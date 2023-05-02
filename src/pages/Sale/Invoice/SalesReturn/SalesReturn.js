@@ -240,23 +240,21 @@ const SalesReturn = (props) => {
 
     const pagesListColumns = [
         {
-            text: "ItemName",
+            text: "Item Name",
             dataField: "",
             formatter: (cellContent, row, key) => {
                 return (
                     <Label>{row.ItemName.label}</Label>
-
                 )
             }
         }, ,
         {
-            text: "previous Quantity",
+            text: "Invoice Qty",
             dataField: "",
             hidden: returnMode === 2 && true,
             formatter: (cellContent, row, key) => {
                 return (
                     <Label>{row.Quantity}</Label>
-
                 )
             }
         },
@@ -312,12 +310,10 @@ const SalesReturn = (props) => {
                 return (
                     <>
                         <span style={{ justifyContent: 'center', width: "100px" }}>
-                            {/* {(returnMode === 1) ?
-                                <Label>{row.RowData.MRPValue}</Label>
-                                : */}
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
+                                defaultValue={returnMode === 1 && { value: row.RowData.MRP, label: row.RowData.MRPValue }}
                                 isSearchable={true}
                                 isDisabled={returnMode === 1 && true}
                                 className="react-dropdown"
@@ -325,7 +321,6 @@ const SalesReturn = (props) => {
                                 options={row.ItemMRPDetails}
                                 onChange={(event) => { row.MRP = event.value }}
                             />
-                            {/* } */}
                         </span></>)
             }
         },
@@ -335,9 +330,6 @@ const SalesReturn = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
-                // if(row.GSTChange===undefined){
-                //     row.GSTChange={}
-                // }
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
                         id={`GST${key}`}
@@ -405,7 +397,7 @@ const SalesReturn = (props) => {
                     <Flatpickr
                         name='ReturnDate'
                         defaultValue={returnMode === 1 ? invertDatefunc(row.RowData.BatchDate) : currentDate}
-                        isDisabled={returnMode === 1 ? true : false}
+                        disabled={returnMode === 1 ? true : false}
                         className="form-control d-block p-2 bg-white text-dark"
                         placeholder="Select..."
                         options={{
@@ -421,7 +413,7 @@ const SalesReturn = (props) => {
             }
         },
         {
-            text: "ItemComment",
+            text: "Item Comment",
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
@@ -433,7 +425,6 @@ const SalesReturn = (props) => {
                         defaultChecked={row.ItemComment}
                         type="text"
                         className="col col-sm text-center"
-                        // onChange={e => { SelectAll(e.target.checked, row, key) }}
                         onChange={(event) => { row.ItemComment = event.target.value }}
                     />
                 </span>)
@@ -446,14 +437,6 @@ const SalesReturn = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    {/* <Input type="file"
-                        className="form-control "
-                        // value={FileName}
-                        name="image"
-                        id="file"
-                        accept=".jpg, .jpeg, .png ,.pdf"
-                    // onChange={(event) => { onchangeHandler(event) }}
-                    /> */}
                     <div>
                         <div className="btn-group btn-group-example mb-3" role="group">
                             <Input
@@ -479,6 +462,7 @@ const SalesReturn = (props) => {
         {
             text: "Action ",
             dataField: "",
+            hidden: (returnMode === 1) && true,
             formatter: (cellContent, row, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
@@ -501,18 +485,18 @@ const SalesReturn = (props) => {
         },
     ];
 
-    async function AddPartyHandler(e) {
+    async function AddPartyHandler(e, type) {
 
         const invalidMsg1 = []
-        if ((returnMode === 0) && (values.ItemName === '') && (values.InvoiceNumber === '')) {
-            invalidMsg1.push(`  Select a value from Item Or Invoice No.`)
+        if ((values.ItemName === '') && (type === 'add')) {
+            invalidMsg1.push(`Select Item Name`)
         }
-        if ((returnMode === 2) && (values.ItemName === '')) {
-            invalidMsg1.push(`Item is Required`)
-        };
-        if ((returnMode === 1) && (values.InvoiceNumber === '')) {
-            invalidMsg1.push(`Invoice No. is Required`)
-        };
+        if ((values.InvoiceNumber === '') && (values.Customer === '') && (type === 'Select')) {
+            invalidMsg1.push(`Select Retailer.`)
+        }
+        else if ((values.InvoiceNumber === '') && (type === 'Select')) {
+            invalidMsg1.push(`Select Invoice No.`)
+        }
 
         if (invalidMsg1.length > 0) {
             CustomAlert({
@@ -630,7 +614,7 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-
+        
         event.preventDefault();
 
         const btnId = event.target.id
@@ -645,6 +629,7 @@ const SalesReturn = (props) => {
 
             return ({
                 Item: i.ItemName.value,
+                ItemName: i.ItemName.label,
                 Quantity: i.Qty,
                 Unit: returnMode === 1 ? i.RowData.Unit : i.Unit,
                 BaseUnitQuantity: returnMode === 1 ? i.RowData.BaseUnitQuantity : i.BaseUnitQuantity,
@@ -666,28 +651,40 @@ const SalesReturn = (props) => {
                 TaxType: "GST",
                 ReturnItemImages: []
             })
+
+
         })
+
+        const filterData = ReturnItems.filter((i) => {
+            return i.Quantity > 0
+        })
+
+        if (filterData.length === 0) {
+            CustomAlert({
+                Type: 4,
+                Message: " Please Enter One Item Quantity"
+            })
+            return btnIsDissablefunc({ btnId, state: false })
+        }
 
         const invalidMsg1 = []
 
         ReturnItems.forEach((i) => {
-            if ((i.Quantity === undefined)) {
-                invalidMsg1.push(`Quantity Is Required`)
+
+            if ((i.Unit === undefined) || (i.Unit === null)) {
+                invalidMsg1.push(`${i.ItemName} : Unit Is Required`)
             }
-            if ((i.Rate === undefined)) {
-                invalidMsg1.push(`Rate Is Required`)
-            };
-            if ((i.MRP === undefined)) {
-                invalidMsg1.push(`MRP Is Required`)
-            };
-            if ((i.Unit === undefined)) {
-                invalidMsg1.push(`Unit Is Required`)
-            };
-            if ((i.GST === undefined)) {
-                invalidMsg1.push(`GST Is Required`)
-            };
-            if ((i.BatchCode === undefined)) {
-                invalidMsg1.push(`BatchCode Is Required`)
+            else if ((i.MRP === undefined) || (i.MRP === null)) {
+                invalidMsg1.push(`${i.ItemName} : MRP Is Required`)
+            }
+            else if ((i.GST === undefined) || (i.GST === null)) {
+                invalidMsg1.push(`${i.ItemName} : GST Is Required`)
+            }
+            else if ((i.Rate === undefined) || (i.Rate === null)) {
+                invalidMsg1.push(`${i.ItemName} : Rate Is Required`)
+            }
+            else if ((i.BatchCode === undefined) || (i.BatchCode === null)) {
+                invalidMsg1.push(`${i.ItemName} : BatchCode Is Required`)
             };
         })
 
@@ -713,9 +710,8 @@ const SalesReturn = (props) => {
                     RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
-                    ReturnItems: ReturnItems,
+                    ReturnItems: filterData,
                 });
-
                 // if (pageMode === mode.edit) {
                 //     dispatch(updateCategoryTypeID({ jsonBody, updateId: values.id, btnId }));
                 // }
@@ -768,6 +764,8 @@ const SalesReturn = (props) => {
                                             <Select
                                                 id="Customer "
                                                 name="Customer"
+                                                // closeMenuOnSelect={false}
+                                                // menuIsOpen={menuIsOpen}
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
@@ -826,7 +824,7 @@ const SalesReturn = (props) => {
                                                 className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Comment"
                                                 autoComplete='off'
-                                                autoFocus={true}
+                                                // autoFocus={true}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
@@ -863,12 +861,44 @@ const SalesReturn = (props) => {
 
                                         </Col>
 
-                                        <Col sm="1" className="mx-4 mt-1 ">
+                                        <Col sm="1" className="mx-6 mt-1">
+                                            {
+                                                (!(returnMode === 1)) &&
+                                                < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
+                                                    onClick={(e,) => AddPartyHandler(e, "add")}
+                                                > Add</Button>
+                                            }
+
+                                        </Col>
+                                        {/* <Col sm="1" className="mx-6 mt-1 ">
+
+                                            <Col sm="1" className="mx-6 ">                   
+                                                {(pageMode === mode.defaultsave) ?
+                                                    (TableArr.length === 0) || (returnMode === 2) ?
+                                                        <Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
+                                                            onClick={(e,) => AddPartyHandler(e, "1")}
+                                                        >        <i > </i>Add</Button>
+                                                        :
+                                                        <Change_Button onClick={(e) => {
+                                                            setTableArr([])
+                                                            setState((i) => {
+                                                                let a = { ...i }
+                                                                a.values.InvoiceNumber = ""
+                                                                a.hasValid.InvoiceNumber.valid = true;
+                                                                return a
+                                                            })
+                                                        }} />
+                                                    : null
+                                                }
+
+                                            </Col>
+                                        </Col> */}
+                                        {/* <Col sm="1" className="mx-4 mt-1 ">
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginLeft: "0.5cm", color: " rgb(125 74 157)" }}>
                                                 OR </Label>
 
-                                        </Col>
+                                        </Col> */}
                                     </FormGroup>
                                 </Col >
                                 <Col sm="6">
@@ -892,28 +922,26 @@ const SalesReturn = (props) => {
                                             />
 
                                         </Col>
-                                        <Col sm="1" className="mx-4 mt-1 ">{/*Go_Button  */}
+                                        <Col sm="1" className="mx-6 mt-1 ">
+                                            {((TableArr.length > 0) || (!(values.ItemName === ""))) ?
+                                                <Change_Button onClick={(e) => {
+                                                    setTableArr([])
+                                                    setState((i) => {
+                                                        let a = { ...i }
+                                                        a.values.ItemName = ""
+                                                        a.values.InvoiceNumber = ""
+                                                        return a
+                                                    })
+                                                }} />
+                                                :
+                                                (!(returnMode === 2)) &&
+                                                <Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
+                                                    onClick={(e,) => AddPartyHandler(e, "Select")}
+                                                >        <i > </i>Select</Button>
 
-                                            <Col sm="1" className="mx-4 ">                      {/*Go_Button  */}
-                                                {(pageMode === mode.defaultsave) ?
-                                                    (TableArr.length === 0) || (returnMode === 2) ?
-                                                        <Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
-                                                            onClick={(e,) => AddPartyHandler(e, "1")}
-                                                        >        <i > </i>Add</Button>
-                                                        :
-                                                        <Change_Button onClick={(e) => {
-                                                            setTableArr([])
-                                                            setState((i) => {
-                                                                let a = { ...i }
-                                                                a.values.InvoiceNumber = ""
-                                                                a.hasValid.InvoiceNumber.valid = true;
-                                                                return a
-                                                            })
-                                                        }} />
-                                                    : null
-                                                }
+                                            }
 
-                                            </Col>
+
                                         </Col>
                                     </FormGroup>
                                 </Col >

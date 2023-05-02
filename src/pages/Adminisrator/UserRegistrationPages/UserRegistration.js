@@ -266,7 +266,6 @@ const AddUser = (props) => {
   };
 
   const saveHandler = (event) => {
-    
     event.preventDefault();
     const btnId = event.target.id;
     btnIsDissablefunc({ btnId: btnId, state: true })
@@ -274,6 +273,7 @@ const AddUser = (props) => {
 
       const userRoleArr = []
       employePartyWiseRoleState.map(i1 => {
+        debugger
         i1.PartyRoles.map(i2 => {
           userRoleArr.push({
             Party: i1.Party,

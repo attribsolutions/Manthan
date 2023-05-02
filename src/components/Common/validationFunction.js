@@ -87,10 +87,15 @@ export const formValChange = ({ event, state, setState }) => {
 
         switch (type) {
             case "select":
+                
                 const result = Array.isArray(value);
                 if (!result) {
                     if (!(value.value === undefined)) {
                         if (!(required[name] === undefined && value.value > 0)) {
+                            isError[name] = "";
+                            hasValid[name].valid = true
+                        }
+                        else if ((required[name] === undefined)) {
                             isError[name] = "";
                             hasValid[name].valid = true
                         }

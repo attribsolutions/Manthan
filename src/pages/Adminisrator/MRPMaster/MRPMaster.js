@@ -38,8 +38,10 @@ import {
     postMRPMasterData, postMRPMasterDataSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
-import { breadcrumbReturnFunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, loginCompanyID, loginIsSCMCompany } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { Change_Button } from "../../../components/Common/CommonButton";
 
 const MRPMaster = (props) => {
 
@@ -47,6 +49,7 @@ const MRPMaster = (props) => {
     const history = useHistory();
     const formRef = useRef(null);
     let editMode = history.location.pageMode;
+    let IsSCM = loginIsSCMCompany()
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState("");
@@ -101,6 +104,7 @@ const MRPMaster = (props) => {
     }, [dispatch]);
 
     useEffect(() => {
+     
         const editDataGatingFromList = history.location.editValue
 
         const locationPath = history.location.pathname
@@ -110,15 +114,15 @@ const MRPMaster = (props) => {
 
         if (!(editDataGatingFromList === undefined)) {
 
-            var divisionid = editDataGatingFromList.Division_id
-            var divisionName = editDataGatingFromList.DivisionName
-            var partyId = editDataGatingFromList.Party_id
-            var partyName = editDataGatingFromList.PartyName
+            var divisionid = editDataGatingFromList.Division_id === null ? 0 : editDataGatingFromList.Division_id
+            var divisionName = editDataGatingFromList.DivisionName === null ? "Select.." : editDataGatingFromList.DivisionName
+            var partyId = editDataGatingFromList.Party_id === null ? 0 : editDataGatingFromList.Party_id
+            var partyName = editDataGatingFromList.PartyName === null ? "Select.." : editDataGatingFromList.PartyName
             var effectiveDate = editDataGatingFromList.EffectiveDate
 
             const jsonBody = JSON.stringify({
-                Division: divisionid,
-                Party: partyId,
+                Division: (IsSCM === 1) ? 0 : divisionid,
+                Party: (IsSCM === 1) ? 0 : partyId,
                 EffectiveDate: effectiveDate
             });
             dispatch(postGoButtonForMRP_Master(jsonBody))
@@ -237,22 +241,26 @@ const MRPMaster = (props) => {
             })
         );
     };
-    const GoButton_Handler = (event, values) => {
 
+    const GoButton_Handler = (event, values) => {
+        debugger
         let division = { ...division_dropdown_Select }
         let party = { ...party_dropdown_Select }
 
         const jsonBody = JSON.stringify({
-            Division: division.value ? division.value : " ",
+            Division: division.value ? division.value : 0,
             Party: party.value ? party.value : 0,
             EffectiveDate: effectiveDate
         });
 
         if (!(effectiveDate)) {
-            alert("EffectiveDate not select")
+            CustomAlert({
+                Type: 4,
+                Message: "Effective Date is Required"
+            })
+            return;
         }
         dispatch(postGoButtonForMRP_Master(jsonBody))
-        console.log("Go button Post Json", jsonBody)
     };
 
     const pageOptions = {
@@ -371,9 +379,10 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
+     
         var ItemData = TableData.map((index) => ({
-            Division: division_dropdown_Select.value,
-            Party: party_dropdown_Select.value,
+            Division: (IsSCM === 1) ? null : division_dropdown_Select.value,
+            Party: (IsSCM === 1) ? null : party_dropdown_Select.value,
             EffectiveDate: effectiveDate,
             Company: loginCompanyID(),
             CreatedBy: loginUserID(),
@@ -395,7 +404,7 @@ const MRPMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode ===mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>
@@ -420,40 +429,48 @@ const MRPMaster = (props) => {
                                     <Col>
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
                                             <CardHeader className="card-header   text-black c_card_body" >
-                                                <Row className="mt-3 " >
-                                                    <Col sm={3}>
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-6 p-2 " style={{ width: "2cm" }}>Division</Label>
-                                                            <Col sm={8} >
-                                                                <Select
-                                                                    value={division_dropdown_Select}
-                                                                    options={Division_DropdownOptions}
-                                                                    isDisabled={editMode === "edit" ? true : false}
-                                                                    className="divisionName"
-                                                                    placeholder="select"
-                                                                    onChange={(e) => { Division_Dropdown_OnChange_Handller(e) }}
-                                                                    classNamePrefix="select2-selection"
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
-                                                    </Col>
 
-                                                    <Col sm={3} >
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-6 p-2" style={{ width: "2.5cm" }} >Party Name</Label>
-                                                            <Col sm={8} >
-                                                                <Select
-                                                                    value={party_dropdown_Select}
-                                                                    options={PartyDropdown_Options}
-                                                                    isDisabled={editMode === "edit" ? true : false}
-                                                                    className="rounded-bottom"
-                                                                    placeholder="select"
-                                                                    onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
-                                                                    classNamePrefix="select2-selection"
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
-                                                    </Col>
+                                                <Row className="mt-3 " >
+                                                    {(IsSCM === 1) ?
+                                                        null
+                                                        :
+                                                        <Col sm={3}>
+                                                            <FormGroup className="mb-3 row ">
+                                                                <Label className="col-sm-6 p-2 " style={{ width: "2cm" }}>Division</Label>
+                                                                <Col sm={8} >
+                                                                    <Select
+                                                                        value={division_dropdown_Select}
+                                                                        options={Division_DropdownOptions}
+                                                                        isDisabled={((editMode === "edit") || (TableData.length > 0)) ? true : false}
+                                                                        className="divisionName"
+                                                                        placeholder="select"
+                                                                        onChange={(e) => { Division_Dropdown_OnChange_Handller(e) }}
+                                                                        classNamePrefix="select2-selection"
+                                                                    />
+                                                                </Col>
+                                                            </FormGroup>
+                                                        </Col>}
+
+                                                    {(IsSCM === 1) ?
+                                                        null
+                                                        :
+                                                        <Col sm={3} >
+                                                            <FormGroup className="mb-3 row ">
+                                                                <Label className="col-sm-6 p-2" style={{ width: "2.5cm" }} >Party Name</Label>
+                                                                <Col sm={8} >
+                                                                    <Select
+                                                                        value={party_dropdown_Select}
+                                                                        options={PartyDropdown_Options}
+                                                                        isDisabled={((editMode === "edit") || (TableData.length > 0)) ? true : false}
+                                                                        className="rounded-bottom"
+                                                                        placeholder="select"
+                                                                        onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
+                                                                        classNamePrefix="select2-selection"
+                                                                    />
+                                                                </Col>
+                                                            </FormGroup>
+                                                        </Col>
+                                                    }
 
                                                     <Col sm={4}>
                                                         <FormGroup className="mb-3 row col ">
@@ -463,22 +480,34 @@ const MRPMaster = (props) => {
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
                                                                     value={effectiveDate}
-                                                                    isDisabled={editMode === "edit" ? true : false}
+                                                                    disabled={((editMode === "edit") || (TableData.length > 0)) ? true : false}
                                                                     className="form-control d-block p-2 bg-white text-dark"
                                                                     placeholder=" Please Enter FSSAI Exipry"
                                                                     options={{
-                                                                        altInput: true,
-                                                                        altFormat: "F j, Y",
-                                                                        dateFormat: "Y-m-d"
+                                                                        altFormat: "d-m-Y",
+                                                                        dateFormat: "Y-m-d",
                                                                     }}
                                                                     onChange={EffectiveDateHandler}
                                                                 />
                                                             </Col>
                                                         </FormGroup>
                                                     </Col >
-                                                    <Col sm={1} style={{}} >
-                                                        <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
+
+
+                                                    <Col sm={1} >
+                                                        {((TableData.length > 0)) ?
+                                                            !(editMode) ?
+                                                                < Change_Button onClick={(e) => {
+                                                                    dispatch(postGoButtonForMRP_MasterSuccess([]));
+                                                                }} />
+                                                                : null
+                                                            : <Button type="button" color="btn btn-outline-success border-2 font-size-12"
+                                                                onClick={() => { GoButton_Handler() }} >Go</Button>
+                                                        }
+
                                                     </Col>
+
+
                                                 </Row>
                                             </CardHeader>
                                         </Card>

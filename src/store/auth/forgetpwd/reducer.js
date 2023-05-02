@@ -3,6 +3,7 @@ import {
   SEND_OTP_FOR_FORGET_PASSWORD_ERROR,
   CHANGE_PASSWORD_FOR_FORGET_PASSWORD_ERROR,
   CHANGE_PASSWORD_FOR_FORGET_PASSWORD_SUCCESS,
+  SEND_OTP_FOR_FORGET_PASSWORD,
 } from "./actionTypes"
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   sendOtpError: null,
   sendPasswordMsg: null,
   sendPasswordError: null,
+  Loading:false
 }
 
 const forgetPassword = (state = initialState, action) => {
@@ -20,6 +22,14 @@ const forgetPassword = (state = initialState, action) => {
       state = {
         ...state,
         sendOTPSuccessMsg: action.payload,
+        Loading: false
+
+      }
+      break
+    case SEND_OTP_FOR_FORGET_PASSWORD:
+      state = {
+        ...state,
+        Loading: true
       }
       break
 

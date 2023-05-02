@@ -18,7 +18,6 @@ import {
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
-    getGroupList,
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
@@ -50,7 +49,6 @@ const PartyItems = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userAccState, setUserAccState] = useState("");
-    const [itemArr, setitemArr] = useState([]);
 
     const fileds = {
         id: "",
@@ -67,6 +65,7 @@ const PartyItems = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -89,13 +88,10 @@ const PartyItems = (props) => {
         dispatch(getPartyItemListSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getPartyListAPI())
-        dispatch(getGroupList());
+        if (!(hasShowloction && hasShowModal)) {
+            dispatch(getPartyListAPI())
+        }
     }, []);
-
-    useEffect(() => {
-        setitemArr(tableList)
-    }, [tableList]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -112,7 +108,9 @@ const PartyItems = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            if (!props.isAssing) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -132,17 +130,35 @@ const PartyItems = (props) => {
                 hasEditVal = location.editValue
             }
             if (hasEditVal) {
-                const { Party, PartyName } = hasEditVal
+                const { Party, PartyName, PartyItem = [] } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
                 values.Name = { value: Party, label: PartyName };
 
-                dispatch(getpartyItemList(Party))
+                const convArr = PartyItem.map((item) => {
+                    item["selectCheck"] = false
+                    if (item.Party > 0) {
+                        { item["selectCheck"] = true }
+                    }
+                    return item
+                });
+                dispatch(getPartyItemListSuccess(convArr))
+                
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(PartyName))
             }
             dispatch(editPartyItemIDSuccess({ Status: false }))
+        }
+        else if (loginIsSCMCompany() === 1) {
+
+            setState((i) => {
+                const a = { ...i }
+                a.values.Name = { value: loginPartyID(), label: '' }
+                a.hasValid.Name.valid = true
+                return a
+            })
+            dispatch(getpartyItemList(loginPartyID()))
         }
     }, [])
 
@@ -207,19 +223,6 @@ const PartyItems = (props) => {
         }
     }, [pageField])
 
-    useEffect(() => {
-        if (loginIsSCMCompany() === 1) {
-
-            setState((i) => {
-                const a = { ...i }
-                a.values.Name = { value: loginPartyID(), label: '' }
-                a.hasValid.Name.valid = true
-                return a
-            })
-            dispatch(getpartyItemList(loginPartyID()))
-        }
-    }, [])
-
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -227,12 +230,12 @@ const PartyItems = (props) => {
 
     const tableColumns = [
         {
-            text: "ItemID",
+            text: "Item ID",
             dataField: "Item",
             sort: true,
         },
         {
-            text: "ItemName",
+            text: "Item Name",
             dataField: "ItemName",
             sort: true,
         },
@@ -292,12 +295,13 @@ const PartyItems = (props) => {
                 return
             }
         }
+
         dispatch(getpartyItemList(supplier))
     };
 
     const SaveHandler = async (event) => {
         event.preventDefault();
-        const Find = itemArr.filter((index) => {
+        const Find = tableList.filter((index) => {
             return (index.selectCheck === true)
         })
         const btnId = event.target.id
@@ -315,7 +319,7 @@ const PartyItems = (props) => {
     };
 
     function rowSelected() {
-        
+
         var data = []
         return data = tableList.map((index) => {
             if ((index.selectCheck)) {

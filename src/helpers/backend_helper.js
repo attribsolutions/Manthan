@@ -181,7 +181,7 @@ export const Group_By_GroupTypes_DropDown_API = (id) => get(`${url.GET_GROUP_BY_
 export const SubGroup_By_Group_DropDown_API = (id) => get(`${url.GET_SUBGROUP_BY_GROUP_ID}/${id}`)// GetSubGroupByGroupID DropDown API
 export const Get_Item_Tag = () => get(url.GET_ITEM_TAG)// Get Item Tag Api
 export const Get_Brand_Tag = () => get(url.GET_BRAND_TAG)// Get Item Tag Api
-export const GeneralMasterSubType_API = (data) => post(url.GENERAL_MASTER_SUB_TYPE, data)// post api
+export const GeneralMasterSubType_API = (data) => post(url.GENERAL_MASTER_BRAND_NAME, data)// post api
 
 // Party Master
 export const Party_Master_Get_API = (jsonbody) => post(url.PARTY_MASTER_FILTER_API, jsonbody)//get api
@@ -343,17 +343,22 @@ export const Party_Dropdown_Get_API = (id) => get(`${url.MANAGEMENT_PARTIES}/${i
 
 
 // ImportField_Add
-export const ImportField_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_FILTER, jsonBody,btnId)//get api
+export const ImportField_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_FILTER, jsonBody, btnId)//get api
 export const ImportField_Add_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_SAVE, jsonBody, btnId)// post api
 
 // ImportMaster_Map API
-export const ImportMaster_Map_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_FILTER, jsonBody,btnId)//get api
-export const ImportMaster_Map_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_SAVE, jsonBody, btnId)// post api
+export const ImportMaster_Map_Customer_GoButton_API = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_CUSTOMER}/${partyId}`, btnId)//get api
+export const ImportMaster_Map_Customer_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_CUSTOMER, jsonBody, btnId)// post api
+export const ImportMaster_Map_Item_GoButton_API = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_ITEM}/${partyId}`, btnId)//get api
+export const ImportMaster_Map_Item_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_ITEM, jsonBody, btnId)// post api
+export const ImportMaster_Map_Unit_GoButton_API = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_UNIT}/${partyId}`, btnId)//get api
+export const ImportMaster_Map_Unit_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_UNIT, jsonBody, btnId)// post api
 
+export const ExcelUpload_Invoice_Save_API = ({ jsonBody, btnId }) => post(url.BULK_INVOICES, jsonBody, btnId)// post api
 
 
 export const ImportFieldAdd_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_ADD_SAVE, jsonBody, btnId)// post api
-export const ImportFieldAdd_Post_API = ( jsonBody) => post(url.IMPORT_FIELD_ADD_FILTER, jsonBody)
+export const ImportFieldAdd_Post_API = (jsonBody) => post(url.IMPORT_FIELD_ADD_FILTER, jsonBody)
 export const ImportFieldAdd_Delete_API = ({ deleteId, btnId }) => del(`${url.IMPORT_FIELD_ADD_SAVE}/${deleteId}`, btnId)// delete api
 export const ImportFieldAdd_Edit_API = ({ editId, btnId }) => get(`${url.IMPORT_FIELD_ADD_SAVE}/${editId}`, btnId)// edit api
 export const ImportFieldAdd_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.IMPORT_FIELD_ADD_SAVE}/${updateId}`, jsonBody, btnId)// update api
@@ -420,7 +425,7 @@ export const Loading_Sheet_Update_API = (updateId) => get(`${url.LOADING_SHEET}/
 export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_BULK_UPDATE, jsonBody, btnId)// post api
 export const PartyMasterBulkUpdate_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE, jsonBody)// Go Button post api
 export const post_PartyAPI = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)// post api
-export const post_SelectFieldAPI = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)// post api
+export const post_SelectFieldAPI = (jsonBody) => post(url.GENERAL_MASTER_SUB_TYPE, jsonBody)// post api
 export const Update_Party_Bulk = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_BULK_UPDATE}/${updateId}`, jsonBody, btnId)// update api
 
 // Order Page api  
@@ -545,7 +550,7 @@ export const Opening_balance_API = (jsonBody) => post(url.OPENING_BALANCE, jsonB
 export const Depositor_Bank_Filter_API = (jsonBody) => post(url.DEPOSITOR_BANK_FILTER, jsonBody)//  postapi
 export const Receipt_Post_API = ({ jsonBody, btnId }) => post(url.RECEIPT_POST_API, jsonBody, btnId)//  postapi
 export const Receipt_Filter_API = (jsonBody) => post(url.RECEIPT_FILTERS, jsonBody)// Get subModule For H_pages
-export const Receipt_Type_API = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)//  postapi
+export const Receipt_Type_API = (jsonBody) => post(url.GENERAL_MASTER_SUB_TYPE, jsonBody)//  postapi
 export const Receipt_Delete_API = ({ deleteId, btnId }) => del(`${url.RECEIPT_POST_API}/${deleteId}`, btnId)// delete api
 export const Bank_List_API = (jsonBody) => post(url.BANK_LIST_API, jsonBody)//  postapi
 export const Make_Receipt_to_Payment_API = (jsonBody) => post(url.MAKE_RECEIPT_TO_PAYMENT, jsonBody)// Get subModule For H_pages
@@ -559,9 +564,9 @@ export const SalesReturn_list_API = (filters) => post(url.SALES_RETURN_LIST_API,
 export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_RETURN}/${deleteId}`, btnId)// Sales Return Delete API
 
 // Credit Debit 
-export const Credit_Debit_Type = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)//  postapi
+export const Credit_Debit_Type = (jsonBody) => post(url.GENERAL_MASTER_SUB_TYPE, jsonBody)//  postapi
 export const Go_Button_Credit_Debit_Post_API = (jsonBody) => post(url.CREDIT_DEBIT_FILTER, jsonBody)//  postapi
-export const Credit_Debit_Save_API = ({ jsonBody, btnId }) => post(url.CREDIT_DEBIT, jsonBody,btnId )//post api
+export const Credit_Debit_Save_API = ({ jsonBody, btnId }) => post(url.CREDIT_DEBIT, jsonBody, btnId)//post api
 export const del_Credit_List_API = ({ deleteId, btnId }) => del(`${url.CREDIT_DEBIT}/${deleteId}`, btnId)// delete api
 export const Edit_Credit_List_API = ({ editId, btnId }) => get(`${url.CREDIT_DEBIT}/${editId}`, btnId)// Edit api
 export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// Invoice Return api

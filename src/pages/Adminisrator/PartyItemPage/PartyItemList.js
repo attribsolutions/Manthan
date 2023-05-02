@@ -6,9 +6,7 @@ import {
   commonPageFieldListSuccess,
   deleteGrouplistSuccess,
   delete_GroupList_ID,
-  editGroupID,
   saveGroupMaster_Success,
-  updateGroupIDSuccess,
 } from "../../../store/actions";
 import PartyItems from "./PartyItems";
 import { editPartyItemID, GetPartyList, SavePartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
@@ -44,32 +42,40 @@ const PartyItemsList = (props) => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(pageId.PARTYITEM_LIST))
     dispatch(GetPartyList());
-
-
-
   }, []);
 
-  const { pageField ,userAccess=[]} = reducers
+  function editBodyfunc(row) {
+    
+    const config = { ...row }
+    config.PartyName = row. rowData.Name
+    config.Party = row. rowData.id;
+    config.editId = row. rowData.id
 
-  return (
-    <React.Fragment>
-       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={PartyItems}
-            masterPath={url.PARTYITEM}
-            ButtonMsgLable={"Party Items"}
-            deleteName={"Name"}
+    dispatch(editPartyItemID(config))
+  }
 
-          />
-          : null
-      }
+const { pageField, userAccess = [] } = reducers
 
-    </React.Fragment>
-  )
+return (
+  <React.Fragment>
+    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+    {
+      (pageField) ?
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={PartyItems}
+          masterPath={url.PARTYITEM}
+          ButtonMsgLable={"Party Items"}
+          deleteName={"Name"}
+          editBodyfunc={editBodyfunc}
+
+        />
+        : null
+    }
+
+  </React.Fragment>
+)
 }
 
 export default PartyItemsList;

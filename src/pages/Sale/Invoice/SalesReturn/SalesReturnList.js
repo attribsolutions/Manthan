@@ -43,11 +43,11 @@ const SalesReturnList = () => {
         (state) => ({
             tableList: state.SalesReturnReducer.salesReturnList,
             deleteMsg: state.SalesReturnReducer.deleteMsg,
-            updateMsg: state.BOMReducer.updateMsg,
+            // updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
-            editData: state.BOMReducer.editData,
+            // editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
@@ -58,10 +58,10 @@ const SalesReturnList = () => {
 
     const action = {
         getList: salesReturnListAPI,
-        editId: editBOMList,
+        // editId: editBOMList,
         deleteId: delete_SalesReturn_Id,
         postSucc: postMessage,
-        updateSucc: updateBOMListSuccess,
+        // updateSucc: updateBOMListSuccess,
         deleteSucc: delete_SalesReturn_Id_Succcess
     }
 

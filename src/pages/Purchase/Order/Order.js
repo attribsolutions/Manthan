@@ -133,7 +133,6 @@ const Order = (props) => {
         PartyList: state.PartyMasterReducer.partyList
     }));;
 
-    console.log()
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -156,14 +155,9 @@ const Order = (props) => {
         }
     }, []);
 
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
-
+  
     useEffect(() => {  // userAccess useEffect
+        debugger
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -176,6 +170,7 @@ const Order = (props) => {
         if (userAcc) {
             setUserAccState(userAcc);
             breadcrumbReturnFunc({ dispatch, userAcc });
+
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)
             });
@@ -239,7 +234,15 @@ const Order = (props) => {
     }, []);
 
     useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
+
+    useEffect(() => {
         if (assingItemData.Status === true) {
+            debugger
             setisOpen_assignLink(true);
         }
     }, [assingItemData]);
@@ -588,22 +591,24 @@ const Order = (props) => {
     function partyOnchange(e) {
         setCard(true)
         setPartySelect(e)
-        // if(RoleID === 2 && !partySelect.length === 0){
-
-        // }
     };
 
     function Open_Assign_func() {
         setisOpen_assignLink(false)
         dispatch(editPartyItemIDSuccess({ Status: false }));
         breadcrumbReturnFunc({ dispatch, userAcc: userAccState })
-
         goButtonHandler()
     };
 
     async function assignItem_onClick() {
-
-        const config = { editId: supplierSelect.value, btnmode: mode.assingLink, subPageMode, btnId: `btn-assingLink-${supplierSelect.value}` }
+        const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : loginPartyID()
+        const config = {
+            editId: isParty,
+            Party: isParty,
+            btnmode: mode.assingLink,
+            subPageMode,
+            btnId: `btn-assingLink-${supplierSelect.value}`
+        }
 
         const isConfirmed = await CustomAlert({
             Type: 7,
@@ -1136,8 +1141,10 @@ const Order = (props) => {
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <SaveButton pageMode={pageMode} userAcc={userAccState}
-                                module={"Order"} onClick={saveHandeller}
+                            <SaveButton
+                                pageMode={pageMode}
+                                userAcc={userAccState}
+                                onClick={saveHandeller}
                             />
                         </div>
                             : <div className="row save1"></div>
@@ -1154,6 +1161,7 @@ const Order = (props) => {
 
                     <PartyItems
                         editValue={assingItemData.Data}
+                        isAssing={true}
                         masterPath={url.PARTYITEM}
                         redirectPath={subPageMode}
                         isOpenModal={Open_Assign_func}

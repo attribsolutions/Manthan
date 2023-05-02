@@ -1,7 +1,6 @@
 import {
     Card,
     CardBody,
-    CardHeader,
     Col,
     Container,
     FormGroup,
@@ -11,23 +10,20 @@ import {
 } from "reactstrap";
 import Flatpickr from "react-flatpickr";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValid,
     initialFiledFunc,
-    onChangeSelect,
-    resetFunction,
+    resetFunction
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
-    currentDate,
     invertDatefunc,
     loginCompanyID,
     loginPartyID
@@ -38,7 +34,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect, useRef, useState } from "react";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
@@ -49,13 +44,10 @@ import {
     postParty_Master_Bulk_Update,
     postParty_Master_Bulk_Update_Success,
     postSelect_Field_for_dropdown,
-    updatePartyMasterBulkID,
+    updatePartyMasterBulkID
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
-import { GetDistrictOnState } from "../../../helpers/url_helper";
 import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { useLayoutEffect } from "react";
 
 
 
@@ -69,8 +61,6 @@ const PartyMasterBulkUpdate = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [SelectFieldName, setSelectFieldName] = useState([]);
-
-
     const [state_DropDown_select, setState_DropDown_select] = useState();
     const [district_dropdown_Select, setDistrict_dropdown_Select] = useState();
 
@@ -87,10 +77,6 @@ const PartyMasterBulkUpdate = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [val, setvalue] = useState()
     const [key, setKey] = useState()
-
-
-    // const [error, seterror] = useState({})
-
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -132,8 +118,6 @@ const PartyMasterBulkUpdate = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(GetRoutesList());
         dispatch(getState())
-
-
     }, []);
 
     // userAccess useEffect
@@ -159,8 +143,6 @@ const PartyMasterBulkUpdate = (props) => {
             TypeID: 2
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
-
-        // dispatch(getDistrictOnState(22))
     }, []);
 
     useEffect(() => {
@@ -208,12 +190,16 @@ const PartyMasterBulkUpdate = (props) => {
     }, [postMsg.Status])
 
     useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${"Party Count"} :${Data.length}`))
+    }, [Data])
+
+    useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
+    
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -281,11 +267,7 @@ const PartyMasterBulkUpdate = (props) => {
         setState_DropDown_select(event)
         setKey(key)
 
-        // dispatch(getDistrictOnState(22))
     }
-
-
-
 
     function divisionhandler(event, user) {
         user.Newvalue = event.target.checked
@@ -369,7 +351,6 @@ const PartyMasterBulkUpdate = (props) => {
                                 <Select
                                     id={key}
                                     value={state_DropDown_select}
-                                    // defaultValue={user.Newvalue}
                                     options={StateValues}
                                     onChange={(event) => handllerState(event, user, key)}
                                 />
@@ -445,7 +426,6 @@ const PartyMasterBulkUpdate = (props) => {
                                 name='fromdate'
                                 className="form-control d-block p-2 bg-white text-dark"
                                 placeholder="Select..."
-                                // value={fromdate}
                                 options={{
                                     altInput: true,
                                     altFormat: "d-m-Y",
@@ -468,7 +448,6 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
 
-
     const pageOptions = {
         sizePerPage: 10,
         totalSize: Data.length,
@@ -481,12 +460,8 @@ const PartyMasterBulkUpdate = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            // if (formValid(state)) {
             btnIsDissablefunc({ btnId, state: true })
-
-
             Data.forEach(i => {
-
                 if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict) {
                     const arr = {
                         SubPartyID: i.SubPartyID,
@@ -497,7 +472,6 @@ const PartyMasterBulkUpdate = (props) => {
                     }
                     arr1.push(arr)
                 }
-
             })
 
             const jsonBody = JSON.stringify({
@@ -519,8 +493,6 @@ const PartyMasterBulkUpdate = (props) => {
                     })
                     btnIsDissablefunc({ btnId, state: false })
                 } else {
-
-
                     const invalidMsg1 = []
                     arr1.forEach((i) => {
 
@@ -577,7 +549,6 @@ const PartyMasterBulkUpdate = (props) => {
                 }
 
             }
-            // }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
@@ -671,14 +642,13 @@ const PartyMasterBulkUpdate = (props) => {
                                                         )}
                                                     </FormGroup>
                                                 </Col>
-                                                
+
                                                 <Col sm={1}>
                                                     <div className="col col-1 px-5">
                                                         < Go_Button onClick={(e) => goButtonHandler()} />
                                                     </div>
                                                 </Col>
                                             </Row>
-
                                         </CardBody>
                                     </Card>
                                 </Col>
@@ -693,12 +663,10 @@ const PartyMasterBulkUpdate = (props) => {
                                         data={Data}
                                         columns={pagesListColumns}
                                         search
-
                                     >
                                         {toolkitProps => (
                                             <React.Fragment>
                                                 <div className="table">
-
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         bordered={true}

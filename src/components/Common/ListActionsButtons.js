@@ -1,7 +1,7 @@
 import { Button } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
-import { btnIsDissablefunc } from "./CommonFunction"
+import { btnIsDissablefunc, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 
 
@@ -14,11 +14,10 @@ export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves
 export const printBtnCss = "badge badge-soft-primary font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 
 
-
 export const listPageActionsButtonFunc = (props) => {
 
     const dispatch = props.dispatchHook;
-    const userCreated = parseInt(localStorage.getItem("userId"))
+    const userCreated = loginUserID()
     const {
         subPageMode = '',
         userAccState,
@@ -86,8 +85,6 @@ export const listPageActionsButtonFunc = (props) => {
 
     };
 
-
-
     async function deleteHandler(rowData, btnId) {
         try {
             if (deleteBodyfunc) {
@@ -134,7 +131,6 @@ export const listPageActionsButtonFunc = (props) => {
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => {
-
 
             const forceEdit = rowData.forceEdit;
             rowData["hasSelect"] = false

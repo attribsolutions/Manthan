@@ -1,4 +1,5 @@
-import { invertDatefunc } from '../../../../components/Common/CommonFunction';
+// import { groupBy } from 'lodash';
+import { groupBy, invertDatefunc } from '../../../../components/Common/CommonFunction';
 import { CustomAlert } from '../../../../CustomAlert/ConfirmDialog';
 
 const XLSX = require('xlsx');
@@ -40,7 +41,7 @@ export const readExcelFile = async ({ file, compareParam }) => {
       }
 
     });
-debugger
+
     processing(10)
 
     let invalidMsg = []
@@ -62,7 +63,7 @@ debugger
       CustomAlert({
         Type: 3,
         Message: JSON.stringify(invalidMsg),
-    })
+      })
       return []
     }
 
@@ -70,7 +71,7 @@ debugger
     // groupBy(jsonResult, (party) => (party))
     // console.log('Upload data', jsonResult)
     // const aad = await commonPageFiled_API(184)
-    debugger
+
     return jsonResult
 
   } catch (e) { }
@@ -80,6 +81,41 @@ debugger
 
 
 
+
+export async function fileDetails({ compareParam = [], readjson = [] }) {
+
+
+  const fileFiled = {}
+
+  await compareParam.forEach(ele => {
+    if ((ele.Value !== null)) {
+      fileFiled[ele.FieldName] = ele.Value
+    }
+  })
+  let invoiceNO = []
+  let partyNO = []
+
+  const invoice = await groupBy(readjson, (party) => {
+    return (party[fileFiled.InvoiceNumber])
+  })
+  const party = await groupBy(readjson, (party) => (party[fileFiled.Party]))
+
+  await invoice.forEach((ele, a, s) => {
+    invoiceNO.push(a)
+  });
+
+  await party.forEach((ele, a, s) => {
+    partyNO.push(a)
+  });
+
+  const invoiceDate = await groupBy(readjson, (party) => (party[fileFiled.InvoiceDate]))
+  const amount = await readjson.reduce((total, current,) => {
+    return total + Number(current[fileFiled.GrandTotal])
+  }, 0)
+
+
+  return { fileFiled, invoice, party, invoiceDate, amount, invoiceNO, partyNO }
+}
 
 
 

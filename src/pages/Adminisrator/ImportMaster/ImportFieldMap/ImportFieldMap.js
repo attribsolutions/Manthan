@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
@@ -57,7 +57,7 @@ const ImportFieldMap = (props) => {
         goButtonItem: state.ImportFieldMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
-debugger
+
     useEffect(() => {
         const page_Id = pageId.IMPORT_FIELD_MAP
         dispatch(commonPageFieldSuccess(null));
@@ -115,6 +115,12 @@ debugger
             })
         }
     }, [postMsg])
+
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${" Field Count"} :${goButtonItem.length}`))
+    }, [goButtonItem])
+
 
     const partyDropdown_Options = partyList.map((index) => ({
         value: index.id,
@@ -176,8 +182,13 @@ debugger
         event.preventDefault();
 
         let jsonArr = []
+        const invalid = []
 
         goButtonItem.forEach(i => {
+            
+            if ((((i.Value === '') || (i.Value === null)) && (i.IsCompulsory === true))) {
+                invalid.push({ [i.FieldName]: "this filed Requird." })
+            }
             if ((!(i.Value === '') && !(i.Value === null))) {
                 const obj = {
                     Value: i.Value,
@@ -191,9 +202,13 @@ debugger
             }
         })
 
-        const jsonBody = JSON.stringify(jsonArr);
-        dispatch(save_ImportFiledMap({ jsonBody }));
-
+        if (invalid.length > 0) {
+            CustomAlert({ Type: 3, Message: invalid })
+            return
+        } else {
+            const jsonBody = JSON.stringify(jsonArr);
+            dispatch(save_ImportFiledMap({ jsonBody }));
+        }
     };
 
     if (!(userPageAccessState === '')) {
@@ -222,9 +237,7 @@ debugger
                                                 />
                                             </Col>
                                         </FormGroup>
-                                    </Col >
-
-
+                                    </Col>
 
                                     <Col sm="2" className="mt-3 ">
                                         {(goButtonItem.length === 0) ?
@@ -232,12 +245,9 @@ debugger
                                             :
                                             <Change_Button onClick={change_ButtonHandler} />
                                         }
-
                                     </Col>
                                 </div>
-
                             </div>
-
                         </div>
 
                         <div className="mt-1">
