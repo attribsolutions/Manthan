@@ -70,7 +70,7 @@ const PartyMaster = (props) => {
     }
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,
+    const { postMsg,
         State,
         DistrictOnState,
         Company,
@@ -80,7 +80,7 @@ const PartyMaster = (props) => {
         updateMsg,
         Supplier
     } = useSelector((state) => ({
-        PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
+        postMsg: state.PartyMasterReducer.PartySaveSuccess,
         updateMsg: state.PartyMasterReducer.updateMessage,
         State: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
@@ -195,7 +195,7 @@ const PartyMaster = (props) => {
     }, [PartyTypes])
 
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(postPartyDataSuccess({ Status: false }))
             setCompanyList_dropdown_Select('')
             setPartyType_dropdown_Select('')
@@ -207,30 +207,30 @@ const PartyMaster = (props) => {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                     RedirectPath: '/PartyList',
                     AfterResponseAction: false
                 }))
             }
         }
-        else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
+        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
             dispatch(postPartyDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse.Status])
+    }, [postMsg.Status])
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
