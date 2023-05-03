@@ -185,8 +185,10 @@ export const PARTY_SUB_PARTY_LIST = '/PartySubPartyList'
 export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 
 //PartyItems
-export const PARTYITEM_FOR_LIST = '/PartyItemsFilter' // FOR Get
+export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
 export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
+export const PARTY_ITEM_FILTER = '/PartyItemFilter' // FOR Get
+
 
 //Routes
 export const ROUTES_FILTER = '/RoutesFilter '
