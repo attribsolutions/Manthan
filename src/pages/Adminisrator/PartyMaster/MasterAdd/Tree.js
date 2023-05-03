@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { Card, CardBody, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input, Label, Modal, Row, UncontrolledDropdown } from 'reactstrap';
+import React from 'react'
 import './Tree.scss'
 
 
 
 export default function Tree(props) {
+    debugger
     const onchange = (e) => {
-        
+
         try {
-            let targetDiv = document.getElementById("color")
+            let targetDiv = document.getElementById("price-drop")
             targetDiv.style.display = "none";
         } catch { }
     }
@@ -123,7 +123,7 @@ export default function Tree(props) {
 //     }
 
 //     function fun2(data2) {
-//         // 
+//         //
 //         return (
 //             // <li >
 //             <div style={{ paddingLeft: "20px" }} className={""} >

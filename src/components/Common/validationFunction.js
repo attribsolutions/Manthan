@@ -2,7 +2,7 @@ import { CommonConsole } from "./CommonFunction";
 
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
     let isValid = true;
-
+debugger
     Object.keys(required).forEach((lab) => {
 
         if (!(hasValid[lab].valid)) {
@@ -169,7 +169,6 @@ export function defaultSetValidAll({ state, setState, fieldArr }) {
 }
 
 export const onChangeSelect = ({ hasSelect, evn, state, setState }) => {
-
     const event = { change: { name: evn.name, value: hasSelect }, type: "select" }
     formValChange({ event, state, setState })
 }
