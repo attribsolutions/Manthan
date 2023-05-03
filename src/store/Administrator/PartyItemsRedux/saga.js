@@ -14,9 +14,9 @@ function* Save_PartyItems_GneratorFunction({ config }) {            // Save API
 }
 
 // get Item list for Master Page
-function* getPartyItemGenFunc({ SupplierID }) {                       // getList API
+function* getPartyItemGenFunc({ jsonBody }) {                       // getList API
   try {
-    const response = yield call(get_Party_Item_List, SupplierID);
+    const response = yield call(get_Party_Item_List, jsonBody);
     response.Data.map((item) => {
       item["selectCheck"] = false
       if (item.Party > 0) {
@@ -28,13 +28,15 @@ function* getPartyItemGenFunc({ SupplierID }) {                       // getList
   } catch (error) { CommonConsole(error) }
 }
 
+
 function* getPartyListGenFunc() {
-  const filter = loginJsonBody()                                         // getList API
+  // const filter = loginJsonBody()                                         // getList API
   try {
-    const response = yield call(GetPartyList_API, filter);
+    const response = yield call(GetPartyList_API);
     yield put(getPartyListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
+
 
 function* editPartyItems_ID_GenratorFunction({ config }) {               // edit API 
   const { btnmode } = config;
