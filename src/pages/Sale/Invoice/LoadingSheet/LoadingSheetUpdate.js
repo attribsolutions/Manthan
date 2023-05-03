@@ -10,93 +10,43 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
+import { commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../../store/actions";
+import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
-import {
-    comAddPageFieldFunc,
-    formValid,
-    initialFiledFunc,
-    onChangeDate,
-    onChangeSelect,
-    resetFunction,
-} from "../../../../components/Common/validationFunction";
-import Select from "react-select";
-import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, loginUserID } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginPartyID, currentDate } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
-import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
-import { invoiceListGoBtnfilter } from "../../../../store/Sales/Invoice/action";
-import { getVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
-import { LoadingSheetListAction, LoadingSheetListActionSuccess, LoadingSheet_GoBtn_API, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMaster, SaveLoadingSheetMasterSucccess } from "../../../../store/Sales/LoadingSheetRedux/action";
+import { LoadingSheet_GoBtn_API_Succcess } from "../../../../store/Sales/LoadingSheetRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
-import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
-import data from "./data.json";
 import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
-import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
+import { GetOpeningBalance, ReceiptGoButtonMaster } from "../../../../store/Accounting/Receipt/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
-
-
 
 const LoadingSheetUpdate = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    // const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, Date: currentDate });
-    const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [array, setArray] = useState([]);
-
-    const fileds = {
-        id: "",
-        Date: currentDate,
-        FromDate: currentDate,
-        ToDate: currentDate,
-        RouteName: "",
-        VehicleNumber: "",
-        DriverName: ""
-    }
-
-    const [state, setState] = useState(initialFiledFunc(fileds))
+    const [loadingDate, setLoadingDate] = useState(currentDate);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
-        postMsg,
-        // updateMsg,
-        pageField,
         userAccess,
         List,
-        makeReceipt,
-        OpeningBalance
     } = useSelector((state) => ({
-        postMsg: state.LoadingSheetReducer.postMsg,
         List: state.LoadingSheetReducer.LoadingSheetUpdate,
-        updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        makeReceipt: state.ReceiptReducer.ReceiptGoButton,
-        OpeningBalance: state.ReceiptReducer.OpeningBalance,
+
     }));
-
-    const location = { ...history.location }
-    // const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
     const { InvoiceParent = [], PartyDetails = {} } = List
-
-    // const { fromdate, todate, Date } = orderlistFilter;
 
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
@@ -105,6 +55,9 @@ const LoadingSheetUpdate = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -122,65 +75,12 @@ const LoadingSheetUpdate = (props) => {
         };
     }, [userAccess])
 
-    // useEffect(() => {
-    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-    //         setState(() => resetFunction(fileds, state))// Clear form values  
-    //         // dispatch(Breadcrumb_inputName(''))
-
-    //         if (pageMode === mode.dropdownAdd) {
-    //             dispatch(AlertState({
-    //                 Type: 1,
-    //                 Status: true,
-    //                 Message: postMsg.Message,
-    //             }))
-    //         }
-    //         else {
-    //             dispatch(AlertState({
-    //                 Type: 1,
-    //                 Status: true,
-    //                 Message: postMsg.Message,
-    //                 RedirectPath: url.LOADING_SHEET_LIST,
-    //             }))
-    //         }
-    //     }
-    //     else if (postMsg.Status === true) {
-
-    //         dispatch(AlertState({
-    //             Type: 4,
-    //             Status: true,
-    //             Message: JSON.stringify(postMessage.Message),
-    //             RedirectPath: false,
-    //             AfterResponseAction: false
-    //         }));
-    //     }
-    // }, [postMsg])
-
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
-
-    useEffect(() => {
-
-        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
-            dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
-
-            history.push({
-                pathname: makeReceipt.path,
-                pageMode: makeReceipt.pageMode,
-                editValue: makeReceipt.ListData,
-            })
-        }
-    }, [makeReceipt, OpeningBalance])
-
     function makeBtnFunc(e, row) {
 
         var { CustomerID, id } = row
 
         try {
-            debugger
+
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
@@ -197,14 +97,6 @@ const LoadingSheetUpdate = (props) => {
             dispatch(GetOpeningBalance(jsonBody1));
 
         } catch (e) { }
-    }
-
-
-    function checkLoading(e, row, key) {
-        
-
-        let checkedValue = e.target.checked
-        row.idChecked = checkedValue
     }
 
     const pagesListColumns = [
@@ -226,17 +118,16 @@ const LoadingSheetUpdate = (props) => {
         },
         {
             text: "Select All",
-            dataField: "Check",
+            dataField: "Checked",
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center' }}>
                     <Input
-                        id=""
-                        key={row.id}
-                        defaultChecked={row.Check}
+                        id={`Checked${key}`}
+                        defaultChecked={row.Checked}
                         type="checkbox"
                         className="col col-sm text-center"
-                        onChange={e => { checkLoading(e, row, key) }}
+                        onChange={(event) => { row.Checked = event.target.checked; }}
                     />
                 </span>)
             }
@@ -260,7 +151,6 @@ const LoadingSheetUpdate = (props) => {
                             className=" fas fa-file-invoice" ></span> </Button></span>)
             }
         }
-
     ];
 
     const pageOptions = {
@@ -269,69 +159,39 @@ const LoadingSheetUpdate = (props) => {
         custom: true,
     };
 
-    const saveHandeller = async (event) => {
-
-        event.preventDefault();
-        const btnId = event.target.id
-
-
-        try {
-            if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
-
-
-                const jsonBody = JSON.stringify({
-
-                });
-
-                if (pageMode === mode.edit) {
-                }
-                else {
-                    dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
-                }
-            }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
-    };
-
     function DateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.Date = date;
-            a.hasValid.Date.valid = true
-            return a
-        })
+        setLoadingDate(date)
     }
 
     function MakeReceiptForAll() {
-        
+
         let result = InvoiceParent.map(a => {
-            if (a.idChecked === true) {
+            if (a.Checked === true) {
                 return a.id
             }
         })
         const LoadingNumber = result.toString()
+
+        const LoadingNumber_withoutcomma = LoadingNumber.replace(/,*$/, '');
+
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             CustomerID: "",
-            InvoiceID: LoadingNumber
+            InvoiceID: LoadingNumber_withoutcomma
         });
+
         const body = { jsonBody }
 
-    
-        if (LoadingNumber === "") {
+        if (LoadingNumber_withoutcomma === "") {
             CustomAlert({
                 Type: 3,
                 Message: "Select At Least One Field",
             })
-        } else {
+        }
+        else {
             dispatch(ReceiptGoButtonMaster(body))
             history.push(url.BULK_RECIPT);
         }
-
-       
-
-
-
     }
 
     if (!(userPageAccessState === '')) {
@@ -364,7 +224,7 @@ const LoadingSheetUpdate = (props) => {
                                         <Col sm="7">
                                             <Flatpickr
                                                 name='Date'
-                                                value={values.Date}
+                                                value={loadingDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
@@ -427,13 +287,13 @@ const LoadingSheetUpdate = (props) => {
 
                         </PaginationProvider>
                         {
-                            // Data.length > 0 ?
-                            <FormGroup>
-                                <Col sm={2} className={"row save1"}>
-                                    <button type="button" style={{ width: "120px" }} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>
-                                </Col>
-                            </FormGroup >
-                            // : null
+                            InvoiceParent.length > 0 ?
+                                <FormGroup>
+                                    <Col sm={2} className={"row save1"}>
+                                        <button type="button" style={{ width: "120px" }} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>
+                                    </Col>
+                                </FormGroup >
+                                : null
                         }
 
                     </form >
