@@ -28,7 +28,8 @@ const ordeRreport = (data) => {
         title: `POReport/${data.OrderDate}-${data.CustomerName} `
     });
     // window.open(doc.output('dataurlnewwindow'));
-    doc.output('dataurlnewwindow');
+    const options = { filename: "Order Report" }
+    doc.output('dataurlnewwindow', options);
 
 }
 export default ordeRreport;
