@@ -1,5 +1,6 @@
+import { Filter } from "interweave";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import { Save_Party_Items, get_Party_Item_List, GetPartyList_API, edit_PartyItem_List_Api, } from "../../../helpers/backend_helper";
 import { SavePartyItemsSuccess, getPartyItemListSuccess, getPartyListSuccess, editPartyItemIDSuccess, } from "./action";
 import { POST_PARTYITEMS, GET_PARTY_ITEM_LIST, GET_PARTY_LIST, EDIT_PARTY_ITEM_ID, } from "./actionType";
@@ -12,7 +13,7 @@ function* Save_PartyItems_GneratorFunction({ config }) {            // Save API
   } catch (error) { CommonConsole(error) }
 }
 
-
+// get Item list for Master Page
 function* getPartyItemGenFunc({ SupplierID }) {                       // getList API
   try {
     const response = yield call(get_Party_Item_List, SupplierID);
@@ -27,19 +28,17 @@ function* getPartyItemGenFunc({ SupplierID }) {                       // getList
   } catch (error) { CommonConsole(error) }
 }
 
-
-
-function* getPartyListGenFunc() {                                              // getList API
+function* getPartyListGenFunc() {
+  const filter = loginJsonBody()                                         // getList API
   try {
-    const response = yield call(GetPartyList_API);
+    const response = yield call(GetPartyList_API, filter);
     yield put(getPartyListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-
-function* editPartyItems_ID_GenratorFunction({ config  }) {               // edit API 
+function* editPartyItems_ID_GenratorFunction({ config }) {               // edit API 
   const { btnmode } = config;
-  
+
   try {
     const response = yield call(edit_PartyItem_List_Api, config);
     response.pageMode = btnmode;
@@ -52,7 +51,7 @@ function* editPartyItems_ID_GenratorFunction({ config  }) {               // edi
       return item
     });
     response.Data = { ...config, PartyItem };
-    
+
     yield put(editPartyItemIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }

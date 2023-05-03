@@ -163,7 +163,7 @@ export const deletHPagesUsingID_API = ({ deleteId, btnId }) => del(`${url.H_PAGE
 
 // M_Items
 export const Items_Group_Get_API = () => get(url.ITEMS_GROUP_API)//get api
-export const Items_Master_Get_API = () => get(url.Items_MASTER_API)//get api
+export const Items_Filter_API = (filters) => post(url.Items_FILTER_API, filters) // list api using post method
 export const Items_Master_Post_API = ({ jsonBody, btnId }) => post(url.Items_MASTER_API, jsonBody, btnId)// save api
 export const Items_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.Items_MASTER_API}/${deleteId}`, btnId)// delete api
 export const Items_Master_Edit_API = ({ editId, btnId }) => get(`${url.Items_MASTER_API}/${editId}`, btnId)// edit api
@@ -329,10 +329,11 @@ export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY
 
 //PartyItems API
 
-export const GoButton_API = (data) => post(url.PARTYITEM_FOR_LIST, data)//get api
+// export const GoButton_API = (data) => post(url.PARTYITEM_FOR_LIST, data)//get api
 export const Save_Party_Items = ({ jsonBody, btnId }) => post(url.PARTYITEM_FOR_MASTER, jsonBody, btnId)// post api
 export const get_Party_Item_List = (SupplierID) => get(`${url.PARTYITEM_FOR_MASTER}/${SupplierID}`)//get api
-export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
+// export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
+export const GetPartyList_API = (filters) => post(url.PARTYITEM_FOR_LIST, filters) // get api
 export const edit_PartyItem_List_Api = ({ editId, btnId }) => get(`${url.PARTYITEM_FOR_MASTER}/${editId}`, btnId)// edit api
 
 //Post api VendorSupplierCustomer 

@@ -88,7 +88,7 @@ const GRNAdd3 = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
-
+        
         if ((items.Status === true)) {
             const grnDetails = { ...items.Data }
             let arr = []
@@ -97,6 +97,7 @@ const GRNAdd3 = (props) => {
             let tQty = 0
             let id = 1
             grnDetails.OrderItem.forEach((i, k) => {
+                
                 i.BatchDate_conv = convertDatefunc(i.BatchDate)
                 if (k === 0) {
                     i.id = id
@@ -283,7 +284,7 @@ const GRNAdd3 = (props) => {
 
 
     const saveHandeller = (event) => {
-
+        
         event.preventDefault();
 
         const btnId = event.target.id
@@ -294,7 +295,7 @@ const GRNAdd3 = (props) => {
         }
         try {
             const itemArr = []
-
+            let sum = 0
             grnItemList.forEach(i => {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
@@ -330,8 +331,11 @@ const GRNAdd3 = (props) => {
                 if ((i.Quantity > 0)) {
                     itemArr.push(arr)
                 }
-
             })
+
+            itemArr.forEach(element => {
+                sum = sum + Number(element.Amount)
+            });
 
             if (invoiceNo.length === 0) {
                 CustomAlert({
@@ -345,7 +349,7 @@ const GRNAdd3 = (props) => {
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
-                GrandTotal: orderAmount,
+                GrandTotal: sum,
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: loginUserID(),
@@ -461,7 +465,7 @@ const GRNAdd3 = (props) => {
                                             style={{ paddingTop: "7px" }}
                                             placeholder="Enter Invoice No"
                                             disabled={true}
-                                            // onChange={(e) => openPOdata[0].Inward = true}
+                                        // onChange={(e) => openPOdata[0].Inward = true}
                                         />
 
                                     </Col>

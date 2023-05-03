@@ -64,6 +64,7 @@ export const ROLE_FILTER_API = "/RolesFilter" // role get api
 
 // M_Items Api
 export const Items_MASTER_API = "/Items"
+export const Items_FILTER_API = "/ItemsFilter"
 export const GET_GROUP_BY_GROUPTYPES_ID = "/GetGroupByGroupTypeID"
 export const GET_SUBGROUP_BY_GROUP_ID = "/GetSubGroupByGroupID"
 export const GET_ITEM_TAG = "/ItemTag"
@@ -184,7 +185,7 @@ export const PARTY_SUB_PARTY_LIST = '/PartySubPartyList'
 export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 
 //PartyItems
-export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
+export const PARTYITEM_FOR_LIST = '/PartyItemsFilter' // FOR Get
 export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 
 //Routes
