@@ -38,7 +38,7 @@ import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginIsSCMCompany, loginPartyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyGroup, loginCompanyID, loginIsSCMCompany, loginPartyID, loginRoleID, loginUserID } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 
@@ -144,7 +144,7 @@ const PartyItems = (props) => {
                     return item
                 });
                 dispatch(getPartyItemListSuccess(convArr))
-                
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(PartyName))
             }
@@ -158,7 +158,17 @@ const PartyItems = (props) => {
                 a.hasValid.Name.valid = true
                 return a
             })
-            dispatch(getpartyItemList(loginPartyID()))
+            const jsonBody = JSON.stringify({
+                "CompanyGroup": loginCompanyGroup(),
+                "CompanyID": loginCompanyID(),
+                "IsSCMCompany": loginIsSCMCompany(),
+                "PartyID": loginPartyID(),
+                "RoleID": loginRoleID(),
+                "UserID": loginUserID()
+
+            });
+            dispatch(getpartyItemList(jsonBody))
+            //    dispatch(getpartyItemList(loginPartyID()))
         }
     }, [])
 
@@ -295,8 +305,16 @@ const PartyItems = (props) => {
                 return
             }
         }
+        const jsonBody = JSON.stringify({
+            "CompanyGroup": loginCompanyGroup(),
+            "CompanyID": loginCompanyID(),
+            "IsSCMCompany": loginIsSCMCompany(),
+            "PartyID": supplier,
+            "RoleID": loginRoleID(),
+            "UserID": loginUserID()
 
-        dispatch(getpartyItemList(supplier))
+        });
+        dispatch(getpartyItemList(jsonBody))
     };
 
     const SaveHandler = async (event) => {
@@ -331,7 +349,6 @@ const PartyItems = (props) => {
 
     const PartyDropdown = () => {
         if (loginIsSCMCompany() === 1) {
-
             return null
         }
         return <Card>

@@ -28,10 +28,10 @@ export const SavePartyItemsSuccess = (resp) => ({    // Save  success
   payload: resp,
 });
 
-
-export const getpartyItemList = (SupplierID) => ({   // After Supplier Select Item List API
+// Get Item List for Party Item Master
+export const getpartyItemList = (jsonBody) => ({   // After Supplier Select Item List API
   type: GET_PARTY_ITEM_LIST,  
-  SupplierID,
+  jsonBody,
 });
 
 export const getPartyItemListSuccess = data => ({        // After Supplier Select Item List API success

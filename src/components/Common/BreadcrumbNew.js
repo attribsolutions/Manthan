@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react"
-import { Row,  Modal, Button, } from "reactstrap"
+import { Row, Modal, Button, } from "reactstrap"
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { BreadcrumbReset} from "../../store/Utilites/Breadcrumb/actions";
+import { BreadcrumbReset } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 
 const BreadcrumbNew = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  // for Excel Download
 
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [downListKey, setDownListKey] = useState([]);
 
-  // const { pageId } = props;
+  const [trueValues, setTrueValues] = useState({});
+
   let { showCountlabel = '', bredcrumbItemName = '', breadcrumbDetail } = useSelector((state) => ({
     showCountlabel: state.BreadcrumbReducer.showCountlabel,
     bredcrumbItemName: state.BreadcrumbReducer.bredcrumbItemName,
@@ -22,17 +22,23 @@ const BreadcrumbNew = () => {
 
   }));
 
-
   const {
-    newBtnView= true,
-    excelBtnView= true,
-    pageHeading= '',
-    CountLabel= true,
-    newBtnPath= "",
-    pageMode= "",
-    downBtnData= [],
+    newBtnView = true,
+    excelBtnView = true,
+    pageHeading = '',
+    CountLabel = true,
+    newBtnPath = "",
+    pageMode = "",
+    downBtnData = [],
+    defaultDownBtnData = {}
   } = breadcrumbDetail;
-  
+
+  // console.log(downListKey)
+
+  // useEffect(() => {
+  //   downListKey.splice(0, 0, 'SelectAll')
+  // }, [downListKey])
+
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
     removeBodyCss();
@@ -43,26 +49,33 @@ const BreadcrumbNew = () => {
   }
 
   const NewButtonHandeller = () => {
-      history.push({
-        pathname: newBtnPath,
-        pageMode: pageMode
-      })
+    history.push({
+      pathname: newBtnPath,
+      pageMode: pageMode
+    })
   }
+
   useEffect(() => {
     dispatch(BreadcrumbReset())
   }, [history.location.pathname]);
-   
+
   useEffect(() => {
+    var keysValues = {}
+
     if (!(downBtnData === undefined)) {
+    
       if ((downBtnData.length > 0)) {
         const propertyNames = Object.keys(downBtnData[0]);
         setDownListKey(propertyNames)
+
+        keysValues = Object.keys(defaultDownBtnData).filter(k => defaultDownBtnData[k] === true)
+        setTrueValues(keysValues)
       }
     }
   }, [downBtnData])
 
   const DownloadInExcelButtonHanler = (event, values) => {
-    // const exldata = downBtnData
+  
     let list = []
     let object1 = {}
     var selectedValues = Object.keys(values);
@@ -85,84 +98,61 @@ const BreadcrumbNew = () => {
     setmodal_scroll(false)
   }
 
-  const handleChange = (e) => {
-    var chek = document.getElementById("checkAll")
-    if (chek) {
-      for (var i = 0; i < downListKey.length; i++) {
-        document.getElementById(`chckbox${i}`).checked = true
-      }
-    }
-    else {
-      for (var i = 0; i < downListKey.length; i++) {
-        document.getElementById(`chckbox${i}`).checked = false
-      }
-    }
-  };
-
-  const excelCheckBoxOnChange = (e) => {
-    const check = e.target
-    if (check.id === "checkAll") {
-      if (check.checked) {
-        for (var i = 0; i < downListKey.length; i++) {
-          const a = document.getElementById(`chckbox${i}`)
-          if (a) {
-            a.checked = true
-          }
-        }
-      }
-      else {
-        for (var i = 0; i < downListKey.length; i++) {
-          const a = document.getElementById(`chckbox${i}`)
-          if (a) {
-            a.checked = false
-          }
-        }
-      }
-    }
-
-  };
+  // function OnChangeFunc(event, value, key) {
+   
+  //   var data = downListKey.map((i, key) => { return key })
+  //   console.log(data)
+  //   if (value === "SelectAll") {
+  //     data.map((indx, key) => {
+  //       document.getElementById(`chckbox${indx}`).checked = event
+  //     })
+  //   }
+  // }
 
   function ExcelCheckBox() {
     const arrDiv = []
+
     downListKey.forEach((index, key) => {
-      const match = index.slice(0, 1);
-      if (!(match === "$")) {
-        arrDiv.push(
-          <div className="row" >
-            <div className="col col-12"  >
-              <Row>
-                <div className="col col-12 " >
-                  <AvInput
-                    className=" text-black checkbox-border-red"
-                    type="checkbox"
-                    id={`chckbox${key}-${index.id}`}
-                    name={index}
-                  />&nbsp;&nbsp;&nbsp;
-                  <label className="form-label text-black"> {index} </label>
-                </div>
-              </Row>
-            </div>
+
+      arrDiv.push(
+        <div className="row" >
+          <div className="col col-12"  >
+            <Row>
+              <div className="col col-12 " >
+                <AvInput
+                  className=" text-black checkbox-border-red"
+                  type="checkbox"
+                  id={`chckbox${key}`}
+                  defaultChecked={trueValues.find((i) => {
+                    return (index === i) ? true : false
+                  })}
+                  name={index}
+                  // onChange={(e) => { OnChangeFunc(e.target.checked, index, key) }}
+                />&nbsp;&nbsp;&nbsp;
+                <label className="form-label text-black"> {index} </label>
+              </div>
+            </Row>
           </div>
-        )
-      }
+        </div>
+      )
     })
     return arrDiv
   }
 
   return (
     <React.Fragment>
-      <header id="page-topbar1"style={{ zIndex:"1"}}  >
-        <div className="navbar-header blur1" style={{ paddingRight: "-10px",zIndex:"-1"}}>
+      <header id="page-topbar1" style={{ zIndex: "1" }}  >
+        <div className="navbar-header blur1" style={{ paddingRight: "-10px", zIndex: "-1" }}>
           <div className="d-flex" >
-            <div className="navbar-brand-box" style={{backgroundColor:"white"}} ></div>
+            <div className="navbar-brand-box" style={{ backgroundColor: "white" }} ></div>
             <div style={{ paddingLeft: "7px" }} >
-             
+
               {
                 newBtnView ?
                   <div >
                     <button type="button" className="btn btn-success"
                       data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-                      onClick={NewButtonHandeller }>
+                      onClick={NewButtonHandeller}>
                       New
                     </button>
                     <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px", }} >{pageHeading}</label>
