@@ -38,12 +38,12 @@ function* getPartyListGenFunc() {
 }
 
 
-function* editPartyItems_ID_GenratorFunction({ body, config }) {     // edit API 
+function* editPartyItems_ID_GenratorFunction({ body }) {     // edit API 
   debugger
-  const { btnmode, jsonBody } = body;
+  const { config, jsonBody } = body;
   try {
     const response = yield call(edit_PartyItem_List_Api, jsonBody);
-    response.pageMode = "edit";
+    response.pageMode = config.btnmode;
 
     const PartyItem = response.Data.map((item) => {
       item["itemCheck"] = false
@@ -52,7 +52,7 @@ function* editPartyItems_ID_GenratorFunction({ body, config }) {     // edit API
       }
       return item
     });
-    response.Data = { ...body, PartyItem };
+    response.Data = { ...config, PartyItem };
 
     yield put(editPartyItemIDSuccess(response));
   } catch (error) { CommonConsole(error) }

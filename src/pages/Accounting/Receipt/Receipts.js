@@ -101,7 +101,7 @@ const Receipts = (props) => {
     }, []);
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Receipt Count :${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`Invoice Count :${Data.length}`))
     }, [ReceiptGoButton]);
 
     // Customer dropdown Options

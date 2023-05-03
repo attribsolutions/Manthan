@@ -32,7 +32,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalula
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturnFunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc, loginRoleID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc, loginRoleID, loginJsonBody } from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -155,9 +155,9 @@ const Order = (props) => {
         }
     }, []);
 
-  
+
     useEffect(() => {  // userAccess useEffect
-        debugger
+        
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -242,7 +242,7 @@ const Order = (props) => {
 
     useEffect(() => {
         if (assingItemData.Status === true) {
-            debugger
+            
             setisOpen_assignLink(true);
         }
     }, [assingItemData]);
@@ -601,6 +601,7 @@ const Order = (props) => {
     };
 
     async function assignItem_onClick() {
+        
         const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : loginPartyID()
         const config = {
             editId: isParty,
@@ -614,9 +615,13 @@ const Order = (props) => {
             Type: 7,
             Message: "Do you confirm your choice?",
         });
+
         if (isConfirmed) {
+
+            const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: isParty } });
+
+            dispatch(editPartyItemID({ jsonBody, config }))
             dispatch(GoButton_For_Order_AddSuccess([]))
-            dispatch(editPartyItemID(config));
         };
     };
 

@@ -9,11 +9,11 @@ import {
   saveGroupMaster_Success,
 } from "../../../store/actions";
 import PartyItems from "./PartyItems";
-import { editPartyItemID, GetPartyList, SavePartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+import { editPartyItemID, GetPartyList, } from "../../../store/Administrator/PartyItemsRedux/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import { loginCompanyGroup, loginCompanyID, loginIsSCMCompany, loginRoleID, loginUserID } from "../../../components/Common/CommonFunction";
+import { loginJsonBody, } from "../../../components/Common/CommonFunction";
 
 const PartyItemsList = (props) => {
 
@@ -35,7 +35,7 @@ const PartyItemsList = (props) => {
     editId: editPartyItemID,
     deleteId: delete_GroupList_ID,
     postSucc: saveGroupMaster_Success,
-    updateSucc: SavePartyItemsSuccess,
+    // updateSucc: SavePartyItemsSuccess,
     deleteSucc: deleteGrouplistSuccess
 
   }
@@ -46,20 +46,14 @@ const PartyItemsList = (props) => {
   }, []);
 
   function editBodyfunc(row) {
-    debugger
+
     const config = { ...row }
     config.PartyName = row.rowData.Name
     config.Party = row.rowData.id;
     config.editId = row.rowData.id
 
-    const jsonBody = JSON.stringify({
-      "CompanyGroup": loginCompanyGroup(),
-      "CompanyID": loginCompanyID(),
-      "IsSCMCompany": loginIsSCMCompany(),
-      "PartyID": config.editId,
-      "RoleID": loginRoleID(),
-      "UserID": loginUserID()
-    });
+    const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: config.editId } });
+
     dispatch(editPartyItemID({ jsonBody, config }))
   }
 
