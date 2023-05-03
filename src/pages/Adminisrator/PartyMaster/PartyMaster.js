@@ -43,7 +43,6 @@ import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/ac
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
-import NewForm from "./NewForm";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -408,7 +407,7 @@ const PartyMaster = (props) => {
             dispatch(updatePartyID(jsonBody, EditData.id));
         }
         else {
-            
+
             dispatch(postPartyData(jsonBody));
         }
     };
@@ -421,7 +420,7 @@ const PartyMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                     <Container fluid>
-                    {/* <NewForm/> */}
+                        {/* <NewForm/> */}
                         <AvForm onValidSubmit={(e, v) => { SaveHandler(e, v); }}>
 
                             <Row>
@@ -622,7 +621,7 @@ const PartyMaster = (props) => {
                                                                         />
                                                                     </FormGroup>
                                                                 </Col> */}
-                                                                 <Col md="3">
+                                                                <Col md="3">
                                                                     <FormGroup>
                                                                         <Label htmlFor="validationCustom01">Suppiler </Label>
                                                                         {/* style={{ height: "2.9cm" }} */}
@@ -784,7 +783,7 @@ const PartyMaster = (props) => {
                                                             </Row>
 
                                                             <Row className="mt-3" >
-                                                               
+
                                                             </Row>
 
                                                         </CardBody>
@@ -792,19 +791,10 @@ const PartyMaster = (props) => {
                                                 </TabPane>
 
                                                 <TabPane tabId="2">
-                                                    <Row>
-                                                        <Col md={12}  >
-                                                            <Row className="mt-3">
-                                                                <Col className=" col col-11 ">
-                                                                    <AddressDetails_Tab tableData={AddressDetailsMaster} func={setAddressDetailsMaster} />
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
+                                                    <AddressDetails_Tab tableData={AddressDetailsMaster} func={setAddressDetailsMaster} />
                                                 </TabPane>
 
                                                 <TabPane tabId="3">
-                                                    <Col md={12}  >
                                                         <Card className="text-black " >
                                                             <CardBody className="c_card_body">
                                                                 <Col>
@@ -968,7 +958,6 @@ const PartyMaster = (props) => {
                                                                 </Col>
                                                             </CardBody>
                                                         </Card>
-                                                    </Col>
                                                 </TabPane>
                                             </TabContent>
                                         </CardBody>
@@ -1012,8 +1001,7 @@ const PartyMaster = (props) => {
                                 </Col>
                             </Row>
                         </AvForm>
-                        <Input/>
-                     
+
                     </Container>
                 </div >
             </React.Fragment>
