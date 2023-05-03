@@ -18,7 +18,7 @@ export const getPartyListSuccess = (pages) => ({  // get List success
   payload: pages,
 });
 
-export const SavePartyItems = (config={}) => ({            // save Action
+export const SavePartyItems = (config = {}) => ({            // save Action
   type: POST_PARTYITEMS,
   config,
 });
@@ -30,7 +30,7 @@ export const SavePartyItemsSuccess = (resp) => ({    // Save  success
 
 // Get Item List for Party Item Master
 export const getpartyItemList = (jsonBody) => ({   // After Supplier Select Item List API
-  type: GET_PARTY_ITEM_LIST,  
+  type: GET_PARTY_ITEM_LIST,
   jsonBody,
 });
 
@@ -39,9 +39,9 @@ export const getPartyItemListSuccess = data => ({        // After Supplier Selec
   payload: data,
 })
 
-export const editPartyItemID = (config={}) => ({      // Edit Action 
+export const editPartyItemID = (body, config) => ({      // Edit Action 
   type: EDIT_PARTY_ITEM_ID,
-  config
+  body, config
 });
 
 export const editPartyItemIDSuccess = (editData) => ({       // Edit  Success

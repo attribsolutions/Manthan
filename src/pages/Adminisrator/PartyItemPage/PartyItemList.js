@@ -13,6 +13,7 @@ import { editPartyItemID, GetPartyList, SavePartyItemsSuccess } from "../../../s
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
+import { loginCompanyGroup, loginCompanyID, loginIsSCMCompany, loginRoleID, loginUserID } from "../../../components/Common/CommonFunction";
 
 const PartyItemsList = (props) => {
 
@@ -45,37 +46,45 @@ const PartyItemsList = (props) => {
   }, []);
 
   function editBodyfunc(row) {
-    
+    debugger
     const config = { ...row }
-    config.PartyName = row. rowData.Name
-    config.Party = row. rowData.id;
-    config.editId = row. rowData.id
+    config.PartyName = row.rowData.Name
+    config.Party = row.rowData.id;
+    config.editId = row.rowData.id
 
-    dispatch(editPartyItemID(config))
+    const jsonBody = JSON.stringify({
+      "CompanyGroup": loginCompanyGroup(),
+      "CompanyID": loginCompanyID(),
+      "IsSCMCompany": loginIsSCMCompany(),
+      "PartyID": config.editId,
+      "RoleID": loginRoleID(),
+      "UserID": loginUserID()
+    });
+    dispatch(editPartyItemID({ jsonBody, config }))
   }
 
-const { pageField, userAccess = [] } = reducers
+  const { pageField, userAccess = [] } = reducers
 
-return (
-  <React.Fragment>
-    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-    {
-      (pageField) ?
-        <CommonListPage
-          action={action}
-          reducers={reducers}
-          MasterModal={PartyItems}
-          masterPath={url.PARTYITEM}
-          ButtonMsgLable={"Party Items"}
-          deleteName={"Name"}
-          editBodyfunc={editBodyfunc}
+  return (
+    <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      {
+        (pageField) ?
+          <CommonListPage
+            action={action}
+            reducers={reducers}
+            MasterModal={PartyItems}
+            masterPath={url.PARTYITEM}
+            ButtonMsgLable={"Party Items"}
+            deleteName={"Name"}
+            editBodyfunc={editBodyfunc}
 
-        />
-        : null
-    }
+          />
+          : null
+      }
 
-  </React.Fragment>
-)
+    </React.Fragment>
+  )
 }
 
 export default PartyItemsList;
