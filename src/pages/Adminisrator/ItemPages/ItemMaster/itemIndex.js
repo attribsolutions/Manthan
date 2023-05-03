@@ -76,7 +76,7 @@ const ItemsMaster = (props) => {
 
     let initial = {
         Name: "",
-        Sequence: "",
+        SAPItemCode: "",
         ShortName: "",
         BarCode: '',
         BaseUnit: [],
@@ -222,7 +222,7 @@ const ItemsMaster = (props) => {
                     // ====================== Base detail tab ======================
 
                     Name: hasEditVal.Name,
-                    Sequence: hasEditVal.Sequence,
+                    SAPItemCode: hasEditVal.SAPItemCode,
                     ShortName: hasEditVal.ShortName,
                     BarCode: hasEditVal.BarCode,
                     Company: { label: hasEditVal.CompanyName, value: hasEditVal.Company },
@@ -653,7 +653,7 @@ const ItemsMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     Name: formValue.Name,
                     ShortName: formValue.ShortName,
-                    Sequence: formValue.Sequence,
+                    SAPItemCode: formValue.SAPItemCode,
                     BarCode: formValue.BarCode,
                     isActive: formValue.isActive,
                     IsSCM: formValue.IsSCM,
@@ -1054,13 +1054,13 @@ const ItemsMaster = (props) => {
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">Sequence</Label>
+                                                                        <Label htmlFor="validationCustom01">SAP Code</Label>
                                                                         <Input
-                                                                            id='txtSequence0'
-                                                                            defaultValue={EditData.Sequence}
-                                                                            placeholder=" Please Enter Sequence "
+                                                                            id='txtSAPItemCode0'
+                                                                            defaultValue={EditData.SAPItemCode}
+                                                                            placeholder=" Please Enter SAP Code "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Sequence") }}
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "SAPItemCode") }}
                                                                         />
 
                                                                     </FormGroup>
