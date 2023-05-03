@@ -163,7 +163,7 @@ export const deletHPagesUsingID_API = ({ deleteId, btnId }) => del(`${url.H_PAGE
 
 // M_Items
 export const Items_Group_Get_API = () => get(url.ITEMS_GROUP_API)//get api
-export const Items_Master_Get_API = () => get(url.Items_MASTER_API)//get api
+export const Items_Filter_API = (filters) => post(url.Items_FILTER_API, filters) // list api using post method
 export const Items_Master_Post_API = ({ jsonBody, btnId }) => post(url.Items_MASTER_API, jsonBody, btnId)// save api
 export const Items_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.Items_MASTER_API}/${deleteId}`, btnId)// delete api
 export const Items_Master_Edit_API = ({ editId, btnId }) => get(`${url.Items_MASTER_API}/${editId}`, btnId)// edit api
