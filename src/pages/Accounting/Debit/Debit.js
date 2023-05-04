@@ -30,6 +30,7 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
+    convertDatefunc,
     currentDate,
     loginCompanyID,
     loginPartyID,
@@ -234,7 +235,7 @@ const Debit = (props) => {
 
     const ReceiptNo_Options = ReceiptNumber.map((index) => ({
         value: index.Receipt,
-        label: `${index.FullReceiptNumber} -${index.AmountPaid} -${index.ReceiptDate}`,
+        label: `${index.FullReceiptNumber} -${index.AmountPaid} -${convertDatefunc(index.ReceiptDate)}`,
         Amount: index.AmountPaid,
         ReceiptDate: index.ReceiptDate
     }));
