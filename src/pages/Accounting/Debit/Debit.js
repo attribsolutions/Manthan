@@ -64,10 +64,10 @@ const Debit = (props) => {
     const dispatch = useDispatch();
 
     const fileds = {
-        DebitDate: currentDate,
-        PartyName: "",
+        CRDRNoteDate: currentDate,
+        Customer: "",
         Comment: "",
-        Amount: "",
+        GrandTotal: "",
         ServiceItems: "",
         Narration: "",
         ReceiptNO: "",
@@ -252,11 +252,11 @@ const Debit = (props) => {
         })
     };
 
-    function DebitDateOnchange(e, date) {
+    function CRDRNoteDateOnchange(e, date) {
         setState((i) => {
             const a = { ...i }
-            a.values.DebitDate = date;
-            a.hasValid.DebitDate.valid = true
+            a.values.CRDRNoteDate = date;
+            a.hasValid.CRDRNoteDate.valid = true
             return a
         })
     };
@@ -270,10 +270,10 @@ const Debit = (props) => {
                 btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
-                    CRDRNoteDate: values.DebitDate,
-                    Customer: values.PartyName.value,
+                    CRDRNoteDate: values.CRDRNoteDate,
+                    Customer: values.Customer.value,
                     NoteType: CreditDebitTypeId.id,
-                    GrandTotal: values.Amount,
+                    GrandTotal: values.GrandTotal,
                     Narration: values.Narration,
                     Comment: values.Comment,
                     ReceiptNO: values.ReceiptNO,
@@ -312,11 +312,11 @@ const Debit = (props) => {
                                 <Col sm="6">
                                     <FormGroup className="row mt-2" >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.DebitDate}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CRDRNoteDate}</Label>
                                         <Col sm="7">
                                             <Flatpickr
-                                                name='DebitDate'
-                                                value={values.DebitDate}
+                                                name='CRDRNoteDate'
+                                                value={values.CRDRNoteDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
@@ -324,7 +324,7 @@ const Debit = (props) => {
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
                                                 }}
-                                                onChange={DebitDateOnchange}
+                                                onChange={CRDRNoteDateOnchange}
                                             />
                                         </Col>
                                     </FormGroup>
@@ -361,12 +361,12 @@ const Debit = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.PartyName}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer}</Label>
                                         <Col sm="7">
                                             <Select
-                                                id="PartyName "
-                                                name="PartyName"
-                                                value={values.PartyName}
+                                                id="Customer "
+                                                name="Customer"
+                                                value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -375,8 +375,8 @@ const Debit = (props) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                 }}
                                             />
-                                            {isError.PartyName.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                            {isError.Customer.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
                                             )}
                                         </Col>
 
@@ -439,14 +439,14 @@ const Debit = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Amount}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.GrandTotal}</Label>
                                         <Col sm="7">
                                             <Input
-                                                name="Amount"
-                                                id="Amount"
-                                                value={values.Amount}
+                                                name="GrandTotal"
+                                                id="GrandTotal"
+                                                value={values.GrandTotal}
                                                 type="text"
-                                                className={isError.Amount.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                className={isError.GrandTotal.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Amount"
                                                 autoComplete='off'
                                                 autoFocus={true}
@@ -454,8 +454,8 @@ const Debit = (props) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                            {isError.Amount.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Amount}</small></span>
+                                            {isError.GrandTotal.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.GrandTotal}</small></span>
                                             )}
                                         </Col>
 
