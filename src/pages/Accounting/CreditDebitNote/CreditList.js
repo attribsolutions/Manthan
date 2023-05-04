@@ -341,7 +341,7 @@ const CreditList = () => {
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             ButtonMsgLable={otherState.buttonMsgLable}
-                            deleteName={"Customer"}
+                            deleteName={"FullNoteNumber"}
                             MasterModal={otherState.MasterModal}
                         />
                         : null

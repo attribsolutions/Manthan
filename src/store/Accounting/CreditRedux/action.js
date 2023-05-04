@@ -9,6 +9,8 @@ import {
   GET_CREDIT_LIST_SUCCESS,
   INVOICE_RETURN_ID,
   INVOICE_RETURN_ID_SUCCESS,
+  RECEIPT_NUMBER_LIST,
+  RECEIPT_NUMBER_LIST_SUCCESS,
   SAVE_CREDIT,
   SAVE_CREDIT_SUCCESS,
 
@@ -74,6 +76,15 @@ export const deleteCreditlistSuccess = (resp) => ({// Delete Success
   payload: resp
 });
 
+// Receipt No. dropdown Api for debit master page.
+export const Receipt_No_List = (jsonBody) => ({// Delete  Action
+  type: RECEIPT_NUMBER_LIST,
+  jsonBody,
+});
 
+export const Receipt_No_List_Success = (resp) => ({// Delete Success
+  type: RECEIPT_NUMBER_LIST_SUCCESS,
+  payload: resp
+});
 
 
