@@ -25,11 +25,11 @@ function* save_LoadingSheet_GenFun({ config }) {
     } catch (error) { CommonConsole(error) }
 }
 
-function* Update_LoadingSheet_GenFun(id) {
+// loading sheet update button api
+function* Update_LoadingSheet_GenFun({ id }) {
+
     try {
-
-        const response = yield call(Loading_Sheet_Update_API, id.id);
-
+        const response = yield call(Loading_Sheet_Update_API, id);
         yield put(UpdateLoadingSheetSucccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
@@ -42,7 +42,6 @@ function* Delete_LoadingSheet_ID_GenratorFunction({ config }) {        // delete
 }
 
 // Post API For Master Page
-
 function* get_LoadingSheet_List_GenFun({ filters }) {
     try {
         const response = yield call(Loading_Sheet_get_API, filters);

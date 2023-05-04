@@ -37,8 +37,7 @@ const CreditList = () => {
         FromDate: currentDate,
         ToDate: currentDate,
         Customer: { value: "", label: "All" },
-        NoteType: ""
-
+        NoteType: { value: "", label: "All" },
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -92,7 +91,6 @@ const CreditList = () => {
         }
     }, [userAccess])
 
-
     //   Note Type Api for Type identify
     useEffect(() => {
 
@@ -113,14 +111,26 @@ const CreditList = () => {
         dispatch(Retailer_List(jsonBody));
     }, []);
 
-
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
 
-  
-    const NoteType= []
+    customerOptions.unshift({
+        value: "",
+        label: " All"
+    });
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: loginPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }, []);
+
+    const NoteType = []
     CreditDebitType.forEach(index => {
         if (index.Name === "CreditNote" || index.Name === "Goods CreditNote") {
             const arr = {
@@ -130,6 +140,7 @@ const CreditList = () => {
             NoteType.push(arr)
         }
     })
+    NoteType.unshift({ value: "", label: " All" });
 
     useEffect(() => {
         if (CreditDebitType.length > 0) {
@@ -145,9 +156,8 @@ const CreditList = () => {
 
         const GoodsCreditType = CreditDebitType.find((index) => {
             return index.Name === "Goods CreditNote"
-
         })
-        
+
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
@@ -157,12 +167,6 @@ const CreditList = () => {
         });
         dispatch(GetCreditList(jsonBody, hasPagePath));
     }
-
-    customerOptions.unshift({
-        value: "",
-        label: " All"
-    });
-
 
     function downBtnFunc(row) {
         var ReportType = report.Credit;
@@ -194,7 +198,6 @@ const CreditList = () => {
             a.hasValid.Customer.valid = true
             return a
         })
-
     }
 
     function NoteTypeOnChange(e) {
@@ -204,14 +207,11 @@ const CreditList = () => {
             a.hasValid.NoteType.valid = true
             return a
         })
-
     }
-
-
 
     const HeaderContent = () => {
         return (
-            <div className="px-2   c_card_filter text-black" >
+            <div className="px-2 c_card_filter text-black" >
                 <div className="row" >
                     <Col sm={2} className="">
                         <FormGroup className=" mb-2 row mt-3 " >
@@ -314,7 +314,6 @@ const CreditList = () => {
                             downBtnFunc={downBtnFunc}
                             ButtonMsgLable={"Credit"}
                             deleteName={"Customer"}
-
                         />
                         : null
                 }
