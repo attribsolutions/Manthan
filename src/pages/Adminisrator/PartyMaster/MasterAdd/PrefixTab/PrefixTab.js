@@ -1,173 +1,235 @@
-import React from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { Card, CardBody, Col, FormGroup, Input, Label } from 'reactstrap'
+import { comAddPageFieldFunc, initialFiledFunc, onChangeText } from '../../../../../components/Common/validationFunction'
 
-const PrefixTab = () => {
-  return (
-    <div>
-       <Card className="text-black " >
-                                                            <CardBody className="c_card_body">
-                                                                <Col>
-                                                                    <FormGroup className="mb-3">
-                                                                        <Row md="5">
-                                                                            <Label htmlFor="validationCustom01"> Order Prefix</Label>
-                                                                            <AvField
-                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].Orderprefix : ''}
-                                                                                type="text"
-                                                                                autoComplete='off'
-                                                                                name="Orderprefix"
-                                                                                placeholder="Please Enter Order Prefix"
-                                                                                className="form-control "
-                                                                            />
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Col>
+const PrefixTab = forwardRef((props, ref) => {
 
-                                                                <Col >
-                                                                    <FormGroup className="mb-3">
-                                                                        <Row md="5">
-                                                                            <Label htmlFor="validationCustom01">Invoice Prefix</Label>
-                                                                            <AvField
-                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].Invoiceprefix : ''}
-                                                                                type="text"
-                                                                                autoComplete='off'
-                                                                                name="Invoiceprefix"
-                                                                                placeholder="Please Enter Invoice Prefix "
-                                                                                className="form-control"
-                                                                            />
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Col>
+    const fileds = {
+        OrderPrefix: '',
+        InvoicePrefix: '',
+        GRNPrefix: '',
+        ChallanPrefix:'',
+        ReceiptPrefix: '',
+        WorkOrderPrefix: '',
+        MaterialIssuePrefix: '',
+        DemandPrefix: '',
+        IBChallanPrefix: '',
+        IBInwardPrefix: '',
+    }
 
-                                                                <Col>
-                                                                    <FormGroup className="mb-3">
-                                                                        <Row md="5">
-                                                                            <Label htmlFor="validationCustom01"> GRN Prefix</Label>
-                                                                            <AvField
-                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].Grnprefix : ''}
-                                                                                type="text"
-                                                                                autoComplete='off'
-                                                                                name="Grnprefix"
-                                                                                placeholder="Please Enter GRN Prefix"
-                                                                                className="form-control "
-                                                                            />
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Col>
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-                                                                <Col>
-                                                                    <FormGroup>
-                                                                        <Row md="5">
-                                                                            <Label htmlFor="validationCustom01"> Receipt Prefix</Label>
-                                                                            <AvField
-                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].Receiptprefix : ''}
-                                                                                type="text"
-                                                                                autoComplete='off'
-                                                                                name="Receiptprefix"
-                                                                                placeholder="Please Enter Receipt Prefix"
-                                                                                className="form-control"
-                                                                            />
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Col>
+    useImperativeHandle(ref, () => ({
+        setCurrentState(arr) {
+            setState(arr)
+        },
+        getCurrentState: () => {
+            return state
+        },
+    }));
 
-                                                                <Col>
-                                                                    <FormGroup className="mt-3">
-                                                                        <Row md="5">
-                                                                            <Label htmlFor="validationCustom01"> Challan Prefix</Label>
-                                                                            <AvField
-                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].Challanprefix : ''}
-                                                                                type="text"
-                                                                                autoComplete='off'
-                                                                                name="Challanprefix"
-                                                                                placeholder="Please Enter Challan Prefix"
-                                                                                className="form-control"
-                                                                            />
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Col>
+    const { values } = state;
+    const { isError } = state;
+    const { fieldLabel } = state;
 
-                                                                <Col>
-                                                                    <FormGroup className="mt-3">
-                                                                        <Row md="5">
-                                                                            <Label htmlFor="validationCustom01"> WorkOrder Prefix</Label>
-                                                                            <AvField
-                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].WorkOrderprefix : ''}
-                                                                                type="text"
-                                                                                autoComplete='off'
-                                                                                name="WorkOrderprefix"
-                                                                                placeholder="Please Enter WorkOrder Prefix"
-                                                                                className="form-control"
-                                                                            />
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Col>
+    const {
+        pageField,
+    } = useSelector((state) => ({
+        pageField: state.CommonPageFieldReducer.pageField
+    }));
 
-                                                                <Col>
-                                                                    <FormGroup className="mt-3">
-                                                                        <Row md="5">
-                                                                            <Label htmlFor="validationCustom01"> MaterialIssue Prefix</Label>
-                                                                            <AvField
-                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].MaterialIssueprefix : ''}
-                                                                                type="text"
-                                                                                autoComplete='off'
-                                                                                name="MaterialIssueprefix"
-                                                                                placeholder="Please Enter MaterialIssue Prefix"
-                                                                                className="form-control"
-                                                                            />
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Col>
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
-                                                                <Col>
-                                                                    <FormGroup className="mt-3">
-                                                                        <Row md="5">
-                                                                            <Label htmlFor="validationCustom01"> Demand Prefix</Label>
-                                                                            <AvField
-                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].Demandprefix : ''}
-                                                                                type="text"
-                                                                                autoComplete='off'
-                                                                                name="Demandprefix"
-                                                                                placeholder="Please Enter Demand Prefix"
-                                                                                className="form-control"
-                                                                            />
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Col>
+    return (
+        <div>
+            <Card className="text-black " >
+                <CardBody className="c_card_body">
 
-                                                                <Col>
-                                                                    <FormGroup className="mt-3">
-                                                                        <Row md="5">
-                                                                            <Label htmlFor="validationCustom01"> IBChallan Prefix</Label>
-                                                                            <AvField
-                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].IBChallanprefix : ''}
-                                                                                type="text"
-                                                                                autoComplete='off'
-                                                                                name="IBChallanprefix"
-                                                                                placeholder="Please Enter IBChallan Prefix"
-                                                                                className="form-control"
-                                                                            />
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Col>
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.OrderPrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="OrderPrefix"
+                                value={values.OrderPrefix}
+                                type="text"
+                                className={isError.OrderPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Order Prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+                        {isError.OrderPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.OrderPrefix}</span>
+                        )}
+                    </FormGroup>
 
-                                                                <Col>
-                                                                    <FormGroup className="mt-3">
-                                                                        <Row md="5">
-                                                                            <Label htmlFor="validationCustom01"> IBInward Prefix</Label>
-                                                                            <AvField
-                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].IBInwardprefix : ''}
-                                                                                type="text"
-                                                                                autoComplete='off'
-                                                                                name="IBInwardprefix"
-                                                                                placeholder="Please Enter IBInward Prefix"
-                                                                                className="form-control"
-                                                                            />
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Col>
-                                                            </CardBody>
-                                                        </Card>
-    </div>
-  )
-}
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.InvoicePrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="InvoicePrefix"
+                                value={values.InvoicePrefix}
+                                type="text"
+                                className={isError.InvoicePrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Invoice Prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+                        {isError.InvoicePrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.InvoicePrefix}</span>
+                        )}
+                    </FormGroup>
+
+
+
+
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.GRNPrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="GRNPrefix"
+                                value={values.GRNPrefix}
+                                type="text"
+                                className={isError.GRNPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Invoice Prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+                        {isError.GRNPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.GRNPrefix}</span>
+                        )}
+                    </FormGroup>
+
+
+
+
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.ReceiptPrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="ReceiptPrefix"
+                                value={values.ReceiptPrefix}
+                                type="text"
+                                className={isError.ReceiptPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Receipt Prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+                        {isError.ReceiptPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.ReceiptPrefix}</span>
+                        )}
+                    </FormGroup>
+
+
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.WorkOrderPrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="ChallanPrefix"
+                                value={values.WorkOrderPrefix}
+                                type="text"
+                                className={isError.WorkOrderPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Receipt Prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+
+                        {isError.WorkOrderPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.WorkOrderPrefix}</span>
+                        )}
+                    </FormGroup>
+
+
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.MaterialIssuePrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="ChallanPrefix"
+                                value={values.MaterialIssuePrefix}
+                                type="text"
+                                className={isError.MaterialIssuePrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Receipt Prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+
+                        {isError.MaterialIssuePrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.MaterialIssuePrefix}</span>
+                        )}
+                    </FormGroup>
+
+
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.DemandPrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="ChallanPrefix"
+                                value={values.DemandPrefix}
+                                type="text"
+                                className={isError.DemandPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Receipt Prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+
+                        {isError.DemandPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.DemandPrefix}</span>
+                        )}
+                    </FormGroup>
+
+
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.ChallanPrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="ChallanPrefix"
+                                value={values.IBChallanPrefix}
+                                type="text"
+                                className={isError.IBChallanPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter IBChallan Prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+                        {isError.IBChallanPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.IBChallanPrefix}</span>
+                        )}
+                    </FormGroup>
+
+
+
+                </CardBody>
+            </Card>
+        </div>
+    )
+})
 
 export default PrefixTab

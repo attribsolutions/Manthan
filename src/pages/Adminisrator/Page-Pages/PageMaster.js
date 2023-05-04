@@ -80,7 +80,6 @@ const PageMaster = (props) => {
     ShowInListPage: false,
     ShowInDownload: false,
     DownloadDefaultSelect: false,
-    PageFieldValidation:[]
   }]);
 
   const {
@@ -196,14 +195,7 @@ const PageMaster = (props) => {
             ListPageSeq: index.ListPageSeq,
             ShowInListPage: index.ShowInListPage,
             ShowInDownload: index.ShowInDownload,
-            DownloadDefaultSelect: index.ShownloadDefaultSelect,
-            PageFieldValidation:index.FieldValidationlist
-          }
-        })
-
-        let validationList = PageFieldMaster.map((index) => {
-          return {
-            PageFieldValidation:index.FieldValidationlist
+            DownloadDefaultSelect: index.ShownloadDefaultSelect
           }
         })
         PageFieldMaster.sort((firstItem, secondItem) => firstItem.ListPageSeq - secondItem.ListPageSeq);
@@ -233,7 +225,6 @@ const PageMaster = (props) => {
             DownloadDefaultSelect: index.ShownloadDefaultSelect
           }
         })
-
         PageFieldList.sort((firstItem, secondItem) => firstItem.ListPageSeq - secondItem.ListPageSeq);
 
 

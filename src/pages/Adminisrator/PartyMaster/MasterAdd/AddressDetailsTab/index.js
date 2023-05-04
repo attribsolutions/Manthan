@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap';
 import Flatpickr from "react-flatpickr"
 import AddressDetailsTable from './Table';
-import { useDispatch, useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeText, resetFunction } from '../../../../../components/Common/validationFunction';
 
-function AddressTabHook(props) {
 
+const AddressTabForm = forwardRef((props, ref) => {
 
     const fileds = {
         PartyAddress: "",
@@ -25,6 +25,14 @@ function AddressTabHook(props) {
     const { isError } = state;
     const { fieldLabel } = state;
 
+    useImperativeHandle(ref, () => ({
+        setCurrentState(arr) {
+            setAddressTable(arr)
+        },
+        getCurrentState: () => {
+            return addressTable
+        },
+    }));
 
     const {
         pageField,
@@ -262,7 +270,11 @@ function AddressTabHook(props) {
 
         </Row>
     );
-    return [AddressTab, addressTable, setAddressTable]
-}
+    function curruntState() {
+        return addressTable
+    }
+    return AddressTab
+    // [AddressTab, curruntState, setAddressTable]
+})
 
-export default AddressTabHook;
+export default AddressTabForm;

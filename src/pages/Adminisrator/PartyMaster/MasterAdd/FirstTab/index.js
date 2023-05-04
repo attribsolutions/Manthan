@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
 import Select from "react-select"
 import { useDispatch, useSelector } from 'react-redux'
 import { Card, Col, FormGroup, Input, Label, Row } from 'reactstrap'
@@ -10,7 +10,7 @@ import Tree from '../Tree'
 import '../Tree.scss'
 
 
-const FirstTabHook = () => {
+const BaseTabForm = forwardRef((props, ref) => {
 
     const dispatch = useDispatch();
     const fileds = {
@@ -18,6 +18,7 @@ const FirstTabHook = () => {
         MobileNo: "",
         PriceList: "",
         PartyType: "",
+        SAPPartyCode: "",
         Supplier: [],
         PAN: "",
         Email: "",
@@ -31,11 +32,26 @@ const FirstTabHook = () => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState([]);
+    const [priceListSelect, setPriceListSelect] = useState({ value: '' });
 
     const { values } = state;
     const { isError } = state;
     const { fieldLabel } = state;
+
+    useImperativeHandle(ref, () => ({
+        setCurrentState(arr) {
+            setState(arr)
+        },
+        getCurrentState: () => {
+            return state
+        },
+        getPriceListSelect: () => {
+            return priceListSelect
+        },
+        setPriceListSelect(arr) {
+            setPriceListSelect(arr)
+        }
+    }));
 
     const {
         State,
@@ -60,6 +76,19 @@ const FirstTabHook = () => {
         }
     }, [pageField])
 
+    useEffect(() => {
+        if (PartyTypes.length === 1) {
+            setState((i) => {
+                let a = { ...i }
+                a.values.PartyType = {
+                    value: PartyTypes[0].id,
+                    label: PartyTypes[0].Name
+                }
+                a.hasValid.valid = true
+            })
+            dispatch(priceListByPartyAction(PartyTypes[0].id))
+        }
+    }, [PartyTypes])
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -89,12 +118,12 @@ const FirstTabHook = () => {
 
     function partyTypeOnChange(hasSelect, evn) {
         onChangeSelect({ hasSelect, evn, state, setState })
-        setPriceList_dropdown_Select({ label: '' })
+        setPriceListSelect({ label: '' })
         dispatch(priceListByPartyAction(hasSelect.value))
     }
 
     const onclickselect = function () {
-        debugger
+       
         const hasNone = document.getElementById("price-drop").style;
         if ((priceListByPartyType.length > 0)) {
             if ((hasNone.display === "none")) {
@@ -111,8 +140,8 @@ const FirstTabHook = () => {
                 <div id="price-drop" style={{ display: "none" }}  >
                     <div style={{ width: "20cm", marginBottom: "-60px" }} >
 
-                        <Tree id="tree" data={priceListByPartyType} priceList={PriceList_dropdown_Select}
-                            func1={setPriceList_dropdown_Select} />
+                        <Tree id="tree" data={priceListByPartyType} priceList={priceListSelect}
+                            func1={setPriceListSelect} />
                     </div>
                 </div>
 
@@ -208,6 +237,26 @@ const FirstTabHook = () => {
                                 )}
                             </FormGroup>
                         </Col>
+                        <Col md="1"></Col>
+                        <Col md="3">
+                            <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">{fieldLabel.SAPPartyCode} </Label>
+                                <Input
+                                    name="SAPPartyCode"
+                                    value={values.SAPPartyCode}
+                                    type="text"
+                                    className={isError.SAPPartyCode.length > 0 ? "is-invalid form-control" : "form-control"}
+                                    placeholder="Please Enter SAP Code"
+                                    autoComplete='off'
+                                    onChange={(event) => {
+                                        onChangeText({ event, state, setState })
+                                    }}
+                                />
+                                {isError.SAPPartyCode.length > 0 && (
+                                    <span className="invalid-feedback">{isError.SAPPartyCode}</span>
+                                )}
+                            </FormGroup>
+                        </Col>
                     </Row>
                 </Card>
             </Row>
@@ -241,7 +290,7 @@ const FirstTabHook = () => {
                             <FormGroup>
                                 <Label htmlFor="validationCustom01">Price List </Label>
                                 <Input
-                                    value={PriceList_dropdown_Select.label}
+                                    value={priceListSelect.label}
                                     autoComplete={"off"}
                                     placeholder="Select..."
                                     onClick={onclickselect}
@@ -418,11 +467,11 @@ const FirstTabHook = () => {
             </Row>
         </div>
     )
+    return FirstTab
+    // return [FirstTab, state, setState]
+})
 
-    return [FirstTab, state, setState]
-}
-
-export default FirstTabHook
+export default BaseTabForm
 
 
 

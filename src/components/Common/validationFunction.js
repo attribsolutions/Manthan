@@ -2,7 +2,7 @@ import { CommonConsole } from "./CommonFunction";
 
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
     let isValid = true;
-debugger
+   
     Object.keys(required).forEach((lab) => {
 
         if (!(hasValid[lab].valid)) {
@@ -87,7 +87,7 @@ export const formValChange = ({ event, state, setState }) => {
 
         switch (type) {
             case "select":
-                
+
                 const result = Array.isArray(value);
                 if (!result) {
                     if (!(value.value === undefined)) {
@@ -207,10 +207,19 @@ export const initialFiledFunc = (field) => {
 
 export const resetFunction = (field, state) => {
 
-    var preState = { ...state }
+    let preState = { ...state }
     preState.values = field
     Object.keys(field).forEach(label => {
         preState.hasValid[label]["valid"] = false
     })
     return preState
+}
+export const bulkSetState = (field, state, setState) => {
+  
+    let preState = { ...state }
+    Object.keys(field).forEach(label => {
+        preState.hasValid[label]["valid"] = true
+        preState.values[label] = field[label]
+    })
+    setState(preState)
 }

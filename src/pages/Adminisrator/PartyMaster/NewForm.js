@@ -44,7 +44,7 @@ function NewForm() {
     if (!(pageField === null)) {
       let obj = {}
       pageField.PageFieldMaster.forEach(i => {
-        // debugger
+        //
         obj[i.ControlID] = i.ControlID;
         obj[`${obj[i.ControlID]}_info`] = i
       })
@@ -62,7 +62,7 @@ function NewForm() {
 
 
   function onchange(e, f) {
-    debugger
+   
   }
   return (
     <div style={{ marginTop: '20px' }}>
@@ -76,7 +76,7 @@ function NewForm() {
           fieldInfo={state1}
           changeValid={false}
           onChange={() => {
-            debugger
+           
           }}
 
         />
@@ -86,7 +86,7 @@ function NewForm() {
           onlyValid={true}
           fieldInfo={state1}
           changeValid={false}
-          onChange={() => { debugger }}
+          onChange={() => { }}
         />
        
         <Button
@@ -112,10 +112,10 @@ const CForm = ({ onValidSubmit, children }) => {
     let onvalid = []
     let ak = children.filter(i => (i.type.name === "CInput"))
 
-    debugger
+   
 
     ak.forEach(i => {
-      debugger
+     
 
       let info = i.props.fieldInfo[`${i.props.name}_info`]
 
@@ -135,7 +135,7 @@ const CForm = ({ onValidSubmit, children }) => {
       }
       onvalid.push({ [i.props.name]: d.value })
     });
-    debugger
+   
     if (!(invalid.length > 0)) {
       onValidSubmit(onvalid, e)
     }
@@ -182,11 +182,11 @@ const CInput = ({
 
   function on_Change(e) {
     let val = e.target.value
-    debugger
+   
     let con1 = String(changeValid) === "true"
     let con2 = RegExp(filedState.RegularExpression).test(val)
     let con3 = (!(con2) && (filedState.IsCompulsory))
-    debugger
+   
     if (!con1) {        //onlyValid
       if (con3) {      // ! regxmatch && errorMassage
         let a = document.getElementById(`_error_${name}`)
@@ -263,7 +263,7 @@ const CInput = ({
 
 // function NewForm() {
 //   function onchange(e, f) {
-//     debugger
+//    
 //   }
 //   return (
 //     <div style={{ marginTop: '20px' }}>
@@ -326,13 +326,13 @@ const CInput = ({
 //     let invalid = []
 //     let onvalid = []
 //     for (let i = 0; i < collection.length; i++) {
-//       // debugger
+//       //
 
 //       if (!(collection[i].tagName === "BUTTON")) {
 
 //         let pattern = collection[i].getAttribute('cPattern')
 //         let pattern1 = collection[i].getAttribute('cpattern1')
-//         debugger
+//        
 //         var result = pattern.substring(1, pattern.length - 1);
 //         let regx = new RegExp(result);
 //         let val = collection[i].value;
@@ -349,7 +349,7 @@ const CInput = ({
 //         onvalid.push({ [collection[i].name]: collection[i].value })
 //       }
 //     }
-//     debugger
+//    
 //     if (!(invalid.length > 0)) {
 //       onValidSubmit(onvalid, e)
 //     }
@@ -392,7 +392,7 @@ const CInput = ({
 
 //   function on_Change(e) {
 //     let val = e.target.value
-//     debugger
+//    
 //     let con1 = String(onlyValid) === "true"
 //     let con2 = cPattern.test(val)
 //     let con3 = (!(con2) && !(errorMassage === ""))

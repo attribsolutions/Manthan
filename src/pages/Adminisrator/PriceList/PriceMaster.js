@@ -122,7 +122,7 @@ const PriceMaster = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
-        debugger
+       
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null

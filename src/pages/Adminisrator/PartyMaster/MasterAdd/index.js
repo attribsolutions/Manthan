@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import MetaTags from "react-meta-tags"
 import {
     Card,
@@ -32,7 +32,7 @@ import {
     updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
 import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
-import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID } from "../../../../components/Common/CommonFunction"
+import { breadcrumbReturnFunc, isEditMode_CssFun, loginCompanyID, loginPartyID, loginUserID, metaTageLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -42,47 +42,32 @@ import { SaveButton } from "../../../../components/Common/CommonButton";
 import { SSDD_List_under_Company } from "../../../../store/CommonAPI/SupplierRedux/actions";
 // import FirstTab from "./FirstTab.js/FirstTab";
 // import AddressDetails_Tab from "./AddressDetailsTab"
-import FirstTabHook from "./FirstTab.js/FirstTab";
-import AddressTabHook from "./AddressDetailsTab";
+import AddressTabForm from "./AddressDetailsTab/index";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
-import { formValid } from "../../../../components/Common/validationFunction";
+import { bulkSetState, formValid } from "../../../../components/Common/validationFunction";
+import BaseTabForm from "./FirstTab/index";
+import PrefixTab from "./PrefixTab/PrefixTab";
 
 const PartyMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const [FirstTab, baseTabDetail, setBaseTabDetail] = FirstTabHook()
-    const [AddressTab, addressTabDetail, setAddressTabDetail] = AddressTabHook([]);
+    const addressTabRef = useRef(null);
+    const baseTabRef = useRef(null);
+    const prefixTabRef = useRef(null);
+
     const [EditData, setEditData] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
     const [modalCss, setModalCss] = useState(false);
-    const [state_DropDown_select, setState_DropDown_select] = useState([]);
-    const [district_dropdown_Select, setDistrict_dropdown_Select] = useState([]);
-    const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState([]);
-    const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState([]);
-    const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState([]);
 
-    // const [addressTabDetail, setAddressTabDetail] = useState([]);
-    // const [baseTabDetail, setBaseTabDetail] = useState([]);
-    const [prefixTabDetail, setPrefixTabDetail] = useState([]);
-
-    const [PartyPrefix, setPartyPrefix] = useState([]);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
-    const toggle1 = tab => {
-        if (activeTab1 !== tab) {
-            setactiveTab1(tab)
-        }
-    }
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        Company,
-        PartyTypes,
         userAccess,
         updateMsg,
     } = useSelector((state) => ({
@@ -115,59 +100,84 @@ const PartyMaster = (props) => {
         };
     }, [userAccess])
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if ((hasShowloction || hasShowModal)) {
+        if ((hasShowloction || hasShowModal)) {
 
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
-    //         if (hasEditVal) {
+            if (hasEditVal) {
 
-    //             setEditData(hasEditVal);
-    //             dispatch(Breadcrumb_inputName(hasEditVal.Name))
-    //             seteditCreatedBy(hasEditVal.CreatedBy);
+                setEditData(hasEditVal);
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy);
 
-    //             setState_DropDown_select({
-    //                 label: hasEditVal.State.Name,
-    //                 value: hasEditVal.State.id,
-    //             });
-    //             setDistrict_dropdown_Select({
-    //                 label: hasEditVal.District.Name,
-    //                 value: hasEditVal.District.id,
-    //             });
+                let baseValue = {
+                    Name: hasEditVal.Name,
+                    MobileNo: hasEditVal.MobileNo,
+                    PriceList: (hasEditVal.PriceList) && {
+                        label: hasEditVal.PriceList.Name,
+                        value: hasEditVal.PriceList.id,
+                    },
+                    PartyType: {
+                        label: hasEditVal.PartyType.Name,
+                        value: hasEditVal.PartyType.id,
+                    },
+                    SAPPartyCode: hasEditVal.SAPPartyCode,
+                    Supplier: [],
+                    PAN: hasEditVal.PAN,
+                    Email: hasEditVal.Email,
+                    AlternateContactNo: hasEditVal.AlternateContactNo,
+                    State: {
+                        label: hasEditVal.State.Name,
+                        value: hasEditVal.State.id,
+                    },
+                    District: {
+                        label: hasEditVal.District.Name,
+                        value: hasEditVal.District.id,
+                    },
+                    GSTIN: hasEditVal.GSTIN,
+                    MkUpMkDn: hasEditVal.MkUpMkDn,
+                    isActive: hasEditVal.isActive,
 
-    //             setPartyType_dropdown_Select({
-    //                 label: hasEditVal.PartyType.Name,
-    //                 value: hasEditVal.PartyType.id,
-    //             });
+                }
 
-    //             setCompanyList_dropdown_Select({
-    //                 label: hasEditVal.Company.Name,
-    //                 value: hasEditVal.Company.id,
-    //             });
-    //             if (hasEditVal.PriceList) {
-    //                 setPriceList_dropdown_Select({
-    //                     label: hasEditVal.PriceList.Name,
-    //                     value: hasEditVal.PriceList.id,
-    //                 });
-    //             }
-    //             // ====================== Images tab ======================
+                let prefix = (hasEditVal.PartyPrefix.length > 0) ? hasEditVal.PartyPrefix[0] : '';
+                let prefixValue = {
+                    OrderPrefix: prefix.Orderprefix,
+                    InvoicePrefix: prefix.Invoiceprefix,
+                    GRNPrefix: prefix.Grnprefix,
+                    ReceiptPrefix: prefix.Receiptprefix,
+                    ChallanPrefix: prefix.Challanprefix,
+                    WorkOrderPrefix: prefix.WorkOrderprefix,
+                    MaterialIssuePrefix: prefix.MaterialIssueprefix,
+                    DemandPrefix: prefix.Demandprefix,
+                    IBChallanPrefix: prefix.IBChallanprefix,
+                    IBInwardPrefix: prefix.IBInwardprefix,
+                }
 
-    //             setPartyPrefix(hasEditVal.PartyPrefix)
-    //             setAddressTabDetail(hasEditVal.PartyAddress)
-    //             dispatch(editPartyIDSuccess({ Status: false }));
-    //         }
-    //     }
-    // }, []);
+                let getBaseTab = baseTabRef.current.getCurrentState();
+                let setBaseTab = baseTabRef.current.setCurrentState;
+                let getPrefixtab = prefixTabRef.current.getCurrentState();
+                let setPrefixtab = prefixTabRef.current.setCurrentState;
+                let setAddressTab = addressTabRef.current.setCurrentState;
+
+                bulkSetState(baseValue, getBaseTab, setBaseTab)
+                bulkSetState(prefixValue, getPrefixtab, setPrefixtab)
+                setAddressTab(hasEditVal.PartyAddress)
+                dispatch(editPartyIDSuccess({ Status: false }));
+            }
+        }
+    }, []);
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -178,18 +188,6 @@ const PartyMaster = (props) => {
         dispatch(getcompanyList());
         dispatch(SSDD_List_under_Company())
     }, [dispatch]);
-
-
-
-    useEffect(() => {
-        if (PartyTypes.length === 1) {
-            setPartyType_dropdown_Select({
-                value: PartyTypes[0].id,
-                label: PartyTypes[0].Name
-            })
-            dispatch(priceListByPartyAction(PartyTypes[0].id))
-        }
-    }, [PartyTypes])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
@@ -241,29 +239,35 @@ const PartyMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
+    const toggle1 = tab => {
+        if (activeTab1 !== tab) {
+            setactiveTab1(tab)
+        }
+    }
 
+    const SaveHandler = (event) => {
 
+        event.preventDefault();
 
+        let baseTabDetail = baseTabRef.current.getCurrentState()
+        let priceListSelect = baseTabRef.current.getPriceListSelect()
+        let setBaseTabDetail = baseTabRef.current.setCurrentState
+        let addressTabDetail = addressTabRef.current.getCurrentState()
+        let prefixValue = prefixTabRef.current.getCurrentState().values
 
-
-
-
-    const SaveHandler = (event, values) => {
-        var a = baseTabDetail
-        var b = addressTabDetail
-debugger
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
         if (!validBasetab) {
             return
-        }
+        };
+
         if (addressTabDetail.length === 0) {
+            setactiveTab1("2")
             CustomAlert({
                 Type: 4,
                 Message: "Address details is required",
             })
             return;
-        }
-debugger
+        };
 
         const baseValue = baseTabDetail.values
 
@@ -272,11 +276,10 @@ debugger
             CreatedBy: loginUserID(),
             UpdatedBy: loginUserID(),
         }))
-        // const Supplier = []
 
         const jsonBody = JSON.stringify({
             "Name": baseValue.Name,
-            "PriceList": PriceList_dropdown_Select.value,
+            "PriceList": priceListSelect.value,
             "PartyType": baseValue.PartyType.value,
             "Company": loginCompanyID(),
             "PAN": baseValue.PAN,
@@ -285,52 +288,49 @@ debugger
             "AlternateContactNo": baseValue.AlternateContactNo,
             "State": baseValue.State.value,
             "District": baseValue.District.value,
+            "SAPPartyCode": baseValue.SAPPartyCode,
             "Taluka": 0,
             "City": 0,
             "GSTIN": baseValue.GSTIN,
             "MkUpMkDn": baseValue.MkUpMkDn,
             "isActive": baseValue.IsActive,
-            // SupplierID:loginPartyID(),
             "CreatedBy": loginUserID(),
             "UpdatedBy": loginUserID(),
             "PartySubParty": supplierArr,
             "PartyAddress": addressTabDetail,
-            "PartyPrefix": [
-                // {
-                //     Orderprefix: values.Orderprefix,
-                //     Invoiceprefix: values.Invoiceprefix,
-                //     Grnprefix: values.Grnprefix,
-                //     Receiptprefix: values.Receiptprefix,
-                //     Challanprefix: values.Challanprefix,
-                //     WorkOrderprefix: values.WorkOrderprefix,
-                //     MaterialIssueprefix: values.MaterialIssueprefix,
-                //     Demandprefix: values.Demandprefix,
-                //     IBChallanprefix: values.IBChallanprefix,
-                //     IBInwardprefix: values.IBInwardprefix
-                // }
-            ],
-           
-        });
 
+            "PartyPrefix": [
+                {
+                    "Orderprefix": prefixValue.OrderPrefix,
+                    "Invoiceprefix": prefixValue.InvoicePrefix,
+                    "Grnprefix": prefixValue.GRNPrefix,
+                    "Receiptprefix": prefixValue.ReceiptPrefix,
+                    "Challanprefix": prefixValue.Challanprefix,
+                    "WorkOrderprefix": prefixValue.WorkOrderPrefix,
+                    "MaterialIssueprefix": prefixValue.MaterialIssuePrefix,
+                    "Demandprefix": prefixValue.DemandPrefix,
+                    "IBChallanprefix": prefixValue.IBChallanPrefix,
+                    "IBInwardprefix": prefixValue.IBInwardPrefix
+                }
+            ],
+
+        });
         if (pageMode === mode.edit) {
             dispatch(updatePartyID(jsonBody, EditData.id));
         }
         else {
-
             dispatch(postPartyData(jsonBody));
         }
     };
 
-    var IsEditMode_Css = ''
-    if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    let IsEditMode_Css = isEditMode_CssFun()
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <MetaTags> {metaTageLabel(userPageAccessState)}</MetaTags>
                     <Container fluid>
-                        {/* <AvForm onValidSubmit={(e, v) => { SaveHandler(e, v); }}> */}
-
                         <Row>
                             <Col lg={12}>
                                 <Card className="text-black" >
@@ -357,6 +357,7 @@ debugger
                                                     <span className="d-none d-sm-block">Party Master</span>
                                                 </NavLink>
                                             </NavItem>
+
                                             <NavItem>
                                                 <NavLink
                                                     id="nave-link-2"
@@ -375,6 +376,7 @@ debugger
 
                                                 </NavLink>
                                             </NavItem>
+
                                             <NavItem>
                                                 <NavLink
                                                     id="nave-link-3"
@@ -400,31 +402,24 @@ debugger
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <Row >
-                                                        <Col sm={2}>
-
-                                                        </Col>
-                                                    </Row>
                                                 </NavLink>
                                             </NavItem>
                                         </Nav>
 
                                         <TabContent activeTab={activeTab1} className="p-3 text-muted">
                                             <TabPane tabId="1">
-                                                {FirstTab}
+                                                <BaseTabForm ref={baseTabRef} />
                                             </TabPane>
 
                                             <TabPane tabId="2">
-                                                {AddressTab}
+                                                <AddressTabForm ref={addressTabRef} />
                                             </TabPane>
 
                                             <TabPane tabId="3">
-
+                                                <PrefixTab ref={prefixTabRef} />
                                             </TabPane>
                                         </TabContent>
                                     </CardBody>
-
-
 
                                     <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
                                         <SaveButton pageMode={pageMode}
@@ -437,18 +432,13 @@ debugger
                                 </Card>
                             </Col>
                         </Row>
-                        {/* </AvForm> */}
 
                     </Container>
                 </div >
             </React.Fragment>
         );
-    }
-    else {
-        return (
-            <React.Fragment></React.Fragment>
-        )
-    }
+    };
+    return null
 };
 export default PartyMaster;
 

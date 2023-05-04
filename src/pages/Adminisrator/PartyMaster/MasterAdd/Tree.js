@@ -4,7 +4,7 @@ import './Tree.scss'
 
 
 export default function Tree(props) {
-    debugger
+    
     const onchange = (e) => {
 
         try {
