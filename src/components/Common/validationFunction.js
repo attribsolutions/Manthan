@@ -2,7 +2,7 @@ import { CommonConsole } from "./CommonFunction";
 
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
     let isValid = true;
-   
+
     Object.keys(required).forEach((lab) => {
 
         if (!(hasValid[lab].valid)) {
@@ -15,7 +15,6 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
 };
 
 export const formValChange = ({ event, state, setState }) => {
-
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
@@ -182,6 +181,32 @@ export const onChangeText = ({ event, state, setState }) => {
     formValChange({ event, state, setState })
 }
 
+export const onChangeCheckbox=({ event, state, setState })=> {
+    setState(() => {
+
+        const a = { ...state }
+        const { name, checked } = event.target;
+        if (!(a.required[name] === undefined)) {
+            if (checked) {
+                a.isError[name] = "";
+                a.hasValid[name].valid = true
+                a.values[name] = checked
+            }
+            else {
+                a.isError[name] = a.hasValid[name].inValidMsg;
+                a.hasValid[name].valid = true
+                a.values[name] = checked
+            }
+        }
+        else {
+            a.isError[name] = "";
+            a.hasValid[name].valid = true
+            a.values[name] = checked
+        }
+        return a
+    })
+}
+
 export const initialFiledFunc = (field) => {
 
     const obj = {}
@@ -204,7 +229,6 @@ export const initialFiledFunc = (field) => {
     return obj
 }
 
-
 export const resetFunction = (field, state) => {
 
     let preState = { ...state }
@@ -214,8 +238,9 @@ export const resetFunction = (field, state) => {
     })
     return preState
 }
+
 export const bulkSetState = (field, state, setState) => {
-  
+
     let preState = { ...state }
     Object.keys(field).forEach(label => {
         preState.hasValid[label]["valid"] = true

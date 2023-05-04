@@ -4,7 +4,7 @@ import './Tree.scss'
 
 
 export default function Tree(props) {
-    
+
     const onchange = (e) => {
 
         try {
@@ -13,42 +13,39 @@ export default function Tree(props) {
         } catch { }
     }
 
-    const TreeNode = (node) => {
+    const TreeNode = (node) => (
+        <li >
+            <div className="classmt">
+                <span id="price-option" className=" text-black  form-control"
+                    onClick={(e) => {
+                        props.func1(node);
+                        onchange(e);
+                    }}>{node.label}</span>
+
+            </div>
+
+            <div >
+                <ul >
+                    {tree(node.children)}
+                </ul>
+            </div>
+        </li>
+    )
 
 
-        return (
-            <li >
-                <div className="classmt">
-                    <span id="span" className="align-middle text-black list-group-ite  form-control"
-                        style={{ marginLeft: "-1.9cm" }}
-                        onClick={(e) => {
-                            props.func1(node);
-                            onchange(e);
-                        }}>{node.label}</span>
+    const tree = (tree1) => (
+        <ul className='list-group'>
+            {tree1.map((tree) => (
+                TreeNode(tree)
+            ))}
+        </ul>
+    )
 
-                </div>
 
-                <div >
-                    <ul >
-                        {tree(node.children)}
-                    </ul>
-                </div>
-            </li>
-        )
-    }
-
-    const tree = (tree1) => {
-
-        return (
-            <ul className='list-group'>
-                {tree1.map((tree) => (
-                    TreeNode(tree)
-                ))}
-            </ul>
-        )
-    }
-
-    return (<ul className='treestructure'> {tree(props.data)}</ul>)
+    return (
+        <div className='price-drop-body'>
+            <ul style={{ paddingLeft: '0px' }}> {tree(props.data)}</ul>
+        </div>)
 }
 
 

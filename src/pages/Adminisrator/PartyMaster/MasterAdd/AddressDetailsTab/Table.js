@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 
@@ -40,18 +40,14 @@ function AddressDetailsTable({addressTable=[],setAddressTable}) {
 
     const tableRows = addressTable.map((info, key) => {
        
-        const pic = info.fssaidocument
         return (
             <tr>
                 <td>{info.Address}</td>
                 <td>{info.FSSAINo}</td>
                 <td>{info.FSSAIExipry}</td>
                 <td>
-                    {/* {info.fssaidocument} */}
-                    { }
                     <button
                         type='button'
-                        // id='myImg'
                         onClick={() => { myFunction(info) }}
                         className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light">
                         Show Image

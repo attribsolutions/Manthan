@@ -36,7 +36,7 @@ import {
   UPDATE_PARTY_ID,
 } from "./actionTypes";
 
-function* Get_Party_GenratorFunction() {   // Only CompanyID is Required
+function* Get_Party_GenFun() {   // Only CompanyID is Required
   try {
     const response = yield call(Party_Master_Get_API, loginJsonBody());
     function address(arr) {
@@ -63,14 +63,14 @@ function* Get_Party_GenratorFunction() {   // Only CompanyID is Required
   } catch (error) { CommonConsole(error) }
 }
 
-function* Submit_Party_GenratorFunction({ Data }) {
+function* save_Party_Master_GenFun({ config }) {
   try {
-    const response = yield call(Party_Master_Post_API, Data);
+    const response = yield call(Party_Master_Post_API, config);
     yield put(postPartyDataSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* Delete_Party_GenratorFunction({ id }) {
+function* Delete_Party_GenFun({ id }) {
  
   try {
     const response = yield call(Party_Master_Delete_API, id);
@@ -78,7 +78,7 @@ function* Delete_Party_GenratorFunction({ id }) {
   } catch (error) { CommonConsole(error) }
 }
 
-function* Edit_Party_GenratorFunction({ id, pageMode }) {
+function* Edit_Party_GenFun({ id, pageMode }) {
  
   try {
     const response = yield call(Party_Master_Edit_API, id);
@@ -87,7 +87,7 @@ function* Edit_Party_GenratorFunction({ id, pageMode }) {
   } catch (error) { CommonConsole(error) }
 }
 
-function* Update_Party_GenratorFunction({ updateData, id }) {
+function* Update_Party_GenFun({ updateData, id }) {
   try {
     const response = yield call(Party_Master_Update_API, updateData, id);
     yield put(updatePartyIDSuccess(response))
@@ -119,7 +119,7 @@ function* GetAddressTypes_saga({ }) {
 }
 
 // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
-function* GetPartyTypeByDivisionTypeID_GenratorFunction({ id }) {
+function* GetPartyTypeByDivisionTypeID_GenFun({ id }) {
   try {
     const response = yield call(GetPartyTypeByDivisionTypeID_For_Dropdown, id);
     yield put(GetPartyTypeByDivisionTypeIDSuccess(response.Data));
@@ -127,7 +127,7 @@ function* GetPartyTypeByDivisionTypeID_GenratorFunction({ id }) {
 }
 
 // GetCompanyByDivisionTypeID/1 API dependent on DivisionTypes api
-function* GetCompanyByDivisionTypeID_GenratorFunction({ id }) {
+function* GetCompanyByDivisionTypeID_GenFun({ id }) {
   try {
     const response = yield call(GetCompanyByDivisionTypeID_For_Dropdown, id);
     yield put(GetCompanyByDivisionTypeIDSuccess(response.Data));
@@ -135,16 +135,16 @@ function* GetCompanyByDivisionTypeID_GenratorFunction({ id }) {
 }
 
 function* PartyMasterSaga() {
-  yield takeEvery(GET_PARTY_LIST_API, Get_Party_GenratorFunction);
-  yield takeEvery(POST_PARTY_DATA, Submit_Party_GenratorFunction);
-  yield takeEvery(EDIT_PARTY_ID, Edit_Party_GenratorFunction);
-  yield takeEvery(DELETE_PARTY_ID, Delete_Party_GenratorFunction);
-  yield takeEvery(UPDATE_PARTY_ID, Update_Party_GenratorFunction);
+  yield takeEvery(GET_PARTY_LIST_API, Get_Party_GenFun);
+  yield takeEvery(POST_PARTY_DATA, save_Party_Master_GenFun);
+  yield takeEvery(EDIT_PARTY_ID, Edit_Party_GenFun);
+  yield takeEvery(DELETE_PARTY_ID, Delete_Party_GenFun);
+  yield takeEvery(UPDATE_PARTY_ID, Update_Party_GenFun);
   yield takeEvery(GET_DISTRICT_ON_STATE, GetDistrictOnState_saga);
   yield takeEvery(GET_PRICELIST, GetPriceList_saga);
   yield takeEvery(GET_ADDRESSTYPES, GetAddressTypes_saga);
-  yield takeEvery(GET_PARTTYPE_BY_DIVISIONTYPES_ID, GetPartyTypeByDivisionTypeID_GenratorFunction);
-  yield takeEvery(GET_COMPANY_BY_DIVISIONTYPES_ID, GetCompanyByDivisionTypeID_GenratorFunction);
+  yield takeEvery(GET_PARTTYPE_BY_DIVISIONTYPES_ID, GetPartyTypeByDivisionTypeID_GenFun);
+  yield takeEvery(GET_COMPANY_BY_DIVISIONTYPES_ID, GetCompanyByDivisionTypeID_GenFun);
 }
 
 export default PartyMasterSaga;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'rea
 import Select from "react-select"
 import { useDispatch, useSelector } from 'react-redux'
 import { Card, Col, FormGroup, Input, Label, Row } from 'reactstrap'
-import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from '../../../../../components/Common/validationFunction'
+import { comAddPageFieldFunc, initialFiledFunc, onChangeCheckbox, onChangeSelect, onChangeText } from '../../../../../components/Common/validationFunction'
 import { Breadcrumb_inputName } from '../../../../../store/actions'
 import { getDistrictOnState } from '../../../../../store/Administrator/PartyRedux/action'
 import { priceListByPartyAction } from '../../../../../store/Administrator/PriceList/action'
@@ -13,6 +13,7 @@ import '../Tree.scss'
 const BaseTabForm = forwardRef((props, ref) => {
 
     const dispatch = useDispatch();
+
     const fileds = {
         Name: "",
         MobileNo: "",
@@ -89,6 +90,20 @@ const BaseTabForm = forwardRef((props, ref) => {
             dispatch(priceListByPartyAction(PartyTypes[0].id))
         }
     }, [PartyTypes])
+
+    useEffect(() => {
+
+        document.addEventListener('mouseup', function (event) {
+            try {
+                var pol = document.getElementById('price-drop');
+                if (event.target != pol && event.target.parentNode != pol) {
+                    pol.style.display = 'none';
+                }
+            } catch (e) { }
+        });
+
+    }, [])
+
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -110,10 +125,9 @@ const BaseTabForm = forwardRef((props, ref) => {
         label: index.Name
     }));
 
-    function handllerState(e) {
-        // setState_DropDown_select(e)
-        dispatch(getDistrictOnState(e.value))
-        // setDistrict_dropdown_Select('')
+    function handllerState(hasSelect, evn,) {
+        onChangeSelect({ hasSelect, evn, state, setState })
+        dispatch(getDistrictOnState(hasSelect.value))
     }
 
     function partyTypeOnChange(hasSelect, evn) {
@@ -123,34 +137,40 @@ const BaseTabForm = forwardRef((props, ref) => {
     }
 
     const onclickselect = function () {
-       
+
         const hasNone = document.getElementById("price-drop").style;
+
         if ((priceListByPartyType.length > 0)) {
-            if ((hasNone.display === "none")) {
+            if ((hasNone.display === "none") || (hasNone.display === "")) {
                 hasNone.display = "block";
             } else {
                 hasNone.display = "none";
             }
         }
     };
+
     const test1 = () => {
 
         return (
             <>
-                <div id="price-drop" style={{ display: "none" }}  >
-                    <div style={{ width: "20cm", marginBottom: "-60px" }} >
 
-                        <Tree id="tree" data={priceListByPartyType} priceList={priceListSelect}
-                            func1={setPriceListSelect} />
-                    </div>
+
+
+                <div id="price-drop" className='price-drop-options' >
+
+                    <Tree
+                        data={priceListByPartyType}
+                        priceList={priceListSelect}
+                        func1={setPriceListSelect} />
                 </div>
 
             </>
         )
     }
+
     const FirstTab = (
-        <div>
-            <Row>
+        <div id={"base-tabe-area"}>
+            <Row on>
                 <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
 
                     <Row className="mt-3 ">
@@ -383,7 +403,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                                                 type="checkbox"
                                                 className="form-check-input"
                                                 checked={values.MkUpMkDn}
-                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                onChange={(event) => onChangeCheckbox({ event, state, setState })}
                                             />
                                         </div>
                                     </Col>
@@ -404,10 +424,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         options={StateValues}
-                                        onChange={(hasSelect, evn) => {
-                                            handllerState(hasSelect)
-                                            onChangeSelect({ hasSelect, evn, state, setState })
-                                        }}
+                                        onChange={handllerState}
                                     />
                                     {isError.State.length > 0 && (
                                         <span className="text-danger f-8"><small>{isError.State}</small></span>
@@ -429,7 +446,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                                         classNamePrefix="dropdown"
                                         options={DistrictOnStateValues}
                                         onChange={(hasSelect, evn) => {
-                                            onChangeSelect({ hasSelect, evn, state, setState })
+                                            onChangeCheckbox({ hasSelect, evn, state, setState })
                                         }}
                                     />
                                     {isError.District.length > 0 && (
@@ -453,7 +470,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                                             <Input type="checkbox" className="form-check-input"
                                                 checked={values.isActive}
                                                 name="isActive"
-                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                onChange={(event) => onChangeCheckbox({ event, state, setState })}
                                             />
                                         </div>
                                     </Col>
@@ -468,7 +485,6 @@ const BaseTabForm = forwardRef((props, ref) => {
         </div>
     )
     return FirstTab
-    // return [FirstTab, state, setState]
 })
 
 export default BaseTabForm
