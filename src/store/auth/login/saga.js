@@ -26,7 +26,7 @@ import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 
 
 function* loginUser({ payload: { user, history } }) {
-
+debugger
   try {
     const response =
       yield call(Python_FoodERP_postJwtLogin, {

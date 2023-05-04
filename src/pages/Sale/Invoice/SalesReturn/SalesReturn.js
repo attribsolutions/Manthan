@@ -24,7 +24,7 @@ import {
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, loginUserID, loginCompanyID, convertDatefunc, invertDatefunc } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, loginUserID, loginCompanyID, convertDatefunc, invertDatefunc, loginJsonBody } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -64,7 +64,7 @@ const SalesReturn = (props) => {
 
     const [returnMode, setrRturnMode] = useState(0);
     const [imageTable, setImageTable] = useState([]);
-    console.log(returnMode)
+  
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -89,7 +89,7 @@ const SalesReturn = (props) => {
         const page_Id = pageId.SALES_RETURN
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartyItemList(loginPartyID()))
+        dispatch(getpartyItemList(loginJsonBody()))
     }, []);
 
     useEffect(() => {
@@ -671,19 +671,19 @@ const SalesReturn = (props) => {
 
         ReturnItems.forEach((i) => {
 
-            if ((i.Unit === undefined)) {
+            if ((i.Unit === undefined) || (i.Unit === null)) {
                 invalidMsg1.push(`${i.ItemName} : Unit Is Required`)
             }
-            else if ((i.MRP === undefined)) {
+            else if ((i.MRP === undefined) || (i.MRP === null)) {
                 invalidMsg1.push(`${i.ItemName} : MRP Is Required`)
             }
-            else if ((i.GST === undefined)) {
+            else if ((i.GST === undefined) || (i.GST === null)) {
                 invalidMsg1.push(`${i.ItemName} : GST Is Required`)
             }
-            else if ((i.Rate === undefined)) {
+            else if ((i.Rate === undefined) || (i.Rate === null)) {
                 invalidMsg1.push(`${i.ItemName} : Rate Is Required`)
             }
-            else if ((i.BatchCode === undefined)) {
+            else if ((i.BatchCode === undefined) || (i.BatchCode === null)) {
                 invalidMsg1.push(`${i.ItemName} : BatchCode Is Required`)
             };
         })

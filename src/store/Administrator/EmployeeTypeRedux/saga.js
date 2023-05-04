@@ -5,16 +5,18 @@ import { deleteEmployeeTypeIDSuccess, editEmployeeTypeSuccess, getEmployeeTypeli
 import { DELETE_EMPLOYEE_TYPE_ID, EDIT_EMPLOYEE_TYPE_ID, GET_EMPLOYEE_TYPE_LIST, POST_EMPLOYEETYPE_SUBMIT, UPDATE_EMPLOYEE_TYPE_ID } from "./actionTypes";
 
 function* Post_EmployeeType_GneratorFunction({ config }) {           // post api
+
   try {
     const response = yield call(Employee_Type_API, config);
+    // response.Data = { id: 1, Name: "label" }
     yield put(PostEmployeeTypeSubmitSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* Get_EmployeeTypeList_GenratorFunction() {  
-  const filters=loginJsonBody()   // only required CompanyID                 // get api
+function* Get_EmployeeTypeList_GenratorFunction() {
+  const filters = loginJsonBody()   // only required CompanyID                 // get api
   try {
-    const response = yield call(get_EmployeeType_List_Api,filters);
+    const response = yield call(get_EmployeeType_List_Api, filters);
     yield put(getEmployeeTypelistSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
@@ -26,7 +28,7 @@ function* Delete_EmployeeTypeList_ID_GenratorFunction({ config }) {         // d
   } catch (error) { CommonConsole(error) }
 }
 
-function* Edit_EmployeeTypeList_ID_GenratorFunction({config }) {         // edit api
+function* Edit_EmployeeTypeList_ID_GenratorFunction({ config }) {         // edit api
   const { btnmode } = config;
   try {
     const response = yield call(edit_EmployeeType_List_Api, config);
@@ -35,7 +37,7 @@ function* Edit_EmployeeTypeList_ID_GenratorFunction({config }) {         // edit
   } catch (error) { CommonConsole(error) }
 }
 
-function* Update_EmployeeTypeList_ID_GenratorFunction({ config}) {        // update api
+function* Update_EmployeeTypeList_ID_GenratorFunction({ config }) {        // update api
   try {
     const response = yield call(update_EmployeeType_List_Api, config);
     yield put(updateEmployeeTypeIDSuccess(response))

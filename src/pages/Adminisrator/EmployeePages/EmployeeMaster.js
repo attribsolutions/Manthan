@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+
 import {
   Card,
   CardBody,
@@ -9,8 +10,11 @@ import {
   Label,
   CardHeader,
   FormGroup,
-  Input
+  Input,
+  Button,
+  Modal
 } from "reactstrap";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   getState,
@@ -51,6 +55,8 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
+import AddMaster from "./Drodown";
 
 const AddEmployee = (props) => {
 
@@ -78,6 +84,7 @@ const AddEmployee = (props) => {
   const [userPageAccessState, setUserAccState] = useState('');
   const [modalCss, setModalCss] = useState(false);
   const [editCreatedBy, seteditCreatedBy] = useState("");
+  console.log("userPageAccessState in Employee Master", userPageAccessState)
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -89,6 +96,7 @@ const AddEmployee = (props) => {
     postMsg,
     userAccess,
     pageField,
+    EmployeeTypePostMsg,
     updateMsg } = useSelector((state) => ({
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       State: state.EmployeesReducer.State,
@@ -96,11 +104,11 @@ const AddEmployee = (props) => {
       partyList: state.PartyMasterReducer.partyList,
       company: state.EmployeesReducer.CompanyNames,
       postMsg: state.EmployeesReducer.postMessage,
+      EmployeeTypePostMsg: state.EmployeeTypeReducer.PostEmployeeType,
       updateMsg: state.EmployeesReducer.updateMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
     }));
-
 
   const values = { ...state.values }
   const { isError } = state;
@@ -118,6 +126,16 @@ const AddEmployee = (props) => {
     dispatch(getPartyListAPI())
     dispatch(getState());
   }, [dispatch]);
+
+  // useEffect(() => {
+
+  //   if ((location.Data)) {
+  //     const { id, Name } = location.Data
+  //     const values = {
+  //       ...state.values.EmployeeTypeName = { value: id, label: Name }
+  //     }
+  //   }
+  // }, [location])
 
   // userAccess useEffect
   useEffect(() => {
@@ -160,9 +178,12 @@ const AddEmployee = (props) => {
           value: data.id,
           label: data.Name
         }))
-        
-        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo,  EmployeeTypeName, StateName, DistrictName, 
-          State_id, District_id,  EmployeeType_id, } = hasEditVal
+
+        // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
+
+        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
+          State_id, District_id, Company_id, EmployeeType_id, } = hasEditVal
+
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.id.valid = id
@@ -275,7 +296,6 @@ const AddEmployee = (props) => {
     label: data.Name
   }));
 
-
   function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
     setState((i) => {
@@ -343,7 +363,6 @@ const AddEmployee = (props) => {
     return (
       <React.Fragment>
         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Container fluid>
 
@@ -546,10 +565,11 @@ const AddEmployee = (props) => {
 
                   <Card className="mt-n2">
                     <CardBody className="c_card_body">
+
                       <Row >
-                        <FormGroup className="mb-2 col col-sm-3 ">
-                          <Label htmlFor="validationCustom01"> {fieldLabel.EmployeeTypeName} </Label>
-                          <Col sm={12}>
+                        <Col md="3">
+                          <FormGroup className="mb-3 ">
+                            <Label > {fieldLabel.EmployeeTypeName}</Label>
                             <Select
                               name="EmployeeTypeName"
                               value={values.EmployeeTypeName}
@@ -564,13 +584,19 @@ const AddEmployee = (props) => {
                             {isError.EmployeeTypeName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.EmployeeTypeName}</small></span>
                             )}
-                          </Col>
-                        </FormGroup>
+                          </FormGroup>
+                        </Col>
 
-                        <Col md="1">  </Col>
-                        <div className="col-lg-3 col-md-4">
-                          <div className="mb-3">
-                            <Label htmlFor="validationCustom01">{fieldLabel.EmployeeParties} </Label>
+                        <Col md="1" className=" mt-3">
+                          <AddMaster
+                            masterModal={EmployeeTypesMaster}
+                            masterPath={url.EMPLOYEETYPE}
+                          />
+                        </Col>
+
+                        <Col md="3">
+                          <FormGroup className="mb-3">
+                            <Label>{fieldLabel.EmployeeParties}</Label>
                             <Select
                               name="EmployeeParties"
                               value={values.EmployeeParties}
@@ -582,8 +608,8 @@ const AddEmployee = (props) => {
                               }}
                               classNamePrefix="dropdown"
                             />
-                          </div>
-                        </div>
+                          </FormGroup>
+                        </Col>
                       </Row>
 
                       <FormGroup className="mt-3">
@@ -599,6 +625,7 @@ const AddEmployee = (props) => {
                           </Col>
                         </Row>
                       </FormGroup>
+
                     </CardBody>
                   </Card>
                 </form>
@@ -606,7 +633,9 @@ const AddEmployee = (props) => {
             </Card>
           </Container>
         </div>
+
       </React.Fragment >
+
     );
   }
   else {

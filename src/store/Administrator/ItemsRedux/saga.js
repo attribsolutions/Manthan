@@ -1,13 +1,14 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
 
 
 function* Get_Items_GenFunc() {
+  const filters = loginJsonBody()
   try {
-    const response = yield call(apiCall.Items_Master_Get_API);
+    const response = yield call(apiCall.Items_Filter_API, filters);
     yield put(action.getItemListSuccess(response.Data))
   } catch (error) { CommonConsole(error) }
 }
@@ -42,7 +43,7 @@ function* Edit_Items_GenFunc({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
-function* Update_Items_GenFunc({ config}) {
+function* Update_Items_GenFunc({ config }) {
   try {
     const response = yield call(apiCall.Items_Master_Update_API, config);
     yield put(action.updateItemMasterActionSuccess(response))

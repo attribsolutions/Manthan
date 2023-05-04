@@ -29,8 +29,9 @@ function pageFooter(doc,data) {
           title: "Report"
       });
     // window.open('dataurlnewwindow');
-    
-    doc.output('dataurlnewwindow');
+    const options = { filename: "Invoice Report" }
+    doc.output('dataurlnewwindow', options);
+   
 
     // return(<></>);
 }

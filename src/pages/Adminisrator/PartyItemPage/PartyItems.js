@@ -14,7 +14,6 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    AlertState,
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
@@ -38,7 +37,7 @@ import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginIsSCMCompany, loginPartyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginIsSCMCompany, loginJsonBody, loginPartyID, } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 
@@ -130,6 +129,7 @@ const PartyItems = (props) => {
                 hasEditVal = location.editValue
             }
             if (hasEditVal) {
+
                 const { Party, PartyName, PartyItem = [] } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -144,7 +144,7 @@ const PartyItems = (props) => {
                     return item
                 });
                 dispatch(getPartyItemListSuccess(convArr))
-                
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(PartyName))
             }
@@ -152,17 +152,20 @@ const PartyItems = (props) => {
         }
         else if (loginIsSCMCompany() === 1) {
 
-            setState((i) => {
-                const a = { ...i }
-                a.values.Name = { value: loginPartyID(), label: '' }
-                a.hasValid.Name.valid = true
-                return a
-            })
-            dispatch(getpartyItemList(loginPartyID()))
+            // setState((i) => {
+            //     const a = { ...i }
+            //     a.values.Name = { value: loginPartyID(), label: '' }
+            //     a.hasValid.Name.valid = true
+            //     return a
+            // })
+            const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: loginPartyID() } });
+
+            dispatch(getpartyItemList(jsonBody))
         }
     }, [])
 
     useEffect(async () => {
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SavePartyItemsSuccess({ Status: false }))
             if (pageMode === mode.assingLink) {
@@ -185,7 +188,7 @@ const PartyItems = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                if (promise) { history.push({ pathname: url.PARTYITEM_LIST }) }
+                if (promise) { history.push({ pathname: url.PARTYITEM }) }
             }
 
         } else if
@@ -196,24 +199,6 @@ const PartyItems = (props) => {
             })
         }
     }, [postMsg])
-
-    useEffect(() => {
-
-        if (updateMsg.Status === true && updateMsg.StatusCode === 206550 && !modalCss) {
-            history.push({
-                pathname: url.PARTYITEM_LIST,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(SavePartyItemsSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
-        }
-    }, [updateMsg, modalCss]);
 
     useEffect(() => {
 
@@ -295,11 +280,13 @@ const PartyItems = (props) => {
                 return
             }
         }
+        const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: supplier } });
 
-        dispatch(getpartyItemList(supplier))
+        dispatch(getpartyItemList(jsonBody))
     };
 
     const SaveHandler = async (event) => {
+
         event.preventDefault();
         const Find = tableList.filter((index) => {
             return (index.selectCheck === true)
@@ -331,7 +318,6 @@ const PartyItems = (props) => {
 
     const PartyDropdown = () => {
         if (loginIsSCMCompany() === 1) {
-
             return null
         }
         return <Card>

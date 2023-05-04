@@ -21,13 +21,14 @@ export const columns1 = [
     "Total Amt"
 ];
 
-
 export const BilledBy = [
     "Billed by",
 ]
+
 export const BilledTo = [
     "Billed by",
 ]
+
 export const Details = [
     " ",
 ]
@@ -110,8 +111,6 @@ export const Rows1 = (data) => {
     return returnArr;
 }
 
-
-
 export const Rows = (data) => {
     
     const { CRDRInvoices = [] } = data
@@ -184,6 +183,7 @@ export const BilledByRow = (data) => {
 
     return BilledToArray;
 }
+
 export const BilledToRow = (data) => {
     var BilledByArray = [
         [`Name :${data.Customer}`],
