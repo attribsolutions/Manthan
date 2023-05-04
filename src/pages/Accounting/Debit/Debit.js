@@ -262,7 +262,7 @@ const Debit = (props) => {
     };
 
     const saveHandeller = async (event) => {
-        debugger
+       
         event.preventDefault();
         const btnId = event.target.id
         try {
