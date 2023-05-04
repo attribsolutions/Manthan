@@ -6,9 +6,6 @@ import {
     CardHeader,
     Col,
     Container,
-    FormGroup,
-    Input,
-    Label,
     Nav,
     NavItem,
     NavLink,
@@ -16,15 +13,12 @@ import {
     TabContent,
     TabPane,
 } from "reactstrap"
-import { Link, useHistory } from "react-router-dom"
+import {  useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import Select from "react-select";
-import { priceListByPartyAction } from "../../../../store/Administrator/PriceList/action";
 import { getState } from "../../../../store/Administrator/EmployeeRedux/action"
 import {
     editPartyIDSuccess,
-    getDistrictOnState,
     getPriceList,
     postPartyData,
     postPartyDataSuccess,
@@ -32,7 +26,7 @@ import {
     updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
 import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
-import { breadcrumbReturnFunc, isEditMode_CssFun, loginCompanyID, loginPartyID, loginUserID, metaTageLabel } from "../../../../components/Common/CommonFunction"
+import { breadcrumbReturnFunc, isEditMode_CssFun, loginCompanyID,  loginUserID, metaTageLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -40,8 +34,6 @@ import { getPartyTypelist } from "../../../../store/Administrator/PartyTypeRedux
 import { getcompanyList } from "../../../../store/Administrator/CompanyRedux/actions";
 import { SaveButton } from "../../../../components/Common/CommonButton";
 import { SSDD_List_under_Company } from "../../../../store/CommonAPI/SupplierRedux/actions";
-// import FirstTab from "./FirstTab.js/FirstTab";
-// import AddressDetails_Tab from "./AddressDetailsTab"
 import AddressTabForm from "./AddressDetailsTab/index";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { bulkSetState, formValid } from "../../../../components/Common/validationFunction";
@@ -64,7 +56,6 @@ const PartyMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
 
     const [editCreatedBy, seteditCreatedBy] = useState("");
-
 
     const {
         postMsg,
@@ -181,7 +172,7 @@ const PartyMaster = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(57))
+        dispatch(commonPageField(pageId.PARTY))
         dispatch(getState());
         dispatch(getPriceList());
         dispatch(getPartyTypelist());
@@ -257,6 +248,7 @@ const PartyMaster = (props) => {
 
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
         if (!validBasetab) {
+            setactiveTab1("1")
             return
         };
 
@@ -323,7 +315,7 @@ const PartyMaster = (props) => {
         }
     };
 
-    let IsEditMode_Css = isEditMode_CssFun()
+    let IsEditMode_Css = isEditMode_CssFun();
 
     if (!(userPageAccessState === '')) {
         return (

@@ -3,7 +3,7 @@ import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'react
 import Flatpickr from "react-flatpickr"
 import AddressDetailsTable from './Table';
 import {  useSelector } from 'react-redux';
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeText, resetFunction } from '../../../../../components/Common/validationFunction';
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeCheckbox, onChangeDate, onChangeText, resetFunction } from '../../../../../components/Common/validationFunction';
 
 
 const AddressTabForm = forwardRef((props, ref) => {
@@ -248,7 +248,7 @@ const AddressTabForm = forwardRef((props, ref) => {
                                                     className="form-check-input"
                                                     checked={values.IsDefault}
                                                     onChange={(event) => {
-                                                        onChangeText({ event, state, setState })
+                                                        onChangeCheckbox({ event, state, setState })
                                                     }}
                                                 />
                                                 <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
