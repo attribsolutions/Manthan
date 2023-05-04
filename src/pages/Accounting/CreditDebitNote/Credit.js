@@ -686,41 +686,6 @@ const Credit = (props) => {
                     arr1.push(CRDRNoteItems)
                 }
             }
-
-            // if (index.Qty) {
-            //     // if ((!index.unit)) {
-            //     //     CustomAlert({
-            //     //         Type: 3,
-            //     //         Message: `Please Select Unit ${index.ItemName}`,
-            //     //     })
-            //     //     // return btnIsDissablefunc({ btnId, state: false })
-            //     // }
-            //     const CRDRNoteItems = {
-            //         CRDRNoteDate: values.CRDRNoteDate,
-            //         Item: index.Item,
-            //         Quantity: Number(index.Qty),
-            //         Unit: index.unit,
-            //         BaseUnitQuantity: index.BaseUnitQuantity,
-            //         MRP: index.MRP,
-            //         Rate: index.Rate,
-            //         BasicAmount: index.BasicAmount,
-            //         TaxType: index.TaxType,
-            //         GST: index.GST,
-            //         GSTAmount: index.CGSTAmount,
-            //         Amount: index.AmountTotal,
-            //         CGST: index.CGSTAmount,
-            //         SGST: index.SGSTAmount,
-            //         IGST: index.IGST,
-            //         BatchCode: index.BatchCode,
-            //         CGSTPercentage: index.CGSTPercentage,
-            //         SGSTPercentage: index.SGSTPercentage,
-            //         IGSTPercentage: index.IGSTPercentage,
-
-            //     }
-            //     arr1.push(CRDRNoteItems)
-            // }
-
-
         })
 
         try {
@@ -797,7 +762,7 @@ const Credit = (props) => {
                                                 value={values.Narration}
                                                 type="text"
                                                 className={isError.Narration.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Comment"
+                                                placeholder="Please Enter Narration"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
