@@ -93,7 +93,7 @@ const EmployeeTypesMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-        debugger
+       
         let userAcc = null;
         let locationPath;
 

@@ -39,7 +39,7 @@ function* getPartyListGenFunc() {
 
 
 function* editPartyItems_ID_GenratorFunction({ body }) {     // edit API 
-  debugger
+ 
   const { config, jsonBody } = body;
   try {
     const response = yield call(edit_PartyItem_List_Api, jsonBody);
