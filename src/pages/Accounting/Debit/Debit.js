@@ -58,7 +58,7 @@ import { CredietDebitType, saveCredit, saveCredit_Success } from "../../../store
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
-const Credit = (props) => {
+const Debit = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
@@ -86,15 +86,12 @@ const Credit = (props) => {
         postMsg,
         pageField,
         RetailerList,
-        ReceiptGoButton,
         ReceiptModeList,
         CreditDebitType,
-        updateMsg,
         userAccess } = useSelector((state) => ({
             postMsg: state.CredietDebitReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             CreditDebitType: state.CredietDebitReducer.CreditDebitType,
-            ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             userAccess: state.Login.RoleAccessUpdateData,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             pageField: state.CommonPageFieldReducer.pageField
@@ -106,19 +103,13 @@ const Credit = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
-    debugger
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    let { Data = [] } = ReceiptGoButton;
-
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
     const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
-
-
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -179,7 +170,6 @@ const Credit = (props) => {
             setState(() => resetFunction(fileds, state)) //Clear form values 
             dispatch(Breadcrumb_inputName(''))
 
-
             if (pageMode === "other") {
                 CustomAlert({
                     Type: 1,
@@ -206,24 +196,6 @@ const Credit = (props) => {
             })
         }
     }, [postMsg])
-
-    // useEffect(() => {
-    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-    //         setState(() => resetFunction(fileds, state)) // Clear form values 
-    //         history.push({
-    //             pathname: url.BANK_LIST,
-    //         })
-    //     } else if (updateMsg.Status === true && !modalCss) {
-    //         dispatch(updateBankIDSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(updateMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [updateMsg, modalCss]);
 
     useEffect(() => {
         if (pageField) {
@@ -266,11 +238,10 @@ const Credit = (props) => {
         value: index.id,
         label: index.Name,
     }));
-    debugger
+
     const CreditDebitTypeId = CreditDebitType.find((index) => {
         return index.Name === "DebitNote"
     });
-
 
     function ReciptDateOnchange(e, date) {
         setState((i) => {
@@ -281,7 +252,6 @@ const Credit = (props) => {
         })
     };
 
-
     function DebitDateOnchange(e, date) {
         setState((i) => {
             const a = { ...i }
@@ -290,56 +260,6 @@ const Credit = (props) => {
             return a
         })
     };
-
-
-    // const pagesListColumns = [
-    //     {
-    //         text: "InvoiceDate",
-    //         dataField: "InvoiceDate",
-    //     },
-    //     {
-    //         text: "Invoice No",
-    //         dataField: "FullInvoiceNumber",
-    //     },
-    //     {
-    //         text: "Invoice Amount",
-    //         dataField: "GrandTotal",
-    //     },
-    //     {
-    //         text: "Paid",
-    //         dataField: "PaidAmount",
-    //     },
-    //     {
-    //         text: "Bal Amt",
-    //         dataField: "BalanceAmount",
-    //     },
-    //     {
-    //         text: "Calculate",
-    //         dataField: "",
-    //         // formatter: (cellContent, row, key) => {
-
-    //         //     return (<span style={{ justifyContent: 'center', width: "100px" }}>
-    //         //         <CInput
-    //         //             key={`Quantity${row.FullInvoiceNumber}${key}`}
-    //         //             id={`Quantity${row.FullInvoiceNumber}`}
-    //         //             pattern={decimalRegx}
-    //         //             defaultValue={pageMode === mode.view ? row.Amount : row.Calculate}
-    //         //             disabled={pageMode === mode.view ? true : false}
-    //         //             // value={row.Calculate}
-    //         //             // type="text"
-    //         //             autoComplete="off"
-    //         //             className="col col-sm text-center"
-    //         //             onChange={(e) => CalculateOnchange(e, row, key)}
-
-    //         //         />
-    //         //     </span>)
-    //         // },
-    //         // headerStyle: (colum, colIndex) => {
-    //         //     return { width: '140px', textAlign: 'center' };
-    //         // },
-    //     },
-    // ];
-
 
     const saveHandeller = async (event) => {
         debugger
@@ -421,7 +341,7 @@ const Credit = (props) => {
                                                 value={values.Narration}
                                                 type="text"
                                                 className={isError.Narration.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Comment"
+                                                placeholder="Please Enter Narration"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
@@ -527,7 +447,7 @@ const Credit = (props) => {
                                                 value={values.Amount}
                                                 type="text"
                                                 className={isError.Amount.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Comment"
+                                                placeholder="Please Enter Amount"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
@@ -601,12 +521,6 @@ const Credit = (props) => {
 
                             </Row> : null}
 
-
-                            {/* </CardBody> */}
-                            {/* </CardBody> */}
-
-                            {/* </div> */}
-
                         </div>
                         <FormGroup>
                             <Col sm={2} style={{ marginLeft: "3px" }} >
@@ -619,38 +533,6 @@ const Credit = (props) => {
 
                             </Col>
                         </FormGroup >
-                        {/* </Card> */}
-
-                        {/* <ToolkitProvider
-
-                            keyField="id"
-                            data={Data}
-                            columns={pagesListColumns}
-
-                            search
-                        >
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    <div className="table">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            bordered={true}
-                                            striped={false}
-                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                            classes={"table align-middle table-nowrap table-hover"}
-                                            headerWrapperClasses={"thead-light"}
-
-                                            {...toolkitProps.baseProps}
-
-                                        />
-
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-
-                                </React.Fragment>
-                            )
-                            }
-                        </ToolkitProvider> */}
 
                     </form >
                 </div>
@@ -664,5 +546,5 @@ const Credit = (props) => {
     }
 };
 
-export default Credit
+export default Debit
 

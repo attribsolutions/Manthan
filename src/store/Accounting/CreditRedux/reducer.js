@@ -1,13 +1,10 @@
 import {
-  CREDITDEBIT_TYPE_SUCCESS, DELETE_CREDIT_LIST_ID_SUCCESS, DELETE_GROUP_LIST_ID_SUCCESS,
+  CREDITDEBIT_TYPE_SUCCESS,
+  DELETE_CREDIT_LIST_ID_SUCCESS,
   EDIT_CREDIT_LIST_ID_SUCCESS,
-  EDIT_GROUPMASTER_ID_SUCCESS,
   GET_CREDIT_LIST_SUCCESS,
-  GET_GROUP_LIST_SUCCESS,
   INVOICE_RETURN_ID_SUCCESS,
   SAVE_CREDIT_SUCCESS,
-  SAVE_GROUP_MASTER_SUCCESS,
-  UPDATE_GROUPMASTER_ID_SUCCESS
 } from "./actionType";
 
 const INIT_STATE = {
@@ -17,7 +14,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   CreditDebitType: [],
-  InvoiceReturn:[]
+  InvoiceReturn: []
 }
 
 const CredietDebitReducer = (state = INIT_STATE, action) => {
@@ -59,13 +56,6 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
         ...state,
         InvoiceReturn: action.payload,
       };
-
-    // update api
-    // case UPDATE_GROUPMASTER_ID_SUCCESS:
-    //   return {
-    //     ...state,
-    //     updateMsg: action.payload,
-    //   };
 
     default:
       return state
