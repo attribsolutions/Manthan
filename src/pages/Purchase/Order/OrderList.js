@@ -208,13 +208,13 @@ const OrderList = () => {
             if (list.length > 0) {
                 list.forEach(ele => {
                     if (ele.hasSelect) {
-                        grnRef.push({
-                            Invoice: null,
-                            Order: ele.POType === "Challan" ? '' : ele.id,
-                            ChallanNo: ele.FullOrderNumber,
-                            Inward: url.GRN_STP_3 ? true : false,
-                            Challan: ele.POType === "Challan" ? ele.id : ''
-                        });
+                            grnRef.push({
+                                Invoice: (subPageMode === url.GRN_STP_3) ? ele.id : null,
+                                Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : null,
+                                ChallanNo: ele.FullOrderNumber,
+                                Inward: url.GRN_STP_3 ? true : false,
+                                Challan: ele.POType === "Challan" ? ele.id : ''
+                            });
                         isGRNSelect = isGRNSelect.concat(`${ele.id},`)
                         challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
                     }

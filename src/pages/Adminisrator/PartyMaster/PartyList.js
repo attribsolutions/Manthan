@@ -15,7 +15,6 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import { MetaTags } from 'react-meta-tags';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import { loginCompanyID, loginRoleID, loginUserID } from '../../../components/Common/CommonFunction';
 
 const PartyList = () => {
     const dispatch = useDispatch();

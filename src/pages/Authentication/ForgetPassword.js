@@ -86,7 +86,7 @@ const ForgetPasswordPage = props => {
   }, [sendOTPSuccessMsg_redux, sendOtpMegError_reducx])
 
   function handleValidSubmit(event, values) {
-    debugger
+   
     var jsonBody = JSON.stringify({
       Email: values.email,
       Phone:""
@@ -107,7 +107,7 @@ const ForgetPasswordPage = props => {
     else {
       // setPaswErr("form-control is-valid mb-2")
       setPaswErr(false)
-      debugger
+     
       var jsonBody = JSON.stringify({
         UserID: values.userId,
         OTP: values.OTP,
