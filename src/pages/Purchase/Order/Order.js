@@ -573,7 +573,7 @@ const Order = (props) => {
             Customer: loginPartyID(),
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
-            RateParty: supplierSelect.value
+            RateParty: loginPartyID()
         })
         dispatch(GoButton_For_Order_Add(subPageMode, jsonBody))
     };
@@ -599,7 +599,7 @@ const Order = (props) => {
     };
 
     async function assignItem_onClick() {
-        
+
         const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : loginPartyID()
         const config = {
             editId: isParty,
