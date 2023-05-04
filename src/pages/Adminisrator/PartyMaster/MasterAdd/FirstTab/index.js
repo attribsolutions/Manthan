@@ -13,6 +13,7 @@ import '../Tree.scss'
 const BaseTabForm = forwardRef((props, ref) => {
 
     const dispatch = useDispatch();
+
     const fileds = {
         Name: "",
         MobileNo: "",
@@ -91,12 +92,16 @@ const BaseTabForm = forwardRef((props, ref) => {
     }, [PartyTypes])
 
     useEffect(() => {
+
         document.addEventListener('mouseup', function (event) {
-            var pol = document.getElementById('price-drop');
-            if (event.target != pol && event.target.parentNode != pol) {
-                pol.style.display = 'none';
-            }
+            try {
+                var pol = document.getElementById('price-drop');
+                if (event.target != pol && event.target.parentNode != pol) {
+                    pol.style.display = 'none';
+                }
+            } catch (e) { }
         });
+
     }, [])
 
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
@@ -162,8 +167,6 @@ const BaseTabForm = forwardRef((props, ref) => {
             </>
         )
     }
-
-
 
     const FirstTab = (
         <div id={"base-tabe-area"}>
@@ -482,7 +485,6 @@ const BaseTabForm = forwardRef((props, ref) => {
         </div>
     )
     return FirstTab
-    // return [FirstTab, state, setState]
 })
 
 export default BaseTabForm

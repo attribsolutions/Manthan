@@ -14,7 +14,6 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
     return isValid
 };
 
-
 export const formValChange = ({ event, state, setState }) => {
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
@@ -181,6 +180,7 @@ export const onChangeDate = ({ v, e, state, setState }) => {
 export const onChangeText = ({ event, state, setState }) => {
     formValChange({ event, state, setState })
 }
+
 export const onChangeCheckbox=({ event, state, setState })=> {
     setState(() => {
 
@@ -229,7 +229,6 @@ export const initialFiledFunc = (field) => {
     return obj
 }
 
-
 export const resetFunction = (field, state) => {
 
     let preState = { ...state }
@@ -239,6 +238,7 @@ export const resetFunction = (field, state) => {
     })
     return preState
 }
+
 export const bulkSetState = (field, state, setState) => {
 
     let preState = { ...state }

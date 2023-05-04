@@ -185,10 +185,10 @@ export const GeneralMasterSubType_API = (data) => post(url.GENERAL_MASTER_BRAND_
 
 // Party Master
 export const Party_Master_Get_API = (jsonbody) => post(url.PARTY_MASTER_FILTER_API, jsonbody)//get api
-export const Party_Master_Post_API = (data) => post(url.PARTY_MASTER_API, data)// post api
+export const Party_Master_Post_API = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_API, jsonBody, btnId)// post api
 export const Party_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.PARTY_MASTER_API}/${deleteId}`, btnId)// delete api
 export const Party_Master_Edit_API = ({ editId, btnId }) => get(`${url.PARTY_MASTER_API}/${editId}`, btnId)// edit api
-export const Party_Master_Update_API = (data, id) => put(`${url.PARTY_MASTER_API}/${id}`, data)// update api
+export const Party_Master_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_API}/${updateId}`, jsonBody,btnId)// update api
 export const GetDistrictOnState_For_Dropdown = (id) => get(`${url.GetDistrictOnState}/${id}`)//  GetDistrictOnState DropDown API
 export const GetPriceList_For_Dropdown = () => get(url.PRICELIST)//  get priceList
 export const GetAddressTypes_For_Dropdown = () => get(url.ADDRESSTYPES)//  get addresstypes

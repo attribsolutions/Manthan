@@ -13,7 +13,7 @@ import {
     TabContent,
     TabPane,
 } from "reactstrap"
-import {  useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
 import { getState } from "../../../../store/Administrator/EmployeeRedux/action"
@@ -26,7 +26,7 @@ import {
     updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
 import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
-import { breadcrumbReturnFunc, isEditMode_CssFun, loginCompanyID,  loginUserID, metaTageLabel } from "../../../../components/Common/CommonFunction"
+import { breadcrumbReturnFunc, btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginUserID, metaTageLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -239,6 +239,7 @@ const PartyMaster = (props) => {
     const SaveHandler = (event) => {
 
         event.preventDefault();
+        const btnId = event.target.id;
 
         let baseTabDetail = baseTabRef.current.getCurrentState()
         let priceListSelect = baseTabRef.current.getPriceListSelect()
@@ -261,58 +262,65 @@ const PartyMaster = (props) => {
             return;
         };
 
-        const baseValue = baseTabDetail.values
+        try {
+            btnIsDissablefunc({ btnId, state: true })
 
-        const supplierArr = baseValue.Supplier.map((i) => ({
-            Party: i.value,
-            CreatedBy: loginUserID(),
-            UpdatedBy: loginUserID(),
-        }))
+            const baseValue = baseTabDetail.values
 
-        const jsonBody = JSON.stringify({
-            "Name": baseValue.Name,
-            "PriceList": priceListSelect.value,
-            "PartyType": baseValue.PartyType.value,
-            "Company": loginCompanyID(),
-            "PAN": baseValue.PAN,
-            "Email": baseValue.Email,
-            "MobileNo": baseValue.MobileNo,
-            "AlternateContactNo": baseValue.AlternateContactNo,
-            "State": baseValue.State.value,
-            "District": baseValue.District.value,
-            "SAPPartyCode": baseValue.SAPPartyCode,
-            "Taluka": 0,
-            "City": 0,
-            "GSTIN": baseValue.GSTIN,
-            "MkUpMkDn": baseValue.MkUpMkDn,
-            "isActive": baseValue.IsActive,
-            "CreatedBy": loginUserID(),
-            "UpdatedBy": loginUserID(),
-            "PartySubParty": supplierArr,
-            "PartyAddress": addressTabDetail,
+            const supplierArr = baseValue.Supplier.map((i) => ({
+                Party: i.value,
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
+            }))
 
-            "PartyPrefix": [
-                {
-                    "Orderprefix": prefixValue.OrderPrefix,
-                    "Invoiceprefix": prefixValue.InvoicePrefix,
-                    "Grnprefix": prefixValue.GRNPrefix,
-                    "Receiptprefix": prefixValue.ReceiptPrefix,
-                    "Challanprefix": prefixValue.Challanprefix,
-                    "WorkOrderprefix": prefixValue.WorkOrderPrefix,
-                    "MaterialIssueprefix": prefixValue.MaterialIssuePrefix,
-                    "Demandprefix": prefixValue.DemandPrefix,
-                    "IBChallanprefix": prefixValue.IBChallanPrefix,
-                    "IBInwardprefix": prefixValue.IBInwardPrefix
-                }
-            ],
+            const jsonBody = JSON.stringify({
+                "Name": baseValue.Name,
+                "PriceList": priceListSelect.value,
+                "PartyType": baseValue.PartyType.value,
+                "Company": loginCompanyID(),
+                "PAN": baseValue.PAN,
+                "Email": baseValue.Email,
+                "MobileNo": baseValue.MobileNo,
+                "AlternateContactNo": baseValue.AlternateContactNo,
+                "State": baseValue.State.value,
+                "District": baseValue.District.value,
+                "SAPPartyCode": baseValue.SAPPartyCode,
+                "Taluka": 0,
+                "City": 0,
+                "GSTIN": baseValue.GSTIN,
+                "MkUpMkDn": baseValue.MkUpMkDn,
+                "isActive": baseValue.IsActive,
+                "CreatedBy": loginUserID(),
+                "UpdatedBy": loginUserID(),
+                "PartySubParty": supplierArr,
+                "PartyAddress": addressTabDetail,
 
-        });
-        if (pageMode === mode.edit) {
-            dispatch(updatePartyID(jsonBody, EditData.id));
-        }
-        else {
-            dispatch(postPartyData(jsonBody));
-        }
+                "PartyPrefix": [
+                    {
+                        "Orderprefix": prefixValue.OrderPrefix,
+                        "Invoiceprefix": prefixValue.InvoicePrefix,
+                        "Grnprefix": prefixValue.GRNPrefix,
+                        "Receiptprefix": prefixValue.ReceiptPrefix,
+                        "Challanprefix": prefixValue.Challanprefix,
+                        "WorkOrderprefix": prefixValue.WorkOrderPrefix,
+                        "MaterialIssueprefix": prefixValue.MaterialIssuePrefix,
+                        "Demandprefix": prefixValue.DemandPrefix,
+                        "IBChallanprefix": prefixValue.IBChallanPrefix,
+                        "IBInwardprefix": prefixValue.IBInwardPrefix
+                    }
+                ],
+
+            });
+            debugger
+            if (pageMode === mode.edit) {
+
+                dispatch(updatePartyID({ jsonBody, updateId: EditData.id, btnId }));
+            }
+            else {
+                dispatch(postPartyData({ jsonBody, btnId }));
+            }
+
+        } catch (error) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
     let IsEditMode_Css = isEditMode_CssFun();
