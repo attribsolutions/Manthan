@@ -101,23 +101,23 @@ const CommonListPage = (props) => {
     let defaultDownList2 = [];
     let listObj = {};
     let listObj2 = {};
-    
+
     tableList.forEach((index1) => {
 
       PageFieldMaster.forEach((index2) => {
-      
+
         if (index2.ShowInDownload) {
           listObj2[index2.ControlID] = index2.ShownloadDefaultSelect
           listObj[index2.ControlID] = index1[index2.ControlID]
         }
       })
+
       downList.push(listObj)
       defaultDownList2.push(listObj2)
       listObj = {}
     })
     dispatch(CommonBreadcrumbDetails({ downBtnData: downList, defaultDownBtnData: listObj2 }))
   }, [tableList])
-
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(async () => {
