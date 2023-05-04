@@ -105,15 +105,15 @@ const CreditList = () => {
 
     }, []);
 
-    useEffect(() => {
-        const page_Id = otherState.page_Id
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
+    // useEffect(() => {
+    //     const page_Id = otherState.page_Id
+    //     let userAcc = userAccess.find((inx) => {
+    //         return (inx.id === page_Id)
+    //     })
+    //     if (!(userAcc === undefined)) {
+    //         setUserAccState(userAcc)
+    //     }
+    // }, [userAccess])
 
     //   Note Type Api for Type identify
     useEffect(() => {
@@ -315,7 +315,7 @@ const CreditList = () => {
                         </FormGroup>
                     </Col >
 
-                    <Col sm={2} className="mt-3 " style={{ paddingLeft: "100px" }}>
+                    <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
                         <Go_Button onClick={goButtonHandler} />
                     </Col>
                 </div>
