@@ -9,17 +9,14 @@ import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { useHistory } from "react-router-dom";
 import { currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as report from '../../../Reports/ReportIndex'
-import { editBOMList, updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
+import { updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import {
-    deleteReceiptList, deleteReceiptList_Success,
-} from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { Edit_Credit_List_API, Receipt_Print } from "../../../helpers/backend_helper";
+import { Edit_Credit_List_API, } from "../../../helpers/backend_helper";
 import Credit from "./Credit";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
@@ -27,6 +24,7 @@ import Flatpickr from "react-flatpickr"
 import { Go_Button } from "../../../components/Common/CommonButton";
 import { CredietDebitType, Edit_CreditList_ID, GetCreditList, deleteCreditlistSuccess, delete_CreditList_ID } from "../../../store/Accounting/CreditRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import Debit from "../Debit/Debit";
 
 const CreditList = () => {
 
@@ -44,6 +42,12 @@ const CreditList = () => {
     const hasPagePath = history.location.pathname
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [otherState, setOtherState] = useState({
+        masterPath: '',
+        buttonMsgLable: ''
+
+    });
     const [userAccState, setUserAccState] = useState('');
 
     const reducers = useSelector(
@@ -72,24 +76,51 @@ const CreditList = () => {
         deleteSucc: deleteCreditlistSuccess
     }
 
-    // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = pageId.CREDIT_LIST
-        setpageMode(hasPagePath)
+
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+        let masterPath = '';
+        let buttonMsgLable = ""
+        let makeBtnShow = false;
+        let newBtnPath = '';
+        let makeBtnName = '';
+        let MasterModal = ''
+
+        if (subPageMode === url.CREDIT_LIST) {
+            page_Id = pageId.CREDIT_LIST;
+            masterPath = url.CREDIT;
+            newBtnPath = url.CREDIT;
+            buttonMsgLable = "Credit"
+            MasterModal = Credit
+        }
+        else if (subPageMode === url.DEBIT_LIST) {
+            page_Id = pageId.DEBIT_LIST;
+            masterPath = url.DEBIT;
+            newBtnPath = url.DEBIT;
+            buttonMsgLable = "Debit"
+            MasterModal = Debit
+        }
+
+        // dispatch(ReceiptListAPI(""))//for clear privious order list
+        setOtherState({ masterPath, newBtnPath, buttonMsgLable })
+        setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(BreadcrumbShowCountlabel(`${"Credit Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
+        // dispatch(getSupplier())
+
     }, []);
 
-    useEffect(() => {
-        const page_Id = pageId.CREDIT_LIST
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
+    // useEffect(() => {
+    //     const page_Id = pageId.CREDIT_LIST
+    //     let userAcc = userAccess.find((inx) => {
+    //         return (inx.id === page_Id)
+    //     })
+    //     if (!(userAcc === undefined)) {
+    //         setUserAccState(userAcc)
+    //     }
+    // }, [userAccess])
 
     //   Note Type Api for Type identify
     useEffect(() => {
@@ -132,13 +163,34 @@ const CreditList = () => {
 
     const NoteType = []
     CreditDebitType.forEach(index => {
-        if (index.Name === "CreditNote" || index.Name === "Goods CreditNote") {
-            const arr = {
-                value: index.id,
-                label: index.Name,
+        if (otherState.buttonMsgLable === "Credit") {
+            if ((index.Name === "CreditNote") || (index.Name === "Goods CreditNote")) {
+                const arr = {
+                    value: index.id,
+                    label: index.Name,
+                }
+                NoteType.push(arr)
             }
-            NoteType.push(arr)
+
         }
+        else {
+            if ((index.Name === "DebitNote") || (index.Name === "Goods DebitNote")) {
+                const arr = {
+                    value: index.id,
+                    label: index.Name,
+                }
+                NoteType.push(arr)
+            }
+        }
+
+        // else if ((index.Name === "DebitNote") || (index.Name === "Goods DebitNote") && (otherState.buttonMsgLable === "Debit")) {
+        //     const arr = {
+        //         value: index.id,
+        //         label: index.Name,
+        //     }
+        //     NoteType.push(arr)
+        // }
+
     })
     NoteType.unshift({ value: "", label: " All" });
 
@@ -163,7 +215,8 @@ const CreditList = () => {
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
             PartyID: loginPartyID(),
-            NoteType: values.NoteType === "" ? CreditDebitTypeId.id : values.NoteType.value
+            NoteType: values.NoteType === "" ? CreditDebitTypeId.id : values.NoteType.value,
+            Note: otherState.buttonMsgLable
         });
         dispatch(GetCreditList(jsonBody, hasPagePath));
     }
@@ -305,15 +358,16 @@ const CreditList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={Credit}
-                            masterPath={url.CREDIT}
-                            newBtnPath={url.CREDIT}
+                            masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
+                            makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
-                            ButtonMsgLable={"Credit"}
+                            ButtonMsgLable={otherState.buttonMsgLable}
                             deleteName={"Customer"}
+                            MasterModal={otherState.MasterModal}
                         />
                         : null
                 }
