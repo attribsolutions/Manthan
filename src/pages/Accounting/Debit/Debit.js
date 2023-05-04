@@ -42,19 +42,10 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import {
     editBankIDSuccess,
-    saveBankMaster,
-    saveBankMaster_Success,
-    updateBankID,
-    updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
-import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import CInput from "../../../CustomValidateForm/CInput";
-import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { CredietDebitType, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
+import { CredietDebitType, Receipt_No_List, Receipt_No_List_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
@@ -88,8 +79,10 @@ const Debit = (props) => {
         RetailerList,
         ReceiptModeList,
         CreditDebitType,
+        ReceiptNumber,
         userAccess } = useSelector((state) => ({
             postMsg: state.CredietDebitReducer.postMsg,
+            ReceiptNumber: state.CredietDebitReducer.ReceiptNumber,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             CreditDebitType: state.CredietDebitReducer.CreditDebitType,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -98,7 +91,7 @@ const Debit = (props) => {
         }));
 
     useEffect(() => {
-        const page_Id = pageId.DEBIT//changes
+        const page_Id = pageId.DEBIT
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -108,8 +101,8 @@ const Debit = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
-    const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -239,6 +232,13 @@ const Debit = (props) => {
         label: index.Name,
     }));
 
+    const ReceiptNo_Options = ReceiptNumber.map((index) => ({
+        value: index.Receipt,
+        label: `${index.FullReceiptNumber} -${index.AmountPaid} -${index.ReceiptDate}`,
+        Amount: index.AmountPaid,
+        ReceiptDate: index.ReceiptDate
+    }));
+
     const CreditDebitTypeId = CreditDebitType.find((index) => {
         return index.Name === "DebitNote"
     });
@@ -261,8 +261,40 @@ const Debit = (props) => {
         })
     };
 
+    function PartyOnChangeHandler(hasSelect, evn) {
+        setState((i) => {
+            let a = { ...i }
+            a.values.ReceiptNO = "";
+            a.values.GrandTotal = "";
+            a.values.ReceiptDate = "";
+            a.hasValid.ReceiptNO.valid = true;
+            a.hasValid.GrandTotal.valid = true;
+            a.hasValid.ReceiptDate.valid = true;
+        })
+        onChangeSelect({ hasSelect, evn, state, setState, })
+        dispatch(Receipt_No_List_Success([]))
+
+        const jsonBody = JSON.stringify({
+            PartyID: loginPartyID(),
+            CustomerID: hasSelect.value
+        });
+        dispatch(Receipt_No_List(jsonBody));
+    }
+
+    function ReceiptNumberHandler(hasSelect, evn) {
+
+        setState((i) => {
+            let a = { ...i }
+            a.values.GrandTotal = hasSelect.Amount;
+            a.values.ReceiptDate = hasSelect.ReceiptDate;
+            a.hasValid.GrandTotal.valid = true;
+            a.hasValid.ReceiptDate.valid = true;
+        })
+        onChangeSelect({ hasSelect, evn, state, setState, })
+    }
+
     const saveHandeller = async (event) => {
-       
+
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -276,7 +308,7 @@ const Debit = (props) => {
                     GrandTotal: values.GrandTotal,
                     Narration: values.Narration,
                     Comment: values.Comment,
-                    ReceiptNO: values.ReceiptNO,
+                    ReceiptNO: values.ReceiptNO.value,
                     ReceiptDate: values.ReceiptDate,
                     CRDRNoteItems: [],
                     CRDRInvoices: [],
@@ -372,7 +404,7 @@ const Debit = (props) => {
                                                 classNamePrefix="dropdown"
                                                 options={customerOptions}
                                                 onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                    PartyOnChangeHandler(hasSelect, evn)
                                                 }}
                                             />
                                             {isError.Customer.length > 0 && (
@@ -478,20 +510,18 @@ const Debit = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                options={customerOptions}
+                                                options={ReceiptNo_Options}
                                                 onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                    ReceiptNumberHandler(hasSelect, evn)
                                                 }}
                                             />
-
                                             {isError.ReceiptNO.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ReceiptNO}</small></span>
                                             )}
                                         </Col>
-
-
                                     </FormGroup>
                                 </Col >
+
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
