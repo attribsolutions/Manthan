@@ -14,7 +14,7 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginIsSCMCompany, loginPartyID, loginUserID } from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -177,13 +177,11 @@ const ImportMasterMap = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
-                let partyId = values.Party.value;
-                let mapType = values.MapType.value;
+            btnIsDissablefunc({ btnId, state: true })
+            let partyId = (loginIsSCMCompany() === 1) ? loginPartyID() : values.Party.value;
+            let mapType = values.MapType.value;
 
-                dispatch(GoButton_ImportMasterMap({ partyId, mapType }))
-            }
+            dispatch(GoButton_ImportMasterMap({ partyId, mapType }))
         } catch (error) { }
     };
 
@@ -199,7 +197,7 @@ const ImportMasterMap = (props) => {
             let jsonArr = []
             await goButtonArr.forEach(i => {
 
-                
+
 
                 if ((!(i.mapValue === '') && !(i.mapValue === null))) {
                     jsonArr.push({
@@ -270,7 +268,7 @@ const ImportMasterMap = (props) => {
                         <div className="px-2   c_card_filter text-black" >
                             <form onSubmit={(event) => goButtonHandler(event)} noValidate>
                                 <div className="row">
-                                    <Col sm="5">
+                                    <Col sm="5" style={{ display: (loginIsSCMCompany() === 1) ? "none" : "block" }}>
                                         <FormGroup className="mb-2 row mt-3 " >
                                             <Label className=" p-2"
                                                 style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
