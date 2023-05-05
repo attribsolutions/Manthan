@@ -177,14 +177,11 @@ const ImportMasterMap = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
-                // let partyId = values.Party.value;
-                let partyId = (loginIsSCMCompany() === 1) ? loginPartyID() : values.Party.value;
-                let mapType = values.MapType.value;
+            btnIsDissablefunc({ btnId, state: true })
+            let partyId = (loginIsSCMCompany() === 1) ? loginPartyID() : values.Party.value;
+            let mapType = values.MapType.value;
 
-                dispatch(GoButton_ImportMasterMap({ partyId, mapType }))
-            }
+            dispatch(GoButton_ImportMasterMap({ partyId, mapType }))
         } catch (error) { }
     };
 
