@@ -237,7 +237,7 @@ export function isEditMode_CssFun(pageMode) {
   }
   return ""
 }
-export function metaTageLabel(userPageAccess='') {
+export function metaTagLabel(userPageAccess='') {
   return <title>{userPageAccess.PageHeading}| FoodERP-2.0</title>
 
 }

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import {
     deletePartyID,
@@ -9,7 +9,7 @@ import {
     postPartyDataSuccess,
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
-import PartyMaster from './PartyMaster';
+import PartyMaster from './MasterAdd/PartyIndex';
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { MetaTags } from 'react-meta-tags';
