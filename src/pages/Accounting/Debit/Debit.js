@@ -269,7 +269,7 @@ const Debit = (props) => {
             a.values.GrandTotal = "";
             a.values.ReceiptDate = "";
             a.hasValid.ReceiptNO.valid = true;
-            // a.hasValid.GrandTotal.valid = true;
+            a.hasValid.GrandTotal.valid = true;
             a.hasValid.ReceiptDate.valid = true;
         })
         onChangeSelect({ hasSelect, evn, state, setState, })
