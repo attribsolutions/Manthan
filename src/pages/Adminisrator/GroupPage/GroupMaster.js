@@ -76,7 +76,7 @@ const GroupMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    const values = { ...state.values }
+    const { values } = state
     const { isError } = state;
     const { fieldLabel } = state;
 
@@ -194,13 +194,7 @@ const GroupMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-    useEffect(() => {
 
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
 
     const GroupTypesValues = GroupTypeAPI.map((Data) => ({
         value: Data.id,

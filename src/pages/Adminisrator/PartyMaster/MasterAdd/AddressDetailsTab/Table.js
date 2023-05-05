@@ -1,44 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 
-function AddressDetailsTable(props) {
+function AddressDetailsTable({addressTable=[],setAddressTable}) {
 
     const ondeleteHandeler = (ele) => {
 
         if (!(ele === 0)) {
-            var fil = props.tableData.filter((i) => {
+            var fil = addressTable.filter((i) => {
                 return !(i.id === ele);
             });
-            props.func(fil);
+            setAddressTable(fil);
         }
     };
 
     function defaultChangeHandler(key) {
-        const newtableData = props.tableData.map((ele, k) => {
+        const newtableData = addressTable.map((ele, k) => {
             ele.IsDefault = false;
             if (k === key) {
                 ele.IsDefault = true;
             }
             return ele
         });
-        props.func(newtableData)
+        setAddressTable(newtableData)
     }
-    //   function myFunction() {
-    //     
-    //     /* Access image by id and change
-    //     the display property to block*/
-    //     document.getElementById('images')
-    //             .style.display = "block";
-
-    // //     document.getElementById('')
-    // //             .style.display = "none";
-    // }
-
-    // useEffect(() => {
-    //     var x = document.getElementById("add-img");
-    //     x.style.display = "none";
-    // }, []);
+   
 
     function myFunction(row) {
 
@@ -52,20 +38,16 @@ function AddressDetailsTable(props) {
         }
     }
 
-    const tableRows = props.tableData.map((info, key) => {
+    const tableRows = addressTable.map((info, key) => {
        
-        const pic = info.fssaidocument
         return (
             <tr>
                 <td>{info.Address}</td>
                 <td>{info.FSSAINo}</td>
                 <td>{info.FSSAIExipry}</td>
                 <td>
-                    {/* {info.fssaidocument} */}
-                    { }
                     <button
                         type='button'
-                        // id='myImg'
                         onClick={() => { myFunction(info) }}
                         className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light">
                         Show Image
@@ -99,7 +81,7 @@ function AddressDetailsTable(props) {
         <>
             <div>
                 < img id='add-img' className='abc1' src={''} />
-                {props.tableData.length > 0 ?
+                {addressTable.length > 0 ?
                     <Table className="table table-bordered table-hover">
                         <Thead>
                             <tr>

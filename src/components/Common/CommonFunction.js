@@ -1,7 +1,7 @@
 import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
 import { CommonBreadcrumbDetails } from "../../store/actions";
 import { createBrowserHistory } from 'history';
-
+import * as mode from "../../routes/PageMode"
 
 export const history = createBrowserHistory();
 
@@ -231,7 +231,16 @@ export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "" }) {
     })
   );
 }
+export function isEditMode_CssFun(pageMode) {
+  if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) {
+    return "-5.5%"
+  }
+  return ""
+}
+export function metaTageLabel(userPageAccess='') {
+  return <title>{userPageAccess.PageHeading}| FoodERP-2.0</title>
 
+}
 export function CommonConsole(error) {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
   console.log("CommonConsole =>:", error);
 }
@@ -311,8 +320,8 @@ export async function CheckAPIResponse({
       Type: 2,
       Message: `${url}:This API ${method} Method Execution Error`,
     });
-  
-   
+
+
     return Promise.reject(error);
     // }
   }

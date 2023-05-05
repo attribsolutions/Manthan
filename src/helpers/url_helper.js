@@ -64,6 +64,7 @@ export const ROLE_FILTER_API = "/RolesFilter" // role get api
 
 // M_Items Api
 export const Items_MASTER_API = "/Items"
+export const Items_FILTER_API = "/ItemsFilter"
 export const GET_GROUP_BY_GROUPTYPES_ID = "/GetGroupByGroupTypeID"
 export const GET_SUBGROUP_BY_GROUP_ID = "/GetSubGroupByGroupID"
 export const GET_ITEM_TAG = "/ItemTag"
@@ -186,6 +187,8 @@ export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 //PartyItems
 export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
 export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
+export const PARTY_ITEM_FILTER = '/PartyItemFilter' // FOR Get
+
 
 //Routes
 export const ROUTES_FILTER = '/RoutesFilter '
@@ -312,10 +315,10 @@ export const EMPLOYEE_DROPDOWN_API = '/ManagementEmployeeList'
 export const RECEIPT_GO_BUTTON_API = '/ReceiptInvoices'
 export const RECEIPT_POST_API = '/Receipt'
 export const DEPOSITOR_BANK_FILTER = '/DepositorBankFilter'
-export const RECEIPT_FILTERS ='/ReceiptFilter'
-export const OPENING_BALANCE ='/GetOpeningBalance'
+export const RECEIPT_FILTERS = '/ReceiptFilter'
+export const OPENING_BALANCE = '/GetOpeningBalance'
 export const BANK_LIST_API = '/PartyBankList'
-export const MAKE_RECEIPT_TO_PAYMENT ='/MakeReceiptofPayment'
+export const MAKE_RECEIPT_TO_PAYMENT = '/MakeReceiptofPayment'
 
 // Sales Return
 
@@ -325,7 +328,8 @@ export const ADD_BUTTON_API_FOR_INVOICE = '/InvoiceReturnCRDR'
 export const SALES_RETURN = '/PurchaseReturn'
 export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
 
-export const CREDIT_DEBIT ='/CreditDebitNote'
-export const CREDIT_DEBIT_FILTER ='/CreditDebitNoteFilter'
-export const INVOICE_RETURN ='/InvoiceReturnCRDR'
-
+// Credit and Debit API
+export const CREDIT_DEBIT = '/CreditDebitNote'
+export const CREDIT_DEBIT_FILTER = '/CreditDebitNoteFilter'
+export const INVOICE_RETURN = '/InvoiceReturnCRDR'
+export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'

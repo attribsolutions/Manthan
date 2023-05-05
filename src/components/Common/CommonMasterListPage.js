@@ -96,24 +96,28 @@ const CommonListPage = (props) => {
 
 
   useEffect(() => {
-   
+
     let downList = [];
+    let defaultDownList2 = [];
     let listObj = {};
+    let listObj2 = {};
 
     tableList.forEach((index1) => {
+
       PageFieldMaster.forEach((index2) => {
+
         if (index2.ShowInDownload) {
-          listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
+          listObj2[index2.ControlID] = index2.ShownloadDefaultSelect
           listObj[index2.ControlID] = index1[index2.ControlID]
         }
       })
+
       downList.push(listObj)
+      defaultDownList2.push(listObj2)
       listObj = {}
     })
-    dispatch(CommonBreadcrumbDetails({ downBtnData: downList }))
-
+    dispatch(CommonBreadcrumbDetails({ downBtnData: downList, defaultDownBtnData: listObj2 }))
   }, [tableList])
-
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(async () => {
@@ -248,7 +252,7 @@ const CommonListPage = (props) => {
       order: sortType, // desc or asc
     },
   ];
-  
+
   const pageOptions = {
     sizePerPage: 15,
     // totalSize: tableList.length,

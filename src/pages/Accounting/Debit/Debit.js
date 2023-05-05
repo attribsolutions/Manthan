@@ -30,6 +30,7 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
+    convertDatefunc,
     currentDate,
     loginCompanyID,
     loginPartyID,
@@ -42,32 +43,23 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import {
     editBankIDSuccess,
-    saveBankMaster,
-    saveBankMaster_Success,
-    updateBankID,
-    updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
-import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import CInput from "../../../CustomValidateForm/CInput";
-import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { CredietDebitType, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
+import { CredietDebitType, Receipt_No_List, Receipt_No_List_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
-const Credit = (props) => {
+const Debit = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
 
     const fileds = {
-        DebitDate: currentDate,
-        PartyName: "",
+        CRDRNoteDate: currentDate,
+        Customer: "",
         Comment: "",
-        Amount: "",
+        GrandTotal: "",
         ServiceItems: "",
         Narration: "",
         ReceiptNO: "",
@@ -86,39 +78,32 @@ const Credit = (props) => {
         postMsg,
         pageField,
         RetailerList,
-        ReceiptGoButton,
         ReceiptModeList,
         CreditDebitType,
-        updateMsg,
+        ReceiptNumber,
         userAccess } = useSelector((state) => ({
             postMsg: state.CredietDebitReducer.postMsg,
+            ReceiptNumber: state.CredietDebitReducer.ReceiptNumber,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             CreditDebitType: state.CredietDebitReducer.CreditDebitType,
-            ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             userAccess: state.Login.RoleAccessUpdateData,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
     useEffect(() => {
-        const page_Id = pageId.DEBIT//changes
+        const page_Id = pageId.DEBIT
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
 
-    debugger
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    let { Data = [] } = ReceiptGoButton;
-
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
-    const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
-
-
-
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -179,7 +164,6 @@ const Credit = (props) => {
             setState(() => resetFunction(fileds, state)) //Clear form values 
             dispatch(Breadcrumb_inputName(''))
 
-
             if (pageMode === "other") {
                 CustomAlert({
                     Type: 1,
@@ -206,24 +190,6 @@ const Credit = (props) => {
             })
         }
     }, [postMsg])
-
-    // useEffect(() => {
-    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-    //         setState(() => resetFunction(fileds, state)) // Clear form values 
-    //         history.push({
-    //             pathname: url.BANK_LIST,
-    //         })
-    //     } else if (updateMsg.Status === true && !modalCss) {
-    //         dispatch(updateBankIDSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(updateMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [updateMsg, modalCss]);
 
     useEffect(() => {
         if (pageField) {
@@ -266,11 +232,17 @@ const Credit = (props) => {
         value: index.id,
         label: index.Name,
     }));
-    debugger
+
+    const ReceiptNo_Options = ReceiptNumber.map((index) => ({
+        value: index.Receipt,
+        label: `${index.FullReceiptNumber} -${index.AmountPaid} -${convertDatefunc(index.ReceiptDate)}`,
+        Amount: index.AmountPaid,
+        ReceiptDate: index.ReceiptDate
+    }));
+
     const CreditDebitTypeId = CreditDebitType.find((index) => {
         return index.Name === "DebitNote"
     });
-
 
     function ReciptDateOnchange(e, date) {
         setState((i) => {
@@ -281,68 +253,49 @@ const Credit = (props) => {
         })
     };
 
-
-    function DebitDateOnchange(e, date) {
+    function CRDRNoteDateOnchange(e, date) {
         setState((i) => {
             const a = { ...i }
-            a.values.DebitDate = date;
-            a.hasValid.DebitDate.valid = true
+            a.values.CRDRNoteDate = date;
+            a.hasValid.CRDRNoteDate.valid = true
             return a
         })
     };
 
+    function PartyOnChangeHandler(hasSelect, evn) {
+        setState((i) => {
+            let a = { ...i }
+            a.values.ReceiptNO = "";
+            a.values.GrandTotal = "";
+            a.values.ReceiptDate = "";
+            a.hasValid.ReceiptNO.valid = true;
+            a.hasValid.GrandTotal.valid = true;
+            a.hasValid.ReceiptDate.valid = true;
+        })
+        onChangeSelect({ hasSelect, evn, state, setState, })
+        dispatch(Receipt_No_List_Success([]))
 
-    // const pagesListColumns = [
-    //     {
-    //         text: "InvoiceDate",
-    //         dataField: "InvoiceDate",
-    //     },
-    //     {
-    //         text: "Invoice No",
-    //         dataField: "FullInvoiceNumber",
-    //     },
-    //     {
-    //         text: "Invoice Amount",
-    //         dataField: "GrandTotal",
-    //     },
-    //     {
-    //         text: "Paid",
-    //         dataField: "PaidAmount",
-    //     },
-    //     {
-    //         text: "Bal Amt",
-    //         dataField: "BalanceAmount",
-    //     },
-    //     {
-    //         text: "Calculate",
-    //         dataField: "",
-    //         // formatter: (cellContent, row, key) => {
+        const jsonBody = JSON.stringify({
+            PartyID: loginPartyID(),
+            CustomerID: hasSelect.value
+        });
+        dispatch(Receipt_No_List(jsonBody));
+    }
 
-    //         //     return (<span style={{ justifyContent: 'center', width: "100px" }}>
-    //         //         <CInput
-    //         //             key={`Quantity${row.FullInvoiceNumber}${key}`}
-    //         //             id={`Quantity${row.FullInvoiceNumber}`}
-    //         //             pattern={decimalRegx}
-    //         //             defaultValue={pageMode === mode.view ? row.Amount : row.Calculate}
-    //         //             disabled={pageMode === mode.view ? true : false}
-    //         //             // value={row.Calculate}
-    //         //             // type="text"
-    //         //             autoComplete="off"
-    //         //             className="col col-sm text-center"
-    //         //             onChange={(e) => CalculateOnchange(e, row, key)}
+    function ReceiptNumberHandler(hasSelect, evn) {
 
-    //         //         />
-    //         //     </span>)
-    //         // },
-    //         // headerStyle: (colum, colIndex) => {
-    //         //     return { width: '140px', textAlign: 'center' };
-    //         // },
-    //     },
-    // ];
-
+        setState((i) => {
+            let a = { ...i }
+            a.values.GrandTotal = hasSelect.Amount;
+            a.values.ReceiptDate = hasSelect.ReceiptDate;
+            a.hasValid.GrandTotal.valid = true;
+            a.hasValid.ReceiptDate.valid = true;
+        })
+        onChangeSelect({ hasSelect, evn, state, setState, })
+    }
 
     const saveHandeller = async (event) => {
-        debugger
+
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -350,13 +303,13 @@ const Credit = (props) => {
                 btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
-                    CRDRNoteDate: values.DebitDate,
-                    Customer: values.PartyName.value,
+                    CRDRNoteDate: values.CRDRNoteDate,
+                    Customer: values.Customer.value,
                     NoteType: CreditDebitTypeId.id,
-                    GrandTotal: values.Amount,
+                    GrandTotal: values.GrandTotal,
                     Narration: values.Narration,
                     Comment: values.Comment,
-                    ReceiptNO: values.ReceiptNO,
+                    ReceiptNO: values.ReceiptNO.value,
                     ReceiptDate: values.ReceiptDate,
                     CRDRNoteItems: [],
                     CRDRInvoices: [],
@@ -392,11 +345,11 @@ const Credit = (props) => {
                                 <Col sm="6">
                                     <FormGroup className="row mt-2" >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.DebitDate}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CRDRNoteDate}</Label>
                                         <Col sm="7">
                                             <Flatpickr
-                                                name='DebitDate'
-                                                value={values.DebitDate}
+                                                name='CRDRNoteDate'
+                                                value={values.CRDRNoteDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
@@ -404,7 +357,7 @@ const Credit = (props) => {
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
                                                 }}
-                                                onChange={DebitDateOnchange}
+                                                onChange={CRDRNoteDateOnchange}
                                             />
                                         </Col>
                                     </FormGroup>
@@ -421,7 +374,7 @@ const Credit = (props) => {
                                                 value={values.Narration}
                                                 type="text"
                                                 className={isError.Narration.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Comment"
+                                                placeholder="Please Enter Narration"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
@@ -441,22 +394,22 @@ const Credit = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.PartyName}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer}</Label>
                                         <Col sm="7">
                                             <Select
-                                                id="PartyName "
-                                                name="PartyName"
-                                                value={values.PartyName}
+                                                id="Customer "
+                                                name="Customer"
+                                                value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={customerOptions}
                                                 onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                    PartyOnChangeHandler(hasSelect, evn)
                                                 }}
                                             />
-                                            {isError.PartyName.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                            {isError.Customer.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
                                             )}
                                         </Col>
 
@@ -519,23 +472,23 @@ const Credit = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Amount}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.GrandTotal}</Label>
                                         <Col sm="7">
                                             <Input
-                                                name="Amount"
-                                                id="Amount"
-                                                value={values.Amount}
+                                                name="GrandTotal"
+                                                id="GrandTotal"
+                                                value={values.GrandTotal}
                                                 type="text"
-                                                className={isError.Amount.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Comment"
+                                                className={isError.GrandTotal.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Please Enter Amount"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                            {isError.Amount.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Amount}</small></span>
+                                            {isError.GrandTotal.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.GrandTotal}</small></span>
                                             )}
                                         </Col>
 
@@ -558,20 +511,18 @@ const Credit = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                options={customerOptions}
+                                                options={ReceiptNo_Options}
                                                 onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                    ReceiptNumberHandler(hasSelect, evn)
                                                 }}
                                             />
-
                                             {isError.ReceiptNO.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ReceiptNO}</small></span>
                                             )}
                                         </Col>
-
-
                                     </FormGroup>
                                 </Col >
+
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
@@ -601,12 +552,6 @@ const Credit = (props) => {
 
                             </Row> : null}
 
-
-                            {/* </CardBody> */}
-                            {/* </CardBody> */}
-
-                            {/* </div> */}
-
                         </div>
                         <FormGroup>
                             <Col sm={2} style={{ marginLeft: "3px" }} >
@@ -619,38 +564,6 @@ const Credit = (props) => {
 
                             </Col>
                         </FormGroup >
-                        {/* </Card> */}
-
-                        {/* <ToolkitProvider
-
-                            keyField="id"
-                            data={Data}
-                            columns={pagesListColumns}
-
-                            search
-                        >
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    <div className="table">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            bordered={true}
-                                            striped={false}
-                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                            classes={"table align-middle table-nowrap table-hover"}
-                                            headerWrapperClasses={"thead-light"}
-
-                                            {...toolkitProps.baseProps}
-
-                                        />
-
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-
-                                </React.Fragment>
-                            )
-                            }
-                        </ToolkitProvider> */}
 
                     </form >
                 </div>
@@ -664,5 +577,5 @@ const Credit = (props) => {
     }
 };
 
-export default Credit
+export default Debit
 

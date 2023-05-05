@@ -32,8 +32,8 @@ import ItemsMaster from "../pages/Adminisrator/ItemPages/ItemMaster/itemIndex"
 
 import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
 import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";
-import PartyList from "../pages/Adminisrator/PartyPages/PartyList";
-import PartyMaster from "../pages/Adminisrator/PartyPages/PartyMaster";
+import PartyList from "../pages/Adminisrator/PartyMaster/PartyList";
+import PartyMaster from "../pages/Adminisrator/PartyMaster/MasterAdd/index";
 
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import SendOTP from "../pages/Authentication/SendOTP";
@@ -142,9 +142,7 @@ import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
 import LoadingSheetUpdate from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetUpdate";
 import SalesReturn from "../pages/Sale/Invoice/SalesReturn/SalesReturn";
 import Credit from "../pages/Accounting/CreditDebitNote/Credit";
-import Debit from "../pages/Accounting/CreditDebitNote/Debit";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
-import DebitList from "../pages/Accounting/CreditDebitNote/DebitList";
 
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
 import ImportFieldAddList from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAddList";
@@ -153,6 +151,7 @@ import UploadExcel from "../pages/Adminisrator/ImportMaster/ExcelUpload/UploadEx
 
 import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
 import ImportMasterMap from "../pages/Adminisrator/ImportMaster/ImportMasterMap/ImportMasterMap";
+import Debit from "../pages/Accounting/Debit/Debit";
 
 
 const userRoutes = [
@@ -362,16 +361,11 @@ const userRoutes = [
   { path: path.PAYMENT_ENTRY, component: PaymentEntry },
   { path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
 
-
-
   { path: path.CREDIT_LIST, component: CreditList },
-  { path: path.DEBIT_LIST, component: DebitList },
+  { path: path.DEBIT_LIST, component: CreditList },
 
   { path: path.CREDIT, component: Credit },
   { path: path.DEBIT, component: Debit },
-
-
-
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

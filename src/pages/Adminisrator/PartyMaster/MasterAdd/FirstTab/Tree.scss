@@ -1,0 +1,41 @@
+.classmt {
+    box-shadow: 5px;
+    padding: 2px;
+    border-radius: 4px;
+    padding: 1px;
+}
+
+.classmt:hover {
+    cursor: pointer;
+}
+
+::marker {
+    color: white;
+}
+#Input:hover+.color {
+    display: block;
+}
+
+
+.price-drop-options {
+
+    border: 1px solid #8080804d;
+    padding: 5px 5px 5px 5px;
+    margin: 5px 10px 0px 0px;
+    position: absolute;
+    z-index: 2;
+    width: -webkit-fill-available;
+    background-color: white;
+    border-radius: 5px;
+    display: none 
+}
+
+.price-drop-body {
+    max-height: 203px;
+    overflow: auto;
+    overflow: auto;
+}
+
+#price-option:hover {
+    background-color: #7ab1ef33;
+}

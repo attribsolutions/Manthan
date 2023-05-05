@@ -273,7 +273,7 @@ const AddUser = (props) => {
 
       const userRoleArr = []
       employePartyWiseRoleState.map(i1 => {
-        debugger
+       
         i1.PartyRoles.map(i2 => {
           userRoleArr.push({
             Party: i1.Party,

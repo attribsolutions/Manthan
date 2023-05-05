@@ -43,6 +43,7 @@ import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/ac
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
+import NewForm from "./NewForm";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -62,7 +63,7 @@ const PartyMaster = (props) => {
     const [PartyPrefix, setPartyPrefix] = useState([]);
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [suppilerSelect, setSuppilerSelect] = useState([]);
-    console.log(suppilerSelect)
+
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
             setactiveTab1(tab)
@@ -420,6 +421,7 @@ const PartyMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                     <Container fluid>
+                    <NewForm/>
                         <AvForm onValidSubmit={(e, v) => { SaveHandler(e, v); }}>
 
                             <Row>
@@ -1010,6 +1012,8 @@ const PartyMaster = (props) => {
                                 </Col>
                             </Row>
                         </AvForm>
+                        <Input/>
+                     
                     </Container>
                 </div >
             </React.Fragment>

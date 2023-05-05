@@ -3,26 +3,18 @@ import {
   CREDITDEBIT_TYPE_SUCCESS,
   DELETE_CREDIT_LIST_ID,
   DELETE_CREDIT_LIST_ID_SUCCESS,
-  DELETE_GROUP_LIST_ID,
-  DELETE_GROUP_LIST_ID_SUCCESS,
   EDIT_CREDIT_LIST_ID,
   EDIT_CREDIT_LIST_ID_SUCCESS,
-  EDIT_GROUPMASTER_ID,
-  EDIT_GROUPMASTER_ID_SUCCESS,
   GET_CREDIT_LIST,
   GET_CREDIT_LIST_SUCCESS,
-  GET_GROUP_LIST,
-  GET_GROUP_LIST_SUCCESS,
   INVOICE_RETURN_ID,
   INVOICE_RETURN_ID_SUCCESS,
+  RECEIPT_NUMBER_LIST,
+  RECEIPT_NUMBER_LIST_SUCCESS,
   SAVE_CREDIT,
   SAVE_CREDIT_SUCCESS,
-  SAVE_GROUP_MASTER,
-  SAVE_GROUP_MASTER_SUCCESS,
-  UPDATE_GROUPMASTER_ID,
-  UPDATE_GROUPMASTER_ID_SUCCESS
-} from "./actionType";
 
+} from "./actionType";
 
 export const GetCreditList = (data) => ({// get List Action
   type: GET_CREDIT_LIST,
@@ -34,7 +26,7 @@ export const GetCreditListSuccess = (resp) => ({// get List success
   payload: resp,
 });
 
-export const saveCredit = (config={}) => ({// save Action
+export const saveCredit = (config = {}) => ({// save Action
   type: SAVE_CREDIT,
   config,
 });
@@ -54,17 +46,7 @@ export const CredietDebitTypeSuccess = (resp) => ({// Edit  Success
   payload: resp,
 });
 
-// export const updateGroupID = (config = {}) => ({// update  Action
-//   type: UPDATE_GROUPMASTER_ID,
-//   config,
-// });
-
-// export const updateGroupIDSuccess = (resp) => ({ //Update Success
-//   type: UPDATE_GROUPMASTER_ID_SUCCESS,
-//   payload: resp,
-// })
-
-export const Edit_CreditList_ID = (config={}) => ({// Delete  Action
+export const Edit_CreditList_ID = (config = {}) => ({// Delete  Action
   type: EDIT_CREDIT_LIST_ID,
   config,
 });
@@ -84,7 +66,7 @@ export const Invoice_Return_ID_Success = (resp) => ({// Delete Success
   payload: resp
 });
 
-export const delete_CreditList_ID = (config={}) => ({// Delete  Action
+export const delete_CreditList_ID = (config = {}) => ({// Delete  Action
   type: DELETE_CREDIT_LIST_ID,
   config,
 });
@@ -94,6 +76,15 @@ export const deleteCreditlistSuccess = (resp) => ({// Delete Success
   payload: resp
 });
 
+// Receipt No. dropdown Api for debit master page.
+export const Receipt_No_List = (jsonBody) => ({// Delete  Action
+  type: RECEIPT_NUMBER_LIST,
+  jsonBody,
+});
 
+export const Receipt_No_List_Success = (resp) => ({// Delete Success
+  type: RECEIPT_NUMBER_LIST_SUCCESS,
+  payload: resp
+});
 
 

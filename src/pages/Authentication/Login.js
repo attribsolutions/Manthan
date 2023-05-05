@@ -25,7 +25,7 @@ import CarouselPage from "./CarouselPage"
 import axios from "axios";
 
 const Login = props => {
-  debugger
+ 
 
   const dispatch = useDispatch()
 

@@ -2,11 +2,11 @@ import React from 'react'
 import { Input } from 'reactstrap';
 
 const CInput = (prop) => {
-    const { onChange = () => { }, pattern = '' } = prop
+    const { onChange = () => { }, cpattern = '' } = prop
 
     function on_Change(e) {
         let val = e.target.value
-        const result = pattern.test(val);
+        const result = cpattern.test(val);
         if (result) {
             onChange(e)
         }

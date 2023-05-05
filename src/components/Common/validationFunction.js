@@ -15,7 +15,6 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
 };
 
 export const formValChange = ({ event, state, setState }) => {
-
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
@@ -87,7 +86,7 @@ export const formValChange = ({ event, state, setState }) => {
 
         switch (type) {
             case "select":
-                
+
                 const result = Array.isArray(value);
                 if (!result) {
                     if (!(value.value === undefined)) {
@@ -169,7 +168,6 @@ export function defaultSetValidAll({ state, setState, fieldArr }) {
 }
 
 export const onChangeSelect = ({ hasSelect, evn, state, setState }) => {
-
     const event = { change: { name: evn.name, value: hasSelect }, type: "select" }
     formValChange({ event, state, setState })
 }
@@ -181,6 +179,32 @@ export const onChangeDate = ({ v, e, state, setState }) => {
 
 export const onChangeText = ({ event, state, setState }) => {
     formValChange({ event, state, setState })
+}
+
+export const onChangeCheckbox=({ event, state, setState })=> {
+    setState(() => {
+
+        const a = { ...state }
+        const { name, checked } = event.target;
+        if (!(a.required[name] === undefined)) {
+            if (checked) {
+                a.isError[name] = "";
+                a.hasValid[name].valid = true
+                a.values[name] = checked
+            }
+            else {
+                a.isError[name] = a.hasValid[name].inValidMsg;
+                a.hasValid[name].valid = true
+                a.values[name] = checked
+            }
+        }
+        else {
+            a.isError[name] = "";
+            a.hasValid[name].valid = true
+            a.values[name] = checked
+        }
+        return a
+    })
 }
 
 export const initialFiledFunc = (field) => {
@@ -205,13 +229,22 @@ export const initialFiledFunc = (field) => {
     return obj
 }
 
-
 export const resetFunction = (field, state) => {
 
-    var preState = { ...state }
+    let preState = { ...state }
     preState.values = field
     Object.keys(field).forEach(label => {
         preState.hasValid[label]["valid"] = false
     })
     return preState
+}
+
+export const bulkSetState = (field, state, setState) => {
+
+    let preState = { ...state }
+    Object.keys(field).forEach(label => {
+        preState.hasValid[label]["valid"] = true
+        preState.values[label] = field[label]
+    })
+    setState(preState)
 }
