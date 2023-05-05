@@ -311,7 +311,7 @@ const PartyMaster = (props) => {
                 ],
 
             });
-            debugger
+        
             if (pageMode === mode.edit) {
 
                 dispatch(updatePartyID({ jsonBody, updateId: EditData.id, btnId }));
