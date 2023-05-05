@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-
 import { Button, Col, Row } from "reactstrap";
 import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
+     PaginationListStandalone,
+     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -84,7 +83,7 @@ const GSTList = () => {
 
     //select id for delete row
     const deleteHandeler = (CommonID) => {
-        
+
         dispatch(
             AlertState({
                 Type: 5,
@@ -168,7 +167,6 @@ const GSTList = () => {
                         </Button>
                         : null
                     }
-
                 </div>
             ),
         },
