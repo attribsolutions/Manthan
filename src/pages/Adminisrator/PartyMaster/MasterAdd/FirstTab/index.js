@@ -415,7 +415,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                                             classNamePrefix="dropdown"
                                             options={DistrictOnStateValues}
                                             onChange={(hasSelect, evn) => {
-                                                onChangeCheckbox({ hasSelect, evn, state, setState })
+                                                onChangeSelect({ hasSelect, evn, state, setState })
                                             }}
                                         />
                                         {isError.District.length > 0 && (
