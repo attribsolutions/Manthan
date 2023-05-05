@@ -1,7 +1,7 @@
 import axios from "axios"
 import { CheckAPIResponse, CommonConsole } from "../components/Common/CommonFunction"
 
-const API_URL = "http://192.168.1.114:8001"
+const API_URL = "http://192.168.1.114:8000"
 
 // const API_URL = "http://103.135.203.145:8000"
 
