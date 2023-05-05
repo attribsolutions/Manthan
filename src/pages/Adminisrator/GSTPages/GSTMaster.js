@@ -9,17 +9,16 @@ import {
     FormGroup,
     Input,
     Label,
-    Row,
+    Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
 import { AlertState } from "../../../store/actions";
-import {
-    paginationFactory,
+import paginationFactory, {
     PaginationListStandalone,
-    PaginationProvider,
+    PaginationProvider
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -209,17 +208,15 @@ const GSTMaster = (props) => {
         );
     };
 
-    const GoButton_Handler = (event, values) => {
+    const GoButton_Handler = () => {
 
         const jsonBody = JSON.stringify({
             EffectiveDate: effectiveDate,
-
         });
         if (!(effectiveDate)) {
             alert("EffectiveDate not select")
         }
         dispatch(postGoButtonForGST_Master(jsonBody))
-        console.log("Go button Post Json", jsonBody)
     };
 
     const pageOptions = {
@@ -241,7 +238,6 @@ const GSTMaster = (props) => {
             formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
-
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
@@ -270,7 +266,6 @@ const GSTMaster = (props) => {
                     user["GSTPerDis"] = false
                 }
                 return (
-
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
@@ -369,7 +364,7 @@ const GSTMaster = (props) => {
 
 
     //'Save' And 'Update' Button Handller
-    const handleValidSubmit = (event, values) => {
+    const handleValidSubmit = () => {
         var ItemData = TableData.map((index) => ({
             EffectiveDate: effectiveDate,
             Company: loginCompanyID(),
@@ -387,13 +382,11 @@ const GSTMaster = (props) => {
             return (!(index.GSTPercentage === '') && !(index.HSNCode === '') && (index.id === ''))
         })
 
-
         const jsonBody = JSON.stringify(Find)
 
         if (!(Find.length > 0) && !(editMode)) {
             alert("At Least one MRP add")
         }
-
         else {
             dispatch(postGSTMasterData(jsonBody));
             console.log("jsonBody", jsonBody)
@@ -532,7 +525,7 @@ const GSTMaster = (props) => {
                     </AvForm>
                 </Container>
             </div>
-        </React.Fragment >
+        </React.Fragment>
     )
 }
 

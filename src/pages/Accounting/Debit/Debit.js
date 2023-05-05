@@ -283,15 +283,15 @@ const Debit = (props) => {
     }
 
     function ReceiptNumberHandler(hasSelect, evn) {
-        // document.getElementById("GrandTotal").disabled = true
-        // document.getElementById("ReceiptDate").disabled = true
-
+       
         setState((i) => {
+          
             let a = { ...i }
             a.values.GrandTotal = hasSelect.Amount;
             a.values.ReceiptDate = hasSelect.ReceiptDate;
             a.hasValid.GrandTotal.valid = true;
             a.hasValid.ReceiptDate.valid = true;
+            a.isError.GrandTotal = ""
         })
         onChangeSelect({ hasSelect, evn, state, setState, })
     }
