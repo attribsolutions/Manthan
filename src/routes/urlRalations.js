@@ -156,8 +156,8 @@ export const Production_Add_Mode = url.PRODUCTION_LIST
 //******************************* Inventory  ************************************//
 
 export const GRN_LIST_1 = url.GRN_STP_1
-export const GRN_ADD_1 = url.GRN_LIST_3
-export const GRN_STP_1 = url.GRN_LIST_3
+export const GRN_ADD_1 = url.GRN_LIST_1
+export const GRN_STP_1 = url.GRN_LIST_1
 
 export const GRNList_3 = url.GRN_STP_3
 export const GRN_ADD_3 = url.GRN_LIST_3
@@ -183,7 +183,7 @@ export const IB_Invoice_STP = url.IB_ORDER_PO_LIST
 
 //******************************* Sales ************************************//
 export const InvoiceList = url.INVOICE_1
-export const Invoice = url.INVOICE_LIST_1
+export const Invoice_1 = url.INVOICE_LIST_1
 
 export const Loading_Sheet_List = url.LOADING_SHEET
 export const Loading_Sheet = url.LOADING_SHEET_LIST
