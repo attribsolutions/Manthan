@@ -105,7 +105,6 @@ const AddressTabForm = forwardRef((props, ref) => {
 
     const AddressTab = (
         <Row>
-            <Col md={12}  >
                 <Card className="text-black" style={{ backgroundColor: "whitesmoke" }}>
                     <CardBody >
                         <Row >
@@ -260,7 +259,6 @@ const AddressTabForm = forwardRef((props, ref) => {
                 <Row>
                     <AddressDetailsTable addressTable={addressTable} setAddressTable={setAddressTable} />
                 </Row>
-            </Col>
 
         </Row>
     );
