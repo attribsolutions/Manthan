@@ -624,6 +624,7 @@ const Order = (props) => {
     };
 
     const saveHandeller = async (event) => {
+        debugger
         event.preventDefault();
 
         const btnId = event.target.id
@@ -648,6 +649,7 @@ const Order = (props) => {
                     Item: i.Item_id,
                     Quantity: isdel ? 0 : i.Quantity,
                     MRP: i.MRP_id,
+                    MRPValue: i.MRPValue,
                     Rate: i.Rate,
                     Unit: i.Unit_id,
                     BaseUnitQuantity: i.BaseUnitQuantity,
@@ -655,6 +657,7 @@ const Order = (props) => {
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
                     GST: i.GST_id,
+                    GSTPercentage:i.GSTPercentage,
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
