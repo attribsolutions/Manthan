@@ -2,8 +2,8 @@ import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'rea
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap';
 import Flatpickr from "react-flatpickr"
 import AddressDetailsTable from './Table';
-import {  useSelector } from 'react-redux';
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeText, resetFunction } from '../../../../../components/Common/validationFunction';
+import { useSelector } from 'react-redux';
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeCheckbox, onChangeDate, onChangeText, resetFunction } from '../../../../../components/Common/validationFunction';
 
 
 const AddressTabForm = forwardRef((props, ref) => {
@@ -46,9 +46,6 @@ const AddressTabForm = forwardRef((props, ref) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
-
-
 
     const addRowsHandler = (e) => {
         e.preventDefault();
@@ -108,7 +105,6 @@ const AddressTabForm = forwardRef((props, ref) => {
 
     const AddressTab = (
         <Row>
-            <Col md={12}  >
                 <Card className="text-black" style={{ backgroundColor: "whitesmoke" }}>
                     <CardBody >
                         <Row >
@@ -152,7 +148,6 @@ const AddressTabForm = forwardRef((props, ref) => {
                         <Row>
 
                             <Col md="4">
-
                                 <FormGroup className="mb-3">
                                     <Label htmlFor="validationCustom01">{fieldLabel.FSSAINo} </Label>
                                     <Input
@@ -197,9 +192,8 @@ const AddressTabForm = forwardRef((props, ref) => {
 
                             </Col>
 
-                            <Col md="1">
+                            <Col md="1"></Col>
 
-                            </Col>
                             <Row className='col col-12'>
                                 <Col md="4">
                                     <FormGroup className="mb-3">
@@ -221,7 +215,7 @@ const AddressTabForm = forwardRef((props, ref) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col md="1">  </Col>
+                                <Col md="1"></Col>
 
                                 <Col md="4" >
                                     <FormGroup >
@@ -236,7 +230,7 @@ const AddressTabForm = forwardRef((props, ref) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col md="1">  </Col>
+                                <Col md="1"></Col>
 
                                 <FormGroup className="col col-sm-4 mt-4">
                                     <Row className="justify-content-md-left">
@@ -248,7 +242,7 @@ const AddressTabForm = forwardRef((props, ref) => {
                                                     className="form-check-input"
                                                     checked={values.IsDefault}
                                                     onChange={(event) => {
-                                                        onChangeText({ event, state, setState })
+                                                        onChangeCheckbox({ event, state, setState })
                                                     }}
                                                 />
                                                 <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -260,13 +254,11 @@ const AddressTabForm = forwardRef((props, ref) => {
                             </Row>
                         </Row>
 
-
                     </CardBody>
                 </Card>
                 <Row>
                     <AddressDetailsTable addressTable={addressTable} setAddressTable={setAddressTable} />
                 </Row>
-            </Col>
 
         </Row>
     );

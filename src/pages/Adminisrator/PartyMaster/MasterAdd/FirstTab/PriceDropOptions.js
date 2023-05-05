@@ -1,58 +1,59 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './Tree.scss'
 
+const PriceDropOptions = (props) => {
 
+    useEffect(() => {
+        window.addEventListener('mouseup', handleClosePriceDropOptions);
+        return () => { // cleanup this component
+            window.removeEventListener('mouseup', handleClosePriceDropOptions);
+        };
+    }, []);
 
-export default function Tree(props) {
-    
-    const onchange = (e) => {
-
+    function handleClosePriceDropOptions(event) {
         try {
-            let targetDiv = document.getElementById("price-drop")
-            targetDiv.style.display = "none";
-        } catch { }
-    }
+            var pol = document.getElementById('price-drop');
+            if (event.target != pol && event.target.parentNode != pol) {
+                pol.style.display = 'none';
+            }
+        } catch (e) { }
+    };
 
-    const TreeNode = (node) => {
+    const ChildNode = (node) => (
+        <li >
+            <div className="classmt">
+                <span id="price-option" className=" text-black  form-control"
+                    onClick={(e) => {
+                        props.setPriceSelect(node);
+                        // onchange(e);
+                    }}>{node.label}</span>
+            </div>
+            <div >
+                <ul >
+                    {ParentNode(node.children)}
+                </ul>
+            </div>
+        </li>
+    );
 
+    const ParentNode = (tree1) => (
+        <ul className='list-group'>
+            {tree1.map((tree) => (
+                ChildNode(tree)
+            ))}
+        </ul>
+    );
 
-        return (
-            <li >
-                <div className="classmt">
-                    <span id="span" className="align-middle text-black list-group-ite  form-control"
-                        style={{ marginLeft: "-1.9cm" }}
-                        onClick={(e) => {
-                            props.func1(node);
-                            onchange(e);
-                        }}>{node.label}</span>
-
-                </div>
-
-                <div >
-                    <ul >
-                        {tree(node.children)}
-                    </ul>
-                </div>
-            </li>
-        )
-    }
-
-    const tree = (tree1) => {
-
-        return (
-            <ul className='list-group'>
-                {tree1.map((tree) => (
-                    TreeNode(tree)
-                ))}
-            </ul>
-        )
-    }
-
-    return (<ul className='treestructure'> {tree(props.data)}</ul>)
+    return (
+        <div id="price-drop" className='price-drop-options' >
+            <div className='price-drop-body'>
+                <ul style={{ paddingLeft: '0px' }}>
+                    {ParentNode(props.data)}</ul>
+            </div>
+        </div>
+    )
 }
-
-
-
+export default PriceDropOptions;
 
 
 

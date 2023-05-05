@@ -28,9 +28,9 @@ export const getPartyListAPISuccess = (pages) => ({
 });
 
 // post api
-export const postPartyData = (Data, id) => ({
+export const postPartyData = (config) => ({
   type: POST_PARTY_DATA,
-  Data, id
+  config
 });
 
 export const postPartyDataSuccess = (PartySaveSuccess) => ({
