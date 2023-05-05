@@ -26,6 +26,7 @@ import {
     delete_PriceList,
     delete_PriceListSuccess,
     editPriceListSuccess,
+    priceListByCompay_Action,
     priceListByPartyAction,
     savePriceMasterAction,
     savePriceMasterActionSuccess,
@@ -67,6 +68,7 @@ const PriceMaster = (props) => {
         updateMessage,
         PartyTypes,
         PriceList,
+        priceListByCompany = [],
         userAccess
     } = useSelector((state) => ({
         PostAPIResponse: state.PriceListReducer.postMsg,
@@ -75,6 +77,7 @@ const PriceMaster = (props) => {
         PartyTypes: state.PartyTypeReducer.ListData,
         PriceList: state.ItemMastersReducer.PriceList,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
+        priceListByCompany: state.PriceListReducer.priceListByCompany,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
@@ -101,6 +104,8 @@ const PriceMaster = (props) => {
 
     useEffect(() => {
         dispatch(getPartyTypelist());
+        dispatch(priceListByCompay_Action(loginCompanyID()));
+
     }, [dispatch]);
 
     useEffect(() => {
@@ -122,7 +127,7 @@ const PriceMaster = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
-       
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -193,7 +198,9 @@ const PriceMaster = (props) => {
         })
         return optionArr
     }
-    const calculatepathOptions = calculatepathOptionsfunction()
+    const calculatepathOptions = priceListByCompany.map(i => ({
+        label: i.Name, value: i.id
+    }))
     //*************************** end calculatepathOptionsfunction************************** 
 
 
@@ -569,11 +576,8 @@ const PriceMaster = (props) => {
                                                                         autoComplete="off"
                                                                     >
                                                                     </Input>
-
-                                                                    {/* {test1()} */}
                                                                     <PriceDrop List={priceListByPartyType}
                                                                     />
-                                                                    {/* <NodeInsidemenu/> */}
                                                                 </Col>
                                                             </Row>
                                                             : null}
@@ -651,7 +655,7 @@ const PriceMaster = (props) => {
                                                     <div className="row"> <h4 className={'text-center text-primary'}>Price List</h4></div>
                                                     <Card>
                                                         <CardBody className="mt-3">
-                                                            {/* {fun1(priceListByPartyType)} */}
+
                                                             <MainPriceTree />
                                                             {((priceListByPartyType.length === 0)) ?
                                                                 <div className='row justify-content-center mt-n4 '>

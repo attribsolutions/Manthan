@@ -10,7 +10,9 @@ import {
     UPDATE_PRICE_LIST,
     UPDATE_PRICE_LIST_SUCCESS,
     GET_PRICE_LIST_PAGE,
-    GET_PRICE_LIST_PAGE_SUCCESS
+    GET_PRICE_LIST_PAGE_SUCCESS,
+    PRICE_LIST_BY_COMPANY,
+    PRICE_LIST_BY_COMPANY_SUCCESS
 } from "./actionType";
 
 
@@ -79,3 +81,12 @@ export const updatePriceListSuccess = (resp) => ({// update  Success
     payload: resp,
 })
 
+
+export const priceListByCompay_Action = (companyId) => ({
+    type: PRICE_LIST_BY_COMPANY,
+    companyId,
+})
+export const priceListByCompay_ActionSuccess = (resp) => ({
+    type: PRICE_LIST_BY_COMPANY_SUCCESS,
+    payload: resp,
+})
