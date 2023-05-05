@@ -4,8 +4,6 @@ import {
   GET_COMPANY_BY_DIVISIONTYPES_ID,
   GET_COMPANY_BY_DIVISIONTYPES_ID_SUCCESS,
   GET_DISTRICT_ON_STATE,
-  GET_PRICELIST,
-  GET_PRICELIST_SUCCESS,
   GET_ADDRESSTYPES,
   GET_ADDRESSTYPES_SUCCESS,
   GET_DISTRICT_ON_STATE_SUCCESS,
@@ -80,16 +78,16 @@ export const getDistrictOnStateSuccess = (data) => ({
   payload: data,
 });
 
-//get pricelist
-export const getPriceList = () => ({
-  type: GET_PRICELIST,
+// //get pricelist
+// export const getPriceList = () => ({
+//   type: GET_PRICELIST,
 
 
-});
-export const getPriceListSuccess = (data) => ({
-  type: GET_PRICELIST_SUCCESS,
-  payload: data,
-});
+// });
+// export const getPriceListSuccess = (data) => ({
+//   type: GET_PRICELIST_SUCCESS,
+//   payload: data,
+// });
 //get AddressType dropdown api
 export const getAddressTypes = () => ({
   type: GET_ADDRESSTYPES,
