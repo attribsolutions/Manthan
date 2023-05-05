@@ -106,8 +106,10 @@ function* DeleteInvoiceGenFunc({ config }) {
 
 // GO-Botton SO-invoice Add Page API
 export function invoice_GoButton_dataConversion_Func(response) {
-
+  debugger
   try {
+    let con_Qty = 0
+    let tAmount = 0;
     let convResp = response.OrderItemDetails.map(i1 => {
 
       i1["OrderQty"] = i1.Quantity
@@ -119,7 +121,7 @@ export function invoice_GoButton_dataConversion_Func(response) {
       i1["StockInvalidMsg"] = '';
 
 
-      let count = Number(i1.Quantity) * Number(i1.ConversionUnit);
+      let con_Qty = Number(i1.Quantity) * Number(i1.ConversionUnit);
       let tAmount = 0;
       i1.StockDetails = i1.StockDetails.map(i2 => {
 
@@ -127,12 +129,12 @@ export function invoice_GoButton_dataConversion_Func(response) {
         i1.StockTotal = (Number(i2.BaseUnitQuantity) + Number(i1.StockTotal));
         let qty = Number(i2.BaseUnitQuantity);
 
-        if ((count > qty) && !(count === 0)) {
-          count = count - qty
+        if ((con_Qty > qty) && !(con_Qty === 0)) {
+          con_Qty = con_Qty - qty
           i2.Qty = qty.toFixed(3)
-        } else if ((count <= qty) && (count > 0)) {
-          i2.Qty = count.toFixed(3)
-          count = 0
+        } else if ((con_Qty <= qty) && (con_Qty > 0)) {
+          i2.Qty = con_Qty.toFixed(3)
+          con_Qty = 0
         }
         else {
           i2.Qty = 0;

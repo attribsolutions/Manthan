@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../store/actions";
-import { breadcrumbReturnFunc, }
+import { breadcrumbReturnFunc, metaTagLabel, }
   from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
@@ -262,9 +262,7 @@ const CommonListPage = (props) => {
   if (!(userAccState === '')) {
     return (
       <React.Fragment>
-        <MetaTags>
-          <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
-        </MetaTags>
+        <MetaTags> {metaTagLabel(userAccState)}</MetaTags>    
         <div className="page-content">
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (

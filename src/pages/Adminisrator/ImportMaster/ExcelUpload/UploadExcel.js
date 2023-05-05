@@ -21,7 +21,7 @@ import Select from "react-select";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, groupBy, loginCompanyID, loginUserID } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, groupBy, loginCompanyID, loginPartyID, loginUserID } from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
@@ -36,14 +36,14 @@ const UploadExcel = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [],partyNO:[] }
+    const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [], partyNO: [] }
     const fileds = {
         id: "",
         Party: "",
         ImportType: "",
         PatternType: ""
     }
-    
+
     const [state, setState] = useState(initialFiledFunc(fileds))
 
     const [EditData, setEditData] = useState({});
@@ -110,25 +110,25 @@ const UploadExcel = (props) => {
         }
     }, [pageField])
 
-    useEffect(async () => {
+    // useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(ExcelUpload_save_action_Success({ Status: false }))
-            CustomAlert({
-                Type: 1,
-                Message: postMsg.Message,
-            })
+    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+    //         dispatch(ExcelUpload_save_action_Success({ Status: false }))
+    //         CustomAlert({
+    //             Type: 1,
+    //             Message: postMsg.Message,
+    //         })
 
 
-        }
-        else if (postMsg.Status === true) {
-            dispatch(ExcelUpload_save_action_Success({ Status: false }))
-            CustomAlert({
-                Type: 4,
-                Message: JSON.stringify(postMessage.Message),
-            })
-        }
-    }, [postMsg])
+    //     }
+    //     else if (postMsg.Status === true) {
+    //         dispatch(ExcelUpload_save_action_Success({ Status: false }))
+    //         CustomAlert({
+    //             Type: 4,
+    //             Message: JSON.stringify(postMessage.Message),
+    //         })
+    //     }
+    // }, [postMsg])
 
     const PartyDropdown_Options = partyList.map((index) => ({
         value: index.id,
@@ -162,9 +162,9 @@ const UploadExcel = (props) => {
 
             const readjson = await readExcelFile({ file: files[0], compareParam, })
             if (readjson.length > 0) {
-                
+
                 const aa = await fileDetails({ compareParam, readjson })
-                
+
                 const btnerify = document.getElementById("btn-verify");
                 const btnupload = document.getElementById('btn-upload');
                 const filedetail = document.getElementById('filedetail');
@@ -248,11 +248,11 @@ const UploadExcel = (props) => {
                 parentObj = {
                     "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
                     "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
-                    "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : '',
+                    "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
                     "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
                     "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
                     "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
-                    "Party": ele[parArr.Party] ? ele[parArr.Party] : '',
+                    "Party": loginPartyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
                     "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
@@ -264,29 +264,29 @@ const UploadExcel = (props) => {
                     "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
                     "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
                     "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
-                    "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : '',
+                    "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
                     "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
                     "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
                     "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                    "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
+                    "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : null,
                     "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
-                    "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
+                    "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : null,
                     "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
                     "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
-                    "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
-                    "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : '',
-                    "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : '',
-                    "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : '',
-                    "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : '',
-                    "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : '',
-                    "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : '',
-                    "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : '',
-                    "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : '',
-                    "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : '',
+                    "GST": ele[parArr.GST] ? ele[parArr.GST] : null,
+                    "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,
+                    "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : 0,
+                    "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : 0,
+                    "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
+                    "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
+                    "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : 0,
+                    "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : 0,
+                    "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
+                    "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
                     "TaxType": ele[parArr.TaxType] ? ele[parArr.TaxType] : '',
                     "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
-                    "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : '',
-                    "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : '',
+                    "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
+                    "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
 
                 })
             })
@@ -295,7 +295,7 @@ const UploadExcel = (props) => {
         });
 
         console.log('Upload data', outerArr)
-        const jsonBody = JSON.stringify(outerArr)
+        const jsonBody = JSON.stringify({ "BulkData": outerArr })
         dispatch(ExcelUpload_save_action({ jsonBody, }));
     };
 
@@ -406,7 +406,7 @@ const UploadExcel = (props) => {
                                                             {readJsonDetail.invoiceNO.map(i => (<Label>{i} ,&#160;</Label>))}
                                                         </p>
                                                     </div>
-                                                    
+
                                                 </details>
 
                                                 <details>
@@ -419,15 +419,10 @@ const UploadExcel = (props) => {
                                                 </details>
                                                 <details>
                                                     <summary> From Dates :20-01-2021</summary>
-                                                    <div className="error-msg">
-                                                        <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
-                                                    </div>
+
                                                 </details>
                                                 <details>
                                                     <summary>Total Amount :{readJsonDetail.amount}</summary>
-                                                    <div className="error-msg">
-                                                        <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
-                                                    </div>
                                                 </details>
                                                 {/* <div className="error-msg">
                                                     <i className="fa fa-error"></i>
