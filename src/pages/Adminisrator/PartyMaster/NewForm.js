@@ -152,15 +152,6 @@ const CForm = ({ onValidSubmit, children }) => {
   )
 }
 
-
-
-
-
-
-
-
-
-
 const CInput = ({
   name,
   id,
