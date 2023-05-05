@@ -283,6 +283,8 @@ const Debit = (props) => {
     }
 
     function ReceiptNumberHandler(hasSelect, evn) {
+        // document.getElementById("GrandTotal").disabled = true
+        // document.getElementById("ReceiptDate").disabled = true
 
         setState((i) => {
             let a = { ...i }
@@ -478,6 +480,7 @@ const Debit = (props) => {
                                                 name="GrandTotal"
                                                 id="GrandTotal"
                                                 value={values.GrandTotal}
+                                                disabled={(values.ReceiptNO) ? true : false}
                                                 type="text"
                                                 className={isError.GrandTotal.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Amount"
@@ -508,6 +511,7 @@ const Debit = (props) => {
                                                 id=" ReceiptNO"
                                                 name="ReceiptNO"
                                                 value={values.ReceiptNO}
+                                                disabled={true}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -531,11 +535,13 @@ const Debit = (props) => {
 
                                             <Flatpickr
                                                 name='ReceiptDate'
+                                                id="ReceiptDate"
+                                                disabled={(values.ReceiptNO) ? true : false}
                                                 value={values.ReceiptDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
-                                                    altInput: true,
+                                                    // altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
                                                 }}
