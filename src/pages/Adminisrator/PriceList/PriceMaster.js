@@ -104,7 +104,7 @@ const PriceMaster = (props) => {
 
     useEffect(() => {
         dispatch(getPartyTypelist());
-        dispatch(priceListByCompay_Action(loginCompanyID()));
+        dispatch(priceListByCompay_Action());
 
     }, [dispatch]);
 
