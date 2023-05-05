@@ -134,6 +134,7 @@ export const IMAGETYPE_DROPDOWN_API = '/ImageTypes'
 export const MRP_TYPE_DROPDOWN_API = '/MRPTypes'
 export const DIVISION_DROPDOWN_API = '/Divisions'
 export const PRICE_LIST = '/PriceList'
+export const PRICE_LIST_BY_COMPANY = '/CompanywisePriceLists'
 
 // MRP Master Api
 export const MRP_MASTER_LIST = '/Mrps'

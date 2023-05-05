@@ -267,6 +267,8 @@ export const detelet_DriverType_List_Api = ({ deleteId, btnId }) => del(`${url.D
 //PriceList api
 export const Save_PriceList_API = ({ jsonBody, btnId }) => post(url.PRICE_LIST, jsonBody, btnId)// post api
 export const get_PriceListByPartyType_API = (partyType) => get(`${url.PRICE_LIST}/${partyType}`)// post api
+export const get_PriceListByCompay_API = (compayId) => get(`${url.PRICE_LIST_BY_COMPANY}/${compayId}`)// post api
+
 export const GetPriceList_For_Listpage = () => get(url.PRICELIST)//  get priceList
 export const delete_PriceList_API = ({ deleteId, btnId }) => del(`${url.PRICE_LIST}/${deleteId}`, btnId)// delete api
 export const edit_PriceList = ({ editId, btnId }) => get(`${url.PRICE_LIST}/${editId}`, btnId) // edit api
