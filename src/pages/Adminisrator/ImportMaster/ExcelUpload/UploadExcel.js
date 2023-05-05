@@ -110,25 +110,23 @@ const UploadExcel = (props) => {
         }
     }, [pageField])
 
-    // useEffect(async () => {
+    useEffect(async () => {
 
-    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-    //         dispatch(ExcelUpload_save_action_Success({ Status: false }))
-    //         CustomAlert({
-    //             Type: 1,
-    //             Message: postMsg.Message,
-    //         })
-
-
-    //     }
-    //     else if (postMsg.Status === true) {
-    //         dispatch(ExcelUpload_save_action_Success({ Status: false }))
-    //         CustomAlert({
-    //             Type: 4,
-    //             Message: JSON.stringify(postMessage.Message),
-    //         })
-    //     }
-    // }, [postMsg])
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(ExcelUpload_save_action_Success({ Status: false }))
+            CustomAlert({
+                Type: 1,
+                Message: postMsg.Message,
+            })
+        }
+        else if (postMsg.Status === true) {
+            dispatch(ExcelUpload_save_action_Success({ Status: false }))
+            CustomAlert({
+                Type: 4,
+                Message: JSON.stringify(postMessage.Message),
+            })
+        }
+    }, [postMsg])
 
     const PartyDropdown_Options = partyList.map((index) => ({
         value: index.id,
@@ -268,12 +266,12 @@ const UploadExcel = (props) => {
                     "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
                     "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
                     "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                    "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : null,
+                    "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
                     "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
-                    "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : null,
+                    "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
                     "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
                     "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
-                    "GST": ele[parArr.GST] ? ele[parArr.GST] : null,
+                    "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
                     "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,
                     "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : 0,
                     "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : 0,

@@ -292,9 +292,9 @@ export async function CheckAPIResponse({
 
   const { data = "", code } = response;
   const con1 = data.StatusCode === 200;
-  const con2 = data.StatusCode === 204;
-  const con3 = data.StatusCode === 226; //reject
-  const con4 = data.StatusCode === 400; //reject
+  const con2 = data.StatusCode === 204; //data nao avalable
+  const con3 = data.StatusCode === 226; //reject used an another transaction
+  const con4 = data.StatusCode === 400; //reject  exception error
   const con5 = data.StatusCode === 406; //reject
   const con6 = method === "post" || method === "put"; //for console body
   const con7 = data.StatusCode === 100;
