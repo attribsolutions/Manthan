@@ -26,7 +26,7 @@ import {
     updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
 import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
-import { breadcrumbReturnFunc, btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginUserID, metaTageLabel } from "../../../../components/Common/CommonFunction"
+import { breadcrumbReturnFunc, btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -329,7 +329,7 @@ const PartyMaster = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags> {metaTageLabel(userPageAccessState)}</MetaTags>
+                    <MetaTags> jfvhfkhkfhkhvf</MetaTags>
                     <Container fluid>
                         <Row>
                             <Col lg={12}>

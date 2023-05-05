@@ -12,9 +12,7 @@ import {
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { PRICE } from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode"
 
 const PriceList = () => {
   const dispatch = useDispatch();
@@ -61,7 +59,6 @@ const PriceList = () => {
 
   return (
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {
         (pageField) ?
           <CommonListPage
