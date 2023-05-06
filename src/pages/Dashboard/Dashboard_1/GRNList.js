@@ -19,7 +19,7 @@ export default function InvoiceForGRN() {
     }));
 
     useEffect(() => {
-        debugger
+       
         let subPageMode = url.GRN_STP_1
         const gobtnId = `gobtn-${subPageMode}`
         const filtersBody = JSON.stringify({
