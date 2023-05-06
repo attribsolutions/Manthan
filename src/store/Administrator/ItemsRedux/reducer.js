@@ -33,7 +33,6 @@ const INIT_STATE = {
     MRPType: [],
     Division: [],
     Party: [],
-    PriceList: [],
     GroupList: [],
     CategoryType: [],
     Category: [],
@@ -139,11 +138,7 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 Party: action.payload,
             }
-        case GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS:
-            return {
-                ...state,
-                PriceList: action.payload,
-            }
+   
         case GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,

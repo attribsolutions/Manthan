@@ -92,13 +92,6 @@ function* Party_DropDown_GenFunc({ id = 0 }) {
   } catch (error) { CommonConsole(error) }
 }
 
-function* PriceList_DropDown_GenFunc() {
-  try {
-    const response = yield call(apiCall.PriceList_Get_DropDown_API);
-    yield put(action.get_PriceList_ForDropDown_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
-}
-
 // Item tag Name 
 function* Item_tagname_GenFunc() {
   try {
@@ -151,7 +144,6 @@ function* ItemsMastersSaga() {
   yield takeEvery(actionType.GET_MRPTYPE_FOR_DROPDOWN, MRPType_DropDown_GenFunc);
   yield takeEvery(actionType.GET_DIVISION_FOR_DROPDOWN, Division_DropDown_GenFunc);
   yield takeEvery(actionType.GET_PARTY_FOR_DROPDOWN, Party_DropDown_GenFunc);
-  yield takeEvery(actionType.GET_PRICE_LIST_FOR_DROPDOWN, PriceList_DropDown_GenFunc);
   yield takeEvery(actionType.GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN, Group_DropDown_GenFunc);
   yield takeEvery(actionType.GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, SubGroup_DropDown_GenFunc);
   yield takeEvery(actionType.GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, Category_DropDown_API_GenFunc);

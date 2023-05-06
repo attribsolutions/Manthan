@@ -149,17 +149,6 @@ export const get_Party_ForDropDown_Success = (data) => ({
   payload: data,
 });
 
-// get PriceList for dropdown api
-export const get_PriceList_ForDropDown = (id) => ({
-  type: actionType.GET_PRICE_LIST_FOR_DROPDOWN,
-  id
-});
-
-export const get_PriceList_ForDropDown_Success = (data) => ({
-  type: actionType.GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS,
-  payload: data,
-});
-
 // Group API dependent on GroupType api
 export const get_Group_By_GroupType_ForDropDown = (id) => ({
   type: actionType.GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN,
