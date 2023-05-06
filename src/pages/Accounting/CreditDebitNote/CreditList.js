@@ -325,7 +325,6 @@ const CreditList = () => {
 
     return (
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <div className="page-content">
                 {
                     (pageField) ?
