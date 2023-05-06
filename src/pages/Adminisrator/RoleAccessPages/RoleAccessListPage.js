@@ -46,7 +46,6 @@ const RoleAccessListPage1 = () => {
         userAccess: state.Login.RoleAccessUpdateData,
         PostMessage_ForCopyRoleAccess: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
         deleteMsg: state.RoleAccessReducer.deleteMsg,
-
     }));
 
 
@@ -86,10 +85,6 @@ const RoleAccessListPage1 = () => {
         })
 
     }
-
-
-
-
 
     useEffect(() => {
         if ((PostMessage_ForCopyRoleAccess.Status === true) && (PostMessage_ForCopyRoleAccess.StatusCode === 200)) {
