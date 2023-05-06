@@ -3,7 +3,7 @@ import * as path from "./route_url";
 import { Redirect } from "react-router-dom"
 
 //Dashboard
-import Dashboard from "../pages/FirstDashboard/index";
+import Dashboard from "../pages/Dashboard/index";
 
 // Authentication related pages
 import Login from "../pages/Authentication/Login"
@@ -152,7 +152,7 @@ import UploadExcel from "../pages/Adminisrator/ImportMaster/ExcelUpload/UploadEx
 import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
 import ImportMasterMap from "../pages/Adminisrator/ImportMaster/ImportMasterMap/ImportMasterMap";
 import Debit from "../pages/Accounting/Debit/Debit";
-import Dashboard_1 from "../pages/FirstDashboard/Dashboard_1/Dashboard_1"
+import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"
 
 
 const userRoutes = [

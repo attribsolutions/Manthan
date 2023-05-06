@@ -57,6 +57,7 @@ import * as mode from "../../../../routes/PageMode";
 import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { SaveButton } from "../../../../components/Common/CommonButton";
+import { priceListByCompay_Action } from "../../../../store/Administrator/PriceList/action";
 
 export const unitConversionInitial = {
     id: 1,
@@ -316,7 +317,7 @@ const ItemsMaster = (props) => {
         dispatch(get_ImageType_ForDropDown());
         dispatch(get_Division_ForDropDown());
         dispatch(get_Party_ForDropDown());
-        dispatch(get_PriceList_ForDropDown());
+        // dispatch(priceListByCompay_Action());
         dispatch(getCategoryTypelist());
         dispatch(getItemTagName())
         dispatch(getBrandTagName())
