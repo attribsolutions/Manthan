@@ -127,7 +127,8 @@ const Invoice = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        if ((hasShowloction || hasShowModal)) {
+        debugger
+        if ((hasShowloction || hasShowModal || (location.state))) {
 
             let hasEditVal = null
             if (hasShowloction) {
@@ -139,6 +140,16 @@ const Invoice = (props) => {
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
+            }
+            else if (location) {
+
+                setPageMode(mode.defaultsave)
+
+                let Customer = location.state.CustomerID
+                let CustomerName = location.state.Customer
+
+                hasEditVal = { Customer, CustomerName }
+
             }
 
             if (hasEditVal) {
@@ -672,7 +683,7 @@ const Invoice = (props) => {
         } catch (e) { };
     };
 
- 
+
     function orderQtyOnChange(event, index) {
 
         let input = event.target.value
@@ -743,7 +754,7 @@ const Invoice = (props) => {
                 index.StockDetails.forEach((ele) => {
 
                     if (ele.Qty > 0) {
-                    
+
                         const calculate = discountCalculate(ele, index)
 
                         grand_total = grand_total + Number(calculate.tAmount)
@@ -790,14 +801,14 @@ const Invoice = (props) => {
                 }));
                 return returnFunc()
             }
-            
-            const forInvoice_1_json = () => ( {  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
                 InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
             });
 
-            const forIB_Invoice_json =async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const forIB_Invoice_json = async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 IBChallanDate: values.InvoiceDate,
                 IBChallanItems: invoiceItems,
                 IBChallansReferences: await OrderIDs.map(i => ({ Demand: i }))
