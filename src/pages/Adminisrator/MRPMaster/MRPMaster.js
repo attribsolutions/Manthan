@@ -414,7 +414,7 @@ const MRPMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "3cm" }}>
-            <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
+            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP} /> */}
                 {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                 <Container fluid>

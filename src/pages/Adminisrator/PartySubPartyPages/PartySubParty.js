@@ -431,7 +431,7 @@ const PartySubParty = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
+                        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >

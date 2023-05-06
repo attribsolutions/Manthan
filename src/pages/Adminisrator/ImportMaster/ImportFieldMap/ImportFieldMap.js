@@ -228,7 +228,7 @@ const ImportFieldMap = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <form onSubmit={(event) => SaveHandler(event)} noValidate>
                     <div className="page-content">

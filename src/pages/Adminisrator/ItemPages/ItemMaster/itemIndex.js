@@ -821,7 +821,7 @@ const ItemsMaster = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "1cm" }}>
-                    <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                     <Container fluid>
                         <form >
                             <Row>

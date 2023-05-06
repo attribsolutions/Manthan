@@ -48,7 +48,7 @@ const GSTMaster = (props) => {
 
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState("save");
-    const [userAccState, setUserAccState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState('');
     const [effectiveDate, setEffectiveDate] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -403,7 +403,7 @@ const GSTMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-            <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
+            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <Container fluid>
                     <AvForm
@@ -415,8 +415,8 @@ const GSTMaster = (props) => {
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header"  >
-                                <h4 className="card-title text-black">{userAccState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userAccState.PageDescriptionDetails}</p>
+                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
                             <CardBody>
