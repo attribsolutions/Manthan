@@ -222,7 +222,7 @@ const Dashboard_1 = (props) => {
                         <Col lg={6}>
                             <Card >
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}>
-                                    <Label className=" text-primary text-bold mb-n2"
+                                    <Label className=" text-primary text-bold mb-n2 text-decoration-underline"
                                         onClick={paymentEntry_onClick}
                                     >
                                         Todays Payment Entry</Label>
@@ -234,7 +234,7 @@ const Dashboard_1 = (props) => {
                         <Col lg={6}>
                             <Card >
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}>
-                                    <Label className=" text-primary text-bold mb-n2"
+                                    <Label className=" text-primary text-bold mb-n2 text-decoration-underline"
                                         onClick={InvoiceFoRGRN_onClick}
                                     >
                                         Invoices For GRN</Label>
