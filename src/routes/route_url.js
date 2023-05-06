@@ -1,6 +1,7 @@
 
 export const DASHBORD = "/Dashboard"
 
+export const DASHBORD_1 = "/Dashboard_1"
 // ***************************** Utility **************************************//
 
 export const SEARCH_BOX2 = "/SearchBoxSecond"
@@ -211,9 +212,9 @@ export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"
 
 export const BANK_ASSIGN = "/BankAssign"
 
-export const CREDIT_LIST ="/Credit_List"
-export const CREDIT ="/Credit"
+export const CREDIT_LIST = "/Credit_List"
+export const CREDIT = "/Credit"
 
 
-export const DEBIT_LIST ="/Debit_List"
-export const DEBIT ="/Debit"
+export const DEBIT_LIST = "/Debit_List"
+export const DEBIT = "/Debit"
