@@ -16,7 +16,6 @@ import {
 import GroupTypeMaster from "./GroupTypeMaster";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 
 const GroupTypeList = (props) => {
   const dispatch = useDispatch();
@@ -52,7 +51,6 @@ const GroupTypeList = (props) => {
 
   return (
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {
         (pageField) ?
           <CommonListPage

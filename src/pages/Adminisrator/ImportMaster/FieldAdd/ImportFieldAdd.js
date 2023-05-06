@@ -31,7 +31,13 @@ import {
     resetFunction
 } from "../../../../components/Common/validationFunction";
 import { SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginUserID, btnIsDissablefunc, loginCompanyID } from "../../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginUserID,
+    btnIsDissablefunc,
+    loginCompanyID,
+    metaTagLabel
+} from "../../../../components/Common/CommonFunction";
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -132,7 +138,7 @@ const ImportFieldAdd = (props) => {
 
             if (hasEditVal) {
 
-                const { id, FieldName, ControlTypeName,ControlTypeID, IsCompulsory, FieldValidationName,FieldValidationID } = hasEditVal
+                const { id, FieldName, ControlTypeName, ControlTypeID, IsCompulsory, FieldValidationName, FieldValidationID } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.FieldName.valid = true;
@@ -261,7 +267,7 @@ const ImportFieldAdd = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
                     <Container fluid  >
 
                         <Card className="text-black" >
@@ -307,7 +313,7 @@ const ImportFieldAdd = (props) => {
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
                                                                 options={controlType_Options}
-                                                                 onChange={controlTypeHandler}
+                                                                onChange={controlTypeHandler}
                                                             />
                                                             {isError.ControlTypeName.length > 0 && (
                                                                 <span className="text-danger f-8"><small>{isError.ControlTypeName}</small></span>

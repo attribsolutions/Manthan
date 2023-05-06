@@ -35,7 +35,8 @@ import {
 import {
     breadcrumbReturnFunc,
     loginUserID,
-    loginCompanyID
+    loginCompanyID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 
 
@@ -402,7 +403,7 @@ const GSTMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                <MetaTags> <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
 
                 <Container fluid>
                     <AvForm

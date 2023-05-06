@@ -39,7 +39,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
-import { breadcrumbReturnFunc, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import PageFieldMaster_Tab from "./PageFieldMaster";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -512,7 +512,7 @@ const PageMaster = (props) => {
     return (
       <React.Fragment>
         <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"-70px" }}>
-          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+        <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
           <Container fluid>
             <AvForm
               id="mainForm"

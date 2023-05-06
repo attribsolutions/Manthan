@@ -7,7 +7,6 @@ import {
 } from "../../../../store/actions";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import ImportFieldAdd from "./ImportFieldAdd";
 import {
   delete_ImportFiledAdd,
@@ -60,7 +59,6 @@ const ImportFieldAddList = () => {
   const { pageField, userAccess = [] } = reducers
   return (
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {
         (pageField) ?
           <CommonListPage

@@ -19,7 +19,7 @@ import {
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturnFunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 
 const GSTList = () => {
 
@@ -176,7 +176,7 @@ const GSTList = () => {
         return (
             <React.Fragment>
                 <div className="page-content">
-                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
 
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}

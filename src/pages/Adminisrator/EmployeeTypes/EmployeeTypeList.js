@@ -51,8 +51,6 @@ const EmployeeTypeList = (props) => {
 
   return (
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.EMPLOYEETYPE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage

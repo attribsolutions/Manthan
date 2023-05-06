@@ -13,7 +13,6 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import { loginCompanyID, loginPartyID, loginRoleID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdownList from "../../../components/Common/PartyDropdownComp/PartyDropdownList";
@@ -82,7 +81,6 @@ const DriverList = () => {
     // </React.Fragment>
 
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       <div className="page-content">
 
         {RoleID === 2 ?

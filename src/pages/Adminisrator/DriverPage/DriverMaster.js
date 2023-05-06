@@ -33,7 +33,15 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, loginRoleID, loginEmployeeID } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginCompanyID,
+    loginPartyID,
+    loginUserID,
+    btnIsDissablefunc,
+    loginRoleID,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -240,13 +248,11 @@ const DriverMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+
+                <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-
-                        <MetaTags> <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title></MetaTags>
-
                         {RoleID === 2 ?
                             <PartyDropdownMaster
                                 state={state}

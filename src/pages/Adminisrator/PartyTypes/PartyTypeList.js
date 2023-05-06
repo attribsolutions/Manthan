@@ -13,7 +13,6 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 
 
 const PartyTypeList = (props) => {
@@ -52,8 +51,7 @@ const PartyTypeList = (props) => {
 
   return (
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYTYPE_lIST} /> */}
+
       {
         (pageField) ?
           <CommonListPage

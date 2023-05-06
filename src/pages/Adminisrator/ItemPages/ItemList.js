@@ -12,7 +12,6 @@ import ItemsMaster from "./ItemMaster/itemIndex";
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { ITEM } from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import * as pageId from "../../../routes/allPageID"
 
 const ItemsList = () => {
@@ -50,8 +49,7 @@ const ItemsList = () => {
 
   return (
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ITEM_lIST} /> */}
+     
       {
         (pageField) ?
           <CommonListPage

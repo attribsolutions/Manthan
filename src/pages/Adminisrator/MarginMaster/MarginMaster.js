@@ -34,7 +34,12 @@ import {
     postMarginMasterDataSuccess
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
-import { breadcrumbReturnFunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginUserID,
+    loginCompanyID,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 
@@ -409,7 +414,7 @@ const MarginMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {

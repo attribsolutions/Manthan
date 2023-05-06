@@ -19,7 +19,7 @@ import {
 import { countlabelFunc } from "../../../components/Common/CommonMasterListPage"
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturnFunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 
 const MRPList = (props) => {
 
@@ -176,7 +176,6 @@ const MRPList = (props) => {
             </Button>
             : null
           }
-
         </div>
       ),
     },
@@ -186,8 +185,8 @@ const MRPList = (props) => {
     return (
       <React.Fragment>
         <div className="page-content">
-          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      
+        <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
+  
           <PaginationProvider
             pagination={paginationFactory(pageOptions)}
           >
