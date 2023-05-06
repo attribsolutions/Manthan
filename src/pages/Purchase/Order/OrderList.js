@@ -18,7 +18,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc, currentDate, excelDownCommonFunc, loginPartyID } from "../../../components/Common/CommonFunction";
+import { btnIsDissablefunc, convertDatefunc, currentDate, excelDownCommonFunc, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
@@ -30,7 +30,7 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { makeIB_InvoiceAction } from "../../../store/Sales/Invoice/action";
+import { GoButtonForinvoiceAdd, makeIB_InvoiceAction } from "../../../store/Sales/Invoice/action";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 
 
@@ -117,6 +117,8 @@ const OrderList = () => {
             page_Id = pageId.ORDER_LIST_4
             masterPath = url.ORDER_4;
             newBtnPath = url.ORDER_4;
+            makeBtnShow = true;
+            makeBtnName = "Make Invoice"
         }
         else if (subPageMode === url.IB_INVOICE_STP) {
             page_Id = pageId.IB_INVOICE_STP
@@ -208,13 +210,13 @@ const OrderList = () => {
             if (list.length > 0) {
                 list.forEach(ele => {
                     if (ele.hasSelect) {
-                            grnRef.push({
-                                Invoice: (subPageMode === url.GRN_STP_3) ? ele.id : null,
-                                Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : null,
-                                ChallanNo: ele.FullOrderNumber,
-                                Inward: url.GRN_STP_3 ? true : false,
-                                Challan: ele.POType === "Challan" ? ele.id : ''
-                            });
+                        grnRef.push({
+                            Invoice: (subPageMode === url.GRN_STP_3) ? ele.id : null,
+                            Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : null,
+                            ChallanNo: ele.FullOrderNumber,
+                            Inward: url.GRN_STP_3 ? true : false,
+                            Challan: ele.POType === "Challan" ? ele.id : ''
+                        });
                         isGRNSelect = isGRNSelect.concat(`${ele.id},`)
                         challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
                     }
@@ -349,6 +351,22 @@ const OrderList = () => {
     }
 
 
+    const updateBtnFunc = (list) => {
+        debugger
+        const { CustomerID, id, OrderDate } = list
+        let subPageMode = url.INVOICE_1
+        const btnId = `ADDGoBtn${subPageMode}`
+        history.push(url.INVOICE_1, list);
+
+        const jsonBody = JSON.stringify({
+            OrderIDs: id.toString(),
+            FromDate: convertDatefunc(OrderDate),
+            Customer: CustomerID,
+            Party: loginPartyID(),
+        });
+        dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, btnId }));
+    };
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -444,6 +462,7 @@ const OrderList = () => {
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
                             makeBtnFunc={makeBtnFunc}
+                            updateBtnFunc={updateBtnFunc}
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
                             makeBtnName={otherState.makeBtnName}
