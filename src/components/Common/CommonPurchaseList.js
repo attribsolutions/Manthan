@@ -10,7 +10,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../store/actions";
+import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../store/actions";
 import { breadcrumbReturnFunc }
     from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
@@ -61,18 +61,18 @@ const CommonPurchaseList = (props) => {
     const [modal_edit, setmodal_edit] = useState(false);
     // const [tableList, settableList] = useState([]);
     const {
-        editData={Data:''},
+        editData = { Data: '' },
         updateMsg = { Status: false },
-        deleteMsg= { Status: false },
-        userAccess=[],
-        postMsg= { Status: false },
+        deleteMsg = { Status: false },
+        userAccess = [],
+        postMsg = { Status: false },
         pageField = { id: '' },
         tableList = []
     } = props.reducers;
 
     const {
         getList,
-        editId ,
+        editId,
         deleteId,
         postSucc,
         updateSucc,
@@ -117,23 +117,27 @@ const CommonPurchaseList = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        if (tableList.length > 0) {
-            downList = []
-            listObj = {}
+     
+        let downList = [];
+        let defaultDownList2 = [];
+        let listObj = {};
+        let listObj2 = {};
 
-            tableList.forEach((index1) => {
-                PageFieldMaster.forEach((index2) => {
-                    if (index2.ShowInDownload) {
-                        listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
-                        listObj[index2.ControlID] = index1[index2.ControlID]
-                    }
-                })
-                downList.push(listObj)
-                listObj = {}
+        tableList.forEach((index1) => {
+         
+            PageFieldMaster.forEach((index2) => {
+             
+                if (index2.ShowInDownload) {
+                    listObj2[index2.ControlID] = index2.ShownloadDefaultSelect
+                    listObj[index2.ControlID] = index1[index2.ControlID]
+                }
             })
-            dispatch(BreadcrumbDownBtndata(downList))
-        }
 
+            downList.push(listObj)
+            defaultDownList2.push(listObj2)
+            listObj = {}
+        })
+        dispatch(CommonBreadcrumbDetails({ downBtnData: downList, defaultDownBtnData: listObj2 }))
     }, [tableList])
 
 
