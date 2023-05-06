@@ -13,7 +13,7 @@ import {
   BreadcrumbShowCountlabel,
   CommonBreadcrumbDetails,
 } from "../../store/actions";
-import { breadcrumbReturnFunc } from "./CommonFunction";
+import { breadcrumbReturnFunc, metaTagLabel } from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
