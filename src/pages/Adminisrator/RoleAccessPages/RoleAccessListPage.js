@@ -413,7 +413,6 @@ const RoleAccessListPage = () => {
 
     return (
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <div className="page-content" style={{ marginTop: "-4px" }}>
                 {
                     (pageField) ?
