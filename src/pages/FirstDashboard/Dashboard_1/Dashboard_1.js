@@ -10,7 +10,7 @@ import {
     Col,
     Container, Label, Row,
 } from "reactstrap";
-import { breadcrumbReturnFunc } from '../../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, metaTagLabel } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
@@ -88,9 +88,7 @@ const Dashboard_1 = (props) => {
     return (
         <React.Fragment>
             <div className="page-content">
-                <MetaTags>
-                    <title>Dashboard | Minia - React Admin & Dashboard Template</title>
-                </MetaTags>
+            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
                     <Row>
                         {/* {(WidgetsData || []).map((widget, key) => ( */}

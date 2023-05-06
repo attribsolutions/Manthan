@@ -14,7 +14,7 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, metaTagLabel } from "../../../components/Common/CommonFunction";
 import {
     comAddPageFieldFunc,
     formValid, initialFiledFunc,
@@ -317,8 +317,7 @@ const ProductionMaster = (props) => {
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "16cm" }} >
 
                     <form onSubmit={SaveHandler} noValidate>
