@@ -34,6 +34,7 @@ import { postSelect_Field_for_dropdown } from "../../../store/Administrator/Part
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import CInput from "../../../CustomValidateForm/CInput";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
+import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 
 const Receipts = (props) => {
 
@@ -307,7 +308,7 @@ const Receipts = (props) => {
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
-
+                        onKeyDown={(e) => handleKeyDown(e, Data)}
                     />
                 </span>)
             },
@@ -445,7 +446,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id;
 

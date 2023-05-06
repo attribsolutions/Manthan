@@ -1,5 +1,5 @@
 import { combineReducers } from "redux"
-
+import DashboardReducer from "./Dashboard/Dashboard_1_Redux/reducer"
 // Front
 import Layout from "./layout/reducer"
 
@@ -151,5 +151,6 @@ const rootReducer = combineReducers({
   ReceiptReducer,
   SalesReturnReducer,
   CredietDebitReducer,
+  DashboardReducer,
 })
 export default rootReducer

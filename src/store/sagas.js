@@ -79,6 +79,7 @@ import LoadingSheetSaga from "./Sales/LoadingSheetRedux/saga"
 import ReceiptSaga from "./Accounting/Receipt/saga"
 import SalesReturnSaga from "./Sales/SalesReturnRedux/saga"
 import CreditDebitSaga from "./Accounting/CreditRedux/saga"
+import DashboardSaga from "./Dashboard/Dashboard_1_Redux/saga"
 
 
 export default function* rootSaga() {
@@ -87,7 +88,7 @@ export default function* rootSaga() {
     fork(ImportFieldMap_Saga),
     fork(ImportFieldAdd_Saga),
     fork(ImportMasterMap_Saga),
-    
+
     fork(AuthSaga),
     fork(ForgetSaga),
     fork(ProfileSaga),
@@ -147,5 +148,6 @@ export default function* rootSaga() {
     fork(ReceiptSaga),
     fork(SalesReturnSaga),
     fork(CreditDebitSaga),
+    fork(DashboardSaga)
   ])
 }

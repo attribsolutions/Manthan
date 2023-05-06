@@ -39,6 +39,7 @@ import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { bulkSetState, formValid } from "../../../../components/Common/validationFunction";
 import BaseTabForm from "./FirstTab/index";
 import PrefixTab from "./PrefixTab/PrefixTab";
+import { priceListByCompay_ActionSuccess, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 
 const PartyMaster = (props) => {
 
@@ -62,8 +63,8 @@ const PartyMaster = (props) => {
         userAccess,
         updateMsg,
     } = useSelector((state) => ({
-        postMsg: state.PartyMasterReducer.PartySaveSuccess,
-        updateMsg: state.PartyMasterReducer.updateMessage,
+        postMsg: state.PartyMasterReducer.postMsg,
+        updateMsg: state.PartyMasterReducer.updateMsg,
         Company: state.Company.companyList,
         PartyTypes: state.PartyTypeReducer.ListData,
         PriceList: state.PartyMasterReducer.PriceList,
@@ -174,7 +175,7 @@ const PartyMaster = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PARTY))
         dispatch(getState());
-        dispatch(getPriceList());
+        dispatch(priceListByPartyActionSuccess([]));
         dispatch(getPartyTypelist());
         dispatch(getcompanyList());
         dispatch(SSDD_List_under_Company())
@@ -311,7 +312,7 @@ const PartyMaster = (props) => {
                 ],
 
             });
-        
+
             if (pageMode === mode.edit) {
 
                 dispatch(updatePartyID({ jsonBody, updateId: EditData.id, btnId }));
@@ -329,7 +330,7 @@ const PartyMaster = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags> jfvhfkhkfhkhvf</MetaTags>
+                    <MetaTags> {metaTagLabel(userPageAccessState)}</MetaTags>
                     <Container fluid>
                         <Row>
                             <Col lg={12}>

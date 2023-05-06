@@ -1,7 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import {
-  GetPriceList_For_Dropdown,
   GetCompanyByDivisionTypeID_For_Dropdown,
   GetDistrictOnState_For_Dropdown,
   GetPartyTypeByDivisionTypeID_For_Dropdown,
@@ -19,7 +18,6 @@ import {
   getDistrictOnStateSuccess,
   getPartyListAPISuccess,
   GetPartyTypeByDivisionTypeIDSuccess,
-  getPriceListSuccess,
   postPartyDataSuccess,
   updatePartyIDSuccess,
   getAddressTypesSuccess,
@@ -28,7 +26,6 @@ import {
   DELETE_PARTY_ID, EDIT_PARTY_ID,
   GET_COMPANY_BY_DIVISIONTYPES_ID,
   GET_DISTRICT_ON_STATE,
-  GET_PRICELIST,
   GET_ADDRESSTYPES,
   GET_PARTTYPE_BY_DIVISIONTYPES_ID,
   GET_PARTY_LIST_API,
@@ -102,13 +99,6 @@ function* GetDistrictOnState_saga({ id }) {
   } catch (error) { CommonConsole(error) }
 }
 
-//get pricelist
-function* GetPriceList_saga({ }) {
-  try {
-    const response = yield call(GetPriceList_For_Dropdown);
-    yield put(getPriceListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
-}
 
 //get addresstypes
 function* GetAddressTypes_saga({ }) {
@@ -141,7 +131,6 @@ function* PartyMasterSaga() {
   yield takeEvery(DELETE_PARTY_ID, Delete_Party_GenFun);
   yield takeEvery(UPDATE_PARTY_ID, Update_Party_GenFun);
   yield takeEvery(GET_DISTRICT_ON_STATE, GetDistrictOnState_saga);
-  yield takeEvery(GET_PRICELIST, GetPriceList_saga);
   yield takeEvery(GET_ADDRESSTYPES, GetAddressTypes_saga);
   yield takeEvery(GET_PARTTYPE_BY_DIVISIONTYPES_ID, GetPartyTypeByDivisionTypeID_GenFun);
   yield takeEvery(GET_COMPANY_BY_DIVISIONTYPES_ID, GetCompanyByDivisionTypeID_GenFun);
