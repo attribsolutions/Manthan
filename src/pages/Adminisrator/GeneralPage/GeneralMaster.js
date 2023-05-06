@@ -42,7 +42,8 @@ import {
     breadcrumbReturnFunc,
     loginUserID,
     loginCompanyID,
-    btnIsDissablefunc
+    btnIsDissablefunc,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -256,7 +257,7 @@ const GeneralMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+               <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
                     <Container fluid>

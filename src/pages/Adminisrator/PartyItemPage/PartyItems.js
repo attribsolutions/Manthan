@@ -37,7 +37,14 @@ import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginIsSCMCompany, loginJsonBody, loginPartyID, } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    loginIsSCMCompany,
+    loginJsonBody,
+    loginPartyID,
+    metaTagLabel,
+} from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 
@@ -367,8 +374,7 @@ const PartyItems = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
+                        <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userAccState.PageDescription}</h4>

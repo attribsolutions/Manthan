@@ -13,8 +13,6 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew"
 import { loginCompanyID } from "../../../components/Common/CommonFunction";
 
 
@@ -61,9 +59,6 @@ const GeneralList = (props) => {
 
     return (
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GENERAL_LIST} /> */}
-
             {
                 (pageField) ?
                     <CommonListPage

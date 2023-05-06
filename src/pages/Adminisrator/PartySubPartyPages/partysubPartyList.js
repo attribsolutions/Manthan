@@ -13,7 +13,6 @@ import {
 import PartySubParty from "./PartySubParty";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 
 const PartySubPartyList = () => {
   const dispatch = useDispatch();
@@ -50,7 +49,6 @@ const PartySubPartyList = () => {
 
   return (
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {
         (pageField) ?
           <CommonListPage

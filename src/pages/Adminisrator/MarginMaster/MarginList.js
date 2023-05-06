@@ -9,7 +9,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import "../../../assets/scss/CustomTable2/datatables.scss"
-import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
   delete_MarginList,
@@ -25,7 +24,6 @@ const MarginList = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
   const [userAccState, setUserAccState] = useState('');
-
 
 
   // get Access redux data
@@ -187,7 +185,6 @@ const MarginList = (props) => {
     return (
       <React.Fragment>
         <div className="page-content">
-          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
           <PaginationProvider
             pagination={paginationFactory(pageOptions)}
           >

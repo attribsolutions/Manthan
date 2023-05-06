@@ -10,7 +10,7 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -149,6 +149,11 @@ const CreditLimitMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${" Credit Limit Count"} :${Data.length}`))
+    }, [Data])
+
 
     const RoutesDropdown_options = RoutesList.map((index) => ({
         value: index.id,

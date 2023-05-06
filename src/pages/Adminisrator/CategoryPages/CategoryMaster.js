@@ -37,7 +37,12 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    loginUserID,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -222,11 +227,10 @@ const CategoryMaster = (props) => {
                     UpdatedBy: loginUserID()
                 });
 
-                if (pageMode === mode.edit)
-                 {  
+                if (pageMode === mode.edit) {
                     dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
                 }
-                
+
                 else {
                     dispatch(saveCategoryMaster({ jsonBody, btnId }));
                 }
@@ -241,7 +245,7 @@ const CategoryMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
                     <Container fluid>
@@ -307,7 +311,7 @@ const CategoryMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
-                                                                      onClick={saveHandeller}
+                                                                        onClick={saveHandeller}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"CategoryMaster"}

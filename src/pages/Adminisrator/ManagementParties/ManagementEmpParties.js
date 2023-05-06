@@ -21,14 +21,17 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { Change_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginCompanyID,
+    metaTagLabel,
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import {
     getEmployeedropdownList,
@@ -263,8 +266,7 @@ const ManagementEmpParties = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
+                <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
                     {/* <Container fluid> */}
                     <div className="px-2   c_card_header text-black mb-1" >
