@@ -22,7 +22,7 @@ import paginationFactory, {
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import { get_Party_ForDropDown, get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import {
     deleteID_In_Margin_MasterPage,
@@ -36,6 +36,7 @@ import {
 import { AvForm } from "availity-reactstrap-validation";
 import { breadcrumbReturnFunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
+import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -62,7 +63,7 @@ const MarginMaster = (props) => {
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
         PostAPIResponse: state.MarginMasterReducer.PostData,
         Party: state.ItemMastersReducer.Party,
-        PriceList: state.ItemMastersReducer.PriceList,
+        PriceList: state.PriceListReducer.priceListByCompany,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
@@ -84,7 +85,7 @@ const MarginMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({dispatch,userAcc});
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -121,7 +122,7 @@ const MarginMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(get_PriceList_ForDropDown());
+        dispatch(priceListByCompay_Action());
         dispatch(get_Party_ForDropDown());
         dispatch(postGoButtonForMargin_Master_Success([]));
     }, [dispatch]);
@@ -324,7 +325,7 @@ const MarginMaster = (props) => {
             dataField: "Margin",
             sort: true,
             formatter: (cellContent, user) => {
-                
+
                 if (((cellContent > 0) && (user["margin"] === undefined) || user.margin)) {
                     user["margin"] = true
                 } else {

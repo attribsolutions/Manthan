@@ -4,8 +4,9 @@ import Flatpickr from "react-flatpickr"
 import Select from "react-select";
 import { useDispatch, useSelector } from 'react-redux';
 import MarginTable from './Table';
-import { get_Party_ForDropDown, get_PriceList_ForDropDown } from '../../../../../store/Administrator/ItemsRedux/action';
+import { get_Party_ForDropDown, } from '../../../../../store/Administrator/ItemsRedux/action';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
+import { priceListByCompay_Action } from '../../../../../store/Administrator/PriceList/action';
 
 function Margin_Tab(props) {
 
@@ -21,12 +22,12 @@ function Margin_Tab(props) {
         PriceList
     } = useSelector((state) => ({
         Party: state.ItemMastersReducer.Party,
-        PriceList: state.ItemMastersReducer.PriceList,
+        PriceList: state.PriceListReducer.priceListByCompany,
     }));
 
     useEffect(() => {
         dispatch(get_Party_ForDropDown());
-        dispatch(get_PriceList_ForDropDown());
+        dispatch(priceListByCompay_Action());
     }, [dispatch]);
 
 
@@ -69,9 +70,9 @@ function Margin_Tab(props) {
             CreatedBy: loginUserID(),
             UpdatedBy: loginUserID(),
             Company: loginCompanyID(),
-            CommonID:0,
-            IsDeleted:0,
-            IsAdd:true
+            CommonID: 0,
+            IsDeleted: 0,
+            IsAdd: true
         };
 
         if (!(priceList === "")
