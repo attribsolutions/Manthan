@@ -334,3 +334,7 @@ export const CREDIT_DEBIT = '/CreditDebitNote'
 export const CREDIT_DEBIT_FILTER = '/CreditDebitNoteFilter'
 export const INVOICE_RETURN = '/InvoiceReturnCRDR'
 export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
+
+
+// Dashboard
+export const DASHBOARD = '/getdashboard'

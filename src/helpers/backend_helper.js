@@ -576,6 +576,10 @@ export const Edit_Credit_List_API = ({ editId, btnId }) => get(`${url.CREDIT_DEB
 export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// Invoice Return api
 export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, jsonBody)//  postapi
 
+
+// Dashboard 
+export const Dashboard_Get_API = (id) => get(`${url.DASHBOARD}/${id}`)// Dashboard grt api
+
 export {
   getLoggedInUser,
   isUserAuthenticated,
