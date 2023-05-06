@@ -147,7 +147,6 @@ const ChallanList = () => {
     return (
 
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <div className="page-content">
 
                 <div className="px-2  c_card_filter text-black " >

@@ -32,7 +32,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalula
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturnFunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc, loginRoleID, loginJsonBody } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc, loginRoleID, loginJsonBody, metaTagLabel } from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -88,7 +88,7 @@ const Order = (props) => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname)
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userAccState, setUserAccState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
     const [deliverydate, setdeliverydate] = useState(currentDate)
@@ -594,7 +594,7 @@ const Order = (props) => {
     function Open_Assign_func() {
         setisOpen_assignLink(false)
         dispatch(editPartyItemIDSuccess({ Status: false }));
-        breadcrumbReturnFunc({ dispatch, userAcc: userAccState })
+        breadcrumbReturnFunc({ dispatch, userAcc: userPageAccessState })
         goButtonHandler()
     };
 
@@ -851,10 +851,10 @@ const Order = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     }
 
-    if (!(userAccState === "")) {
+    if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
                     {RoleID === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
@@ -1149,7 +1149,7 @@ const Order = (props) => {
                         ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton
                                 pageMode={pageMode}
-                                userAcc={userAccState}
+                                userAcc={userPageAccessState}
                                 onClick={saveHandeller}
                             />
                         </div>
