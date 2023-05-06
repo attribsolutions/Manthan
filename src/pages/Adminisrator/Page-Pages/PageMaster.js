@@ -512,7 +512,7 @@ const PageMaster = (props) => {
     return (
       <React.Fragment>
         <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"-70px" }}>
-        <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
+        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
           <Container fluid>
             <AvForm
               id="mainForm"
