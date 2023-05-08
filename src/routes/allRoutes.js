@@ -146,7 +146,7 @@ import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
 import ImportFieldAddList from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAddList";
-import ImportFieldMap from "../pages/Adminisrator/ImportMaster/ImportFieldMap/ImportFieldMap";
+import ImportExcelFieldMap from "../pages/Adminisrator/ImportMaster/ImportExcelFieldMap/ImportExcelFieldMap";
 import UploadExcel from "../pages/Adminisrator/ImportMaster/ExcelUpload/UploadExcel";
 
 import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
@@ -261,7 +261,7 @@ const userRoutes = [
 
   { path: path.UPLOAD_EXCEL, component: UploadExcel },
 
-  { path: path.IMPORT_FIELD_MAP, component: ImportFieldMap },
+  { path: path.IMPORT_EXCEL_FIELD_MAP_add, component: ImportExcelFieldMap },
   { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd },
   { path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList },
 

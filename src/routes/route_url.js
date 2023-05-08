@@ -102,13 +102,14 @@ export const GENERAL_LIST = "/GeneralList"
 export const CREDITLIMIT = "/CreditLimit"
 export const CREDITLIMIT_LIST = "/CreditLimitList"
 
-export const IMPORT_FIELD_MAP = "/ImportFieldMap"
-export const IMPORT_FIELD_MAP_LIST = "/ImportFieldMapList"
+export const IMPORT_EXCEL_FIELD_MAP_add = "/Import_ExcelFieldMap_add"
+export const IMPORT_EXCEL_FIELD_MAP_list = "/Import_ExcelFieldMap_list"
 
 export const UPLOAD_EXCEL = "/Upload_Excel"
 
 export const IMPORT_FIELD_ADD = "/ImportFieldAdd"
 export const IMPORT_FIELD_ADD_LIST = "/ImportFieldAddList"
+
 
 export const IMPORT_FIELD_MASTER = "/ImportMasterMap"
 

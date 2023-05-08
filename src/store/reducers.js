@@ -54,7 +54,7 @@ import PartyMasterBulkUpdateReducer from "./Administrator/PartyMasterBulkUpdateR
 import ManagementPartiesReducer from "./Administrator/ManagementPartiesRedux/reducer"
 import BankReducer from "./Accounting/BankRedux/reducer"
 import BankAssignReducer from "./Accounting/BankAssignRedux/reducer"
-import ImportFieldMap_Reducer from "./Administrator/ImportFieldMapRedux/reducer"
+import ImportExportFieldMap_Reducer from "./Administrator/ImportExportFieldMapRedux/reducer"
 import ImportFieldAdd_Reducer from "./Administrator/ImportFieldAddRedux/reducer"
 import ImportMasterMap_Reducer from "./Administrator/ImportMasterMapRedux/reducer"
 
@@ -98,7 +98,7 @@ const rootReducer = combineReducers({
   BreadcrumbReducer,
   CommonPageFieldReducer,
   PdfReportReducers,
-  ImportFieldMap_Reducer,
+  ImportExportFieldMap_Reducer,
   ImportFieldAdd_Reducer,
   ImportMasterMap_Reducer,
   Modules,

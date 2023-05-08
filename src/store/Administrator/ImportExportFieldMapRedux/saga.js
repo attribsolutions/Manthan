@@ -61,7 +61,7 @@ function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {              //
 //   } catch (error) { CommonConsole(error) }
 // }
 
-function* ImportFieldMap_Saga() {
+function* ImportExcelFieldMap_Saga() {
   yield takeEvery(GO_BUTTON_IMPORT_FIELD_MAP_ADD, GoButtonExcel_ImportMaster_GenFun)
   yield takeEvery(SAVE_IMPORT_FIELD_MAP, Save_Method_ForExcel_ImportMaster_GenFun)
   // yield takeEvery(GET_EXCEL_IMPORT_LIST, Get_Excel_Import_List_GenFunc)
@@ -70,4 +70,4 @@ function* ImportFieldMap_Saga() {
   // yield takeEvery(UPDATE_EXCEL_IMPORTMASTER_ID, Update_Excel_Importlist_ID_GenFunc)
 }
 
-export default ImportFieldMap_Saga;
+export default ImportExcelFieldMap_Saga;
