@@ -39,7 +39,7 @@ function* supplierAddressGenFunc({ editId }) {
   try {
     const response = yield call(Party_Master_Edit_API, config);
     let first = [], secd = [], newArr = []
-    const arr = response.Data.PartyAddress;
+    const arr = response.Data.Data.PartyAddress;
     arr.forEach((i, k) => {
       if (i.IsDefault === true) {
 
