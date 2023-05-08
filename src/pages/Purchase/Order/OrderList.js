@@ -18,7 +18,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc, currentDate, excelDownCommonFunc, loginPartyID } from "../../../components/Common/CommonFunction";
+import { btnIsDissablefunc, convertDatefunc, currentDate, excelDownCommonFunc, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
@@ -30,7 +30,7 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { makeIB_InvoiceAction } from "../../../store/Sales/Invoice/action";
+import { GoButtonForinvoiceAdd, makeIB_InvoiceAction } from "../../../store/Sales/Invoice/action";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 
 
@@ -81,7 +81,7 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-
+        debugger
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -116,7 +116,10 @@ const OrderList = () => {
         else if (subPageMode === url.ORDER_LIST_4) {
             page_Id = pageId.ORDER_LIST_4
             masterPath = url.ORDER_4;
+            page_Mode = mode.modeSTPList
             newBtnPath = url.ORDER_4;
+            makeBtnShow = true;
+            makeBtnName = "Make Invoice"
         }
         else if (subPageMode === url.IB_INVOICE_STP) {
             page_Id = pageId.IB_INVOICE_STP
@@ -201,6 +204,18 @@ const OrderList = () => {
             }
             dispatch(makeIB_InvoiceAction({ jsonBody, path: url.IB_INVOICE, pageMode: mode.defaultsave, customer }));
         }
+        else if (subPageMode === url.ORDER_LIST_4) {
+            const { CustomerID, id, OrderDate } = obj
+            history.push(url.INVOICE_1, obj);
+
+            const jsonBody = JSON.stringify({
+                OrderIDs: id.toString(),
+                FromDate: convertDatefunc(OrderDate),
+                Customer: CustomerID,
+                Party: loginPartyID(),
+            });
+            dispatch(GoButtonForinvoiceAdd({ subPageMode: url.INVOICE_1, jsonBody, btnId: gobtnId }));
+        }
         else {
             var isGRNSelect = ''
             var challanNo = ''
@@ -208,13 +223,13 @@ const OrderList = () => {
             if (list.length > 0) {
                 list.forEach(ele => {
                     if (ele.hasSelect) {
-                            grnRef.push({
-                                Invoice: (subPageMode === url.GRN_STP_3) ? ele.id : null,
-                                Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : null,
-                                ChallanNo: ele.FullOrderNumber,
-                                Inward: url.GRN_STP_3 ? true : false,
-                                Challan: ele.POType === "Challan" ? ele.id : ''
-                            });
+                        grnRef.push({
+                            Invoice: (subPageMode === url.GRN_STP_3) ? ele.id : null,
+                            Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : null,
+                            ChallanNo: ele.FullOrderNumber,
+                            Inward: url.GRN_STP_3 ? true : false,
+                            Challan: ele.POType === "Challan" ? ele.id : ''
+                        });
                         isGRNSelect = isGRNSelect.concat(`${ele.id},`)
                         challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
                     }
@@ -348,7 +363,6 @@ const OrderList = () => {
         // setorderlistFilter(newObj)
     }
 
-
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -425,8 +439,6 @@ const OrderList = () => {
     }
     return (
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
             <div className="page-content">
                 {
                     (pageField) ?

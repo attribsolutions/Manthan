@@ -50,7 +50,6 @@ export default function PageList() {
 
   return (
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {
         (pageField) ?
           <CommonListPage

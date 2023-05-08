@@ -28,7 +28,8 @@ import {
     btnIsDissablefunc,
     loginCompanyID,
     loginPartyID,
-    loginUserID
+    loginUserID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -340,7 +341,7 @@ const BankAssign = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <Container fluid>

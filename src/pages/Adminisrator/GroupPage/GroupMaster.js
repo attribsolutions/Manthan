@@ -38,7 +38,8 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
-    loginUserID
+    loginUserID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -236,7 +237,7 @@ const GroupMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >

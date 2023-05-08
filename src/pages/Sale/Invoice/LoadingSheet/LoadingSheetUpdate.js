@@ -14,7 +14,7 @@ import { commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, loginPartyID, currentDate } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginPartyID, currentDate, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -197,7 +197,7 @@ const LoadingSheetUpdate = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <div id="id1"></div>

@@ -14,8 +14,19 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginIsSCMCompany, loginPartyID, loginUserID } from "../../../../components/Common/CommonFunction";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, } from "../../../../components/Common/validationFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    loginIsSCMCompany,
+    loginPartyID,
+    loginUserID,
+    metaTagLabel
+} from "../../../../components/Common/CommonFunction";
+import {
+    comAddPageFieldFunc,
+    formValid, initialFiledFunc,
+    onChangeSelect,
+} from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -125,7 +136,6 @@ const ImportMasterMap = (props) => {
     }, [postMsg])
 
 
-
     const partyDropdown_Options = partyList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -143,7 +153,6 @@ const ImportMasterMap = (props) => {
         value: 3,
         label: "Unit",
     }]
-
 
 
     const pagesListColumns = [
@@ -196,9 +205,6 @@ const ImportMasterMap = (props) => {
         async function funcForParty() {
             let jsonArr = []
             await goButtonArr.forEach(i => {
-
-
-
                 if ((!(i.mapValue === '') && !(i.mapValue === null))) {
                     jsonArr.push({
                         "Party": i.party,
@@ -260,8 +266,7 @@ const ImportMasterMap = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content">
                     <div className="px-2 c_card_header text-black" >

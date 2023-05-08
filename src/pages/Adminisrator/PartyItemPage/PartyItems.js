@@ -37,7 +37,14 @@ import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginIsSCMCompany, loginJsonBody, loginPartyID, } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    loginIsSCMCompany,
+    loginJsonBody,
+    loginPartyID,
+    metaTagLabel,
+} from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 
@@ -47,7 +54,7 @@ const PartyItems = (props) => {
     const dispatch = useDispatch();
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
-    const [userAccState, setUserAccState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState('');
 
     const fileds = {
         id: "",
@@ -362,17 +369,16 @@ const PartyItems = (props) => {
     let IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
-    if (!(userAccState === '')) {
+    if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
+                        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
-                                <h4 className="card-title text-black">{userAccState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userAccState.PageDescriptionDetails}</p>
+                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
@@ -427,7 +433,7 @@ const PartyItems = (props) => {
                                 {/* {(tableList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}> */}
                                 <SaveButton
                                     pageMode={pageMode}
-                                    userAcc={userAccState}
+                                    userAcc={userPageAccessState}
                                     module={"PartyItems"} onClick={SaveHandler}
                                 />
                                 {/* </div> */}

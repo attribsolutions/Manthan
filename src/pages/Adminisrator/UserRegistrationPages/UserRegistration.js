@@ -26,7 +26,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -378,7 +378,7 @@ const AddUser = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+          <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
         {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.USER} /> */}
 
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>

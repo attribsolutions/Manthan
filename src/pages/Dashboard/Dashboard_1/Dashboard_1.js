@@ -10,7 +10,7 @@ import {
     Col,
     Container, Label, Row,
 } from "reactstrap";
-import { breadcrumbReturnFunc } from '../../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, metaTagLabel } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
@@ -30,7 +30,7 @@ const Dashboard_1 = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);//changes
     const [modalCss, setModalCss] = useState(false);
-    const [userPageAccessState, setUserAccState] = useState(123);
+    const [userPageAccessState, setUserAccState] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -88,9 +88,7 @@ const Dashboard_1 = (props) => {
     return (
         <React.Fragment>
             <div className="page-content">
-                <MetaTags>
-                    <title>Dashboard | Minia - React Admin & Dashboard Template</title>
-                </MetaTags>
+            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
                     <Row>
                         {/* {(WidgetsData || []).map((widget, key) => ( */}
@@ -222,7 +220,7 @@ const Dashboard_1 = (props) => {
                         <Col lg={6}>
                             <Card >
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}>
-                                    <Label className=" text-primary text-bold mb-n2"
+                                    <Label className=" text-primary text-bold mb-n2 text-decoration-underline"
                                         onClick={paymentEntry_onClick}
                                     >
                                         Todays Payment Entry</Label>
@@ -234,7 +232,7 @@ const Dashboard_1 = (props) => {
                         <Col lg={6}>
                             <Card >
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}>
-                                    <Label className=" text-primary text-bold mb-n2"
+                                    <Label className=" text-primary text-bold mb-n2 text-decoration-underline"
                                         onClick={InvoiceFoRGRN_onClick}
                                     >
                                         Invoices For GRN</Label>

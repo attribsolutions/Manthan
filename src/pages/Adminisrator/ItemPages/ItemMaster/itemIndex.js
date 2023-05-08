@@ -45,12 +45,19 @@ import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
-import { breadcrumbReturnFunc, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginUserID,
+    loginCompanyID,
+    btnIsDissablefunc,
+    metaTagLabel
+} from "../../../../components/Common/CommonFunction";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { SaveButton } from "../../../../components/Common/CommonButton";
+import { priceListByCompay_Action } from "../../../../store/Administrator/PriceList/action";
 
 export const unitConversionInitial = {
     id: 1,
@@ -310,7 +317,7 @@ const ItemsMaster = (props) => {
         dispatch(get_ImageType_ForDropDown());
         dispatch(get_Division_ForDropDown());
         dispatch(get_Party_ForDropDown());
-        dispatch(get_PriceList_ForDropDown());
+        // dispatch(priceListByCompay_Action());
         dispatch(getCategoryTypelist());
         dispatch(getItemTagName())
         dispatch(getBrandTagName())
@@ -421,7 +428,6 @@ const ItemsMaster = (props) => {
     function Common_Text_INPUT_Validation(value, type, key) {
 
         let OnchangeControl = document.getElementById(`txt${type}${key}`)
-
         if (value === '') {
             OnchangeControl.className = 'form-control is-invalid'
             return false
@@ -491,7 +497,7 @@ const ItemsMaster = (props) => {
                 isvalid = false
                 inValidMsg.push("ShortName: Is Requried")
             }
-          
+
             if (formValue.BaseUnit.length < 1) {
                 setInValidDrop(i => {
                     const a = { ...i }
@@ -519,7 +525,6 @@ const ItemsMaster = (props) => {
                 })
                 isvalid = false
                 inValidMsg.push("Category: Is Requried")
-
             }
 
             if (formValue.Division.length < 1) {
@@ -816,7 +821,7 @@ const ItemsMaster = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "1cm" }}>
-                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                     <Container fluid>
                         <form >
                             <Row>

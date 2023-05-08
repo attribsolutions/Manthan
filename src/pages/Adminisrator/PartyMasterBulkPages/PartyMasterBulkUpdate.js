@@ -26,7 +26,8 @@ import {
     btnIsDissablefunc,
     invertDatefunc,
     loginCompanyID,
-    loginPartyID
+    loginPartyID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -560,7 +561,7 @@ const PartyMasterBulkUpdate = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                  <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <Container fluid>

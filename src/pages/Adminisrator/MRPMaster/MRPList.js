@@ -19,13 +19,13 @@ import {
 import { countlabelFunc } from "../../../components/Common/CommonMasterListPage"
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturnFunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 
 const MRPList = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
-  const [userAccState, setUserAccState] = useState('');
+  const [userPageAccessState, setUserAccState] = useState('');
 
 
   // get Access redux data
@@ -96,7 +96,7 @@ const MRPList = (props) => {
   };
 
   const EditPageHandler = (rowData) => {
-    let RelatedPageID = userAccState.RelatedPageID
+    let RelatedPageID = userPageAccessState.RelatedPageID
 
     const found = userAccess.find((element) => {
       return element.id === RelatedPageID
@@ -136,13 +136,13 @@ const MRPList = (props) => {
     {
       text: "Action",
       hidden: (
-        !(userAccState.RoleAccess_IsEdit)
-        && !(userAccState.RoleAccess_IsView)
-        && !(userAccState.RoleAccess_IsDelete)) ? true : false,
+        !(userPageAccessState.RoleAccess_IsEdit)
+        && !(userPageAccessState.RoleAccess_IsView)
+        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
 
       formatter: (cellContent, Role) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {((userAccState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
+          {((userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Effective Date"
@@ -154,7 +154,7 @@ const MRPList = (props) => {
             :
             null}
 
-          {(!(userAccState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userAccState.RoleAccess_IsView)) ?
+          {(!(userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userPageAccessState.RoleAccess_IsView)) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Effective Date"
@@ -165,7 +165,7 @@ const MRPList = (props) => {
               <i className="bx bxs-show font-size-18 "></i>
             </Button> : null}
 
-          {((userAccState.RoleAccess_IsDelete) && (Role.CommonID > 0))
+          {((userPageAccessState.RoleAccess_IsDelete) && (Role.CommonID > 0))
             ?
             <Button
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -176,18 +176,17 @@ const MRPList = (props) => {
             </Button>
             : null
           }
-
         </div>
       ),
     },
   ];
 
-  if (!(userAccState === '')) {
+  if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
         <div className="page-content">
-          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      
+        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+  
           <PaginationProvider
             pagination={paginationFactory(pageOptions)}
           >

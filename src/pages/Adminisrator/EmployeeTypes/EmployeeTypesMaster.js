@@ -39,7 +39,8 @@ import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
     loginUserID,
-    loginCompanyID
+    loginCompanyID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -261,7 +262,7 @@ const EmployeeTypesMaster = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                     <Container fluid>
                         <Card className="text-black">

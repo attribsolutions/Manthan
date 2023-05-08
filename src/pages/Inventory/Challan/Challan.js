@@ -21,7 +21,7 @@ import {
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -714,7 +714,8 @@ const Challan = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+
 
                 <div className="page-content" >
 

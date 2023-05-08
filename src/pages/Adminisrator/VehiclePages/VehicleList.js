@@ -68,7 +68,6 @@ const VehicleList = () => {
   return (
 
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       <div className="page-content">
 
         {RoleID === 2 ?

@@ -34,7 +34,12 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginUserID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginUserID,
+    btnIsDissablefunc,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -238,8 +243,8 @@ const Modules = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    <Container fluid  >
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                    <Container fluid >
 
                         <Card className="text-black" >
                             <CardHeader className="card-header   text-black c_card_header" >

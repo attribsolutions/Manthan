@@ -13,7 +13,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { breadcrumbReturnFunc, loginUserID, currentDate } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate, metaTagLabel } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -28,7 +28,7 @@ const Inward = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const [userAccState, setUserAccState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [InwardDate, setInwardDate] = useState(currentDate);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const {
@@ -216,7 +216,7 @@ const Inward = (props) => {
 
     return (
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+           <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
             <div className="page-content">
 
@@ -322,7 +322,7 @@ const Inward = (props) => {
                 </div>
                 <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                     <SaveButton pageMode={pageMode}
-                        userAcc={userAccState}
+                        userAcc={userPageAccessState}
                         module={"Inward"} onClick={saveHandeller}
                     />
                 </div>
