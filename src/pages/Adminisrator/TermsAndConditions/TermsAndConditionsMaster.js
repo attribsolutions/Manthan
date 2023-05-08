@@ -33,7 +33,7 @@ import {
     UpdateTermsAndCondtions,
     UpdateTermsAndCondtions_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -223,7 +223,7 @@ const TermsAndConditionsMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                         {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.TERMS_AND_CONDITION} /> */}
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >

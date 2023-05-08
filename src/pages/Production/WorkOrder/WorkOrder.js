@@ -28,7 +28,8 @@ import {
     currentDate,
     loginCompanyID,
     loginPartyID,
-    btnIsDissablefunc
+    btnIsDissablefunc,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import {
     editWorkOrderListSuccess,
@@ -439,7 +440,7 @@ const WorkOrder = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "200px" }}>
                     <form  noValidate>
                         <div className="px-2 mb-1 c_card_filter text-black" >

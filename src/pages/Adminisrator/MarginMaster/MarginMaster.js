@@ -414,7 +414,7 @@ const MarginMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {

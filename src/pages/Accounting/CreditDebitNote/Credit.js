@@ -30,7 +30,8 @@ import {
     btnIsDissablefunc,
     loginCompanyID,
     loginPartyID,
-    loginUserID
+    loginUserID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import Select from "react-select";
 import Flatpickr from "react-flatpickr"
@@ -725,7 +726,7 @@ const Credit = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >

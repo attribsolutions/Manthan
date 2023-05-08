@@ -28,16 +28,17 @@ import { comAddPageFieldFunc, initialFiledFunc, } from "../../../../components/C
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
+// import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess, save_ImportFiledMap, save_ImportFiledMap_Success } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import {
     GoButton_ImportFiledMap_Add,
     GoButton_ImportFiledMap_AddSuccess,
     save_ImportFiledMap,
     save_ImportFiledMap_Success
-} from "../../../../store/Administrator/ImportFieldMapRedux/action";
+} from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 
-const ImportFieldMap = (props) => {
+const ImportExcelFieldMap = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -64,16 +65,16 @@ const ImportFieldMap = (props) => {
         goButtonItem,
         partyList
     } = useSelector((state) => ({
-        postMsg: state.ImportFieldMap_Reducer.postMsg,
+        postMsg: state.ImportExportFieldMap_Reducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        goButtonItem: state.ImportFieldMap_Reducer.addGoButton,
+        goButtonItem: state.ImportExportFieldMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
 
     useEffect(() => {
-        const page_Id = pageId.IMPORT_FIELD_MAP
+        const page_Id = pageId.IMPORT_EXCEL_FIELD_MAP_add
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
@@ -228,7 +229,7 @@ const ImportFieldMap = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <form onSubmit={(event) => SaveHandler(event)} noValidate>
                     <div className="page-content">
@@ -317,4 +318,4 @@ const ImportFieldMap = (props) => {
     }
 };
 
-export default ImportFieldMap
+export default ImportExcelFieldMap

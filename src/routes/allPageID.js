@@ -101,8 +101,8 @@ export const SALESMAN_LIST = 152
 export const CREDITLIMIT = 160
 export const CREDITLIMIT_LIST = 154
 
-export const IMPORT_FIELD_MAP = 157
-export const IMPORT_FIELD_MAP_LIST = 158
+export const IMPORT_EXCEL_FIELD_MAP_add = 157
+export const IMPORT_EXCEL_FIELD_MAP_list = 158
 
 export const IMPORT_MASTER_MAP = 194
 

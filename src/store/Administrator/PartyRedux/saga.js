@@ -48,10 +48,10 @@ function* Get_Party_GenFun() {   // Only CompanyID is Required
       index["State"] = index.State.Name;
       index["District"] = index.District.Name;
       index['Company'] = index.Company.Name;
-      index['PartyTypeName'] = index.PartyType.Name;
+      index['PartyType'] = index.PartyType.Name;
 
       if (!index.PriceList) { index.PriceList = '' }
-      else { index["PriceListName"] = index.PriceList.Name; }
+      else { index["PriceList"] = index.PriceList.Name; }
       index["PartyAddress"] = address(index);
       index["Check"] = false
       return index;
@@ -68,7 +68,7 @@ function* save_Party_Master_GenFun({ config }) {
 }
 
 function* Delete_Party_GenFun({ id }) {
- 
+
   try {
     const response = yield call(Party_Master_Delete_API, id);
     yield put(deletePartyIDSuccess(response))
@@ -76,10 +76,11 @@ function* Delete_Party_GenFun({ id }) {
 }
 
 function* Edit_Party_GenFun({ id, pageMode }) {
- 
+
   try {
     const response = yield call(Party_Master_Edit_API, id);
     response.pageMode = id.btnmode
+    response.Data = response.Data.Data//remove chield data array
     yield put(editPartyIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }

@@ -266,7 +266,7 @@ const ImportMasterMap = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userAccess)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content">
                     <div className="px-2 c_card_header text-black" >

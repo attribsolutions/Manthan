@@ -24,7 +24,7 @@ import { Change_Button, Go_Button, SaveButton } from "../../../components/Common
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -45,6 +45,7 @@ import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedu
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { discountCalculate, stockDistributeFunc } from "./invoiceCaculations";
 import "./invoice.scss"
+import { arrowUpDounFunc } from "../../Purchase/Order/OrderPageCalulation";
 
 const Invoice = (props) => {
 
@@ -127,7 +128,8 @@ const Invoice = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        if ((hasShowloction || hasShowModal)) {
+        debugger
+        if ((hasShowloction || hasShowModal || (location.state))) {
 
             let hasEditVal = null
             if (hasShowloction) {
@@ -139,6 +141,16 @@ const Invoice = (props) => {
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
+            }
+            else if (location) {
+
+                setPageMode(mode.defaultsave)
+
+                let Customer = location.state.CustomerID
+                let CustomerName = location.state.Customer
+
+                hasEditVal = { Customer, CustomerName }
+
             }
 
             if (hasEditVal) {
@@ -242,8 +254,9 @@ const Invoice = (props) => {
             goButtonHandler(makeIBInvoice);
             dispatch(makeIB_InvoiceActionSuccess({ Status: false }))
         }
-    }, [makeIBInvoice])
+    }, [makeIBInvoice]);
 
+    useEffect(arrowUpDounFunc("#tableArrow"), [OrderItemDetails]);
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
         value: index.id,
@@ -672,7 +685,7 @@ const Invoice = (props) => {
         } catch (e) { };
     };
 
- 
+
     function orderQtyOnChange(event, index) {
 
         let input = event.target.value
@@ -743,7 +756,7 @@ const Invoice = (props) => {
                 index.StockDetails.forEach((ele) => {
 
                     if (ele.Qty > 0) {
-                    
+
                         const calculate = discountCalculate(ele, index)
 
                         grand_total = grand_total + Number(calculate.tAmount)
@@ -790,14 +803,14 @@ const Invoice = (props) => {
                 }));
                 return returnFunc()
             }
-            
-            const forInvoice_1_json = () => ( {  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
                 InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
             });
 
-            const forIB_Invoice_json =async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const forIB_Invoice_json = async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 IBChallanDate: values.InvoiceDate,
                 IBChallanItems: invoiceItems,
                 IBChallansReferences: await OrderIDs.map(i => ({ Demand: i }))
@@ -835,7 +848,7 @@ const Invoice = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
 
@@ -921,6 +934,7 @@ const Invoice = (props) => {
                                                 <Col xl="12">
                                                     <div className="table-responsive">
                                                         <BootstrapTable
+                                                            id="tableArrow"
                                                             keyField={"id"}
                                                             responsive
                                                             bordered={false}

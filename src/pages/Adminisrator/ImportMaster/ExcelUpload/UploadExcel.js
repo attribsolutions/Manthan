@@ -21,13 +21,13 @@ import Select from "react-select";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, groupBy, loginCompanyID, loginPartyID, loginUserID } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, groupBy, loginCompanyID, loginPartyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
 import { fileDetails, readExcelFile } from "./readFile";
 import CInput from "../../../../CustomValidateForm/CInput";
-import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess } from "../../../../store/Administrator/ImportFieldMapRedux/action";
+import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import './scss.scss'
 import { ExcelUpload_save_action, ExcelUpload_save_action_Success } from "../../../../store/Administrator/ImportMasterMapRedux/action";
@@ -67,7 +67,7 @@ const UploadExcel = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         partyList: state.PartyMasterReducer.partyList,
-        compareParam: state.ImportFieldMap_Reducer.addGoButton,
+        compareParam: state.ImportExportFieldMap_Reducer.addGoButton,
     }));
 
     useEffect(() => {
@@ -302,7 +302,7 @@ const UploadExcel = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <form onSubmit={(event) => SaveHandler(event)} noValidate>
                     <div className="page-content">
