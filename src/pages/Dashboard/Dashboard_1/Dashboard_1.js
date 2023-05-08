@@ -10,7 +10,7 @@ import {
     Col,
     Container, Label, Row,
 } from "reactstrap";
-import { breadcrumbReturnFunc, metaTagLabel } from '../../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
@@ -30,7 +30,7 @@ const Dashboard_1 = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);//changes
     const [modalCss, setModalCss] = useState(false);
-    const [userPageAccessState, setUserAccState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState(123);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -88,7 +88,9 @@ const Dashboard_1 = (props) => {
     return (
         <React.Fragment>
             <div className="page-content">
-            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>
+                    <title>Dashboard | Minia - React Admin & Dashboard Template</title>
+                </MetaTags>
                 <Container fluid>
                     <Row>
                         {/* {(WidgetsData || []).map((widget, key) => ( */}
@@ -219,8 +221,9 @@ const Dashboard_1 = (props) => {
                     <Row>
                         <Col lg={6}>
                             <Card >
-                                <CardHeader style={{ backgroundColor: "whitesmoke" }}>
-                                    <Label className=" text-primary text-bold mb-n2 text-decoration-underline"
+                                <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                    className="card-header align-items-center d-flex text-center">
+                                    <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
                                         onClick={paymentEntry_onClick}
                                     >
                                         Todays Payment Entry</Label>
@@ -231,8 +234,9 @@ const Dashboard_1 = (props) => {
 
                         <Col lg={6}>
                             <Card >
-                                <CardHeader style={{ backgroundColor: "whitesmoke" }}>
-                                    <Label className=" text-primary text-bold mb-n2 text-decoration-underline"
+                                <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                    className="card-header align-items-center d-flex">
+                                    <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
                                         onClick={InvoiceFoRGRN_onClick}
                                     >
                                         Invoices For GRN</Label>
@@ -242,7 +246,17 @@ const Dashboard_1 = (props) => {
                         </Col>
                     </Row>
 
-
+                    {/* <div className="card">
+                        <div className="card-header align-items-center d-flex">
+                            <h4 className="card-title mb-0 flex-grow-1">Transactions</h4>
+                            <Label className=" text-primary text-bold mb-n2 text-decoration-underline"
+                                onClick={InvoiceFoRGRN_onClick}
+                            >
+                                Invoices For GRN</Label>
+                         
+                        </div>
+                        <InvoiceForGRN />
+                    </div> */}
 
                 </Container>
             </div>
