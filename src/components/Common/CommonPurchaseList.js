@@ -26,8 +26,8 @@ let downList = [];
 let listObj = {};
 
 let searchProps = {
-  onClear: function onClear() {},
-  onSearch: function onSearch() {},
+  onClear: function onClear() { },
+  onSearch: function onSearch() { },
   searchText: "",
 };
 
@@ -85,12 +85,12 @@ const CommonPurchaseList = (props) => {
     masterPath,
     ButtonMsgLable,
     deleteName,
-    goButnFunc = () => {},
-    makeBtnFunc = () => {},
+    goButnFunc = () => { },
+    makeBtnFunc = () => { },
     makeBtnShow,
     updateBtnFunc,
     makeBtnName,
-    downBtnFunc = () => {},
+    downBtnFunc = () => { },
     pageMode,
     newBtnPath,
     HeaderContent = () => {

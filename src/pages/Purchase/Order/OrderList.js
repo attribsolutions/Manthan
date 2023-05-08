@@ -81,7 +81,7 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-
+        debugger
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -116,6 +116,7 @@ const OrderList = () => {
         else if (subPageMode === url.ORDER_LIST_4) {
             page_Id = pageId.ORDER_LIST_4
             masterPath = url.ORDER_4;
+            page_Mode = mode.modeSTPList
             newBtnPath = url.ORDER_4;
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
@@ -202,6 +203,18 @@ const OrderList = () => {
                 label: obj.Customer
             }
             dispatch(makeIB_InvoiceAction({ jsonBody, path: url.IB_INVOICE, pageMode: mode.defaultsave, customer }));
+        }
+        else if (subPageMode === url.ORDER_LIST_4) {
+            const { CustomerID, id, OrderDate } = obj
+            history.push(url.INVOICE_1, obj);
+
+            const jsonBody = JSON.stringify({
+                OrderIDs: id.toString(),
+                FromDate: convertDatefunc(OrderDate),
+                Customer: CustomerID,
+                Party: loginPartyID(),
+            });
+            dispatch(GoButtonForinvoiceAdd({ subPageMode: url.INVOICE_1, jsonBody, btnId: gobtnId }));
         }
         else {
             var isGRNSelect = ''
@@ -350,23 +363,6 @@ const OrderList = () => {
         // setorderlistFilter(newObj)
     }
 
-
-    const updateBtnFunc = (list) => {
-        debugger
-        const { CustomerID, id, OrderDate } = list
-        let subPageMode = url.INVOICE_1
-        const btnId = `ADDGoBtn${subPageMode}`
-        history.push(url.INVOICE_1, list);
-
-        const jsonBody = JSON.stringify({
-            OrderIDs: id.toString(),
-            FromDate: convertDatefunc(OrderDate),
-            Customer: CustomerID,
-            Party: loginPartyID(),
-        });
-        dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, btnId }));
-    };
-
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -460,7 +456,6 @@ const OrderList = () => {
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
                             makeBtnFunc={makeBtnFunc}
-                            updateBtnFunc={updateBtnFunc}
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
                             makeBtnName={otherState.makeBtnName}
