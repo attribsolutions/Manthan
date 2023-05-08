@@ -37,7 +37,7 @@ const BaseTabForm = forwardRef((props, ref) => {
     const { values } = state;
     const { isError } = state;
     const { fieldLabel } = state;
-
+   
     useImperativeHandle(ref, () => ({
         setCurrentState(arr) {
             setState(arr)
@@ -54,14 +54,14 @@ const BaseTabForm = forwardRef((props, ref) => {
     }));
 
     const {
-        State,
+        stateRedux,
         DistrictOnState,
         PartyTypes,
         priceListByPartyType,
         SupplierRedux,
         pageField,
     } = useSelector((state) => ({
-        State: state.EmployeesReducer.State,
+        stateRedux: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         PartyTypes: state.PartyTypeReducer.ListData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
@@ -84,7 +84,8 @@ const BaseTabForm = forwardRef((props, ref) => {
                     value: PartyTypes[0].id,
                     label: PartyTypes[0].Name
                 }
-                a.hasValid.valid = true
+                a.hasValid.valid = true;
+                return a
             })
             dispatch(priceListByPartyAction(PartyTypes[0].id))
         }
@@ -96,7 +97,7 @@ const BaseTabForm = forwardRef((props, ref) => {
         division: index.IsDivision
     }));
 
-    const StateValues = State.map((index) => ({
+    const StateValues = stateRedux.map((index) => ({
         value: index.id,
         label: index.Name
     }));
