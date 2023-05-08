@@ -45,6 +45,7 @@ import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedu
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { discountCalculate, stockDistributeFunc } from "./invoiceCaculations";
 import "./invoice.scss"
+import { arrowUpDounFunc } from "../../Purchase/Order/OrderPageCalulation";
 
 const Invoice = (props) => {
 
@@ -253,8 +254,9 @@ const Invoice = (props) => {
             goButtonHandler(makeIBInvoice);
             dispatch(makeIB_InvoiceActionSuccess({ Status: false }))
         }
-    }, [makeIBInvoice])
+    }, [makeIBInvoice]);
 
+    useEffect(arrowUpDounFunc("#tableArrow"), [OrderItemDetails]);
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
         value: index.id,
@@ -932,6 +934,7 @@ const Invoice = (props) => {
                                                 <Col xl="12">
                                                     <div className="table-responsive">
                                                         <BootstrapTable
+                                                            id="tableArrow"
                                                             keyField={"id"}
                                                             responsive
                                                             bordered={false}

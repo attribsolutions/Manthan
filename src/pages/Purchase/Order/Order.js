@@ -28,7 +28,7 @@ import {
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
+import { basicAmount, GstAmount, handleKeyDown, Amount, arrowUpDounFunc } from "./OrderPageCalulation";
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -43,8 +43,11 @@ import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { useRef } from "react";
+import $ from 'jquery';
 
 let editVal = {}
+
 
 function initialState(history) {
     let page_Id = '';
@@ -76,6 +79,7 @@ const Order = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const RoleID = loginRoleID();
+    const ref1 = useRef('')
 
     const fileds = {
         id: "",
@@ -326,6 +330,40 @@ const Order = (props) => {
         label: data.Name
     }));
 
+    useEffect(arrowUpDounFunc("#tableArrow"), [orderItemTable])
+
+    function arrowChange(e, ca, v) {
+        debugger
+        const a = ((e.keyCode > 36) && (e.keyCode < 40));
+        const b = e.keyCode === 46;
+        const c = e.keyCode === 110;
+
+        if (!/[0-9]/.test(e.key) && a && b && c) {
+            e.preventDefault();
+            return
+        }
+        const aa = ref1
+        const nodeList = document.querySelectorAll("Quantity");
+        const htmlCollection = document.getElementsByTagName("input")
+        var arr = Array.from(htmlCollection).filter(i => (e.target.name === i.name))
+
+        let text = "";
+        let eId = e.target.id
+        let hasnext = false
+        for (let x of arr) {
+            debugger
+            if (hasnext) {
+                x.focus();
+                hasnext = false
+            }
+            if (x.id === eId) { hasnext = true }
+            else { hasnext = false }
+
+
+            text = x;
+        }
+        debugger
+    }
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
 
@@ -371,26 +409,31 @@ const Order = (props) => {
             // sort: true,
             formatter: (value, row, k) => {
                 return (
-                    <span >
-                        <Input type="text"
-                            id={`Quantity${k}`}
-                            defaultValue={row.Quantity}
-                            key={`Quantity${row.id}`}
-                            className="text-end"
-                            onChange={(e) => {
-                                const val = e.target.value
-                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                                if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "qty")
-                                } else {
-                                    document.getElementById(`Quantity${k}`).value = row.Quantity
-                                }
-                                handleKeyDown(e, orderItemTable)
-                            }}
-                            autoComplete="off"
-                            onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
-                        />
-                    </span>
+                    // <span >
+                    <Input type="text"
+                        id={`Quantit__${k}`}
+                        name="Quantity"
+                        htmlFor={"Quantity"}
+                        defaultValue={row.Quantity}
+                        key={`Quantity${row.id}`}
+                        className="text-end move"
+                        // onChange={(e) => {
+                        //     const val = e.target.value
+                        //     let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                        //     if ((isnum) || (val === '')) {
+                        //         val_onChange(val, row, "qty")
+                        //     } else {
+                        //         document.getElementById(`Quantity${k}`).value = row.Quantity
+                        //     }
+                        //     handleKeyDown(e, orderItemTable)
+                        // }}
+                        autoComplete="off"
+                        onKeyDown={(e, v, c) => {
+                            // arrowChange(e, v, c)
+                            // handleKeyDown(e, orderItemTable)
+                        }}
+                    />
+                    // </span>
                 )
             },
 
@@ -450,6 +493,7 @@ const Order = (props) => {
                     <span className="text-right" >
                         <Input
                             type="text"
+
                             id={`Ratey${k}`}
                             key={`Ratey${row.id}`}
                             defaultValue={row.Rate}
@@ -573,7 +617,7 @@ const Order = (props) => {
             Customer: loginPartyID(),
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
-            RateParty: loginPartyID()
+            RateParty: supplierSelect.value
         })
         dispatch(GoButton_For_Order_Add(subPageMode, jsonBody))
     };
@@ -624,7 +668,6 @@ const Order = (props) => {
     };
 
     const saveHandeller = async (event) => {
-        debugger
         event.preventDefault();
 
         const btnId = event.target.id
@@ -649,7 +692,6 @@ const Order = (props) => {
                     Item: i.Item_id,
                     Quantity: isdel ? 0 : i.Quantity,
                     MRP: i.MRP_id,
-                    MRPValue: i.MRPValue,
                     Rate: i.Rate,
                     Unit: i.Unit_id,
                     BaseUnitQuantity: i.BaseUnitQuantity,
@@ -657,7 +699,6 @@ const Order = (props) => {
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
                     GST: i.GST_id,
-                    GSTPercentage:i.GSTPercentage,
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
@@ -856,6 +897,47 @@ const Order = (props) => {
             <React.Fragment>
                  <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
+
+                    {/* <table id="people">
+                        <thead>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Phone Number</th>
+                            <th>Location</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input /></td>
+                                <td><input /></td>
+                                <td><input /></td>
+                                <td><input /></td>
+                            </tr>
+                            <tr>
+                                <td><input /></td>
+                                <td><input /></td>
+                                <td><input /></td>
+                                <td><input /></td>
+                            </tr>
+                            <tr>
+                                <td><input /></td>
+                                <td><input /></td>
+                                <td><input /></td>
+                                <td><input /></td>
+                            </tr>
+                            <tr>
+                                <td><input /></td>
+                                <td><input /></td>
+                                <td><input /></td>
+                                <td><input /></td>
+                            </tr>
+                            <tr>
+                                <td><input /></td>
+                                <td><input /></td>
+                                <td><input /></td>
+                                <td><input /></td>
+                            </tr>
+                        </tbody>
+                    </table> */}
                     {RoleID === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
                             <div className=" mt-1 mb-2 row ">
@@ -1113,7 +1195,9 @@ const Order = (props) => {
                                                 <div className="table table-Rresponsive ">
                                                     <BootstrapTable
                                                         keyField={"id"}
+                                                        id="tableArrow"
                                                         responsive
+                                                        ref={ref1}
                                                         bordered={false}
                                                         striped={false}
                                                         classes={"table  table-bordered table-hover"}
