@@ -7,19 +7,34 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
+import {
+    BreadcrumbShowCountlabel,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginUserID } from "../../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginCompanyID,
+    loginUserID,
+    metaTagLabel
+} from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess, save_ImportFiledMap, save_ImportFiledMap_Success } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
+// import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess, save_ImportFiledMap, save_ImportFiledMap_Success } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
+import {
+    GoButton_ImportFiledMap_Add,
+    GoButton_ImportFiledMap_AddSuccess,
+    save_ImportFiledMap,
+    save_ImportFiledMap_Success
+} from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 
@@ -185,7 +200,7 @@ const ImportExcelFieldMap = (props) => {
         const invalid = []
 
         goButtonItem.forEach(i => {
-            
+
             if ((((i.Value === '') || (i.Value === null)) && (i.IsCompulsory === true))) {
                 invalid.push({ [i.FieldName]: "this filed Requird." })
             }
@@ -214,7 +229,7 @@ const ImportExcelFieldMap = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <form onSubmit={(event) => SaveHandler(event)} noValidate>
                     <div className="page-content">
