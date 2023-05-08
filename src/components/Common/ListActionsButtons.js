@@ -131,7 +131,7 @@ export const listPageActionsButtonFunc = (props) => {
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => {
-
+            
             const forceEdit = rowData.forceEdit;
             rowData["hasSelect"] = false
             return (
@@ -195,7 +195,8 @@ export const listPageActionsButtonFunc = (props) => {
                     }
 
                     {
-                        ((pageMode === mode.modeSTPList) && makeBtnShow && rowData.POType === 3) ?
+                        ((pageMode === mode.modeSTPList) && makeBtnShow) ?
+                            // ((pageMode === mode.modeSTPList) && makeBtnShow && rowData.POType === 3) ?  
                             < Button
                                 type="button"
                                 id={`btn-makeBtn-${rowData.id}`}
