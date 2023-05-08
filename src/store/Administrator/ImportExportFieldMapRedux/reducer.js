@@ -12,7 +12,7 @@ const INIT_STATE = {
   updateMsg: { Status: false },
 }
 
-const ImportFieldMap_Reducer = (state = INIT_STATE, action) => {
+const ImportExportFieldMap_Reducer = (state = INIT_STATE, action) => {
 
 
   switch (action.type) {
@@ -61,4 +61,4 @@ const ImportFieldMap_Reducer = (state = INIT_STATE, action) => {
   }
 }
 
-export default ImportFieldMap_Reducer
+export default ImportExportFieldMap_Reducer
