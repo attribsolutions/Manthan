@@ -307,7 +307,7 @@ export default function InvoiceForGRN() {
 
     // ]
     useEffect(() => {
-        debugger
+        
         let subPageMode = url.GRN_STP_3
         const gobtnId = `gobtn-${subPageMode}`
         const filtersBody = JSON.stringify({
@@ -331,7 +331,7 @@ export default function InvoiceForGRN() {
     }, [GRNitem])
 
     function makeBtnHandler(rowData, btnId) {
-        debugger
+        
         const list = [rowData]
         var isGRNSelect = ''
         var challanNo = ''
