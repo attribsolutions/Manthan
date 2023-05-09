@@ -19,7 +19,7 @@ export default function PaymentEntryList() {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            FromDate: currentDate,
+            FromDate:  "2023-01-01",
             ToDate: currentDate,
             CustomerID: "",
             PartyID: loginPartyID(),

@@ -100,7 +100,8 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
 
 }
 
-function* orderList_GoBtn_GenFunc({ config }) {              //  Order List Filter by subPageMode
+function* orderList_GoBtn_GenFunc({ config }) { 
+               //  Order List Filter by subPageMode
   try {
     const { subPageMode } = config
     let response;
