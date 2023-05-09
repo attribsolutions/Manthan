@@ -411,27 +411,27 @@ const Order = (props) => {
                 return (
                     // <span >
                     <Input type="text"
-                        id={`Quantit__${k}`}
+                        id={`Quantity${k}`}
                         name="Quantity"
                         htmlFor={"Quantity"}
                         defaultValue={row.Quantity}
                         key={`Quantity${row.id}`}
                         className="text-end move"
-                        // onChange={(e) => {
-                        //     const val = e.target.value
-                        //     let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                        //     if ((isnum) || (val === '')) {
-                        //         val_onChange(val, row, "qty")
-                        //     } else {
-                        //         document.getElementById(`Quantity${k}`).value = row.Quantity
-                        //     }
-                        //     handleKeyDown(e, orderItemTable)
-                        // }}
+                        onChange={(e) => {
+                            const val = e.target.value
+                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                            if ((isnum) || (val === '')) {
+                                val_onChange(val, row, "qty")
+                            } else {
+                                document.getElementById(`Quantity${k}`).value = row.Quantity
+                            }
+                            handleKeyDown(e, orderItemTable)
+                        }}
                         autoComplete="off"
-                        onKeyDown={(e, v, c) => {
+                        // onKeyDown={(e, v, c) => {
                             // arrowChange(e, v, c)
                             // handleKeyDown(e, orderItemTable)
-                        }}
+                        // }}
                     />
                     // </span>
                 )
@@ -576,7 +576,7 @@ const Order = (props) => {
     };
 
     function val_onChange(val, row, type) {
-
+        debugger
         if (type === "qty") {
             row["Quantity"] = val;
         }
@@ -669,7 +669,7 @@ const Order = (props) => {
 
     const saveHandeller = async (event) => {
         event.preventDefault();
-
+        debugger
         const btnId = event.target.id
         btnIsDissablefunc({ btnId, state: true })
 
@@ -692,6 +692,7 @@ const Order = (props) => {
                     Item: i.Item_id,
                     Quantity: isdel ? 0 : i.Quantity,
                     MRP: i.MRP_id,
+                    MRPValue:i.MRPValue,
                     Rate: i.Rate,
                     Unit: i.Unit_id,
                     BaseUnitQuantity: i.BaseUnitQuantity,
@@ -699,6 +700,7 @@ const Order = (props) => {
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
                     GST: i.GST_id,
+                    GSTPercentage:i.GSTPercentage,
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
@@ -895,7 +897,7 @@ const Order = (props) => {
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
 
                     {/* <table id="people">
