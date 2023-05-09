@@ -67,8 +67,8 @@ const LoadingSheetList = () => {
             page_Id = pageId.LOADING_SHEET;
             masterPath = url.LOADING_SHEET;
             newBtnPath = url.LOADING_SHEET;
-            page_Mode = mode.modeSTPList
-            makeBtnShow = true;
+            // page_Mode = mode.modeSTPList
+            // makeBtnShow = true;
         }
         setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
