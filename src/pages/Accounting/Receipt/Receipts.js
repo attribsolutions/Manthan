@@ -303,12 +303,12 @@ const Receipts = (props) => {
                     <CInput
                         key={`Quantity-${row.Invoice}`}
                         id={`Quantity-${row.Invoice}`}
-                        pattern={decimalRegx}
+                        cpattern={decimalRegx}
                         defaultValue={row.Calculate}
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
-                        onKeyDown={(e) => handleKeyDown(e, Data)}
+                        // onKeyDown={(e) => handleKeyDown(e, Data)}
                     />
                 </span>)
             },
@@ -799,7 +799,7 @@ const Receipts = (props) => {
 
                                                 name="AmountPaid"
                                                 id="AmountPaid"
-                                                pattern={decimalRegx}
+                                                cpattern={decimalRegx}
                                                 // defaultValue={values.AmountPaid}
                                                 value={values.AmountPaid}
                                                 disabled={page_Mode === mode.modeSTPsave ? true : false}

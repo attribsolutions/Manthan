@@ -64,7 +64,7 @@ const SalesReturn = (props) => {
 
     const [returnMode, setrRturnMode] = useState(0);
     const [imageTable, setImageTable] = useState([]);
-  
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -271,7 +271,7 @@ const SalesReturn = (props) => {
                         defaultValue={row.Qty}
                         autoComplete="off"
                         type="text"
-                        pattern={decimalRegx}
+                        cpattern={decimalRegx}
                         className="col col-sm text-end"
                         onChange={(event) => quantityHandler(event, row)}
                     />
@@ -319,7 +319,10 @@ const SalesReturn = (props) => {
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
                                 options={row.ItemMRPDetails}
-                                onChange={(event) => { row.MRP = event.value }}
+                                onChange={(event) => {
+                                    row.MRP = event.value
+                                    row.MRPValue = event.label
+                                }}
                             />
                         </span></>)
             }
@@ -361,7 +364,7 @@ const SalesReturn = (props) => {
                         defaultValue={row.Rate}
                         disabled={returnMode === 1 && true}
                         type="text"
-                        pattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
+                        cpattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
                         className="col col-sm text-end"
                         onChange={(event) => { row.Rate = event.target.value }}
                     />
@@ -614,7 +617,7 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        
+        debugger
         event.preventDefault();
 
         const btnId = event.target.id
@@ -637,14 +640,16 @@ const SalesReturn = (props) => {
                 BatchDate: i.BatchDate,
                 Amount: calculate.tAmount,
                 MRP: returnMode === 1 ? i.RowData.MRP : i.MRP,
+                MRPValue: returnMode === 1 ? i.RowData.MRPValue : i.MRPValue,
                 Rate: i.Rate,
                 BasicAmount: calculate.baseAmt,
                 GSTAmount: calculate.gstAmt,
                 GST: returnMode === 1 ? i.RowData.GST : i.GST_ID,
+                // GST: returnMode === 1 ? i.RowData.GSTPercentage : i.GSTPercentage,
+                GSTPercentage: gstPercentage,
                 CGST: calculate.CGST,
                 SGST: calculate.SGST,
                 IGST: 0,
-                GSTPercentage: gstPercentage,
                 CGSTPercentage: (gstPercentage / 2),
                 SGSTPercentage: (gstPercentage / 2),
                 IGSTPercentage: 0,
@@ -726,7 +731,7 @@ const SalesReturn = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 

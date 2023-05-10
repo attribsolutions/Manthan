@@ -12,7 +12,6 @@ import * as report from '../../../Reports/ReportIndex'
 import { updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
@@ -108,7 +107,7 @@ const CreditList = () => {
         setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-
+        dispatch(BreadcrumbShowCountlabel(`${buttonMsgLable} Count : 0`))
     }, []);
 
     // useEffect(() => {
