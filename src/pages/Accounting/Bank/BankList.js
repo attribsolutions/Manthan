@@ -11,7 +11,6 @@ import {
     delete_Bank_ID,
     editBankID,
     getBanklist,
-    getBankList,
     saveBankMaster_Success,
     updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";

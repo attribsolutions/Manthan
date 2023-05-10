@@ -30,7 +30,6 @@ function* Save_Method_ForBankMaster_GenFun({ config }) {             // Save API
     } catch (error) { CommonConsole(error) }
 }
 
-
 function* get_Bank_List_GenratorFunction() {  
     try {
         
