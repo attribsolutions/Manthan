@@ -10,6 +10,7 @@ import {
     deleteBankIDSuccess,
     delete_Bank_ID,
     editBankID,
+    getBanklist,
     getBankList,
     saveBankMaster_Success,
     updateBankIDSuccess
@@ -33,7 +34,7 @@ const BankList = () => {
     );
 
     const action = {
-        getList: getBankList,
+        getList: getBanklist,
         editId: editBankID,
         deleteId: delete_Bank_ID,
         postSucc: saveBankMaster_Success,
