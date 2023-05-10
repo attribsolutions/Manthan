@@ -64,7 +64,7 @@ const SalesReturn = (props) => {
 
     const [returnMode, setrRturnMode] = useState(0);
     const [imageTable, setImageTable] = useState([]);
-  
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -271,7 +271,7 @@ const SalesReturn = (props) => {
                         defaultValue={row.Qty}
                         autoComplete="off"
                         type="text"
-                        pattern={decimalRegx}
+                        cpattern={decimalRegx}
                         className="col col-sm text-end"
                         onChange={(event) => quantityHandler(event, row)}
                     />
@@ -361,7 +361,7 @@ const SalesReturn = (props) => {
                         defaultValue={row.Rate}
                         disabled={returnMode === 1 && true}
                         type="text"
-                        pattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
+                        cpattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
                         className="col col-sm text-end"
                         onChange={(event) => { row.Rate = event.target.value }}
                     />
@@ -614,7 +614,7 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
 
         const btnId = event.target.id
@@ -726,7 +726,7 @@ const SalesReturn = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
