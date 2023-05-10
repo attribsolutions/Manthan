@@ -83,7 +83,7 @@ export const arrowUpDounFunc = (tableId) => {
 
             // select all on focus
             this.find('input').keydown(function (e) {
-
+                debugger
                 // shortcut for key other than arrow keys
                 if ($.inArray(e.which, [arrow.left, arrow.up, arrow.right, arrow.down]) < 0) { return; }
 
@@ -125,7 +125,7 @@ export const arrowUpDounFunc = (tableId) => {
                         td.find('input').each(function (i2, tdEle) {
                             debugger
                             var thisIndex = $(tdEle).index('input:text');
-                            if (next === thisIndex) {
+                            if (pre === thisIndex) {
                                 tdPreInput = tdEle
                             }
                         });

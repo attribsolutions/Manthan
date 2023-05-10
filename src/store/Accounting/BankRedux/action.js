@@ -11,7 +11,6 @@ import {
     UPDATE_BANK_ID_SUCCESS
   } from "./actionType";
   
-  
   export const getBanklist = () => ({// get List Action
     type: GET_BANK_LIST,
   });

@@ -332,38 +332,6 @@ const Order = (props) => {
 
     useEffect(arrowUpDounFunc("#tableArrow"), [orderItemTable])
 
-    function arrowChange(e, ca, v) {
-        debugger
-        const a = ((e.keyCode > 36) && (e.keyCode < 40));
-        const b = e.keyCode === 46;
-        const c = e.keyCode === 110;
-
-        if (!/[0-9]/.test(e.key) && a && b && c) {
-            e.preventDefault();
-            return
-        }
-        const aa = ref1
-        const nodeList = document.querySelectorAll("Quantity");
-        const htmlCollection = document.getElementsByTagName("input")
-        var arr = Array.from(htmlCollection).filter(i => (e.target.name === i.name))
-
-        let text = "";
-        let eId = e.target.id
-        let hasnext = false
-        for (let x of arr) {
-            debugger
-            if (hasnext) {
-                x.focus();
-                hasnext = false
-            }
-            if (x.id === eId) { hasnext = true }
-            else { hasnext = false }
-
-
-            text = x;
-        }
-        debugger
-    }
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
 

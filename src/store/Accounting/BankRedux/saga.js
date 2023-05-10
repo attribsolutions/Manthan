@@ -30,6 +30,7 @@ function* Save_Method_ForBankMaster_GenFun({ config }) {             // Save API
     } catch (error) { CommonConsole(error) }
 }
 
+
 function* get_Bank_List_GenratorFunction() {  
     try {
         
@@ -40,7 +41,7 @@ function* get_Bank_List_GenratorFunction() {
 
 
 function* Delete_Bank_ID_GenratorFunction({ config }) {   // delete API
- 
+
     try {
         const response = yield call(detelet_Bank_List_Api, config);
         yield put(deleteBankIDSuccess(response))

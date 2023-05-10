@@ -1,5 +1,6 @@
 import axios from "axios"
 import { del, get, put, post, postForget, } from "./api_helper"
+import { orderApporval } from "./sapApi"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -187,7 +188,7 @@ export const Party_Master_Get_API = (jsonbody) => post(url.PARTY_MASTER_FILTER_A
 export const Party_Master_Post_API = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_API, jsonBody, btnId)// post api
 export const Party_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.PARTY_MASTER_API}/${deleteId}`, btnId)// delete api
 export const Party_Master_Edit_API = ({ editId, btnId }) => get(`${url.PARTY_MASTER_API}/${editId}`, btnId)// edit api
-export const Party_Master_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_API}/${updateId}`, jsonBody,btnId)// update api
+export const Party_Master_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_API}/${updateId}`, jsonBody, btnId)// update api
 export const GetDistrictOnState_For_Dropdown = (id) => get(`${url.GetDistrictOnState}/${id}`)//  GetDistrictOnState DropDown API
 export const GetAddressTypes_For_Dropdown = () => get(url.ADDRESSTYPES)//  get addresstypes
 export const GetPartyTypes_For_Dropdown = () => get(url.PARTYTYPES)//  get partytypes
@@ -396,6 +397,7 @@ export const SalesMan_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url
 export const SalesMan_Delete_API = ({ deleteId, btnId }) => del(`${url.SALESMAN_FOR_MASTER}/${deleteId}`, btnId) // delete api
 
 //Bank Api
+
 export const get_Bank_List_Api = () => get(url.BANK_LIST)
 export const Post_Bank_Master_API = ({ jsonBody, btnId }) => post(url.BANK, jsonBody, btnId)// post api
 export const edit_Bank_List_Api = ({ editId, btnId }) => get(`${url.BANK}/${editId}`, btnId) // edit api
@@ -440,6 +442,7 @@ export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}
 export const OrderPage_Delete_API = ({ deleteId, btnId }) => del(`${url.ORDER_PAGE_API}/${deleteId}`, btnId)//Delete Order
 export const OrderPage_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.ORDER_PAGE_API}/${updateId}`, jsonBody, btnId)// update api
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
+export const orderApproval_Save_API = ({ jsonBody, btnId }) => orderApporval(jsonBody, btnId)//order approval
 
 // OrderType Dropdown API
 export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api

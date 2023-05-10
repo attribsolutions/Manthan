@@ -10,7 +10,7 @@ import {
     deleteBankIDSuccess,
     delete_Bank_ID,
     editBankID,
-    getBanklist,
+    getBankList,
     saveBankMaster_Success,
     updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
@@ -33,7 +33,7 @@ const BankList = () => {
     );
 
     const action = {
-        getList: getBanklist,
+        getList: getBankList,
         editId: editBankID,
         deleteId: delete_Bank_ID,
         postSucc: saveBankMaster_Success,
