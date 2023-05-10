@@ -40,7 +40,7 @@ function* get_Bank_List_GenratorFunction() {
 
 
 function* Delete_Bank_ID_GenratorFunction({ config }) {   // delete API
- 
+
     try {
         const response = yield call(detelet_Bank_List_Api, config);
         yield put(deleteBankIDSuccess(response))
