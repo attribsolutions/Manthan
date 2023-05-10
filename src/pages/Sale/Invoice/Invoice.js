@@ -546,7 +546,7 @@ const Invoice = (props) => {
                             <label className="label" >Type</label>
                             <div id="select">
                                 <Select
-                                    className="react-dropdown "
+                                    classNamePrefix="select2-selection"
                                     defaultValue={{ value: 2, label: " % " }}
                                     options={[{ value: 1, label: "Rs" },
                                     { value: 2, label: "%" }]}

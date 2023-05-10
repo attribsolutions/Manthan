@@ -78,6 +78,7 @@ const CommonPurchaseList = (props) => {
     props.action;
 
   const {
+
     editBodyfunc,
     deleteBodyfunc,
     copyBodyfunc,
@@ -96,6 +97,8 @@ const CommonPurchaseList = (props) => {
     HeaderContent = () => {
       return null;
     },
+    orderApproval,
+
   } = props;
 
   const { PageFieldMaster = [] } = { ...pageField };
@@ -180,7 +183,7 @@ const CommonPurchaseList = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
-    if (editData.Status === true) {
+    if ((editData.Status === true) && !(editData.pageMode === mode.orderApproval)) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
           pathname: masterPath,
@@ -190,6 +193,8 @@ const CommonPurchaseList = (props) => {
       } else {
         setmodal_edit(true);
       }
+    } else if ((editData.Status === true) && (editData.pageMode === mode.orderApproval)) {
+      orderApproval(editData)
     }
   }, [editData]);
 
@@ -305,6 +310,7 @@ const CommonPurchaseList = (props) => {
           copyBodyfunc: copyBodyfunc,
           makeBtnFunc: makeBtnFunc,
           pageMode: pageMode,
+          orderApproval: orderApproval
         })
       );
     }
