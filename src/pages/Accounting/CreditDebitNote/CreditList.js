@@ -102,7 +102,7 @@ const CreditList = () => {
         setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-
+        dispatch(BreadcrumbShowCountlabel(`${buttonMsgLable} Count : 0`))
     }, []);
 
     // useEffect(() => {
