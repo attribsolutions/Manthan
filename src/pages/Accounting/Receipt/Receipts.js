@@ -101,9 +101,9 @@ const Receipts = (props) => {
         dispatch(BankListAPI())
     }, []);
 
-    useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Invoice Count :${Data.length}`))
-    }, [ReceiptGoButton]);
+    // useEffect(() => {
+    //     dispatch(BreadcrumbShowCountlabel(`Invoice Count :${Data.length}`))
+    // }, [ReceiptGoButton]);
 
     // Customer dropdown Options
     useEffect(() => {

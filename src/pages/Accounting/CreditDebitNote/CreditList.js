@@ -20,7 +20,14 @@ import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import Flatpickr from "react-flatpickr"
 import { Go_Button } from "../../../components/Common/CommonButton";
-import { CredietDebitType, Edit_CreditList_ID, GetCreditList, deleteCreditlistSuccess, delete_CreditList_ID, GetCreditListSuccess } from "../../../store/Accounting/CreditRedux/action";
+import {
+    CredietDebitType,
+    Edit_CreditList_ID,
+    GetCreditList,
+    deleteCreditlistSuccess,
+    delete_CreditList_ID,
+    GetCreditListSuccess
+} from "../../../store/Accounting/CreditRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const CreditList = () => {
@@ -96,7 +103,6 @@ const CreditList = () => {
             newBtnPath = url.DEBIT;
             buttonMsgLable = "Debit"
         }
-
         setOtherState({ masterPath, newBtnPath, buttonMsgLable, page_Id })
         setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -116,13 +122,13 @@ const CreditList = () => {
 
     //   Note Type Api for Type identify
     useEffect(() => {
-
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
             TypeID: 5
         });
         dispatch(CredietDebitType(jsonBody));
     }, []);
+
 
     // Retailer DropDown List Type 1 for credit list drop down
     useEffect(() => {
