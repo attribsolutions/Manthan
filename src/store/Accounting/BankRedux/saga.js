@@ -3,13 +3,13 @@ import {
     saveBankMaster_Success,
     deleteBankIDSuccess,
     editBankIDSuccess,
-    postBanklistSuccess,
+    getBankListSuccess,
     updateBankIDSuccess
 } from "./action";
 import {
     detelet_Bank_List_Api,
     edit_Bank_List_Api,
-    post_Bank_List_Api,
+    BankList_Get_API,
     Post_Bank_Master_API,
     update_Bank_List_Api
 } from "../../../helpers/backend_helper";
@@ -30,19 +30,16 @@ function* Save_Method_ForBankMaster_GenFun({ config }) {             // Save API
     } catch (error) { CommonConsole(error) }
 }
 
-function* post_Bank_List_GenratorFunction({ jsonBody} ) {  
-              // postList API
-    // const filters = loginJsonBody();// required only PartyID and CompanyID
+function* get_Bank_List_Genfun() {
     try {
-        
-        const response = yield call(post_Bank_List_Api, jsonBody);
-        yield put(postBanklistSuccess(response.Data));
+        const response = yield call(BankList_Get_API);
+        yield put(getBankListSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
 
 
 function* Delete_Bank_ID_GenratorFunction({ config }) {   // delete API
- 
+
     try {
         const response = yield call(detelet_Bank_List_Api, config);
         yield put(deleteBankIDSuccess(response))
@@ -67,7 +64,7 @@ function* Update_Bank_ID_GenratorFunction({ config }) {             // update AP
 
 function* BankSaga() {
     yield takeEvery(SAVE_BANK_MASTER, Save_Method_ForBankMaster_GenFun)
-    yield takeEvery(POST_BANK_LIST, post_Bank_List_GenratorFunction)
+    yield takeEvery(POST_BANK_LIST, get_Bank_List_Genfun)
     yield takeEvery(DELETE_BANK_ID, Delete_Bank_ID_GenratorFunction)
     yield takeEvery(EDIT_BANK_ID, Edit_Bank_ID_GenratorFunction)
     yield takeEvery(UPDATE_BANK_ID, Update_Bank_ID_GenratorFunction)

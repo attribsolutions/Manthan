@@ -12,13 +12,13 @@ import {
   } from "./actionType";
   
   
-  export const postBanklist = (jsonBody) => ({// get List Action
+  export const getBankList = (jsonBody) => ({// get List Action
     type: POST_BANK_LIST,
     jsonBody,
     
   });
   
-  export const postBanklistSuccess = (resp) => ({// get List success
+  export const getBankListSuccess = (resp) => ({// get List success
     type: POST_BANK_LIST_SUCCESS,
     payload: resp,
   });

@@ -187,7 +187,7 @@ export const Party_Master_Get_API = (jsonbody) => post(url.PARTY_MASTER_FILTER_A
 export const Party_Master_Post_API = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_API, jsonBody, btnId)// post api
 export const Party_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.PARTY_MASTER_API}/${deleteId}`, btnId)// delete api
 export const Party_Master_Edit_API = ({ editId, btnId }) => get(`${url.PARTY_MASTER_API}/${editId}`, btnId)// edit api
-export const Party_Master_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_API}/${updateId}`, jsonBody,btnId)// update api
+export const Party_Master_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_API}/${updateId}`, jsonBody, btnId)// update api
 export const GetDistrictOnState_For_Dropdown = (id) => get(`${url.GetDistrictOnState}/${id}`)//  GetDistrictOnState DropDown API
 export const GetAddressTypes_For_Dropdown = () => get(url.ADDRESSTYPES)//  get addresstypes
 export const GetPartyTypes_For_Dropdown = () => get(url.PARTYTYPES)//  get partytypes
@@ -396,7 +396,7 @@ export const SalesMan_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url
 export const SalesMan_Delete_API = ({ deleteId, btnId }) => del(`${url.SALESMAN_FOR_MASTER}/${deleteId}`, btnId) // delete api
 
 //Bank Api
-export const post_Bank_List_Api = (jsonBody) => post(url.BANK_LIST, jsonBody)
+export const BankList_Get_API = () => get(url.BANK_LIST)
 export const Post_Bank_Master_API = ({ jsonBody, btnId }) => post(url.BANK, jsonBody, btnId)// post api
 export const edit_Bank_List_Api = ({ editId, btnId }) => get(`${url.BANK}/${editId}`, btnId) // edit api
 export const update_Bank_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.BANK}/${updateId}`, jsonBody, btnId)// update
