@@ -62,6 +62,11 @@ function* InvoiceListGenFunc({ config }) {
     }
 
     const newList = yield response.Data.map((i) => {
+      if (i.LoadingSheetCreated === true) {
+        i["LoadingSheetCreated"] = "LoadingSheet Created"
+      } else {
+        i["LoadingSheetCreated"] = ""
+      }
       i["preInvoiceDate"] = i.InvoiceDate
       i.InvoiceDate = concatDateAndTime(i.InvoiceDate, i.CreatedOn)
       return i

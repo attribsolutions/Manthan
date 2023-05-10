@@ -33,7 +33,8 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnFunc = () => { },
         pageMode,
         makeBtnName,
-        makeBtnShow = false
+        makeBtnShow = false,
+        orderApproval = false,
     } = props;
 
     function editHandler(rowData, btnmode, btnId) {
@@ -131,7 +132,7 @@ export const listPageActionsButtonFunc = (props) => {
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => {
-            
+
             const forceEdit = rowData.forceEdit;
             rowData["hasSelect"] = false
             return (
@@ -317,7 +318,22 @@ export const listPageActionsButtonFunc = (props) => {
                             </Button>
                             : null
                     }
-
+                    {
+                        ((orderApproval) && (userAccState.RoleAccess_IsView)) ?
+                            <Button
+                                type="button"
+                                id={`btn-orderApproval-${rowData.id}`}
+                                className={editBtnCss}
+                                title={`Order Approval ${ButtonMsgLable}`}
+                                onClick={() => {
+                                    const btnId = `btn-orderApproval-${rowData.id}`;
+                                    editHandler(rowData, mode.orderApproval, btnId)
+                                }}
+                            >
+                                <i className="bx bxs-copy font-size-18 "></i>
+                            </Button>
+                            : null
+                    }
 
                 </div >
             )
