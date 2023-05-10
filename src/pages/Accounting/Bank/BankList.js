@@ -10,7 +10,7 @@ import {
     deleteBankIDSuccess,
     delete_Bank_ID,
     editBankID,
-    postBanklist,
+    getBankList,
     saveBankMaster_Success,
     updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
@@ -34,7 +34,7 @@ const BankList = () => {
     );
 
     const action = {
-        getList: postBanklist,
+        getList: getBankList,
         editId: editBankID,
         deleteId: delete_Bank_ID,
         postSucc: saveBankMaster_Success,
@@ -47,7 +47,7 @@ const BankList = () => {
         const page_Id = pageId.BANK_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(postBanklist(getlistBody()));
+        dispatch(getBankList(getlistBody()));
     }, []);
 
 
