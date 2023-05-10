@@ -128,12 +128,19 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
       i.DeliveryDate = (`${DeliveryDate}`)
 
-      if ((i.Inward === 0)) {
+      if (i.Inward === 0) {
         i.Inward = "Open"
         i.forceEdit = false
       } else {
         i.Inward = "Close"
         i.forceEdit = true
+      }
+      if (i.InvoiceCreated === true) {
+        i.InvoiceCreated = "Invoice Created"
+        i.forceMakeBtn = true
+      } else {
+        i.InvoiceCreated = ""
+        i.forceMakeBtn = false
       }
       return i
     })
