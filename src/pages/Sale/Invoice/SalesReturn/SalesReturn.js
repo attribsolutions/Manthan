@@ -319,7 +319,10 @@ const SalesReturn = (props) => {
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
                                 options={row.ItemMRPDetails}
-                                onChange={(event) => { row.MRP = event.value }}
+                                onChange={(event) => {
+                                    row.MRP = event.value
+                                    row.MRPValue = event.label
+                                }}
                             />
                         </span></>)
             }
@@ -614,7 +617,7 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-
+        debugger
         event.preventDefault();
 
         const btnId = event.target.id
@@ -637,14 +640,16 @@ const SalesReturn = (props) => {
                 BatchDate: i.BatchDate,
                 Amount: calculate.tAmount,
                 MRP: returnMode === 1 ? i.RowData.MRP : i.MRP,
+                MRPValue: returnMode === 1 ? i.RowData.MRPValue : i.MRPValue,
                 Rate: i.Rate,
                 BasicAmount: calculate.baseAmt,
                 GSTAmount: calculate.gstAmt,
                 GST: returnMode === 1 ? i.RowData.GST : i.GST_ID,
+                // GST: returnMode === 1 ? i.RowData.GSTPercentage : i.GSTPercentage,
+                GSTPercentage: gstPercentage,
                 CGST: calculate.CGST,
                 SGST: calculate.SGST,
                 IGST: 0,
-                GSTPercentage: gstPercentage,
                 CGSTPercentage: (gstPercentage / 2),
                 SGSTPercentage: (gstPercentage / 2),
                 IGSTPercentage: 0,
