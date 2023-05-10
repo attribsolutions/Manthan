@@ -14,7 +14,6 @@ import {
     saveBankMaster_Success,
     updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
-import { loginCompanyID } from "../../../components/Common/CommonFunction";
 
 
 const BankList = () => {
@@ -47,15 +46,8 @@ const BankList = () => {
         const page_Id = pageId.BANK_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(getBankList(getlistBody()));
+        dispatch(getBanklist());
     }, []);
-
-
-    function getlistBody() {
-        return JSON.stringify({
-            CompanyID: loginCompanyID(),
-        });
-    }
 
     const { pageField, userAccess = [] } = reducers;
 
@@ -67,7 +59,6 @@ const BankList = () => {
                         action={action}
                         reducers={reducers}
                         MasterModal={BankMaster}
-                        getListbodyFunc={getlistBody}
                         masterPath={url.BANK}
                         ButtonMsgLable={"Bank"}
                         deleteName={"Name"}

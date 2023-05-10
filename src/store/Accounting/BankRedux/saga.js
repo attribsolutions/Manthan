@@ -3,20 +3,20 @@ import {
     saveBankMaster_Success,
     deleteBankIDSuccess,
     editBankIDSuccess,
-    getBankListSuccess,
+    getBanklistSuccess,
     updateBankIDSuccess
 } from "./action";
 import {
     detelet_Bank_List_Api,
     edit_Bank_List_Api,
-    BankList_Get_API,
+    get_Bank_List_Api,
     Post_Bank_Master_API,
     update_Bank_List_Api
 } from "../../../helpers/backend_helper";
 import {
     DELETE_BANK_ID,
     EDIT_BANK_ID,
-    POST_BANK_LIST,
+    GET_BANK_LIST,
     SAVE_BANK_MASTER,
     UPDATE_BANK_ID
 } from "./actionType";
@@ -30,10 +30,12 @@ function* Save_Method_ForBankMaster_GenFun({ config }) {             // Save API
     } catch (error) { CommonConsole(error) }
 }
 
-function* get_Bank_List_Genfun() {
+
+function* get_Bank_List_GenratorFunction() {  
     try {
-        const response = yield call(BankList_Get_API);
-        yield put(getBankListSuccess(response.Data));
+        
+        const response = yield call(get_Bank_List_Api);
+        yield put(getBanklistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
 
@@ -64,7 +66,7 @@ function* Update_Bank_ID_GenratorFunction({ config }) {             // update AP
 
 function* BankSaga() {
     yield takeEvery(SAVE_BANK_MASTER, Save_Method_ForBankMaster_GenFun)
-    yield takeEvery(POST_BANK_LIST, get_Bank_List_Genfun)
+    yield takeEvery(GET_BANK_LIST, get_Bank_List_GenratorFunction)
     yield takeEvery(DELETE_BANK_ID, Delete_Bank_ID_GenratorFunction)
     yield takeEvery(EDIT_BANK_ID, Edit_Bank_ID_GenratorFunction)
     yield takeEvery(UPDATE_BANK_ID, Update_Bank_ID_GenratorFunction)

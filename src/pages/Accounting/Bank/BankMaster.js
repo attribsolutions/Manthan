@@ -81,7 +81,7 @@ const BankMaster = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
-  
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -126,7 +126,7 @@ const BankMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name} = hasEditVal
+                const { id, Name } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
@@ -234,7 +234,7 @@ const BankMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <Container fluid>

@@ -5,22 +5,19 @@ import {
     DELETE_BANK_ID_SUCCESS,
     EDIT_BANK_ID,
     EDIT_BANK_ID_SUCCESS,
-    POST_BANK_LIST,
-    POST_BANK_LIST_SUCCESS,
+    GET_BANK_LIST,
+    GET_BANK_LIST_SUCCESS,
     UPDATE_BANK_ID,
     UPDATE_BANK_ID_SUCCESS
   } from "./actionType";
   
-  
-  export const getBankList = (jsonBody) => ({// get List Action
-    type: POST_BANK_LIST,
-    jsonBody,
-    
+  export const getBanklist = () => ({// get List Action
+    type: GET_BANK_LIST,
   });
   
-  export const getBankListSuccess = (resp) => ({// get List success
-    type: POST_BANK_LIST_SUCCESS,
-    payload: resp,
+  export const getBanklistSuccess = (pages) => ({// get List success
+    type: GET_BANK_LIST_SUCCESS,
+    payload: pages,
   });
   
   export const saveBankMaster = (config = {}) => ({// save Action
