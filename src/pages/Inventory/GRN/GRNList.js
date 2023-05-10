@@ -87,7 +87,7 @@ const GRNList = () => {
             masterPath = url.GRN_ADD_3;
             newBtnPath = url.GRN_STP_3;
             page_Mode = mode.modeSTPList
-            makeBtnShow = true;
+            makeBtnShow = false;
         }
         setSubPageMode(subPageMode)
         setOtherState({ masterPath, makeBtnShow, newBtnPath })

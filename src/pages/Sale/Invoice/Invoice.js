@@ -760,7 +760,7 @@ const Invoice = (props) => {
                         const calculate = discountCalculate(ele, index)
 
                         grand_total = grand_total + Number(calculate.tAmount)
-
+                        debugger
                         invoiceItems.push({
                             Item: index.Item,
                             Unit: index.UnitDrop.value,
@@ -771,10 +771,12 @@ const Invoice = (props) => {
                             BaseUnitQuantity: ele.BaseUnitQuantity,
                             LiveBatch: ele.LiveBatche,
                             MRP: ele.LiveBatcheMRPID,
+                            MRPValue: ele.MRP,//changes
                             Rate: ele.Rate,
                             BasicAmount: calculate.discountBaseAmt,
                             GSTAmount: calculate.gstAmt,
                             GST: ele.LiveBatcheGSTID,
+                            GSTPercentage: ele.GST,// changes
                             CGST: calculate.CGST,
                             SGST: calculate.SGST,
                             IGST: 0,
@@ -848,7 +850,7 @@ const Invoice = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
 
