@@ -32,7 +32,7 @@ import *as url from "../../../routes/route_url"
 
 
 function* goButtonGenFunc(action) {                      // GO-Botton order Add Page by subPageMode  
-   
+
   try {
 
     const { subPageMode, data } = action
@@ -100,16 +100,16 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
 
 }
 
-function* orderList_GoBtn_GenFunc({ config }) { 
-               //  Order List Filter by subPageMode
+function* orderList_GoBtn_GenFunc({ config }) {
+  //  Order List Filter by subPageMode
   try {
     const { subPageMode } = config
     let response;
     let newList;
-    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2)||(subPageMode === url.ORDER_LIST_4)) {
+    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2) || (subPageMode === url.ORDER_LIST_4)) {
       response = yield call(OrderList_get_Filter_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
-    else if ((subPageMode === url.GRN_STP_1)||subPageMode === url.GRN_STP_3) {
+    else if ((subPageMode === url.GRN_STP_1) || subPageMode === url.GRN_STP_3) {
       response = yield call(GRN_STP_for_orderList_goBtn, config); // GO-Botton IB-invoice Add Page API
     }
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
@@ -125,12 +125,19 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
       i.DeliveryDate = (`${DeliveryDate}`)
 
-      if ((i.Inward === 0)) {
+      if (i.Inward === 0) {
         i.Inward = "Open"
         i.forceEdit = false
       } else {
         i.Inward = "Close"
         i.forceEdit = true
+      }
+      if (i.InvoiceCreated === true) {
+        i.InvoiceCreated = "Invoice Created"
+        i.forceMakeBtn = true
+      } else {
+        i.InvoiceCreated = ""
+        i.forceMakeBtn = false
       }
       return i
     })

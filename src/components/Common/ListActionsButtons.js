@@ -131,8 +131,9 @@ export const listPageActionsButtonFunc = (props) => {
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => {
-            
+
             const forceEdit = rowData.forceEdit;
+            const forceMakeBtn = rowData.forceMakeBtn;
             rowData["hasSelect"] = false
             return (
                 // <div className="d-flex gap-3" style={{ display:'', justifyContent: 'right'}} >
@@ -195,7 +196,7 @@ export const listPageActionsButtonFunc = (props) => {
                     }
 
                     {
-                        ((pageMode === mode.modeSTPList) && makeBtnShow) ?
+                        ((pageMode === mode.modeSTPList) && (makeBtnShow) && !(forceMakeBtn)) ?
                             // ((pageMode === mode.modeSTPList) && makeBtnShow && rowData.POType === 3) ?  
                             < Button
                                 type="button"
