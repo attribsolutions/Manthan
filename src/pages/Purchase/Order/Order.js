@@ -393,7 +393,7 @@ const Order = (props) => {
                             } else {
                                 document.getElementById(`Quantity${k}`).value = row.Quantity
                             }
-                            handleKeyDown(e, orderItemTable)
+                            // handleKeyDown(e, orderItemTable)
                         }}
                         autoComplete="off"
                         // onKeyDown={(e, v, c) => {
@@ -476,7 +476,7 @@ const Order = (props) => {
                                     document.getElementById(`Ratey${k}`).value = row.Rate
                                 }
                             }}
-                            onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
+                            // onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
                         />
                     </span>
                 )

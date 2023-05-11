@@ -78,12 +78,12 @@ export const arrowUpDounFunc = (tableId) => {
     return () => {
         // (function ($) {
         $.fn.enableCellNavigation = function () {
-            debugger
+
             var arrow = { left: 37, up: 38, right: 39, down: 40 };
 
             // select all on focus
             this.find('input').keydown(function (e) {
-                debugger
+
                 // shortcut for key other than arrow keys
                 if ($.inArray(e.which, [arrow.left, arrow.up, arrow.right, arrow.down]) < 0) { return; }
 
@@ -102,14 +102,68 @@ export const arrowUpDounFunc = (tableId) => {
                 switch (e.which) {
 
                     case arrow.left: {
+                       
+
                         if (input.selectionStart == 0) {
                             moveTo = td.prev('td:has(input,textarea)');
+                           
+
+                            var tr = td.closest('tr');
+                            var pos = td[0].cellIndex;
+                            var ctd = tr.children('td')
+                       
+                            let prevTd = td
+                            let in_d = 0
+                            while ((in_d < pos)) {
+                              
+                                moveTo = prevTd.prev('td:has(input,textarea)');
+                                if (moveTo.length > 0) { in_d = ctd.length - 1 }
+                                prevTd = td.prev('td')
+                                in_d++;
+                            }
+
                         }
+                        if (moveTo && moveTo.length) {
+
+                            e.preventDefault();
+                            var tdInput = moveTo.find('input,textarea')
+
+                            if (tdInput.length > 0) {
+                                tdInput[0].focus();
+                                tdInput[0].select();
+                            }
+                        }
+
                         break;
                     }
                     case arrow.right: {
                         if (input.selectionEnd == input.value.length) {
-                            moveTo = td.next('td:has(input,textarea)');
+
+                            var tr = td.closest('tr');
+                            var pos = td[0].cellIndex;
+                            var ctd = tr.children('td')
+                            debugger
+                            let nextTd = td
+
+                            while (pos < ctd.length) {
+                                debugger
+                                moveTo = nextTd.next('td:has(input,textarea)');
+                                if (moveTo.length > 0) { pos = ctd.length + 1 }
+                                nextTd = td.next('td')
+                                pos++;
+                            }
+
+                        }
+
+                        if (moveTo && moveTo.length) {
+
+                            e.preventDefault();
+                            var tdInput = moveTo.find('input,textarea')
+
+                            if (tdInput.length > 0) {
+                                tdInput[0].focus();
+                                tdInput[0].select();
+                            }
                         }
                         break;
                     }
@@ -117,9 +171,6 @@ export const arrowUpDounFunc = (tableId) => {
                     case arrow.up: {
                         var thisIndex = $(input).index('input:text');
                         var pre = thisIndex - 1;
-
-                        // var nextElemId = $('input:text').eq(next).attr('id');
-                        var preElemId = $('input:text').eq(pre);
 
                         var tdPreInput
                         td.find('input').each(function (i2, tdEle) {
@@ -155,13 +206,13 @@ export const arrowUpDounFunc = (tableId) => {
                         break;
                     }
                     case arrow.down: {
-                        debugger
+                     
                         var thisIndex = $(input).index('input:text');
                         var next = thisIndex + 1;
 
                         var tdNextInput
                         td.find('input').each(function (i2, tdEle) {
-                            debugger
+                          
                             var thisIndex = $(tdEle).index('input:text');
                             if (next === thisIndex) {
                                 tdNextInput = tdEle
@@ -201,10 +252,12 @@ export const arrowUpDounFunc = (tableId) => {
         };
 
 
-
         $(function () {
             $(tableId).enableCellNavigation();
         });
 
     }
 }
+
+
+
