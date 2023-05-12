@@ -65,7 +65,7 @@ const EmployeeTypesMaster = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [modalCss, setModalCss] = useState(false);
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    console.log("userPageAccessState in Employee type", userPageAccessState)
+   
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         updateMsg,

@@ -7,7 +7,10 @@ import { Breadcrumb_inputName } from '../../../../../store/actions'
 import { getDistrictOnState } from '../../../../../store/Administrator/PartyRedux/action'
 import { priceListByPartyAction } from '../../../../../store/Administrator/PriceList/action'
 import PriceDropOptions from './PriceDropOptions'
-
+import PartyType from '../../../PartyTypes/PartyType'
+import * as url from "../../../../../routes/route_url";
+import AddMaster from "../../../EmployeePages/Drodown";
+import * as pageId from "../../../../../routes/allPageID"
 
 const BaseTabForm = forwardRef((props, ref) => {
 
@@ -33,11 +36,12 @@ const BaseTabForm = forwardRef((props, ref) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
+    const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
 
     const { values } = state;
     const { isError } = state;
     const { fieldLabel } = state;
-   
+
     useImperativeHandle(ref, () => ({
         setCurrentState(arr) {
             setState(arr)
@@ -60,14 +64,25 @@ const BaseTabForm = forwardRef((props, ref) => {
         priceListByPartyType,
         SupplierRedux,
         pageField,
+        userAccess
     } = useSelector((state) => ({
         stateRedux: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         PartyTypes: state.PartyTypeReducer.ListData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         SupplierRedux: state.CommonAPI_Reducer.SSDD_List,
-        pageField: state.CommonPageFieldReducer.pageField
+        pageField: state.CommonPageFieldReducer.pageField,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
+
+    useEffect(() => {
+
+        userAccess.find((index) => {
+            if (index.id === pageId.PARTYTYPE) {
+                return setFindAddMasterAccess(true)
+            }
+        });
+    }, [userAccess])
 
     useEffect(() => {
         if (pageField) {
@@ -273,8 +288,17 @@ const BaseTabForm = forwardRef((props, ref) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
+                            {
+                                (findAddMasterAccess) ?
+                                    <Col md="1" className=" mt-3">
+                                        <AddMaster
+                                            masterModal={PartyType}
+                                            masterPath={url.PARTYTYPE}
+                                        />
+                                    </Col> : <Col md="1">  </Col>
+                            }
 
-                            <Col md="1">  </Col>
+                            {/* <Col md="1">  </Col> */}
                             <Col md="3">
                                 <FormGroup>
                                     <Label>Price List </Label>
