@@ -31,7 +31,6 @@ import {
     save_ImportFiledMap_Success
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
-import * as commonFunc from "../../../../components/Common/CommonFunction";
 
 const ImportExcelFieldMap = (props) => {
 
