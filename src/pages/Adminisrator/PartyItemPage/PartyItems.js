@@ -47,6 +47,7 @@ import {
 } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const PartyItems = (props) => {
 
@@ -214,6 +215,8 @@ const PartyItems = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableList]);
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -399,6 +402,7 @@ const PartyItems = (props) => {
                                                     <div className="table">
                                                         <BootstrapTable
                                                             keyField={"Item"}
+                                                            Item="table_Arrow"
                                                             bordered={true}
                                                             striped={false}
                                                             selectRow={selectAllCheck(rowSelected())}

@@ -20,7 +20,7 @@ import {
     SAVE_BANK_MASTER,
     UPDATE_BANK_ID
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { CommonConsole, loginCompanyID } from "../../../components/Common/CommonFunction";
 
 
 function* Save_Method_ForBankMaster_GenFun({ config }) {             // Save API
@@ -31,9 +31,9 @@ function* Save_Method_ForBankMaster_GenFun({ config }) {             // Save API
 }
 
 function* get_Bank_List_GenratorFunction() {  
+    const companyId = loginCompanyID();
     try {
-        
-        const response = yield call(get_Bank_List_Api);
+        const response = yield call(get_Bank_List_Api,companyId);
         yield put(getBanklistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }

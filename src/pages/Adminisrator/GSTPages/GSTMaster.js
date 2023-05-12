@@ -38,7 +38,7 @@ import {
     loginCompanyID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
-
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -175,6 +175,8 @@ const GSTMaster = (props) => {
             );
         }
     }, [deleteMessage]);
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
 
     const EffectiveDateHandler = (e, date) => {
         setEffectiveDate(date)
@@ -403,7 +405,7 @@ const GSTMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <Container fluid>
                     <AvForm
@@ -465,7 +467,7 @@ const GSTMaster = (props) => {
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="Item"
+                                                keyField="id"
                                                 data={TableData}
                                                 columns={pagesListColumns}
                                                 search
@@ -476,7 +478,8 @@ const GSTMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"Item"}
+                                                                        keyField={"id"}
+                                                                        id="table_Arrow"
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}

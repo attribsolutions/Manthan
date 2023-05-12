@@ -49,7 +49,7 @@ import {
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 
 const PartyMasterBulkUpdate = (props) => {
@@ -193,6 +193,8 @@ const PartyMasterBulkUpdate = (props) => {
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Party Count"} :${Data.length}`))
     }, [Data])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     useEffect(() => {
         if (pageField) {
@@ -670,6 +672,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                 <div className="table">
                                                     <BootstrapTable
                                                         keyField={"id"}
+                                                        id="table_Arrow"
                                                         bordered={true}
                                                         striped={false}
                                                         noDataIndication={<div className="text-danger text-center ">PartyMasterbulk Not available</div>}
