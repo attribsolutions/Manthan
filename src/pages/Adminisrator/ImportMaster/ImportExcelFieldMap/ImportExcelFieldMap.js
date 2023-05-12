@@ -18,12 +18,7 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import {
-    breadcrumbReturnFunc,
-    loginCompanyID,
-    loginUserID,
-    metaTagLabel
-} from "../../../../components/Common/CommonFunction";
+import * as commonFunc from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -79,7 +74,9 @@ const ImportExcelFieldMap = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
-
+        if ((commonFunc.loginIsSCMCompany() === 1)) {
+            goButtonHandler()
+        }
     }, []);
 
     const location = { ...history.location }
@@ -100,7 +97,7 @@ const ImportExcelFieldMap = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            commonFunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -184,9 +181,10 @@ const ImportExcelFieldMap = (props) => {
     ];
 
     async function goButtonHandler() {
+        let partyId = ((commonFunc.loginIsSCMCompany() === 1)) ? commonFunc.loginPartyID() : partySelect.value;
         const jsonBody = JSON.stringify({
-            PartyID: partySelect.value,
-            CompanyID: loginCompanyID()
+            PartyID: partyId,
+            CompanyID: commonFunc.loginCompanyID()
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
@@ -200,7 +198,7 @@ const ImportExcelFieldMap = (props) => {
 
         let jsonArr = []
         const invalid = []
-
+        let partyId = ((commonFunc.loginIsSCMCompany() === 1)) ? commonFunc.loginPartyID() : partySelect.value;
         goButtonItem.forEach(i => {
 
             if ((((i.Value === '') || (i.Value === null)) && (i.IsCompulsory === true))) {
@@ -210,10 +208,10 @@ const ImportExcelFieldMap = (props) => {
                 const obj = {
                     Value: i.Value,
                     ImportField: i.id,
-                    Party: partySelect.value,
-                    Company: loginCompanyID(),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+                    Party: partyId,
+                    Company: commonFunc.loginCompanyID(),
+                    CreatedBy: commonFunc.loginUserID(),
+                    UpdatedBy: commonFunc.loginUserID(),
                 }
                 jsonArr.push(obj)
             }
@@ -231,44 +229,43 @@ const ImportExcelFieldMap = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{commonFunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <form onSubmit={(event) => SaveHandler(event)} noValidate>
                     <div className="page-content">
+                        <div style={{ display: ((commonFunc.loginIsSCMCompany() === 1)) && "none" }}>
+                            <div className="px-2 c_card_header text-black" >
+                                <div className="px-2   c_card_filter text-black" >
+                                    <div className="row" >
+                                        <Col sm="10">
+                                            <FormGroup className="mb-2 row mt-3 " >
+                                                <Label className=" p-2"
 
-                        <div className="px-2 c_card_header text-black" >
-                            <div className="px-2   c_card_filter text-black" >
-                                <div className="row" >
-                                    <Col sm="10">
-                                        <FormGroup className="mb-2 row mt-3 " >
-                                            <Label className=" p-2"
+                                                    style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
+                                                <Col style={{ maxWidth: "300px" }} >
+                                                    <Select
+                                                        classNamePrefix="select2-Customer"
+                                                        isDisabled={!(goButtonItem.length === 0) && true}
+                                                        value={partySelect}
+                                                        options={partyDropdown_Options}
+                                                        onChange={(e) => { SetPartySelect(e) }}
+                                                    />
+                                                </Col>
+                                            </FormGroup>
+                                        </Col>
 
-                                                style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
-                                            <Col style={{ maxWidth: "300px" }} >
-                                                <Select
-                                                    classNamePrefix="select2-Customer"
-                                                    isDisabled={!(goButtonItem.length === 0) && true}
-                                                    value={partySelect}
-                                                    options={partyDropdown_Options}
-                                                    onChange={(e) => { SetPartySelect(e) }}
-                                                />
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
-
-                                    <Col sm="2" className="mt-3 ">
-                                        {(goButtonItem.length === 0) ?
-                                            < Go_Button onClick={goButtonHandler} />
-                                            :
-                                            <Change_Button onClick={change_ButtonHandler} />
-                                        }
-                                    </Col>
+                                        <Col sm="2" className="mt-3 ">
+                                            {(goButtonItem.length === 0) ?
+                                                < Go_Button onClick={goButtonHandler} />
+                                                :
+                                                <Change_Button onClick={change_ButtonHandler} />
+                                            }
+                                        </Col>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div className="mt-1">
-
+                        <div >
                             <ToolkitProvider
                                 keyField="id"
                                 data={goButtonItem}

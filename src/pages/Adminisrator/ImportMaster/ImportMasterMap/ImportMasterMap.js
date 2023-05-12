@@ -188,7 +188,7 @@ const ImportMasterMap = (props) => {
         const btnId = event.target.id
         try {
             btnIsDissablefunc({ btnId, state: true })
-            let partyId = (loginIsSCMCompany() === 1) ? loginPartyID() : values.Party.value;
+            let partyId = (((loginIsSCMCompany()) === 1)) ? loginPartyID() : values.Party.value;
             let mapType = values.MapType.value;
 
             dispatch(GoButton_ImportMasterMap({ partyId, mapType }))
