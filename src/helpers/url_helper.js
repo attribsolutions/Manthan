@@ -218,7 +218,7 @@ export const GENERAL_MASTER_SUB_TYPE = '/GeneralMasterSubType'
 
 //Bank
 export const BANK = '/Bank'
-export const BANK_LIST = '/BankFilter'
+export const BANK_LIST_FILTER = '/BankFilter'
 
 // BankAssign
 export const BANK_ASSIGN = '/PartyBankSave'
