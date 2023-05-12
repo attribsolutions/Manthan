@@ -12,9 +12,8 @@ import {
   } from "./actionType";
   
 
-  export const getBanklist = companyId => ({// get List Action
+  export const getBanklist = () => ({// get List Action
     type: GET_BANK_LIST,
-    payload: companyId,
   });
   
   export const getBanklistSuccess = companyId => ({// get List success
