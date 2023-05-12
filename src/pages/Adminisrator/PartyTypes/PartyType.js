@@ -96,8 +96,15 @@ const PartyType = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -108,7 +115,7 @@ const PartyType = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
+            setUserAccState(userAcc);
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
@@ -155,35 +162,45 @@ const PartyType = (props) => {
         }
     }, [])
 
-    useEffect(async () => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
-            dispatch(SavePartyTypeAPISuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values  
-            dispatch(Breadcrumb_inputName(''))
 
-            if (pageMode === mode.dropdownAdd) {
+    useEffect(async () => {
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(SavePartyTypeAPISuccess({ Status: false }))
+            dispatch(Breadcrumb_inputName(''))
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            if (props.pageMode === mode.dropdownAdd) {
                 CustomAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
+                // history.push({
+                //     Data: postMsg.Data
+                // })
+                dispatch(getPartyTypelist())
+
+                props.isOpenModal(false)
+            }
+            else if (pageMode === mode.edit) {
+                CustomAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                history.push({ pathname: url.PARTYTYPE_lIST })
             }
             else {
+                dispatch(Breadcrumb_inputName(''))
                 const promise = await CustomAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                if (promise) {
-                    history.push({
-                        pathname: url.PARTYTYPE_lIST
-                    })
-                }
-
+                if (promise) { history.push({ pathname: url.PARTYTYPE_lIST }) }
             }
-        }
-        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
-            dispatch(SavePartyTypeAPISuccess({ Status: false }))
+
+        } else if
+            (postMsg.Status === true) {
             CustomAlert({
-                Type: 4,
+                Type: 3,
                 Message: JSON.stringify(postMsg.Message),
             })
         }

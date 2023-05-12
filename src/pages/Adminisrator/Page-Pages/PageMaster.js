@@ -44,7 +44,9 @@ import PageFieldMaster_Tab from "./PageFieldMaster";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
 import { SaveButton } from "../../../components/Common/CommonButton";
-
+import AddMaster from "../EmployeePages/Drodown";
+import Modules from "../ModulesPages/Modules";
+import * as url from "../../../routes/route_url";
 
 const PageMaster = (props) => {
   const dispatch = useDispatch();
@@ -63,9 +65,9 @@ const PageMaster = (props) => {
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
-  const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState("");
   const [pageAccessData, setPageAccessData] = useState([]);
   const [editCreatedBy, seteditCreatedBy] = useState("");
+  const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
@@ -122,8 +124,13 @@ const PageMaster = (props) => {
 
     if (userAcc) {
       setUserAccState(userAcc)
-      breadcrumbReturnFunc({dispatch,userAcc});
+      breadcrumbReturnFunc({ dispatch, userAcc });
     };
+    userAccess.find((index) => {
+      if (index.id === pageId.MODULE) {
+        return setFindAddMasterAccess(true)
+      }
+    });
   }, [userAccess])
 
   useEffect(() => {
@@ -264,7 +271,6 @@ const PageMaster = (props) => {
     if (postMsg.Status === true && postMsg.StatusCode === 200) {
       dispatch(saveHPagesSuccess({ Status: false }));
       setModule_DropdownSelect("");
-      setPageAccess_DropDownSelect("");
       setPageType_DropdownSelect("");
       setrelatedPage_DropdownSelect("");
 
@@ -435,7 +441,7 @@ const PageMaster = (props) => {
       CreatedBy: loginUserID(),
       UpdatedBy: loginUserID(),
       PagePageAccess: Access,
-      PageFieldMaster:PageFieldMaster,
+      PageFieldMaster: PageFieldMaster,
     })
 
     if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
@@ -500,9 +506,7 @@ const PageMaster = (props) => {
   function tog_center() {
     setmodal_center(!modal_center)
   }
-  function DropDownAddHandler() {
-    tog_center()
-  }
+
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
@@ -511,8 +515,8 @@ const PageMaster = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"-70px" }}>
-        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+        <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "-70px" }}>
+          <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
           <Container fluid>
             <AvForm
               id="mainForm"
@@ -520,7 +524,7 @@ const PageMaster = (props) => {
               onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
 
               <Col lg={12}>
-                <Card className="text-black "  style={{minHeight:"100px"}}>
+                <Card className="text-black " style={{ minHeight: "100px" }}>
                   <CardHeader className="card-header   text-black c_card_header" >
                     <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                     <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
@@ -544,23 +548,23 @@ const PageMaster = (props) => {
                         </NavLink>
                       </NavItem>
                       {/* {!(pageType_DropdownSelect.value === 2) ? */}
-                        <NavItem>
-                          <NavLink
-                            style={{ cursor: "pointer" }}
-                            className={classnames({
-                              active: customActiveTab === "2",
-                            })}
-                            onClick={() => {
-                              toggleCustom("2");
-                            }}
-                          >
-                            <span className="d-block d-sm-none">
-                              <i className="far fa-user"></i>
-                            </span>
-                            <span className="d-none d-sm-block">Page Field</span>
-                          </NavLink>
-                        </NavItem>
-                        {/* : <></> */}
+                      <NavItem>
+                        <NavLink
+                          style={{ cursor: "pointer" }}
+                          className={classnames({
+                            active: customActiveTab === "2",
+                          })}
+                          onClick={() => {
+                            toggleCustom("2");
+                          }}
+                        >
+                          <span className="d-block d-sm-none">
+                            <i className="far fa-user"></i>
+                          </span>
+                          <span className="d-none d-sm-block">Page Field</span>
+                        </NavLink>
+                      </NavItem>
+                      {/* : <></> */}
                       {/* } */}
 
                     </Nav>
@@ -672,15 +676,15 @@ const PageMaster = (props) => {
                                   />
                                 </FormGroup>
                               </Col>
+                              {(findAddMasterAccess) ?
+                                <Col md="1" className=" mt-3">
+                                  <AddMaster
+                                    masterModal={Modules}
+                                    masterPath={url.MODULE}
+                                  />
+                                </Col>
+                                : <Col md="1"> </Col>}
 
-                              <Col md="1" className=" mt-3">
-                                <Button
-                                  className=" button_add"
-                                  color="btn btn-outline-primary border-2 font-size-12"
-                                  type="button" onClick={() => { DropDownAddHandler() }}>
-                                  <i className="dripicons-plus"></i>
-                                </Button>
-                              </Col>
 
                               <Col md="3">
                                 <FormGroup className="mb-3">
@@ -979,12 +983,12 @@ const PageMaster = (props) => {
                     </TabContent>
                     <Row >{/* +++++++++++++++++++++++++++ Save Button  ++++++++++++++++++++++++++++++++++++++++++ */}
                       <Col sm={2}>
-                        
 
 
 
 
-                          {/* {
+
+                        {/* {
                             pageMode === "edit" ?
                               userPageAccessState.RoleAccess_IsEdit ?
                                 <button
@@ -1011,12 +1015,12 @@ const PageMaster = (props) => {
                       </Col>
                     </Row>
                   </CardBody>
-                  <div style={{ paddingLeft: "30px",paddingBottom:"10px" }}>
-                  <SaveButton pageMode={pageMode}
-                    userAcc={userPageAccessState}
-                    editCreatedBy={editCreatedBy}
-                    module={"PageMaster"}
-                  />
+                  <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
+                    <SaveButton pageMode={pageMode}
+                      userAcc={userPageAccessState}
+                      editCreatedBy={editCreatedBy}
+                      module={"PageMaster"}
+                    />
                   </div>
                 </Card>
               </Col>
