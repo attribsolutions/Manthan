@@ -582,8 +582,8 @@ const Order = (props) => {
             dispatch(getSupplierAddress(supplierSelect.value))
         }
         const jsonBody = JSON.stringify({
-            Party: supplierSelect.value,
-            Customer: commonFunc.loginPartyID(),
+            Party: commonFunc.loginPartyID(),
+            Customer: supplierSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
             RateParty: supplierSelect.value
