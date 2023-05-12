@@ -22,7 +22,7 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   orderList: [],
-  orderlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: { value: '', label: "All" } },
+  orderlistFilter: { fromdate: "", todate: '', venderSelect: { value: '', label: "All" } },
   // orderAddFilter: { orderdate: currentDate, supplierSelect: '' }
   orderApprovalRedux: { Status: false },
 }

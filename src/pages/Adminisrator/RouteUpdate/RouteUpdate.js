@@ -128,7 +128,7 @@ const RouteUpdate = (props) => {
 
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Route Update Count"} :${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Route Update Count"}:${Data.length}`))
     }, [RouteUpdateList])
 
     useEffect(() => {

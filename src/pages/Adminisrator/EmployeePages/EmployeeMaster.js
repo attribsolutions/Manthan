@@ -85,7 +85,7 @@ const AddEmployee = (props) => {
   const [userPageAccessState, setUserAccState] = useState('');
   const [modalCss, setModalCss] = useState(false);
   const [editCreatedBy, seteditCreatedBy] = useState("");
-  console.log("userPageAccessState in Employee Master", userPageAccessState)
+  const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -93,19 +93,15 @@ const AddEmployee = (props) => {
     State,
     district,
     partyList,
-    company,
     postMsg,
     userAccess,
     pageField,
-    EmployeeTypePostMsg,
     updateMsg } = useSelector((state) => ({
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       State: state.EmployeesReducer.State,
       district: state.PartyMasterReducer.DistrictOnState,
       partyList: state.PartyMasterReducer.partyList,
-      company: state.EmployeesReducer.CompanyNames,
       postMsg: state.EmployeesReducer.postMessage,
-      EmployeeTypePostMsg: state.EmployeeTypeReducer.PostEmployeeType,
       updateMsg: state.EmployeesReducer.updateMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
@@ -140,6 +136,7 @@ const AddEmployee = (props) => {
 
   // userAccess useEffect
   useEffect(() => {
+
     let userAcc = null;
     let locationPath = location.pathname;
 
@@ -155,6 +152,13 @@ const AddEmployee = (props) => {
       setUserAccState(userAcc)
       breadcrumbReturnFunc({ dispatch, userAcc });
     };
+
+    userAccess.find((index) => {
+      if (index.id === pageId.EMPLOYEETYPE) {
+        return setFindAddMasterAccess(true)
+      }
+    });
+
   }, [userAccess])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -589,12 +593,14 @@ const AddEmployee = (props) => {
                           </FormGroup>
                         </Col>
 
-                        <Col md="1" className=" mt-3">
+                        {findAddMasterAccess ? <Col md="1" className=" mt-3">
                           <AddMaster
                             masterModal={EmployeeTypesMaster}
                             masterPath={url.EMPLOYEETYPE}
                           />
-                        </Col>
+                        </Col> : <Col md="1"></Col>
+                        }
+
 
                         <Col md="3">
                           <FormGroup className="mb-3">
