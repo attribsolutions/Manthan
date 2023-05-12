@@ -394,10 +394,9 @@ const OrderList = () => {
             "CancelFlag": "" //blank
         }
         const jsonBody = JSON.stringify(body)
-        debugger
+
         dispatch(orderApprovalAction({ jsonBody }))
         editOrderIdSuccess({ Status: false })
-        debugger
     }
 
     const HeaderContent = () => {

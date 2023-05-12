@@ -1,8 +1,8 @@
-var axios = require('axios');
 
-export function orderApporval(body, btnId,) {
+
+export async function orderApporval(body, btnId,) {
     debugger
-
+    var axios = require('axios');
     var data = JSON.stringify({
         "Customer": "500581",
         "DocDate": "04.05.2023",
@@ -23,45 +23,37 @@ export function orderApporval(body, btnId,) {
         "CancelFlag": " "
     });
 
-    const token = `${"Interface"}:${"Admin@1234"}`;
-    const encodedToken = Buffer.from(token).toString('base64');
+    const username = 'Interface';
+    const password = 'Admin@1234';
+
+    const basicAuth = 'Basic ' + btoa(username + ':' + password);
 
     var config = {
         method: 'post',
         url: 'http://cbms4prdapp.chitalebandhu.net.in:8000/sap/opu/odata/sap/ZCBM_OD_SD_CSCMFOODERP_SRV/OrderHeaderSet',
         headers: {
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
             'X-Requested-With': 'x',
-            'Authorization': 'Basic ' + encodedToken,
-            // 'Authorization': 'Basic SW50ZXJmYWNlOkFkbWluQDEyMzQ=',
+            'Authorization': basicAuth,
             'Content-Type': 'application/json',
-            'Cookie': 'SAP_SESSIONID_CSP_900=Jpz_uthylLnY5mC03KrCDSFzrvHuTRHtptICAEHiAA8%3d; sap-usercontext=sap-client=900'
+            'Cookie': 'SAP_SESSIONID_CSP_900=ntvo5dIY7ZtkSuAHyepZgQd5M5_vFRHtptICAEHiAA8%3d; sap-usercontext=sap-client=900'
         },
-        data: data
+        data: data,
+        withCredentials: true
     };
 
-
-    const session_url = 'http://cbms4prdapp.chitalebandhu.net.in:8000/sap/opu/odata/sap/ZCBM_OD_SD_CSCMFOODERP_SRV/OrderHeaderSet';
-    const username = 'Interface';
-    const password = 'Admin@1234';
-    const credentials = btoa(username + ':' + password);
-
-    const headers = {
-        'X-Requested-With': 'x',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Basic ${credentials}`
-    }
-    axios.get(session_url, {}, {
-        headers: { headers },
-        auth: { username: username, password: password }
-    }).then(function (data) {
-        debugger
-        console.log(data);
-        console.log(headers);
-    }).catch(function (error) {
-        debugger
-        console.log('Error on Authentication');
-        //console.log(username);
-    });
+    debugger
+    
+    axios(config)
+        .then(function (response) {
+            debugger
+            console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+            debugger
+            console.log(error);
+        });
 
 }
