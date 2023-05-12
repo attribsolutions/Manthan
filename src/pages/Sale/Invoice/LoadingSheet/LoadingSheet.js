@@ -37,6 +37,7 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
+import * as commonFunc from "../../../../components/Common/CommonFunction";
 
 const LoadingSheet = (props) => {
 
@@ -159,6 +160,8 @@ const LoadingSheet = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
@@ -493,7 +496,6 @@ const LoadingSheet = (props) => {
                         >
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
-
                                     keyField="id"
                                     data={Data}
                                     columns={pagesListColumns}
@@ -505,6 +507,7 @@ const LoadingSheet = (props) => {
                                             <div className="table">
                                                 <BootstrapTable
                                                     keyField={"id"}
+                                                    id="table_Arrow"
                                                     bordered={true}
                                                     striped={false}
                                                     selectRow={selectAllCheck()}

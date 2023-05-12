@@ -31,6 +31,8 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as pageId from "../../../routes/allPageID"
+import * as commonFunc from "../../../components/Common/CommonFunction";
+
 
 let initialTableData = []
 
@@ -186,6 +188,8 @@ const GRNAdd = (props) => {
 
         }
     }, [postMsg])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
 
     function val_onChange(val, row, type) {
 
@@ -849,6 +853,7 @@ const GRNAdd = (props) => {
                                                 <div className="table table-Rresponsive">
                                                     <BootstrapTable
                                                         responsive
+                                                        id="table_Arrow"
                                                         bordered={false}
                                                         striped={false}
                                                         classes={"table  table-bordered table-hover"}

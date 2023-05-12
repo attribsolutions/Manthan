@@ -37,7 +37,7 @@ import {
     save_ImportMasterMap,
     save_ImportMasterMap_Success
 } from "../../../../store/Administrator/ImportMasterMapRedux/action";
-
+import * as commonFunc from "../../../../components/Common/CommonFunction";
 
 const ImportMasterMap = (props) => {
 
@@ -135,6 +135,7 @@ const ImportMasterMap = (props) => {
         }
     }, [postMsg])
 
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonArr]);
 
     const partyDropdown_Options = partyList.map((index) => ({
         value: index.id,
@@ -341,6 +342,7 @@ const ImportMasterMap = (props) => {
                                     <div className="table">
                                         <BootstrapTable
                                             bordered={true}
+                                            id="table_Arrow"
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                             classes={"table align-middle  table-hover"}

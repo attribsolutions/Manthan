@@ -12,13 +12,14 @@ import {
   } from "./actionType";
   
 
-  export const getBanklist = () => ({// get List Action
+  export const getBanklist = companyId => ({// get List Action
     type: GET_BANK_LIST,
+    payload: companyId,
   });
   
-  export const getBanklistSuccess = (pages) => ({// get List success
+  export const getBanklistSuccess = companyId => ({// get List success
     type: GET_BANK_LIST_SUCCESS,
-    payload: pages,
+    payload: companyId,
   });
   
   export const saveBankMaster = (config = {}) => ({// save Action

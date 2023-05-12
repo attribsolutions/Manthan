@@ -31,7 +31,7 @@ import {
     save_ImportFiledMap_Success
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
-
+import * as commonFunc from "../../../../components/Common/CommonFunction";
 
 const ImportExcelFieldMap = (props) => {
 
@@ -132,6 +132,8 @@ const ImportExcelFieldMap = (props) => {
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${" Field Count"} :${goButtonItem.length}`))
     }, [goButtonItem])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonItem]);
 
 
     const partyDropdown_Options = partyList.map((index) => ({
@@ -277,6 +279,7 @@ const ImportExcelFieldMap = (props) => {
                                             <BootstrapTable
                                                 bordered={true}
                                                 striped={false}
+                                                id="table_Arrow"
                                                 noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                 classes={"table align-middle  table-hover"}
                                                 headerWrapperClasses={"thead-light"}

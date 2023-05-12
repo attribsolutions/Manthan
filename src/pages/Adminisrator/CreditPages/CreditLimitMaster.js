@@ -43,6 +43,8 @@ import {
     postCreditLimit,
     postCreditLimitSuccess
 } from "../../../store/Administrator/CreditLimitRedux/actions";
+import * as commonFunc from "../../../components/Common/CommonFunction";
+
 
 const CreditLimitMaster = (props) => {
 
@@ -155,6 +157,7 @@ const CreditLimitMaster = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${" Credit Limit Count"} :${Data.length}`))
     }, [Data])
 
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const RoutesDropdown_options = RoutesList.map((index) => ({
         value: index.id,
@@ -334,6 +337,7 @@ const CreditLimitMaster = (props) => {
                                                         <div className="table">
                                                             <BootstrapTable
                                                                 keyField={"id"}
+                                                                id="table_Arrow"
                                                                 bordered={true}
                                                                 striped={false}
                                                                 noDataIndication={<div className="text-danger text-center ">Creditlimit Not available</div>}

@@ -47,6 +47,7 @@ import {
 import * as mode from "../../../routes/PageMode"
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Change_Button } from "../../../components/Common/CommonButton";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const MRPMaster = (props) => {
 
@@ -202,6 +203,8 @@ const MRPMaster = (props) => {
             );
         }
     }, [deleteMessage]);
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
 
     const PartyDropdown_Options = Party.map((Data) => ({
         value: Data.id,
@@ -522,7 +525,7 @@ const MRPMaster = (props) => {
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="Item"
+                                                keyField="id"
                                                 data={TableData}
                                                 columns={pagesListColumns}
                                                 search
@@ -533,7 +536,8 @@ const MRPMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"Item"}
+                                                                        keyField={"id"}
+                                                                        id="table_Arrow"
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}
