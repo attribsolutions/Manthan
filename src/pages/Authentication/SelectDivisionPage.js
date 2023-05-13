@@ -22,11 +22,12 @@ const SelectDivisionPage = props => {
 
   const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
 
-  const { divisionDropdown_redux } = useSelector(state => ({
+  const { divisionDropdown_redux, roleAccessSidbarData } = useSelector(state => ({
     loginError: state.Login.loginError,
     divisionDropdown_redux: state.Login.divisionDropdown,
+    roleAccessSidbarData: state.Login.roleAccessSidbarData
   }))
-
+  console.log("roleAccessSidbarData", roleAccessSidbarData)
 
   useEffect(() => {
     dispatch(resetRoleAccessAction())
@@ -38,8 +39,22 @@ const SelectDivisionPage = props => {
     }
   }, [])
 
+
   useEffect(() => {
-    
+    debugger
+    if (roleAccessSidbarData.length > 0) {
+      const findDashboard = roleAccessSidbarData.find((index) => (index.ModuleName === "Dashboard"))
+      if (!(findDashboard === undefined)) {
+        history.push(findDashboard.ModuleData[0].ActualPagePath)
+      } else {
+        history.push("/Dashboard")
+      }
+    }
+
+  }, [roleAccessSidbarData])
+
+  useEffect(() => {
+
     if (divisionDropdown_redux.length === 1) {
 
       let value = divisionDropdown_redux[0]
@@ -52,7 +67,9 @@ const SelectDivisionPage = props => {
 
       localStorage.setItem("roleId", JSON.stringify(value))
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
-      history.push("/Dashboard")
+
+
+      // history.push("/Dashboard")
     }
   }, [divisionDropdown_redux])
 
@@ -70,7 +87,7 @@ const SelectDivisionPage = props => {
   }));
 
   function goButtonHandller() {
-    
+
     if (!(divisionDropdowSelect.value === undefined)) {
 
       let value = divisionDropdown_redux[divisionDropdowSelect.value]
