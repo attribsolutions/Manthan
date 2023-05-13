@@ -585,8 +585,8 @@ const Order = (props) => {
             Customer: commonFunc.loginPartyID(),
         }
         let SO_body = {
-            Party: commonFunc.loginPartyID(),
-            Customer: supplierSelect.value,
+            Party: commonFunc.loginPartyID(), //swap  party and customer for sale oerder
+            Customer: supplierSelect.value,//swap  party and customer for sale oerder
 
         }
         let baseBody = {
