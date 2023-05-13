@@ -21,6 +21,7 @@ import { getDashbordDetails } from '../../../store/Dashboard/Dashboard_1_Redux/a
 import { options } from '../Options';
 import PaymentEntryList from './PaymentEntryList';
 import InvoiceForGRN from './GRNList';
+import SalesReturnListForDashboard from './SalesReturnListForDashboard';
 
 
 const Dashboard_1 = (props) => {
@@ -84,6 +85,9 @@ const Dashboard_1 = (props) => {
         history.push(url.GRN_STP_1)
     }
 
+    function salesReturn_onClick(){
+        history.push(url.SALES_RETURN_LIST)
+    }
 
     return (
         <React.Fragment>
@@ -244,6 +248,22 @@ const Dashboard_1 = (props) => {
                                 <InvoiceForGRN />
                             </Card>
                         </Col>
+                    </Row>
+
+                    <Row>
+                        <Col lg={6}>
+                            <Card >
+                                <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                    className="card-header align-items-center d-flex text-center">
+                                    <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                        onClick={salesReturn_onClick}
+                                    >
+                                        Sales Return List</Label>
+                                </CardHeader>
+                                <SalesReturnListForDashboard />
+                            </Card>
+                        </Col>
+
                     </Row>
 
                     {/* <div className="card">

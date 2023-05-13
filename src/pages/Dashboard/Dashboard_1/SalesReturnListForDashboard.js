@@ -1,20 +1,21 @@
 import React, { useEffect } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { ReceiptListAPI } from '../../../store/Accounting/Receipt/action';
-import { currentDate, loginPartyID } from '../../../components/Common/CommonFunction';
+import { currentDate, loginCompanyID, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import * as url from "../../../routes/route_url";
 import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
+import { Retailer_List } from '../../../store/CommonAPI/SupplierRedux/actions';
+import { salesReturnListAPI } from '../../../store/Sales/SalesReturnRedux/action';
 
-export default function PaymentEntryList() {
+export default function SalesReturnListForDashboard() {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
     const { tableList, } = useSelector((state) => ({
-        tableList: state.ReceiptReducer.ReceiptList,
+        tableList: state.SalesReturnReducer.salesReturnList,
     }));
 
     useEffect(() => {
@@ -23,32 +24,31 @@ export default function PaymentEntryList() {
             ToDate: currentDate,
             CustomerID: "",
             PartyID: loginPartyID(),
-            ReceiptType: 30,
         });
-        dispatch(ReceiptListAPI(jsonBody, url.PAYMENT_ENTRY_LIST));
+        dispatch(salesReturnListAPI(jsonBody));
     }, [])
 
 
     const pagesListColumns = [
         {
-            text: "Date",
-            dataField: "ReceiptDate",
+            text: "ID",
+            dataField: "id",
         },
         {
-            text: "FullReceiptNumber",
-            dataField: "FullReceiptNumber",
+            text: "Return Date",
+            dataField: "ReturnDate",
         },
         {
-            text: "AmountPaid",
-            dataField: "AmountPaid",
+            text: "FullReturnNumber",
+            dataField: "FullReturnNumber",
         },
         {
-            text: "DocumentNo",
-            dataField: "Cheque No",
+            text: "Customer",
+            dataField: "Customer",
         },
         {
-            text: "ChequeDate",
-            dataField: "ChequeDate",
+            text: "Return Reason",
+            dataField: "ReturnReasonName",
         },
 
     ];
@@ -57,7 +57,7 @@ export default function PaymentEntryList() {
 
         <ToolkitProvider
 
-            keyField="Invoice"
+            keyField="id"
             data={tableList}
             columns={pagesListColumns}
 
@@ -67,7 +67,7 @@ export default function PaymentEntryList() {
                 <React.Fragment>
                     <div className="table table-responsive">
                         <BootstrapTable 
-                            keyField={"Invoice"}
+                            keyField={"id"}
                             bordered={true}
                             striped={false}
                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
