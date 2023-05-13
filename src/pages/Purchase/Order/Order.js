@@ -95,7 +95,7 @@ const Order = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
-    const [deliverydate, setdeliverydate] = useState()
+    const [deliverydate, setdeliverydate] = useState(commonFunc.currentDate)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
@@ -343,7 +343,6 @@ const Order = (props) => {
                         <div>
                             Item Name
                         </div>
-
                         <div>
                             <samp style={{ display: (supplierSelect.value > 0) && (findPartyItemAccess) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
                                 onClick={assignItem_onClick}>
@@ -358,7 +357,6 @@ const Order = (props) => {
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
             dataField: "StockQuantity",
-            // sort: true,
             formatter: (value, row, k) => {
 
                 return (
@@ -375,10 +373,8 @@ const Order = (props) => {
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             dataField: "",
-            // sort: true,
             formatter: (value, row, k) => {
                 return (
-                    // <span >
                     <Input type="text"
                         id={`Quantity${k}`}
                         name="Quantity"
@@ -394,19 +390,15 @@ const Order = (props) => {
                             } else {
                                 document.getElementById(`Quantity${k}`).value = row.Quantity
                             }
-                            // handleKeyDown(e, orderItemTable)
                         }}
                         autoComplete="off"
-                    // onKeyDown={(e, v, c) => {
-                    // arrowChange(e, v, c)
-                    // handleKeyDown(e, orderItemTable)
-                    // }}
+
                     />
-                    // </span>
+
                 )
             },
 
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
@@ -414,14 +406,30 @@ const Order = (props) => {
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
-            // sort: true,
             formatter: (value, row, key) => {
-
+                
                 if (!row.UnitName) {
-                    row["Unit_id"] = row.UnitDetails[0].UnitID
-                    row["UnitName"] = row.UnitDetails[0].UnitName
-                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
-                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                    row["Unit_id"] = 0;
+                    row["UnitName"] = 'null';
+                    row["BaseUnitQuantity"] = 0;
+                    row["poBaseUnitQty"] = 0;
+
+                    function defaultUnit(i) {
+                        row["Unit_id"] = i.UnitID;
+                        row["UnitName"] = i.UnitName;
+                        row["BaseUnitQuantity"] = i.BaseUnitQuantity;
+                        row["poBaseUnitQty"] = i.BaseUnitQuantity;
+                        row["Rate"] = i.Rate;
+                    }
+
+                    row.UnitDetails.forEach(i => {
+                        if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
+                            defaultUnit(i)
+                        }
+                        else if ((i.SODefaultUnit) && (subPageMode === url.ORDER_4)) {
+                            defaultUnit(i)
+                        }
+                    })
                 }
 
                 return (
@@ -430,60 +438,42 @@ const Order = (props) => {
                         id={"ddlUnit"}
                         key={`ddlUnit${row.id}`}
                         defaultValue={{ value: row.Unit_id, label: row.UnitName }}
-                        // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
                                 value: i.UnitID,
-                                baseUnitQty: i.BaseUnitQuantity
+                                baseUnitQty: i.BaseUnitQuantity,
+                                Rate: i.Rate
                             }))
                         }
                         onChange={e => {
                             row["Unit_id"] = e.value;
                             row["UnitName"] = e.label
                             row["BaseUnitQuantity"] = e.baseUnitQty
+                            row["Rate"] = e.Rate
+                            document.getElementById(`Rate-${key}`).innerText = e.Rate
                         }}
                     >
                     </Select >
                 )
             },
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '150px', textAlign: 'center' };
             }
         },
 
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
-            dataField: "",
-            // sort: true,
+            dataField: '',
             formatter: (value, row, k) => {
-
                 return (
-                    <span className="text-right" >
-                        <Input
-                            type="text"
-
-                            id={`Ratey${k}`}
-                            key={`Ratey${row.id}`}
-                            defaultValue={row.Rate}
-                            autoComplete="off"
-                            className="text-end"
-                            onChange={(e) => {
-                                const val = e.target.value
-                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                                if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "rate")
-                                } else {
-                                    document.getElementById(`Ratey${k}`).value = row.Rate
-                                }
-                            }}
-                        // onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
-                        />
-                    </span>
+                    <div key={row.id} className="text-end">
+                        <span id={`Rate-${k}`}>{row.Rate}</span>
+                    </div>
                 )
             },
 
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
@@ -501,7 +491,7 @@ const Order = (props) => {
                     </div>
                 )
             },
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             },
         },
@@ -525,7 +515,7 @@ const Order = (props) => {
                 )
             },
 
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
@@ -577,7 +567,7 @@ const Order = (props) => {
         }
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
-        
+
         let PO_Body = {
             Party: supplierSelect.value,
             Customer: commonFunc.loginPartyID(),
