@@ -22,6 +22,7 @@ import {
     updateCategoryTypeID,
     getCategoryTypelistSuccess,
     updateCategoryTypeIDSuccess,
+    getCategoryTypelist,
 } from "../../../store/Administrator/CategoryTypeRedux/actions";
 import {
     comAddPageFieldFunc,
@@ -35,6 +36,7 @@ import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, metaTagLabel, } f
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const CategoryTypeMaster = (props) => {
 
@@ -79,9 +81,36 @@ const CategoryTypeMaster = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
+    // useEffect(() => {
+    //     let userAcc = null;
+    //     let locationPath = location.pathname;
+
+    //     if (hasShowModal) {
+    //         locationPath = props.masterPath;
+    //     };
+
+    //     userAcc = userAccess.find((inx) => {
+    //         return (`/${inx.ActualPagePath}` === locationPath)
+    //     })
+
+    //     if (userAcc) {
+    //         setUserAccState(userAcc);
+    //         if (!props.isdropdown) {
+    //           breadcrumbReturnFunc({ dispatch, userAcc });
+    //         }
+    //       };
+    // }, [userAccess])
+
     useEffect(() => {
+
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -92,12 +121,13 @@ const CategoryTypeMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
+   
     }, [userAccess])
-
-
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -131,37 +161,44 @@ const CategoryTypeMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveCategoryTypeMaster_Success({ Status: false }))
-            setState(() => resetFunction(fileds, state))//Clear form values
             dispatch(Breadcrumb_inputName(''))
-            if (pageMode === "other") {
-                dispatch(AlertState({
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            if (props.pageMode === mode.dropdownAdd) {
+                CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
+                
+                dispatch(getCategoryTypelist())
+
+                props.isOpenModal(false)
+            }
+            else if (pageMode === mode.edit) {
+                CustomAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                history.push({ pathname: url.CATEGORYTYPE_lIST })
             }
             else {
-                dispatch(AlertState({
+                dispatch(Breadcrumb_inputName(''))
+                const promise = await CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.CATEGORYTYPE_lIST,
-                }))
+                })
+                if (promise) { history.push({ pathname: url.CATEGORYTYPE_lIST }) }
             }
-        }
-        else if (postMsg.Status === true) {
-            dispatch(getCategoryTypelistSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
+
+        } else if
+            (postMsg.Status === true) {
+            CustomAlert({
+                Type: 3,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
@@ -222,7 +259,7 @@ const CategoryTypeMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-              <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
