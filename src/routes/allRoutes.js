@@ -158,7 +158,7 @@ import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"
 const userRoutes = [
   // *************************** DashBord *******************************//
 
-  { path: path.DASHBORD, component: Dashboard },
+  { path: path.DASHBORD, component: Dashboard_1 },
 
   { path: path.DASHBORD_1, component: Dashboard_1 },
   // *************************** Administration *******************************//

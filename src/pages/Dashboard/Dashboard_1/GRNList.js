@@ -311,7 +311,7 @@ export default function InvoiceForGRN() {
         let subPageMode = url.GRN_STP_3
         const gobtnId = `gobtn-${subPageMode}`
         const filtersBody = JSON.stringify({
-            FromDate: "2023-04-01",
+            FromDate: currentDate,
             ToDate: currentDate,
             Supplier: "",
             Customer: loginPartyID(),
