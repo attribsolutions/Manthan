@@ -102,7 +102,7 @@ debugger
                                 value={values.GRNPrefix}
                                 type="text"
                                 className={isError.GRNPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                placeholder="Please Enter Invoice Prefix"
+                                placeholder="Please Enter GRN Prefix"
                                 autoComplete='off'
                                 onChange={(event) => {
                                     onChangeText({ event, state, setState })
@@ -142,11 +142,11 @@ debugger
                         <Label className='col col-4'>{fieldLabel.WorkOrderPrefix} </Label>
                         <Col sm={4}>
                             <Input
-                                name="ChallanPrefix"
+                                name="WorkOrderPrefix"
                                 value={values.WorkOrderPrefix}
                                 type="text"
                                 className={isError.WorkOrderPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                placeholder="Please Enter Receipt Prefix"
+                                placeholder="Please Enter WorkOrder Prefix"
                                 autoComplete='off'
                                 onChange={(event) => {
                                     onChangeText({ event, state, setState })
@@ -164,11 +164,11 @@ debugger
                         <Label className='col col-4'>{fieldLabel.MaterialIssuePrefix} </Label>
                         <Col sm={4}>
                             <Input
-                                name="ChallanPrefix"
+                                name="MaterialIssuePrefix"
                                 value={values.MaterialIssuePrefix}
                                 type="text"
                                 className={isError.MaterialIssuePrefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                placeholder="Please Enter Receipt Prefix"
+                                placeholder="Please Enter Material Issue Prefix"
                                 autoComplete='off'
                                 onChange={(event) => {
                                     onChangeText({ event, state, setState })
@@ -186,11 +186,11 @@ debugger
                         <Label className='col col-4'>{fieldLabel.DemandPrefix} </Label>
                         <Col sm={4}>
                             <Input
-                                name="ChallanPrefix"
+                                name="DemandPrefix"
                                 value={values.DemandPrefix}
                                 type="text"
                                 className={isError.DemandPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                placeholder="Please Enter Receipt Prefix"
+                                placeholder="Please Enter Demand Prefix"
                                 autoComplete='off'
                                 onChange={(event) => {
                                     onChangeText({ event, state, setState })
@@ -209,18 +209,18 @@ debugger
                         <Col sm={4}>
                             <Input
                                 name="ChallanPrefix"
-                                value={values.IBChallanPrefix}
+                                value={values.ChallanPrefix}
                                 type="text"
-                                className={isError.IBChallanPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                placeholder="Please Enter IBChallan Prefix"
+                                className={isError.ChallanPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Challan Prefix"
                                 autoComplete='off'
                                 onChange={(event) => {
                                     onChangeText({ event, state, setState })
                                 }}
                             />
                         </Col>
-                        {isError.IBChallanPrefix.length > 0 && (
-                            <span className="invalid-feedback">{isError.IBChallanPrefix}</span>
+                        {isError.ChallanPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.ChallanPrefix}</span>
                         )}
                     </FormGroup>
 
