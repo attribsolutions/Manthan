@@ -34,6 +34,10 @@ import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/validationFunction";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import AddMaster from "../EmployeePages/Drodown";
+import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
+import * as url from "../../../routes/route_url";
+import AddEmployee from "../EmployeePages/EmployeeMaster";
 
 const AddUser = (props) => {
 
@@ -97,7 +101,7 @@ const AddUser = (props) => {
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
-  
+
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -123,9 +127,17 @@ const AddUser = (props) => {
   }, [cPassword])
 
   // userAccess useEffect
+
   useEffect(() => {
+
     let userAcc = null;
-    let locationPath = location.pathname;
+    let locationPath;
+
+    if (props.pageMode === mode.dropdownAdd) {
+      locationPath = props.masterPath;
+    } else {
+      locationPath = location.pathname;
+    }
 
     if (hasShowModal) {
       locationPath = props.masterPath;
@@ -136,11 +148,12 @@ const AddUser = (props) => {
     })
 
     if (userAcc) {
-      setUserAccState(userAcc)
-      breadcrumbReturnFunc({ dispatch, userAcc });
+      setUserAccState(userAcc);
+      if (!props.isdropdown) {
+        breadcrumbReturnFunc({ dispatch, userAcc });
+      }
     };
   }, [userAccess])
-
 
   useEffect(() => {
 
@@ -149,7 +162,6 @@ const AddUser = (props) => {
       comAddPageFieldFunc({ state, setState, fieldArr })
     }
   }, [pageField])
-
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -183,7 +195,6 @@ const AddUser = (props) => {
         values.isLoginUsingMobile = isLoginUsingMobile;
         values.isSendOTP = isSendOTP;
 
-
         hasValid.id.valid = true;
         hasValid.LoginName.valid = true;
         hasValid.Password.valid = true;
@@ -209,7 +220,7 @@ const AddUser = (props) => {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
       setEmployeeSelect('')
 
-      if (pageMode === "other") {
+      if (pageMode === mode.dropdownAdd) {
         dispatch(AlertState({
           Type: 1,
           Status: true,
@@ -221,7 +232,7 @@ const AddUser = (props) => {
           Type: 1,
           Status: true,
           Message: PostAPIResponse.Message,
-          RedirectPath: '/UserList',
+          RedirectPath: url.USER_lIST,
           AfterResponseAction: false
         }))
       }
@@ -273,7 +284,7 @@ const AddUser = (props) => {
 
       const userRoleArr = []
       employePartyWiseRoleState.map(i1 => {
-       
+
         i1.PartyRoles.map(i2 => {
           userRoleArr.push({
             Party: i1.Party,
@@ -313,7 +324,7 @@ const AddUser = (props) => {
 
   const PartyWiseRoleTable = () => {
 
-    if ( values.EmployeeName === '') {
+    if (values.EmployeeName === '') {
       return null
     }
     if (!(employePartyWiseRoleState.length === 0)) {
@@ -378,7 +389,7 @@ const AddUser = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-          <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
         {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.USER} /> */}
 
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
@@ -416,7 +427,12 @@ const AddUser = (props) => {
                                   )}
                                 </Col>
                               </FormGroup>
-
+                              <Col md="1" className=" mt-3">
+                                <AddMaster
+                                  masterModal={AddEmployee}
+                                  masterPath={url.EMPLOYEE}
+                                />
+                              </Col>
                             </Row>
 
                             <Row>

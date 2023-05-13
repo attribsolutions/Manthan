@@ -172,24 +172,25 @@ const AddEmployee = (props) => {
     let locationPath;
 
     if (props.pageMode === mode.dropdownAdd) {
-        locationPath = props.masterPath;
+      locationPath = props.masterPath;
     } else {
-        locationPath = location.pathname;
+      locationPath = location.pathname;
     }
 
     if (hasShowModal) {
-        locationPath = props.masterPath;
+      locationPath = props.masterPath;
     };
 
     userAcc = userAccess.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
+      return (`/${inx.ActualPagePath}` === locationPath)
     })
 
     if (userAcc) {
-        setUserAccState(userAcc);
+      setUserAccState(userAcc);
+      if (!props.isdropdown) {
         breadcrumbReturnFunc({ dispatch, userAcc });
+      }
     };
-
     userAccess.find((index) => {
       if (index.id === pageId.EMPLOYEETYPE) {
         return setFindEmployeeTypeMasterAccess(true)
@@ -198,7 +199,7 @@ const AddEmployee = (props) => {
         return setPartyMasterAccess(true)
       }
     });
-}, [userAccess])
+  }, [userAccess])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -266,12 +267,12 @@ const AddEmployee = (props) => {
 
   useEffect(() => {
 
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values  
       dispatch(Breadcrumb_inputName(''))
 
-      if (pageMode === "other") {
+      if (props.pageMode === mode.dropdownAdd) {
         dispatch(AlertState({
           Type: 1,
           Status: true,
