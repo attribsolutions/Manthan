@@ -26,19 +26,19 @@ import { AlertState } from "../../actions";
 function* get_ModuleList_GenFun() { // get API
   try {
     const response = yield call(Module_Get_API);
-    if (response.StatusCode === 200) {
-      yield put(getModuleListSuccess(response.Data));
-    }
-    else {
-      yield put(AlertState({
-        Type: 4,
-        Status: true, Message: response.Message,
-      }));
-    }
+    // if (response.StatusCode === 200) {
+    yield put(getModuleListSuccess(response.Data));
+    // }
+    // else {
+    //   yield put(AlertState({
+    //     Type: 4,
+    //     Status: true, Message: response.Message,
+    //   }));
+    // }
   } catch (error) { CommonConsole(error) }
 }
 
-function* save_Module_GenFun({ config = {} }) {  // Post API
+function* save_Module_GenFun({ config }) {  // Post API
   try {
     const response = yield call(Module_Post_API, config);
     yield put(saveModuleMasterSuccess(response));
@@ -46,7 +46,7 @@ function* save_Module_GenFun({ config = {} }) {  // Post API
 }
 
 function* editModule_ID_GenFun({ config }) {//Edit API
-  const { btnmode } = config; 
+  const { btnmode } = config;
   try {
     const response = yield call(Module_Edit_API, config);
     response.pageMode = btnmode
