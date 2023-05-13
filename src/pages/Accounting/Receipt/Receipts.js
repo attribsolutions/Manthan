@@ -35,6 +35,7 @@ import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import CInput from "../../../CustomValidateForm/CInput";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const Receipts = (props) => {
 
@@ -248,6 +249,8 @@ const Receipts = (props) => {
             }));
         }
     }, [postMsg])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -857,6 +860,7 @@ const Receipts = (props) => {
                                     <div className="table">
                                         <BootstrapTable
                                             keyField={"Invoice"}
+                                            // id="table_Arrow"
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}

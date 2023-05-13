@@ -394,6 +394,7 @@ import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoBut
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { setISODay } from "date-fns";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const BulkRecipt = (props) => {
 
@@ -509,6 +510,7 @@ const BulkRecipt = (props) => {
     }, [userAccess])
 
 
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     function CalculateOnchange(e, row, key) {
         
@@ -729,6 +731,7 @@ const BulkRecipt = (props) => {
                                     <div className="table">
                                         <BootstrapTable
                                             keyField={"id"}
+                                            id="table_Arrow"
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}

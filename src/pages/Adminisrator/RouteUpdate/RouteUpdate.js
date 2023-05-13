@@ -29,6 +29,7 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI } from "../../../store/Administrator/RouteUpdateRedux/action";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const RouteUpdate = (props) => {
 
@@ -139,6 +140,8 @@ const RouteUpdate = (props) => {
         }
     }, [pageField])
 
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -239,6 +242,7 @@ const RouteUpdate = (props) => {
                                             <div className="table">
                                                 <BootstrapTable
                                                     keyField={"id"}
+                                                    id="table_Arrow"
                                                     bordered={true}
                                                     striped={false}
                                                     noDataIndication={<div className="text-danger text-center ">Party Not available</div>}

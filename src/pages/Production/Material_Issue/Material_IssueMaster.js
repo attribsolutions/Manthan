@@ -38,6 +38,7 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const MaterialIssueMaster = (props) => {
 
@@ -261,6 +262,8 @@ const MaterialIssueMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField]);
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonList]);
 
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
@@ -851,6 +854,7 @@ const MaterialIssueMaster = (props) => {
                                                     <div className="table-responsive">
                                                         <BootstrapTable
                                                             keyField={"id"}
+                                                            id="table_Arrow"
                                                             responsive
                                                             bordered={false}
                                                             striped={false}

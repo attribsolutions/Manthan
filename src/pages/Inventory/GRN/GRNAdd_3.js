@@ -25,7 +25,7 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as pageId from "../../../routes/allPageID"
-
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 
 const GRNAdd3 = (props) => {
@@ -217,6 +217,8 @@ const GRNAdd3 = (props) => {
         }
     }, [postMsg])
 
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
 
     const tableColumns = [
         {//------------- ItemName column ----------------------------------
@@ -480,6 +482,7 @@ const GRNAdd3 = (props) => {
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
+                                id="table_Arrow"
                                 defaultSorted={defaultSorted}
                                 data={grnItemList}
                                 columns={tableColumns}

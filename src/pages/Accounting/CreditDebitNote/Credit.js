@@ -52,7 +52,7 @@ import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Ret
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
-
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const Credit = (props) => {
     const history = useHistory();
@@ -271,6 +271,8 @@ const Credit = (props) => {
         });
         dispatch(CredietDebitType(jsonBody));
     }, [])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems]);
 
     const PartyOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -892,6 +894,7 @@ const Credit = (props) => {
                                     {InvoiceItems.length <= 0 ? null : <div className="table">
                                         <BootstrapTable
                                             keyField={"id"}
+                                            id="table_Arrow"
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
