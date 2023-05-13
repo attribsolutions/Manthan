@@ -58,6 +58,7 @@ import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRe
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
 import AddMaster from "./Drodown";
+import PartyMaster from "../PartyMaster/MasterAdd/PartyIndex";
 
 const AddEmployee = (props) => {
 
@@ -85,7 +86,8 @@ const AddEmployee = (props) => {
   const [userPageAccessState, setUserAccState] = useState('');
   const [modalCss, setModalCss] = useState(false);
   const [editCreatedBy, seteditCreatedBy] = useState("");
-  const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
+  const [findEmployeeTypeMasterAccess, setFindEmployeeTypeMasterAccess] = useState(false)
+  const [findPartyMasterAccess, setPartyMasterAccess] = useState(false)
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -135,31 +137,68 @@ const AddEmployee = (props) => {
   // }, [location])
 
   // userAccess useEffect
+  // useEffect(() => {
+
+  //   let userAcc = null;
+  //   let locationPath = location.pathname;
+
+  //   if (hasShowModal) {
+  //     locationPath = props.masterPath;
+  //   };
+
+  //   userAcc = userAccess.find((inx) => {
+  //     return (`/${inx.ActualPagePath}` === locationPath)
+  //   })
+
+  //   if (userAcc) {
+  //     setUserAccState(userAcc)
+  //     breadcrumbReturnFunc({ dispatch, userAcc });
+  //   };
+
+  //   userAccess.find((index) => {
+  //     if (index.id === pageId.EMPLOYEETYPE) {
+  //       return setFindEmployeeTypeMasterAccess(true)
+  //     }
+  //     if (index.id === pageId.PARTY) {
+  //       return setPartyMasterAccess(true)
+  //     }
+  //   });
+
+  // }, [userAccess])
+
   useEffect(() => {
 
     let userAcc = null;
-    let locationPath = location.pathname;
+    let locationPath;
+
+    if (props.pageMode === mode.dropdownAdd) {
+        locationPath = props.masterPath;
+    } else {
+        locationPath = location.pathname;
+    }
 
     if (hasShowModal) {
-      locationPath = props.masterPath;
+        locationPath = props.masterPath;
     };
 
     userAcc = userAccess.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
+        return (`/${inx.ActualPagePath}` === locationPath)
     })
 
     if (userAcc) {
-      setUserAccState(userAcc)
-      breadcrumbReturnFunc({ dispatch, userAcc });
+        setUserAccState(userAcc);
+        breadcrumbReturnFunc({ dispatch, userAcc });
     };
 
     userAccess.find((index) => {
       if (index.id === pageId.EMPLOYEETYPE) {
-        return setFindAddMasterAccess(true)
+        return setFindEmployeeTypeMasterAccess(true)
+      }
+      if (index.id === pageId.PARTY) {
+        return setPartyMasterAccess(true)
       }
     });
-
-  }, [userAccess])
+}, [userAccess])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -593,7 +632,7 @@ const AddEmployee = (props) => {
                           </FormGroup>
                         </Col>
 
-                        {findAddMasterAccess ? <Col md="1" className=" mt-3">
+                        {findEmployeeTypeMasterAccess ? <Col md="1" className=" mt-3">
                           <AddMaster
                             masterModal={EmployeeTypesMaster}
                             masterPath={url.EMPLOYEETYPE}
@@ -618,6 +657,14 @@ const AddEmployee = (props) => {
                             />
                           </FormGroup>
                         </Col>
+
+                        {findPartyMasterAccess ? <Col md="1" className=" mt-3">
+                          <AddMaster
+                            masterModal={PartyMaster}
+                            masterPath={url.PARTY}
+                          />
+                        </Col> : <Col md="1"></Col>
+                        }
                       </Row>
 
                       <FormGroup className="mt-3">

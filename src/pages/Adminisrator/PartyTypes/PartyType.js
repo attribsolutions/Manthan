@@ -116,7 +116,9 @@ const PartyType = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
