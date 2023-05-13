@@ -79,16 +79,31 @@ const PartyMaster = (props) => {
     useEffect(() => {
 
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
+
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
+
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
+
+        // if (userAcc) {
+        //     setUserAccState(userAcc);
+        //     breadcrumbReturnFunc({ dispatch, userAcc });
+        // };
         if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 

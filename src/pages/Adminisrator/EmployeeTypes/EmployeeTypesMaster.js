@@ -48,7 +48,7 @@ import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const EmployeeTypesMaster = (props) => {
-
+debugger
     const dispatch = useDispatch();
     const history = useHistory()
     const location = useLocation()
@@ -65,7 +65,7 @@ const EmployeeTypesMaster = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [modalCss, setModalCss] = useState(false);
     const [editCreatedBy, seteditCreatedBy] = useState("");
-   
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         updateMsg,
@@ -94,7 +94,7 @@ const EmployeeTypesMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-       
+
         let userAcc = null;
         let locationPath;
 
@@ -114,7 +114,9 @@ const EmployeeTypesMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -262,7 +264,7 @@ const EmployeeTypesMaster = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                     <Container fluid>
                         <Card className="text-black">
