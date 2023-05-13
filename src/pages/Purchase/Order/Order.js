@@ -199,10 +199,18 @@ const Order = (props) => {
             if (hasEditVal) {
                 dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
                 setorderdate(hasEditVal.OrderDate)
-                setsupplierSelect({
-                    label: hasEditVal.SupplierName,
-                    value: hasEditVal.Supplier
-                });
+
+                if (subPageMode === url.ORDER_4) {
+                    setsupplierSelect({
+                        label: hasEditVal.CustomerName,
+                        value: hasEditVal.Customer
+                    });
+                } else {
+                    setsupplierSelect({
+                        label: hasEditVal.SupplierName,
+                        value: hasEditVal.Supplier
+                    });
+                }
                 setdeliverydate(hasEditVal.DeliveryDate)
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
@@ -407,7 +415,7 @@ const Order = (props) => {
             text: "Unit",
             dataField: "",
             formatter: (value, row, key) => {
-                
+
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
