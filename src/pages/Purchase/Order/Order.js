@@ -545,7 +545,6 @@ const Order = (props) => {
     };
 
     function val_onChange(val, row, type) {
-        debugger
         if (type === "qty") {
             row["Quantity"] = val;
         }
@@ -886,47 +885,7 @@ const Order = (props) => {
             <React.Fragment>
                 <MetaTags>{commonFunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
-
-                    {/* <table id="people">
-                        <thead>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Phone Number</th>
-                            <th>Location</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input /></td>
-                                <td><input /></td>
-                                <td><input /></td>
-                                <td><input /></td>
-                            </tr>
-                            <tr>
-                                <td><input /></td>
-                                <td><input /></td>
-                                <td><input /></td>
-                                <td><input /></td>
-                            </tr>
-                            <tr>
-                                <td><input /></td>
-                                <td><input /></td>
-                                <td><input /></td>
-                                <td><input /></td>
-                            </tr>
-                            <tr>
-                                <td><input /></td>
-                                <td><input /></td>
-                                <td><input /></td>
-                                <td><input /></td>
-                            </tr>
-                            <tr>
-                                <td><input /></td>
-                                <td><input /></td>
-                                <td><input /></td>
-                                <td><input /></td>
-                            </tr>
-                        </tbody>
-                    </table> */}
+                   
                     {RoleID === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
                             <div className=" mt-1 mb-2 row ">
@@ -968,7 +927,6 @@ const Order = (props) => {
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
-                                                    // altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
                                                 }}
