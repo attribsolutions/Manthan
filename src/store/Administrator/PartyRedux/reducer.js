@@ -4,7 +4,6 @@ import {
     GET_COMPANY_BY_DIVISIONTYPES_ID_SUCCESS,
     GET_DISTRICT_ON_STATE_SUCCESS,
     GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
-    GET_PRICELIST_SUCCESS,
     GET_ADDRESSTYPES_SUCCESS,
     GET_PARTY_LIST_API_SUCCESS,
     POST_PARTY_DATA_SUCCESS,
@@ -13,10 +12,10 @@ import {
 
 const INIT_STATE = {
     partyList: [],
-    PartySaveSuccess: { Status: false },
-    deleteMessage: { Status: false },
+    postMsg: { Status: false },
+    deleteMsg: { Status: false },
     editData: { Status: false },
-    updateMessage: { Status: false },
+    updateMsg: { Status: false },
     DistrictOnState: [],
     AddressTypes: []
 };
@@ -34,14 +33,14 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
         case POST_PARTY_DATA_SUCCESS:
             return {
                 ...state,
-                PartySaveSuccess: action.payload,
+                postMsg: action.payload,
             };
 
         // delete api
         case DELETE_PARTY_ID_SUCCESS:
             return {
                 ...state,
-                deleteMessage: action.payload,
+                deleteMsg: action.payload,
             };
 
         // edit api
@@ -55,7 +54,7 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
         case UPDATE_PARTY_ID_SUCCESS:
             return {
                 ...state,
-                updateMessage: action.payload,
+                updateMsg: action.payload,
             };
 
         // GetDistrictOnState API
@@ -63,13 +62,6 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 DistrictOnState: action.payload,
-            };
-
-        //get PriceList
-        case GET_PRICELIST_SUCCESS:
-            return {
-                ...state,
-                PriceList: action.payload,
             };
 
         //get addresstypes

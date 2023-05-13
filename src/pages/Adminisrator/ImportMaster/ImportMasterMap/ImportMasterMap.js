@@ -14,8 +14,19 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginIsSCMCompany, loginPartyID, loginUserID } from "../../../../components/Common/CommonFunction";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, } from "../../../../components/Common/validationFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    loginIsSCMCompany,
+    loginPartyID,
+    loginUserID,
+    metaTagLabel
+} from "../../../../components/Common/CommonFunction";
+import {
+    comAddPageFieldFunc,
+    formValid, initialFiledFunc,
+    onChangeSelect,
+} from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -26,7 +37,7 @@ import {
     save_ImportMasterMap,
     save_ImportMasterMap_Success
 } from "../../../../store/Administrator/ImportMasterMapRedux/action";
-
+import * as commonFunc from "../../../../components/Common/CommonFunction";
 
 const ImportMasterMap = (props) => {
 
@@ -124,7 +135,7 @@ const ImportMasterMap = (props) => {
         }
     }, [postMsg])
 
-
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonArr]);
 
     const partyDropdown_Options = partyList.map((index) => ({
         value: index.id,
@@ -143,7 +154,6 @@ const ImportMasterMap = (props) => {
         value: 3,
         label: "Unit",
     }]
-
 
 
     const pagesListColumns = [
@@ -178,7 +188,7 @@ const ImportMasterMap = (props) => {
         const btnId = event.target.id
         try {
             btnIsDissablefunc({ btnId, state: true })
-            let partyId = (loginIsSCMCompany() === 1) ? loginPartyID() : values.Party.value;
+            let partyId = (((loginIsSCMCompany()) === 1)) ? loginPartyID() : values.Party.value;
             let mapType = values.MapType.value;
 
             dispatch(GoButton_ImportMasterMap({ partyId, mapType }))
@@ -196,9 +206,6 @@ const ImportMasterMap = (props) => {
         async function funcForParty() {
             let jsonArr = []
             await goButtonArr.forEach(i => {
-
-
-
                 if ((!(i.mapValue === '') && !(i.mapValue === null))) {
                     jsonArr.push({
                         "Party": i.party,
@@ -260,8 +267,7 @@ const ImportMasterMap = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content">
                     <div className="px-2 c_card_header text-black" >
@@ -336,6 +342,7 @@ const ImportMasterMap = (props) => {
                                     <div className="table">
                                         <BootstrapTable
                                             bordered={true}
+                                            id="table_Arrow"
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                             classes={"table align-middle  table-hover"}

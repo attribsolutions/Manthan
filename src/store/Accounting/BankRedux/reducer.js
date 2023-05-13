@@ -1,6 +1,6 @@
 import {
     SAVE_BANK_MASTER_SUCCESS,
-    POST_BANK_LIST_SUCCESS,
+    GET_BANK_LIST_SUCCESS,
     DELETE_BANK_ID_SUCCESS,
     EDIT_BANK_ID_SUCCESS,
     UPDATE_BANK_ID_SUCCESS
@@ -24,7 +24,7 @@ import {
         }
   
       // post api
-      case POST_BANK_LIST_SUCCESS:
+      case GET_BANK_LIST_SUCCESS:
         return {
           ...state,
           BankList: action.payload,

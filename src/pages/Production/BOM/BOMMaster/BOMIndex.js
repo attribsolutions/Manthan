@@ -31,7 +31,7 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, loginCompanyID, btnIsDissablefunc, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -314,8 +314,7 @@ const BOMMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>

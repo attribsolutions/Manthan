@@ -1,7 +1,7 @@
 
 
 export const basicAmount = i => {
- 
+
     let rate = 0
     let qty = 0
     if (!(i.Rate == '')) { rate = i.Rate; };
@@ -72,3 +72,7 @@ export function handleKeyDown(e, item) {
         document.getElementById(inp_lable + count).focus();
     }
 }
+
+
+
+

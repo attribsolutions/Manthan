@@ -15,6 +15,8 @@ import {
   GET_ORDER_LIST_PAGE,
   GET_ORDER_LIST_PAGE_SUCCESS,
   ORDER_LIST_FILTERS,
+  ORDER_APPROVAL_ACTION,
+  ORDER_APPROVAL_ACTION_SUCCESS,
 } from './actionType'
 
 
@@ -34,9 +36,9 @@ export const GoButton_For_Order_AddSuccess = list => ({
 })
 
 //get listpage api
-export const getOrderListPage = (config={}) => ({
+export const getOrderListPage = (config = {}) => ({
   type: GET_ORDER_LIST_PAGE,
- config,
+  config,
 });
 
 export const getOrderListPageSuccess = (resp) => ({
@@ -91,6 +93,16 @@ export const getDivisionOrders = () => ({
 export const getDivisionOrdersSuccess = orders => ({
   type: GET_DIVISIONORDER_LIST_SUCCESS,
   payload: orders,
+})
+
+export const orderApprovalAction = (config) => ({
+  type: ORDER_APPROVAL_ACTION,
+  config
+});
+
+export const orderApprovalActionSuccess = resp => ({
+  type: ORDER_APPROVAL_ACTION_SUCCESS,
+  payload: resp,
 })
 
 

@@ -9,6 +9,7 @@ import {
   GET_ORDER_LIST_PAGE_SUCCESS,
   ORDER_LIST_FILTERS,
   GET_ORDER_LIST_PAGE,
+  ORDER_APPROVAL_ACTION_SUCCESS,
   // ORDER_ADD_FILTERS,
 } from "./actionType"
 
@@ -21,9 +22,9 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   orderList: [],
-  orderlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: { value: '', label: "All" } },
+  orderlistFilter: { fromdate: "", todate: '', venderSelect: { value: '', label: "All" } },
   // orderAddFilter: { orderdate: currentDate, supplierSelect: '' }
-
+  orderApprovalRedux: { Status: false },
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
@@ -83,6 +84,12 @@ const OrderReducer = (state = INIT_STATE, action) => {
         ...state,
         orderList: [],
       }
+    case ORDER_APPROVAL_ACTION_SUCCESS:
+      return {
+        ...state,
+        orderApprovalRedux: action.payload,
+      }
+
 
     default:
       return state

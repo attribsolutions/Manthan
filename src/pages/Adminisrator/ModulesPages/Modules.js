@@ -17,6 +17,7 @@ import {
     saveModuleMasterSuccess,
     editModuleIDSuccess,
     updateModuleIDSuccess,
+    getModuleList,
 } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import {
@@ -34,10 +35,16 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginUserID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginUserID,
+    btnIsDissablefunc,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const Modules = (props) => {
 
@@ -86,9 +93,15 @@ const Modules = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-
+       
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -99,8 +112,10 @@ const Modules = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -144,39 +159,83 @@ const Modules = (props) => {
     }, [])
 
     // This UseEffect clear Form Data and when modules Save Successfully.
-    useEffect(() => {
+    // useEffect(() => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+    //         dispatch(saveModuleMasterSuccess({ Status: false }))
+    //         setState(() => resetFunction(fileds, state)) // Clear form values 
+    //         dispatch(Breadcrumb_inputName(''))
+
+    //         if (pageMode === "dropdownAdd") {
+    //             dispatch(AlertState({
+    //                 Type: 1,
+    //                 Status: true,
+    //                 Message: postMsg.Message,
+    //             }))
+    //         }
+    //         else {
+    //             dispatch(AlertState({
+    //                 Type: 1,
+    //                 Status: true,
+    //                 Message: postMsg.Message,
+    //                 RedirectPath: url.MODULE_lIST,
+    //             }))
+    //         }
+    //     } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+    //         dispatch(saveModuleMasterSuccess({ Status: false }))
+    //         dispatch(AlertState({
+    //             Type: 4,
+    //             Status: true,
+    //             Message: JSON.stringify(postMsg.Message),
+    //             RedirectPath: false,
+    //             AfterResponseAction: false
+    //         }));
+    //     }
+    // }, [postMsg])
+
+    useEffect(async () => {
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveModuleMasterSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state)) // Clear form values 
             dispatch(Breadcrumb_inputName(''))
-
-            if (pageMode === "dropdownAdd") {
-                dispatch(AlertState({
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            if (props.pageMode === mode.dropdownAdd) {
+                CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
+                // history.push({
+                //     Data: postMsg.Data
+                // })
+                dispatch(getModuleList())
+
+                props.isOpenModal(false)
+            }
+            else if (pageMode === mode.edit) {
+                CustomAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                history.push({ pathname: url.MODULE_lIST })
             }
             else {
-                dispatch(AlertState({
+                dispatch(Breadcrumb_inputName(''))
+                const promise = await CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.MODULE_lIST,
-                }))
+                })
+                if (promise) { history.push({ pathname: url.MODULE_lIST }) }
             }
-        } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-            dispatch(saveModuleMasterSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
+
+        } else if
+            (postMsg.Status === true) {
+            CustomAlert({
+                Type: 3,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
+
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
@@ -238,8 +297,8 @@ const Modules = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    <Container fluid  >
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                    <Container fluid >
 
                         <Card className="text-black" >
                             <CardHeader className="card-header   text-black c_card_header" >

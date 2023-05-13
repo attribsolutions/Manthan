@@ -35,7 +35,7 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
   }
 
   if (!(iscall === searchCount)) {
-    dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count :${iscall}`))
+    dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${iscall}`))
     searchCount = paginationProps.dataSize
   }
   searchProps = toolkitProps.searchProps

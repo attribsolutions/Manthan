@@ -13,7 +13,6 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -38,10 +37,17 @@ import {
     postMRPMasterData, postMRPMasterDataSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
-import { breadcrumbReturnFunc, loginUserID, loginCompanyID, loginIsSCMCompany } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginUserID,
+    loginCompanyID,
+    loginIsSCMCompany,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Change_Button } from "../../../components/Common/CommonButton";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const MRPMaster = (props) => {
 
@@ -104,7 +110,7 @@ const MRPMaster = (props) => {
     }, [dispatch]);
 
     useEffect(() => {
-     
+
         const editDataGatingFromList = history.location.editValue
 
         const locationPath = history.location.pathname
@@ -198,6 +204,8 @@ const MRPMaster = (props) => {
         }
     }, [deleteMessage]);
 
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
+
     const PartyDropdown_Options = Party.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -243,7 +251,7 @@ const MRPMaster = (props) => {
     };
 
     const GoButton_Handler = (event, values) => {
-  
+
         let division = { ...division_dropdown_Select }
         let party = { ...party_dropdown_Select }
 
@@ -379,7 +387,7 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-     
+
         var ItemData = TableData.map((index) => ({
             Division: (IsSCM === 1) ? null : division_dropdown_Select.value,
             Party: (IsSCM === 1) ? null : party_dropdown_Select.value,
@@ -409,7 +417,7 @@ const MRPMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "3cm" }}>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP} /> */}
                 {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                 <Container fluid>
@@ -517,7 +525,7 @@ const MRPMaster = (props) => {
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="Item"
+                                                keyField="id"
                                                 data={TableData}
                                                 columns={pagesListColumns}
                                                 search
@@ -528,7 +536,8 @@ const MRPMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"Item"}
+                                                                        keyField={"id"}
+                                                                        id="table_Arrow"
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}

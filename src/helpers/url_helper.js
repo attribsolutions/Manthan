@@ -218,7 +218,7 @@ export const GENERAL_MASTER_SUB_TYPE = '/GeneralMasterSubType'
 
 //Bank
 export const BANK = '/Bank'
-export const BANK_LIST = '/BankFilter'
+export const BANK_LIST_FILTER = '/BankFilter'
 
 // BankAssign
 export const BANK_ASSIGN = '/PartyBankSave'
@@ -334,3 +334,7 @@ export const CREDIT_DEBIT = '/CreditDebitNote'
 export const CREDIT_DEBIT_FILTER = '/CreditDebitNoteFilter'
 export const INVOICE_RETURN = '/InvoiceReturnCRDR'
 export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
+
+
+// Dashboard
+export const DASHBOARD = '/getdashboard'

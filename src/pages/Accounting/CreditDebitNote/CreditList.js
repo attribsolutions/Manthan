@@ -12,7 +12,6 @@ import * as report from '../../../Reports/ReportIndex'
 import { updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
@@ -21,7 +20,14 @@ import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import Flatpickr from "react-flatpickr"
 import { Go_Button } from "../../../components/Common/CommonButton";
-import { CredietDebitType, Edit_CreditList_ID, GetCreditList, deleteCreditlistSuccess, delete_CreditList_ID, GetCreditListSuccess } from "../../../store/Accounting/CreditRedux/action";
+import {
+    CredietDebitType,
+    Edit_CreditList_ID,
+    GetCreditList,
+    deleteCreditlistSuccess,
+    delete_CreditList_ID,
+    GetCreditListSuccess
+} from "../../../store/Accounting/CreditRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const CreditList = () => {
@@ -97,12 +103,11 @@ const CreditList = () => {
             newBtnPath = url.DEBIT;
             buttonMsgLable = "Debit"
         }
-
         setOtherState({ masterPath, newBtnPath, buttonMsgLable, page_Id })
         setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-
+        dispatch(BreadcrumbShowCountlabel(`${buttonMsgLable} Count : 0`))
     }, []);
 
     // useEffect(() => {
@@ -117,13 +122,13 @@ const CreditList = () => {
 
     //   Note Type Api for Type identify
     useEffect(() => {
-
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
             TypeID: 5
         });
         dispatch(CredietDebitType(jsonBody));
     }, []);
+
 
     // Retailer DropDown List Type 1 for credit list drop down
     useEffect(() => {
@@ -325,7 +330,6 @@ const CreditList = () => {
 
     return (
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <div className="page-content">
                 {
                     (pageField) ?

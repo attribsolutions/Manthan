@@ -33,7 +33,7 @@ import {
     updatePriceList,
     updatePriceListSuccess
 } from "../../../store/Administrator/PriceList/action";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
@@ -104,7 +104,7 @@ const PriceMaster = (props) => {
 
     useEffect(() => {
         dispatch(getPartyTypelist());
-        dispatch(priceListByCompay_Action(loginCompanyID()));
+        dispatch(priceListByCompay_Action());
 
     }, [dispatch]);
 
@@ -502,7 +502,7 @@ const PriceMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "5cm" }} >
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
                     <Card className="text-black">
                         <CardHeader className="card-header   text-black c_card_header" >

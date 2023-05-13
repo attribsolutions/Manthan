@@ -9,8 +9,6 @@ import {
     EDIT_PRICE_LIST_SUCCESS,
     UPDATE_PRICE_LIST,
     UPDATE_PRICE_LIST_SUCCESS,
-    GET_PRICE_LIST_PAGE,
-    GET_PRICE_LIST_PAGE_SUCCESS,
     PRICE_LIST_BY_COMPANY,
     PRICE_LIST_BY_COMPANY_SUCCESS
 } from "./actionType";
@@ -28,18 +26,14 @@ export const priceListByPartyActionSuccess = (data) => ({// priceMaster Gobtn Su
     payload: data,
 });
 
-
-export const getPriceListPage = () => ({// listpage api
-    type: GET_PRICE_LIST_PAGE,
-
-});
-
-export const getPriceListPageSuccess = (data) => ({// listpage Success
-    type: GET_PRICE_LIST_PAGE_SUCCESS,
-    payload: data,
-});
-
-
+export const priceListByCompay_Action = (companyId) => ({
+    type: PRICE_LIST_BY_COMPANY,
+    companyId,
+})
+export const priceListByCompay_ActionSuccess = (resp) => ({
+    type: PRICE_LIST_BY_COMPANY_SUCCESS,
+    payload: resp,
+})
 
 export const savePriceMasterAction = (config) => ({// save api
     type: POST_PRICE_LIST_DATA,
@@ -82,11 +76,4 @@ export const updatePriceListSuccess = (resp) => ({// update  Success
 })
 
 
-export const priceListByCompay_Action = (companyId) => ({
-    type: PRICE_LIST_BY_COMPANY,
-    companyId,
-})
-export const priceListByCompay_ActionSuccess = (resp) => ({
-    type: PRICE_LIST_BY_COMPANY_SUCCESS,
-    payload: resp,
-})
+

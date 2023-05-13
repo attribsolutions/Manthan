@@ -7,7 +7,7 @@ import {
   delete_PriceList,
   editPriceList,
   updatePriceListSuccess,
-  getPriceListPage
+  priceListByCompay_Action
 } from "../../../store/Administrator/PriceList/action";
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -18,7 +18,7 @@ const PriceList = () => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      tableList: state.PriceListReducer.priceList,
+      tableList: state.PriceListReducer.priceListByCompany,
       editData: state.PriceListReducer.editData,
       updateMsg: state.PriceListReducer.updateMessage,
       deleteMsg: state.PriceListReducer.deleteMsg,
@@ -31,7 +31,7 @@ const PriceList = () => {
   const { pageField, userAccess = [] } = reducers
 
   const action = {
-    getList: getPriceListPage,
+    getList: priceListByCompay_Action,
     editId: editPriceList,
     deleteId: delete_PriceListSuccess,
     postSucc: savePriceMasterActionSuccess,
@@ -43,7 +43,7 @@ const PriceList = () => {
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(pageId.PARTYITEM_LIST))
-    dispatch(getPriceListPage());
+    dispatch(priceListByCompay_Action());
   }, []);
 
 

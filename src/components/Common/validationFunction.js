@@ -138,6 +138,7 @@ export const formValChange = ({ event, state, setState }) => {
 };
 
 export function comAddPageFieldFunc({ state, setState, fieldArr }) {
+
     var isState = { ...state }
     const values = { ...state.values }
     try {

@@ -51,7 +51,7 @@ import PartyMasterBulkUpdateSaga from "./Administrator/PartyMasterBulkUpdateRedu
 import ManagementPartiesSaga from "./Administrator/ManagementPartiesRedux/saga"
 import BankSaga from "./Accounting/BankRedux/saga"
 import BankAssignSaga from "./Accounting/BankAssignRedux/saga"
-import ImportFieldMap_Saga from "./Administrator/ImportFieldMapRedux/saga"
+import ImportExcelFieldMap_Saga from "./Administrator/ImportExportFieldMapRedux/saga"
 import ImportFieldAdd_Saga from "./Administrator/ImportFieldAddRedux/saga"
 import ImportMasterMap_Saga from "./Administrator/ImportMasterMapRedux/saga"
 
@@ -79,15 +79,16 @@ import LoadingSheetSaga from "./Sales/LoadingSheetRedux/saga"
 import ReceiptSaga from "./Accounting/Receipt/saga"
 import SalesReturnSaga from "./Sales/SalesReturnRedux/saga"
 import CreditDebitSaga from "./Accounting/CreditRedux/saga"
+import DashboardSaga from "./Dashboard/Dashboard_1_Redux/saga"
 
 
 export default function* rootSaga() {
   yield all([
     fork(AccountSaga),
-    fork(ImportFieldMap_Saga),
+    fork(ImportExcelFieldMap_Saga),
     fork(ImportFieldAdd_Saga),
     fork(ImportMasterMap_Saga),
-    
+
     fork(AuthSaga),
     fork(ForgetSaga),
     fork(ProfileSaga),
@@ -147,5 +148,6 @@ export default function* rootSaga() {
     fork(ReceiptSaga),
     fork(SalesReturnSaga),
     fork(CreditDebitSaga),
+    fork(DashboardSaga)
   ])
 }

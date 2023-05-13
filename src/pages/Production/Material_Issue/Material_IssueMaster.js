@@ -26,7 +26,7 @@ import {
     saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import {
     editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, saveMaterialIssue, SaveMaterialIssueSuccess
 } from "../../../store/Production/Matrial_Issue/action";
@@ -38,6 +38,7 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const MaterialIssueMaster = (props) => {
 
@@ -261,6 +262,8 @@ const MaterialIssueMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField]);
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonList]);
 
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
@@ -704,7 +707,7 @@ const MaterialIssueMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MATERIAL_ISSUE} /> */}
 
                 <div className="page-content" >
@@ -851,6 +854,7 @@ const MaterialIssueMaster = (props) => {
                                                     <div className="table-responsive">
                                                         <BootstrapTable
                                                             keyField={"id"}
+                                                            id="table_Arrow"
                                                             responsive
                                                             bordered={false}
                                                             striped={false}

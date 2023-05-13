@@ -18,7 +18,7 @@ import {
     initialFiledFunc,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, metaTagLabel, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -29,6 +29,7 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI } from "../../../store/Administrator/RouteUpdateRedux/action";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const RouteUpdate = (props) => {
 
@@ -128,7 +129,7 @@ const RouteUpdate = (props) => {
 
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Route Update Count"} :${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Route Update Count"}:${Data.length}`))
     }, [RouteUpdateList])
 
     useEffect(() => {
@@ -138,6 +139,8 @@ const RouteUpdate = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
@@ -215,7 +218,7 @@ const RouteUpdate = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
                     {/* <Container fluid> */}
@@ -239,6 +242,7 @@ const RouteUpdate = (props) => {
                                             <div className="table">
                                                 <BootstrapTable
                                                     keyField={"id"}
+                                                    id="table_Arrow"
                                                     bordered={true}
                                                     striped={false}
                                                     noDataIndication={<div className="text-danger text-center ">Party Not available</div>}

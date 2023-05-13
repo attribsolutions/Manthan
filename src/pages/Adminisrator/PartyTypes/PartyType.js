@@ -35,7 +35,14 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginIsSCMCompany, loginUserID } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    loginCompanyID,
+    loginIsSCMCompany,
+    loginUserID,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -89,8 +96,15 @@ const PartyType = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -101,8 +115,10 @@ const PartyType = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -148,35 +164,45 @@ const PartyType = (props) => {
         }
     }, [])
 
-    useEffect(async () => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
-            dispatch(SavePartyTypeAPISuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values  
-            dispatch(Breadcrumb_inputName(''))
 
-            if (pageMode === mode.dropdownAdd) {
+    useEffect(async () => {
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(SavePartyTypeAPISuccess({ Status: false }))
+            dispatch(Breadcrumb_inputName(''))
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            if (props.pageMode === mode.dropdownAdd) {
                 CustomAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
+                // history.push({
+                //     Data: postMsg.Data
+                // })
+                dispatch(getPartyTypelist())
+
+                props.isOpenModal(false)
+            }
+            else if (pageMode === mode.edit) {
+                CustomAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                history.push({ pathname: url.PARTYTYPE_lIST })
             }
             else {
+                dispatch(Breadcrumb_inputName(''))
                 const promise = await CustomAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                if (promise) {
-                    history.push({
-                        pathname: url.PARTYTYPE_lIST
-                    })
-                }
-
+                if (promise) { history.push({ pathname: url.PARTYTYPE_lIST }) }
             }
-        }
-        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
-            dispatch(SavePartyTypeAPISuccess({ Status: false }))
+
+        } else if
+            (postMsg.Status === true) {
             CustomAlert({
-                Type: 4,
+                Type: 3,
                 Message: JSON.stringify(postMsg.Message),
             })
         }
@@ -244,7 +270,7 @@ const PartyType = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header"  >
@@ -284,8 +310,8 @@ const PartyType = (props) => {
                                                 <Row>
                                                     <FormGroup className="mb-2 col col-sm-4">
                                                         <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input" 
-                                                            className="col-sm-5 col-form-label" >{fieldLabel.IsSCM} </Label>
+                                                            <Label htmlFor="horizontal-firstname-input"
+                                                                className="col-sm-5 col-form-label" >{fieldLabel.IsSCM} </Label>
                                                             <Col md={2} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-2">
                                                                     <Input type="checkbox" className="form-check-input"
@@ -307,8 +333,8 @@ const PartyType = (props) => {
 
                                                     <FormGroup className="mb-2 col col-sm-4">
                                                         <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input" 
-                                                            className="col-sm-5 col-form-label" >{fieldLabel.IsDivision} </Label>
+                                                            <Label htmlFor="horizontal-firstname-input"
+                                                                className="col-sm-5 col-form-label" >{fieldLabel.IsDivision} </Label>
                                                             <Col md={2} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-3">
                                                                     <Input type="checkbox" className="form-check-input"
@@ -336,7 +362,7 @@ const PartyType = (props) => {
                                                     <FormGroup className="mb-2 col col-sm-4">
                                                         <Row className="justify-content-md-left">
                                                             <Label htmlFor="horizontal-firstname-input"
-                                                             className="col-sm-5 col-form-label" >{fieldLabel.IsRetailer} </Label>
+                                                                className="col-sm-5 col-form-label" >{fieldLabel.IsRetailer} </Label>
                                                             <Col md={1} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-3">
                                                                     <Input type="checkbox" className="form-check-input"
@@ -357,8 +383,8 @@ const PartyType = (props) => {
 
                                                     <FormGroup className="mb-2 col col-sm-4">
                                                         <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input" 
-                                                            className="col-sm-5 col-form-label" >{fieldLabel.IsVendor} </Label>
+                                                            <Label htmlFor="horizontal-firstname-input"
+                                                                className="col-sm-5 col-form-label" >{fieldLabel.IsVendor} </Label>
                                                             <Col md={1} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-3">
                                                                     <Input type="checkbox" className="form-check-input"

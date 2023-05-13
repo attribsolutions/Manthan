@@ -22,7 +22,7 @@ import paginationFactory, {
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import { get_Party_ForDropDown, get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import {
     deleteID_In_Margin_MasterPage,
@@ -34,8 +34,15 @@ import {
     postMarginMasterDataSuccess
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
-import { breadcrumbReturnFunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginUserID,
+    loginCompanyID,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
+import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -62,7 +69,7 @@ const MarginMaster = (props) => {
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
         PostAPIResponse: state.MarginMasterReducer.PostData,
         Party: state.ItemMastersReducer.Party,
-        PriceList: state.ItemMastersReducer.PriceList,
+        PriceList: state.PriceListReducer.priceListByCompany,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
@@ -84,7 +91,7 @@ const MarginMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({dispatch,userAcc});
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -121,7 +128,7 @@ const MarginMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(get_PriceList_ForDropDown());
+        dispatch(priceListByCompay_Action());
         dispatch(get_Party_ForDropDown());
         dispatch(postGoButtonForMargin_Master_Success([]));
     }, [dispatch]);
@@ -150,6 +157,8 @@ const MarginMaster = (props) => {
             );
         }
     }, [deleteMessage]);
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
 
     const PartyTypeDropdown_Options = Party.map((Data) => ({
         value: Data.id,
@@ -324,7 +333,7 @@ const MarginMaster = (props) => {
             dataField: "Margin",
             sort: true,
             formatter: (cellContent, user) => {
-                
+
                 if (((cellContent > 0) && (user["margin"] === undefined) || user.margin)) {
                     user["margin"] = true
                 } else {
@@ -408,7 +417,7 @@ const MarginMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
@@ -492,7 +501,7 @@ const MarginMaster = (props) => {
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="Item"
+                                                keyField="id"
                                                 data={TableData}
                                                 columns={pagesListColumns}
                                                 search
@@ -503,7 +512,8 @@ const MarginMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"Item"}
+                                                                        keyField={"id"}
+                                                                        id="table_Arrow"
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}

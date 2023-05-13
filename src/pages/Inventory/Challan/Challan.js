@@ -21,7 +21,7 @@ import {
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -37,6 +37,7 @@ import {
 } from "../../../store/Inventory/ChallanRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const Challan = (props) => {
 
@@ -235,6 +236,9 @@ const Challan = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField]);
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [GoButton]);
+
     const venderOptions = vender.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -714,7 +718,8 @@ const Challan = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+
 
                 <div className="page-content" >
 
@@ -815,6 +820,7 @@ const Challan = (props) => {
                                                     <div className="table-responsive">
                                                         <BootstrapTable
                                                             keyField={"id"}
+                                                            id="table_Arrow"
                                                             responsive
                                                             bordered={false}
                                                             striped={false}

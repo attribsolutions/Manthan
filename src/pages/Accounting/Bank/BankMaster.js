@@ -31,7 +31,8 @@ import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
     loginCompanyID,
-    loginUserID
+    loginUserID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -80,7 +81,7 @@ const BankMaster = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
-  
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -125,7 +126,7 @@ const BankMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name} = hasEditVal
+                const { id, Name } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
@@ -233,7 +234,7 @@ const BankMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <Container fluid>

@@ -34,7 +34,7 @@ import {
 } from "../../../store/actions";
 import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -50,7 +50,7 @@ import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 const RoleAccessAdd1 = () => {
     const dispatch = useDispatch();
     const history = useHistory()
-    const [userAccState, setUserAccState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [editCreatedBy, setEditCreatedBy] = useState('');
     const [tableListData, setTableListData] = useState([])
@@ -546,11 +546,11 @@ const RoleAccessAdd1 = () => {
         }
     }
 
-    if (!(userAccState === '')) {
+    if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content text-black" style={{ minHeight: "600px" }} >
-                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                     <Container fluid>
                         <CardBody >
@@ -716,7 +716,7 @@ const RoleAccessAdd1 = () => {
                                                     {/* <Button type="button" color="primary" onClick={() => { saveHandeller() }}>Save</Button> */}
                                                     <SaveButton
                                                         pageMode={pageMode}
-                                                        userAcc={userAccState}
+                                                        userAcc={userPageAccessState}
                                                         module={"RoleAccess"}
                                                         onClick={saveHandeller}
                                                         editCreatedBy={editCreatedBy}
@@ -956,7 +956,7 @@ const RoleAccessAdd = () => {
         }
     ]
 
-    const [userAccState, setUserAccState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [editCreatedBy, setEditCreatedBy] = useState('');
     const [tableHederList, setTableHederList] = useState(InitialCol)
@@ -1377,9 +1377,8 @@ const RoleAccessAdd = () => {
 
     return <React.Fragment>
         <div className="page-content" >
-            <MetaTags> <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <Container fluid>
-
                 {
                     !showTableOnUI ?
 
@@ -1523,7 +1522,7 @@ const RoleAccessAdd = () => {
                                         {/* <Button type="button" color="primary" onClick={() => { saveHandeller() }}>Save</Button> */}
                                         <SaveButton
                                             pageMode={pageMode}
-                                            userAcc={userAccState}
+                                            userAcc={userPageAccessState}
                                             module={"RoleAccess"}
                                             onClick={saveHandeller}
                                             editCreatedBy={editCreatedBy}

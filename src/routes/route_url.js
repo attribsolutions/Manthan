@@ -1,6 +1,7 @@
 
 export const DASHBORD = "/Dashboard"
 
+export const DASHBORD_1 = "/Dashboard_1"
 // ***************************** Utility **************************************//
 
 export const SEARCH_BOX2 = "/SearchBoxSecond"
@@ -101,13 +102,14 @@ export const GENERAL_LIST = "/GeneralList"
 export const CREDITLIMIT = "/CreditLimit"
 export const CREDITLIMIT_LIST = "/CreditLimitList"
 
-export const IMPORT_FIELD_MAP = "/ImportFieldMap"
-export const IMPORT_FIELD_MAP_LIST = "/ImportFieldMapList"
+export const IMPORT_EXCEL_FIELD_MAP_add = "/Import_ExcelFieldMap_add"
+export const IMPORT_EXCEL_FIELD_MAP_list = "/Import_ExcelFieldMap_list"
 
 export const UPLOAD_EXCEL = "/Upload_Excel"
 
 export const IMPORT_FIELD_ADD = "/ImportFieldAdd"
 export const IMPORT_FIELD_ADD_LIST = "/ImportFieldAddList"
+
 
 export const IMPORT_FIELD_MASTER = "/ImportMasterMap"
 
@@ -211,9 +213,9 @@ export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"
 
 export const BANK_ASSIGN = "/BankAssign"
 
-export const CREDIT_LIST ="/Credit_List"
-export const CREDIT ="/Credit"
+export const CREDIT_LIST = "/Credit_List"
+export const CREDIT = "/Credit"
 
 
-export const DEBIT_LIST ="/Debit_List"
-export const DEBIT ="/Debit"
+export const DEBIT_LIST = "/Debit_List"
+export const DEBIT = "/Debit"

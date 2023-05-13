@@ -20,12 +20,12 @@ import { basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturnFunc, loginUserID, currentDate, btnIsDissablefunc, convertDatefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate, btnIsDissablefunc, convertDatefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as pageId from "../../../routes/allPageID"
-
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 
 const GRNAdd3 = (props) => {
@@ -35,7 +35,7 @@ const GRNAdd3 = (props) => {
     const subPageMode = history.location.pathname;
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userAccState, setUserAccState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState('');
 
     const [grnDate, setgrnDate] = useState(currentDate);
     const [orderAmount, setOrderAmount] = useState(0);
@@ -218,6 +218,8 @@ const GRNAdd3 = (props) => {
     }, [postMsg])
 
 
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
+
     const tableColumns = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
@@ -367,10 +369,11 @@ const GRNAdd3 = (props) => {
         } catch (error) { returnFunc() }
     }
 
-    if (!(userAccState === "")) {
+    if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+
                 <div className="page-content" >
 
                     <div className="px-2 mb-1  c_card_header " >
@@ -479,6 +482,7 @@ const GRNAdd3 = (props) => {
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
+                                id="table_Arrow"
                                 defaultSorted={defaultSorted}
                                 data={grnItemList}
                                 columns={tableColumns}
@@ -525,7 +529,7 @@ const GRNAdd3 = (props) => {
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
                                     editCreatedBy={editCreatedBy}
-                                    userAcc={userAccState}
+                                    userAcc={userPageAccessState}
                                     module={"GRN"} onClick={saveHandeller}
                                 />
                             </div>

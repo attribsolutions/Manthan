@@ -38,7 +38,8 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
-    loginUserID
+    loginUserID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -133,7 +134,6 @@ const GroupMaster = (props) => {
                 values.id = id
                 values.GroupTypeName = { label: GroupTypeName, value: GroupType };
 
-                hasValid.id.valid = true;
                 hasValid.Name.valid = true;
                 hasValid.GroupTypeName.valid = true;
 
@@ -195,6 +195,12 @@ const GroupMaster = (props) => {
     }, [updateMsg, modalCss]);
 
 
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     const GroupTypesValues = GroupTypeAPI.map((Data) => ({
         value: Data.id,
@@ -236,7 +242,7 @@ const GroupMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >

@@ -1,8 +1,8 @@
 import * as url from "./route_url"
 
 
-
-
+//****************************Dashboard ************************************** */
+export const DASHBORD_1 = url.DASHBORD_1
 
 // ***************************** Utility **************************************//
 
@@ -105,8 +105,8 @@ export const GeneralMaster = url.GENERAL_LIST
 export const CreditLimitMaster = url.CREDITLIMIT_LIST
 export const CreditLimitList = url.CREDITLIMIT
 
-export const ImportFieldMap = url.IMPORT_FIELD_MAP
-export const ImportFieldMapList = url.IMPORT_FIELD_MAP
+export const ImportFieldMap = url.IMPORT_EXCEL_FIELD_MAP_add
+export const ImportFieldMapList = url.IMPORT_EXCEL_FIELD_MAP_add
 
 export const ImportFieldAdd = url.IMPORT_FIELD_ADD_LIST
 export const ImportFieldAddList = url.IMPORT_FIELD_ADD

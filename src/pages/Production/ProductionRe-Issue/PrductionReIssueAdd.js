@@ -25,7 +25,14 @@ import {
     saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID }
+import {
+    breadcrumbReturnFunc,
+    convertDatefunc,
+    loginUserID, currentDate,
+    loginCompanyID,
+    loginPartyID,
+    metaTagLabel
+}
     from "../../../components/Common/CommonFunction";
 import {
     editMaterialIssueIdSuccess,
@@ -33,7 +40,6 @@ import {
     goButtonForMaterialIssue_Master_ActionSuccess,
     SaveMaterialIssueSuccess
 } from "../../../store/Production/Matrial_Issue/action";
-
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -42,8 +48,13 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
-import { Save_Production_ReIssue, Save_Production_ReIssueSuccess, makeBtnProduction_ReIssue_STP_actionSuccess, ItemForProdunction_ReIssueSuccess } from "../../../store/Production/ProductionReissueRedux/actions";
-
+import {
+    Save_Production_ReIssue,
+    Save_Production_ReIssueSuccess,
+    makeBtnProduction_ReIssue_STP_actionSuccess,
+    ItemForProdunction_ReIssueSuccess
+} from "../../../store/Production/ProductionReissueRedux/actions";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const ProductionReIssueAdd = (props) => {
 
@@ -257,6 +268,10 @@ const ProductionReIssueAdd = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField]);
+
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonList]);
+
     //****************************************************************** */
     const pagesListColumns = [
         {
@@ -604,7 +619,7 @@ const ProductionReIssueAdd = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" >
 
                     <form onSubmit={SaveHandler} noValidate>
@@ -685,6 +700,7 @@ const ProductionReIssueAdd = (props) => {
                                                     <div className="table-responsive">
                                                         <BootstrapTable
                                                             keyField={"id"}
+                                                            id="table_Arrow"
                                                             responsive
                                                             bordered={false}
                                                             striped={false}

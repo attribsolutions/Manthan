@@ -26,7 +26,8 @@ import {
     btnIsDissablefunc,
     invertDatefunc,
     loginCompanyID,
-    loginPartyID
+    loginPartyID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -48,7 +49,7 @@ import {
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 
 const PartyMasterBulkUpdate = (props) => {
@@ -192,6 +193,8 @@ const PartyMasterBulkUpdate = (props) => {
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Party Count"} :${Data.length}`))
     }, [Data])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     useEffect(() => {
         if (pageField) {
@@ -560,7 +563,7 @@ const PartyMasterBulkUpdate = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                  <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <Container fluid>
@@ -669,6 +672,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                 <div className="table">
                                                     <BootstrapTable
                                                         keyField={"id"}
+                                                        id="table_Arrow"
                                                         bordered={true}
                                                         striped={false}
                                                         noDataIndication={<div className="text-danger text-center ">PartyMasterbulk Not available</div>}

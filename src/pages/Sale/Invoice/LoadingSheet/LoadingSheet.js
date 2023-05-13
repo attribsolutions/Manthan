@@ -22,7 +22,7 @@ import {
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, loginUserID } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -37,6 +37,7 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
+import * as commonFunc from "../../../../components/Common/CommonFunction";
 
 const LoadingSheet = (props) => {
 
@@ -159,6 +160,8 @@ const LoadingSheet = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
@@ -339,12 +342,11 @@ const LoadingSheet = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
-                        <div className="px-2 c_card_filter header text-black mb-2" >
+                        <div className="px-2 c_card_filter header text-black mb-1" >
 
                             <div className=" row ">
                                 <Col sm="6">
@@ -494,7 +496,6 @@ const LoadingSheet = (props) => {
                         >
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
-
                                     keyField="id"
                                     data={Data}
                                     columns={pagesListColumns}
@@ -506,6 +507,7 @@ const LoadingSheet = (props) => {
                                             <div className="table">
                                                 <BootstrapTable
                                                     keyField={"id"}
+                                                    id="table_Arrow"
                                                     bordered={true}
                                                     striped={false}
                                                     selectRow={selectAllCheck()}

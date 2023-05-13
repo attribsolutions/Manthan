@@ -10,7 +10,7 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -24,7 +24,8 @@ import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
-    loginPartyID
+    loginPartyID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -42,6 +43,8 @@ import {
     postCreditLimit,
     postCreditLimitSuccess
 } from "../../../store/Administrator/CreditLimitRedux/actions";
+import * as commonFunc from "../../../components/Common/CommonFunction";
+
 
 const CreditLimitMaster = (props) => {
 
@@ -149,6 +152,12 @@ const CreditLimitMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${" Credit Limit Count"} :${Data.length}`))
+    }, [Data])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const RoutesDropdown_options = RoutesList.map((index) => ({
         value: index.id,
@@ -259,7 +268,7 @@ const CreditLimitMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
                     <Container fluid>
@@ -328,6 +337,7 @@ const CreditLimitMaster = (props) => {
                                                         <div className="table">
                                                             <BootstrapTable
                                                                 keyField={"id"}
+                                                                id="table_Arrow"
                                                                 bordered={true}
                                                                 striped={false}
                                                                 noDataIndication={<div className="text-danger text-center ">Creditlimit Not available</div>}

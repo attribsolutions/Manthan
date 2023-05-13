@@ -1,6 +1,5 @@
 import {
     Col,
-    CustomInput,
     FormGroup,
     Input,
     Label,
@@ -28,11 +27,12 @@ import {
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
+import { basicAmount, GstAmount, Amount } from "./OrderPageCalulation";
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturnFunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc, loginRoleID, loginJsonBody } from "../../../components/Common/CommonFunction";
+
+import * as commonFunc from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -43,10 +43,13 @@ import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { useRef } from "react";
 
 let editVal = {}
 
+
 function initialState(history) {
+
     let page_Id = '';
     let listPath = ''
     let sub_Mode = history.location.pathname;
@@ -75,7 +78,8 @@ const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const RoleID = loginRoleID();
+    const RoleID = commonFunc.loginRoleID();
+    const ref1 = useRef('')
 
     const fileds = {
         id: "",
@@ -88,16 +92,16 @@ const Order = (props) => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname)
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userAccState, setUserAccState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
-    const [deliverydate, setdeliverydate] = useState(currentDate)
+    const [deliverydate, setdeliverydate] = useState()
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
-    const [poFromDate, setpoFromDate] = useState(currentDate);
-    const [poToDate, setpoToDate] = useState(currentDate);
-    const [orderdate, setorderdate] = useState(currentDate);
+    const [poFromDate, setpoFromDate] = useState(commonFunc.currentDate);
+    const [poToDate, setpoToDate] = useState(commonFunc.currentDate);
+    const [orderdate, setorderdate] = useState(commonFunc.currentDate);
     const [supplierSelect, setsupplierSelect] = useState('');
     const [partySelect, setPartySelect] = useState('');
 
@@ -151,7 +155,7 @@ const Order = (props) => {
         dispatch(getOrderType())
         dispatch(getPartyListAPI())
         if (!(subPageMode === url.ORDER_4)) {
-            dispatch(getSupplierAddress(loginPartyID()))
+            dispatch(getSupplierAddress(commonFunc.loginPartyID()))
         }
     }, []);
 
@@ -168,8 +172,7 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            breadcrumbReturnFunc({ dispatch, userAcc });
-
+            commonFunc.breadcrumbReturnFunc({ dispatch, userAcc });
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)
             });
@@ -311,6 +314,8 @@ const Order = (props) => {
         }
     }, [updateMsg, modalCss]);
 
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [orderItemTable]);
+
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -325,6 +330,8 @@ const Order = (props) => {
         value: data.id,
         label: data.Name
     }));
+
+
 
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
@@ -371,26 +378,31 @@ const Order = (props) => {
             // sort: true,
             formatter: (value, row, k) => {
                 return (
-                    <span >
-                        <Input type="text"
-                            id={`Quantity${k}`}
-                            defaultValue={row.Quantity}
-                            key={`Quantity${row.id}`}
-                            className="text-end"
-                            onChange={(e) => {
-                                const val = e.target.value
-                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                                if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "qty")
-                                } else {
-                                    document.getElementById(`Quantity${k}`).value = row.Quantity
-                                }
-                                handleKeyDown(e, orderItemTable)
-                            }}
-                            autoComplete="off"
-                            onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
-                        />
-                    </span>
+                    // <span >
+                    <Input type="text"
+                        id={`Quantity${k}`}
+                        name="Quantity"
+                        htmlFor={"Quantity"}
+                        defaultValue={row.Quantity}
+                        key={`Quantity${row.id}`}
+                        className="text-end move"
+                        onChange={(e) => {
+                            const val = e.target.value
+                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                            if ((isnum) || (val === '')) {
+                                val_onChange(val, row, "qty")
+                            } else {
+                                document.getElementById(`Quantity${k}`).value = row.Quantity
+                            }
+                            // handleKeyDown(e, orderItemTable)
+                        }}
+                        autoComplete="off"
+                    // onKeyDown={(e, v, c) => {
+                    // arrowChange(e, v, c)
+                    // handleKeyDown(e, orderItemTable)
+                    // }}
+                    />
+                    // </span>
                 )
             },
 
@@ -450,6 +462,7 @@ const Order = (props) => {
                     <span className="text-right" >
                         <Input
                             type="text"
+
                             id={`Ratey${k}`}
                             key={`Ratey${row.id}`}
                             defaultValue={row.Rate}
@@ -464,7 +477,7 @@ const Order = (props) => {
                                     document.getElementById(`Ratey${k}`).value = row.Rate
                                 }
                             }}
-                            onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
+                        // onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
                         />
                     </span>
                 )
@@ -532,7 +545,6 @@ const Order = (props) => {
     };
 
     function val_onChange(val, row, type) {
-
         if (type === "qty") {
             row["Quantity"] = val;
         }
@@ -566,15 +578,31 @@ const Order = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
         if (subPageMode === url.ORDER_4) {
-            dispatch(getSupplierAddress(supplierSelect.value))
+
         }
-        const jsonBody = JSON.stringify({
+        let PO_Body = {
             Party: supplierSelect.value,
-            Customer: loginPartyID(),
+            Customer: commonFunc.loginPartyID(),
+        }
+        let SO_body = {
+            Party: commonFunc.loginPartyID(), //swap  party and customer for sale oerder
+            Customer: supplierSelect.value,//swap  party and customer for sale oerder
+
+        }
+        let baseBody = {
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
-            RateParty: loginPartyID()
-        })
+            RateParty: supplierSelect.value
+        }
+
+        let jsonBody;   //json body decleration 
+        if (subPageMode === url.ORDER_4) {
+            jsonBody = JSON.stringify({ ...SO_body, ...baseBody });
+        }
+        else {
+            jsonBody = JSON.stringify({ ...PO_Body, ...baseBody });
+        }
+
         dispatch(GoButton_For_Order_Add(subPageMode, jsonBody))
     };
 
@@ -583,7 +611,10 @@ const Order = (props) => {
     };
 
     function supplierOnchange(e) {
-        setsupplierSelect(e)
+        setsupplierSelect(e);
+        if (subPageMode === url.ORDER_4) {
+            dispatch(getSupplierAddress(e.value))
+        }
     };
 
     function partyOnchange(e) {
@@ -594,13 +625,13 @@ const Order = (props) => {
     function Open_Assign_func() {
         setisOpen_assignLink(false)
         dispatch(editPartyItemIDSuccess({ Status: false }));
-        breadcrumbReturnFunc({ dispatch, userAcc: userAccState })
+        commonFunc.breadcrumbReturnFunc({ dispatch, userAcc: userPageAccessState })
         goButtonHandler()
     };
 
     async function assignItem_onClick() {
 
-        const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : loginPartyID()
+        const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : commonFunc.loginPartyID()
         const config = {
             editId: isParty,
             Party: isParty,
@@ -616,7 +647,7 @@ const Order = (props) => {
 
         if (isConfirmed) {
 
-            const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: isParty } });
+            const jsonBody = JSON.stringify({ ...commonFunc.loginJsonBody(), ...{ PartyID: isParty } });
 
             dispatch(editPartyItemID({ jsonBody, config }))
             dispatch(GoButton_For_Order_AddSuccess([]))
@@ -624,17 +655,16 @@ const Order = (props) => {
     };
 
     const saveHandeller = async (event) => {
-        debugger
         event.preventDefault();
-
+        debugger
         const btnId = event.target.id
-        btnIsDissablefunc({ btnId, state: true })
+        commonFunc.btnIsDissablefunc({ btnId, state: true })
 
         function returnFunc() {
-            btnIsDissablefunc({ btnId, state: false })
+            commonFunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
-            const division = loginPartyID();
+            const division = commonFunc.loginPartyID();
             const supplier = supplierSelect.value;
 
             const validMsg = []
@@ -657,7 +687,7 @@ const Order = (props) => {
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
                     GST: i.GST_id,
-                    GSTPercentage:i.GSTPercentage,
+                    GSTPercentage: i.GSTPercentage,
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
@@ -821,10 +851,10 @@ const Order = (props) => {
                 FullOrderNumber: "PO0001",
                 Division: division,
                 POType: orderTypeSelect.value,
-                POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
-                POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID(),
+                POFromDate: orderTypeSelect.value === 1 ? commonFunc.currentDate : poFromDate,
+                POToDate: orderTypeSelect.value === 1 ? commonFunc.currentDate : poToDate,
+                CreatedBy: commonFunc.loginUserID(),
+                UpdatedBy: commonFunc.loginUserID(),
                 OrderTermsAndConditions: termsAndCondition
             };
 
@@ -848,14 +878,15 @@ const Order = (props) => {
                 dispatch(saveOrderAaction({ jsonBody, subPageMode, btnId }))
             }
 
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { commonFunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
-    if (!(userAccState === "")) {
+    if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{commonFunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
+
                     {RoleID === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
                             <div className=" mt-1 mb-2 row ">
@@ -897,7 +928,6 @@ const Order = (props) => {
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
-                                                    // altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
                                                 }}
@@ -1113,7 +1143,9 @@ const Order = (props) => {
                                                 <div className="table table-Rresponsive ">
                                                     <BootstrapTable
                                                         keyField={"id"}
+                                                        id="table_Arrow"
                                                         responsive
+                                                        ref={ref1}
                                                         bordered={false}
                                                         striped={false}
                                                         classes={"table  table-bordered table-hover"}
@@ -1149,7 +1181,7 @@ const Order = (props) => {
                         ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton
                                 pageMode={pageMode}
-                                userAcc={userAccState}
+                                userAcc={userPageAccessState}
                                 onClick={saveHandeller}
                             />
                         </div>

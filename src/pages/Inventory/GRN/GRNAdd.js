@@ -25,12 +25,14 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Or
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturnFunc, loginUserID, currentDate, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import FeatherIcon from "feather-icons-react";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as pageId from "../../../routes/allPageID"
+import * as commonFunc from "../../../components/Common/CommonFunction";
+
 
 let initialTableData = []
 
@@ -41,7 +43,7 @@ const GRNAdd = (props) => {
     const history = useHistory();
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userAccState, setUserAccState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const [grnDate, setgrnDate] = useState(currentDate);
@@ -186,6 +188,8 @@ const GRNAdd = (props) => {
 
         }
     }, [postMsg])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
 
     function val_onChange(val, row, type) {
 
@@ -669,10 +673,10 @@ const GRNAdd = (props) => {
         } catch (error) { returnFunc() }
     }
 
-    if (!(userAccState === "")) {
+    if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" >
 
                     <div className="px-2 mb-1  c_card_header " >
@@ -849,6 +853,7 @@ const GRNAdd = (props) => {
                                                 <div className="table table-Rresponsive">
                                                     <BootstrapTable
                                                         responsive
+                                                        id="table_Arrow"
                                                         bordered={false}
                                                         striped={false}
                                                         classes={"table  table-bordered table-hover"}
@@ -882,7 +887,7 @@ const GRNAdd = (props) => {
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
                                     editCreatedBy={editCreatedBy}
-                                    userAcc={userAccState}
+                                    userAcc={userPageAccessState}
                                     module={"GRN"} onClick={saveHandeller}
                                 />
                             </div>

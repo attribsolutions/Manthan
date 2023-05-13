@@ -3,11 +3,10 @@ import { DELETE_PRICE_LIST_SUCCESS, PRICE_LIST_BY_PARTY_ACTION_SUCCESS, POST_PRI
 const INIT_STATE = {
   postMsg: { Status: false },
   priceListByPartyType: [],
-  priceList: [],
+  priceListByCompany: [],
   deleteMsg: { Status: false },
   editData: { Status: false },
   updateMessage: { Status: false },
-  priceListByCompany: []
 }
 
 const PriceListReducer = (state = INIT_STATE, action) => {
@@ -27,10 +26,10 @@ const PriceListReducer = (state = INIT_STATE, action) => {
       };
 
     // GET api
-    case GET_PRICE_LIST_PAGE_SUCCESS:
+    case PRICE_LIST_BY_COMPANY_SUCCESS:
       return {
         ...state,
-        priceList: action.payload,
+        priceListByCompany: action.payload,
       };
 
     // DELETE api
@@ -53,12 +52,7 @@ const PriceListReducer = (state = INIT_STATE, action) => {
         updateMessage: action.payload,
       };
 
-    case PRICE_LIST_BY_COMPANY_SUCCESS:
-      return {
-        ...state,
-        priceListByCompany: action.payload,
-      };
-
+   
 
     default:
       return state;

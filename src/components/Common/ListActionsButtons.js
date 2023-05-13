@@ -33,7 +33,8 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnFunc = () => { },
         pageMode,
         makeBtnName,
-        makeBtnShow = false
+        makeBtnShow = false,
+        orderApproval = false,
     } = props;
 
     function editHandler(rowData, btnmode, btnId) {
@@ -133,6 +134,7 @@ export const listPageActionsButtonFunc = (props) => {
         formatter: (cellContent, rowData) => {
 
             const forceEdit = rowData.forceEdit;
+            const forceMakeBtn = rowData.forceMakeBtn;
             rowData["hasSelect"] = false
             return (
                 // <div className="d-flex gap-3" style={{ display:'', justifyContent: 'right'}} >
@@ -195,7 +197,8 @@ export const listPageActionsButtonFunc = (props) => {
                     }
 
                     {
-                        ((pageMode === mode.modeSTPList) && makeBtnShow && rowData.POType === 3) ?
+                        ((pageMode === mode.modeSTPList) && (makeBtnShow) && !(forceMakeBtn)) ?
+                            // ((pageMode === mode.modeSTPList) && makeBtnShow && rowData.POType === 3) ?  
                             < Button
                                 type="button"
                                 id={`btn-makeBtn-${rowData.id}`}
@@ -316,7 +319,22 @@ export const listPageActionsButtonFunc = (props) => {
                             </Button>
                             : null
                     }
-
+                    {
+                        ((orderApproval) && (userAccState.RoleAccess_IsView)) ?
+                            <Button
+                                type="button"
+                                id={`btn-orderApproval-${rowData.id}`}
+                                className={editBtnCss}
+                                title={`Order Approval ${ButtonMsgLable}`}
+                                onClick={() => {
+                                    const btnId = `btn-orderApproval-${rowData.id}`;
+                                    editHandler(rowData, mode.orderApproval, btnId)
+                                }}
+                            >
+                                <i className="bx bxs-copy font-size-18 "></i>
+                            </Button>
+                            : null
+                    }
 
                 </div >
             )

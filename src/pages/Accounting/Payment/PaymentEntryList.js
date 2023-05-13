@@ -142,7 +142,7 @@ const PaymentEntryList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Payment Entry Count"} :0`))
         dispatch(getSupplier())
 
     }, []);
@@ -335,7 +335,6 @@ const PaymentEntryList = () => {
     
     return (
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <div className="page-content">
                 {
                     (pageField) ?

@@ -30,7 +30,8 @@ import {
     btnIsDissablefunc,
     loginCompanyID,
     loginPartyID,
-    loginUserID
+    loginUserID,
+    metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import Select from "react-select";
 import Flatpickr from "react-flatpickr"
@@ -51,7 +52,7 @@ import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Ret
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
-
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const Credit = (props) => {
     const history = useHistory();
@@ -270,6 +271,8 @@ const Credit = (props) => {
         });
         dispatch(CredietDebitType(jsonBody));
     }, [])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems]);
 
     const PartyOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -725,7 +728,7 @@ const Credit = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
@@ -891,6 +894,7 @@ const Credit = (props) => {
                                     {InvoiceItems.length <= 0 ? null : <div className="table">
                                         <BootstrapTable
                                             keyField={"id"}
+                                            id="table_Arrow"
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}

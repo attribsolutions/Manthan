@@ -23,10 +23,10 @@ const PartyList = () => {
         (state) => ({
             tableList: state.PartyMasterReducer.partyList,
             editData: state.PartyMasterReducer.editData,
-            updateMsg: state.PartyMasterReducer.updateMessage,
-            deleteMsg: state.PartyMasterReducer.deleteMessage,
+            updateMsg: state.PartyMasterReducer.updateMsg,
+            deleteMsg: state.PartyMasterReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
-            postMsg: state.PartyMasterReducer.PartySaveSuccess,
+            postMsg: state.PartyMasterReducer.postMsg,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
@@ -51,7 +51,6 @@ const PartyList = () => {
 
     return (
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             {
                 (pageField) ?
                     <CommonListPage

@@ -24,7 +24,7 @@ import {
   userUpdateActionSuccess
 } from "../../../store/actions";
 import Select from "react-select";
-import { Breadcrumb_inputName, CommonBreadcrumbDetails } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
@@ -37,10 +37,14 @@ import {
   resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginIsSCMCompany, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginIsSCMCompany, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import AddMaster from "../EmployeePages/Drodown";
+import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
+
+
 const RoleMaster = (props) => {
 
   const dispatch = useDispatch();
@@ -62,7 +66,7 @@ const RoleMaster = (props) => {
   const [modalCss, setModalCss] = useState(false);
   const [userPageAccessState, setUserAccState] = useState(123);
   const [editCreatedBy, seteditCreatedBy] = useState("");
-
+  const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
     postMsg,
@@ -98,6 +102,11 @@ const RoleMaster = (props) => {
     let locationPath = location.pathname;
 
     if (hasShowModal) {
+      userAccess.find((index) => {
+        if (index.id === pageId.PARTYTYPE) {
+          return setFindAddMasterAccess(true)
+        }
+      });
       locationPath = props.masterPath;
     };
 
@@ -108,15 +117,13 @@ const RoleMaster = (props) => {
     if (userAcc) {
       setUserAccState(userAcc)
       breadcrumbReturnFunc({ dispatch, userAcc });
-      dispatch(CommonBreadcrumbDetails({
-        pageHeading: userAcc.PageHeading,
-        userAccess: {},
-        newBtnView: false,
-        showCount: false,
-        excelData: [],
-        breadShow: true
-      }))
     };
+
+    userAccess.find((index) => {
+      if (index.id === pageId.PARTYTYPE) {
+        return setFindAddMasterAccess(true)
+      }
+    });
   }, [userAccess])
 
   useEffect(() => {
@@ -276,7 +283,7 @@ const RoleMaster = (props) => {
       <React.Fragment>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Container fluid>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <Card className="text-black">
               <CardHeader className="card-header  text-black c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -284,165 +291,183 @@ const RoleMaster = (props) => {
               </CardHeader>
               <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                 <form noValidate>
-                  <Row className="">
-                    <Col md={12}>
-                      <Card>
-                        <CardBody className="c_card_body">
-                          <Row>
-                            <FormGroup className="mb-2 col col-sm-4 ">
-                              <Label>{fieldLabel.Name} </Label>
-                              <Input
-                                name="Name"
-                                id="txtName"
-                                value={values.Name}
-                                type="text"
-                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                placeholder="Please Enter Name"
-                                autoComplete='off'
-                                autoFocus={true}
-                                onChange={(event) => {
-                                  onChangeText({ event, state, setState })
-                                  dispatch(Breadcrumb_inputName(event.target.value))
-                                }}
-                              />
-                              {isError.Name.length > 0 && (
-                                <span className="invalid-feedback">{isError.Name}</span>
-                              )}
-                            </FormGroup>
 
-                            <Col md={1} className="mx-n1"> </Col>
-                            <FormGroup className="mb-2 col col-sm-4 ">
-                              <Label htmlFor="validationCustom01">{fieldLabel.RoleEmployeeTypes} </Label>
-                              <Select
-                                name="RoleEmployeeTypes"
-                                value={values.RoleEmployeeTypes}
-                                isSearchable={false}
-                                isMulti={true}
-                                options={EmployeeType_DropdownOptions}
-                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                classNamePrefix="dropdown"
-                              />
-                              {isError.RoleEmployeeTypes.length > 0 && (
-                                <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
-                              )}
-                            </FormGroup>
-                            
-                            <Row>
-                              <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01">{fieldLabel.Description} </Label>
-                                <Input
-                                  type="text"
-                                  value={values.Description}
-                                  className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
-                                  name="Description"
-                                  autoComplete="off"
-                                  placeholder="Please Enter description"
-                                  onChange={(event) => onChangeText({ event, state, setState })}
+                  <Card>
+                    <CardBody className="c_card_body">
+                      <Row>
+                        <FormGroup className="mb-2 col col-sm-4 ">
+                          <Label>{fieldLabel.Name} </Label>
+                          <Input
+                            name="Name"
+                            id="txtName"
+                            value={values.Name}
+                            type="text"
+                            className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter Name"
+                            autoComplete='off'
+                            autoFocus={true}
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                              dispatch(Breadcrumb_inputName(event.target.value))
+                            }}
+                          />
+                          {isError.Name.length > 0 && (
+                            <span className="invalid-feedback">{isError.Name}</span>
+                          )}
+                        </FormGroup>
+
+                        <Col md={1} className="mx-n1"> </Col>
+                        <FormGroup className="mb-2 col col-sm-4 ">
+                          <Label >{fieldLabel.RoleEmployeeTypes} </Label>
+                          <Select
+                            name="RoleEmployeeTypes"
+                            value={values.RoleEmployeeTypes}
+                            isSearchable={false}
+                            isMulti={true}
+                            options={EmployeeType_DropdownOptions}
+                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                            classNamePrefix="dropdown"
+                          />
+                          {isError.RoleEmployeeTypes.length > 0 && (
+                            <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
+                          )}
+                        </FormGroup>
+                        {
+                          (findAddMasterAccess) && <Col md="1" className=" mt-3">
+                            <AddMaster
+                              masterModal={EmployeeTypesMaster}
+                              masterPath={url.EMPLOYEETYPE}
+                            />
+                          </Col>
+                        }
+
+                      </Row>
+
+                      <Row>
+                        <FormGroup className="mb-2 col col-sm-4 ">
+                          <Label>{fieldLabel.Description} </Label>
+                          <Input
+                            name="Description"
+                            id="txtName"
+                            value={values.Description}
+                            type="text"
+                            className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter Description"
+                            autoComplete='off'
+                            autoFocus={true}
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.Description.length > 0 && (
+                            <span className="invalid-feedback">{isError.Description}</span>
+                          )}
+                        </FormGroup>
+
+                        <Col md={1} className="mx-n1"> </Col>
+                        <FormGroup className="mb-2 col col-sm-4 ">
+                          <Label >{fieldLabel.Dashboard} </Label>
+                          <Input
+                            name="Dashboard"
+                            id="txtName"
+                            value={values.Dashboard}
+                            type="text"
+                            className={isError.Dashboard.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter Dashboard"
+                            autoComplete='off'
+                            autoFocus={true}
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.Dashboard.length > 0 && (
+                            <span className="invalid-feedback">{isError.Dashboard}</span>
+                          )}
+                        </FormGroup>
+                      </Row>
+
+                      <Row>
+                        <FormGroup className="mb-2 col col-sm-5">
+                          <Row className="justify-content-md-left">
+                            <Label className="col-sm-5 col-form-label" >{fieldLabel.isSCMRole}</Label>
+                            <Col md={2} style={{ marginTop: '9px', }} >
+
+                              <div className="form-check form-switch form-switch-md mb-3" >
+                                <Input type="checkbox" className="form-check-input"
+                                  checked={values.isSCMRole}
+                                  name="isSCMRole"
+                                  disabled={loginIsSCMCompany() > 0 ? true : false}
+                                  onChange={(e) => {
+                                    setState((i) => {
+                                      const a = { ...i }
+                                      a.values.isSCMRole = e.target.checked;
+                                      return a
+                                    })
+                                  }}
                                 />
-                                {isError.Description.length > 0 && (
-                                  <span className="invalid-feedback">{isError.Description}</span>
-                                )}
-                              </FormGroup>
-                              <Col md="1">  </Col>
-                              <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01">{fieldLabel.Dashboard} </Label>
-                                <Input
-                                  type="text"
-                                  value={values.Dashboard}
-                                  className={isError.Dashboard.length > 0 ? "is-invalid form-control" : "form-control"}
-                                  name="Dashboard"
-                                  autoComplete="off"
-                                  placeholder="Please Enter dashboard"
-                                  onChange={(event) => onChangeText({ event, state, setState })}
-                                />
-                                {isError.Dashboard.length > 0 && (
-                                  <span className="invalid-feedback">{isError.Dashboard}</span>
-                                )}
-                              </FormGroup>
-                            </Row>
-                            <Row>
-                              <FormGroup className="mb-2 col col-sm-5">
-                                <Row className="justify-content-md-left">
-                                  <Label className="col-sm-5 col-form-label" >{fieldLabel.isSCMRole}</Label>
-                                  <Col md={2} style={{ marginTop: '9px', }} >
-
-                                    <div className="form-check form-switch form-switch-md mb-3" >
-                                      <Input type="checkbox" className="form-check-input"
-                                        checked={values.isSCMRole}
-                                        name="isSCMRole"
-                                        disabled={loginIsSCMCompany() > 0 ? true : false}
-                                        onChange={(e) => {
-                                          setState((i) => {
-                                            const a = { ...i }
-                                            a.values.isSCMRole = e.target.checked;
-                                            return a
-                                          })
-                                        }}
-                                      />
-                                    </div>
-                                  </Col>
-                                </Row>
-                              </FormGroup>
-                              <FormGroup className="mb-2 col col-sm-5">
-                                <Row className="justify-content-md-left">
-                                  <Label className="col-sm-3 col-form-label" >{fieldLabel.isActive}</Label>
-                                  <Col md={2} style={{ marginTop: '9px' }} >
-
-                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                      <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        checked={values.isActive}
-                                        name="isActive"
-                                        onChange={(e) => {
-                                          setState((i) => {
-                                            const a = { ...i }
-                                            a.values.isActive = e.target.checked;
-                                            return a
-                                          })
-                                        }}
-                                      />
-                                    </div>
-                                  </Col>
-                                </Row>
-                              </FormGroup>
-                              <FormGroup className="mb-2 col col-sm-5">
-                                <Row className="justify-content-md-left">
-                                  <Label className="col-sm-5 col-form-label" >{fieldLabel.IsPartyConnection}</Label>
-                                  <Col md={1} style={{ marginTop: '9px' }} >
-
-                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                      <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        checked={values.IsPartyConnection}
-                                        name="IsPartyConnection"
-                                        onChange={(e) => {
-                                          setState((i) => {
-                                            const a = { ...i }
-                                            a.values.IsPartyConnection = e.target.checked;
-                                            return a
-                                          })
-                                        }}
-                                      />
-                                    </div>
-                                  </Col>
-                                </Row>
-                              </FormGroup>
-                            </Row>
-                            <FormGroup>
-                              <Row>
-                                <Col sm={2}>
-                                  <SaveButton pageMode={pageMode}
-                                    onClick={SaveHandler}
-                                    userAcc={userPageAccessState}
-                                    editCreatedBy={editCreatedBy}
-                                    module={"RoleMaster"}
-                                  />
-                                </Col>
-                              </Row>
-                            </FormGroup >
+                              </div>
+                            </Col>
                           </Row>
-                        </CardBody>
-                      </Card>
-                    </Col>
-                  </Row>
+                        </FormGroup>
+                        <FormGroup className="mb-2 col col-sm-5">
+                          <Row className="justify-content-md-left">
+                            <Label className="col-sm-3 col-form-label" >{fieldLabel.isActive}</Label>
+                            <Col md={2} style={{ marginTop: '9px' }} >
+
+                              <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                  checked={values.isActive}
+                                  name="isActive"
+                                  onChange={(e) => {
+                                    setState((i) => {
+                                      const a = { ...i }
+                                      a.values.isActive = e.target.checked;
+                                      return a
+                                    })
+                                  }}
+                                />
+                              </div>
+                            </Col>
+                          </Row>
+                        </FormGroup>
+                        <FormGroup className="mb-2 col col-sm-5">
+                          <Row className="justify-content-md-left">
+                            <Label className="col-sm-5 col-form-label" >{fieldLabel.IsPartyConnection}</Label>
+                            <Col md={1} style={{ marginTop: '9px' }} >
+
+                              <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                  checked={values.IsPartyConnection}
+                                  name="IsPartyConnection"
+                                  onChange={(e) => {
+                                    setState((i) => {
+                                      const a = { ...i }
+                                      a.values.IsPartyConnection = e.target.checked;
+                                      return a
+                                    })
+                                  }}
+                                />
+                              </div>
+                            </Col>
+                          </Row>
+                        </FormGroup>
+                        {/* </Row> */}
+                        <FormGroup>
+                          <Row>
+                            <Col sm={2}>
+                              <SaveButton pageMode={pageMode}
+                                onClick={SaveHandler}
+                                userAcc={userPageAccessState}
+                                editCreatedBy={editCreatedBy}
+                                module={"RoleMaster"}
+                              />
+                            </Col>
+                          </Row>
+                        </FormGroup >
+                      </Row>
+                    </CardBody>
+                  </Card>
+
                 </form>
               </CardBody>
             </Card>

@@ -21,7 +21,7 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, loginCompanyID, loginPartyID, loginUserID, } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, loginCompanyID, loginPartyID, loginUserID, metaTagLabel, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -34,6 +34,8 @@ import { postSelect_Field_for_dropdown } from "../../../store/Administrator/Part
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import CInput from "../../../CustomValidateForm/CInput";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
+import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const Receipts = (props) => {
 
@@ -100,9 +102,9 @@ const Receipts = (props) => {
         dispatch(BankListAPI())
     }, []);
 
-    useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Invoice Count :${Data.length}`))
-    }, [ReceiptGoButton]);
+    // useEffect(() => {
+    //     dispatch(BreadcrumbShowCountlabel(`Invoice Count :${Data.length}`))
+    // }, [ReceiptGoButton]);
 
     // Customer dropdown Options
     useEffect(() => {
@@ -248,6 +250,8 @@ const Receipts = (props) => {
         }
     }, [postMsg])
 
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -302,12 +306,12 @@ const Receipts = (props) => {
                     <CInput
                         key={`Quantity-${row.Invoice}`}
                         id={`Quantity-${row.Invoice}`}
-                        pattern={decimalRegx}
+                        cpattern={decimalRegx}
                         defaultValue={row.Calculate}
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
-
+                        // onKeyDown={(e) => handleKeyDown(e, Data)}
                     />
                 </span>)
             },
@@ -445,7 +449,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -575,8 +579,7 @@ const Receipts = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
+                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
@@ -799,7 +802,7 @@ const Receipts = (props) => {
 
                                                 name="AmountPaid"
                                                 id="AmountPaid"
-                                                pattern={decimalRegx}
+                                                cpattern={decimalRegx}
                                                 // defaultValue={values.AmountPaid}
                                                 value={values.AmountPaid}
                                                 disabled={page_Mode === mode.modeSTPsave ? true : false}
@@ -857,6 +860,7 @@ const Receipts = (props) => {
                                     <div className="table">
                                         <BootstrapTable
                                             keyField={"Invoice"}
+                                            // id="table_Arrow"
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
