@@ -48,8 +48,7 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-
-
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const goBtnID1 = "workOrdergoBtnID1"
 const changeBtnID1 = "workOrderchangeBtnID1"
@@ -215,6 +214,8 @@ const WorkOrder = (props) => {
             }));
         }
     }, [postMsg])
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [BOMItems]);
 
     useEffect(() => {
 
@@ -652,6 +653,7 @@ const WorkOrder = (props) => {
                                                         <div className="table-responsive">
                                                             <BootstrapTable
                                                                 keyField={"id"}
+                                                                id="table_Arrow"
                                                                 responsive
                                                                 bordered={false}
                                                                 striped={false}

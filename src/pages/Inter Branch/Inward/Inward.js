@@ -23,6 +23,7 @@ import * as mode from "../../../routes/PageMode";
 import * as url from "../../../routes/route_url";
 import { AlertState } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const Inward = (props) => {
 
@@ -83,6 +84,9 @@ const Inward = (props) => {
             }));
         }
     }, [postMsg])
+
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems]);
 
     function InwardDateOnchange(e, date) {
         setInwardDate(date)
@@ -291,6 +295,7 @@ const Inward = (props) => {
                                                 <div className="table-responsive">
                                                     <BootstrapTable
                                                         keyField={"id"}
+                                                        id="table_Arrow"
                                                         responsive
                                                         bordered={false}
                                                         striped={false}

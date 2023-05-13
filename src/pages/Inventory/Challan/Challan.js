@@ -37,6 +37,7 @@ import {
 } from "../../../store/Inventory/ChallanRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const Challan = (props) => {
 
@@ -235,6 +236,9 @@ const Challan = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField]);
+
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [GoButton]);
+
     const venderOptions = vender.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -816,6 +820,7 @@ const Challan = (props) => {
                                                     <div className="table-responsive">
                                                         <BootstrapTable
                                                             keyField={"id"}
+                                                            id="table_Arrow"
                                                             responsive
                                                             bordered={false}
                                                             striped={false}
