@@ -49,7 +49,7 @@ let editVal = {}
 
 
 function initialState(history) {
- 
+
     let page_Id = '';
     let listPath = ''
     let sub_Mode = history.location.pathname;
@@ -579,15 +579,30 @@ const Order = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
         if (subPageMode === url.ORDER_4) {
-            dispatch(getSupplierAddress(supplierSelect.value))
+
         }
-        const jsonBody = JSON.stringify({
+        let PO_Body = {
             Party: commonFunc.loginPartyID(),
             Customer: supplierSelect.value,
+        }
+        let SO_body = {
+            Party: supplierSelect.value,
+            Customer: commonFunc.loginPartyID(),
+        }
+        let baseBody = {
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
             RateParty: supplierSelect.value
-        })
+        }
+
+        let jsonBody;   //json body decleration 
+        if (subPageMode === url.ORDER_4) {
+            jsonBody = JSON.stringify({ ...SO_body, ...baseBody });
+        }
+        else {
+            jsonBody = JSON.stringify({ ...PO_Body, ...baseBody });
+        }
+
         dispatch(GoButton_For_Order_Add(subPageMode, jsonBody))
     };
 
@@ -596,7 +611,10 @@ const Order = (props) => {
     };
 
     function supplierOnchange(e) {
-        setsupplierSelect(e)
+        setsupplierSelect(e);
+        if (subPageMode === url.ORDER_4) {
+            dispatch(getSupplierAddress(e.value))
+        }
     };
 
     function partyOnchange(e) {
