@@ -577,30 +577,29 @@ const Order = (props) => {
         }
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
-        if (subPageMode === url.ORDER_4) {
-
-        }
+        
         let PO_Body = {
             Party: supplierSelect.value,
             Customer: commonFunc.loginPartyID(),
+            RateParty: commonFunc.loginPartyID(),
+            EffectiveDate: orderdate,
+            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
         }
         let SO_body = {
             Party: commonFunc.loginPartyID(), //swap  party and customer for sale oerder
             Customer: supplierSelect.value,//swap  party and customer for sale oerder
-
-        }
-        let baseBody = {
+            RateParty: supplierSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
-            RateParty: supplierSelect.value
         }
+
 
         let jsonBody;   //json body decleration 
         if (subPageMode === url.ORDER_4) {
-            jsonBody = JSON.stringify({ ...SO_body, ...baseBody });
+            jsonBody = JSON.stringify({ ...SO_body, });
         }
         else {
-            jsonBody = JSON.stringify({ ...PO_Body, ...baseBody });
+            jsonBody = JSON.stringify({ ...PO_Body, });
         }
 
         dispatch(GoButton_For_Order_Add(subPageMode, jsonBody))
