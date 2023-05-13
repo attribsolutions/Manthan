@@ -45,6 +45,8 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import GroupTypeMaster from "../GroupTypePage/GroupTypeMaster";
+import AddMaster from "../EmployeePages/Drodown";
 
 const GroupMaster = (props) => {
 
@@ -62,6 +64,7 @@ const GroupMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -97,19 +100,34 @@ const GroupMaster = (props) => {
     useEffect(() => {
 
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
+
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
+
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-        if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
-        };
-    }, [userAccess])
 
+        if (userAcc) {
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
+        };
+        userAccess.find((index) => {
+            if (index.id === pageId.GROUPTYPE) {
+                return setFindAddMasterAccess(true)
+            }
+        });
+    }, [userAccess])
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
@@ -242,7 +260,7 @@ const GroupMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
@@ -252,72 +270,78 @@ const GroupMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black " >
                                 <form noValidate>
-                                    <Row className="">
-                                        <Col md={12} style={{ height: "9cm" }}>
-                                            <Card>
-                                                <CardBody className="c_card_body">
-                                                    <Row>
-                                                        <FormGroup className="mb-3">
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
-                                                            <Col md={4}  >
-                                                                <Input
-                                                                    name="Name"
-                                                                    id="txtName"
-                                                                    value={values.Name}
-                                                                    type="text"
-                                                                    className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    placeholder="Please Enter Name"
-                                                                    autoComplete='off'
-                                                                    autoFocus={true}
-                                                                    onChange={(event) => {
-                                                                        dispatch(Breadcrumb_inputName(event.target.value));
-                                                                        onChangeText({ event, state, setState });
-                                                                    }}
-                                                                />
-                                                                {isError.Name.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.Name}</span>
-                                                                )}
 
-                                                            </Col>
-                                                        </FormGroup>
-                                                        <Row>
-                                                            <FormGroup className="mb-3  " style={{ marginLeft: "8px", paddingLeft: "4px" }}>
-                                                                <Label htmlFor="validationCustom01"> {fieldLabel.GroupTypeName} </Label>
-                                                                <Col md={4} >
-                                                                    <Select
-                                                                        name="GroupTypeName"
-                                                                        value={values.GroupTypeName}
-                                                                        isSearchable={true}
-                                                                        className="react-dropdown"
-                                                                        options={GroupTypesValues}
-                                                                        onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                                        classNamePrefix="dropdown"
-                                                                    />
-                                                                    {isError.GroupTypeName.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.GroupTypeName}</small></span>
-                                                                    )}
-                                                                </Col>
-                                                            </FormGroup>
-                                                        </Row>
+                                    <Card>
+                                        <CardBody className="c_card_body">
+                                            <Row>
+                                                <FormGroup className="mb-2 col col-sm-4 ">
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                                                    <Input
+                                                        name="Name"
+                                                        id="txtName"
+                                                        value={values.Name}
+                                                        type="text"
+                                                        className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                        placeholder="Please Enter Name"
+                                                        autoComplete='off'
+                                                        autoFocus={true}
+                                                        onChange={(event) => {
+                                                            onChangeText({ event, state, setState })
+                                                            dispatch(Breadcrumb_inputName(event.target.value))
+                                                        }}
+                                                    />
+                                                    {isError.Name.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.Name}</span>
+                                                    )}
+                                                </FormGroup>
+                                            </Row>
+                                            <Row>
 
-                                                        <FormGroup >
-                                                            <Row>
-                                                                <Col sm={4}>
-                                                                    <SaveButton
-                                                                        pageMode={pageMode}
-                                                                        onClick={SaveHandler}
-                                                                        userAcc={userPageAccessState}
-                                                                        editCreatedBy={editCreatedBy}
-                                                                        module={"GroupMaster"}
-                                                                    />
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup>
-                                                    </Row>
-                                                </CardBody>
-                                            </Card>
-                                        </Col>
-                                    </Row>
+                                                <Col md="4" >
+                                                    <FormGroup className="mb-3">
+                                                        <Label htmlFor="validationCustom01"> {fieldLabel.GroupTypeName} </Label>
+                                                        <Col sm={12} >
+                                                            <Select
+                                                                name="GroupTypeName"
+                                                                value={values.GroupTypeName}
+                                                                isSearchable={true}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
+                                                                options={GroupTypesValues}
+                                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+
+                                                            />
+                                                            {isError.GroupTypeName.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.GroupTypeName}</small></span>
+                                                            )}
+                                                        </Col>
+                                                    </FormGroup>
+                                                </Col>
+
+                                                {(findAddMasterAccess) &&
+                                                    <Col md="1" className=" mt-3">
+                                                        <AddMaster
+                                                            masterModal={GroupTypeMaster}
+                                                            masterPath={url.GROUPTYPE}
+                                                        />
+                                                    </Col>}
+                                            </Row>
+
+                                            <FormGroup className="mt-1">
+                                                <Row>
+                                                    <Col sm={2}>
+                                                        <SaveButton
+                                                            pageMode={pageMode}
+                                                            onClick={SaveHandler}
+                                                            userAcc={userPageAccessState}
+                                                            editCreatedBy={editCreatedBy}
+                                                            module={"GroupMaster"}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </FormGroup>
+                                        </CardBody>
+                                    </Card>
                                 </form>
                             </CardBody>
                         </Card>

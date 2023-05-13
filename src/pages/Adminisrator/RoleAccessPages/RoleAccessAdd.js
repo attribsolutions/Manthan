@@ -41,7 +41,6 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as url from "../../../routes/route_url"
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -550,7 +549,7 @@ const RoleAccessAdd1 = () => {
         return (
             <React.Fragment>
                 <div className="page-content text-black" style={{ minHeight: "600px" }} >
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                     <Container fluid>
                         <CardBody >
@@ -1056,13 +1055,16 @@ const RoleAccessAdd = () => {
                                 <Col>
                                     <FormGroup className=" col col-sm-4 ">
                                         <Input
-                                            id=""
+                                            id={`check-id-${ischeck}-${user.PageID}`}
                                             key={user.PageID}
                                             type="checkbox"
                                             defaultChecked={user[ischeck]}
                                             className="col col-sm text-end"
                                             onChange={(e) => {
-                                                dispatch(IscheckRoleAcessMasterAction(user.id, ischeck, e.target.checked))
+                                                debugger
+                                                user[ischeck] = e.target.checked ? 1 : 0;
+                                                document.getElementById(`check-id-${ischeck}-${user.PageID}`).checked = e.target.checked;
+                                                // dispatch(IscheckRoleAcessMasterAction(user.id, ischeck, e.target.checked))
                                             }}
                                         />
                                     </FormGroup>
@@ -1352,8 +1354,8 @@ const RoleAccessAdd = () => {
                                             responsive
                                             bordered={false}
                                             striped={false}
-                                            headerClasses="header-class"
-                                            classes={"table  table-bordered"}
+                                            headerClasses="theader-class"
+                                            classes={"table  table-bordered "}
                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                             {...toolkitProps.baseProps}
                                         />
@@ -1377,7 +1379,7 @@ const RoleAccessAdd = () => {
 
     return <React.Fragment>
         <div className="page-content" >
-        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <Container fluid>
                 {
                     !showTableOnUI ?
@@ -1529,16 +1531,16 @@ const RoleAccessAdd = () => {
                                         />
                                     </Col>
                                 </Row>
-                                
+
                             </div>
-                            
+
                         </div>
                 }
-                <div  style={{
-                    marginLeft:"-7px",
-                    paddingTop:'4px'
-                                }}>
-                <RoleAccTable ></RoleAccTable>
+                <div style={{
+                    marginLeft: "-7px",
+                    paddingTop: '4px'
+                }}>
+                    <RoleAccTable ></RoleAccTable>
                 </div>
 
             </Container>

@@ -24,6 +24,7 @@ import {
 } from "../../../components/Common/validationFunction";
 import {
     editGroupTypeIDSuccess,
+    getGroupTypeslist,
     getGroupTypeslistSuccess,
     saveGroupTypeMaster,
     saveGroupTypeMasterSuccess,
@@ -40,6 +41,7 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const GroupTypeMaster = (props) => {
 
@@ -88,8 +90,15 @@ const GroupTypeMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -100,9 +109,12 @@ const GroupTypeMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
+
     }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -140,40 +152,47 @@ const GroupTypeMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveGroupTypeMasterSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))//Clear form values
             dispatch(Breadcrumb_inputName(''))
-
-            if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            if (props.pageMode === mode.dropdownAdd) {
+                CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
+                
+                dispatch(getGroupTypeslist())
+    
+                props.isOpenModal(false)
+            }
+            else if (pageMode === mode.edit) {
+                CustomAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                history.push({ pathname: url.GROUPTYPE_lIST })
             }
             else {
-                dispatch(AlertState({
+                dispatch(Breadcrumb_inputName(''))
+                const promise = await CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.GROUPTYPE_lIST,
-                }))
+                })
+                if (promise) { history.push({ pathname: url.GROUPTYPE_lIST }) }
             }
-        }
-        else if (postMsg.Status === true) {
-            dispatch(getGroupTypeslistSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+    
+        } else if
+            (postMsg.Status === true) {
+            CustomAlert({
+                Type: 3,
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
-
+    
     useEffect(() => {
 
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {

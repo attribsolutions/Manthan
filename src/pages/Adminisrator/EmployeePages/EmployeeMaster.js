@@ -267,12 +267,12 @@ const AddEmployee = (props) => {
 
   useEffect(() => {
 
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values  
       dispatch(Breadcrumb_inputName(''))
 
-      if (pageMode === "other") {
+      if (props.pageMode === mode.dropdownAdd) {
         dispatch(AlertState({
           Type: 1,
           Status: true,
