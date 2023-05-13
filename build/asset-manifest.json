@@ -1,5 +1,6 @@
 {
   "files": {
+
     "main.css": "/static/css/main.95f8c2d4.chunk.css",
     "main.js": "/static/js/main.dbe50d6a.chunk.js",
     "main.js.map": "/static/js/main.dbe50d6a.chunk.js.map",
@@ -21,6 +22,8 @@
     "static/js/3.f4832e01.chunk.js.LICENSE.txt": "/static/js/3.f4832e01.chunk.js.LICENSE.txt",
     "static/js/4.3dcbdb61.chunk.js.LICENSE.txt": "/static/js/4.3dcbdb61.chunk.js.LICENSE.txt",
     "static/js/5.4428dcc4.chunk.js.LICENSE.txt": "/static/js/5.4428dcc4.chunk.js.LICENSE.txt",
+
+   
     "static/media/Enterpass.2732ee11.png": "/static/media/Enterpass.2732ee11.png",
     "static/media/theme.scss": "/static/media/materialdesignicons-webfont.e9db4005.woff2",
     "static/media/avatar-1.0fdabd61.jpg": "/static/media/avatar-1.0fdabd61.jpg",
@@ -31,10 +34,12 @@
     "static/media/resetpassword.40817561.png": "/static/media/resetpassword.40817561.png"
   },
   "entrypoints": [
+
     "static/js/runtime-main.00041602.js",
     "static/css/2.f91b08a3.chunk.css",
     "static/js/2.78e9096c.chunk.js",
     "static/css/main.95f8c2d4.chunk.css",
     "static/js/main.dbe50d6a.chunk.js"
+
   ]
 }

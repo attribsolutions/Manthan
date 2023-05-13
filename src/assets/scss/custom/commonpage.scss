@@ -107,12 +107,22 @@ height: 9cm;
 .button_add {
   width: 30px !important;
   height: 30px !important;
-  //  background-color:#b3e7c0 !important; 
   border-radius: 10% !important;
   margin-top: 15px !important;
   padding-bottom: 3px !important;
   padding-top: 5px !important;
   padding-left: 7px !important;
+}
+
+.rounded_Add_Btn {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50% !important;
+  margin-top: 15px !important;
+  padding-bottom: 3px !important;
+  padding-top: 5px !important;
+  padding-left: 7px !important;
+
 }
 
 .button_save {
