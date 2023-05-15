@@ -240,9 +240,6 @@ const UploadExcel = (props) => {
             }
         })
 
-        // const c_invoice = compareParam.find(i => (i.FieldName === "InvoiceNumber"))
-        // const invoiceGroup = await groupBy(preUploadjson, (party) => (party[c_invoice.Value]))
-
         readJsonDetail.invoice.forEach(inv => {
             let parentObj;
             let invoiceItems = []

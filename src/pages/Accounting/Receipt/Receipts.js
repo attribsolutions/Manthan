@@ -841,39 +841,32 @@ const Receipts = (props) => {
                                             )}
                                         </Col>
                                     </FormGroup>
-                                </Col >
+                                </Col>
                             </Row>
-
                         </div>
 
 
                         <ToolkitProvider
-
-                            keyField="Invoice"
+                            keyField="id"
                             data={Data}
                             columns={pagesListColumns}
-
                             search
                         >
                             {toolkitProps => (
                                 <React.Fragment>
                                     <div className="table">
                                         <BootstrapTable
-                                            keyField={"Invoice"}
-                                            // id="table_Arrow"
+                                            keyField={"id"}
+                                            id="table_Arrow"
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
-
                                             {...toolkitProps.baseProps}
-
                                         />
-
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
-
                                 </React.Fragment>
                             )
                             }
@@ -887,15 +880,14 @@ const Receipts = (props) => {
                                         userAcc={userPageAccessState}
                                         editCreatedBy={editCreatedBy}
                                     />
-
                                 </Col>
                             </FormGroup >
                             : null
                         }
 
-                    </form >
-                </div >
-            </React.Fragment >
+                    </form>
+                </div>
+            </React.Fragment>
         );
     }
     else {
