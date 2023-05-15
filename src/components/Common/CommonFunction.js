@@ -443,11 +443,11 @@ export const tableInputArrowUpDounFunc = (tableId) => {
               var tr = td.closest('tr');
               var pos = td[0].cellIndex;
               var ctd = tr.children('td')
-              debugger
+              
               let nextTd = td
 
               while (pos < ctd.length) {
-                debugger
+                
                 moveTo = nextTd.next('td:has(input,textarea)');
                 if (moveTo.length > 0) { pos = ctd.length + 1 }
                 nextTd = td.next('td')
@@ -475,7 +475,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
 
             var tdPreInput
             td.find('input').each(function (i2, tdEle) {
-              debugger
+              
               var thisIndex = $(tdEle).index('input:text');
               if (pre === thisIndex) {
                 tdPreInput = tdEle

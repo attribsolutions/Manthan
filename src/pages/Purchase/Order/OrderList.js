@@ -87,7 +87,7 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        debugger
+        
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -371,8 +371,9 @@ const OrderList = () => {
     }
 
     function orderApprovalFunc(editData) {
-        const { Data } = editData
-        
+    
+        const { Data,btnId } = editData
+
         let body = {
             "Customer": Data.CustomerSAPCode,//parent--CustomerSAPCode 
             "DocDate": Data.OrderDate, //parent--OrderDate
@@ -394,7 +395,7 @@ const OrderList = () => {
         }
         const jsonBody = JSON.stringify(body)
 
-        dispatch(orderApprovalAction({ jsonBody }))
+        dispatch(orderApprovalAction({ jsonBody, btnId }))
         editOrderIdSuccess({ Status: false })
     }
 

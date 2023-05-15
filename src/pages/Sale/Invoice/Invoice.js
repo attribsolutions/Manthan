@@ -128,7 +128,7 @@ const Invoice = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+        
         if ((hasShowloction || hasShowModal || (location.state))) {
 
             let hasEditVal = null
@@ -762,7 +762,7 @@ const Invoice = (props) => {
                         const calculate = discountCalculate(ele, index)
 
                         grand_total = grand_total + Number(calculate.tAmount)
-                        debugger
+                        
                         invoiceItems.push({
                             Item: index.Item,
                             Unit: index.UnitDrop.value,
