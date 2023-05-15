@@ -324,14 +324,14 @@ export const listPageActionsButtonFunc = (props) => {
                             <Button
                                 type="button"
                                 id={`btn-orderApproval-${rowData.id}`}
-                                className={editBtnCss}
+                                className={makeBtnCss}
                                 title={`Order Approval ${ButtonMsgLable}`}
                                 onClick={() => {
                                     const btnId = `btn-orderApproval-${rowData.id}`;
                                     editHandler(rowData, mode.orderApproval, btnId)
                                 }}
                             >
-                                <i className="bx bxs-copy font-size-18 "></i>
+                                <i className="bx bx-check-shield font-size-20"></i>
                             </Button>
                             : null
                     }
