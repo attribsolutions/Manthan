@@ -7,8 +7,6 @@ import { useSelector, useDispatch } from "react-redux"
 import { Link, useHistory } from "react-router-dom"
 
 import { getUserDetailsAction, resetRoleAccessAction, roleAceessAction } from "../../store/actions"
-
-// import images
 import logo from "../../assets/images/logo-sm.svg"
 
 //Import config
@@ -22,12 +20,10 @@ const SelectDivisionPage = props => {
 
   const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
 
-  const { divisionDropdown_redux, roleAccessSidbarData } = useSelector(state => ({
+  const { divisionDropdown_redux,  } = useSelector(state => ({
     loginError: state.Login.loginError,
     divisionDropdown_redux: state.Login.divisionDropdown,
-    roleAccessSidbarData: state.Login.roleAccessSidbarData
-  }))
-  console.log("roleAccessSidbarData", roleAccessSidbarData)
+  }));
 
   useEffect(() => {
     dispatch(resetRoleAccessAction())
@@ -38,20 +34,6 @@ const SelectDivisionPage = props => {
       dispatch(getUserDetailsAction(localStorage.getItem("userId")))
     }
   }, [])
-
-
-  // useEffect(() => {
-  //   debugger
-  //   if (roleAccessSidbarData.length > 0) {
-  //     const findDashboard = roleAccessSidbarData.find((index) => (index.ModuleName === "Dashboard"))
-  //     if (!(findDashboard === undefined)) {
-  //       history.push(findDashboard.ModuleData[0].ActualPagePath)
-  //     } else {
-  //       history.push("/Dashboard")
-  //     }
-  //   }
-
-  // }, [roleAccessSidbarData])
 
   useEffect(() => {
 
@@ -73,13 +55,6 @@ const SelectDivisionPage = props => {
     }
   }, [divisionDropdown_redux])
 
-
-  // const divisionDropdown_DropdownOption = divisionDropdown_redux.filter((d) => {
-  //   return !(d.Role_id === null)
-  // }).map((d) => ({
-  //   value: d.Employee_id,
-  //   label: d.PartyName,
-  // }));
 
   const divisionDropdown_DropdownOption = divisionDropdown_redux.map((d, key) => ({
     value: key,
