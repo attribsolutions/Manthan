@@ -163,7 +163,6 @@ function* orderList_GoBtn_GenFunc({ config }) {
 function* orderApproval_GenFunc({ config }) {
   
   try {
-
     const response = yield call(orderApproval_Save_API, config)
     yield put(orderApprovalActionSuccess(response));
   } catch (error) { CommonConsole(error) }

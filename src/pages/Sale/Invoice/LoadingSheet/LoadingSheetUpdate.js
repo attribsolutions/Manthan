@@ -117,6 +117,7 @@ const LoadingSheetUpdate = (props) => {
         {
             text: "Bill Date",
             dataField: "InvoiceDate",
+            
         },
         {
             text: "Bill NO",

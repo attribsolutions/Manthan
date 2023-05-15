@@ -38,7 +38,7 @@ import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const Receipts = (props) => {
-    debugger
+    
     const history = useHistory()
     const dispatch = useDispatch();
 
@@ -164,7 +164,7 @@ const Receipts = (props) => {
 
     // loction useEffect
     useEffect(() => {
-        debugger
+        
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null

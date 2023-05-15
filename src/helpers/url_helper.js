@@ -234,7 +234,7 @@ export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"
 export const ORDER_PAGE_API = "Orders"
 export const ORDER_Edit_API = "OrderEdit"
 export const ORDER_TYPE_API = '/POType'
-export const ORDER_APPROVAL_API = '/SAPInvoice'
+export const ORDER_APPROVAL_API = '/SAPOrder'
 
 
 // GRN
