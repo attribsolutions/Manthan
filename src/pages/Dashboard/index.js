@@ -6,10 +6,10 @@ import { useHistory } from 'react-router-dom';
 import {  Container,} from "reactstrap";
 
 const Dashboard = () => {
-    const history = useHistory();
-    const { roleAccessSidbarData } = useSelector(state => ({
-        roleAccessSidbarData: state.Login.roleAccessSidbarData
-    }))
+    // const history = useHistory();
+    // const { roleAccessSidbarData } = useSelector(state => ({
+    //     roleAccessSidbarData: state.Login.roleAccessSidbarData
+    // }))
 
     // useEffect(() => {
       
