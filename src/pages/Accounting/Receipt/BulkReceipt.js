@@ -17,7 +17,7 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, loginPartyID, loginUserID, metaTagLabel, } from "../../../components/Common/CommonFunction";
+import * as commonFunc from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -26,7 +26,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { ReceiptGoButtonMaster_Success, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const BulkRecipt = (props) => {
 
@@ -34,7 +33,7 @@ const BulkRecipt = (props) => {
     const dispatch = useDispatch();
 
     const fileds = {
-        CurrentDate: currentDate,
+        CurrentDate: commonFunc.currentDate,
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
@@ -67,10 +66,9 @@ const BulkRecipt = (props) => {
     const { Data = [] } = ReceiptGoButton
 
     useEffect(() => {
-        const page_Id = pageId.RECEIPTS
+        const page_Id = pageId.BULK_RECIPT
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        // dispatch(BankListAPI())
     }, []);
 
     useEffect(() => {
@@ -88,14 +86,12 @@ const BulkRecipt = (props) => {
 
 
     useEffect(async () => {
-
+        debugger
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(ReceiptGoButtonMaster_Success([]))
-            setState(() => resetFunction(fileds, state))//Clear form values
-
-
-            if (pageMode === "other") {
+            // setState(() => resetFunction(fileds, state))//Clear form values
+            if (pageMode === mode.dropdownAdd) {
                 CustomAlert({
                     Type: 1,
                     Message: postMsg.Message,
@@ -108,7 +104,7 @@ const BulkRecipt = (props) => {
                 })
                 if (promise) {
                     history.push({
-                        pathname: url.LOADING_SHEET_LIST,
+                        pathname: url.BULK_RECIPT,
                     })
                 }
             }
@@ -121,7 +117,6 @@ const BulkRecipt = (props) => {
             })
         }
     }, [postMsg])
-
 
     useEffect(() => {
         let userAcc = null;
@@ -137,12 +132,11 @@ const BulkRecipt = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            commonFunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
-
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+    // useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     function CalculateOnchange(e, row, key) {
 
@@ -154,7 +148,6 @@ const BulkRecipt = (props) => {
             row.Calculate = Calculate
         }
     }
-
 
     const pagesListColumns = [
         {
@@ -201,20 +194,18 @@ const BulkRecipt = (props) => {
 
     ];
 
-
     const SaveHandler = (event) => {
-
+      
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
         try {
-            // if (formValid(state)) {
-            btnIsDissablefunc({ btnId, state: true })
+            commonFunc.btnIsDissablefunc({ btnId, state: true })
 
             Data.forEach(i => {
                 const arr =
                 {
-                    ReceiptDate: i.InvoiceDate,
+                    ReceiptDate: commonFunc.dataBaseDatefunc(i.InvoiceDate),
                     Description: "",
                     AmountPaid: i.GrandTotal,
                     BalanceAmount: i.BalanceAmount,
@@ -223,11 +214,11 @@ const BulkRecipt = (props) => {
                     AdvancedAmountAjusted: "",
                     Customer: i.Customer,
                     ChequeDate: "",
-                    Party: loginPartyID(),
+                    Party: commonFunc.loginPartyID(),
                     ReceiptMode: 31,
                     ReceiptType: 29,
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+                    CreatedBy: commonFunc.loginUserID(),
+                    UpdatedBy: commonFunc.loginUserID(),
                     ReceiptInvoices: [
                         {
                             Invoice: i.Invoice,
@@ -242,69 +233,11 @@ const BulkRecipt = (props) => {
             const jsonBody = JSON.stringify({
                 BulkData: arr1
             })
+            dispatch(saveReceiptMaster({ jsonBody, btnId }));
 
-            if (pageMode === mode.edit) {
-                // dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
-            }
-            else {
-
-                dispatch(saveReceiptMaster({ jsonBody, btnId }));
-
-            }
-            // }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { commonFunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
-
-
-
-
-
-
-
-
-    // const saveHandeller = async (event) => {
-    //     const arr1 = []
-
-    //     event.preventDefault();
-    //     const btnId = event.target.id;
-    //     try {
-    //         btnIsDissablefunc({ btnId, state: true })
-    //         Data.forEach(i => {
-    //             
-    //             const arr = {
-    //                 Customer: i.CustomerName,
-    //                 ReceiptDate: i.InvoiceDate,
-    //                 BillNo: i.FullInvoiceNumber,
-    //                 BalanceAmount: "",
-    //                 Grandtotal: i.Grandtotal,
-    //                 DocumentNo: i.ChequeNo,
-    //                 AdvancedAmountAjusted: "",
-    //                 Bank: i.BankName.value,
-    //                 // ChequeDate: i.ReceiptModeName.label === "Cheque" ? i.ChequeDate : "",
-    //                 DepositorBank: i.DepositorBankName.value,
-    //                 Party: loginPartyID(),
-    //                 ReceiptMode: i.ReceiptModeName.value,
-    //                 CreatedBy: loginUserID(),
-    //                 UpdatedBy: loginUserID(),
-    //                 // "ReceiptInvoices": FilterReceiptInvoices,
-    //                 // "PaymentReceipt": page_Mode === mode.modeSTPsave ? PaymentReceipt : []
-    //             }
-    //             arr1.push(arr)
-    //         })
-    //         const jsonBody = JSON.stringify({
-    //             BulkData: arr1
-    //         })
-
-    //         if (pageMode === mode.edit) {
-    //             // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
-    //         }
-    //         else {
-    //             dispatch(saveReceiptMaster({ jsonBody, btnId }));
-    //         }
-
-    //     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
-    // };
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -312,7 +245,7 @@ const BulkRecipt = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{commonFunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
@@ -363,7 +296,7 @@ const BulkRecipt = (props) => {
                                     <div className="table">
                                         <BootstrapTable
                                             keyField={"id"}
-                                            id="table_Arrow"
+                                            // id="table_Arrow"
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
@@ -389,7 +322,7 @@ const BulkRecipt = (props) => {
                                         onClick={SaveHandler}
                                         userAcc={userPageAccessState}
                                         editCreatedBy={editCreatedBy}
-                                        module={"Receipts"}
+                                        module={"BulkRecipt"}
                                     />
 
                                 </Col>
