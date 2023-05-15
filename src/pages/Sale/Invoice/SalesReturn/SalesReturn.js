@@ -619,14 +619,14 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        debugger
+      
         event.preventDefault();
 
         const btnId = event.target.id
 
         let grand_total = 0;
         const ReturnItems = TableArr.map((i) => {
-            debugger
+         
             var gstPercentage = returnMode === 1 ? i.gstPercentage : i.GST
             const calculate = salesReturnCalculate({ Rate: i.Rate, Qty: i.Qty, gstPercentage: gstPercentage })
 
@@ -647,7 +647,6 @@ const SalesReturn = (props) => {
                 BasicAmount: calculate.baseAmt,
                 GSTAmount: calculate.gstAmt,
                 GST: returnMode === 1 ? i.RowData.GST : i.GST_ID,
-                // GST: returnMode === 1 ? i.RowData.GSTPercentage : i.GSTPercentage,
                 GSTPercentage: gstPercentage,
                 CGST: calculate.CGST,
                 SGST: calculate.SGST,
