@@ -383,10 +383,9 @@ const Order = (props) => {
             dataField: "",
             formatter: (value, row, k) => {
                 return (
-                    <Input type="text"
+                    <Input
+                        type="text"
                         id={`Quantity${k}`}
-                        name="Quantity"
-                        htmlFor={"Quantity"}
                         defaultValue={row.Quantity}
                         key={`Quantity${row.id}`}
                         className="text-end move"
@@ -394,7 +393,8 @@ const Order = (props) => {
                             const val = e.target.value
                             let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                             if ((isnum) || (val === '')) {
-                                val_onChange(val, row, "qty")
+                                row["Quantity"] = val
+                                itemWise_Calculation(row)
                             } else {
                                 document.getElementById(`Quantity${k}`).value = row.Quantity
                             }
@@ -459,6 +459,7 @@ const Order = (props) => {
                             row["UnitName"] = e.label
                             row["BaseUnitQuantity"] = e.baseUnitQty
                             row["Rate"] = e.Rate
+                            itemWise_Calculation(row)
                             document.getElementById(`Rate-${key}`).innerText = e.Rate
                         }}
                     >
@@ -542,13 +543,7 @@ const Order = (props) => {
         custom: true,
     };
 
-    function val_onChange(val, row, type) {
-        if (type === "qty") {
-            row["Quantity"] = val;
-        }
-        else {
-            row["Rate"] = val
-        }
+    function itemWise_Calculation(row) {
 
         row["Amount"] = Amount(row)
 
