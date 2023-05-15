@@ -87,7 +87,7 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        
+
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -371,29 +371,33 @@ const OrderList = () => {
     }
 
     function orderApprovalFunc(editData) {
-    
-        const { Data,btnId } = editData
 
+        const { Data, btnId } = editData;
+
+        let isorderItemSet = [];
+        Data.OrderItems.forEach(i => {
+            if (i.Quantity > 0) {
+                isorderItemSet.push({
+                    "OrderNo": Data.id,//parent id
+                    "ItemNo": i.Item_id, //OrderItem--id
+                    "Material": i.SAPItemCode,//OrderItem--SAPItemCode
+                    "Quantity": i.Quantity,//OrderItem--Quantity
+                    "Unit": i.SAPUnitName,//OrderItem--SAPUnitName
+                    "Plant": Data.SupplierSAPCode,//parent
+                    "Batch": ""// blank
+                })
+            }
+        })
         let body = {
             "Customer": Data.CustomerSAPCode,//parent--CustomerSAPCode 
             "DocDate": Data.OrderDate, //parent--OrderDate
             "Indicator": "F",
             "OrderNo": Data.id,//parent--id
             "Stats": "1",
-            "OrderItemSet": Data.OrderItems.map(i => (
-                {
-                    "OrderNo": Data.id,//parent id
-                    "ItemNo": i.id, //OrderItem--id
-                    "Material": i.ItemSAPCode,//OrderItem--ItemSAPCode
-                    "Quantity": i.Quantity,//OrderItem--Quantity
-                    "Unit": i.SAPUnitName,//OrderItem--SAPUnitName
-                    "Plant": Data.SupplierSAPCode,//parent
-                    "Batch": ""// blank
-                }
-            )),
+            "OrderItemSet": isorderItemSet,
             "CancelFlag": "" //blank
         }
-        const jsonBody = JSON.stringify(body)
+        const jsonBody = JSON.stringify(body);
 
         dispatch(orderApprovalAction({ jsonBody, btnId }))
         editOrderIdSuccess({ Status: false })
