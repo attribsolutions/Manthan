@@ -279,8 +279,7 @@ const OrderList = () => {
                 Customer: rowData.CustomerID,
                 EffectiveDate: rowData.preOrderDate,
                 OrderID: rowData.id,
-                RateParty: rowData.SupplierID
-
+                RateParty: rowData.CustomerID
             })
             dispatch(editOrderId({ jsonBody, ...config }));
         } catch (error) { btnIsDissablefunc({ btnId, state: false }) }
