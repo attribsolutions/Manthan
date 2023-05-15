@@ -79,7 +79,7 @@ function* Edit_Party_GenFun({ id, pageMode }) {
 
   try {
     const response = yield call(Party_Master_Edit_API, id);
-    response.pageMode = id.btnmode
+    response.Data.pageMode = id.btnmode
     response.Data = response.Data.Data//remove chield data array
     yield put(editPartyIDSuccess(response));
   } catch (error) { CommonConsole(error) }

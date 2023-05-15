@@ -39,7 +39,7 @@ import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { bulkSetState, formValid } from "../../../../components/Common/validationFunction";
 import BaseTabForm from "./FirstTab/index";
 import PrefixTab from "./PrefixTab/PrefixTab";
-import { priceListByCompay_ActionSuccess, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
+import { priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 
 const PartyMaster = (props) => {
 
@@ -95,10 +95,6 @@ const PartyMaster = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
-        // if (userAcc) {
-        //     setUserAccState(userAcc);
-        //     breadcrumbReturnFunc({ dispatch, userAcc });
-        // };
         if (userAcc) {
             setUserAccState(userAcc);
             if (!props.isdropdown) {
@@ -131,10 +127,6 @@ const PartyMaster = (props) => {
                 let baseValue = {
                     Name: hasEditVal.Name,
                     MobileNo: hasEditVal.MobileNo,
-                    PriceList: (hasEditVal.PriceList) && {
-                        label: hasEditVal.PriceList.Name,
-                        value: hasEditVal.PriceList.id,
-                    },
                     PartyType: {
                         label: hasEditVal.PartyType.Name,
                         value: hasEditVal.PartyType.id,
@@ -156,7 +148,7 @@ const PartyMaster = (props) => {
                     MkUpMkDn: hasEditVal.MkUpMkDn,
                     isActive: hasEditVal.isActive,
 
-                }
+                };
 
                 let prefix = (hasEditVal.PartyPrefix.length > 0) ? hasEditVal.PartyPrefix[0] : '';
                 let prefixValue = {
@@ -170,17 +162,24 @@ const PartyMaster = (props) => {
                     DemandPrefix: prefix.Demandprefix,
                     IBChallanPrefix: prefix.IBChallanprefix,
                     IBInwardPrefix: prefix.IBInwardprefix,
-                }
+                };
+
+                let editPriceList = (hasEditVal.PriceList) ? {
+                    label: hasEditVal.PriceList.Name, value: hasEditVal.PriceList.id,
+                } : { label: '' };
 
                 let getBaseTab = baseTabRef.current.getCurrentState();
                 let setBaseTab = baseTabRef.current.setCurrentState;
                 let getPrefixtab = prefixTabRef.current.getCurrentState();
                 let setPrefixtab = prefixTabRef.current.setCurrentState;
                 let setAddressTab = addressTabRef.current.setCurrentState;
+                let setPriceList = baseTabRef.current.setPriceListSelect;
+
 
                 bulkSetState(baseValue, getBaseTab, setBaseTab)
                 bulkSetState(prefixValue, getPrefixtab, setPrefixtab)
                 setAddressTab(hasEditVal.PartyAddress)
+                setPriceList(editPriceList);
                 dispatch(editPartyIDSuccess({ Status: false }));
             }
         }

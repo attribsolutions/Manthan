@@ -111,7 +111,7 @@ function* DeleteInvoiceGenFunc({ config }) {
 
 // GO-Botton SO-invoice Add Page API
 export function invoice_GoButton_dataConversion_Func(response) {
-  debugger
+  
   try {
     let con_Qty = 0
     let tAmount = 0;

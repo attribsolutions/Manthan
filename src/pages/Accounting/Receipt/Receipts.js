@@ -38,7 +38,7 @@ import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import * as commonFunc from "../../../components/Common/CommonFunction";
 
 const Receipts = (props) => {
-
+    debugger
     const history = useHistory()
     const dispatch = useDispatch();
 
@@ -164,7 +164,7 @@ const Receipts = (props) => {
 
     // loction useEffect
     useEffect(() => {
-
+        debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -311,7 +311,7 @@ const Receipts = (props) => {
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
-                        // onKeyDown={(e) => handleKeyDown(e, Data)}
+                    // onKeyDown={(e) => handleKeyDown(e, Data)}
                     />
                 </span>)
             },
@@ -579,7 +579,7 @@ const Receipts = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>

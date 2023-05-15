@@ -367,7 +367,7 @@ const Order = (props) => {
             hidden: !(pageMode === mode.defaultsave) && true,
             dataField: "StockQuantity",
             formatter: (value, row, k) => {
-                debugger
+                
                 return (
                     <div key={row.id} className="text-end">
                         <span>{row.StockQuantity}</span>
@@ -649,7 +649,7 @@ const Order = (props) => {
 
     const saveHandeller = async (event) => {
         event.preventDefault();
-        debugger
+        
         const btnId = event.target.id
         commonFunc.btnIsDissablefunc({ btnId, state: true })
 
