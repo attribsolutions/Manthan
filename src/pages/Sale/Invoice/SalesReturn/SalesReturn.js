@@ -526,7 +526,8 @@ const SalesReturn = (props) => {
                 ItemName: { label: i.ItemName, value: i.Item },
                 Quantity: i.Quantity,
                 Rate: i.Rate,
-                RowData: i
+                RowData: i,
+                BatchDate: currentDate
             }))
 
             const itemArr = [...TableArr]
@@ -541,7 +542,8 @@ const SalesReturn = (props) => {
                     Quantity: i.Quantity,
                     Rate: i.Rate,
                     gstPercentage: i.RowData.GSTPercentage,
-                    RowData: i.RowData
+                    RowData: i.RowData,
+                    BatchDate: currentDate
                 })
             })
 
@@ -617,14 +619,14 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        
+        debugger
         event.preventDefault();
 
         const btnId = event.target.id
 
         let grand_total = 0;
         const ReturnItems = TableArr.map((i) => {
-
+            debugger
             var gstPercentage = returnMode === 1 ? i.gstPercentage : i.GST
             const calculate = salesReturnCalculate({ Rate: i.Rate, Qty: i.Qty, gstPercentage: gstPercentage })
 
@@ -637,7 +639,7 @@ const SalesReturn = (props) => {
                 Unit: returnMode === 1 ? i.RowData.Unit : i.Unit,
                 BaseUnitQuantity: returnMode === 1 ? i.RowData.BaseUnitQuantity : i.BaseUnitQuantity,
                 BatchCode: returnMode === 1 ? i.RowData.BatchCode : i.BatchCode,
-                BatchDate: i.BatchDate,
+                BatchDate: returnMode === 1 ? i.RowData.BatchDate : i.BatchDate,
                 Amount: calculate.tAmount,
                 MRP: returnMode === 1 ? i.RowData.MRP : i.MRP,
                 MRPValue: returnMode === 1 ? i.RowData.MRPValue : i.MRPValue,
