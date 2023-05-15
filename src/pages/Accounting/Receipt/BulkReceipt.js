@@ -185,6 +185,7 @@ const BulkRecipt = (props) => {
                         id=""
                         key={row.Invoice}
                         defaultValue={row.BalanceAmount}
+                        disabled={true}
                         className="col col-sm"
                         onChange={e => { CalculateOnchange(e, row, key) }}
                     />
