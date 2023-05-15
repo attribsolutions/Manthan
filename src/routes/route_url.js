@@ -99,8 +99,8 @@ export const SUBGROUP_LIST = "/SubGroupList"
 export const GENERAL = "/GeneralMaster"
 export const GENERAL_LIST = "/GeneralList"
 
-export const CREDITLIMIT = "/CreditLimit"
-export const CREDITLIMIT_LIST = "/CreditLimitList"
+// export const CREDITLIMIT = "/CreditLimit"
+// export const CREDITLIMIT_LIST = "/CreditLimitList"
 
 export const IMPORT_EXCEL_FIELD_MAP_add = "/Import_ExcelFieldMap_add"
 export const IMPORT_EXCEL_FIELD_MAP_list = "/Import_ExcelFieldMap_list"
