@@ -6,13 +6,15 @@ import { LOADING_SHEET_LIST_ACTION, LOADING_SHEET_GO_BUTTON_API, SAVE_LOADING_SH
 
 // GoButton Post API for Loading Sheet
 function* goBtn_Post_API_GenFun({ filters }) {
-
+   
     try {
         const response = yield call(Loading_Sheet_Go_Button_API, filters);
+
         response.Data.map((index) => {
             index["selectCheck"] = false
             return index
         });
+
         yield put(LoadingSheet_GoBtn_API_Succcess(response));
     } catch (error) { CommonConsole(error) }
 }
@@ -30,6 +32,10 @@ function* Update_LoadingSheet_GenFun({ id }) {
 
     try {
         const response = yield call(Loading_Sheet_Update_API, id);
+        response.Data.InvoiceParent.map((index) => {
+            index.InvoiceDate = convertDatefunc(index.InvoiceDate);
+            return index
+        });
         yield put(UpdateLoadingSheetSucccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
