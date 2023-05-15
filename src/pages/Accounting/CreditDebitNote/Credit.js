@@ -274,6 +274,8 @@ const Credit = (props) => {
 
     useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems]);
 
+    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+
     const PartyOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -308,13 +310,11 @@ const Credit = (props) => {
     };
 
     function InvoiceNoOnChange(e) {
-
         let id = e.value
         dispatch(Invoice_Return_ID(id));
     };
 
     function CustomerOnChange(e) { // Customer dropdown function
-
 
         setState((i) => {
             i.values.GrandTotal = 0
@@ -373,8 +373,6 @@ const Credit = (props) => {
         onChangeText({ event, state, setState })
         AmountPaidDistribution(event.target.value)
         dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(event.target.value).toFixed(2)}`))
-
-
     }
 
     function AmountPaidDistribution(val1) {
@@ -408,7 +406,7 @@ const Credit = (props) => {
         }
         row.gstPercentage = row.GSTPercentage
         let calculate = salesReturnCalculate(row)
-        
+
         Setcalculation(calculate)
         let AmountTotal = calculate.tAmount
         row["AmountTotal"] = Number(AmountTotal)
@@ -491,8 +489,6 @@ const Credit = (props) => {
                             }
                         }}
                         onKeyDown={(e) => handleKeyDown(e, InvoiceItems)}
-
-
                     />
                 </span>)
             }
@@ -536,12 +532,9 @@ const Credit = (props) => {
                             classNamePrefix="dropdown"
                             // options={Units}
                             onChange={(e) => UnitOnchange(e, row, key)}
-
                         />
                     </span>)
-
                 }
-
             }
         },
         {
@@ -728,7 +721,7 @@ const Credit = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
@@ -852,10 +845,9 @@ const Credit = (props) => {
 
                                             )}
                                         </Col>
-
-
                                     </FormGroup>
                                 </Col >
+
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
@@ -900,16 +892,12 @@ const Credit = (props) => {
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
-
                                             {...toolkitProps.baseProps}
-
                                         />
-
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
-
-
                                     }
+
                                     {Table1.length <= 0 ? null : <div className="table">
                                         <BootstrapTable
                                             keyField={"id"}
@@ -918,15 +906,10 @@ const Credit = (props) => {
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
-
                                             {...toolkitProps.baseProps}
-
                                         />
-
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
-
-
                                     }
 
                                 </React.Fragment>
@@ -937,11 +920,9 @@ const Credit = (props) => {
 
                         {
                             <ToolkitProvider
-
                                 keyField="id"
                                 data={Table.length <= 0 ? Data : Table}
                                 columns={pagesListColumns}
-
                                 search
                             >
                                 {toolkitProps => (
@@ -949,6 +930,7 @@ const Credit = (props) => {
                                         <div className="table">
                                             <BootstrapTable
                                                 keyField={"id"}
+                                                id="table_Arrow"
                                                 bordered={true}
                                                 striped={false}
                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
