@@ -102,8 +102,8 @@ export const SubGroupMaster = url.SUBGROUP_LIST
 export const GeneralList = url.GENERAL
 export const GeneralMaster = url.GENERAL_LIST
 
-export const CreditLimitMaster = url.CREDITLIMIT_LIST
-export const CreditLimitList = url.CREDITLIMIT
+// export const CreditLimitMaster = url.CREDITLIMIT_LIST
+// export const CreditLimitList = url.CREDITLIMIT
 
 export const ImportFieldMap = url.IMPORT_EXCEL_FIELD_MAP_add
 export const ImportFieldMapList = url.IMPORT_EXCEL_FIELD_MAP_add
