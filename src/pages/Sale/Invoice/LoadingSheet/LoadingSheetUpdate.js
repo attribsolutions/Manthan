@@ -25,7 +25,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
-import { GetOpeningBalance, ReceiptGoButtonMaster } from "../../../../store/Accounting/Receipt/action";
+import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 const LoadingSheetUpdate = (props) => {
@@ -40,11 +40,14 @@ const LoadingSheetUpdate = (props) => {
     const {
         userAccess,
         List,
+        makeReceipt,
+        OpeningBalance
     } = useSelector((state) => ({
         List: state.LoadingSheetReducer.LoadingSheetUpdate,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-
+        makeReceipt: state.ReceiptReducer.ReceiptGoButton,
+        OpeningBalance: state.ReceiptReducer.OpeningBalance,
     }));
     const { InvoiceParent = [], PartyDetails = {} } = List
 
@@ -75,12 +78,22 @@ const LoadingSheetUpdate = (props) => {
         };
     }, [userAccess])
 
+    useEffect(() => {
+
+        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
+            dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
+
+            history.push({
+                pathname: makeReceipt.path,
+                pageMode: makeReceipt.pageMode,
+                editValue: makeReceipt.ListData,
+            })
+        }
+    }, [makeReceipt, OpeningBalance])
+
     function makeBtnFunc(e, row) {
-
         var { CustomerID, id } = row
-
         try {
-
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
@@ -92,6 +105,7 @@ const LoadingSheetUpdate = (props) => {
                 CustomerID: CustomerID,
                 ReceiptDate: currentDate
             });
+
             const body = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row }
             dispatch(ReceiptGoButtonMaster(body));
             dispatch(GetOpeningBalance(jsonBody1));
