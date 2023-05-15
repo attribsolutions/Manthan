@@ -40,18 +40,18 @@ const SelectDivisionPage = props => {
   }, [])
 
 
-  useEffect(() => {
-    debugger
-    if (roleAccessSidbarData.length > 0) {
-      const findDashboard = roleAccessSidbarData.find((index) => (index.ModuleName === "Dashboard"))
-      if (!(findDashboard === undefined)) {
-        history.push(findDashboard.ModuleData[0].ActualPagePath)
-      } else {
-        history.push("/Dashboard")
-      }
-    }
+  // useEffect(() => {
+  //   debugger
+  //   if (roleAccessSidbarData.length > 0) {
+  //     const findDashboard = roleAccessSidbarData.find((index) => (index.ModuleName === "Dashboard"))
+  //     if (!(findDashboard === undefined)) {
+  //       history.push(findDashboard.ModuleData[0].ActualPagePath)
+  //     } else {
+  //       history.push("/Dashboard")
+  //     }
+  //   }
 
-  }, [roleAccessSidbarData])
+  // }, [roleAccessSidbarData])
 
   useEffect(() => {
 
@@ -69,7 +69,7 @@ const SelectDivisionPage = props => {
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
 
 
-      // history.push("/Dashboard")
+      history.push("/Dashboard")
     }
   }, [divisionDropdown_redux])
 

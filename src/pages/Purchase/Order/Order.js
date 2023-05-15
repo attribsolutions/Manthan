@@ -364,9 +364,10 @@ const Order = (props) => {
 
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
+            hidden: !(pageMode === mode.defaultsave) && true,
             dataField: "StockQuantity",
             formatter: (value, row, k) => {
-
+                debugger
                 return (
                     <div key={row.id} className="text-end">
                         <span>{row.StockQuantity}</span>
