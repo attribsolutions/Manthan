@@ -441,8 +441,8 @@ export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}
 export const OrderPage_Delete_API = ({ deleteId, btnId }) => del(`${url.ORDER_PAGE_API}/${deleteId}`, btnId)//Delete Order
 export const OrderPage_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.ORDER_PAGE_API}/${updateId}`, jsonBody, btnId)// update api
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
-export const orderApproval_Save_API = ({ jsonBody, btnId }) => orderApporval(jsonBody, btnId)//order approval
-
+// export const orderApproval_Save_API = ({ jsonBody, btnId }) => orderApporval(jsonBody, btnId)//order approval
+export const orderApproval_Save_API = ({ jsonBody, btnId }) => post(url.ORDER_APPROVAL_API, jsonBody, btnId)// Order approval
 // OrderType Dropdown API
 export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
 

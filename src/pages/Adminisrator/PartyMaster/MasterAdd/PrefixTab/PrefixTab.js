@@ -19,7 +19,7 @@ const PrefixTab = forwardRef((props, ref) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-debugger
+
     useImperativeHandle(ref, () => ({
         setCurrentState(arr) {
             setState(arr)

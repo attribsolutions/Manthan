@@ -1061,7 +1061,7 @@ const RoleAccessAdd = () => {
                                             defaultChecked={user[ischeck]}
                                             className="col col-sm text-end"
                                             onChange={(e) => {
-                                                debugger
+                                                
                                                 user[ischeck] = e.target.checked ? 1 : 0;
                                                 document.getElementById(`check-id-${ischeck}-${user.PageID}`).checked = e.target.checked;
                                                 // dispatch(IscheckRoleAcessMasterAction(user.id, ischeck, e.target.checked))
