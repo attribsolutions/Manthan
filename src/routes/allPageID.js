@@ -98,8 +98,8 @@ export const ROUTES_LIST = 150
 export const SALESMAN = 151
 export const SALESMAN_LIST = 152
 
-export const CREDITLIMIT = 160
-export const CREDITLIMIT_LIST = 154
+// export const CREDITLIMIT = 160
+// export const CREDITLIMIT_LIST = 154
 
 export const IMPORT_EXCEL_FIELD_MAP_add = 157
 export const IMPORT_EXCEL_FIELD_MAP_list = 158

@@ -24,7 +24,7 @@ const INIT_STATE = {
   orderList: [],
   orderlistFilter: { fromdate: "", todate: '', venderSelect: { value: '', label: "All" } },
   // orderAddFilter: { orderdate: currentDate, supplierSelect: '' }
-  orderApprovalRedux: { Status: false },
+  orderApprovalMsg: { Status: false },
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
@@ -87,7 +87,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
     case ORDER_APPROVAL_ACTION_SUCCESS:
       return {
         ...state,
-        orderApprovalRedux: action.payload,
+        orderApprovalMsg: action.payload,
       }
 
 
