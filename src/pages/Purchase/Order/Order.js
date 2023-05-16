@@ -367,7 +367,7 @@ const Order = (props) => {
             hidden: !(pageMode === mode.defaultsave) && true,
             dataField: "StockQuantity",
             formatter: (value, row, k) => {
-                
+
                 return (
                     <div key={row.id} className="text-end">
                         <span>{row.StockQuantity}</span>
@@ -389,13 +389,13 @@ const Order = (props) => {
                         id={`Quantity${k}`}
                         defaultValue={row.Quantity}
                         key={`Quantity${row.id}`}
-                        className="text-end move"
+                        className="text-end"
                         onChange={(e) => {
                             const val = e.target.value
                             let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                             if ((isnum) || (val === '')) {
                                 row["Quantity"] = val
-                                itemWise_Calculation(row)
+                                itemWise_CalculationFunc(row)
                             } else {
                                 document.getElementById(`Quantity${k}`).value = row.Quantity
                             }
@@ -420,14 +420,12 @@ const Order = (props) => {
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
-                    row["BaseUnitQuantity"] = 0;
-                    row["poBaseUnitQty"] = 0;
 
                     function defaultUnit(i) {
                         row["Unit_id"] = i.UnitID;
+                        row["po_Unit_id"] = i.UnitID;
                         row["UnitName"] = i.UnitName;
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
-                        row["poBaseUnitQty"] = i.BaseUnitQuantity;
                         row["Rate"] = i.Rate;
                     }
 
@@ -439,6 +437,17 @@ const Order = (props) => {
                             defaultUnit(i)
                         }
                     })
+                } else   {
+                    row["edit_Qty"] = row.Quantity;
+                    row["edit_Unit_id"] = row.Unit_id;
+
+                    row.UnitDetails.forEach(i => {
+                        if ((row.Unit_id === i.UnitID)) {
+                            row["BaseUnitQuantity"] = i.BaseUnitQuantity;
+                        }
+
+                    })
+
                 }
 
                 return (
@@ -460,7 +469,7 @@ const Order = (props) => {
                             row["UnitName"] = e.label
                             row["BaseUnitQuantity"] = e.baseUnitQty
                             row["Rate"] = e.Rate
-                            itemWise_Calculation(row)
+                            itemWise_CalculationFunc(row)
                             document.getElementById(`Rate-${key}`).innerText = e.Rate
                         }}
                     >
@@ -544,7 +553,7 @@ const Order = (props) => {
         custom: true,
     };
 
-    function itemWise_Calculation(row) {
+    function itemWise_CalculationFunc(row) {
 
         row["Amount"] = Amount(row)
 
@@ -649,7 +658,7 @@ const Order = (props) => {
 
     const saveHandeller = async (event) => {
         event.preventDefault();
-        
+
         const btnId = event.target.id
         commonFunc.btnIsDissablefunc({ btnId, state: true })
 
@@ -659,12 +668,81 @@ const Order = (props) => {
         try {
             const division = commonFunc.loginPartyID();
             const supplier = supplierSelect.value;
-
+            debugger
             const validMsg = []
             const itemArr = []
             const isVDC_POvalidMsg = []
 
-            function isChanged({ i, isedit, isdel }) {
+            await orderItemTable.forEach(i => {
+                debugger
+                if ((i.Quantity > 0) && !(i.Rate > 0)) {
+                    validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
+                }
+                else if (pageMode === mode.edit) {
+
+                    var ischange = (!(Number(i.edit_Qty) === Number(i.Quantity)) || !(i.edit_Unit_id === i.Unit_id));
+
+                    if (ischange && (i.edit_Qty === 0)) {
+                        var isedit = 0;
+                        orderItem({ i, isedit })
+                    }
+                    else if (ischange) {
+                        var isedit = 1;
+                        orderItem({ i, isedit })
+                    } else {
+                        var isedit = 0;
+                        orderItem({ i, isedit })
+                    }
+                }
+                else {
+                    const isedit = 0;
+                    orderItem({ i, isedit })
+                };
+            })
+
+
+            function orderItem({ i, isedit }) {  //isvdc_po logic
+
+                if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
+                    var isdel = false;
+                    isRowValueChanged({ i, isedit, isdel })
+                }
+                else if ((i.Quantity < 1) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
+                    var isdel = true;
+                    isRowValueChanged({ i, isedit, isdel })
+                }
+                else if ((i.Quantity > 0) && (i.Rate > 0)) {
+
+                    if (i.Bom) {
+                        if ((itemArr.length === 0)) {
+                            const isdel = false;
+                            isRowValueChanged({ i, isedit, isdel })
+
+                        } else {
+                            if (isVDC_POvalidMsg.length === 0)
+                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
+                        }
+                    } else {
+                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                    }
+                }
+                else if ((i.Quantity < 1) && (i.editrowId)) {
+                    if (i.Bom) {
+                        if ((itemArr.length === 0)) {
+                            const isdel = true;
+                            isRowValueChanged({ i, isedit, isdel })
+
+                        } else {
+                            if (isVDC_POvalidMsg.length === 0)
+                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
+                        }
+                    } else {
+                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                    }
+                };
+            }
+
+            function isRowValueChanged({ i, isedit, isdel }) {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
                 const arr = {
@@ -675,7 +753,7 @@ const Order = (props) => {
                     MRPValue: i.MRPValue,
                     Rate: i.Rate,
                     Unit: i.Unit_id,
-                    BaseUnitQuantity: i.BaseUnitQuantity,
+                    BaseUnitQuantity: (Number(i.BaseUnitQuantity) * Number(i.Quantity)).toFixed(2),
                     Margin: "",
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
@@ -694,78 +772,7 @@ const Order = (props) => {
                 itemArr.push(arr)
             };
 
-            function orderItem({ i, isedit }) {  //isvdc_po logic
 
-                if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
-                    var isdel = false;
-                    isChanged({ i, isedit, isdel })
-                }
-                else if ((i.Quantity < 1) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
-                    var isdel = true;
-                    isChanged({ i, isedit, isdel })
-                }
-                else if ((i.Quantity > 0) && (i.Rate > 0)) {
-
-                    if (i.Bom) {
-                        if ((itemArr.length === 0)) {
-                            const isdel = false;
-                            isChanged({ i, isedit, isdel })
-
-                        } else {
-                            if (isVDC_POvalidMsg.length === 0)
-                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
-                        }
-                    } else {
-                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
-                    }
-                }
-                else if ((i.Quantity < 1) && (i.editrowId)) {
-                    if (i.Bom) {
-                        if ((itemArr.length === 0)) {
-                            const isdel = true;
-                            isChanged({ i, isedit, isdel })
-
-                        } else {
-                            if (isVDC_POvalidMsg.length === 0)
-                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
-                        }
-                    } else {
-                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
-                    }
-                };
-            }
-
-            await orderItemTable.forEach(i => {
-
-                if ((i.Quantity > 0) && !(i.Rate > 0)) {
-                    // validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
-                    validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
-
-                }
-                //  else if (!(i.Quantity > 0) && (i.Rate > 0)) {
-                //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
-                // }
-
-                else if (pageMode === mode.edit) {
-                    var ischange = (!(i.poQty === i.Quantity) ||
-                        !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
-                    if (ischange && (i.poQty === 0)) {
-                        var isedit = 0;
-                        orderItem({ i, isedit })
-                    }
-                    else if (ischange) {
-                        var isedit = 1;
-                        orderItem({ i, isedit })
-                    } else {
-                        var isedit = 0;
-                        orderItem({ i, isedit })
-                    }
-                }
-                else {
-                    const isedit = 0;
-                    orderItem({ i, isedit })
-                };
-            })
             const termsAndCondition = await termsAndConTable.map(i => ({
                 TermsAndCondition: i.value,
                 IsDeleted: i.IsDeleted
