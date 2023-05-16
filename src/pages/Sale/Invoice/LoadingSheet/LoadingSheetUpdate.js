@@ -116,6 +116,11 @@ const LoadingSheetUpdate = (props) => {
 
     const pagesListColumns = [
         {
+            text: "ID",
+            dataField: "id",
+
+        },
+        {
             text: "Bill Date",
             dataField: "InvoiceDate",
 
@@ -151,36 +156,14 @@ const LoadingSheetUpdate = (props) => {
                             className=" fas fa-file-invoice" ></span> </Button></span>)
             }
         },
-        // {
-        //     text: "Select All",
-        //     dataField: "Check",
-        //     formatter: (cellContent, row, key) => {
-
-        //         return (<span style={{ justifyContent: 'center' }}>
-        //             <Input
-        //                 id={`Checked${key}`}
-        //                 defaultChecked={row.Check}
-        //                 type="checkbox"
-        //                 className="col col-sm text-center"
-        //                 onChange={(event) => { row.Check = event.target.checked; }}
-        //             />
-        //         </span>)
-        //     }
-        // },
-
 
     ];
 
     function rowSelected() {
-        debugger
+      
         return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
     }
 
-    const pageOptions = {
-        sizePerPage: 10,
-        // totalSize: Data.length,
-        custom: true,
-    };
 
     function DateOnchange(e, date) {
         setLoadingDate(date)
@@ -263,52 +246,38 @@ const LoadingSheetUpdate = (props) => {
                             </div>
                         </div>
 
-                        <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
+
+                        <ToolkitProvider
+
+                            keyField="id"
+                            data={InvoiceParent}
+                            columns={pagesListColumns}
+
+                            search
                         >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    <div className="table">
+                                        <BootstrapTable
+                                            keyField={"id"}
+                                            bordered={true}
+                                            striped={false}
+                                            selectRow={selectAllCheck(rowSelected())}
+                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                            classes={"table align-middle table-nowrap table-hover"}
+                                            headerWrapperClasses={"thead-light"}
 
-                                    keyField="id"
-                                    data={InvoiceParent}
-                                    columns={pagesListColumns}
+                                            {...toolkitProps.baseProps}
 
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <div className="table">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    bordered={true}
-                                                    striped={false}
-                                                    selectRow={selectAllCheck(rowSelected())}
-                                                    noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
+                                        />
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
 
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "LoadingSheet")}
-                                                {mySearchProps(toolkitProps.searchProps)}
-                                            </div>
-
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
+                                </React.Fragment>
                             )
                             }
+                        </ToolkitProvider>
 
-                        </PaginationProvider>
                         {
                             InvoiceParent.length > 0 ?
                                 <FormGroup>
