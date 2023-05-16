@@ -157,6 +157,7 @@ const LoadingSheetUpdate = (props) => {
                     <Button
                         type="button"
                         id={`btn-makeBtn-${row.id}`}
+                        title={"Make Receipt"}
                         className={makeBtnCss}
                         onClick={(e) => {
                             makeBtnFunc(e, row)
