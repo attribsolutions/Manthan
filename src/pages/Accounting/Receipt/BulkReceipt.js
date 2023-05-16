@@ -27,7 +27,7 @@ const BulkRecipt = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const[pageMode,setPageMode]=useState(mode.defaultsave)
+    const [pageMode, setPageMode] = useState(mode.defaultsave)
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -168,7 +168,7 @@ const BulkRecipt = (props) => {
     ];
 
     const SaveHandler = (event) => {
-
+        debugger
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
@@ -178,7 +178,7 @@ const BulkRecipt = (props) => {
             Data.forEach(i => {
                 const arr =
                 {
-                    ReceiptDate: commonFunc.dataBaseDatefunc(i.InvoiceDate),
+                    ReceiptDate: commonFunc.currentDate,
                     Description: "",
                     AmountPaid: i.GrandTotal,
                     BalanceAmount: i.BalanceAmount,
