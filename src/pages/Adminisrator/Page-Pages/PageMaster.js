@@ -200,6 +200,7 @@ const PageMaster = (props) => {
             IsCompulsory: index.IsCompulsory,
             DefaultSort: index.DefaultSort,
             ListPageSeq: index.ListPageSeq,
+            Alignment:index.Alignment,
             ShowInListPage: index.ShowInListPage,
             ShowInDownload: index.ShowInDownload,
             DownloadDefaultSelect: index.ShownloadDefaultSelect
@@ -227,6 +228,7 @@ const PageMaster = (props) => {
             IsCompulsory: index.IsCompulsory,
             DefaultSort: index.DefaultSort,
             ListPageSeq: index.ListPageSeq,
+            Alignment:index.Alignment,
             ShowInListPage: index.ShowInListPage,
             ShowInDownload: index.ShowInDownload,
             DownloadDefaultSelect: index.ShownloadDefaultSelect
@@ -385,6 +387,7 @@ const PageMaster = (props) => {
       IsCompulsory: index.IsCompulsory,
       DefaultSort: index.DefaultSort,
       ListPageSeq: index.ListPageSeq,
+      Alignment: index.Alignment,
       ShowInListPage: index.ShowInListPage,
       ShowInDownload: index.ShowInDownload,
       ControlType: index.ControlType.value,
