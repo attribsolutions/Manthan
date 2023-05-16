@@ -668,13 +668,13 @@ const Order = (props) => {
         try {
             const division = commonFunc.loginPartyID();
             const supplier = supplierSelect.value;
-            debugger
+            
             const validMsg = []
             const itemArr = []
             const isVDC_POvalidMsg = []
 
             await orderItemTable.forEach(i => {
-                debugger
+                
                 if ((i.Quantity > 0) && !(i.Rate > 0)) {
                     validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
                 }
