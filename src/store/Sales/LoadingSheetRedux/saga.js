@@ -33,7 +33,7 @@ function* Update_LoadingSheet_GenFun({ id }) {
     try {
         const response = yield call(Loading_Sheet_Update_API, id);
         response.Data.InvoiceParent.map((index) => {
-            index["preInvoiceDate"] = index.InvoiceDate
+            index["selectCheck"] = false
             index.InvoiceDate = convertDatefunc(index.InvoiceDate);
             return index
         });

@@ -27,6 +27,7 @@ import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList
 import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
 import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -117,7 +118,7 @@ const LoadingSheetUpdate = (props) => {
         {
             text: "Bill Date",
             dataField: "InvoiceDate",
-            
+
         },
         {
             text: "Bill NO",
@@ -131,23 +132,6 @@ const LoadingSheetUpdate = (props) => {
             text: "Amount",
             dataField: "GrandTotal",
         },
-        {
-            text: "Select All",
-            dataField: "Checked",
-            formatter: (cellContent, row, key) => {
-
-                return (<span style={{ justifyContent: 'center' }}>
-                    <Input
-                        id={`Checked${key}`}
-                        defaultChecked={row.Checked}
-                        type="checkbox"
-                        className="col col-sm text-center"
-                        onChange={(event) => { row.Checked = event.target.checked; }}
-                    />
-                </span>)
-            }
-        },
-
         {
             text: "Action",
             dataField: "",
@@ -166,8 +150,31 @@ const LoadingSheetUpdate = (props) => {
                         <span style={{ marginLeft: "6px", marginRight: "6px" }}
                             className=" fas fa-file-invoice" ></span> </Button></span>)
             }
-        }
+        },
+        // {
+        //     text: "Select All",
+        //     dataField: "Check",
+        //     formatter: (cellContent, row, key) => {
+
+        //         return (<span style={{ justifyContent: 'center' }}>
+        //             <Input
+        //                 id={`Checked${key}`}
+        //                 defaultChecked={row.Check}
+        //                 type="checkbox"
+        //                 className="col col-sm text-center"
+        //                 onChange={(event) => { row.Check = event.target.checked; }}
+        //             />
+        //         </span>)
+        //     }
+        // },
+
+
     ];
+
+    function rowSelected() {
+        debugger
+        return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
+    }
 
     const pageOptions = {
         sizePerPage: 10,
@@ -180,28 +187,27 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function MakeReceiptForAll() {
-
-        let result = InvoiceParent.map(a => {
-            if (a.Checked === true) {
-                return a.id
+        debugger
+        const result = InvoiceParent.map((index) => {
+            if (index.selectCheck === true) {
+                return index.id
             }
         })
-        const LoadingNumber = result.toString()
 
-        const LoadingNumber_withoutcomma = LoadingNumber.replace(/,*$/, '');
+        const LoadingNumber = result.toString()
 
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             CustomerID: "",
-            InvoiceID: LoadingNumber_withoutcomma
+            InvoiceID: LoadingNumber
         });
 
         const body = { jsonBody }
 
-        if (LoadingNumber_withoutcomma === "") {
+        if (LoadingNumber === ",") {
             CustomAlert({
                 Type: 3,
-                Message: "Select At Least One Field",
+                Message: "Select At Least One Invoice",
             })
         }
         else {
@@ -276,6 +282,7 @@ const LoadingSheetUpdate = (props) => {
                                                     keyField={"id"}
                                                     bordered={true}
                                                     striped={false}
+                                                    selectRow={selectAllCheck(rowSelected())}
                                                     noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                                     classes={"table align-middle table-nowrap table-hover"}
                                                     headerWrapperClasses={"thead-light"}
@@ -283,7 +290,7 @@ const LoadingSheetUpdate = (props) => {
                                                     {...toolkitProps.baseProps}
                                                     {...paginationTableProps}
                                                 />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "LoadingSheet")}
                                                 {mySearchProps(toolkitProps.searchProps)}
                                             </div>
 

@@ -192,6 +192,8 @@ const BulkRecipt = (props) => {
                     ReceiptType: 29,
                     CreatedBy: commonFunc.loginUserID(),
                     UpdatedBy: commonFunc.loginUserID(),
+                    Bank:"",
+                    DepositorBank:"",
                     ReceiptInvoices: [
                         {
                             Invoice: i.Invoice,
