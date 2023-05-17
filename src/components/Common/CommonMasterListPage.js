@@ -16,6 +16,7 @@ import { breadcrumbReturnFunc, metaTagLabel, }
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc } from "./ListActionsButtons";
+import DynamicColumnHook from "./TableCommonFunc";
 
 
 let sortType = "asc"
@@ -209,67 +210,79 @@ const CommonListPage = (props) => {
     setmodal_edit(false)
   }
 
-  PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
-    return a.ListPageSeq - b.ListPageSeq
-  });
+  // PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
+  //   return a.ListPageSeq - b.ListPageSeq
+  // });
 
-  let sortLabel = ""
-  const columns = []
+  // let sortLabel = ""
+  // const columns = []
 
-  PageFieldMaster.forEach((i, k) => {
-    if (i.ShowInListPage) {
-      columns.push({
-        text: i.FieldLabel,
-        dataField: i.ControlID,
-        sort: true,
-      })
+  // PageFieldMaster.forEach((i, k) => {
+  //   if (i.ShowInListPage) {
+  //     columns.push({
+  //       text: i.FieldLabel,
+  //       dataField: i.ControlID,
+  //       sort: true,
+  //     })
 
-      if (i.DefaultSort === 1) {
-        sortLabel = i.ControlID
-        sortType = "asc"
-      } else if (i.DefaultSort === 2) {
-        sortLabel = i.ControlID;
-        sortType = "desc"
-      }
-    }
-    if (PageFieldMaster.length - 1 === k) {
-      columns.push(listPageActionsButtonFunc({
-        dispatchHook: dispatch,
-        ButtonMsgLable: ButtonMsgLable,
-        deleteName: deleteName,
-        userAccState: userAccState,
-        editActionFun: editId,
-        deleteActionFun: deleteId,
-        editBodyfunc: editBodyfunc,
-      })
-      )
-    }
-  })
+  //     if (i.DefaultSort === 1) {
+  //       sortLabel = i.ControlID
+  //       sortType = "asc"
+  //     } else if (i.DefaultSort === 2) {
+  //       sortLabel = i.ControlID;
+  //       sortType = "desc"
+  //     }
+  //   }
+  //   if (PageFieldMaster.length - 1 === k) {
+  //     columns.push(listPageActionsButtonFunc({
+  //       dispatchHook: dispatch,
+  //       ButtonMsgLable: ButtonMsgLable,
+  //       deleteName: deleteName,
+  //       userAccState: userAccState,
+  //       editActionFun: editId,
+  //       deleteActionFun: deleteId,
+  //       editBodyfunc: editBodyfunc,
+  //     })
+  //     )
+  //   }
+  // })
 
-  const defaultSorted = [
-    {
-      dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
-      order: sortType, // desc or asc
-    },
-  ];
+  // const defaultSorted = [
+  //   {
+  //     dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
+  //     order: sortType, // desc or asc
+  //   },
+  // ];
 
-  const pageOptions = {
-    sizePerPage: 15,
-    // totalSize: tableList.length,
-    custom: true,
-  };
+  // const pageOptions = {
+  //   sizePerPage: 15,
+  //   // totalSize: tableList.length,
+  //   custom: true,
+  // };
+  const lastColumn = () => {
+    return listPageActionsButtonFunc({
+      dispatchHook: dispatch,
+      ButtonMsgLable: ButtonMsgLable,
+      deleteName: deleteName,
+      userAccState: userAccState,
+      editActionFun: editId,
+      deleteActionFun: deleteId,
+      editBodyfunc: editBodyfunc,
+    })
+  }
+  const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({ pageField, lastColumn, userAccState })
 
   if (!(userAccState === '')) {
     return (
       <React.Fragment>
-        <MetaTags> {metaTagLabel(userAccState)}</MetaTags>    
+        <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <div className="page-content">
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
                 keyField="id"
                 data={tableList}
-                columns={columns}
+                columns={tableColumns}
                 search={defaultSearch(pageField.id)}
               >
                 {(toolkitProps, a) => (
