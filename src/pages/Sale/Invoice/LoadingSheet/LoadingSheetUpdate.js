@@ -27,6 +27,7 @@ import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList
 import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
 import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -115,9 +116,14 @@ const LoadingSheetUpdate = (props) => {
 
     const pagesListColumns = [
         {
+            text: "ID",
+            dataField: "id",
+
+        },
+        {
             text: "Bill Date",
             dataField: "InvoiceDate",
-            
+
         },
         {
             text: "Bill NO",
@@ -132,23 +138,6 @@ const LoadingSheetUpdate = (props) => {
             dataField: "GrandTotal",
         },
         {
-            text: "Select All",
-            dataField: "Checked",
-            formatter: (cellContent, row, key) => {
-
-                return (<span style={{ justifyContent: 'center' }}>
-                    <Input
-                        id={`Checked${key}`}
-                        defaultChecked={row.Checked}
-                        type="checkbox"
-                        className="col col-sm text-center"
-                        onChange={(event) => { row.Checked = event.target.checked; }}
-                    />
-                </span>)
-            }
-        },
-
-        {
             text: "Action",
             dataField: "",
             formatter: (cellContent, row) => {
@@ -157,6 +146,7 @@ const LoadingSheetUpdate = (props) => {
                     <Button
                         type="button"
                         id={`btn-makeBtn-${row.id}`}
+                        title={"Make Receipt"}
                         className={makeBtnCss}
                         onClick={(e) => {
                             makeBtnFunc(e, row)
@@ -165,42 +155,42 @@ const LoadingSheetUpdate = (props) => {
                         <span style={{ marginLeft: "6px", marginRight: "6px" }}
                             className=" fas fa-file-invoice" ></span> </Button></span>)
             }
-        }
+        },
+
     ];
 
-    const pageOptions = {
-        sizePerPage: 10,
-        // totalSize: Data.length,
-        custom: true,
-    };
+    function rowSelected() {
+      
+        return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
+    }
+
 
     function DateOnchange(e, date) {
         setLoadingDate(date)
     }
 
     function MakeReceiptForAll() {
-
-        let result = InvoiceParent.map(a => {
-            if (a.Checked === true) {
-                return a.id
+        debugger
+        const result = InvoiceParent.map((index) => {
+            if (index.selectCheck === true) {
+                return index.id
             }
         })
-        const LoadingNumber = result.toString()
 
-        const LoadingNumber_withoutcomma = LoadingNumber.replace(/,*$/, '');
+        const LoadingNumber = result.toString()
 
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             CustomerID: "",
-            InvoiceID: LoadingNumber_withoutcomma
+            InvoiceID: LoadingNumber
         });
 
         const body = { jsonBody }
 
-        if (LoadingNumber_withoutcomma === "") {
+        if (LoadingNumber === ",") {
             CustomAlert({
                 Type: 3,
-                Message: "Select At Least One Field",
+                Message: "Select At Least One Invoice",
             })
         }
         else {
@@ -256,51 +246,38 @@ const LoadingSheetUpdate = (props) => {
                             </div>
                         </div>
 
-                        <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
+
+                        <ToolkitProvider
+
+                            keyField="id"
+                            data={InvoiceParent}
+                            columns={pagesListColumns}
+
+                            search
                         >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    <div className="table">
+                                        <BootstrapTable
+                                            keyField={"id"}
+                                            bordered={true}
+                                            striped={false}
+                                            selectRow={selectAllCheck(rowSelected())}
+                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                            classes={"table align-middle table-nowrap table-hover"}
+                                            headerWrapperClasses={"thead-light"}
 
-                                    keyField="id"
-                                    data={InvoiceParent}
-                                    columns={pagesListColumns}
+                                            {...toolkitProps.baseProps}
 
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <div className="table">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    bordered={true}
-                                                    striped={false}
-                                                    noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
+                                        />
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
 
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                {mySearchProps(toolkitProps.searchProps)}
-                                            </div>
-
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
+                                </React.Fragment>
                             )
                             }
+                        </ToolkitProvider>
 
-                        </PaginationProvider>
                         {
                             InvoiceParent.length > 0 ?
                                 <FormGroup>
