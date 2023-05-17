@@ -168,7 +168,7 @@ const BulkRecipt = (props) => {
     ];
 
     const SaveHandler = (event) => {
-        debugger
+        
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id

@@ -4,8 +4,6 @@ import {
     Col,
     FormGroup,
     Label,
-    Input,
-    Row,
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
@@ -19,15 +17,13 @@ import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { LoadingSheet_GoBtn_API_Succcess } from "../../../../store/Sales/LoadingSheetRedux/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
-import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
 import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
-import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
+import DynamicColumnHook, { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -37,12 +33,12 @@ const LoadingSheetUpdate = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [loadingDate, setLoadingDate] = useState(currentDate);
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         userAccess,
         List,
         makeReceipt,
-        OpeningBalance
+        OpeningBalance,
+        pageField,
     } = useSelector((state) => ({
         List: state.LoadingSheetReducer.LoadingSheetUpdate,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -52,6 +48,27 @@ const LoadingSheetUpdate = (props) => {
     }));
     const { InvoiceParent = [], PartyDetails = {} } = List
 
+    const lastColumn = () => ({
+        text: "Action",
+        dataField: "",
+        formatter: (cellContent, row) => {
+
+            return (<span style={{ justifyContent: 'center' }}>
+                <Button
+                    type="button"
+                    id={`btn-makeBtn-${row.id}`}
+                    title={"Make Receipt"}
+                    className={makeBtnCss}
+                    onClick={(e) => {
+                        makeBtnFunc(e, row)
+                    }}
+                >
+                    <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                        className=" fas fa-file-invoice" ></span> </Button></span>)
+        }
+    })
+    const [tableColumns] = DynamicColumnHook({ pageField,lastColumn })
+    
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
         const page_Id = pageId.LOADING_SHEET_LIST_UPDATE
@@ -114,53 +131,9 @@ const LoadingSheetUpdate = (props) => {
         } catch (e) { }
     }
 
-    const pagesListColumns = [
-        {
-            text: "ID",
-            dataField: "id",
 
-        },
-        {
-            text: "Bill Date",
-            dataField: "InvoiceDate",
-
-        },
-        {
-            text: "Bill NO",
-            dataField: "FullInvoiceNumber",
-        },
-        {
-            text: "Customer Name",
-            dataField: "Customer",
-        },
-        {
-            text: "Amount",
-            dataField: "GrandTotal",
-        },
-        {
-            text: "Action",
-            dataField: "",
-            formatter: (cellContent, row) => {
-
-                return (<span style={{ justifyContent: 'center' }}>
-                    <Button
-                        type="button"
-                        id={`btn-makeBtn-${row.id}`}
-                        title={"Make Receipt"}
-                        className={makeBtnCss}
-                        onClick={(e) => {
-                            makeBtnFunc(e, row)
-                        }}
-                    >
-                        <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                            className=" fas fa-file-invoice" ></span> </Button></span>)
-            }
-        },
-
-    ];
-
+   
     function rowSelected() {
-      
         return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
     }
 
@@ -170,7 +143,6 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function MakeReceiptForAll() {
-        debugger
         const result = InvoiceParent.map((index) => {
             if (index.selectCheck === true) {
                 return index.id
@@ -251,7 +223,7 @@ const LoadingSheetUpdate = (props) => {
 
                             keyField="id"
                             data={InvoiceParent}
-                            columns={pagesListColumns}
+                            columns={tableColumns}
 
                             search
                         >
