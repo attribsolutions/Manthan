@@ -289,12 +289,12 @@ const PartyMaster = (props) => {
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
             }))
-
+        
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,
                 "PriceList": priceListSelect.value,
                 "PartyType": baseValue.PartyType.value,
-                "Company": loginCompanyID(),
+                "Company": (pageMode === mode.defaultsave) ? loginCompanyID() : EditData.Company.id,
                 "PAN": baseValue.PAN,
                 "Email": baseValue.Email,
                 "MobileNo": baseValue.MobileNo,
