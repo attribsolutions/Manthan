@@ -67,27 +67,27 @@ function* save_Party_Master_GenFun({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
-function* Delete_Party_GenFun({ id }) {
+function* Delete_Party_GenFun({ config }) {
 
   try {
-    const response = yield call(Party_Master_Delete_API, id);
+    const response = yield call(Party_Master_Delete_API, config);
     yield put(deletePartyIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-function* Edit_Party_GenFun({ id, pageMode }) {
+function* Edit_Party_GenFun({ config }) {
 
   try {
-    const response = yield call(Party_Master_Edit_API, id);
-    response.Data.pageMode = id.btnmode
+    const response = yield call(Party_Master_Edit_API, config);
     response.Data = response.Data.Data//remove chield data array
+    response["pageMode"] = config.btnmode
     yield put(editPartyIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* Update_Party_GenFun({ updateData, id }) {
+function* Update_Party_GenFun({config}) {
   try {
-    const response = yield call(Party_Master_Update_API, updateData, id);
+    const response = yield call(Party_Master_Update_API, config);
     yield put(updatePartyIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
@@ -102,7 +102,7 @@ function* GetDistrictOnState_saga({ id }) {
 
 
 //get addresstypes
-function* GetAddressTypes_saga({ }) {
+function* GetAddressTypes_saga() {
   try {
     const response = yield call(GetAddressTypes_For_Dropdown);
     yield put(getAddressTypesSuccess(response.Data));

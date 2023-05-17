@@ -77,8 +77,6 @@ function* Update_PriceList_GenFunc({ config = {} }) {// update api
   } catch (error) { CommonConsole(error) }
 }
 
-
-
 function* PriceListSaga() {
   yield takeEvery(POST_PRICE_LIST_DATA, Save_PriceList_GenFunc);
   yield takeEvery(PRICE_LIST_BY_PARTY_ACTION, PriceList_ByParty_GenFunc);
