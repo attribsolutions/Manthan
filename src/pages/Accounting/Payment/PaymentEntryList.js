@@ -10,7 +10,7 @@ import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { currentDate_ymd, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 
 import {
     deleteBOMId,
@@ -45,8 +45,8 @@ const PaymentEntryList = () => {
     const history = useHistory();
 
     const fileds = {
-        FromDate: currentDate,
-        ToDate: currentDate,
+        FromDate: currentDate_ymd,
+        ToDate: currentDate_ymd,
         Customer: { value: "", label: "All" }
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -253,7 +253,7 @@ const PaymentEntryList = () => {
             const jsonBody1 = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
-                ReceiptDate: currentDate
+                ReceiptDate: currentDate_ymd
             });
 
             const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: list[0] }

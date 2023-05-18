@@ -14,7 +14,7 @@ import Inward from "./Inward";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage } from "../../../store/Inter Branch/InwardRedux/action";
-import { currentDate, loginPartyID } from "../../../components/Common/CommonFunction";
+import { currentDate_ymd, loginPartyID } from "../../../components/Common/CommonFunction";
 import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 
@@ -26,7 +26,7 @@ const InwardList = () => {
     const hasPagePath = history.location.pathname
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
-    const [inwardlistFiltersState, setInwardlistFilter] = useState({ todate: currentDate, fromdate: currentDate, SupplierSelect: { value: '', label: "All" } });
+    const [inwardlistFiltersState, setInwardlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, SupplierSelect: { value: '', label: "All" } });
 
     const reducers = useSelector(
         (state) => ({

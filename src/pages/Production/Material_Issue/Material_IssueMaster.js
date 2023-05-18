@@ -26,7 +26,7 @@ import {
     saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate_ymd, loginCompanyID, loginPartyID, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import {
     editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, saveMaterialIssue, SaveMaterialIssueSuccess
 } from "../../../store/Production/Matrial_Issue/action";
@@ -46,7 +46,7 @@ const MaterialIssueMaster = (props) => {
     const history = useHistory()
 
     const fileds = {
-        MaterialIssueDate: currentDate,
+        MaterialIssueDate: currentDate_ymd,
         ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
@@ -122,7 +122,7 @@ const MaterialIssueMaster = (props) => {
             const { ListData, Data } = GoButton
             const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom,  } = ListData
             setState((i) => {
-                i.values.MaterialIssueDate = currentDate
+                i.values.MaterialIssueDate = currentDate_ymd
                 i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
                 i.values.NumberOfLot = NumberOfLot;
                 i.values.LotQuantity = Quantity;
@@ -169,7 +169,7 @@ const MaterialIssueMaster = (props) => {
                 const { id, Item, ItemName, LotQuantity, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
                 // const { BatchesData = [] } = MaterialIssueItems
                 setState((i) => {
-                    i.values.MaterialIssueDate = currentDate
+                    i.values.MaterialIssueDate = currentDate_ymd
                     i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: LotQuantity };
                     i.values.NumberOfLot = NumberOfLot;
                     i.values.LotQuantity = LotQuantity;

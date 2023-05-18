@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/CommonFunction"
+import { currentDate_ymd } from "../../../components/Common/CommonFunction"
 import {
 
   UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS,
@@ -13,7 +13,7 @@ import {
   // ORDER_ADD_FILTERS,
 } from "./actionType"
 
-// const date = currentDate;
+// const date = currentDate_ymd;
 
 const INIT_STATE = {
   goBtnOrderAdd: null,
@@ -23,7 +23,7 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   orderList: [],
   orderlistFilter: { fromdate: "", todate: '', venderSelect: { value: '', label: "All" } },
-  // orderAddFilter: { orderdate: currentDate, supplierSelect: '' }
+  // orderAddFilter: { orderdate: currentDate_ymd, supplierSelect: '' }
   orderApprovalMsg: { Status: false },
 }
 

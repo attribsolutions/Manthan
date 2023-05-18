@@ -13,7 +13,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { breadcrumbReturnFunc, loginUserID, currentDate, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate_ymd, metaTagLabel } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -30,7 +30,7 @@ const Inward = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [userPageAccessState, setUserAccState] = useState('');
-    const [InwardDate, setInwardDate] = useState(currentDate);
+    const [InwardDate, setInwardDate] = useState(currentDate_ymd);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const {
         postMsg,
