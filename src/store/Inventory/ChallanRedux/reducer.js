@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/CommonFunction";
+import { currentDate_ymd } from "../../../components/Common/CommonFunction";
 import {
   CHALLAN_POST_API_SUCCESS,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS,
@@ -12,13 +12,13 @@ import {
 } from "./actionType"
 
 
-// const date = currentDate();
+// const date = currentDate_ymd();
 
 const INIT_STATE = {
 
   deleteMsg: { Status: false },
   ChallanList: [],
-  ChallanlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: { value: '', label: "All" } },
+  ChallanlistFilter: { fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } },
   gobutton_Add:[],
   GoButton:[],
   challanitems:[],

@@ -17,7 +17,7 @@ import { useHistory } from "react-router-dom";
 import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
     btnIsDissablefunc,
-    currentDate,
+    currentDate_ymd,
     excelDownCommonFunc,
     loginPartyID
 } from "../../../components/Common/CommonFunction";
@@ -46,7 +46,7 @@ const InvoiceList = () => {
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, supplierSelect: { value: '', label: "All" } });
+    const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
 
     const reducers = useSelector(

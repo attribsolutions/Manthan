@@ -20,7 +20,7 @@ import { basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturnFunc, loginUserID, currentDate, btnIsDissablefunc, convertDatefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate_ymd, btnIsDissablefunc, convertDatefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -37,7 +37,7 @@ const GRNAdd3 = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
-    const [grnDate, setgrnDate] = useState(currentDate);
+    const [grnDate, setgrnDate] = useState(currentDate_ymd);
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
     const [grnItemList, setgrnItemList] = useState([]);

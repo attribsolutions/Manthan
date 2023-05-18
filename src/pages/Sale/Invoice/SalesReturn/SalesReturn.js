@@ -24,7 +24,7 @@ import {
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, loginUserID, loginCompanyID, convertDatefunc, invertDatefunc, loginJsonBody, metaTagLabel } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginPartyID, currentDate_ymd, btnIsDissablefunc, loginUserID, loginCompanyID, convertDatefunc, invertDatefunc, loginJsonBody, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -50,7 +50,7 @@ const SalesReturn = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
-        ReturnDate: currentDate,
+        ReturnDate: currentDate_ymd,
         Customer: "",
         ItemName: "",
         InvoiceNumber: "",
@@ -399,7 +399,7 @@ const SalesReturn = (props) => {
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Flatpickr
                         name='ReturnDate'
-                        defaultValue={returnMode === 1 ? invertDatefunc(row.RowData.BatchDate) : currentDate}
+                        defaultValue={returnMode === 1 ? invertDatefunc(row.RowData.BatchDate) : currentDate_ymd}
                         disabled={returnMode === 1 ? true : false}
                         className="form-control d-block p-2 bg-white text-dark"
                         placeholder="Select..."
@@ -527,7 +527,7 @@ const SalesReturn = (props) => {
                 Quantity: i.Quantity,
                 Rate: i.Rate,
                 RowData: i,
-                BatchDate: currentDate
+                BatchDate: currentDate_ymd
             }))
 
             const itemArr = [...TableArr]
@@ -543,7 +543,7 @@ const SalesReturn = (props) => {
                     Rate: i.Rate,
                     gstPercentage: i.RowData.GSTPercentage,
                     RowData: i.RowData,
-                    BatchDate: currentDate
+                    BatchDate: currentDate_ymd
                 })
             })
 

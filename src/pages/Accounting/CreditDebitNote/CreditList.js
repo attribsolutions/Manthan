@@ -7,7 +7,7 @@ import {
 } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { useHistory } from "react-router-dom";
-import { currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { currentDate_ymd, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as report from '../../../Reports/ReportIndex'
 import { updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../routes/allPageID";
@@ -36,8 +36,8 @@ const CreditList = () => {
     const history = useHistory();
 
     const fileds = {
-        FromDate: currentDate,
-        ToDate: currentDate,
+        FromDate: currentDate_ymd,
+        ToDate: currentDate_ymd,
         Customer: { value: "", label: "All" },
         NoteType: { value: "", label: "All" },
     }

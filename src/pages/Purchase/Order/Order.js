@@ -95,13 +95,14 @@ const Order = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
-    const [deliverydate, setdeliverydate] = useState(commonFunc.currentDate)
+    const [deliverydate, setdeliverydate] = useState(commonFunc.currentDate_dmy)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
-    const [poFromDate, setpoFromDate] = useState(commonFunc.currentDate);
-    const [poToDate, setpoToDate] = useState(commonFunc.currentDate);
-    const [orderdate, setorderdate] = useState(commonFunc.currentDate);
+    const [poFromDate, setpoFromDate] = useState(commonFunc.currentDate_dmy);
+    const [poToDate, setpoToDate] = useState(commonFunc.currentDate_dmy);
+    const [orderdate, setorderdate] = useState(commonFunc.currentDate_dmy);
+    debugger
     const [supplierSelect, setsupplierSelect] = useState('');
     const [partySelect, setPartySelect] = useState('');
 
@@ -852,8 +853,8 @@ const Order = (props) => {
                 FullOrderNumber: "PO0001",
                 Division: division,
                 POType: orderTypeSelect.value,
-                POFromDate: orderTypeSelect.value === 1 ? commonFunc.currentDate : poFromDate,
-                POToDate: orderTypeSelect.value === 1 ? commonFunc.currentDate : poToDate,
+                POFromDate: orderTypeSelect.value === 1 ? commonFunc.currentDate_ymd : poFromDate,
+                POToDate: orderTypeSelect.value === 1 ? commonFunc.currentDate_ymd : poToDate,
                 CreatedBy: commonFunc.loginUserID(),
                 UpdatedBy: commonFunc.loginUserID(),
                 OrderTermsAndConditions: termsAndCondition
@@ -929,6 +930,7 @@ const Order = (props) => {
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
+                                                    altInput:true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
                                                 }}

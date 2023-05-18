@@ -52,31 +52,45 @@ export const excelDownCommonFunc = (props) => { //++++++++Common Excel Covernt D
   return downList;
 };
 
-export const dataBaseDatefunc = (isDate) => { //+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
+function isDateInitial(isdate) {
 
-  let current
-  if (isDate){
-    current = new Date(isDate)
-  }
-  else{
-    current = new Date()
-  }
-  const month = current.getMonth() + 1;
-  const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` : `${month}`
-    }-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`
-    }`;
-  return currentDate;
+  let current = (isdate) ? new Date(isdate) : new Date();
+
+  let month = current.getMonth() + 1;
+  let dd = current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`;
+  let mm = -month < 10 ? `0${month}` : `${month}`;
+  let yy = current.getFullYear();
+
+  return { dd, mm, yy }
+
+}
+
+export const date_ymd_func = (isdate) => { //+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
+
+  let date = isDateInitial(isdate);
+
+  return (`${date.yy}-${date.mm}-${date.dd}`)
+
 };
 
-export const currentDate = dataBaseDatefunc();
+export const date_dmy_func = (isdate) => { //+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
+
+  let date = isDateInitial(isdate);
+  return (`${date.dd}-${date.mm}-${date.yy}`)
+
+};
+
+export const currentDate_ymd = date_ymd_func();
+
+export const currentDate_dmy = date_dmy_func();
 
 export const invertDatefunc = (inp) => { //+++++++++++++++ Current Date++++++++++++++++++++++++++++
   const current = new Date(inp);
   const month = current.getMonth() + 1;
-  const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` : `${month}`
+  const ymd = `${current.getFullYear()}-${month < 10 ? `0${month}` : `${month}`
     }-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`
     }`;
-  return currentDate;
+  return ymd;
 };
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
@@ -450,11 +464,11 @@ export const tableInputArrowUpDounFunc = (tableId) => {
               var tr = td.closest('tr');
               var pos = td[0].cellIndex;
               var ctd = tr.children('td')
-              
+
               let nextTd = td
 
               while (pos < ctd.length) {
-                
+
                 moveTo = nextTd.next('td:has(input,textarea)');
                 if (moveTo.length > 0) { pos = ctd.length + 1 }
                 nextTd = td.next('td')
@@ -482,7 +496,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
 
             var tdPreInput
             td.find('input').each(function (i2, tdEle) {
-              
+
               var thisIndex = $(tdEle).index('input:text');
               if (pre === thisIndex) {
                 tdPreInput = tdEle

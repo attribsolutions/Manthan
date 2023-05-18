@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/CommonFunction"
+import { currentDate_ymd } from "../../../components/Common/CommonFunction"
 import {
   DELETE_WORK_ORDER_LIST_PAGE_SUCCESS,
   EDIT_WORK_ORDER_LIST_ID_SUCCESS,
@@ -18,7 +18,7 @@ const INIT_STATE = {
   editData: { Status: false, },
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
-  workOrderlistFilters: { fromdate: currentDate, todate: currentDate, }
+  workOrderlistFilters: { fromdate: currentDate_ymd, todate: currentDate_ymd, }
 }
 
 const WorkOrderReducer = (state = INIT_STATE, action) => {

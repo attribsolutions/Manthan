@@ -21,7 +21,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc, convertDatefunc, currentDate, loginPartyID } from "../../../components/Common/CommonFunction";
+import { btnIsDissablefunc, convertDatefunc, currentDate_ymd, loginPartyID } from "../../../components/Common/CommonFunction";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
@@ -41,8 +41,8 @@ const OrderList = () => {
     const history = useHistory();
 
     const fileds = {
-        FromDate: currentDate,
-        ToDate: currentDate,
+        FromDate: currentDate_ymd,
+        ToDate: currentDate_ymd,
         Supplier: { value: "", label: "All" }
     }
 

@@ -20,7 +20,7 @@ import * as report from '../../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
 import Flatpickr from "react-flatpickr";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-import { currentDate, loginPartyID } from "../../../../components/Common/CommonFunction";
+import { currentDate_ymd, loginPartyID } from "../../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList";
 import * as url from "../../../../routes/route_url"
 import * as mode from "../../../../routes/PageMode"
@@ -46,7 +46,7 @@ const LoadingSheetList = () => {
         })
     );
 
-    const { fromdate = currentDate, todate = currentDate } = headerFilters;
+    const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
     const { userAccess, pageField } = reducers;
 
     const action = {

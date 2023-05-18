@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/CommonFunction"
+import { currentDate_ymd } from "../../../components/Common/CommonFunction"
 import {
   DEPOSITOR_BANK_FILTER_SUCCESS,
   RECEIPT_LIST_API_SUCCESS,
@@ -20,8 +20,8 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   OpeningBalance: '',
   bankList: [],
-  receiptlistFilters: { fromdate: currentDate, todate: currentDate, Customer: { value: '', label: "All" } },
-  paymentEntrylistFilters: { fromdate: currentDate, todate: currentDate, Customer: { value: '', label: "All" } }
+  receiptlistFilters: { fromdate: currentDate_ymd, todate: currentDate_ymd, Customer: { value: '', label: "All" } },
+  paymentEntrylistFilters: { fromdate: currentDate_ymd, todate: currentDate_ymd, Customer: { value: '', label: "All" } }
 }
 
 const ReceiptReducer = (state = INIT_STATE, action) => {
