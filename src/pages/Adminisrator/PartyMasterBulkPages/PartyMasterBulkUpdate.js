@@ -24,7 +24,7 @@ import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
-    invertDatefunc,
+    date_ymd_func,
     loginCompanyID,
     loginPartyID,
     metaTagLabel
@@ -300,7 +300,7 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     function fromdateOnchange(event, user) {
-        const Date = invertDatefunc(event[0])
+        const Date = date_ymd_func(event[0])
         user.NewFSSAIExipry = Date
     }
 

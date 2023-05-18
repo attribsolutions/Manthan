@@ -65,35 +65,21 @@ function isDateInitial(isdate) {
 
 }
 
-export const date_ymd_func = (isdate) => { //+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
-
+export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by format (yyyy-dd-mm) ++++++++++++++++++++++++++++++++++++
   let date = isDateInitial(isdate);
-
   return (`${date.yy}-${date.mm}-${date.dd}`)
-
 };
 
-export const date_dmy_func = (isdate) => { //+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
 
+export const date_dmy_func = (isdate) => { //+++++++++++++++ Current Date by format (dd-mm-yyy) ++++++++++++++++++++++++++++++++++++
   let date = isDateInitial(isdate);
   return (`${date.dd}-${date.mm}-${date.yy}`)
-
 };
 
 export const currentDate_ymd = date_ymd_func();
-
 export const currentDate_dmy = date_dmy_func();
 
-export const invertDatefunc = (inp) => { //+++++++++++++++ Current Date++++++++++++++++++++++++++++
-  const current = new Date(inp);
-  const month = current.getMonth() + 1;
-  const ymd = `${current.getFullYear()}-${month < 10 ? `0${month}` : `${month}`
-    }-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`
-    }`;
-  return ymd;
-};
-
-export const loginUserDetails = () => { //+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
   try {
     const a = localStorage.getItem("roleId")
@@ -106,7 +92,7 @@ export const loginUserDetails = () => { //+++++++++++++++++++++ Seesion Company 
   return user_Details;
 };
 
-export const loginRoleID = () => { //+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+export const loginRoleID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
     const detail = JSON.parse(localStorage.getItem("roleId"));
     return detail.Role;
@@ -116,7 +102,7 @@ export const loginRoleID = () => { //+++++++++++++++++++++ Seesion Company Id+++
   return '';
 };
 
-export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
+export const loginUserID = () => {//++++++++++++++++++++++ Session User Id+++++++++++++++++++++++++++++
   let created_By = 0;
   try {
     created_By = JSON.parse(localStorage.getItem("userId"));
@@ -126,7 +112,7 @@ export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id++++++
   return created_By;
 };
 
-export const loginCompanyID = () => { //+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+export const loginCompanyID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Company = 0;
   try {
     user_Company = JSON.parse(localStorage.getItem("Company"));
@@ -136,7 +122,7 @@ export const loginCompanyID = () => { //+++++++++++++++++++++ Seesion Company Id
   return user_Company;
 };
 
-export const loginCompanyName = () => { //+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+export const loginCompanyName = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let company = "";
   try {
     company = localStorage.getItem("CompanyName");
@@ -146,7 +132,7 @@ export const loginCompanyName = () => { //+++++++++++++++++++++ Seesion Company 
   return company;
 };
 
-export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
+export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
   let user_Party = 0;
   try {
     user_Party = JSON.parse(localStorage.getItem("roleId")).Party_id;
@@ -156,7 +142,7 @@ export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID 
   return user_Party;
 };
 
-export const loginEmployeeID = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
+export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
   let user_EmployeeID = 0;
   try {
     user_EmployeeID = JSON.parse(localStorage.getItem("roleId")).Employee_id;
@@ -166,7 +152,7 @@ export const loginEmployeeID = () => {//+++++++++++++++++++++ Seesion loginParty
   return user_EmployeeID;
 };
 
-export const loginIsSCMCompany = () => { //+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
+export const loginIsSCMCompany = () => { //+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
   let IsSCMCompany = 0;
   try {
     IsSCMCompany = JSON.parse(localStorage.getItem("IsSCMCompany"));
@@ -176,7 +162,7 @@ export const loginIsSCMCompany = () => { //+++++++++++++++++++++ Seesion loginPa
   return IsSCMCompany;
 };
 
-export const loginCompanyGroup = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
+export const loginCompanyGroup = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
   let CompanyGroup = 0;
   try {
     CompanyGroup = JSON.parse(localStorage.getItem("CompanyGroup"));
