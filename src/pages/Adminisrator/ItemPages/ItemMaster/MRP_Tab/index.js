@@ -18,6 +18,7 @@ import {
   get_Party_ForDropDown,
 } from "../../../../../store/Administrator/ItemsRedux/action";
 import { loginUserID, loginCompanyID, loginIsSCMCompany } from "../../../../../components/Common/CommonFunction";
+import { CustomAlert } from "../../../../../CustomAlert/ConfirmDialog";
 
 function MRPTab(props) {
   const dispatch = useDispatch();
@@ -89,7 +90,7 @@ function MRPTab(props) {
       props.func(updatedTableData);
       clearState();
     } else {
-      alert("Please Enter value");
+      CustomAlert({ Type: 4, Message: "Please Enter value" })
     }
   };
 
@@ -142,7 +143,7 @@ function MRPTab(props) {
                         autoComplete="off"
                         options={{
                           altInput: true,
-                          altFormat: "F j, Y",
+                          altFormat: "d-m-Y",
                           dateFormat: "Y-m-d",
                         }}
                         onChange={EffectiveDateHandler}
