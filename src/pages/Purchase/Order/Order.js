@@ -421,6 +421,15 @@ const Order = (props) => {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
 
+                    row.UnitDetails.forEach(i => {
+                        if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
+                            defaultUnit(i)
+                        }
+                        else if ((i.SODefaultUnit) && (subPageMode === url.ORDER_4)) {
+                            defaultUnit(i)
+                        }
+                    });
+
                     function defaultUnit(i) {
                         row["Unit_id"] = i.UnitID;
                         row["po_Unit_id"] = i.UnitID;
@@ -429,24 +438,16 @@ const Order = (props) => {
                         row["Rate"] = i.Rate;
                     }
 
-                    row.UnitDetails.forEach(i => {
-                        if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
-                            defaultUnit(i)
-                        }
-                        else if ((i.SODefaultUnit) && (subPageMode === url.ORDER_4)) {
-                            defaultUnit(i)
-                        }
-                    })
-                } else   {
+                } else {
                     row["edit_Qty"] = row.Quantity;
                     row["edit_Unit_id"] = row.Unit_id;
 
                     row.UnitDetails.forEach(i => {
                         if ((row.Unit_id === i.UnitID)) {
                             row["BaseUnitQuantity"] = i.BaseUnitQuantity;
+                            row["UnitName"] = i.UnitName;
                         }
-
-                    })
+                    });
 
                 }
 
@@ -668,13 +669,13 @@ const Order = (props) => {
         try {
             const division = commonFunc.loginPartyID();
             const supplier = supplierSelect.value;
-            
+
             const validMsg = []
             const itemArr = []
             const isVDC_POvalidMsg = []
 
             await orderItemTable.forEach(i => {
-                
+
                 if ((i.Quantity > 0) && !(i.Rate > 0)) {
                     validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
                 }
