@@ -145,7 +145,7 @@ function Margin_Tab(props) {
                                     </FormGroup>
 
                                     <FormGroup className="mb-3 col col-sm-3 " >
-                                        <Label >Margin</Label>
+                                        <Label >Margin (%)</Label>
                                         <Input
                                             type="text"
                                             id={`txtMargin${0}`}
