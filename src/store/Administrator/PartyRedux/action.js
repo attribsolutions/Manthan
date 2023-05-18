@@ -48,9 +48,9 @@ export const deletePartyIDSuccess = (deleteMessage) => ({
 });
 
 // edit api
-export const editPartyID = (id, pageMode) => ({
+export const editPartyID = (config) => ({
   type: EDIT_PARTY_ID,
-  id, pageMode
+  config
 })
 export const editPartyIDSuccess = (editData) => ({
   type: EDIT_PARTY_ID_SUCCESS,
@@ -58,9 +58,9 @@ export const editPartyIDSuccess = (editData) => ({
 })
 
 // update api
-export const updatePartyID = (updateData, id) => ({
+export const updatePartyID = (config) => ({
   type: UPDATE_PARTY_ID,
-  updateData, id,
+  config
 })
 export const updatePartyIDSuccess = (data) => ({
   type: UPDATE_PARTY_ID_SUCCESS,

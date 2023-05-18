@@ -11,11 +11,6 @@ import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    comAddPageFieldFunc,
-    initialFiledFunc,
-    resetFunction,
-} from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import * as commonFunc from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
@@ -32,13 +27,7 @@ const BulkRecipt = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const fileds = {
-        CurrentDate: commonFunc.currentDate,
-    }
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [modalCss, setModalCss] = useState(false);
-    const [ID, setID] = useState("");
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [pageMode, setPageMode] = useState(mode.defaultsave)
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -54,13 +43,7 @@ const BulkRecipt = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
     const location = { ...history.location }
-    const page_Mode = location.pageMode
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const { Data = [] } = ReceiptGoButton
@@ -76,21 +59,12 @@ const BulkRecipt = (props) => {
     }, [ReceiptGoButton]);
 
 
-    useEffect(() => {
-
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
-
-
     useEffect(async () => {
-        debugger
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(ReceiptGoButtonMaster_Success([]))
-            // setState(() => resetFunction(fileds, state))//Clear form values
+
             if (pageMode === mode.dropdownAdd) {
                 CustomAlert({
                     Type: 1,
@@ -135,8 +109,6 @@ const BulkRecipt = (props) => {
             commonFunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
-
-    // useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     function CalculateOnchange(e, row, key) {
 
@@ -196,7 +168,7 @@ const BulkRecipt = (props) => {
     ];
 
     const SaveHandler = (event) => {
-      
+        
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
@@ -206,7 +178,7 @@ const BulkRecipt = (props) => {
             Data.forEach(i => {
                 const arr =
                 {
-                    ReceiptDate: commonFunc.dataBaseDatefunc(i.InvoiceDate),
+                    ReceiptDate: commonFunc.currentDate,
                     Description: "",
                     AmountPaid: i.GrandTotal,
                     BalanceAmount: i.BalanceAmount,
@@ -220,6 +192,8 @@ const BulkRecipt = (props) => {
                     ReceiptType: 29,
                     CreatedBy: commonFunc.loginUserID(),
                     UpdatedBy: commonFunc.loginUserID(),
+                    Bank:"",
+                    DepositorBank:"",
                     ReceiptInvoices: [
                         {
                             Invoice: i.Invoice,
@@ -239,9 +213,6 @@ const BulkRecipt = (props) => {
         } catch (e) { commonFunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -259,7 +230,7 @@ const BulkRecipt = (props) => {
                                         <Col sm="7">
                                             <Flatpickr
                                                 name='Date'
-                                                value={values.CurrentDate}
+                                                value={commonFunc.currentDate}
                                                 disabled={true}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 options={{
@@ -297,7 +268,6 @@ const BulkRecipt = (props) => {
                                     <div className="table">
                                         <BootstrapTable
                                             keyField={"id"}
-                                            // id="table_Arrow"
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}

@@ -51,6 +51,7 @@ function PageFieldMaster_Tab(props) {
             DefaultSort: 0,
             FieldSequence: '',
             ShowInListPage: false,
+            Alignment:'',
             ListPageSeq: '',
             ShowInDownload: false,
             DownloadDefaultSelect: false,
@@ -136,6 +137,7 @@ function PageFieldMaster_Tab(props) {
                                 <th className="" >Field Validation</th>
                                 <th className="" >InValid Msg</th>
                                 <th className="">List Page Seq</th>
+                                <th className="">Align</th>
                                 <th >Is Compulsory</th>
                                 <th>Default Sort</th>
                                 <th>Show In List Page</th>
@@ -219,6 +221,20 @@ function PageFieldMaster_Tab(props) {
                                                 // defaultValue={EditData.ListPageSeq}
                                                 value={pageFieldTabTable[key].ListPageSeq}
                                                 onChange={(e) => PageField_onChange_Handler(e.target.value, "ListPageSeq", key)}>
+
+                                            </Input>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div style={{ width: "70px" }}>
+                                            <Input
+                                                autoComplete="off"
+                                                type="text"
+                                                id={`Alignment${key}`}
+                                                // defaultValue={EditData.ListPageSeq}
+                                                value={pageFieldTabTable[key].Alignment}
+                                                onChange={(e) => PageField_onChange_Handler(e.target.value, "Alignment", key)}>
 
                                             </Input>
                                         </div>

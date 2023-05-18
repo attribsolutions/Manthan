@@ -19,6 +19,7 @@ import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
 import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
+import DynamicColumnHook from "./TableCommonFunc";
 
 let sortType = "asc";
 let searchCount = 0;
@@ -183,7 +184,7 @@ const CommonPurchaseList = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
-    
+
     if ((editData.Status === true) && !(editData.pageMode === mode.orderApproval)) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
@@ -206,11 +207,6 @@ const CommonPurchaseList = (props) => {
     makeBtnFunc(arr);
   }
 
-  // function tog_center() {
-  //
-  //     setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
-  // }
-
   function tog_center() {
     if (modal_edit) {
       breadcrumbReturnFunc({
@@ -222,51 +218,18 @@ const CommonPurchaseList = (props) => {
     setmodal_edit(false);
   }
 
-  // ****** columns sort by sequnce
-  PageFieldMaster.sort(function (a, b) {
-    //sort function is  sort list page coloumn by asending order by listpage sequense
-    return a.ListPageSeq - b.ListPageSeq;
-  });
-  // *******
-
-  let sortLabel = "";
-  const columns = [];
-
-  if (!PageFieldMaster.length > 0) {
-    columns.push({ text: "Page Field Is Blank..." });
-  }
-
-  PageFieldMaster.forEach((i, k) => {
-    if (i.ShowInListPage) {
-      columns.push({
-        text: i.FieldLabel,
-        dataField: i.ControlID,
-        sort: true,
-      });
-
-      if (i.DefaultSort === 1) {
-        sortLabel = i.ControlID;
-        sortType = "asc";
-      } else if (i.DefaultSort === 2) {
-        sortLabel = i.ControlID;
-        sortType = "desc";
-      }
-    }
-
-    // ======================== for GRNMode2 Page Action Button ================================
-
+  const secondLastColumn = () => {// ======================== for GRNMode2 Page Action Button ================================
     if (
       makeBtnShow &&
-      pageMode === mode.modeSTPsave &&
-      PageFieldMaster.length - 1 === k
+      pageMode === mode.modeSTPsave
     ) {
-      columns.push({
+      return {
         text: "Action",
         dataField: "hasSelect",
         sort: true,
         formatter: (cellContent, rowData, key) => {
           rowData["hasSelect"] = false;
-          // if (rowData.POType === 3) {
+        
           return (
             <div>
               <Button
@@ -288,47 +251,39 @@ const CommonPurchaseList = (props) => {
           );
           // }
         },
-      });
+      }
     }
+  }
 
-    // ======================== for List Page Action Button ================================
-    else if (PageFieldMaster.length - 1 === k) {
-      columns.push(
-        listPageActionsButtonFunc({
-          dispatchHook: dispatch,
-          subPageMode: history.location.pathname,
-          ButtonMsgLable: ButtonMsgLable,
-          deleteName: deleteName,
-          userAccState: userAccState,
-          editActionFun: editId,
-          deleteActionFun: deleteId,
-          downBtnFunc: downBtnFunc,
-          updateBtnFunc: updateBtnFunc,
-          makeBtnShow: makeBtnShow,
-          makeBtnName: makeBtnName,
-          editBodyfunc: editBodyfunc,
-          deleteBodyfunc: deleteBodyfunc,
-          copyBodyfunc: copyBodyfunc,
-          makeBtnFunc: makeBtnFunc,
-          pageMode: pageMode,
-          orderApproval: orderApproval
-        })
-      );
-    }
-  });
+  const lastColumn = () => {  // ======================== for List Page Action Button ================================
+    return listPageActionsButtonFunc({
+      dispatchHook: dispatch,
+      subPageMode: history.location.pathname,
+      ButtonMsgLable: ButtonMsgLable,
+      deleteName: deleteName,
+      userAccState: userAccState,
+      editActionFun: editId,
+      deleteActionFun: deleteId,
+      downBtnFunc: downBtnFunc,
+      updateBtnFunc: updateBtnFunc,
+      makeBtnShow: makeBtnShow,
+      makeBtnName: makeBtnName,
+      editBodyfunc: editBodyfunc,
+      deleteBodyfunc: deleteBodyfunc,
+      copyBodyfunc: copyBodyfunc,
+      makeBtnFunc: makeBtnFunc,
+      pageMode: pageMode,
+      orderApproval: orderApproval
+    })
 
-  const defaultSorted = [
-    {
-      dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
-      order: sortType, // desc or asc
-    },
-  ];
+  }
+  const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({
+    pageField,
+    lastColumn,
+    secondLastColumn,
+    userAccState
+  })
 
-  const pageOptions = {
-    sizePerPage: 15,
-    // totalSize: tableList.length,
-    custom: true,
-  };
 
   if (!(userAccState === "")) {
     return (
@@ -341,7 +296,7 @@ const CommonPurchaseList = (props) => {
               <ToolkitProvider
                 keyField="id"
                 data={tableList}
-                columns={columns}
+                columns={tableColumns}
                 search={defaultSearch(pageField.id)}
               >
                 {(toolkitProps, a) => (
@@ -367,7 +322,7 @@ const CommonPurchaseList = (props) => {
                           />
                         </div>
                       </Col>
-
+                      
                       {countlabelFunc(
                         toolkitProps,
                         paginationProps,

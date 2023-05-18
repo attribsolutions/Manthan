@@ -53,7 +53,7 @@ export const excelDownCommonFunc = (props) => { //++++++++Common Excel Covernt D
 };
 
 export const dataBaseDatefunc = (isDate) => { //+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
- debugger
+
   let current
   if (isDate){
     current = new Date(isDate)
@@ -69,7 +69,7 @@ export const dataBaseDatefunc = (isDate) => { //+++++++++++++++ Cuurnt Date+++++
 };
 
 export const currentDate = dataBaseDatefunc();
-debugger
+
 export const invertDatefunc = (inp) => { //+++++++++++++++ Current Date++++++++++++++++++++++++++++
   const current = new Date(inp);
   const month = current.getMonth() + 1;

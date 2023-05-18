@@ -33,10 +33,10 @@ const PriceList = () => {
   const action = {
     getList: priceListByCompay_Action,
     editId: editPriceList,
-    deleteId: delete_PriceListSuccess,
+    deleteId: delete_PriceList,
     postSucc: savePriceMasterActionSuccess,
     updateSucc: updatePriceListSuccess,
-    deleteSucc: delete_PriceList
+    deleteSucc: delete_PriceListSuccess,
   }
 
   //  This UseEffect => Featch Modules List data  First Rendering

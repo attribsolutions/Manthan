@@ -39,7 +39,7 @@ import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { bulkSetState, formValid } from "../../../../components/Common/validationFunction";
 import BaseTabForm from "./FirstTab/index";
 import PrefixTab from "./PrefixTab/PrefixTab";
-import { priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
+import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 
 const PartyMaster = (props) => {
 
@@ -180,6 +180,8 @@ const PartyMaster = (props) => {
                 bulkSetState(prefixValue, getPrefixtab, setPrefixtab)
                 setAddressTab(hasEditVal.PartyAddress)
                 setPriceList(editPriceList);
+
+                dispatch(priceListByPartyAction(hasEditVal.PartyType.id,))
                 dispatch(editPartyIDSuccess({ Status: false }));
             }
         }
@@ -287,12 +289,12 @@ const PartyMaster = (props) => {
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
             }))
-
+        
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,
                 "PriceList": priceListSelect.value,
                 "PartyType": baseValue.PartyType.value,
-                "Company": loginCompanyID(),
+                "Company": (pageMode === mode.defaultsave) ? loginCompanyID() : EditData.Company.id,
                 "PAN": baseValue.PAN,
                 "Email": baseValue.Email,
                 "MobileNo": baseValue.MobileNo,

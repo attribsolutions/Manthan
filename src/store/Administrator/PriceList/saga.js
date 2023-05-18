@@ -40,25 +40,24 @@ function* Save_PriceList_GenFunc({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
-//listpage
-function* get_PriceListPageByCompany_GenFunc() {
+
+function* get_PriceListPageByCompany_GenFunc() {//listpage
   try {
     const response = yield call(get_PriceListByCompay_API, loginCompanyID());
     yield put(priceListByCompay_ActionSuccess(response.Data))
   } catch (error) { CommonConsole(error) }
 }
 
-//delete
-function* delete_PriceList_GenFun({ config = {} }) {
-  try {
 
+function* delete_PriceList_GenFun({ config = {} }) {//delete
+  try {
     const response = yield call(delete_PriceList_API, config);
     yield put(delete_PriceListSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-// edit api
-function* Edit_PriceList__GenFunc({ config }) {
+
+function* Edit_PriceList__GenFunc({ config }) {// edit api
 
   const { btnmode, PartyTypeName, PartyTypeId } = config;
   try {
@@ -70,15 +69,13 @@ function* Edit_PriceList__GenFunc({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
-// update api
-function* Update_PriceList_GenFunc({ config = {} }) {
+
+function* Update_PriceList_GenFunc({ config = {} }) {// update api
   try {
     const response = yield call(update_PriceList, config);
     yield put(updatePriceListSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
-
-
 
 function* PriceListSaga() {
   yield takeEvery(POST_PRICE_LIST_DATA, Save_PriceList_GenFunc);
