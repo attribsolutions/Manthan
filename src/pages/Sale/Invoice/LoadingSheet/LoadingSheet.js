@@ -22,7 +22,7 @@ import {
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginPartyID, currentDate_ymd, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -46,15 +46,15 @@ const LoadingSheet = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    // const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, Date: currentDate });
+    // const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, Date: currentDate_ymd });
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [array, setArray] = useState([]);
 
     const fileds = {
         id: "",
-        Date: currentDate,
-        FromDate: currentDate,
-        ToDate: currentDate,
+        Date: currentDate_ymd,
+        FromDate: currentDate_ymd,
+        ToDate: currentDate_ymd,
         RouteName: "",
         VehicleNumber: "",
         DriverName: ""

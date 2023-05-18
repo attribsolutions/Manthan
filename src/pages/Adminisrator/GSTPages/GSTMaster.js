@@ -438,11 +438,11 @@ const GSTMaster = (props) => {
                                                                     name="effectiveDate"
                                                                     value={effectiveDate}
                                                                     className="form-control  bg-white text-dark mt-n2"
-                                                                    placeholder=" Please Enter FSSAI Exipry"
+                                                                    placeholder=" Please Enter EffectiveDate"
                                                                     options={{
                                                                         altInput: true,
-                                                                        altFormat: "F j, Y",
-                                                                        dateFormat: "Y-m-d"
+                                                                        altFormat: "d-m-Y",
+                                                                        dateFormat: "Y-m-d",
                                                                     }}
                                                                     onChange={EffectiveDateHandler}
                                                                 />

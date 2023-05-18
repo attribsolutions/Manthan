@@ -204,7 +204,7 @@ const MarginMaster = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: "PriceList not select",
+                Message: "Please select PriceList",
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -214,7 +214,7 @@ const MarginMaster = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: "EffectiveDate not select",
+                Message: "Please select EffectiveDate",
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -481,8 +481,8 @@ const MarginMaster = (props) => {
                                                                     placeholder=" Please Enter EffectiveDate"
                                                                     options={{
                                                                         altInput: true,
-                                                                        altFormat: "F j, Y",
-                                                                        dateFormat: "Y-m-d"
+                                                                        altFormat: "d-m-Y",
+                                                                        dateFormat: "Y-m-d",
                                                                     }}
                                                                     onChange={EffectiveDateHandler}
                                                                 />

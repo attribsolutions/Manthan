@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/CommonFunction";
+import { currentDate_ymd } from "../../../components/Common/CommonFunction";
 import {
   DELETE_PRODUCTION_SUCCESS,
   EDIT_PRODUCTION_FOR_PRODUCTION_PAGE_SUCCESS,
@@ -11,7 +11,7 @@ import {
 } from "./actionType"
 
 
-// const date = currentDate();
+// const date = currentDate_ymd();
 
 const INIT_STATE = {
   postMsg: { Status: false },
@@ -21,7 +21,7 @@ const INIT_STATE = {
   ProductionList: [],
   grnItemList: [],
   produtionMake: { Status: false,  },
-  productionFilter: { fromdate: currentDate, todate: currentDate },
+  productionFilter: { fromdate: currentDate_ymd, todate: currentDate_ymd },
   unit:[]
 }
 

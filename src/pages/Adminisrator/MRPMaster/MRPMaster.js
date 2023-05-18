@@ -418,8 +418,7 @@ const MRPMaster = (props) => {
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "3cm" }}>
             <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP} /> */}
-                {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
+              
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
@@ -490,8 +489,9 @@ const MRPMaster = (props) => {
                                                                     value={effectiveDate}
                                                                     disabled={((editMode === "edit") || (TableData.length > 0)) ? true : false}
                                                                     className="form-control d-block p-2 bg-white text-dark"
-                                                                    placeholder=" Please Enter FSSAI Exipry"
+                                                                    placeholder=" Please Enter EffectiveDate"
                                                                     options={{
+                                                                        altInput: true,
                                                                         altFormat: "d-m-Y",
                                                                         dateFormat: "Y-m-d",
                                                                     }}

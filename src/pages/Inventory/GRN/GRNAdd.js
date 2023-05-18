@@ -25,7 +25,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Or
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturnFunc, loginUserID, currentDate, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate_ymd, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import FeatherIcon from "feather-icons-react";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -46,7 +46,7 @@ const GRNAdd = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const [grnDate, setgrnDate] = useState(currentDate);
+    const [grnDate, setgrnDate] = useState(currentDate_ymd);
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
     const [grnItemList, setgrnItemList] = useState([]);
@@ -107,7 +107,7 @@ const GRNAdd = (props) => {
                 ele["Quantity"] = ''
                 ele["poAmount"] = ele.Amount
                 ele["Amount"] = 0
-                ele["BatchDate"] = currentDate
+                ele["BatchDate"] = currentDate_ymd
                 ele["BatchCode"] = '0'
                 ele["delbtn"] = false
 

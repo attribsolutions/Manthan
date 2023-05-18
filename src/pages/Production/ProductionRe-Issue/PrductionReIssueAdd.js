@@ -28,7 +28,7 @@ import {
 import {
     breadcrumbReturnFunc,
     convertDatefunc,
-    loginUserID, currentDate,
+    loginUserID, currentDate_ymd,
     loginCompanyID,
     loginPartyID,
     metaTagLabel
@@ -62,7 +62,7 @@ const ProductionReIssueAdd = (props) => {
     const history = useHistory()
 
     const fileds = {
-        ProductionReIssueDate: currentDate,
+        ProductionReIssueDate: currentDate_ymd,
         ItemName: [],
     }
 
@@ -176,7 +176,7 @@ const ProductionReIssueAdd = (props) => {
     //             const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
     //             // const { BatchesData = [] } = MaterialIssueItems
     //             setState((i) => {
-    //                 i.values.MaterialIssueDate = currentDate
+    //                 i.values.MaterialIssueDate = currentDate_ymd
     //                 i.values.ItemName = { value: Item, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
     //                 i.values.NumberOfLot = NumberOfLot;
     //                 i.values.LotQuantity = EstimatedOutputQty;

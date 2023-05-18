@@ -6,7 +6,7 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, loginPartyID } from "../../../components/Common/CommonFunction";
+import { currentDate_ymd, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
     updateWorkOrderListSuccess
 } from "../../../store/Production/WorkOrder/action";
@@ -126,8 +126,8 @@ const ProductionList = () => {
         let FromDate
         let ToDate
         if (onload) {
-            FromDate = currentDate;
-            ToDate = currentDate;
+            FromDate = currentDate_ymd;
+            ToDate = currentDate_ymd;
         } else {
             ToDate = todate;
             FromDate = fromdate;

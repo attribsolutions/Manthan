@@ -21,7 +21,7 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, loginCompanyID, loginPartyID, loginUserID, metaTagLabel, } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate_ymd, loginCompanyID, loginPartyID, loginUserID, metaTagLabel, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -43,7 +43,7 @@ const Receipts = (props) => {
     const dispatch = useDispatch();
 
     const fileds = {
-        ReceiptDate: currentDate,
+        ReceiptDate: currentDate_ymd,
         OpeningBalanceAmt: "",
         Customer: "",
         ReceiptModeName: "",
@@ -52,7 +52,7 @@ const Receipts = (props) => {
         DocumentNo: "",
         DepositorBankName: "",
         Description: "",
-        ChequeDate: currentDate,
+        ChequeDate: currentDate_ymd,
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
@@ -280,6 +280,7 @@ const Receipts = (props) => {
         {
             text: "InvoiceDate",
             dataField: "InvoiceDate",
+           
         },
         {
             text: "Bill No",
@@ -288,14 +289,17 @@ const Receipts = (props) => {
         {
             text: "Bill Amount",
             dataField: "GrandTotal",
+            align:()=>("right")
         },
         {
             text: "Paid",
             dataField: "PaidAmount",
+            align:()=>("right")
         },
         {
             text: "Bal Amt",
             dataField: "BalanceAmount",
+            align:()=>("right")
         },
         {
             text: "Calculate",
@@ -309,9 +313,8 @@ const Receipts = (props) => {
                         cpattern={decimalRegx}
                         defaultValue={row.Calculate}
                         autoComplete="off"
-                        className="col col-sm text-center"
+                        className=" text-end"
                         onChange={(e) => CalculateOnchange(e, row, key)}
-                    // onKeyDown={(e) => handleKeyDown(e, Data)}
                     />
                 </span>)
             },

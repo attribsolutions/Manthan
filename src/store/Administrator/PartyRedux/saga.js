@@ -79,13 +79,16 @@ function* Edit_Party_GenFun({ config }) {
 
   try {
     const response = yield call(Party_Master_Edit_API, config);
-    response.Data = response.Data.Data//remove chield data array
+    let newData = response.Data.Data //remove chield data array
+    newData["PartySubParty"] = response.Data.PartySubParty //remove chield data array 
+    response.Data = newData
     response["pageMode"] = config.btnmode
+
     yield put(editPartyIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* Update_Party_GenFun({config}) {
+function* Update_Party_GenFun({ config }) {
   try {
     const response = yield call(Party_Master_Update_API, config);
     yield put(updatePartyIDSuccess(response))
