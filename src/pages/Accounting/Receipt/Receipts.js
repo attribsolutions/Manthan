@@ -280,6 +280,7 @@ const Receipts = (props) => {
         {
             text: "InvoiceDate",
             dataField: "InvoiceDate",
+           
         },
         {
             text: "Bill No",
@@ -288,14 +289,17 @@ const Receipts = (props) => {
         {
             text: "Bill Amount",
             dataField: "GrandTotal",
+            align:()=>("right")
         },
         {
             text: "Paid",
             dataField: "PaidAmount",
+            align:()=>("right")
         },
         {
             text: "Bal Amt",
             dataField: "BalanceAmount",
+            align:()=>("right")
         },
         {
             text: "Calculate",
@@ -309,7 +313,7 @@ const Receipts = (props) => {
                         cpattern={decimalRegx}
                         defaultValue={row.Calculate}
                         autoComplete="off"
-                        className="col col-sm text-center"
+                        className=" text-end"
                         onChange={(e) => CalculateOnchange(e, row, key)}
                     // onKeyDown={(e) => handleKeyDown(e, Data)}
                     />

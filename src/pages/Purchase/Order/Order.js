@@ -44,6 +44,8 @@ import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administ
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { useRef } from "react";
+import CInput from "../../../CustomValidateForm/CInput";
+import { onlyNumberRegx } from "../../../CustomValidateForm/RegexPattern";
 
 let editVal = {}
 
@@ -384,26 +386,21 @@ const Order = (props) => {
             dataField: "",
             formatter: (value, row, k) => {
                 return (
-                    <Input
-                        type="text"
-                        id={`Quantity${k}`}
-                        defaultValue={row.Quantity}
-                        key={`Quantity${row.id}`}
-                        className="text-end"
-                        onChange={(e) => {
-                            const val = e.target.value
-                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                            if ((isnum) || (val === '')) {
-                                row["Quantity"] = val
+                    <>
+                        <CInput
+                            key={`Quantity-${k}`}
+                            id={`Quantity-${k}`}
+                            cpattern={onlyNumberRegx}
+                            defaultValue={row.Quantity}
+                            autoComplete="off"
+                            className=" text-end"
+                            onChange={(e) => {
+                                row["Quantity"] = e.target.value
                                 itemWise_CalculationFunc(row)
-                            } else {
-                                document.getElementById(`Quantity${k}`).value = row.Quantity
-                            }
-                        }}
-                        autoComplete="off"
-
-                    />
-
+                                document.getElementById(`Quantity-${k}`).value = row.Quantity
+                            }}
+                        />
+                    </>
                 )
             },
 
