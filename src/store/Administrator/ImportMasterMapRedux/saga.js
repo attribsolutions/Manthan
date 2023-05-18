@@ -83,7 +83,7 @@ function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {  // Save API
 }
 
 function* ExcelUpload_save_GenFun({ config }) {  // Save API
-  
+
   try {
     const response = yield call(ExcelUpload_Invoice_Save_API, config);
     yield put(ExcelUpload_save_action_Success(response));
@@ -95,7 +95,6 @@ function* ImportMasterMap_Saga() {
   yield takeEvery(GO_BUTTON_IMPORT_MASTER_MAP, GoButtonExcel_ImportMaster_GenFun)
   yield takeEvery(SAVE_IMPORT_MASTER_MAP, Save_Method_ForExcel_ImportMaster_GenFun)
   yield takeEvery(EXCEL_UPLOAD_SAVE, ExcelUpload_save_GenFun )
-
 }
 
 export default ImportMasterMap_Saga;

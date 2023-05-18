@@ -228,76 +228,77 @@ const UploadExcel = (props) => {
     }
 
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
+     
         event.preventDefault();
+        const btnId = event.target.id
+        try {
+            commonFunc.btnIsDissablefunc({ btnId, state: true })
+            const parArr = readJsonDetail.fileFiled
+            const outerArr = []
 
-        const parArr = readJsonDetail.fileFiled
-        const outerArr = []
-
-        compareParam.forEach(ele => {
-            if ((ele.Value !== null)) {
-                parArr[ele.FieldName] = ele.Value
-            }
-        })
-
-        readJsonDetail.invoice.forEach(inv => {
-            let parentObj;
-            let invoiceItems = []
-            inv.forEach(ele => {
-                parentObj = {
-                    "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
-                    "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
-                    "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
-                    "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
-                    "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
-                    "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
-                    "Party": commonFunc.loginPartyID(),
-                    CreatedBy: commonFunc.loginUserID(),
-                    UpdatedBy: commonFunc.loginUserID(),
-                    "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
+            compareParam.forEach(ele => {
+                if ((ele.Value !== null)) {
+                    parArr[ele.FieldName] = ele.Value
                 }
-
-
-
-                invoiceItems.push({
-                    "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
-                    "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
-                    "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
-                    "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
-                    "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
-                    "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
-                    "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                    "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
-                    "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
-                    "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
-                    "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
-                    "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
-                    "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
-                    "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,
-                    "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : 0,
-                    "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : 0,
-                    "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
-                    "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
-                    "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : 0,
-                    "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : 0,
-                    "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
-                    "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
-                    "TaxType": ele[parArr.TaxType] ? ele[parArr.TaxType] : '',
-                    "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
-                    "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
-                    "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
-
-                })
             })
 
-            outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
-        });
+            readJsonDetail.invoice.forEach(inv => {
+                let parentObj;
+                let invoiceItems = []
+                inv.forEach(ele => {
+                    parentObj = {
+                        "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
+                        "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
+                        "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
+                        "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
+                        "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
+                        "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
+                        "Party": commonFunc.loginPartyID(),
+                        CreatedBy: commonFunc.loginUserID(),
+                        UpdatedBy: commonFunc.loginUserID(),
+                        "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
+                    }
 
-        console.log('Upload data', outerArr)
-        const jsonBody = JSON.stringify({ "BulkData": outerArr })
-        dispatch(ExcelUpload_save_action({ jsonBody, }));
+                    invoiceItems.push({
+                        "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
+                        "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
+                        "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
+                        "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
+                        "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
+                        "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
+                        "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
+                        "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
+                        "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
+                        "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
+                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
+                        "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
+                        "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
+                        "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,
+                        "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : 0,
+                        "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : 0,
+                        "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
+                        "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
+                        "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : 0,
+                        "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : 0,
+                        "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
+                        "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
+                        "TaxType": ele[parArr.TaxType] ? ele[parArr.TaxType] : '',
+                        "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
+                        "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
+                        "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
+
+                    })
+                })
+
+                outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
+            });
+
+            const jsonBody = JSON.stringify({ "BulkData": outerArr })
+            dispatch(ExcelUpload_save_action({ jsonBody, btnId }));
+
+        } catch (e) { commonFunc.btnIsDissablefunc({ btnId, state: false }) }
     };
-
 
 
     if (!(userPageAccessState === '')) {
@@ -305,7 +306,7 @@ const UploadExcel = (props) => {
             <React.Fragment>
                 <MetaTags>{commonFunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <form onSubmit={(event) => SaveHandler(event)} noValidate>
+                <form noValidate>
                     <div className="page-content">
 
                         <div className="px-2 c_card_header text-black" >
