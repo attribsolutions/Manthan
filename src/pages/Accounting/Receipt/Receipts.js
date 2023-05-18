@@ -32,7 +32,7 @@ import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import CInput from "../../../CustomValidateForm/CInput";
+import  {CInput} from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import * as commonFunc from "../../../components/Common/CommonFunction";

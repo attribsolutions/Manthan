@@ -42,7 +42,7 @@ import { currentDate } from "../../../components/Common/CommonFunction"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import CInput from "../../../CustomValidateForm/CInput";
+import  {CInput} from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern"
 import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
