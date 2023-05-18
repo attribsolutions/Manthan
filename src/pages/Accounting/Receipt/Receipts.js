@@ -315,7 +315,6 @@ const Receipts = (props) => {
                         autoComplete="off"
                         className=" text-end"
                         onChange={(e) => CalculateOnchange(e, row, key)}
-                    // onKeyDown={(e) => handleKeyDown(e, Data)}
                     />
                 </span>)
             },
