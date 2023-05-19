@@ -21,7 +21,6 @@ import { decimalRegx } from "../../../CustomValidateForm/RegexPattern"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
-// import * as _cfunc from "../../../components/Common/CommonFunction";
 import * as _cfunc from "../../../components/Common/CommonFunction"
 import * as _act from "../../../store/actions";
 import { mode, url, pageId } from "../../../routes/index"
@@ -112,7 +111,7 @@ const Credit = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -159,11 +158,9 @@ const Credit = (props) => {
     }, []);
 
     useEffect(() => saveMsgUseEffect({
-        postMsg,
+        postMsg, pageMode,
+        history, dispatch,
         postSuccss: _act.saveCredit_Success,
-        pageMode,
-        history,
-        dispatch,
         listPath: url.CREDIT_LIST
     }), [postMsg])
 
@@ -220,7 +217,7 @@ const Credit = (props) => {
         dispatch(_act.CredietDebitType(jsonBody));
     }, [])
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems, Data]);
+    useEffect(() =>_cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems, Data]);
 
     const PartyOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -574,7 +571,7 @@ const Credit = (props) => {
                 Type: 3,
                 Message: `Amount Paid value can not be ${values.Amount}`,
             })
-            return _cfunc._cfunc.btnIsDissablefunc({ btnId, state: false })
+            return _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
 
         const ReceiptInvoices1 = Data.map((index) => ({
@@ -593,7 +590,7 @@ const Credit = (props) => {
                     Type: 3,
                     Message: `Please Select Unit ${index.ItemName}`,
                 })
-                // return _cfunc._cfunc.btnIsDissablefunc({ btnId, state: false })
+                // return _cfunc.btnIsDissablefunc({ btnId, state: false })
             } else {
                 if (index.Qty) {
                     // if ((!index.unit)) {
@@ -601,7 +598,7 @@ const Credit = (props) => {
                     //         Type: 3,
                     //         Message: `Please Select Unit ${index.ItemName}`,
                     //     })
-                    //     // return _cfunc._cfunc.btnIsDissablefunc({ btnId, state: false })
+                    //     // return _cfunc.btnIsDissablefunc({ btnId, state: false })
                     // }
                     const CRDRNoteItems = {
                         CRDRNoteDate: values.CRDRNoteDate,
@@ -632,7 +629,7 @@ const Credit = (props) => {
 
         try {
             if (formValid(state, setState)) {
-                _cfunc._cfunc.btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
@@ -656,7 +653,7 @@ const Credit = (props) => {
                 }
 
             }
-        } catch (e) { _cfunc._cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
 
     };
 
