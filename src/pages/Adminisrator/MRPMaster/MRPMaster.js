@@ -486,6 +486,7 @@ const MRPMaster = (props) => {
                                                                 <C_DatePicker
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
+                                                                    placeholder = "Please Enter EffectiveDate"
                                                                     value={effectiveDate}
                                                                     disabled={((editMode === "edit") || (TableData.length > 0)) ? true : false}
                                                                     onChange={EffectiveDateHandler}

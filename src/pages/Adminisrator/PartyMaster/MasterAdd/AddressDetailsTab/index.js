@@ -184,6 +184,7 @@ const AddressTabForm = forwardRef((props, ref) => {
                                 <C_DatePicker
                                     name="FSSAIExipry"
                                     value={values.FSSAIExipry}
+                                    placeholder = {"DD/MM/YYYY"}
                                     onChange={(c, v, e) => onChangeDate({ v, e, state, setState })}
                                 />
                                 {(isError.FSSAIExipry.length > 0) && (

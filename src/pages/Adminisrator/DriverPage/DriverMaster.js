@@ -303,6 +303,7 @@ const DriverMaster = (props) => {
                                                                 <C_DatePicker
                                                                     name="DOB"
                                                                     value={values.DOB}
+                                                                    placeholder = {"DD/MM/YYYY"}
                                                                     onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                                 />
                                                             </FormGroup>

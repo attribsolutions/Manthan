@@ -132,6 +132,7 @@ function Margin_Tab(props) {
                                             <C_DatePicker
                                                 id={`txtEffectiveDate${0}`}
                                                 value={effectiveDate}
+                                                placeholder = "Please Enter EffectiveDate"
                                                 onChange={EffectiveDateHandler}
                                             />
                                         </div>
