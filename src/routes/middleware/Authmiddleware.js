@@ -20,29 +20,6 @@ const Authmiddleware = ({
             to={{ pathname: "/login", state: { from: props.location } }} />
         )
       }
-      
-     else if ((userPageAccess === undefined)) {
-        // console.log("userPageAccess props if ", history)
-
-        // history.push("/Dashboard")
-        // return (
-        //   <Redirect
-        //     to={{ pathname: "/Dashboard",  }}  />
-        // )
-      }
-      else {
-        if (!(userPageAccess.fromDashboardAccess)) {
-          // console.log("userPageAccess props else", history)
-
-          // history.push("/Dashboard")
-          // return (
-          //   <Redirect
-          //     to={{ pathname: "/Dashboard",  }}  />
-          // )
-        }
-      };
-
-
       return (
         <Layout>
           <Component {...props} />

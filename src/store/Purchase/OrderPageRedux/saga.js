@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   deleteOrderIdSuccess,
-  postOrderSuccess,
+  saveOrderActionSuccess,
   editOrderIdSuccess,
   updateOrderIdSuccess,
   getOrderListPageSuccess,
@@ -75,7 +75,7 @@ function* saveOrder_GenFunc({ config }) {
     } else {
       response = yield call(OrderPage_Save_API_ForPO, config);
     }
-    yield put(postOrderSuccess(response));
+    yield put(saveOrderActionSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 

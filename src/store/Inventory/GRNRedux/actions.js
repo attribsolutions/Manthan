@@ -15,7 +15,6 @@ import {
   UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS
 } from './actionType'
 
-
 export const grnlistfilters = filter => ({
   type: SET_GRN_LIST_FILTERS,
   payload: filter,
