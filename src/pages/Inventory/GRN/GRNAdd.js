@@ -30,6 +30,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as pageId from "../../../routes/allPageID"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 
 
 let initialTableData = []
@@ -42,6 +43,14 @@ const GRNAdd = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
+
+
+
+    const fileds = {
+        GRNDate: currentDate_ymd,
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const [grnDate, setgrnDate] = useState(currentDate_ymd);
@@ -58,13 +67,14 @@ const GRNAdd = (props) => {
         items,
         postMsg,
         userAccess,
+        pageField,
     } = useSelector((state) => ({
         // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField,
+        pageField: state.CommonPageFieldReducer.pageField
     }));
 
     useEffect(() => {
@@ -73,6 +83,8 @@ const GRNAdd = (props) => {
         dispatch(commonPageField(page_Id))
         // dispatch(getSupplierAddress())
     }, [])
+
+    const values = { ...state.values }
 
     // userAccess useEffect
     useEffect(() => {
@@ -186,6 +198,13 @@ const GRNAdd = (props) => {
 
         }
     }, [postMsg])
+
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
 
@@ -679,7 +698,8 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>GRN Date</Label>
                                     <Col sm="7">
                                         <C_DatePicker
-                                            name="grndate"
+                                            name="GRNDate"
+                                            value={values.GRNDate}
                                             disabled={(pageMode === mode.view) ? true : false}
                                             onChange={(e, date) => { setgrnDate(date) }}
                                         />
@@ -716,7 +736,7 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>Invoice Date</Label>
                                     <Col md="7">
                                         <C_DatePicker
-                                            disabled={pageMode === mode.view ? true : false}
+                                            disabled={true}
                                         />
                                     </Col>
                                 </FormGroup>

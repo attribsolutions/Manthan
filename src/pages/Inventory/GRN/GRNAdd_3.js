@@ -31,6 +31,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as pageId from "../../../routes/allPageID"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 
 
 const GRNAdd3 = (props) => {
@@ -51,10 +52,18 @@ const GRNAdd3 = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
 
+
+    const fileds = {
+        GRNDate: currentDate_ymd,
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const {
         items,
         postMsg,
         userAccess,
+        pageField
     } = useSelector((state) => ({
         // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
@@ -87,6 +96,8 @@ const GRNAdd3 = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
+    const values = { ...state.values }
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
@@ -221,6 +232,13 @@ const GRNAdd3 = (props) => {
 
         }
     }, [postMsg])
+
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
@@ -390,7 +408,8 @@ const GRNAdd3 = (props) => {
                                         style={{ width: "130px" }}>GRN Date</Label>
                                     <Col sm="7">
                                         <C_DatePicker
-                                            name="grndate"
+                                            name="GRNDate"
+                                            value={values.GRNDate}
                                             disabled={(pageMode === mode.view) ? true : false}
                                             onChange={(e, date) => { setgrnDate(date) }}
                                         />

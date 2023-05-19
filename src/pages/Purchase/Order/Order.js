@@ -19,7 +19,7 @@ import { SaveButton, Go_Button, Change_Button } from "../../../components/Common
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
-import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
+import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
@@ -32,7 +32,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { editPartyItemID } from "../../../store/Administrator/PartyItemsRedux/action";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-import { pageFieldUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 
 
 
@@ -259,46 +259,26 @@ const Order = (props) => {
         }
     }, [orderType]);
 
-    useEffect(async () => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(_act.saveOrderActionSuccess({ Status: false }))
+
+    useEffect(() => saveMsgUseEffect({
+        postMsg, pageMode,
+        history, dispatch,
+        postSuccss:_act.saveOrderActionSuccess,
+        status200: () => {
             setTermsAndConTable([])
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
+        },
+        listPath: listPath
+    }), [postMsg])
 
-            const a = await customAlert({
-                Type: 1,
-                Message: postMsg.Message,
-            })
-            if (a) {
-                history.push({
-                    pathname: listPath,
-                });
-            }
+    useEffect(() => updateMsgUseEffect({
+        updateMsg, modalCss,
+        history, dispatch,
+        updateSuccss:_act.saveOrderActionSuccess,
+        listPath: listPath
+    }), [updateMsg])
 
-        } else if (postMsg.Status === true) {
-            dispatch(_act.saveOrderActionSuccess({ Status: false }))
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(postMsg.Message),
-            })
-        }
-    }, [postMsg]);
 
-    useEffect(() => {
-        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            history.push({
-                pathname: listPath,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(_act.updateOrderIdSuccess({ Status: false }));
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(updateMsg.Message),
-            })
-        }
-    }, [updateMsg, modalCss]);
-
- 
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
@@ -319,7 +299,7 @@ const Order = (props) => {
 
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
-    
+
             dataField: "ItemName",
             headerFormatter: (value, row, k) => {
                 return (
@@ -332,18 +312,18 @@ const Order = (props) => {
                                 onClick={assignItem_onClick}>
                                 Assign-Items</samp>
                         </div>
-    
+
                     </div>
                 )
             },
         },
-    
+
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
             hidden: !(pageMode === mode.defaultsave) && true,
             dataField: "StockQuantity",
             formatter: (value, row, k) => {
-    
+
                 return (
                     <div key={row.id} className="text-end">
                         <span>{row.StockQuantity}</span>
@@ -354,7 +334,7 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             },
         },
-    
+
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             dataField: "",
@@ -371,27 +351,26 @@ const Order = (props) => {
                             onChange={(e) => {
                                 row["Quantity"] = e.target.value
                                 itemWise_CalculationFunc(row)
-                                document.getElementById(`Quantity-${k}`).value = row.Quantity
                             }}
                         />
                     </>
                 )
             },
-    
+
             headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-    
+
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
             formatter: (value, row, key) => {
-    
+
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
-    
+
                     row.UnitDetails.forEach(i => {
                         if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
                             defaultUnit(i)
@@ -400,7 +379,7 @@ const Order = (props) => {
                             defaultUnit(i)
                         }
                     });
-    
+
                     function defaultUnit(i) {
                         row["Unit_id"] = i.UnitID;
                         row["po_Unit_id"] = i.UnitID;
@@ -408,20 +387,20 @@ const Order = (props) => {
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
                         row["Rate"] = i.Rate;
                     }
-    
+
                 } else {
                     row["edit_Qty"] = row.Quantity;
                     row["edit_Unit_id"] = row.Unit_id;
-    
+
                     row.UnitDetails.forEach(i => {
                         if ((row.Unit_id === i.UnitID)) {
                             row["BaseUnitQuantity"] = i.BaseUnitQuantity;
                             row["UnitName"] = i.UnitName;
                         }
                     });
-    
+
                 }
-    
+
                 return (
                     <Select
                         classNamePrefix="select2-selection"
@@ -445,7 +424,7 @@ const Order = (props) => {
                                 itemWise_CalculationFunc(row)
                                 document.getElementById(`Rate-${key}`).innerText = e.Rate
                             }
-    
+
                         }}
                     >
                     </Select >
@@ -455,7 +434,7 @@ const Order = (props) => {
                 return { width: '150px', textAlign: 'center' };
             }
         },
-    
+
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
             dataField: '',
@@ -473,33 +452,33 @@ const Order = (props) => {
                                     itemWise_CalculationFunc(row);
                                 }}
                             />
-    
+
                         </div>
                     )
                 }
                 else {
                     return (
                         <div key={row.id} className="text-end">
-    
+
                             <span id={`Rate-${k}`}>{row.Rate}</span>
                         </div>
                     )
                 }
-    
+
             },
-    
+
             headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-    
-    
+
+
         {//------------- MRP column ----------------------------------
             text: "MRP",
             dataField: "MRPValue",
             // sort: true,
             formatter: (value, row, k) => {
-    
+
                 return (
                     <div key={row.id} className="text-end">
                         <span>{row.MRPValue}</span>
@@ -510,7 +489,7 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             },
         },
-    
+
         { //------------- Comment column ----------------------------------
             text: "Comment",
             dataField: "",
@@ -521,7 +500,7 @@ const Order = (props) => {
                         <Input type="text"
                             id={`Comment${k}`}
                             key={`Comment${row.id}`}
-    
+
                             defaultValue={row.Comment}
                             autoComplete="off"
                             onChange={(e) => { row["Comment"] = e.target.value }}
@@ -529,7 +508,7 @@ const Order = (props) => {
                     </span>
                 )
             },
-    
+
             headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }

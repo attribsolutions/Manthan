@@ -73,8 +73,14 @@ export const date_dmy_func = (isdate) => { //+++++++++++++++ Current Date by for
   return (`${date.dd}-${date.mm}-${date.yy}`)
 };
 
+export const sap_date_dmy_func = (isdate) => { //+++++++++++++++ Current Date by format (dd-mm-yyy) ++++++++++++++++++++++++++++++++++++
+  let date = isDateInitial(isdate);
+  return (`${date.dd}.${date.mm}.${date.yy}`)
+};
+
 export const currentDate_ymd = date_ymd_func();
 export const currentDate_dmy = date_dmy_func();
+export const sap_date_dmy = sap_date_dmy_func();
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';

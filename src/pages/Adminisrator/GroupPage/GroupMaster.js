@@ -46,7 +46,7 @@ import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import GroupTypeMaster from "../GroupTypePage/GroupTypeMaster";
 import AddMaster from "../EmployeePages/Drodown";
-import { userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+import { saveMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 
 const GroupMaster = (props) => {
 
@@ -145,39 +145,48 @@ const GroupMaster = (props) => {
         }
     }, [])
 
-    useEffect(async () => {
+    // useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(saveGroupMaster_Success({ Status: false }))
-            setState(() => resetFunction(fileds, state))//Clear form values
-            dispatch(Breadcrumb_inputName(''))
+    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+    //         dispatch(saveGroupMaster_Success({ Status: false }))
+    //         setState(() => resetFunction(fileds, state))//Clear form values
+    //         dispatch(Breadcrumb_inputName(''))
 
-            if (pageMode === "other") {
-                customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
-            }
-            else {
-                const promise = await customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
-                if (promise) {
-                    history.push({
-                        pathname: url.GROUP_lIST,
-                    })
-                }
-            }
-        }
-        else if (postMsg.Status === true) {
-            dispatch(getGroupListSuccess({ Status: false }))
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(postMessage.Message),
-            })
-        }
-    }, [postMsg])
+    //         if (pageMode === "other") {
+    //             customAlert({
+    //                 Type: 1,
+    //                 Message: postMsg.Message,
+    //             })
+    //         }
+    //         else {
+    //             const promise = await customAlert({
+    //                 Type: 1,
+    //                 Message: postMsg.Message,
+    //             })
+    //             if (promise) {
+    //                 history.push({
+    //                     pathname: url.GROUP_lIST,
+    //                 })
+    //             }
+    //         }
+    //     }
+    //     else if (postMsg.Status === true) {
+    //         dispatch(getGroupListSuccess({ Status: false }))
+    //         customAlert({
+    //             Type: 4,
+    //             Message: JSON.stringify(postMessage.Message),
+    //         })
+    //     }
+    // }, [postMsg])
+
+    useEffect(() => saveMsgUseEffect({
+        postMsg, pageMode,
+        history, dispatch,
+        postSuccss: saveGroupMaster_Success,
+        resetFunc: { fileds, state, setState },
+        listPath: url.GROUP_lIST
+    }), [postMsg])
+
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {

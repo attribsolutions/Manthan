@@ -10,7 +10,6 @@ import {
     Label,
     Row,
 } from "reactstrap";
-
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -28,15 +27,26 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
+    onChangeSelect,
     onChangeText,
     resetFunction
 } from "../../../components/Common/validationFunction";
+import Select from "react-select";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, loginRoleID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginCompanyID,
+    loginPartyID,
+    loginUserID,
+    btnIsDissablefunc,
+    loginRoleID,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
+import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 
 const SalesManMaster = (props) => {
 
@@ -49,6 +59,7 @@ const SalesManMaster = (props) => {
         Name: "",
         MobileNo: "",
         Party: '',
+        SalesmanRoute: [],
         IsActive: false
     }
 
@@ -62,9 +73,11 @@ const SalesManMaster = (props) => {
     const { postMsg,
         updateMsg,
         pageField,
+        RoutesList,
         userAccess } = useSelector((state) => ({
             postMsg: state.SalesManReducer.PostData,
             updateMsg: state.SalesManReducer.updateMessage,
+            RoutesList: state.RoutesReducer.RoutesList,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -73,6 +86,7 @@ const SalesManMaster = (props) => {
         const page_Id = pageId.SALESMAN
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(GetRoutesList())
     }, []);
 
     const values = { ...state.values }
@@ -104,7 +118,7 @@ const SalesManMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
+        debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -119,6 +133,11 @@ const SalesManMaster = (props) => {
             }
 
             if (hasEditVal) {
+debugger
+                const routeArr = hasEditVal.SalesmanRoute.map((data) => ({
+                    value: data.id,
+                    label: data.Name
+                }))
 
                 const { id, Name, IsActive, MobileNo, Party, PartyName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -126,12 +145,14 @@ const SalesManMaster = (props) => {
                 values.id = id;
                 values.MobileNo = MobileNo;
                 values.IsActive = IsActive
-                hasValid.Party.valid = true;
+                values.SalesmanRoute = routeArr;
+                values.Party = { value: Party, label: PartyName }
 
+                hasValid.Party.valid = true;
                 hasValid.Name.valid = true;
                 hasValid.IsActive.valid = true;
                 hasValid.MobileNo.valid = true;
-                values.Party = { value: Party, label: PartyName }
+                hasValid.SalesmanRoute.valid = true;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -200,18 +221,35 @@ const SalesManMaster = (props) => {
         }
     }, [pageField])
 
+    const RoutesListOptions = RoutesList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+        IsActive: index.IsActive
+    }));
+
+    const RouteName_Options = RoutesListOptions.filter((index) => {
+        return index.IsActive === true
+    });
+
+
     const SaveHandler = async (event) => {
+
         event.preventDefault();
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
+                const routeArr = values.SalesmanRoute.map((i) => ({
+                    Route: i.value,
+                }))
+
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     MobileNo: values.MobileNo,
                     IsActive: values.IsActive,
                     Party: RoleID === 2 ? values.Party.value : loginPartyID(),
+                    SalesmanRoute: routeArr,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
@@ -235,7 +273,7 @@ const SalesManMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                   <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
@@ -298,16 +336,24 @@ const SalesManMaster = (props) => {
                                                         </FormGroup>
                                                     </Row>
 
-                                                    {/* {RoleID === 2 ?
-                                                        <Row>
-                                                            <FormGroup className="mt-2 col col-sm-4 ">
-                                                                <PartyDropdownMaster
-                                                                    fieldLabel={fieldLabel.Party}
-                                                                    state={values.Party}
-                                                                    setState={setState} />
-                                                            </FormGroup>
-                                                        </Row>
-                                                        : null} */}
+                                                    <Row>
+                                                        <FormGroup className="mt-2 col col-sm-4">
+                                                            <Label htmlFor="validationCustom01"> {fieldLabel.SalesmanRoute} </Label>
+                                                            <Select
+                                                                name="SalesmanRoute"
+                                                                isMulti={true}
+                                                                value={values.SalesmanRoute}
+                                                                isSearchable={true}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
+                                                                options={RouteName_Options}
+                                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                            />
+                                                            {isError.SalesmanRoute.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.SalesmanRoute}</small></span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Row>
 
                                                     <Row>
                                                         <FormGroup className="mt-2 col col-sm-5">
