@@ -38,11 +38,11 @@ import Flatpickr from "react-flatpickr"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { currentDate } from "../../../components/Common/CommonFunction"
+import { currentDate_ymd } from "../../../components/Common/CommonFunction"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import CInput from "../../../CustomValidateForm/CInput";
+import  {CInput} from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern"
 import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
@@ -58,7 +58,8 @@ const Credit = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const fileds = {
-        CRDRNoteDate: currentDate,
+        CRDRNoteDate: currentDate_ymd
+,
         Customer: "",
         NoteReason: "",
         servicesItem: "",

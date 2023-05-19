@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import ReactApexChart from "react-apexcharts"
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
@@ -22,6 +23,8 @@ import { options } from '../Options';
 import PaymentEntryList from './PaymentEntryList';
 import InvoiceForGRN from './GRNList';
 import SalesReturnListForDashboard from './SalesReturnListForDashboard';
+import { orderApprovalAction, orderApprovalActionSuccess } from '../../../store/Purchase/OrderPageRedux/actions';
+import { CustomAlert } from '../../../CustomAlert/ConfirmDialog';
 
 
 const Dashboard_1 = (props) => {
@@ -38,10 +41,12 @@ const Dashboard_1 = (props) => {
         getDashboard,
         pageField,
         updateMsg,
-        userAccess } = useSelector((state) => ({
+        userAccess,
+        orderApprovalMsg } = useSelector((state) => ({
             getDashboard: state.DashboardReducer.getDashboard,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageField
+            pageField: state.CommonPageFieldReducer.pageField,
+            orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
         }));
 
     const { OrderCount, InvoiceCount, GRNsCount } = getDashboard
@@ -85,9 +90,53 @@ const Dashboard_1 = (props) => {
         history.push(url.GRN_STP_1)
     }
 
-    function salesReturn_onClick(){
+    function salesReturn_onClick() {
         history.push(url.SALES_RETURN_LIST)
     }
+
+    // ******************************** SAP button code **********************************
+    useEffect(() => {
+
+        if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
+            dispatch(orderApprovalActionSuccess({ Status: false }))
+            CustomAlert({
+                Type: 1,
+                Message: orderApprovalMsg.Message,
+            })
+        } else if (orderApprovalMsg.Status === true) {
+            dispatch(orderApprovalActionSuccess({ Status: false }))
+            CustomAlert({
+                Type: 4,
+                Message: JSON.stringify(orderApprovalMsg.Message),
+            })
+        }
+
+    }, [orderApprovalMsg]);
+
+    function demoSAPhandler(event) {
+        event.preventDefault();
+        const btnId = "sapbtn-id"
+        let jsonBody = {
+            "Customer": "500581",
+            "DocDate": "04.05.2023",
+            "Indicator": "F",
+            "OrderNo": "127407",
+            "Stats": "1",
+            "OrderItemSet": [{
+                "OrderNo": "127407",
+                "ItemNo": "3706465",
+                "Material": "1200249",
+                "Quantity": "1.000",
+                "Unit": "KG",
+                "Plant": "IW03",
+                "Batch": ""
+            }],
+            "CancelFlag": " "
+        }
+
+        dispatch(orderApprovalAction({ jsonBody, btnId }))
+    }
+
 
     return (
         <React.Fragment>
@@ -263,7 +312,13 @@ const Dashboard_1 = (props) => {
                                 <SalesReturnListForDashboard />
                             </Card>
                         </Col>
-
+                        <Col lg={6}>
+                            <Button type='button'
+                                className='btn btn-success'
+                                id="sapbtn-id"
+                                onClick={demoSAPhandler}>demoSAP
+                            </Button>
+                        </Col>
                     </Row>
 
                     {/* <div className="card">

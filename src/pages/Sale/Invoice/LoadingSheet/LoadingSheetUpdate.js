@@ -12,7 +12,7 @@ import { commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, loginPartyID, currentDate, metaTagLabel } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginPartyID, currentDate_ymd, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -31,7 +31,7 @@ const LoadingSheetUpdate = (props) => {
     const history = useHistory()
 
     const [userPageAccessState, setUserAccState] = useState('');
-    const [loadingDate, setLoadingDate] = useState(currentDate);
+    const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
 
     const {
         userAccess,
@@ -121,7 +121,7 @@ const LoadingSheetUpdate = (props) => {
             const jsonBody1 = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
-                ReceiptDate: currentDate
+                ReceiptDate: currentDate_ymd
             });
 
             const body = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row }

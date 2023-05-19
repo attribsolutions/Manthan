@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 
-import Flatpickr from "react-flatpickr";
 import {
     deleteOrderId,
     deleteOrderIdSuccess,
@@ -21,7 +20,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc, convertDatefunc, currentDate, loginPartyID } from "../../../components/Common/CommonFunction";
+import { btnIsDissablefunc, convertDatefunc, currentDate_ymd, loginPartyID } from "../../../components/Common/CommonFunction";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
@@ -33,6 +32,7 @@ import { order_Type } from "../../../components/Common/C-Varialbes";
 import { GoButtonForinvoiceAdd, makeIB_InvoiceAction } from "../../../store/Sales/Invoice/action";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 
 const OrderList = () => {
@@ -41,8 +41,8 @@ const OrderList = () => {
     const history = useHistory();
 
     const fileds = {
-        FromDate: currentDate,
-        ToDate: currentDate,
+        FromDate: currentDate_ymd,
+        ToDate: currentDate_ymd,
         Supplier: { value: "", label: "All" }
     }
 
@@ -319,28 +319,28 @@ const OrderList = () => {
         try {
             let filtersBody = {}
             const PO_filters = {
-                FromDate: values.FromDate,
-                ToDate: values.ToDate,
-                Supplier: values.Supplier.value,
-                Customer: loginPartyID(),
-                OrderType: order_Type.PurchaseOrder,
-                IBType: IBType ? IBType : otherState.IBType
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Supplier": values.Supplier.value,
+                "Customer": loginPartyID(),
+                "OrderType": order_Type.PurchaseOrder,
+                "IBType": IBType ? IBType : otherState.IBType
             }
             const SO_filters = {
-                FromDate: values.FromDate,
-                ToDate: values.ToDate,
-                Supplier: loginPartyID(),//Suppiler swipe
-                Customer: values.Supplier.value,//customer swipe
-                OrderType: order_Type.SaleOrder,
-                IBType: IBType ? IBType : otherState.IBType
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Supplier": loginPartyID(),//Suppiler swipe
+                "Customer": values.Supplier.value,//customer swipe
+                "OrderType": order_Type.SaleOrder,
+                "IBType": IBType ? IBType : otherState.IBType
             }
             const GRN_STP_3_filters = {
-                FromDate: values.FromDate,
-                ToDate: values.ToDate,
-                Supplier: values.Supplier.value,
-                Customer: loginPartyID(),
-                OrderType: order_Type.InvoiceToGRN,
-                IBType: IBType ? IBType : otherState.IBType
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Supplier": values.Supplier.value,
+                "Customer": loginPartyID(),
+                "OrderType": order_Type.InvoiceToGRN,
+                "IBType": IBType ? IBType : otherState.IBType
             }
             if (subPageMode === url.ORDER_LIST_4) {
                 filtersBody = JSON.stringify(SO_filters);
@@ -437,16 +437,9 @@ const OrderList = () => {
                                 {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "FromDate"}
                             </Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name='FromDate'
                                     value={values.FromDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={fromdateOnchange}
                                 />
                             </Col>
@@ -459,16 +452,9 @@ const OrderList = () => {
                                 {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "ToDate"}
                             </Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name="ToDate"
                                     value={values.ToDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={todateOnchange}
                                 />
                             </Col>

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { currentDate, loginCompanyID, loginPartyID } from '../../../components/Common/CommonFunction';
+import { currentDate_ymd, loginCompanyID, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import * as url from "../../../routes/route_url";
@@ -20,8 +20,8 @@ export default function SalesReturnListForDashboard() {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            FromDate: currentDate,
-            ToDate: currentDate,
+            FromDate: currentDate_ymd,
+            ToDate: currentDate_ymd,
             CustomerID: "",
             PartyID: loginPartyID(),
         });

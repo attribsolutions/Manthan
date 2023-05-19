@@ -178,7 +178,7 @@ const BulkRecipt = (props) => {
             Data.forEach(i => {
                 const arr =
                 {
-                    ReceiptDate: commonFunc.currentDate,
+                    ReceiptDate: commonFunc.currentDate_ymd,
                     Description: "",
                     AmountPaid: i.GrandTotal,
                     BalanceAmount: i.BalanceAmount,
@@ -230,7 +230,7 @@ const BulkRecipt = (props) => {
                                         <Col sm="7">
                                             <Flatpickr
                                                 name='Date'
-                                                value={commonFunc.currentDate}
+                                                value={commonFunc.currentDate_ymd}
                                                 disabled={true}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 options={{

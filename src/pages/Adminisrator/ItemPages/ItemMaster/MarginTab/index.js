@@ -7,6 +7,7 @@ import MarginTable from './Table';
 import { get_Party_ForDropDown, } from '../../../../../store/Administrator/ItemsRedux/action';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
 import { priceListByCompay_Action } from '../../../../../store/Administrator/PriceList/action';
+import { CustomAlert } from '../../../../../CustomAlert/ConfirmDialog';
 
 function Margin_Tab(props) {
 
@@ -87,7 +88,7 @@ function Margin_Tab(props) {
             clearState();
 
         }
-        else (alert("Please Enter value"))
+        else { CustomAlert({ Type: 4, Message: "Please Enter value" })}
     };
 
     const clearState = () => {
@@ -136,16 +137,16 @@ function Margin_Tab(props) {
                                                 autoComplete='off'
                                                 options={{
                                                     altInput: true,
-                                                    altFormat: "F j, Y",
-                                                    dateFormat: "Y-m-d"
-                                                }}
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                  }}
                                                 onChange={EffectiveDateHandler}
                                             />
                                         </div>
                                     </FormGroup>
 
                                     <FormGroup className="mb-3 col col-sm-3 " >
-                                        <Label >Margin</Label>
+                                        <Label >Margin (%)</Label>
                                         <Input
                                             type="text"
                                             id={`txtMargin${0}`}

@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/CommonFunction"
+import { currentDate_ymd } from "../../../components/Common/CommonFunction"
 import { DELETE_MATERIAL_ISSUE_PAGE_SUCCESS, EDIT_MATERIAL_ISSUE_LIST_PAGE_SUCCESS, GET_MATERIAL_ISSUE_LIST_PAGE_SUCCESS, MATERIAL_ISSUE_LIST_FILTERS, POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER_SUCCESS, POST_MATERIAL_ISSUE_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
@@ -7,7 +7,7 @@ const INIT_STATE = {
     deleteMsg: { Status: false },
     editData:{ Status: false },
     materialIssueList: [],
-    materialIssuelistFilters: { fromdate: currentDate, todate: currentDate, }
+    materialIssuelistFilters: { fromdate: currentDate_ymd, todate: currentDate_ymd, }
 
 }
 

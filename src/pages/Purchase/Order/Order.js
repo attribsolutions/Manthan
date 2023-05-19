@@ -44,6 +44,8 @@ import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administ
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { useRef } from "react";
+import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
+import { onlyNumberRegx } from "../../../CustomValidateForm/RegexPattern";
 
 let editVal = {}
 
@@ -95,13 +97,14 @@ const Order = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
-    const [deliverydate, setdeliverydate] = useState(commonFunc.currentDate)
+    const [deliverydate, setdeliverydate] = useState(commonFunc.currentDate_ymd)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
-    const [poFromDate, setpoFromDate] = useState(commonFunc.currentDate);
-    const [poToDate, setpoToDate] = useState(commonFunc.currentDate);
-    const [orderdate, setorderdate] = useState(commonFunc.currentDate);
+    const [poFromDate, setpoFromDate] = useState(commonFunc.currentDate_ymd);
+    const [poToDate, setpoToDate] = useState(commonFunc.currentDate_ymd);
+    const [orderdate, setorderdate] = useState(commonFunc.currentDate_ymd);
+ 
     const [supplierSelect, setsupplierSelect] = useState('');
     const [partySelect, setPartySelect] = useState('');
 
@@ -111,7 +114,6 @@ const Order = (props) => {
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
-    const [card, setCard] = useState(false)
 
     const {
         goBtnOrderdata,
@@ -384,26 +386,21 @@ const Order = (props) => {
             dataField: "",
             formatter: (value, row, k) => {
                 return (
-                    <Input
-                        type="text"
-                        id={`Quantity${k}`}
-                        defaultValue={row.Quantity}
-                        key={`Quantity${row.id}`}
-                        className="text-end"
-                        onChange={(e) => {
-                            const val = e.target.value
-                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                            if ((isnum) || (val === '')) {
-                                row["Quantity"] = val
+                    <>
+                        <CInput
+                            key={`Quantity-${k}`}
+                            id={`Quantity-${k}`}
+                            cpattern={onlyNumberRegx}
+                            defaultValue={row.Quantity}
+                            autoComplete="off"
+                            className=" text-end"
+                            onChange={(e) => {
+                                row["Quantity"] = e.target.value
                                 itemWise_CalculationFunc(row)
-                            } else {
-                                document.getElementById(`Quantity${k}`).value = row.Quantity
-                            }
-                        }}
-                        autoComplete="off"
-
-                    />
-
+                                document.getElementById(`Quantity-${k}`).value = row.Quantity
+                            }}
+                        />
+                    </>
                 )
             },
 
@@ -421,6 +418,15 @@ const Order = (props) => {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
 
+                    row.UnitDetails.forEach(i => {
+                        if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
+                            defaultUnit(i)
+                        }
+                        else if ((i.SODefaultUnit) && (subPageMode === url.ORDER_4)) {
+                            defaultUnit(i)
+                        }
+                    });
+
                     function defaultUnit(i) {
                         row["Unit_id"] = i.UnitID;
                         row["po_Unit_id"] = i.UnitID;
@@ -429,24 +435,16 @@ const Order = (props) => {
                         row["Rate"] = i.Rate;
                     }
 
-                    row.UnitDetails.forEach(i => {
-                        if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
-                            defaultUnit(i)
-                        }
-                        else if ((i.SODefaultUnit) && (subPageMode === url.ORDER_4)) {
-                            defaultUnit(i)
-                        }
-                    })
-                } else   {
+                } else {
                     row["edit_Qty"] = row.Quantity;
                     row["edit_Unit_id"] = row.Unit_id;
 
                     row.UnitDetails.forEach(i => {
                         if ((row.Unit_id === i.UnitID)) {
                             row["BaseUnitQuantity"] = i.BaseUnitQuantity;
+                            row["UnitName"] = i.UnitName;
                         }
-
-                    })
+                    });
 
                 }
 
@@ -620,7 +618,6 @@ const Order = (props) => {
     };
 
     function partyOnchange(e) {
-        setCard(true)
         setPartySelect(e)
     };
 
@@ -668,13 +665,13 @@ const Order = (props) => {
         try {
             const division = commonFunc.loginPartyID();
             const supplier = supplierSelect.value;
-            
+
             const validMsg = []
             const itemArr = []
             const isVDC_POvalidMsg = []
 
             await orderItemTable.forEach(i => {
-                
+
                 if ((i.Quantity > 0) && !(i.Rate > 0)) {
                     validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
                 }
@@ -851,8 +848,8 @@ const Order = (props) => {
                 FullOrderNumber: "PO0001",
                 Division: division,
                 POType: orderTypeSelect.value,
-                POFromDate: orderTypeSelect.value === 1 ? commonFunc.currentDate : poFromDate,
-                POToDate: orderTypeSelect.value === 1 ? commonFunc.currentDate : poToDate,
+                POFromDate: orderTypeSelect.value === 1 ? commonFunc.currentDate_ymd : poFromDate,
+                POToDate: orderTypeSelect.value === 1 ? commonFunc.currentDate_ymd : poToDate,
                 CreatedBy: commonFunc.loginUserID(),
                 UpdatedBy: commonFunc.loginUserID(),
                 OrderTermsAndConditions: termsAndCondition
@@ -919,18 +916,12 @@ const Order = (props) => {
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "115px" }}>Order Date</Label>
                                         <Col sm="6">
-                                            <Flatpickr
-                                                style={{ userselect: "all" }}
+
+                                            <C_DatePicker
                                                 id="orderdate"
                                                 name="orderdate"
                                                 value={orderdate}
                                                 disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={orderdateOnchange}
                                             />
                                         </Col>
@@ -989,17 +980,11 @@ const Order = (props) => {
                                             <Label className=" p-2"
                                                 style={{ width: "130px" }}>Delivery Date</Label>
                                             <div className="col col-6 sm-1">
-                                                <Flatpickr
+                                                <C_DatePicker
                                                     id="deliverydate"
                                                     name="deliverydate"
                                                     value={deliverydate}
                                                     disabled={pageMode === "edit" ? true : false}
-                                                    className="form-control d-block p-2 bg-white text-dark"
-                                                    placeholder="Select..."
-                                                    options={{
-                                                        altFormat: "d-m-Y",
-                                                        dateFormat: "Y-m-d",
-                                                    }}
                                                     onChange={(e, date) => { setdeliverydate(date) }}
                                                 />
                                             </div>
@@ -1081,17 +1066,10 @@ const Order = (props) => {
                                                 <Label className=" p-2"
                                                     style={{ width: "115px" }}>PO From Date</Label>
                                                 <div className="col col-6 ">
-                                                    <Flatpickr
+                                                    <C_DatePicker
                                                         id="pofromdate"
                                                         name="pofromdate"
                                                         value={poFromDate}
-                                                        className="form-control d-block p-2 bg-white text-dark"
-                                                        placeholder="Select..."
-                                                        options={{
-                                                            altInput: true,
-                                                            altFormat: "d-m-Y",
-                                                            dateFormat: "Y-m-d",
-                                                        }}
                                                         onChange={(e, date) => { setpoFromDate(date) }}
                                                     />
                                                 </div>
@@ -1103,17 +1081,10 @@ const Order = (props) => {
                                                 <Label className=" p-2"
                                                     style={{ width: "130px" }}>PO To Date</Label>
                                                 <div className="col col-6 ">
-                                                    <Flatpickr
+                                                    <C_DatePicker
                                                         id="potodate"
                                                         name="potodate"
                                                         value={poToDate}
-                                                        className="form-control d-block p-2 bg-white text-dark"
-                                                        placeholder="Select..."
-                                                        options={{
-                                                            altInput: true,
-                                                            altFormat: "d-m-Y",
-                                                            dateFormat: "Y-m-d",
-                                                        }}
                                                         onChange={(e, date) => { setpoToDate(date) }}
                                                     />
                                                 </div>

@@ -227,7 +227,7 @@ const PartySubParty = (props) => {
             const newArr = (PartySubParty.map(i => ({
                 value: i.SubParty,
                 label: i.SubPartyName,
-                isPartyType: i.PartyType,
+                IsVendor: i.IsVendor,
                 Creditlimit: i.Creditlimit,
                 Route: i.Route
             })))
@@ -331,13 +331,6 @@ const PartySubParty = (props) => {
         }
     }
 
-    // For Delete Button in table
-    function deleteTableSubPartyHandler(id) {
-        // const newArr = partyTableArr.filter((item) => !(item.value === tableValue))
-        // setPartyTableArr(newArr)
-        dispatch(deleteIDForMasterPage(id))
-    }
-
     const pagesListColumns = [
         {
             text: "SubPartyName",
@@ -375,7 +368,7 @@ const PartySubParty = (props) => {
     };
 
     const SaveHandler = async (event) => {
-
+       
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -403,7 +396,7 @@ const PartySubParty = (props) => {
                         Route: i.Route
                     }
 
-                    if (i.isPartyType === 3) {
+                    if (i.IsVendor === true) {
                         return { ...isvendor, ...ramain }
                     }
                     else {

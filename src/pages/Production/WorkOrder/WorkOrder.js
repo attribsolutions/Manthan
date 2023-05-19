@@ -25,7 +25,7 @@ import { Change_Button, Go_Button, SaveButton } from "../../../components/Common
 import {
     breadcrumbReturnFunc,
     loginUserID,
-    currentDate,
+    currentDate_ymd,
     loginCompanyID,
     loginPartyID,
     btnIsDissablefunc,
@@ -249,7 +249,7 @@ const WorkOrder = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
-            ToDate: currentDate,
+            ToDate: currentDate_ymd,
             Company: loginCompanyID(),
             Party: loginPartyID()
         });

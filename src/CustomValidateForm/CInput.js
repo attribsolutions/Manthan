@@ -1,7 +1,7 @@
 import React from 'react'
 import { Input } from 'reactstrap';
 
-const CInput = (prop) => {
+export const  CInput = (prop) => {
     const { onChange = () => { }, cpattern = '' } = prop
 
     function on_Change(e) {
@@ -23,4 +23,6 @@ const CInput = (prop) => {
     return (<Input {...param} />)
 }
 
-export default CInput
+
+
+

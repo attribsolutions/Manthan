@@ -21,7 +21,7 @@ import {
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate_ymd, loginCompanyID, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -49,7 +49,7 @@ const Challan = (props) => {
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
-        ChallanDate: currentDate,
+        ChallanDate: currentDate_ymd,
         Party: "",
         Item: ''
     }

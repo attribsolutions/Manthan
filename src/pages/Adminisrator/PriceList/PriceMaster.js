@@ -60,14 +60,13 @@ const PriceMaster = (props) => {
     const [calculationPathstate, setcalculationPathstate] = useState([]);
     const [movePricelist, setMovePricelist] = useState('');
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const { PostAPIResponse,
+    const {
+        PostAPIResponse,
         priceListByPartyType,
         deleteAPIResponse,
         updateMessage,
         PartyTypes,
-        PriceList,
         priceListByCompany = [],
         userAccess
     } = useSelector((state) => ({
@@ -75,7 +74,6 @@ const PriceMaster = (props) => {
         deleteAPIResponse: state.PriceListReducer.deleteMsg,
         updateMessage: state.PriceListReducer.updateMessage,
         PartyTypes: state.PartyTypeReducer.ListData,
-        PriceList: state.ItemMastersReducer.PriceList,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         priceListByCompany: state.PriceListReducer.priceListByCompany,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -272,7 +270,6 @@ const PriceMaster = (props) => {
                 BasePriceListID: movePricelist.BasePriceListID,
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
-                PriceList: PriceList.value,
                 Company: loginCompanyID(),
                 CalculationPath: pathNo,
                 CreatedBy: loginUserID(),
@@ -502,7 +499,7 @@ const PriceMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "5cm" }} >
-            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
                     <Card className="text-black">
                         <CardHeader className="card-header   text-black c_card_header" >

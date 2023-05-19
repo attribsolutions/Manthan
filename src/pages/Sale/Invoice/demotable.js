@@ -35,7 +35,7 @@ import {
   breadcrumbReturnFunc,
   convertDatefunc,
   loginUserID,
-  currentDate,
+  currentDate_ymd,
   loginPartyID,
   btnIsDissablefunc,
 } from "../../../components/Common/CommonFunction";
@@ -77,7 +77,7 @@ const Invoice = (props) => {
 
   const fileds = {
     // id: "",
-    InvoiceDate: currentDate,
+    InvoiceDate: currentDate_ymd,
     Customer: "",
   };
 
