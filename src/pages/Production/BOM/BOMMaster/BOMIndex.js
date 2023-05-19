@@ -7,7 +7,6 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName, commonPageFieldSuccess, getItemList } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../../store/actions";
@@ -19,7 +18,6 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
-
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../../components/Common/CommonButton";
@@ -31,10 +29,17 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, loginUserID, loginCompanyID, btnIsDissablefunc, metaTagLabel } from "../../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginUserID,
+    loginCompanyID,
+    btnIsDissablefunc,
+    metaTagLabel
+} from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
+import { C_DatePicker } from "../../../../CustomValidateForm";
 
 const BOMMaster = (props) => {
 
@@ -258,7 +263,7 @@ const BOMMaster = (props) => {
             return i
         })
     }
-  
+
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -267,42 +272,42 @@ const BOMMaster = (props) => {
             Quantity: index.Quantity,
             Unit: index.Unit
         }))
-            
+
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
                 let BOMrefID = 0
-            if ((pageMode === mode.edit)) {
-                BOMrefID = EditData.id
-            };
+                if ((pageMode === mode.edit)) {
+                    BOMrefID = EditData.id
+                };
 
-            const jsonBody = JSON.stringify({
-                BomDate: values.BomDate,
-                EstimatedOutputQty: values.EstimatedOutputQty,
-                Comment: values.Comment,
-                IsActive: values.IsActive,
-                Item: values.ItemName.value,
-                Unit: values.UnitName.value,
-                CreatedBy: loginUserID(),
-                Company: loginCompanyID(),
-                BOMItems: BOMItems,
-                IsVDCItem: values.IsVDCItem,
-                ReferenceBom: BOMrefID
-            });
-            if (BOMItems.length === 0) {
-                dispatch(
-                    AlertState({
-                        Type: 4,
-                        Status: true,
-                        Message: "At Least One Matrial data Add in the table",
-                        RedirectPath: false,
-                        PermissionAction: false,
-                    })
-                );
-                return;
-            }
+                const jsonBody = JSON.stringify({
+                    BomDate: values.BomDate,
+                    EstimatedOutputQty: values.EstimatedOutputQty,
+                    Comment: values.Comment,
+                    IsActive: values.IsActive,
+                    Item: values.ItemName.value,
+                    Unit: values.UnitName.value,
+                    CreatedBy: loginUserID(),
+                    Company: loginCompanyID(),
+                    BOMItems: BOMItems,
+                    IsVDCItem: values.IsVDCItem,
+                    ReferenceBom: BOMrefID
+                });
+                if (BOMItems.length === 0) {
+                    dispatch(
+                        AlertState({
+                            Type: 4,
+                            Status: true,
+                            Message: "At Least One Matrial data Add in the table",
+                            RedirectPath: false,
+                            PermissionAction: false,
+                        })
+                    );
+                    return;
+                }
                 if (pageMode === mode.edit) {
-                    dispatch(updateBOMList({ jsonBody, updateId:`${EditData.id}/${EditData.Company}`, btnId }));
+                    dispatch(updateBOMList({ jsonBody, updateId: `${EditData.id}/${EditData.Company}`, btnId }));
                 }
                 else {
                     dispatch(saveBOMMaster({ jsonBody, btnId }));
@@ -310,11 +315,11 @@ const BOMMaster = (props) => {
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
-    
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
@@ -324,19 +329,10 @@ const BOMMaster = (props) => {
                                     <FormGroup className="mb-2 row mt-2  ">
                                         <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.BomDate} </Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name="BomDate"
                                                 value={values.BomDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
-                                                autoComplete="0,''"
                                                 disabled={pageMode === mode.edit ? true : false}
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                    defaultDate: (pageMode === mode.edit) ? values.BomDate : "today"
-                                                }}
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />

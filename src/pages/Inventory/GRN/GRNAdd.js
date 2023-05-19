@@ -11,15 +11,12 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
-
-import Flatpickr from "react-flatpickr";
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
-import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -32,6 +29,7 @@ import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as pageId from "../../../routes/allPageID"
 import * as commonFunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 
 let initialTableData = []
@@ -447,19 +445,12 @@ const GRNAdd = (props) => {
                     document.getElementById(`BatchDate${k}`).value = row.BatchDate
                 } catch (e) { }
                 return (
-                    <Flatpickr
-                        className="form-control d-block p-2 bg-white text-dark"
-                        placeholder="Batch Date..."
+                    <C_DatePicker
                         id={`BatchDate${k}`}
                         key={row.id}
                         value={row.BatchDate}
                         data-enable-time
                         disabled={(pageMode === mode.view) ? true : false}
-                        options={{
-                            altInput: true,
-                            altFormat: "d-m-Y",
-                            dateFormat: "Y-m-d",
-                        }}
                         onChange={(e, date) => { row.BatchDate = date }}
                     />
                 )
@@ -687,17 +678,9 @@ const GRNAdd = (props) => {
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "130px" }}>GRN Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             name="grndate"
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
                                             disabled={(pageMode === mode.view) ? true : false}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                                defaultDate: "today"
-                                            }}
                                             onChange={(e, date) => { setgrnDate(date) }}
                                         />
                                     </Col>
@@ -732,16 +715,8 @@ const GRNAdd = (props) => {
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Invoice Date</Label>
                                     <Col md="7">
-                                        <Flatpickr
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
+                                        <C_DatePicker
                                             disabled={pageMode === mode.view ? true : false}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                                defaultDate: "today"
-                                            }}
                                         />
                                     </Col>
                                 </FormGroup>

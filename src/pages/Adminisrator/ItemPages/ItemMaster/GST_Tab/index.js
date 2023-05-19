@@ -9,10 +9,10 @@ import {
     Label,
     Row
 } from 'reactstrap';
-import Flatpickr from "react-flatpickr"
 import GSTTable from './Table';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
 import { CustomAlert } from '../../../../../CustomAlert/ConfirmDialog';
+import { C_DatePicker } from '../../../../../CustomValidateForm';
 
 function GSTTab(props) {
 
@@ -70,19 +70,11 @@ function GSTTab(props) {
                             <FormGroup className="mb-3 col col-sm-3 ">
                                 <Label>Effective Date</Label>
                                 <div id={`txtEffectiveDate${0}`} >
-                                    <Flatpickr
+                                    <C_DatePicker
                                         id={`txtEffectiveDate${0}`}
                                         name="FSSAIExipry"
                                         value={effectiveDate}
                                         required={true}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="YYYY-MM-DD"
-                                        autoComplete='off'
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                          }}
                                         onChange={EffectiveDateHandler}
                                     />
                                 </div>

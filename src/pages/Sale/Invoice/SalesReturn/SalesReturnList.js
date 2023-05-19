@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Flatpickr from "react-flatpickr";
 import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
@@ -11,16 +10,15 @@ import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { currentDate_ymd, loginCompanyID, loginPartyID } from "../../../../components/Common/CommonFunction";
-import { editBOMList, updateBOMListSuccess } from "../../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import { initialFiledFunc } from "../../../../components/Common/validationFunction";
-import { GetVender, Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
+import {  Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../../components/Common/CommonButton";
 import * as mode from "../../../../routes/PageMode"
 import SalesReturn from "./SalesReturn";
 import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI } from "../../../../store/Sales/SalesReturnRedux/action";
+import { C_DatePicker } from "../../../../CustomValidateForm";
 
 const SalesReturnList = () => {
 
@@ -153,16 +151,9 @@ const SalesReturnList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>FromDate</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name='FromDate'
                                     value={values.FromDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={fromdateOnchange}
                                 />
                             </Col>
@@ -174,16 +165,9 @@ const SalesReturnList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name="ToDate"
                                     value={values.ToDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={todateOnchange}
                                 />
                             </Col>

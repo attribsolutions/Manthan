@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap';
-import Flatpickr from "react-flatpickr"
 import Select from "react-select";
 import { useDispatch, useSelector } from 'react-redux';
 import MarginTable from './Table';
@@ -8,6 +7,7 @@ import { get_Party_ForDropDown, } from '../../../../../store/Administrator/Items
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
 import { priceListByCompay_Action } from '../../../../../store/Administrator/PriceList/action';
 import { CustomAlert } from '../../../../../CustomAlert/ConfirmDialog';
+import { C_DatePicker } from '../../../../../CustomValidateForm';
 
 function Margin_Tab(props) {
 
@@ -129,17 +129,9 @@ function Margin_Tab(props) {
                                     <FormGroup className="mb-3 col col-sm-3 ">
                                         <Label>Effective Date</Label>
                                         <div id={`txtEffectiveDate${0}`} >
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 id={`txtEffectiveDate${0}`}
                                                 value={effectiveDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
-                                                autoComplete='off'
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                  }}
                                                 onChange={EffectiveDateHandler}
                                             />
                                         </div>
@@ -154,7 +146,6 @@ function Margin_Tab(props) {
                                             placeholder="Please Enter Margin"
                                             autoComplete="off"
                                             onChange={MarginHandler}
-
                                         />
                                     </FormGroup>
 
@@ -175,9 +166,7 @@ function Margin_Tab(props) {
                                     </Col>
                                 </Row>
                             </Col>
-
                         </Row>
-
                     </CardBody>
                 </Card>
                 <Row>

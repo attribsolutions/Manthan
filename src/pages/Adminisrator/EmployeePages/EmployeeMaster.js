@@ -30,7 +30,6 @@ import {
   getDistrictOnStateSuccess,
   getPartyListAPI
 } from "../../../store/Administrator/PartyRedux/action";
-import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
@@ -59,6 +58,7 @@ import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
 import AddMaster from "./Drodown";
 import PartyMaster from "../PartyMaster/MasterAdd/PartyIndex";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const AddEmployee = (props) => {
 
@@ -486,16 +486,9 @@ const AddEmployee = (props) => {
                       <Row>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.DOB} </Label>
-                          <Flatpickr
+                          <C_DatePicker
                             name="DOB"
                             value={values.DOB}
-                            className="form-control d-block p-2 bg-white text-dark"
-                            placeholder="DD-MM-YYYY"
-                            autoComplete="0,''"
-                            options={{
-                              altFormat: "d-m-Y",
-                              dateFormat: "d-m-Y",
-                            }}
                             onChange={(y, v, e) => {
                               onChangeDate({ e, v, state, setState })
                             }}

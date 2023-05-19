@@ -5,20 +5,17 @@ import {
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../../store/actions";
-import {
-    deleteBOMId,
-    deleteBOMIdSuccess,
-    editBOMList,
-    updateBOMListSuccess
-} from "../../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../../routes//allPageID";
-import { MetaTags } from "react-meta-tags";
 import LoadingSheet from "./LoadingSheet";
-import { DeleteLoadingSheet, DeleteLoadingSheetSucccess, LoadingSheetListAction, UpdateLoadingSheet } from "../../../../store/Sales/LoadingSheetRedux/action";
+import {
+    DeleteLoadingSheet,
+    DeleteLoadingSheetSucccess,
+    LoadingSheetListAction,
+    UpdateLoadingSheet
+} from "../../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../../helpers/backend_helper";
 import * as report from '../../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
-import Flatpickr from "react-flatpickr";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { currentDate_ymd, loginPartyID } from "../../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList";
@@ -27,6 +24,7 @@ import * as mode from "../../../../routes/PageMode"
 
 
 import { useHistory } from "react-router-dom";
+import { C_DatePicker } from "../../../../CustomValidateForm";
 
 const LoadingSheetList = () => {
     const history = useHistory();
@@ -128,16 +126,9 @@ const LoadingSheetList = () => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "83px" }}>From Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             name='fromdate'
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
                                             value={fromdate}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
                                             onChange={fromdateOnchange}
                                         />
                                     </Col>
@@ -148,16 +139,9 @@ const LoadingSheetList = () => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "65px" }}>To Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             nane='todate'
-                                            className="form-control d-block p-2 bg-white text-dark"
                                             value={todate}
-                                            placeholder="Select..."
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
                                             onChange={todateOnchange}
                                         />
                                     </Col>

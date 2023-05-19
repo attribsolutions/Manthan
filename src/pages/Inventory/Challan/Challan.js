@@ -8,7 +8,6 @@ import {
     Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -16,12 +15,18 @@ import {
     comAddPageFieldFunc,
     initialFiledFunc,
     onChangeDate,
-
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate_ymd, loginCompanyID, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    convertDatefunc,
+    loginUserID,
+    currentDate_ymd,
+    loginCompanyID,
+    loginPartyID,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -38,6 +43,7 @@ import {
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 import * as commonFunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const Challan = (props) => {
 
@@ -718,7 +724,7 @@ const Challan = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
 
                 <div className="page-content" >
@@ -731,16 +737,11 @@ const Challan = (props) => {
                                         <FormGroup className="row mt-2 mb-3  ">
                                             <Label className="mt-1" style={{ width: "110px" }}>Challan Date </Label>
                                             <Col sm={7}>
-                                                <Flatpickr
+                                                <C_DatePicker
                                                     name="ChallanDate"
                                                     value={values.ChallanDate}
-                                                    className="form-control d-block bg-white text-dark"
                                                     id="myInput11"
                                                     disabled={(GoButton.length > 0 || pageMode === "edit") ? true : false}
-
-                                                    options={{
-                                                        dateFormat: "Y-m-d",
-                                                    }}
                                                     onChange={ChallanDateOnchange}
                                                 />
                                                 {isError.ChallanDate.length > 0 && (

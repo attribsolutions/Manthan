@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
     Col,
@@ -7,7 +6,6 @@ import {
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../../store/actions";
@@ -24,6 +22,7 @@ import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
 import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
+import { C_DatePicker } from "../../../../CustomValidateForm";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -199,32 +198,21 @@ const LoadingSheetUpdate = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>Loading Date </Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='Date'
                                                 value={loadingDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={DateOnchange}
                                             />
                                         </Col>
-
                                     </FormGroup>
                                 </Col >
                             </div>
                         </div>
 
-
                         <ToolkitProvider
-
                             keyField="id"
                             data={InvoiceParent}
                             columns={tableColumns}
-
                             search
                         >
                             {toolkitProps => (
