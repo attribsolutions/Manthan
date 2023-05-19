@@ -716,7 +716,7 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>Invoice Date</Label>
                                     <Col md="7">
                                         <C_DatePicker
-                                            disabled={pageMode === mode.view ? true : false}
+                                            disabled={true}
                                         />
                                     </Col>
                                 </FormGroup>
