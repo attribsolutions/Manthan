@@ -12,6 +12,7 @@ export const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger w
 const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 export const printBtnCss = "badge badge-soft-primary font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
+const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
 
 export const listPageActionsButtonFunc = (props) => {
@@ -256,14 +257,14 @@ export const listPageActionsButtonFunc = (props) => {
                             <Button style={{ width: "30px" }}
                                 type="button"
                                 id={`btn-delete-${rowData.id}`}
-                                className={editSelfBtnCss}
+                                className={makeBtnCss}
                                 title={`Update ${ButtonMsgLable}`}
                                 onClick={() => {
                                     const btnId = `btn-delete-${rowData.id}`
                                     updateBtnFunc(rowData, mode.copy, btnId)
                                 }}
                             >
-                                <i className="dripicons-document-edit "></i>
+                               <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
                             </Button>
                             : null
                     }
@@ -324,14 +325,14 @@ export const listPageActionsButtonFunc = (props) => {
                             <Button
                                 type="button"
                                 id={`btn-orderApproval-${rowData.id}`}
-                                className={editBtnCss}
+                                className={makeBtnCss}
                                 title={`Order Approval ${ButtonMsgLable}`}
                                 onClick={() => {
                                     const btnId = `btn-orderApproval-${rowData.id}`;
                                     editHandler(rowData, mode.orderApproval, btnId)
                                 }}
                             >
-                                <i className="bx bxs-copy font-size-18 "></i>
+                                <i className="bx bx-check-shield font-size-20"></i>
                             </Button>
                             : null
                     }

@@ -126,7 +126,7 @@ import SalesManMaster from "../pages/Adminisrator/SalesManPages/SalesManMaster";
 import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
 import LoadingSheet from "../pages/Sale/Invoice/LoadingSheet/LoadingSheet";
 import LoadingSheetList from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetList";
-import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
+// import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
 import Report from "../Reports/AllReportPage";
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
@@ -256,7 +256,7 @@ const userRoutes = [
   { path: path.SALESMAN, component: SalesManMaster },
   { path: path.SALESMAN_LIST, component: SalesManList },
 
-  { path: path.CREDITLIMIT, component: CreditLimitMaster },
+  // { path: path.CREDITLIMIT, component: CreditLimitMaster },
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
   { path: path.UPLOAD_EXCEL, component: UploadExcel },

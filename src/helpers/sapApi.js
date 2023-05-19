@@ -1,7 +1,7 @@
 
 
 export async function orderApporval(body, btnId,) {
-    debugger
+    
     var axios = require('axios');
     var data = JSON.stringify({
         "Customer": "500581",
@@ -44,15 +44,15 @@ export async function orderApporval(body, btnId,) {
         withCredentials: true
     };
 
-    debugger
+    
     
     axios(config)
         .then(function (response) {
-            debugger
+            
             console.log(JSON.stringify(response.data));
         })
         .catch(function (error) {
-            debugger
+            
             console.log(error);
         });
 

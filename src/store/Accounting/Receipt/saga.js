@@ -51,6 +51,7 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
     }
 
     const newList = yield response.Data.map((i) => {
+      i["preReceipDate"]=i.ReceiptDate;
       i.ReceiptDate = concatDateAndTime(i.ReceiptDate, i.CreatedOn)
       return i
     })

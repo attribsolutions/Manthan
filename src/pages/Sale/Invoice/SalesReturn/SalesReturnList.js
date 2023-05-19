@@ -10,7 +10,7 @@ import Select from "react-select";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, loginCompanyID, loginPartyID } from "../../../../components/Common/CommonFunction";
+import { currentDate_ymd, loginCompanyID, loginPartyID } from "../../../../components/Common/CommonFunction";
 import { editBOMList, updateBOMListSuccess } from "../../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
@@ -28,8 +28,8 @@ const SalesReturnList = () => {
     const history = useHistory();
 
     const fileds = {
-        FromDate: currentDate,
-        ToDate: currentDate,
+        FromDate: currentDate_ymd,
+        ToDate: currentDate_ymd,
         Customer: { value: "", label: "All" }
     }
 

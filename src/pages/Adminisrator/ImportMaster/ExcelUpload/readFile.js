@@ -1,5 +1,5 @@
 // import { groupBy } from 'lodash';
-import { groupBy, invertDatefunc } from '../../../../components/Common/CommonFunction';
+import { groupBy, date_ymd_func } from '../../../../components/Common/CommonFunction';
 import { CustomAlert } from '../../../../CustomAlert/ConfirmDialog';
 
 const XLSX = require('xlsx');
@@ -50,7 +50,7 @@ export const readExcelFile = async ({ file, compareParam }) => {
 
     jsonResult.forEach((r1, k) => {
       comparefilter.forEach((c1) => {
-        if (c1.ControlTypeName === "Date") { r1[c1.Value] = invertDatefunc(r1[c1.Value]) }
+        if (c1.ControlTypeName === "Date") { r1[c1.Value] = date_ymd_func(r1[c1.Value]) }
         const regExp = RegExp(c1.RegularExpression)
         if (!(regExp.test(r1[c1.Value]))) {
           invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)

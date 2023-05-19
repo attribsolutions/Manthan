@@ -1,11 +1,11 @@
-import { currentDate } from "../../../components/Common/CommonFunction"
+import { currentDate_ymd } from "../../../components/Common/CommonFunction"
 import { DELETE_INWARD_LIST_PAGE_SUCCESS, GET_INWARD_LIST_PAGE_SUCCESS, INWARD_LIST_FILTERS, MAKE_INWARD_SUCCESS, POST_INWARD_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
     postMsg: { Status: false },
     InwardList: [],
     deleteMsg: { Status: false },
-    InwardlistFilter: { fromdate: currentDate, todate: currentDate, SupplierSelect: { value: '', label: "All" } },
+    InwardlistFilter: { fromdate: currentDate_ymd, todate: currentDate_ymd, SupplierSelect: { value: '', label: "All" } },
     makeInward:[]
 }
 

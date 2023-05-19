@@ -44,6 +44,8 @@ import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administ
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { useRef } from "react";
+import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
+import { onlyNumberRegx } from "../../../CustomValidateForm/RegexPattern";
 
 let editVal = {}
 
@@ -95,13 +97,14 @@ const Order = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
-    const [deliverydate, setdeliverydate] = useState()
+    const [deliverydate, setdeliverydate] = useState(commonFunc.currentDate_ymd)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
-    const [poFromDate, setpoFromDate] = useState(commonFunc.currentDate);
-    const [poToDate, setpoToDate] = useState(commonFunc.currentDate);
-    const [orderdate, setorderdate] = useState(commonFunc.currentDate);
+    const [poFromDate, setpoFromDate] = useState(commonFunc.currentDate_ymd);
+    const [poToDate, setpoToDate] = useState(commonFunc.currentDate_ymd);
+    const [orderdate, setorderdate] = useState(commonFunc.currentDate_ymd);
+ 
     const [supplierSelect, setsupplierSelect] = useState('');
     const [partySelect, setPartySelect] = useState('');
 
@@ -111,7 +114,6 @@ const Order = (props) => {
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
-    const [card, setCard] = useState(false)
 
     const {
         goBtnOrderdata,
@@ -199,10 +201,18 @@ const Order = (props) => {
             if (hasEditVal) {
                 dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
                 setorderdate(hasEditVal.OrderDate)
-                setsupplierSelect({
-                    label: hasEditVal.SupplierName,
-                    value: hasEditVal.Supplier
-                });
+
+                if (subPageMode === url.ORDER_4) {
+                    setsupplierSelect({
+                        label: hasEditVal.CustomerName,
+                        value: hasEditVal.Customer
+                    });
+                } else {
+                    setsupplierSelect({
+                        label: hasEditVal.SupplierName,
+                        value: hasEditVal.Supplier
+                    });
+                }
                 setdeliverydate(hasEditVal.DeliveryDate)
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
@@ -343,7 +353,6 @@ const Order = (props) => {
                         <div>
                             Item Name
                         </div>
-
                         <div>
                             <samp style={{ display: (supplierSelect.value > 0) && (findPartyItemAccess) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
                                 onClick={assignItem_onClick}>
@@ -357,8 +366,8 @@ const Order = (props) => {
 
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
+            hidden: !(pageMode === mode.defaultsave) && true,
             dataField: "StockQuantity",
-            // sort: true,
             formatter: (value, row, k) => {
 
                 return (
@@ -375,38 +384,27 @@ const Order = (props) => {
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             dataField: "",
-            // sort: true,
             formatter: (value, row, k) => {
                 return (
-                    // <span >
-                    <Input type="text"
-                        id={`Quantity${k}`}
-                        name="Quantity"
-                        htmlFor={"Quantity"}
-                        defaultValue={row.Quantity}
-                        key={`Quantity${row.id}`}
-                        className="text-end move"
-                        onChange={(e) => {
-                            const val = e.target.value
-                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                            if ((isnum) || (val === '')) {
-                                val_onChange(val, row, "qty")
-                            } else {
-                                document.getElementById(`Quantity${k}`).value = row.Quantity
-                            }
-                            // handleKeyDown(e, orderItemTable)
-                        }}
-                        autoComplete="off"
-                    // onKeyDown={(e, v, c) => {
-                    // arrowChange(e, v, c)
-                    // handleKeyDown(e, orderItemTable)
-                    // }}
-                    />
-                    // </span>
+                    <>
+                        <CInput
+                            key={`Quantity-${k}`}
+                            id={`Quantity-${k}`}
+                            cpattern={onlyNumberRegx}
+                            defaultValue={row.Quantity}
+                            autoComplete="off"
+                            className=" text-end"
+                            onChange={(e) => {
+                                row["Quantity"] = e.target.value
+                                itemWise_CalculationFunc(row)
+                                document.getElementById(`Quantity-${k}`).value = row.Quantity
+                            }}
+                        />
+                    </>
                 )
             },
 
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
@@ -414,14 +412,40 @@ const Order = (props) => {
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
-            // sort: true,
             formatter: (value, row, key) => {
 
                 if (!row.UnitName) {
-                    row["Unit_id"] = row.UnitDetails[0].UnitID
-                    row["UnitName"] = row.UnitDetails[0].UnitName
-                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
-                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                    row["Unit_id"] = 0;
+                    row["UnitName"] = 'null';
+
+                    row.UnitDetails.forEach(i => {
+                        if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
+                            defaultUnit(i)
+                        }
+                        else if ((i.SODefaultUnit) && (subPageMode === url.ORDER_4)) {
+                            defaultUnit(i)
+                        }
+                    });
+
+                    function defaultUnit(i) {
+                        row["Unit_id"] = i.UnitID;
+                        row["po_Unit_id"] = i.UnitID;
+                        row["UnitName"] = i.UnitName;
+                        row["BaseUnitQuantity"] = i.BaseUnitQuantity;
+                        row["Rate"] = i.Rate;
+                    }
+
+                } else {
+                    row["edit_Qty"] = row.Quantity;
+                    row["edit_Unit_id"] = row.Unit_id;
+
+                    row.UnitDetails.forEach(i => {
+                        if ((row.Unit_id === i.UnitID)) {
+                            row["BaseUnitQuantity"] = i.BaseUnitQuantity;
+                            row["UnitName"] = i.UnitName;
+                        }
+                    });
+
                 }
 
                 return (
@@ -430,60 +454,43 @@ const Order = (props) => {
                         id={"ddlUnit"}
                         key={`ddlUnit${row.id}`}
                         defaultValue={{ value: row.Unit_id, label: row.UnitName }}
-                        // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
                                 value: i.UnitID,
-                                baseUnitQty: i.BaseUnitQuantity
+                                baseUnitQty: i.BaseUnitQuantity,
+                                Rate: i.Rate
                             }))
                         }
                         onChange={e => {
                             row["Unit_id"] = e.value;
                             row["UnitName"] = e.label
                             row["BaseUnitQuantity"] = e.baseUnitQty
+                            row["Rate"] = e.Rate
+                            itemWise_CalculationFunc(row)
+                            document.getElementById(`Rate-${key}`).innerText = e.Rate
                         }}
                     >
                     </Select >
                 )
             },
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '150px', textAlign: 'center' };
             }
         },
 
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
-            dataField: "",
-            // sort: true,
+            dataField: '',
             formatter: (value, row, k) => {
-
                 return (
-                    <span className="text-right" >
-                        <Input
-                            type="text"
-
-                            id={`Ratey${k}`}
-                            key={`Ratey${row.id}`}
-                            defaultValue={row.Rate}
-                            autoComplete="off"
-                            className="text-end"
-                            onChange={(e) => {
-                                const val = e.target.value
-                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                                if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "rate")
-                                } else {
-                                    document.getElementById(`Ratey${k}`).value = row.Rate
-                                }
-                            }}
-                        // onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
-                        />
-                    </span>
+                    <div key={row.id} className="text-end">
+                        <span id={`Rate-${k}`}>{row.Rate}</span>
+                    </div>
                 )
             },
 
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
@@ -501,7 +508,7 @@ const Order = (props) => {
                     </div>
                 )
             },
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             },
         },
@@ -525,7 +532,7 @@ const Order = (props) => {
                 )
             },
 
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
@@ -544,13 +551,7 @@ const Order = (props) => {
         custom: true,
     };
 
-    function val_onChange(val, row, type) {
-        if (type === "qty") {
-            row["Quantity"] = val;
-        }
-        else {
-            row["Rate"] = val
-        }
+    function itemWise_CalculationFunc(row) {
 
         row["Amount"] = Amount(row)
 
@@ -577,7 +578,7 @@ const Order = (props) => {
         }
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
-        
+
         let PO_Body = {
             Party: supplierSelect.value,
             Customer: commonFunc.loginPartyID(),
@@ -617,7 +618,6 @@ const Order = (props) => {
     };
 
     function partyOnchange(e) {
-        setCard(true)
         setPartySelect(e)
     };
 
@@ -655,7 +655,7 @@ const Order = (props) => {
 
     const saveHandeller = async (event) => {
         event.preventDefault();
-        debugger
+
         const btnId = event.target.id
         commonFunc.btnIsDissablefunc({ btnId, state: true })
 
@@ -670,7 +670,76 @@ const Order = (props) => {
             const itemArr = []
             const isVDC_POvalidMsg = []
 
-            function isChanged({ i, isedit, isdel }) {
+            await orderItemTable.forEach(i => {
+
+                if ((i.Quantity > 0) && !(i.Rate > 0)) {
+                    validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
+                }
+                else if (pageMode === mode.edit) {
+
+                    var ischange = (!(Number(i.edit_Qty) === Number(i.Quantity)) || !(i.edit_Unit_id === i.Unit_id));
+
+                    if (ischange && (i.edit_Qty === 0)) {
+                        var isedit = 0;
+                        orderItem({ i, isedit })
+                    }
+                    else if (ischange) {
+                        var isedit = 1;
+                        orderItem({ i, isedit })
+                    } else {
+                        var isedit = 0;
+                        orderItem({ i, isedit })
+                    }
+                }
+                else {
+                    const isedit = 0;
+                    orderItem({ i, isedit })
+                };
+            })
+
+
+            function orderItem({ i, isedit }) {  //isvdc_po logic
+
+                if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
+                    var isdel = false;
+                    isRowValueChanged({ i, isedit, isdel })
+                }
+                else if ((i.Quantity < 1) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
+                    var isdel = true;
+                    isRowValueChanged({ i, isedit, isdel })
+                }
+                else if ((i.Quantity > 0) && (i.Rate > 0)) {
+
+                    if (i.Bom) {
+                        if ((itemArr.length === 0)) {
+                            const isdel = false;
+                            isRowValueChanged({ i, isedit, isdel })
+
+                        } else {
+                            if (isVDC_POvalidMsg.length === 0)
+                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
+                        }
+                    } else {
+                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                    }
+                }
+                else if ((i.Quantity < 1) && (i.editrowId)) {
+                    if (i.Bom) {
+                        if ((itemArr.length === 0)) {
+                            const isdel = true;
+                            isRowValueChanged({ i, isedit, isdel })
+
+                        } else {
+                            if (isVDC_POvalidMsg.length === 0)
+                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
+                        }
+                    } else {
+                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                    }
+                };
+            }
+
+            function isRowValueChanged({ i, isedit, isdel }) {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
                 const arr = {
@@ -681,7 +750,7 @@ const Order = (props) => {
                     MRPValue: i.MRPValue,
                     Rate: i.Rate,
                     Unit: i.Unit_id,
-                    BaseUnitQuantity: i.BaseUnitQuantity,
+                    BaseUnitQuantity: (Number(i.BaseUnitQuantity) * Number(i.Quantity)).toFixed(2),
                     Margin: "",
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
@@ -700,78 +769,7 @@ const Order = (props) => {
                 itemArr.push(arr)
             };
 
-            function orderItem({ i, isedit }) {  //isvdc_po logic
 
-                if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
-                    var isdel = false;
-                    isChanged({ i, isedit, isdel })
-                }
-                else if ((i.Quantity < 1) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
-                    var isdel = true;
-                    isChanged({ i, isedit, isdel })
-                }
-                else if ((i.Quantity > 0) && (i.Rate > 0)) {
-
-                    if (i.Bom) {
-                        if ((itemArr.length === 0)) {
-                            const isdel = false;
-                            isChanged({ i, isedit, isdel })
-
-                        } else {
-                            if (isVDC_POvalidMsg.length === 0)
-                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
-                        }
-                    } else {
-                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
-                    }
-                }
-                else if ((i.Quantity < 1) && (i.editrowId)) {
-                    if (i.Bom) {
-                        if ((itemArr.length === 0)) {
-                            const isdel = true;
-                            isChanged({ i, isedit, isdel })
-
-                        } else {
-                            if (isVDC_POvalidMsg.length === 0)
-                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
-                        }
-                    } else {
-                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
-                    }
-                };
-            }
-
-            await orderItemTable.forEach(i => {
-
-                if ((i.Quantity > 0) && !(i.Rate > 0)) {
-                    // validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
-                    validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
-
-                }
-                //  else if (!(i.Quantity > 0) && (i.Rate > 0)) {
-                //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
-                // }
-
-                else if (pageMode === mode.edit) {
-                    var ischange = (!(i.poQty === i.Quantity) ||
-                        !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
-                    if (ischange && (i.poQty === 0)) {
-                        var isedit = 0;
-                        orderItem({ i, isedit })
-                    }
-                    else if (ischange) {
-                        var isedit = 1;
-                        orderItem({ i, isedit })
-                    } else {
-                        var isedit = 0;
-                        orderItem({ i, isedit })
-                    }
-                }
-                else {
-                    const isedit = 0;
-                    orderItem({ i, isedit })
-                };
-            })
             const termsAndCondition = await termsAndConTable.map(i => ({
                 TermsAndCondition: i.value,
                 IsDeleted: i.IsDeleted
@@ -850,8 +848,8 @@ const Order = (props) => {
                 FullOrderNumber: "PO0001",
                 Division: division,
                 POType: orderTypeSelect.value,
-                POFromDate: orderTypeSelect.value === 1 ? commonFunc.currentDate : poFromDate,
-                POToDate: orderTypeSelect.value === 1 ? commonFunc.currentDate : poToDate,
+                POFromDate: orderTypeSelect.value === 1 ? commonFunc.currentDate_ymd : poFromDate,
+                POToDate: orderTypeSelect.value === 1 ? commonFunc.currentDate_ymd : poToDate,
                 CreatedBy: commonFunc.loginUserID(),
                 UpdatedBy: commonFunc.loginUserID(),
                 OrderTermsAndConditions: termsAndCondition
@@ -918,18 +916,11 @@ const Order = (props) => {
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "115px" }}>Order Date</Label>
                                         <Col sm="6">
-                                            <Flatpickr
-                                                style={{ userselect: "all" }}
-                                                id="orderdate"
+
+                                            <C_DatePicker
                                                 name="orderdate"
                                                 value={orderdate}
                                                 disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={orderdateOnchange}
                                             />
                                         </Col>
@@ -988,17 +979,11 @@ const Order = (props) => {
                                             <Label className=" p-2"
                                                 style={{ width: "130px" }}>Delivery Date</Label>
                                             <div className="col col-6 sm-1">
-                                                <Flatpickr
+                                                <C_DatePicker
                                                     id="deliverydate"
                                                     name="deliverydate"
                                                     value={deliverydate}
                                                     disabled={pageMode === "edit" ? true : false}
-                                                    className="form-control d-block p-2 bg-white text-dark"
-                                                    placeholder="Select..."
-                                                    options={{
-                                                        altFormat: "d-m-Y",
-                                                        dateFormat: "Y-m-d",
-                                                    }}
                                                     onChange={(e, date) => { setdeliverydate(date) }}
                                                 />
                                             </div>
@@ -1080,17 +1065,10 @@ const Order = (props) => {
                                                 <Label className=" p-2"
                                                     style={{ width: "115px" }}>PO From Date</Label>
                                                 <div className="col col-6 ">
-                                                    <Flatpickr
+                                                    <C_DatePicker
                                                         id="pofromdate"
                                                         name="pofromdate"
                                                         value={poFromDate}
-                                                        className="form-control d-block p-2 bg-white text-dark"
-                                                        placeholder="Select..."
-                                                        options={{
-                                                            altInput: true,
-                                                            altFormat: "d-m-Y",
-                                                            dateFormat: "Y-m-d",
-                                                        }}
                                                         onChange={(e, date) => { setpoFromDate(date) }}
                                                     />
                                                 </div>
@@ -1102,17 +1080,10 @@ const Order = (props) => {
                                                 <Label className=" p-2"
                                                     style={{ width: "130px" }}>PO To Date</Label>
                                                 <div className="col col-6 ">
-                                                    <Flatpickr
+                                                    <C_DatePicker
                                                         id="potodate"
                                                         name="potodate"
                                                         value={poToDate}
-                                                        className="form-control d-block p-2 bg-white text-dark"
-                                                        placeholder="Select..."
-                                                        options={{
-                                                            altInput: true,
-                                                            altFormat: "d-m-Y",
-                                                            dateFormat: "Y-m-d",
-                                                        }}
                                                         onChange={(e, date) => { setpoToDate(date) }}
                                                     />
                                                 </div>

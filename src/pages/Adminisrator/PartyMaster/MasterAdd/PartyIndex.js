@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import MetaTags from "react-meta-tags"
 import {
     Card,
@@ -19,6 +19,8 @@ import classnames from "classnames"
 import { getState } from "../../../../store/Administrator/EmployeeRedux/action"
 import {
     editPartyIDSuccess,
+    getDistrictOnState,
+    getDistrictOnStateSuccess,
     getPriceList,
     postPartyData,
     postPartyDataSuccess,
@@ -39,7 +41,7 @@ import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { bulkSetState, formValid } from "../../../../components/Common/validationFunction";
 import BaseTabForm from "./FirstTab/index";
 import PrefixTab from "./PrefixTab/PrefixTab";
-import { priceListByCompay_ActionSuccess, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
+import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 
 const PartyMaster = (props) => {
 
@@ -95,10 +97,6 @@ const PartyMaster = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
-        // if (userAcc) {
-        //     setUserAccState(userAcc);
-        //     breadcrumbReturnFunc({ dispatch, userAcc });
-        // };
         if (userAcc) {
             setUserAccState(userAcc);
             if (!props.isdropdown) {
@@ -108,93 +106,106 @@ const PartyMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        try {
+            if ((hasShowloction || hasShowModal)) {
 
-        if ((hasShowloction || hasShowModal)) {
-
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
-
-            if (hasEditVal) {
-
-                setEditData(hasEditVal);
-                dispatch(Breadcrumb_inputName(hasEditVal.Name))
-                seteditCreatedBy(hasEditVal.CreatedBy);
-
-                let baseValue = {
-                    Name: hasEditVal.Name,
-                    MobileNo: hasEditVal.MobileNo,
-                    PriceList: (hasEditVal.PriceList) && {
-                        label: hasEditVal.PriceList.Name,
-                        value: hasEditVal.PriceList.id,
-                    },
-                    PartyType: {
-                        label: hasEditVal.PartyType.Name,
-                        value: hasEditVal.PartyType.id,
-                    },
-                    SAPPartyCode: hasEditVal.SAPPartyCode,
-                    Supplier: [],
-                    PAN: hasEditVal.PAN,
-                    Email: hasEditVal.Email,
-                    AlternateContactNo: hasEditVal.AlternateContactNo,
-                    State: {
-                        label: hasEditVal.State.Name,
-                        value: hasEditVal.State.id,
-                    },
-                    District: {
-                        label: hasEditVal.District.Name,
-                        value: hasEditVal.District.id,
-                    },
-                    GSTIN: hasEditVal.GSTIN,
-                    MkUpMkDn: hasEditVal.MkUpMkDn,
-                    isActive: hasEditVal.isActive,
-
+                let hasEditVal = null
+                if (hasShowloction) {
+                    setPageMode(location.pageMode)
+                    hasEditVal = location.editValue
+                }
+                else if (hasShowModal) {
+                    hasEditVal = props.editValue
+                    setPageMode(props.pageMode)
+                    setModalCss(true)
                 }
 
-                let prefix = (hasEditVal.PartyPrefix.length > 0) ? hasEditVal.PartyPrefix[0] : '';
-                let prefixValue = {
-                    OrderPrefix: prefix.Orderprefix,
-                    InvoicePrefix: prefix.Invoiceprefix,
-                    GRNPrefix: prefix.Grnprefix,
-                    ReceiptPrefix: prefix.Receiptprefix,
-                    ChallanPrefix: prefix.Challanprefix,
-                    WorkOrderPrefix: prefix.WorkOrderprefix,
-                    MaterialIssuePrefix: prefix.MaterialIssueprefix,
-                    DemandPrefix: prefix.Demandprefix,
-                    IBChallanPrefix: prefix.IBChallanprefix,
-                    IBInwardPrefix: prefix.IBInwardprefix,
+                if (hasEditVal) {
+
+                    setEditData(hasEditVal);
+                    dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                    seteditCreatedBy(hasEditVal.CreatedBy);
+
+                    let baseValue = {
+                        Name: hasEditVal.Name,
+                        MobileNo: hasEditVal.MobileNo,
+                        PartyType: {
+                            label: hasEditVal.PartyType.Name,
+                            value: hasEditVal.PartyType.id,
+                        },
+                        SAPPartyCode: hasEditVal.SAPPartyCode,
+                        Supplier: hasEditVal.PartySubParty.map(i => ({
+                            value: i.Party,
+                            label: i.PartyName
+                        })),
+                        PAN: hasEditVal.PAN,
+                        Email: hasEditVal.Email,
+                        AlternateContactNo: hasEditVal.AlternateContactNo,
+                        State: {
+                            label: hasEditVal.State.Name,
+                            value: hasEditVal.State.id,
+                        },
+                        District: {
+                            label: hasEditVal.District.Name,
+                            value: hasEditVal.District.id,
+                        },
+                        GSTIN: hasEditVal.GSTIN,
+                        MkUpMkDn: hasEditVal.MkUpMkDn,
+                        isActive: hasEditVal.isActive,
+
+                    };
+
+                    let prefix = (hasEditVal.PartyPrefix.length > 0) ? hasEditVal.PartyPrefix[0] : '';
+                    let prefixValue = {
+                        OrderPrefix: prefix.Orderprefix,
+                        InvoicePrefix: prefix.Invoiceprefix,
+                        GRNPrefix: prefix.Grnprefix,
+                        ReceiptPrefix: prefix.Receiptprefix,
+                        ChallanPrefix: prefix.Challanprefix,
+                        WorkOrderPrefix: prefix.WorkOrderprefix,
+                        MaterialIssuePrefix: prefix.MaterialIssueprefix,
+                        DemandPrefix: prefix.Demandprefix,
+                        IBChallanPrefix: prefix.IBChallanprefix,
+                        IBInwardPrefix: prefix.IBInwardprefix,
+                    };
+
+                    let editPriceList = (hasEditVal.PriceList) ? {
+                        label: hasEditVal.PriceList.Name, value: hasEditVal.PriceList.id,
+                    } : { label: '' };
+
+                    let getBaseTab = baseTabRef.current.getCurrentState();
+                    let setBaseTab = baseTabRef.current.setCurrentState;
+                    let getPrefixtab = prefixTabRef.current.getCurrentState();
+                    let setPrefixtab = prefixTabRef.current.setCurrentState;
+                    let setAddressTab = addressTabRef.current.setCurrentState;
+                    let setPriceList = baseTabRef.current.setPriceListSelect;
+
+
+                    bulkSetState(baseValue, getBaseTab, setBaseTab)
+                    bulkSetState(prefixValue, getPrefixtab, setPrefixtab)
+                    setAddressTab(hasEditVal.PartyAddress)
+                    setPriceList(editPriceList);
+
+                    dispatch(getDistrictOnState(hasEditVal.State.id))
+                    dispatch(priceListByPartyAction(hasEditVal.PartyType.id,))
+                    dispatch(editPartyIDSuccess({ Status: false }));
                 }
-
-                let getBaseTab = baseTabRef.current.getCurrentState();
-                let setBaseTab = baseTabRef.current.setCurrentState;
-                let getPrefixtab = prefixTabRef.current.getCurrentState();
-                let setPrefixtab = prefixTabRef.current.setCurrentState;
-                let setAddressTab = addressTabRef.current.setCurrentState;
-
-                bulkSetState(baseValue, getBaseTab, setBaseTab)
-                bulkSetState(prefixValue, getPrefixtab, setPrefixtab)
-                setAddressTab(hasEditVal.PartyAddress)
-                dispatch(editPartyIDSuccess({ Status: false }));
             }
-        }
+        } catch (e) { }
     }, []);
 
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
+    useLayoutEffect(() => {
+        dispatch(getDistrictOnStateSuccess([]))//clear district privious options
+        dispatch(commonPageFieldSuccess(null));//clear privious PageField
+        dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
         dispatch(commonPageField(pageId.PARTY))
         dispatch(getState());
-        dispatch(priceListByPartyActionSuccess([]));
         dispatch(getPartyTypelist());
         dispatch(getcompanyList());
         dispatch(SSDD_List_under_Company())
-    }, [dispatch]);
+    }, [])
+
+
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
@@ -293,7 +304,7 @@ const PartyMaster = (props) => {
                 "Name": baseValue.Name,
                 "PriceList": priceListSelect.value,
                 "PartyType": baseValue.PartyType.value,
-                "Company": loginCompanyID(),
+                "Company": (pageMode === mode.defaultsave) ? loginCompanyID() : EditData.Company.id,
                 "PAN": baseValue.PAN,
                 "Email": baseValue.Email,
                 "MobileNo": baseValue.MobileNo,

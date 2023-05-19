@@ -4,8 +4,6 @@ import {
     Col,
     FormGroup,
     Label,
-    Input,
-    Row,
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
@@ -14,19 +12,18 @@ import { commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, loginPartyID, currentDate, metaTagLabel } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginPartyID, currentDate_ymd, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { LoadingSheet_GoBtn_API_Succcess } from "../../../../store/Sales/LoadingSheetRedux/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
-import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
-import { GetOpeningBalance, ReceiptGoButtonMaster } from "../../../../store/Accounting/Receipt/action";
+import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import DynamicColumnHook, { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -34,20 +31,44 @@ const LoadingSheetUpdate = (props) => {
     const history = useHistory()
 
     const [userPageAccessState, setUserAccState] = useState('');
-    const [loadingDate, setLoadingDate] = useState(currentDate);
+    const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         userAccess,
         List,
+        makeReceipt,
+        OpeningBalance,
+        pageField,
     } = useSelector((state) => ({
         List: state.LoadingSheetReducer.LoadingSheetUpdate,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-
+        makeReceipt: state.ReceiptReducer.ReceiptGoButton,
+        OpeningBalance: state.ReceiptReducer.OpeningBalance,
     }));
     const { InvoiceParent = [], PartyDetails = {} } = List
 
+    const lastColumn = () => ({
+        text: "Action",
+        dataField: "",
+        formatter: (cellContent, row) => {
+
+            return (<span style={{ justifyContent: 'center' }}>
+                <Button
+                    type="button"
+                    id={`btn-makeBtn-${row.id}`}
+                    title={"Make Receipt"}
+                    className={makeBtnCss}
+                    onClick={(e) => {
+                        makeBtnFunc(e, row)
+                    }}
+                >
+                    <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                        className=" fas fa-file-invoice" ></span> </Button></span>)
+        }
+    })
+    const [tableColumns] = DynamicColumnHook({ pageField,lastColumn })
+    
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
         const page_Id = pageId.LOADING_SHEET_LIST_UPDATE
@@ -75,12 +96,22 @@ const LoadingSheetUpdate = (props) => {
         };
     }, [userAccess])
 
+    useEffect(() => {
+
+        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
+            dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
+
+            history.push({
+                pathname: makeReceipt.path,
+                pageMode: makeReceipt.pageMode,
+                editValue: makeReceipt.ListData,
+            })
+        }
+    }, [makeReceipt, OpeningBalance])
+
     function makeBtnFunc(e, row) {
-
         var { CustomerID, id } = row
-
         try {
-
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
@@ -90,8 +121,9 @@ const LoadingSheetUpdate = (props) => {
             const jsonBody1 = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
-                ReceiptDate: currentDate
+                ReceiptDate: currentDate_ymd
             });
+
             const body = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row }
             dispatch(ReceiptGoButtonMaster(body));
             dispatch(GetOpeningBalance(jsonBody1));
@@ -99,93 +131,38 @@ const LoadingSheetUpdate = (props) => {
         } catch (e) { }
     }
 
-    const pagesListColumns = [
-        {
-            text: "Bill Date",
-            dataField: "InvoiceDate",
-        },
-        {
-            text: "Bill NO",
-            dataField: "FullInvoiceNumber",
-        },
-        {
-            text: "Customer Name",
-            dataField: "Customer",
-        },
-        {
-            text: "Amount",
-            dataField: "GrandTotal",
-        },
-        {
-            text: "Select All",
-            dataField: "Checked",
-            formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center' }}>
-                    <Input
-                        id={`Checked${key}`}
-                        defaultChecked={row.Checked}
-                        type="checkbox"
-                        className="col col-sm text-center"
-                        onChange={(event) => { row.Checked = event.target.checked; }}
-                    />
-                </span>)
-            }
-        },
+   
+    function rowSelected() {
+        return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
+    }
 
-        {
-            text: "Action",
-            dataField: "",
-            formatter: (cellContent, row) => {
-
-                return (<span style={{ justifyContent: 'center' }}>
-                    <Button
-                        type="button"
-                        id={`btn-makeBtn-${row.id}`}
-                        className={makeBtnCss}
-                        onClick={(e) => {
-                            makeBtnFunc(e, row)
-                        }}
-                    >
-                        <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                            className=" fas fa-file-invoice" ></span> </Button></span>)
-            }
-        }
-    ];
-
-    const pageOptions = {
-        sizePerPage: 10,
-        // totalSize: Data.length,
-        custom: true,
-    };
 
     function DateOnchange(e, date) {
         setLoadingDate(date)
     }
 
     function MakeReceiptForAll() {
-
-        let result = InvoiceParent.map(a => {
-            if (a.Checked === true) {
-                return a.id
+        const result = InvoiceParent.map((index) => {
+            if (index.selectCheck === true) {
+                return index.id
             }
         })
-        const LoadingNumber = result.toString()
 
-        const LoadingNumber_withoutcomma = LoadingNumber.replace(/,*$/, '');
+        const LoadingNumber = result.toString()
 
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             CustomerID: "",
-            InvoiceID: LoadingNumber_withoutcomma
+            InvoiceID: LoadingNumber
         });
 
         const body = { jsonBody }
 
-        if (LoadingNumber_withoutcomma === "") {
+        if (LoadingNumber === ",") {
             CustomAlert({
                 Type: 3,
-                Message: "Select At Least One Field",
+                Message: "Select At Least One Invoice",
             })
         }
         else {
@@ -241,51 +218,38 @@ const LoadingSheetUpdate = (props) => {
                             </div>
                         </div>
 
-                        <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
+
+                        <ToolkitProvider
+
+                            keyField="id"
+                            data={InvoiceParent}
+                            columns={tableColumns}
+
+                            search
                         >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    <div className="table">
+                                        <BootstrapTable
+                                            keyField={"id"}
+                                            bordered={true}
+                                            striped={false}
+                                            selectRow={selectAllCheck(rowSelected())}
+                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                            classes={"table align-middle table-nowrap table-hover"}
+                                            headerWrapperClasses={"thead-light"}
 
-                                    keyField="id"
-                                    data={InvoiceParent}
-                                    columns={pagesListColumns}
+                                            {...toolkitProps.baseProps}
 
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <div className="table">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    bordered={true}
-                                                    striped={false}
-                                                    noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
+                                        />
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
 
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                {mySearchProps(toolkitProps.searchProps)}
-                                            </div>
-
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
+                                </React.Fragment>
                             )
                             }
+                        </ToolkitProvider>
 
-                        </PaginationProvider>
                         {
                             InvoiceParent.length > 0 ?
                                 <FormGroup>

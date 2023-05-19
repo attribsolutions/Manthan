@@ -19,7 +19,6 @@ const BaseTabForm = forwardRef((props, ref) => {
     const fileds = {
         Name: "",
         MobileNo: "",
-        PriceList: "",
         PartyType: "",
         SAPPartyCode: "",
         Supplier: [],
@@ -149,6 +148,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                 hasNone.display = "none";
             }
         }
+       
     };
 
     const FirstTab = (
@@ -309,11 +309,13 @@ const BaseTabForm = forwardRef((props, ref) => {
                                         onClick={priceListOnClick}
                                     >
                                     </Input>
+                                   
                                     <PriceDropOptions
                                         data={priceListByPartyType}
                                         priceList={priceListSelect}
                                         setPriceSelect={setPriceListSelect} />
                                 </FormGroup>
+
                             </Col>
                             <Col md="1">  </Col>
 

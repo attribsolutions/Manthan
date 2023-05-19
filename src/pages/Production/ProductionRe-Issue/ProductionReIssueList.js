@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom"
 
 import Flatpickr from "react-flatpickr";
 import { MetaTags } from "react-meta-tags";
-import { currentDate } from "../../../components/Common/CommonFunction";
+import { currentDate_ymd } from "../../../components/Common/CommonFunction";
 import * as report from '../../../Reports/ReportIndex';
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
@@ -34,8 +34,8 @@ const ProductionReIssueList = () => {
     const [otherState, setOtherState] = useState({ masterPath: url.PRODUCTION_REISSUE, makeBtnShow: false, newBtnPath: url.PRODUCTION_REISSUE_STP });
 
     const [userAccState, setUserAccState] = useState('');;
-    const [todate, settodate] = useState(currentDate);
-    const [fromdate, setfromdate] = useState(currentDate);
+    const [todate, settodate] = useState(currentDate_ymd);
+    const [fromdate, setfromdate] = useState(currentDate_ymd);
 
     const reducers = useSelector(
         (state) => ({
@@ -86,8 +86,8 @@ const ProductionReIssueList = () => {
         // let FromDate
         // let ToDate
         // if (onload) {
-        //     FromDate = currentDate;
-        //     ToDate = currentDate;
+        //     FromDate = currentDate_ymd;
+        //     ToDate = currentDate_ymd;
         // } else {
         //     ToDate = todate;
         //     FromDate = fromdate;

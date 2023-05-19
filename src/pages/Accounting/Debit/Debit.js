@@ -31,7 +31,7 @@ import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
     convertDatefunc,
-    currentDate,
+    currentDate_ymd,
     loginCompanyID,
     loginPartyID,
     loginUserID,
@@ -57,7 +57,7 @@ const Debit = (props) => {
     const dispatch = useDispatch();
 
     const fileds = {
-        CRDRNoteDate: currentDate,
+        CRDRNoteDate: currentDate_ymd,
         Customer: "",
         Comment: "",
         GrandTotal: "",

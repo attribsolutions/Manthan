@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { ReceiptListAPI } from '../../../store/Accounting/Receipt/action';
-import { currentDate, loginPartyID } from '../../../components/Common/CommonFunction';
+import { currentDate_ymd, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import * as url from "../../../routes/route_url";
@@ -19,8 +19,8 @@ export default function PaymentEntryList() {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            FromDate:  "2023-01-01",
-            ToDate: currentDate,
+            FromDate: currentDate_ymd,
+            ToDate: currentDate_ymd,
             CustomerID: "",
             PartyID: loginPartyID(),
             ReceiptType: 30,

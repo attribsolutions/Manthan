@@ -48,7 +48,7 @@ import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const EmployeeTypesMaster = (props) => {
-debugger
+
     const dispatch = useDispatch();
     const history = useHistory()
     const location = useLocation()

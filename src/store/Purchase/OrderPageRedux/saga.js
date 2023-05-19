@@ -30,8 +30,9 @@ import {
   GET_ORDER_LIST_PAGE,
   ORDER_APPROVAL_ACTION
 } from "./actionType";
-import { CommonConsole, concatDateAndTime, convertDatefunc, } from "../../../components/Common/CommonFunction";
+import { btnIsDissablefunc, CommonConsole, concatDateAndTime, convertDatefunc, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
+import { orderApproval } from "../../../routes/PageMode";
 
 
 function* goButtonGenFunc(action) {                      // GO-Botton order Add Page by subPageMode  
@@ -80,16 +81,26 @@ function* saveOrder_GenFunc({ config }) {
 
 function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
 
-  const { btnmode } = config;
+  const { btnmode, btnId } = config;
+
+  let newconfig = config
+
+  if ((config.btnmode === orderApproval)) {  // only for arder aproval btn is dissable changes
+    btnIsDissablefunc({ btnId, state: true })
+    newconfig = { ...config, btnId: undefined }
+  }
+
   try {
-    const response = yield call(OrderPage_Edit_API, config);
+    const response = yield call(OrderPage_Edit_API, newconfig);
     response.pageMode = btnmode
+    response.btnId = btnId
     yield put(editOrderIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
 function* DeleteOrder_GenFunc({ config }) {                  // Delete Order by subPageMode
   try {
+
     const response = yield call(OrderPage_Delete_API, config);
     yield put(deleteOrderIdSuccess(response));
   } catch (error) { CommonConsole(error) }
@@ -150,8 +161,8 @@ function* orderList_GoBtn_GenFunc({ config }) {
 }
 
 function* orderApproval_GenFunc({ config }) {
+  
   try {
-
     const response = yield call(orderApproval_Save_API, config)
     yield put(orderApprovalActionSuccess(response));
   } catch (error) { CommonConsole(error) }

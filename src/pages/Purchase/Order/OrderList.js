@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 
-import Flatpickr from "react-flatpickr";
 import {
     deleteOrderId,
     deleteOrderIdSuccess,
@@ -11,6 +10,7 @@ import {
     getOrderListPage,
     getOrderListPageSuccess,
     orderApprovalAction,
+    orderApprovalActionSuccess,
     updateOrderIdSuccess,
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
@@ -20,7 +20,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc, convertDatefunc, currentDate, loginPartyID } from "../../../components/Common/CommonFunction";
+import { btnIsDissablefunc, convertDatefunc, currentDate_ymd, loginPartyID } from "../../../components/Common/CommonFunction";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
@@ -31,6 +31,8 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { GoButtonForinvoiceAdd, makeIB_InvoiceAction } from "../../../store/Sales/Invoice/action";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 
 const OrderList = () => {
@@ -39,8 +41,8 @@ const OrderList = () => {
     const history = useHistory();
 
     const fileds = {
-        FromDate: currentDate,
-        ToDate: currentDate,
+        FromDate: currentDate_ymd,
+        ToDate: currentDate_ymd,
         Supplier: { value: "", label: "All" }
     }
 
@@ -66,13 +68,15 @@ const OrderList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.OrderReducer.editData,
+            orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, GRNitem, supplier, makeIBInvoice } = reducers;
+    const { pageField, GRNitem, supplier, makeIBInvoice, orderApprovalMsg } = reducers;
 
     const values = { ...state.values }
     const { fieldLabel } = state;
@@ -87,7 +91,7 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        debugger
+
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -194,7 +198,26 @@ const OrderList = () => {
                 page_Mode: makeIBInvoice.page_Mode,
             })
         }
-    }, [makeIBInvoice])
+    }, [makeIBInvoice]);
+
+    useEffect(() => {
+        
+        if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
+            dispatch(orderApprovalActionSuccess({ Status: false }))
+            CustomAlert({
+                Type: 1,
+                Message: orderApprovalMsg.Message,
+            })
+        } else if (orderApprovalMsg.Status === true) {
+            dispatch(orderApprovalActionSuccess({ Status: false }))
+            CustomAlert({
+                Type: 4,
+                Message: JSON.stringify(orderApprovalMsg.Message),
+            })
+        }
+
+    }, [orderApprovalMsg]);
+
 
     const makeBtnFunc = (list = []) => {
 
@@ -279,8 +302,7 @@ const OrderList = () => {
                 Customer: rowData.CustomerID,
                 EffectiveDate: rowData.preOrderDate,
                 OrderID: rowData.id,
-                RateParty: rowData.SupplierID
-
+                RateParty: rowData.CustomerID
             })
             dispatch(editOrderId({ jsonBody, ...config }));
         } catch (error) { btnIsDissablefunc({ btnId, state: false }) }
@@ -297,28 +319,28 @@ const OrderList = () => {
         try {
             let filtersBody = {}
             const PO_filters = {
-                FromDate: values.FromDate,
-                ToDate: values.ToDate,
-                Supplier: values.Supplier.value,
-                Customer: loginPartyID(),
-                OrderType: order_Type.PurchaseOrder,
-                IBType: IBType ? IBType : otherState.IBType
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Supplier": values.Supplier.value,
+                "Customer": loginPartyID(),
+                "OrderType": order_Type.PurchaseOrder,
+                "IBType": IBType ? IBType : otherState.IBType
             }
             const SO_filters = {
-                FromDate: values.FromDate,
-                ToDate: values.ToDate,
-                Supplier: loginPartyID(),//Suppiler swipe
-                Customer: values.Supplier.value,//customer swipe
-                OrderType: order_Type.SaleOrder,
-                IBType: IBType ? IBType : otherState.IBType
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Supplier": loginPartyID(),//Suppiler swipe
+                "Customer": values.Supplier.value,//customer swipe
+                "OrderType": order_Type.SaleOrder,
+                "IBType": IBType ? IBType : otherState.IBType
             }
             const GRN_STP_3_filters = {
-                FromDate: values.FromDate,
-                ToDate: values.ToDate,
-                Supplier: values.Supplier.value,
-                Customer: loginPartyID(),
-                OrderType: order_Type.InvoiceToGRN,
-                IBType: IBType ? IBType : otherState.IBType
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Supplier": values.Supplier.value,
+                "Customer": loginPartyID(),
+                "OrderType": order_Type.InvoiceToGRN,
+                "IBType": IBType ? IBType : otherState.IBType
             }
             if (subPageMode === url.ORDER_LIST_4) {
                 filtersBody = JSON.stringify(SO_filters);
@@ -372,31 +394,36 @@ const OrderList = () => {
     }
 
     function orderApprovalFunc(editData) {
-        const { Data } = editData
-        
+
+        const { Data, btnId } = editData;
+
+        let isorderItemSet = [];
+        Data.OrderItems.forEach(i => {
+            if (i.Quantity > 0) {
+                isorderItemSet.push({
+                    "OrderNo": Data.id,//parent id
+                    "ItemNo": i.Item_id, //OrderItem--id
+                    "Material": i.SAPItemCode,//OrderItem--SAPItemCode
+                    "Quantity": i.Quantity,//OrderItem--Quantity
+                    "Unit": i.SAPUnitName,//OrderItem--SAPUnitName
+                    "Plant": Data.SupplierSAPCode,//parent
+                    "Batch": ""// blank
+                })
+            }
+        })
         let body = {
             "Customer": Data.CustomerSAPCode,//parent--CustomerSAPCode 
             "DocDate": Data.OrderDate, //parent--OrderDate
             "Indicator": "F",
             "OrderNo": Data.id,//parent--id
             "Stats": "1",
-            "OrderItemSet": Data.OrderItems.map(i => (
-                {
-                    "OrderNo": Data.id,//parent id
-                    "ItemNo": i.id, //OrderItem--id
-                    "Material": i.ItemSAPCode,//OrderItem--ItemSAPCode
-                    "Quantity": i.Quantity,//OrderItem--Quantity
-                    "Unit": i.SAPUnitName,//OrderItem--SAPUnitName
-                    "Plant": Data.SupplierSAPCode,//parent
-                    "Batch": ""// blank
-                }
-            )),
+            "OrderItemSet": isorderItemSet,
             "CancelFlag": "" //blank
         }
-        const jsonBody = JSON.stringify(body)
+        const jsonBody = JSON.stringify(body);
 
-        dispatch(orderApprovalAction({ jsonBody }))
-        editOrderIdSuccess({ Status: false })
+        dispatch(editOrderIdSuccess({ Status: false }))
+        dispatch(orderApprovalAction({ jsonBody, btnId }))
     }
 
     const HeaderContent = () => {
@@ -410,16 +437,9 @@ const OrderList = () => {
                                 {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "FromDate"}
                             </Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name='FromDate'
                                     value={values.FromDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={fromdateOnchange}
                                 />
                             </Col>
@@ -432,16 +452,9 @@ const OrderList = () => {
                                 {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "ToDate"}
                             </Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name="ToDate"
                                     value={values.ToDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={todateOnchange}
                                 />
                             </Col>

@@ -12,6 +12,7 @@ import {
 import Flatpickr from "react-flatpickr"
 import GSTTable from './Table';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
+import { CustomAlert } from '../../../../../CustomAlert/ConfirmDialog';
 
 function GSTTab(props) {
 
@@ -49,7 +50,7 @@ function GSTTab(props) {
 
         }
         else {
-            alert("Please Enter value")
+            CustomAlert({ Type: 4, Message: "Please Enter value" })
         }
     };
     const clearState = () => {
@@ -79,9 +80,9 @@ function GSTTab(props) {
                                         autoComplete='off'
                                         options={{
                                             altInput: true,
-                                            altFormat: "F j, Y",
-                                            dateFormat: "Y-m-d"
-                                        }}
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                          }}
                                         onChange={EffectiveDateHandler}
                                     />
                                 </div>
@@ -92,7 +93,7 @@ function GSTTab(props) {
                                 <Input type="text"
                                     id={`txtGST${0}`}
                                     value={GST}
-                                    placeholder="Please Enter Margin"
+                                    placeholder="Please Enter GST"
                                     autoComplete="off"
                                     onChange={(event) => setGST(event.target.value)}
                                 />
@@ -104,7 +105,7 @@ function GSTTab(props) {
                                 <Input type="text"
                                     id={`txtHSNCode${0}`}
                                     value={HSNCode}
-                                    placeholder="Please Enter Margin"
+                                    placeholder="Please Enter HSNCode"
                                     autoComplete="off"
                                     onChange={(event) => setHSNCode(event.target.value)}
                                 />

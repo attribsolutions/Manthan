@@ -24,7 +24,7 @@ import { Change_Button, Go_Button, SaveButton } from "../../../components/Common
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate_ymd, loginPartyID, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -58,7 +58,7 @@ const Invoice = (props) => {
 
     const fileds = {
         // id: "",
-        InvoiceDate: currentDate,
+        InvoiceDate: currentDate_ymd,
         Customer: "",
     }
 
@@ -128,7 +128,7 @@ const Invoice = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+        
         if ((hasShowloction || hasShowModal || (location.state))) {
 
             let hasEditVal = null
@@ -762,7 +762,7 @@ const Invoice = (props) => {
                         const calculate = discountCalculate(ele, index)
 
                         grand_total = grand_total + Number(calculate.tAmount)
-                        debugger
+                        
                         invoiceItems.push({
                             Item: index.Item,
                             Unit: index.UnitDrop.value,

@@ -8,8 +8,7 @@ import {
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageFieldSuccess, getItemList } from "../../../../store/actions";
+import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -17,27 +16,26 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeDate,
     onChangeSelect,
     onChangeText,
     resetFunction,
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, loginUserID, loginCompanyID, convertDatefunc, invertDatefunc, loginJsonBody, metaTagLabel } from "../../../../components/Common/CommonFunction";
+import { Change_Button, SaveButton } from "../../../../components/Common/CommonButton";
+import { breadcrumbReturnFunc, loginPartyID, currentDate_ymd, btnIsDissablefunc, loginUserID, loginCompanyID, convertDatefunc, date_ymd_func, loginJsonBody, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
-import { GetVender, Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success } from "../../../../store/Sales/SalesReturnRedux/action";
 import CustomTable2 from "../../../../CustomTable2/Table";
 import "./salesReturn.scss";
-import CInput from "../../../../CustomValidateForm/CInput";
-import { decimalRegx, floatRegx } from "../../../../CustomValidateForm/RegexPattern";
+import { CInput, C_DatePicker } from "../../../../CustomValidateForm/index";
+import { decimalRegx, } from "../../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../../store/Administrator/PartyItemsRedux/action";
-import { SalesReturn_add_button_api, SalesReturn_add_button_api_For_Invoice, SalesReturn_add_button_api_For_Item } from "../../../../helpers/backend_helper";
+import { SalesReturn_add_button_api_For_Invoice, SalesReturn_add_button_api_For_Item } from "../../../../helpers/backend_helper";
 import { salesReturnCalculate } from "./SalesCalculation";
 
 const SalesReturn = (props) => {
@@ -50,7 +48,7 @@ const SalesReturn = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
-        ReturnDate: currentDate,
+        ReturnDate: currentDate_ymd,
         Customer: "",
         ItemName: "",
         InvoiceNumber: "",
@@ -397,19 +395,12 @@ const SalesReturn = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Flatpickr
+                    <C_DatePicker
                         name='ReturnDate'
-                        defaultValue={returnMode === 1 ? invertDatefunc(row.RowData.BatchDate) : currentDate}
+                        defaultValue={returnMode === 1 ? date_ymd_func(row.RowData.BatchDate) : currentDate_ymd}
                         disabled={returnMode === 1 ? true : false}
-                        className="form-control d-block p-2 bg-white text-dark"
-                        placeholder="Select..."
-                        options={{
-                            altInput: true,
-                            altFormat: "d-m-Y",
-                            dateFormat: "Y-m-d",
-                        }}
-                        onChange={(event) => {
-                            row.BatchDate = invertDatefunc(event)
+                        onChange={(e,date) => {
+                            row.BatchDate = date_ymd_func(date)
                         }}
                     />
                 </span>)
@@ -526,7 +517,8 @@ const SalesReturn = (props) => {
                 ItemName: { label: i.ItemName, value: i.Item },
                 Quantity: i.Quantity,
                 Rate: i.Rate,
-                RowData: i
+                RowData: i,
+                BatchDate: currentDate_ymd
             }))
 
             const itemArr = [...TableArr]
@@ -541,7 +533,8 @@ const SalesReturn = (props) => {
                     Quantity: i.Quantity,
                     Rate: i.Rate,
                     gstPercentage: i.RowData.GSTPercentage,
-                    RowData: i.RowData
+                    RowData: i.RowData,
+                    BatchDate: currentDate_ymd
                 })
             })
 
@@ -617,7 +610,7 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        debugger
+
         event.preventDefault();
 
         const btnId = event.target.id
@@ -631,30 +624,29 @@ const SalesReturn = (props) => {
             grand_total = grand_total + Number(calculate.tAmount)
 
             return ({
-                Item: i.ItemName.value,
-                ItemName: i.ItemName.label,
-                Quantity: i.Qty,
-                Unit: returnMode === 1 ? i.RowData.Unit : i.Unit,
-                BaseUnitQuantity: returnMode === 1 ? i.RowData.BaseUnitQuantity : i.BaseUnitQuantity,
-                BatchCode: returnMode === 1 ? i.RowData.BatchCode : i.BatchCode,
-                BatchDate: i.BatchDate,
-                Amount: calculate.tAmount,
-                MRP: returnMode === 1 ? i.RowData.MRP : i.MRP,
-                MRPValue: returnMode === 1 ? i.RowData.MRPValue : i.MRPValue,
-                Rate: i.Rate,
-                BasicAmount: calculate.baseAmt,
-                GSTAmount: calculate.gstAmt,
-                GST: returnMode === 1 ? i.RowData.GST : i.GST_ID,
-                // GST: returnMode === 1 ? i.RowData.GSTPercentage : i.GSTPercentage,
-                GSTPercentage: gstPercentage,
-                CGST: calculate.CGST,
-                SGST: calculate.SGST,
-                IGST: 0,
-                CGSTPercentage: (gstPercentage / 2),
-                SGSTPercentage: (gstPercentage / 2),
-                IGSTPercentage: 0,
-                TaxType: "GST",
-                ReturnItemImages: []
+                "Item": i.ItemName.value,
+                "ItemName": i.ItemName.label,
+                "Quantity": i.Qty,
+                "Unit": returnMode === 1 ? i.RowData.Unit : i.Unit,
+                "BaseUnitQuantity": returnMode === 1 ? i.RowData.BaseUnitQuantity : i.BaseUnitQuantity,
+                "BatchCode": returnMode === 1 ? i.RowData.BatchCode : i.BatchCode,
+                "BatchDate": returnMode === 1 ? i.RowData.BatchDate : i.BatchDate,
+                "Amount": calculate.tAmount,
+                "MRP": returnMode === 1 ? i.RowData.MRP : i.MRP,
+                "MRPValue": returnMode === 1 ? i.RowData.MRPValue : i.MRPValue,
+                "Rate": i.Rate,
+                "BasicAmount": calculate.baseAmt,
+                "GSTAmount": calculate.gstAmt,
+                "GST": returnMode === 1 ? i.RowData.GST : i.GST_ID,
+                "GSTPercentage": gstPercentage,
+                "CGST": calculate.CGST,
+                "SGST": calculate.SGST,
+                "IGST": 0,
+                "CGSTPercentage": (gstPercentage / 2),
+                "SGSTPercentage": (gstPercentage / 2),
+                "IGSTPercentage": 0,
+                "TaxType": "GST",
+                "ReturnItemImages": []
             })
 
 
@@ -745,16 +737,9 @@ const SalesReturn = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReturnDate}  </Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='ReturnDate'
                                                 value={values.ReturnDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={ReturnDate_Onchange}
                                             />
                                         </Col>

@@ -14,7 +14,7 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate_ymd, metaTagLabel } from "../../../components/Common/CommonFunction";
 import {
     comAddPageFieldFunc,
     formValid, initialFiledFunc,
@@ -48,7 +48,7 @@ const ProductionMaster = (props) => {
 
     const fileds = {
         id: "",
-        ProductionDate: currentDate,
+        ProductionDate: currentDate_ymd,
         NumberOfLot: "",
         EstimatedQuantity: "",
         ActualQuantity: "",
@@ -119,7 +119,7 @@ const ProductionMaster = (props) => {
                     BestBefore = '',
                     Remark = "", PrintedBatchCode = '',
                     NumberOfLot = 0, ActualQuantity = '',
-                    ProductionDate = currentDate } = hasEditVal;
+                    ProductionDate = currentDate_ymd } = hasEditVal;
 
                 setUnitNamefromPageMod_2(UnitName)
                 setState(ele => {
@@ -166,7 +166,7 @@ const ProductionMaster = (props) => {
         } else {
             const jsonBody = JSON.stringify({
                 FromDate: "2022-11-01", //from datehardrd code value is compulsory
-                ToDate: currentDate,
+                ToDate: currentDate_ymd,
             });
             dispatch(getMaterialIssueListPage(jsonBody));
         }

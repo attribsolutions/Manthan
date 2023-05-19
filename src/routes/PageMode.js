@@ -5,8 +5,8 @@ export const view = "view";
 export const copy = "copy";
 export const isdelete = "isdelete";
 export const dropdownAdd = "dropdownAdd";
-export const modeSTPsave = "modeSTPsave";
-export const modeSTPList = "modeSTPList";
+export const modeSTPsave = "modeSTPsave";//for in the list page save button show purpose
+export const modeSTPList = "modeSTPList"; // only list page and buttons
 export const orderApproval = "orderApproval";
 
 export const editValue = "editValue" //Only for variable
