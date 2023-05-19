@@ -475,6 +475,7 @@ const MarginMaster = (props) => {
                                                                 <C_DatePicker
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
+                                                                    placeholder = "Please Enter EffectiveDate"
                                                                     value={effectiveDate}
                                                                     isDisabled={editMode === "edit" ? true : false}
                                                                     onChange={EffectiveDateHandler}

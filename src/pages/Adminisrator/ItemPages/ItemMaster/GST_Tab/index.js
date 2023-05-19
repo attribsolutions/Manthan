@@ -73,6 +73,7 @@ function GSTTab(props) {
                                     <C_DatePicker
                                         id={`txtEffectiveDate${0}`}
                                         name="FSSAIExipry"
+                                        placeholder = "Please Enter EffectiveDate"
                                         value={effectiveDate}
                                         required={true}
                                         onChange={EffectiveDateHandler}

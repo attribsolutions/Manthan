@@ -435,6 +435,7 @@ const GSTMaster = (props) => {
                                                                 <C_DatePicker
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
+                                                                    placeholder = "Please Enter EffectiveDate"
                                                                     value={effectiveDate}
                                                                     onChange={EffectiveDateHandler}
                                                                 />
