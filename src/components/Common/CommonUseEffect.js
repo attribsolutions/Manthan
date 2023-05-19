@@ -1,8 +1,9 @@
 import { breadcrumbReturnFunc } from "./CommonFunction";
 import { mode } from "../../routes/index";
-import { comAddPageFieldFunc } from "./validationFunction";
+import { comAddPageFieldFunc, resetFunction } from "./validationFunction";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import $ from 'jquery';
+import { Breadcrumb_inputName } from "../../store/actions";
 
 export const userAccessUseEffect = ({ props,
     dispatch,
@@ -30,10 +31,17 @@ export const userAccessUseEffect = ({ props,
         if (otherloginAccss) { otherloginAccss(inx) }
     })
 }
-export const saveMsgUseEffect = async({ postMsg, postSuccss, pageMode, dispatch,history, listPath }) => {
+
+// ****************************************************************************************
+// ****************************************************************************************
+
+export const saveMsgUseEffect = async ({
+    postMsg, postSuccss, pageMode, dispatch, history, status200, listPath }) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
         dispatch(postSuccss({ Status: false }))
+
+        if (status200) { status200() };
 
         if (pageMode === mode.dropdownAdd) {
             customAlert({
@@ -62,12 +70,45 @@ export const saveMsgUseEffect = async({ postMsg, postSuccss, pageMode, dispatch,
     }
 }
 
+
+// ****************************************************************************************
+// ****************************************************************************************
+
+
+export const updateMsgUseEffect = async ({
+    updateMsg, updateSuccss, modalCss, dispatch, history, listPath, status200 }) => {
+
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+        dispatch(updateSuccss({ Status: false }))
+
+        if (status200) { status200() };
+
+        history.push({
+            pathname: listPath,
+        })
+    } else if (updateMsg.Status === true && !modalCss) {
+        dispatch(updateSuccss({ Status: false }));
+        customAlert({
+            Type: 3,
+            Message: JSON.stringify(updateMsg.Message),
+        })
+    }
+}
+
+// ****************************************************************************************
+// ****************************************************************************************
+
+
 export const pageFieldUseEffect = ({ state, setState, pageField }) => {
     if (pageField) {
         const fieldArr = pageField.PageFieldMaster
         comAddPageFieldFunc({ state, setState, fieldArr })
     }
 }
+
+// ****************************************************************************************
+// ***************************************************************************************
+
 export const table_ArrowUseEffect = (tableId) => {
 
     // (function ($) {
@@ -249,3 +290,6 @@ export const table_ArrowUseEffect = (tableId) => {
 
 
 }
+
+// ****************************************************************************************
+// ***************************************************************************************

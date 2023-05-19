@@ -145,6 +145,7 @@ const Credit = (props) => {
         postMsg, pageMode,
         history, dispatch,
         postSuccss: _act.saveCredit_Success,
+       
         listPath: url.CREDIT_LIST
     }), [postMsg])
 
