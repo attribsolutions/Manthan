@@ -6,7 +6,7 @@ import MarginTable from './Table';
 import { get_Party_ForDropDown, } from '../../../../../store/Administrator/ItemsRedux/action';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
 import { priceListByCompay_Action } from '../../../../../store/Administrator/PriceList/action';
-import { CustomAlert } from '../../../../../CustomAlert/ConfirmDialog';
+import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { C_DatePicker } from '../../../../../CustomValidateForm';
 
 function Margin_Tab(props) {
@@ -88,7 +88,7 @@ function Margin_Tab(props) {
             clearState();
 
         }
-        else { CustomAlert({ Type: 4, Message: "Please Enter value" })}
+        else { customAlert({ Type: 4, Message: "Please Enter value" })}
     };
 
     const clearState = () => {

@@ -41,12 +41,12 @@ import {
     loginUserID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
-import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+
+import { mode, url, pageId } from "../../../routes/index";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import GroupTypeMaster from "../GroupTypePage/GroupTypeMaster";
 import AddMaster from "../EmployeePages/Drodown";
+import { userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 
 const GroupMaster = (props) => {
 
@@ -64,7 +64,7 @@ const GroupMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
+    const [groupTypeMasterAccess, setGroupTypeMasterAccess] = useState(false)
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -95,39 +95,21 @@ const GroupMaster = (props) => {
         dispatch(getGroupTypeslist())
 
     }, []);
-
+  
     // userAccess useEffect
-    useEffect(() => {
+    useEffect(() => userAccessUseEffect({
+        props,
+        userAccess,
+        dispatch,
+        setUserAccState,
+        otherloginAccss
+    }), [userAccess]);
+    
+    const otherloginAccss = (ind) => {
 
-        let userAcc = null;
-        let locationPath;
+    }
+  
 
-        if (props.pageMode === mode.dropdownAdd) {
-            locationPath = props.masterPath;
-        } else {
-            locationPath = location.pathname;
-        }
-
-        if (hasShowModal) {
-            locationPath = props.masterPath;
-        };
-
-        userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (userAcc) {
-            setUserAccState(userAcc);
-            if (!props.isdropdown) {
-                breadcrumbReturnFunc({ dispatch, userAcc });
-            }
-        };
-        userAccess.find((index) => {
-            if (index.id === pageId.GROUPTYPE) {
-                return setFindAddMasterAccess(true)
-            }
-        });
-    }, [userAccess])
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
@@ -171,13 +153,13 @@ const GroupMaster = (props) => {
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
             }
             else {
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -190,7 +172,7 @@ const GroupMaster = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(getGroupListSuccess({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
             })
@@ -205,7 +187,7 @@ const GroupMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateGroupIDSuccess({ Status: false }));
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -318,7 +300,7 @@ const GroupMaster = (props) => {
                                                     </FormGroup>
                                                 </Col>
 
-                                                {(findAddMasterAccess) &&
+                                                {(groupTypeMasterAccess) &&
                                                     <Col md="1" className=" mt-3">
                                                         <AddMaster
                                                             masterModal={GroupTypeMaster}

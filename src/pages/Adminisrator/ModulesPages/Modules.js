@@ -44,7 +44,7 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const Modules = (props) => {
 
@@ -200,7 +200,7 @@ const Modules = (props) => {
             dispatch(Breadcrumb_inputName(''))
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (props.pageMode === mode.dropdownAdd) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -212,7 +212,7 @@ const Modules = (props) => {
                 props.isOpenModal(false)
             }
             else if (pageMode === mode.edit) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -220,7 +220,7 @@ const Modules = (props) => {
             }
             else {
                 dispatch(Breadcrumb_inputName(''))
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -229,7 +229,7 @@ const Modules = (props) => {
 
         } else if
             (postMsg.Status === true) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(postMsg.Message),
             })

@@ -51,7 +51,7 @@ import {
     Save_Production_ReIssueSuccess,
     makeBtnProduction_ReIssue_STP_actionSuccess,
 } from "../../../store/Production/ProductionReissueRedux/actions";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const ProductionReIssueAdd = (props) => {
@@ -268,7 +268,7 @@ const ProductionReIssueAdd = (props) => {
     }, [pageField]);
 
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonList]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonList]);
 
     //****************************************************************** */
     const pagesListColumns = [

@@ -14,7 +14,7 @@ import { BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../store/a
 import { breadcrumbReturnFunc, metaTagLabel, }
   from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
-import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc } from "./ListActionsButtons";
 import DynamicColumnHook from "./TableCommonFunc";
 
@@ -126,14 +126,14 @@ const CommonListPage = (props) => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
       dispatch(updateSucc({ Status: false }));
       dispatch(getList(getListbodyFunc()));
-      CustomAlert({
+      customAlert({
         Type: 1,
         Message: JSON.stringify(updateMsg.Message),
       })
       tog_center();
     } else if (updateMsg.Status === true) {
       dispatch(updateSucc({ Status: false }));
-      CustomAlert({
+      customAlert({
         Type: 3,
         Message: JSON.stringify(updateMsg.Message),
       })
@@ -146,14 +146,14 @@ const CommonListPage = (props) => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
       dispatch(deleteSucc({ Status: false }));
 
-      const promise = await CustomAlert({
+      const promise = await customAlert({
         Type: 1,
         Message: deleteMsg.Message,
       })
       dispatch(getList(getListbodyFunc()));
     } else if (deleteMsg.Status === true) {
       dispatch(deleteSucc({ Status: false }));
-      CustomAlert({
+      customAlert({
         Type: 3,
         Message: JSON.stringify(deleteMsg.Message),
       })
@@ -165,7 +165,7 @@ const CommonListPage = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(postSucc({ Status: false }))
-      const promise = await CustomAlert({
+      const promise = await customAlert({
         Type: 1,
         Message: postMsg.Message
       })
@@ -176,7 +176,7 @@ const CommonListPage = (props) => {
 
     else if ((postMsg.Status === true)) {
       dispatch(postSucc({ Status: false }))
-      CustomAlert({
+      customAlert({
         Type: 4,
         Message: JSON.stringify(postMsg.Message),
       })

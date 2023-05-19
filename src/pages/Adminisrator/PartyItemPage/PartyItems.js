@@ -36,7 +36,7 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
@@ -47,7 +47,7 @@ import {
 } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const PartyItems = (props) => {
 
@@ -177,14 +177,14 @@ const PartyItems = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SavePartyItemsSuccess({ Status: false }))
             if (pageMode === mode.assingLink) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
                 props.isOpenModal(false)
             }
             else if (pageMode === mode.edit) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -192,7 +192,7 @@ const PartyItems = (props) => {
             }
             else {
                 dispatch(Breadcrumb_inputName(''))
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -201,7 +201,7 @@ const PartyItems = (props) => {
 
         } else if
             (postMsg.Status === true) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(postMsg.Message),
             })
@@ -216,7 +216,7 @@ const PartyItems = (props) => {
         }
     }, [pageField])
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableList]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableList]);
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -283,7 +283,7 @@ const PartyItems = (props) => {
         }
 
         if (tableList.length > 0) {
-            const ispermission = await CustomAlert({ Type: 7, Message: "Refresh  Item...!" })
+            const ispermission = await customAlert({ Type: 7, Message: "Refresh  Item...!" })
             if (ispermission) {
                 dispatch(getPartyItemListSuccess([]))
             } else {

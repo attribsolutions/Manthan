@@ -54,7 +54,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
 import AddMaster from "./Drodown";
 import PartyMaster from "../PartyMaster/MasterAdd/PartyIndex";
@@ -290,7 +290,7 @@ const AddEmployee = (props) => {
     }
     else if (postMsg.Status === true) {
       dispatch(PostEmployeeSuccess({ Status: false }))
-      CustomAlert({
+      customAlert({
         Type: 4,
         Message: JSON.stringify(postMsg.Message),
       })
@@ -305,7 +305,7 @@ const AddEmployee = (props) => {
       })
     } else if (updateMsg.Status === true && !modalCss) {
       dispatch(updateEmployeeIDSuccess({ Status: false }));
-      CustomAlert({
+      customAlert({
         Type: 3,
         Message: JSON.stringify(updateMsg.Message),
       })

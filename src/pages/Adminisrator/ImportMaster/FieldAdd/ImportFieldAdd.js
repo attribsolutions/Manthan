@@ -48,7 +48,7 @@ import {
     update_ImportFiledAdd,
     update_ImportFiledAdd_Success
 } from "../../../../store/Administrator/ImportFieldAddRedux/action";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 const ImportFieldAdd = (props) => {
 
@@ -203,7 +203,7 @@ const ImportFieldAdd = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(update_ImportFiledAdd_Success({ Status: false }));
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
 import { Col, FormGroup, Label } from "reactstrap";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import Order from "./Order";
 import * as _act from "../../../store/actions";
@@ -188,13 +188,13 @@ const OrderList = () => {
 
         if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
             dispatch(_act.orderApprovalActionSuccess({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: orderApprovalMsg.Message,
             })
         } else if (orderApprovalMsg.Status === true) {
             dispatch(_act.orderApprovalActionSuccess({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(orderApprovalMsg.Message),
             })

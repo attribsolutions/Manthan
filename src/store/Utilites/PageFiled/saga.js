@@ -6,7 +6,7 @@ import {
   commonPageFieldSuccess,
   commonPageFieldListSuccess
 } from "../../actions"
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { history } from "../../../components/Common/CommonFunction";
 
 
@@ -21,13 +21,13 @@ function* commonPageFiled_GenFunc({ pageId }) {
       yield put(commonPageFieldSuccess(response.Data));
     }
     else {
-    CustomAlert({
+    customAlert({
         Type: 2,
         Message: `PageMaster API Error : Page-Id=${pageId}`
       })
     }
   } catch (error) {
-     CustomAlert({
+     customAlert({
       Type: 2,
       Message: `PageMaster API Error : Page-Id=${pageId}`
     })
@@ -43,14 +43,14 @@ function* commonPageFiledList_GenFunc({ pageId }) {
       yield put(commonPageFieldListSuccess(response.Data));
     }
     else {
-      yield CustomAlert({
+      yield customAlert({
         Type: 2,
         Message: `PageMaster API Error : Page-Id=${pageId}`
       })
      
     }
   } catch (error) {
-    yield CustomAlert({
+    yield customAlert({
       Type: 2,
       Message: `PageMaster API Error : Page-Id=${pageId}`
     })

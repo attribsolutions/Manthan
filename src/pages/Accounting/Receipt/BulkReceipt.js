@@ -10,7 +10,7 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -18,7 +18,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { ReceiptGoButtonMaster_Success, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const BulkRecipt = (props) => {
@@ -65,13 +65,13 @@ const BulkRecipt = (props) => {
             dispatch(ReceiptGoButtonMaster_Success([]))
 
             if (pageMode === mode.dropdownAdd) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
             }
             else {
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -84,7 +84,7 @@ const BulkRecipt = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
             })
@@ -105,7 +105,7 @@ const BulkRecipt = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            commonFunc.breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -172,12 +172,12 @@ const BulkRecipt = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            commonFunc.btnIsDissablefunc({ btnId, state: true })
+            _cfunc.btnIsDissablefunc({ btnId, state: true })
 
             Data.forEach(i => {
                 const arr =
                 {
-                    ReceiptDate: commonFunc.currentDate_ymd,
+                    ReceiptDate: _cfunc.currentDate_ymd,
                     Description: "",
                     AmountPaid: i.GrandTotal,
                     BalanceAmount: i.BalanceAmount,
@@ -186,11 +186,11 @@ const BulkRecipt = (props) => {
                     AdvancedAmountAjusted: "",
                     Customer: i.Customer,
                     ChequeDate: "",
-                    Party: commonFunc.loginPartyID(),
+                    Party: _cfunc.loginPartyID(),
                     ReceiptMode: 31,
                     ReceiptType: 29,
-                    CreatedBy: commonFunc.loginUserID(),
-                    UpdatedBy: commonFunc.loginUserID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
                     Bank:"",
                     DepositorBank:"",
                     ReceiptInvoices: [
@@ -209,14 +209,14 @@ const BulkRecipt = (props) => {
             })
             dispatch(saveReceiptMaster({ jsonBody, btnId }));
 
-        } catch (e) { commonFunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{commonFunc.metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
@@ -229,7 +229,7 @@ const BulkRecipt = (props) => {
                                         <Col sm="7">
                                             <C_DatePicker
                                                 name='Date'
-                                                value={commonFunc.currentDate_ymd}
+                                                value={_cfunc.currentDate_ymd}
                                                 disabled={true}
                                             />
                                         </Col>

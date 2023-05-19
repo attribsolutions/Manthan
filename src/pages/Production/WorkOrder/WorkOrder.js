@@ -46,7 +46,7 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const goBtnID1 = "workOrdergoBtnID1"
@@ -214,7 +214,7 @@ const WorkOrder = (props) => {
         }
     }, [postMsg])
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [BOMItems]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [BOMItems]);
 
     useEffect(() => {
 

@@ -47,7 +47,7 @@ import {
   makeIB_InvoiceActionSuccess,
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { bulkSearch, discountCalculate } from "./invoiceCaculations";
 import "./invoice.scss";
 import demoData from "./demo1.json";
@@ -171,12 +171,12 @@ const Invoice = (props) => {
       dispatch(GoButtonForinvoiceAddSuccess([]));
 
       if (pageMode === mode.dropdownAdd) {
-        CustomAlert({
+        customAlert({
           Type: 1,
           Message: JSON.stringify(postMsg.Message),
         });
       } else {
-        const promise = await CustomAlert({
+        const promise = await customAlert({
           Type: 1,
           Message: JSON.stringify(postMsg.Message),
           RedirectPath: url.INVOICE_LIST_1,
@@ -190,7 +190,7 @@ const Invoice = (props) => {
         }
       }
     } else if (postMsg.Status === true) {
-      CustomAlert({
+      customAlert({
         Type: 4,
         Message: JSON.stringify(postMsg.Message),
       });

@@ -27,9 +27,9 @@ import {
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as pageId from "../../../routes/allPageID"
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 
@@ -204,7 +204,7 @@ const GRNAdd3 = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveGRNSuccess({ Status: false }))
-            const promise = await CustomAlert({
+            const promise = await customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
@@ -214,7 +214,7 @@ const GRNAdd3 = (props) => {
 
         } else if (postMsg.Status === true) {
             dispatch(saveGRNSuccess({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: JSON.stringify(postMsg.Message),
             })
@@ -223,7 +223,7 @@ const GRNAdd3 = (props) => {
     }, [postMsg])
 
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
 
     const tableColumns = [
         {//------------- ItemName column ----------------------------------
@@ -345,7 +345,7 @@ const GRNAdd3 = (props) => {
             });
 
             if (invoiceNo.length === 0) {
-                CustomAlert({
+                customAlert({
                     Type: 3,
                     Message: "Please Enter Invoice Number",
                 })
