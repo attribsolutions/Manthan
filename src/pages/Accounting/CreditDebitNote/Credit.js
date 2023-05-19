@@ -910,7 +910,6 @@ const Credit = (props) => {
                             }
                         </ToolkitProvider>
 
-
                         {
                             <ToolkitProvider
                                 keyField="id"
@@ -942,8 +941,6 @@ const Credit = (props) => {
                                 }
                             </ToolkitProvider>}
 
-
-
                         {Data.length > 0 ?
                             <FormGroup>
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
@@ -958,7 +955,6 @@ const Credit = (props) => {
                             </FormGroup >
                             : null
                         }
-
                     </form >
                 </div>
             </React.Fragment>

@@ -1,17 +1,13 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
-  Card,
-  CardBody,
   Col,
   FormGroup,
   Input,
   Label,
   Row,
-  Table,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr";
 import {
   BreadcrumbShowCountlabel,
   commonPageFieldSuccess,
@@ -39,13 +35,6 @@ import {
   loginPartyID,
   btnIsDissablefunc,
 } from "../../../components/Common/CommonFunction";
-import paginationFactory, {
-  PaginationListStandalone,
-  PaginationProvider,
-} from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-
-import BootstrapTable from "react-bootstrap-table-next";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
@@ -58,13 +47,13 @@ import {
   makeIB_InvoiceActionSuccess,
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { bulkSearch, discountCalculate } from "./invoiceCaculations";
 import "./invoice.scss";
 import demoData from "./demo1.json";
 import { numberWithCommas } from "../../../Reports/Report_common_function";
 import CustomTable2 from "../../../CustomTable2/Table";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 
 const Invoice = (props) => {
@@ -1016,19 +1005,15 @@ const Invoice = (props) => {
                         {fieldLabel.InvoiceDate}{" "}
                       </Label>
                       <Col sm="7">
-                        <Flatpickr
+                        <C_DatePicker
                           name="InvoiceDate"
                           value={values.InvoiceDate}
-                          className="form-control d-block bg-white text-dark"
                           id="myInput11"
                           disabled={
                             OrderItemDetails.length > 0 || pageMode === "edit"
                               ? true
                               : false
                           }
-                          options={{
-                            dateFormat: "Y-m-d",
-                          }}
                           onChange={InvoiceDateOnchange}
                         />
                         {isError.InvoiceDate.length > 0 && (

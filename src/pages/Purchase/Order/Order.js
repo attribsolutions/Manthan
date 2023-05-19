@@ -8,8 +8,6 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
-
-import Flatpickr from "react-flatpickr";
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -31,7 +29,6 @@ import { basicAmount, GstAmount, Amount } from "./OrderPageCalulation";
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-
 import * as commonFunc from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";

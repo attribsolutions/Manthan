@@ -1,6 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Flatpickr from "react-flatpickr";
 import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
@@ -38,6 +37,7 @@ import PaymentEntry from "./PaymentEntry";
 import { Receipt_Print, get_Group_List_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const PaymentEntryList = () => {
 
@@ -272,16 +272,9 @@ const PaymentEntryList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>FromDate</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name='FromDate'
                                     value={values.FromDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={fromdateOnchange}
                                 />
                             </Col>
@@ -293,16 +286,9 @@ const PaymentEntryList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name="ToDate"
                                     value={values.ToDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={todateOnchange}
                                 />
                             </Col>

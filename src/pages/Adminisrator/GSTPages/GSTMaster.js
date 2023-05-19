@@ -14,7 +14,6 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Flatpickr from "react-flatpickr"
 import { AlertState } from "../../../store/actions";
 import paginationFactory, {
     PaginationListStandalone,
@@ -39,6 +38,7 @@ import {
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as commonFunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -432,18 +432,10 @@ const GSTMaster = (props) => {
                                                         <FormGroup className="mb-4 row">
                                                             <Label className="col-md-4">EffectiveDate</Label>
                                                             <Col md="8">
-                                                                <Flatpickr
-
+                                                                <C_DatePicker
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
                                                                     value={effectiveDate}
-                                                                    className="form-control  bg-white text-dark mt-n2"
-                                                                    placeholder=" Please Enter EffectiveDate"
-                                                                    options={{
-                                                                        altInput: true,
-                                                                        altFormat: "d-m-Y",
-                                                                        dateFormat: "Y-m-d",
-                                                                    }}
                                                                     onChange={EffectiveDateHandler}
                                                                 />
                                                             </Col>

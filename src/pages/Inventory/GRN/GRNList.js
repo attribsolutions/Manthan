@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import Order from "../../Purchase/Order/Order";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
-
-import Flatpickr from "react-flatpickr";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import {
     deleteGRNId,
@@ -20,12 +16,11 @@ import { btnIsDissablefunc, loginPartyID } from "../../../components/Common/Comm
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
-import { MetaTags } from "react-meta-tags";
-import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
 import { makeChallanAction, makeChallanActionSuccess } from "../../../store/Inventory/ChallanRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import GRNAdd from "./GRNAdd";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const GRNList = () => {
 
@@ -171,16 +166,9 @@ const GRNList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>From Date</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name='fromdate'
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
                                     value={fromdate}
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={fromdateOnchange}
                                 />
                             </Col>
@@ -191,16 +179,9 @@ const GRNList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>To Date</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     nane='todate'
-                                    className="form-control d-block p-2 bg-white text-dark"
                                     value={todate}
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={todateOnchange}
                                 />
                             </Col>

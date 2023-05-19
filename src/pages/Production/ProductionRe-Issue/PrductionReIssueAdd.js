@@ -8,7 +8,6 @@ import {
     Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
@@ -33,9 +32,8 @@ import {
     loginPartyID,
     metaTagLabel
 }
-    from "../../../components/Common/CommonFunction";
+ from "../../../components/Common/CommonFunction";
 import {
-    editMaterialIssueIdSuccess,
     goButtonForMaterialIssue_Master_Action,
     goButtonForMaterialIssue_Master_ActionSuccess,
     SaveMaterialIssueSuccess
@@ -52,9 +50,9 @@ import {
     Save_Production_ReIssue,
     Save_Production_ReIssueSuccess,
     makeBtnProduction_ReIssue_STP_actionSuccess,
-    ItemForProdunction_ReIssueSuccess
 } from "../../../store/Production/ProductionReissueRedux/actions";
 import * as commonFunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const ProductionReIssueAdd = (props) => {
 
@@ -630,15 +628,9 @@ const ProductionReIssueAdd = (props) => {
                                         <FormGroup className="row mt-2  ">
                                             <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.ProductionReIssueDate} </Label>
                                             <Col sm="7">
-                                                <Flatpickr
+                                                <C_DatePicker
                                                     name="ProductionReIssueDate"
                                                     value={values.ProductionReIssueDate}
-                                                    className="form-control d-block bg-white text-dark"
-                                                    placeholder="YYYY-MM-DD"
-                                                    options={{
-                                                        altFormat: "d-m-Y",
-                                                        dateFormat: "Y-m-d",
-                                                    }}
                                                     onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 />
                                                 {isError.ProductionReIssueDate.length > 0 && (

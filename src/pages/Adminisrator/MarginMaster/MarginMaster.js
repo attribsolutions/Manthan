@@ -15,7 +15,6 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Flatpickr from "react-flatpickr"
 import { AlertState } from "../../../store/actions";
 import paginationFactory, {
     PaginationListStandalone,
@@ -43,6 +42,7 @@ import {
 import * as url from "../../../routes/route_url";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 import * as commonFunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -472,18 +472,11 @@ const MarginMaster = (props) => {
                                                         <FormGroup className="mb-3 row ">
                                                             <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>EffectiveDate</Label>
                                                             <Col sm={8}>
-                                                                <Flatpickr
+                                                                <C_DatePicker
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
                                                                     value={effectiveDate}
                                                                     isDisabled={editMode === "edit" ? true : false}
-                                                                    className="form-control d-block p-2 bg-white text-dark"
-                                                                    placeholder=" Please Enter EffectiveDate"
-                                                                    options={{
-                                                                        altInput: true,
-                                                                        altFormat: "d-m-Y",
-                                                                        dateFormat: "Y-m-d",
-                                                                    }}
                                                                     onChange={EffectiveDateHandler}
                                                                 />
                                                             </Col>

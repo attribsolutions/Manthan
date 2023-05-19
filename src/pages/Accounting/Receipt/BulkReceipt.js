@@ -4,9 +4,7 @@ import {
     FormGroup,
     Input,
     Label,
-
 } from "reactstrap";
-import Flatpickr from "react-flatpickr"
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -21,6 +19,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { ReceiptGoButtonMaster_Success, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const BulkRecipt = (props) => {
 
@@ -228,16 +227,10 @@ const BulkRecipt = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>Receipt Date</Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='Date'
                                                 value={commonFunc.currentDate_ymd}
                                                 disabled={true}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                             />
                                         </Col>
                                     </FormGroup>

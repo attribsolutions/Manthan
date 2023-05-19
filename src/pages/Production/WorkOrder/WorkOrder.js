@@ -7,14 +7,12 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValid,
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
@@ -49,6 +47,7 @@ import * as mode from "../../../routes/PageMode";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as commonFunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const goBtnID1 = "workOrdergoBtnID1"
 const changeBtnID1 = "workOrderchangeBtnID1"
@@ -453,20 +452,11 @@ const WorkOrder = (props) => {
                                                 <Label className="mt-1"
                                                     style={{ width: "130px" }}>{fieldLabel.WorkOrderDate}</Label>
                                                 <div className="col-6">
-                                                    <Flatpickr
+                                                    <C_DatePicker
                                                         style={{ userselect: "all" }}
                                                         name="WorkOrderDate"
                                                         value={values.WorkOrderDate}
-                                                        className="form-control d-block p-2 bg-white text-dark"
-                                                        placeholder="YYYY-MM-DD"
-                                                        autoComplete="0,''"
                                                         disabled={(BOMItems.length > 0) || (pageMode === mode.edit) ? true : false}
-                                                        options={{
-                                                            // altInput: true,
-                                                            altFormat: "d-m-Y",
-                                                            dateFormat: "Y-m-d",
-                                                            defaultDate: pageMode === mode.edit ? values.WorkOrderDate : "today"
-                                                        }}
                                                         onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                         onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                     />

@@ -7,8 +7,6 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
-
-import Flatpickr from "react-flatpickr";
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
@@ -35,6 +33,7 @@ import { getMaterialIssueListPage } from "../../../store/Production/Matrial_Issu
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const ProductionMaster = (props) => {
 
@@ -328,17 +327,10 @@ const ProductionMaster = (props) => {
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.ProductionDate}</Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name="ProductionDate"
                                                 value={values.ProductionDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
                                                 disabled={pageMode === mode.modeSTPsave || pageMode === mode.view ? true : false}
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
 
@@ -400,18 +392,10 @@ const ProductionMaster = (props) => {
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.BestBefore}</Label>
                                         <Col md="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name="BestBefore"
                                                 value={values.BestBefore}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
                                                 disabled={pageMode === mode.view ? true : false}
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                    defaultDate: pageMode === mode.view ? values.BestBefore : "today"
-                                                }}
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
                                         </Col>

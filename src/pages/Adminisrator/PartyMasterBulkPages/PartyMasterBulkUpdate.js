@@ -8,7 +8,6 @@ import {
     Label,
     Row
 } from "reactstrap";
-import Flatpickr from "react-flatpickr";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,6 +49,7 @@ import {
 import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as commonFunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 
 const PartyMasterBulkUpdate = (props) => {
@@ -424,16 +424,9 @@ const PartyMasterBulkUpdate = (props) => {
                 <div style={{ width: "180px" }} >
                     <Col sm={12}>
                         <FormGroup sm={6}>
-                            <Flatpickr
+                            <C_DatePicker
                                 id={key}
                                 name='fromdate'
-                                className="form-control d-block p-2 bg-white text-dark"
-                                placeholder="Select..."
-                                options={{
-                                    altInput: true,
-                                    altFormat: "d-m-Y",
-                                    dateFormat: "Y-m-d",
-                                }}
                                 onChange={(event) => fromdateOnchange(event, user)}
                             />
                         </FormGroup>

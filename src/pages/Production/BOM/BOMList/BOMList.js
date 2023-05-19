@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import Flatpickr from "react-flatpickr";
 import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
@@ -10,7 +8,6 @@ import {
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
 import { BIllOf_MATERIALS, BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-
 import { useHistory } from "react-router-dom";
 import { excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../../components/Common/CommonFunction";
 import { useMemo } from "react";
@@ -22,11 +19,10 @@ import {
     getBOMListPage,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-// } from "../../../../store/Production/BOMRedux/action";
 import BOMMaster from "../BOMMaster/BOMIndex";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
+import { C_DatePicker } from "../../../../CustomValidateForm";
 
 const BOMList = () => {
 
@@ -123,17 +119,9 @@ const BOMList = () => {
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
                                 <Col sm="6">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         name='fromdate'
                                         value={fromdate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
                                         onChange={fromdateOnchange}
                                     />
                                 </Col>
@@ -145,17 +133,9 @@ const BOMList = () => {
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px", marginRight: "0.4cm" }}>To Date</Label>
                                 <Col sm="6 ">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         name="todate"
                                         value={todate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
                                         onChange={todateOnchange}
                                     />
                                 </Col>

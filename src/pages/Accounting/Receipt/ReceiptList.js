@@ -1,6 +1,5 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Flatpickr from "react-flatpickr";
 import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
@@ -13,12 +12,14 @@ import { useHistory } from "react-router-dom";
 import { currentDate_ymd, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import Receipts from "./Receipts";
 import * as report from '../../../Reports/ReportIndex'
-import { editBOMList, updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import {
-    deleteReceiptList, deleteReceiptList_Success, ReceiptListAPI, ReceiptListAPISuccess, ReceiptTypeAPI,
+    deleteReceiptList,
+    deleteReceiptList_Success,
+    ReceiptListAPI,
+    ReceiptListAPISuccess,
+    ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
@@ -26,6 +27,7 @@ import { Go_Button } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { Receipt_Print } from "../../../helpers/backend_helper";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const ReceiptList = () => {
 
@@ -57,7 +59,7 @@ const ReceiptList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    
+
     const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
     const values = { ...state.values }
 
@@ -196,16 +198,9 @@ const ReceiptList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>FromDate</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name='FromDate'
                                     value={values.FromDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={fromdateOnchange}
                                 />
                             </Col>
@@ -217,16 +212,9 @@ const ReceiptList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name="ToDate"
                                     value={values.ToDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={todateOnchange}
                                 />
                             </Col>
