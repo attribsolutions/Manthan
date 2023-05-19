@@ -38,7 +38,6 @@ import {
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import Select from "react-select";
-import Flatpickr from "react-flatpickr"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -48,7 +47,8 @@ import {
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CredietDebitType, Receipt_No_List, Receipt_No_List_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 
 const Debit = (props) => {
@@ -166,13 +166,13 @@ const Debit = (props) => {
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
             }
             else {
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -185,7 +185,7 @@ const Debit = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(saveCredit_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
             })
@@ -350,16 +350,9 @@ const Debit = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CRDRNoteDate}</Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='CRDRNoteDate'
                                                 value={values.CRDRNoteDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={CRDRNoteDateOnchange}
                                             />
                                         </Col>
@@ -534,18 +527,11 @@ const Debit = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptDate}</Label>
                                         <Col sm="7">
 
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='ReceiptDate'
                                                 id="ReceiptDate"
                                                 disabled={(values.ReceiptNO) ? true : false}
                                                 value={values.ReceiptDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    // altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={ReciptDateOnchange}
                                             />
 

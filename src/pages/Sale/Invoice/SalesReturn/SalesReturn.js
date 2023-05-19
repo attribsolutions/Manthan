@@ -27,7 +27,7 @@ import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success } from "../../../../store/Sales/SalesReturnRedux/action";
 import CustomTable2 from "../../../../CustomTable2/Table";
@@ -493,7 +493,7 @@ const SalesReturn = (props) => {
         }
 
         if (invalidMsg1.length > 0) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(invalidMsg1)
             })
@@ -657,7 +657,7 @@ const SalesReturn = (props) => {
         })
 
         if (filterData.length === 0) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: " Please Enter One Item Quantity"
             })
@@ -686,7 +686,7 @@ const SalesReturn = (props) => {
         })
 
         if (invalidMsg1.length > 0) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(invalidMsg1)
             })

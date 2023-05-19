@@ -1,6 +1,6 @@
 import { Button } from "reactstrap";
 import * as mode from "../../routes/PageMode"
-import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { btnIsDissablefunc, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 
@@ -49,7 +49,7 @@ export const listPageActionsButtonFunc = (props) => {
                 dispatch(editActionFun({ ...config }));
             }
         } catch (error) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Action Not define",
             })
@@ -67,7 +67,7 @@ export const listPageActionsButtonFunc = (props) => {
                 dispatch(editActionFun({ ...config }));
             }
         } catch (error) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Action Not define",
             })
@@ -79,7 +79,7 @@ export const listPageActionsButtonFunc = (props) => {
         try {
             downBtnFunc(rowData, downbtnType);
         } catch (error) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Action Not define",
             })
@@ -94,7 +94,7 @@ export const listPageActionsButtonFunc = (props) => {
                 deleteBodyfunc({ ...config })
                 return
             } else {
-                const rep = await CustomAlert({
+                const rep = await customAlert({
                     Type: 8,
                     Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
                 })
@@ -105,7 +105,7 @@ export const listPageActionsButtonFunc = (props) => {
                 }
             }
         } catch (error) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Action Not define",
             })

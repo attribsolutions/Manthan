@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import Flatpickr from "react-flatpickr";
 import {
     Col,
     FormGroup,
@@ -23,7 +21,8 @@ import * as mode from "../../../routes/PageMode";
 import * as url from "../../../routes/route_url";
 import { AlertState } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const Inward = (props) => {
 
@@ -86,7 +85,7 @@ const Inward = (props) => {
     }, [postMsg])
 
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems]);
 
     function InwardDateOnchange(e, date) {
         setInwardDate(date)
@@ -231,18 +230,11 @@ const Inward = (props) => {
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
                                 <Col sm="7">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         style={{ userselect: "all" }}
                                         id="orderdate"
                                         name="orderdate"
                                         value={InwardDate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                        }}
                                         onChange={InwardDateOnchange}
                                     />
                                 </Col>

@@ -4,12 +4,10 @@ import {
   Card,
   CardBody,
   Col,
-  FormGroup,
   Input,
   Label,
   Row,
 } from "reactstrap";
-import Flatpickr from "react-flatpickr";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import MRPTable from "./Table";
@@ -18,7 +16,8 @@ import {
   get_Party_ForDropDown,
 } from "../../../../../store/Administrator/ItemsRedux/action";
 import { loginUserID, loginCompanyID, loginIsSCMCompany } from "../../../../../components/Common/CommonFunction";
-import { CustomAlert } from "../../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../../CustomAlert/ConfirmDialog";
+import { C_DatePicker } from "../../../../../CustomValidateForm";
 
 function MRPTab(props) {
   const dispatch = useDispatch();
@@ -90,7 +89,7 @@ function MRPTab(props) {
       props.func(updatedTableData);
       clearState();
     } else {
-      CustomAlert({ Type: 4, Message: "Please Enter value" })
+      customAlert({ Type: 4, Message: "Please Enter value" })
     }
   };
 
@@ -135,17 +134,10 @@ function MRPTab(props) {
                   <div className="mb-3 col col-sm-3 ">
                     <Label>Effective Date</Label>
                     <div id={`txtEffectiveDate${0}`}>
-                      <Flatpickr
+                      <C_DatePicker
                         id={`txtEffectiveDate${0}`}
                         value={effectiveDate}
-                        className="form-control d-block p-2 bg-white text-dark"
-                        placeholder="YYYY-MM-DD"
-                        autoComplete="off"
-                        options={{
-                          altInput: true,
-                          altFormat: "d-m-Y",
-                          dateFormat: "Y-m-d",
-                        }}
+                        placeholder = "Please Enter EffectiveDate"
                         onChange={EffectiveDateHandler}
                       />
                     </div>

@@ -15,7 +15,6 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Flatpickr from "react-flatpickr"
 import { AlertState } from "../../../store/actions";
 import paginationFactory, {
     PaginationListStandalone,
@@ -45,9 +44,10 @@ import {
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Change_Button } from "../../../components/Common/CommonButton";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const MRPMaster = (props) => {
 
@@ -204,7 +204,7 @@ const MRPMaster = (props) => {
         }
     }, [deleteMessage]);
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
 
     const PartyDropdown_Options = Party.map((Data) => ({
         value: Data.id,
@@ -262,7 +262,7 @@ const MRPMaster = (props) => {
         });
 
         if (!(effectiveDate)) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: "Effective Date is Required"
             })
@@ -483,18 +483,12 @@ const MRPMaster = (props) => {
                                                         <FormGroup className="mb-3 row col ">
                                                             <Label className="col-sm-6 p-2 " style={{ width: "2.9cm" }}>EffectiveDate</Label>
                                                             <Col sm={8}>
-                                                                <Flatpickr
+                                                                <C_DatePicker
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
+                                                                    placeholder = "Please Enter EffectiveDate"
                                                                     value={effectiveDate}
                                                                     disabled={((editMode === "edit") || (TableData.length > 0)) ? true : false}
-                                                                    className="form-control d-block p-2 bg-white text-dark"
-                                                                    placeholder=" Please Enter EffectiveDate"
-                                                                    options={{
-                                                                        altInput: true,
-                                                                        altFormat: "d-m-Y",
-                                                                        dateFormat: "Y-m-d",
-                                                                    }}
                                                                     onChange={EffectiveDateHandler}
                                                                 />
                                                             </Col>

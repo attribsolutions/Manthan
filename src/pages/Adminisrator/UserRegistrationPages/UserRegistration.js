@@ -31,7 +31,7 @@ import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/validationFunction";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import AddMaster from "../EmployeePages/Drodown";
@@ -293,7 +293,7 @@ const AddUser = (props) => {
         })
       })
       if (userRoleArr.length <= 0) {
-        CustomAlert({
+        customAlert({
           Type: 4,
           Message: "At Least One Role  Add in the Table",
         })

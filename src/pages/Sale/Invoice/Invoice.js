@@ -8,7 +8,6 @@ import {
     Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
@@ -17,14 +16,21 @@ import {
     comAddPageFieldFunc,
     initialFiledFunc,
     onChangeDate,
-
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate_ymd, loginPartyID, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    convertDatefunc,
+    loginUserID,
+    currentDate_ymd,
+    loginPartyID,
+    btnIsDissablefunc,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -41,11 +47,11 @@ import {
     makeIB_InvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { discountCalculate, stockDistributeFunc } from "./invoiceCaculations";
 import "./invoice.scss"
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const Invoice = (props) => {
 
@@ -128,7 +134,7 @@ const Invoice = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        
+
         if ((hasShowloction || hasShowModal || (location.state))) {
 
             let hasEditVal = null
@@ -182,13 +188,13 @@ const Invoice = (props) => {
             dispatch(GoButtonForinvoiceAddSuccess([]))
 
             if (pageMode === mode.dropdownAdd) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                 })
             }
             else {
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                     RedirectPath: url.INVOICE_LIST_1,
@@ -204,7 +210,7 @@ const Invoice = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
             })
@@ -255,9 +261,9 @@ const Invoice = (props) => {
             dispatch(makeIB_InvoiceActionSuccess({ Status: false }))
         }
     }, [makeIBInvoice]);
-    
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [OrderItemDetails]);
+
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [OrderItemDetails]);
 
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
@@ -762,7 +768,7 @@ const Invoice = (props) => {
                         const calculate = discountCalculate(ele, index)
 
                         grand_total = grand_total + Number(calculate.tAmount)
-                        
+
                         invoiceItems.push({
                             Item: index.Item,
                             Unit: index.UnitDrop.value,
@@ -864,16 +870,11 @@ const Invoice = (props) => {
                                         <FormGroup className="row mt-2 mb-3  ">
                                             <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
                                             <Col sm="7">
-                                                <Flatpickr
+                                                <C_DatePicker
                                                     name="InvoiceDate"
                                                     value={values.InvoiceDate}
-                                                    className="form-control d-block bg-white text-dark"
                                                     id="myInput11"
                                                     disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
-
-                                                    options={{
-                                                        dateFormat: "Y-m-d",
-                                                    }}
                                                     onChange={InvoiceDateOnchange}
                                                 />
                                                 {isError.InvoiceDate.length > 0 && (

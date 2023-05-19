@@ -23,7 +23,6 @@ import {
     updateDriverID_Success,
 } from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
-import Flatpickr from "react-flatpickr"
 import {
     comAddPageFieldFunc,
     formValid,
@@ -47,6 +46,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
 import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
 import { getPartyTableList } from "../../../store/Administrator/ManagementPartiesRedux/action";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const DriverMaster = (props) => {
 
@@ -300,19 +300,10 @@ const DriverMaster = (props) => {
                                                         <Col md="4">
                                                             <FormGroup className="mb-3">
                                                                 <Label>{fieldLabel.DOB} </Label>
-                                                                <Flatpickr
+                                                                <C_DatePicker
                                                                     name="DOB"
                                                                     value={values.DOB}
-                                                                    className="form-control d-block p-2 bg-white text-dark"
-                                                                    placeholder="YYYY-MM-DD"
-                                                                    autoComplete="0,''"
-                                                                    options={{
-                                                                        altInput: true,
-                                                                        altFormat: "F j, Y",
-                                                                        dateFormat: "Y-m-d",
-                                                                        minDate: new Date().fp_incr("n"),
-                                                                        maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
-                                                                    }}
+                                                                    placeholder = {"DD/MM/YYYY"}
                                                                     onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                                 />
                                                             </FormGroup>

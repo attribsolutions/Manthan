@@ -21,7 +21,6 @@ import {
     editPartyIDSuccess,
     getDistrictOnState,
     getDistrictOnStateSuccess,
-    getPriceList,
     postPartyData,
     postPartyDataSuccess,
     updatePartyID,
@@ -37,11 +36,12 @@ import { getcompanyList } from "../../../../store/Administrator/CompanyRedux/act
 import { SaveButton } from "../../../../components/Common/CommonButton";
 import { SSDD_List_under_Company } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import AddressTabForm from "./AddressDetailsTab/index";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { bulkSetState, formValid } from "../../../../components/Common/validationFunction";
 import BaseTabForm from "./FirstTab/index";
 import PrefixTab from "./PrefixTab/PrefixTab";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
+import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
 
 const PartyMaster = (props) => {
 
@@ -78,32 +78,41 @@ const PartyMaster = (props) => {
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    useEffect(() => {
 
-        let userAcc = null;
-        let locationPath;
+    useEffect(() => userAccessUseEffect({
+        props,
+        userAccess,
+        dispatch,
+        setUserAccState
+    }), [userAccess]);
 
-        if (props.pageMode === mode.dropdownAdd) {
-            locationPath = props.masterPath;
-        } else {
-            locationPath = location.pathname;
-        }
 
-        if (hasShowModal) {
-            locationPath = props.masterPath;
-        };
+    // useEffect(() => {
 
-        userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
+    //     let userAcc = null;
+    //     let locationPath;
 
-        if (userAcc) {
-            setUserAccState(userAcc);
-            if (!props.isdropdown) {
-                breadcrumbReturnFunc({ dispatch, userAcc });
-            }
-        };
-    }, [userAccess])
+    //     if (props.pageMode === mode.dropdownAdd) {
+    //         locationPath = props.masterPath;
+    //     } else {
+    //         locationPath = location.pathname;
+    //     }
+
+    //     if (hasShowModal) {
+    //         locationPath = props.masterPath;
+    //     };
+
+    //     userAcc = userAccess.find((inx) => {
+    //         return (`/${inx.ActualPagePath}` === locationPath)
+    //     })
+
+    //     if (userAcc) {
+    //         setUserAccState(userAcc);
+    //         if (!props.isdropdown) {
+    //             breadcrumbReturnFunc({ dispatch, userAcc });
+    //         }
+    //     };
+    // }, [userAccess])
 
     useEffect(() => {
         try {
@@ -282,7 +291,7 @@ const PartyMaster = (props) => {
 
         if (addressTabDetail.length === 0) {
             setactiveTab1("2")
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: "Address details is required",
             })

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
-
-import Flatpickr from "react-flatpickr";
 import {
     updateOrderIdSuccess,
 } from "../../../store/Purchase/OrderPageRedux/actions";
@@ -18,10 +16,8 @@ import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRed
 import {
     btnIsDissablefunc,
     currentDate_ymd,
-    excelDownCommonFunc,
     loginPartyID
 } from "../../../components/Common/CommonFunction";
-import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
@@ -29,7 +25,6 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { MetaTags } from "react-meta-tags";
 import {
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
@@ -37,6 +32,7 @@ import {
     invoiceListGoBtnfilter
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 
 const InvoiceList = () => {
@@ -190,16 +186,9 @@ const InvoiceList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>From Date</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name='fromdate'
                                     value={fromdate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={fromdateOnchange}
                                 />
                             </Col>
@@ -210,16 +199,9 @@ const InvoiceList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>To Date</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name="todate"
                                     value={todate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={todateOnchange}
                                 />
                             </Col>
@@ -267,7 +249,6 @@ const InvoiceList = () => {
                             downBtnFunc={downBtnFunc}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
-
                             ButtonMsgLable={"Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make GRN"}

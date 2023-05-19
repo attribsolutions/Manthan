@@ -13,7 +13,7 @@ import { Link, useHistory } from "react-router-dom";
 import Select from "react-select";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
-import * as commonFunc from "../../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
 import {
     comAddPageFieldFunc,
     initialFiledFunc,
@@ -25,7 +25,7 @@ import {
     GoButton_ImportFiledMap_Add,
     GoButton_ImportFiledMap_AddSuccess
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import {
     ExcelUpload_save_action,
     ExcelUpload_save_action_Success
@@ -76,7 +76,7 @@ const UploadExcel = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
-        if ((commonFunc.loginIsSCMCompany() === 1)) {
+        if ((_cfunc.loginIsSCMCompany() === 1)) {
             goButtonHandler()
         }
     }, []);
@@ -101,7 +101,7 @@ const UploadExcel = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            commonFunc.breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -117,14 +117,14 @@ const UploadExcel = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(ExcelUpload_save_action_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
         }
         else if (postMsg.Status === true) {
             dispatch(ExcelUpload_save_action_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
             })
@@ -138,10 +138,10 @@ const UploadExcel = (props) => {
 
 
     function goButtonHandler(e) {
-        let partyId = ((commonFunc.loginIsSCMCompany() === 1)) ? commonFunc.loginPartyID() : e.value;
+        let partyId = ((_cfunc.loginIsSCMCompany() === 1)) ? _cfunc.loginPartyID() : e.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
-            CompanyID: commonFunc.loginCompanyID()
+            CompanyID: _cfunc.loginCompanyID()
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
@@ -151,7 +151,7 @@ const UploadExcel = (props) => {
 
         var files = selectedFiles;
         if (files.length == 0) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Please choose any file...",
             })
@@ -180,7 +180,7 @@ const UploadExcel = (props) => {
             }
 
         } else {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Please select a valid excel file.",
             })
@@ -190,7 +190,7 @@ const UploadExcel = (props) => {
     async function handleAcceptedFiles(files) {
 
         if (selectedFiles.length > 0) {
-            const isConfirmed = await CustomAlert({
+            const isConfirmed = await customAlert({
                 Type: 8,
                 Message: "Do you confirm your choice?",
             });
@@ -233,7 +233,7 @@ const UploadExcel = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            commonFunc.btnIsDissablefunc({ btnId, state: true })
+            _cfunc.btnIsDissablefunc({ btnId, state: true })
             const parArr = readJsonDetail.fileFiled
             const outerArr = []
 
@@ -254,9 +254,9 @@ const UploadExcel = (props) => {
                         "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
                         "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
                         "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
-                        "Party": commonFunc.loginPartyID(),
-                        CreatedBy: commonFunc.loginUserID(),
-                        UpdatedBy: commonFunc.loginUserID(),
+                        "Party": _cfunc.loginPartyID(),
+                        CreatedBy: _cfunc.loginUserID(),
+                        UpdatedBy: _cfunc.loginUserID(),
                         "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
                     }
 
@@ -297,21 +297,21 @@ const UploadExcel = (props) => {
             const jsonBody = JSON.stringify({ "BulkData": outerArr })
             dispatch(ExcelUpload_save_action({ jsonBody, btnId }));
 
-        } catch (e) { commonFunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{commonFunc.metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <form noValidate>
                     <div className="page-content">
 
                         <div className="px-2 c_card_header text-black" >
                             <div className="px-2   c_card_filter text-black" >
-                                <div className="row" style={{ display: ((commonFunc.loginIsSCMCompany() === 1)) ? 'none' : "block" }} >
+                                <div className="row" style={{ display: ((_cfunc.loginIsSCMCompany() === 1)) ? 'none' : "block" }} >
                                     <Col sm="3">
                                         <FormGroup className="mb-2 row mt-3 " >
                                             <Label className=" p-2"
@@ -331,7 +331,7 @@ const UploadExcel = (props) => {
                                         </FormGroup>
                                     </Col >
                                 </div>
-                                <div className="row " style={{ display: ((commonFunc.loginIsSCMCompany() === 1)) ? 'block' : "none" }} >
+                                <div className="row " style={{ display: ((_cfunc.loginIsSCMCompany() === 1)) ? 'block' : "none" }} >
 
                                     <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
                                 </div>

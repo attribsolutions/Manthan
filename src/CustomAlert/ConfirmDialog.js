@@ -5,12 +5,12 @@ import { useHistory } from 'react-router-dom';
 import useConfirm from './useConfirm';
 
 
-export let CustomAlert;
+export let customAlert;
 
 const ConfirmDialog = () => {
 
     const { confirmState, confirm } = useConfirm();
-    CustomAlert = confirm;
+    customAlert = confirm;
     let component = null;
 
     if (confirmState.Status) {

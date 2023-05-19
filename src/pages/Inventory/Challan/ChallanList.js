@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { BreadcrumbReset, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
-
-import Flatpickr from "react-flatpickr";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
-
-import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import Challan from "./Challan";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const ChallanList = () => {
 
@@ -157,16 +153,9 @@ const ChallanList = () => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "83px" }}>From Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             name='fromdate'
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
                                             value={fromdate}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
                                             onChange={fromdateOnchange}
                                         />
                                     </Col>
@@ -177,16 +166,9 @@ const ChallanList = () => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "65px" }}>To Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             nane='todate'
-                                            className="form-control d-block p-2 bg-white text-dark"
                                             value={todate}
-                                            placeholder="Select..."
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
                                             onChange={todateOnchange}
                                         />
                                     </Col>

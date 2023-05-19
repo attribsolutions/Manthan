@@ -6,7 +6,6 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Flatpickr from "react-flatpickr"
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -28,6 +27,7 @@ import * as mode from "../../../routes/PageMode"
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const PaymentEntry = (props) => {
 
@@ -314,16 +314,9 @@ const PaymentEntry = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptDate}  </Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='ReceiptDate'
                                                 value={values.ReceiptDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={ReceiptDate_Onchange}
                                             />
                                         </Col>
@@ -462,16 +455,9 @@ const PaymentEntry = (props) => {
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeDate}</Label>
                                             <Col sm="7">
-                                                <Flatpickr
+                                                <C_DatePicker
                                                     name='ChequeDate'
                                                     value={values.ChequeDate}
-                                                    className="form-control d-block p-2 bg-white text-dark"
-                                                    placeholder="Select..."
-                                                    options={{
-                                                        altInput: true,
-                                                        altFormat: "d-m-Y",
-                                                        dateFormat: "Y-m-d",
-                                                    }}
                                                     onChange={ChequeDate_Onchange}
                                                 />
                                             </Col>

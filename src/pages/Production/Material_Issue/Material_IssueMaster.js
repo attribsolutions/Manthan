@@ -8,7 +8,6 @@ import {
     Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
@@ -26,9 +25,21 @@ import {
     saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate_ymd, loginCompanyID, loginPartyID, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import {
-    editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, saveMaterialIssue, SaveMaterialIssueSuccess
+    breadcrumbReturnFunc,
+    convertDatefunc,
+    loginUserID,
+    currentDate_ymd,
+    loginCompanyID,
+    loginPartyID,
+    btnIsDissablefunc,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
+import {
+    editMaterialIssueIdSuccess,
+    goButtonForMaterialIssue_Master_Action,
+    goButtonForMaterialIssue_Master_ActionSuccess,
+    saveMaterialIssue, SaveMaterialIssueSuccess
 } from "../../../store/Production/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -38,7 +49,8 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const MaterialIssueMaster = (props) => {
 
@@ -60,7 +72,7 @@ const MaterialIssueMaster = (props) => {
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
-   
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -120,7 +132,7 @@ const MaterialIssueMaster = (props) => {
         if ((GoButton.Status === true) && (GoButton.StatusCode === 200)) {
 
             const { ListData, Data } = GoButton
-            const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom,  } = ListData
+            const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, } = ListData
             setState((i) => {
                 i.values.MaterialIssueDate = currentDate_ymd
                 i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
@@ -263,7 +275,7 @@ const MaterialIssueMaster = (props) => {
         }
     }, [pageField]);
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonList]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonList]);
 
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
@@ -486,7 +498,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     const handleChange = (event, index1, index2) => {
-        
+
         let input = event.target.value
         let result = /^\d*(\.\d{0,3})?$/.test(input);
         let val1 = 0;
@@ -721,17 +733,10 @@ const MaterialIssueMaster = (props) => {
                                         <FormGroup className="row mt-2  ">
                                             <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.MaterialIssueDate} </Label>
                                             <Col sm="7">
-                                                <Flatpickr
+                                                <C_DatePicker
                                                     name="MaterialIssueDate"
                                                     value={values.MaterialIssueDate}
                                                     // disabled={(Data.length > 0) ? true : false}
-                                                    className="form-control d-block bg-white text-dark"
-                                                    placeholder="YYYY-MM-DD"
-                                                    options={{
-                                                        // altInput: true,
-                                                        altFormat: "d-m-Y",
-                                                        dateFormat: "Y-m-d",
-                                                    }}
                                                     onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 />
                                                 {isError.MaterialIssueDate.length > 0 && (

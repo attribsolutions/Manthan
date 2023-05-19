@@ -24,7 +24,7 @@ import PaymentEntryList from './PaymentEntryList';
 import InvoiceForGRN from './GRNList';
 import SalesReturnListForDashboard from './SalesReturnListForDashboard';
 import { orderApprovalAction, orderApprovalActionSuccess } from '../../../store/Purchase/OrderPageRedux/actions';
-import { CustomAlert } from '../../../CustomAlert/ConfirmDialog';
+import { customAlert } from '../../../CustomAlert/ConfirmDialog';
 
 
 const Dashboard_1 = (props) => {
@@ -99,13 +99,13 @@ const Dashboard_1 = (props) => {
 
         if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
             dispatch(orderApprovalActionSuccess({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: orderApprovalMsg.Message,
             })
         } else if (orderApprovalMsg.Status === true) {
             dispatch(orderApprovalActionSuccess({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(orderApprovalMsg.Message),
             })

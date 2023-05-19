@@ -41,7 +41,7 @@ import {
     saveBankAssign,
     saveBankAssign_Success,
 } from "../../../store/Accounting/BankAssignRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const BankAssign = (props) => {
 
@@ -321,7 +321,7 @@ const BankAssign = (props) => {
                 }
             })
             if (invalidMsg1.length > 0) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: JSON.stringify(invalidMsg1)
                 })

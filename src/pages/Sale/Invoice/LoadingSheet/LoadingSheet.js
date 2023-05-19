@@ -3,11 +3,9 @@ import {
     Col,
     FormGroup,
     Label,
-    Input,
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../../store/actions";
@@ -16,20 +14,31 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeDate,
     onChangeSelect,
     resetFunction,
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginPartyID, currentDate_ymd, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginPartyID,
+    currentDate_ymd,
+    btnIsDissablefunc,
+    loginUserID,
+    metaTagLabel
+} from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
 import { invoiceListGoBtnfilter } from "../../../../store/Sales/Invoice/action";
 import { getVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
-import { LoadingSheet_GoBtn_API, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMaster, SaveLoadingSheetMasterSucccess } from "../../../../store/Sales/LoadingSheetRedux/action";
+import {
+    LoadingSheet_GoBtn_API,
+    LoadingSheet_GoBtn_API_Succcess,
+    SaveLoadingSheetMaster,
+    SaveLoadingSheetMasterSucccess
+} from "../../../../store/Sales/LoadingSheetRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -37,7 +46,8 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
-import * as commonFunc from "../../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../../CustomValidateForm";
 
 const LoadingSheet = (props) => {
 
@@ -161,7 +171,7 @@ const LoadingSheet = (props) => {
         }
     }, [pageField])
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
@@ -354,16 +364,9 @@ const LoadingSheet = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Date}  </Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='Date'
                                                 value={values.Date}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={DateOnchange}
                                             />
                                         </Col>
@@ -402,16 +405,9 @@ const LoadingSheet = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.FromDate} </Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='FromDate'
                                                 value={values.FromDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={FromDateOnchange}
                                             />
                                         </Col>
@@ -424,16 +420,9 @@ const LoadingSheet = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.ToDate}</Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='ToDate'
                                                 value={values.ToDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={ToDateOnchange}
                                             />
                                         </Col>
