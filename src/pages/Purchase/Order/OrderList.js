@@ -1,38 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Select from "react-select";
-
-import {
-    deleteOrderId,
-    deleteOrderIdSuccess,
-    editOrderId,
-    editOrderIdSuccess,
-    getOrderListPage,
-    getOrderListPageSuccess,
-    orderApprovalAction,
-    orderApprovalActionSuccess,
-    updateOrderIdSuccess,
-} from "../../../store/Purchase/OrderPageRedux/actions";
-import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
-import Order from "./Order";
-import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
-import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc, convertDatefunc, currentDate_ymd, loginPartyID } from "../../../components/Common/CommonFunction";
-import { Go_Button } from "../../../components/Common/CommonButton";
-import * as report from '../../../Reports/ReportIndex'
-import * as url from "../../../routes/route_url";
-import * as mode from "../../../routes/PageMode";
-import * as pageId from "../../../routes/allPageID"
-import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
-import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { order_Type } from "../../../components/Common/C-Varialbes";
-import { GoButtonForinvoiceAdd, makeIB_InvoiceAction } from "../../../store/Sales/Invoice/action";
-import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
+import Select from "react-select";
+import { Col, FormGroup, Label } from "reactstrap";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import Order from "./Order";
+import * as _act from "../../../store/actions";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
+
+import { Go_Button } from "../../../components/Common/CommonButton";
+import * as report from '../../../Reports/ReportIndex'
+import { url, mode, pageId } from "../../../routes/index"
+import { order_Type } from "../../../components/Common/C-Varialbes";
+import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
+import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 
 
 const OrderList = () => {
@@ -41,8 +24,8 @@ const OrderList = () => {
     const history = useHistory();
 
     const fileds = {
-        FromDate: currentDate_ymd,
-        ToDate: currentDate_ymd,
+        FromDate: _cfunc.currentDate_ymd,
+        ToDate: _cfunc.currentDate_ymd,
         Supplier: { value: "", label: "All" }
     }
 
@@ -81,12 +64,13 @@ const OrderList = () => {
     const values = { ...state.values }
     const { fieldLabel } = state;
 
-    const action = {
-        getList: getOrderListPage,
-        deleteId: deleteOrderId,
-        postSucc: postMessage,
-        updateSucc: updateOrderIdSuccess,
-        deleteSucc: deleteOrderIdSuccess
+    const tableAction = {
+        getList: _act.getOrderListPage,
+        deleteId: _act.deleteOrderId,
+        postSucc: _act.saveOrderActionSuccess,
+        updateSucc: _act.updateOrderIdSuccess,
+        deleteSucc: _act.deleteOrderIdSuccess,
+
     }
 
     // Featch Modules List data  First Rendering
@@ -153,13 +137,13 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
-        dispatch(getOrderListPageSuccess([]))//for clear privious order list
+        dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, isOrderApproval })
         setPageMode(page_Mode)
-        dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
-        dispatch(GetVenderSupplierCustomer(subPageMode))
+        dispatch(_act.commonPageFieldListSuccess(null))
+        dispatch(_act.commonPageFieldList(page_Id))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
+        dispatch(_act.GetVenderSupplierCustomer(subPageMode))
         goButtonHandler("event", IBType)
 
     }, []);
@@ -201,15 +185,15 @@ const OrderList = () => {
     }, [makeIBInvoice]);
 
     useEffect(() => {
-        
+
         if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
-            dispatch(orderApprovalActionSuccess({ Status: false }))
+            dispatch(_act.orderApprovalActionSuccess({ Status: false }))
             CustomAlert({
                 Type: 1,
                 Message: orderApprovalMsg.Message,
             })
         } else if (orderApprovalMsg.Status === true) {
-            dispatch(orderApprovalActionSuccess({ Status: false }))
+            dispatch(_act.orderApprovalActionSuccess({ Status: false }))
             CustomAlert({
                 Type: 4,
                 Message: JSON.stringify(orderApprovalMsg.Message),
@@ -226,14 +210,14 @@ const OrderList = () => {
             const jsonBody = JSON.stringify({
                 FromDate: obj.preOrderDate,
                 Customer: obj.CustomerID,
-                Party: loginPartyID(),
+                Party: _cfunc.loginPartyID(),
                 OrderIDs: `${obj.id}`
             });
             const customer = {
                 value: obj.CustomerID,
                 label: obj.Customer
             }
-            dispatch(makeIB_InvoiceAction({ jsonBody, path: url.IB_INVOICE, pageMode: mode.defaultsave, customer }));
+            dispatch(_act.makeIB_InvoiceAction({ jsonBody, path: url.IB_INVOICE, pageMode: mode.defaultsave, customer }));
         }
         else if (subPageMode === url.ORDER_LIST_4) {
             const { CustomerID, id, OrderDate } = obj
@@ -241,11 +225,11 @@ const OrderList = () => {
 
             const jsonBody = JSON.stringify({
                 OrderIDs: id.toString(),
-                FromDate: convertDatefunc(OrderDate),
+                FromDate: _cfunc.convertDatefunc(OrderDate),
                 Customer: CustomerID,
-                Party: loginPartyID(),
+                Party: _cfunc.loginPartyID(),
             });
-            dispatch(GoButtonForinvoiceAdd({ subPageMode: url.INVOICE_1, jsonBody, btnId: gobtnId }));
+            dispatch(_act.GoButtonForinvoiceAdd({ subPageMode: url.INVOICE_1, jsonBody, btnId: gobtnId }));
         }
         else {
             var isGRNSelect = ''
@@ -284,7 +268,7 @@ const OrderList = () => {
                         Mode: isMode
                     })
 
-                    dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode, path: path, grnRef, challanNo }))
+                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, pageMode, path: path, grnRef, challanNo }))
 
                 } else {
                     alert("Please Select Order1")
@@ -295,7 +279,7 @@ const OrderList = () => {
 
     function editBodyfunc(config) {
         const { rowData, btnId } = config;
-        btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
         try {
             const jsonBody = JSON.stringify({
                 Party: rowData.SupplierID,
@@ -304,32 +288,32 @@ const OrderList = () => {
                 OrderID: rowData.id,
                 RateParty: rowData.CustomerID
             })
-            dispatch(editOrderId({ jsonBody, ...config }));
-        } catch (error) { btnIsDissablefunc({ btnId, state: false }) }
+            dispatch(_act.editOrderId({ jsonBody, ...config }));
+        } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
     function downBtnFunc(row) {
         var ReportType = report.order1;
-        dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
+        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
     }
 
     function goButtonHandler(event, IBType) {
 
-        btnIsDissablefunc({ btnId: gobtnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
             let filtersBody = {}
             const PO_filters = {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
                 "Supplier": values.Supplier.value,
-                "Customer": loginPartyID(),
+                "Customer": _cfunc.loginPartyID(),
                 "OrderType": order_Type.PurchaseOrder,
                 "IBType": IBType ? IBType : otherState.IBType
             }
             const SO_filters = {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
-                "Supplier": loginPartyID(),//Suppiler swipe
+                "Supplier": _cfunc.loginPartyID(),//Suppiler swipe
                 "Customer": values.Supplier.value,//customer swipe
                 "OrderType": order_Type.SaleOrder,
                 "IBType": IBType ? IBType : otherState.IBType
@@ -338,7 +322,7 @@ const OrderList = () => {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
                 "Supplier": values.Supplier.value,
-                "Customer": loginPartyID(),
+                "Customer": _cfunc.loginPartyID(),
                 "OrderType": order_Type.InvoiceToGRN,
                 "IBType": IBType ? IBType : otherState.IBType
             }
@@ -351,9 +335,9 @@ const OrderList = () => {
             else {
                 filtersBody = JSON.stringify(PO_filters);
             }
-            dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
+            dispatch(_act.getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
 
-        } catch (error) { btnIsDissablefunc({ btnId: gobtnId, state: false }) }
+        } catch (error) { _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: false }) }
     }
 
     function fromdateOnchange(e, date) {
@@ -422,8 +406,8 @@ const OrderList = () => {
         }
         const jsonBody = JSON.stringify(body);
 
-        dispatch(editOrderIdSuccess({ Status: false }))
-        dispatch(orderApprovalAction({ jsonBody, btnId }))
+        dispatch(_act.editOrderIdSuccess({ Status: false }))
+        dispatch(_act.orderApprovalAction({ jsonBody, btnId }))
     }
 
     const HeaderContent = () => {
@@ -493,7 +477,7 @@ const OrderList = () => {
                 {
                     (pageField) ?
                         <CommonPurchaseList
-                            action={action}
+                            action={tableAction}
                             reducers={reducers}
                             showBreadcrumb={false}
                             masterPath={otherState.masterPath}

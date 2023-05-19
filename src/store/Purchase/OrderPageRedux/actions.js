@@ -47,11 +47,11 @@ export const getOrderListPageSuccess = (resp) => ({
 });
 
 
-export const saveOrderAaction = (config = {}) => ({
+export const saveOrderAction = (config = {}) => ({
   type: SAVE_ORDER_FROM_ORDER_PAGE,
   config,
 });
-export const postOrderSuccess = (resp) => ({
+export const saveOrderActionSuccess = (resp) => ({
   type: SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS,
   payload: resp
 });
