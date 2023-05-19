@@ -29,7 +29,11 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI } from "../../../store/Administrator/RouteUpdateRedux/action";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+
+import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
+
+import * as _cfunc from "../../../components/Common/CommonFunction";
+
 
 const RouteUpdate = (props) => {
 
@@ -140,7 +144,7 @@ const RouteUpdate = (props) => {
         }
     }, [pageField])
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
@@ -159,14 +163,16 @@ const RouteUpdate = (props) => {
         },
         {
             text: "RouteName",
-            dataField: "RouteName",
+            dataField: "Route Name",
 
             formatter: (value, row, key) => {
 
                 return (
                     <Select
                         classNamePrefix="select2-selection"
-                        defaultValue={{ value: row.Route, label: row.RouteName }}
+                        defaultValue={!(row.Route > 0) ? { value: "", label: " select... " } : {
+                            value: row.Route, label: row.RouteName
+                        }}
                         options={RouteName_Options}
                         onChange={e => {
                             row["Route"] = e.value;
@@ -218,7 +224,7 @@ const RouteUpdate = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
                     {/* <Container fluid> */}

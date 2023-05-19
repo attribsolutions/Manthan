@@ -20,7 +20,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
 import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 
@@ -159,7 +159,7 @@ const LoadingSheetUpdate = (props) => {
         const body = { jsonBody }
 
         if (LoadingNumber === ",") {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Select At Least One Invoice",
             })

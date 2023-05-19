@@ -34,7 +34,7 @@ import {
     updatePriceListSuccess
 } from "../../../store/Administrator/PriceList/action";
 import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
 import * as mode from "../../../routes/PageMode"
@@ -111,7 +111,7 @@ const PriceMaster = (props) => {
             dispatch(savePriceMasterActionSuccess({ Status: false }))
             dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setDropOpen(false)
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: PostAPIResponse.Message,
             })
@@ -155,7 +155,7 @@ const PriceMaster = (props) => {
         if ((deleteAPIResponse.Status === true) && (deleteAPIResponse.StatusCode === 200)) {
             dispatch(delete_PriceListSuccess({ Status: false }))
             dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: deleteAPIResponse.Message,
             })
@@ -168,7 +168,7 @@ const PriceMaster = (props) => {
             dispatch(updatePriceListSuccess({ Status: false }))
             dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setDropOpen(false)
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: updateMessage.Message,
             })
@@ -226,7 +226,7 @@ const PriceMaster = (props) => {
     const delete_PriceList_Handler = async (price, event) => {// Delete handler
         event.preventDefault();
         const btnId = "cc";
-        const promise = await CustomAlert({
+        const promise = await customAlert({
             Type: 7,
             Message: `Are you sure you want to delete this Price : "${price.label}"`,
         })
@@ -252,7 +252,7 @@ const PriceMaster = (props) => {
         }
 
         if (invaildMsg.length > 0) {
-            CustomAlert({ Type: 3, Message: invaildMsg })
+            customAlert({ Type: 3, Message: invaildMsg })
         }
         else {
             var mkup = document.getElementById(`mkupMkdown`).checked

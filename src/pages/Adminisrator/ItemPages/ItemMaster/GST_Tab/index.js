@@ -11,7 +11,7 @@ import {
 } from 'reactstrap';
 import GSTTable from './Table';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
-import { CustomAlert } from '../../../../../CustomAlert/ConfirmDialog';
+import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { C_DatePicker } from '../../../../../CustomValidateForm';
 
 function GSTTab(props) {
@@ -50,7 +50,7 @@ function GSTTab(props) {
 
         }
         else {
-            CustomAlert({ Type: 4, Message: "Please Enter value" })
+            customAlert({ Type: 4, Message: "Please Enter value" })
         }
     };
     const clearState = () => {

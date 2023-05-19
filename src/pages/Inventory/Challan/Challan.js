@@ -40,9 +40,9 @@ import {
     GoButtonForChallanAddSuccess,
     saveChallan_ChallanAdd
 } from "../../../store/Inventory/ChallanRedux/actions";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const Challan = (props) => {
@@ -243,7 +243,7 @@ const Challan = (props) => {
         }
     }, [pageField]);
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [GoButton]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [GoButton]);
 
     const venderOptions = vender.map((i) => ({
         value: i.id,
@@ -583,7 +583,7 @@ const Challan = (props) => {
             validMsg.push({ Party: "Please Select Party" })
         };
         if (validMsg.length > 0) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: validMsg
             })
@@ -677,7 +677,7 @@ const Challan = (props) => {
         })
 
         if (isvalidMsg.length > 0) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: isvalidMsg,
             })

@@ -49,7 +49,7 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const MaterialIssueMaster = (props) => {
@@ -275,7 +275,7 @@ const MaterialIssueMaster = (props) => {
         }
     }, [pageField]);
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonList]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonList]);
 
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,

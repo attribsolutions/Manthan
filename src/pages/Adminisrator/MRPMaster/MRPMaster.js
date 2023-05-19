@@ -44,9 +44,9 @@ import {
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Change_Button } from "../../../components/Common/CommonButton";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const MRPMaster = (props) => {
@@ -204,7 +204,7 @@ const MRPMaster = (props) => {
         }
     }, [deleteMessage]);
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
 
     const PartyDropdown_Options = Party.map((Data) => ({
         value: Data.id,
@@ -262,7 +262,7 @@ const MRPMaster = (props) => {
         });
 
         if (!(effectiveDate)) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: "Effective Date is Required"
             })

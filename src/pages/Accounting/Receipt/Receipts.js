@@ -30,11 +30,11 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import  {CInput, C_DatePicker} from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const Receipts = (props) => {
     
@@ -249,7 +249,7 @@ const Receipts = (props) => {
         }
     }, [postMsg])
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -462,7 +462,7 @@ const Receipts = (props) => {
 
         let diffrence = Math.abs(calSum - values.AmountPaid);
         if (Number(values.AmountPaid) < calSum) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: `Amount Paid value is Excess ${diffrence}`,
             })
@@ -470,7 +470,7 @@ const Receipts = (props) => {
 
         }
         else if (Number(values.AmountPaid) > calSum) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: `Amount Paid value is Short ${diffrence}`,
             })
@@ -479,7 +479,7 @@ const Receipts = (props) => {
         }
 
         if ((values.ReceiptModeName.value === undefined) || values.ReceiptModeName.value === "") {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: "Receipt Mode Is Required",
             })
@@ -490,7 +490,7 @@ const Receipts = (props) => {
             || (values.AmountPaid === "NaN")
             || (values.AmountPaid === undefined)
             || (values.AmountPaid === 0)) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: `Amount Paid value can not be 0`,
             })
@@ -511,7 +511,7 @@ const Receipts = (props) => {
             };
 
             if (invalidMsg1.length > 0) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: JSON.stringify(invalidMsg1)
                 })

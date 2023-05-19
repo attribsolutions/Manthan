@@ -47,10 +47,10 @@ import {
     makeIB_InvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { discountCalculate, stockDistributeFunc } from "./invoiceCaculations";
 import "./invoice.scss"
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const Invoice = (props) => {
@@ -188,13 +188,13 @@ const Invoice = (props) => {
             dispatch(GoButtonForinvoiceAddSuccess([]))
 
             if (pageMode === mode.dropdownAdd) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                 })
             }
             else {
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                     RedirectPath: url.INVOICE_LIST_1,
@@ -210,7 +210,7 @@ const Invoice = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
             })
@@ -263,7 +263,7 @@ const Invoice = (props) => {
     }, [makeIBInvoice]);
 
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [OrderItemDetails]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [OrderItemDetails]);
 
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({

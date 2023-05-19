@@ -16,7 +16,7 @@ import {
   get_Party_ForDropDown,
 } from "../../../../../store/Administrator/ItemsRedux/action";
 import { loginUserID, loginCompanyID, loginIsSCMCompany } from "../../../../../components/Common/CommonFunction";
-import { CustomAlert } from "../../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../../../CustomValidateForm";
 
 function MRPTab(props) {
@@ -89,7 +89,7 @@ function MRPTab(props) {
       props.func(updatedTableData);
       clearState();
     } else {
-      CustomAlert({ Type: 4, Message: "Please Enter value" })
+      customAlert({ Type: 4, Message: "Please Enter value" })
     }
   };
 

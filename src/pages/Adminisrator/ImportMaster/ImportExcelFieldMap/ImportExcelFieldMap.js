@@ -18,7 +18,7 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import * as commonFunc from "../../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -30,7 +30,7 @@ import {
     save_ImportFiledMap,
     save_ImportFiledMap_Success
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 const ImportExcelFieldMap = (props) => {
 
@@ -73,7 +73,7 @@ const ImportExcelFieldMap = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
-        if ((commonFunc.loginIsSCMCompany() === 1)) {
+        if ((_cfunc.loginIsSCMCompany() === 1)) {
             goButtonHandler()
         }
     }, []);
@@ -96,7 +96,7 @@ const ImportExcelFieldMap = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            commonFunc.breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -111,7 +111,7 @@ const ImportExcelFieldMap = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(save_ImportFiledMap_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
@@ -120,7 +120,7 @@ const ImportExcelFieldMap = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(save_ImportFiledMap_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
             })
@@ -132,7 +132,7 @@ const ImportExcelFieldMap = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${" Field Count"} :${goButtonItem.length}`))
     }, [goButtonItem])
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonItem]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonItem]);
 
 
     const partyDropdown_Options = partyList.map((index) => ({
@@ -180,10 +180,10 @@ const ImportExcelFieldMap = (props) => {
     ];
 
     async function goButtonHandler() {
-        let partyId = ((commonFunc.loginIsSCMCompany() === 1)) ? commonFunc.loginPartyID() : partySelect.value;
+        let partyId = ((_cfunc.loginIsSCMCompany() === 1)) ? _cfunc.loginPartyID() : partySelect.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
-            CompanyID: commonFunc.loginCompanyID()
+            CompanyID: _cfunc.loginCompanyID()
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
@@ -197,7 +197,7 @@ const ImportExcelFieldMap = (props) => {
 
         let jsonArr = []
         const invalid = []
-        let partyId = ((commonFunc.loginIsSCMCompany() === 1)) ? commonFunc.loginPartyID() : partySelect.value;
+        let partyId = ((_cfunc.loginIsSCMCompany() === 1)) ? _cfunc.loginPartyID() : partySelect.value;
         goButtonItem.forEach(i => {
 
             if ((((i.Value === '') || (i.Value === null)) && (i.IsCompulsory === true))) {
@@ -208,16 +208,16 @@ const ImportExcelFieldMap = (props) => {
                     Value: i.Value,
                     ImportField: i.id,
                     Party: partyId,
-                    Company: commonFunc.loginCompanyID(),
-                    CreatedBy: commonFunc.loginUserID(),
-                    UpdatedBy: commonFunc.loginUserID(),
+                    Company: _cfunc.loginCompanyID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
                 }
                 jsonArr.push(obj)
             }
         })
 
         if (invalid.length > 0) {
-            CustomAlert({ Type: 3, Message: invalid })
+            customAlert({ Type: 3, Message: invalid })
             return
         } else {
             const jsonBody = JSON.stringify(jsonArr);
@@ -228,11 +228,11 @@ const ImportExcelFieldMap = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{commonFunc.metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <form onSubmit={(event) => SaveHandler(event)} noValidate>
                     <div className="page-content">
-                        <div style={{ display: ((commonFunc.loginIsSCMCompany() === 1)) && "none" }}>
+                        <div style={{ display: ((_cfunc.loginIsSCMCompany() === 1)) && "none" }}>
                             <div className="px-2 c_card_header text-black" >
                                 <div className="px-2   c_card_filter text-black" >
                                     <div className="row" >

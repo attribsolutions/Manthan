@@ -47,7 +47,7 @@ import {
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CredietDebitType, Receipt_No_List, Receipt_No_List_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 
@@ -166,13 +166,13 @@ const Debit = (props) => {
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
             }
             else {
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -185,7 +185,7 @@ const Debit = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(saveCredit_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
             })

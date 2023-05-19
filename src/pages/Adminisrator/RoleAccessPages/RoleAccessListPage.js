@@ -28,7 +28,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/CommonFunction";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import RoleAccessAdd from "./RoleAccessAdd"
 
 const RoleAccessListPage1 = () => {
@@ -112,7 +112,7 @@ const RoleAccessListPage1 = () => {
         if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
             dispatch(DeleteRoleAcessSuccess({ Status: false }));
             dispatch(getRoleAccessListPage(getListbodyFunc()));
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: JSON.stringify(deleteMsg.Message),
             })
@@ -130,7 +130,7 @@ const RoleAccessListPage1 = () => {
     //select id for delete row
     const deleteHandeler = async (id, name) => {
 
-        const ispermission = await CustomAlert({
+        const ispermission = await customAlert({
             Type: 7,
             Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
         })
@@ -351,14 +351,14 @@ const RoleAccessListPage = () => {
             dispatch(saveCopyRoleAccessActionSuccess({ Status: false }))
             dispatch(getRoleAccessListPage());
             tog_center()
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: postMsgCopy.Message,
             })
         }
         else if (postMsgCopy.Status === true) {
             dispatch(saveCopyRoleAccessActionSuccess({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: JSON.stringify(postMsgCopy.Message),
             })
@@ -381,7 +381,7 @@ const RoleAccessListPage = () => {
 
         const { rowData, btnId } = config;
 
-        const ispermission = await CustomAlert({
+        const ispermission = await customAlert({
             Type: 7,
             Message: `Are you sure you want to delete this Role : "${rowData.RoleName}"`,
         })

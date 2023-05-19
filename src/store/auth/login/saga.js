@@ -22,7 +22,7 @@ import {
 } from "../../../helpers/backend_helper"
 import { AlertState } from "../../actions"
 import { history } from "../../../components/Common/CommonFunction"
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 
 
 function* loginUser({ payload: { user, history } }) {
@@ -144,7 +144,7 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
 
   } catch (error) {
 
-    const aa = yield CustomAlert({
+    const aa = yield customAlert({
       Type: 2,
       Message: `RoleAccess get Api Error `
     })

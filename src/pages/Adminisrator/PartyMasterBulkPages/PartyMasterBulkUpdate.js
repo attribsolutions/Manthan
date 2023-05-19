@@ -47,8 +47,8 @@ import {
     updatePartyMasterBulkID
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { getState } from "../../../store/Administrator/EmployeeRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 
@@ -194,7 +194,7 @@ const PartyMasterBulkUpdate = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Party Count"} :${Data.length}`))
     }, [Data])
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     useEffect(() => {
         if (pageField) {
@@ -236,7 +236,7 @@ const PartyMasterBulkUpdate = (props) => {
     const goButtonHandler = () => {
 
         if (SelectFieldName.length === 0) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Please select field",
             })
@@ -483,7 +483,7 @@ const PartyMasterBulkUpdate = (props) => {
             else {
 
                 if (arr1.length <= 0) {
-                    CustomAlert({
+                    customAlert({
                         Type: 3,
                         Message: "Update At least One Field",
                     })
@@ -534,7 +534,7 @@ const PartyMasterBulkUpdate = (props) => {
 
                     })
                     if (invalidMsg1.length > 0) {
-                        CustomAlert({
+                        customAlert({
                             Type: 3,
                             Message: invalidMsg1.toString()
                         })

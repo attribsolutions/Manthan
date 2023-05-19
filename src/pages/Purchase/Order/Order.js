@@ -22,7 +22,7 @@ import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useRef } from "react";
 import { CInput, C_DatePicker, onlyNumberRegx } from "../../../CustomValidateForm/index";
@@ -32,6 +32,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { editPartyItemID } from "../../../store/Administrator/PartyItemsRedux/action";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { pageFieldUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 
 
 
@@ -147,27 +148,20 @@ const Order = (props) => {
     }, []);
 
 
-    useEffect(() => {  // userAccess useEffect
-        let userAcc = null;
-        let locationPath = location.pathname;
+    useEffect(() => userAccessUseEffect({ // userAccess useEffect 
+        props,
+        userAccess,
+        dispatch,
+        setUserAccState,
+        otherloginAccss// for other pages login role access chack
+    }), [userAccess]);
 
-        if (hasShowModal) { locationPath = props.masterPath; };
+    const otherloginAccss = (ind) => {
+        if ((ind.id === pageId.PARTYITEM) && !(subPageMode === url.IB_ORDER)) {
+            setFindPartyItemAccess(true)
+        }
+    };
 
-        userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        });
-
-        if (userAcc) {
-            setUserAccState(userAcc);
-            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
-            let FindPartyItemAccess = userAccess.find((index) => {
-                return (index.id === pageId.PARTYITEM)
-            });
-            if ((FindPartyItemAccess) && !(subPageMode === url.IB_ORDER)) {
-                setFindPartyItemAccess(true)
-            };
-        };
-    }, [userAccess]);
 
     useEffect(() => { // hasEditVal useEffect
 
@@ -230,12 +224,8 @@ const Order = (props) => {
         }
     }, []);
 
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
+    useEffect(() => pageFieldUseEffect({ state, setState, pageField }), [pageField])
+    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [orderItemTable]);
 
     useEffect(() => {
         if (assingItemData.Status === true) {
@@ -275,10 +265,9 @@ const Order = (props) => {
             setTermsAndConTable([])
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
 
-            const a = await CustomAlert({
+            const a = await customAlert({
                 Type: 1,
                 Message: postMsg.Message,
-                RedirectPath: listPath,
             })
             if (a) {
                 history.push({
@@ -288,7 +277,7 @@ const Order = (props) => {
 
         } else if (postMsg.Status === true) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
             })
@@ -302,14 +291,14 @@ const Order = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(_act.updateOrderIdSuccess({ Status: false }));
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
         }
     }, [updateMsg, modalCss]);
 
-    useEffect(_cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [orderItemTable]);
+ 
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
@@ -555,7 +544,7 @@ const Order = (props) => {
     const goButtonHandler = async () => {
 
         if (!supplierSelect > 0) {
-            await CustomAlert({
+            await customAlert({
                 Type: 4,
                 Message: `Please select ${fieldLabel.Supplier}`
             })
@@ -624,7 +613,7 @@ const Order = (props) => {
             btnId: `btn-assingLink-${supplierSelect.value}`
         }
 
-        const isConfirmed = await CustomAlert({
+        const isConfirmed = await customAlert({
             Type: 7,
             Message: "Do you confirm your choice?",
         });
@@ -761,14 +750,14 @@ const Order = (props) => {
             }))
 
             if (isVDC_POvalidMsg.length > 0) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: isVDC_POvalidMsg,
                 })
                 return returnFunc();
             };
             if (validMsg.length > 0) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: validMsg,
                 })
@@ -776,7 +765,7 @@ const Order = (props) => {
                 return returnFunc();
             }
             if (itemArr.length === 0) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: "Please Enter One Item Quantity",
                 })
@@ -784,7 +773,7 @@ const Order = (props) => {
                 return returnFunc();
             }
             if (orderTypeSelect.length === 0) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: "Please Select PO Type",
                 })
@@ -793,7 +782,7 @@ const Order = (props) => {
             if ((termsAndCondition.length === 0) && !(subPageMode === url.ORDER_2)
                 && !(subPageMode === url.ORDER_4) && !(subPageMode === url.IB_ORDER)
             ) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: "Please Enter One Terms And Condition",
                 })

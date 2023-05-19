@@ -41,7 +41,7 @@ import {
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const MarginMaster = (props) => {
@@ -158,7 +158,7 @@ const MarginMaster = (props) => {
         }
     }, [deleteMessage]);
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
 
     const PartyTypeDropdown_Options = Party.map((Data) => ({
         value: Data.id,

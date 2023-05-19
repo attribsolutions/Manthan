@@ -16,12 +16,10 @@ import Footer from "./Footer";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import Spinner from "../Common/Spinner";
 import CustomAlert from "../Common/CustomAlert";
 import BreadcrumbNew from "../../components/Common/BreadcrumbNew"
 
 import { useHistory } from "react-router-dom";
-import { Progress } from "reactstrap";
 import "./loader.scss";
 
 

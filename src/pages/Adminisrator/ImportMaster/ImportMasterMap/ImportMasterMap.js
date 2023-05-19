@@ -30,14 +30,14 @@ import {
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import {
     GoButton_ImportMasterMap,
     GoButton_ImportMasterMap_Success,
     save_ImportMasterMap,
     save_ImportMasterMap_Success
 } from "../../../../store/Administrator/ImportMasterMapRedux/action";
-import * as commonFunc from "../../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
 
 const ImportMasterMap = (props) => {
 
@@ -121,21 +121,21 @@ const ImportMasterMap = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(save_ImportMasterMap_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
         }
         else if (postMsg.Status === true) {
             dispatch(save_ImportMasterMap_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
             })
         }
     }, [postMsg])
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonArr]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonArr]);
 
     const partyDropdown_Options = partyList.map((index) => ({
         value: index.id,

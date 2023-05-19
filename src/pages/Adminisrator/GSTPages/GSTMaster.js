@@ -37,7 +37,7 @@ import {
     loginCompanyID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const GSTMaster = (props) => {
@@ -176,7 +176,7 @@ const GSTMaster = (props) => {
         }
     }, [deleteMessage]);
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
 
     const EffectiveDateHandler = (e, date) => {
         setEffectiveDate(date)

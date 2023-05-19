@@ -21,7 +21,7 @@ import * as mode from "../../../routes/PageMode";
 import * as url from "../../../routes/route_url";
 import { AlertState } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const Inward = (props) => {
@@ -85,7 +85,7 @@ const Inward = (props) => {
     }, [postMsg])
 
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems]);
 
     function InwardDateOnchange(e, date) {
         setInwardDate(date)

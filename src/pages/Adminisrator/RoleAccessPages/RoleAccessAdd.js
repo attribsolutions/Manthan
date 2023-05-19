@@ -39,7 +39,7 @@ import { getcompanyList } from "../../../store/Administrator/CompanyRedux/action
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as url from "../../../routes/route_url"
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -186,14 +186,14 @@ const RoleAccessAdd1 = () => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveRoleAccessAddActionSuccess({ Status: false }))
-            const promise = await CustomAlert({ Type: 1, Message: postMsg.Message, })
+            const promise = await customAlert({ Type: 1, Message: postMsg.Message, })
             if (promise) {
                 history.push({ pathname: url.ROLEACCESS_lIST })
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveRoleAccessAddActionSuccess({ Status: false }))
-            CustomAlert({ Type: 4, Message: JSON.stringify(postMsg.Message), })
+            customAlert({ Type: 4, Message: JSON.stringify(postMsg.Message), })
         }
     }, [postMsg])
 
@@ -1100,14 +1100,14 @@ const RoleAccessAdd = () => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveRoleAccessAddActionSuccess({ Status: false }))
-            const promise = await CustomAlert({ Type: 1, Message: postMsg.Message, })
+            const promise = await customAlert({ Type: 1, Message: postMsg.Message, })
             if (promise) {
                 history.push({ pathname: url.ROLEACCESS_lIST })
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveRoleAccessAddActionSuccess({ Status: false }))
-            CustomAlert({ Type: 4, Message: JSON.stringify(postMsg.Message), })
+            customAlert({ Type: 4, Message: JSON.stringify(postMsg.Message), })
         }
     }, [postMsg])
 
@@ -1185,7 +1185,7 @@ const RoleAccessAdd = () => {
             setShowTableOnUI(true)
         }
         else if (role === undefined) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: "Please Select Role",
             })
@@ -1215,13 +1215,13 @@ const RoleAccessAdd = () => {
                 dispatch(AddPageHandlerForRoleAccessListPage(selectePageID));
             }
             else if (found) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: "Page Alredy Exist",
                 })
             }
             else {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: "Please Select Page",
                 })
