@@ -918,7 +918,6 @@ const Order = (props) => {
                                         <Col sm="6">
 
                                             <C_DatePicker
-                                                id="orderdate"
                                                 name="orderdate"
                                                 value={orderdate}
                                                 disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}

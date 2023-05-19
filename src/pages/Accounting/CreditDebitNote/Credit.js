@@ -34,7 +34,6 @@ import {
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import Select from "react-select";
-import Flatpickr from "react-flatpickr"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -42,7 +41,7 @@ import { currentDate_ymd } from "../../../components/Common/CommonFunction"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import  {CInput} from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern"
 import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
@@ -59,7 +58,7 @@ const Credit = (props) => {
     const dispatch = useDispatch();
     const fileds = {
         CRDRNoteDate: currentDate_ymd
-,
+        ,
         Customer: "",
         NoteReason: "",
         servicesItem: "",
@@ -732,16 +731,9 @@ const Credit = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CRDRNoteDate}</Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='CreditDate'
                                                 value={values.CRDRNoteDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={DateOnchange}
                                             />
                                         </Col>

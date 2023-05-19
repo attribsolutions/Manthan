@@ -18,7 +18,6 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { Edit_Credit_List_API, } from "../../../helpers/backend_helper";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
-import Flatpickr from "react-flatpickr"
 import { Go_Button } from "../../../components/Common/CommonButton";
 import {
     CredietDebitType,
@@ -29,6 +28,7 @@ import {
     GetCreditListSuccess
 } from "../../../store/Accounting/CreditRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const CreditList = () => {
 
@@ -251,16 +251,9 @@ const CreditList = () => {
                             <Label className="col-sm-4 p-2"
                                 style={{ width: "66px" }}>FromDate</Label>
                             <Col sm={7}>
-                                <Flatpickr
+                                <C_DatePicker
                                     name='FromDate'
                                     value={values.FromDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={fromdateOnchange}
                                 />
                             </Col>
@@ -272,16 +265,9 @@ const CreditList = () => {
                             <Label className="col-sm-4 p-2"
                                 style={{ width: "60px" }}>ToDate</Label>
                             <Col sm={7}>
-                                <Flatpickr
+                                <C_DatePicker
                                     name="ToDate"
                                     value={values.ToDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={todateOnchange}
                                 />
                             </Col>
