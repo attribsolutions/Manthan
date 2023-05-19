@@ -319,7 +319,7 @@ const Order = (props) => {
 
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
-
+    
             dataField: "ItemName",
             headerFormatter: (value, row, k) => {
                 return (
@@ -332,18 +332,18 @@ const Order = (props) => {
                                 onClick={assignItem_onClick}>
                                 Assign-Items</samp>
                         </div>
-
+    
                     </div>
                 )
             },
         },
-
+    
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
             hidden: !(pageMode === mode.defaultsave) && true,
             dataField: "StockQuantity",
             formatter: (value, row, k) => {
-
+    
                 return (
                     <div key={row.id} className="text-end">
                         <span>{row.StockQuantity}</span>
@@ -354,7 +354,7 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             },
         },
-
+    
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             dataField: "",
@@ -377,21 +377,21 @@ const Order = (props) => {
                     </>
                 )
             },
-
+    
             headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-
+    
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
             formatter: (value, row, key) => {
-
+    
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
-
+    
                     row.UnitDetails.forEach(i => {
                         if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
                             defaultUnit(i)
@@ -400,7 +400,7 @@ const Order = (props) => {
                             defaultUnit(i)
                         }
                     });
-
+    
                     function defaultUnit(i) {
                         row["Unit_id"] = i.UnitID;
                         row["po_Unit_id"] = i.UnitID;
@@ -408,20 +408,20 @@ const Order = (props) => {
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
                         row["Rate"] = i.Rate;
                     }
-
+    
                 } else {
                     row["edit_Qty"] = row.Quantity;
                     row["edit_Unit_id"] = row.Unit_id;
-
+    
                     row.UnitDetails.forEach(i => {
                         if ((row.Unit_id === i.UnitID)) {
                             row["BaseUnitQuantity"] = i.BaseUnitQuantity;
                             row["UnitName"] = i.UnitName;
                         }
                     });
-
+    
                 }
-
+    
                 return (
                     <Select
                         classNamePrefix="select2-selection"
@@ -439,10 +439,13 @@ const Order = (props) => {
                         onChange={e => {
                             row["Unit_id"] = e.value;
                             row["UnitName"] = e.label
-                            row["BaseUnitQuantity"] = e.baseUnitQty
-                            row["Rate"] = e.Rate
-                            itemWise_CalculationFunc(row)
-                            document.getElementById(`Rate-${key}`).innerText = e.Rate
+                            row["BaseUnitQuantity"] = e.baseUnitQty;
+                            if (!(subPageMode === url.ORDER_1)) {
+                                row["Rate"] = e.Rate
+                                itemWise_CalculationFunc(row)
+                                document.getElementById(`Rate-${key}`).innerText = e.Rate
+                            }
+    
                         }}
                     >
                     </Select >
@@ -452,30 +455,51 @@ const Order = (props) => {
                 return { width: '150px', textAlign: 'center' };
             }
         },
-
+    
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
             dataField: '',
             formatter: (value, row, k) => {
-                return (
-                    <div key={row.id} className="text-end">
-                        <span id={`Rate-${k}`}>{row.Rate}</span>
-                    </div>
-                )
+                if (subPageMode === url.ORDER_1) {
+                    return (
+                        <div key={row.id} className="text-end">
+                            <CInput
+                                type="text"
+                                id={`Rate-${k}`}
+                                cpattern={onlyNumberRegx}
+                                defaultValue={row.Rate}
+                                onChange={(event) => {
+                                    row.Rate = event.target.value;
+                                    itemWise_CalculationFunc(row);
+                                }}
+                            />
+    
+                        </div>
+                    )
+                }
+                else {
+                    return (
+                        <div key={row.id} className="text-end">
+    
+                            <span id={`Rate-${k}`}>{row.Rate}</span>
+                        </div>
+                    )
+                }
+    
             },
-
+    
             headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-
-
+    
+    
         {//------------- MRP column ----------------------------------
             text: "MRP",
             dataField: "MRPValue",
             // sort: true,
             formatter: (value, row, k) => {
-
+    
                 return (
                     <div key={row.id} className="text-end">
                         <span>{row.MRPValue}</span>
@@ -486,7 +510,7 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             },
         },
-
+    
         { //------------- Comment column ----------------------------------
             text: "Comment",
             dataField: "",
@@ -497,7 +521,7 @@ const Order = (props) => {
                         <Input type="text"
                             id={`Comment${k}`}
                             key={`Comment${row.id}`}
-
+    
                             defaultValue={row.Comment}
                             autoComplete="off"
                             onChange={(e) => { row["Comment"] = e.target.value }}
@@ -505,13 +529,12 @@ const Order = (props) => {
                     </span>
                 )
             },
-
+    
             headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
     ];
-
     const defaultSorted = [
         {
             dataField: "PriceList", // if dataField is not match to any column you defined, it will be ignored.
