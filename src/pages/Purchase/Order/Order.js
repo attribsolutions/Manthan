@@ -19,7 +19,7 @@ import { SaveButton, Go_Button, Change_Button } from "../../../components/Common
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
-import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
+import {  initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
@@ -371,7 +371,6 @@ const Order = (props) => {
                             onChange={(e) => {
                                 row["Quantity"] = e.target.value
                                 itemWise_CalculationFunc(row)
-                                document.getElementById(`Quantity-${k}`).value = row.Quantity
                             }}
                         />
                     </>
