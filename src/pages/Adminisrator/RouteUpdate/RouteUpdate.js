@@ -29,12 +29,11 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI } from "../../../store/Administrator/RouteUpdateRedux/action";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
-<<<<<<< Updated upstream
-import * as commonFunc from "../../../components/Common/CommonFunction";
+
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
-=======
+
 import * as _cfunc from "../../../components/Common/CommonFunction";
->>>>>>> Stashed changes
+
 
 const RouteUpdate = (props) => {
 
