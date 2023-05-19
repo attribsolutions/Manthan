@@ -378,11 +378,11 @@ const OrderList = () => {
     }
 
     function orderApprovalFunc(editData) {
-
+       
         const { Data, btnId } = editData;
 
         let isorderItemSet = [];
-        Data.OrderItems.forEach(i => {
+        Data.OrderItem.forEach(i => {
             if (i.Quantity > 0) {
                 isorderItemSet.push({
                     "OrderNo": Data.id,//parent id
@@ -397,7 +397,7 @@ const OrderList = () => {
         })
         let body = {
             "Customer": Data.CustomerSAPCode,//parent--CustomerSAPCode 
-            "DocDate": Data.OrderDate, //parent--OrderDate
+            "DocDate": _cfunc.sap_date_dmy_func(Data.OrderDate), //parent--OrderDate
             "Indicator": "F",
             "OrderNo": Data.id,//parent--id
             "Stats": "1",
