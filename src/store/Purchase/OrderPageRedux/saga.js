@@ -14,12 +14,13 @@ import {
   OrderPage_Save_API_ForPO,
   OrderPage_GoButton_API,
   OrderList_get_Filter_API,
-  OrderPage_Edit_API,
   IBOrderPage_GoButton_API,
   IBOrderList_get_Filter_API,
   GRN_STP_for_orderList_goBtn,
   IBOrderPage_Save_API,
   orderApproval_Save_API,
+  OrderPage_Edit_Get_API,
+  OrderPage_Edit_Post_API,
 } from "../../../helpers/backend_helper";
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -80,8 +81,8 @@ function* saveOrder_GenFunc({ config }) {
 }
 
 function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
-
-  const { btnmode, btnId } = config;
+  
+  const { btnmode, btnId, rowData } = config;
 
   let newconfig = config
 
@@ -91,7 +92,14 @@ function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
   }
 
   try {
-    const response = yield call(OrderPage_Edit_API, newconfig);
+    let response
+    if (config.btnmode === orderApproval) {
+      response = yield call(OrderPage_Edit_Get_API, rowData.id);
+    }
+    else {
+      response = yield call(OrderPage_Edit_Post_API, newconfig);
+    }
+
     response.pageMode = btnmode
     response.btnId = btnId
     yield put(editOrderIdSuccess(response));
@@ -161,7 +169,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
 }
 
 function* orderApproval_GenFunc({ config }) {
-  
+
   try {
     const response = yield call(orderApproval_Save_API, config)
     yield put(orderApprovalActionSuccess(response));
