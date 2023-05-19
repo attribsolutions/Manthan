@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import MetaTags from "react-meta-tags"
 import {
     Card,
@@ -19,6 +19,7 @@ import classnames from "classnames"
 import { getState } from "../../../../store/Administrator/EmployeeRedux/action"
 import {
     editPartyIDSuccess,
+    getDistrictOnState,
     getDistrictOnStateSuccess,
     getPriceList,
     postPartyData,
@@ -185,25 +186,26 @@ const PartyMaster = (props) => {
                     setAddressTab(hasEditVal.PartyAddress)
                     setPriceList(editPriceList);
 
+                    dispatch(getDistrictOnState(hasEditVal.State.id))
                     dispatch(priceListByPartyAction(hasEditVal.PartyType.id,))
                     dispatch(editPartyIDSuccess({ Status: false }));
                 }
-            } else {
-                dispatch(getDistrictOnStateSuccess([]))//clear district privious options
             }
         } catch (e) { }
     }, []);
 
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
+    useLayoutEffect(() => {
+        dispatch(getDistrictOnStateSuccess([]))//clear district privious options
+        dispatch(commonPageFieldSuccess(null));//clear privious PageField
+        dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
         dispatch(commonPageField(pageId.PARTY))
         dispatch(getState());
-        dispatch(priceListByPartyActionSuccess([]));
         dispatch(getPartyTypelist());
         dispatch(getcompanyList());
         dispatch(SSDD_List_under_Company())
+    }, [])
 
-    }, [dispatch]);
+
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
