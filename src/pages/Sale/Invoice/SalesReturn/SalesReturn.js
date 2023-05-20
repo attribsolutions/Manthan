@@ -22,7 +22,6 @@ import {
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Change_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginPartyID, currentDate_ymd, btnIsDissablefunc, loginUserID, loginCompanyID, convertDatefunc, date_ymd_func, loginJsonBody, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -37,11 +36,15 @@ import { decimalRegx, } from "../../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../../store/Administrator/PartyItemsRedux/action";
 import { SalesReturn_add_button_api_For_Invoice, SalesReturn_add_button_api_For_Item } from "../../../../helpers/backend_helper";
 import { salesReturnCalculate } from "./SalesCalculation";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+
 
 const SalesReturn = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -87,14 +90,14 @@ const SalesReturn = (props) => {
         const page_Id = pageId.SALES_RETURN
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartyItemList(loginJsonBody()))
+        dispatch(getpartyItemList(_cfunc.loginJsonBody()))
     }, []);
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
@@ -125,14 +128,14 @@ const SalesReturn = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
     // Return Reason dropdown Values
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 8
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
@@ -397,10 +400,10 @@ const SalesReturn = (props) => {
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <C_DatePicker
                         name='ReturnDate'
-                        defaultValue={returnMode === 1 ? date_ymd_func(row.RowData.BatchDate) : currentDate_ymd}
+                        defaultValue={returnMode === 1 ? _cfunc.date_ymd_func(row.RowData.BatchDate) : currentDate_ymd}
                         disabled={returnMode === 1 ? true : false}
-                        onChange={(e,date) => {
-                            row.BatchDate = date_ymd_func(date)
+                        onChange={(e, date) => {
+                            row.BatchDate = _cfunc.date_ymd_func(date)
                         }}
                     />
                 </span>)
@@ -562,7 +565,7 @@ const SalesReturn = (props) => {
         setTableArr([])
 
         const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
             CustomerID: event.value
         });
 
@@ -661,7 +664,7 @@ const SalesReturn = (props) => {
                 Type: 4,
                 Message: " Please Enter One Item Quantity"
             })
-            return btnIsDissablefunc({ btnId, state: false })
+            return _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
 
         const invalidMsg1 = []
@@ -690,12 +693,12 @@ const SalesReturn = (props) => {
                 Type: 4,
                 Message: JSON.stringify(invalidMsg1)
             })
-            return btnIsDissablefunc({ btnId, state: false })
+            return _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
 
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
                     ReturnDate: values.ReturnDate,
@@ -703,10 +706,10 @@ const SalesReturn = (props) => {
                     Customer: values.Customer.value,
                     Comment: values.Comment,
                     GrandTotal: grand_total,
-                    Party: loginPartyID(),
+                    Party: _cfunc.loginPartyID(),
                     RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
                     ReturnItems: filterData,
                 });
                 // if (pageMode === mode.edit) {
@@ -717,13 +720,13 @@ const SalesReturn = (props) => {
 
             }
             // }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
