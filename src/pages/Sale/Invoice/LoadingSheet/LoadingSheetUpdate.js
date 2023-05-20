@@ -10,9 +10,7 @@ import { commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
-import * as pageId from "../../../../routes//allPageID";
-import * as url from "../../../../routes/route_url";
-import * as mode from "../../../../routes/PageMode";
+import { url, mode, pageId } from "../../../../routes/index"
 import { LoadingSheet_GoBtn_API_Succcess } from "../../../../store/Sales/LoadingSheetRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -23,7 +21,6 @@ import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
-
 
 const LoadingSheetUpdate = (props) => {
 
@@ -131,13 +128,10 @@ const LoadingSheetUpdate = (props) => {
 
         } catch (e) { }
     }
-
-
    
     function rowSelected() {
         return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
     }
-
 
     function DateOnchange(e, date) {
         setLoadingDate(date)
@@ -179,7 +173,6 @@ const LoadingSheetUpdate = (props) => {
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <div id="id1"></div>
-
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
