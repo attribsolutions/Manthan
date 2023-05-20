@@ -10,15 +10,9 @@ import {
   GET_GRN_LIST_PAGE_SUCCESS,
   SAVE_GRN_FROM_GRN_PAGE_ACTION,
   SAVE_GRN_FROM_GRN_PAGE_SUCCESS,
-  SET_GRN_LIST_FILTERS,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
   UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS
 } from './actionType'
-
-export const grnlistfilters = filter => ({
-  type: SET_GRN_LIST_FILTERS,
-  payload: filter,
-})
 
 
 //get listpage api
