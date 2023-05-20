@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Flatpickr from "react-flatpickr";
 import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
@@ -10,22 +9,20 @@ import Select from "react-select";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate_ymd, loginCompanyID, loginPartyID } from "../../../../components/Common/CommonFunction";
-import { editBOMList, updateBOMListSuccess } from "../../../../store/Production/BOMRedux/action";
-import * as pageId from "../../../../routes//allPageID";
-import * as url from "../../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import { initialFiledFunc } from "../../../../components/Common/validationFunction";
-import { GetVender, Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../../components/Common/CommonButton";
-import * as mode from "../../../../routes/PageMode"
 import SalesReturn from "./SalesReturn";
 import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI } from "../../../../store/Sales/SalesReturnRedux/action";
+import { C_DatePicker } from "../../../../CustomValidateForm";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+import { url, mode, pageId } from "../../../../routes/index"
 
 const SalesReturnList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -43,11 +40,9 @@ const SalesReturnList = () => {
         (state) => ({
             tableList: state.SalesReturnReducer.salesReturnList,
             deleteMsg: state.SalesReturnReducer.deleteMsg,
-            // updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
-            // editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
@@ -58,10 +53,8 @@ const SalesReturnList = () => {
 
     const action = {
         getList: salesReturnListAPI,
-        // editId: editBOMList,
         deleteId: delete_SalesReturn_Id,
         postSucc: postMessage,
-        // updateSucc: updateBOMListSuccess,
         deleteSucc: delete_SalesReturn_Id_Succcess
     }
 
@@ -78,8 +71,8 @@ const SalesReturnList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
@@ -110,7 +103,7 @@ const SalesReturnList = () => {
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
         });
         dispatch(salesReturnListAPI(jsonBody));
     }
@@ -141,7 +134,6 @@ const SalesReturnList = () => {
             a.hasValid.Customer.valid = true
             return a
         })
-
     }
 
     const HeaderContent = () => {
@@ -153,16 +145,9 @@ const SalesReturnList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>FromDate</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name='FromDate'
                                     value={values.FromDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={fromdateOnchange}
                                 />
                             </Col>
@@ -174,16 +159,9 @@ const SalesReturnList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name="ToDate"
                                     value={values.ToDate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={todateOnchange}
                                 />
                             </Col>

@@ -22,7 +22,7 @@ export const initialstate = {
   pageField: {},
   masterPage: ''
 }
-const BreadcrumbFix = props => {
+const BreadcrumbFix1 = props => {
 
   const history = useHistory();
   const dispatch = useDispatch();

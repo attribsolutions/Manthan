@@ -1,8 +1,5 @@
 import React, { useEffect, useState, } from "react";
 import {
-    Card,
-    CardBody,
-    CardHeader,
     Col,
     FormGroup,
     Input,
@@ -16,7 +13,6 @@ import {
     commonPageFieldSuccess,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -27,18 +23,7 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import {
-    breadcrumbReturnFunc,
-    btnIsDissablefunc,
-    convertDatefunc,
-    currentDate_ymd,
-    loginCompanyID,
-    loginPartyID,
-    loginUserID,
-    metaTagLabel
-} from "../../../components/Common/CommonFunction";
 import Select from "react-select";
-import Flatpickr from "react-flatpickr"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -48,13 +33,15 @@ import {
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CredietDebitType, Receipt_No_List, Receipt_No_List_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction"
 
 const Debit = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const fileds = {
         CRDRNoteDate: currentDate_ymd,
@@ -121,7 +108,7 @@ const Debit = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -166,13 +153,13 @@ const Debit = (props) => {
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
             }
             else {
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -185,7 +172,7 @@ const Debit = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(saveCredit_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
             })
@@ -202,15 +189,15 @@ const Debit = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 7
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
@@ -218,7 +205,7 @@ const Debit = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 5
         });
         dispatch(CredietDebitType(jsonBody));
@@ -236,9 +223,9 @@ const Debit = (props) => {
 
     const ReceiptNo_Options = ReceiptNumber.map((index) => ({
         value: index.Receipt,
-        label: `${index.FullReceiptNumber} -${index.AmountPaid} -${convertDatefunc(index.ReceiptDate)}`,
+        label: `${index.FullReceiptNumber} -${index.AmountPaid} -${_cfunc.date_dmy_func(index.ReceiptDate)}`,
         Amount: index.AmountPaid,
-        ReceiptDate: index.ReceiptDate
+        ReceiptDate: _cfunc.date_dmy_func(index.ReceiptDate)
     }));
 
     const CreditDebitTypeId = CreditDebitType.find((index) => {
@@ -277,16 +264,16 @@ const Debit = (props) => {
         dispatch(Receipt_No_List_Success([]))
 
         const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
             CustomerID: hasSelect.value
         });
         dispatch(Receipt_No_List(jsonBody));
     }
 
     function ReceiptNumberHandler(hasSelect, evn) {
-       
+
         setState((i) => {
-          
+
             let a = { ...i }
             a.values.GrandTotal = hasSelect.Amount;
             a.values.ReceiptDate = hasSelect.ReceiptDate;
@@ -303,7 +290,7 @@ const Debit = (props) => {
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
@@ -316,9 +303,9 @@ const Debit = (props) => {
                     ReceiptDate: values.ReceiptDate,
                     CRDRNoteItems: [],
                     CRDRInvoices: [],
-                    Party: loginPartyID(),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+                    Party: _cfunc.loginPartyID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
                 });
 
                 if (pageMode === mode.edit) {
@@ -328,7 +315,7 @@ const Debit = (props) => {
                     dispatch(saveCredit({ jsonBody, btnId }));
                 }
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -338,7 +325,7 @@ const Debit = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <form noValidate>
 
@@ -350,16 +337,9 @@ const Debit = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CRDRNoteDate}</Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='CRDRNoteDate'
                                                 value={values.CRDRNoteDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={CRDRNoteDateOnchange}
                                             />
                                         </Col>
@@ -533,25 +513,23 @@ const Debit = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptDate}</Label>
                                         <Col sm="7">
-
-                                            <Flatpickr
-                                                name='ReceiptDate'
+                                            <Input
+                                                name="ReceiptDate"
                                                 id="ReceiptDate"
-                                                disabled={(values.ReceiptNO) ? true : false}
                                                 value={values.ReceiptDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    // altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
-                                                onChange={ReciptDateOnchange}
+                                                disabled={true}
+                                                type="text"
+                                            // className={isError.ReceiptDate.length > 0 ? "is-invalid form-control" : "form-control"}
+                                            // placeholder="Please Enter ReceiptDate"
+                                            // autoComplete='off'
+                                            // autoFocus={true}
+                                            // onChange={(event) => {
+                                            //     onChangeText({ event, state, setState })
+                                            // }}
                                             />
-
-                                            {isError.ReceiptDate.length > 0 && (
+                                            {/* {isError.ReceiptDate.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ReceiptDate}</small></span>
-                                            )}
+                                            )} */}
                                         </Col>
 
                                     </FormGroup>

@@ -37,7 +37,7 @@ import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, metaTagLabel } fr
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const TermsAndConditionsMaster = (props) => {
 
@@ -136,13 +136,13 @@ const TermsAndConditionsMaster = (props) => {
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
             }
             else {
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -157,7 +157,7 @@ const TermsAndConditionsMaster = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(saveTermAndConditionSuccess({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
             })
@@ -174,7 +174,7 @@ const TermsAndConditionsMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(UpdateTermsAndCondtions_Success({ Status: false }));
             dispatch(
-                CustomAlert({
+                customAlert({
                     Type: 3,
                     Message: JSON.stringify(updateMsg.Message),
                 })

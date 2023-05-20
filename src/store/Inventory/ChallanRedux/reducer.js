@@ -1,4 +1,3 @@
-import { currentDate_ymd } from "../../../components/Common/CommonFunction";
 import {
   CHALLAN_POST_API_SUCCESS,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS,
@@ -6,24 +5,19 @@ import {
   GO_BUTTON_CHALLAN_POST_API_SUCCESS,
   GO_BUTTON_FOR_CHALLAN_ADD_SUCCESS,
   ITEM_DROPDOWN_CHALLAN_SUCCESS,
-  CHALLAN_LIST_PAGE_FILTERS_PARAMETER,
   MAKE_CHALLAN_ACTION_SUCCESS,
 
 } from "./actionType"
 
 
-// const date = currentDate_ymd();
-
 const INIT_STATE = {
-
   deleteMsg: { Status: false },
   ChallanList: [],
-  ChallanlistFilter: { fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } },
-  gobutton_Add:[],
-  GoButton:[],
-  challanitems:[],
+  gobutton_Add: [],
+  GoButton: [],
+  challanitems: [],
   postMsg: { Status: false },
-  makeChallan:{Status:false}
+  makeChallan: { Status: false }
 
 
 }
@@ -36,11 +30,11 @@ const ChallanReducer = (state = INIT_STATE, action) => {
         ...state,
         GoButton: action.payload,
       }
-      case GO_BUTTON_FOR_CHALLAN_ADD_SUCCESS:
-        return {
-          ...state,
-          gobutton_Add: action.payload,
-        }
+    case GO_BUTTON_FOR_CHALLAN_ADD_SUCCESS:
+      return {
+        ...state,
+        gobutton_Add: action.payload,
+      }
 
     case ITEM_DROPDOWN_CHALLAN_SUCCESS:
       return {
@@ -48,15 +42,10 @@ const ChallanReducer = (state = INIT_STATE, action) => {
         challanitems: action.payload,
       }
 
-    case CHALLAN_LIST_PAGE_FILTERS_PARAMETER: // challan LidtPage  (filters_paramerter)
-      return {
-        ...state,
-        ChallanlistFilter: action.payload,
-      }
     case CHALLAN_LIST_FOR_LIST_PAGE_SUCCESS: // challan List  by filters
       return {
         ...state,
-        ChallanList:action.payload,
+        ChallanList: action.payload,
       }
 
     case DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS://Delete challan
@@ -64,17 +53,17 @@ const ChallanReducer = (state = INIT_STATE, action) => {
         ...state,
         deleteMsg: action.payload,
       }
-      case CHALLAN_POST_API_SUCCESS://SAVE challan
+    case CHALLAN_POST_API_SUCCESS://SAVE challan
       return {
         ...state,
         postMsg: action.payload,
       }
-   case MAKE_CHALLAN_ACTION_SUCCESS: //Make  challan
+    case MAKE_CHALLAN_ACTION_SUCCESS: //Make  challan
       return {
         ...state,
         makeChallan: action.payload,
       }
-      
+
     default:
       return state
   }

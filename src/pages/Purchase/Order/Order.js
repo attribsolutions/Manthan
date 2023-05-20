@@ -1,3 +1,6 @@
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { MetaTags } from "react-meta-tags"
+import { useHistory } from "react-router-dom";
 import {
     Col,
     FormGroup,
@@ -8,47 +11,31 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
-
-import Flatpickr from "react-flatpickr";
-import React, { useEffect, useState } from "react";
-import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-import { useHistory } from "react-router-dom";
-import {
-    editOrderIdSuccess,
-    GoButton_For_Order_Add,
-    GoButton_For_Order_AddSuccess,
-    saveOrderAaction,
-    postOrderSuccess,
-    updateOrderIdAction,
-    updateOrderIdSuccess
-} from "../../../store/Purchase/OrderPageRedux/actions";
-import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, Amount } from "./OrderPageCalulation";
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
-import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
-import * as commonFunc from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
-import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
+import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
-import * as url from "../../../routes/route_url";
-import * as mode from "../../../routes/PageMode";
-import * as pageId from "../../../routes/allPageID"
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
-import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+
+import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { useRef } from "react";
-import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
-import { onlyNumberRegx } from "../../../CustomValidateForm/RegexPattern";
+import { CInput, C_DatePicker, onlyNumberRegx } from "../../../CustomValidateForm/index";
+
+import * as _act from "../../../store/actions";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { url, mode, pageId } from "../../../routes/index"
+import { editPartyItemID } from "../../../store/Administrator/PartyItemsRedux/action";
+import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+
 
 let editVal = {}
-
 
 function initialState(history) {
 
@@ -75,36 +62,36 @@ function initialState(history) {
     return { page_Id, listPath }
 };
 
-
 const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const RoleID = commonFunc.loginRoleID();
+    const RoleID = _cfunc.loginRoleID();
+    const currentDate_ymd = _cfunc.date_ymd_func();
     const ref1 = useRef('')
 
     const fileds = {
         id: "",
         Supplier: "",
-
     }
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [page_id, setPage_id] = useState(() => initialState(history).page_Id)
-    const [listPath, setListPath] = useState(() => initialState(history).listPath)
-    const [subPageMode, setSubPageMode] = useState(history.location.pathname)
+    const [page_id] = useState(() => initialState(history).page_Id)
+    const [listPath] = useState(() => initialState(history).listPath)
+    const [subPageMode] = useState(history.location.pathname)
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
-    const [deliverydate, setdeliverydate] = useState(commonFunc.currentDate_ymd)
+    const [deliverydate, setdeliverydate] = useState(currentDate_ymd)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
-    const [poFromDate, setpoFromDate] = useState(commonFunc.currentDate_ymd);
-    const [poToDate, setpoToDate] = useState(commonFunc.currentDate_ymd);
-    const [orderdate, setorderdate] = useState(commonFunc.currentDate_ymd);
- 
+    const [poFromDate, setpoFromDate] = useState(currentDate_ymd);
+    const [poToDate, setpoToDate] = useState(currentDate_ymd);
+    const [orderdate, setorderdate] = useState(currentDate_ymd);
+
     const [supplierSelect, setsupplierSelect] = useState('');
     const [partySelect, setPartySelect] = useState('');
 
@@ -139,50 +126,40 @@ const Order = (props) => {
         PartyList: state.PartyMasterReducer.partyList
     }));;
 
-    const values = { ...state.values }
-    const { isError } = state;
     const { fieldLabel } = state;
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    useEffect(() => {
-
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_id))
-        dispatch(GoButton_For_Order_AddSuccess(null))
-        dispatch(GetVenderSupplierCustomer(subPageMode, RoleID))
-        dispatch(getTermAndCondition())
-        dispatch(getOrderType())
+    useLayoutEffect(() => {
+        dispatch(_act.commonPageFieldSuccess(null));
+        dispatch(_act.GoButton_For_Order_AddSuccess(null))
+        dispatch(_act.commonPageField(page_id))
+        dispatch(_act.GetVenderSupplierCustomer(subPageMode, RoleID))
+        dispatch(_act.getTermAndCondition())
+        dispatch(_act.getOrderType())
         dispatch(getPartyListAPI())
         if (!(subPageMode === url.ORDER_4)) {
-            dispatch(getSupplierAddress(commonFunc.loginPartyID()))
+            dispatch(_act.getSupplierAddress(_cfunc.loginPartyID()))
         }
     }, []);
 
 
-    useEffect(() => {  // userAccess useEffect
-        let userAcc = null;
-        let locationPath = location.pathname;
+    useEffect(() => userAccessUseEffect({ // userAccess useEffect 
+        props,
+        userAccess,
+        dispatch,
+        setUserAccState,
+        otherloginAccss// for other pages login role access chack
+    }), [userAccess]);
 
-        if (hasShowModal) { locationPath = props.masterPath; };
+    const otherloginAccss = (ind) => {
+        if ((ind.id === pageId.PARTYITEM) && !(subPageMode === url.IB_ORDER)) {
+            setFindPartyItemAccess(true)
+        }
+    };
 
-        userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        });
-
-        if (userAcc) {
-            setUserAccState(userAcc);
-            commonFunc.breadcrumbReturnFunc({ dispatch, userAcc });
-            let FindPartyItemAccess = userAccess.find((index) => {
-                return (index.id === pageId.PARTYITEM)
-            });
-            if ((FindPartyItemAccess) && !(subPageMode === url.IB_ORDER)) {
-                setFindPartyItemAccess(true)
-            };
-        };
-    }, [userAccess]);
 
     useEffect(() => { // hasEditVal useEffect
 
@@ -199,7 +176,7 @@ const Order = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
                 setorderdate(hasEditVal.OrderDate)
 
                 if (subPageMode === url.ORDER_4) {
@@ -239,18 +216,37 @@ const Order = (props) => {
                 setorderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
             }
-            dispatch(editOrderIdSuccess({ Status: false }))
+            dispatch(_act.editOrderIdSuccess({ Status: false }))
         } else {
-            dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0`))
+            dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :0`))
         }
     }, []);
 
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
+    useEffect(() => saveMsgUseEffect({
+        postMsg, pageMode,
+        history, dispatch,
+        postSuccss: _act.saveOrderActionSuccess,
+        status200: () => {
+            setTermsAndConTable([])
+            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+        },
+        listPath: listPath
+    }), [postMsg])
+
+    useEffect(() => updateMsgUseEffect({
+        updateMsg, modalCss,
+        history, dispatch,
+        updateSuccss: _act.saveOrderActionSuccess,
+        listPath: listPath
+    }), [updateMsg])
+
+    useEffect(() => pageFieldUseEffect({// useEffect common pagefield for master
+        state,
+        setState,
+        pageField
+    }), [pageField])
+
+    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [orderItemTable]);
 
     useEffect(() => {
         if (assingItemData.Status === true) {
@@ -264,7 +260,7 @@ const Order = (props) => {
             setorderItemTable(OrderItems)
 
             setTermsAndConTable(TermsAndConditions)
-            dispatch(GoButton_For_Order_AddSuccess(''))
+            dispatch(_act.GoButton_For_Order_AddSuccess(''))
         }
     }, [goBtnOrderdata]);
 
@@ -284,48 +280,6 @@ const Order = (props) => {
         }
     }, [orderType]);
 
-    useEffect(async () => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postOrderSuccess({ Status: false }))
-            setTermsAndConTable([])
-            dispatch(GoButton_For_Order_AddSuccess([]))
-
-            const a = await CustomAlert({
-                Type: 1,
-                Message: postMsg.Message,
-                RedirectPath: listPath,
-            })
-            if (a) {
-                history.push({
-                    pathname: listPath,
-                });
-            }
-
-        } else if (postMsg.Status === true) {
-            dispatch(postOrderSuccess({ Status: false }))
-            CustomAlert({
-                Type: 4,
-                Message: JSON.stringify(postMsg.Message),
-            })
-        }
-    }, [postMsg]);
-
-    useEffect(() => {
-        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            history.push({
-                pathname: listPath,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateOrderIdSuccess({ Status: false }));
-            CustomAlert({
-                Type: 3,
-                Message: JSON.stringify(updateMsg.Message),
-            })
-        }
-    }, [updateMsg, modalCss]);
-
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [orderItemTable]);
-
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -342,20 +296,22 @@ const Order = (props) => {
     }));
 
 
-
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
 
             dataField: "ItemName",
-            headerFormatter: (value, row, k) => {
+            sort: true,
+            sortValue: (cell, row) => row["ItemName"],
+            headerFormatter: (value, row, k,f) => {
+                debugger
                 return (
                     <div className="d-flex justify-content-between" key={row.id}>
                         <div>
                             Item Name
                         </div>
-                        <div>
+                        <div className="cursor-pointer" onClick={assignItem_onClick}>
                             <samp style={{ display: (supplierSelect.value > 0) && (findPartyItemAccess) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
-                                onClick={assignItem_onClick}>
+                            >
                                 Assign-Items</samp>
                         </div>
 
@@ -366,6 +322,7 @@ const Order = (props) => {
 
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
+            sort: true,
             hidden: !(pageMode === mode.defaultsave) && true,
             dataField: "StockQuantity",
             formatter: (value, row, k) => {
@@ -383,7 +340,6 @@ const Order = (props) => {
 
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
-            dataField: "",
             formatter: (value, row, k) => {
                 return (
                     <>
@@ -397,7 +353,6 @@ const Order = (props) => {
                             onChange={(e) => {
                                 row["Quantity"] = e.target.value
                                 itemWise_CalculationFunc(row)
-                                document.getElementById(`Quantity-${k}`).value = row.Quantity
                             }}
                         />
                     </>
@@ -426,6 +381,11 @@ const Order = (props) => {
                             defaultUnit(i)
                         }
                     });
+                    // ********************** //if default unit is not selected then auto first indx unit select
+                    if ((row["UnitName"] === 'null') && row.UnitDetails.length > 0) {
+                        defaultUnit(row.UnitDetails[0])
+                    }
+                    // **********************                   
 
                     function defaultUnit(i) {
                         row["Unit_id"] = i.UnitID;
@@ -465,10 +425,13 @@ const Order = (props) => {
                         onChange={e => {
                             row["Unit_id"] = e.value;
                             row["UnitName"] = e.label
-                            row["BaseUnitQuantity"] = e.baseUnitQty
-                            row["Rate"] = e.Rate
-                            itemWise_CalculationFunc(row)
-                            document.getElementById(`Rate-${key}`).innerText = e.Rate
+                            row["BaseUnitQuantity"] = e.baseUnitQty;
+                            if (!(subPageMode === url.ORDER_1)) {
+                                row["Rate"] = e.Rate
+                                itemWise_CalculationFunc(row)
+                                document.getElementById(`Rate-${key}`).innerText = e.Rate
+                            }
+
                         }}
                     >
                     </Select >
@@ -481,13 +444,34 @@ const Order = (props) => {
 
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
-            dataField: '',
+            dataField: "",
             formatter: (value, row, k) => {
-                return (
-                    <div key={row.id} className="text-end">
-                        <span id={`Rate-${k}`}>{row.Rate}</span>
-                    </div>
-                )
+                if (subPageMode === url.ORDER_1) {
+                    return (
+                        <div key={row.id} className="text-end">
+                            <CInput
+                                type="text"
+                                id={`Rate-${k}`}
+                                cpattern={onlyNumberRegx}
+                                defaultValue={row.Rate}
+                                onChange={(event) => {
+                                    row.Rate = event.target.value;
+                                    itemWise_CalculationFunc(row);
+                                }}
+                            />
+
+                        </div>
+                    )
+                }
+                else {
+                    return (
+                        <div key={row.id} className="text-end">
+
+                            <span id={`Rate-${k}`}>{row.Rate}</span>
+                        </div>
+                    )
+                }
+
             },
 
             headerStyle: () => {
@@ -498,8 +482,7 @@ const Order = (props) => {
 
         {//------------- MRP column ----------------------------------
             text: "MRP",
-            dataField: "MRPValue",
-            // sort: true,
+            dataField: "",
             formatter: (value, row, k) => {
 
                 return (
@@ -516,7 +499,6 @@ const Order = (props) => {
         { //------------- Comment column ----------------------------------
             text: "Comment",
             dataField: "",
-            // sort: true,
             formatter: (value, row, k) => {
                 return (
                     <span >
@@ -537,19 +519,14 @@ const Order = (props) => {
             }
         },
     ];
-
     const defaultSorted = [
         {
-            dataField: "PriceList", // if dataField is not match to any column you defined, it will be ignored.
+            dataField: "ItemName", // if dataField is not match to any column you defined, it will be ignored.
             order: "asc", // desc or asc
         },
     ];
 
-    const pageOptions = {
-        sizePerPage: (orderItemTable.length + 2),
-        totalSize: 0,
-        custom: true,
-    };
+
 
     function itemWise_CalculationFunc(row) {
 
@@ -564,30 +541,30 @@ const Order = (props) => {
             sum = sum + amt
         });
         setOrderAmount(sum.toFixed(2))
-        dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
     };
 
     const goButtonHandler = async () => {
 
         if (!supplierSelect > 0) {
-            await CustomAlert({
+            await customAlert({
                 Type: 4,
                 Message: `Please select ${fieldLabel.Supplier}`
             })
             return;
         }
-        dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
 
         let PO_Body = {
             Party: supplierSelect.value,
-            Customer: commonFunc.loginPartyID(),
-            RateParty: commonFunc.loginPartyID(),
+            Customer: _cfunc.loginPartyID(),
+            RateParty: _cfunc.loginPartyID(),
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
         }
         let SO_body = {
-            Party: commonFunc.loginPartyID(), //swap  party and customer for sale oerder
+            Party: _cfunc.loginPartyID(), //swap  party and customer for sale oerder
             Customer: supplierSelect.value,//swap  party and customer for sale oerder
             RateParty: supplierSelect.value,
             EffectiveDate: orderdate,
@@ -603,7 +580,7 @@ const Order = (props) => {
             jsonBody = JSON.stringify({ ...PO_Body, });
         }
 
-        dispatch(GoButton_For_Order_Add(subPageMode, jsonBody))
+        dispatch(_act.GoButton_For_Order_Add(subPageMode, jsonBody))
     };
 
     function orderdateOnchange(e, date) {
@@ -613,7 +590,7 @@ const Order = (props) => {
     function supplierOnchange(e) {
         setsupplierSelect(e);
         if (subPageMode === url.ORDER_4) {
-            dispatch(getSupplierAddress(e.value))
+            dispatch(_act.getSupplierAddress(e.value))
         }
     };
 
@@ -623,14 +600,14 @@ const Order = (props) => {
 
     function Open_Assign_func() {
         setisOpen_assignLink(false)
-        dispatch(editPartyItemIDSuccess({ Status: false }));
-        commonFunc.breadcrumbReturnFunc({ dispatch, userAcc: userPageAccessState })
+        dispatch(_act.editPartyItemIDSuccess({ Status: false }));
+        _cfunc.breadcrumbReturnFunc({ dispatch, userAcc: userPageAccessState })
         goButtonHandler()
     };
 
-    async function assignItem_onClick() {
-
-        const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : commonFunc.loginPartyID()
+    async function assignItem_onClick(event) {
+        event.stopPropagation();
+        const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : _cfunc.loginPartyID()
         const config = {
             editId: isParty,
             Party: isParty,
@@ -639,17 +616,17 @@ const Order = (props) => {
             btnId: `btn-assingLink-${supplierSelect.value}`
         }
 
-        const isConfirmed = await CustomAlert({
+        const isConfirmed = await customAlert({
             Type: 7,
             Message: "Do you confirm your choice?",
         });
 
         if (isConfirmed) {
 
-            const jsonBody = JSON.stringify({ ...commonFunc.loginJsonBody(), ...{ PartyID: isParty } });
+            const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), ...{ PartyID: isParty } });
 
             dispatch(editPartyItemID({ jsonBody, config }))
-            dispatch(GoButton_For_Order_AddSuccess([]))
+            dispatch(_act.GoButton_For_Order_AddSuccess([]))
         };
     };
 
@@ -657,13 +634,13 @@ const Order = (props) => {
         event.preventDefault();
 
         const btnId = event.target.id
-        commonFunc.btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
         function returnFunc() {
-            commonFunc.btnIsDissablefunc({ btnId, state: false })
+            _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
-            const division = commonFunc.loginPartyID();
+            const division = _cfunc.loginPartyID();
             const supplier = supplierSelect.value;
 
             const validMsg = []
@@ -769,21 +746,20 @@ const Order = (props) => {
                 itemArr.push(arr)
             };
 
-
             const termsAndCondition = await termsAndConTable.map(i => ({
                 TermsAndCondition: i.value,
                 IsDeleted: i.IsDeleted
             }))
 
             if (isVDC_POvalidMsg.length > 0) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: isVDC_POvalidMsg,
                 })
                 return returnFunc();
             };
             if (validMsg.length > 0) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: validMsg,
                 })
@@ -791,7 +767,7 @@ const Order = (props) => {
                 return returnFunc();
             }
             if (itemArr.length === 0) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: "Please Enter One Item Quantity",
                 })
@@ -799,7 +775,7 @@ const Order = (props) => {
                 return returnFunc();
             }
             if (orderTypeSelect.length === 0) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: "Please Select PO Type",
                 })
@@ -808,7 +784,7 @@ const Order = (props) => {
             if ((termsAndCondition.length === 0) && !(subPageMode === url.ORDER_2)
                 && !(subPageMode === url.ORDER_4) && !(subPageMode === url.IB_ORDER)
             ) {
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: "Please Enter One Terms And Condition",
                 })
@@ -848,10 +824,10 @@ const Order = (props) => {
                 FullOrderNumber: "PO0001",
                 Division: division,
                 POType: orderTypeSelect.value,
-                POFromDate: orderTypeSelect.value === 1 ? commonFunc.currentDate_ymd : poFromDate,
-                POToDate: orderTypeSelect.value === 1 ? commonFunc.currentDate_ymd : poToDate,
-                CreatedBy: commonFunc.loginUserID(),
-                UpdatedBy: commonFunc.loginUserID(),
+                POFromDate: orderTypeSelect.value === 1 ? currentDate_ymd : poFromDate,
+                POToDate: orderTypeSelect.value === 1 ? currentDate_ymd : poToDate,
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
                 OrderTermsAndConditions: termsAndCondition
             };
 
@@ -869,19 +845,19 @@ const Order = (props) => {
             // +*********************************
 
             if (pageMode === mode.edit) {
-                dispatch(updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
+                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
 
             } else {
-                dispatch(saveOrderAaction({ jsonBody, subPageMode, btnId }))
+                dispatch(_act.saveOrderAction({ jsonBody, subPageMode, btnId }))
             }
 
-        } catch (e) { commonFunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                <MetaTags>{commonFunc.metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
 
                     {RoleID === 2 ?
@@ -945,7 +921,7 @@ const Order = (props) => {
                                             (orderItemTable.length === 0) ?
                                                 < Go_Button onClick={(e) => goButtonHandler()} />
                                                 :
-                                                <Change_Button onClick={(e) => dispatch(GoButton_For_Order_AddSuccess([]))} />
+                                                <Change_Button onClick={(e) => dispatch(_act.GoButton_For_Order_AddSuccess([]))} />
                                             : null
                                         }
                                     </Col>
@@ -1097,51 +1073,41 @@ const Order = (props) => {
                     </div>
 
 
-                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                        {({ paginationProps, paginationTableProps }) => (
-                            <ToolkitProvider
-                                keyField="id"
-                                defaultSorted={defaultSorted}
-                                data={orderItemTable}
-                                columns={pagesListColumns}
-                                search
-                            >
-                                {(toolkitProps,) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table table-Rresponsive ">
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        id="table_Arrow"
-                                                        responsive
-                                                        ref={ref1}
-                                                        bordered={false}
-                                                        striped={false}
-                                                        classes={"table  table-bordered table-hover"}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
-                                                    />
-                                                    {mySearchProps(toolkitProps.searchProps)}
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row className="align-items-md-center mt-30">
-                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                <PaginationListStandalone {...paginationProps} />
-                                            </Col>
-                                        </Row>
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        )}
 
-                    </PaginationProvider>
+                    <ToolkitProvider
+                        keyField={"Item_id"}
+                        data={orderItemTable}
+                        columns={pagesListColumns}
+                        search
+                    >
+                        {(toolkitProps,) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table table-Rresponsive ">
+                                            <BootstrapTable
+                                                keyField={"Item_id"}
+                                                id="table_Arrow"
+                                                ref={ref1}
+                                                defaultSorted={defaultSorted}
+                                                bordered={false}
+                                                striped={false}
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Items Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
 
 
                     <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />

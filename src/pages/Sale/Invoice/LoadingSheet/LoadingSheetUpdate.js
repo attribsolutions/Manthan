@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
     Col,
@@ -7,28 +6,27 @@ import {
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, loginPartyID, currentDate_ymd, metaTagLabel } from "../../../../components/Common/CommonFunction";
-import * as pageId from "../../../../routes//allPageID";
-import * as url from "../../../../routes/route_url";
-import * as mode from "../../../../routes/PageMode";
+import { url, mode, pageId } from "../../../../routes/index"
 import { LoadingSheet_GoBtn_API_Succcess } from "../../../../store/Sales/LoadingSheetRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
 import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
+import { C_DatePicker } from "../../../../CustomValidateForm";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
 
 const LoadingSheetUpdate = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
@@ -92,7 +90,7 @@ const LoadingSheetUpdate = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -113,13 +111,13 @@ const LoadingSheetUpdate = (props) => {
         var { CustomerID, id } = row
         try {
             const jsonBody = JSON.stringify({
-                PartyID: loginPartyID(),
+                PartyID: _cfunc.loginPartyID(),
                 CustomerID: CustomerID,
                 InvoiceID: (id).toString()
             });
 
             const jsonBody1 = JSON.stringify({
-                PartyID: loginPartyID(),
+                PartyID: _cfunc.loginPartyID(),
                 CustomerID: CustomerID,
                 ReceiptDate: currentDate_ymd
             });
@@ -130,13 +128,10 @@ const LoadingSheetUpdate = (props) => {
 
         } catch (e) { }
     }
-
-
    
     function rowSelected() {
         return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
     }
-
 
     function DateOnchange(e, date) {
         setLoadingDate(date)
@@ -152,7 +147,7 @@ const LoadingSheetUpdate = (props) => {
         const LoadingNumber = result.toString()
 
         const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
             CustomerID: "",
             InvoiceID: LoadingNumber
         });
@@ -160,7 +155,7 @@ const LoadingSheetUpdate = (props) => {
         const body = { jsonBody }
 
         if (LoadingNumber === ",") {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Select At Least One Invoice",
             })
@@ -174,11 +169,10 @@ const LoadingSheetUpdate = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <div id="id1"></div>
-
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
@@ -199,32 +193,21 @@ const LoadingSheetUpdate = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>Loading Date </Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='Date'
                                                 value={loadingDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={DateOnchange}
                                             />
                                         </Col>
-
                                     </FormGroup>
                                 </Col >
                             </div>
                         </div>
 
-
                         <ToolkitProvider
-
                             keyField="id"
                             data={InvoiceParent}
                             columns={tableColumns}
-
                             search
                         >
                             {toolkitProps => (

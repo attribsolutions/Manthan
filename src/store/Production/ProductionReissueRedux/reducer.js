@@ -9,8 +9,6 @@ import {
 } from "./actionType"
 
 
-// const date = currentDate_ymd();
-
 const INIT_STATE = {
   postMsg: { Status: false },
   editData: { Status: false, },

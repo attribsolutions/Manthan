@@ -6,39 +6,37 @@ import {
     Row,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-
-import Flatpickr from "react-flatpickr";
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
-import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturnFunc, loginUserID, currentDate_ymd, btnIsDissablefunc, convertDatefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
-import * as url from "../../../routes/route_url";
-import * as mode from "../../../routes/PageMode";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import * as pageId from "../../../routes/allPageID"
-import * as commonFunc from "../../../components/Common/CommonFunction";
+
+import { mode, url, pageId } from "../../../routes/index";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
+import { initialFiledFunc } from "../../../components/Common/validationFunction";
+import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+import { useLayoutEffect } from "react";
 
 
 const GRNAdd3 = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const subPageMode = history.location.pathname;
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const [grnDate, setgrnDate] = useState(currentDate_ymd);
-    const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
     const [grnItemList, setgrnItemList] = useState([]);
     const [openPOdata, setopenPOdata] = useState([]);
@@ -46,10 +44,18 @@ const GRNAdd3 = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
 
+
+    const fileds = {
+        GRNDate: currentDate_ymd,
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const {
         items,
         postMsg,
         userAccess,
+        pageField
     } = useSelector((state) => ({
         // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
@@ -59,36 +65,44 @@ const GRNAdd3 = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
     }));
 
-    useEffect(() => {
-        let page_Id = pageId.GRN_ADD_3;
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        // dispatch(getSupplierAddress())
-    }, [])
 
-    // userAccess useEffect
-    useEffect(() => {
-        let userAcc = null;
-        let locationPath = location.pathname;
 
-        if (hasShowModal) { locationPath = props.masterPath; };
-
-        userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
-        };
-    }, [userAccess])
+    const values = { ...state.values }
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
+    useLayoutEffect(() => {
+        let page_Id = pageId.GRN_ADD_3;
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, [])
+
+    useEffect(() => userAccessUseEffect({ // userAccess common useEffect 
+        props,
+        userAccess,
+        dispatch,
+        setUserAccState,
+    }), [userAccess]);
+
+    useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
+        postMsg, pageMode,
+        history, dispatch,
+        postSuccss: saveGRNSuccess,
+        listPath: url.GRN_LIST_3
+    }), [postMsg])
+
+    useEffect(() => pageFieldUseEffect({// useEffect common pagefield for master
+        state,
+        setState,
+        pageField
+    }), [pageField])
+
+    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [grnItemList]);
+
     useEffect(() => {
-        
+
         if ((items.Status === true)) {
             const grnDetails = { ...items.Data }
             let arr = []
@@ -97,8 +111,8 @@ const GRNAdd3 = (props) => {
             let tQty = 0
             let id = 1
             grnDetails.OrderItem.forEach((i, k) => {
-                
-                i.BatchDate_conv = convertDatefunc(i.BatchDate)
+
+                i.BatchDate_conv = _cfunc.convertDatefunc(i.BatchDate)
                 if (k === 0) {
                     i.id = id
                     arr.push(i)
@@ -195,30 +209,6 @@ const GRNAdd3 = (props) => {
         }
     }, [])
 
-    useEffect(async () => {
-
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(saveGRNSuccess({ Status: false }))
-            const promise = await CustomAlert({
-                Type: 1,
-                Message: postMsg.Message,
-            })
-            if (promise) {
-                history.push({ pathname: url.GRN_LIST_3 })
-            }
-
-        } else if (postMsg.Status === true) {
-            dispatch(saveGRNSuccess({ Status: false }))
-            CustomAlert({
-                Type: 1,
-                Message: JSON.stringify(postMsg.Message),
-            })
-
-        }
-    }, [postMsg])
-
-
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
 
     const tableColumns = [
         {//------------- ItemName column ----------------------------------
@@ -286,14 +276,14 @@ const GRNAdd3 = (props) => {
 
 
     const saveHandeller = (event) => {
-        
+
         event.preventDefault();
 
         const btnId = event.target.id
-        btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
         function returnFunc() {
-            btnIsDissablefunc({ btnId, state: false })
+            _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
             const itemArr = []
@@ -340,7 +330,7 @@ const GRNAdd3 = (props) => {
             });
 
             if (invoiceNo.length === 0) {
-                CustomAlert({
+                customAlert({
                     Type: 3,
                     Message: "Please Enter Invoice Number",
                 })
@@ -354,7 +344,7 @@ const GRNAdd3 = (props) => {
                 GrandTotal: sum,
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
-                CreatedBy: loginUserID(),
+                CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArr,
                 GRNReferences: openPOdata
@@ -372,7 +362,7 @@ const GRNAdd3 = (props) => {
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
 
@@ -384,17 +374,10 @@ const GRNAdd3 = (props) => {
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "130px" }}>GRN Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
-                                            name="grndate"
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
+                                        <C_DatePicker
+                                            name="GRNDate"
+                                            value={values.GRNDate}
                                             disabled={(pageMode === mode.view) ? true : false}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                                defaultDate: "today"
-                                            }}
                                             onChange={(e, date) => { setgrnDate(date) }}
                                         />
                                     </Col>
@@ -429,16 +412,8 @@ const GRNAdd3 = (props) => {
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Invoice Date</Label>
                                     <Col md="7">
-                                        <Flatpickr
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
+                                        <C_DatePicker
                                             disabled={true}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                                defaultDate: "today"
-                                            }}
                                         />
                                     </Col>
                                 </FormGroup>

@@ -17,7 +17,7 @@ import { breadcrumbReturnFunc, metaTagLabel } from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
-import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook from "./TableCommonFunc";
 
@@ -51,7 +51,7 @@ export const countlabelFunc = (
 };
 
 export async function isAlertFunc(type, Msg) {
-  await CustomAlert({
+  await customAlert({
     Type: type,
     Message: Msg.Message,
     isFunc: true,

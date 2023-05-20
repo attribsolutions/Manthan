@@ -1,42 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import Flatpickr from "react-flatpickr";
 import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../../store/actions";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
-import { BIllOf_MATERIALS, BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
+import {  BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../../components/Common/CommonFunction";
 import { useMemo } from "react";
 import {
-    BOMlistfilters,
+    
     deleteBOMId,
     deleteBOMIdSuccess,
     editBOMList,
     getBOMListPage,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-// } from "../../../../store/Production/BOMRedux/action";
 import BOMMaster from "../BOMMaster/BOMIndex";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
+import { C_DatePicker } from "../../../../CustomValidateForm";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+
 
 const BOMList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
 
     const hasPagePath = history.location.pathname
 
     const [pageMode, setpageMode] = useState(BIllOf_MATERIALS_LIST)
     const [userAccState, setUserAccState] = useState('');
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
 
     const reducers = useSelector(
         (state) => ({
@@ -52,7 +52,9 @@ const BOMList = () => {
     );
 
     const { userAccess, pageField, tableList, bomlistFilters } = reducers;
-    const { fromdate, todate } = bomlistFilters;
+    // const { fromdate, todate } = bomlistFilters;
+    const { fromdate, todate, venderSelect } = hederFilters;
+
 
     const action = {
         getList: getBOMListPage,
@@ -77,7 +79,7 @@ const BOMList = () => {
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
+        return _cfunc.excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
 
@@ -95,22 +97,22 @@ const BOMList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Company: loginCompanyID(),
-            Party:loginPartyID(),
+            Company: _cfunc.loginCompanyID(),
+            Party:_cfunc.loginPartyID(),
         });
         dispatch(getBOMListPage(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...bomlistFilters }
+        let newObj = { ...hederFilters }
         newObj.fromdate = date
-        dispatch(BOMlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...bomlistFilters }
+        let newObj = { ...hederFilters }
         newObj.todate = date
-        dispatch(BOMlistfilters(newObj))
+        setHederFilters(newObj)
     }
     return (
         <React.Fragment>
@@ -123,17 +125,9 @@ const BOMList = () => {
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
                                 <Col sm="6">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         name='fromdate'
                                         value={fromdate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
                                         onChange={fromdateOnchange}
                                     />
                                 </Col>
@@ -145,17 +139,9 @@ const BOMList = () => {
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px", marginRight: "0.4cm" }}>To Date</Label>
                                 <Col sm="6 ">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         name="todate"
                                         value={todate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
                                         onChange={todateOnchange}
                                     />
                                 </Col>

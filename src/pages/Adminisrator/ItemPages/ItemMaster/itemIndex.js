@@ -55,7 +55,7 @@ import {
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRedux/action";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { SaveButton } from "../../../../components/Common/CommonButton";
 import { priceListByCompay_Action } from "../../../../store/Administrator/PriceList/action";
 
@@ -329,13 +329,13 @@ const ItemsMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(SaveItemMasterActionSuccess({ Status: false }))
             if (pageMode === mode.dropdownAdd) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
             }
             else {
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -349,7 +349,7 @@ const ItemsMaster = (props) => {
 
         else if (postMsg.Status === true) {
             dispatch(SaveItemMasterActionSuccess({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
             })
@@ -363,7 +363,7 @@ const ItemsMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateItemMasterActionSuccess({ Status: false }));
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -648,7 +648,7 @@ const ItemsMaster = (props) => {
                 let imagedata1 = imagedata.reduce(function (r, a) { return r.concat(a); }, []);
 
                 if (GStDetailsMaster.length === 0) {
-                    CustomAlert({
+                    customAlert({
                         Type: 4,
                         Message: "GST Details Required",
                     })
@@ -698,7 +698,7 @@ const ItemsMaster = (props) => {
                 }
             }                                                            // ************* is valid if start 
             else {                                                       // ************* is valid esle start 
-                CustomAlert({
+                customAlert({
                     Type: 4,
                     Message: JSON.stringify(inValidMsg),
                 })

@@ -5,36 +5,30 @@ import {
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../../store/actions";
-import {
-    deleteBOMId,
-    deleteBOMIdSuccess,
-    editBOMList,
-    updateBOMListSuccess
-} from "../../../../store/Production/BOMRedux/action";
-import * as pageId from "../../../../routes//allPageID";
-import { MetaTags } from "react-meta-tags";
 import LoadingSheet from "./LoadingSheet";
-import { DeleteLoadingSheet, DeleteLoadingSheetSucccess, LoadingSheetListAction, UpdateLoadingSheet } from "../../../../store/Sales/LoadingSheetRedux/action";
+import {
+    DeleteLoadingSheet,
+    DeleteLoadingSheetSucccess,
+    LoadingSheetListAction,
+    UpdateLoadingSheet
+} from "../../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../../helpers/backend_helper";
 import * as report from '../../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
-import Flatpickr from "react-flatpickr";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-import { currentDate_ymd, loginPartyID } from "../../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList";
-import * as url from "../../../../routes/route_url"
-import * as mode from "../../../../routes/PageMode"
-
-
 import { useHistory } from "react-router-dom";
+import { C_DatePicker } from "../../../../CustomValidateForm";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+import { url, mode, pageId } from "../../../../routes/index"
 
 const LoadingSheetList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const subPageMode = history.location.pathname;
+    const currentDate_ymd = _cfunc.date_ymd_func()
 
     const [headerFilters, setHeaderFilters] = useState('');
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
+
     const [pageMode, setPageMode] = useState(mode.defaultList);
 
     const reducers = useSelector(
@@ -55,23 +49,9 @@ const LoadingSheetList = () => {
         deleteSucc: DeleteLoadingSheetSucccess
     }
 
+    let page_Id = pageId.LOADING_SHEET_LIST
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        let page_Id = '';
-        let page_Mode = mode.defaultList;
-        let masterPath = '';
-        let makeBtnShow = false
-        let newBtnPath = ''
-
-        if (subPageMode === url.LOADING_SHEET_LIST) {
-            page_Id = pageId.LOADING_SHEET;
-            masterPath = url.LOADING_SHEET;
-            newBtnPath = url.LOADING_SHEET;
-            // page_Mode = mode.modeSTPList
-            // makeBtnShow = true;
-        }
-        setOtherState({ masterPath, makeBtnShow, newBtnPath })
-        setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
@@ -82,7 +62,7 @@ const LoadingSheetList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
         });
         dispatch(LoadingSheetListAction(jsonBody));
     }
@@ -128,16 +108,9 @@ const LoadingSheetList = () => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "83px" }}>From Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             name='fromdate'
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
                                             value={fromdate}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
                                             onChange={fromdateOnchange}
                                         />
                                     </Col>
@@ -148,16 +121,9 @@ const LoadingSheetList = () => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "65px" }}>To Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             nane='todate'
-                                            className="form-control d-block p-2 bg-white text-dark"
                                             value={todate}
-                                            placeholder="Select..."
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
                                             onChange={todateOnchange}
                                         />
                                     </Col>
@@ -179,9 +145,8 @@ const LoadingSheetList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             pageMode={pageMode}
-                            masterPath={otherState.masterPath}
-                            newBtnPath={otherState.newBtnPath}
-                            makeBtnShow={otherState.makeBtnShow}
+                            masterPath={LoadingSheet}
+                            newBtnPath={url.LOADING_SHEET}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             updateBtnFunc={updateBtnFunc}

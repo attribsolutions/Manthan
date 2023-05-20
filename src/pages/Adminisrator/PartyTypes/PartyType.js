@@ -35,18 +35,12 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import {
-    breadcrumbReturnFunc,
-    btnIsDissablefunc,
-    loginCompanyID,
-    loginIsSCMCompany,
-    loginUserID,
-    metaTagLabel
-} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+
 
 const PartyType = (props) => {
 
@@ -56,7 +50,7 @@ const PartyType = (props) => {
     const fileds = {
         id: "",
         Name: "",
-        IsSCM: loginIsSCMCompany() > 0 ? true : false,
+        IsSCM: _cfunc.loginIsSCMCompany() > 0 ? true : false,
         IsDivision: false,
         IsRetailer: false,
         IsVendor: false,
@@ -117,7 +111,7 @@ const PartyType = (props) => {
         if (userAcc) {
             setUserAccState(userAcc);
             if (!props.isdropdown) {
-                breadcrumbReturnFunc({ dispatch, userAcc });
+                _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
             }
         };
     }, [userAccess])
@@ -172,7 +166,7 @@ const PartyType = (props) => {
             dispatch(Breadcrumb_inputName(''))
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (props.pageMode === mode.dropdownAdd) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -184,7 +178,7 @@ const PartyType = (props) => {
                 props.isOpenModal(false)
             }
             else if (pageMode === mode.edit) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -192,7 +186,7 @@ const PartyType = (props) => {
             }
             else {
                 dispatch(Breadcrumb_inputName(''))
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
@@ -201,7 +195,7 @@ const PartyType = (props) => {
 
         } else if
             (postMsg.Status === true) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(postMsg.Message),
             })
@@ -218,7 +212,7 @@ const PartyType = (props) => {
 
             dispatch(updatePartyTypeIDSuccess({ Status: false }));
 
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -238,7 +232,7 @@ const PartyType = (props) => {
         const btnId = event.target.id;
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     IsSCM: values.IsSCM,
@@ -246,9 +240,9 @@ const PartyType = (props) => {
                     IsRetailer: values.IsRetailer,
                     IsVendor: values.IsVendor,
                     IsAdminDivision: values.IsAdminDivision,
-                    Company: loginCompanyID(),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+                    Company: _cfunc.loginCompanyID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
                 });
                 if (pageMode === mode.edit) {
                     dispatch(updatePartyTypeAction({ jsonBody, updateId: values.id, btnId }));
@@ -258,7 +252,7 @@ const PartyType = (props) => {
                 }
             }
         } catch (error) {
-            btnIsDissablefunc({ btnId, state: false })
+            _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
     };
 
@@ -270,7 +264,7 @@ const PartyType = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                    <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header"  >
@@ -316,7 +310,7 @@ const PartyType = (props) => {
                                                                 <div className="form-check form-switch form-switch-md mb-2">
                                                                     <Input type="checkbox" className="form-check-input"
                                                                         checked={values.IsSCM}
-                                                                        disabled={loginIsSCMCompany() > 0 ? true : false}
+                                                                        disabled={_cfunc.loginIsSCMCompany() > 0 ? true : false}
                                                                         name="IsSCM"
                                                                         onChange={(e) => {
                                                                             setState((i) => {

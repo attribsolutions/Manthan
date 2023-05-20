@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import Flatpickr from "react-flatpickr";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate_ymd, loginPartyID } from "../../../components/Common/CommonFunction";
+import { date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
     updateWorkOrderListSuccess
 } from "../../../store/Production/WorkOrder/action";
@@ -17,28 +15,26 @@ import {
     getProductionListPage,
     Productionlistfilters
 } from "../../../store/Production/ProductionRedux/actions"
-
-import { MetaTags } from "react-meta-tags";
 import * as report from '../../../Reports/ReportIndex'
-
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import * as url from "../../../routes/route_url"
-
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { production_Edit_API } from "../../../helpers/backend_helper";
 import ProductionMaster from "./ProductionMaster";
-import { makeBtnProduction_ReIssue_STP_action, makeBtnProduction_ReIssue_STP_actionSuccess } from "../../../store/Production/ProductionReissueRedux/actions";
+import { makeBtnProduction_ReIssue_STP_action } from "../../../store/Production/ProductionReissueRedux/actions";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const ProductionList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const currentDate_ymd = date_ymd_func();
+
+    const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
-
-    const [userAccState, setUserAccState] = useState('');
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd })
     const reducers = useSelector(
         (state) => ({
             tableList: state.ProductionReducer.ProductionList,
@@ -46,16 +42,13 @@ const ProductionList = () => {
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.ProductionReducer.editData,
-            productionFilter: state.ProductionReducer.productionFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             makeProductionReIssue: state.ProductionReIssueReducer.makeProductionReIssue,
-
         })
     );
 
     const action = {
-        // getList: ,
         editId: edit_ProductionId,
         deleteId: delete_ProductionId,
         postSucc: postMessage,
@@ -63,7 +56,6 @@ const ProductionList = () => {
         deleteSucc: delete_ProductionIdSuccess
     }
 
-    // Featch Modules List data  First Rendering
     useEffect(() => {
 
         let page_Id = '';
@@ -84,7 +76,6 @@ const ProductionList = () => {
             makeBtnShow = true;
         }
 
-        // dispatch(getOrderListPage(""))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -93,22 +84,13 @@ const ProductionList = () => {
         goButtonHandler(true)
     }, []);
 
-    const { userAccess, pageField, productionFilter, makeProductionReIssue } = reducers;
-    const { fromdate, todate } = productionFilter
+    const { pageField, makeProductionReIssue } = reducers;
+    const { fromdate, todate } = hederFilters
+
+
 
 
     useEffect(() => {
-
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId.PRODUCTION_LIST)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
-
-    useEffect(() => {
-        
         if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
             history.push({
                 pathname: makeProductionReIssue.path,
@@ -136,24 +118,24 @@ const ProductionList = () => {
             FromDate: FromDate,
             ToDate: ToDate,
         });
-        
+
         dispatch(getProductionListPage(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...productionFilter }
-        newObj.fromdate = date
-        dispatch(Productionlistfilters(newObj))
+        let newObj = { ...hederFilters }
+        newObj.fromdate = date;
+        setHederFilters(newObj);
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...productionFilter }
-        newObj.todate = date
-        dispatch(Productionlistfilters(newObj))
+        let newObj = { ...hederFilters }
+        newObj.todate = date;
+        setHederFilters(newObj);
     }
 
     const makeBtnFunc = (list = []) => {
-        
+
         var Items = { value: list[0].Item, label: list[0].ItemName }
         try {
             const jsonBody = JSON.stringify({
@@ -177,16 +159,8 @@ const ProductionList = () => {
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
                                 <Col sm="6">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         name='fromdate'
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
                                         onChange={fromdateOnchange}
                                     />
                                 </Col>
@@ -197,16 +171,8 @@ const ProductionList = () => {
                                 <Label className="col-sm-1 p-2"
                                     style={{ width: "65px", marginRight: "0.4cm" }}>To Date</Label>
                                 <Col sm="6 ">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         name="todate"
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
                                         onChange={todateOnchange}
                                     />
                                 </Col>

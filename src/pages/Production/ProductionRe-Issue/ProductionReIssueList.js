@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom"
-
-import Flatpickr from "react-flatpickr";
-import { MetaTags } from "react-meta-tags";
 import { currentDate_ymd } from "../../../components/Common/CommonFunction";
 import * as report from '../../../Reports/ReportIndex';
 import * as pageId from "../../../routes/allPageID";
@@ -17,12 +14,12 @@ import {
     update_Production_ReIssueIdSuccess
 }
 from "../../../store/Production/ProductionReissueRedux/actions";
-//  from "../../store/Production/ProductionReissueRedux/actions";
 import { commonPageFieldList } from "../../../store/actions";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { production_Edit_API } from "../../../helpers/backend_helper";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import ProductionReIssueAdd from "./PrductionReIssueAdd";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 
 const ProductionReIssueList = () => {
@@ -125,16 +122,8 @@ const ProductionReIssueList = () => {
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
                                 <Col sm="6">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         name='fromdate'
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
                                         onChange={fromdateOnchange}
                                     />
                                 </Col>
@@ -145,16 +134,8 @@ const ProductionReIssueList = () => {
                                 <Label className="col-sm-1 p-2"
                                     style={{ width: "65px", marginRight: "0.4cm" }}>To Date</Label>
                                 <Col sm="6 ">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         name="todate"
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
                                         onChange={todateOnchange}
                                     />
                                 </Col>

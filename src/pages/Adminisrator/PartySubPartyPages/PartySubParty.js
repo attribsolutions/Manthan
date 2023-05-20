@@ -53,7 +53,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { Retailer_List, SSDD_List_under_Company, } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PartySubParty = (props) => {
 
@@ -308,14 +308,14 @@ const PartySubParty = (props) => {
         });
 
         if (values.PartyName === '') {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Select Party",
             })
         }
         else if ((values.Subparty === '')) {
             const msg = (values.IsRetailerTransfer) ? "Select Retailer" : "Select Sub-Party"
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: msg,
             })
@@ -324,7 +324,7 @@ const PartySubParty = (props) => {
             setPartyTableArr([...partyTableArr, values.Subparty]);
         }
         else {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Party Already Exist",
             })

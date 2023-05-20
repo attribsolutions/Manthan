@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import Flatpickr from "react-flatpickr";
 import Select from "react-select";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { MetaTags } from "react-meta-tags";
 import Inward from "./Inward";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -17,6 +13,7 @@ import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage } from "../../
 import { currentDate_ymd, loginPartyID } from "../../../components/Common/CommonFunction";
 import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const InwardList = () => {
 
@@ -116,16 +113,9 @@ const InwardList = () => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "83px" }}>From Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             name='fromdate'
                                             value={fromdate}
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
                                             onChange={fromdateOnchange}
                                         />
                                     </Col>
@@ -136,16 +126,9 @@ const InwardList = () => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "65px" }}>To Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             name="todate"
                                             value={todate}
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
                                             onChange={todateOnchange}
                                         />
                                     </Col>

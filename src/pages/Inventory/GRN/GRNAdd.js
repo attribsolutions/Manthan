@@ -1,51 +1,47 @@
-import {
-    Button,
-    Col,
-    Dropdown,
-    DropdownMenu,
-    DropdownToggle,
-    FormGroup,
-    Input,
-    Label,
-    Row,
-} from "reactstrap";
-import { useDispatch, useSelector } from "react-redux";
-import Select from "react-select";
 
-import Flatpickr from "react-flatpickr";
+import Select from "react-select";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    Button, Col, Dropdown, DropdownMenu, DropdownToggle, Input, Label, Row,FormGroup
+} from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
-import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import FeatherIcon from "feather-icons-react";
+
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturnFunc, loginUserID, currentDate_ymd, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
-import FeatherIcon from "feather-icons-react";
-import * as url from "../../../routes/route_url";
-import * as mode from "../../../routes/PageMode";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import * as pageId from "../../../routes/allPageID"
-import * as commonFunc from "../../../components/Common/CommonFunction";
 
+import { mode, url, pageId } from "../../../routes/index";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import * as _act from "../../../store/actions";
+
+import { C_DatePicker } from "../../../CustomValidateForm";
+import { initialFiledFunc } from "../../../components/Common/validationFunction";
+import { useLayoutEffect } from "react";
+import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 
 let initialTableData = []
 
 const GRNAdd = (props) => {
 
-
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
+    const fileds = {
+        GRNDate: currentDate_ymd,
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const [grnDate, setgrnDate] = useState(currentDate_ymd);
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
@@ -60,42 +56,46 @@ const GRNAdd = (props) => {
         items,
         postMsg,
         userAccess,
+        pageField,
     } = useSelector((state) => ({
-        // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField,
+        pageField: state.CommonPageFieldReducer.pageField
     }));
 
-    useEffect(() => {
-        let page_Id = pageId.GRN_ADD_1;
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        // dispatch(getSupplierAddress())
+    useLayoutEffect(() => {
+        dispatch(_act.commonPageFieldSuccess(null));
+        dispatch(_act.commonPageField(pageId.GRN_ADD_1))
     }, [])
 
-    // userAccess useEffect
-    useEffect(() => {
-        let userAcc = null;
-        let locationPath = location.pathname;
-
-        if (hasShowModal) { locationPath = props.masterPath; };
-
-        userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
-        };
-    }, [userAccess])
-
+    const values = { ...state.values }
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useEffect(() => userAccessUseEffect({ // userAccess common useEffect 
+        props,
+        userAccess,
+        dispatch,
+        setUserAccState,
+    }), [userAccess]);
+
+    useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
+        postMsg, pageMode,
+        history, dispatch,
+        postSuccss: _act.saveGRNSuccess,
+        listPath: url.GRN_LIST_1
+    }), [postMsg]);
+
+    useEffect(() => pageFieldUseEffect({// useEffect common pagefield for master
+        state,
+        setState,
+        pageField
+    }), [pageField]);
+
+    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [grnItemList]);
 
     useEffect(() => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
@@ -125,9 +125,9 @@ const GRNAdd = (props) => {
             myArr.map(i => ({ Name: i, hascheck: false }))
             setopenPOdata(grnDetails.GRNReferences)
             items.Status = false
-            dispatch(makeGRN_Mode_1ActionSuccess(items))
+            dispatch(_act.makeGRN_Mode_1ActionSuccess(items))
 
-            dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${grnItems.OrderAmount}`))
+            dispatch(_act.BreadcrumbShowCountlabel(`${"GRN Amount"} :${grnItems.OrderAmount}`))
         }
 
     }, [items])
@@ -160,36 +160,13 @@ const GRNAdd = (props) => {
                 setInvoiceNo(InvoiceNumber)
                 setGrnDetail(ChallanNo1);
                 setgrnItemList(GRNItems)
-                dispatch(editGRNIdSuccess({ Status: false }))
-                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+                dispatch(_act.editGRNIdSuccess({ Status: false }))
+                dispatch(_act.Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
     }, [])
 
-    useEffect(async () => {
-
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(saveGRNSuccess({ Status: false }))
-            const promise = await CustomAlert({
-                Type: 1,
-                Message: postMsg.Message,
-            })
-            if (promise) {
-                history.push({ pathname: url.GRN_LIST_1 })
-            }
-
-        } else if (postMsg.Status === true) {
-            dispatch(saveGRNSuccess({ Status: false }))
-            CustomAlert({
-                Type: 1,
-                Message: JSON.stringify(postMsg.Message),
-            })
-
-        }
-    }, [postMsg])
-
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
 
     function val_onChange(val, row, type) {
 
@@ -212,7 +189,7 @@ const GRNAdd = (props) => {
             sum = sum + parseFloat(ind.Amount)
         });
         setOrderAmount(sum.toFixed(2))
-        dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${sum.toFixed(2)}`))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"GRN Amount"} :${sum.toFixed(2)}`))
     }
 
     const tableColumnsMode_1 = [
@@ -335,7 +312,7 @@ const GRNAdd = (props) => {
                             id={`MRP${row.id}`}
                             autoComplete="off"
                             key={row.id}
-                            disabled={ true }
+                            disabled={true}
                             // disabled={pageMode === mode.view ? true : false}
                             onChange={(e) => {
                                 const val = e.target.value
@@ -447,19 +424,12 @@ const GRNAdd = (props) => {
                     document.getElementById(`BatchDate${k}`).value = row.BatchDate
                 } catch (e) { }
                 return (
-                    <Flatpickr
-                        className="form-control d-block p-2 bg-white text-dark"
-                        placeholder="Batch Date..."
+                    <C_DatePicker
                         id={`BatchDate${k}`}
                         key={row.id}
                         value={row.BatchDate}
                         data-enable-time
                         disabled={(pageMode === mode.view) ? true : false}
-                        options={{
-                            altInput: true,
-                            altFormat: "d-m-Y",
-                            dateFormat: "Y-m-d",
-                        }}
                         onChange={(e, date) => { row.BatchDate = date }}
                     />
                 )
@@ -565,10 +535,10 @@ const GRNAdd = (props) => {
         event.preventDefault();
 
         const btnId = event.target.id
-        btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
         function returnFunc() {
-            btnIsDissablefunc({ btnId, state: false })
+            _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
             const itemArr = []
@@ -631,21 +601,21 @@ const GRNAdd = (props) => {
             })
 
             if (invoiceNo.length === 0) {
-                CustomAlert({
+                customAlert({
                     Type: 3,
                     Message: "Please Enter Invoice Number",
                 })
                 return returnFunc()
             }
             if (itemArr.length === 0) {
-                CustomAlert({
+                customAlert({
                     Type: 3,
                     Message: "Please Enter One Item Quantity",
                 })
                 return returnFunc()
             }
             if (isvalidMsg.length > 0) {
-                CustomAlert({
+                customAlert({
                     Type: 3,
                     Message: isvalidMsg,
                 })
@@ -658,7 +628,7 @@ const GRNAdd = (props) => {
                 GrandTotal: orderAmount,
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
-                CreatedBy: loginUserID(),
+                CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArr,
                 GRNReferences: openPOdata
@@ -668,7 +638,7 @@ const GRNAdd = (props) => {
             if (pageMode === mode.edit) {
                 returnFunc()
             } else {
-                dispatch(saveGRNAction({ jsonBody, btnId }))
+                dispatch(_act.saveGRNAction({ jsonBody, btnId }))
             }
         } catch (error) { returnFunc() }
     }
@@ -676,7 +646,7 @@ const GRNAdd = (props) => {
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" >
 
                     <div className="px-2 mb-1  c_card_header " >
@@ -687,17 +657,10 @@ const GRNAdd = (props) => {
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "130px" }}>GRN Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
-                                            name="grndate"
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
+                                        <C_DatePicker
+                                            name="GRNDate"
+                                            value={values.GRNDate}
                                             disabled={(pageMode === mode.view) ? true : false}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                                defaultDate: "today"
-                                            }}
                                             onChange={(e, date) => { setgrnDate(date) }}
                                         />
                                     </Col>
@@ -732,16 +695,8 @@ const GRNAdd = (props) => {
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Invoice Date</Label>
                                     <Col md="7">
-                                        <Flatpickr
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
-                                            disabled={pageMode === mode.view ? true : false}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                                defaultDate: "today"
-                                            }}
+                                        <C_DatePicker
+                                            disabled={true}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -831,55 +786,45 @@ const GRNAdd = (props) => {
                                     </Col>
                                 </FormGroup>
 
-
-
                             </Col>
                         </Row>
                     </div>
 
-                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                        {({ paginationProps, paginationTableProps }) => (
-                            <ToolkitProvider
-                                keyField="id"
-                                defaultSorted={defaultSorted}
-                                data={grnItemList}
-                                columns={tableColumnsMode_1}
-                                search
-                            >
-                                {(toolkitProps,) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table table-Rresponsive">
-                                                    <BootstrapTable
-                                                        responsive
-                                                        id="table_Arrow"
-                                                        bordered={false}
-                                                        striped={false}
-                                                        classes={"table  table-bordered table-hover"}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
-                                                    />
-                                                    {mySearchProps(toolkitProps.searchProps)}
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row className="align-items-md-center mt-30">
-                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                <PaginationListStandalone {...paginationProps} />
-                                            </Col>
-                                        </Row>
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        )}
 
-                    </PaginationProvider>
+                    <ToolkitProvider
+                        keyField="id"
+                        defaultSorted={defaultSorted}
+                        data={grnItemList}
+                        columns={tableColumnsMode_1}
+                        search
+                    >
+                        {(toolkitProps,) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table table-Rresponsive">
+                                            <BootstrapTable
+                                                responsive
+                                                id="table_Arrow"
+                                                bordered={false}
+                                                striped={false}
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Items Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
+
 
 
                     {

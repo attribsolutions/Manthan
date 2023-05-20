@@ -9,20 +9,19 @@ import {
   deleteDriverID,
   saveDriverMasterSuccess,
 } from "../../../store/Administrator/DriverRedux/action";
-import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { loginCompanyID, loginPartyID, loginRoleID } from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdownList from "../../../components/Common/PartyDropdownComp/PartyDropdownList";
 
 const DriverList = () => {
 
   const dispatch = useDispatch();
-  const RoleID = loginRoleID()
+  const RoleID = _cfunc.loginRoleID()
 
-  const [party, setParty] = useState({ value: loginPartyID(), label: "Select..." });
+  const [party, setParty] = useState({ value: _cfunc.loginPartyID(), label: "Select..." });
 
   const reducers = useSelector(
     (state) => ({
@@ -57,7 +56,7 @@ const DriverList = () => {
   const goButtonHandler = () => {
 
     const jsonBody = JSON.stringify({
-      CompanyID: loginCompanyID(),
+      CompanyID: _cfunc.loginCompanyID(),
       PartyID: party.value,
     });
     dispatch(getDriverList(jsonBody));

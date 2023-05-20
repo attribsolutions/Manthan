@@ -8,7 +8,6 @@ import {
     Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
@@ -17,14 +16,13 @@ import {
     comAddPageFieldFunc,
     initialFiledFunc,
     onChangeDate,
-
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate_ymd, loginPartyID, btnIsDissablefunc, metaTagLabel } from "../../../components/Common/CommonFunction";
+
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -41,23 +39,23 @@ import {
     makeIB_InvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { discountCalculate, stockDistributeFunc } from "./invoiceCaculations";
 import "./invoice.scss"
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const Invoice = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
     const subPageMode = history.location.pathname
 
     const goBtnId = `ADDGoBtn${subPageMode}`
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
-        // id: "",
         InvoiceDate: currentDate_ymd,
         Customer: "",
     }
@@ -69,7 +67,6 @@ const Invoice = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         updateMsg,
@@ -122,13 +119,13 @@ const Invoice = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        
+
         if ((hasShowloction || hasShowModal || (location.state))) {
 
             let hasEditVal = null
@@ -165,7 +162,7 @@ const Invoice = (props) => {
                 const jsonBody = JSON.stringify({
                     FromDate: hasEditVal.InvoiceDate,
                     Customer: hasEditVal.Customer,
-                    Party: loginPartyID(),
+                    Party: _cfunc.loginPartyID(),
                     OrderIDs: ""
                 });
                 dispatch(GoButtonForinvoiceAdd({ jsonBody, }));
@@ -182,13 +179,13 @@ const Invoice = (props) => {
             dispatch(GoButtonForinvoiceAddSuccess([]))
 
             if (pageMode === mode.dropdownAdd) {
-                CustomAlert({
+                customAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                 })
             }
             else {
-                const promise = await CustomAlert({
+                const promise = await customAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                     RedirectPath: url.INVOICE_LIST_1,
@@ -204,7 +201,7 @@ const Invoice = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            CustomAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
             })
@@ -255,9 +252,9 @@ const Invoice = (props) => {
             dispatch(makeIB_InvoiceActionSuccess({ Status: false }))
         }
     }, [makeIBInvoice]);
-    
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [OrderItemDetails]);
+
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [OrderItemDetails]);
 
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
@@ -496,7 +493,7 @@ const Invoice = (props) => {
                                             </td>
                                             <td>
                                                 <div style={{ width: "90px" }}>
-                                                    {convertDatefunc(index2.BatchDate)}
+                                                    {_cfunc.convertDatefunc(index2.BatchDate)}
                                                 </div>
                                             </td>
                                             <td>
@@ -720,18 +717,18 @@ const Invoice = (props) => {
 
     function goButtonHandler(makeIBInvoice) {
         const btnId = goBtnId;
-        btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
         try {
             const jsonBody = JSON.stringify({
                 FromDate: values.InvoiceDate,
                 Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
-                Party: loginPartyID(),
+                Party: _cfunc.loginPartyID(),
                 OrderIDs: ""
             });
             dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, btnId }));
 
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     const SaveHandler = async (event) => {
@@ -739,10 +736,10 @@ const Invoice = (props) => {
         event.preventDefault();
 
         const btnId = event.target.id
-        btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
         function returnFunc() {
-            btnIsDissablefunc({ btnId, state: false })
+            _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
             const validMsg = []
@@ -762,7 +759,7 @@ const Invoice = (props) => {
                         const calculate = discountCalculate(ele, index)
 
                         grand_total = grand_total + Number(calculate.tAmount)
-                        
+
                         invoiceItems.push({
                             Item: index.Item,
                             Unit: index.UnitDrop.value,
@@ -775,7 +772,7 @@ const Invoice = (props) => {
                             MRP: ele.LiveBatcheMRPID,
                             MRPValue: ele.MRP,//changes
                             Rate: ele.Rate,
-                            BasicAmount: calculate.discountBaseAmt,
+                            BasicAmount: (calculate.discountBaseAmt).toFixed(2),
                             GSTAmount: calculate.gstAmt,
                             GST: ele.LiveBatcheGSTID,
                             GSTPercentage: ele.GST,// changes
@@ -798,13 +795,18 @@ const Invoice = (props) => {
             })
 
             if (validMsg.length > 0) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 4,
-                    Status: true,
                     Message: JSON.stringify(validMsg),
-                    RedirectPath: false,
-                    AfterResponseAction: false
-                }));
+                })
+                return returnFunc()
+            }
+
+            if (!(invoiceItems.length > 0)) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Enter One Item Quantity",
+                })
                 return returnFunc()
             }
 
@@ -825,9 +827,9 @@ const Invoice = (props) => {
                 GrandTotal: Math.round(grand_total),
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 Customer: values.Customer.value,
-                Party: loginPartyID(),
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID(),
+                Party: _cfunc.loginPartyID(),
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
             });
 
 
@@ -852,7 +854,7 @@ const Invoice = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
 
@@ -864,16 +866,11 @@ const Invoice = (props) => {
                                         <FormGroup className="row mt-2 mb-3  ">
                                             <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
                                             <Col sm="7">
-                                                <Flatpickr
+                                                <C_DatePicker
                                                     name="InvoiceDate"
                                                     value={values.InvoiceDate}
-                                                    className="form-control d-block bg-white text-dark"
                                                     id="myInput11"
                                                     disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
-
-                                                    options={{
-                                                        dateFormat: "Y-m-d",
-                                                    }}
                                                     onChange={InvoiceDateOnchange}
                                                 />
                                                 {isError.InvoiceDate.length > 0 && (

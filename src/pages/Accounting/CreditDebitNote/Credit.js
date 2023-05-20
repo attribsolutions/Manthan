@@ -1,64 +1,38 @@
 import React, { useEffect, useState, } from "react";
-import {
-    Col,
-    FormGroup,
-    Input,
-    Label,
-    Row
-} from "reactstrap";
+import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import {
-    BreadcrumbShowCountlabel,
-    Breadcrumb_inputName,
-    commonPageField,
-    commonPageFieldSuccess,
-} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
-    comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
     onChangeSelect,
     onChangeText,
-    resetFunction
 } from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
-import {
-    breadcrumbReturnFunc,
-    btnIsDissablefunc,
-    loginCompanyID,
-    loginPartyID,
-    loginUserID,
-    metaTagLabel
-} from "../../../components/Common/CommonFunction";
 import Select from "react-select";
-import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode"
-import { currentDate_ymd } from "../../../components/Common/CommonFunction"
+import { SaveButton } from "../../../components/Common/CommonButton";
+
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
-import { decimalRegx } from "../../../CustomValidateForm/RegexPattern"
-import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
-import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
-import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
-import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
+import { decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/RegexPattern"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
-import * as commonFunc from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction"
+import * as _act from "../../../store/actions";
+import { mode, url, pageId } from "../../../routes/index"
+import { pageFieldUseEffect, saveMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+import { useLayoutEffect } from "react";
 
 const Credit = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
+
     const fileds = {
-        CRDRNoteDate: currentDate_ymd
-        ,
+        CRDRNoteDate:currentDate_ymd,
         Customer: "",
         NoteReason: "",
         servicesItem: "",
@@ -103,48 +77,33 @@ const Credit = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    useEffect(() => {
-        const page_Id = pageId.CREDIT//changes
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        dispatch(ReceiptGoButtonMaster_Success([]))
-        dispatch(Invoice_Return_ID_Success([]))
-        dispatch(InvoiceNumberSuccess([]))
+    useLayoutEffect(() => {
+        dispatch(_act.commonPageFieldSuccess(null));
+        dispatch(_act.ReceiptGoButtonMaster_Success([]))
+        dispatch(_act.Invoice_Return_ID_Success([]))
+        dispatch(_act.InvoiceNumberSuccess([]))
+        dispatch(_act.commonPageField(pageId.CREDIT))
+
     }, []);
 
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
+    const { fieldLabel, values, isError } = state;
     let { Data = [] } = ReceiptGoButton;
     const { InvoiceItems = [] } = InvoiceReturn;
+
     const location = { ...history.location };
-    const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
-    const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
+    const hasShowloction = location.hasOwnProperty(mode.editValue);
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useEffect(() => userAccessUseEffect({ // userAccess useEffect 
+        props,
+        userAccess,
+        dispatch,
+        setUserAccState,
+    }), [userAccess]);
 
 
-
-    // userAccess useEffect
-    useEffect(() => {
-        let userAcc = null;
-        let locationPath = location.pathname;
-
-        if (hasShowModal) {
-            locationPath = props.masterPath;
-        };
-
-        userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
-        };
-    }, [userAccess])
-
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
+    useEffect(() => {// This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
 
         if ((hasShowloction || hasShowModal)) {
 
@@ -163,118 +122,66 @@ const Credit = (props) => {
                 const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                // hasValid.Name.valid = true;
-
                 values.CRDRNoteDate = CRDRNoteDate;
                 values.Customer = { label: Customer, value: CustomerID };
                 values.NoteReason = { label: NoteReason, value: "" };
                 values.InvoiceNO = { label: FullNoteNumber, value: "" };
-                // values.BalanceAmount
+
                 values.servicesItem = servicesItem;
                 values.Narration = Narration;
                 values.GrandTotal = GrandTotal;
+
                 setTable(CRDRInvoices)
                 setTable1(CRDRNoteItems)
 
-
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                dispatch(_act.Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
-            dispatch(EditCreditlistSuccess({ Status: false }))
+            dispatch(_act.EditCreditlistSuccess({ Status: false }))
         }
     }, []);
 
-    useEffect(() => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(saveCredit_Success({ Status: false }))
-            setState(() => resetFunction(fileds, state)) //Clear form values 
-            dispatch(Breadcrumb_inputName(''))
+    useEffect(() => saveMsgUseEffect({
+        postMsg, pageMode,
+        history, dispatch,
+        postSuccss: _act.saveCredit_Success,
+       
+        listPath: url.CREDIT_LIST
+    }), [postMsg])
 
-            if (pageMode === "other") {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                }))
-            }
-            else {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                    RedirectPath: url.CREDIT_LIST,
-                }))
-            }
-        }
-        else if (postMsg.Status === true) {
-            dispatch(saveCredit_Success({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-        }
-    }, [postMsg])
 
-    // useEffect(() => {
-    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-    //         setState(() => resetFunction(fileds, state)) // Clear form values 
-    //         history.push({
-    //             pathname: url.BANK_LIST,
-    //         })
-    //     } else if (updateMsg.Status === true && !modalCss) {
-    //         dispatch(updateBankIDSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(updateMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [updateMsg, modalCss]);
+    useEffect(() => pageFieldUseEffect({ state, setState, pageField }), [pageField]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems, Data]);
 
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField]);
-
-    // Retailer DropDown List Type 1 for credit list drop down
-    useEffect(() => {
+    useEffect(() => {   // Retailer DropDown List Type 1 for credit list drop down
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
         });
-        dispatch(Retailer_List(jsonBody));
+        dispatch(_act.Retailer_List(jsonBody));
     }, []);
 
-    // Note Reason Type id 6 Required
-    useEffect(() => {
+
+    useEffect(() => {     // Note Reason Type id 6 Required
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 6
         });
-        dispatch(postSelect_Field_for_dropdown(jsonBody));
+        dispatch(_act.postSelect_Field_for_dropdown(jsonBody));
     }, []);
 
-    //   Note Type Api for Type identify
-    useEffect(() => {
+
+    useEffect(() => {    //   Note Type Api for Type identify
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 5
         });
-        dispatch(CredietDebitType(jsonBody));
+        dispatch(_act.CredietDebitType(jsonBody));
     }, [])
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems]);
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const PartyOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -311,7 +218,7 @@ const Credit = (props) => {
 
     function InvoiceNoOnChange(e) {
         let id = e.value
-        dispatch(Invoice_Return_ID(id));
+        dispatch(_act.Invoice_Return_ID(id));
     };
 
     function CustomerOnChange(e) { // Customer dropdown function
@@ -323,21 +230,21 @@ const Credit = (props) => {
         })
 
         const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
             CustomerID: e.value,
             InvoiceID: ""
         });
         const body = { jsonBody, pageMode }
-        dispatch(ReceiptGoButtonMaster(body));
+        dispatch(_act.ReceiptGoButtonMaster(body));
         const jsonBody1 = JSON.stringify({
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
             CustomerID: e.value
         });
 
-        dispatch(InvoiceNumber(jsonBody1));
+        dispatch(_act.InvoiceNumber(jsonBody1));
     };
 
-    function CalculateOnchange(event, row, key) {  // Calculate Input box onChange Function
+    function CalculateOnchange(event, row, key) {   // Calculate Input box onChange Function
         let input = event.target.value
         let v1 = Number(row.BalanceAmount);
         let v2 = Number(input)
@@ -359,7 +266,6 @@ const Credit = (props) => {
 
     function AmountPaid_onChange(event) {
         let input = event.target.value
-        // let result = /^\d*(\.\d{0,2})?$/.test(input);
         let sum = 0
         Data.forEach(element => {
             sum = sum + Number(element.BalanceAmount)
@@ -372,7 +278,7 @@ const Credit = (props) => {
         }
         onChangeText({ event, state, setState })
         AmountPaidDistribution(event.target.value)
-        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(event.target.value).toFixed(2)}`))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(event.target.value).toFixed(2)}`))
     }
 
     function AmountPaidDistribution(val1) {
@@ -397,13 +303,8 @@ const Credit = (props) => {
         })
     }
 
-    function val_onChange(val, row, type) {
-        if (type === "qty") {
-            row["Qty"] = val;
-        }
-        else {
-            row["Rate"] = val
-        }
+    function itemWise_CalculationFunc(val, row, type) {
+
         row.gstPercentage = row.GSTPercentage
         let calculate = salesReturnCalculate(row)
 
@@ -435,7 +336,7 @@ const Credit = (props) => {
         })
         setTotalSum(sum)
         AmountPaidDistribution(sum)
-        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(sum).toFixed(2)}`))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(sum).toFixed(2)}`))
 
     };
 
@@ -467,30 +368,41 @@ const Credit = (props) => {
             dataField: "",
             formatter: (cellContent, row, key) => {
 
-                return (<span >
-                    <Input
+                return (< >
+                    <CInput
+                        key={`Qty${row.Item}${key}`}
+                        id={`Qty${key}`}
+                        cpattern={onlyNumberRegx}
+                        defaultValue={row.Quantity}
+                        autoComplete="off"
+                        className=" text-end"
+                        onChange={(e) => {
+                            row["Quantity"] = e.target.value
+                            itemWise_CalculationFunc(row)
+                        }}
+                    />
+                    {/* <Input
                         key={`Qty${row.Item}${key}`}
                         id={`Qty${key}`}
                         pattern={decimalRegx}
                         defaultValue={null}
-                        // defaultValue={pageMode === mode.view ? row.Quantity : null}
                         disabled={pageMode === mode.view ? true : false}
                         placeholder="Enter Quantity"
                         autoComplete="off"
                         className="col col-sm"
-                        // onChange={(event) => val_onChange(event, row, "qty")}
                         onChange={(e) => {
                             const val = e.target.value
                             let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                             if ((isnum) || (val === '')) {
-                                val_onChange(val, row, "qty")
+                                itemWise_CalculationFunc(val, row, "qty")
                             } else {
                                 document.getElementById(`Qty${key}`).value = row.Quantity
                             }
                         }}
                         onKeyDown={(e) => handleKeyDown(e, InvoiceItems)}
-                    />
-                </span>)
+                    /> */}
+                </>
+                )
             }
         },
         {
@@ -530,7 +442,6 @@ const Credit = (props) => {
                             isSearchable={true}
                             className="react-dropdown"
                             classNamePrefix="dropdown"
-                            // options={Units}
                             onChange={(e) => UnitOnchange(e, row, key)}
                         />
                     </span>)
@@ -542,8 +453,22 @@ const Credit = (props) => {
             dataField: "",
             formatter: (cellContent, row, key) => {
 
-                return (<span >
-                    <Input
+                return (
+                    <>
+                        <CInput
+                            type="text"
+                            key={`Ratey${row.Item}${key}`}
+                            id={`Ratey${key}`}
+                            defaultValue={row.Rate}
+                            cpattern={onlyNumberRegx}
+                            autoComplete="off"
+                            className=" text-end"
+                            onChange={(e) => {
+                                row["Rate"] = e.target.value
+                                itemWise_CalculationFunc(row)
+                            }}
+                        />
+                        {/* <Input
                         type="text"
                         key={`Ratey${row.Item}${key}`}
                         id={`Ratey${key}`}
@@ -551,12 +476,12 @@ const Credit = (props) => {
                         disabled={pageMode === mode.view ? true : false}
                         autoComplete="off"
                         className="col col-sm"
-                        // onChange={(event) => val_onChange(event, row, "Rate")}
+
                         onChange={(e) => {
                             const val = e.target.value
                             let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                             if ((isnum) || (val === '')) {
-                                val_onChange(val, row, "Rate")
+                                itemWise_CalculationFunc(val, row, "Rate")
                             } else {
                                 document.getElementById(`Ratey${key}`).value = row.Rate
                             }
@@ -564,8 +489,9 @@ const Credit = (props) => {
                         onKeyDown={(e) => handleKeyDown(e, InvoiceItems)}
 
 
-                    />
-                </span>)
+                    /> */}
+                    </>
+                )
             }
         },
     ];
@@ -604,8 +530,6 @@ const Credit = (props) => {
                         pattern={decimalRegx}
                         defaultValue={pageMode === mode.view ? row.Amount : row.Calculate}
                         disabled={pageMode === mode.view ? true : false}
-                        // value={row.Calculate}
-                        // type="text"
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
@@ -624,11 +548,11 @@ const Credit = (props) => {
         event.preventDefault();
         const btnId = event.target.id;
         if ((values.Amount === 0) || (values.Amount === "NaN")) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: `Amount Paid value can not be ${values.Amount}`,
             })
-            return btnIsDissablefunc({ btnId, state: false })
+            return _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
 
         const ReceiptInvoices1 = Data.map((index) => ({
@@ -643,19 +567,19 @@ const Credit = (props) => {
         InvoiceItems.forEach(index => {
 
             if ((!index.unit)) {
-                CustomAlert({
+                customAlert({
                     Type: 3,
                     Message: `Please Select Unit ${index.ItemName}`,
                 })
-                // return btnIsDissablefunc({ btnId, state: false })
+                // return _cfunc.btnIsDissablefunc({ btnId, state: false })
             } else {
                 if (index.Qty) {
                     // if ((!index.unit)) {
-                    //     CustomAlert({
+                    //     customAlert({
                     //         Type: 3,
                     //         Message: `Please Select Unit ${index.ItemName}`,
                     //     })
-                    //     // return btnIsDissablefunc({ btnId, state: false })
+                    //     // return _cfunc.btnIsDissablefunc({ btnId, state: false })
                     // }
                     const CRDRNoteItems = {
                         CRDRNoteDate: values.CRDRNoteDate,
@@ -686,7 +610,7 @@ const Credit = (props) => {
 
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
@@ -696,21 +620,20 @@ const Credit = (props) => {
                     Narration: values.Narration,
                     NoteReason: values.NoteReason.value,
                     CRDRNoteItems: arr1 ? arr1 : [],
-                    Party: loginPartyID(),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+                    Party: _cfunc.loginPartyID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
                     CRDRInvoices: FilterReceiptInvoices,
                 })
                 if (pageMode === mode.edit) {
-                    // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
 
-                    dispatch(saveCredit({ jsonBody, btnId }));
+                    dispatch(_act.saveCredit({ jsonBody, btnId }));
                 }
 
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
 
     };
 
@@ -721,7 +644,7 @@ const Credit = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
@@ -859,9 +782,6 @@ const Credit = (props) => {
                                                 }}
 
                                             />
-                                            {/* {isError.InvoiceNO.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.InvoiceNO}</small></span>
-                                            )} */}
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -876,9 +796,9 @@ const Credit = (props) => {
                         >
                             {toolkitProps => (
                                 <React.Fragment>
-                                    {InvoiceItems.length <= 0 ? null : <div className="table">
+                                    {(InvoiceItems.length > 0) && <div className="table">
                                         <BootstrapTable
-                                            keyField={"id"}
+                                            keyField="id"
                                             id="table_Arrow"
                                             bordered={true}
                                             striped={false}
@@ -891,9 +811,10 @@ const Credit = (props) => {
                                     </div>
                                     }
 
-                                    {Table1.length <= 0 ? null : <div className="table">
+                                    {(Table1.length > 0) && <div className="table">
                                         <BootstrapTable
-                                            keyField={"id"}
+                                            keyField="id"
+                                            id="table_Arrow"
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
@@ -909,7 +830,6 @@ const Credit = (props) => {
                             )
                             }
                         </ToolkitProvider>
-
 
                         {
                             <ToolkitProvider
@@ -942,8 +862,6 @@ const Credit = (props) => {
                                 }
                             </ToolkitProvider>}
 
-
-
                         {Data.length > 0 ?
                             <FormGroup>
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
@@ -958,7 +876,6 @@ const Credit = (props) => {
                             </FormGroup >
                             : null
                         }
-
                     </form >
                 </div>
             </React.Fragment>

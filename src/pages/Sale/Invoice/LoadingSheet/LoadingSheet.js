@@ -3,11 +3,9 @@ import {
     Col,
     FormGroup,
     Label,
-    Input,
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../../store/actions";
@@ -16,20 +14,23 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeDate,
     onChangeSelect,
     resetFunction,
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginPartyID, currentDate_ymd, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
 import { invoiceListGoBtnfilter } from "../../../../store/Sales/Invoice/action";
 import { getVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
-import { LoadingSheet_GoBtn_API, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMaster, SaveLoadingSheetMasterSucccess } from "../../../../store/Sales/LoadingSheetRedux/action";
+import {
+    LoadingSheet_GoBtn_API,
+    LoadingSheet_GoBtn_API_Succcess,
+    SaveLoadingSheetMaster,
+    SaveLoadingSheetMasterSucccess
+} from "../../../../store/Sales/LoadingSheetRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -37,16 +38,18 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
-import * as commonFunc from "../../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+import { C_DatePicker } from "../../../../CustomValidateForm";
 
 const LoadingSheet = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    // const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, Date: currentDate_ymd });
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [array, setArray] = useState([]);
 
@@ -62,10 +65,8 @@ const LoadingSheet = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        // updateMsg,
         pageField,
         userAccess,
         VehicleNumber,
@@ -97,7 +98,6 @@ const LoadingSheet = (props) => {
     }, []);
 
     const location = { ...history.location }
-    // const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
@@ -116,7 +116,7 @@ const LoadingSheet = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -161,7 +161,7 @@ const LoadingSheet = (props) => {
         }
     }, [pageField])
 
-    useEffect(commonFunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
@@ -187,7 +187,7 @@ const LoadingSheet = (props) => {
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
-            Party: loginPartyID(),
+            Party: _cfunc.loginPartyID(),
             Route: "",
             LoadingSheetID: ""
         });
@@ -277,7 +277,7 @@ const LoadingSheet = (props) => {
 
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
                 if (LoadingSheetDetails.length === 0) {
                     dispatch(
                         AlertState({
@@ -286,19 +286,19 @@ const LoadingSheet = (props) => {
                             Message: "Minimum one Invoice is Select",
                         })
                     );
-                    return btnIsDissablefunc({ btnId, state: false })
+                    return _cfunc.btnIsDissablefunc({ btnId, state: false })
                 }
 
                 const jsonBody = JSON.stringify({
                     Date: values.Date,
-                    Party: loginPartyID(),
+                    Party: _cfunc.loginPartyID(),
                     Route: values.RouteName.value,
                     Vehicle: values.VehicleNumber.value,
                     Driver: values.DriverName.value,
                     TotalAmount: GrandTotal.toFixed(2),
                     InvoiceCount: totalInvoices,
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
                     LoadingSheetDetails: LoadingSheetDetails
                 });
 
@@ -309,7 +309,7 @@ const LoadingSheet = (props) => {
                     dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
                 }
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     function DateOnchange(e, date) {
@@ -342,7 +342,7 @@ const LoadingSheet = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
@@ -354,16 +354,9 @@ const LoadingSheet = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Date}  </Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='Date'
                                                 value={values.Date}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={DateOnchange}
                                             />
                                         </Col>
@@ -402,16 +395,9 @@ const LoadingSheet = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.FromDate} </Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='FromDate'
                                                 value={values.FromDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={FromDateOnchange}
                                             />
                                         </Col>
@@ -424,16 +410,9 @@ const LoadingSheet = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.ToDate}</Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='ToDate'
                                                 value={values.ToDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={ToDateOnchange}
                                             />
                                         </Col>

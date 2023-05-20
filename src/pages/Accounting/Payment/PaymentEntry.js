@@ -6,7 +6,6 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Flatpickr from "react-flatpickr"
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -21,18 +20,18 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate_ymd, loginCompanyID, loginPartyID, loginUserID, metaTagLabel, } from "../../../components/Common/CommonFunction";
-import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode"
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
+import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { url, mode, pageId } from "../../../routes/index"
 
 const PaymentEntry = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+    const currentDate_ymd = _cfunc.date_ymd_func()
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -82,11 +81,11 @@ const PaymentEntry = (props) => {
         dispatch(getSupplier())
         dispatch(GetOpeningBalance_Success([]))
     }, []);
-    
+
     // Receipt Mode dropdown Values
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 4
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
@@ -95,7 +94,7 @@ const PaymentEntry = (props) => {
     // Receipt Type API Values **** only Post Json Body
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 3
         });
         dispatch(ReceiptTypeAPI(jsonBody));
@@ -131,7 +130,7 @@ const PaymentEntry = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -221,7 +220,7 @@ const PaymentEntry = (props) => {
         })
         const jsonBody = JSON.stringify({
             PartyID: e.value,
-            CustomerID: loginPartyID(),
+            CustomerID: _cfunc.loginPartyID(),
             ReceiptDate: values.ReceiptDate
         });
 
@@ -258,7 +257,7 @@ const PaymentEntry = (props) => {
 
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 var BulkData = [{
                     "ReceiptDate": values.ReceiptDate,
@@ -271,11 +270,11 @@ const PaymentEntry = (props) => {
                     "Bank": values.BankName.value,
                     "Customer": values.Customer.value,
                     "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
-                    "Party": loginPartyID(),
+                    "Party": _cfunc.loginPartyID(),
                     "ReceiptMode": values.ReceiptModeName.value,
                     "ReceiptType": ReceiptTypeID.id,
-                    "CreatedBy": loginUserID(),
-                    "UpdatedBy": loginUserID(),
+                    "CreatedBy": _cfunc.loginUserID(),
+                    "UpdatedBy": _cfunc.loginUserID(),
                     "ReceiptInvoices": [],
                     "PaymentReceipt": []
                 }]
@@ -284,14 +283,10 @@ const PaymentEntry = (props) => {
                     BulkData: BulkData
                 })
 
-                if (pageMode === mode.edit) {
-                    // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
-                }
-                else {
-                    dispatch(saveReceiptMaster({ jsonBody, btnId }));
-                }
+                dispatch(saveReceiptMaster({ jsonBody, btnId }));
+
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -301,7 +296,7 @@ const PaymentEntry = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
@@ -314,20 +309,12 @@ const PaymentEntry = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptDate}  </Label>
                                         <Col sm="7">
-                                            <Flatpickr
+                                            <C_DatePicker
                                                 name='ReceiptDate'
                                                 value={values.ReceiptDate}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="Select..."
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
                                                 onChange={ReceiptDate_Onchange}
                                             />
                                         </Col>
-
                                     </FormGroup>
                                 </Col >
                             </Row>
@@ -462,16 +449,9 @@ const PaymentEntry = (props) => {
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeDate}</Label>
                                             <Col sm="7">
-                                                <Flatpickr
+                                                <C_DatePicker
                                                     name='ChequeDate'
                                                     value={values.ChequeDate}
-                                                    className="form-control d-block p-2 bg-white text-dark"
-                                                    placeholder="Select..."
-                                                    options={{
-                                                        altInput: true,
-                                                        altFormat: "d-m-Y",
-                                                        dateFormat: "Y-m-d",
-                                                    }}
                                                     onChange={ChequeDate_Onchange}
                                                 />
                                             </Col>
@@ -517,7 +497,7 @@ const PaymentEntry = (props) => {
                                                 value={values.Description}
                                                 type="text"
                                                 className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Amount"
+                                                placeholder="Please Enter Description"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
@@ -540,12 +520,10 @@ const PaymentEntry = (props) => {
                                     onClick={saveHandeller}
                                     userAcc={userPageAccessState}
                                     editCreatedBy={editCreatedBy}
-                                    module={"PaymentEntry"}
                                 />
 
                             </Col>
                         </FormGroup >
-
 
                     </form >
                 </div >

@@ -14,16 +14,9 @@ import {
   SAVE_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE,
   GET_ORDER_LIST_PAGE_SUCCESS,
-  ORDER_LIST_FILTERS,
   ORDER_APPROVAL_ACTION,
   ORDER_APPROVAL_ACTION_SUCCESS,
 } from './actionType'
-
-
-export const orderlistfilters = filter => ({
-  type: ORDER_LIST_FILTERS,
-  payload: filter,
-})
 
 export const GoButton_For_Order_Add = (subPageMode, data) => ({
   type: GO_BUTTON_FOR_ORDER_PAGE,
@@ -47,11 +40,11 @@ export const getOrderListPageSuccess = (resp) => ({
 });
 
 
-export const saveOrderAaction = (config = {}) => ({
+export const saveOrderAction = (config = {}) => ({
   type: SAVE_ORDER_FROM_ORDER_PAGE,
   config,
 });
-export const postOrderSuccess = (resp) => ({
+export const saveOrderActionSuccess = (resp) => ({
   type: SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS,
   payload: resp
 });

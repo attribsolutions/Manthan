@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
-
-import Flatpickr from "react-flatpickr";
-import {
-    updateOrderIdSuccess,
-} from "../../../store/Purchase/OrderPageRedux/actions";
 import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
@@ -14,14 +9,7 @@ import {
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import {
-    btnIsDissablefunc,
-    currentDate_ymd,
-    excelDownCommonFunc,
-    loginPartyID
-} from "../../../components/Common/CommonFunction";
-import { useMemo } from "react";
+import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
@@ -29,24 +17,24 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { MetaTags } from "react-meta-tags";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
-    editInvoiceList,
     invoiceListGoBtnfilter
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
-
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const InvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
+    const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
 
     const reducers = useSelector(
@@ -58,22 +46,18 @@ const InvoiceList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.InvoiceReducer.editData,
-            // orderlistFilter: state.OrderReducer.orderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { userAccess, pageField, supplier, tableList, } = reducers;
-    const { fromdate, todate, supplierSelect } = orderlistFilter;
+    const { pageField, supplier } = reducers;
+    const { fromdate, todate, supplierSelect } = hederFilters;
 
     const action = {
         getList: invoiceListGoBtnfilter,
         deleteId: deleteInvoiceId,
-        postSucc: postMessage,
-        editId: editInvoiceList,
-        updateSucc: updateOrderIdSuccess,
         deleteSucc: deleteInvoiceIdSuccess
     }
 
@@ -130,47 +114,47 @@ const InvoiceList = () => {
     });
 
     function downBtnFunc(row) {
-        
-          
+
+
         var ReportType = report.invoice;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, {editId: row.id}))
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }))
     }
 
     function goButtonHandler(event, IBType) {
 
         const btnId = gobtnId;
-        btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
         try {
             const filtersBody = JSON.stringify({
                 FromDate: fromdate,
                 ToDate: todate,
                 Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
-                Party: loginPartyID(),
+                Party: _cfunc.loginPartyID(),
                 IBType: IBType ? IBType : otherState.IBType
             });
 
             dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody, btnId }));
 
-        } catch (error) { btnIsDissablefunc({ btnId, state: true }) }
+        } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: true }) }
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...orderlistFilter }
+        let newObj = { ...hederFilters }
         newObj.fromdate = date
-        setorderlistFilter(newObj)
+        setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...orderlistFilter }
+        let newObj = { ...hederFilters }
         newObj.todate = date
-        setorderlistFilter(newObj)
+        setHederFilters(newObj)
     }
 
     function supplierOnchange(e) {
 
-        let newObj = { ...orderlistFilter }
+        let newObj = { ...hederFilters }
         newObj.supplierSelect = e
-        setorderlistFilter(newObj)
+        setHederFilters(newObj)
     }
 
     const makeBtnFunc = (list = {}, btnId) => {
@@ -190,16 +174,9 @@ const InvoiceList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>From Date</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name='fromdate'
                                     value={fromdate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={fromdateOnchange}
                                 />
                             </Col>
@@ -210,16 +187,9 @@ const InvoiceList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>To Date</Label>
                             <Col sm="7">
-                                <Flatpickr
+                                <C_DatePicker
                                     name="todate"
                                     value={todate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                    }}
                                     onChange={todateOnchange}
                                 />
                             </Col>
@@ -267,11 +237,10 @@ const InvoiceList = () => {
                             downBtnFunc={downBtnFunc}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
-
                             ButtonMsgLable={"Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make GRN"}
-                            filters={orderlistFilter}
+                            filters={hederFilters}
                         />
                         : null
                 }

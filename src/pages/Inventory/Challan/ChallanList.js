@@ -1,33 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { BreadcrumbReset, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
-
-import Flatpickr from "react-flatpickr";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { loginPartyID } from "../../../components/Common/CommonFunction";
-import * as url from "../../../routes/route_url"
-import * as mode from "../../../routes/PageMode"
-import * as pageId from "../../../routes/allPageID"
-
-import { MetaTags } from "react-meta-tags";
+import { date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useHistory } from "react-router-dom";
-import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
+import {  deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import Challan from "./Challan";
+import { C_DatePicker } from "../../../CustomValidateForm";
+import { url, mode, pageId } from "../../../routes/index"
 
 const ChallanList = () => {
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const currentDate_ymd = date_ymd_func();
 
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
-
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
     const reducers = useSelector(
         (state) => ({
             vender: state.CommonAPI_Reducer.vender,
@@ -36,14 +31,13 @@ const ChallanList = () => {
             updateMsg: state.GRNReducer.updateMsg,
             postMsg: state.GRNReducer.postMsg,
             editData: state.GRNReducer.editData,
-            ChallanlistFilter: state.ChallanReducer.ChallanlistFilter,
             makeGRN: state.GRNReducer.GRNitem,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, vender, ChallanlistFilter, makeGRN } = reducers;
-    const { fromdate, todate, venderSelect } = ChallanlistFilter;
+    const { userAccess, pageField, vender, makeGRN } = reducers;
+    const { fromdate, todate, venderSelect } = hederFilters;
 
     const action = {
         deleteId: deleteChallanId,
@@ -94,15 +88,8 @@ const ChallanList = () => {
         label: " All"
     });
 
-
-
     const makeBtnFunc = (list = []) => {
-        
-        // const obj = { ...list[0], id: list[0].id }
-        // history.push({
-        //     pathname: url.GRN_ADD_1,
-        //     pageMode: mode.modeSTPsave
-        // })
+
         const challanNo = list[0].FullChallanNumber
         const grnRef = [{
             Challan: list[0].id,
@@ -127,21 +114,21 @@ const ChallanList = () => {
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...ChallanlistFilter }
+        let newObj = { ...hederFilters }
         newObj.fromdate = date
-        dispatch(challanlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...ChallanlistFilter }
+        let newObj = { ...hederFilters }
         newObj.todate = date
-        dispatch(challanlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     function venderOnchange(e) {
-        let newObj = { ...ChallanlistFilter }
+        let newObj = { ...hederFilters }
         newObj.venderSelect = e
-        dispatch(challanlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     return (
@@ -157,16 +144,9 @@ const ChallanList = () => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "83px" }}>From Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             name='fromdate'
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
                                             value={fromdate}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
                                             onChange={fromdateOnchange}
                                         />
                                     </Col>
@@ -177,16 +157,9 @@ const ChallanList = () => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "65px" }}>To Date</Label>
                                     <Col sm="7">
-                                        <Flatpickr
+                                        <C_DatePicker
                                             nane='todate'
-                                            className="form-control d-block p-2 bg-white text-dark"
                                             value={todate}
-                                            placeholder="Select..."
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
                                             onChange={todateOnchange}
                                         />
                                     </Col>
@@ -228,17 +201,13 @@ const ChallanList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
-                            // downBtnFunc={downBtnFunc}
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"challan"}
                             makeBtnName={"Make GRN"}
                             deleteName={"FullGRNNumber"}
                             MasterModal={Challan}
                         />
-
                         : null
-
-
                 }
 
             </div>

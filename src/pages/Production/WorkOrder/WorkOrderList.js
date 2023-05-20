@@ -1,38 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import Flatpickr from "react-flatpickr";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
-import { useMemo } from "react";
+import { date_ymd_func, excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
     deleteWorkOrderId,
     deleteWorkOrderIdSuccess,
     editWorkOrderList,
     getWorkOrderListPage,
     updateWorkOrderListSuccess,
-    WorkOrderlistfilters
 } from "../../../store/Production/WorkOrder/action";
 import WorkOrder from "./WorkOrder";
-import * as url from "../../../routes/route_url"
-import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode"
-import { MetaTags } from "react-meta-tags";
+import { mode, url, pageId } from "../../../routes/index"
 import { goButtonForMaterialIssue_Master_Action } from "../../../store/Production/Matrial_Issue/action";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const WorkOrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = date_ymd_func();
 
     const hasPagePath = history.location.pathname
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
-    const [userAccState, setUserAccState] = useState('');
-
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, })
     const reducers = useSelector(
         (state) => ({
             tableList: state.WorkOrderReducer.WorkOrderList,
@@ -40,15 +34,14 @@ const WorkOrderList = () => {
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.WorkOrderReducer.editData,
-            workOrderlistFilters: state.WorkOrderReducer.workOrderlistFilters,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             makeProductionReIssue: state.MaterialIssueReducer.GoButton
         })
     );
 
-    const { userAccess, pageField, tableList, workOrderlistFilters, makeProductionReIssue } = reducers;
-    const { fromdate, todate } = workOrderlistFilters
+    const { pageField, makeProductionReIssue } = reducers;
+    const { fromdate, todate } = hederFilters
     const page_Id = (hasPagePath === url.MATERIAL_ISSUE_STP) ? pageId.MATERIAL_ISSUE_STP : pageId.WORK_ORDER_LIST;
     const page_mode = (hasPagePath === url.MATERIAL_ISSUE_STP) ? mode.modeSTPsave : mode.defaultList;
 
@@ -61,7 +54,6 @@ const WorkOrderList = () => {
         deleteSucc: deleteWorkOrderIdSuccess
     }
 
-    // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(page_mode)
         dispatch(BreadcrumbShowCountlabel(`${"Work Order Count"} :0`))
@@ -71,25 +63,8 @@ const WorkOrderList = () => {
 
     }, []);
 
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
-
-
     useEffect(() => {
 
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
-
-    useEffect(() => {
-        
         if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
             history.push({
                 pathname: makeProductionReIssue.path,
@@ -107,33 +82,20 @@ const WorkOrderList = () => {
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...workOrderlistFilters }
+        let newObj = { ...hederFilters }
         newObj.fromdate = date
-        dispatch(WorkOrderlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...workOrderlistFilters }
+        let newObj = { ...hederFilters }
         newObj.todate = date
-        dispatch(WorkOrderlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
 
     const makeBtnFunc = (list = []) => {
-        
-        // history.push({
-        //     pathname: url.MATERIAL_ISSUE,
-        //     pageMode: mode.modeSTPsave,
-        //     [mode.editValue]: list[0]
-        // })
-        // const jsonBody = JSON.stringify({
-        //     WorkOrder: id,
-        //     Item: Item,
-        //     Company: loginCompanyID(),
-        //     Party: loginPartyID(),
-        //     Quantity: parseInt(Quantity)
-        // });
-        // dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
+
         var jsonData = list[0]
         try {
             const jsonBody = JSON.stringify({
@@ -148,7 +110,7 @@ const WorkOrderList = () => {
 
         } catch (e) { }
     }
-    
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -161,18 +123,9 @@ const WorkOrderList = () => {
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
                                 <Col sm="6">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         name='fromdate'
                                         value={fromdate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-
-                                        }}
                                         onChange={fromdateOnchange}
                                     />
                                 </Col>
@@ -183,17 +136,9 @@ const WorkOrderList = () => {
                                 <Label className="col-sm-1 p-2"
                                     style={{ width: "65px", marginRight: "0.4cm" }}>To Date</Label>
                                 <Col sm="6 ">
-                                    <Flatpickr
+                                    <C_DatePicker
                                         name="todate"
                                         value={todate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
                                         onChange={todateOnchange}
                                     />
                                 </Col>

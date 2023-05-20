@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Select from "react-select";
 import { Table } from 'reactstrap';
 import * as url from "../../../routes/route_url"

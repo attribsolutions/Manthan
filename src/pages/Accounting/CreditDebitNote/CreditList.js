@@ -7,7 +7,6 @@ import {
 } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { useHistory } from "react-router-dom";
-import { currentDate_ymd, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as report from '../../../Reports/ReportIndex'
 import { updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../routes/allPageID";
@@ -28,12 +27,15 @@ import {
     GetCreditListSuccess
 } from "../../../store/Accounting/CreditRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import * as _cfunc from "../../../components/Common/CommonFunction"
 import { C_DatePicker } from "../../../CustomValidateForm";
+
 
 const CreditList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -110,20 +112,11 @@ const CreditList = () => {
         dispatch(BreadcrumbShowCountlabel(`${buttonMsgLable} Count : 0`))
     }, []);
 
-    // useEffect(() => {
-    //     const page_Id = otherState.page_Id
-    //     let userAcc = userAccess.find((inx) => {
-    //         return (inx.id === page_Id)
-    //     })
-    //     if (!(userAcc === undefined)) {
-    //         setUserAccState(userAcc)
-    //     }
-    // }, [userAccess])
 
     //   Note Type Api for Type identify
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 5
         });
         dispatch(CredietDebitType(jsonBody));
@@ -134,8 +127,8 @@ const CreditList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
@@ -153,8 +146,8 @@ const CreditList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
@@ -194,7 +187,7 @@ const CreditList = () => {
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
             NoteType: values.NoteType.value,
             Note: otherState.buttonMsgLable
         });

@@ -30,7 +30,6 @@ import {
   getDistrictOnStateSuccess,
   getPartyListAPI
 } from "../../../store/Administrator/PartyRedux/action";
-import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
@@ -55,10 +54,11 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
 import AddMaster from "./Drodown";
 import PartyMaster from "../PartyMaster/MasterAdd/PartyIndex";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 const AddEmployee = (props) => {
 
@@ -290,7 +290,7 @@ const AddEmployee = (props) => {
     }
     else if (postMsg.Status === true) {
       dispatch(PostEmployeeSuccess({ Status: false }))
-      CustomAlert({
+      customAlert({
         Type: 4,
         Message: JSON.stringify(postMsg.Message),
       })
@@ -305,7 +305,7 @@ const AddEmployee = (props) => {
       })
     } else if (updateMsg.Status === true && !modalCss) {
       dispatch(updateEmployeeIDSuccess({ Status: false }));
-      CustomAlert({
+      customAlert({
         Type: 3,
         Message: JSON.stringify(updateMsg.Message),
       })
@@ -486,16 +486,10 @@ const AddEmployee = (props) => {
                       <Row>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.DOB} </Label>
-                          <Flatpickr
+                          <C_DatePicker
                             name="DOB"
                             value={values.DOB}
-                            className="form-control d-block p-2 bg-white text-dark"
-                            placeholder="DD-MM-YYYY"
-                            autoComplete="0,''"
-                            options={{
-                              altFormat: "d-m-Y",
-                              dateFormat: "d-m-Y",
-                            }}
+                            placeholder = {"DD/MM/YYYY"}
                             onChange={(y, v, e) => {
                               onChangeDate({ e, v, state, setState })
                             }}
