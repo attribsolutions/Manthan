@@ -11,7 +11,7 @@ import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { useMemo } from "react";
 import {
-    BOMlistfilters,
+    
     deleteBOMId,
     deleteBOMIdSuccess,
     editBOMList,
@@ -29,11 +29,14 @@ const BOMList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
 
     const hasPagePath = history.location.pathname
 
     const [pageMode, setpageMode] = useState(BIllOf_MATERIALS_LIST)
     const [userAccState, setUserAccState] = useState('');
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
 
     const reducers = useSelector(
         (state) => ({
@@ -49,7 +52,9 @@ const BOMList = () => {
     );
 
     const { userAccess, pageField, tableList, bomlistFilters } = reducers;
-    const { fromdate, todate } = bomlistFilters;
+    // const { fromdate, todate } = bomlistFilters;
+    const { fromdate, todate, venderSelect } = hederFilters;
+
 
     const action = {
         getList: getBOMListPage,
@@ -99,15 +104,15 @@ const BOMList = () => {
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...bomlistFilters }
+        let newObj = { ...hederFilters }
         newObj.fromdate = date
-        dispatch(BOMlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...bomlistFilters }
+        let newObj = { ...hederFilters }
         newObj.todate = date
-        dispatch(BOMlistfilters(newObj))
+        setHederFilters(newObj)
     }
     return (
         <React.Fragment>
