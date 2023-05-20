@@ -280,9 +280,6 @@ const Order = (props) => {
         }
     }, [orderType]);
 
-
-
-
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -299,20 +296,22 @@ const Order = (props) => {
     }));
 
 
-
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
 
             dataField: "ItemName",
-            headerFormatter: (value, row, k) => {
+            sort: true,
+            sortValue: (cell, row) => row["ItemName"],
+            headerFormatter: (value, row, k,f) => {
+                debugger
                 return (
                     <div className="d-flex justify-content-between" key={row.id}>
                         <div>
                             Item Name
                         </div>
-                        <div>
+                        <div className="cursor-pointer" onClick={assignItem_onClick}>
                             <samp style={{ display: (supplierSelect.value > 0) && (findPartyItemAccess) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
-                                onClick={assignItem_onClick}>
+                            >
                                 Assign-Items</samp>
                         </div>
 
@@ -323,6 +322,7 @@ const Order = (props) => {
 
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
+            sort: true,
             hidden: !(pageMode === mode.defaultsave) && true,
             dataField: "StockQuantity",
             formatter: (value, row, k) => {
@@ -340,7 +340,6 @@ const Order = (props) => {
 
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
-            dataField: "",
             formatter: (value, row, k) => {
                 return (
                     <>
@@ -382,8 +381,8 @@ const Order = (props) => {
                             defaultUnit(i)
                         }
                     });
-                    // ********************** //if default unit is not selected then atuto first indxx unit
-                    if ((row["UnitName"] = 'null') && row.UnitDetails.length > 0) { 
+                    // ********************** //if default unit is not selected then auto first indx unit select
+                    if ((row["UnitName"] === 'null') && row.UnitDetails.length > 0) {
                         defaultUnit(row.UnitDetails[0])
                     }
                     // **********************                   
@@ -445,7 +444,7 @@ const Order = (props) => {
 
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
-            dataField: '',
+            dataField: "",
             formatter: (value, row, k) => {
                 if (subPageMode === url.ORDER_1) {
                     return (
@@ -483,8 +482,7 @@ const Order = (props) => {
 
         {//------------- MRP column ----------------------------------
             text: "MRP",
-            dataField: "MRPValue",
-            // sort: true,
+            dataField: "",
             formatter: (value, row, k) => {
 
                 return (
@@ -501,7 +499,6 @@ const Order = (props) => {
         { //------------- Comment column ----------------------------------
             text: "Comment",
             dataField: "",
-            // sort: true,
             formatter: (value, row, k) => {
                 return (
                     <span >
@@ -524,16 +521,12 @@ const Order = (props) => {
     ];
     const defaultSorted = [
         {
-            dataField: "PriceList", // if dataField is not match to any column you defined, it will be ignored.
+            dataField: "ItemName", // if dataField is not match to any column you defined, it will be ignored.
             order: "asc", // desc or asc
         },
     ];
 
-    const pageOptions = {
-        sizePerPage: (orderItemTable.length + 2),
-        totalSize: 0,
-        custom: true,
-    };
+
 
     function itemWise_CalculationFunc(row) {
 
@@ -612,8 +605,8 @@ const Order = (props) => {
         goButtonHandler()
     };
 
-    async function assignItem_onClick() {
-
+    async function assignItem_onClick(event) {
+        event.stopPropagation();
         const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : _cfunc.loginPartyID()
         const config = {
             editId: isParty,
@@ -1080,51 +1073,41 @@ const Order = (props) => {
                     </div>
 
 
-                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                        {({ paginationProps, paginationTableProps }) => (
-                            <ToolkitProvider
-                                keyField="id"
-                                defaultSorted={defaultSorted}
-                                data={orderItemTable}
-                                columns={pagesListColumns}
-                                search
-                            >
-                                {(toolkitProps,) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table table-Rresponsive ">
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        id="table_Arrow"
-                                                        responsive
-                                                        ref={ref1}
-                                                        bordered={false}
-                                                        striped={false}
-                                                        classes={"table  table-bordered table-hover"}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
-                                                    />
-                                                    {mySearchProps(toolkitProps.searchProps)}
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row className="align-items-md-center mt-30">
-                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                <PaginationListStandalone {...paginationProps} />
-                                            </Col>
-                                        </Row>
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        )}
 
-                    </PaginationProvider>
+                    <ToolkitProvider
+                        keyField={"Item_id"}
+                        data={orderItemTable}
+                        columns={pagesListColumns}
+                        search
+                    >
+                        {(toolkitProps,) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table table-Rresponsive ">
+                                            <BootstrapTable
+                                                keyField={"Item_id"}
+                                                id="table_Arrow"
+                                                ref={ref1}
+                                                defaultSorted={defaultSorted}
+                                                bordered={false}
+                                                striped={false}
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Items Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
 
 
                     <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
