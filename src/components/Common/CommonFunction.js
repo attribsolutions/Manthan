@@ -80,7 +80,6 @@ export const sap_date_dmy_func = (isdate) => { //+++++++++++++++ Current Date by
 
 export const currentDate_ymd = date_ymd_func();
 export const currentDate_dmy = date_dmy_func();
-export const sap_date_dmy = sap_date_dmy_func();
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
@@ -280,9 +279,9 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
     try {
       document.getElementById(btnId).disabled = state;
 
-      document.getElementById("overlay").style.display = true
-        ? "block"
-        : "none";
+      // document.getElementById("overlay").style.display = true
+      //   ? "block"
+      //   : "none";
 
       document.getElementById("preloader").style.display = state
         ? "block"
