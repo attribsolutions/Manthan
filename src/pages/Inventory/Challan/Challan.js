@@ -39,7 +39,7 @@ const Challan = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const currentDate_ymd = _cfunc.date_dmy_func()
+    const currentDate_ymd = _cfunc.date_ymd_func()
     const subPageMode = history.location.pathname
     const saveBtnid = `saveBtn${subPageMode}`
 
