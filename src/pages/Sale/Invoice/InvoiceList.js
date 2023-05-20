@@ -39,7 +39,7 @@ const InvoiceList = () => {
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
+    const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
 
     const reducers = useSelector(
@@ -51,15 +51,14 @@ const InvoiceList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.InvoiceReducer.editData,
-            // orderlistFilter: state.OrderReducer.orderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { userAccess, pageField, supplier, tableList, } = reducers;
-    const { fromdate, todate, supplierSelect } = orderlistFilter;
+    const { userAccess, pageField, supplier } = reducers;
+    const { fromdate, todate, supplierSelect } = hederFilters;
 
     const action = {
         getList: invoiceListGoBtnfilter,
@@ -148,22 +147,22 @@ const InvoiceList = () => {
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...orderlistFilter }
+        let newObj = { ...hederFilters }
         newObj.fromdate = date
-        setorderlistFilter(newObj)
+        setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...orderlistFilter }
+        let newObj = { ...hederFilters }
         newObj.todate = date
-        setorderlistFilter(newObj)
+        setHederFilters(newObj)
     }
 
     function supplierOnchange(e) {
 
-        let newObj = { ...orderlistFilter }
+        let newObj = { ...hederFilters }
         newObj.supplierSelect = e
-        setorderlistFilter(newObj)
+        setHederFilters(newObj)
     }
 
     const makeBtnFunc = (list = {}, btnId) => {
@@ -249,7 +248,7 @@ const InvoiceList = () => {
                             ButtonMsgLable={"Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make GRN"}
-                            filters={orderlistFilter}
+                            filters={hederFilters}
                         />
                         : null
                 }

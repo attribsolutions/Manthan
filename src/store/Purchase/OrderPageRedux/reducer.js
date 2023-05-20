@@ -22,25 +22,11 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   orderList: [],
-  orderlistFilter: { fromdate: "", todate: '', venderSelect: { value: '', label: "All" } },
-  // orderAddFilter: { orderdate: currentDate_ymd, supplierSelect: '' }
   orderApprovalMsg: { Status: false },
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
-
-    // case ORDER_ADD_FILTERS:
-    //   return {
-    //     ...state,
-    //     orderAddFilter: action.payload,
-    //   }
-
-    case ORDER_LIST_FILTERS:
-      return {
-        ...state,
-        orderlistFilter: action.payload,
-      }
 
     case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
       return {
