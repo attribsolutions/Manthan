@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import {
-    updateOrderIdSuccess,
-} from "../../../store/Purchase/OrderPageRedux/actions";
-import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess,
@@ -12,7 +9,7 @@ import {
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
@@ -24,12 +21,10 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
-    editInvoiceList,
     invoiceListGoBtnfilter
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
-
 
 const InvoiceList = () => {
 
@@ -57,15 +52,12 @@ const InvoiceList = () => {
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { userAccess, pageField, supplier } = reducers;
+    const { pageField, supplier } = reducers;
     const { fromdate, todate, supplierSelect } = hederFilters;
 
     const action = {
         getList: invoiceListGoBtnfilter,
         deleteId: deleteInvoiceId,
-        // postSucc: postMessage,
-        // editId: editInvoiceList,
-        // updateSucc: updateOrderIdSuccess,
         deleteSucc: deleteInvoiceIdSuccess
     }
 
@@ -122,10 +114,10 @@ const InvoiceList = () => {
     });
 
     function downBtnFunc(row) {
-        
-          
+
+
         var ReportType = report.invoice;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, {editId: row.id}))
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }))
     }
 
     function goButtonHandler(event, IBType) {
