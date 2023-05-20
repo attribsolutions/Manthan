@@ -19,17 +19,6 @@ import {
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import {
-    breadcrumbReturnFunc,
-    loginPartyID,
-    currentDate_ymd,
-    btnIsDissablefunc,
-    loginUserID,
-    metaTagLabel
-} from "../../../../components/Common/CommonFunction";
-import * as pageId from "../../../../routes//allPageID";
-import * as url from "../../../../routes/route_url";
-import * as mode from "../../../../routes/PageMode";
 import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
 import { invoiceListGoBtnfilter } from "../../../../store/Sales/Invoice/action";
 import { getVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
@@ -47,18 +36,17 @@ import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
+import { url, mode, pageId } from "../../../../routes/index"
 import { C_DatePicker } from "../../../../CustomValidateForm";
 
 const LoadingSheet = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
+    const currentDate_ymd = _cfunc.date_ymd_func()
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    // const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, Date: currentDate_ymd });
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [array, setArray] = useState([]);
 
     const fileds = {
         id: "",
@@ -75,7 +63,6 @@ const LoadingSheet = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        // updateMsg,
         pageField,
         userAccess,
         VehicleNumber,
@@ -85,7 +72,6 @@ const LoadingSheet = (props) => {
     } = useSelector((state) => ({
         postMsg: state.LoadingSheetReducer.postMsg,
         GoButton: state.LoadingSheetReducer.goBtnLoadingSheet,
-        updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         VehicleNumber: state.VehicleReducer.VehicleList,
@@ -126,7 +112,7 @@ const LoadingSheet = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -197,25 +183,12 @@ const LoadingSheet = (props) => {
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
-            Party: loginPartyID(),
+            Party: _cfunc.loginPartyID(),
             Route: "",
             LoadingSheetID: ""
         });
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
     }
-
-    // function SelectAll(event, row, key) {
-
-    //     const arr = []
-    //     Data.forEach(ele => {
-    //         if (ele.id === row.id) {
-    //             ele.Check = event
-    //         }
-    //         arr.push(ele)
-    //     })
-    //     setArray(arr)
-
-    // }
 
     const pagesListColumns = [
         {
@@ -234,23 +207,6 @@ const LoadingSheet = (props) => {
             text: "GrandTotal",
             dataField: "GrandTotal",
         },
-        // {
-        //     text: "Select All",
-        //     dataField: "Check",
-        //     formatter: (cellContent, row, key) => {
-
-        //         return (<span style={{ justifyContent: 'center' }}>
-        //             <Input
-        //                 id=""
-        //                 key={row.id}
-        //                 defaultChecked={row.Check}
-        //                 type="checkbox"
-        //                 className="col col-sm text-center"
-        //                 onChange={e => { SelectAll(e.target.checked, row, key) }}
-        //             />
-        //         </span>)
-        //     }
-        // }
     ];
 
     const pageOptions = {
@@ -287,7 +243,7 @@ const LoadingSheet = (props) => {
 
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
                 if (LoadingSheetDetails.length === 0) {
                     dispatch(
                         AlertState({
@@ -296,30 +252,25 @@ const LoadingSheet = (props) => {
                             Message: "Minimum one Invoice is Select",
                         })
                     );
-                    return btnIsDissablefunc({ btnId, state: false })
+                    return _cfunc.btnIsDissablefunc({ btnId, state: false })
                 }
 
                 const jsonBody = JSON.stringify({
                     Date: values.Date,
-                    Party: loginPartyID(),
+                    Party: _cfunc.loginPartyID(),
                     Route: values.RouteName.value,
                     Vehicle: values.VehicleNumber.value,
                     Driver: values.DriverName.value,
                     TotalAmount: GrandTotal.toFixed(2),
                     InvoiceCount: totalInvoices,
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
                     LoadingSheetDetails: LoadingSheetDetails
                 });
 
-                if (pageMode === mode.edit) {
-                    // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
-                }
-                else {
-                    dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
-                }
+                dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     function DateOnchange(e, date) {
@@ -352,7 +303,7 @@ const LoadingSheet = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
@@ -374,7 +325,7 @@ const LoadingSheet = (props) => {
                                     </FormGroup>
                                 </Col >
 
-                                <Col sm="6">{/*Supplier Name */}
+                                <Col sm="6">
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.DriverName}</Label>
@@ -391,9 +342,9 @@ const LoadingSheet = (props) => {
                                                 }
                                                 }
                                             />
-                                            {/* {isError.RouteName.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.RouteName}</small></span>
-                                                )} */}
+                                            {isError.DriverName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.DriverName}</small></span>
+                                            )}
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -415,7 +366,7 @@ const LoadingSheet = (props) => {
                                     </FormGroup>
                                 </Col >
 
-                                <Col sm="6">{/*Supplier Name */}
+                                <Col sm="6">
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.ToDate}</Label>
@@ -446,15 +397,17 @@ const LoadingSheet = (props) => {
                                                 options={RouteName_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
-                                                }
-                                                }
+                                                }}
                                             />
+                                            {isError.RouteName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.RouteName}</small></span>
+                                            )}
                                         </Col>
 
                                     </FormGroup>
                                 </Col >
 
-                                <Col sm="6">{/*Supplier Name */}
+                                <Col sm="6">
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.VehicleNumber}</Label>
@@ -471,8 +424,11 @@ const LoadingSheet = (props) => {
                                                 }
                                                 }
                                             />
+                                            {isError.VehicleNumber.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.VehicleNumber}</small></span>
+                                            )}
                                         </Col>
-                                        <Col sm="1" className="mx-4 ">{/*Go_Button  */}
+                                        <Col sm="1" className="mx-4 ">
                                             < Go_Button onClick={(e) => goButtonHandler()} />
                                         </Col>
                                     </FormGroup>
@@ -534,7 +490,6 @@ const LoadingSheet = (props) => {
                                             onClick={saveHandeller}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
-                                            module={"LoadingSheet"}
                                         />
 
                                     </Col>
