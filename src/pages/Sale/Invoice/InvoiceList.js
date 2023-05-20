@@ -63,9 +63,9 @@ const InvoiceList = () => {
     const action = {
         getList: invoiceListGoBtnfilter,
         deleteId: deleteInvoiceId,
-        postSucc: postMessage,
-        editId: editInvoiceList,
-        updateSucc: updateOrderIdSuccess,
+        // postSucc: postMessage,
+        // editId: editInvoiceList,
+        // updateSucc: updateOrderIdSuccess,
         deleteSucc: deleteInvoiceIdSuccess
     }
 
