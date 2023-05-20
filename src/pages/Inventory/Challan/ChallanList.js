@@ -6,14 +6,12 @@ import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { loginPartyID } from "../../../components/Common/CommonFunction";
-import * as url from "../../../routes/route_url"
-import * as mode from "../../../routes/PageMode"
-import * as pageId from "../../../routes/allPageID"
 import { useHistory } from "react-router-dom";
 import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import Challan from "./Challan";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { url, mode, pageId } from "../../../routes/index"
 
 const ChallanList = () => {
 
@@ -90,15 +88,8 @@ const ChallanList = () => {
         label: " All"
     });
 
-
-
     const makeBtnFunc = (list = []) => {
-        
-        // const obj = { ...list[0], id: list[0].id }
-        // history.push({
-        //     pathname: url.GRN_ADD_1,
-        //     pageMode: mode.modeSTPsave
-        // })
+
         const challanNo = list[0].FullChallanNumber
         const grnRef = [{
             Challan: list[0].id,
@@ -210,17 +201,13 @@ const ChallanList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
-                            // downBtnFunc={downBtnFunc}
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"challan"}
                             makeBtnName={"Make GRN"}
                             deleteName={"FullGRNNumber"}
                             MasterModal={Challan}
                         />
-
                         : null
-
-
                 }
 
             </div>
