@@ -12,18 +12,18 @@ import {
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-import { loginCompanyID, loginPartyID, loginRoleID } from "../../../components/Common/CommonFunction";
 import PartyDropdownList from "../../../components/Common/PartyDropdownComp/PartyDropdownList";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+
 
 const VehicleList = () => {
 
   const dispatch = useDispatch();
-  const RoleID = loginRoleID()
+  const RoleID = _cfunc.loginRoleID()
 
-  const [party, setParty] = useState({ value: loginPartyID(), label: "Select..." });
+  const [party, setParty] = useState({ value: _cfunc.loginPartyID(), label: "Select..." });
 
   const reducers = useSelector(
     (state) => ({
@@ -59,7 +59,7 @@ const VehicleList = () => {
   const goButtonHandler = () => {
 
     const jsonBody = JSON.stringify({
-      CompanyID: loginCompanyID(),
+      CompanyID: _cfunc.loginCompanyID(),
       PartyID: party.value,
     });
     dispatch(getVehicleList(jsonBody));
