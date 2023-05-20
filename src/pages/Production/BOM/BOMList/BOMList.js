@@ -6,10 +6,9 @@ import {
     commonPageFieldListSuccess
 } from "../../../../store/actions";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
-import { BIllOf_MATERIALS, BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
+import {  BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../../components/Common/CommonFunction";
 import { useMemo } from "react";
 import {
     BOMlistfilters,
@@ -23,6 +22,8 @@ import BOMMaster from "../BOMMaster/BOMIndex";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import { C_DatePicker } from "../../../../CustomValidateForm";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+
 
 const BOMList = () => {
 
@@ -73,7 +74,7 @@ const BOMList = () => {
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
+        return _cfunc.excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
 
@@ -91,8 +92,8 @@ const BOMList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Company: loginCompanyID(),
-            Party:loginPartyID(),
+            Company: _cfunc.loginCompanyID(),
+            Party:_cfunc.loginPartyID(),
         });
         dispatch(getBOMListPage(jsonBody));
     }
