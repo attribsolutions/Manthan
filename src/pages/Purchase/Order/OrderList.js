@@ -22,15 +22,15 @@ const OrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const currentDate_ymd = _cfunc.date_ymd_func();
     const fileds = {
-        FromDate: _cfunc.currentDate_ymd,
-        ToDate: _cfunc.currentDate_ymd,
+        FromDate: currentDate_ymd,
+        ToDate: currentDate_ymd,
         Supplier: { value: "", label: "All" }
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [otherState, setOtherState] = useState({
         masterPath: '',
@@ -347,9 +347,7 @@ const OrderList = () => {
             a.hasValid.FromDate.valid = true
             return a
         })
-        // let newObj = { ...orderlistFilter }
-        // newObj.fromdate = date
-        // setorderlistFilter(newObj)
+        
     }
 
     function todateOnchange(e, date) {
@@ -359,9 +357,7 @@ const OrderList = () => {
             a.hasValid.ToDate.valid = true
             return a
         })
-        // let newObj = { ...orderlistFilter }
-        // newObj.todate = date
-        // setorderlistFilter(newObj)
+       
     }
 
     function supplierOnchange(e) {

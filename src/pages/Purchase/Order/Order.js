@@ -745,7 +745,6 @@ const Order = (props) => {
                 itemArr.push(arr)
             };
 
-
             const termsAndCondition = await termsAndConTable.map(i => ({
                 TermsAndCondition: i.value,
                 IsDeleted: i.IsDeleted
