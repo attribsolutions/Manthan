@@ -795,13 +795,18 @@ const Invoice = (props) => {
             })
 
             if (validMsg.length > 0) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 4,
-                    Status: true,
                     Message: JSON.stringify(validMsg),
-                    RedirectPath: false,
-                    AfterResponseAction: false
-                }));
+                })
+                return returnFunc()
+            }
+
+            if (!(invoiceItems.length > 0)) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Enter One Item Quantity",
+                })
                 return returnFunc()
             }
 
