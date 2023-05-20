@@ -22,7 +22,7 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { url, mode, pageId } from "../../../routes/index"
+import { url, mode} from "../../../routes/index"
 import { GetVender, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
     challanItemForDropdown,

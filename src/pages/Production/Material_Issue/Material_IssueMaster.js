@@ -26,16 +26,6 @@ import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
 import {
-    breadcrumbReturnFunc,
-    convertDatefunc,
-    loginUserID,
-    currentDate_ymd,
-    loginCompanyID,
-    loginPartyID,
-    btnIsDissablefunc,
-    metaTagLabel
-} from "../../../components/Common/CommonFunction";
-import {
     editMaterialIssueIdSuccess,
     goButtonForMaterialIssue_Master_Action,
     goButtonForMaterialIssue_Master_ActionSuccess,
@@ -45,9 +35,7 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
-import * as mode from "../../../routes/PageMode";
-import * as pageId from "../../../routes/allPageID"
-import * as url from "../../../routes/route_url"
+import { mode, pageId, url } from "../../../routes/index";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -56,6 +44,7 @@ const MaterialIssueMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const fileds = {
         MaterialIssueDate: currentDate_ymd,
@@ -73,7 +62,6 @@ const MaterialIssueMaster = (props) => {
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         updateMsg,
@@ -107,7 +95,6 @@ const MaterialIssueMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-    // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
@@ -122,7 +109,7 @@ const MaterialIssueMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _act.breadcrumbReturnFunc({ dispatch, userAcc });
 
         };
     }, [userAccess])
@@ -144,14 +131,6 @@ const MaterialIssueMaster = (props) => {
                 i.hasValid.LotQuantity.valid = true;
                 return i
             })
-            // Item: Itemselect.Item,
-            // Unit: Itemselect.Unit,
-            // MaterialIssueItems: materialIssueItems,
-            // MaterialIssueWorkOrder: [
-            //     {
-            //         WorkOrder: Itemselect.id,
-            //         Bom: Itemselect.Bom
-            //     }
             setItemselect({ Item: Item, Unit: Unit, id: id, Bom: Bom })
             setGoButtonList(Data)
         }
@@ -179,7 +158,6 @@ const MaterialIssueMaster = (props) => {
 
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, LotQuantity, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
-                // const { BatchesData = [] } = MaterialIssueItems
                 setState((i) => {
                     i.values.MaterialIssueDate = currentDate_ymd
                     i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: LotQuantity };
@@ -193,17 +171,7 @@ const MaterialIssueMaster = (props) => {
                 })
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
-                // if (insidePageMode === mode.modeSTPsave) {
-                //     const jsonBody = JSON.stringify({
-                //         WorkOrder: id,
-                //         Item: Item,
-                //         Company: loginCompanyID(),
-                //         Party: loginPartyID(),
-                //         Quantity: parseInt(LotQuantity)
-                //     });
-                //     dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
-                // }
-
+                
                 if (insidePageMode === mode.view) {
                     dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
                     setGoButtonList(MaterialIssueItems)
@@ -365,7 +333,7 @@ const MaterialIssueMaster = (props) => {
                                         <td>
                                             <div style={{ width: "100px" }}>
                                                 <Label>
-                                                    {convertDatefunc(index.BatchDate)}
+                                                    {_cfunc.date_dmy_func(index.BatchDate)}
                                                 </Label>
                                             </div>
                                         </td>
@@ -425,7 +393,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function goButtonHandler(event) {
-        // event.preventDefault();
+        event.preventDefault();
         if (state.values.LotQuantity === "0") {
             alert("Quantity Can Not be 0")
         } else
@@ -433,8 +401,8 @@ const MaterialIssueMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     WorkOrder: values.ItemName.value,
                     Item: values.ItemName.Item,
-                    Company: loginCompanyID(),
-                    Party: loginPartyID(),
+                    Company: _act.loginCompanyID(),
+                    Party: _act.loginPartyID(),
                     Quantity: parseInt(values.LotQuantity)
                 });
                 const body = { jsonBody, pageMode }
@@ -602,16 +570,16 @@ const MaterialIssueMaster = (props) => {
                     }));
                     return
                 }
-                btnIsDissablefunc({ btnId, state: true })
+                _act.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
                     MaterialIssueDate: values.MaterialIssueDate,
                     NumberOfLot: values.NumberOfLot,
                     LotQuantity: values.LotQuantity,
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
-                    Company: loginCompanyID(),
-                    Party: loginPartyID(),
+                    CreatedBy: _act.loginUserID(),
+                    UpdatedBy: _act.loginUserID(),
+                    Company: _act.loginCompanyID(),
+                    Party: _act.loginPartyID(),
                     Item: Itemselect.Item,
                     Unit: Itemselect.Unit,
                     MaterialIssueItems: materialIssueItems,
@@ -629,103 +597,17 @@ const MaterialIssueMaster = (props) => {
                     dispatch(saveMaterialIssue(jsonBody));
                 }
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _act.btnIsDissablefunc({ btnId, state: false }) }
     };
 
-
-    // const SaveHandler = async (event) => {
-    //     event.preventDefault();
-    //     const validMsg = []
-    //     const materialIssueItems = []
-    //     let ox = await goButtonList.map((index) => {
-
-    //         var TotalStock = 0;
-    //         index.BatchesData.map(i => {
-    //             TotalStock += Number(i.BaseUnitQuantity);
-    //         });
-
-    //         var OrderQty = Number(index.Quantity)
-    //         if (OrderQty > TotalStock) {
-    //             {
-    //                 validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
-    //             };
-    //         }
-    //         let a = index["invalid"]
-    //         if (a) {
-    //             validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
-    //         };
-
-    //         function batch(ele) {
-    //             materialIssueItems.push({
-    //                 Item: index.Item,
-    //                 Unit: index.Unit,
-    //                 WorkOrderQuantity: index.Quantity,
-    //                 BatchCode: ele.BatchCode,
-    //                 BatchDate: ele.BatchDate,
-    //                 SystemBatchDate: ele.SystemBatchDate,
-    //                 SystemBatchCode: ele.SystemBatchCode,
-    //                 IssueQuantity: parseInt(ele.Qty),
-    //                 BatchID: ele.id,
-    //                 LiveBatchID: ele.LiveBatchID
-    //             })
-    //         }
-    //         index.BatchesData.map((ele) => {
-    //             // 
-    //             if (Number(ele.Qty) > 0) {
-    //                 batch(ele)
-    //             }
-    //         })
-    //     })
-    //     if (formValid(state, setState)) {
-    //         if (validMsg.length > 0) {
-    //             dispatch(AlertState({
-    //                 Type: 4,
-    //                 Status: true,
-    //                 Message: JSON.stringify(validMsg),
-    //                 RedirectPath: false,
-    //                 AfterResponseAction: false
-    //             }));
-    //             return
-    //         }
-
-    //         const jsonBody = JSON.stringify({
-    //             MaterialIssueDate: values.MaterialIssueDate,
-    //             NumberOfLot: values.NumberOfLot,
-    //             LotQuantity: values.LotQuantity,
-    //             CreatedBy: loginUserID(),
-    //             UpdatedBy: loginUserID(),
-    //             Company: loginCompanyID(),
-    //             Party: loginPartyID(),
-    //             Item: Itemselect.Item,
-    //             Unit: Itemselect.Unit,
-    //             MaterialIssueItems: materialIssueItems,
-    //             MaterialIssueWorkOrder: [
-    //                 {
-    //                     WorkOrder: Itemselect.id,
-    //                     Bom: Itemselect.Bom
-    //                 }
-    //             ]
-    //         }
-    //         );
-    //         if (pageMode === mode.edit) {
-    //         }
-    //         else {
-    //             dispatch(saveMaterialIssue(jsonBody));
-    //         }
-    //         // 
-    //     };
-    // }
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MATERIAL_ISSUE} /> */}
+                <MetaTags>{_act.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                    /> */}
-                    <form onSubmit={SaveHandler} noValidate>
+                    <form >
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
                                 <Col className=" mt-1 row" sm={11} >
@@ -736,7 +618,6 @@ const MaterialIssueMaster = (props) => {
                                                 <C_DatePicker
                                                     name="MaterialIssueDate"
                                                     value={values.MaterialIssueDate}
-                                                    // disabled={(Data.length > 0) ? true : false}
                                                     onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 />
                                                 {isError.MaterialIssueDate.length > 0 && (
@@ -751,7 +632,6 @@ const MaterialIssueMaster = (props) => {
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
                                             <Col sm={7}>
                                                 <Select
-                                                    // isDisabled={(values.ItemName) ? true : null}
                                                     name="ItemName"
                                                     value={values.ItemName}
                                                     isDisabled={Data.length > 0 ? true : false}
@@ -783,11 +663,6 @@ const MaterialIssueMaster = (props) => {
                                                     onChange={NumberOfLotchange}
                                                 />
 
-                                                {/* <span className="text-danger">Note* :
-                                                    <span className="text-secondary">{`${fieldLabel.NumberOfLot} is less than (${values.ItemName.NoLot})`}
-                                                    </span></span> */}
-
-
                                             </Col>
                                         </FormGroup>
                                     </Col>
@@ -808,9 +683,6 @@ const MaterialIssueMaster = (props) => {
                                                     onChange={Quantitychange}
 
                                                 />
-                                                {/* <span className="text-danger">Note* :
-                                                    <span className="text-secondary">{`${fieldLabel.LotQuantity} is less than (${values.ItemName.lotQty})`}
-                                                    </span></span> */}
                                             </Col>
                                             <div className="col col-1">
                                                 <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
@@ -830,15 +702,7 @@ const MaterialIssueMaster = (props) => {
                                         : null
                                     }
                                 </Col>
-                                {/* <Col sm="1" className="mx-4 ">
-                                    {pageMode === "save" ?
-                                        (GoButton.length === 0) ?
-                                            < Go_Button onClick={(e) => goButtonHandler()} />
-                                            :
-                                            <Change_Button onClick={(e) => dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))} />
-                                        : null
-                                    }
-                                </Col> */}
+
                                 <Col>
                                 </Col>
                             </Row>
@@ -868,7 +732,6 @@ const MaterialIssueMaster = (props) => {
                                                             {...paginationTableProps}
                                                         />
                                                         {countlabelFunc(toolkitProps, paginationProps, dispatch, "Material Issue")}
-                                                        {/* {mySearchProps(toolkitProps.searchProps, pageField.id)} */}
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -886,7 +749,7 @@ const MaterialIssueMaster = (props) => {
                         {goButtonList.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                 <SaveButton pageMode={pageMode}
-                                    //   onClick={onsave}
+                                    onClick={SaveHandler}
                                     userAcc={userPageAccessState}
                                     module={"Material Issue"}
                                 />

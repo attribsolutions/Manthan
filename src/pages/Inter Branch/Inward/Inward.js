@@ -11,14 +11,11 @@ import {
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { breadcrumbReturnFunc, loginUserID, currentDate_ymd, metaTagLabel } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { postInward, postInwardSuccess } from "../../../store/Inter Branch/InwardRedux/action";
-import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode";
-import * as url from "../../../routes/route_url";
+import  {mode,url} from "../../../routes/index";
 import { AlertState } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -28,9 +25,11 @@ const Inward = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
     const [userPageAccessState, setUserAccState] = useState('');
     const [InwardDate, setInwardDate] = useState(currentDate_ymd);
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [pageMode] = useState(mode.defaultsave);
     const {
         postMsg,
         userAccess,
@@ -55,7 +54,7 @@ const Inward = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _act.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -84,8 +83,6 @@ const Inward = (props) => {
         }
     }, [postMsg])
 
-
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems]);
 
     function InwardDateOnchange(e, date) {
         setInwardDate(date)
@@ -124,13 +121,10 @@ const Inward = (props) => {
             IBInwardNumber: InwardData.InvoiceNumber,
             FullIBInwardNumber: InwardData.FullInvoiceNumber,
             GrandTotal: InwardData.GrandTotal,
-            CreatedBy: loginUserID(),
-            UpdatedBy: loginUserID(),
+            CreatedBy: _act.loginUserID(),
+            UpdatedBy: _act.loginUserID(),
             Customer: InwardData.Customer,
             Supplier: InwardData.Party,
-            // Supplier: InwardData.Customer,
-            // Customer: InwardData.Party,
-            
             InterBranchInwardItems: arr,
             InterBranchInwardReferences: [{
                 IBChallan: id
@@ -160,7 +154,6 @@ const Inward = (props) => {
                         <Thead>
                             <tr>
                                 <th>Batch Code </th>
-                                {/* <th>System Batch Code</th> */}
                                 <th>Quantity</th>
                             </tr>
                         </Thead>
@@ -176,14 +169,6 @@ const Inward = (props) => {
                                                 </Label>
                                             </div>
                                         </td>
-                                        {/* <td>
-                                            <div style={{ width: "150px" }}>
-                                                <Label>
-                                                    {index.LiveBatch.SystemBatchCode}
-                                                </Label>
-                                            </div>
-                                        </td> */}
-
                                         <td>
                                             <div style={{ width: "120px", textAlign: "right" }}>
                                                 <Label >
@@ -219,7 +204,7 @@ const Inward = (props) => {
 
     return (
         <React.Fragment>
-           <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+           <MetaTags>{_act.metaTagLabel(userPageAccessState)}</MetaTags>
 
             <div className="page-content">
 
@@ -249,7 +234,6 @@ const Inward = (props) => {
                                     <Input type="text"
                                         defaultValue={PartyName}
                                         placeholder='Enter Division'
-                                    // onChange={e => description = e.target.value}
                                     />
                                 </Col>
                             </FormGroup>
@@ -263,7 +247,6 @@ const Inward = (props) => {
                                     <Input type="text"
                                         defaultValue={InvoiceNumber}
                                         placeholder='Enter Challan No.'
-                                    // onChange={e => description = e.target.value}
                                     />
                                 </Col>
                             </FormGroup>
@@ -299,9 +282,6 @@ const Inward = (props) => {
                                                                 Items Not available
                                                             </div>}
                                                     />
-                                                    {/* {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")} */}
-                                                    {/* {mySearchProps(toolkitProps.searchProps, pageField.id)} */}
-
                                                 </div>
                                             </Col>
                                         </Row>
