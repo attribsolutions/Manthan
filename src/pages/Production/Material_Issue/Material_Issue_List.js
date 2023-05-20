@@ -25,9 +25,6 @@ const MaterialIssueList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    // const [pageMode, setpageMode] = useState(page_mode)
-    // const [userAccState, setUserAccState] = useState('');
-
     const reducers = useSelector(
         (state) => ({
             tableList: state.MaterialIssueReducer.materialIssueList,
@@ -74,15 +71,6 @@ const MaterialIssueList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
-
-    // useEffect(() => {
-    //     let userAcc = userAccess.find((inx) => {
-    //         return (inx.id === page_Id)
-    //     })
-    //     if (!(userAcc === undefined)) {
-    //         // setUserAccState(userAcc)
-    //     }
-    // }, [userAccess]);
 
     useEffect(() => {
         if (produtionMake.Status === true && produtionMake.StatusCode === 406) {
