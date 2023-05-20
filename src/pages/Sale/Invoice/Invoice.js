@@ -772,7 +772,7 @@ const Invoice = (props) => {
                             MRP: ele.LiveBatcheMRPID,
                             MRPValue: ele.MRP,//changes
                             Rate: ele.Rate,
-                            BasicAmount: calculate.discountBaseAmt,
+                            BasicAmount: (calculate.discountBaseAmt).toFixed(2),
                             GSTAmount: calculate.gstAmt,
                             GST: ele.LiveBatcheGSTID,
                             GSTPercentage: ele.GST,// changes

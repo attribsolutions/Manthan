@@ -37,17 +37,14 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction"
 
-
-
 const Debit = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
-
     const fileds = {
-        CRDRNoteDate:currentDate_ymd,
+        CRDRNoteDate: currentDate_ymd,
         Customer: "",
         Comment: "",
         GrandTotal: "",
@@ -226,9 +223,9 @@ const Debit = (props) => {
 
     const ReceiptNo_Options = ReceiptNumber.map((index) => ({
         value: index.Receipt,
-        label: `${index.FullReceiptNumber} -${index.AmountPaid} -${_cfunc.convertDatefunc(index.ReceiptDate)}`,
+        label: `${index.FullReceiptNumber} -${index.AmountPaid} -${_cfunc.date_dmy_func(index.ReceiptDate)}`,
         Amount: index.AmountPaid,
-        ReceiptDate: index.ReceiptDate
+        ReceiptDate: _cfunc.date_dmy_func(index.ReceiptDate)
     }));
 
     const CreditDebitTypeId = CreditDebitType.find((index) => {
@@ -274,9 +271,9 @@ const Debit = (props) => {
     }
 
     function ReceiptNumberHandler(hasSelect, evn) {
-       
+
         setState((i) => {
-          
+
             let a = { ...i }
             a.values.GrandTotal = hasSelect.Amount;
             a.values.ReceiptDate = hasSelect.ReceiptDate;
@@ -328,7 +325,7 @@ const Debit = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <form noValidate>
 
@@ -516,18 +513,23 @@ const Debit = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptDate}</Label>
                                         <Col sm="7">
-
-                                            <C_DatePicker
-                                                name='ReceiptDate'
+                                            <Input
+                                                name="ReceiptDate"
                                                 id="ReceiptDate"
-                                                disabled={(values.ReceiptNO) ? true : false}
                                                 value={values.ReceiptDate}
-                                                onChange={ReciptDateOnchange}
+                                                disabled={true}
+                                                type="text"
+                                            // className={isError.ReceiptDate.length > 0 ? "is-invalid form-control" : "form-control"}
+                                            // placeholder="Please Enter ReceiptDate"
+                                            // autoComplete='off'
+                                            // autoFocus={true}
+                                            // onChange={(event) => {
+                                            //     onChangeText({ event, state, setState })
+                                            // }}
                                             />
-
-                                            {isError.ReceiptDate.length > 0 && (
+                                            {/* {isError.ReceiptDate.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ReceiptDate}</small></span>
-                                            )}
+                                            )} */}
                                         </Col>
 
                                     </FormGroup>
