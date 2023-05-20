@@ -48,7 +48,14 @@ const RoutesMaster = (props) => {
         id: "",
         Name: "",
         Party: "",
-        IsActive: false
+        IsActive: false,
+        Sunday: false,
+        Monday: false,
+        Tuesday: false,
+        Wednesday: false,
+        Thursday: false,
+        Friday: false,
+        Saturday: false,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -74,7 +81,7 @@ const RoutesMaster = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
-
+   
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -104,7 +111,7 @@ const RoutesMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
+debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -120,16 +127,31 @@ const RoutesMaster = (props) => {
 
             if (hasEditVal) {
 
-                const { id, Name, IsActive, Party, PartyName } = hasEditVal
+                const { id, Name, IsActive, Party, PartyName, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                values.Name = Name;
-                values.id = id;
-                values.IsActive = IsActive
-                hasValid.Party.valid = true;
 
+                values.id = id;
+                values.Party = { value: Party, label: PartyName }
+                values.Name = Name;
+                values.IsActive = IsActive
+                values.Sunday = Sunday
+                values.Monday = Monday
+                values.Tuesday = Tuesday
+                values.Wednesday = Wednesday
+                values.Thursday = Thursday
+                values.Friday = Friday
+                values.Saturday = Saturday
+
+                hasValid.Party.valid = true;
                 hasValid.Name.valid = true;
                 hasValid.IsActive.valid = true;
-                values.Party = { value: Party, label: PartyName }
+                hasValid.Sunday.valid = true;
+                hasValid.Monday.valid = true;
+                hasValid.Tuesday.valid = true;
+                hasValid.Wednesday.valid = true;
+                hasValid.Thursday.valid = true;
+                hasValid.Friday.valid = true;
+                hasValid.Saturday.valid = true;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -199,7 +221,9 @@ const RoutesMaster = (props) => {
         }
     }, [pageField])
 
+
     const SaveHandler = async (event) => {
+
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -210,6 +234,13 @@ const RoutesMaster = (props) => {
                     Name: values.Name,
                     IsActive: values.IsActive,
                     Party: RoleID === 2 ? values.Party.value : loginPartyID(),
+                    Sunday: values.Sunday,
+                    Monday: values.Monday,
+                    Tuesday: values.Tuesday,
+                    Wednesday: values.Wednesday,
+                    Thursday: values.Thursday,
+                    Friday: values.Friday,
+                    Saturday: values.Saturday,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
@@ -233,11 +264,11 @@ const RoutesMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                  <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        
+
                         {RoleID === 2 ?
                             <PartyDropdownMaster
                                 state={state}
@@ -279,16 +310,145 @@ const RoutesMaster = (props) => {
                                                         </FormGroup>
                                                     </Row>
 
-                                                    {/* {RoleID === 2 ?
-                                                        <Row>
-                                                            <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <PartyDropdownMaster
-                                                                    fieldLabel={fieldLabel.Party}
-                                                                    state={values.Party}
-                                                                    setState={setState} />
-                                                            </FormGroup>
-                                                        </Row>
-                                                        : null} */}
+                                                    <Col>
+                                                        <FormGroup className="mt-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01" >{fieldLabel.Sunday}</Label>
+                                                            <Input
+                                                                style={{ marginLeft: "50px" }}
+                                                                type="checkbox"
+                                                                className="p-2"
+                                                                name="Sunday"
+                                                                checked={values.Sunday}
+                                                                onChange={(e) => {
+                                                                    setState((i) => {
+                                                                        const a = { ...i }
+                                                                        a.values.Sunday = e.target.checked;
+                                                                        return a
+                                                                    })
+                                                                }}
+                                                            >
+
+                                                            </Input>
+                                                        </FormGroup>
+
+
+                                                        <FormGroup className="mt-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Monday}</Label>
+                                                            <Input
+                                                                style={{ marginLeft: "50px" }}
+                                                                type="checkbox"
+                                                                className="p-2"
+                                                                name="Monday"
+                                                                checked={values.Monday}
+                                                                onChange={(e) => {
+                                                                    setState((i) => {
+                                                                        const a = { ...i }
+                                                                        a.values.Monday = e.target.checked;
+                                                                        return a
+                                                                    })
+                                                                }}
+                                                            >
+                                                            </Input>
+                                                        </FormGroup>
+
+
+                                                        <FormGroup className="mt-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Tuesday}</Label>
+                                                            <Input
+                                                                style={{ marginLeft: "49px" }}
+                                                                type="checkbox"
+                                                                className="p-2"
+                                                                name="Tuesday"
+                                                                checked={values.Tuesday}
+                                                                onChange={(e) => {
+                                                                    setState((i) => {
+                                                                        const a = { ...i }
+                                                                        a.values.Tuesday = e.target.checked;
+                                                                        return a
+                                                                    })
+                                                                }}
+                                                            >
+                                                            </Input>
+                                                        </FormGroup>
+
+
+                                                        <FormGroup className="mt-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Wednesday}</Label>
+                                                            <Input
+                                                                style={{ marginLeft: "28px" }}
+                                                                type="checkbox"
+                                                                className="p-2"
+                                                                name="Wednesday"
+                                                                checked={values.Wednesday}
+                                                                onChange={(e) => {
+                                                                    setState((i) => {
+                                                                        const a = { ...i }
+                                                                        a.values.Wednesday = e.target.checked;
+                                                                        return a
+                                                                    })
+                                                                }}
+                                                            >
+                                                            </Input>
+                                                        </FormGroup>
+
+
+                                                        <FormGroup className="mt-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Thursday}</Label>
+                                                            <Input
+                                                                style={{ marginLeft: "40px" }}
+                                                                type="checkbox"
+                                                                className="p-2"
+                                                                name="Thursday"
+                                                                checked={values.Thursday}
+                                                                onChange={(e) => {
+                                                                    setState((i) => {
+                                                                        const a = { ...i }
+                                                                        a.values.Thursday = e.target.checked;
+                                                                        return a
+                                                                    })
+                                                                }}
+                                                            >
+                                                            </Input>
+                                                        </FormGroup>
+
+                                                        <FormGroup className="mt-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Friday}</Label>
+                                                            <Input
+                                                                style={{ marginLeft: "59px" }}
+                                                                type="checkbox"
+                                                                className="p-2"
+                                                                name="Friday"
+                                                                checked={values.Friday}
+                                                                onChange={(e) => {
+                                                                    setState((i) => {
+                                                                        const a = { ...i }
+                                                                        a.values.Friday = e.target.checked;
+                                                                        return a
+                                                                    })
+                                                                }}
+                                                            >
+                                                            </Input>
+                                                        </FormGroup>
+
+                                                        <FormGroup className="mt-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Saturday}</Label>
+                                                            <Input
+                                                                style={{ marginLeft: "40px" }}
+                                                                type="checkbox"
+                                                                className="p-2"
+                                                                name="Saturday"
+                                                                checked={values.Saturday}
+                                                                onChange={(e) => {
+                                                                    setState((i) => {
+                                                                        const a = { ...i }
+                                                                        a.values.Saturday = e.target.checked;
+                                                                        return a
+                                                                    })
+                                                                }}
+                                                            >
+                                                            </Input>
+                                                        </FormGroup>
+                                                    </Col>
 
                                                     <Row>
                                                         <FormGroup className="mt-2 col col-sm-5">
