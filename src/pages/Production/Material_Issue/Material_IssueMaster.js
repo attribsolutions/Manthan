@@ -109,7 +109,7 @@ const MaterialIssueMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            _act.breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
 
         };
     }, [userAccess])
@@ -401,8 +401,8 @@ const MaterialIssueMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     WorkOrder: values.ItemName.value,
                     Item: values.ItemName.Item,
-                    Company: _act.loginCompanyID(),
-                    Party: _act.loginPartyID(),
+                    Company: _cfunc.loginCompanyID(),
+                    Party: _cfunc.loginPartyID(),
                     Quantity: parseInt(values.LotQuantity)
                 });
                 const body = { jsonBody, pageMode }
@@ -570,16 +570,16 @@ const MaterialIssueMaster = (props) => {
                     }));
                     return
                 }
-                _act.btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
                     MaterialIssueDate: values.MaterialIssueDate,
                     NumberOfLot: values.NumberOfLot,
                     LotQuantity: values.LotQuantity,
-                    CreatedBy: _act.loginUserID(),
-                    UpdatedBy: _act.loginUserID(),
-                    Company: _act.loginCompanyID(),
-                    Party: _act.loginPartyID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
+                    Company: _cfunc.loginCompanyID(),
+                    Party: _cfunc.loginPartyID(),
                     Item: Itemselect.Item,
                     Unit: Itemselect.Unit,
                     MaterialIssueItems: materialIssueItems,
@@ -597,14 +597,14 @@ const MaterialIssueMaster = (props) => {
                     dispatch(saveMaterialIssue(jsonBody));
                 }
             }
-        } catch (e) { _act.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{_act.metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
                     <form >
