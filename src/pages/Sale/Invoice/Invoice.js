@@ -22,15 +22,7 @@ import { Change_Button, Go_Button, SaveButton } from "../../../components/Common
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import {
-    breadcrumbReturnFunc,
-    convertDatefunc,
-    loginUserID,
-    currentDate_ymd,
-    loginPartyID,
-    btnIsDissablefunc,
-    metaTagLabel
-} from "../../../components/Common/CommonFunction";
+
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -57,13 +49,13 @@ const Invoice = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
     const subPageMode = history.location.pathname
 
     const goBtnId = `ADDGoBtn${subPageMode}`
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
-        // id: "",
         InvoiceDate: currentDate_ymd,
         Customer: "",
     }
@@ -75,7 +67,6 @@ const Invoice = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         updateMsg,
@@ -128,7 +119,7 @@ const Invoice = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -171,7 +162,7 @@ const Invoice = (props) => {
                 const jsonBody = JSON.stringify({
                     FromDate: hasEditVal.InvoiceDate,
                     Customer: hasEditVal.Customer,
-                    Party: loginPartyID(),
+                    Party: _cfunc.loginPartyID(),
                     OrderIDs: ""
                 });
                 dispatch(GoButtonForinvoiceAdd({ jsonBody, }));
@@ -502,7 +493,7 @@ const Invoice = (props) => {
                                             </td>
                                             <td>
                                                 <div style={{ width: "90px" }}>
-                                                    {convertDatefunc(index2.BatchDate)}
+                                                    {_cfunc.convertDatefunc(index2.BatchDate)}
                                                 </div>
                                             </td>
                                             <td>
@@ -726,18 +717,18 @@ const Invoice = (props) => {
 
     function goButtonHandler(makeIBInvoice) {
         const btnId = goBtnId;
-        btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
         try {
             const jsonBody = JSON.stringify({
                 FromDate: values.InvoiceDate,
                 Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
-                Party: loginPartyID(),
+                Party: _cfunc.loginPartyID(),
                 OrderIDs: ""
             });
             dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, btnId }));
 
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     const SaveHandler = async (event) => {
@@ -745,10 +736,10 @@ const Invoice = (props) => {
         event.preventDefault();
 
         const btnId = event.target.id
-        btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
         function returnFunc() {
-            btnIsDissablefunc({ btnId, state: false })
+            _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
             const validMsg = []
@@ -831,9 +822,9 @@ const Invoice = (props) => {
                 GrandTotal: Math.round(grand_total),
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 Customer: values.Customer.value,
-                Party: loginPartyID(),
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID(),
+                Party: _cfunc.loginPartyID(),
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
             });
 
 
@@ -858,7 +849,7 @@ const Invoice = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
 

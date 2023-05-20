@@ -35,9 +35,7 @@ import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action"
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 
 
-
 let editVal = {}
-
 
 function initialState(history) {
 
@@ -64,19 +62,19 @@ function initialState(history) {
     return { page_Id, listPath }
 };
 
-
 const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const RoleID = _cfunc.loginRoleID();
+    const currentDate_ymd = _cfunc.date_ymd_func();
     const ref1 = useRef('')
 
     const fileds = {
         id: "",
         Supplier: "",
-
     }
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [page_id] = useState(() => initialState(history).page_Id)
     const [listPath] = useState(() => initialState(history).listPath)
@@ -86,13 +84,13 @@ const Order = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
-    const [deliverydate, setdeliverydate] = useState(_cfunc.currentDate_ymd)
+    const [deliverydate, setdeliverydate] = useState(currentDate_ymd)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
-    const [poFromDate, setpoFromDate] = useState(_cfunc.currentDate_ymd);
-    const [poToDate, setpoToDate] = useState(_cfunc.currentDate_ymd);
-    const [orderdate, setorderdate] = useState(_cfunc.currentDate_ymd);
+    const [poFromDate, setpoFromDate] = useState(currentDate_ymd);
+    const [poToDate, setpoToDate] = useState(currentDate_ymd);
+    const [orderdate, setorderdate] = useState(currentDate_ymd);
 
     const [supplierSelect, setsupplierSelect] = useState('');
     const [partySelect, setPartySelect] = useState('');
@@ -263,7 +261,7 @@ const Order = (props) => {
     useEffect(() => saveMsgUseEffect({
         postMsg, pageMode,
         history, dispatch,
-        postSuccss:_act.saveOrderActionSuccess,
+        postSuccss: _act.saveOrderActionSuccess,
         status200: () => {
             setTermsAndConTable([])
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
@@ -271,10 +269,12 @@ const Order = (props) => {
         listPath: listPath
     }), [postMsg])
 
+
+
     useEffect(() => updateMsgUseEffect({
         updateMsg, modalCss,
         history, dispatch,
-        updateSuccss:_act.saveOrderActionSuccess,
+        updateSuccss: _act.saveOrderActionSuccess,
         listPath: listPath
     }), [updateMsg])
 
@@ -824,8 +824,8 @@ const Order = (props) => {
                 FullOrderNumber: "PO0001",
                 Division: division,
                 POType: orderTypeSelect.value,
-                POFromDate: orderTypeSelect.value === 1 ? _cfunc.currentDate_ymd : poFromDate,
-                POToDate: orderTypeSelect.value === 1 ? _cfunc.currentDate_ymd : poToDate,
+                POFromDate: orderTypeSelect.value === 1 ? currentDate_ymd : poFromDate,
+                POToDate: orderTypeSelect.value === 1 ? currentDate_ymd : poToDate,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 OrderTermsAndConditions: termsAndCondition
