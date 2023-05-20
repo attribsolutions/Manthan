@@ -222,7 +222,30 @@ const Order = (props) => {
         }
     }, []);
 
-    useEffect(() => pageFieldUseEffect({ state, setState, pageField }), [pageField])
+    useEffect(() => saveMsgUseEffect({
+        postMsg, pageMode,
+        history, dispatch,
+        postSuccss: _act.saveOrderActionSuccess,
+        status200: () => {
+            setTermsAndConTable([])
+            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+        },
+        listPath: listPath
+    }), [postMsg])
+
+    useEffect(() => updateMsgUseEffect({
+        updateMsg, modalCss,
+        history, dispatch,
+        updateSuccss: _act.saveOrderActionSuccess,
+        listPath: listPath
+    }), [updateMsg])
+
+    useEffect(() => pageFieldUseEffect({// useEffect common pagefield for master
+        state,
+        setState,
+        pageField
+    }), [pageField])
+
     useEffect(() => table_ArrowUseEffect("#table_Arrow"), [orderItemTable]);
 
     useEffect(() => {
@@ -258,27 +281,7 @@ const Order = (props) => {
     }, [orderType]);
 
 
-    useEffect(() => saveMsgUseEffect({
-        postMsg, pageMode,
-        history, dispatch,
-        postSuccss: _act.saveOrderActionSuccess,
-        status200: () => {
-            setTermsAndConTable([])
-            dispatch(_act.GoButton_For_Order_AddSuccess([]))
-        },
-        listPath: listPath
-    }), [postMsg])
-
-
-
-    useEffect(() => updateMsgUseEffect({
-        updateMsg, modalCss,
-        history, dispatch,
-        updateSuccss: _act.saveOrderActionSuccess,
-        listPath: listPath
-    }), [updateMsg])
-
-
+   
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,

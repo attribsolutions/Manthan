@@ -17,34 +17,26 @@ import { basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import {
-    breadcrumbReturnFunc,
-    loginUserID,
-    currentDate_ymd,
-    btnIsDissablefunc,
-    convertDatefunc,
-    metaTagLabel
-} from "../../../components/Common/CommonFunction";
-import * as url from "../../../routes/route_url";
-import * as mode from "../../../routes/PageMode";
+
+import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import * as pageId from "../../../routes/allPageID"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
-import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
+import { initialFiledFunc } from "../../../components/Common/validationFunction";
+import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+import { useLayoutEffect } from "react";
 
 
 const GRNAdd3 = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const subPageMode = history.location.pathname;
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const [grnDate, setgrnDate] = useState(currentDate_ymd);
-    const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
     const [grnItemList, setgrnItemList] = useState([]);
     const [openPOdata, setopenPOdata] = useState([]);
@@ -73,35 +65,41 @@ const GRNAdd3 = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
     }));
 
-    useEffect(() => {
-        let page_Id = pageId.GRN_ADD_3;
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        // dispatch(getSupplierAddress())
-    }, [])
 
-    // userAccess useEffect
-    useEffect(() => {
-        let userAcc = null;
-        let locationPath = location.pathname;
-
-        if (hasShowModal) { locationPath = props.masterPath; };
-
-        userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
-        };
-    }, [userAccess])
 
     const values = { ...state.values }
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useLayoutEffect(() => {
+        let page_Id = pageId.GRN_ADD_3;
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, [])
+
+    useEffect(() => userAccessUseEffect({ // userAccess common useEffect 
+        props,
+        userAccess,
+        dispatch,
+        setUserAccState,
+    }), [userAccess]);
+
+    useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
+        postMsg, pageMode,
+        history, dispatch,
+        postSuccss: saveGRNSuccess,
+        listPath: url.GRN_LIST_3
+    }), [postMsg])
+
+    useEffect(() => pageFieldUseEffect({// useEffect common pagefield for master
+        state,
+        setState,
+        pageField
+    }), [pageField])
+
+    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [grnItemList]);
 
     useEffect(() => {
 
@@ -114,7 +112,7 @@ const GRNAdd3 = (props) => {
             let id = 1
             grnDetails.OrderItem.forEach((i, k) => {
 
-                i.BatchDate_conv = convertDatefunc(i.BatchDate)
+                i.BatchDate_conv = _cfunc.convertDatefunc(i.BatchDate)
                 if (k === 0) {
                     i.id = id
                     arr.push(i)
@@ -211,37 +209,6 @@ const GRNAdd3 = (props) => {
         }
     }, [])
 
-    useEffect(async () => {
-
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(saveGRNSuccess({ Status: false }))
-            const promise = await customAlert({
-                Type: 1,
-                Message: postMsg.Message,
-            })
-            if (promise) {
-                history.push({ pathname: url.GRN_LIST_3 })
-            }
-
-        } else if (postMsg.Status === true) {
-            dispatch(saveGRNSuccess({ Status: false }))
-            customAlert({
-                Type: 1,
-                Message: JSON.stringify(postMsg.Message),
-            })
-
-        }
-    }, [postMsg])
-
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
-
-
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [grnItemList]);
 
     const tableColumns = [
         {//------------- ItemName column ----------------------------------
@@ -313,10 +280,10 @@ const GRNAdd3 = (props) => {
         event.preventDefault();
 
         const btnId = event.target.id
-        btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
         function returnFunc() {
-            btnIsDissablefunc({ btnId, state: false })
+            _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
             const itemArr = []
@@ -377,7 +344,7 @@ const GRNAdd3 = (props) => {
                 GrandTotal: sum,
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
-                CreatedBy: loginUserID(),
+                CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArr,
                 GRNReferences: openPOdata
@@ -395,7 +362,7 @@ const GRNAdd3 = (props) => {
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
 
