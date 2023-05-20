@@ -136,19 +136,22 @@ const BulkRecipt = (props) => {
         {
             text: "Bill Amount",
             dataField: "GrandTotal",
+            align:()=>("right")
         },
         {
             text: "Paid",
             dataField: "PaidAmount",
+            align:()=>("right")
         },
         {
             text: "Bal Amt",
             dataField: "BalanceAmount",
+            align:()=>("right")
         },
         {
             text: "Calculate",
             dataField: "",
-
+           
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center' }}>
@@ -157,7 +160,7 @@ const BulkRecipt = (props) => {
                         key={row.Invoice}
                         defaultValue={row.BalanceAmount}
                         disabled={true}
-                        className="col col-sm"
+                        className="text-end"
                         onChange={e => { CalculateOnchange(e, row, key) }}
                     />
                 </span>)
