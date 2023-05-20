@@ -95,6 +95,7 @@ const CommonPurchaseList = (props) => {
     downBtnFunc = () => { },
     pageMode,
     newBtnPath,
+    forceNewBtnView,
     HeaderContent = () => {
       return null;
     },
@@ -111,7 +112,7 @@ const CommonPurchaseList = (props) => {
     });
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath });
+      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath,forceNewBtnView });
     }
   }, [userAccess]);
 
