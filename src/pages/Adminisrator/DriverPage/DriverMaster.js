@@ -32,27 +32,19 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import {
-    breadcrumbReturnFunc,
-    loginCompanyID,
-    loginPartyID,
-    loginUserID,
-    btnIsDissablefunc,
-    loginRoleID,
-    metaTagLabel
-} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
 import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
-import { getPartyTableList } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+
 
 const DriverMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const RoleID = loginRoleID()
+    const RoleID = _cfunc.loginRoleID()
 
     const fileds = {
         id: "",
@@ -112,7 +104,7 @@ const DriverMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -219,16 +211,16 @@ const DriverMaster = (props) => {
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     Address: values.Address,
                     DOB: values.DOB,
-                    Party: RoleID === 2 ? values.Party.value : loginPartyID(),
-                    Company: loginCompanyID(),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID()
+                    Party: RoleID === 2 ? values.Party.value : _cfunc.loginPartyID(),
+                    Company: _cfunc.loginCompanyID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID()
                 });
 
                 if (pageMode === mode.edit) {
@@ -238,7 +230,7 @@ const DriverMaster = (props) => {
                     dispatch(saveDriverMaster({ jsonBody, btnId }));
                 }
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -249,7 +241,7 @@ const DriverMaster = (props) => {
         return (
             <React.Fragment>
 
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
