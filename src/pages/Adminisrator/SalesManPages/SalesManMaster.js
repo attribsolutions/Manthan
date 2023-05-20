@@ -385,7 +385,7 @@ const SalesManMaster = (props) => {
                                                                     onClick={SaveHandler}
                                                                     userAcc={userPageAccessState}
                                                                     editCreatedBy={editCreatedBy}
-                                                                    module={"RoutesMaster"}
+                                                                    module={"SalesManMaster"}
                                                                 />
                                                             </Col>
                                                         </Row>
