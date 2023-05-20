@@ -19,14 +19,6 @@ import {
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import {
-    breadcrumbReturnFunc,
-    loginPartyID,
-    currentDate_ymd,
-    btnIsDissablefunc,
-    loginUserID,
-    metaTagLabel
-} from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -53,6 +45,8 @@ const LoadingSheet = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -126,7 +120,7 @@ const LoadingSheet = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -197,7 +191,7 @@ const LoadingSheet = (props) => {
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
-            Party: loginPartyID(),
+            Party: _cfunc.loginPartyID(),
             Route: "",
             LoadingSheetID: ""
         });
@@ -287,7 +281,7 @@ const LoadingSheet = (props) => {
 
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
                 if (LoadingSheetDetails.length === 0) {
                     dispatch(
                         AlertState({
@@ -296,19 +290,19 @@ const LoadingSheet = (props) => {
                             Message: "Minimum one Invoice is Select",
                         })
                     );
-                    return btnIsDissablefunc({ btnId, state: false })
+                    return _cfunc.btnIsDissablefunc({ btnId, state: false })
                 }
 
                 const jsonBody = JSON.stringify({
                     Date: values.Date,
-                    Party: loginPartyID(),
+                    Party: _cfunc.loginPartyID(),
                     Route: values.RouteName.value,
                     Vehicle: values.VehicleNumber.value,
                     Driver: values.DriverName.value,
                     TotalAmount: GrandTotal.toFixed(2),
                     InvoiceCount: totalInvoices,
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
                     LoadingSheetDetails: LoadingSheetDetails
                 });
 
@@ -319,7 +313,7 @@ const LoadingSheet = (props) => {
                     dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
                 }
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     function DateOnchange(e, date) {
@@ -352,7 +346,7 @@ const LoadingSheet = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>

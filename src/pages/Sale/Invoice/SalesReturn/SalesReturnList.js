@@ -9,21 +9,24 @@ import Select from "react-select";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate_ymd, loginCompanyID, loginPartyID } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import { initialFiledFunc } from "../../../../components/Common/validationFunction";
-import {  Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../../components/Common/CommonButton";
 import * as mode from "../../../../routes/PageMode"
 import SalesReturn from "./SalesReturn";
 import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI } from "../../../../store/Sales/SalesReturnRedux/action";
 import { C_DatePicker } from "../../../../CustomValidateForm";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+
 
 const SalesReturnList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -76,8 +79,8 @@ const SalesReturnList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
@@ -108,7 +111,7 @@ const SalesReturnList = () => {
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
         });
         dispatch(salesReturnListAPI(jsonBody));
     }

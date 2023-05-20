@@ -18,21 +18,11 @@ import {
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import {
-    breadcrumbReturnFunc,
-    convertDatefunc,
-    loginUserID,
-    currentDate_ymd,
-    loginCompanyID,
-    loginPartyID,
-    metaTagLabel
-} from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
-import * as mode from "../../../routes/PageMode";
-import * as url from "../../../routes/route_url"
+import { url, mode, pageId } from "../../../routes/index"
 import { GetVender, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
     challanItemForDropdown,
@@ -49,9 +39,8 @@ const Challan = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func()
     const subPageMode = history.location.pathname
-
-    // const goBtnId = `ADDGoBtn${subPageMode}`
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
@@ -61,11 +50,11 @@ const Challan = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    // const [challanItemList, setchallanItemList] = useState([]);                                                                                    
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -83,21 +72,15 @@ const Challan = (props) => {
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        customer: state.CommonAPI_Reducer.customer,
-        vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
     }));
 
-
-
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -114,7 +97,7 @@ const Challan = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
 
         };
     }, [userAccess])
@@ -140,19 +123,7 @@ const Challan = (props) => {
                 const { Customer, CustomerName, } = hasEditVal
                 const { values, hasValid, } = { ...state }
                 hasValid.Customer.valid = true;
-
                 values.Customer = { label: CustomerName, value: Customer };
-
-                //++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
-                const jsonBody = JSON.stringify({
-                    FromDate: hasEditVal.InvoiceDate,
-                    Customer: hasEditVal.Customer,
-                    Party: loginPartyID(),
-                    OrderIDs: ""
-                });
-                // dispatch(GoButton_post_For_Invoice(jsonBody));
-                // dispatch(editInvoiceListSuccess({ Status: false }))
-
             }
         }
     }, []);
@@ -160,18 +131,7 @@ const Challan = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            // dispatch(postInvoiceMasterSuccess({ Status: false }))
-            // dispatch(GoButton_post_For_Invoice_Success([]))
-            // dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
-            // dispatch(saveBOMMasterSuccess({ Status: false }))
-            // setState(() => resetFunction(fileds, state))// Clear form values 
 
-            // dispatch(AlertState({
-            //     Type: 1,
-            //     Status: true,
-            //     Message: "Item is out of stock",
-            //     RedirectPath: url.MATERIAL_ISSUE_LIST,
-            // }))
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
@@ -189,9 +149,6 @@ const Challan = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-
-            // dispatch(postInvoiceMasterSuccess({ Status: false }))
-            // dispatch(GoButton_post_For_Invoice_Success([]))
 
             dispatch(AlertState({
                 Type: 4,
@@ -222,7 +179,7 @@ const Challan = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID()
+            Company: _cfunc.loginCompanyID()
         });
         dispatch(challanItemForDropdown(jsonBody))
         dispatch(GetVender())
@@ -285,16 +242,10 @@ const Challan = (props) => {
             formatter: (cellContent, user) => (
                 <div >
                     <Input type="text"
-                        // disabled={pageMode === 'edit' ? true : false}
                         style={{ textAlign: "right" }}
-                        // className=" width-100"
-                        // // key={user.id}
                         placeholder="Enter Quantity"
-                        // // autoComplete="off"
-                        // // defaultValue={user.Quantity}
                         onChange={(event) => orderQtyOnChange(event, user)}
                     ></Input>
-                    {/* <samp className="mt-1">Quantity:{user.OrderQty} {user.UnitName}</samp> */}
                 </div>
 
             )
@@ -345,15 +296,12 @@ const Challan = (props) => {
                                     <div>
                                         <samp >Quantity</samp>
                                     </div>
-                                    {/* <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp> */}
                                 </th>
                                 <th className="" >
                                     <div>
                                         <samp >Rate</samp>
                                     </div>
-                                    {/* <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp> */}
                                 </th>
-                                {/* <th className="" >Rate</th> */}
                             </tr>
 
                         </Thead>
@@ -373,7 +321,7 @@ const Challan = (props) => {
                                         </td>
                                         <td>
                                             <div style={{ width: "100px" }}>
-                                                {convertDatefunc(index1.BatchDate)}
+                                                {_cfunc.convertDatefunc(index1.BatchDate)}
                                             </div>
                                         </td>
                                         <td>
@@ -387,32 +335,13 @@ const Challan = (props) => {
                                                 {`${index1.Rate} `}
                                             </div>
                                         </td>
-                                        {/* <td> */}
-                                        {/* <div style={{ width: "150px" }}> */}
-                                        {/* <Input type="text"
-                                                        disabled={pageMode === 'edit' ? true : false}
-                                                        style={{ textAlign: "right" }}
-                                                        key={`batchQty${index1.id}-${index2.id}`}
-                                                        id={`batchQty${index1.id}-${index2.id}`}
-                                                        defaultValue={index2.Qty}
-                                                        onChange={(event) => StockQtyOnChange(event, index1, index2)}
-                                                    ></Input> */}
-                                        {/* </div> */}
-                                        {/* </td> */}
                                     </tr>
                                 )
                             })}
                         </Tbody>
                     </Table></div>
-                // </div >
             ),
-
         },
-        // {//***************Rate********************************************************************* */
-        //     text: "Rate",
-        //     dataField: "Rate",
-        // }
-
     ];
 
     const pageOptions = {
@@ -443,45 +372,6 @@ const Challan = (props) => {
             return v1
         })
         dispatch(GoButtonForChallanAddSuccess([]))
-    };
-
-    const StockQtyOnChange = (event, index1, index2) => {
-
-        let input = event.target.value
-        let result = /^\d*(\.\d{0,3})?$/.test(input);
-        let val1 = 0;
-        let v3 = index2.Qty
-        if (result) {
-            let v1 = Number(index2.BaseUnitQuantity);
-            let v2 = Number(input)
-            if (v1 >= v2) { val1 = input }
-            else { val1 = v1 };
-
-        } else if (((v3 >= 0) && (!(input === '')))) {
-            val1 = v3
-        } else {
-            val1 = 0
-        }
-
-        event.target.value = val1;
-        index2.Qty = val1
-
-        let t1 = 0  //L1 Current StockDetails QTY Sum="t1"
-        let t2 = index1.StockUnit//L2 Current StockDetails QTY Unit="t2"
-
-        //C1 start* for loop for Stock Sum 
-        index1.StockDetails.forEach(i2 => {
-            t1 = Number(t1) + Number(i2.Qty);
-        });
-        //C1 end*
-
-        index1.Quantity = (t1 / index1.ConversionUnit).toFixed(3)
-        try {
-            // C2 start ** Total stock Qty label
-            document.getElementById(`stocktotal${index1.id}`).innerText = `Total:${t1} ${t2}`
-            document.getElementById(`OrderQty${index1.id}`).value = index1.Quantity
-            // C2 end
-        } catch (e) { };
     };
 
     function stockDistributeFunc(index) {
@@ -539,37 +429,6 @@ const Challan = (props) => {
             v1.values.Quantity = input
             return v1
         })
-        // let val1 = 0;
-        // if (result) {
-        //     // let v1 = Number(index.StockTotal);
-        //     // let v2 = Number(input) * Number(index.ConversionUnit)
-        //     // if (v1 >= v2) { val1 = input }
-        //     // else { val1 = v1 / Number(index.ConversionUnit) };
-
-        // } else if (((index.Quantity >= 0) && (!(input === '')))) {
-        //     val1 = index.Quantity
-        // } else {
-        //     val1 = 0
-        // }
-
-        // event.target.value = val1;
-        // index.Quantity = val1
-
-        stockDistributeFunc(index)
-    };
-
-    function orderQtyUnit_SelectOnchange(event, index) {
-
-        index.UnitDrop = event;
-        index.ConversionUnit = event.ConversionUnit;
-        // var n1 = Number(index.Quantity);
-        // var n2 = Number(event.ConversionUnit);
-        // const t1 = (n1 * n2).toFixed(2);
-        // const t2 = index.StockUnit
-
-        // try {
-        //     document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
-        // } catch (e) { }
         stockDistributeFunc(index)
     };
 
@@ -590,31 +449,22 @@ const Challan = (props) => {
             return
         } else {
             const jsonBody = JSON.stringify({
-                Party: loginPartyID(),
+                Party: _cfunc.loginPartyID(),
                 Item: values.Item.value
             });
             dispatch(GoButtonForChallanAdd(jsonBody));
         }
     };
 
-    const SaveHandler = (e,) => {
+    const saveHandeller = (e,) => {
         const itemArr = []
         let grand_total = 0;
 
-        console.log(itemArr)
-
-
         const isvalidMsg = [];
-        // const array =[]
+
         GoButton[0].StockDetails.forEach(i => {
-            var demo = {
-                Rate: i.Rate,
-                Quantity: values.Quantity
-            }
             i["Quantity"] = values.Quantity
 
-            console.log(i)
-            // if ((i.Quantity > 0)) {
             const basicAmt = parseFloat(basicAmount(i))
             const cgstAmt = (GstAmount(i))
             const amount = Amount(i)
@@ -650,26 +500,6 @@ const Challan = (props) => {
                 SystemBatchCode: i.SystemBatchCode,
                 BatchID: i.id,
             }
-            // let isfound = itemArr.filter(ind => {
-            //     return ind.Item === i.Item
-            // })
-
-            // if (isfound.length > 0) {
-            //     let dubli = isfound.filter(ele => {
-            //         let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
-            //         
-            //         return condition
-            //     })
-
-            // if ((i.Quantity > 0)) {
-            //     if (dubli.length === 0) {
-            // itemArr.push(arr)
-
-            //     } else {
-            //         isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
-            //     }
-            // }
-            // } else
             if ((i.GSTPercentage > 0)) {
                 itemArr.push(arr)
             }
@@ -681,55 +511,32 @@ const Challan = (props) => {
                 Type: 3,
                 Message: isvalidMsg,
             })
-            // dispatch(AlertState({
-            //     Type: 4,
-            //     Status: true,
-            //     Message: isvalidMsg,
-            //     RedirectPath: false,
-            //     AfterResponseAction: false
-            // }));
             return
         }
-        const array = {
-            id: 727,
-            Item: values.Item.value,
-            Quantity: "20.000",
-            BaseUnitQuantity: "10.000",
-            LiveBatche: 146,
-            GRN: 526,
-            Party: loginPartyID()
-        }
-
         const jsonBody = JSON.stringify({
             GRN: "",
             ChallanDate: values.ChallanDate,
-            Party: loginPartyID(),
+            Party: _cfunc.loginPartyID(),
             GrandTotal: grand_total,
             Customer: values.Party.value,
-            CreatedBy: loginUserID(),
-            UpdatedBy: loginUserID(),
+            CreatedBy: _cfunc.loginUserID(),
+            UpdatedBy: _cfunc.loginUserID(),
             RoundOffAmount: Math.round(grand_total),
             ChallanItems: itemArr,
-            // BatchWiseLiveStockGRNID:array
 
         });
 
-        if (pageMode === "edit") {
-        } else {
-
-            dispatch(saveChallan_ChallanAdd(jsonBody))
-        }
+        dispatch(saveChallan_ChallanAdd(jsonBody))
     }
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
 
-                    <form onSubmit={SaveHandler} noValidate>
+                    <form noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
                                 <Col className=" mt-1 row " sm={12} >
@@ -780,7 +587,6 @@ const Challan = (props) => {
                                                     name="Item"
                                                     value={values.Item}
                                                     isSearchable={true}
-                                                    // isDisabled={(GoButton.length > 0) ? true : false}
                                                     id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
@@ -852,10 +658,9 @@ const Challan = (props) => {
                         {GoButton.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                 <SaveButton pageMode={pageMode}
-                                    //   onClick={onsave}
+                                    onClick={saveHandeller}
                                     id={saveBtnid}
                                     userAcc={userPageAccessState}
-                                    module={"Material Issue"}
                                 />
                             </Col>
                         </FormGroup > : null}

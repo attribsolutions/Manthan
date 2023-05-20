@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import {
-    deleteGRNId,
-    deleteGRNIdSuccess,
-    editGRNAction, getGRNListPage,
-    grnlistfilters,
-    updateGRNIdSuccess
-} from "../../../store/Inventory/GRNRedux/actions";
-import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { btnIsDissablefunc, loginPartyID } from "../../../components/Common/CommonFunction";
-import * as url from "../../../routes/route_url"
-import * as mode from "../../../routes/PageMode"
-import * as pageId from "../../../routes/allPageID"
+import { mode, url, pageId } from "../../../routes/index"
+import * as _act from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { makeChallanAction, makeChallanActionSuccess } from "../../../store/Inventory/ChallanRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import GRNAdd from "./GRNAdd";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -50,21 +39,19 @@ const GRNList = () => {
         })
     );
     const gobtnId = `gobtn-${subPageMode}`
-    const { userAccess, pageField, customer, makeChallan, grnlistFilter } = reducers;
+    const { pageField, customer, makeChallan, grnlistFilter } = reducers;
     const { fromdate, todate, venderSelect } = grnlistFilter;
 
     const action = {
-        getList: getGRNListPage,
-        editId: editGRNAction,
-        deleteId: deleteGRNId,
-        postSucc: postMessage,
-        updateSucc: updateGRNIdSuccess,
-        deleteSucc: deleteGRNIdSuccess
+        getList: _act.getGRNListPage,
+        editId: _act.editGRNAction,
+        deleteId: _act.deleteGRNId,
+        postSucc: _act.saveGRNSuccess,
+        updateSucc: _act.updateGRNIdSuccess,
+        deleteSucc: _act.deleteGRNIdSuccess
     }
 
-
-    // Featch Modules List data  First Rendering
-    useEffect(() => {
+    useLayoutEffect(() => {
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -87,15 +74,15 @@ const GRNList = () => {
         setSubPageMode(subPageMode)
         setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
-        dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
-        dispatch(GetVenderSupplierCustomer(subPageMode))
+        dispatch(_act.commonPageFieldListSuccess(null))
+        dispatch(_act.commonPageFieldList(page_Id))
+        dispatch(_act.GetVenderSupplierCustomer(subPageMode))
         goButtonHandler()
     }, []);
 
     useEffect(() => {
         if (makeChallan.Status === true && makeChallan.StatusCode === 200) {
-            dispatch(makeChallanActionSuccess({ Status: false }))
+            dispatch(_act.makeChallanActionSuccess({ Status: false }))
             history.push({
                 pathname: makeChallan.path,
                 page_Mode: makeChallan.page_Mode,
@@ -121,7 +108,7 @@ const GRNList = () => {
         const makeBody = JSON.stringify({
             GRN: id,
         });
-        dispatch(makeChallanAction({ makeBody, pageMode: mode.modeSTPsave, path: url.CHALLAN_LIST }))
+        dispatch(_act.makeChallanAction({ makeBody, pageMode: mode.modeSTPsave, path: url.CHALLAN_LIST }))
     };
 
     function goButtonHandler() {
@@ -133,28 +120,27 @@ const GRNList = () => {
                 ToDate: todate,
                 Supplier: venderSelect === "" ? '' : venderSelect.value,
                 Party: loginPartyID(),
-                // OrderType: (subPageMode === url.GRN_LIST_1) ? order_Type.PurchaseOrder : order_Type.SaleOrder
             });
-            dispatch(getGRNListPage({ filtersBody, btnId }));
+            dispatch(_act.getGRNListPage({ filtersBody, btnId }));
         } catch (error) { }
     }
 
     function fromdateOnchange(e, date) {
         let newObj = { ...grnlistFilter }
         newObj.fromdate = date
-        dispatch(grnlistfilters(newObj))
+        dispatch(_act.grnlistfilters(newObj))
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...grnlistFilter }
         newObj.todate = date
-        dispatch(grnlistfilters(newObj))
+        dispatch(_act.grnlistfilters(newObj))
     }
 
     function venderOnchange(e) {
         let newObj = { ...grnlistFilter }
         newObj.venderSelect = e
-        dispatch(grnlistfilters(newObj))
+        dispatch(_act.grnlistfilters(newObj))
     }
 
     const HeaderContent = () => {
@@ -235,7 +221,6 @@ const GRNList = () => {
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"GRN"}
-                            // makeBtnName={"Make Challan"}
                             deleteName={"FullGRNNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={GRNAdd}

@@ -35,12 +35,11 @@ export const Rows = (data) => {
     debugger
     const { OrderItem = [] } = data
     let hasHedRow = []
-    debugger
     const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
     console.log(grouped)
     grouped.forEach(i => {
 
-        if (i.length > 1) {
+        if (i.length > 0) {
           
             let totalBasicAmount = 0
             let totalCGst = 0
