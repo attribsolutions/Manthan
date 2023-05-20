@@ -50,7 +50,6 @@ const LoadingSheet = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    // const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, Date: currentDate_ymd });
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [array, setArray] = useState([]);
 
@@ -66,10 +65,8 @@ const LoadingSheet = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        // updateMsg,
         pageField,
         userAccess,
         VehicleNumber,
@@ -101,7 +98,6 @@ const LoadingSheet = (props) => {
     }, []);
 
     const location = { ...history.location }
-    // const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
