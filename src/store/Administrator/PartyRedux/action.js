@@ -37,9 +37,9 @@ export const postPartyDataSuccess = (PartySaveSuccess) => ({
 });
 
 // delete api
-export const deletePartyID = (id) => ({
+export const deletePartyID = (config={}) => ({
   type: DELETE_PARTY_ID,
-  id,
+  config,
 
 });
 export const deletePartyIDSuccess = (deleteMessage) => ({
