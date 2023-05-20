@@ -23,7 +23,7 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Vendor", 80, 75)
+    doc.text("Supplier", 80, 75)
     doc.text('Customer', 280, 75)
     doc.text('Shipping Address', 440, 75)
     doc.setDrawColor(0, 0, 0);
@@ -216,9 +216,8 @@ export const reportHeder3 = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
     doc.line(570, 45, 408, 45) //horizontal line 2 billby upper
-
     doc.setFont(undefined, 'bold')
-    doc.text(`Order No: ${data.OrderNo} `, 415, 25) //Invoice Id
+    doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
     var date = convertDatefunc(data.OrderDate)
     doc.text(`Order Date: ${date}`, 415, 40) //Invoice date
     var date = convertDatefunc(data.DeliveryDate)
@@ -280,6 +279,7 @@ export const tableBody = (doc, data) => {
 
     const tableRow = table.Rows(data);
     console.log(tableRow)
+    const { OrderItem = [] } = data
 
     //Body table  Css
     var options = {
@@ -306,6 +306,16 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[6].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
             }
+            
+
+    // OrderItem.forEach((element, key) => {
+    //     
+    //     if (data1.row.cells[1].raw === element.Comment) {
+    //         data1.row.cells[0].styles.fontSize = 8    
+    //     }
+    // })
+
+            
         },
         margin: {
             left: 30, right: 25,//200 bottom
@@ -493,7 +503,6 @@ export const pageFooter = (doc, data) => {
     doc.text(`Rupees:`, 33, 762,)
     doc.setFont(undefined, 'Normal')
     doc.text(`${stringNumber}`, 65, 762,)
-
 
     let finalY = doc.previousAutoTable.finalY;
 

@@ -25,12 +25,8 @@ const Report = () => {
     }
 
     function downlodeinvoiceReport() {
-        const jsonBody = JSON.stringify({
-            InvoiceIDs: [70, 71]
-        });
-
         var ReportType = report.invoice;
-        dispatch(getpdfReportdata(MultipleInvoice_API, jsonBody, ReportType))
+        dispatch(getpdfReportdata(get_Group_List_Api,ReportType))
 
     }
     function downlodePartyWiseinvoice() {
