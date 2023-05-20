@@ -125,12 +125,13 @@ export const listPageActionsButtonFunc = (props) => {
         hidden:
             (
                 !(userAccState.RoleAccess_IsEdit)
-                && !(userAccState.RoleAccess_IsPrint)
-                && !(userAccState.RoleAccess_IsMultipleInvoicePrint)
-                && !(userAccState.RoleAccess_IsView)
-                && !(userAccState.RoleAccess_IsDelete)
-                && !(userAccState.RoleAccess_IsDeleteSelf)
-                && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
+                    && !(userAccState.RoleAccess_IsPrint)
+                    && !(userAccState.RoleAccess_IsMultipleInvoicePrint)
+                    && !(userAccState.RoleAccess_IsView)
+                    && !(userAccState.RoleAccess_IsDelete)
+                    && !(userAccState.RoleAccess_IsDeleteSelf)
+                    && !(userAccState.RoleAccess_IsEditSelf) ? true : false
+                && !(makeBtnShow)),
 
         formatter: (cellContent, rowData) => {
 
@@ -264,7 +265,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     updateBtnFunc(rowData, mode.copy, btnId)
                                 }}
                             >
-                               <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
+                                <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
                             </Button>
                             : null
                     }
