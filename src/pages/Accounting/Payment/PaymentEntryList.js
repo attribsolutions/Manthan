@@ -9,40 +9,30 @@ import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate_ymd, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
-
-import {
-    deleteBOMId,
-    deleteBOMIdSuccess,
-    editBOMList,
-    updateBOMListSuccess
-} from "../../../store/Production/BOMRedux/action";
-import * as pageId from "../../../routes//allPageID";
-import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import {
     deleteReceiptList,
     deleteReceiptList_Success,
     GetOpeningBalance,
-    GetOpeningBalance_Success,
     ReceiptGoButtonMaster,
     ReceiptGoButtonMaster_Success,
     ReceiptListAPI, ReceiptListAPISuccess, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
-import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
+import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
-import * as mode from "../../../routes/PageMode"
 import PaymentEntry from "./PaymentEntry";
-import { Receipt_Print, get_Group_List_Api } from "../../../helpers/backend_helper";
+import { Receipt_Print } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { url, mode, pageId } from "../../../routes/index"
 
 const PaymentEntryList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func()
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -52,7 +42,7 @@ const PaymentEntryList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [subPageMode] = useState(history.location.pathname);
     const [userAccState, setUserAccState] = useState('');
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '' });
 
@@ -79,10 +69,8 @@ const PaymentEntryList = () => {
 
     const action = {
         getList: ReceiptListAPI,
-        editId: editBOMList,
         deleteId: deleteReceiptList,
         postSucc: postMessage,
-        updateSucc: updateBOMListSuccess,
         deleteSucc: deleteReceiptList_Success
     }
 
@@ -93,7 +81,7 @@ const PaymentEntryList = () => {
     // Receipt Type API Values **** only Post Json Body
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 3
         });
         dispatch(ReceiptTypeAPI(jsonBody));
@@ -103,8 +91,8 @@ const PaymentEntryList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
@@ -199,7 +187,7 @@ const PaymentEntryList = () => {
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
             ReceiptType: ReceiptTypeID.id,
         });
         dispatch(ReceiptListAPI(jsonBody, subPageMode));
@@ -231,7 +219,6 @@ const PaymentEntryList = () => {
             a.hasValid.Customer.valid = true
             return a
         })
-
     }
 
     function downBtnFunc(row) {
@@ -245,13 +232,13 @@ const PaymentEntryList = () => {
 
         try {
             const jsonBody = JSON.stringify({
-                PartyID: loginPartyID(),
+                PartyID: _cfunc.loginPartyID(),
                 CustomerID: CustomerID,
                 InvoiceID: ""
             });
 
             const jsonBody1 = JSON.stringify({
-                PartyID: loginPartyID(),
+                PartyID: _cfunc.loginPartyID(),
                 CustomerID: CustomerID,
                 ReceiptDate: currentDate_ymd
             });
@@ -318,7 +305,7 @@ const PaymentEntryList = () => {
             </div>
         )
     }
-    
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -336,7 +323,6 @@ const PaymentEntryList = () => {
 
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
-                            // editBodyfunc={editBodyfunc}
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"PaymentEntry"}
                             deleteName={"FullReceiptNumber"}

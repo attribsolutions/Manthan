@@ -29,17 +29,11 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-import {
-    breadcrumbReturnFunc,
-    loginUserID,
-    loginCompanyID,
-    btnIsDissablefunc,
-    metaTagLabel
-} from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { C_DatePicker } from "../../../../CustomValidateForm";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
 
 const BOMMaster = (props) => {
 
@@ -110,7 +104,7 @@ const BOMMaster = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
 
         };
     }, [userAccess])
@@ -275,7 +269,7 @@ const BOMMaster = (props) => {
 
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
                 let BOMrefID = 0
                 if ((pageMode === mode.edit)) {
                     BOMrefID = EditData.id
@@ -288,8 +282,8 @@ const BOMMaster = (props) => {
                     IsActive: values.IsActive,
                     Item: values.ItemName.value,
                     Unit: values.UnitName.value,
-                    CreatedBy: loginUserID(),
-                    Company: loginCompanyID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    Company: _cfunc.loginCompanyID(),
                     BOMItems: BOMItems,
                     IsVDCItem: values.IsVDCItem,
                     ReferenceBom: BOMrefID
@@ -313,13 +307,13 @@ const BOMMaster = (props) => {
                     dispatch(saveBOMMaster({ jsonBody, btnId }));
                 }
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>

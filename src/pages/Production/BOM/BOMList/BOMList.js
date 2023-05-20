@@ -6,13 +6,12 @@ import {
     commonPageFieldListSuccess
 } from "../../../../store/actions";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
-import { BIllOf_MATERIALS, BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
+import {  BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../../components/Common/CommonFunction";
 import { useMemo } from "react";
 import {
-    BOMlistfilters,
+    
     deleteBOMId,
     deleteBOMIdSuccess,
     editBOMList,
@@ -23,16 +22,21 @@ import BOMMaster from "../BOMMaster/BOMIndex";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import { C_DatePicker } from "../../../../CustomValidateForm";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+
 
 const BOMList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
 
     const hasPagePath = history.location.pathname
 
     const [pageMode, setpageMode] = useState(BIllOf_MATERIALS_LIST)
     const [userAccState, setUserAccState] = useState('');
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
 
     const reducers = useSelector(
         (state) => ({
@@ -48,7 +52,9 @@ const BOMList = () => {
     );
 
     const { userAccess, pageField, tableList, bomlistFilters } = reducers;
-    const { fromdate, todate } = bomlistFilters;
+    // const { fromdate, todate } = bomlistFilters;
+    const { fromdate, todate, venderSelect } = hederFilters;
+
 
     const action = {
         getList: getBOMListPage,
@@ -73,7 +79,7 @@ const BOMList = () => {
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
+        return _cfunc.excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
 
@@ -91,22 +97,22 @@ const BOMList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Company: loginCompanyID(),
-            Party:loginPartyID(),
+            Company: _cfunc.loginCompanyID(),
+            Party:_cfunc.loginPartyID(),
         });
         dispatch(getBOMListPage(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...bomlistFilters }
+        let newObj = { ...hederFilters }
         newObj.fromdate = date
-        dispatch(BOMlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...bomlistFilters }
+        let newObj = { ...hederFilters }
         newObj.todate = date
-        dispatch(BOMlistfilters(newObj))
+        setHederFilters(newObj)
     }
     return (
         <React.Fragment>

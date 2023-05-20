@@ -5,17 +5,13 @@ import {
   EDIT_MATERIAL_ISSUE_LIST_PAGE_SUCCESS,
   GET_MATERIAL_ISSUE_LIST_PAGE,
   GET_MATERIAL_ISSUE_LIST_PAGE_SUCCESS,
-  MATERIAL_ISSUE_LIST_FILTERS,
   POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER,
   POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER_SUCCESS,
   POST_MATERIAL_ISSUE,
   POST_MATERIAL_ISSUE_SUCCESS
 } from "./actionType";
 
-export const MaterialIssuelistfilters = filter => ({                            //Material issue  Filter Action
-  type: MATERIAL_ISSUE_LIST_FILTERS,
-  payload: filter,
-})
+
 
 export const goButtonForMaterialIssue_Master_Action = (data) => ({               //GO Button Action
   type: POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER,

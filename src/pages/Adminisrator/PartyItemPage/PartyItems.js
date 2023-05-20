@@ -6,7 +6,6 @@ import {
     Col,
     Container,
     FormGroup,
-    Input,
     Label,
     Row,
 } from "reactstrap";
@@ -31,7 +30,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, } from "../../../components/Common/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, } from "../../../components/Common/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -68,22 +67,18 @@ const PartyItems = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        updateMsg,
         supplier,
         pageField,
         tableList,
         userAccess } = useSelector((state) => ({
             postMsg: state.PartyItemsReducer.postMsg,
-            updateMsg: state.PartyItemsReducer.updateMsg,
             tableList: state.PartyItemsReducer.partyItem,
             supplier: state.PartyMasterReducer.partyList,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -159,15 +154,7 @@ const PartyItems = (props) => {
             dispatch(editPartyItemIDSuccess({ Status: false }))
         }
         else if (loginIsSCMCompany() === 1) {
-
-            // setState((i) => {
-            //     const a = { ...i }
-            //     a.values.Name = { value: loginPartyID(), label: '' }
-            //     a.hasValid.Name.valid = true
-            //     return a
-            // })
             const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: loginPartyID() } });
-
             dispatch(getpartyItemList(jsonBody))
         }
     }, [])
@@ -234,40 +221,6 @@ const PartyItems = (props) => {
             dataField: "ItemName",
             sort: true,
         },
-        // {
-        //     text: "SelectAll",
-        //     dataField: "itemCheck",
-        //     sort: true,
-        //     formatter: (cellContent, row, col, k) => {
-
-
-        //         if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
-
-        //         return (<span >
-        //             <Input type="checkbox"
-        //                 defaultChecked={cellContent}
-        //                 key={row.Item}
-        //                 disabled={(pageMode === mode.assingLink) ? (row.hasInitialVal) ? true : false : false}
-        //                 onChange={e => {
-        //                     setitemArr(ele => {
-        //                         let a = { ...ele };
-        //                         const newrr = [...ele].map(i => {
-        //                             if (row.Item === i.Item) {
-        //                                 i.itemCheck = !i.itemCheck;
-        //                             }
-        //                             return i
-        //                         });
-        //                         return newrr
-        //                     })
-
-        //                 }}
-        //             />
-
-        //         </span>
-        //         )
-        //     },
-
-        // }
     ];
 
     const pageOptions = {
@@ -303,27 +256,18 @@ const PartyItems = (props) => {
         })
         const btnId = event.target.id
         try {
-            if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
-                var PartyData = Find.map((index) => ({
-                    Item: index.Item,
-                    Party: values.Name.value
-                }))
-                const jsonBody = JSON.stringify(PartyData)
-                dispatch(SavePartyItems({ jsonBody, btnId }));
-            }
+            btnIsDissablefunc({ btnId, state: true })
+            var PartyData = Find.map((index) => ({
+                Item: index.Item,
+                Party: values.Name.value
+            }))
+            const jsonBody = JSON.stringify(PartyData)
+            dispatch(SavePartyItems({ jsonBody, btnId }));
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
     function rowSelected() {
-
-        var data = []
-        return data = tableList.map((index) => {
-            if ((index.selectCheck)) {
-                return index.Item
-            }
-            return
-        })
+        return tableList.map((index) => { return (index.selectCheck) && index.Item })
     }
 
     const PartyDropdown = () => {
@@ -433,17 +377,13 @@ const PartyItems = (props) => {
 
                                 </PaginationProvider>
 
-
-                                {/* {(tableList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}> */}
                                 <SaveButton
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
                                     module={"PartyItems"} onClick={SaveHandler}
                                 />
-                                {/* </div> */}
-                                {/* : <div className="row save1"></div>} */}
-                            </CardBody>
 
+                            </CardBody>
                         </Card>
 
                     </Container>

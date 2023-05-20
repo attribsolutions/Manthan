@@ -5,9 +5,9 @@ import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { loginPartyID } from "../../../components/Common/CommonFunction";
+import { date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useHistory } from "react-router-dom";
-import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
+import {  deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import Challan from "./Challan";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -17,11 +17,12 @@ const ChallanList = () => {
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const currentDate_ymd = date_ymd_func();
 
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
-
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
     const reducers = useSelector(
         (state) => ({
             vender: state.CommonAPI_Reducer.vender,
@@ -30,14 +31,13 @@ const ChallanList = () => {
             updateMsg: state.GRNReducer.updateMsg,
             postMsg: state.GRNReducer.postMsg,
             editData: state.GRNReducer.editData,
-            ChallanlistFilter: state.ChallanReducer.ChallanlistFilter,
             makeGRN: state.GRNReducer.GRNitem,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, vender, ChallanlistFilter, makeGRN } = reducers;
-    const { fromdate, todate, venderSelect } = ChallanlistFilter;
+    const { userAccess, pageField, vender, makeGRN } = reducers;
+    const { fromdate, todate, venderSelect } = hederFilters;
 
     const action = {
         deleteId: deleteChallanId,
@@ -114,21 +114,21 @@ const ChallanList = () => {
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...ChallanlistFilter }
+        let newObj = { ...hederFilters }
         newObj.fromdate = date
-        dispatch(challanlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...ChallanlistFilter }
+        let newObj = { ...hederFilters }
         newObj.todate = date
-        dispatch(challanlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     function venderOnchange(e) {
-        let newObj = { ...ChallanlistFilter }
+        let newObj = { ...hederFilters }
         newObj.venderSelect = e
-        dispatch(challanlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     return (

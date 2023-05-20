@@ -9,24 +9,20 @@ import Select from "react-select";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import * as pageId from "../../../../routes//allPageID";
-import * as url from "../../../../routes/route_url";
 import { initialFiledFunc } from "../../../../components/Common/validationFunction";
 import { Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../../components/Common/CommonButton";
-import * as mode from "../../../../routes/PageMode"
 import SalesReturn from "./SalesReturn";
 import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI } from "../../../../store/Sales/SalesReturnRedux/action";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
-
+import { url, mode, pageId } from "../../../../routes/index"
 
 const SalesReturnList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -44,11 +40,9 @@ const SalesReturnList = () => {
         (state) => ({
             tableList: state.SalesReturnReducer.salesReturnList,
             deleteMsg: state.SalesReturnReducer.deleteMsg,
-            // updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
-            // editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
@@ -59,10 +53,8 @@ const SalesReturnList = () => {
 
     const action = {
         getList: salesReturnListAPI,
-        // editId: editBOMList,
         deleteId: delete_SalesReturn_Id,
         postSucc: postMessage,
-        // updateSucc: updateBOMListSuccess,
         deleteSucc: delete_SalesReturn_Id_Succcess
     }
 
@@ -142,7 +134,6 @@ const SalesReturnList = () => {
             a.hasValid.Customer.valid = true
             return a
         })
-
     }
 
     const HeaderContent = () => {

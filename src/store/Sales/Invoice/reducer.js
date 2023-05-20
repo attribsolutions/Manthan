@@ -1,4 +1,3 @@
-import { currentDate_ymd } from "../../../components/Common/CommonFunction"
 import { DELETE_INVOICE_LIST_PAGE_SUCCESS, EDIT_INVOICE_LIST_SUCCESS, INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS,
      GO_BUTTON_FOR_INVOICE_ADD_SUCCESS,
      INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS, 
@@ -10,7 +9,6 @@ const INIT_STATE = {
     postMsg: { Status: false },
     editData: { Status: false },
     Invoicelist: [],
-    invoicelistFilter: { fromdate: currentDate_ymd, todate: currentDate_ymd, customerSelect: { value: '', label: "All" } },
     deleteMsg: { Status: false },
 }
 

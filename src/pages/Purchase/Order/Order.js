@@ -281,7 +281,7 @@ const Order = (props) => {
     }, [orderType]);
 
 
-   
+
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
@@ -382,6 +382,11 @@ const Order = (props) => {
                             defaultUnit(i)
                         }
                     });
+                    // ********************** //if default unit is not selected then atuto first indxx unit
+                    if ((row["UnitName"] = 'null') && row.UnitDetails.length > 0) { 
+                        defaultUnit(row.UnitDetails[0])
+                    }
+                    // **********************                   
 
                     function defaultUnit(i) {
                         row["Unit_id"] = i.UnitID;

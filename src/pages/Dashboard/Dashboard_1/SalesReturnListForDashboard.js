@@ -1,18 +1,15 @@
 import React, { useEffect } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { currentDate_ymd, loginCompanyID, loginPartyID } from '../../../components/Common/CommonFunction';
+import {date_ymd_func, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import * as url from "../../../routes/route_url";
 import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
-import { Retailer_List } from '../../../store/CommonAPI/SupplierRedux/actions';
 import { salesReturnListAPI } from '../../../store/Sales/SalesReturnRedux/action';
 
 export default function SalesReturnListForDashboard() {
 
     const dispatch = useDispatch();
-    const history = useHistory();
+    const currentDate_ymd = date_ymd_func();
 
     const { tableList, } = useSelector((state) => ({
         tableList: state.SalesReturnReducer.salesReturnList,
@@ -54,13 +51,10 @@ export default function SalesReturnListForDashboard() {
     ];
 
     return (
-
         <ToolkitProvider
-
             keyField="id"
             data={tableList}
             columns={pagesListColumns}
-
             search
         >
             {toolkitProps => (
@@ -73,11 +67,8 @@ export default function SalesReturnListForDashboard() {
                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                             classes={"table align-middle table-nowrap table-hover"}
                             headerWrapperClasses={"thead-light"}
-
                             {...toolkitProps.baseProps}
-
                         />
-
                         {mySearchProps(toolkitProps.searchProps)}
                     </div>
 

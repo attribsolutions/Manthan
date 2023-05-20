@@ -1,4 +1,3 @@
-import { date_ymd_func } from "../../../components/Common/CommonFunction";
 import {
   CHALLAN_POST_API_SUCCESS,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS,
@@ -6,19 +5,14 @@ import {
   GO_BUTTON_CHALLAN_POST_API_SUCCESS,
   GO_BUTTON_FOR_CHALLAN_ADD_SUCCESS,
   ITEM_DROPDOWN_CHALLAN_SUCCESS,
-  CHALLAN_LIST_PAGE_FILTERS_PARAMETER,
   MAKE_CHALLAN_ACTION_SUCCESS,
 
 } from "./actionType"
 
 
-const currentDate_ymd = date_ymd_func();
-
 const INIT_STATE = {
-
   deleteMsg: { Status: false },
   ChallanList: [],
-  ChallanlistFilter: { fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } },
   gobutton_Add: [],
   GoButton: [],
   challanitems: [],
@@ -48,11 +42,6 @@ const ChallanReducer = (state = INIT_STATE, action) => {
         challanitems: action.payload,
       }
 
-    case CHALLAN_LIST_PAGE_FILTERS_PARAMETER: // challan LidtPage  (filters_paramerter)
-      return {
-        ...state,
-        ChallanlistFilter: action.payload,
-      }
     case CHALLAN_LIST_FOR_LIST_PAGE_SUCCESS: // challan List  by filters
       return {
         ...state,

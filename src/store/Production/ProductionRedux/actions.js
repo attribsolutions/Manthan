@@ -12,15 +12,10 @@ import {
   GET_UNIT_ID_FOR_PRODUNCTION_SUCCESS,
   POST_PRODUCTION_FROM_PRODUCTION_PAGE,
   POST_PRODUCTION_FROM_PRODUCTION_PAGE_SUCCESS,
-  SET_PRODUCTION_LIST_FILTERS,
   UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE,
   UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE_SUCCESS
 } from './actionType'
 
-export const Productionlistfilters = filter => ({                   //Post production list filter          
-  type: SET_PRODUCTION_LIST_FILTERS,
-  payload: filter,
-})
 
 export const getProduction_Mode2 = (data, pageMode, path) => ({       //getProduction Mode2
   type: GET_PRODUCTION_ITEM_MODE_2,

@@ -4,19 +4,15 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc } from "../../../components/Common/CommonFunction";
-import { useMemo } from "react";
+import { date_ymd_func} from "../../../components/Common/CommonFunction";
 import MaterialIssueMaster from "./Material_IssueMaster";
 import {
     deleteMaterialIssueId,
     deleteMaterialIssueIdSuccess,
     editMaterialIssueId,
     getMaterialIssueListPage,
-    MaterialIssuelistfilters
 } from "../../../store/Production/Matrial_Issue/action";
-import * as url from "../../../routes/route_url"
-import * as pageId from "../../../routes/allPageID"
-import * as  mode from "../../../routes/PageMode";
+import { mode, url, pageId } from "../../../routes/index";
 import { updateWorkOrderListSuccess } from "../../../store/Production/WorkOrder/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
@@ -24,9 +20,9 @@ const MaterialIssueList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = date_ymd_func();
 
-    // const [pageMode, setpageMode] = useState(page_mode)
-    // const [userAccState, setUserAccState] = useState('');
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, })
 
     const reducers = useSelector(
         (state) => ({
@@ -35,15 +31,14 @@ const MaterialIssueList = () => {
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.MaterialIssueReducer.editData,
-            materialIssuelistFilters: state.MaterialIssueReducer.materialIssuelistFilters,
             produtionMake: state.ProductionReducer.produtionMake,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
-    const { userAccess, pageField, tableList, materialIssuelistFilters, produtionMake } = reducers;
-    const { fromdate, todate } = materialIssuelistFilters;
+    const {  pageField, produtionMake } = reducers;
+    const { fromdate, todate } = hederFilters;
 
     const hasPagePath = history.location.pathname;
     const pageMode = (hasPagePath === url.PRODUCTION_STP) ? mode.modeSTPsave : mode.defaultList;
@@ -68,21 +63,6 @@ const MaterialIssueList = () => {
 
     }, []);
 
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
-
-
-    // useEffect(() => {
-    //     let userAcc = userAccess.find((inx) => {
-    //         return (inx.id === page_Id)
-    //     })
-    //     if (!(userAcc === undefined)) {
-    //         // setUserAccState(userAcc)
-    //     }
-    // }, [userAccess]);
 
     useEffect(() => {
         if (produtionMake.Status === true && produtionMake.StatusCode === 406) {
@@ -112,15 +92,15 @@ const MaterialIssueList = () => {
     };
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...materialIssuelistFilters }
+        let newObj = { ...hederFilters }
         newObj.fromdate = date
-        dispatch(MaterialIssuelistfilters(newObj))
-    };
+        setHederFilters(newObj)
+    }
 
     function todateOnchange(e, date) {
-        let newObj = { ...materialIssuelistFilters }
+        let newObj = { ...hederFilters }
         newObj.todate = date
-        dispatch(MaterialIssuelistfilters(newObj))
+        setHederFilters(newObj)
     };
 
     return (

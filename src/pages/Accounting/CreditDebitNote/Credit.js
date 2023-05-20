@@ -4,7 +4,6 @@ import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
-    comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
     onChangeSelect,
@@ -19,7 +18,6 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
 import { decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/RegexPattern"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction"
 import * as _act from "../../../store/actions";
@@ -30,8 +28,11 @@ import { useLayoutEffect } from "react";
 const Credit = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
+
     const fileds = {
-        CRDRNoteDate: _cfunc.currentDate_ymd,
+        CRDRNoteDate:currentDate_ymd,
         Customer: "",
         NoteReason: "",
         servicesItem: "",
@@ -153,7 +154,7 @@ const Credit = (props) => {
     useEffect(() => pageFieldUseEffect({ state, setState, pageField }), [pageField]);
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [InvoiceItems, Data]);
 
-    useEffect(() => {// Retailer DropDown List Type 1 for credit list drop down
+    useEffect(() => {   // Retailer DropDown List Type 1 for credit list drop down
         const jsonBody = JSON.stringify({
             Type: 1,
             PartyID: _cfunc.loginPartyID(),
@@ -163,7 +164,7 @@ const Credit = (props) => {
     }, []);
 
 
-    useEffect(() => {// Note Reason Type id 6 Required
+    useEffect(() => {     // Note Reason Type id 6 Required
         const jsonBody = JSON.stringify({
             Company: _cfunc.loginCompanyID(),
             TypeID: 6
@@ -172,7 +173,7 @@ const Credit = (props) => {
     }, []);
 
 
-    useEffect(() => { //   Note Type Api for Type identify
+    useEffect(() => {    //   Note Type Api for Type identify
         const jsonBody = JSON.stringify({
             Company: _cfunc.loginCompanyID(),
             TypeID: 5
@@ -243,7 +244,7 @@ const Credit = (props) => {
         dispatch(_act.InvoiceNumber(jsonBody1));
     };
 
-    function CalculateOnchange(event, row, key) {  // Calculate Input box onChange Function
+    function CalculateOnchange(event, row, key) {   // Calculate Input box onChange Function
         let input = event.target.value
         let v1 = Number(row.BalanceAmount);
         let v2 = Number(input)
@@ -529,8 +530,6 @@ const Credit = (props) => {
                         pattern={decimalRegx}
                         defaultValue={pageMode === mode.view ? row.Amount : row.Calculate}
                         disabled={pageMode === mode.view ? true : false}
-                        // value={row.Calculate}
-                        // type="text"
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
@@ -627,7 +626,6 @@ const Credit = (props) => {
                     CRDRInvoices: FilterReceiptInvoices,
                 })
                 if (pageMode === mode.edit) {
-                    // dispatch(_act.updateCategoryID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
 
@@ -784,9 +782,6 @@ const Credit = (props) => {
                                                 }}
 
                                             />
-                                            {/* {isError.InvoiceNO.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.InvoiceNO}</small></span>
-                                            )} */}
                                         </Col>
                                     </FormGroup>
                                 </Col >

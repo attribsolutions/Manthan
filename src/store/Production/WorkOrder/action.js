@@ -13,13 +13,9 @@ import {
   POST_WORK_ORDER_MASTER_SUCCESS,
   UPDATE_WORK_ORDER_LIST,
   UPDATE_WORK_ORDER_LIST_SUCCESS,
-  WORK_ORDER_LIST_FILTERS
 } from "./actionTypes";
 
-export const WorkOrderlistfilters = filter => ({                                  //WorkOrder List Filter Api
-  type: WORK_ORDER_LIST_FILTERS,
-  payload: filter,
-})
+
 
 // get BOMList 
 export const getBOMList = (filters) => ({                                          //Get BOM List filter Api

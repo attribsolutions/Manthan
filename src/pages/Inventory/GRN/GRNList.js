@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import { btnIsDissablefunc, loginPartyID } from "../../../components/Common/CommonFunction";
+import { btnIsDissablefunc, date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
 import { mode, url, pageId } from "../../../routes/index"
 import * as _act from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -15,6 +15,7 @@ const GRNList = () => {
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const currentDate_ymd = date_ymd_func();
 
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
@@ -22,7 +23,7 @@ const GRNList = () => {
         masterPath: '',
         makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '', orderType: ''
     });
-
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
     const reducers = useSelector(
         (state) => ({
             customer: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -31,7 +32,6 @@ const GRNList = () => {
             updateMsg: state.GRNReducer.updateMsg,
             postMsg: state.GRNReducer.postMsg,
             editData: state.GRNReducer.editData,
-            grnlistFilter: state.GRNReducer.grnlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             makeChallan: state.ChallanReducer.makeChallan,
@@ -39,8 +39,8 @@ const GRNList = () => {
         })
     );
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, customer, makeChallan, grnlistFilter } = reducers;
-    const { fromdate, todate, venderSelect } = grnlistFilter;
+    const { pageField, customer, makeChallan } = reducers;
+    const { fromdate, todate, venderSelect } = hederFilters;
 
     const action = {
         getList: _act.getGRNListPage,
@@ -126,21 +126,21 @@ const GRNList = () => {
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...grnlistFilter }
+        let newObj = { ...hederFilters }
         newObj.fromdate = date
-        dispatch(_act.grnlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...grnlistFilter }
+        let newObj = { ...hederFilters }
         newObj.todate = date
-        dispatch(_act.grnlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     function venderOnchange(e) {
-        let newObj = { ...grnlistFilter }
+        let newObj = { ...hederFilters }
         newObj.venderSelect = e
-        dispatch(_act.grnlistfilters(newObj))
+        setHederFilters(newObj)
     }
 
     const HeaderContent = () => {
