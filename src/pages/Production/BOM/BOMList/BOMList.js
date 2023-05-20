@@ -54,7 +54,7 @@ const BOMList = () => {
         getList: getBOMListPage,
         editId: editBOMList,
         deleteId: deleteBOMId,
-        postSucc: postMessage,
+        postSucc: ()=>{},
         updateSucc: updateBOMListSuccess,
         deleteSucc: deleteBOMIdSuccess
     }

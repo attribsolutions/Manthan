@@ -189,7 +189,7 @@ const PartySubParty = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));

@@ -159,7 +159,7 @@ const TermsAndConditionsMaster = (props) => {
             dispatch(saveTermAndConditionSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
