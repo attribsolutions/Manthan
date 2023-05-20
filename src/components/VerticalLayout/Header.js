@@ -39,7 +39,6 @@ import {
   changeSidebarType,
   changelayoutMode
 } from "../../store/actions"
-import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
 import { MainSearchBox, } from '../Common/SearchBox/index';
 
 const Header = props => {

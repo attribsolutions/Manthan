@@ -275,11 +275,12 @@ export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Func
 }
 
 export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Button Dissable and Sppiner Function +++++++++++++++++++++++++++++++
+ 
   if (btnId) {
     try {
       document.getElementById(btnId).disabled = state;
 
-      document.getElementById("overlay").style.display = state
+      document.getElementById("overlay").style.display = true
         ? "block"
         : "none";
 
@@ -287,7 +288,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
         ? "block"
         : "none";
     } catch (error) {
-      CommonConsole(error);
+      CommonConsole(`btnIsDissablefunc Error ==> ${btnId}`);
     }
   }
 }
