@@ -10,7 +10,7 @@ const INIT_STATE = {
     postMsg: { Status: false },
     editData: { Status: false },
     Invoicelist: [],
-    invoicelistFilter: { fromdate: currentDate_ymd, todate: currentDate_ymd, customerSelect: { value: '', label: "All" } },
+    // invoicelistFilter: { fromdate: currentDate_ymd, todate: currentDate_ymd, customerSelect: { value: '', label: "All" } },
     deleteMsg: { Status: false },
 }
 

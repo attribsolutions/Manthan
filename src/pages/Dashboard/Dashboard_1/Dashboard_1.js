@@ -16,8 +16,6 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
 import * as mode from "../../../routes/PageMode"
-import CountUp from "react-countup";
-import { WidgetsData } from '../WidgetsData';
 import { getDashbordDetails } from '../../../store/Dashboard/Dashboard_1_Redux/action';
 import { options } from '../Options';
 import PaymentEntryList from './PaymentEntryList';
@@ -39,8 +37,6 @@ const Dashboard_1 = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         getDashboard,
-        pageField,
-        updateMsg,
         userAccess,
         orderApprovalMsg } = useSelector((state) => ({
             getDashboard: state.DashboardReducer.getDashboard,

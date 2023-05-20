@@ -54,7 +54,7 @@ const Inward = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            _act.breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -121,8 +121,8 @@ const Inward = (props) => {
             IBInwardNumber: InwardData.InvoiceNumber,
             FullIBInwardNumber: InwardData.FullInvoiceNumber,
             GrandTotal: InwardData.GrandTotal,
-            CreatedBy: _act.loginUserID(),
-            UpdatedBy: _act.loginUserID(),
+            CreatedBy: _cfunc.loginUserID(),
+            UpdatedBy: _cfunc.loginUserID(),
             Customer: InwardData.Customer,
             Supplier: InwardData.Party,
             InterBranchInwardItems: arr,
@@ -204,7 +204,7 @@ const Inward = (props) => {
 
     return (
         <React.Fragment>
-           <MetaTags>{_act.metaTagLabel(userPageAccessState)}</MetaTags>
+           <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
             <div className="page-content">
 
