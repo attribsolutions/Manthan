@@ -4,7 +4,7 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate_ymd, loginPartyID } from "../../../components/Common/CommonFunction";
+import {  date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
     updateWorkOrderListSuccess
 } from "../../../store/Production/WorkOrder/action";
@@ -29,7 +29,8 @@ const ProductionList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const currentDate_ymd = date_ymd_func();
+    const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
 
@@ -50,7 +51,6 @@ const ProductionList = () => {
     );
 
     const action = {
-        // getList: ,
         editId: edit_ProductionId,
         deleteId: delete_ProductionId,
         postSucc: postMessage,
@@ -58,7 +58,6 @@ const ProductionList = () => {
         deleteSucc: delete_ProductionIdSuccess
     }
 
-    // Featch Modules List data  First Rendering
     useEffect(() => {
 
         let page_Id = '';
@@ -79,7 +78,6 @@ const ProductionList = () => {
             makeBtnShow = true;
         }
 
-        // dispatch(getOrderListPage(""))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
