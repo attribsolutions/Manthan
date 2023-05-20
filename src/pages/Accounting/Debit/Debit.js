@@ -1,8 +1,5 @@
 import React, { useEffect, useState, } from "react";
 import {
-    Card,
-    CardBody,
-    CardHeader,
     Col,
     FormGroup,
     Input,
@@ -16,7 +13,6 @@ import {
     commonPageFieldSuccess,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -27,16 +23,6 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import {
-    breadcrumbReturnFunc,
-    btnIsDissablefunc,
-    convertDatefunc,
-    currentDate_ymd,
-    loginCompanyID,
-    loginPartyID,
-    loginUserID,
-    metaTagLabel
-} from "../../../components/Common/CommonFunction";
 import Select from "react-select";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -49,15 +35,19 @@ import { postSelect_Field_for_dropdown } from "../../../store/Administrator/Part
 import { CredietDebitType, Receipt_No_List, Receipt_No_List_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction"
+
 
 
 const Debit = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+    const currentDate_ymd = _cfunc.date_ymd_func();
+
 
     const fileds = {
-        CRDRNoteDate: currentDate_ymd,
+        CRDRNoteDate:currentDate_ymd,
         Customer: "",
         Comment: "",
         GrandTotal: "",
@@ -121,7 +111,7 @@ const Debit = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -202,15 +192,15 @@ const Debit = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 7
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
@@ -218,7 +208,7 @@ const Debit = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
+            Company: _cfunc.loginCompanyID(),
             TypeID: 5
         });
         dispatch(CredietDebitType(jsonBody));
@@ -236,7 +226,7 @@ const Debit = (props) => {
 
     const ReceiptNo_Options = ReceiptNumber.map((index) => ({
         value: index.Receipt,
-        label: `${index.FullReceiptNumber} -${index.AmountPaid} -${convertDatefunc(index.ReceiptDate)}`,
+        label: `${index.FullReceiptNumber} -${index.AmountPaid} -${_cfunc.convertDatefunc(index.ReceiptDate)}`,
         Amount: index.AmountPaid,
         ReceiptDate: index.ReceiptDate
     }));
@@ -277,7 +267,7 @@ const Debit = (props) => {
         dispatch(Receipt_No_List_Success([]))
 
         const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginPartyID(),
             CustomerID: hasSelect.value
         });
         dispatch(Receipt_No_List(jsonBody));
@@ -303,7 +293,7 @@ const Debit = (props) => {
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
@@ -316,9 +306,9 @@ const Debit = (props) => {
                     ReceiptDate: values.ReceiptDate,
                     CRDRNoteItems: [],
                     CRDRInvoices: [],
-                    Party: loginPartyID(),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+                    Party: _cfunc.loginPartyID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
                 });
 
                 if (pageMode === mode.edit) {
@@ -328,7 +318,7 @@ const Debit = (props) => {
                     dispatch(saveCredit({ jsonBody, btnId }));
                 }
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -338,7 +328,7 @@ const Debit = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <form noValidate>
 
