@@ -118,7 +118,7 @@ const SalesManMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+        
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -133,7 +133,7 @@ const SalesManMaster = (props) => {
             }
 
             if (hasEditVal) {
-debugger
+
                 const routeArr = hasEditVal.SalesmanRoute.map((data) => ({
                     value: data.id,
                     label: data.Name
