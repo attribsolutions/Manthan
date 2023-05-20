@@ -1,5 +1,4 @@
 import {
-
   CHALLAN_POST_API,
   CHALLAN_POST_API_SUCCESS,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE,
@@ -12,14 +11,9 @@ import {
   MAKE_CHALLAN_ACTION,
   MAKE_CHALLAN_ACTION_SUCCESS,
   ITEM_DROPDOWN_CHALLAN_SUCCESS,
-  CHALLAN_LIST_PAGE_FILTERS_PARAMETER,
 } from './actionType'
 
 
-export const challanlistfilters = filter => ({
-  type: CHALLAN_LIST_PAGE_FILTERS_PARAMETER,
-  payload: filter,
-})
 
 //get listpage api
 export const challanList_ForListPage = (filters) => ({

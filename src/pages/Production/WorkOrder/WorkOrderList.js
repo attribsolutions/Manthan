@@ -4,7 +4,7 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { date_ymd_func, excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useMemo } from "react";
 import {
     deleteWorkOrderId,
@@ -25,12 +25,13 @@ const WorkOrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const currentDate_ymd = date_ymd_func();
 
     const hasPagePath = history.location.pathname
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
     const [userAccState, setUserAccState] = useState('');
-
+    const [hederFilters, setHederFilters] = useState( { fromdate: currentDate_ymd, todate: currentDate_ymd, })
     const reducers = useSelector(
         (state) => ({
             tableList: state.WorkOrderReducer.WorkOrderList,
