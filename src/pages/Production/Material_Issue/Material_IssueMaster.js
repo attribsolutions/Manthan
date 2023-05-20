@@ -61,7 +61,7 @@ const MaterialIssueMaster = (props) => {
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
-
+  
     const {
         postMsg,
         updateMsg,
@@ -171,7 +171,7 @@ const MaterialIssueMaster = (props) => {
                 })
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
-                
+
                 if (insidePageMode === mode.view) {
                     dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
                     setGoButtonList(MaterialIssueItems)

@@ -4,7 +4,7 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import {  date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
+import { date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
     updateWorkOrderListSuccess
 } from "../../../store/Production/WorkOrder/action";
@@ -22,7 +22,7 @@ import * as url from "../../../routes/route_url"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { production_Edit_API } from "../../../helpers/backend_helper";
 import ProductionMaster from "./ProductionMaster";
-import { makeBtnProduction_ReIssue_STP_action} from "../../../store/Production/ProductionReissueRedux/actions";
+import { makeBtnProduction_ReIssue_STP_action } from "../../../store/Production/ProductionReissueRedux/actions";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 const ProductionList = () => {
@@ -30,11 +30,11 @@ const ProductionList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = date_ymd_func();
+
     const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
-
-    const [userAccState, setUserAccState] = useState('');
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd })
     const reducers = useSelector(
         (state) => ({
             tableList: state.ProductionReducer.ProductionList,
@@ -42,11 +42,9 @@ const ProductionList = () => {
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.ProductionReducer.editData,
-            productionFilter: state.ProductionReducer.productionFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             makeProductionReIssue: state.ProductionReIssueReducer.makeProductionReIssue,
-
         })
     );
 
@@ -86,22 +84,13 @@ const ProductionList = () => {
         goButtonHandler(true)
     }, []);
 
-    const { userAccess, pageField, productionFilter, makeProductionReIssue } = reducers;
-    const { fromdate, todate } = productionFilter
+    const { pageField, makeProductionReIssue } = reducers;
+    const { fromdate, todate } = hederFilters
+
+
 
 
     useEffect(() => {
-
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId.PRODUCTION_LIST)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
-
-    useEffect(() => {
-        
         if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
             history.push({
                 pathname: makeProductionReIssue.path,
@@ -129,24 +118,24 @@ const ProductionList = () => {
             FromDate: FromDate,
             ToDate: ToDate,
         });
-        
+
         dispatch(getProductionListPage(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...productionFilter }
-        newObj.fromdate = date
-        dispatch(Productionlistfilters(newObj))
+        let newObj = { ...hederFilters }
+        newObj.fromdate = date;
+        setHederFilters(newObj);
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...productionFilter }
-        newObj.todate = date
-        dispatch(Productionlistfilters(newObj))
+        let newObj = { ...hederFilters }
+        newObj.todate = date;
+        setHederFilters(newObj);
     }
 
     const makeBtnFunc = (list = []) => {
-        
+
         var Items = { value: list[0].Item, label: list[0].ItemName }
         try {
             const jsonBody = JSON.stringify({
