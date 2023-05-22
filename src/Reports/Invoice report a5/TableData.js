@@ -1,4 +1,4 @@
-import { convertDatefunc } from "../../components/Common/CommonFunction";
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 import { invoice } from "../ReportIndex";
 
 export const columns = [
@@ -118,7 +118,7 @@ export const Rows = (data) => {
 
 export const BilledByRow = (data) => {
     let DefaultAddress = data.PartyAddress.filter( IsDefaultAddress => IsDefaultAddress['IsDefault'] === true )
-    var date = convertDatefunc(DefaultAddress[0].FSSAIExipry)
+    var date = date_dmy_func(DefaultAddress[0].FSSAIExipry)
     var BilledByArray = [
         [`${data.PartyName}`],
         [`${data.PartyState}`],
@@ -130,7 +130,7 @@ export const BilledByRow = (data) => {
 }
 export const BilledToRow = (data) => {
     let DefaultAddress = data.CustomerAddress.filter(IsDefaultAddress => IsDefaultAddress['IsDefault'] === true )
-    var date = convertDatefunc(DefaultAddress[0].FSSAIExipry)
+    var date = date_dmy_func(DefaultAddress[0].FSSAIExipry)
     var BilledToArray = [
         [`${data.CustomerName}`],
         [`${data.CustomerState}`],

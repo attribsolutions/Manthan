@@ -115,19 +115,12 @@ export function convertOnlyTimefunc(inputDate) { //+++++++++++Convert Time Forma
 }
 
 export function concatDateAndTime(date, time) {//+++++++++++time and date concate +++++++++++++++++++++++++++++++
-  const d = convertDatefunc(date);
+  const d = date_dmy_func(date);
   const t = convertTimefunc(time);
   return `${d} ${t}`;
 }
 
-export function convertDatefunc(inputDate) { // +++++++++++Convert Date Format+++++++++++++++++++++++++++++++
-  const date = new Date(inputDate);
-  let month = date.getMonth() + 1;
 
-  let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`
-    }-${month < 10 ? `0${month}` : `${month}`}-${date.getFullYear()}`;
-  return convDate;
-}
 
 
 

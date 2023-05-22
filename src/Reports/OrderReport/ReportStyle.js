@@ -2,7 +2,7 @@
 import reportHederPng from "../../assets/images/reportHeder.png"
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
-import { convertDatefunc } from "../../components/Common/CommonFunction";
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 let initial_y = 0
 
 export const pageBorder = (doc) => {
@@ -218,9 +218,9 @@ export const reportHeder3 = (doc, data) => {
     doc.line(570, 45, 408, 45) //horizontal line 2 billby upper
     doc.setFont(undefined, 'bold')
     doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
-    var date = convertDatefunc(data.OrderDate)
+    var date = date_dmy_func(data.OrderDate)
     doc.text(`Order Date: ${date}`, 415, 40) //Invoice date
-    var date = convertDatefunc(data.DeliveryDate)
+    var date = date_dmy_func(data.DeliveryDate)
     doc.text(`DeliveryDate: ${date}`, 415, 55) //Invoice date
 
 }

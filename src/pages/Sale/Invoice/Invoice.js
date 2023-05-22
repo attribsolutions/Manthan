@@ -479,6 +479,7 @@ const Invoice = (props) => {
                             </Thead>
                             <Tbody  >
                                 {cellContent.map((index2) => {
+                                    debugger
                                     return (
                                         < tr key={index1.id} >
                                             <td>
@@ -493,7 +494,7 @@ const Invoice = (props) => {
                                             </td>
                                             <td>
                                                 <div style={{ width: "90px" }}>
-                                                    {_cfunc.convertDatefunc(index2.BatchDate)}
+                                                    {_cfunc.date_dmy_func(index2.BatchDate)}
                                                 </div>
                                             </td>
                                             <td>
