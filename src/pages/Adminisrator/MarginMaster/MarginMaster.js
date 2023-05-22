@@ -111,7 +111,7 @@ const MarginMaster = (props) => {
             var priceListName = editDataGatingFromList.PriceListName
             var partyId = editDataGatingFromList.Party_id
             var partyName = editDataGatingFromList.PartyName
-            var effectiveDate = editDataGatingFromList.EffectiveDate
+            var effectiveDate = editDataGatingFromList.preEffectiveDate
 
             const jsonBody = JSON.stringify({
                 PriceList: PriceListid,
@@ -166,11 +166,18 @@ const MarginMaster = (props) => {
         value: Data.id,
         label: Data.Name
     }));
-
+    PartyTypeDropdown_Options.unshift({
+        value: "",
+        label: "select"
+    });
     const PriceList_DropdownOptions = PriceList.map((data) => ({
         value: data.id,
         label: data.Name
     }));
+    PriceList_DropdownOptions.unshift({
+        value: "",
+        label: "select"
+    });
 
     function PartyType_Dropdown_OnChange_Handller(e) {
         setPartyName_dropdown_Select(e)
