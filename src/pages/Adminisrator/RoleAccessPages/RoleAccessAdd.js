@@ -440,7 +440,7 @@ const RoleAccessAdd1 = () => {
                 pageAccessElement = {}
             }
             const jsonBody = JSON.stringify(selectedItemArray)
-            dispatch(saveRoleAccessAddAction({ jsonBody, btnId }));
+            // dispatch(saveRoleAccessAddAction({ jsonBody, btnId }));
 
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     }
@@ -926,7 +926,9 @@ const RoleAccessAdd = () => {
             headerStyle: {
                 position: "sticky",
                 left: "0",
-                backgroundColor: "white"
+                backgroundColor: "white",
+                top: "0",
+                zIndex: 2
 
             },
 
@@ -934,6 +936,12 @@ const RoleAccessAdd = () => {
         {
             text: "Module Name",
             dataField: "ModuleName",
+            headerStyle: {
+                position: "sticky",
+                backgroundColor: "white",
+                top: "0",
+
+            },
         },
         {
             text: "PageName",
@@ -944,13 +952,16 @@ const RoleAccessAdd = () => {
                         position: "sticky",
                         left: "1.7cm",
                         backgroundColor: "white"
+
                     };
                 }
             },
             headerStyle: {
                 position: "sticky",
                 left: "1.7cm",
-                backgroundColor: "white"
+                backgroundColor: "white",
+                top: "0",
+                zIndex: 2
             },
         }
     ]
@@ -1047,6 +1058,13 @@ const RoleAccessAdd = () => {
                 return {
                     text: text,
                     dataField: ischeck,
+                    headerStyle: {
+                        position: "sticky",
+                        // left: "1.7cm",
+                        backgroundColor: "white",
+                        top: "0",
+                        zIndex: 1
+                    },
 
                     formatter: (cellContent, user) => {
                         if (!(user[checkShow] > 0)) return null
@@ -1061,7 +1079,7 @@ const RoleAccessAdd = () => {
                                             defaultChecked={user[ischeck]}
                                             className="col col-sm text-end"
                                             onChange={(e) => {
-                                                
+
                                                 user[ischeck] = e.target.checked ? 1 : 0;
                                                 document.getElementById(`check-id-${ischeck}-${user.PageID}`).checked = e.target.checked;
                                                 // dispatch(IscheckRoleAcessMasterAction(user.id, ischeck, e.target.checked))
@@ -1348,7 +1366,7 @@ const RoleAccessAdd = () => {
                         <React.Fragment>
                             <Row>
                                 <Col xl="12">
-                                    <div className="table-responsive">
+                                    <div className="table-responsive" style={{ maxHeight: "320px" }} >
                                         <BootstrapTable
                                             keyField={"id"}
                                             responsive
@@ -1378,7 +1396,7 @@ const RoleAccessAdd = () => {
 
 
     return <React.Fragment>
-        <div className="page-content" >
+        <div className="page-content" style={{ maxHeight: "600px" }} >
             <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <Container fluid>
                 {
@@ -1444,7 +1462,7 @@ const RoleAccessAdd = () => {
 
                         :
                         <div>
-                            <Row style={{ backgroundColor: "#dddddd", }} className='mb-1 mt-n head '>
+                            <Row style={{ backgroundColor: "#dddddd", borderRadius: "5px" }} className='mb-1 mt-n head '>
                                 <Row sm={12} >
                                     <Col sm={3} className="p-2 ">
                                         <Label className="p-2 col-sm-3">Role</Label>
@@ -1482,7 +1500,8 @@ const RoleAccessAdd = () => {
                                 style={{
                                     backgroundColor: "rgb(231 231 231)",
                                     marginLeft: "-8px",
-                                    marginRight: "-8px"
+                                    marginRight: "-8px",
+                                    borderRadius: "5px"
                                 }} >
                                 <Row >
                                     <Col sm={4}>
@@ -1515,7 +1534,7 @@ const RoleAccessAdd = () => {
                                         </FormGroup>
                                     </Col >
 
-                                    <Col sm={3} >
+                                    <Col sm={2} >
                                         <Button type="button" color="btn btn-outline-success" className=""
                                             onClick={() => { AddPageButton_Handeler() }}>
                                             {page_DropdownSelect.value === 0 ? 'Add All Page' : "Add Page"}</Button>
