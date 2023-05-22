@@ -287,19 +287,20 @@ const MRPMaster = (props) => {
             text: "Current MRP",
             dataField: "CurrentMRP",
             sort: true,
-            formatter: (cellContent, user) => (
+            formatter: (cellContent, row, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
 
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
+                                    key={`CurrentMRP${row.Item}`}
                                     id=""
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
                                     className="col col-sm text-end"
-                                    onChange={(e) => CurrentMRPHandler(e, user)}
+                                    onChange={(e) => CurrentMRPHandler(e, row)}
                                 />
                             </FormGroup>
                         </Col>
@@ -312,12 +313,13 @@ const MRPMaster = (props) => {
             text: "Effective from ",
             dataField: "CurrentDate",
             sort: true,
-            formatter: (cellContent) => (
+            formatter: (cellContent, row, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-6 ">
-                                <Label style={{ color: "#B0290B" }}>{cellContent}</Label>
+                                <Label style={{ color: "#B0290B" }}
+                                    key={`CurrentDate${row.Item}`}>{cellContent}</Label>
                             </FormGroup>
                         </Col>
                     </div>
@@ -330,12 +332,12 @@ const MRPMaster = (props) => {
             dataField: "MRP",
             sort: true,
 
-            formatter: (cellContent, user) => {
+            formatter: (cellContent, row, key) => {
 
-                if (((cellContent > 0) && (user["mrp"] === undefined) || user.mrp)) {
-                    user["mrp"] = true
+                if (((cellContent > 0) && (row["mrp"] === undefined) || row.mrp)) {
+                    row["mrp"] = true
                 } else {
-                    user["mrp"] = false
+                    row["mrp"] = false
                 }
                 return (
 
@@ -343,11 +345,12 @@ const MRPMaster = (props) => {
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
+                                    key={`MRP${row.Item}`}
                                     type="text"
                                     defaultValue={cellContent}
-                                    disabled={user.mrp}
+                                    disabled={row.mrp}
                                     className="col col-sm text-end"
-                                    onChange={(e) => MRPHandler(e, user)}
+                                    onChange={(e) => MRPHandler(e, row)}
                                 />
                             </FormGroup>
                         </Col>
@@ -417,8 +420,8 @@ const MRPMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "3cm" }}>
-            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-              
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
@@ -486,7 +489,7 @@ const MRPMaster = (props) => {
                                                                 <C_DatePicker
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
-                                                                    placeholder = "Please Enter EffectiveDate"
+                                                                    placeholder="Please Enter EffectiveDate"
                                                                     value={effectiveDate}
                                                                     disabled={((editMode === "edit") || (TableData.length > 0)) ? true : false}
                                                                     onChange={EffectiveDateHandler}
@@ -519,7 +522,7 @@ const MRPMaster = (props) => {
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="id"
+                                                keyField="Item"
                                                 data={TableData}
                                                 columns={pagesListColumns}
                                                 search
@@ -530,7 +533,7 @@ const MRPMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"id"}
+                                                                        keyField={"Item"}
                                                                         id="table_Arrow"
                                                                         responsive
                                                                         bordered={false}

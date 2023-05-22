@@ -43,6 +43,7 @@ import * as url from "../../../routes/route_url";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { mode } from "../../../routes";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -51,7 +52,7 @@ const MarginMaster = (props) => {
     let editMode = history.location.pageMode;
 
     //SetState  Edit data Geting From Modules List component
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState("");
     const [partyName_dropdown_Select, setPartyName_dropdown_Select] = useState("");
     const [priceList_dropdown_Select, setpriceList_dropdown_Select] = useState("");
@@ -246,7 +247,7 @@ const MarginMaster = (props) => {
             setEffectiveDate('')
             setpriceList_dropdown_Select('')
 
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -323,7 +324,7 @@ const MarginMaster = (props) => {
                             <FormGroup className=" col col-sm-6 ">
                                 <Label
                                     style={{ color: "#B0290B" }}
-                                    key={`CurrentMargin${row.Item}`}>{cellContent}</Label>
+                                    key={`CurrentDate${row.Item}`}>{cellContent}</Label>
                             </FormGroup>
                         </Col>
                     </div>
@@ -348,7 +349,7 @@ const MarginMaster = (props) => {
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
-                                    key={`CurrentMargin${row.Item}`}
+                                    key={`Margin${row.Item}`}
                                     type="text"
                                     defaultValue={cellContent}
                                     disabled={row.margin}
@@ -499,7 +500,7 @@ const MarginMaster = (props) => {
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="id"
+                                                keyField="Item"
                                                 data={TableData}
                                                 columns={pagesListColumns}
                                                 search
@@ -510,7 +511,7 @@ const MarginMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"id"}
+                                                                        keyField={"Item"}
                                                                         id="table_Arrow"
                                                                         responsive
                                                                         bordered={false}
