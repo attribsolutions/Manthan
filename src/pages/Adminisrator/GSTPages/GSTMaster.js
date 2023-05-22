@@ -39,6 +39,8 @@ import {
 } from "../../../components/Common/CommonFunction";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { mode } from "../../../routes";
+import { find } from "lodash";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -238,18 +240,19 @@ const GSTMaster = (props) => {
             text: "Current GSTPercentage",
             dataField: "CurrentGSTPercentage",
             sort: true,
-            formatter: (cellContent, user) => (
+            formatter: (cellContent, row) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
+                                    key={`CurrentGSTPercentage${row.Item}`}
                                     id=""
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
                                     className="col col-sm text-end"
-                                    onChange={(e) => CurrentGSTPercentageHandler(e, user)}
+                                    onChange={(e) => CurrentGSTPercentageHandler(e, row)}
                                 />
                             </FormGroup>
                         </Col>
@@ -262,22 +265,24 @@ const GSTMaster = (props) => {
             text: "GSTPercentage ",
             dataField: "GSTPercentage",
             sort: true,
-            formatter: (cellContent, user, key) => {
-                if (((cellContent > 0) && (user["GSTPerDis"] === undefined) || user.GSTPerDis)) {
-                    user["GSTPerDis"] = true
+            formatter: (cellContent, row, key) => {
+                if (((cellContent > 0) && (row["GSTPerDis"] === undefined) || row.GSTPerDis)) {
+                    row["GSTPerDis"] = true
                 } else {
-                    user["GSTPerDis"] = false
+                    row["GSTPerDis"] = false
                 }
                 return (
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
+                                    key={`GSTPercentage${row.Item}`}
+                                    id=""
                                     type="text"
                                     defaultValue={cellContent}
-                                    disabled={user.GSTPerDis}
+                                    disabled={row.GSTPerDis}
                                     className="col col-sm text-end"
-                                    onChange={(e) => GSTPercentageHandler(e, user)}
+                                    onChange={(e) => GSTPercentageHandler(e, row)}
                                 />
                             </FormGroup>
                         </Col>
@@ -290,18 +295,19 @@ const GSTMaster = (props) => {
             text: "Current HSNCode",
             dataField: "CurrentHSNCode",
             sort: true,
-            formatter: (cellContent, user) => (
+            formatter: (cellContent, row) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
+                                    key={`CurrentHSNCode${row.Item}`}
                                     id=""
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
                                     className="col col-sm text-end"
-                                    onChange={(e) => CurrentHSNCodeHandler(e, user)}
+                                    onChange={(e) => CurrentHSNCodeHandler(e, row)}
                                 />
                             </FormGroup>
                         </Col>
@@ -314,11 +320,11 @@ const GSTMaster = (props) => {
             text: "HSNCode ",
             dataField: "HSNCode",
             sort: true,
-            formatter: (cellContent, user, key) => {
-                if (((cellContent > 0) && (user["hsncodeDis"] === undefined) || user.hsncodeDis)) {
-                    user["hsncodeDis"] = true
+            formatter: (cellContent, row, key) => {
+                if (((cellContent > 0) && (row["hsncodeDis"] === undefined) || row.hsncodeDis)) {
+                    row["hsncodeDis"] = true
                 } else {
-                    user["hsncodeDis"] = false
+                    row["hsncodeDis"] = false
                 }
                 return (
 
@@ -326,11 +332,12 @@ const GSTMaster = (props) => {
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
+                                    key={`HSNCode${row.Item}`}
                                     type="text"
                                     defaultValue={cellContent}
-                                    disabled={user.hsncodeDis}
+                                    disabled={row.hsncodeDis}
                                     className="col col-sm text-end"
-                                    onChange={(e) => HSNCodeHandler(e, user)}
+                                    onChange={(e) => HSNCodeHandler(e, row)}
                                 />
                             </FormGroup>
                         </Col>
@@ -368,6 +375,7 @@ const GSTMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = () => {
+
         var ItemData = TableData.map((index) => ({
             EffectiveDate: effectiveDate,
             Company: loginCompanyID(),
@@ -380,27 +388,53 @@ const GSTMaster = (props) => {
             id: index.id
         }))
 
-
-        const Find = ItemData.filter((index) => {
+        const filterData = ItemData.filter((index) => {
             return (!(index.GSTPercentage === '') && !(index.HSNCode === '') && (index.id === ''))
         })
 
-        const jsonBody = JSON.stringify(Find)
+        const jsonBody = JSON.stringify(filterData)
 
-        if (!(Find.length > 0) && !(editMode)) {
-            alert("At Least one MRP add")
+        if (!(filterData.length > 0)) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please Enter One GSTPercentage & HSNCode",
+                })
+            );
         }
         else {
             dispatch(postGSTMasterData(jsonBody));
-            console.log("jsonBody", jsonBody)
         }
+        // filterData.forEach(i => {
+        //     debugger
 
+        //     if ((i.GSTPercentage === '') && (!(i.HSNCode === ""))) {
+        //         dispatch(
+        //             AlertState({
+        //                 Type: 4,
+        //                 Status: true,
+        //                 Message: "Please Enter GSTPercentage",
+        //             })
+        //         );
+        //     }
+        // else if (!(i.GSTPercentage === '') && ((i.HSNCode === ""))) {
+        //     dispatch(
+        //         AlertState({
+        //             Type: 4,
+        //             Status: true,
+        //             Message: "Please Enter HSNCode",
+        //         })
+        //     );
+        // }
+
+        // });
 
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>
@@ -426,16 +460,16 @@ const GSTMaster = (props) => {
                                     <Col md={12}>
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
 
-                                            <CardHeader className="card-header   text-black c_card_body"  >
+                                            <CardHeader className="card-header text-black c_card_body"  >
                                                 <Row className="mt-2">
-                                                    <Col md="6">
+                                                    <Col md="4">
                                                         <FormGroup className="mb-4 row">
-                                                            <Label className="col-md-4">EffectiveDate</Label>
+                                                            <Label className="col-md-4 mt-2">EffectiveDate</Label>
                                                             <Col md="8">
                                                                 <C_DatePicker
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
-                                                                    placeholder = "Please Enter EffectiveDate"
+                                                                    placeholder="Please Enter EffectiveDate"
                                                                     value={effectiveDate}
                                                                     onChange={EffectiveDateHandler}
                                                                 />
@@ -445,11 +479,9 @@ const GSTMaster = (props) => {
 
                                                     <Col md="2">
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12  "
-                                                            className="mt-n2"
+                                                            className="mt-1"
                                                             onClick={() => { GoButton_Handler() }} >Go</Button>
-
                                                     </Col>
-
                                                 </Row>
 
                                             </CardHeader>
@@ -460,7 +492,7 @@ const GSTMaster = (props) => {
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="id"
+                                                keyField="Item"
                                                 data={TableData}
                                                 columns={pagesListColumns}
                                                 search
@@ -471,7 +503,7 @@ const GSTMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"id"}
+                                                                        keyField={"Item"}
                                                                         id="table_Arrow"
                                                                         responsive
                                                                         bordered={false}
