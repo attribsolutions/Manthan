@@ -119,7 +119,7 @@ export const listPageActionsButtonFunc = (props) => {
         arr.push(rowData)
         makeBtnFunc(arr)
     }
-
+   
     return ({
         text: "Action",
         hidden:
@@ -130,8 +130,9 @@ export const listPageActionsButtonFunc = (props) => {
                     && !(userAccState.RoleAccess_IsView)
                     && !(userAccState.RoleAccess_IsDelete)
                     && !(userAccState.RoleAccess_IsDeleteSelf)
-                    && !(userAccState.RoleAccess_IsEditSelf) ? true : false
-                && !(makeBtnShow)),
+                    && !(userAccState.RoleAccess_IsEditSelf)
+                    && !(makeBtnShow) ? true : false
+            ),
 
         formatter: (cellContent, rowData) => {
 
