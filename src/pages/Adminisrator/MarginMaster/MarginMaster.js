@@ -44,6 +44,7 @@ import { priceListByCompay_Action } from "../../../store/Administrator/PriceList
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mode } from "../../../routes";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -398,10 +399,18 @@ const MarginMaster = (props) => {
         const Find = ItemData.filter((index) => {
             return (!(index.Margin === '') && (index.id === ''))
         })
-
         const jsonBody = JSON.stringify(Find)
 
-        dispatch(postMarginMasterData(jsonBody));
+        if (!(Find.length > 0)) {
+            customAlert({
+                Type: 4,
+                Message: "Please Enter Margin"
+            })
+        }
+        else {
+            dispatch(postMarginMasterData(jsonBody));
+        }
+
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
