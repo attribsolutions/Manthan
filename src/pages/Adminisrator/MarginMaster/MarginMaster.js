@@ -42,8 +42,9 @@ import {
 import * as url from "../../../routes/route_url";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mode } from "../../../routes";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -287,51 +288,47 @@ const MarginMaster = (props) => {
             text: "Item Name",
             dataField: "Name",
             sort: true,
+            headerStyle: () => {
+                return { width: '500px', };
+            }
         },
         {
             text: "Current Margin",
             dataField: "CurrentMargin",
             sort: true,
-            formatter: (cellContent, row, key) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    key={`CurrentMargin${row.Item}`}
-                                    id=""
-                                    type="text"
-                                    disabled={true}
-                                    defaultValue={cellContent}
-                                    className="col col-sm text-end"
-                                    onChange={(e) => CurrentMRPHandler(e, row)}
-                                />
-                            </FormGroup>
-                        </Col>
-
-                    </div>
-                </>
-            ),
+            formatter: (cellContent, row, key) => {
+                return (<span style={{ justifyContent: 'center' }}>
+                    <Input
+                        key={`CurrentMargin${row.Item}`}
+                        id=""
+                        type="text"
+                        disabled={true}
+                        defaultValue={cellContent}
+                        className="col col-sm text-end"
+                        onChange={(e) => CurrentMRPHandler(e, row)}
+                    />
+                </span>)
+            },
+            headerStyle: () => {
+                return { width: '200px', };
+            }
         },
         {
             text: "Effective from ",
             dataField: "CurrentDate",
             sort: true,
-            formatter: (cellContent, row, key) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-6 ">
-                                <Label
-                                    style={{ color: "#B0290B" }}
-                                    key={`CurrentDate${row.Item}`}>{cellContent}</Label>
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
+            headerStyle: () => {
+                return { width: '200px' };
+            },
+            formatter: (cellContent, row, key) => {
+                return (<span style={{ justifyContent: 'center' }}>
+                    <Label
+                        style={{ color: "black", textAlign: "center", display: "block", }}
+                        key={`CurrentDate${row.Item}`}
+                    >{_cfunc.date_dmy_func(cellContent)}</Label>
+                </span>)
+            },
         },
-
         {
             text: "Margin ",
             dataField: "Margin",
@@ -343,50 +340,44 @@ const MarginMaster = (props) => {
                 } else {
                     row["margin"] = false
                 }
-                return (
-
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    key={`Margin${row.Item}`}
-                                    type="text"
-                                    defaultValue={cellContent}
-                                    disabled={row.margin}
-                                    className="col col-sm text-end"
-                                    onChange={(e) => MarginHandler(e, row)}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
-
-                )
+                return (<span style={{ justifyContent: 'center' }}>
+                    <CInput
+                        key={`Margin${row.Item}`}
+                        type="text"
+                        cpattern={decimalRegx}
+                        defaultValue={cellContent}
+                        disabled={row.margin}
+                        className="col col-sm text-end"
+                        onChange={(e) => MarginHandler(e, row)}
+                    />
+                </span>)
             },
+            headerStyle: () => {
+                return { width: '200px' };
+            }
         },
         {
             text: "Action ",
             dataField: "",
-            formatter: (cellContent, user) => (
-
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                {!(user.id === '') ?
-                                    <Button
-                                        id={"deleteid"}
-                                        type="button"
-                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                        onClick={() => { deleteHandeler(user.id, user.Name); }}
-                                    >
-                                        <i className="mdi mdi-delete font-size-18"></i>
-                                    </Button> : <></>}
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
+            headerStyle: () => {
+                return { width: '100px' };
+            },
+            formatter: (cellContent, user) => {
+                return (
+                    <span className="d-flex justify-content-center align-items-center">
+                        {!(user.id === '') &&
+                            <Button
+                                id={"deleteid"}
+                                type="button"
+                                className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
+                                onClick={() => { deleteHandeler(user.id, user.Name); }}
+                            >
+                                <i className="mdi mdi-delete font-size-18"></i>
+                            </Button>}
+                    </span>
+                )
+            }
         },
     ]
 
@@ -408,16 +399,23 @@ const MarginMaster = (props) => {
         const Find = ItemData.filter((index) => {
             return (!(index.Margin === '') && (index.id === ''))
         })
-
         const jsonBody = JSON.stringify(Find)
 
-        dispatch(postMarginMasterData(jsonBody));
+        if (!(Find.length > 0)) {
+            customAlert({
+                Type: 4,
+                Message: "Please Enter Margin"
+            })
+        }
+        else {
+            dispatch(postMarginMasterData(jsonBody));
+        }
+
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
 
     return (
         <React.Fragment>
