@@ -113,7 +113,7 @@ const MarginMaster = (props) => {
 
             const jsonBody = JSON.stringify({
                 PriceList: PriceListid,
-                Party: partyId,
+                Party: partyId === null ? 0 : partyId,
                 EffectiveDate: effectiveDate
             });
             dispatch(postGoButtonForMargin_Master(jsonBody))
@@ -182,12 +182,12 @@ const MarginMaster = (props) => {
         setEffectiveDate(date)
     }
 
-    const MarginHandler = (e, user) => {
-        user["Margin"] = e.target.value
+    const MarginHandler = (e, row) => {
+        row["Margin"] = e.target.value
     }
 
-    const CurrentMRPHandler = (e, user) => {
-        user["CurrentMRP"] = e.target.value
+    const CurrentMRPHandler = (e, row) => {
+        row["CurrentMRP"] = e.target.value
     }
 
     const GoButton_Handler = (event, values) => {
@@ -291,18 +291,19 @@ const MarginMaster = (props) => {
             text: "Current Margin",
             dataField: "CurrentMargin",
             sort: true,
-            formatter: (cellContent, user) => (
+            formatter: (cellContent, row, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
+                                    key={`CurrentMargin${row.Item}`}
                                     id=""
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
                                     className="col col-sm text-end"
-                                    onChange={(e) => CurrentMRPHandler(e, user)}
+                                    onChange={(e) => CurrentMRPHandler(e, row)}
                                 />
                             </FormGroup>
                         </Col>
@@ -315,12 +316,14 @@ const MarginMaster = (props) => {
             text: "Effective from ",
             dataField: "CurrentDate",
             sort: true,
-            formatter: (cellContent) => (
+            formatter: (cellContent, row, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-6 ">
-                                <Label style={{ color: "#B0290B" }}>{cellContent}</Label>
+                                <Label
+                                    style={{ color: "#B0290B" }}
+                                    key={`CurrentMargin${row.Item}`}>{cellContent}</Label>
                             </FormGroup>
                         </Col>
                     </div>
@@ -332,12 +335,12 @@ const MarginMaster = (props) => {
             text: "Margin ",
             dataField: "Margin",
             sort: true,
-            formatter: (cellContent, user) => {
+            formatter: (cellContent, row) => {
 
-                if (((cellContent > 0) && (user["margin"] === undefined) || user.margin)) {
-                    user["margin"] = true
+                if (((cellContent > 0) && (row["margin"] === undefined) || row.margin)) {
+                    row["margin"] = true
                 } else {
-                    user["margin"] = false
+                    row["margin"] = false
                 }
                 return (
 
@@ -345,11 +348,12 @@ const MarginMaster = (props) => {
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
+                                    key={`CurrentMargin${row.Item}`}
                                     type="text"
                                     defaultValue={cellContent}
-                                    disabled={user.margin}
+                                    disabled={row.margin}
                                     className="col col-sm text-end"
-                                    onChange={(e) => MarginHandler(e, user)}
+                                    onChange={(e) => MarginHandler(e, row)}
                                 />
                             </FormGroup>
                         </Col>
@@ -475,7 +479,7 @@ const MarginMaster = (props) => {
                                                                 <C_DatePicker
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
-                                                                    placeholder = "Please Enter EffectiveDate"
+                                                                    placeholder="Please Enter EffectiveDate"
                                                                     value={effectiveDate}
                                                                     isDisabled={editMode === "edit" ? true : false}
                                                                     onChange={EffectiveDateHandler}
