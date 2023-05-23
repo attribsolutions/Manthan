@@ -74,10 +74,10 @@ const CommonPurchaseList = (props) => {
     pageField = { id: "" },
     tableList = [],
   } = props.reducers;
-
+  
   const { getList, editId, deleteId, postSucc, updateSucc, deleteSucc } =
-    props.action;
-
+  props.action;
+  
   const {
 
     editBodyfunc,
@@ -112,7 +112,7 @@ const CommonPurchaseList = (props) => {
     });
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath,forceNewBtnView });
+      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath, forceNewBtnView });
     }
   }, [userAccess]);
 
@@ -230,7 +230,7 @@ const CommonPurchaseList = (props) => {
         sort: true,
         formatter: (cellContent, rowData, key) => {
           rowData["hasSelect"] = false;
-        
+
           return (
             <div>
               <Button
@@ -323,7 +323,7 @@ const CommonPurchaseList = (props) => {
                           />
                         </div>
                       </Col>
-                      
+
                       {countlabelFunc(
                         toolkitProps,
                         paginationProps,

@@ -47,7 +47,7 @@ import * as mode from "../../../routes/PageMode"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Change_Button } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 
 const MRPMaster = (props) => {
 
@@ -295,18 +295,19 @@ const MRPMaster = (props) => {
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     key={`CurrentMRP${row.Item}`}
-                                    id=""
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
                                     className="col col-sm text-end"
-                                    onChange={(e) => CurrentMRPHandler(e, row)}
                                 />
                             </FormGroup>
                         </Col>
                     </div>
                 </>
             ),
+            headerStyle: () => {
+                return { width: '200px',  };
+            }
         },
         {
 
@@ -344,9 +345,10 @@ const MRPMaster = (props) => {
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
-                                <Input
+                                <CInput
                                     key={`MRP${row.Item}`}
                                     type="text"
+                                    cpattern={decimalRegx}
                                     defaultValue={cellContent}
                                     disabled={row.mrp}
                                     className="col col-sm text-end"

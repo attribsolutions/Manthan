@@ -1,21 +1,17 @@
 import {
-    DELETE_ID_IN_MARGIN_MASTERPAGE_SUCCESS,
-    DELETE_MARGIN_LIST_PAGE_SUCCESS,
-    EDIT_MARGIN_LIST_PAGE_SUCCESS,
-    GET_MARGIN_LIST_PAGE_SUCCESS,
-    POST_GO_BUTTON_FOR_MARGIN_MASTER,
-    POST_GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS,
-    POST_MARGIN_MASTER_DATA_SUCCESS,
-    UPDATE_MARGIN_LIST_PAGE_SUCCESS
+    DELETE_ID_FOR_MARGIN_MASTER_SUCCESS,
+    DELETE_MARGIN_LIST_ID_SUCCESS,
+    GET_MARGIN_LIST_SUCCESS,
+    GO_BUTTON_FOR_MARGIN_MASTER,
+    GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS,
+    SAVE_MARGIN_MASTER_SUCCESS,
 } from "./actionType";
 
 const INIT_STATE = {
-    PostData: [],
+    postMsg: [],
     MarginList: [],
     deleteMsg: { Status: false },
-    editData: { Status: false },
-    updateMessage: { Status: false },
-    MarginGoButton: [],
+    MarginGoButton: { Status: false },
     deleteId_For_MarginMaster: { Status: false },
 };
 
@@ -23,53 +19,41 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
         // post api
-        case POST_MARGIN_MASTER_DATA_SUCCESS:
+        case SAVE_MARGIN_MASTER_SUCCESS:
             return {
                 ...state,
-                PostData: action.payload,
+                postMsg: action.payload,
             };
 
         // GET api
-        case GET_MARGIN_LIST_PAGE_SUCCESS:
+        case GET_MARGIN_LIST_SUCCESS:
             return {
                 ...state,
                 MarginList: action.payload,
             };
 
         // DELETE api
-        case DELETE_MARGIN_LIST_PAGE_SUCCESS:
+        case DELETE_MARGIN_LIST_ID_SUCCESS:
             return {
                 ...state,
                 deleteMsg: action.payload,
             };
 
-        case EDIT_MARGIN_LIST_PAGE_SUCCESS:
-            return {
-                ...state,
-                editData: action.payload,
-            };
-
-        case UPDATE_MARGIN_LIST_PAGE_SUCCESS:
-            return {
-                ...state,
-                updateMessage: action.payload,
-            };
-
-        case POST_GO_BUTTON_FOR_MARGIN_MASTER:
+        case GO_BUTTON_FOR_MARGIN_MASTER:
             return {
                 ...state,
                 MarginGoButton: [],
             };
 
         // Go Button post api
-        case POST_GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS:
+        case GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS:
             return {
                 ...state,
                 MarginGoButton: action.payload,
             };
 
         // delete api Margin Master Page
-        case DELETE_ID_IN_MARGIN_MASTERPAGE_SUCCESS:
+        case DELETE_ID_FOR_MARGIN_MASTER_SUCCESS:
             return {
                 ...state,
                 deleteId_For_MarginMaster: action.payload,
