@@ -12,9 +12,9 @@ import {
 } from "./actionType";
 
 // post api
-export const saveMarginMaster = (Data) => ({
+export const saveMarginMaster = (config={}) => ({
     type: SAVE_MARGIN_MASTER,
-    Data,
+    config,
 });
 
 export const saveMarginMasterSuccess = (resp) => ({

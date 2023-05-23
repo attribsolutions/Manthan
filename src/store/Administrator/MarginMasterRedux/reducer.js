@@ -8,7 +8,7 @@ import {
 } from "./actionType";
 
 const INIT_STATE = {
-    postMsg: [],
+    postMsg: { Status: false },
     MarginList: [],
     deleteMsg: { Status: false },
     MarginGoButton: { Status: false },
