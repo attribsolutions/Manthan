@@ -1,33 +1,110 @@
-import React from "react"
+import React, { useEffect } from "react"
 import PropTypes from "prop-types"
 import { Route, Redirect } from "react-router-dom"
+import { useState } from "react"
+
+
+let count1 = 0
+let count2 = 0
+let count3 = 0
+let count4 = 0
+let count5 = 0
+let count6 = 0
+let count7 = 0
+
+
+let intervalId
 
 const Authmiddleware = ({
-  userPageAccess: userPageAccess,
   history: history,
   component: Component,
   layout: Layout,
   isAuthProtected,
   ...rest
-}) => (
-  <Route
-    {...rest}
-    render={props => {
-      
-      if (isAuthProtected && !localStorage.getItem("token")) {
-        return (
-          <Redirect
-            to={{ pathname: "/login", state: { from: props.location } }} />
-        )
+}) => {
+
+  const [islogOut, setIsLogOut] = useState(false)
+
+  useEffect(() => {
+
+
+    if (isAuthProtected) {
+
+      //console.log("inside useEffect", count2)//________________________
+      ++count2                             //________________________
+
+      let timer
+
+      const hasNoActivity = () => {
+
+        //console.log(" hasNoActivity", count3) //________________________
+        ++count3                               //________________________
+
+        clearInterval(intervalId);
+        clearInterval(timer);
+        sessionStorage.clear()
+        setIsLogOut(true)
+        // history.push({ pathname: '/login' })
       }
-      return (
-        <Layout>
-          <Component {...props} />
-        </Layout>
-      )
-    }}
-  />
-)
+
+      const startTimer = () => {
+
+        //console.log(" startTimer", count4) //________________________
+        ++count4                              //________________________
+
+        timer = setInterval(hasNoActivity, 15 * 60 * 1000);
+      };
+
+      const resetTimer = () => {
+        //console.log(" resetTimer", count5) //________________________
+        ++count5
+        clearInterval(timer);
+        startTimer();
+      };
+
+      let hasActivity = sessionStorage.getItem('lastActivityTime', new Date().getTime())
+      !hasActivity && keepSessionAlive();
+      localStorage.getItem("token") && startTimer()
+
+      window.addEventListener('keydown', resetTimer);
+      window.addEventListener('mousemove', resetTimer);
+      window.addEventListener('keypress', resetTimer);
+
+
+      return () => {
+        //console.log(" return", count6) //________________________
+        ++count6
+        clearInterval(timer);
+        document.removeEventListener('keydown', resetTimer);
+        window.removeEventListener('mousemove', resetTimer);
+        window.removeEventListener('keypress', resetTimer);
+      };
+    }
+  }, []);
+
+  return (
+    <>
+
+      <Route
+        {...rest}
+
+        render={props => {
+
+          if (islogOut || (isAuthProtected && !localStorage.getItem("token"))) {
+            return (
+              <Redirect
+                to={{ pathname: "/login", state: { from: props.location } }} />
+            )
+          }
+          return (
+            <Layout>
+              <Component {...props} />
+            </Layout>
+          )
+        }}
+      /></>
+  )
+}
 
 Authmiddleware.propTypes = {
   isAuthProtected: PropTypes.bool,
@@ -39,3 +116,15 @@ Authmiddleware.propTypes = {
 }
 
 export default Authmiddleware;
+
+
+const updateTokan = () => {
+  // axios.get('https://api.example.com/keepalive');
+}
+
+const keepSessionAlive = () => {
+  //console.log(" keepSessionAlive", count7) //________________________
+  ++count7
+  sessionStorage.setItem('keepSessionAlive', new Date().getTime())
+  intervalId = setInterval(updateTokan, 15 * 60 * 1000)
+};
