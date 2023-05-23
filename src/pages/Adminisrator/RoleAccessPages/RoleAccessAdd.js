@@ -1266,9 +1266,8 @@ const RoleAccessAdd = () => {
         custom: true,
     };
 
+
     const saveHandeller = (event) => {
-
-
         event.preventDefault();
         const btnId = event.target.id
         // btnIsDissablefunc({ btnId, state: true })
@@ -1366,7 +1365,7 @@ const RoleAccessAdd = () => {
                         <React.Fragment>
                             <Row>
                                 <Col xl="12">
-                                    <div className="table-responsive" style={{ maxHeight: "320px" }} >
+                                    <div className="table-responsive" id="TableDiv" style={{ maxHeight:"52vh"}} >
                                         <BootstrapTable
                                             keyField={"id"}
                                             responsive
@@ -1390,18 +1389,21 @@ const RoleAccessAdd = () => {
         )
 
     }
+    debugger
+    // var h = window.innerHeight;
+    // document.getElementById("TableDiv").style.maxHeight = "200px auto";
+
     let IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
 
 
     return <React.Fragment>
-        <div className="page-content" style={{ maxHeight: "600px" }} >
+        <div className="page-content" style={{ maxHeight:"100vh"}} >
             <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <Container fluid>
                 {
                     !showTableOnUI ?
-
                         <CardHeader className="card-header   text-black  c_card_body"  >
                             <Row className="mt-3">
                                 <Col sm={3}>
