@@ -1146,21 +1146,26 @@ const Credit = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-
-                const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber } = hasEditVal
+                debugger
+                const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber, NoteType } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
+                debugger
                 // hasValid.Name.valid = true;
 
                 values.CRDRNoteDate = CRDRNoteDate;
                 values.Customer = { label: Customer, value: CustomerID };
                 values.NoteReason = { label: NoteReason, value: "" };
-                values.InvoiceNO = { label: FullNoteNumber, value: "" };
+                values.InvoiceNO = { label: NoteType === "CreditNote" ? null : FullNoteNumber, value: "" };
                 // values.BalanceAmount
                 values.servicesItem = servicesItem;
                 values.Narration = Narration;
                 values.GrandTotal = GrandTotal;
+                CRDRInvoices.map((index, key) => (
+                    key,
+                    index.BalanceAmount = index.GrandTotal - index.PaidAmount
+                ));
                 setTable(CRDRInvoices)
+
                 setTable1(CRDRNoteItems)
 
 
@@ -1384,7 +1389,7 @@ const Credit = (props) => {
         })
     }
 
-    function val_onChange(val, row, type,key) {
+    function val_onChange(val, row, type, key) {
         debugger
         if (type === "qty") {
             row["Qty"] = val;
@@ -1428,7 +1433,7 @@ const Credit = (props) => {
         try {
             document.getElementById(`Qty${key}`).value = val
         } catch (e) { }
-       
+
 
     };
 
@@ -1494,7 +1499,7 @@ const Credit = (props) => {
                         className=" text-end"
                         onChange={(e) => {
                             const val = e.target.value
-                            val_onChange(val, row, "qty",key)
+                            val_onChange(val, row, "qty", key)
 
                         }}
                     />
@@ -1667,84 +1672,56 @@ const Credit = (props) => {
             return index.PaidAmount > 0
         })
 
+        let inValideUnits = []
+
         InvoiceItems.forEach(index => {
-
-            if ((!index.unit)) {
-                customAlert({
-                    Type: 3,
-                    Message: `Please Select Unit ${index.ItemName}`,
-                })
-                // return btnIsDissablefunc({ btnId, state: false })
-            } else {
-                if (index.Qty) {
-                    // if ((!index.unit)) {
-                    //     CustomAlert({
-                    //         Type: 3,
-                    //         Message: `Please Select Unit ${index.ItemName}`,
-                    //     })
-                    //     // return btnIsDissablefunc({ btnId, state: false })
-                    // }
-                    const CRDRNoteItems = {
-                        CRDRNoteDate: values.CRDRNoteDate,
-                        Item: index.Item,
-                        Quantity: Number(index.Qty),
-                        Unit: index.unit,
-                        BaseUnitQuantity: index.BaseUnitQuantity,
-                        MRP: index.MRP,
-                        Rate: index.Rate,
-                        BasicAmount: index.BasicAmount,
-                        TaxType: index.TaxType,
-                        GST: index.GST,
-                        GSTAmount: index.CGSTAmount,
-                        Amount: index.AmountTotal,
-                        CGST: index.CGSTAmount,
-                        SGST: index.SGSTAmount,
-                        IGST: index.IGST,
-                        BatchCode: index.BatchCode,
-                        CGSTPercentage: index.CGSTPercentage,
-                        SGSTPercentage: index.SGSTPercentage,
-                        IGSTPercentage: index.IGSTPercentage,
-
-                    }
-                    arr1.push(CRDRNoteItems)
-                }
+debugger
+            if ((!(index.unit) && (index.Qty > 0))) {
+                inValideUnits.push({ [`${index.ItemName}`]: "This Item Unit Is Required." })
             }
 
-            // if (index.Qty) {
-            //     // if ((!index.unit)) {
-            //     //     CustomAlert({
-            //     //         Type: 3,
-            //     //         Message: `Please Select Unit ${index.ItemName}`,
-            //     //     })
-            //     //     // return btnIsDissablefunc({ btnId, state: false })
-            //     // }
-            //     const CRDRNoteItems = {
-            //         CRDRNoteDate: values.CRDRNoteDate,
-            //         Item: index.Item,
-            //         Quantity: Number(index.Qty),
-            //         Unit: index.unit,
-            //         BaseUnitQuantity: index.BaseUnitQuantity,
-            //         MRP: index.MRP,
-            //         Rate: index.Rate,
-            //         BasicAmount: index.BasicAmount,
-            //         TaxType: index.TaxType,
-            //         GST: index.GST,
-            //         GSTAmount: index.CGSTAmount,
-            //         Amount: index.AmountTotal,
-            //         CGST: index.CGSTAmount,
-            //         SGST: index.SGSTAmount,
-            //         IGST: index.IGST,
-            //         BatchCode: index.BatchCode,
-            //         CGSTPercentage: index.CGSTPercentage,
-            //         SGSTPercentage: index.SGSTPercentage,
-            //         IGSTPercentage: index.IGSTPercentage,
+            if (index.Qty) {
+                // if ((!index.unit)) {
+                //     CustomAlert({
+                //         Type: 3,
+                //         Message: `Please Select Unit ${index.ItemName}`,
+                //     })
+                //     // return btnIsDissablefunc({ btnId, state: false })
+                // }
+                const CRDRNoteItems = {
+                    CRDRNoteDate: values.CRDRNoteDate,
+                    Item: index.Item,
+                    Quantity: Number(index.Qty),
+                    Unit: index.unit,
+                    BaseUnitQuantity: index.BaseUnitQuantity,
+                    MRP: index.MRP,
+                    Rate: index.Rate,
+                    BasicAmount: index.BasicAmount,
+                    TaxType: index.TaxType,
+                    GST: index.GST,
+                    GSTAmount: index.CGSTAmount,
+                    Amount: index.AmountTotal,
+                    CGST: index.CGSTAmount,
+                    SGST: index.SGSTAmount,
+                    IGST: index.IGST,
+                    BatchCode: index.BatchCode,
+                    CGSTPercentage: index.CGSTPercentage,
+                    SGSTPercentage: index.SGSTPercentage,
+                    IGSTPercentage: index.IGSTPercentage,
 
-            //     }
-            //     arr1.push(CRDRNoteItems)
-            // }
-
+                }
+                arr1.push(CRDRNoteItems)
+            }
 
         })
+
+        if (inValideUnits.length > 0) {
+            customAlert({
+                Type: 3,
+                Message: inValideUnits
+            })
+            return btnIsDissablefunc({ btnId, state: false })
+        }
 
         try {
             if (formValid(state, setState)) {
@@ -1763,14 +1740,7 @@ const Credit = (props) => {
                     UpdatedBy: loginUserID(),
                     CRDRInvoices: FilterReceiptInvoices,
                 })
-                if (pageMode === mode.edit) {
-                    // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
-                }
-                else {
-
-                    dispatch(saveCredit({ jsonBody, btnId }));
-                }
-
+                dispatch(saveCredit({ jsonBody, btnId }));
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
 
