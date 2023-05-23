@@ -283,7 +283,7 @@ export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MRP_M
 export const MRP_MasterPage_delete_API = (id) => del(`${url.MRP_MASTER_LIST}/${id}`)// delete api MRP Master Page
 
 // Margin Master
-export const Post_MarginMaster_API = (data) => post(url.MARGIN_MASTER_LIST, data)// post api
+export const Post_MarginMaster_API = ({ jsonBody, btnId }) => post(url.MARGIN_MASTER_LIST, jsonBody, btnId)// post api
 export const GetMarginList_For_Listpage = () => get(url.MARGIN_MASTER_LIST)//  get List
 export const delete_MarginList_API = ({ deleteId, btnId }) => del(`${url.DELETE_API_FOR_LIST_MARGIN_PAGE}/${deleteId}`, btnId)// post api
 export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_MARGIN_MASTER, data)// go button postapi

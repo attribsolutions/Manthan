@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, date_dmy_func } from "../../../components/Common/CommonFunction";
+import { CommonConsole, concatDateAndTime, date_dmy_func } from "../../../components/Common/CommonFunction";
 import {
   delete_MarginList_API,
   GetMarginList_For_Listpage,
@@ -22,9 +22,9 @@ import {
   SAVE_MARGIN_MASTER,
 } from "./actionType";
 
-function* post_Margin_GenFunc({ Data }) {
+function* post_Margin_GenFunc({ config }) {
   try {
-    const response = yield call(Post_MarginMaster_API, Data);
+    const response = yield call(Post_MarginMaster_API, config);
     yield put(saveMarginMasterSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
@@ -35,7 +35,7 @@ function* get_Margin_GenFunc() {
     const response = yield call(GetMarginList_For_Listpage);
     response.Data.map(i => {
       i["preEffectiveDate"] = i.EffectiveDate
-      i.EffectiveDate = date_dmy_func(i.EffectiveDate)
+      i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
     })
     yield put(getMarginListSuccess(response.Data))
   } catch (error) { CommonConsole(error) }
