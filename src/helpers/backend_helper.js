@@ -285,9 +285,7 @@ export const MRP_MasterPage_delete_API = (id) => del(`${url.MRP_MASTER_LIST}/${i
 // Margin Master
 export const Post_MarginMaster_API = (data) => post(url.MARGIN_MASTER_LIST, data)// post api
 export const GetMarginList_For_Listpage = () => get(url.MARGIN_MASTER_LIST)//  get List
-export const delete_MarginList_API = (CommonID) => del(`${url.DELETE_API_FOR_LIST_MARGIN_PAGE}/${CommonID}`)// post api
-export const edit_MarginList = (id) => get(`${url.MARGIN_MASTER_LIST}/${id}`) // edit api
-export const update_MarginList = (data, id) => put(`${url.MARGIN_MASTER_LIST}/${id}`, data)// update
+export const delete_MarginList_API = ({ deleteId, btnId }) => del(`${url.DELETE_API_FOR_LIST_MARGIN_PAGE}/${deleteId}`, btnId)// post api
 export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_MARGIN_MASTER, data)// go button postapi
 export const Margin_MasterPage_delete_API = (id) => del(`${url.MARGIN_MASTER_LIST}/${id}`)// delete api Margin Master Page
 

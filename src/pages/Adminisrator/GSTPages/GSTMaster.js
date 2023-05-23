@@ -38,9 +38,8 @@ import {
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mode } from "../../../routes";
-import { find } from "lodash";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -275,9 +274,10 @@ const GSTMaster = (props) => {
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
-                                <Input
+                                <CInput
                                     key={`GSTPercentage${row.Item}`}
                                     id=""
+                                    cpattern={decimalRegx}
                                     type="text"
                                     defaultValue={cellContent}
                                     disabled={row.GSTPerDis}
@@ -331,9 +331,10 @@ const GSTMaster = (props) => {
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
-                                <Input
+                                <CInput
                                     key={`HSNCode${row.Item}`}
                                     type="text"
+                                    cpattern={decimalRegx}
                                     defaultValue={cellContent}
                                     disabled={row.hsncodeDis}
                                     className="col col-sm text-end"

@@ -88,6 +88,7 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     async function deleteHandler(rowData, btnId) {
+        
         try {
             if (deleteBodyfunc) {
                 const config = { rowData, subPageMode, btnId }

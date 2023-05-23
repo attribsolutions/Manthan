@@ -24,13 +24,13 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import { get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import {
-    deleteID_In_Margin_MasterPage,
-    deleteID_In_Margin_MasterPageSuccess,
-    getMarginListPage,
-    postGoButtonForMargin_Master,
-    postGoButtonForMargin_Master_Success,
-    postMarginMasterData,
-    postMarginMasterDataSuccess
+    deleteIdForMarginMaster,
+    deleteIdForMarginMasterSuccess,
+    getMarginList,
+    goButtonForMargin,
+    goButtonForMarginSuccess,
+    saveMarginMaster,
+    saveMarginMasterSuccess
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
 import {
@@ -50,8 +50,7 @@ const MarginMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const formRef = useRef(null);
-    let editMode = history.location.pageMode;
-
+  
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState("");
@@ -61,22 +60,23 @@ const MarginMaster = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
-        TableData,
+        tableData,
         deleteMessage,
         Party,
         PriceList,
         userAccess
     } = useSelector((state) => ({
-        TableData: state.MarginMasterReducer.MarginGoButton,
+        tableData: state.MarginMasterReducer.MarginGoButton,
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
-        PostAPIResponse: state.MarginMasterReducer.PostData,
+        PostAPIResponse: state.MarginMasterReducer.postMsg,
         Party: state.ItemMastersReducer.Party,
         PriceList: state.PriceListReducer.priceListByCompany,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
+    const { Data = [] } = tableData
 
     const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -99,57 +99,46 @@ const MarginMaster = (props) => {
 
     useEffect(() => {
 
-        const editDataGatingFromList = history.location.editValue
+        const editDataGatingFromList = history.location
+        if (!(editDataGatingFromList.editValue === undefined)) {
+            const { editValue, page_Mode } = editDataGatingFromList
+            const { PriceList_id, PriceListName, Party_id, PartyName, preEffectiveDate } = editValue
+            var PriceListid = PriceList_id;
+            var priceListName = PriceListName;
+            var partyId = Party_id === null ? "" : Party_id;
+            var partyName = PartyName === null ? "select" : PartyName;
+            var effective_Date = preEffectiveDate;
 
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (!(editDataGatingFromList === undefined)) {
-            var PriceListid = editDataGatingFromList.PriceList_id
-            var priceListName = editDataGatingFromList.PriceListName
-            var partyId = editDataGatingFromList.Party_id
-            var partyName = editDataGatingFromList.PartyName
-            var effectiveDate = editDataGatingFromList.preEffectiveDate
-
-            const jsonBody = JSON.stringify({
-                PriceList: PriceListid,
-                Party: partyId === null ? 0 : partyId,
-                EffectiveDate: effectiveDate
-            });
-            dispatch(postGoButtonForMargin_Master(jsonBody))
             setPartyName_dropdown_Select({ label: partyName, value: partyId })
             setpriceList_dropdown_Select({ label: priceListName, value: PriceListid })
-            setEffectiveDate(effectiveDate)
-
+            setEffectiveDate(effective_Date)
+            setPageMode(page_Mode)
         }
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
+        else {
+            dispatch(goButtonForMarginSuccess({ Status: false }))
         }
     }, [userAccess])
 
     useEffect(() => {
         dispatch(priceListByCompay_Action());
         dispatch(get_Party_ForDropDown());
-        dispatch(postGoButtonForMargin_Master_Success([]));
     }, [dispatch]);
 
     useEffect(() => {
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-            dispatch(deleteID_In_Margin_MasterPageSuccess({ Status: false }));
-            dispatch(postGoButtonForMargin_Master_Success([]))
+            dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
+            dispatch(goButtonForMarginSuccess([]))
             GoButton_Handler()
             dispatch(
                 AlertState({
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
-                    AfterResponseAction: getMarginListPage,
+                    AfterResponseAction: getMarginList,
                 })
             );
         } else if (deleteMessage.Status === true) {
-            dispatch(deleteID_In_Margin_MasterPageSuccess({ Status: false }));
+            dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -160,7 +149,7 @@ const MarginMaster = (props) => {
         }
     }, [deleteMessage]);
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const PartyTypeDropdown_Options = Party.map((Data) => ({
         value: Data.id,
@@ -178,26 +167,6 @@ const MarginMaster = (props) => {
         value: "",
         label: "select"
     });
-
-    function PartyType_Dropdown_OnChange_Handller(e) {
-        setPartyName_dropdown_Select(e)
-    }
-
-    function PriceList_Dropdown_OnChange_Handller(e) {
-        setpriceList_dropdown_Select(e)
-    }
-
-    const EffectiveDateHandler = (e, date) => {
-        setEffectiveDate(date)
-    }
-
-    const MarginHandler = (e, row) => {
-        row["Margin"] = e.target.value
-    }
-
-    const CurrentMRPHandler = (e, row) => {
-        row["CurrentMRP"] = e.target.value
-    }
 
     const GoButton_Handler = (event, values) => {
 
@@ -230,7 +199,8 @@ const MarginMaster = (props) => {
             return
         }
 
-        dispatch(postGoButtonForMargin_Master(jsonBody))
+        // dispatch(goButtonForMargin(jsonBody))
+        dispatch(goButtonForMargin({ jsonBody }));
     };
 
     //select id for delete row
@@ -241,7 +211,7 @@ const MarginMaster = (props) => {
                 Status: true,
                 Message: `Are you sure you want to delete this Item : "${name}"`,
                 RedirectPath: false,
-                PermissionAction: deleteID_In_Margin_MasterPage,
+                PermissionAction: deleteIdForMarginMaster,
                 ID: id,
             })
         );
@@ -250,7 +220,7 @@ const MarginMaster = (props) => {
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(postMarginMasterDataSuccess({ Status: false }))
+            dispatch(saveMarginMasterSuccess({ Status: false }))
             setPartyName_dropdown_Select('')
             setEffectiveDate('')
             setpriceList_dropdown_Select('')
@@ -273,7 +243,7 @@ const MarginMaster = (props) => {
         }
 
         else if (PostAPIResponse.Status === true) {
-            dispatch(postMarginMasterDataSuccess({ Status: false }))
+            dispatch(saveMarginMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -286,7 +256,7 @@ const MarginMaster = (props) => {
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: TableData.length,
+        totalSize: Data.length,
         custom: true,
     };
 
@@ -312,7 +282,7 @@ const MarginMaster = (props) => {
                         disabled={true}
                         defaultValue={cellContent}
                         className="col col-sm text-end"
-                        onChange={(e) => CurrentMRPHandler(e, row)}
+                        onChange={(e) => row["CurrentMRP"] = e.target.value}
                     />
                 </span>)
             },
@@ -355,7 +325,7 @@ const MarginMaster = (props) => {
                         defaultValue={cellContent}
                         disabled={row.margin}
                         className="col col-sm text-end"
-                        onChange={(e) => MarginHandler(e, row)}
+                        onChange={(e) => row["Margin"] = e.target.value}
                     />
                 </span>)
             },
@@ -390,7 +360,7 @@ const MarginMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        var ItemData = TableData.map((index) => ({
+        var ItemData = Data.map((index) => ({
             PriceList: priceList_dropdown_Select.value,
             Party: partyName_dropdown_Select.value,
             EffectiveDate: effectiveDate,
@@ -415,14 +385,13 @@ const MarginMaster = (props) => {
             })
         }
         else {
-            dispatch(postMarginMasterData(jsonBody));
+            dispatch(saveMarginMaster(jsonBody));
         }
-
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>
@@ -453,10 +422,10 @@ const MarginMaster = (props) => {
                                                                 <Select
                                                                     value={priceList_dropdown_Select}
                                                                     options={PriceList_DropdownOptions}
-                                                                    isDisabled={editMode === "edit" ? true : false}
+                                                                    isDisabled={pageMode === mode.edit ? true : false}
                                                                     className="rounded-bottom"
                                                                     placeholder="select"
-                                                                    onChange={(e) => { PriceList_Dropdown_OnChange_Handller(e) }}
+                                                                    onChange={(e) => { setpriceList_dropdown_Select(e) }}
                                                                     classNamePrefix="select2-selection"
                                                                 />
                                                             </Col>
@@ -469,10 +438,10 @@ const MarginMaster = (props) => {
                                                                 <Select
                                                                     value={partyName_dropdown_Select}
                                                                     options={PartyTypeDropdown_Options}
-                                                                    isDisabled={editMode === "edit" ? true : false}
+                                                                    isDisabled={pageMode === mode.edit ? true : false}
                                                                     className="rounded-bottom"
                                                                     placeholder="select"
-                                                                    onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
+                                                                    onChange={(e) => { setPartyName_dropdown_Select(e) }}
                                                                     classNamePrefix="select2-selection"
                                                                 />
                                                             </Col>
@@ -487,8 +456,8 @@ const MarginMaster = (props) => {
                                                                     name="effectiveDate"
                                                                     placeholder="Please Enter EffectiveDate"
                                                                     value={effectiveDate}
-                                                                    isDisabled={editMode === "edit" ? true : false}
-                                                                    onChange={EffectiveDateHandler}
+                                                                    isDisabled={pageMode === mode.edit ? true : false}
+                                                                    onChange={(e, date) => { setEffectiveDate(date) }}
                                                                 />
                                                             </Col>
                                                         </FormGroup>
@@ -501,12 +470,12 @@ const MarginMaster = (props) => {
                                         </Card>
                                     </Col>
                                 </Row>
-                                {TableData.length > 0 ?
+                                {Data.length > 0 ?
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
                                                 keyField="Item"
-                                                data={TableData}
+                                                data={Data}
                                                 columns={pagesListColumns}
                                                 search
                                             >
@@ -540,10 +509,10 @@ const MarginMaster = (props) => {
                                         )}
                                     </PaginationProvider>
                                     : null}
-                                {TableData.length > 0 ?
+                                {Data.length > 0 ?
                                     <div>
                                         {
-                                            (editMode) ?
+                                            (pageMode === mode.edit) ?
                                                 <button
                                                     type="submit"
                                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
