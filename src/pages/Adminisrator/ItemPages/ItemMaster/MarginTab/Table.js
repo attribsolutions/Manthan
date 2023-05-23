@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteID_In_MasterPage, deleteID_In_MasterPageSuccess } from '../../../../../store/Administrator/MRPMasterRedux/action';
+import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success } from '../../../../../store/Administrator/MRPMasterRedux/action';
 import { AlertState } from '../../../../../store/actions';
 import { deleteIdForMarginMaster, deleteIdForMarginMasterSuccess } from '../../../../../store/Administrator/MarginMasterRedux/action';
 

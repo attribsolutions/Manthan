@@ -1,91 +1,66 @@
 import {
-    POST_MRP_MASTER_DATA,
-    POST_MRP_MASTER_DATA_SUCCESS,
-    GET_MRP_LIST_PAGE,
-    GET_MRP_LIST_PAGE_SUCCESS,
-    DELETE_MRP_LIST_PAGE,
-    DELETE_MRP_LIST_PAGE_SUCCESS,
-    EDIT_MRP_LIST_PAGE,
-    EDIT_MRP_LIST_PAGE_SUCCESS,
-    UPDATE_MRP_LIST_PAGE,
-    UPDATE_MRP_LIST_PAGE_SUCCESS,
-    POST_GO_BUTTON_FOR_MRP_MASTER,
-    POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
-    DELETE_ID_IN_MASTERPAGE,
-    DELETE_ID_IN_MASTERPAGE_SUCCESS,
+    SAVE_MRP_MASTER,
+    SAVE_MRP_MASTER_SUCCESS,
+    GET_MRP_LIST,
+    GET_MRP_LIST_SUCCESS,
+    DELETE_MRP_LIST,
+    DELETE_MRP_LIST_SUCCESS,
+    GO_BUTTON_FOR_MRP_MASTER,
+    GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
+    DELETE_MRP_MASTER_ID,
+    DELETE_MRP_MASTER_ID_SUCCESS,
 } from "./actionTypes";
 
 // MRP Post API
-export const postMRPMasterData = (Data,) => ({
-    type: POST_MRP_MASTER_DATA,
-    Data,
+export const saveMRPMaster = (config={}) => ({
+    type: SAVE_MRP_MASTER,
+    config,
 });
 
-export const postMRPMasterDataSuccess = (data) => ({
-    type: POST_MRP_MASTER_DATA_SUCCESS,
-    payload: data,
+export const saveMRPMasterSuccess = (resp) => ({
+    type: SAVE_MRP_MASTER_SUCCESS,
+    payload: resp,
 });
 
 // Go Button Post API
-export const postGoButtonForMRP_Master = (data,) => ({
-    type: POST_GO_BUTTON_FOR_MRP_MASTER,
+export const GoButtonForMRP_Master = (data) => ({
+    type: GO_BUTTON_FOR_MRP_MASTER,
     data,
 });
 
-export const postGoButtonForMRP_MasterSuccess = (data) => ({
-    type: POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
-    payload: data,
+export const GoButtonForMRP_MasterSuccess = (resp) => ({
+    type: GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
+    payload: resp,
 });
 
 //get listpage api
-export const getMRPListPage = () => ({
-    type: GET_MRP_LIST_PAGE,
+export const getMRPList = () => ({
+    type: GET_MRP_LIST,
 });
 
-export const getMRPListPageSuccess = (data) => ({
-    type: GET_MRP_LIST_PAGE_SUCCESS,
-    payload: data,
+export const getMRPList_Success = (resp) => ({
+    type: GET_MRP_LIST_SUCCESS,
+    payload: resp,
 });
 
-//delete
-export const delete_MRPList = (CommonID) => ({
-    type: DELETE_MRP_LIST_PAGE,
-    CommonID,
+//delete action for MRP List Page
+export const deleteMRPList_Id = (config={}) => ({
+    type: DELETE_MRP_LIST,
+    config,
 });
 
-export const delete_MRPListSuccess = (data) => ({
-    type: DELETE_MRP_LIST_PAGE_SUCCESS,
-    payload: data,
+export const deleteMRPList_Id_Success = (resp) => ({
+    type: DELETE_MRP_LIST_SUCCESS,
+    payload: resp,
 });
 
-//edit api
-export const editMRPList = (id, pageMode) => ({
-    type: EDIT_MRP_LIST_PAGE,
-    id, pageMode
-})
-export const editMRPListSuccess = (editData) => ({
-    type: EDIT_MRP_LIST_PAGE_SUCCESS,
-    payload: editData,
-})
-
-// update api
-export const updateMRPList = (updateData, ID) => ({
-    type: UPDATE_MRP_LIST_PAGE,
-    updateData, ID,
-})
-
-export const updateMRPListSuccess = (updateMessage) => ({
-    type: UPDATE_MRP_LIST_PAGE_SUCCESS,
-    payload: updateMessage,
-})
-
-// delete api MRP Master Page
-export const deleteID_In_MasterPage = (id) => ({
-    type: DELETE_ID_IN_MASTERPAGE,
+//delete action for MRP Master Page
+export const deleteMRPMaster_Id = (id) => ({
+    type: DELETE_MRP_MASTER_ID,
     id,
 });
 
-export const deleteID_In_MasterPageSuccess = (data) => ({
-    type: DELETE_ID_IN_MASTERPAGE_SUCCESS,
-    payload: data,
+export const deleteMRPMaster_Id_Success = (resp) => ({
+    type: DELETE_MRP_MASTER_ID_SUCCESS,
+    payload: resp,
 });

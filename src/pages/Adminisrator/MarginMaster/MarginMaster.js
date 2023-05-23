@@ -97,20 +97,13 @@ const MarginMaster = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
-
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
-
-    useEffect(() => {
         dispatch(priceListByCompay_Action());
         dispatch(get_Party_ForDropDown());
     }, [dispatch]);
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -128,6 +121,15 @@ const MarginMaster = (props) => {
         };
     }, [userAccess])
 
+    useEffect(() => {
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
+
+    // hasShowloction && hasShowModal useEffect
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
@@ -204,11 +206,7 @@ const MarginMaster = (props) => {
         value: data.id,
         label: data.Name
     }));
-    PriceList_DropdownOptions.unshift({
-        value: "",
-        label: "select"
-    });
-
+ 
     const GoButton_Handler = (event) => {
 
         event.preventDefault();
@@ -312,7 +310,6 @@ const MarginMaster = (props) => {
                         disabled={true}
                         defaultValue={cellContent}
                         className="col col-sm text-end"
-                        onChange={(e) => row["CurrentMRP"] = e.target.value}
                     />
                 </span>)
             },
@@ -434,17 +431,17 @@ const MarginMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
-                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                    <Card className="text-black ">
-                        <CardHeader className="card-header  text-black c_card_header" >
-                            <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                            <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                        </CardHeader>
-                        <CardBody className=" vh-10 0 text-black" style={{ marginBottom: "4cm" }}>
-                         
-                            <form noValidate>
+                    <form noValidate>
+                        <Card className="text-black ">
+                            <CardHeader className="card-header  text-black c_card_header" >
+                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                            </CardHeader>
+                            <CardBody className=" vh-10 0 text-black" style={{ marginBottom: "4cm" }}>
+
                                 <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
                                     <CardHeader className="c_card_body"  >
                                         <Row className="mt-3">
@@ -521,7 +518,7 @@ const MarginMaster = (props) => {
                                         </Row>
                                     </CardHeader>
                                 </Card>
-                               
+
                                 {Data.length > 0 ?
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
@@ -575,9 +572,9 @@ const MarginMaster = (props) => {
                                     : null
                                 }
 
-                            </form>
-                        </CardBody>
-                    </Card>
+                            </CardBody>
+                        </Card>
+                    </form>
                 </Container>
             </div>
         </React.Fragment>
@@ -585,8 +582,3 @@ const MarginMaster = (props) => {
 }
 
 export default MarginMaster
-
-
-
-
-
