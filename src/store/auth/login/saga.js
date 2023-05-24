@@ -144,11 +144,15 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
 
   } catch (error) {
 
-    const aa = yield customAlert({
+    let redirect = yield customAlert({
       Type: 2,
       Message: `RoleAccess get Api Error `
     })
-    history.go(0)
+    if (redirect) { history.go(0) }
+    else {
+      history.go(0)
+    }
+
 
   }
 }

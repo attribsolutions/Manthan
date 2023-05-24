@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { CommonConsole, concatDateAndTime, convertDatefunc, date_dmy_func, date_ymd_func, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { CommonConsole, concatDateAndTime, date_dmy_func,   loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 
 // customer dropdown click then table values display

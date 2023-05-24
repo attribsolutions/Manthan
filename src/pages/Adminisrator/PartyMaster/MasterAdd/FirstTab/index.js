@@ -36,6 +36,7 @@ const BaseTabForm = forwardRef((props, ref) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
     const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
+    const [isRetailer, setIsRetailer] = useState(false)
 
     const { values } = state;
     const { isError } = state;
@@ -108,8 +109,10 @@ const BaseTabForm = forwardRef((props, ref) => {
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
         label: index.Name,
-        division: index.IsDivision
+        division: index.IsDivision,
+        IsRetailer: index.IsRetailer
     }));
+
 
     const StateValues = stateRedux.map((index) => ({
         value: index.id,
@@ -132,9 +135,33 @@ const BaseTabForm = forwardRef((props, ref) => {
     }
 
     function partyTypeOnChange(hasSelect, evn) {
+        debugger
         onChangeSelect({ hasSelect, evn, state, setState })
         setPriceListSelect({ label: '' })
         dispatch(priceListByPartyAction(hasSelect.value))
+        if (hasSelect.IsRetailer === true) {
+            setState((i) => {
+             
+                const a = { ...i }
+                delete a.required.Email
+                delete a.required.SAPPartyCode
+                delete a.required.GSTIN
+                a.isError.Email = "";
+                a.isError.SAPPartyCode = "";
+                a.isError.GSTIN = "";
+                
+                return a
+            })
+        }
+        else {
+            setState((i) => {
+                const a = { ...i }
+                a.required.Email = true;
+                a.required.SAPPartyCode = true;
+                a.required.GSTIN = true;
+                return a
+            })
+        }
     }
 
     const priceListOnClick = function () {
@@ -148,7 +175,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                 hasNone.display = "none";
             }
         }
-       
+
     };
 
     const FirstTab = (
@@ -309,7 +336,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                                         onClick={priceListOnClick}
                                     >
                                     </Input>
-                                   
+
                                     <PriceDropOptions
                                         data={priceListByPartyType}
                                         priceList={priceListSelect}

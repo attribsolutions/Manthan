@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     Card,
@@ -9,28 +9,31 @@ import {
     FormGroup,
     Input,
     Label,
-    Row
+    Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AlertState } from "../../../store/actions";
+import {
+    AlertState,
+    Breadcrumb_inputName,
+    commonPageField,
+    commonPageFieldSuccess,
+    deleteGSTId_ForMaster,
+    deleteGSTId_ForMaster_Success,
+    getGSTList,
+    goButtonForGST_Master,
+    goButtonForGST_Master_Success,
+    saveGSTMaster,
+    saveGSTMasterSuccess,
+
+} from "../../../store/actions";
 import paginationFactory, {
     PaginationListStandalone,
-    PaginationProvider
+    PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { AvForm } from "availity-reactstrap-validation";
-import {
-    deleteGSTForMasterPage,
-    deleteGSTForMasterPageSuccess,
-    getGSTListPage,
-    postGoButtonForGST_Master,
-    postGoButtonForGST_Master_Success,
-    postGSTMasterData,
-    postGSTMasterDataSuccess
-} from "../../../store/Administrator/GSTRedux/action";
 import {
     breadcrumbReturnFunc,
     loginUserID,
@@ -38,38 +41,60 @@ import {
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { mode, pageId, url } from "../../../routes";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const formRef = useRef(null);
-    let editMode = history.location.pageMode;
+
+    const fileds = {
+        EffectiveDate: "",
+    }
+    
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //SetState  Edit data Geting From Modules List component
-    const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserAccState] = useState('');
-    const [effectiveDate, setEffectiveDate] = useState('');
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [userPageAccessState, setUserAccState] = useState("");
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const {
-        postMsg,
+    const { postMsg,
+        tableData,
         deleteMessage,
-        TableData,
         userAccess,
+        pageField
     } = useSelector((state) => ({
+        tableData: state.GSTReducer.GSTGoButton,
+        deleteMessage: state.GSTReducer.deleteMsgForMaster,
         postMsg: state.GSTReducer.postMsg,
-        deleteMessage: state.GSTReducer.deleteMsg,
-        TableData: state.GSTReducer.GSTGoButton,
         userAccess: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField
     }));
 
+    const { Data = [] } = tableData
+
+    useEffect(() => {
+        const page_Id = pageId.GST
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -89,40 +114,53 @@ const GSTMaster = (props) => {
 
     useEffect(() => {
 
-        const editDataGatingFromList = history.location.editValue
-
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (!(editDataGatingFromList === undefined)) {
-            document.getElementById("EffectiveDateid").disabled = true;
-
-            var effectiveDate = editDataGatingFromList.EffectiveDate
-
-            const jsonBody = JSON.stringify({
-                EffectiveDate: effectiveDate,
-            });
-            dispatch(postGoButtonForGST_Master(jsonBody));
-            setEffectiveDate(effectiveDate)
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
+    }, [pageField])
 
+    // hasShowloction && hasShowModal useEffect
     useEffect(() => {
-        dispatch(postGoButtonForGST_Master_Success([]));
-    }, [dispatch]);
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.page_Mode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+            }
+
+            if (hasEditVal) {
+
+                const { id, preEffectiveDate } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                values.EffectiveDate = preEffectiveDate
+                values.id = id
+
+                hasValid.EffectiveDate.valid = true;
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(Breadcrumb_inputName(hasEditVal.PriceListName))
+                seteditCreatedBy(hasEditVal.CreatedBy)
+            }
+        }
+        else {
+            dispatch(goButtonForGST_Master_Success({ Status: false }))
+        }
+    }, [])
 
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(postGSTMasterDataSuccess({ Status: false }))
-            setEffectiveDate('')
-
-            if (pageMode === "dropdownAdd") {
+            dispatch(saveGSTMasterSuccess({ Status: false }))
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -134,13 +172,13 @@ const GSTMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: "/GSTList",
+                    RedirectPath: url.GST_LIST,
                 }))
             }
         }
 
         else if (postMsg.Status === true) {
-            dispatch(postGSTMasterDataSuccess({ Status: false }))
+            dispatch(saveGSTMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -153,19 +191,19 @@ const GSTMaster = (props) => {
 
     useEffect(() => {
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-            dispatch(deleteGSTForMasterPageSuccess({ Status: false }));
-            dispatch(postGoButtonForGST_Master_Success([]))
+            dispatch(deleteGSTId_ForMaster_Success({ Status: false }));
+            dispatch(goButtonForGST_Master_Success([]))
             GoButton_Handler()
             dispatch(
                 AlertState({
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
-                    AfterResponseAction: getGSTListPage,
+                    AfterResponseAction: getGSTList,
                 })
             );
         } else if (deleteMessage.Status === true) {
-            dispatch(deleteGSTForMasterPageSuccess({ Status: false }));
+            dispatch(deleteGSTId_ForMaster_Success({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -176,27 +214,26 @@ const GSTMaster = (props) => {
         }
     }, [deleteMessage]);
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
-    const EffectiveDateHandler = (e, date) => {
-        setEffectiveDate(date)
-    }
+    const GoButton_Handler = (event) => {
 
-    const GSTPercentageHandler = (e, user) => {
-        user["GSTPercentage"] = e.target.value
-    }
+        if (values.EffectiveDate === '') {
+            customAlert({
+                Type: 4,
+                Message: "Please select EffectiveDate",
+            })
+            return
+        }
+        else {
+            const jsonBody = JSON.stringify({
+                EffectiveDate: values.EffectiveDate
+            });
 
-    const CurrentGSTPercentageHandler = (e, user) => {
-        user["CurrentGSTPercentage"] = e.target.value
-    }
+            dispatch(goButtonForGST_Master({ jsonBody }));
+        }
+    };
 
-    const CurrentHSNCodeHandler = (e, user) => {
-        user["GSTPercentage"] = e.target.value
-    }
-
-    const HSNCodeHandler = (e, user) => {
-        user["HSNCode"] = e.target.value
-    }
     //select id for delete row
     const deleteHandeler = (id, name) => {
         dispatch(
@@ -205,26 +242,15 @@ const GSTMaster = (props) => {
                 Status: true,
                 Message: `Are you sure you want to delete this Item : "${name}"`,
                 RedirectPath: false,
-                PermissionAction: deleteGSTForMasterPage,
+                PermissionAction: deleteGSTId_ForMaster,
                 ID: id,
             })
-        );
-    };
-
-    const GoButton_Handler = () => {
-
-        const jsonBody = JSON.stringify({
-            EffectiveDate: effectiveDate,
-        });
-        if (!(effectiveDate)) {
-            alert("EffectiveDate not select")
-        }
-        dispatch(postGoButtonForGST_Master(jsonBody))
+        )
     };
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: TableData.length,
+        totalSize: Data.length,
         custom: true,
     };
 
@@ -233,235 +259,232 @@ const GSTMaster = (props) => {
             text: "Item Name",
             dataField: "Name",
             sort: true,
+            headerStyle: () => { return { width: '300px' } },
         },
         {
             text: "Current GSTPercentage",
             dataField: "CurrentGSTPercentage",
             sort: true,
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    id=""
-                                    type="text"
-                                    disabled={true}
-                                    defaultValue={cellContent}
-                                    className="col col-sm text-end"
-                                    onChange={(e) => CurrentGSTPercentageHandler(e, user)}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
+            headerStyle: () => { return { width: '200px' } },
+            formatter: (cellContent, row) => {
+                return (<span style={{ justifyContent: 'center' }}>
+                    < Input
+                        key={`CurrentGSTPercentage${row.Item}`}
+                        id=""
+                        type="text"
+                        disabled={true}
+                        defaultValue={cellContent}
+                        className="col col-sm text-end"
+                        onChange={(e) => { row["CurrentGSTPercentage"] = e.target.value }}
+                    />
+                </span>)
+            },
         },
-        {
 
-            text: "GSTPercentage ",
+        {
+            text: "GSTPercentage",
             dataField: "GSTPercentage",
             sort: true,
-            formatter: (cellContent, user, key) => {
-                if (((cellContent > 0) && (user["GSTPerDis"] === undefined) || user.GSTPerDis)) {
-                    user["GSTPerDis"] = true
+            headerStyle: () => { return { width: '200px' } },
+            formatter: (cellContent, row, key) => {
+                if (((cellContent > 0) && (row["GSTPerDis"] === undefined) || row.GSTPerDis)) {
+                    row["GSTPerDis"] = true
                 } else {
-                    user["GSTPerDis"] = false
+                    row["GSTPerDis"] = false
                 }
                 return (
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    type="text"
-                                    defaultValue={cellContent}
-                                    disabled={user.GSTPerDis}
-                                    className="col col-sm text-end"
-                                    onChange={(e) => GSTPercentageHandler(e, user)}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
+                    <span style={{ justifyContent: 'center' }}>
 
+                        <CInput
+                            key={`GSTPercentage${row.Item}`}
+                            id=""
+                            cpattern={decimalRegx}
+                            type="text"
+                            defaultValue={cellContent}
+                            disabled={row.GSTPerDis}
+                            className="col col-sm text-end"
+                            onChange={(e) => { row["GSTPercentage"] = e.target.value }}
+                        />
+
+                    </span>
                 )
             },
         },
+
         {
             text: "Current HSNCode",
             dataField: "CurrentHSNCode",
             sort: true,
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    id=""
-                                    type="text"
-                                    disabled={true}
-                                    defaultValue={cellContent}
-                                    className="col col-sm text-end"
-                                    onChange={(e) => CurrentHSNCodeHandler(e, user)}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
+            headerStyle: () => { return { width: '200px' } },
+            formatter: (cellContent, row) => {
+                return (<span style={{ justifyContent: 'center' }}>
+                    < Input
+                        key={`CurrentHSNCode${row.Item}`}
+                        id=""
+                        type="text"
+                        disabled={true}
+                        defaultValue={cellContent}
+                        className="col col-sm "
+                        onChange={(e) => { row["CurrentHSNCode"] = e.target.value }}
+                    />
+                </span>)
+            },
         },
+
         {
 
             text: "HSNCode ",
             dataField: "HSNCode",
             sort: true,
-            formatter: (cellContent, user, key) => {
-                if (((cellContent > 0) && (user["hsncodeDis"] === undefined) || user.hsncodeDis)) {
-                    user["hsncodeDis"] = true
+            headerStyle: () => { return { width: '200px' } },
+            formatter: (cellContent, row, key) => {
+                if (((cellContent > 0) && (row["hsncodeDis"] === undefined) || row.hsncodeDis)) {
+                    row["hsncodeDis"] = true
                 } else {
-                    user["hsncodeDis"] = false
+                    row["hsncodeDis"] = false
                 }
                 return (
+                    <span style={{ justifyContent: 'center' }}>
 
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    type="text"
-                                    defaultValue={cellContent}
-                                    disabled={user.hsncodeDis}
-                                    className="col col-sm text-end"
-                                    onChange={(e) => HSNCodeHandler(e, user)}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
+                        <CInput
+                            key={`HSNCode${row.Item}`}
+                            type="text"
+                            cpattern={decimalRegx}
+                            defaultValue={cellContent}
+                            disabled={row.hsncodeDis}
+                            className="col col-sm "
+                            onChange={(e) => { row["HSNCode"] = e.target.value }}
+                        />
+
+                    </span>
 
                 )
             },
         },
+
         {
             text: "Action ",
             dataField: "",
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                {!(user.id === '') ?
-                                    <Button
-                                        id={"deleteid"}
-                                        type="button"
-                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                        onClick={() => { deleteHandeler(user.id, user.Name); }}
-                                    >
-                                        <i className="mdi mdi-delete font-size-18"></i>
-                                    </Button> : <></>}
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
+            headerStyle: () => {
+                return { width: '100px' };
+            },
+            formatter: (cellContent, user) => {
+                return (
+                    <span className="d-flex justify-content-center align-items-center">
+                        {!(user.id === '') &&
+                            <Button
+                                id={"deleteid"}
+                                type="button"
+                                className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
+                                onClick={() => { deleteHandeler(user.id, user.Name); }}
+                            >
+                                <i className="mdi mdi-delete font-size-18"></i>
+                            </Button>}
+                    </span>
+                )
+            }
         },
     ]
 
+    const SaveHandler = async (event) => {
+        event.preventDefault();
+        const btnId = event.target.id
+        try {
 
-    //'Save' And 'Update' Button Handller
-    const handleValidSubmit = () => {
-        var ItemData = TableData.map((index) => ({
-            EffectiveDate: effectiveDate,
-            Company: loginCompanyID(),
-            CreatedBy: loginUserID(),
-            IsDeleted: 0,
-            UpdatedBy: loginUserID(),
-            Item: index.Item,
-            GSTPercentage: index.GSTPercentage,
-            HSNCode: index.HSNCode,
-            id: index.id
-        }))
+            _cfunc.btnIsDissablefunc({ btnId, state: true })
 
+            var ItemData = Data.map((index) => ({
+                EffectiveDate: values.EffectiveDate,
+                Company: loginCompanyID(),
+                CreatedBy: loginUserID(),
+                IsDeleted: 0,
+                UpdatedBy: loginUserID(),
+                Item: index.Item,
+                GSTPercentage: index.GSTPercentage,
+                HSNCode: index.HSNCode,
+                id: index.id
+            }))
 
-        const Find = ItemData.filter((index) => {
-            return (!(index.GSTPercentage === '') && !(index.HSNCode === '') && (index.id === ''))
-        })
+            const filterData = ItemData.filter((index) => {
+                return (!(index.GSTPercentage === '') && !(index.HSNCode === '') && (index.id === ''))
+            })
 
-        const jsonBody = JSON.stringify(Find)
+            const jsonBody = JSON.stringify(filterData)
 
-        if (!(Find.length > 0) && !(editMode)) {
-            alert("At Least one MRP add")
-        }
-        else {
-            dispatch(postGSTMasterData(jsonBody));
-            console.log("jsonBody", jsonBody)
-        }
+            if (!(filterData.length > 0)) {
+                dispatch(
+                    AlertState({
+                        Type: 4,
+                        Status: true,
+                        Message: "Please Enter One GSTPercentage & HSNCode",
+                    })
+                );
+                return _cfunc.btnIsDissablefunc({ btnId, state: false })
+            }
+            else {
+                dispatch(saveGSTMaster(jsonBody));
+            }
 
-
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-
                 <Container fluid>
-                    <AvForm
-                        onValidSubmit={(e, v) => {
-                            handleValidSubmit(e, v);
-                        }}
-                        ref={formRef}
-                    >
 
-                        <Card className="text-black">
-                            <CardHeader className="card-header   text-black c_card_header"  >
+                    <form noValidate>
+                        <Card className="text-black ">
+                            <CardHeader className="card-header  text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
+                            <CardBody className=" vh-10 0 text-black" style={{ marginBottom: "4cm" }}>
 
-                            <CardBody>
-                                <Row className="">
-                                    <Col md={12}>
-                                        <Card style={{ backgroundColor: "whitesmoke" }}>
+                                <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
+                                    <CardHeader className="c_card_body"  >
+                                        <Row className="mt-3">
 
-                                            <CardHeader className="card-header   text-black c_card_body"  >
-                                                <Row className="mt-2">
-                                                    <Col md="6">
-                                                        <FormGroup className="mb-4 row">
-                                                            <Label className="col-md-4">EffectiveDate</Label>
-                                                            <Col md="8">
-                                                                <C_DatePicker
-                                                                    id="EffectiveDateid"
-                                                                    name="effectiveDate"
-                                                                    placeholder = "Please Enter EffectiveDate"
-                                                                    value={effectiveDate}
-                                                                    onChange={EffectiveDateHandler}
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
+                                            <Col sm={4}>
+                                                <FormGroup className="mb-3 row ">
+                                                    <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>{fieldLabel.EffectiveDate}</Label>
+                                                    <Col sm={8}>
+                                                        <C_DatePicker
+                                                            id="EffectiveDate"
+                                                            name="EffectiveDate"
+                                                            placeholder={"DD/MM/YYYY"}
+                                                            value={values.EffectiveDate}
+                                                            isDisabled={pageMode === mode.edit ? true : false}
+                                                            onChange={(y, v, e) => {
+                                                                onChangeDate({ e, v, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.EffectiveDate.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.EffectiveDate}</span>
+                                                        )}
                                                     </Col>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col sm={1}>
+                                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
+                                                    onClick={(event) => { GoButton_Handler(event) }} >Go</Button>
+                                            </Col>
+                                        </Row>
+                                    </CardHeader>
+                                </Card>
 
-                                                    <Col md="2">
-                                                        <Button type="button" color="btn btn-outline-success border-2 font-size-12  "
-                                                            className="mt-n2"
-                                                            onClick={() => { GoButton_Handler() }} >Go</Button>
-
-                                                    </Col>
-
-                                                </Row>
-
-                                            </CardHeader>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                                {TableData.length > 0 ?
+                                {Data.length > 0 ?
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="id"
-                                                data={TableData}
+                                                keyField="Item"
+                                                data={Data}
                                                 columns={pagesListColumns}
                                                 search
                                             >
@@ -471,7 +494,7 @@ const GSTMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"id"}
+                                                                        keyField={"Item"}
                                                                         id="table_Arrow"
                                                                         responsive
                                                                         bordered={false}
@@ -493,43 +516,29 @@ const GSTMaster = (props) => {
                                                 )}
                                             </ToolkitProvider>
                                         )}
-
                                     </PaginationProvider>
                                     : null}
-                                {TableData.length > 0 ?
-                                    <div>
-                                        {
-                                            (editMode) ?
-                                                <button
-                                                    type="submit"
-                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
-                                                    className="btn btn-success w-md mt-3"
-                                                >
-                                                    <i class="fas fa-edit me-2"></i>Update
-                                                </button>
-                                                : <button
-                                                    type="submit"
-                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
-                                                    className="btn btn-primary w-md mt-3 "
-                                                > <i className="fas fa-save me-2"></i> Save
-                                                </button>
-                                        }
-                                    </div>
-                                    : null}
+
+                                {Data.length > 0 ?
+                                    <FormGroup>
+                                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                            <SaveButton pageMode={pageMode}
+                                                onClick={SaveHandler}
+                                                userAcc={userPageAccessState}
+                                                editCreatedBy={editCreatedBy}
+                                            />
+                                        </Col>
+                                    </FormGroup >
+                                    : null
+                                }
 
                             </CardBody>
                         </Card>
-                    </AvForm>
+                    </form>
                 </Container>
             </div>
         </React.Fragment>
     )
 }
 
-
 export default GSTMaster
-
-
-
-
-

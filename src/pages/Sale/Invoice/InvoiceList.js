@@ -241,6 +241,7 @@ const InvoiceList = () => {
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make GRN"}
                             filters={hederFilters}
+                            forceNewBtnView={false}
                         />
                         : null
                 }

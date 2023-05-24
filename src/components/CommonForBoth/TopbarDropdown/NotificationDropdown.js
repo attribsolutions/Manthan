@@ -26,7 +26,7 @@ const NotificationDropdown = props => {
         className="dropdown d-inline-block"
         tag="li"
       >
-        <DropdownToggle
+        {/* <DropdownToggle
           className="btn header-item noti-icon position-relative"
           tag="button"
           id="page-header-notifications-dropdown"
@@ -34,9 +34,9 @@ const NotificationDropdown = props => {
           <FeatherIcon
             icon="bell"
             className="icon-lg"
-          />
-          <span className="badge bg-danger rounded-pill">5</span>
-        </DropdownToggle>
+          /> */}
+          {/* <span className="badge bg-danger rounded-pill">5</span>
+        </DropdownToggle> */}
 
         <DropdownMenu className="dropdown-menu-lg dropdown-menu-end p-0">
           <div className="p-3">

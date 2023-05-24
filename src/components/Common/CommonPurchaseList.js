@@ -74,10 +74,10 @@ const CommonPurchaseList = (props) => {
     pageField = { id: "" },
     tableList = [],
   } = props.reducers;
-
+  
   const { getList, editId, deleteId, postSucc, updateSucc, deleteSucc } =
-    props.action;
-
+  props.action;
+  
   const {
 
     editBodyfunc,
@@ -95,10 +95,11 @@ const CommonPurchaseList = (props) => {
     downBtnFunc = () => { },
     pageMode,
     newBtnPath,
+    forceNewBtnView,
     HeaderContent = () => {
       return null;
     },
-    orderApproval,
+    oderAprovalBtnFunc,
 
   } = props;
 
@@ -111,7 +112,7 @@ const CommonPurchaseList = (props) => {
     });
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath });
+      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath, forceNewBtnView });
     }
   }, [userAccess]);
 
@@ -185,7 +186,7 @@ const CommonPurchaseList = (props) => {
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
 
-    if ((editData.Status === true) && !(editData.pageMode === mode.orderApproval)) {
+    if ((editData.Status === true) ) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
           pathname: masterPath,
@@ -195,10 +196,10 @@ const CommonPurchaseList = (props) => {
       } else {
         setmodal_edit(true);
       }
-    } else if (((editData.Status === true) && (editData.pageMode === mode.orderApproval))) {
-      orderApproval(editData)
     }
   }, [editData]);
+
+
 
   function makeBtnHandler(rowData) {
     rowData["hasSelect"] = true;
@@ -229,7 +230,7 @@ const CommonPurchaseList = (props) => {
         sort: true,
         formatter: (cellContent, rowData, key) => {
           rowData["hasSelect"] = false;
-        
+
           return (
             <div>
               <Button
@@ -273,7 +274,7 @@ const CommonPurchaseList = (props) => {
       copyBodyfunc: copyBodyfunc,
       makeBtnFunc: makeBtnFunc,
       pageMode: pageMode,
-      orderApproval: orderApproval
+      oderAprovalBtnFunc: oderAprovalBtnFunc
     })
 
   }
@@ -322,7 +323,7 @@ const CommonPurchaseList = (props) => {
                           />
                         </div>
                       </Col>
-                      
+
                       {countlabelFunc(
                         toolkitProps,
                         paginationProps,

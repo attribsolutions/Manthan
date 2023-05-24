@@ -1,249 +1,150 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Row } from "reactstrap";
-import paginationFactory, {
-  PaginationListStandalone,
-  PaginationProvider,
-} from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import { AlertState } from "../../../store/actions";
-import "../../../assets/scss/CustomTable2/datatables.scss";
-import { MetaTags } from "react-meta-tags";
-import { useHistory } from "react-router-dom";
 import {
-  delete_MRPList,
-  delete_MRPListSuccess,
-  getMRPListPage,
-} from "../../../store/Administrator/MRPMasterRedux/action";
-import { countlabelFunc } from "../../../components/Common/CommonMasterListPage"
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import * as url from "../../../routes/route_url"
-import { breadcrumbReturnFunc, metaTagLabel } from "../../../components/Common/CommonFunction";
+  BreadcrumbShowCountlabel,
+  commonPageFieldList,
+  commonPageFieldListSuccess
+} from "../../../store/actions";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
+import { useHistory } from "react-router-dom";
+import { url, mode, pageId } from "../../../routes/index"
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import * as _act from "../../../store/actions";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { deleteMRPList_Id, deleteMRPList_Id_Success, getMRPList, GoButtonForMRP_MasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+import MRPMaster from "./MRPMaster";
 
-const MRPList = (props) => {
+const MRPList = () => {
 
   const dispatch = useDispatch();
-  const history = useHistory()
-  const [userPageAccessState, setUserAccState] = useState('');
+  const history = useHistory();
+  const hasPagePath = history.location.pathname
 
+  const [pageMode, setpageMode] = useState(mode.defaultsave)
+  const [userAccState, setUserAccState] = useState('');
 
-  // get Access redux data
-  const {
-    tableList,
-    deleteMsg,
-    userAccess, } = useSelector(
-      (state) => ({
-        tableList: state.MRPMasterReducer.MRPList,
-        deleteMsg: state.MRPMasterReducer.deleteMsg,
-        userAccess: state.Login.RoleAccessUpdateData,
-        postMsg: state.MRPMasterReducer.postMsg,
-        pageField: state.CommonPageFieldReducer.pageFieldList
-      })
-    );
-
-  useEffect(() => {
-    const locationPath = history.location.pathname
-    let userAcc = userAccess.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
+  const reducers = useSelector(
+    (state) => ({
+      tableList: state.MRPMasterReducer.MRPList,
+      MRPGoButton: state.MRPMasterReducer.MRPGoButton,
+      deleteMsg: state.MRPMasterReducer.deleteMsg,
+      userAccess: state.Login.RoleAccessUpdateData,
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
-    if (!(userAcc === undefined)) {
-      setUserAccState(userAcc);
-      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath: url.MRP });
-    }
-  }, [userAccess])
+  );
 
-  //  This UseEffect => Featch Modules List data  First Rendering
+  const { userAccess, pageField, MRPGoButton, deleteMsg } = reducers;
+
+  const action = {
+    getList: getMRPList,
+    deleteId: deleteMRPList_Id,
+    deleteSucc: deleteMRPList_Id_Success
+  }
+  const page_Id = pageId.MRP_lIST
+
+  // Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getMRPListPage());
+    setpageMode(hasPagePath)
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(page_Id))
+    dispatch(BreadcrumbShowCountlabel(`${"MRP Count"} :0`))
+    dispatch(getMRPList())
+
   }, []);
 
   useEffect(() => {
-    if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
-      dispatch(delete_MRPListSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: deleteMsg.Message,
-          AfterResponseAction: getMRPListPage,
-        })
-      );
-    } else if (deleteMsg.Status === true) {
-      dispatch(delete_MRPListSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(deleteMsg.Message),
-        })
-      );
-    }
-  }, [deleteMsg.Status]);
-
-  //select id for delete row
-  const deleteHandeler = (CommonID) => {
-    dispatch(
-      AlertState({
-        Type: 5,
-        Status: true,
-        Message: `Are you sure you want to delete this MRP List `,
-        RedirectPath: false,
-        PermissionAction: delete_MRPList,
-        ID: CommonID,
-      })
-    );
-  };
-
-  const EditPageHandler = (rowData) => {
-    let RelatedPageID = userPageAccessState.RelatedPageID
-
-    const found = userAccess.find((element) => {
-      return element.id === RelatedPageID
+    let userAcc = userAccess.find((inx) => {
+      return (inx.id === page_Id)
     })
+    if (!(userAcc === undefined)) {
+      setUserAccState(userAcc)
+    }
+  }, [userAccess])
 
-    if (!(found === undefined)) {
+  useEffect(() => {
+
+    if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
+      dispatch(deleteMRPList_Id_Success([]))
+      dispatch(getMRPList())
+    }
+  }, [deleteMsg]);
+
+  useEffect(() => {
+
+    if (MRPGoButton.Status === true && MRPGoButton.StatusCode === 200) {
+      dispatch(GoButtonForMRP_MasterSuccess({ ...MRPGoButton, Status: false }))
       history.push({
-        pathname: `/${found.ActualPagePath}`,
-        editValue: rowData,
-        pageMode: 'edit'
+        pathname: MRPGoButton.pathname,
+        page_Mode: MRPGoButton.pageMode,
+        editValue: MRPGoButton.rowData
       })
+    }
+  }, [MRPGoButton]);
+
+  function editBodyfunc(index) {
+    debugger
+    const { rowData, btnId } = index
+    let { Division_id, Party_id, preEffectiveDate } = rowData;
+    _cfunc.btnIsDissablefunc({ btnId, state: true })
+
+    try {
+      const jsonBody = JSON.stringify({
+        Division: Division_id === null ? 0 : Division_id,
+        Party: Party_id === null ? 0 : Party_id,
+        EffectiveDate: preEffectiveDate
+      })
+      let config = { jsonBody, pathname: url.MRP, btnmode: mode.edit, rowData: rowData }
+      // sessionStorage.setItem("margin_Master", config)
+      dispatch(_act.GoButtonForMRP_Master(config));
+    } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+  }
+
+  async function deleteBodyfunc(index) {
+
+    const { rowData, btnId } = index
+    if (rowData.CommonID) {
+      const rep = await customAlert({
+        Type: 8,
+        Message: `Are you sure you want to delete this ${"EffectiveDate"}: "${rowData.EffectiveDate}"`,
+      })
+      if (rep) {
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
+        let config = { btnId, deleteId: rowData.CommonID }
+        try {
+          dispatch(deleteMRPList_Id(config))
+        }
+        catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+      }
     }
   }
 
-  const pageOptions = {
-    sizePerPage: 10,
-    totalSize: tableList.length,
-    custom: true,
-  };
+  return (
+    <React.Fragment>
+      <div className="page-content">
 
-  const pagesListColumns = [
-    {
-      text: "EffectiveDate",
-      dataField: "EffectiveDate",
-      sort: true,
-    },
-    {
-      text: "DivisionName",
-      dataField: "DivisionName",
-      sort: true,
-    },
-    {
-      text: "PartyName",
-      dataField: "PartyName",
-      sort: true,
-    },
-    {
-      text: "Action",
-      hidden: (
-        !(userPageAccessState.RoleAccess_IsEdit)
-        && !(userPageAccessState.RoleAccess_IsView)
-        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
-
-      formatter: (cellContent, Role) => (
-        <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {((userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
-            <Button
-              type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Effective Date"
-              onClick={() => { EditPageHandler(Role); }}
-              className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-            >
-              <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </Button>
-            :
-            null}
-
-          {(!(userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userPageAccessState.RoleAccess_IsView)) ?
-            <Button
-              type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Effective Date"
-              onClick={() => { EditPageHandler(Role); }}
-              className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-
-            >
-              <i className="bx bxs-show font-size-18 "></i>
-            </Button> : null}
-
-          {((userPageAccessState.RoleAccess_IsDelete) && (Role.CommonID > 0))
-            ?
-            <Button
-              className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Effective Date"
-              onClick={() => { deleteHandeler(Role.CommonID) }}
-            >
-              <i className="mdi mdi-delete font-size-18"></i>
-            </Button>
-            : null
+        <div className="mt-n1">
+          {
+            (pageField) ?
+              <CommonPurchaseList
+                action={action}
+                reducers={reducers}
+                showBreadcrumb={false}
+                MasterModal={MRPMaster}
+                masterPath={url.MRP}
+                newBtnPath={url.MRP}
+                ButtonMsgLable={"MRP"}
+                deleteName={"EffectiveDate"}
+                pageMode={pageMode}
+                editBodyfunc={editBodyfunc}
+                deleteBodyfunc={deleteBodyfunc}
+              />
+              : null
           }
         </div>
-      ),
-    },
-  ];
 
-  if (!(userPageAccessState === '')) {
-    return (
-      <React.Fragment>
-        <div className="page-content">
-        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-  
-          <PaginationProvider
-            pagination={paginationFactory(pageOptions)}
-          >
-            {({ paginationProps, paginationTableProps }) => (
-              <ToolkitProvider
-                keyField='id'
-                columns={pagesListColumns}
-                data={tableList}
-                search
-              >
-                {toolkitProps => (
-                  <React.Fragment>
-                    <div className="table-responsive">
-                      <BootstrapTable
-                        keyField={"id"}
-                        responsive
-                        bordered={true}
-                        striped={false}
-                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                        classes={"table align-middle table-nowrap table-hover"}
-                        headerWrapperClasses={"thead-light"}
-
-                        {...toolkitProps.baseProps}
-                        {...paginationTableProps}
-                      />
-                      {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                      {mySearchProps(toolkitProps.searchProps)}
-                    </div>
-
-                    <Row className="align-items-md-center mt-30">
-                      <Col className="pagination pagination-rounded justify-content-end mb-2">
-                        <PaginationListStandalone
-                          {...paginationProps}
-
-                        />
-                      </Col>
-                    </Row>
-                  </React.Fragment>
-                )
-                }
-              </ToolkitProvider>
-            )
-            }
-
-          </PaginationProvider>
-        </div>
-
-      </React.Fragment>
-    );
-  }
-  else {
-    return (
-      <React.Fragment></React.Fragment>
-    )
-  }
+      </div>
+    </React.Fragment>
+  )
 }
 
 export default MRPList;
-
-

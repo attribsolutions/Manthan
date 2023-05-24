@@ -321,7 +321,7 @@ const Challan = (props) => {
                                         </td>
                                         <td>
                                             <div style={{ width: "100px" }}>
-                                                {_cfunc.convertDatefunc(index1.BatchDate)}
+                                                {_cfunc.date_dmy_func(index1.BatchDate)}
                                             </div>
                                         </td>
                                         <td>

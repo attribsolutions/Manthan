@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import {
   BOMList_Get_API,
   Post_WorkOrder_Master_API,
@@ -59,7 +59,7 @@ function* GetWorkOrderGenFunc({ filters }) {                                    
     const response = yield call(WorkOrder_Get_API, filters);
     const newList = yield response.Data.map((i) => {
       i.WorkDate = i.WorkOrderDate;
-      var date = convertDatefunc(i.WorkOrderDate)
+      var date = date_dmy_func(i.WorkOrderDate)
       var time = convertTimefunc(i.CreatedOn)
       i.WorkOrderDate = (`${date} ${time}`)
       return i

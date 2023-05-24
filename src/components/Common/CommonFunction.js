@@ -115,19 +115,12 @@ export function convertOnlyTimefunc(inputDate) { //+++++++++++Convert Time Forma
 }
 
 export function concatDateAndTime(date, time) {//+++++++++++time and date concate +++++++++++++++++++++++++++++++
-  const d = convertDatefunc(date);
+  const d = date_dmy_func(date);
   const t = convertTimefunc(time);
   return `${d} ${t}`;
 }
 
-export function convertDatefunc(inputDate) { // +++++++++++Convert Date Format+++++++++++++++++++++++++++++++
-  const date = new Date(inputDate);
-  let month = date.getMonth() + 1;
 
-  let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`
-    }-${month < 10 ? `0${month}` : `${month}`}-${date.getFullYear()}`;
-  return convDate;
-}
 
 
 
@@ -247,7 +240,7 @@ export const loginJsonBody = () => ({
 });
 
 
-export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "" }) {
+export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true }) {
   const isnewBtnView = userAcc.PageType === 2 && userAcc.RoleAccess_IsSave;
   const isCountLabel = userAcc.CountLabel;
   const isexcelBtnView =
@@ -255,7 +248,7 @@ export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "" }) {
   dispatch(
     CommonBreadcrumbDetails({
       newBtnPath: newBtnPath,
-      newBtnView: isnewBtnView,
+      newBtnView: !forceNewBtnView ? forceNewBtnView : isnewBtnView,
       excelBtnView: isexcelBtnView,
       pageHeading: userAcc.PageHeading,
       CountLabel: isCountLabel,
@@ -291,10 +284,17 @@ export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Func
 }
 
 export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Button Dissable and Sppiner Function +++++++++++++++++++++++++++++++
- 
+
   if (btnId) {
     try {
-      document.getElementById(btnId).disabled = state;
+     let btn= document.getElementById(btnId);
+     btn .disabled = state
+// if(state){
+//   btn.innerText='Loging'
+// }else{
+//   btn.innerText=""
+
+// }
 
       // document.getElementById("overlay").style.display = true
       //   ? "block"

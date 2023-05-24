@@ -35,7 +35,7 @@ export const listPageActionsButtonFunc = (props) => {
         pageMode,
         makeBtnName,
         makeBtnShow = false,
-        orderApproval = false,
+        oderAprovalBtnFunc,
     } = props;
 
     function editHandler(rowData, btnmode, btnId) {
@@ -88,6 +88,7 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     async function deleteHandler(rowData, btnId) {
+        
         try {
             if (deleteBodyfunc) {
                 const config = { rowData, subPageMode, btnId }
@@ -119,7 +120,7 @@ export const listPageActionsButtonFunc = (props) => {
         arr.push(rowData)
         makeBtnFunc(arr)
     }
-
+   
     return ({
         text: "Action",
         hidden:
@@ -130,8 +131,9 @@ export const listPageActionsButtonFunc = (props) => {
                     && !(userAccState.RoleAccess_IsView)
                     && !(userAccState.RoleAccess_IsDelete)
                     && !(userAccState.RoleAccess_IsDeleteSelf)
-                    && !(userAccState.RoleAccess_IsEditSelf) ? true : false
-                && !(makeBtnShow)),
+                    && !(userAccState.RoleAccess_IsEditSelf)
+                    && !(makeBtnShow) ? true : false
+            ),
 
         formatter: (cellContent, rowData) => {
 
@@ -322,7 +324,7 @@ export const listPageActionsButtonFunc = (props) => {
                             : null
                     }
                     {
-                        ((orderApproval) && (userAccState.RoleAccess_IsView)) ?
+                        ((oderAprovalBtnFunc)) ?
                             <Button
                                 type="button"
                                 id={`btn-orderApproval-${rowData.id}`}
@@ -330,7 +332,7 @@ export const listPageActionsButtonFunc = (props) => {
                                 title={`Order Approval ${ButtonMsgLable}`}
                                 onClick={() => {
                                     const btnId = `btn-orderApproval-${rowData.id}`;
-                                    editHandler(rowData, mode.orderApproval, btnId)
+                                    oderAprovalBtnFunc(rowData, mode.orderApproval, btnId)
                                 }}
                             >
                                 <i className="bx bx-check-shield font-size-20"></i>

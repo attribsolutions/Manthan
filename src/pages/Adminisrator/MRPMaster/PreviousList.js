@@ -14,11 +14,11 @@ import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
-  delete_MRPList,
-  delete_MRPListSuccess,
+  deleteMRPList_Id,
+  deleteMRPList_Id_Success,
   editMRPList,
-  getMRPListPage,
-  postMRPMasterDataSuccess,
+  getMRPList,
+  saveMRPMasterSuccess,
   updateMRPListSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import MRPMaster from "./MRPMaster"
@@ -54,7 +54,7 @@ const MRPList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getMRPListPage());
+    dispatch(getMRPList());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
@@ -67,7 +67,7 @@ const MRPList = (props) => {
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getMRPListPage,
+          AfterResponseAction: getMRPList,
         })
       );
       tog_center();
@@ -85,17 +85,17 @@ const MRPList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(delete_MRPListSuccess({ Status: false }));
+      dispatch(deleteMRPList_Id_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getMRPListPage,
+          AfterResponseAction: getMRPList,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(delete_MRPListSuccess({ Status: false }));
+      dispatch(deleteMRPList_Id_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -109,9 +109,9 @@ const MRPList = (props) => {
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-      dispatch(postMRPMasterDataSuccess({ Status: false }))
+      dispatch(saveMRPMasterSuccess({ Status: false }))
       tog_center();
-      dispatch(getMRPListPage());
+      dispatch(getMRPList());
       dispatch(AlertState({
         Type: 1,
         Status: true,
@@ -120,7 +120,7 @@ const MRPList = (props) => {
     }
 
     else if ((PostAPIResponse.Status === true)) {
-      dispatch(postMRPMasterDataSuccess({ Status: false }))
+      dispatch(saveMRPMasterSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
@@ -150,7 +150,7 @@ const MRPList = (props) => {
         Status: true,
         Message: `Are you sure you want to delete this MRP List : "${name}"`,
         RedirectPath: false,
-        PermissionAction: delete_MRPList,
+        PermissionAction: deleteMRPList_Id,
         ID: id,
       })
     );
@@ -321,11 +321,11 @@ export default MRPList;
 // import React, { useEffect, useState } from "react";
 // import { useSelector, useDispatch } from "react-redux";
 // import {
-//   delete_MRPList,
-//   delete_MRPListSuccess,
+//   deleteMRPList_Id,
+//   deleteMRPList_Id_Success,
 //   editMRPList,
-//   getMRPListPage,
-//   postMRPMasterDataSuccess,
+//   getMRPList,
+//   saveMRPMasterSuccess,
 //   updateMRPListSuccess
 // } from "../../../store/Administrator/MRPMasterRedux/action";
 // import MRPMaster from "./MRPMaster"
@@ -349,12 +349,12 @@ export default MRPList;
 //     );
 
 //     const action = {
-//       getList: getMRPListPage,
+//       getList: getMRPList,
 //       editId: editMRPList,
-//       deleteId: delete_MRPList,
-//       postSucc: postMRPMasterDataSuccess,
+//       deleteId: deleteMRPList_Id,
+//       postSucc: saveMRPMasterSuccess,
 //       updateSucc: updateMRPListSuccess,
-//       deleteSucc: delete_MRPListSuccess
+//       deleteSucc: deleteMRPList_Id_Success
 //     }
   
 
@@ -362,7 +362,7 @@ export default MRPList;
 //   useEffect(() => {
 //     dispatch(commonPageFieldListSuccess(null))
 //     dispatch(commonPageFieldList(96))
-//     dispatch(getMRPListPage());
+//     dispatch(getMRPList());
 //   }, []);
 
 //   const { pageField } = reducers

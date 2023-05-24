@@ -16,7 +16,7 @@ const monthData = [
         id: 1,
         title: "Stater",
         price: "29",
-        desc: "For small teams trying out Minia for an unlimited period of time"
+        desc: "For small teams trying out FoodERP 2.0 for an unlimited period of time"
     },
     {
         id: 2,
@@ -35,7 +35,7 @@ const monthData = [
         id: 3,
         title: "Unlimited",
         price: "99",
-        desc: "For small teams trying out Minia for an unlimited period of time"
+        desc: "For small teams trying out FoodERP 2.0 for an unlimited period of time"
     },
 ];
 
@@ -44,7 +44,7 @@ const yearData = [
         id: 1,
         title: "Stater",
         price: "129",
-        desc: "For small teams trying out Minia for an unlimited period of time"
+        desc: "For small teams trying out FoodERP 2.0 for an unlimited period of time"
     },
     {
         id: 2,
@@ -63,7 +63,7 @@ const yearData = [
         id: 3,
         title: "Unlimited",
         price: "199",
-        desc: "For small teams trying out Minia for an unlimited period of time"
+        desc: "For small teams trying out FoodERP 2.0 for an unlimited period of time"
     },
 ];
 
@@ -74,7 +74,7 @@ const PagePricing = () => {
         <React.Fragment>
             <div className="page-content">
                 <MetaTags>
-                    <title>Pricing Page | Minia - React Admin & Dashboard Template</title>
+                    <title>Pricing Page | FoodERP 2.0 - React Admin & Dashboard Template</title>
                 </MetaTags>
                 <Container fluid>
                     {/* Render Breadcrumbs */}
@@ -155,7 +155,7 @@ const PagePricing = () => {
                                                         <i className="bx bx-check-circle h3 mb-0 me-4"></i>
                                                         <div className="flex-1">
                                                             <h2 className="fw-medium">$29 <span className="text-muted font-size-15">/ Month Plans</span></h2>
-                                                            <p className="fw-normal mb-0 text-muted">For small teams trying out Minia for an unlimited period of time</p>
+                                                            <p className="fw-normal mb-0 text-muted">For small teams trying out FoodERP 2.0 for an unlimited period of time</p>
                                                         </div>
                                                     </div>
                                                 </NavLink>

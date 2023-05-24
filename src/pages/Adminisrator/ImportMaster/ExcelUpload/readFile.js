@@ -5,14 +5,11 @@ import { customAlert } from '../../../../CustomAlert/ConfirmDialog';
 const XLSX = require('xlsx');
 
 
-export const readExcelFile = async ({ file, compareParam }) => {
-
+export const readExcelFile = async ({ file, compareParameter }) => {
+debugger
 
   try {
-    // const progDiv = document.getElementById("file-proccess")
-    // const progBar = document.getElementById("_progressbar")
-    // const progLabe = document.getElementById("file-proccess-lable")
-    // progDiv.style.display = 'block'
+   
     processing(5)
 
     function processing(t) {
@@ -42,13 +39,14 @@ export const readExcelFile = async ({ file, compareParam }) => {
 
     });
 
-    processing(10)
 
     let invalidMsg = []
     let count = 0
-    const comparefilter = compareParam.filter(f => (f.Value !== null))
+    const comparefilter = compareParameter.filter(f => (f.Value !== null))
+   
 
     jsonResult.forEach((r1, k) => {
+      // debugger
       comparefilter.forEach((c1) => {
         if (c1.ControlTypeName === "Date") { r1[c1.Value] = date_ymd_func(r1[c1.Value]) }
         const regExp = RegExp(c1.RegularExpression)
@@ -68,10 +66,6 @@ export const readExcelFile = async ({ file, compareParam }) => {
     }
 
 
-    // groupBy(jsonResult, (party) => (party))
-    // console.log('Upload data', jsonResult)
-    // const aad = await commonPageFiled_API(184)
-
     return jsonResult
 
   } catch (e) { }
@@ -82,12 +76,12 @@ export const readExcelFile = async ({ file, compareParam }) => {
 
 
 
-export async function fileDetails({ compareParam = [], readjson = [] }) {
+export async function fileDetails({ compareParameter = [], readjson = [] }) {
 
 
   const fileFiled = {}
 
-  await compareParam.forEach(ele => {
+  await compareParameter.forEach(ele => {
     if ((ele.Value !== null)) {
       fileFiled[ele.FieldName] = ele.Value
     }

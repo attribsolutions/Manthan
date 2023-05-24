@@ -16,7 +16,7 @@ const PageMaintenance = () => {
                                 <div className="text-center">
                                     <div className="mb-5">
                                         <Link to="/dashboard">
-                                            <img src={logo} alt="" height="30" className="me-1" /><span className="logo-txt text-dark font-size-22">Minia</span>
+                                            <img src={logo} alt="" height="30" className="me-1" /><span className="logo-txt text-dark font-size-22">FoodERP 2.0</span>
                                         </Link>
                                     </div>
 

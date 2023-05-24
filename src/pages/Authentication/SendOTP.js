@@ -17,7 +17,7 @@ const SendOTP = () => {
   return (
     <React.Fragment>
       <MetaTags>
-        <title>Login | FoodERP Live</title>
+        <title>Login | FoodERP 2.0</title>
       </MetaTags>
       <div className="auth-page">
         <Container fluid className="p-0">

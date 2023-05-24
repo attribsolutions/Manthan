@@ -2,71 +2,60 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionTypes";
 import * as action from "./action";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { CommonConsole, concatDateAndTime } from "../../../components/Common/CommonFunction";
 
-function* Post_MRPMaster_GenratorFunction({ Data }) {
+function* save_MRPMaster_GenFunc({ config }) {
   try {
-    const response = yield call(apiCall.Post_MRPMaster_API, Data);
-    yield put(action.postMRPMasterDataSuccess(response));
-    } catch (error) { CommonConsole(error) }
+    const response = yield call(apiCall.MRPMaster_Post_API, config);
+    yield put(action.saveMRPMasterSuccess(response));
+  } catch (error) { CommonConsole(error) }
 }
 
 // List Page API
-function* get_MRPListPage_GenratorFunction() {
+function* get_MRPMaster_GenFunc() {
   try {
-    const response = yield call(apiCall.GetMRPList_For_Listpage);
-    yield put(action.getMRPListPageSuccess(response.Data))
+    const response = yield call(apiCall.MRPMaster_Get_API);
+    response.Data.map(i => {
+      i["preEffectiveDate"] = i.EffectiveDate
+      i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
+    })
+    yield put(action.getMRPList_Success(response.Data))
   } catch (error) { CommonConsole(error) }
 }
 
 //delete
-function* delete_MRPListPage_GenratorFunction({ CommonID }) {
+function* delete_MRPList_Id_GenFunc({ config }) {
   try {
-    const response = yield call(apiCall.delete_MRPList_API, CommonID);
-    yield put(action.delete_MRPListSuccess(response));
+    const response = yield call(apiCall.MRPMaster_Delete_API_For_List, config);
+    yield put(action.deleteMRPList_Id_Success(response));
   } catch (error) { CommonConsole(error) }
 }
 
-// edit api
-function* Edit_MRPListPage_GenratorFunction({ id, pageMode }) {
+function* goButton_MRPMaster_GenFunc({ data }) {
+  const { jsonBody, pathname, btnmode, rowData } = data
   try {
-    const response = yield call(apiCall.edit_MRPList, id);
-    response.pageMode = pageMode
-    yield put(action.editMRPListSuccess(response));
-  } catch (error) { CommonConsole(error) }
-}
-
-// update api
-function* Update_MRPListPage_GenratorFunction({ updateData, ID }) {
-  try {
-    const response = yield call(apiCall.update_MRPList, updateData, ID);
-    yield put(action.updateMRPListSuccess(response))
-  } catch (error) { CommonConsole(error) }
-}
-
-function* MRPGoButton_post_GenratorFunction({ data }) {
-  try {
-    const response = yield call(apiCall.GoButton_Post_API, data);
-    yield put(action.postGoButtonForMRP_MasterSuccess(response.Data));
+    const response = yield call(apiCall.MRPMaster_goButton_API, jsonBody);
+    response.pageMode = btnmode
+    response.pathname = pathname
+    response.rowData = rowData
+    yield put(action.GoButtonForMRP_MasterSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
 // delete api MRP Master PageL
-function* deleteId_for_MasterPage_GenratorFunction({ id }) {
+function* delete_MRPMaster_Id_GenFunc({ id }) {
   try {
-    const response = yield call(apiCall.MRP_MasterPage_delete_API, id);
+    const response = yield call(apiCall.MRPMaster_Delete_API_For_Master, id);
     response["deletedId"] = id
-    yield put(action.deleteID_In_MasterPageSuccess(response));
+    yield put(action.deleteMRPMaster_Id_Success(response));
   } catch (error) { CommonConsole(error) }
 }
 
 function* MRPMasterSaga() {
-  yield takeEvery(actionType.POST_MRP_MASTER_DATA, Post_MRPMaster_GenratorFunction);
-  yield takeEvery(actionType.POST_GO_BUTTON_FOR_MRP_MASTER, MRPGoButton_post_GenratorFunction);
-  yield takeEvery(actionType.GET_MRP_LIST_PAGE, get_MRPListPage_GenratorFunction);
-  yield takeEvery(actionType.DELETE_MRP_LIST_PAGE, delete_MRPListPage_GenratorFunction);
-  yield takeEvery(actionType.EDIT_MRP_LIST_PAGE, Edit_MRPListPage_GenratorFunction);
-  yield takeEvery(actionType.UPDATE_MRP_LIST_PAGE, Update_MRPListPage_GenratorFunction);
-  yield takeEvery(actionType.DELETE_ID_IN_MASTERPAGE, deleteId_for_MasterPage_GenratorFunction);
+  yield takeEvery(actionType.SAVE_MRP_MASTER, save_MRPMaster_GenFunc);
+  yield takeEvery(actionType.GO_BUTTON_FOR_MRP_MASTER, goButton_MRPMaster_GenFunc);
+  yield takeEvery(actionType.GET_MRP_LIST, get_MRPMaster_GenFunc);
+  yield takeEvery(actionType.DELETE_MRP_LIST, delete_MRPList_Id_GenFunc);
+  yield takeEvery(actionType.DELETE_MRP_MASTER_ID, delete_MRPMaster_Id_GenFunc);
 }
 export default MRPMasterSaga;
