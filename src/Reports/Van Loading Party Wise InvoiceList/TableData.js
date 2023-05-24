@@ -1,4 +1,4 @@
-import { convertDatefunc } from "../../components/Common/CommonFunction";
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 
 export const columns = [
     "SR No.",
@@ -101,7 +101,7 @@ export const Rows1 = (data) => {
     InvoiceParent.forEach((element, key) => {
         const tableitemRow = [
             SrNO++,
-            convertDatefunc(element.InvoiceDate),
+            date_dmy_func(element.InvoiceDate),
             element.FullInvoiceNumber,
             element.CustomerName,
             element.GrandTotal,

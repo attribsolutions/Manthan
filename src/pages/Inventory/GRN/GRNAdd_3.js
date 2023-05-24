@@ -111,8 +111,8 @@ const GRNAdd3 = (props) => {
             let tQty = 0
             let id = 1
             grnDetails.OrderItem.forEach((i, k) => {
-
-                i.BatchDate_conv = _cfunc.convertDatefunc(i.BatchDate)
+debugger
+                i.BatchDate_conv = _cfunc.date_dmy_func(i.BatchDate)
                 if (k === 0) {
                     i.id = id
                     arr.push(i)

@@ -26,7 +26,7 @@ import {
 } from "../../../store/Production/BOMRedux/action";
 import {
     breadcrumbReturnFunc,
-    convertDatefunc,
+    date_dmy_func,
     loginUserID, currentDate_ymd,
     loginCompanyID,
     loginPartyID,
@@ -357,7 +357,7 @@ const ProductionReIssueAdd = (props) => {
                                         <td>
                                             <div style={{ width: "100px" }}>
                                                 <Label>
-                                                    {convertDatefunc(index.BatchDate)}
+                                                    {date_dmy_func(index.BatchDate)}
                                                 </Label>
                                             </div>
                                         </td>

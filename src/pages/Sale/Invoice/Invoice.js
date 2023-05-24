@@ -97,7 +97,7 @@ const Invoice = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-
+    
         dispatch(GetVenderSupplierCustomer(subPageMode))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
@@ -479,6 +479,7 @@ const Invoice = (props) => {
                             </Thead>
                             <Tbody  >
                                 {cellContent.map((index2) => {
+                                    debugger
                                     return (
                                         < tr key={index1.id} >
                                             <td>
@@ -493,7 +494,7 @@ const Invoice = (props) => {
                                             </td>
                                             <td>
                                                 <div style={{ width: "90px" }}>
-                                                    {_cfunc.convertDatefunc(index2.BatchDate)}
+                                                    {_cfunc.date_dmy_func(index2.BatchDate)}
                                                 </div>
                                             </td>
                                             <td>
@@ -772,7 +773,7 @@ const Invoice = (props) => {
                             MRP: ele.LiveBatcheMRPID,
                             MRPValue: ele.MRP,//changes
                             Rate: ele.Rate,
-                            BasicAmount: calculate.discountBaseAmt,
+                            BasicAmount: (calculate.discountBaseAmt).toFixed(2),
                             GSTAmount: calculate.gstAmt,
                             GST: ele.LiveBatcheGSTID,
                             GSTPercentage: ele.GST,// changes
@@ -795,13 +796,18 @@ const Invoice = (props) => {
             })
 
             if (validMsg.length > 0) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 4,
-                    Status: true,
                     Message: JSON.stringify(validMsg),
-                    RedirectPath: false,
-                    AfterResponseAction: false
-                }));
+                })
+                return returnFunc()
+            }
+
+            if (!(invoiceItems.length > 0)) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Enter One Item Quantity",
+                })
                 return returnFunc()
             }
 
@@ -915,8 +921,7 @@ const Invoice = (props) => {
                         </Col>
 
 
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({ paginationProps, paginationTableProps }) => (
+               
                                 <ToolkitProvider
                                     keyField={"id"}
                                     data={OrderItemDetails}
@@ -942,22 +947,15 @@ const Invoice = (props) => {
                                                                 </div>
                                                             }
                                                             {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
                                                         />
                                                     </div>
                                                 </Col>
                                             </Row>
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone {...paginationProps} />
-                                                </Col>
-                                            </Row>
+                                            
                                         </React.Fragment>
                                     )}
                                 </ToolkitProvider>
-                            )}
-
-                        </PaginationProvider>
+                            
 
                         {OrderItemDetails.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
@@ -966,7 +964,6 @@ const Invoice = (props) => {
                                     onClick={SaveHandler}
                                     id={saveBtnid}
                                     userAcc={userPageAccessState}
-                                    module={"Material Issue"}
                                 />
                             </Col>
                         </FormGroup > : null}

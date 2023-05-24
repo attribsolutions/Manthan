@@ -28,7 +28,7 @@ import {
   EDIT_PRODUCTION_FOR_PRODUCTION_PAGE,
 } from "./actionType";
 
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 
 function* SaveProductionGenFunc({ config }) {
   try {
@@ -59,8 +59,8 @@ function* get_PRODUCTION_GerFunc({ filters }) {
     const newList = response.Data.map((index) => {
       // index.Item = index.Item;
       
-      var date = convertDatefunc(index.ProductionDate)
-      var batchdate = convertDatefunc(index.BatchDate)
+      var date = date_dmy_func(index.ProductionDate)
+      var batchdate = date_dmy_func(index.BatchDate)
       var time = convertTimefunc(index.CreatedOn)
       // var batchtime = convertTimefunc(index.CreatedOn)
       index.ProductionDate = (`${date} ${time}`)

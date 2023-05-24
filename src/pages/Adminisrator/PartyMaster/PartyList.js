@@ -12,7 +12,6 @@ import {
 import PartyMaster from './MasterAdd/PartyIndex';
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { MetaTags } from 'react-meta-tags';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 

@@ -497,7 +497,7 @@ const PaymentEntry = (props) => {
                                                 value={values.Description}
                                                 type="text"
                                                 className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Amount"
+                                                placeholder="Please Enter Description"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {

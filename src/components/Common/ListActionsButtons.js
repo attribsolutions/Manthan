@@ -88,6 +88,7 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     async function deleteHandler(rowData, btnId) {
+        
         try {
             if (deleteBodyfunc) {
                 const config = { rowData, subPageMode, btnId }
@@ -119,18 +120,20 @@ export const listPageActionsButtonFunc = (props) => {
         arr.push(rowData)
         makeBtnFunc(arr)
     }
-
+   
     return ({
         text: "Action",
         hidden:
             (
                 !(userAccState.RoleAccess_IsEdit)
-                && !(userAccState.RoleAccess_IsPrint)
-                && !(userAccState.RoleAccess_IsMultipleInvoicePrint)
-                && !(userAccState.RoleAccess_IsView)
-                && !(userAccState.RoleAccess_IsDelete)
-                && !(userAccState.RoleAccess_IsDeleteSelf)
-                && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
+                    && !(userAccState.RoleAccess_IsPrint)
+                    && !(userAccState.RoleAccess_IsMultipleInvoicePrint)
+                    && !(userAccState.RoleAccess_IsView)
+                    && !(userAccState.RoleAccess_IsDelete)
+                    && !(userAccState.RoleAccess_IsDeleteSelf)
+                    && !(userAccState.RoleAccess_IsEditSelf)
+                    && !(makeBtnShow) ? true : false
+            ),
 
         formatter: (cellContent, rowData) => {
 
@@ -264,7 +267,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     updateBtnFunc(rowData, mode.copy, btnId)
                                 }}
                             >
-                               <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
+                                <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
                             </Button>
                             : null
                     }

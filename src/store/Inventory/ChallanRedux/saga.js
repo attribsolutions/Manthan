@@ -23,7 +23,7 @@ import {
   ITEM_DROPDOWN_CHALLAN,
   MAKE_CHALLAN_ACTION,
 } from "./actionType";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 
 
 function* save_Challan_GerFunc({ data }) {                   // Save Challan  genrator function
@@ -37,7 +37,7 @@ function* Challan_List_filterGerFunc({ filters }) {          // Challan List Fil
   try {
     const response = yield call(Challan_get_API, filters);
     const newList = yield response.Data.map((i) => {
-      var date = convertDatefunc(i.ChallanDate)
+      var date = date_dmy_func(i.ChallanDate)
       var time = convertTimefunc(i.CreatedOn)
       i.ChallanDate = (`${date} ${time}`)
       return i

@@ -1,7 +1,7 @@
 
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
-import { convertDatefunc, convertOnlyTimefunc } from "../../components/Common/CommonFunction";
+import { date_dmy_func, convertOnlyTimefunc } from "../../components/Common/CommonFunction";
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
@@ -137,7 +137,7 @@ export const reportHeder3 = (doc, data) => {
     doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
     doc.text(`Loading No:${data.PartyDetails.LoadingSheetNo}`, 415, 30) //Invoice Id
-    var date = convertDatefunc(data.PartyDetails.Date)
+    var date = date_dmy_func(data.PartyDetails.Date)
     var time = convertOnlyTimefunc(data.CreatedOn)
     doc.text(`Loading Date:${date} `, 415, 50) //Invoice date
     doc.setFontSize(11)
