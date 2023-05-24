@@ -44,7 +44,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
 
 const GSTMaster = (props) => {
@@ -54,6 +54,7 @@ const GSTMaster = (props) => {
     const fileds = {
         EffectiveDate: "",
     }
+    
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //SetState  Edit data Geting From Modules List component
@@ -143,6 +144,7 @@ const GSTMaster = (props) => {
                 values.id = id
 
                 hasValid.EffectiveDate.valid = true;
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.PriceListName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
@@ -342,7 +344,6 @@ const GSTMaster = (props) => {
                     row["hsncodeDis"] = false
                 }
                 return (
-
                     <span style={{ justifyContent: 'center' }}>
 
                         <CInput
@@ -424,6 +425,7 @@ const GSTMaster = (props) => {
             else {
                 dispatch(saveGSTMaster(jsonBody));
             }
+
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
