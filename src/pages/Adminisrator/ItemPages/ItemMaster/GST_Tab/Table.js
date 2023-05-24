@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
-import { deleteGSTForMasterPage, deleteGSTForMasterPageSuccess } from '../../../../../store/Administrator/GSTRedux/action';
+import { deleteGSTId_ForMaster, deleteGSTId_ForMaster_Success } from '../../../../../store/Administrator/GSTRedux/action';
 import { useDispatch, useSelector } from 'react-redux';
 import { AlertState } from '../../../../../store/actions';
 
@@ -29,7 +29,7 @@ function GSTTable(props) {
           Status: true,
           Message: `Are you sure you want to delete this GST"`,
           RedirectPath: false,
-          PermissionAction: deleteGSTForMasterPage,
+          PermissionAction: deleteGSTId_ForMaster,
           ID: info.id,
         })
       );
@@ -38,7 +38,7 @@ function GSTTable(props) {
 
   useEffect(() => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
-      dispatch(deleteGSTForMasterPageSuccess({ Status: false }));
+      dispatch(deleteGSTId_ForMaster_Success({ Status: false }));
 
       var fil = props.tableData.filter((i) => {
         return !(i.id === deleteMsg.deletedId);
@@ -53,7 +53,7 @@ function GSTTable(props) {
         })
       );
     } else if (deleteMsg.Status === true) {
-      dispatch(deleteGSTForMasterPageSuccess({ Status: false }));
+      dispatch(deleteGSTId_ForMaster_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
