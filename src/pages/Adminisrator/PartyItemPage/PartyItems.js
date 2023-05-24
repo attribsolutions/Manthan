@@ -331,10 +331,7 @@ const PartyItems = (props) => {
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
                                 <PartyDropdown ></PartyDropdown>
-                                <PaginationProvider
-                                    pagination={paginationFactory(pageOptions)} >
-
-                                    {({ paginationProps, paginationTableProps }) => (
+                              
                                         <ToolkitProvider
                                             keyField="Item"
                                             data={tableList}
@@ -355,27 +352,15 @@ const PartyItems = (props) => {
                                                             headerWrapperClasses={"thead-light"}
 
                                                             {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
+                                                            
                                                         />
-                                                        {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
                                                         {mySearchProps(toolkitProps.searchProps)}
                                                     </div>
-
-                                                    {/* <Row className="align-items-md-center mt-30">
-                                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                            <PaginationListStandalone
-                                                                {...paginationProps}
-                                                            />
-                                                        </Col>
-                                                    </Row> */}
                                                 </React.Fragment>
                                             )
                                             }
                                         </ToolkitProvider>
-                                    )
-                                    }
-
-                                </PaginationProvider>
+                                   
 
                                 <SaveButton
                                     pageMode={pageMode}
