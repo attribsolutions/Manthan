@@ -138,7 +138,7 @@ const Dashboard_1 = (props) => {
         <React.Fragment>
             <div className="page-content">
                 <MetaTags>
-                    <title>Dashboard | Minia - React Admin & Dashboard Template</title>
+                    <title>Dashboard | FoodERP 2.0 - React Admin & Dashboard Template</title>
                 </MetaTags>
                 <Container fluid>
                     <Row>

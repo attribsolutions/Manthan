@@ -8,7 +8,7 @@ const PagesStarter = () => {
         <React.Fragment>
             <div className="page-content">
                 <MetaTags>
-                    <title>Starter Page | Minia - React Admin & Dashboard Template</title>
+                    <title>Starter Page | FoodERP 2.0 - React Admin & Dashboard Template</title>
                 </MetaTags>
                 <Container fluid>
                 </Container>

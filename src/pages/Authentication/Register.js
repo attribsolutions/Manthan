@@ -38,7 +38,7 @@ const Register = props => {
   return (
     <React.Fragment>
       <MetaTags>
-        <title>Register | Minia - React Admin & Dashboard Template</title>
+        <title>Register | FoodERP 2.0 - React Admin & Dashboard Template</title>
       </MetaTags>
       <div className="auth-page">
         <Container fluid className="p-0">
@@ -49,13 +49,13 @@ const Register = props => {
                   <div className="d-flex flex-column h-100">
                     <div className="mb-4 mb-md-5 text-center">
                       <Link to="/dashboard" className="d-block auth-logo">
-                        <img src={logo} alt="" height="28" /> <span className="logo-txt">Minia</span>
+                        <img src={logo} alt="" height="28" /> <span className="logo-txt">FoodERP 2.0</span>
                       </Link>
                     </div>
                     <div className="auth-content my-auto">
                       <div className="text-center">
                         <h5 className="mb-0">Register Account</h5>
-                        <p className="text-muted mt-2">Get your free Minia account now.</p>
+                        <p className="text-muted mt-2">Get your free FoodERP 2.0 account now.</p>
                       </div>
                       <AvForm
                         className="needs-validation custom-form mt-4 pt-2"
@@ -103,7 +103,7 @@ const Register = props => {
                           />
                         </div>
                         <div className="mb-4">
-                          <p className="mb-0">By registering you agree to the Minia <Link to="#" className="text-primary">Terms of Use</Link></p>
+                          <p className="mb-0">By registering you agree to the FoodERP 2.0 <Link to="#" className="text-primary">Terms of Use</Link></p>
                         </div>
                         <div className="mb-3">
                           <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Register</button>
@@ -116,7 +116,7 @@ const Register = props => {
                       </div>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()} Minia . Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                      <p className="mb-0">© {new Date().getFullYear()} FoodERP 2.0 . Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
                     </div>
                   </div>
                 </div>

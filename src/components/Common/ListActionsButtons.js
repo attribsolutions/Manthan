@@ -35,7 +35,7 @@ export const listPageActionsButtonFunc = (props) => {
         pageMode,
         makeBtnName,
         makeBtnShow = false,
-        orderApproval = false,
+        oderAprovalBtnFunc,
     } = props;
 
     function editHandler(rowData, btnmode, btnId) {
@@ -324,7 +324,7 @@ export const listPageActionsButtonFunc = (props) => {
                             : null
                     }
                     {
-                        ((orderApproval) && (userAccState.RoleAccess_IsView)) ?
+                        ((oderAprovalBtnFunc)) ?
                             <Button
                                 type="button"
                                 id={`btn-orderApproval-${rowData.id}`}
@@ -332,7 +332,7 @@ export const listPageActionsButtonFunc = (props) => {
                                 title={`Order Approval ${ButtonMsgLable}`}
                                 onClick={() => {
                                     const btnId = `btn-orderApproval-${rowData.id}`;
-                                    editHandler(rowData, mode.orderApproval, btnId)
+                                    oderAprovalBtnFunc(rowData, mode.orderApproval, btnId)
                                 }}
                             >
                                 <i className="bx bx-check-shield font-size-20"></i>

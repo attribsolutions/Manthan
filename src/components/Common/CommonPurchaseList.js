@@ -99,7 +99,7 @@ const CommonPurchaseList = (props) => {
     HeaderContent = () => {
       return null;
     },
-    orderApproval,
+    oderAprovalBtnFunc,
 
   } = props;
 
@@ -186,7 +186,7 @@ const CommonPurchaseList = (props) => {
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
 
-    if ((editData.Status === true) && !(editData.pageMode === mode.orderApproval)) {
+    if ((editData.Status === true) ) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
           pathname: masterPath,
@@ -196,10 +196,10 @@ const CommonPurchaseList = (props) => {
       } else {
         setmodal_edit(true);
       }
-    } else if (((editData.Status === true) && (editData.pageMode === mode.orderApproval))) {
-      orderApproval(editData)
     }
   }, [editData]);
+
+
 
   function makeBtnHandler(rowData) {
     rowData["hasSelect"] = true;
@@ -274,7 +274,7 @@ const CommonPurchaseList = (props) => {
       copyBodyfunc: copyBodyfunc,
       makeBtnFunc: makeBtnFunc,
       pageMode: pageMode,
-      orderApproval: orderApproval
+      oderAprovalBtnFunc: oderAprovalBtnFunc
     })
 
   }

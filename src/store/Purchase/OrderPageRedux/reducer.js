@@ -7,6 +7,7 @@ import {
   GET_ORDER_LIST_PAGE_SUCCESS,
   GET_ORDER_LIST_PAGE,
   ORDER_APPROVAL_ACTION_SUCCESS,
+  GET_ORDER_APPROVAL_DETAIL_SUCCESS,
 } from "./actionType"
 
 
@@ -18,6 +19,7 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   orderList: [],
   orderApprovalMsg: { Status: false },
+  approvalDetail: { Status: false },
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
@@ -64,6 +66,11 @@ const OrderReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         orderList: [],
+      }
+    case GET_ORDER_APPROVAL_DETAIL_SUCCESS:
+      return {
+        ...state,
+        approvalDetail: action.payload,
       }
     case ORDER_APPROVAL_ACTION_SUCCESS:
       return {

@@ -64,7 +64,7 @@ const UserProfile = props => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Profile | Minia - React Admin & Dashboard Template</title>
+          <title>Profile | FoodERP 2.0 - React Admin & Dashboard Template</title>
         </MetaTags>
         <Container fluid>
 
