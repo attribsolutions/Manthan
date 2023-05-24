@@ -79,7 +79,7 @@ const SelectDivisionPage = props => {
   return (
     <React.Fragment>
       <MetaTags>
-        <title>Login | FoodERP Live</title>
+        <title>Login | FoodERP 2.0</title>
       </MetaTags>
       <div className="auth-page">
         <Container fluid className="p-0">
@@ -122,7 +122,7 @@ const SelectDivisionPage = props => {
                       </div>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()} Minia . Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                      <p className="mb-0">© {new Date().getFullYear()} FoodERP 2.0 . Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
                     </div>
                   </div>
                 </div>

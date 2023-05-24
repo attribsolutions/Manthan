@@ -27,7 +27,7 @@ const invoiceList = [
         },
         {
           id: 2,
-          item: "Minia",
+          item: "FoodERP 2.0",
           adminName: "React Bootstrap 5 Landing Template",
           price: "$399.00",
         },

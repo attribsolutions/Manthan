@@ -7,6 +7,7 @@ import {
   getOrderListPageSuccess,
   GoButton_For_Order_AddSuccess,
   orderApprovalActionSuccess,
+  getOrderApprovalDetailActionSucc,
 } from "./actions";
 import {
   OrderPage_Update_API,
@@ -29,21 +30,22 @@ import {
   GO_BUTTON_FOR_ORDER_PAGE,
   SAVE_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE,
-  ORDER_APPROVAL_ACTION
+  ORDER_APPROVAL_ACTION,
+  GET_ORDER_APPROVAL_DETAIL
 } from "./actionType";
 import { btnIsDissablefunc, CommonConsole, concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
 import { orderApproval } from "../../../routes/PageMode";
 
 
-function* goButtonGenFunc(action) {                      // GO-Botton order Add Page by subPageMode  
+function* goButtonGenFunc({config}) {                      // GO-Botton order Add Page by subPageMode  
 
   try {
-
-    const { subPageMode, data } = action
+debugger
+    const { subPageMode, } = config
     let response;
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4)) {
-      response = yield call(OrderPage_GoButton_API, data); // GO-Botton Purchase Order 1 && 2 Add Page API
+      response = yield call(OrderPage_GoButton_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
       yield response.Data.OrderItems.forEach((ele, k) => {
         ele["id"] = k + 1
       });
@@ -60,7 +62,7 @@ function* goButtonGenFunc(action) {                      // GO-Botton order Add 
       yield response.Data.TermsAndConditions = termArr;
     }
     else if (subPageMode === url.IB_ORDER) {
-      response = yield call(IBOrderPage_GoButton_API, data); // GO-Botton IB-invoice Add Page API
+      response = yield call(IBOrderPage_GoButton_API, config); // GO-Botton IB-invoice Add Page API
     }
     yield put(GoButton_For_Order_AddSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
@@ -81,25 +83,10 @@ function* saveOrder_GenFunc({ config }) {
 }
 
 function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
-  
-  const { btnmode, btnId, rowData } = config;
 
-  let newconfig = config
-
-  if ((config.btnmode === orderApproval)) {  // only for arder aproval btn is dissable changes
-    btnIsDissablefunc({ btnId, state: true })
-    newconfig = { ...config, btnId: undefined }
-  }
-
+  const { btnmode, btnId } = config;
   try {
-    let response
-    if (config.btnmode === orderApproval) {
-      response = yield call(OrderPage_Edit_Get_API, rowData.id);
-    }
-    else {
-      response = yield call(OrderPage_Edit_Post_API, newconfig);
-    }
-
+    let response = yield call(OrderPage_Edit_Post_API, config);
     response.pageMode = btnmode
     response.btnId = btnId
     yield put(editOrderIdSuccess(response));
@@ -169,10 +156,17 @@ function* orderList_GoBtn_GenFunc({ config }) {
 }
 
 function* orderApproval_GenFunc({ config }) {
-
   try {
     const response = yield call(orderApproval_Save_API, config)
     yield put(orderApprovalActionSuccess(response));
+  } catch (error) { CommonConsole(error) }
+}
+
+function* getOrderApproval_Detail_GenFunc({ config }) {
+  try {
+    const response = yield call(OrderPage_Edit_Get_API, config)
+    response.btnId = config.btnId
+    yield put(getOrderApprovalDetailActionSucc(response));
   } catch (error) { CommonConsole(error) }
 }
 
@@ -184,6 +178,7 @@ function* OrderPageSaga() {
   yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenFunc);
   yield takeEvery(GET_ORDER_LIST_PAGE, orderList_GoBtn_GenFunc);
   yield takeEvery(ORDER_APPROVAL_ACTION, orderApproval_GenFunc);
+  yield takeEvery(GET_ORDER_APPROVAL_DETAIL, getOrderApproval_Detail_GenFunc);
 
 }
 

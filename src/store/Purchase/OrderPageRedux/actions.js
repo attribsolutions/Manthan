@@ -16,11 +16,13 @@ import {
   GET_ORDER_LIST_PAGE_SUCCESS,
   ORDER_APPROVAL_ACTION,
   ORDER_APPROVAL_ACTION_SUCCESS,
+  GET_ORDER_APPROVAL_DETAIL,
+  GET_ORDER_APPROVAL_DETAIL_SUCCESS,
 } from './actionType'
 
-export const GoButton_For_Order_Add = (subPageMode, data) => ({
+export const GoButton_For_Order_Add = (config) => ({
   type: GO_BUTTON_FOR_ORDER_PAGE,
-  subPageMode, data,
+ config
 });
 
 export const GoButton_For_Order_AddSuccess = list => ({
@@ -88,6 +90,17 @@ export const getDivisionOrdersSuccess = orders => ({
   payload: orders,
 })
 
+
+
+export const getOrderApprovalDetailAction = (config) => ({
+  type: GET_ORDER_APPROVAL_DETAIL,
+  config
+});
+
+export const getOrderApprovalDetailActionSucc = resp => ({
+  type: GET_ORDER_APPROVAL_DETAIL_SUCCESS,
+  payload: resp,
+})
 export const orderApprovalAction = (config) => ({
   type: ORDER_APPROVAL_ACTION,
   config
