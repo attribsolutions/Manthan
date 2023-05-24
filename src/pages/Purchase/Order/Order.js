@@ -34,6 +34,7 @@ import { editPartyItemID } from "../../../store/Administrator/PartyItemsRedux/ac
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
+import { getOrderApprovalDetailAction } from "../../../store/actions";
 
 
 let editVal = {}
@@ -234,10 +235,14 @@ const Order = (props) => {
             setTermsAndConTable([])
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
 
-            if (subPageMode === url.ORDER_1) {
-
-            }
-            else {
+            // if (subPageMode === url.ORDER_2) {
+            //     let btnId = postMsg.btnId;
+            //     _cfunc.btnIsDissablefunc({ btnId, state: true })
+            //     let config = {btnId}
+            //     config.orderId = postMsg.OrderID;
+            //     dispatch(getOrderApprovalDetailAction(config));
+            // }
+            // else {
                 const a = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
@@ -247,7 +252,7 @@ const Order = (props) => {
                         pathname: listPath,
                     });
                 }
-            }
+            // }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
@@ -578,7 +583,7 @@ const Order = (props) => {
 
     const goButtonHandler = async () => {
 
-       
+
         if (!supplierSelect > 0) {
             await customAlert({
                 Type: 4,

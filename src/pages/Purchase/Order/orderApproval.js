@@ -12,10 +12,10 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
             if (i.Quantity > 0) {
                 isorderItemSet.push({
                     "OrderNo": Data.id,//parent id
-                    "ItemNo": i.Item_id, //OrderItem--id
-                    "Material": i.SAPItemCode,//OrderItem--SAPItemCode
-                    "Quantity": i.Quantity,//OrderItem--Quantity
-                    "Unit": i.SAPUnitName,//OrderItem--SAPUnitName
+                    "ItemNo": i.id, //OrderItem--id
+                    "Material": i.ItemSAPCode,//OrderItem--ItemSAPCode
+                    "Quantity": i.QuantityInNo,//OrderItem--QuantityInNo 
+                    "Unit": "EA",
                     "Plant": Data.SupplierSAPCode,//parent
                     "Batch": ""// blank
                 })
@@ -27,11 +27,10 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
             "Indicator": "F",
             "OrderNo": Data.id,//parent--id
             "Stats": "1",
+            "CancelFlag": "", //blank
             "OrderItemSet": isorderItemSet,
-            "CancelFlag": "" //blank
         }
         const jsonBody = JSON.stringify(body);
-        
         dispatch(getOrderApprovalDetailActionSucc({ Status: false }))
         dispatch(orderApprovalAction({ jsonBody, btnId }))
     }

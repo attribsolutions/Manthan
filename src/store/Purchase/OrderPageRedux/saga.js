@@ -38,10 +38,10 @@ import *as url from "../../../routes/route_url"
 import { orderApproval } from "../../../routes/PageMode";
 
 
-function* goButtonGenFunc({config}) {                      // GO-Botton order Add Page by subPageMode  
+function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
 
   try {
-debugger
+    debugger
     const { subPageMode, } = config
     let response;
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4)) {
@@ -70,13 +70,22 @@ debugger
 
 function* saveOrder_GenFunc({ config }) {
 
-  const { subPageMode } = config;
+  const { subPageMode, btnId,jsonBody } = config;
+
+    let newConfig = config;
+// **************************************** for aorde Sap aproval********************************
+//   if (subPageMode === url.ORDER_2) { 
+//      newConfig = { jsonBody, btnId: undefined }
+//   }
+// ********************************************************
+
   let response = {}
   try {
     if (subPageMode === url.IB_ORDER) {                   // Save  Order  Add Page by subPageMode 
-      response = yield call(IBOrderPage_Save_API, config);
+      response = yield call(IBOrderPage_Save_API, newConfig);
     } else {
       response = yield call(OrderPage_Save_API_ForPO, config);
+      response.btnId=btnId
     }
     yield put(saveOrderActionSuccess(response));
   } catch (error) { CommonConsole(error) }
