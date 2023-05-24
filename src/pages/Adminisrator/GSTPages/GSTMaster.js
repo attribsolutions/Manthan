@@ -322,7 +322,7 @@ const GSTMaster = (props) => {
                         type="text"
                         disabled={true}
                         defaultValue={cellContent}
-                        className="col col-sm text-end"
+                        className="col col-sm "
                         onChange={(e) => { row["CurrentHSNCode"] = e.target.value }}
                     />
                 </span>)
@@ -351,7 +351,7 @@ const GSTMaster = (props) => {
                             cpattern={decimalRegx}
                             defaultValue={cellContent}
                             disabled={row.hsncodeDis}
-                            className="col col-sm text-end"
+                            className="col col-sm "
                             onChange={(e) => { row["HSNCode"] = e.target.value }}
                         />
 
