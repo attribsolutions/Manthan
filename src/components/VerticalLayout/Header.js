@@ -187,7 +187,7 @@ const Header = props => {
             {/* <LanguageDropdown /> */}
 
             {/* light / dark mode */}
-            <LightDark layoutMode={props['layoutMode']} onChangeLayoutMode={onChangeLayoutMode} />
+            {/* <LightDark layoutMode={props['layoutMode']} onChangeLayoutMode={onChangeLayoutMode} /> */}
 
             <Dropdown
               className="d-none d-lg-inline-block ms-1"
@@ -200,12 +200,12 @@ const Header = props => {
                 className="btn header-item noti-icon "
                 tag="button"
               >
-                <FeatherIcon
+                {/* <FeatherIcon
                   icon="grid"
                   className="icon-lg"
-                />
+                /> */}
               </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-lg dropdown-menu-end">
+              {/* <DropdownMenu className="dropdown-menu-lg dropdown-menu-end">
                 <div className="p-2">
                   <Row className="g-0">
                     <Col>
@@ -271,11 +271,11 @@ const Header = props => {
                   </Row>
 
                 </div>
-              </DropdownMenu>
+              </DropdownMenu> */}
             </Dropdown>
 
             <NotificationDropdown />
-            <div
+            {/* <div
               onClick={toggleTopDrawer} disabled={open}
               className="dropdown d-inline-block"
             >
@@ -288,7 +288,7 @@ const Header = props => {
                   className="icon-lg"
                 />
               </button>
-            </div>
+            </div> */}
             <ProfileMenu />
 
           </div>
