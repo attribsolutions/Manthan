@@ -52,6 +52,7 @@ const UploadExcel = (props) => {
     const [selectedFiles, setselectedFiles] = useState([])
     const [preUploadjson, setPreUploadjson] = useState([])
     const [readJsonDetail, setReadJsonDetail] = useState(preDetails)
+    const [preViewDivShow, setPreViewDivShow] = useState(false)
     const [partySelect, SetPartySelect] = useState([])
 
 
@@ -60,14 +61,13 @@ const UploadExcel = (props) => {
         pageField,
         userAccess,
         partyList,
-        compareParam = []
+        compareParameter = []
     } = useSelector((state) => ({
         postMsg: state.ImportMasterMap_Reducer.excelPostMsg,
-
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         partyList: state.PartyMasterReducer.partyList,
-        compareParam: state.ImportExportFieldMap_Reducer.addGoButton,
+        compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
     }));
 
     useEffect(() => {
@@ -78,6 +78,9 @@ const UploadExcel = (props) => {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         if ((_cfunc.loginIsSCMCompany() === 1)) {
             goButtonHandler()
+        }
+        return () => {
+            dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         }
     }, []);
 
@@ -149,6 +152,14 @@ const UploadExcel = (props) => {
 
     async function upload() {
 
+        if (compareParameter.length === 0) {
+            customAlert({
+                Type: 3,
+                Message: "Please wait Downloading field Details.",
+            })
+            return
+        }
+
         var files = selectedFiles;
         if (files.length == 0) {
             customAlert({
@@ -157,26 +168,33 @@ const UploadExcel = (props) => {
             })
             return;
         }
+
         var filename = files[0].name;
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
         if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
 
 
-            const readjson = await readExcelFile({ file: files[0], compareParam, })
+            const readjson = await readExcelFile({ file: files[0], compareParameter, })
             if (readjson.length > 0) {
 
-                const aa = await fileDetails({ compareParam, readjson })
+                const isdetails = await fileDetails({ compareParameter, readjson })
+                let { invoiceNO } = isdetails;
+                if ((invoiceNO.length > 0)) {
+                    setReadJsonDetail(isdetails)
+                    setPreUploadjson(readjson)
+                    setPreViewDivShow(true)
+                } else {
+                    customAlert({
+                        Type: 3,
+                        Message: "Mapping not match."
+                    })
+                }
+                // const btnerify = document.getElementById("btn-verify");
+                // const btnupload = document.getElementById('btn-upload');
+                // const filedetail = document.getElementById('filedetail');
 
-                const btnerify = document.getElementById("btn-verify");
-                const btnupload = document.getElementById('btn-upload');
-                const filedetail = document.getElementById('filedetail');
-
-                setReadJsonDetail(aa)
-                setPreUploadjson(readjson)
-
-                // filedetail.style.display = "block"
-                btnerify.style.display = "none"
-                btnupload.style.display = "block"
+                // btnerify.style.display = "none"
+                // btnupload.style.display = "block"
             }
 
         } else {
@@ -187,7 +205,15 @@ const UploadExcel = (props) => {
         }
     }
 
+
     async function handleAcceptedFiles(files) {
+        if (compareParameter.length === 0) {
+            customAlert({
+                Type: 3,
+                Message: "Please wait Downloading field Details.",
+            })
+            return
+        }
 
         if (selectedFiles.length > 0) {
             const isConfirmed = await customAlert({
@@ -195,18 +221,23 @@ const UploadExcel = (props) => {
                 Message: "Do you confirm your choice?",
             });
             if (!isConfirmed) {
+
                 return
             }
         };
-        try {
-            const btnerify = document.getElementById("btn-verify")
-            const btnupload = document.getElementById('btn-upload')
-            const progDiv = document.getElementById("file-proccess")
+        debugger
+        setReadJsonDetail(preDetails)
+        setPreUploadjson([])
+        setPreViewDivShow(false)
+        // try {
+        //     const btnerify = document.getElementById("btn-verify")
+        //     const btnupload = document.getElementById('btn-upload')
+        //     const progDiv = document.getElementById("file-proccess")
 
-            btnerify.style.display = "block"
-            btnupload.style.display = "none"
-            progDiv.style.display = "none"
-        } catch (d) { }
+        //     btnerify.style.display = "block"
+        //     btnupload.style.display = "none"
+        //     progDiv.style.display = "none"
+        // } catch (d) { }
 
         files.map(file =>
             Object.assign(file, {
@@ -229,7 +260,7 @@ const UploadExcel = (props) => {
 
 
     const SaveHandler = async (event) => {
-     
+
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -237,7 +268,7 @@ const UploadExcel = (props) => {
             const parArr = readJsonDetail.fileFiled
             const outerArr = []
 
-            compareParam.forEach(ele => {
+            compareParameter.forEach(ele => {
                 if ((ele.Value !== null)) {
                     parArr[ele.FieldName] = ele.Value
                 }
@@ -311,30 +342,52 @@ const UploadExcel = (props) => {
 
                         <div className="px-2 c_card_header text-black" >
                             <div className="px-2   c_card_filter text-black" >
-                                <div className="row" style={{ display: ((_cfunc.loginIsSCMCompany() === 1)) ? 'none' : "block" }} >
-                                    <Col sm="3">
-                                        <FormGroup className="mb-2 row mt-3 " >
-                                            <Label className=" p-2"
+                                {
+                                    (!(_cfunc.loginIsSCMCompany() === 1)) ? <>
+                                        <div className="row">
+                                            <Col sm="3">
+                                                <FormGroup className="mb-2 row mt-3 " >
+                                                    <Label className=" p-2"
 
-                                                style={{ width: "115px" }}>{fieldLabel.Party}</Label>
-                                            <Col >
-                                                <Select
-                                                    classNamePrefix="select2-Customer"
-                                                    value={partySelect}
-                                                    options={PartyDropdown_Options}
-                                                    onChange={(e) => {
-                                                        SetPartySelect(e)
-                                                        goButtonHandler(e)
-                                                    }}
-                                                />
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
-                                </div>
-                                <div className="row " style={{ display: ((_cfunc.loginIsSCMCompany() === 1)) ? 'block' : "none" }} >
+                                                        style={{ width: "115px" }}>{fieldLabel.Party}</Label>
+                                                    <Col >
+                                                        <Select
+                                                            classNamePrefix="select2-Customer"
+                                                            value={partySelect}
+                                                            options={PartyDropdown_Options}
+                                                            onChange={(e) => {
+                                                                SetPartySelect(e)
+                                                                goButtonHandler(e)
+                                                            }}
+                                                        />
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col >
+                                        </div>
+                                    </>
+                                        : <>
+                                            {(!(compareParameter.length > 0)) ?
+                                                <div className="row ">
+                                                    <div className="d-flex justify-content-start p-2 ">
+                                                        <div>Please wait Downloading field Details.</div>
+                                                        <div >
+                                                            <div className="dot-pulse">
+                                                                <div className="bounce1"></div>
+                                                                <div className="bounce2"></div>
+                                                                <div className="bounce3"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                :
+                                                <div >
+                                                    <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
+                                                </div>}
 
-                                    <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
-                                </div>
+
+                                        </>
+                                }
+
                             </div>
 
                         </div>
@@ -398,90 +451,71 @@ const UploadExcel = (props) => {
                                                 </Row>
                                             </div>
 
-
-                                            <div id="filedetail">
-
-
-                                                <details>
-                                                    <summary>No. of Invoice: {readJsonDetail.invoice.size}</summary>
-                                                    <div className="error-msg">
-                                                        <p>
-                                                            {readJsonDetail.invoiceNO.map(i => (<Label>{i} ,&#160;</Label>))}
-                                                        </p>
-                                                    </div>
-
-                                                </details>
-
-                                                <details>
-                                                    <summary>No. of Party :{readJsonDetail.party.size}</summary>
-                                                    <div className="error-msg">
-                                                        <p>
-                                                            {readJsonDetail.partyNO.map(i => (<Label>{i} ,&#160;</Label>))}
-                                                        </p>
-                                                    </div>
-                                                </details>
-                                                <details>
-                                                    <summary> From Dates :20-01-2021</summary>
-
-                                                </details>
-                                                <details>
-                                                    <summary>Total Amount :{readJsonDetail.amount}</summary>
-                                                </details>
-                                                {/* <div className="error-msg">
-                                                    <i className="fa fa-error"></i>
-                                                    Total Amount:5454
-                                                </div> */}
-                                            </div>
-                                            {/* <div id="file-proccess" style={{
-                                                width: "80%",
-                                                paddingRight: "40%",
-                                                marginBottom: "10px",
-                                                display: "none"
-                                            }}>
-                                                <div className='progress'>
-                                                    <div className='progress-bar progress-bar-animated bg-primary progress-bar-striped'
-                                                        id="_progressbar"
-                                                        role='progressbar'
-                                                        aria-valuenow={10}
-                                                        aria-valuemin={0}
-                                                        aria-valuemax={100}
-                                                        style={{ width: '0%' }}>
-                                                        <span id='file-proccess-lable'>0% </span>
-                                                    </div>
-                                                </div>
-                                            </div> */}
-
-
-
-
-
                                         </Card>
                                     )
                                 })}
+                                {preViewDivShow &&
+                                    <Card style={{ borderTop: "0px" }}>
+                                        <div id="filedetail">
+
+                                            <details>
+                                                <summary>No. of Invoice: {readJsonDetail.invoice.size}</summary>
+                                                <div className="error-msg">
+                                                    <p>
+                                                        {readJsonDetail.invoiceNO.map(i => (<Label>{i} ,&#160;</Label>))}
+                                                    </p>
+                                                </div>
+
+                                            </details>
+
+                                            <details>
+                                                <summary>No. of Party :{readJsonDetail.party.size}</summary>
+                                                <div className="error-msg">
+                                                    <p>
+                                                        {readJsonDetail.partyNO.map(i => (<Label>{i} ,&#160;</Label>))}
+                                                    </p>
+                                                </div>
+                                            </details>
+                                            <details>
+                                                <summary> From Dates :20-01-2021</summary>
+
+                                            </details>
+                                            <details>
+                                                <summary>Total Amount :{readJsonDetail.amount}</summary>
+                                            </details>
+                                            {/* <div className="error-msg">
+    <i className="fa fa-error"></i>
+    Total Amount:5454
+</div> */}
+                                        </div>
+                                    </Card>
+                                }
                             </div>
 
 
                         </div>
 
                         <div className="text- mt-4" >
-
-                            <button
-                                type="button"
-                                style={{ display: "none" }}
-                                id='btn-upload'
-                                className="btn btn-success "
-                                onClick={SaveHandler}
-                            >
-                                Upload Files
-                            </button>
-                            <button
-                                type="button"
-                                id='btn-verify'
-                                className="btn btn-primary "
-                                onClick={upload}
-                            >
-                                Verify Files
-                            </button>
+                            {preViewDivShow ?
+                                <button
+                                    type="button"
+                                    // style={{ display: "none" }}
+                                    id='btn-upload'
+                                    className="btn btn-success "
+                                    onClick={SaveHandler}
+                                >
+                                    Upload Files
+                                </button>
+                                :
+                                <button
+                                    type="button"
+                                    id='btn-verify'
+                                    className="btn btn-primary "
+                                    onClick={upload}
+                                >
+                                    Verify Files
+                                </button>
+                            }
                         </div>
 
 

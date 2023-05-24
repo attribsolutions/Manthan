@@ -274,20 +274,16 @@ export const edit_PriceList = ({ editId, btnId }) => get(`${url.PRICE_LIST}/${ed
 export const update_PriceList = ({ updateId, jsonBody, btnId }) => put(`${url.PRICE_LIST}/${updateId}`, jsonBody, btnId)// update
 
 // MRP Master 
-export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
-export const GetMRPList_For_Listpage = () => get(url.MRP_MASTER_LIST)// getapi
-export const update_MRPList = (data, id) => put(`${url.MRP_MASTER_LIST}/${id}`, data)// update_MRPList
-export const edit_MRPList = (id) => get(`${url.MRP_MASTER_LIST}/${id}`)// edit api
-export const delete_MRPList_API = (CommonID) => del(`${url.DELETE_API_FOR_MRP_LIST_PAGE}/${CommonID}`)// delete api
-export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MRP_MASTER, data)// go button postapi
-export const MRP_MasterPage_delete_API = (id) => del(`${url.MRP_MASTER_LIST}/${id}`)// delete api MRP Master Page
+export const MRPMaster_Get_API = () => get(url.MRP_MASTER_LIST)// getapi
+export const MRPMaster_Post_API = ({ jsonBody, btnId }) => post(url.MRP_MASTER_LIST, jsonBody, btnId)// post api
+export const MRPMaster_Delete_API_For_List = ({ deleteId, btnId }) => del(`${url.DELETE_API_FOR_MRP_LIST_PAGE}/${deleteId}`, btnId)// delete api
+export const MRPMaster_goButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MRP_MASTER, data)// go button postapi
+export const MRPMaster_Delete_API_For_Master = (id) => del(`${url.MRP_MASTER_LIST}/${id}`)// delete api MRP Master Page
 
 // Margin Master
-export const Post_MarginMaster_API = (data) => post(url.MARGIN_MASTER_LIST, data)// post api
 export const GetMarginList_For_Listpage = () => get(url.MARGIN_MASTER_LIST)//  get List
-export const delete_MarginList_API = (CommonID) => del(`${url.DELETE_API_FOR_LIST_MARGIN_PAGE}/${CommonID}`)// post api
-export const edit_MarginList = (id) => get(`${url.MARGIN_MASTER_LIST}/${id}`) // edit api
-export const update_MarginList = (data, id) => put(`${url.MARGIN_MASTER_LIST}/${id}`, data)// update
+export const Post_MarginMaster_API = ({ jsonBody, btnId }) => post(url.MARGIN_MASTER_LIST, jsonBody, btnId)// post api
+export const delete_MarginList_API = ({ deleteId, btnId }) => del(`${url.DELETE_API_FOR_LIST_MARGIN_PAGE}/${deleteId}`, btnId)// post api
 export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_MARGIN_MASTER, data)// go button postapi
 export const Margin_MasterPage_delete_API = (id) => del(`${url.MARGIN_MASTER_LIST}/${id}`)// delete api Margin Master Page
 
@@ -316,7 +312,7 @@ export const update_TermsAndCondtions_Master_API = ({ jsonBody, updateId, btnId 
 // GST API
 export const Post_GSTMaster_API = (data) => post(url.GST_LIST_API, data)// post api
 export const GetGSTList_For_Listpage = () => get(url.GST_LIST_API)//  get List
-export const delete_GSTList_API = (CommonID) => del(`${url.DELETE_API_FOR_LIST_GST_PAGE}/${CommonID}`)// Delete api
+export const delete_GSTList_API = ({ deleteId, btnId }) => del(`${url.DELETE_API_FOR_LIST_GST_PAGE}/${deleteId}`, btnId)// Delete api
 export const GoButton_Post_API_For_GSTMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_GST_MASTER, data)// go button postapi
 export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`)// delete api
 

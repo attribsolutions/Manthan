@@ -1,10 +1,12 @@
 import React from 'react'
 import { Input } from 'reactstrap';
 
-export const  CInput = (prop) => {
-    const { onChange = () => { }, cpattern = '' } = prop
-
+export const  CInput = (props) => {
+    
+    const { onChange = () => { }, cpattern = '' } = props
+    
     function on_Change(e) {
+        
         let val = e.target.value
         const result = cpattern.test(val);
         if (result) {
@@ -18,7 +20,7 @@ export const  CInput = (prop) => {
             e.target.value = val.slice(0, -1);
         }
     }
-    const param = Object.assign({}, prop, { onChange: on_Change });
+    const param = Object.assign({}, props, { onChange: on_Change });
 
     return (<Input {...param} />)
 }

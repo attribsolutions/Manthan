@@ -29,7 +29,7 @@ import {
 import { updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import {
   breadcrumbReturnFunc,
-  convertDatefunc,
+  date_dmy_func,
   loginUserID,
   currentDate_ymd,
   loginPartyID,
@@ -520,7 +520,7 @@ const Invoice = (props) => {
                       </td>
                       <td>
                         <div style={{ width: "90px" }}>
-                          {convertDatefunc(index2.BatchDate)}
+                          {date_dmy_func(index2.BatchDate)}
                         </div>
                       </td>
                       <td>

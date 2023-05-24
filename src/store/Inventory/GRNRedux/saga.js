@@ -21,7 +21,7 @@ import {
   SAVE_GRN_FROM_GRN_PAGE_ACTION,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
 } from "./actionType";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 
 function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
   try {
@@ -58,7 +58,7 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
   try {
     const response = yield call(GRN_get_API, config);
     const newList = yield response.Data.map((i) => {
-      var date = convertDatefunc(i.GRNDate)
+      var date = date_dmy_func(i.GRNDate)
       var time = convertTimefunc(i.CreatedOn)
       i.GRNDate = (`${date} ${time}`)
       return i

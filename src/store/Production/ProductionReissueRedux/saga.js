@@ -26,7 +26,7 @@ import {
   MAKE_BTN_FOR_PRODUNCTION_RE_ISSUE_STP_ACTION,
   ITEM_FOR_PRODUNCTION_RE_ISSUE,
 } from "./actionType";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { AlertState } from "../../actions";
 
 
@@ -55,7 +55,7 @@ function* ListFilter_Production_ReIssue_GerFunc({ filters }) {    //  Production
   try {
     const response = yield call(Production_ReIssue_get_API, filters);
     const newList = response.Data.map((index) => {
-      var date = convertDatefunc(index.Date)
+      var date = date_dmy_func(index.Date)
       var time = convertTimefunc(index.CreatedOn)
       index.ProductionReIssueDate = (`${date} ${time}`)
       if (index.ProductionItem) {

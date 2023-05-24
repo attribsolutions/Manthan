@@ -1,7 +1,7 @@
 import CheckBox from "jspdf";
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
-import { convertDatefunc } from "../../components/Common/CommonFunction";
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
 import * as table from './TableData'

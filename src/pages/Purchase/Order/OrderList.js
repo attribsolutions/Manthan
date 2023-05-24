@@ -221,12 +221,12 @@ const OrderList = () => {
             dispatch(_act.makeIB_InvoiceAction({ jsonBody, path: url.IB_INVOICE, pageMode: mode.defaultsave, customer }));
         }
         else if (subPageMode === url.ORDER_LIST_4) {
-            const { CustomerID, id, OrderDate } = obj
+            const { CustomerID, id, preOrderDate } = obj
             history.push(url.INVOICE_1, obj);
 
             const jsonBody = JSON.stringify({
                 OrderIDs: id.toString(),
-                FromDate: _cfunc.convertDatefunc(OrderDate),
+                FromDate: preOrderDate,
                 Customer: CustomerID,
                 Party: _cfunc.loginPartyID(),
             });

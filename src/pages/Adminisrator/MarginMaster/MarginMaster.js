@@ -15,7 +15,7 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AlertState } from "../../../store/actions";
+import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
@@ -24,60 +24,86 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import { get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import {
-    deleteID_In_Margin_MasterPage,
-    deleteID_In_Margin_MasterPageSuccess,
-    getMarginListPage,
-    postGoButtonForMargin_Master,
-    postGoButtonForMargin_Master_Success,
-    postMarginMasterData,
-    postMarginMasterDataSuccess
+    deleteIdForMarginMaster,
+    deleteIdForMarginMasterSuccess,
+    getMarginList,
+    goButtonForMargin,
+    goButtonForMarginSuccess,
+    saveMarginMaster,
+    saveMarginMasterSuccess
 } from "../../../store/Administrator/MarginMasterRedux/action";
-import { AvForm } from "availity-reactstrap-validation";
 import {
     breadcrumbReturnFunc,
     loginUserID,
     loginCompanyID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
-import * as url from "../../../routes/route_url";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { mode, pageId, url } from "../../../routes";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const formRef = useRef(null);
-    let editMode = history.location.pageMode;
+
+    const fileds = {
+        EffectiveDate: "",
+        PartyName: "",
+        PriceListName: "",
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //SetState  Edit data Geting From Modules List component
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState("");
-    const [partyName_dropdown_Select, setPartyName_dropdown_Select] = useState("");
-    const [priceList_dropdown_Select, setpriceList_dropdown_Select] = useState("");
-    const [effectiveDate, setEffectiveDate] = useState('');
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,
-        TableData,
+    const { postMsg,
+        tableData,
         deleteMessage,
         Party,
         PriceList,
-        userAccess
+        userAccess,
+        pageField
     } = useSelector((state) => ({
-        TableData: state.MarginMasterReducer.MarginGoButton,
+        tableData: state.MarginMasterReducer.MarginGoButton,
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
-        PostAPIResponse: state.MarginMasterReducer.PostData,
+        postMsg: state.MarginMasterReducer.postMsg,
         Party: state.ItemMastersReducer.Party,
         PriceList: state.PriceListReducer.priceListByCompany,
         userAccess: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField
     }));
 
+    const { Data = [] } = tableData
+
+    useEffect(() => {
+        const page_Id = pageId.MARGIN
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
     const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useEffect(() => {
+        dispatch(priceListByCompay_Action());
+        dispatch(get_Party_ForDropDown());
+    }, [dispatch]);
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -97,57 +123,64 @@ const MarginMaster = (props) => {
 
     useEffect(() => {
 
-        const editDataGatingFromList = history.location.editValue
-
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (!(editDataGatingFromList === undefined)) {
-            var PriceListid = editDataGatingFromList.PriceList_id
-            var priceListName = editDataGatingFromList.PriceListName
-            var partyId = editDataGatingFromList.Party_id
-            var partyName = editDataGatingFromList.PartyName
-            var effectiveDate = editDataGatingFromList.EffectiveDate
-
-            const jsonBody = JSON.stringify({
-                PriceList: PriceListid,
-                Party: partyId,
-                EffectiveDate: effectiveDate
-            });
-            dispatch(postGoButtonForMargin_Master(jsonBody))
-            setPartyName_dropdown_Select({ label: partyName, value: partyId })
-            setpriceList_dropdown_Select({ label: priceListName, value: PriceListid })
-            setEffectiveDate(effectiveDate)
-
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
+    }, [pageField])
 
+    // hasShowloction && hasShowModal useEffect
     useEffect(() => {
-        dispatch(priceListByCompay_Action());
-        dispatch(get_Party_ForDropDown());
-        dispatch(postGoButtonForMargin_Master_Success([]));
-    }, [dispatch]);
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.page_Mode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+            }
+
+            if (hasEditVal) {
+
+                const { id, PriceList_id, PriceListName, Party_id, PartyName, preEffectiveDate } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.PriceListName = { label: PriceListName, value: PriceList_id };
+                values.PartyName = Party_id === null ? { label: "select", value: "" } : { label: PartyName, value: Party_id };
+                values.EffectiveDate = preEffectiveDate
+                values.id = id
+
+                hasValid.PriceListName.valid = true;
+                hasValid.PartyName.valid = true;
+                hasValid.EffectiveDate.valid = true;
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(Breadcrumb_inputName(hasEditVal.PriceListName))
+                seteditCreatedBy(hasEditVal.CreatedBy)
+            }
+        }
+        else {
+            dispatch(goButtonForMarginSuccess({ Status: false }))
+        }
+    }, [])
 
     useEffect(() => {
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-            dispatch(deleteID_In_Margin_MasterPageSuccess({ Status: false }));
-            dispatch(postGoButtonForMargin_Master_Success([]))
+            dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
+            dispatch(goButtonForMarginSuccess([]))
             GoButton_Handler()
             dispatch(
                 AlertState({
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
-                    AfterResponseAction: getMarginListPage,
+                    AfterResponseAction: getMarginList,
                 })
             );
         } else if (deleteMessage.Status === true) {
-            dispatch(deleteID_In_Margin_MasterPageSuccess({ Status: false }));
+            dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -158,70 +191,47 @@ const MarginMaster = (props) => {
         }
     }, [deleteMessage]);
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [TableData]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
     const PartyTypeDropdown_Options = Party.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
+    PartyTypeDropdown_Options.unshift({
+        value: "",
+        label: "select"
+    });
 
     const PriceList_DropdownOptions = PriceList.map((data) => ({
         value: data.id,
         label: data.Name
     }));
+ 
+    const GoButton_Handler = (event) => {
 
-    function PartyType_Dropdown_OnChange_Handller(e) {
-        setPartyName_dropdown_Select(e)
-    }
+        event.preventDefault();
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
 
-    function PriceList_Dropdown_OnChange_Handller(e) {
-        setpriceList_dropdown_Select(e)
-    }
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-    const EffectiveDateHandler = (e, date) => {
-        setEffectiveDate(date)
-    }
+                if (values.EffectiveDate === '') {
+                    customAlert({
+                        Type: 4,
+                        Message: "Please select EffectiveDate",
+                    })
+                    return
+                }
 
-    const MarginHandler = (e, user) => {
-        user["Margin"] = e.target.value
-    }
-
-    const CurrentMRPHandler = (e, user) => {
-        user["CurrentMRP"] = e.target.value
-    }
-
-    const GoButton_Handler = (event, values) => {
-
-        let priceList = { ...priceList_dropdown_Select }
-        let party = { ...partyName_dropdown_Select }
-
-        const jsonBody = JSON.stringify({
-            PriceList: priceList.value ? priceList.value : " ",
-            Party: party.value ? party.value : 0,
-            EffectiveDate: effectiveDate
-        });
-        if (!(priceList.value)) {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: "Please select PriceList",
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-            return
-        }
-        else if (!(effectiveDate)) {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: "Please select EffectiveDate",
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-            return
-        }
-
-        dispatch(postGoButtonForMargin_Master(jsonBody))
+                const jsonBody = JSON.stringify({
+                    PriceList: values.PriceListName.value ? values.PriceListName.value : " ",
+                    Party: values.PartyName.value ? values.PartyName.value : 0,
+                    EffectiveDate: values.EffectiveDate
+                });
+                dispatch(goButtonForMargin({ jsonBody }));
+            }
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     //select id for delete row
@@ -232,7 +242,7 @@ const MarginMaster = (props) => {
                 Status: true,
                 Message: `Are you sure you want to delete this Item : "${name}"`,
                 RedirectPath: false,
-                PermissionAction: deleteID_In_Margin_MasterPage,
+                PermissionAction: deleteIdForMarginMaster,
                 ID: id,
             })
         );
@@ -240,44 +250,41 @@ const MarginMaster = (props) => {
 
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(postMarginMasterDataSuccess({ Status: false }))
-            setPartyName_dropdown_Select('')
-            setEffectiveDate('')
-            setpriceList_dropdown_Select('')
-
-            if (pageMode === "dropdownAdd") {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+            dispatch(saveMarginMasterSuccess({ Status: false }))
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                     RedirectPath: url.MARGIN_lIST,
                 }))
             }
         }
 
-        else if (PostAPIResponse.Status === true) {
-            dispatch(postMarginMasterDataSuccess({ Status: false }))
+        else if (postMsg.Status === true) {
+            dispatch(saveMarginMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: TableData.length,
+        totalSize: Data.length,
         custom: true,
     };
 
@@ -286,217 +293,238 @@ const MarginMaster = (props) => {
             text: "Item Name",
             dataField: "Name",
             sort: true,
+            headerStyle: () => {
+                return { width: '500px', };
+            }
         },
         {
             text: "Current Margin",
             dataField: "CurrentMargin",
             sort: true,
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    id=""
-                                    type="text"
-                                    disabled={true}
-                                    defaultValue={cellContent}
-                                    className="col col-sm text-end"
-                                    onChange={(e) => CurrentMRPHandler(e, user)}
-                                />
-                            </FormGroup>
-                        </Col>
-
-                    </div>
-                </>
-            ),
+            formatter: (cellContent, row, key) => {
+                return (<span style={{ justifyContent: 'center' }}>
+                    <Input
+                        key={`CurrentMargin${row.Item}`}
+                        id=""
+                        type="text"
+                        disabled={true}
+                        defaultValue={cellContent}
+                        className="col col-sm text-end"
+                    />
+                </span>)
+            },
+            headerStyle: () => {
+                return { width: '200px', };
+            }
         },
         {
             text: "Effective from ",
             dataField: "CurrentDate",
             sort: true,
-            formatter: (cellContent) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-6 ">
-                                <Label style={{ color: "#B0290B" }}>{cellContent}</Label>
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
+            headerStyle: () => {
+                return { width: '200px' };
+            },
+            formatter: (cellContent, row, key) => {
+                return (<span style={{ justifyContent: 'center' }}>
+                    <Label
+                        style={{ color: "black", textAlign: "center", display: "block", }}
+                        key={`CurrentDate${row.Item}`}
+                    >{_cfunc.date_dmy_func(cellContent)}</Label>
+                </span>)
+            },
         },
-
         {
             text: "Margin ",
             dataField: "Margin",
             sort: true,
-            formatter: (cellContent, user) => {
+            formatter: (cellContent, row) => {
 
-                if (((cellContent > 0) && (user["margin"] === undefined) || user.margin)) {
-                    user["margin"] = true
+                if (((cellContent > 0) && (row["margin"] === undefined) || row.margin)) {
+                    row["margin"] = true
                 } else {
-                    user["margin"] = false
+                    row["margin"] = false
                 }
-                return (
-
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    type="text"
-                                    defaultValue={cellContent}
-                                    disabled={user.margin}
-                                    className="col col-sm text-end"
-                                    onChange={(e) => MarginHandler(e, user)}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
-
-                )
+                return (<span style={{ justifyContent: 'center' }}>
+                    <CInput
+                        key={`Margin${row.Item}`}
+                        type="text"
+                        cpattern={decimalRegx}
+                        defaultValue={cellContent}
+                        disabled={row.margin}
+                        className="col col-sm text-end"
+                        onChange={(e) => row["Margin"] = e.target.value}
+                    />
+                </span>)
             },
+            headerStyle: () => {
+                return { width: '200px' };
+            }
         },
         {
             text: "Action ",
             dataField: "",
-            formatter: (cellContent, user) => (
-
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                {!(user.id === '') ?
-                                    <Button
-                                        id={"deleteid"}
-                                        type="button"
-                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                        onClick={() => { deleteHandeler(user.id, user.Name); }}
-                                    >
-                                        <i className="mdi mdi-delete font-size-18"></i>
-                                    </Button> : <></>}
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
+            headerStyle: () => {
+                return { width: '100px' };
+            },
+            formatter: (cellContent, user) => {
+                return (
+                    <span className="d-flex justify-content-center align-items-center">
+                        {!(user.id === '') &&
+                            <Button
+                                id={"deleteid"}
+                                type="button"
+                                className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
+                                onClick={() => { deleteHandeler(user.id, user.Name); }}
+                            >
+                                <i className="mdi mdi-delete font-size-18"></i>
+                            </Button>}
+                    </span>
+                )
+            }
         },
     ]
 
-    //'Save' And 'Update' Button Handller
-    const handleValidSubmit = (event, values) => {
-        var ItemData = TableData.map((index) => ({
-            PriceList: priceList_dropdown_Select.value,
-            Party: partyName_dropdown_Select.value,
-            EffectiveDate: effectiveDate,
-            Company: loginCompanyID(),
-            CreatedBy: loginUserID(),
-            UpdatedBy: loginUserID(),
-            IsDeleted: 0,
-            Item: index.Item,
-            Margin: index.Margin,
-            id: index.id
-        }))
+    const SaveHandler = async (event) => {
+        event.preventDefault();
+        const btnId = event.target.id
+        try {
+            // if (formValid(state, setState)) {
+            _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-        const Find = ItemData.filter((index) => {
-            return (!(index.Margin === '') && (index.id === ''))
-        })
+            var ItemData = Data.map((index) => ({
+                PriceList: values.PriceListName.value,
+                Party: values.PartyName.value,
+                EffectiveDate: values.EffectiveDate,
+                Company: loginCompanyID(),
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
+                IsDeleted: 0,
+                Item: index.Item,
+                Margin: index.Margin,
+                id: index.id
+            }))
 
-        const jsonBody = JSON.stringify(Find)
+            const Find = ItemData.filter((index) => {
+                return (!(index.Margin === '') && (index.id === ''))
+            })
+            const jsonBody = JSON.stringify(Find)
 
-        dispatch(postMarginMasterData(jsonBody));
+            if (!(Find.length > 0)) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Enter Margin"
+                })
+                return _cfunc.btnIsDissablefunc({ btnId, state: false })
+            }
+            else {
+                dispatch(saveMarginMaster({ jsonBody, btnId }));
+            }
+
+        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
+    if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
-                    <AvForm
-                        onValidSubmit={(e, v) => {
-                            handleValidSubmit(e, v);
-                        }}
-                        ref={formRef}
-                    >
-                        <Card className="text-black">
-                            <CardHeader className="card-header   text-black c_card_header" >
+
+                    <form noValidate>
+                        <Card className="text-black ">
+                            <CardHeader className="card-header  text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
                             <CardBody className=" vh-10 0 text-black" style={{ marginBottom: "4cm" }}>
-                                <Row className="">
-                                    <Col md={12} >
-                                        <Card style={{ backgroundColor: "whitesmoke" }}>
-                                            <CardHeader className="card-header   text-black c_card_body "  >
-                                                <Row className="mt-3">
-                                                    <Col sm={3}>
-                                                        <FormGroup className="mb-3 row">
-                                                            <Label className="col-sm-4 p-2 ml-n4 ">PriceList</Label>
-                                                            <Col sm={8}>
-                                                                <Select
-                                                                    value={priceList_dropdown_Select}
-                                                                    options={PriceList_DropdownOptions}
-                                                                    isDisabled={editMode === "edit" ? true : false}
-                                                                    className="rounded-bottom"
-                                                                    placeholder="select"
-                                                                    onChange={(e) => { PriceList_Dropdown_OnChange_Handller(e) }}
-                                                                    classNamePrefix="select2-selection"
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
+
+                                <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
+                                    <CardHeader className="c_card_body"  >
+                                        <Row className="mt-3">
+                                            <Col sm={3}>
+                                                <FormGroup className="mb-3 row">
+                                                    <Label htmlFor="validationCustom01" className="col-sm-4 p-2 ml-n2 ">{fieldLabel.PriceListName}</Label>
+                                                    <Col sm={8}>
+                                                        <Select
+                                                            name="PriceListName"
+                                                            value={values.PriceListName}
+                                                            id={"PriceListName"}
+                                                            options={PriceList_DropdownOptions}
+                                                            isDisabled={pageMode === mode.edit ? true : false}
+                                                            isSearchable={true}
+                                                            placeholder="select"
+                                                            onChange={(hasSelect, evn) => {
+                                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                dispatch(Breadcrumb_inputName(hasSelect.label))
+                                                            }}
+                                                            classNamePrefix="dropdown"
+                                                        />
+                                                        {isError.PriceListName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.PriceListName}</small></span>
+                                                        )}
+
                                                     </Col>
-                                                    <Col sm={3}>
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2" style={{ width: "2.5cm" }}>Party Name</Label>
-                                                            <Col sm={8} style={{}}>
-                                                                <Select
-                                                                    value={partyName_dropdown_Select}
-                                                                    options={PartyTypeDropdown_Options}
-                                                                    isDisabled={editMode === "edit" ? true : false}
-                                                                    className="rounded-bottom"
-                                                                    placeholder="select"
-                                                                    onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
-                                                                    classNamePrefix="select2-selection"
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col sm={3}>
+                                                <FormGroup className="mb-3 row ">
+                                                    <Label htmlFor="validationCustom01" className="col-sm-3 p-2" style={{ width: "2.5cm" }}>{fieldLabel.PartyName}</Label>
+                                                    <Col sm={8} >
+                                                        <Select
+                                                            name="PartyName"
+                                                            value={values.PartyName}
+                                                            id={"PartyName"}
+                                                            options={PartyTypeDropdown_Options}
+                                                            isDisabled={pageMode === mode.edit ? true : false}
+                                                            isSearchable={true}
+                                                            placeholder="select"
+                                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                            classNamePrefix="dropdown"
+                                                        />
+                                                        {isError.PartyName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                        )}
                                                     </Col>
-                                                    <Col sm={4}>
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>EffectiveDate</Label>
-                                                            <Col sm={8}>
-                                                                <C_DatePicker
-                                                                    id="EffectiveDateid"
-                                                                    name="effectiveDate"
-                                                                    placeholder = "Please Enter EffectiveDate"
-                                                                    value={effectiveDate}
-                                                                    isDisabled={editMode === "edit" ? true : false}
-                                                                    onChange={EffectiveDateHandler}
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col sm={4}>
+                                                <FormGroup className="mb-3 row ">
+                                                    <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>{fieldLabel.EffectiveDate}</Label>
+                                                    <Col sm={6}>
+                                                        <C_DatePicker
+                                                            id="EffectiveDate"
+                                                            name="EffectiveDate"
+                                                            placeholder={"DD/MM/YYYY"}
+                                                            value={values.EffectiveDate}
+                                                            isDisabled={pageMode === mode.edit ? true : false}
+                                                            onChange={(y, v, e) => {
+                                                                onChangeDate({ e, v, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.EffectiveDate.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.EffectiveDate}</span>
+                                                        )}
                                                     </Col>
-                                                    <Col sm={1}>
-                                                        <Button type="button" color="btn btn-outline-success border-2 font-size-12 " onClick={() => { GoButton_Handler() }} >Go</Button>
-                                                    </Col>
-                                                </Row>
-                                            </CardHeader>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                                {TableData.length > 0 ?
+                                                </FormGroup>
+                                            </Col>
+                                            <Col sm={1}>
+                                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
+                                                    onClick={(event) => { GoButton_Handler(event) }} >Go</Button>
+                                            </Col>
+                                        </Row>
+                                    </CardHeader>
+                                </Card>
+
+                                {Data.length > 0 ?
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="id"
-                                                data={TableData}
+                                                keyField="Item"
+                                                data={Data}
                                                 columns={pagesListColumns}
                                                 search
                                             >
@@ -506,7 +534,7 @@ const MarginMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"id"}
+                                                                        keyField={"Item"}
                                                                         id="table_Arrow"
                                                                         responsive
                                                                         bordered={false}
@@ -530,29 +558,23 @@ const MarginMaster = (props) => {
                                         )}
                                     </PaginationProvider>
                                     : null}
-                                {TableData.length > 0 ?
-                                    <div>
-                                        {
-                                            (editMode) ?
-                                                <button
-                                                    type="submit"
-                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
-                                                    className="btn btn-success w-md mt-3"
-                                                >
-                                                    <i class="fas fa-edit me-2"></i>Update
-                                                </button>
-                                                : <button
-                                                    type="submit"
-                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
-                                                    className="btn btn-primary w-md mt-3 "
-                                                > <i className="fas fa-save me-2"></i> Save
-                                                </button>
-                                        }
-                                    </div>
-                                    : null}
+
+                                {Data.length > 0 ?
+                                    <FormGroup>
+                                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                            <SaveButton pageMode={pageMode}
+                                                onClick={SaveHandler}
+                                                userAcc={userPageAccessState}
+                                                editCreatedBy={editCreatedBy}
+                                            />
+                                        </Col>
+                                    </FormGroup >
+                                    : null
+                                }
+
                             </CardBody>
                         </Card>
-                    </AvForm>
+                    </form>
                 </Container>
             </div>
         </React.Fragment>
@@ -560,8 +582,3 @@ const MarginMaster = (props) => {
 }
 
 export default MarginMaster
-
-
-
-
-

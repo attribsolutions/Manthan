@@ -1,10 +1,10 @@
 import {
-  DELETE_GST_FOR_MASTER_PAGE_SUCCESS,
-  DELETE_GST_LIST_PAGE_SUCCESS,
-  GET_GST_LIST_PAGE_SUCCESS,
-  POST_GO_BUTTON_FOR_GST_MASTER,
-  POST_GO_BUTTON_FOR_GST_MASTER_SUCCESS,
-  POST_GST_MASTER_DATA_SUCCESS
+  DELETE_GST_ID_FOR_MASTER_SUCCESS,
+  DELETE_GST_LIST_ID_SUCCESS,
+  GET_GST_LIST_SUCCESS,
+  GO_BUTTON_FOR_GST_MASTER,
+  GO_BUTTON_FOR_GST_MASTER_SUCCESS,
+  SAVE_GST_MASTER_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -12,56 +12,54 @@ const INIT_STATE = {
   GSTGoButton: [],
   postMsg: { Status: false },
   GSTList: [],
-  deleteMsgForListPage: { Status: false },
+  deleteMsgForMaster: { Status: false },
 }
 
 const GSTReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
     // post api
-    case POST_GST_MASTER_DATA_SUCCESS:
+    case SAVE_GST_MASTER_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
       };
 
-      case  POST_GO_BUTTON_FOR_GST_MASTER:
-            return {
-                ...state,
-                GSTGoButton: [],
-            };
+    case GO_BUTTON_FOR_GST_MASTER:
+      return {
+        ...state,
+        GSTGoButton: [],
+      };
 
     // Go Button post api
-    case POST_GO_BUTTON_FOR_GST_MASTER_SUCCESS:
+    case GO_BUTTON_FOR_GST_MASTER_SUCCESS:
       return {
         ...state,
         GSTGoButton: action.payload,
       };
 
     // GET api
-    case GET_GST_LIST_PAGE_SUCCESS:
+    case GET_GST_LIST_SUCCESS:
       return {
         ...state,
         GSTList: action.payload,
       };
 
     // DELETE api
-    case DELETE_GST_LIST_PAGE_SUCCESS:
-      return {
-        ...state,
-        deleteMsgForListPage: action.payload,
-      };
-
-
-    case DELETE_GST_FOR_MASTER_PAGE_SUCCESS:
+    case DELETE_GST_LIST_ID_SUCCESS:
       return {
         ...state,
         deleteMsg: action.payload,
+      };
+
+    case DELETE_GST_ID_FOR_MASTER_SUCCESS:
+      return {
+        ...state,
+        deleteMsgForMaster: action.payload,
       }
 
     default:
       return state
   }
-
 }
 
 export default GSTReducer

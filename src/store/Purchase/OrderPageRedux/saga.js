@@ -31,7 +31,7 @@ import {
   GET_ORDER_LIST_PAGE,
   ORDER_APPROVAL_ACTION
 } from "./actionType";
-import { btnIsDissablefunc, CommonConsole, concatDateAndTime, convertDatefunc, } from "../../../components/Common/CommonFunction";
+import { btnIsDissablefunc, CommonConsole, concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
 import { orderApproval } from "../../../routes/PageMode";
 
@@ -143,7 +143,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
     newList = yield response.Data.map((i) => {
 
       i["preOrderDate"] = i.OrderDate
-      var DeliveryDate = convertDatefunc(i.DeliveryDate);
+      var DeliveryDate = date_dmy_func(i.DeliveryDate);
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
       i.DeliveryDate = (`${DeliveryDate}`)
 

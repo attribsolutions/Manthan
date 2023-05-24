@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { CommonConsole, concatDateAndTime, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { CommonConsole, concatDateAndTime, date_dmy_func,   loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 
 // customer dropdown click then table values display
@@ -21,10 +21,7 @@ function* ReceiptGoButtonGenFunc({ Data }) {
       index["Calculate"] = 0
       return index
     });
-    // const newList = yield response.Data.map((i) => {
-    //   i.InvoiceDate = concatDateAndTime(i.InvoiceDate, i.CreatedOn)
-    //   return i
-    // })
+
     yield put(action.ReceiptGoButtonMaster_Success(response));
   } catch (error) { CommonConsole(error) }
 }
@@ -51,8 +48,9 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
     }
 
     const newList = yield response.Data.map((i) => {
-      i["preReceipDate"]=i.ReceiptDate;
+      i["preReceipDate"] = i.ReceiptDate;
       i.ReceiptDate = concatDateAndTime(i.ReceiptDate, i.CreatedOn)
+      i.ChequeDate = date_dmy_func(i.ChequeDate)
       return i
     })
 

@@ -3,7 +3,7 @@ import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { numberWithCommas, toWords } from "../Report_common_function";
-import { convertDatefunc, convertOnlyTimefunc, convertTimefunc } from "../../components/Common/CommonFunction";
+import { date_dmy_func, convertOnlyTimefunc, convertTimefunc } from "../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {
@@ -222,7 +222,7 @@ export const reportHeder3 = (doc, data) => {
     doc.line(408, 42, 408, 16);//vertical right 1
     doc.setFont(undefined, 'bold')
     doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 25) //Invoice Id
-    var date = convertDatefunc(data.InvoiceDate)
+    var date = date_dmy_func(data.InvoiceDate)
     var time = convertOnlyTimefunc(data.CreatedOn)
     doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date
 

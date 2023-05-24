@@ -136,14 +136,17 @@ const BulkRecipt = (props) => {
         {
             text: "Bill Amount",
             dataField: "GrandTotal",
+            align: () => ("right")
         },
         {
             text: "Paid",
             dataField: "PaidAmount",
+            align: () => ("right")
         },
         {
             text: "Bal Amt",
             dataField: "BalanceAmount",
+            align: () => ("right")
         },
         {
             text: "Calculate",
@@ -157,17 +160,20 @@ const BulkRecipt = (props) => {
                         key={row.Invoice}
                         defaultValue={row.BalanceAmount}
                         disabled={true}
-                        className="col col-sm"
+                        className="text-end"
                         onChange={e => { CalculateOnchange(e, row, key) }}
                     />
                 </span>)
+            },
+            headerStyle: () => {
+                return { width: '180px', textAlign: 'center' };
             }
         }
 
     ];
 
     const SaveHandler = (event) => {
-        
+
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
@@ -191,8 +197,8 @@ const BulkRecipt = (props) => {
                     ReceiptType: 29,
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID(),
-                    Bank:"",
-                    DepositorBank:"",
+                    Bank: "",
+                    DepositorBank: "",
                     ReceiptInvoices: [
                         {
                             Invoice: i.Invoice,

@@ -27,7 +27,7 @@ import {
   SAVE_CREDIT,
 } from "./actionType";
 
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 
 
 function* Save_Method_ForCredit_GenFun({ config }) {   // Save API
@@ -44,7 +44,7 @@ function* Get_Credit_List_GenFunc(data) {               // getList API
     const response = yield call(Go_Button_Credit_Debit_Post_API, data.data);
     const newList = yield response.Data.map((i) => {
 
-      var date = convertDatefunc(i.CRDRNoteDate)
+      var date = date_dmy_func(i.CRDRNoteDate)
       var time = convertTimefunc(i.CreatedOn)
       i.CRDRNoteDate = (`${date} ${time}`)
       return i

@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { Inward_Delete_API, Inward_List_API, Inward_Post_API, Make_Inward_Post_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { deleteInwardIdSuccess, getInwardListPageSuccess, makeInwardSuccess, postInwardSuccess } from "./action";
@@ -18,7 +18,7 @@ function* get_InwardList_GenFunc({ filters }) {
    try {
     const response = yield call(Inward_List_API, filters);
     const newList = yield response.Data.map((i) => {
-      var date = convertDatefunc(i.IBInwardDate)
+      var date = date_dmy_func(i.IBInwardDate)
       var time = convertTimefunc(i.CreatedOn)
       i.IBInwardDate = (`${date} ${time}`)
       return i

@@ -14,7 +14,7 @@ import {
     EDIT_DRIVER_TYPE_ID,
     UPDATE_DRIVER_TYPE_ID
 } from "./actionType";
-import { CommonConsole, convertDatefunc, loginJsonBody, } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, loginJsonBody, } from "../../../components/Common/CommonFunction";
 
 function* Get_Driver_GenFun({ jsonBody }) { // List API Using Post Method
 
@@ -22,7 +22,7 @@ function* Get_Driver_GenFun({ jsonBody }) { // List API Using Post Method
     try {
         const response = yield call(get_DriverList_API, filters);
         const newList = yield response.Data.map((i) => {
-            var date = convertDatefunc(i.DOB)
+            var date = date_dmy_func(i.DOB)
             i.DOB = (`${date}`)
             return i
         })

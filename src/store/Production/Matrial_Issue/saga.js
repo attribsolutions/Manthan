@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { Material_Issue_Delete_API, Material_Issue_Edit_API, Material_Issue_Get_API, Material_Issue_GoButton_Post_API, Material_Issue_Post_API } from "../../../helpers/backend_helper";
 import { deleteMaterialIssueIdSuccess, editMaterialIssueIdSuccess, getMaterialIssueListPageSuccess, goButtonForMaterialIssue_Master_ActionSuccess, SaveMaterialIssueSuccess } from "./action";
 import { DELETE_MATERIAL_ISSUE_LIST_PAGE, EDIT_MATERIAL_ISSUE_LIST_PAGE, GET_MATERIAL_ISSUE_LIST_PAGE, POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER, POST_MATERIAL_ISSUE } from "./actionType";
@@ -88,7 +88,7 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
   try {
     const response = yield call(Material_Issue_Get_API, filters);
     const newList = yield response.Data.map((i) => {
-      var date = convertDatefunc(i.MaterialIssueDate)
+      var date = date_dmy_func(i.MaterialIssueDate)
       var time = convertTimefunc(i.CreatedOn)
       i.MaterialIssueDate = (`${date} ${time}`)
       return i

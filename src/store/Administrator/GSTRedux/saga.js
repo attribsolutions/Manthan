@@ -1,74 +1,64 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
-import {
-  delete_GSTList_API,
-  GetGSTList_For_Listpage,
-  GoButton_Post_API_For_GSTMaster,
-  GST_MasterPage_delete_API,
-  Post_GSTMaster_API
-} from "../../../helpers/backend_helper";
-import {
-  deleteGSTForMasterPageSuccess,
-  deleteGSTListPageSuccess,
-  getGSTListPageSuccess,
-  postGoButtonForGST_Master_Success,
-  postGSTMasterDataSuccess
-} from "./action";
-import {
-  DELETE_GST_FOR_MASTER_PAGE,
-  DELETE_GST_LIST_PAGE,
-  GET_GST_LIST_PAGE,
-  POST_GO_BUTTON_FOR_GST_MASTER,
-  POST_GST_MASTER_DATA
-} from "./actionType";
+import { CommonConsole, concatDateAndTime } from "../../../components/Common/CommonFunction";
+import * as  apiCall from "../../../helpers/backend_helper";
+import * as actionType from "./actionType";
+import * as action from "./action";
 
-function* Post_GSTMaster_GenratorFunction({ Data }) {
+function* save_GSTMaster_GenFunc({ config }) {
   try {
-    const response = yield call(Post_GSTMaster_API, Data);
-    yield put(postGSTMasterDataSuccess(response));
+    const response = yield call(apiCall.Post_GSTMaster_API, config);
+    yield put(action.saveGSTMasterSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
 //listpage
-function* get_GSTListPage_GenratorFunction() {
+function* get_GSTList_GenFunc() {
 
   try {
-    const response = yield call(GetGSTList_For_Listpage);
-
-    yield put(getGSTListPageSuccess(response.Data));
+    const response = yield call(apiCall.GetGSTList_For_Listpage);
+    response.Data.map(i => {
+      i["preEffectiveDate"] = i.EffectiveDate
+      i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
+    })
+    yield put(action.getGSTListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-//delete
-function* delete_GSTListPage_GenratorFunction({ CommonID }) {
+// delete api for GST List
+function* delete_GSTList_ID_GenFunc({ config }) {
   try {
-    const response = yield call(delete_GSTList_API, CommonID);
-    yield put(deleteGSTListPageSuccess(response));
+    const response = yield call(apiCall.delete_GSTList_API, config);
+    yield put(action.deleteGSTListId_Success(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* GSTGoButton_post_GenratorFunction({ data }) {
+function* goButton_GST_GenFunc({ data }) {
+  const { jsonBody, pathname, btnmode, rowData } = data
   try {
-    const response = yield call(GoButton_Post_API_For_GSTMaster, data);
-    yield put(postGoButtonForGST_Master_Success(response.Data));
+    const response = yield call(apiCall.GoButton_Post_API_For_GSTMaster, jsonBody);
+    response.pageMode = btnmode
+    response.pathname = pathname
+    response.rowData = rowData
+    yield put(action.goButtonForGST_Master_Success(response));
   } catch (error) { CommonConsole(error) }
 }
 
 // delete api for GST Master
-function* deleteId_for_GSTMaster_GenratorFunction({ id }) {
+function* delete_GSTMaster_ID_GenFunc({ id }) {
+  debugger
   try {
-    const response = yield call(GST_MasterPage_delete_API, id);
+    const response = yield call(apiCall.GST_MasterPage_delete_API, id);
     response["deletedId"] = id
-    yield put(deleteGSTForMasterPageSuccess(response))
+    yield put(action.deleteGSTId_ForMaster_Success(response))
   } catch (error) { CommonConsole(error) }
 }
 
 function* GSTSaga() {
-  yield takeEvery(POST_GST_MASTER_DATA, Post_GSTMaster_GenratorFunction);
-  yield takeEvery(GET_GST_LIST_PAGE, get_GSTListPage_GenratorFunction);
-  yield takeEvery(DELETE_GST_LIST_PAGE, delete_GSTListPage_GenratorFunction);
-  yield takeEvery(POST_GO_BUTTON_FOR_GST_MASTER, GSTGoButton_post_GenratorFunction);
-  yield takeEvery(DELETE_GST_FOR_MASTER_PAGE, deleteId_for_GSTMaster_GenratorFunction);
+  yield takeEvery(actionType.SAVE_GST_MASTER, save_GSTMaster_GenFunc);
+  yield takeEvery(actionType.GET_GST_LIST, get_GSTList_GenFunc);
+  yield takeEvery(actionType.DELETE_GST_LIST_ID, delete_GSTList_ID_GenFunc);
+  yield takeEvery(actionType.GO_BUTTON_FOR_GST_MASTER, goButton_GST_GenFunc);
+  yield takeEvery(actionType.DELETE_GST_ID_FOR_MASTER, delete_GSTMaster_ID_GenFunc);
 
 }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "reactstrap";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { deleteID_In_MasterPage, deleteID_In_MasterPageSuccess } from "../../../../../store/Administrator/MRPMasterRedux/action";
+import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success } from "../../../../../store/Administrator/MRPMasterRedux/action";
 import { AlertState } from "../../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { loginIsSCMCompany } from "../../../../../components/Common/CommonFunction";
@@ -30,7 +30,7 @@ function MRPTable(props) {
           Status: true,
           Message: `Are you sure you want to delete this MRP"`,
           RedirectPath: false,
-          PermissionAction: deleteID_In_MasterPage,
+          PermissionAction: deleteMRPMaster_Id,
           ID: info.id,
         })
       );
@@ -39,7 +39,7 @@ function MRPTable(props) {
 
   useEffect(() => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
-      dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
+      dispatch(deleteMRPMaster_Id_Success({ Status: false }));
 
       var fil = props.tableData.filter((i) => {
         return !(i.id === deleteMsg.deletedId);
@@ -54,7 +54,7 @@ function MRPTable(props) {
         })
       );
     } else if (deleteMsg.Status === true) {
-      dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
+      dispatch(deleteMRPMaster_Id_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
