@@ -289,9 +289,12 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
     try {
      let btn= document.getElementById(btnId);
      btn .disabled = state
-if(state){
-  btn.innerText='Loging'
-}
+// if(state){
+//   btn.innerText='Loging'
+// }else{
+//   btn.innerText=""
+
+// }
 
       // document.getElementById("overlay").style.display = true
       //   ? "block"
