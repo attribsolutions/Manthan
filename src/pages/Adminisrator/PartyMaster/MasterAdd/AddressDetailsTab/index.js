@@ -109,8 +109,6 @@ const AddressTabForm = forwardRef((props, ref) => {
         })
     }
 
-
-
     const AddressTab = (
         <Row>
             <Card className="text-black" style={{ backgroundColor: "whitesmoke" }}>
