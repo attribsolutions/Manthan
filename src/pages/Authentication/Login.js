@@ -22,7 +22,7 @@ import { loginUser, postSuperAdmin, roleAceessAction, roleAceessActionSuccess } 
 // import images
 import logo from "../../assets/images/cbm_logo.png"
 
-// import logo from "../../assets/images/logo-sm.svg"
+// import logo from "../../assets/images/foodERP_logo.png"
 
 //Import config
 import CarouselPage from "./CarouselPage"

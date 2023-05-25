@@ -21,7 +21,7 @@ import RightSidebar from "../CommonForBoth/RightSidebar"
 import LightDark from "../CommonForBoth/Menus/LightDark";
 
 // import images
-import logoSvg from "../../assets/images/logo-sm.svg"
+import logoSvg from "../../assets/images/foodERP_logo.png"
 import github from "../../assets/images/brands/github.png"
 import bitbucket from "../../assets/images/brands/bitbucket.png"
 import dribbble from "../../assets/images/brands/dribbble.png"
@@ -83,19 +83,19 @@ const Header = props => {
             <div className="navbar-brand-box">
               <Link to="/dashboard" className="logo logo-dark">
                 <span className="logo-sm">
-                  <img src={logoSvg} alt="" height="24" />
+                  <img src={logoSvg} alt="" height="50" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="24" /> <span className="logo-txt">FoodERP</span>
+                  <img src={logoSvg} alt="" height="50" /> <span className="logo-txt">FoodERP</span>
                 </span>
               </Link>
 
               <Link to="/dashboard" className="logo logo-light">
                 <span className="logo-sm">
-                  <img src={logoSvg} alt="" height="24" />
+                  <img src={logoSvg} alt="" height="50" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="24" /> <span className="logo-txt">FoodERP</span>
+                  <img src={logoSvg} alt="" height="50" /> <span className="logo-txt">FoodERP</span>
                 </span>
               </Link>
             </div>
