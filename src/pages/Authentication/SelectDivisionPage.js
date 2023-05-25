@@ -7,12 +7,13 @@ import { useSelector, useDispatch } from "react-redux"
 import { Link, useHistory } from "react-router-dom"
 
 import { getUserDetailsAction, resetRoleAccessAction, roleAceessAction } from "../../store/actions"
-import logo from "../../assets/images/foodERP_logo.png"
+import logo from "../../assets/images/cbm_logo.png"
 
 //Import config
 import CarouselPage from "./CarouselPage"
 import Select from "react-select";
 import { loginCompanyID } from "../../components/Common/CommonFunction"
+import { useLayoutEffect } from "react"
 
 const SelectDivisionPage = props => {
   const dispatch = useDispatch()
@@ -25,7 +26,7 @@ const SelectDivisionPage = props => {
     divisionDropdown_redux: state.Login.divisionDropdown,
   }));
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(resetRoleAccessAction())
     if (!(localStorage.getItem("userId"))) {
       history.push("/login")
@@ -35,7 +36,7 @@ const SelectDivisionPage = props => {
     }
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
 
     if (divisionDropdown_redux.length === 1) {
 
@@ -88,10 +89,11 @@ const SelectDivisionPage = props => {
               <div className="auth-full-page-content d-flex p-sm-5 p-4">
                 <div className="w-100">
                   <div className="d-flex flex-column h-100">
-                    <div className="mb-4 mb-md-5 text-center">
+                  <div className="mb-4 md-5 text-center">
                       <Link to="/dashboard" className="d-block auth-logo">
-                        <img src={logo} alt="" height="28" /> <span className="logo-txt">FoodERP</span>
+                        <span className="logo-txt">FoodERP 2.0</span>
                       </Link>
+                      <img src={logo} alt="" height="90" /> 
                     </div>
 
                     <div className="auth-content my-auto">
@@ -101,7 +103,7 @@ const SelectDivisionPage = props => {
 
                       <div className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
-                        <p className="text-muted mt-2">Select Role to Continue FoodERP.</p>
+                        <p className="text-muted mt-2">Select Role to Continue FoodERP 2.0.</p>
                       </div>
 
                       <div className="mb-3">

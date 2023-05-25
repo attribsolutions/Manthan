@@ -12,12 +12,12 @@ import { useSelector, useDispatch } from "react-redux"
 import { withRouter, Link } from "react-router-dom"
 
 // availity-reactstrap-validation
-import { AvForm, AvField, AvInput } from "availity-reactstrap-validation"
+import { AvForm, AvField, } from "availity-reactstrap-validation"
 
 
 /// tsdfddf Punam demotest
 // actions
-import { loginUser, postSuperAdmin, roleAceessAction, roleAceessActionSuccess } from "../../store/actions"
+import { loginUser, } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/cbm_logo.png"
@@ -26,7 +26,6 @@ import logo from "../../assets/images/cbm_logo.png"
 
 //Import config
 import CarouselPage from "./CarouselPage"
-import axios from "axios";
 
 const Login = props => {
  
@@ -56,7 +55,7 @@ const Login = props => {
   //   const jsonBody = JSON.stringify([]);
   //   dispatch(postSuperAdmin(jsonBody))
   // }
-
+debugger
   return (
     <React.Fragment>
       <MetaTags>
@@ -71,7 +70,7 @@ const Login = props => {
                   <div className="d-flex flex-column h-100">
                     <div className="mb-4 md-5 text-center">
                       <Link to="/dashboard" className="d-block auth-logo">
-                        <span className="logo-txt">FoodERP</span>
+                        <span className="logo-txt">FoodERP 2.0</span>
                       </Link>
                       <img src={logo} alt="" height="90" /> 
 
@@ -79,7 +78,7 @@ const Login = props => {
                     <div className="auth-content my-auto">
                       <div className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
-                        <p className="text-muted mt-2">Sign in to Continue FoodERP .</p>
+                        <p className="text-muted mt-2">Sign in to Continue FoodERP 2.0</p>
                       </div>
                       {loginError ? (
                         <Alert color="danger" style={{ marginTop: "13px" }}>
