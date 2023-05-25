@@ -237,7 +237,8 @@ const Order = (props) => {
                 let btnId = postMsg.btnId;
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
                 let config = { btnId }
-                config.orderId = postMsg.OrderID;
+                let order_ID = 5000000 + Number(postMsg.OrderID)
+                config.orderId = order_ID;
                 dispatch(_act.getOrderApprovalDetailAction(config));
             }
             // ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
