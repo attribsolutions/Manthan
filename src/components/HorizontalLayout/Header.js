@@ -23,7 +23,7 @@ import LightDark from "../CommonForBoth/Menus/LightDark";
 
 
 // import images
-import logo from "../../assets/images/foodERP_logo.png";
+import logo from "../../assets/images/cbm_logo.png";
 import github from "../../assets/images/brands/github.png"
 import bitbucket from "../../assets/images/brands/bitbucket.png"
 import dribbble from "../../assets/images/brands/dribbble.png"
