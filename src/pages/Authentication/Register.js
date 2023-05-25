@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 
 // import images
-import logo from "../../assets/images/logo-sm.svg"
+import logo from "../../assets/images/foodERP_logo.png"
 import CarouselPage from "./CarouselPage"
 
 const Register = props => {

@@ -4,7 +4,7 @@ import { AvForm, AvInput, AvGroup, AvFeedback, } from "availity-reactstrap-valid
 import MetaTags from "react-meta-tags"
 import { Link } from "react-router-dom"
 // import images
-import logo from "../../assets/images/logo-sm.svg"
+import logo from "../../assets/images/foodERP_logo.png"
 import enterpass from "../../assets/images/Enterpass.png"
 //Import config
 import CarouselPage from "./CarouselPage"

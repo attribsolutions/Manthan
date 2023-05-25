@@ -10,7 +10,7 @@ import bg1 from "../../assets/images/bg-1.jpg";
 import bg2 from "../../assets/images/bg-2.jpg";
 import bg3 from "../../assets/images/bg-3.jpg";
 // import images
-import logo from "../../assets/images/logo-sm.svg";
+import logo from "../../assets/images/foodERP_logo.png";
 
 const PagesComingsoon = () => {
   const comingSoonImage = [

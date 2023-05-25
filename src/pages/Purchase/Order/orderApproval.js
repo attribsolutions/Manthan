@@ -11,7 +11,7 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
         Data.OrderItem.forEach(i => {
             if (i.Quantity > 0) {
                 isorderItemSet.push({
-                    "OrderNo": Data.id,//parent id
+                    "OrderNo": 5000000 + Number(Data.id),//parent--id
                     "ItemNo": i.id, //OrderItem--id
                     "Material": i.ItemSAPCode,//OrderItem--ItemSAPCode
                     "Quantity": i.QuantityInNo,//OrderItem--QuantityInNo 
@@ -37,6 +37,7 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
 }
 
 export const orderApprovalMessage = ({ dispatch, orderApprovalMsg }) => {
+    try{
     if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
         dispatch(orderApprovalActionSuccess({ Status: false }))
         customAlert({
@@ -50,4 +51,5 @@ export const orderApprovalMessage = ({ dispatch, orderApprovalMsg }) => {
             Message: JSON.stringify(orderApprovalMsg.Message),
         })
     }
+} catch(e){}
 }
