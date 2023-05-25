@@ -1,3 +1,5 @@
+
+
 import PropTypes from "prop-types"
 import MetaTags from "react-meta-tags"
 import React, { useEffect } from "react"
@@ -18,7 +20,9 @@ import { AvForm, AvField, AvInput } from "availity-reactstrap-validation"
 import { loginUser, postSuperAdmin, roleAceessAction, roleAceessActionSuccess } from "../../store/actions"
 
 // import images
-import logo from "../../assets/images/logo-sm.svg"
+import logo from "../../assets/images/cbm_logo.png"
+
+// import logo from "../../assets/images/logo-sm.svg"
 
 //Import config
 import CarouselPage from "./CarouselPage"
@@ -65,15 +69,17 @@ const Login = props => {
               <div className="auth-full-page-content d-flex p-sm-5 p-4">
                 <div className="w-100">
                   <div className="d-flex flex-column h-100">
-                    <div className="mb-4 mb-md-5 text-center">
+                    <div className="mb-4 md-5 text-center">
                       <Link to="/dashboard" className="d-block auth-logo">
-                        <img src={logo} alt="" height="28" /> <span className="logo-txt">FoodERP</span>
+                        <span className="logo-txt">FoodERP</span>
                       </Link>
+                      <img src={logo} alt="" height="90" /> 
+
                     </div>
                     <div className="auth-content my-auto">
                       <div className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
-                        <p className="text-muted mt-2">Sign in to Continue FoodERP.</p>
+                        <p className="text-muted mt-2">Sign in to Continue FoodERP .</p>
                       </div>
                       {loginError ? (
                         <Alert color="danger" style={{ marginTop: "13px" }}>
@@ -131,7 +137,7 @@ const Login = props => {
 
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()}. Crafted with <i className="mdi mdi-heart text-danger"></i> by Attrib Solution</p>
+                      <p className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>
                     </div>
                   </div>
                 </div>
