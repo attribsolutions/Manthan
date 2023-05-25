@@ -52,6 +52,9 @@ export const DRIVER_lIST = "/DriverList"
 export const PARTY = "/PartyMaster"
 export const PARTY_lIST = "/PartyList"
 
+export const RETAILER_MASTER = "/RetailerMaster"
+export const RETAILER_LIST = "/RetailerList"
+
 export const PARTYTYPE = "/PartyType"
 export const PARTYTYPE_lIST = "/PartyTypeList"
 

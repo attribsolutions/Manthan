@@ -12,11 +12,24 @@ import {
 import PartyMaster from './MasterAdd/PartyIndex';
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID"
+import { mode,url,pageId} from "../../../routes/index";
+import { useLayoutEffect } from 'react';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const PartyList = () => {
+
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const [subPageMode] = useState(history.location.pathname);
+    const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [otherState, setOtherState] = useState({
+        masterPath: '',
+        makeBtnShow: false,
+        makeBtnShow: '',
+    });
+
     const reducers = useSelector(
 
         (state) => ({
@@ -40,10 +53,32 @@ const PartyList = () => {
     }
 
     //  This UseEffect => Featch Modules List data  First Rendering
-    useEffect(() => {
+    useLayoutEffect(() => {
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+        let masterPath = '';
+        let newBtnPath='';
+        if (subPageMode === url.PARTY_lIST) {
+            page_Id = pageId.PARTY_lIST;
+            masterPath = url.PARTY;
+            newBtnPath = url.PARTY;
+        }
+        else if (subPageMode === url.RETAILER_LIST) {
+            page_Id = pageId.RETAILER_LIST
+            masterPath = url.RETAILER_MASTER;
+            newBtnPath = url.RETAILER_MASTER;
+        }
+       
+     
+        setOtherState({ masterPath, newBtnPath,})
+        setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(pageId.PARTY_lIST))
+        dispatch(commonPageFieldList(page_Id))
         dispatch(getPartyListAPI());
+        return ()=>{
+            dispatch(commonPageFieldListSuccess(null))
+            dispatch(updatePartyIDSuccess([]))//for clear privious order list   
+        }
     }, []);
 
     const { pageField, userAccess = [] } = reducers
@@ -56,7 +91,9 @@ const PartyList = () => {
                         action={action}
                         reducers={reducers}
                         MasterModal={PartyMaster}
-                        masterPath={url.PARTY}
+                        masterPath={otherState.masterPath}
+                        newBtnPath={otherState.newBtnPath}
+                        pageMode={pageMode}
                         ButtonMsgLable={"Party"}
                         deleteName={"Name"}
                     />

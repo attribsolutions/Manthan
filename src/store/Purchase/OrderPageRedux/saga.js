@@ -74,9 +74,9 @@ function* saveOrder_GenFunc({ config }) {
 
     let newConfig = config;
 // **************************************** for aorde Sap aproval********************************
-//   if (subPageMode === url.ORDER_2) { 
-//      newConfig = { jsonBody, btnId: undefined }
-//   }
+  if (subPageMode === url.ORDER_2) { 
+     newConfig = { jsonBody, btnId: undefined }
+  }
 // ********************************************************
 
   let response = {}
