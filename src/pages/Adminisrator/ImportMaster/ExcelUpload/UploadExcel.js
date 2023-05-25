@@ -225,7 +225,7 @@ const UploadExcel = (props) => {
                 return
             }
         };
-        debugger
+        
         setReadJsonDetail(preDetails)
         setPreUploadjson([])
         setPreViewDivShow(false)

@@ -102,7 +102,7 @@ export const ReportFotterColumns2 = [
 ];
 
 export const ReportRows = (data, doc) => {
-    debugger
+    
     const terms = data.OrderTermsAndCondition
     const slicedArray = terms.slice(0, 2);
     var TableArray = [["Terms And Condition"],

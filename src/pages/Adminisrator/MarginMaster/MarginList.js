@@ -82,7 +82,7 @@ const MarginList = () => {
   }, [MarginGoButton]);
 
   function editBodyfunc(index) {
-    debugger
+    
     const { rowData, btnId } = index
     let { PriceList_id, Party_id, preEffectiveDate } = rowData;
     _cfunc.btnIsDissablefunc({ btnId, state: true })

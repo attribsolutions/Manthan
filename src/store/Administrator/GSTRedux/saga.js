@@ -45,7 +45,7 @@ function* goButton_GST_GenFunc({ data }) {
 
 // delete api for GST Master
 function* delete_GSTMaster_ID_GenFunc({ id }) {
-  debugger
+  
   try {
     const response = yield call(apiCall.GST_MasterPage_delete_API, id);
     response["deletedId"] = id

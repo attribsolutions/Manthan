@@ -82,7 +82,7 @@ const MRPList = () => {
   }, [MRPGoButton]);
 
   function editBodyfunc(index) {
-    debugger
+    
     const { rowData, btnId } = index
     let { Division_id, Party_id, preEffectiveDate } = rowData;
     _cfunc.btnIsDissablefunc({ btnId, state: true })
