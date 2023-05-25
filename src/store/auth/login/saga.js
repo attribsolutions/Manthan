@@ -12,6 +12,7 @@ import {
   loginSuccess,
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
+  roleAceessActionError,
   roleAceessActionSuccess
 } from "./actions"
 
@@ -77,12 +78,12 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 function* RoleAccessGenratorFunction({ party, employee, company }) {
-
+debugger
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
 
-    const RoleResponse = yield call(RoleAccessApi_url, party, employee, company);
-
+    const RoleResponse = yield call(RoleAccessApi_url, party, employee, "company");
+debugger
     if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
 
       let arrayMain = []
@@ -131,18 +132,9 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
     }
 
   } catch (error) {
-
-    // let redirect = yield customAlert({
-    //   Type: 2,
-    //   Message: `RoleAccess get Api Error `
-    // })
-    // if (redirect) { history.go(0) }
-    // else {
-    //   history.go(0)
-    // }
-
-
-  }
+    debugger
+    yield put(roleAceessActionError(true))
+   }
 }
 
 function* Post_SuperAdmin_API_GenratorFunction() {
