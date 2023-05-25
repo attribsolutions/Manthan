@@ -107,19 +107,29 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     }, [PartyTypes])
 
     useEffect(() => {
-        if (subPageMode === url.RETAILER_MASTER) {
+        let retailerParty = PartyTypes.find(i => (i.IsRetailer))
+        
+        if ((subPageMode === url.RETAILER_MASTER) && !(retailerParty === undefined)) {
             setState((i) => {
                 let a = { ...i }
                 let supilerArr = [{
                     value: loginPartyID()
                 }]
+
+                a.values.PartyType = {
+                    value: retailerParty.id,
+                    label: retailerParty.Name
+                }
                 a.values.Supplier = supilerArr
+                a.hasValid.PartyType.valid = true;
                 a.hasValid.Supplier.valid = true;
+
+                delete a.required.PartyType
                 delete a.required.Supplier
                 return a
             })
         }
-    }, [pageField])
+    }, [PartyTypes, pageField])
 
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
@@ -150,7 +160,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     }
 
     function partyTypeOnChange(hasSelect, evn) {
-        debugger
+        
         onChangeSelect({ hasSelect, evn, state, setState })
         setPriceListSelect({ label: '' })
         dispatch(priceListByPartyAction(hasSelect.value))
@@ -287,38 +297,42 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 <Card className=" text-black mt-n2" style={{ backgroundColor: "whitesmoke" }} >
                     <CardBody >
                         <Row className="mt-3 ">
-                            <Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Label > {fieldLabel.PartyType}</Label>
-                                    <Col sm={12}>
-                                        <Select
-                                            name="PartyType"
-                                            value={values.PartyType}
-                                            isSearchable={true}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            options={PartyTypeDropdown_Options}
-                                            onChange={partyTypeOnChange}
-                                        />
-                                        {isError.PartyType.length > 0 && (
-                                            <span className="text-danger f-8"><small>{isError.PartyType}</small></span>
-                                        )}
+                            {(subPageMode === url.PARTY) &&
+                                <Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Label > {fieldLabel.PartyType}</Label>
+                                        <Col sm={12}>
+                                            <Select
+                                                name="PartyType"
+                                                value={values.PartyType}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={PartyTypeDropdown_Options}
+                                                onChange={partyTypeOnChange}
+                                            />
+                                            {isError.PartyType.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.PartyType}</small></span>
+                                            )}
 
-                                    </Col>
-                                </FormGroup>
-                            </Col>
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                            }
                             {
-                                (findAddMasterAccess) ?
-                                    <Col md="1" className=" mt-3">
-                                        <AddMaster
-                                            masterModal={PartyType}
-                                            masterPath={url.PARTYTYPE}
-                                        />
-                                    </Col> : <Col md="1">  </Col>
+                                (subPageMode === url.PARTY) ?
+                                    (findAddMasterAccess) ?
+                                        <Col md="1" className=" mt-3">
+                                            <AddMaster
+                                                masterModal={PartyType}
+                                                masterPath={url.PARTYTYPE}
+                                            />
+                                        </Col> : <Col md="1"> </Col>
+                                    : null
                             }
 
-                            {/* <Col md="1">  </Col> */}
-                            <Col md="3">
+                 
+                            <Col md="3" className="mb-3">
                                 <FormGroup>
                                     <Label>Price List </Label>
                                     <Input
@@ -338,30 +352,30 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             </Col>
                             <Col md="1">  </Col>
 
-                            {/* {(subPageMode === url.PARTY) && // SUPLIER dropdown  show only (Party Master) mode */}
-                            < Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Label> {fieldLabel.Supplier} </Label>
-                                    <Col sm={12}>
-                                        <Select
-                                            name="Supplier"
-                                            value={values.Supplier}
-                                            isSearchable={false}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            options={SupplierOptions}
-                                            isMulti={true}
-                                            onChange={(hasSelect, evn) => {
-                                                onChangeSelect({ hasSelect, evn, state, setState })
-                                            }}
-                                        />
-                                        {isError.Supplier.length > 0 && (
-                                            <span className="text-danger f-8"><small>{isError.Supplier}</small></span>
-                                        )}
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                            {/* } */}
+                            {(subPageMode === url.PARTY) && // SUPLIER dropdown  show only (Party Master) mode
+                                < Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Label> {fieldLabel.Supplier} </Label>
+                                        <Col sm={12}>
+                                            <Select
+                                                name="Supplier"
+                                                value={values.Supplier}
+                                                isSearchable={false}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={SupplierOptions}
+                                                isMulti={true}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState })
+                                                }}
+                                            />
+                                            {isError.Supplier.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Supplier}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                            }
                         </Row>
                         <Row>
                             <Col md="3">

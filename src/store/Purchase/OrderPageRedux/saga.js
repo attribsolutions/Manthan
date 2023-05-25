@@ -41,7 +41,7 @@ import { orderApproval } from "../../../routes/PageMode";
 function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
 
   try {
-    debugger
+    
     const { subPageMode, } = config
     let response;
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4)) {

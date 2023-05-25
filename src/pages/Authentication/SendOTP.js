@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import MetaTags from "react-meta-tags"
 import { Link } from "react-router-dom"
 // import images
-import logo from "../../assets/images/logo-sm.svg"
+import logo from "../../assets/images/foodERP_logo.png"
 import resetImage from "../../assets/images/resetpassword.png"
 //Import config
 import CarouselPage from "./CarouselPage"

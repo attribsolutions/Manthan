@@ -10,7 +10,6 @@ import {
     Label,
     Row,
 } from "reactstrap";
-
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -111,7 +110,9 @@ const RoutesMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+
+
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null

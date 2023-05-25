@@ -22,7 +22,7 @@ import {
 } from "../../store/actions"
 
 // import images
-import logo from "../../assets/images/logo-sm.svg"
+import logo from "../../assets/images/foodERP_logo.png"
 import CarouselPage from "./CarouselPage"
 import resetImage from "../../assets/images/resetpassword.png"
 
