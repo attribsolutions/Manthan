@@ -6,7 +6,7 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
     if ((approvalDetail.Status === true)) {
 
         const { Data, btnId } = approvalDetail;
-
+        
         let isorderItemSet = [];
         Data.OrderItem.forEach(i => {
             if (i.Quantity > 0) {
@@ -28,9 +28,10 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
             "OrderNo": (5000000 + Number(Data.id)).toString(),//parent--id
             "Stats": "1",
             "CancelFlag": "", //blank
-            "OrderItemSet": (isorderItemSet).toString(),
+            "OrderItemSet": isorderItemSet,
         }
         const jsonBody = JSON.stringify(body);
+
         dispatch(getOrderApprovalDetailActionSucc({ Status: false }))
         dispatch(orderApprovalAction({ jsonBody, btnId }))
     }
