@@ -2,14 +2,15 @@ import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'rea
 import { useSelector } from 'react-redux'
 import { Card, CardBody, Col, FormGroup, Input, Label } from 'reactstrap'
 import { comAddPageFieldFunc, initialFiledFunc, onChangeText } from '../../../../../components/Common/validationFunction'
+import { url } from '../../../../../routes'
 
-const PrefixTab = forwardRef((props, ref) => {
+const PrefixTab = forwardRef(({ subPageMode }, ref) => {
 
     const fileds = {
         OrderPrefix: '',
         InvoicePrefix: '',
         GRNPrefix: '',
-        ChallanPrefix:'',
+        ChallanPrefix: '',
         ReceiptPrefix: '',
         WorkOrderPrefix: '',
         MaterialIssuePrefix: '',
@@ -46,7 +47,9 @@ const PrefixTab = forwardRef((props, ref) => {
         }
     }, [pageField])
 
-    return (
+    if (subPageMode === url.RETAILER_MASTER) {
+        return null
+    } return (
         <div>
             <Card className="text-black " >
                 <CardBody className="c_card_body">

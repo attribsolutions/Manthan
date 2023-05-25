@@ -11,8 +11,9 @@ import PartyType from '../../../PartyTypes/PartyType'
 import * as url from "../../../../../routes/route_url";
 import AddMaster from "../../../EmployeePages/Drodown";
 import * as pageId from "../../../../../routes/allPageID"
+import { loginPartyID } from '../../../../../components/Common/CommonFunction'
 
-const BaseTabForm = forwardRef((props, ref) => {
+const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     const dispatch = useDispatch();
 
@@ -36,7 +37,6 @@ const BaseTabForm = forwardRef((props, ref) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
     const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
-    const [isRetailer, setIsRetailer] = useState(false)
 
     const { values } = state;
     const { isError } = state;
@@ -106,6 +106,21 @@ const BaseTabForm = forwardRef((props, ref) => {
         }
     }, [PartyTypes])
 
+    useEffect(() => {
+        if (subPageMode === url.RETAILER_MASTER) {
+            setState((i) => {
+                let a = { ...i }
+                let supilerArr = [{
+                    value: loginPartyID()
+                }]
+                a.values.Supplier = supilerArr
+                a.hasValid.Supplier.valid = true;
+                delete a.required.Supplier
+                return a
+            })
+        }
+    }, [pageField])
+
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -139,29 +154,6 @@ const BaseTabForm = forwardRef((props, ref) => {
         onChangeSelect({ hasSelect, evn, state, setState })
         setPriceListSelect({ label: '' })
         dispatch(priceListByPartyAction(hasSelect.value))
-        if (hasSelect.IsRetailer === true) {
-            setState((i) => {
-             
-                const a = { ...i }
-                delete a.required.Email
-                delete a.required.SAPPartyCode
-                delete a.required.GSTIN
-                a.isError.Email = "";
-                a.isError.SAPPartyCode = "";
-                a.isError.GSTIN = "";
-                
-                return a
-            })
-        }
-        else {
-            setState((i) => {
-                const a = { ...i }
-                a.required.Email = true;
-                a.required.SAPPartyCode = true;
-                a.required.GSTIN = true;
-                return a
-            })
-        }
     }
 
     const priceListOnClick = function () {
@@ -346,7 +338,8 @@ const BaseTabForm = forwardRef((props, ref) => {
                             </Col>
                             <Col md="1">  </Col>
 
-                            <Col md="3">
+                            {/* {(subPageMode === url.PARTY) && // SUPLIER dropdown  show only (Party Master) mode */}
+                            < Col md="3">
                                 <FormGroup className="mb-3">
                                     <Label> {fieldLabel.Supplier} </Label>
                                     <Col sm={12}>
@@ -368,6 +361,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
+                            {/* } */}
                         </Row>
                         <Row>
                             <Col md="3">
@@ -505,7 +499,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                     </CardBody>
                 </Card>
             </Row>
-        </div>
+        </div >
     )
     return FirstTab
 })

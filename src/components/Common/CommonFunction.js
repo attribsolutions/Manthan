@@ -171,33 +171,33 @@ export const loginUserID = () => {//++++++++++++++++++++++ Session User Id++++++
 };
 
 export const loginCompanyID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-  let user_Company = 0;
+  let user_Company_id = 0;
   try {
-    user_Company = JSON.parse(localStorage.getItem("Company"));
+    user_Company_id = JSON.parse(localStorage.getItem("Company"));
   } catch (e) {
     CommonConsole("Common login CompanyID  Error");
   }
-  return user_Company;
+  return user_Company_id;
 };
 
 export const loginCompanyName = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-  let company = "";
+  let user_Company_name = "";
   try {
-    company = localStorage.getItem("CompanyName");
+    user_Company_name = localStorage.getItem("CompanyName");
   } catch (e) {
     CommonConsole("Common login CompanyID  Error");
   }
-  return company;
+  return user_Company_name;
 };
 
 export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
-  let user_Party = 0;
+  let user_Party_id = 0;
   try {
-    user_Party = JSON.parse(localStorage.getItem("roleId")).Party_id;
+    user_Party_id = JSON.parse(localStorage.getItem("roleId")).Party_id;
   } catch (e) {
     CommonConsole("Common login PartyID Func  Error");
   }
-  return user_Party;
+  return user_Party_id;
 };
 
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
