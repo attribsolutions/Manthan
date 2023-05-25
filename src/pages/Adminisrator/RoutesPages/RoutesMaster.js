@@ -81,7 +81,7 @@ const RoutesMaster = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
-   
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -111,7 +111,7 @@ const RoutesMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-debugger
+        debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -335,7 +335,7 @@ debugger
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Monday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "50px" }}
+                                                                style={{ marginLeft: "48px" }}
                                                                 type="checkbox"
                                                                 className="p-2"
                                                                 name="Monday"
@@ -355,7 +355,7 @@ debugger
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Tuesday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "49px" }}
+                                                                style={{ marginLeft: "46px" }}
                                                                 type="checkbox"
                                                                 className="p-2"
                                                                 name="Tuesday"
@@ -375,7 +375,7 @@ debugger
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Wednesday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "28px" }}
+                                                                style={{ marginLeft: "25px" }}
                                                                 type="checkbox"
                                                                 className="p-2"
                                                                 name="Wednesday"
@@ -395,7 +395,7 @@ debugger
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Thursday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "40px" }}
+                                                                style={{ marginLeft: "39px" }}
                                                                 type="checkbox"
                                                                 className="p-2"
                                                                 name="Thursday"
@@ -414,7 +414,7 @@ debugger
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Friday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "59px" }}
+                                                                style={{ marginLeft: "58px" }}
                                                                 type="checkbox"
                                                                 className="p-2"
                                                                 name="Friday"
@@ -433,7 +433,7 @@ debugger
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Saturday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "40px" }}
+                                                                style={{ marginLeft: "39px" }}
                                                                 type="checkbox"
                                                                 className="p-2"
                                                                 name="Saturday"
