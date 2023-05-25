@@ -6,7 +6,7 @@ const XLSX = require('xlsx');
 
 
 export const readExcelFile = async ({ file, compareParameter }) => {
-debugger
+
 
   try {
    
@@ -46,7 +46,7 @@ debugger
    
 
     jsonResult.forEach((r1, k) => {
-      // debugger
+      // 
       comparefilter.forEach((c1) => {
         if (c1.ControlTypeName === "Date") { r1[c1.Value] = date_ymd_func(r1[c1.Value]) }
         const regExp = RegExp(c1.RegularExpression)

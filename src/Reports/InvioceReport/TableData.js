@@ -151,7 +151,7 @@ export const BilledToRow = (data) => {
 }
 export const DetailsOfTransportRow = (data) => {
 
-debugger
+
 let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
     const PONumber =result.toString()
     var DetailsOfTransportArray = [
