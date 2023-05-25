@@ -1389,7 +1389,7 @@ const RoleAccessAdd = () => {
         )
 
     }
-    debugger
+    
     // var h = window.innerHeight;
     // document.getElementById("TableDiv").style.maxHeight = "200px auto";
 

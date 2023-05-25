@@ -1146,10 +1146,10 @@ const Credit = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                debugger
+                
                 const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber, NoteType } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                debugger
+                
                 // hasValid.Name.valid = true;
 
                 values.CRDRNoteDate = CRDRNoteDate;
@@ -1390,7 +1390,7 @@ const Credit = (props) => {
     }
 
     function val_onChange(val, row, type, key) {
-        debugger
+        
         if (type === "qty") {
             row["Qty"] = val;
         }
@@ -1399,7 +1399,7 @@ const Credit = (props) => {
         }
         row.gstPercentage = row.GSTPercentage
         let calculate = salesReturnCalculate(row)
-        debugger
+        
         Setcalculation(calculate)
         let AmountTotal = calculate.tAmount
         row["AmountTotal"] = Number(AmountTotal)
@@ -1675,7 +1675,7 @@ const Credit = (props) => {
         let inValideUnits = []
 
         InvoiceItems.forEach(index => {
-debugger
+
             if ((!(index.unit) && (index.Qty > 0))) {
                 inValideUnits.push({ [`${index.ItemName}`]: "This Item Unit Is Required." })
             }

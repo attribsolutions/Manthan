@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { Link, useHistory } from "react-router-dom"
 
 import { getUserDetailsAction, resetRoleAccessAction, roleAceessAction } from "../../store/actions"
-import logo from "../../assets/images/logo-sm.svg"
+import logo from "../../assets/images/foodERP_logo.png"
 
 //Import config
 import CarouselPage from "./CarouselPage"

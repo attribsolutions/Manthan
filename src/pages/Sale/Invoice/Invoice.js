@@ -479,7 +479,7 @@ const Invoice = (props) => {
                             </Thead>
                             <Tbody  >
                                 {cellContent.map((index2) => {
-                                    debugger
+                                    
                                     return (
                                         < tr key={index1.id} >
                                             <td>
