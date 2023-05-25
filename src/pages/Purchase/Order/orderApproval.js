@@ -11,7 +11,7 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
         Data.OrderItem.forEach(i => {
             if (i.Quantity > 0) {
                 isorderItemSet.push({
-                    "OrderNo": Data.id,//parent id
+                    "OrderNo": 5000000 + Number(Data.id),//parent--id
                     "ItemNo": i.id, //OrderItem--id
                     "Material": i.ItemSAPCode,//OrderItem--ItemSAPCode
                     "Quantity": i.QuantityInNo,//OrderItem--QuantityInNo 
