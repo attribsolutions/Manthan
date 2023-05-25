@@ -37,6 +37,7 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
 }
 
 export const orderApprovalMessage = ({ dispatch, orderApprovalMsg }) => {
+    try{
     if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
         dispatch(orderApprovalActionSuccess({ Status: false }))
         customAlert({
@@ -50,4 +51,5 @@ export const orderApprovalMessage = ({ dispatch, orderApprovalMsg }) => {
             Message: JSON.stringify(orderApprovalMsg.Message),
         })
     }
+} catch(e){}
 }
