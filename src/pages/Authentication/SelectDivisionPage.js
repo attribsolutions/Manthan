@@ -21,40 +21,22 @@ const SelectDivisionPage = props => {
 
   const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
 
-  const { divisionDropdown_redux,  } = useSelector(state => ({
+  const { divisionDropdown_redux, } = useSelector(state => ({
     loginError: state.Login.loginError,
     divisionDropdown_redux: state.Login.divisionDropdown,
   }));
 
   useLayoutEffect(() => {
-    dispatch(resetRoleAccessAction())
-    if (!(localStorage.getItem("userId"))) {
-      history.push("/login")
-    }
-    else {
-      dispatch(getUserDetailsAction(localStorage.getItem("userId")))
-    }
+    // dispatch(resetRoleAccessAction())
+    // if (!(localStorage.getItem("userId"))) {
+    //   history.push("/login")
+    // }
+    // else {
+    //   dispatch(getUserDetailsAction(localStorage.getItem("userId")))
+    // }
   }, [])
 
-  useLayoutEffect(() => {
 
-    if (divisionDropdown_redux.length === 1) {
-
-      let value = divisionDropdown_redux[0]
-      let employee = value.Employee_id;
-      let party = value.Party_id
-      if ((party === null)) {
-        party = 0;
-        value.Party_id = 0
-      }
-
-      localStorage.setItem("roleId", JSON.stringify(value))
-      dispatch(roleAceessAction(party, employee, loginCompanyID()))
-
-
-      history.push("/Dashboard")
-    }
-  }, [divisionDropdown_redux])
 
 
   const divisionDropdown_DropdownOption = divisionDropdown_redux.map((d, key) => ({
@@ -65,7 +47,9 @@ const SelectDivisionPage = props => {
   function goButtonHandller() {
 
     if (!(divisionDropdowSelect.value === undefined)) {
-
+      divisionDropdown_redux.forEach(i => {
+        if (i.Party_id === null) { i.Party_id = 0 }
+      });
       let value = divisionDropdown_redux[divisionDropdowSelect.value]
       var employee = value.Employee_id;
       var party = value.Party_id
@@ -89,11 +73,11 @@ const SelectDivisionPage = props => {
               <div className="auth-full-page-content d-flex p-sm-5 p-4">
                 <div className="w-100">
                   <div className="d-flex flex-column h-100">
-                  <div className="mb-4 md-5 text-center">
+                    <div className="mb-4 md-5 text-center">
                       <Link to="/dashboard" className="d-block auth-logo">
                         <span className="logo-txt">FoodERP 2.0</span>
                       </Link>
-                      <img src={logo} alt="" height="90" /> 
+                      <img src={logo} alt="" height="90" />
                     </div>
 
                     <div className="auth-content my-auto">
@@ -124,7 +108,7 @@ const SelectDivisionPage = props => {
                       </div>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()} FoodERP 2.0 . Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                      <p className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>
                     </div>
                   </div>
                 </div>

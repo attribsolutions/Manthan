@@ -16,6 +16,7 @@ import {
 const initialState = {
   loginError: null,
   loading: false,
+  loginSuccess: { Status: false },
   roleAccessSidbarData: [],
   RoleAccessUpdateData: [],
   afterLoginUserDetails: {},
@@ -29,7 +30,12 @@ const Login = (state = initialState, action) => {
     case LOGIN_USER:
       state = { ...state, loading: true, }
       break
-    case LOGIN_SUCCESS: state = { ...state, loading: false, }
+    case LOGIN_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+        loginSuccess: action.payload,
+      }
       break
     case LOGOUT_USER: state = { ...state, }
       break
@@ -52,7 +58,7 @@ const Login = (state = initialState, action) => {
       }
 
     case ROLE_ACCESS_API_CALL_SUCCESS:
-      
+
       return {
         ...state,
         roleAccessSidbarData: action.payload,
