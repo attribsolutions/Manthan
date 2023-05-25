@@ -53,7 +53,7 @@ function initialState(history) {
 
     if (sub_Mode === url.PARTY) {
         page_Id = pageId.PARTY;
-        listPath = url.PAGE_lIST
+        listPath = url.PARTY_lIST
     }
     else {
         page_Id = pageId.RETAILER_MASTER;
