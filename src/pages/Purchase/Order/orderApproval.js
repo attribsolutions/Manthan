@@ -24,7 +24,7 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
         let body = {
             "Customer": Data.CustomerSAPCode,//parent--CustomerSAPCode 
             "DocDate": sap_date_dmy_func(Data.OrderDate), //parent--OrderDate
-            "Indicator": "F",
+            "Indicator": "C",
             "OrderNo": 5000000 + Number(Data.id),//parent--id
             "Stats": "1",
             "CancelFlag": "", //blank
