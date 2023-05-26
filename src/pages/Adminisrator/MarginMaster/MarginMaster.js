@@ -326,6 +326,9 @@ const MarginMaster = (props) => {
                 return { width: '200px' };
             },
             formatter: (cellContent, row, key) => {
+                if (!cellContent) {
+                    return null
+                }
                 return (<span style={{ justifyContent: 'center' }}>
                     <Label
                         style={{ color: "black", textAlign: "center", display: "block", }}
