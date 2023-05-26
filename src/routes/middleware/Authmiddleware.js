@@ -40,14 +40,15 @@ const Authmiddleware = ({
 
       const hasNoActivity = () => {
 
-        //console.log(" hasNoActivity", count3) //________________________
+        console.log(" hasNoActivity", count3) //________________________
         ++count3                               //________________________
 
         clearInterval(intervalId);
         clearInterval(timer);
         sessionStorage.clear()
         setIsLogOut(true)
-        // history.push({ pathname: '/login' })
+        history.push({ pathname: '/logout' })
+        window.location.reload(true)
       }
 
       const startTimer = () => {
@@ -55,7 +56,7 @@ const Authmiddleware = ({
         //console.log(" startTimer", count4) //________________________
         ++count4                              //________________________
 
-        timer = setInterval(hasNoActivity, 2 * 60 * 1000);
+        timer = setInterval(hasNoActivity, 5 * 60 * 1000);
       };
 
       const resetTimer = () => {
@@ -135,5 +136,5 @@ const keepSessionAlive = (dispatch) => {
   ++count7
 
   sessionStorage.setItem('keepSessionAlive', new Date().getTime())
-  intervalId = setInterval(() => updateTokan(dispatch), 1 * 60 * 1000)
+  intervalId = setInterval(() => updateTokan(dispatch), 4 * 60 * 1000)
 };
