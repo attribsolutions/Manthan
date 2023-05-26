@@ -54,7 +54,7 @@ const Login = props => {
   useEffect(() => {
 
     try {
-      if ((loginSuccess.Status === 'True') && (loginSuccess.StatusCode === 200)) {
+      if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
 
         localStorage.setItem("token", (loginSuccess.token))
         localStorage.setItem("userId", (loginSuccess.UserID))
