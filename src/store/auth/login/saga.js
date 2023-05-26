@@ -12,6 +12,7 @@ import {
   loginSuccess,
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
+  roleAceessActionError,
   roleAceessActionSuccess
 } from "./actions"
 
@@ -131,18 +132,9 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
     }
 
   } catch (error) {
-
-    // let redirect = yield customAlert({
-    //   Type: 2,
-    //   Message: `RoleAccess get Api Error `
-    // })
-    // if (redirect) { history.go(0) }
-    // else {
-    //   history.go(0)
-    // }
-
-
-  }
+  
+    yield put(roleAceessActionError(true))
+   }
 }
 
 function* Post_SuperAdmin_API_GenratorFunction() {
