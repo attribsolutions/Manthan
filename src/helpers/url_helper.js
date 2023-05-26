@@ -19,6 +19,10 @@ export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
 export const SUPER_ADMIN_API = '/SuperAdmin'
 
+export const TOKEN_REFRESH_API = '/api/token/refresh/'
+
+
+
 export const PAGE_FIELD = '/PageMaster'
 
 //PAGE Master

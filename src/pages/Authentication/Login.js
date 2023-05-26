@@ -57,6 +57,7 @@ const Login = props => {
       if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
 
         localStorage.setItem("token", (loginSuccess.token))
+        localStorage.setItem("refreshToken", (loginSuccess.refreshtoken))
         localStorage.setItem("userId", (loginSuccess.UserID))
 
         dispatch(getUserDetailsAction(loginSuccess.UserID))

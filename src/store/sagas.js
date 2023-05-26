@@ -80,6 +80,7 @@ import ReceiptSaga from "./Accounting/Receipt/saga"
 import SalesReturnSaga from "./Sales/SalesReturnRedux/saga"
 import CreditDebitSaga from "./Accounting/CreditRedux/saga"
 import DashboardSaga from "./Dashboard/Dashboard_1_Redux/saga"
+import { sessionAlive_saga } from "./auth/sessionAlive/saga"
 
 
 export default function* rootSaga() {
@@ -88,7 +89,8 @@ export default function* rootSaga() {
     fork(ImportExcelFieldMap_Saga),
     fork(ImportFieldAdd_Saga),
     fork(ImportMasterMap_Saga),
-
+    
+    fork(sessionAlive_saga),
     fork(AuthSaga),
     fork(ForgetSaga),
     fork(ProfileSaga),

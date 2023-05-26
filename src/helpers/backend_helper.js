@@ -1,6 +1,5 @@
 import axios from "axios"
-import { del, get, put, post, postForget, } from "./api_helper"
-import { orderApporval } from "./sapApi"
+import { del, get, put, post, postForget,  postRefreshToken, } from "./api_helper"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -55,7 +54,10 @@ const postFakeForgetPwd = data => post(url.POST_FAKE_PASSWORD_FORGET, data)
 // Edit profile
 const postJwtProfile = data => post(url.POST_EDIT_JWT_PROFILE, data)
 
-const postFakeProfile = data => post(url.POST_EDIT_PROFILE, data)
+const postFakeProfile = jsonBody => post(url.POST_EDIT_PROFILE, jsonBody)
+
+
+ export  const getSessionAlive_Api = jsonBody => postRefreshToken(url.TOKEN_REFRESH_API, jsonBody)
 
 // Register Method
 const postJwtRegister = (url, data) => {
