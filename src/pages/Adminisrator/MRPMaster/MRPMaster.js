@@ -35,6 +35,8 @@ import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+
 import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, getMRPList, GoButtonForMRP_Master, GoButtonForMRP_MasterSuccess, saveMRPMaster, saveMRPMasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 
 const MRPMaster = (props) => {
@@ -542,6 +544,7 @@ const MRPMaster = (props) => {
                                                                         {...toolkitProps.baseProps}
                                                                         {...paginationTableProps}
                                                                     />
+                                                                    {mySearchProps(toolkitProps.searchProps)}
                                                                 </div>
                                                             </Col>
                                                         </Row>
