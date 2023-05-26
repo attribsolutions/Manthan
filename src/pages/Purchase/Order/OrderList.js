@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
@@ -16,6 +16,8 @@ import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
+import { getOrderApprovalDetailAction, orderApprovalAction } from "../../../store/actions";
+import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 
 
 const OrderList = () => {
@@ -23,7 +25,7 @@ const OrderList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    
+
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
@@ -39,7 +41,7 @@ const OrderList = () => {
         makeBtnShow: '',
         makeBtnName: '',
         IBType: '',
-        isOrderApproval: false
+        showAprovalBtn: false
     });
 
     const reducers = useSelector(
@@ -53,6 +55,7 @@ const OrderList = () => {
             postMsg: state.OrderReducer.postMsg,
             editData: state.OrderReducer.editData,
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
+            approvalDetail: state.OrderReducer.approvalDetail,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
 
@@ -60,7 +63,7 @@ const OrderList = () => {
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, GRNitem, supplier, makeIBInvoice, orderApprovalMsg } = reducers;
+    const { pageField, GRNitem, supplier, makeIBInvoice, orderApprovalMsg, approvalDetail } = reducers;
 
     const values = { ...state.values }
     const { fieldLabel } = state;
@@ -75,7 +78,7 @@ const OrderList = () => {
     }
 
     // Featch Modules List data  First Rendering
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         let page_Id = '';
         let page_Mode = mode.defaultList;
@@ -84,7 +87,7 @@ const OrderList = () => {
         let IBType = '';
         let newBtnPath = '';
         let makeBtnName = '';
-        let isOrderApproval = false;
+        let showAprovalBtn = false;
 
         if (subPageMode === url.ORDER_LIST_1) {
             page_Id = pageId.ORDER_LIST_1;
@@ -95,7 +98,7 @@ const OrderList = () => {
             page_Id = pageId.ORDER_LIST_2
             masterPath = url.ORDER_2;
             newBtnPath = url.ORDER_2;
-            isOrderApproval = true
+            showAprovalBtn = true
         }
         else if (subPageMode === url.IB_ORDER_PO_LIST) {
             page_Id = pageId.IB_ORDER_PO_LIST
@@ -138,15 +141,17 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
-        dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list
-        setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, isOrderApproval })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(_act.GetVenderSupplierCustomer(subPageMode))
         goButtonHandler("event", IBType)
-
+        return ()=>{
+            dispatch(_act.commonPageFieldListSuccess(null))
+            dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list   
+        }
     }, []);
 
     useEffect(() => {
@@ -186,23 +191,20 @@ const OrderList = () => {
     }, [makeIBInvoice]);
 
     useEffect(() => {
-
-        if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
-            dispatch(_act.orderApprovalActionSuccess({ Status: false }))
-            customAlert({
-                Type: 1,
-                Message: orderApprovalMsg.Message,
-            })
-        } else if (orderApprovalMsg.Status === true) {
-            dispatch(_act.orderApprovalActionSuccess({ Status: false }))
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(orderApprovalMsg.Message),
-            })
-        }
-
+        orderApprovalMessage({ dispatch, orderApprovalMsg })
     }, [orderApprovalMsg]);
 
+    useEffect(() => {
+        orderApprovalFunc({ dispatch, approvalDetail })
+    }, [approvalDetail]);
+
+    function oderAprovalBtnFunc(rowData, ismode, btnId) {
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
+        let config = {}
+        config.btnId = btnId;
+        config.orderId = rowData.id;
+        dispatch(getOrderApprovalDetailAction(config))
+    }
 
     const makeBtnFunc = (list = []) => {
 
@@ -348,7 +350,7 @@ const OrderList = () => {
             a.hasValid.FromDate.valid = true
             return a
         })
-        
+
     }
 
     function todateOnchange(e, date) {
@@ -358,7 +360,7 @@ const OrderList = () => {
             a.hasValid.ToDate.valid = true
             return a
         })
-       
+
     }
 
     function supplierOnchange(e) {
@@ -374,38 +376,7 @@ const OrderList = () => {
         // setorderlistFilter(newObj)
     }
 
-    function orderApprovalFunc(editData) {
-       
-        const { Data, btnId } = editData;
 
-        let isorderItemSet = [];
-        Data.OrderItem.forEach(i => {
-            if (i.Quantity > 0) {
-                isorderItemSet.push({
-                    "OrderNo": Data.id,//parent id
-                    "ItemNo": i.Item_id, //OrderItem--id
-                    "Material": i.SAPItemCode,//OrderItem--SAPItemCode
-                    "Quantity": i.Quantity,//OrderItem--Quantity
-                    "Unit": i.SAPUnitName,//OrderItem--SAPUnitName
-                    "Plant": Data.SupplierSAPCode,//parent
-                    "Batch": ""// blank
-                })
-            }
-        })
-        let body = {
-            "Customer": Data.CustomerSAPCode,//parent--CustomerSAPCode 
-            "DocDate": _cfunc.sap_date_dmy_func(Data.OrderDate), //parent--OrderDate
-            "Indicator": "F",
-            "OrderNo": Data.id,//parent--id
-            "Stats": "1",
-            "OrderItemSet": isorderItemSet,
-            "CancelFlag": "" //blank
-        }
-        const jsonBody = JSON.stringify(body);
-
-        dispatch(_act.editOrderIdSuccess({ Status: false }))
-        dispatch(_act.orderApprovalAction({ jsonBody, btnId }))
-    }
 
     const HeaderContent = () => {
         return (
@@ -491,7 +462,7 @@ const OrderList = () => {
                             deleteName={"FullOrderNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}
-                            orderApproval={otherState.isOrderApproval && orderApprovalFunc}
+                            // oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
 
                         />
                         : null

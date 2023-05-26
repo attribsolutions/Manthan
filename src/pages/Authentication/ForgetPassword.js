@@ -22,7 +22,7 @@ import {
 } from "../../store/actions"
 
 // import images
-import logo from "../../assets/images/logo-sm.svg"
+import logo from "../../assets/images/foodERP_logo.png"
 import CarouselPage from "./CarouselPage"
 import resetImage from "../../assets/images/resetpassword.png"
 
@@ -268,7 +268,7 @@ const ForgetPasswordPage = props => {
                         </div>
                     }
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()} Minia   . Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                      <p className="mb-0">© {new Date().getFullYear()} FoodERP 2.0   . Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
                     </div>
                   </div>
                 </div>

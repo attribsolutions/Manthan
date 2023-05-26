@@ -4,7 +4,7 @@ import { AvForm, AvInput, AvGroup, AvFeedback, } from "availity-reactstrap-valid
 import MetaTags from "react-meta-tags"
 import { Link } from "react-router-dom"
 // import images
-import logo from "../../assets/images/logo-sm.svg"
+import logo from "../../assets/images/foodERP_logo.png"
 import enterpass from "../../assets/images/Enterpass.png"
 //Import config
 import CarouselPage from "./CarouselPage"
@@ -25,7 +25,7 @@ const ResetPassword = () => {
      return (
       <React.Fragment>
       <MetaTags>
-        <title>Login | FoodERP Live</title>
+        <title>Login | FoodERP 2.0</title>
       </MetaTags>
       <div className="auth-page">
         <Container fluid className="p-0">

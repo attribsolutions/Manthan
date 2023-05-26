@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import MetaTags from "react-meta-tags"
 import { Link } from "react-router-dom"
 // import images
-import logo from "../../assets/images/logo-sm.svg"
+import logo from "../../assets/images/foodERP_logo.png"
 import otp from "../../assets/images/otp.jfif"
 //Import config
 import CarouselPage from "./CarouselPage"
@@ -17,7 +17,7 @@ const EnterOTP = () => {
     return (
         <React.Fragment>
         <MetaTags>
-          <title>Login | FoodERP Live</title>
+          <title>Login | FoodERP 2.0</title>
         </MetaTags>
         <div className="auth-page">
           <Container fluid className="p-0">

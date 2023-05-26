@@ -26,8 +26,8 @@ import {
     updatePartyID,
     updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
-import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
-import { breadcrumbReturnFunc, btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
+import {  Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
+import {  btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -43,6 +43,25 @@ import PrefixTab from "./PrefixTab/PrefixTab";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
 
+
+
+function initialState(history) {
+
+    let page_Id = '';
+    let listPath = ''
+    let sub_Mode = history.location.pathname;
+
+    if (sub_Mode === url.PARTY) {
+        page_Id = pageId.PARTY;
+        listPath = url.PARTY_lIST
+    }
+    else {
+        page_Id = pageId.RETAILER_MASTER;
+        listPath = url.RETAILER_LIST
+    }
+    return { page_Id, listPath }
+};
+
 const PartyMaster = (props) => {
 
     const dispatch = useDispatch();
@@ -51,6 +70,10 @@ const PartyMaster = (props) => {
     const addressTabRef = useRef(null);
     const baseTabRef = useRef(null);
     const prefixTabRef = useRef(null);
+
+    const [page_id] = useState(() => initialState(history).page_Id)
+    const [listPath] = useState(() => initialState(history).listPath)
+    const [subPageMode] = useState(history.location.pathname)
 
     const [EditData, setEditData] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -87,33 +110,6 @@ const PartyMaster = (props) => {
     }), [userAccess]);
 
 
-    // useEffect(() => {
-
-    //     let userAcc = null;
-    //     let locationPath;
-
-    //     if (props.pageMode === mode.dropdownAdd) {
-    //         locationPath = props.masterPath;
-    //     } else {
-    //         locationPath = location.pathname;
-    //     }
-
-    //     if (hasShowModal) {
-    //         locationPath = props.masterPath;
-    //     };
-
-    //     userAcc = userAccess.find((inx) => {
-    //         return (`/${inx.ActualPagePath}` === locationPath)
-    //     })
-
-    //     if (userAcc) {
-    //         setUserAccState(userAcc);
-    //         if (!props.isdropdown) {
-    //             breadcrumbReturnFunc({ dispatch, userAcc });
-    //         }
-    //     };
-    // }, [userAccess])
-
     useEffect(() => {
         try {
             if ((hasShowloction || hasShowModal)) {
@@ -130,7 +126,7 @@ const PartyMaster = (props) => {
                 }
 
                 if (hasEditVal) {
-
+                    
                     setEditData(hasEditVal);
                     dispatch(Breadcrumb_inputName(hasEditVal.Name))
                     seteditCreatedBy(hasEditVal.CreatedBy);
@@ -143,9 +139,14 @@ const PartyMaster = (props) => {
                             value: hasEditVal.PartyType.id,
                         },
                         SAPPartyCode: hasEditVal.SAPPartyCode,
+
+
                         Supplier: hasEditVal.PartySubParty.map(i => ({
                             value: i.Party,
-                            label: i.PartyName
+                            label: i.PartyName,
+                            Creditlimit:i.Creditlimit,
+                            Route:i.Route,
+                            Subparty:i.Subparty
                         })),
                         PAN: hasEditVal.PAN,
                         Email: hasEditVal.Email,
@@ -204,10 +205,11 @@ const PartyMaster = (props) => {
     }, []);
 
     useLayoutEffect(() => {
+
         dispatch(getDistrictOnStateSuccess([]))//clear district privious options
         dispatch(commonPageFieldSuccess(null));//clear privious PageField
         dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
-        dispatch(commonPageField(pageId.PARTY))
+        dispatch(commonPageField(page_id))
         dispatch(getState());
         dispatch(getPartyTypelist());
         dispatch(getcompanyList());
@@ -216,50 +218,47 @@ const PartyMaster = (props) => {
 
 
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(postPartyDataSuccess({ Status: false }))
 
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                const a = await customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: '/PartyList',
-                    AfterResponseAction: false
-                }))
+                })
+                if (a) {
+                    history.push({
+                        pathname: listPath,
+                    });
+                }
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
             dispatch(postPartyDataSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg.Status])
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             history.push({
-                pathname: url.PARTY_lIST,
+                pathname: listPath,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updatePartyIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );
@@ -284,6 +283,7 @@ const PartyMaster = (props) => {
         let prefixValue = prefixTabRef.current.getCurrentState().values
 
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
+
         if (!validBasetab) {
             setactiveTab1("1")
             return
@@ -302,11 +302,14 @@ const PartyMaster = (props) => {
             btnIsDissablefunc({ btnId, state: true })
 
             const baseValue = baseTabDetail.values
-
+            debugger
             const supplierArr = baseValue.Supplier.map((i) => ({
+            
                 Party: i.value,
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
+                Creditlimit: pageMode === mode.edit? i.Creditlimit:"",
+                Route:pageMode === mode.edit? i.Route:"",
             }))
 
             const jsonBody = JSON.stringify({
@@ -412,24 +415,25 @@ const PartyMaster = (props) => {
 
                                                 </NavLink>
                                             </NavItem>
+                                            {subPageMode === url.PARTY &&// only view when party  master Mode
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-3"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "3",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("3")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">Transaction Prefix</span>
+                                                    </NavLink>
+                                                </NavItem>}
 
-                                            <NavItem>
-                                                <NavLink
-                                                    id="nave-link-3"
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "3",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("3")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Transaction Prefix</span>
-                                                </NavLink>
-                                            </NavItem>
 
                                             <NavItem>
                                                 <NavLink
@@ -444,15 +448,15 @@ const PartyMaster = (props) => {
 
                                         <TabContent activeTab={activeTab1} className="p-3 text-muted">
                                             <TabPane tabId="1">
-                                                <BaseTabForm ref={baseTabRef} />
+                                                <BaseTabForm ref={baseTabRef} subPageMode={subPageMode} />
                                             </TabPane>
 
                                             <TabPane tabId="2">
-                                                <AddressTabForm ref={addressTabRef} />
+                                                <AddressTabForm ref={addressTabRef} subPageMode={subPageMode} />
                                             </TabPane>
 
                                             <TabPane tabId="3">
-                                                <PrefixTab ref={prefixTabRef} />
+                                                <PrefixTab ref={prefixTabRef} subPageMode={subPageMode} />
                                             </TabPane>
                                         </TabContent>
                                     </CardBody>

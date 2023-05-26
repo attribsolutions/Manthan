@@ -10,7 +10,7 @@ import bg1 from "../../assets/images/bg-1.jpg";
 import bg2 from "../../assets/images/bg-2.jpg";
 import bg3 from "../../assets/images/bg-3.jpg";
 // import images
-import logo from "../../assets/images/logo-sm.svg";
+import logo from "../../assets/images/foodERP_logo.png";
 
 const PagesComingsoon = () => {
   const comingSoonImage = [
@@ -97,7 +97,7 @@ const PagesComingsoon = () => {
   return (
     <React.Fragment>
       <MetaTags>
-        <title>Coming Soon | Minia - React Admin & Dashboard Template</title>
+        <title>Coming Soon | FoodERP 2.0 - React Admin & Dashboard Template</title>
       </MetaTags>
       <div className="preview-img">
         <div className="swiper-container preview-thumb">
@@ -116,12 +116,12 @@ const PagesComingsoon = () => {
                   <a href="index.html">
                     <img src={logo} alt="logo" height="30" className="me-1" />
                     <span className="logo-txt text-white font-size-22">
-                      Minia
+                      FoodERP 2.0
                     </span>
                   </a>
                 </div>
                 <h3 className="text-white mt-5">
-                  Let's get started with Minia
+                  Let's get started with FoodERP 2.0
                 </h3>
                 <p className="text-white-50 font-size-16">
                   Donec pede justo fringilla vel aliquet nec vulputate eget

@@ -429,11 +429,11 @@ export const post_SelectFieldAPI = (jsonBody) => post(url.GENERAL_MASTER_SUB_TYP
 export const Update_Party_Bulk = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_BULK_UPDATE}/${updateId}`, jsonBody, btnId)// update api
 
 // Order Page api  
-export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
+export const OrderPage_GoButton_API = ({ jsonBody, btnId }) => post(url.ORDER_Edit_API,  jsonBody, btnId)//get api
 export const OrderList_get_Filter_API = ({ filtersBody, btnId }) => post(url.ORDER_LiST_BY_FILTERS, filtersBody, btnId)
 export const OrderPage_Save_API_ForPO = ({ jsonBody, btnId }) => post(url.ORDER_PAGE_API, jsonBody, btnId)//get api
 export const OrderPage_Edit_Post_API = ({ jsonBody, btnId }) => post(url.ORDER_Edit_API, jsonBody, btnId)//Edit Order
-export const OrderPage_Edit_Get_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Order edit single get api
+export const OrderPage_Edit_Get_API = ({ orderId}) => get(`${url.ORDER_PAGE_API}/${orderId}`)//Order edit single get api
 export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
 export const OrderPage_Delete_API = ({ deleteId, btnId }) => del(`${url.ORDER_PAGE_API}/${deleteId}`, btnId)//Delete Order
 export const OrderPage_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.ORDER_PAGE_API}/${updateId}`, jsonBody, btnId)// update api
@@ -519,7 +519,7 @@ export const IB_Invoice_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.
 //************************************Inter Branch ************************************/
 
 // IBOrder
-export const IBOrderPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//go button api
+export const IBOrderPage_GoButton_API = ( jsonBody, btnId) => post(url.GO_BUTTON_POST_API_FOR_IBORDER,  jsonBody, btnId)//go button api
 export const IBOrderPage_Save_API = (data) => post(url.SAVE_API_FOR_IBORDER, data)//post api
 export const IBOrderList_get_Filter_API = ({ filtersBody, btnId }) => post(url.IBORDER_LiST_BY_FILTERS, filtersBody, btnId)//list page
 

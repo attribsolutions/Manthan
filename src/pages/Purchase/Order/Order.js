@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { basicAmount, GstAmount, Amount } from "./OrderPageCalulation";
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -32,7 +31,8 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { editPartyItemID } from "../../../store/Administrator/PartyItemsRedux/action";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+import { pageFieldUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 
 
 let editVal = {}
@@ -112,7 +112,9 @@ const Order = (props) => {
         supplierAddress,
         pageField,
         PartyList,
-        assingItemData = ''
+        assingItemData = '',
+        approvalDetail,
+        orderApprovalMsg
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -122,6 +124,8 @@ const Order = (props) => {
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+        orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
+        approvalDetail: state.OrderReducer.approvalDetail,
         assingItemData: state.PartyItemsReducer.editData,
         PartyList: state.PartyMasterReducer.partyList
     }));;
@@ -222,16 +226,41 @@ const Order = (props) => {
         }
     }, []);
 
-    useEffect(() => saveMsgUseEffect({
-        postMsg, pageMode,
-        history, dispatch,
-        postSuccss: _act.saveOrderActionSuccess,
-        status200: () => {
+    useEffect(async () => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+            dispatch(_act.saveOrderActionSuccess({ Status: false }))
+
             setTermsAndConTable([])
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
-        },
-        listPath: listPath
-    }), [postMsg])
+            // ??******************************+++++++++++++++++++++++++++++++++++++++++
+            // if (subPageMode === url.ORDER_2) { //        SAP OEDER-APROVUAL CODE
+            //     let btnId = postMsg.btnId;
+            //     _cfunc.btnIsDissablefunc({ btnId, state: true })
+            //     let config = { btnId }
+            //     config.orderId = postMsg.OrderID;
+            //     dispatch(_act.getOrderApprovalDetailAction(config));
+            // }
+            // ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
+            // else {
+                const a = await customAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                if (a) {
+                    history.push({
+                        pathname: listPath,
+                    });
+                }
+            // }
+        }
+        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+            dispatch(_act.saveOrderActionSuccess({ Status: false }))
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(postMsg.Message),
+            });
+        }
+    }, [postMsg])
 
     useEffect(() => updateMsgUseEffect({
         updateMsg, modalCss,
@@ -280,6 +309,14 @@ const Order = (props) => {
         }
     }, [orderType]);
 
+    useEffect(() => {
+        orderApprovalFunc({ dispatch, approvalDetail })
+    }, [approvalDetail]);
+
+    useEffect(() => {
+        orderApprovalMessage({ dispatch, orderApprovalMsg })
+    }, [orderApprovalMsg]);
+
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -302,8 +339,7 @@ const Order = (props) => {
             dataField: "ItemName",
             sort: true,
             sortValue: (cell, row) => row["ItemName"],
-            headerFormatter: (value, row, k,f) => {
-                debugger
+            headerFormatter: (value, row, k, f) => {
                 return (
                     <div className="d-flex justify-content-between" key={row.id}>
                         <div>
@@ -546,6 +582,7 @@ const Order = (props) => {
 
     const goButtonHandler = async () => {
 
+
         if (!supplierSelect > 0) {
             await customAlert({
                 Type: 4,
@@ -553,6 +590,9 @@ const Order = (props) => {
             })
             return;
         }
+        let btnId = `go-btn${subPageMode}`
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
+
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
 
@@ -579,8 +619,8 @@ const Order = (props) => {
         else {
             jsonBody = JSON.stringify({ ...PO_Body, });
         }
-
-        dispatch(_act.GoButton_For_Order_Add(subPageMode, jsonBody))
+        let config = { subPageMode, jsonBody, btnId }
+        dispatch(_act.GoButton_For_Order_Add(config))
     };
 
     function orderdateOnchange(e, date) {
@@ -854,6 +894,7 @@ const Order = (props) => {
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
+
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
@@ -919,9 +960,13 @@ const Order = (props) => {
                                     <Col sm="1" className="mx-4 ">                      {/*Go_Button  */}
                                         {pageMode === mode.defaultsave ?
                                             (orderItemTable.length === 0) ?
-                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                                < Go_Button
+                                                    id={`go-btn${subPageMode}`}
+                                                    onClick={(e) => goButtonHandler()} />
                                                 :
-                                                <Change_Button onClick={(e) => dispatch(_act.GoButton_For_Order_AddSuccess([]))} />
+                                                <Change_Button
+                                                    id={`change-btn${subPageMode}`}
+                                                    onClick={(e) => dispatch(_act.GoButton_For_Order_AddSuccess([]))} />
                                             : null
                                         }
                                     </Col>

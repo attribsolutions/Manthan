@@ -1,3 +1,5 @@
+
+
 import PropTypes from "prop-types"
 import MetaTags from "react-meta-tags"
 import React, { useEffect } from "react"
@@ -7,56 +9,96 @@ import { Row, Col, Alert, Container } from "reactstrap"
 //redux
 import { useSelector, useDispatch } from "react-redux"
 
-import { withRouter, Link } from "react-router-dom"
+import { withRouter, Link, useHistory } from "react-router-dom"
 
 // availity-reactstrap-validation
-import { AvForm, AvField, AvInput } from "availity-reactstrap-validation"
+import { AvForm, AvField, } from "availity-reactstrap-validation"
 
+import { divisionDropdownSelectSuccess, getUserDetailsAction, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
 
-/// tsdfddf Punam demotest
-// actions
-import { loginUser, postSuperAdmin, roleAceessAction, roleAceessActionSuccess } from "../../store/actions"
+import logo from "../../assets/images/cbm_logo.png"
 
-// import images
-import logo from "../../assets/images/logo-sm.svg"
-
-//Import config
 import CarouselPage from "./CarouselPage"
-import axios from "axios";
+import { loginCompanyID } from "../../components/Common/CommonFunction"
+import { useLayoutEffect } from "react"
+import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 
 const Login = props => {
- 
+
 
   const dispatch = useDispatch()
+  const history = useHistory()
 
-
-  const { loginError } = useSelector(state => ({
+  const { loginError, loginSuccess, divisionDropdown_redux = [] } = useSelector(state => ({
     loginError: state.Login.loginError,
+    loginSuccess: state.Login.loginSuccess,
+    divisionDropdown_redux: state.Login.divisionDropdown,
+
   }))
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    dispatch(resetRoleAccessAction())
+    dispatch(divisionDropdownSelectSuccess([]))
+  }, []);
+
+  useLayoutEffect(() => {
     try {
-      localStorage.clear();
+      if ((localStorage.getItem("token")) && (localStorage.getItem("roleId"))) {
+        history.push({ pathname: "/Dashboard" })
+      }
       document.getElementById("UserName").focus();
     } catch (e) { }
   }, [])
 
+
+  useEffect(() => {
+
+    try {
+      if ((loginSuccess.Status === 'True') && (loginSuccess.StatusCode === 200)) {
+
+        localStorage.setItem("token", (loginSuccess.token))
+        localStorage.setItem("userId", (loginSuccess.UserID))
+
+        dispatch(getUserDetailsAction(loginSuccess.UserID))
+        dispatch(loginSuccess({ Status: false }))
+      }
+    } catch (e) { }
+  }, [loginSuccess])
+
+
+  useEffect(() => {
+
+    if (divisionDropdown_redux.length === 1) {
+
+      let value = divisionDropdown_redux[0]
+      let employee = value.Employee_id;
+      let party = value.Party_id
+      if ((party === null)) {
+        party = 0;
+        value.Party_id = 0
+      }
+
+      localStorage.setItem("roleId", JSON.stringify(value))
+      localStorage.setItem("roleId2", JSON.stringify(value))
+
+      dispatch(roleAceessAction(party, employee, loginCompanyID()))
+
+      history.push("/Dashboard")
+    } else if (divisionDropdown_redux.length > 1) {
+      history.push("/division")
+    }
+  }, [divisionDropdown_redux])
 
   const handleValidSubmit = (event, values) => {
 
     dispatch(loginUser(values, props.history))
   }
 
-
-  // function createSuperAdminHandler() {
-  //   const jsonBody = JSON.stringify([]);
-  //   dispatch(postSuperAdmin(jsonBody))
-  // }
-
   return (
     <React.Fragment>
+      <LogoutChecker />
       <MetaTags>
-        <title>Login | FoodERP Live</title>
+        <title>Login | FoodERP 2.0</title>
       </MetaTags>
       <div className="auth-page">
         <Container fluid className="p-0">
@@ -65,15 +107,17 @@ const Login = props => {
               <div className="auth-full-page-content d-flex p-sm-5 p-4">
                 <div className="w-100">
                   <div className="d-flex flex-column h-100">
-                    <div className="mb-4 mb-md-5 text-center">
+                    <div className="mb-4 md-5 text-center">
                       <Link to="/dashboard" className="d-block auth-logo">
-                        <img src={logo} alt="" height="28" /> <span className="logo-txt">FoodERP</span>
+                        <span className="logo-txt">FoodERP 2.0</span>
                       </Link>
+                      <img src={logo} alt="" height="90" />
+
                     </div>
                     <div className="auth-content my-auto">
                       <div className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
-                        <p className="text-muted mt-2">Sign in to Continue FoodERP.</p>
+                        <p className="text-muted mt-2">Sign in to Continue FoodERP 2.0</p>
                       </div>
                       {loginError ? (
                         <Alert color="danger" style={{ marginTop: "13px" }}>
@@ -96,7 +140,7 @@ const Login = props => {
                             type="text"
                             required
                           />
-                          
+
                         </div>
                         <div className="mb-3">
                           <div className="d-flex align-items-start">
@@ -131,7 +175,7 @@ const Login = props => {
 
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()}. Crafted with <i className="mdi mdi-heart text-danger"></i> by Attrib Solution</p>
+                      <p className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>
                     </div>
                   </div>
                 </div>

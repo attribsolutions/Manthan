@@ -50,6 +50,9 @@ export const DRIVER_lIST = 34
 export const PARTY = 57
 export const PARTY_lIST = 18
 
+export const RETAILER_MASTER = 195
+export const RETAILER_LIST = 196
+
 export const PARTYTYPE = 31
 export const PARTYTYPE_lIST = 32
 
