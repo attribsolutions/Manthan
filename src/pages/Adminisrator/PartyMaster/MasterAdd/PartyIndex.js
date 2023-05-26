@@ -126,7 +126,7 @@ const PartyMaster = (props) => {
                 }
 
                 if (hasEditVal) {
-
+                    
                     setEditData(hasEditVal);
                     dispatch(Breadcrumb_inputName(hasEditVal.Name))
                     seteditCreatedBy(hasEditVal.CreatedBy);
@@ -139,9 +139,14 @@ const PartyMaster = (props) => {
                             value: hasEditVal.PartyType.id,
                         },
                         SAPPartyCode: hasEditVal.SAPPartyCode,
+
+
                         Supplier: hasEditVal.PartySubParty.map(i => ({
                             value: i.Party,
-                            label: i.PartyName
+                            label: i.PartyName,
+                            Creditlimit:i.Creditlimit,
+                            Route:i.Route,
+                            Subparty:i.Subparty
                         })),
                         PAN: hasEditVal.PAN,
                         Email: hasEditVal.Email,
@@ -297,11 +302,14 @@ const PartyMaster = (props) => {
             btnIsDissablefunc({ btnId, state: true })
 
             const baseValue = baseTabDetail.values
-
+            debugger
             const supplierArr = baseValue.Supplier.map((i) => ({
+            
                 Party: i.value,
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
+                Creditlimit: pageMode === mode.edit? i.Creditlimit:"",
+                Route:pageMode === mode.edit? i.Route:"",
             }))
 
             const jsonBody = JSON.stringify({
