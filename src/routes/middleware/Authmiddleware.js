@@ -56,7 +56,7 @@ const Authmiddleware = ({
         //console.log(" startTimer", count4) //________________________
         ++count4                              //________________________
 
-        timer = setInterval(hasNoActivity, 5 * 60 * 1000);
+        timer = setInterval(hasNoActivity, 6 * 60 * 1000);
       };
 
       const resetTimer = () => {
