@@ -2,20 +2,9 @@
 
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useCallback } from "react";
-
-//Import Icons
 import FeatherIcon from "feather-icons-react";
-
-// //Import Scrollbar
 import SimpleBar from "simplebar-react";
-
-//Import images
-
-
-//i18n
 import { withTranslation } from "react-i18next";
-
-// MetisMenu
 import MetisMenu from "metismenujs";
 import { useHistory, withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -26,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const SidebarContent = (props) => {
-
   const dispatch = useDispatch();
   const ref = useRef();
   const history = useHistory();
@@ -41,10 +29,9 @@ const SidebarContent = (props) => {
     roleAccesssForSidbarError: state.Login.roleAccesssForSidbarError,
   }));
 
+
   useEffect(async () => {
-    debugger
     if (roleAccesssForSidbarError) {
-      debugger
       await customAlert({
         Type: 2,
         Message: `RoleAccess get Api Error `

@@ -14,27 +14,20 @@ import { withRouter, Link, useHistory } from "react-router-dom"
 // availity-reactstrap-validation
 import { AvForm, AvField, } from "availity-reactstrap-validation"
 
+import { divisionDropdownSelectSuccess, getUserDetailsAction, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
 
-/// tsdfddf Punam demotest
-// actions
-import { apiError, divisionDropdownSelectSuccess, getUserDetailsAction, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
-
-// import images
 import logo from "../../assets/images/cbm_logo.png"
 
-// import logo from "../../assets/images/foodERP_logo.png"
-
-//Import config
 import CarouselPage from "./CarouselPage"
 import { loginCompanyID } from "../../components/Common/CommonFunction"
 import { useLayoutEffect } from "react"
+import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 
 const Login = props => {
 
 
   const dispatch = useDispatch()
   const history = useHistory()
-
 
   const { loginError, loginSuccess, divisionDropdown_redux = [] } = useSelector(state => ({
     loginError: state.Login.loginError,
@@ -46,12 +39,11 @@ const Login = props => {
   useLayoutEffect(() => {
     dispatch(resetRoleAccessAction())
     dispatch(divisionDropdownSelectSuccess([]))
-  }, []
-  )
-  useEffect(() => {
- 
+  }, []);
+
+  useLayoutEffect(() => {
     try {
-      if (localStorage.getItem("token")) {
+      if ((localStorage.getItem("token")) && (localStorage.getItem("roleId"))) {
         history.push({ pathname: "/Dashboard" })
       }
       document.getElementById("UserName").focus();
@@ -60,7 +52,7 @@ const Login = props => {
 
 
   useEffect(() => {
-   
+
     try {
       if ((loginSuccess.Status === 'True') && (loginSuccess.StatusCode === 200)) {
 
@@ -75,7 +67,7 @@ const Login = props => {
 
 
   useEffect(() => {
-   
+
     if (divisionDropdown_redux.length === 1) {
 
       let value = divisionDropdown_redux[0]
@@ -87,6 +79,8 @@ const Login = props => {
       }
 
       localStorage.setItem("roleId", JSON.stringify(value))
+      localStorage.setItem("roleId2", JSON.stringify(value))
+
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
 
       history.push("/Dashboard")
@@ -102,6 +96,7 @@ const Login = props => {
 
   return (
     <React.Fragment>
+      <LogoutChecker />
       <MetaTags>
         <title>Login | FoodERP 2.0</title>
       </MetaTags>

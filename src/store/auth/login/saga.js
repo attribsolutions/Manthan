@@ -78,12 +78,12 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 function* RoleAccessGenratorFunction({ party, employee, company }) {
-debugger
+
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
 
-    const RoleResponse = yield call(RoleAccessApi_url, party, employee, "company");
-debugger
+    const RoleResponse = yield call(RoleAccessApi_url, party, employee, company);
+
     if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
 
       let arrayMain = []
@@ -132,7 +132,7 @@ debugger
     }
 
   } catch (error) {
-    debugger
+  
     yield put(roleAceessActionError(true))
    }
 }
