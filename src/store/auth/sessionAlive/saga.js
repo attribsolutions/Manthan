@@ -13,7 +13,7 @@ function* getSessionAlive_GenFunc({ jsonBody }) {
     console.log( "response.access",response)
     if ((response.hasOwnProperty("access"))) {
       localStorage.setItem("token", response.access)
-     console.log( "response.access",response.access)
+    //  console.log( "response.access",response.access)
     }
   } catch (error) {
   }

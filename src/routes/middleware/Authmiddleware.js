@@ -40,8 +40,8 @@ const Authmiddleware = ({
 
       const hasNoActivity = () => {
 
-        console.log(" hasNoActivity", count3) //________________________
-        ++count3                               //________________________
+        // console.log(" hasNoActivity", count3) //________________________
+        // ++count3                               //________________________
 
         clearInterval(intervalId);
         clearInterval(timer);
@@ -54,9 +54,9 @@ const Authmiddleware = ({
       const startTimer = () => {
 
         //console.log(" startTimer", count4) //________________________
-        ++count4                              //________________________
+        // ++count4                              //________________________
 
-        timer = setInterval(hasNoActivity, 6 * 60 * 1000);
+        timer = setInterval(hasNoActivity, 4 * 60 * 1000);
       };
 
       const resetTimer = () => {
@@ -77,7 +77,7 @@ const Authmiddleware = ({
 
       return () => {
         //console.log(" return", count6) //________________________
-        ++count6
+        // ++count6
         clearInterval(timer);
         document.removeEventListener('keydown', resetTimer);
         window.removeEventListener('mousemove', resetTimer);
@@ -123,7 +123,7 @@ export default Authmiddleware;
 
 
 const updateTokan = (dispatch) => {
-  console.log(" keepSessionAlive  api call", count7)
+  // console.log(" keepSessionAlive  api call", count7)
   let istoken = localStorage.getItem("refreshToken")
   if (istoken) {
     let jsonBody = { "refresh": `${istoken}` }
@@ -136,5 +136,5 @@ const keepSessionAlive = (dispatch) => {
   ++count7
 
   sessionStorage.setItem('keepSessionAlive', new Date().getTime())
-  intervalId = setInterval(() => updateTokan(dispatch), 4 * 60 * 1000)
+  intervalId = setInterval(() => updateTokan(dispatch), 2 * 60 * 1000)
 };
