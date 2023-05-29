@@ -16,26 +16,45 @@ import {
 //i18n
 import { withTranslation } from "react-i18next"
 // Redux
-import { connect, useSelector } from "react-redux"
+import { connect, useDispatch, useSelector } from "react-redux"
 import { withRouter, Link } from "react-router-dom"
 
 // users
 import user1 from "../../../assets/images/users/avatar-1.jpg"
+import { btnIsDissablefunc } from "../../Common/CommonFunction"
+import { formValid, initialFiledFunc, onChangeText } from "../../Common/validationFunction"
+import { ChangePassword } from "../../../store/auth/changepassword/action"
 
 
 const ProfileMenu = props => {
+
+  const dispatch = useDispatch();
+
+  const fileds = {
+    LoginName: "",
+    password: "",
+    newpassword: ""
+  }
 
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
 
   const [username, setusername] = useState("Admin")
   const [modal_backdrop, setmodal_backdrop] = useState(false);
+  const [state, setState] = useState(() => initialFiledFunc(fileds))
 
 
 
-  const { user } = useSelector((state) => ({
-    user: state.Login.afterLoginUserDetails
+
+  const { user,postMsg } = useSelector((state) => ({
+    user: state.Login.afterLoginUserDetails,
+    // postMsg: state.ChangePasswordReducer.postMsg,
+
   }))
+
+
+  const { values } = state
+
 
   useEffect(() => {
 
@@ -55,36 +74,31 @@ const ProfileMenu = props => {
     document.body.classList.add("no_padding")
   }
 
-//   const SaveHandler = async (event) => {
-//     event.preventDefault();
-//     const btnId = event.target.id
-//     try {
-//         if (formValid(state, setState)) {
-//             btnIsDissablefunc({ btnId, state: true })
+  const SaveHandler = async (event) => {
+    debugger
+    event.preventDefault();
+    const btnId = event.target.id
+    try {
+      if (formValid(state, setState)) {
+        btnIsDissablefunc({ btnId, state: true })
 
-//             const jsonBody = JSON.stringify({
-//                 Name: values.Name,
-//                 GroupType: values.GroupTypeName.value,
-//                 CreatedBy: loginUserID(),
-//                 UpdatedBy: loginUserID(),
-//             });
+        const jsonBody = JSON.stringify({
+          LoginName: values.LoginName,
+          password: values.password,
+          newpassword: values.newpassword,
+        });
 
-//             if (pageMode === mode.edit) {
-//                 dispatch(updateGroupID({ jsonBody, updateId: values.id, btnId }));
-//             }
-//             else {
-//                 dispatch(saveGroupMaster({ jsonBody, btnId }));
-//             }
+        // dispatch(ChangePassword({ jsonBody, btnId }));
 
-//         }
-//     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
-// };
+      }
+    } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+  };
 
   return (
     <React.Fragment>
 
       <Modal
-      
+
         isOpen={modal_backdrop}
         toggle={() => {
           tog_backdrop()
@@ -105,6 +119,16 @@ const ProfileMenu = props => {
           <FormGroup className="mb-2 col col-sm-6 ">
             <Label htmlFor="validationCustom01"> Old Password </Label>
             <Input
+              name="password"
+              id="txtName"
+              value={values.password}
+              type="text"
+              // className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+              autoComplete='off'
+              autoFocus={true}
+              onChange={(event) => {
+                onChangeText({ event, state, setState })
+              }}
 
               placeholder="Enter Old Password"
             />
@@ -112,7 +136,17 @@ const ProfileMenu = props => {
           <FormGroup className="mb-3 col col-sm-6">
             <Label htmlFor="validationCustom01"> New Password </Label>
             <Input
+              name="newpassword"
+              id="txtName1"
+              value={values.newpassword}
+              type="text"
               placeholder="Enter New Password"
+              // className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+              autoComplete='off'
+              autoFocus={true}
+              onChange={(event) => {
+                onChangeText({ event, state, setState })
+              }}
             />
           </FormGroup>
         </div>
@@ -120,7 +154,9 @@ const ProfileMenu = props => {
           <button type="button" className="btn btn-light" onClick={() => {
             setmodal_backdrop(false)
           }}>Close</button>
-          <button type="button" className="btn btn-primary">Change Password</button>
+          <button type="button" className="btn btn-primary"
+            onClick={SaveHandler}
+          >Change Password</button>
         </div>
       </Modal>
 
