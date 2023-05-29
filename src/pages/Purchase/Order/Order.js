@@ -234,14 +234,14 @@ const Order = (props) => {
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
 
-            // if (subPageMode === url.ORDER_2) { //        SAP OEDER-APROVUAL CODE
-            //     let btnId = postMsg.btnId;
-            //     _cfunc.btnIsDissablefunc({ btnId, state: true })
-            //     let config = { btnId }
-            //     config.orderId = postMsg.OrderID;
-            //     dispatch(_act.getOrderApprovalDetailAction(config));
-            // }
-            // else {
+            if (subPageMode === url.ORDER_2) { //        SAP OEDER-APROVUAL CODE
+                let btnId = postMsg.btnId;
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
+                let config = { btnId }
+                config.orderId = postMsg.OrderID;
+                dispatch(_act.getOrderApprovalDetailAction(config));
+            }
+            else {
 
                 // ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
                 const a = await customAlert({
@@ -253,7 +253,7 @@ const Order = (props) => {
                         pathname: listPath,
                     });
                 }
-            // }
+            }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
