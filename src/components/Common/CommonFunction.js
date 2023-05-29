@@ -346,6 +346,7 @@ export async function CheckAPIResponse({
     if (tokenXp) {
       localStorage.clear();
       history.go(0)
+      return
     }
     console.log(`${url}***${method} apiCall response:=>`, error);
     customAlert({

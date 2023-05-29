@@ -9,55 +9,95 @@ import { Row, Col, Alert, Container } from "reactstrap"
 //redux
 import { useSelector, useDispatch } from "react-redux"
 
-import { withRouter, Link } from "react-router-dom"
+import { withRouter, Link, useHistory } from "react-router-dom"
 
 // availity-reactstrap-validation
 import { AvForm, AvField, } from "availity-reactstrap-validation"
 
+import { divisionDropdownSelectSuccess, getUserDetailsAction, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
 
-/// tsdfddf Punam demotest
-// actions
-import { loginUser, } from "../../store/actions"
-
-// import images
 import logo from "../../assets/images/cbm_logo.png"
 
-// import logo from "../../assets/images/foodERP_logo.png"
-
-//Import config
 import CarouselPage from "./CarouselPage"
+import { loginCompanyID } from "../../components/Common/CommonFunction"
+import { useLayoutEffect } from "react"
+import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 
 const Login = props => {
- 
+
 
   const dispatch = useDispatch()
+  const history = useHistory()
 
-
-  const { loginError } = useSelector(state => ({
+  const { loginError, loginSuccess, divisionDropdown_redux = [] } = useSelector(state => ({
     loginError: state.Login.loginError,
+    loginSuccess: state.Login.loginSuccess,
+    divisionDropdown_redux: state.Login.divisionDropdown,
+
   }))
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    dispatch(resetRoleAccessAction())
+    dispatch(divisionDropdownSelectSuccess([]))
+  }, []);
+
+  useLayoutEffect(() => {
     try {
-      localStorage.clear();
+      if ((localStorage.getItem("token")) && (localStorage.getItem("roleId"))) {
+        history.push({ pathname: "/Dashboard" })
+      }
       document.getElementById("UserName").focus();
     } catch (e) { }
   }, [])
 
+
+  useEffect(() => {
+
+    try {
+      if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
+
+        localStorage.setItem("token", (loginSuccess.token))
+        localStorage.setItem("refreshToken", (loginSuccess.refreshtoken))
+        localStorage.setItem("userId", (loginSuccess.UserID))
+
+        dispatch(getUserDetailsAction(loginSuccess.UserID))
+        dispatch(loginSuccess({ Status: false }))
+      }
+    } catch (e) { }
+  }, [loginSuccess])
+
+
+  useEffect(() => {
+
+    if (divisionDropdown_redux.length === 1) {
+
+      let value = divisionDropdown_redux[0]
+      let employee = value.Employee_id;
+      let party = value.Party_id
+      if ((party === null)) {
+        party = 0;
+        value.Party_id = 0
+      }
+
+      localStorage.setItem("roleId", JSON.stringify(value))
+      localStorage.setItem("roleId2", JSON.stringify(value))
+
+      dispatch(roleAceessAction(party, employee, loginCompanyID()))
+
+      history.push("/Dashboard")
+    } else if (divisionDropdown_redux.length > 1) {
+      history.push("/division")
+    }
+  }, [divisionDropdown_redux])
 
   const handleValidSubmit = (event, values) => {
 
     dispatch(loginUser(values, props.history))
   }
 
-
-  // function createSuperAdminHandler() {
-  //   const jsonBody = JSON.stringify([]);
-  //   dispatch(postSuperAdmin(jsonBody))
-  // }
-debugger
   return (
     <React.Fragment>
+      <LogoutChecker />
       <MetaTags>
         <title>Login | FoodERP 2.0</title>
       </MetaTags>
@@ -72,7 +112,7 @@ debugger
                       <Link to="/dashboard" className="d-block auth-logo">
                         <span className="logo-txt">FoodERP 2.0</span>
                       </Link>
-                      <img src={logo} alt="" height="90" /> 
+                      <img src={logo} alt="" height="90" />
 
                     </div>
                     <div className="auth-content my-auto">
@@ -101,7 +141,7 @@ debugger
                             type="text"
                             required
                           />
-                          
+
                         </div>
                         <div className="mb-3">
                           <div className="d-flex align-items-start">

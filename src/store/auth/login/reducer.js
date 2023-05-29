@@ -10,12 +10,15 @@ import {
   DIVISION_DROPDOWN_SUCCESS_AFTER_LOGIN,
   GET_SUPER_ADMIN_API_SUCCESS,
   LOGOUT_REST,
-  RESET_ROLE_ACCESS_ACTION
+  RESET_ROLE_ACCESS_ACTION,
+  ROLE_ACCESS_API_CALL_ERROR
 } from "./actionTypes"
 
 const initialState = {
   loginError: null,
   loading: false,
+  loginSuccess: { Status: false },
+  roleAccesssForSidbarError: false,
   roleAccessSidbarData: [],
   RoleAccessUpdateData: [],
   afterLoginUserDetails: {},
@@ -29,7 +32,12 @@ const Login = (state = initialState, action) => {
     case LOGIN_USER:
       state = { ...state, loading: true, }
       break
-    case LOGIN_SUCCESS: state = { ...state, loading: false, }
+    case LOGIN_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+        loginSuccess: action.payload,
+      }
       break
     case LOGOUT_USER: state = { ...state, }
       break
@@ -52,7 +60,7 @@ const Login = (state = initialState, action) => {
       }
 
     case ROLE_ACCESS_API_CALL_SUCCESS:
-      
+
       return {
         ...state,
         roleAccessSidbarData: action.payload,
@@ -62,6 +70,12 @@ const Login = (state = initialState, action) => {
       return {
         ...state,
         RoleAccessUpdateData: action.payload,
+      }
+    case ROLE_ACCESS_API_CALL_ERROR:
+
+      return {
+        ...state,
+        roleAccesssForSidbarError: action.payload,
       }
 
     case GET_SUPER_ADMIN_API_SUCCESS:

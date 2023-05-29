@@ -3,13 +3,14 @@ import { CheckAPIResponse, CommonConsole } from "../components/Common/CommonFunc
 
 
 
-  const API_URL = "http://192.168.1.114:8000"
+const API_URL = "http://192.168.1.114:8000"
 
 // const API_URL = "http://103.135.203.145:8000"
 
 const axiosApi = axios.create({
   baseURL: API_URL,
 })
+
 
 
 const AuthonticationFunction = () => {
@@ -104,13 +105,16 @@ export function postForget(url, body,) {
 
 }
 
-export async function getModify(url) {
+export async function postRefreshToken(url,body) {
   AuthonticationFunction();
-  return axiosApi.get(url).then(response => {
-    return CheckAPIResponse({ method: "get", url, response });
+  return axiosApi.post(url, body, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    }
+  }).then(response => {
+    return response.data;
   })
-    .catch(error => {
-      return CheckAPIResponse({ method: "get", url, error });
-    });
+
 }
 
