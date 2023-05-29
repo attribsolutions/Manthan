@@ -94,6 +94,7 @@ export function postForget(url, body,) {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        "Authorization":null
       }
     })
     .then(response => {

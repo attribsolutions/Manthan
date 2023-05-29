@@ -343,9 +343,17 @@ export async function CheckAPIResponse({
     if (con6) {                             // print post and Put method body
       console.log(`${url}***=> ${method} Body =>`, body);
     }
+    
     if (tokenXp) {
-      localStorage.clear();
-      history.go(0)
+    
+     await customAlert({
+        Type: 3,
+        Message: "Token Exprire"
+      })
+  
+      history.push({ pathname: "/logout" })
+      window.location.reload(true)
+      
       return
     }
     console.log(`${url}***${method} apiCall response:=>`, error);
@@ -353,8 +361,7 @@ export async function CheckAPIResponse({
       Type: 2,
       Message: `${url}:This API ${method} Method Execution Error`,
     });
-
-
+   
     return Promise.reject(error);
     // }
   }
