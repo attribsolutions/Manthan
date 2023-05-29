@@ -2,6 +2,8 @@ import React, { useEffect } from "react"
 import PropTypes from "prop-types"
 import { Route, Redirect } from "react-router-dom"
 import { useState } from "react"
+import { useDispatch } from "react-redux"
+import { sessionAliveNewToken } from "../../store/auth/sessionAlive/actions"
 
 
 let count1 = 0
@@ -24,6 +26,7 @@ const Authmiddleware = ({
 }) => {
 
   const [islogOut, setIsLogOut] = useState(false)
+  const dispatch = useDispatch();
 
   useEffect(() => {
 
@@ -37,14 +40,15 @@ const Authmiddleware = ({
 
       const hasNoActivity = () => {
 
-        //console.log(" hasNoActivity", count3) //________________________
+        console.log(" hasNoActivity", count3) //________________________
         ++count3                               //________________________
 
         clearInterval(intervalId);
         clearInterval(timer);
         sessionStorage.clear()
         setIsLogOut(true)
-        // history.push({ pathname: '/login' })
+        history.push({ pathname: '/logout' })
+        window.location.reload(true)
       }
 
       const startTimer = () => {
@@ -52,7 +56,7 @@ const Authmiddleware = ({
         //console.log(" startTimer", count4) //________________________
         ++count4                              //________________________
 
-        timer = setInterval(hasNoActivity, 15 * 60 * 1000);
+        timer = setInterval(hasNoActivity, 6 * 60 * 1000);
       };
 
       const resetTimer = () => {
@@ -63,7 +67,7 @@ const Authmiddleware = ({
       };
 
       let hasActivity = sessionStorage.getItem('lastActivityTime', new Date().getTime())
-      !hasActivity && keepSessionAlive();
+      !hasActivity && keepSessionAlive(dispatch);
       localStorage.getItem("token") && startTimer()
 
       window.addEventListener('keydown', resetTimer);
@@ -118,13 +122,19 @@ Authmiddleware.propTypes = {
 export default Authmiddleware;
 
 
-const updateTokan = () => {
-  // axios.get('https://api.example.com/keepalive');
+const updateTokan = (dispatch) => {
+  console.log(" keepSessionAlive  api call", count7)
+  let istoken = localStorage.getItem("refreshToken")
+  if (istoken) {
+    let jsonBody = { "refresh": `${istoken}` }
+    dispatch(sessionAliveNewToken(jsonBody))
+  }
 }
 
-const keepSessionAlive = () => {
-  //console.log(" keepSessionAlive", count7) //________________________
+const keepSessionAlive = (dispatch) => {
+  console.log(" keepSessionAlive", count7) //________________________
   ++count7
+
   sessionStorage.setItem('keepSessionAlive', new Date().getTime())
-  intervalId = setInterval(updateTokan, 15 * 60 * 1000)
+  intervalId = setInterval(() => updateTokan(dispatch), 4 * 60 * 1000)
 };

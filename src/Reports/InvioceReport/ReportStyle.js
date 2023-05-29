@@ -423,7 +423,7 @@ export const tableBody = (doc, data) => {
 
     var options = {
         didParseCell: (data1) => {
-              
+
             if (data1.row.cells[5].raw === "isaddition") {
                 data1.row.cells[2].colSpan = 2
                 data1.row.cells[0].colSpan = 2
@@ -445,7 +445,7 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[4].colSpan = 2
                 data1.row.cells[6].colSpan = 2
 
-                
+
             }
         },
         margin: {
@@ -514,7 +514,7 @@ export const tableBody = (doc, data) => {
     };
 
     doc.autoTable(table.columns, table.Rows(data), options,);
-   
+
 }
 
 export const pageFooter = (doc, data) => {
