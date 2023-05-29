@@ -115,9 +115,9 @@ const ForgetPasswordPage = props => {
     else {
       // setPaswErr("form-control is-valid mb-2")
       setPaswErr(false)
-
+debugger
       var jsonBody = JSON.stringify({
-        UserID: values.userId,
+        LoginName: values.LoginName,
         OTP: values.OTP,
         newpassword: values.passwordcon
       })
@@ -169,13 +169,13 @@ const ForgetPasswordPage = props => {
                               onValidSubmit={(e, v) => handleValidSubmit1(e, v)}
                             >
                               <div className="mb-3">
-                                <label>UserID</label>
+                                <label>LoginName</label>
                                 <AvInput
-                                  name="userId"
+                                  name="LoginName"
                                   className="form-control mb-2"
                                   // dissabled={true}
                                   // autoComplete="new-email"
-                                  placeholder="UserID"
+                                  placeholder="LoginName"
                                   type="text"
                                   autoComplete="off"
                                   required
