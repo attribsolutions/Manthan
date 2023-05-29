@@ -317,7 +317,7 @@ const RoutesMaster = (props) => {
                                                             <Input
                                                                 style={{ marginLeft: "50px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Sunday"
                                                                 checked={values.Sunday}
                                                                 onChange={(e) => {
@@ -338,7 +338,7 @@ const RoutesMaster = (props) => {
                                                             <Input
                                                                 style={{ marginLeft: "48px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Monday"
                                                                 checked={values.Monday}
                                                                 onChange={(e) => {
@@ -358,7 +358,7 @@ const RoutesMaster = (props) => {
                                                             <Input
                                                                 style={{ marginLeft: "46px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Tuesday"
                                                                 checked={values.Tuesday}
                                                                 onChange={(e) => {
@@ -378,7 +378,7 @@ const RoutesMaster = (props) => {
                                                             <Input
                                                                 style={{ marginLeft: "25px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Wednesday"
                                                                 checked={values.Wednesday}
                                                                 onChange={(e) => {
@@ -398,7 +398,7 @@ const RoutesMaster = (props) => {
                                                             <Input
                                                                 style={{ marginLeft: "39px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Thursday"
                                                                 checked={values.Thursday}
                                                                 onChange={(e) => {
@@ -417,7 +417,7 @@ const RoutesMaster = (props) => {
                                                             <Input
                                                                 style={{ marginLeft: "58px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Friday"
                                                                 checked={values.Friday}
                                                                 onChange={(e) => {
@@ -436,7 +436,7 @@ const RoutesMaster = (props) => {
                                                             <Input
                                                                 style={{ marginLeft: "39px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Saturday"
                                                                 checked={values.Saturday}
                                                                 onChange={(e) => {
