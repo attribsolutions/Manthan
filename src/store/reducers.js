@@ -9,6 +9,8 @@ import Account from "./auth/register/reducer"
 import ForgetPassword from "./auth/forgetpwd/reducer"
 import Profile from "./auth/profile/reducer"
 import SpinnerReducer from './Utilites/Spinner/reducer'
+import ChangePasswordReducer from "./auth/changepassword/reducer"
+
 
 //  *********************** Administrator ***********************
 import AlertReducer from './Utilites/CustomAlertRedux/reducer'
@@ -152,5 +154,6 @@ const rootReducer = combineReducers({
   SalesReturnReducer,
   CredietDebitReducer,
   DashboardReducer,
+  ChangePasswordReducer,
 })
 export default rootReducer
