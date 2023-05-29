@@ -119,8 +119,6 @@ const RoutesMaster = (props) => {
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-
-
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -183,6 +181,7 @@ const RoutesMaster = (props) => {
                     Message: postMsg.Message,
                 }))
             }
+
             else {
                 dispatch(AlertState({
                     Type: 1,
@@ -192,6 +191,7 @@ const RoutesMaster = (props) => {
                 }))
             }
         }
+
         else if (postMsg.Status === true) {
             dispatch(GetRoutesListSuccess({ Status: false }))
             dispatch(AlertState({
@@ -205,12 +205,15 @@ const RoutesMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: url.ROUTES_LIST,
             })
-        } else if (updateMsg.Status === true && !modalCss) {
+        }
+
+        else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateRoutesIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -235,6 +238,7 @@ const RoutesMaster = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id
+
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
@@ -258,10 +262,10 @@ const RoutesMaster = (props) => {
                 if (pageMode === mode.edit) {
                     dispatch(updateRoutesID({ jsonBody, updateId: values.id, btnId }));
                 }
+
                 else {
                     dispatch(SaveRoutesMaster({ jsonBody, btnId }));
                 }
-
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
