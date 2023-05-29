@@ -3,9 +3,9 @@ import { CheckAPIResponse, CommonConsole } from "../components/Common/CommonFunc
 
 
 
-const API_URL = "http://192.168.1.114:8000"
+// const API_URL = "http://192.168.1.114:8000"
 
-// const API_URL = "http://117.248.109.234:8000"
+const API_URL = "http://117.248.109.234:8000"
 
 const axiosApi = axios.create({
   baseURL: API_URL,
