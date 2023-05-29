@@ -8,7 +8,7 @@ import {
     FormGroup,
     Input,
     Label,
-    Row,
+    Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
@@ -31,7 +31,15 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, loginRoleID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginCompanyID,
+    loginPartyID,
+    loginUserID,
+    btnIsDissablefunc,
+    loginRoleID,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -315,7 +323,7 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01" >{fieldLabel.Sunday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "50px" }}
+                                                                style={{ marginLeft: "53px" }}
                                                                 type="checkbox"
                                                                 className="p-1"
                                                                 name="Sunday"
@@ -328,7 +336,6 @@ const RoutesMaster = (props) => {
                                                                     })
                                                                 }}
                                                             >
-
                                                             </Input>
                                                         </FormGroup>
 
@@ -336,7 +343,7 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Monday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "48px" }}
+                                                                style={{ marginLeft: "51px" }}
                                                                 type="checkbox"
                                                                 className="p-1"
                                                                 name="Monday"
@@ -356,7 +363,7 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Tuesday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "46px" }}
+                                                                style={{ marginLeft: "49px" }}
                                                                 type="checkbox"
                                                                 className="p-1"
                                                                 name="Tuesday"
@@ -376,7 +383,7 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Wednesday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "25px" }}
+                                                                style={{ marginLeft: "28px" }}
                                                                 type="checkbox"
                                                                 className="p-1"
                                                                 name="Wednesday"
@@ -396,7 +403,7 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Thursday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "39px" }}
+                                                                style={{ marginLeft: "43px" }}
                                                                 type="checkbox"
                                                                 className="p-1"
                                                                 name="Thursday"
@@ -415,7 +422,7 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Friday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "58px" }}
+                                                                style={{ marginLeft: "62px" }}
                                                                 type="checkbox"
                                                                 className="p-1"
                                                                 name="Friday"
@@ -434,7 +441,7 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Saturday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "39px" }}
+                                                                style={{ marginLeft: "43px" }}
                                                                 type="checkbox"
                                                                 className="p-1"
                                                                 name="Saturday"
@@ -486,16 +493,13 @@ const RoutesMaster = (props) => {
                                                             </Col>
                                                         </Row>
                                                     </FormGroup>
-
                                                 </CardBody>
                                             </Card>
                                         </Col>
                                     </Row>
                                 </form>
                             </CardBody>
-
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment>
