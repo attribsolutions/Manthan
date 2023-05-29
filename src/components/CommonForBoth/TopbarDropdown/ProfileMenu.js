@@ -22,11 +22,14 @@ import { withRouter, Link } from "react-router-dom"
 // users
 import user1 from "../../../assets/images/users/avatar-1.jpg"
 import { btnIsDissablefunc } from "../../Common/CommonFunction"
-import { formValid, initialFiledFunc, onChangeText } from "../../Common/validationFunction"
-import { ChangePassword } from "../../../store/auth/changepassword/action"
+import { formValid, initialFiledFunc, onChangeText, resetFunction } from "../../Common/validationFunction"
+import { ChangePassword, ChangePassword_Succes } from "../../../store/auth/changepassword/action"
+import { AlertState } from "../../../store/actions"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 
 
 const ProfileMenu = props => {
+  debugger
 
   const dispatch = useDispatch();
 
@@ -46,9 +49,11 @@ const ProfileMenu = props => {
 
 
 
-  const { user,postMsg } = useSelector((state) => ({
+  const { user, postMsg, divisionDropdown_redux = [] } = useSelector((state) => ({
     user: state.Login.afterLoginUserDetails,
-    // postMsg: state.ChangePasswordReducer.postMsg,
+    postMsg: state.ChangePasswordReducer.postMsg,
+    divisionDropdown_redux: state.Login.divisionDropdown,
+
 
   }))
 
@@ -66,6 +71,46 @@ const ProfileMenu = props => {
 
   }, [props.success, user])
 
+  useEffect(async () => {
+    debugger
+
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+      debugger
+      dispatch(ChangePassword_Succes({ Status: false }))
+      setState(() => resetFunction(fileds, state))// Clear form values  
+      setmodal_backdrop(false)
+
+      // if (props.pageMode === mode.dropdownAdd) {
+      customAlert({
+        Type: 1,
+        Message: postMsg.Message,
+      })
+      // }
+      // else if (pageMode === mode.edit) {
+      //     customAlert({
+      //         Type: 1,
+      //         Message: postMsg.Message,
+      //     })
+      //     history.push({ pathname: url.GROUPTYPE_lIST })
+      // }
+      // else {
+      //     // dispatch(Breadcrumb_inputName(''))
+      //     const promise = await customAlert({
+      //         Type: 1,
+      //         Message: postMsg.Message,
+      //     })
+      //     if (promise) { history.push({ pathname: url.GROUPTYPE_lIST }) }
+      // }
+
+    } else if
+      (postMsg.Status === true) {
+      customAlert({
+        Type: 3,
+        Message: JSON.stringify(postMsg.Message),
+      })
+    }
+  }, [postMsg])
+
   function tog_backdrop() {
     setmodal_backdrop(!modal_backdrop)
     removeBodyCss()
@@ -75,7 +120,7 @@ const ProfileMenu = props => {
   }
 
   const SaveHandler = async (event) => {
-    debugger
+
     event.preventDefault();
     const btnId = event.target.id
     try {
@@ -88,7 +133,7 @@ const ProfileMenu = props => {
           newpassword: values.newpassword,
         });
 
-        // dispatch(ChangePassword({ jsonBody, btnId }));
+        dispatch(ChangePassword({ jsonBody, btnId }));
 
       }
     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
@@ -190,17 +235,19 @@ const ProfileMenu = props => {
             {props.t("Lock screen")}
           </DropdownItem> */}
 
-          <Link className="dropdown-item">
-            <i className="bx bx-user font-size-16 align-middle me-1  text-primary" />
-            <span>{props.t("Change Division")}</span>
-          </Link>
 
-          <div className="dropdown-divider" />
+          {divisionDropdown_redux.length > 1 && //If division  then only
+            <Link className="dropdown-item">
+              <i className="bx bx-user font-size-16 align-middle me-1  text-primary" />
+              <span>{props.t("Change Division")}</span>
+            </Link>}
+
+          {/* <div className="dropdown-divider" /> */}
 
           <div style={{ cursor: "pointer" }} onClick={() => {
             tog_backdrop()
           }} className="dropdown-item">
-            {/* <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger" /> */}
+            <i className="fas fa-lock" style={{ marginRight: "7px" }}></i>
             <span>{props.t("Change Password")}</span>
           </div >
           <Link to="/logout" className="dropdown-item">

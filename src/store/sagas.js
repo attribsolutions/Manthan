@@ -6,6 +6,8 @@ import AuthSaga from "./auth/login/saga"
 import ForgetSaga from "./auth/forgetpwd/saga"
 import ProfileSaga from "./auth/profile/saga"
 import LayoutSaga from "./layout/saga"
+import ChangePasswordSaga from "./auth/changepassword/saga"
+
 
 // {/*   *********************** spinner ***********************
 import Spinner_Saga from "./Utilites/Spinner/saga"
@@ -150,6 +152,8 @@ export default function* rootSaga() {
     fork(ReceiptSaga),
     fork(SalesReturnSaga),
     fork(CreditDebitSaga),
-    fork(DashboardSaga)
+    fork(DashboardSaga),
+    fork(ChangePasswordSaga)
+
   ])
 }
