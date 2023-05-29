@@ -83,7 +83,7 @@ const ProfileMenu = props => {
         btnIsDissablefunc({ btnId, state: true })
 
         const jsonBody = JSON.stringify({
-          LoginName: values.LoginName,
+          LoginName: username,
           password: values.password,
           newpassword: values.newpassword,
         });
