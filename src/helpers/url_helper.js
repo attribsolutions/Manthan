@@ -17,6 +17,9 @@ export const FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN = "/GetUserDetails"
 export const DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE = "/PartyDropdownforloginpage"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
+export const CHANGEPASSWORD_API = "/ChangePassword"
+
+
 export const SUPER_ADMIN_API = '/SuperAdmin'
 
 export const TOKEN_REFRESH_API = '/api/token/refresh/'

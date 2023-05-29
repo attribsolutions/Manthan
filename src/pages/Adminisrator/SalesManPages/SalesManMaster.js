@@ -135,7 +135,7 @@ const SalesManMaster = (props) => {
             if (hasEditVal) {
 
                 const routeArr = hasEditVal.SalesmanRoute.map((data) => ({
-                    value: data.id,
+                    value: data.Route,
                     label: data.Name
                 }))
 
@@ -233,7 +233,8 @@ const SalesManMaster = (props) => {
 
 
     const SaveHandler = async (event) => {
-
+ 
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -243,6 +244,7 @@ const SalesManMaster = (props) => {
                 const routeArr = values.SalesmanRoute.map((i) => ({
                     Route: i.value,
                 }))
+
 
                 const jsonBody = JSON.stringify({
                     Name: values.Name,

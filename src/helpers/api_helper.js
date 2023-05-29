@@ -5,6 +5,7 @@ import { CheckAPIResponse, CommonConsole } from "../components/Common/CommonFunc
 
 // const API_URL = "http://192.168.1.114:8000"
 
+
 const API_URL = "http://117.248.109.234:8000"
 
 const axiosApi = axios.create({
@@ -94,6 +95,7 @@ export function postForget(url, body,) {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        "Authorization":null
       }
     })
     .then(response => {

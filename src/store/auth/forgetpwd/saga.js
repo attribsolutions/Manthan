@@ -11,7 +11,6 @@ import { Python_FoodERP_postJwtForgetPwd_SendOTP, Python_FoodERP_postJwtForgetPw
 function* sendOTP_GnerFun({ user }) {
   
   try {
-   
     const response = yield call(Python_FoodERP_postJwtForgetPwd_SendOTP, user)
     if (response.StatusCode === 200) {
       yield put(userForgetPassword_sendOTP_Success(response.Message))
@@ -20,8 +19,7 @@ function* sendOTP_GnerFun({ user }) {
       yield put(userForgetPassword_sendOTP_Error(response.Message))
     }
   } catch (error) {
-    console.log(JSON.stringify(error))
-    yield put(userForgetPassword_sendOTP_Error(error))
+    yield put(userForgetPassword_sendOTP_Error("ForgetPassword Api Error"))
   }
 }
 

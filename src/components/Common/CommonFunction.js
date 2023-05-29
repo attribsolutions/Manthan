@@ -310,6 +310,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
 }
 
 export async function CheckAPIResponse({
+
   method,
   url,
   response = {},
@@ -321,6 +322,7 @@ export async function CheckAPIResponse({
     // await new Promise(r => setTimeout(r, 0));
     btnIsDissablefunc({ btnId, state: false });
   }
+  
 
   const { data = "", code } = response;
   const con1 = data.StatusCode === 200;
@@ -328,7 +330,7 @@ export async function CheckAPIResponse({
   const con3 = data.StatusCode === 226; //reject used an another transaction
   const con4 = data.StatusCode === 400; //reject  exception error
   const con5 = data.StatusCode === 406; //reject
-  const con6 = method === "post" || method === "put"; //for console body
+  const con6 = method === "post" || method === "put" || method === "postForget" //for console body
   const con7 = data.StatusCode === 100;
 
   if (!(error === undefined)) {
@@ -343,9 +345,17 @@ export async function CheckAPIResponse({
     if (con6) {                             // print post and Put method body
       console.log(`${url}***=> ${method} Body =>`, body);
     }
+    
     if (tokenXp) {
-      localStorage.clear();
-      history.go(0)
+    
+     await customAlert({
+        Type: 3,
+        Message: "Token Exprire"
+      })
+  
+      history.push({ pathname: "/logout" })
+      window.location.reload(true)
+      
       return
     }
     console.log(`${url}***${method} apiCall response:=>`, error);
@@ -353,8 +363,7 @@ export async function CheckAPIResponse({
       Type: 2,
       Message: `${url}:This API ${method} Method Execution Error`,
     });
-
-
+   
     return Promise.reject(error);
     // }
   }

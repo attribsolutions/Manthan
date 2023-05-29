@@ -30,16 +30,20 @@ const ForgetPasswordPage = props => {
   const dispatch = useDispatch();
   // const history = useHistory();
   const [paswErr, setPaswErr] = useState(false)
-  const { sendOTPSuccessMsg_redux, sendOtpMegError_reducx, sendPasswordError_reducx, sendPasswordMsg_reducx,Loading } = useSelector(state => ({
-    sendOTPSuccessMsg_redux: state.ForgetPassword.sendOTPSuccessMsg,
-    sendOtpMegError_reducx: state.ForgetPassword.sendOtpMegError,
-    sendPasswordMsg_reducx: state.ForgetPassword.sendPasswordMsg,
-    sendPasswordError_reducx: state.ForgetPassword.sendPasswordError,
-    Loading: state.ForgetPassword.Loading,
+  const {
+    sendOTPSuccessMsg_redux,
+    sendOtpMegError_reducx,
+    sendPasswordError_reducx,
+    sendPasswordMsg_reducx, Loading } = useSelector(state => ({
+      sendOTPSuccessMsg_redux: state.ForgetPassword.sendOTPSuccessMsg,
+      sendOtpMegError_reducx: state.ForgetPassword.sendOtpMegError,
+      sendPasswordMsg_reducx: state.ForgetPassword.sendPasswordMsg,
+      sendPasswordError_reducx: state.ForgetPassword.sendPasswordError,
+      Loading: state.ForgetPassword.Loading,
 
 
 
-  }))
+    }))
   const [sendPasswordMsg, setSendPasswordMsg] = useState(null)
   const [sendPasswordError, setSendPasswordError] = useState(null)
 
@@ -49,8 +53,9 @@ const ForgetPasswordPage = props => {
 
 
 
-
+  debugger
   useEffect(() => {
+    debugger
     if (sendPasswordMsg_reducx) {
       setSendPasswordMsg(sendPasswordMsg_reducx)
       setSendPasswordError(null)
@@ -70,6 +75,7 @@ const ForgetPasswordPage = props => {
   }, [sendPasswordMsg_reducx, sendPasswordError_reducx])
 
   useEffect(() => {
+    debugger
     if (sendOTPSuccessMsg_redux) {
       setSendOTPSuccessMsg(sendOTPSuccessMsg_redux)
       setSendOtpMegError(null)
@@ -86,16 +92,18 @@ const ForgetPasswordPage = props => {
   }, [sendOTPSuccessMsg_redux, sendOtpMegError_reducx])
 
   function handleValidSubmit(event, values) {
-   
+    debugger
+  event.preventDefault();
     var jsonBody = JSON.stringify({
       Email: values.email,
-      Phone:""
-
-
+      Phone: ""
     })
     dispatch(userForgetPassword_sendOTP(jsonBody))
   }
+
   function handleValidSubmit1(event, values) {
+    debugger
+    event.preventDefault();
     var paswd = values.password1
     var pawdcn = values.passwordcon
 
@@ -107,9 +115,9 @@ const ForgetPasswordPage = props => {
     else {
       // setPaswErr("form-control is-valid mb-2")
       setPaswErr(false)
-     
+debugger
       var jsonBody = JSON.stringify({
-        UserID: values.userId,
+        LoginName: values.LoginName,
         OTP: values.OTP,
         newpassword: values.passwordcon
       })
@@ -161,13 +169,13 @@ const ForgetPasswordPage = props => {
                               onValidSubmit={(e, v) => handleValidSubmit1(e, v)}
                             >
                               <div className="mb-3">
-                                <label>UserID</label>
+                                <label>LoginName</label>
                                 <AvInput
-                                  name="userId"
+                                  name="LoginName"
                                   className="form-control mb-2"
                                   // dissabled={true}
                                   // autoComplete="new-email"
-                                  placeholder="UserID"
+                                  placeholder="LoginName"
                                   type="text"
                                   autoComplete="off"
                                   required
@@ -282,8 +290,5 @@ const ForgetPasswordPage = props => {
   )
 }
 
-ForgetPasswordPage.propTypes = {
-  history: PropTypes.object,
-}
 
-export default withRouter(ForgetPasswordPage)
+export default ForgetPasswordPage
