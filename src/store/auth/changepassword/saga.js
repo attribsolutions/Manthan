@@ -11,17 +11,20 @@ import {
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
-function* ChangePassword_GenFun({ config }) {              // Save API
+function* ChangePassword_GenFun({ config }) {   
+             // Save API
   try {
+    
     const response = yield call(ChangePassword_API, config);
+    
     yield put(ChangePassword_Succes(response));
   } catch (error) { CommonConsole(error) }
 }
 
 
 
-function* GroupSaga() {
+function* ChangePasswordSaga() {
   yield takeEvery(CHANGE_PASSWORD, ChangePassword_GenFun)
 }
 
-export default GroupSaga;
+export default ChangePasswordSaga;

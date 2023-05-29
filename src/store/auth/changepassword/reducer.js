@@ -21,4 +21,4 @@ const ChangePasswordReducer = (state = INIT_STATE, action) => {
   }
 }
 
-export default GroupReducer
+export default ChangePasswordReducer;
