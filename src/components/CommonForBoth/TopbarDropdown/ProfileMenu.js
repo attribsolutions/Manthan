@@ -29,7 +29,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 
 
 const ProfileMenu = props => {
-  debugger
+  
 
   const dispatch = useDispatch();
 
@@ -47,32 +47,24 @@ const ProfileMenu = props => {
   const [state, setState] = useState(() => initialFiledFunc(fileds))
 
 
-
-
   const { user, postMsg, divisionDropdown_redux = [] } = useSelector((state) => ({
     user: state.Login.afterLoginUserDetails,
     postMsg: state.ChangePasswordReducer.postMsg,
     divisionDropdown_redux: state.Login.divisionDropdown,
 
-
   }))
-
 
   const { values } = state
 
-
   useEffect(() => {
-
     if (localStorage.getItem("UserName")) {
       const obj = localStorage.getItem("UserName")
       setusername(obj)
     }
-
-
   }, [props.success, user])
 
+  
   useEffect(async () => {
-    debugger
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       debugger
