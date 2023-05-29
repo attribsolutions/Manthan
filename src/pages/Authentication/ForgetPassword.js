@@ -92,6 +92,7 @@ const ForgetPasswordPage = props => {
   }, [sendOTPSuccessMsg_redux, sendOtpMegError_reducx])
 
   function handleValidSubmit(event, values) {
+    debugger
   event.preventDefault();
     var jsonBody = JSON.stringify({
       Email: values.email,
