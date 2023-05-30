@@ -578,10 +578,12 @@ export const del_Credit_List_API = ({ deleteId, btnId }) => del(`${url.CREDIT_DE
 export const Edit_Credit_List_API = ({ editId, btnId }) => get(`${url.CREDIT_DEBIT}/${editId}`, btnId)// Edit api
 export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// Invoice Return api
 export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, jsonBody)//  postapi
+debugger
+export const PartyLedger_API = (FromDate,ToDate,SAPCode) => chitalebandhu_get(`${url.PARTY_LEDGER_API}FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`,)//  postapi
+debugger
+// export const PartyLedger_API = (FromDate,ToDate,SAPCode) => get(`http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
 
-
-export const PartyLedger_API = (linkUrl) => chitalebandhu_get(`${url.PARTY_LEDGER_API}${linkUrl}`,)//  postapi
-
+debugger
 
 
 // Dashboard 
