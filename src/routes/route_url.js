@@ -221,3 +221,5 @@ export const CREDIT = "/Credit"
 
 export const DEBIT_LIST = "/Debit_List"
 export const DEBIT = "/Debit"
+
+export const SAP_LEDGER = "/SapLedger"
