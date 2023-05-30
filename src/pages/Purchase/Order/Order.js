@@ -428,7 +428,7 @@ const Order = (props) => {
                         row["po_Unit_id"] = i.UnitID;
                         row["UnitName"] = i.UnitName;
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
-                        row["Rate"] = i.Rate;
+                        row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
                     }
 
                 } else {
