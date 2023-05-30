@@ -205,8 +205,9 @@ debugger
                                   ?
                                   <div className="text-danger"> Please Enter Correct Password</div>
                                   : <></>}
-                                <label>confirm password</label>
 
+
+                                <label>confirm password</label>
                                 <AvInput
                                   name="passwordcon"
                                   className={"form-control  mb-2"}
@@ -223,6 +224,7 @@ debugger
                                   : <></>} */}
                               </div>
 
+
                               <div className="mb-3 mt-4">
                                 <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">change Password</button>
                               </div>
@@ -231,6 +233,7 @@ debugger
                             <AvForm className="custom-form mt-4"
                               onValidSubmit={(e, v) => handleValidSubmit(e, v)}
                             >
+
                               <div className="mb-3">
                                 <AvField
                                   name="email"
@@ -242,13 +245,12 @@ debugger
                                   required
                                 />
                               </div>
+
                               <div className="mb-3 mt-4">
                                 <button disabled={Loading} className="btn btn-primary w-100 waves-effect waves-light" type="submit">Reset</button>
                               </div>
                             </AvForm>
                           }
-
-
 
                           <div className="mt-5 text-center">
                             <p className="text-muted mb-0">Remember It ?  &nbsp
