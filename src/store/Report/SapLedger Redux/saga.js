@@ -16,6 +16,7 @@ function* goBtn_Get_API_GenFun( fillter ) {
   try {
     debugger
       const response = yield call(PartyLedger_API, fillter.fromdate,fillter.todate,fillter.SAPCode);
+      debugger
       // response.Data.map((index) => {
       //     index["selectCheck"] = false
       //     return index
