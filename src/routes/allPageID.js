@@ -214,4 +214,7 @@ export const BULK_RECIPT = 181
 export const PAYMENT_ENTRY = 177
 export const PAYMENT_ENTRY_LIST = 178
 
+export const SAP_LEDGER  = 197
+
+
 

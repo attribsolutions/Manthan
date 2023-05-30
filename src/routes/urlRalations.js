@@ -208,4 +208,6 @@ export const CreditList = url.CREDIT
 export const Debit = url.DEBIT_LIST
 export const DebitList = url.DEBIT
 
+export const SapLedger = url.SAP_LEDGER
+
 
