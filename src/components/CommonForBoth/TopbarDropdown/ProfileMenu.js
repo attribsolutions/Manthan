@@ -40,7 +40,7 @@ const ProfileMenu = props => {
     password: "",
     newpassword: ""
   }
-  debugger
+  
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
 

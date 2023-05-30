@@ -83,6 +83,10 @@ import SalesReturnReducer from "./Sales/SalesReturnRedux/reducer"
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
 import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
 import CredietDebitReducer from "./Accounting/CreditRedux/reducer"
+import SapLedgerReducer from "./Report/SapLedger Redux/reducer"
+
+
+
 
 //***************************Accounting ************************** */
 import ReceiptReducer from "./Accounting/Receipt/reducer"
@@ -155,5 +159,7 @@ const rootReducer = combineReducers({
   CredietDebitReducer,
   DashboardReducer,
   ChangePasswordReducer,
+  SapLedgerReducer
+
 })
 export default rootReducer
