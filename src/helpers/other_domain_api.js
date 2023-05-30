@@ -1,15 +1,40 @@
-import { CommonConsole } from '../components/Common/CommonFunction';
+import axios from "axios"
+import { CheckAPIResponse, CommonConsole } from '../components/Common/CommonFunction';
+debugger
+// const axios = require('axios');
+debugger
 
-const axios = require('axios');
+// export const chitalebandhu_get = (url) => {
 
-export const chitalebandhu_get = (url) => {
-    var config = {
-        method: 'get',
-        url: url,
-        headers: {}
-    };
-    let response = axios(config).then(response => response.data)
-        .catch(error => error)
-    CommonConsole(response);
-    return response
-}
+//     debugger
+//     var config = {
+//         method: 'get',
+//         url: url,
+//         // headers: {}
+//     };
+
+//     let response = axios(config).then(response => response.data)
+//         .catch(error => error)
+//     CommonConsole(response);
+//     return response;
+
+// }
+
+
+
+
+export const chitalebandhu_get = async (url) => {
+    
+    try {
+        debugger
+      await  axios.get(url).then((response) => {
+            debugger
+            // setPost(response.data);
+            console.log(response)
+            return response
+        });
+        debugger
+    } catch (error) {
+        console.error(error);
+    }
+};
