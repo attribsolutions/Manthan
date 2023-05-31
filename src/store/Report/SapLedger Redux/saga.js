@@ -14,7 +14,9 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 function* goBtn_Get_API_GenFun( { filters } ) {
 
   try {
-      const response = yield call(PartyLedger_API, fillter.fromdate,fillter.todate,fillter.SAPCode);
+    debugger
+      const response = yield call(PartyLedger_API, filters);
+      debugger
       // response.Data.map((index) => {
       //     index["selectCheck"] = false
       //     return index
