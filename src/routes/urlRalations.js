@@ -123,7 +123,7 @@ export const BankList = url.BANK
 export const RetailerMaster = url.RETAILER_LIST
 export const RetailerList = url.RETAILER_MASTER
 
-
+export const ProductMarginReport = url.PRODUCT_MARGIN_REPORT
 
 //******************************* Purchase Module ************************************//
 

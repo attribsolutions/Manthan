@@ -154,7 +154,7 @@ import ImportMasterMap from "../pages/Adminisrator/ImportMaster/ImportMasterMap/
 import Debit from "../pages/Accounting/Debit/Debit";
 import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"
 import SapLedger from "../Reports/SapLedgerReport/SapLedger";
-
+import ProductMarginReport from "../Reports/ProductMarginReport/ProductMarginReport";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -280,7 +280,7 @@ const userRoutes = [
   { path: path.BANK, component: BankMaster },
   { path: path.BANK_LIST, component: BankList },
 
-
+  { path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
