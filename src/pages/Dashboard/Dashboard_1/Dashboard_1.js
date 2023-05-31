@@ -169,10 +169,7 @@ const Dashboard_1 = (props) => {
         const btnId = "excelbtn-id"
         const ProductMargin = []
         dispatch(getExcel_Button_API())
-
     }
-
-
 
     return (
         <React.Fragment>
