@@ -358,7 +358,8 @@ const SapLedger = (props) => {
         LoginPartydata: state.Login.divisionDropdown
     }));
 
-    debugger
+  
+    
     const { data = [], PartyDetails = {} } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
