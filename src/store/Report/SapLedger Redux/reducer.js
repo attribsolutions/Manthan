@@ -7,7 +7,7 @@ import {
 const INIT_STATE = {
  
   goBtnSapLedger: [],
-  Data:[],
+  ProductMargin:[],
 
 }
 
@@ -23,7 +23,7 @@ const SapLedgerReducer = (state = INIT_STATE, action) => {
       case GET_EXCELBUTTON_API_SUCCESS:
         return {
             ...state,
-            Data: action.payload,
+            ProductMargin: action.payload,
         }
 
     default:
