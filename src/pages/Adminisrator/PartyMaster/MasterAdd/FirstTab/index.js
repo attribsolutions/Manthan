@@ -108,8 +108,9 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     useEffect(() => {
         let retailerParty = PartyTypes.find(i => (i.IsRetailer))
-        
+
         if ((subPageMode === url.RETAILER_MASTER) && !(retailerParty === undefined)) {
+
             setState((i) => {
                 let a = { ...i }
                 let supilerArr = [{
@@ -128,6 +129,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 delete a.required.Supplier
                 return a
             })
+            dispatch(priceListByPartyAction(loginPartyID()))
         }
     }, [PartyTypes, pageField])
 
@@ -160,7 +162,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     }
 
     function partyTypeOnChange(hasSelect, evn) {
-        
+
         onChangeSelect({ hasSelect, evn, state, setState })
         setPriceListSelect({ label: '' })
         dispatch(priceListByPartyAction(hasSelect.value))
@@ -331,7 +333,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     : null
                             }
 
-                 
+
                             <Col md="3" className="mb-3">
                                 <FormGroup>
                                     <Label>Price List </Label>
