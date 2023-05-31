@@ -124,7 +124,7 @@ export const BANK_LIST = 176
 
 export const BANK_ASSIGN = 182
 
-
+export const PRODUCT_MARGIN_REPORT = 198
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
