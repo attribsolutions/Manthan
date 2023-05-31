@@ -18,3 +18,7 @@
 
 /// start serve build file
  $ pm2 serve build 3000 --spa
+
+
+////   +********************* delete Folder
+ $sudo rm -r folder_name
