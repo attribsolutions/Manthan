@@ -49,7 +49,7 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, userA
     const { PageFieldMaster = [] } = { ...pageField };
 
     useEffect(() => {
-
+        
         let sortLabel = ""
         let sortType = "asc"
         let columns = []
@@ -60,7 +60,7 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, userA
         });
         // *******
 
-        if (!PageFieldMaster.length > 0) {
+        if (!(PageFieldMaster.length > 0)) {
             columns.push({ text: "Page Field Is Blank..." });
         }
 

@@ -56,7 +56,7 @@ const Authmiddleware = ({
         //console.log(" startTimer", count4) //________________________
         // ++count4                              //________________________
 
-        timer = setInterval(hasNoActivity, 30 * 60 * 1000);
+        timer = setInterval(hasNoActivity, 5 * 60 * 1000);
       };
 
       const resetTimer = () => {
@@ -136,5 +136,5 @@ const keepSessionAlive = (dispatch) => {
   ++count7
 
   sessionStorage.setItem('keepSessionAlive', new Date().getTime())
-  intervalId = setInterval(() => updateTokan(dispatch), 28 * 60 * 1000)
+  intervalId = setInterval(() => updateTokan(dispatch), 4 * 60 * 1000)
 };

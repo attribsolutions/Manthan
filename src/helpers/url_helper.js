@@ -345,5 +345,9 @@ export const INVOICE_RETURN = '/InvoiceReturnCRDR'
 export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
 
 
+export const PARTY_LEDGER_API = '/SAPLedger'
+
+
+
 // Dashboard
 export const DASHBOARD = '/getdashboard'
