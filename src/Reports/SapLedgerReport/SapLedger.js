@@ -39,12 +39,13 @@ const SapLedger = (props) => {
     const {
         userAccess,
         List,
-  
+        LoginPartydata,
         pageField,
     } = useSelector((state) => ({
         List: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+         LoginPartydata:state.Login.divisionDropdown
     }));
     const { data = [], PartyDetails = {} } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
@@ -79,13 +80,20 @@ const SapLedger = (props) => {
         };
     }, [userAccess])
 
+    // const Sapcode = LoginPartydata.map((index) => ({
+    //     Sapcode: index.SAPPartyCode,
+        
+    // }));
+    debugger
+  let partdata =  localStorage.getItem("roleId")
+  var partyDivisiondata  = JSON.parse(partdata);
  
-
     function goButtonHandler() {
+        
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            SAPCode:500023
+            SAPCode:partyDivisiondata.SAPPartyCode
         });
         dispatch(SapLedger_Go_Button_API(jsonBody));
     }
