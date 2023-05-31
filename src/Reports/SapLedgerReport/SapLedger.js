@@ -349,22 +349,17 @@ const SapLedger = (props) => {
     const {
         userAccess,
         List,
-        LoginPartydata,
+        
         pageField,
     } = useSelector((state) => ({
         List: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        LoginPartydata: state.Login.divisionDropdown
+     
     }));
 
-  
-    
     const { data = [], PartyDetails = {} } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
-
-
-
 
     const tableColumns = [
         {
