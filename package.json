@@ -2,7 +2,6 @@
   "name": "FoodERP 2.0",
   "version": "0.1.0",
   "private": true,
- 
   "dependencies": {
     "-": "^0.0.1",
     "@availity/reactstrap-validation-select": "^9.3.0",
