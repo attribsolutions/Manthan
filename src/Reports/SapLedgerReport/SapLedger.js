@@ -358,6 +358,7 @@ const SapLedger = (props) => {
      
     }));
 
+    
     const { data = [], PartyDetails = {} } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
