@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "-": "^0.0.1",
     "@availity/reactstrap-validation-select": "^9.3.0",
     "@fullcalendar/bootstrap": "^5.9.0",
     "@fullcalendar/daygrid": "^5.9.0",
@@ -29,6 +30,7 @@
     "firebase": "^8.6.7",
     "flatpickr": "^4.6.13",
     "google-maps-react": "^2.0.6",
+    "http-proxy-middleware": "^2.0.6",
     "i": "^0.3.7",
     "i18next": "^20.4.0",
     "i18next-browser-languagedetector": "^6.1.2",
@@ -97,6 +99,7 @@
     "react-switch": "^6.0.0",
     "reactstrap": "^8.10.1",
     "redux-saga": "^1.1.3",
+    "save-dev": "^0.0.1-security",
     "script": "^0.1.4",
     "simplebar-react": "^2.3.5",
     "web-vitals": "^2.1.0",
