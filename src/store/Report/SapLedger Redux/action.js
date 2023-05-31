@@ -6,9 +6,9 @@ import {
 } from "./actionType";
 
 
-export const SapLedger_Go_Button_API = (fromdate,todate,SAPCode) => ({ // save Action
+export const SapLedger_Go_Button_API = (filters) => ({ // save Action
   type: GO_BUTTON_API_SAP_LEDGER,
-  fromdate,todate,SAPCode,
+  filters,
 });
 
 export const SapLedger_Go_Button_API_Success = (resp) => ({ // Save  success
