@@ -102,6 +102,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 a.hasValid.valid = true;
                 return a
             })
+
             dispatch(priceListByPartyAction(PartyTypes[0].id))
         }
     }, [PartyTypes])
@@ -129,7 +130,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 delete a.required.Supplier
                 return a
             })
-            dispatch(priceListByPartyAction(loginPartyID()))
+            dispatch(priceListByPartyAction(retailerParty.id))
         }
     }, [PartyTypes, pageField])
 
