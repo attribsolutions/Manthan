@@ -233,7 +233,6 @@ const Order = (props) => {
             setTermsAndConTable([])
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
-
             if (subPageMode === url.ORDER_2) { //        SAP OEDER-APROVUAL CODE
                 let btnId = postMsg.btnId;
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
@@ -241,9 +240,8 @@ const Order = (props) => {
                 config.orderId = postMsg.OrderID;
                 dispatch(_act.getOrderApprovalDetailAction(config));
             }
+            // ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
             else {
-
-                // ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
                 const a = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
@@ -430,7 +428,7 @@ const Order = (props) => {
                         row["po_Unit_id"] = i.UnitID;
                         row["UnitName"] = i.UnitName;
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
-                        row["Rate"] = i.Rate;
+                        row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
                     }
 
                 } else {
