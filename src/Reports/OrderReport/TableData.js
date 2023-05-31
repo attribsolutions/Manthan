@@ -32,7 +32,7 @@ export const DetailsOfTransport = [
 ]
 
 export const Rows = (data) => {
-    debugger
+    
     const { OrderItem = [] } = data
     let hasHedRow = []
     const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
@@ -102,7 +102,7 @@ export const ReportFotterColumns2 = [
 ];
 
 export const ReportRows = (data, doc) => {
-
+    
     const terms = data.OrderTermsAndCondition
     const slicedArray = terms.slice(0, 2);
     var TableArray = [["Terms And Condition"],
@@ -118,7 +118,7 @@ export const BilledByRow = (data) => {
     var BilledByArray = [
         [`${data.SupplierName}`],
         [`${data.ShippingAddress}`],
-        [`FSSAI:${data.ShippingFssai}`],
+        [`FSSAI:${data.SupplierFssai}`],
     ]
     return BilledByArray;
 }
@@ -140,6 +140,8 @@ export const DetailsOfTransportRow = (data) => {
         [`${data.POTypeName}`],
         [`${data.CustomerName}`],
         [`${data.BillingAddress}`],
+        [`FSSAI:${data.ShippingFssai}`],
+
     ]
 
     return DetailsOfTransportArray;

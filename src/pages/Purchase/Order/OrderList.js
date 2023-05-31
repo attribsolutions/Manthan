@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
@@ -78,7 +78,7 @@ const OrderList = () => {
     }
 
     // Featch Modules List data  First Rendering
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         let page_Id = '';
         let page_Mode = mode.defaultList;
@@ -141,7 +141,6 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
-        dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
@@ -149,7 +148,10 @@ const OrderList = () => {
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(_act.GetVenderSupplierCustomer(subPageMode))
         goButtonHandler("event", IBType)
-
+        return ()=>{
+            dispatch(_act.commonPageFieldListSuccess(null))
+            dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list   
+        }
     }, []);
 
     useEffect(() => {

@@ -82,7 +82,7 @@ const GSTList = () => {
   }, [GSTGoButton]);
 
   function editBodyfunc(index) {
-    debugger
+    
     const { rowData, btnId } = index
     let { preEffectiveDate } = rowData;
     _cfunc.btnIsDissablefunc({ btnId, state: true })

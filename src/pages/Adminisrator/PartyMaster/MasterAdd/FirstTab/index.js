@@ -11,8 +11,9 @@ import PartyType from '../../../PartyTypes/PartyType'
 import * as url from "../../../../../routes/route_url";
 import AddMaster from "../../../EmployeePages/Drodown";
 import * as pageId from "../../../../../routes/allPageID"
+import { loginPartyID } from '../../../../../components/Common/CommonFunction'
 
-const BaseTabForm = forwardRef((props, ref) => {
+const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     const dispatch = useDispatch();
 
@@ -36,7 +37,6 @@ const BaseTabForm = forwardRef((props, ref) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
     const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
-    const [isRetailer, setIsRetailer] = useState(false)
 
     const { values } = state;
     const { isError } = state;
@@ -106,6 +106,31 @@ const BaseTabForm = forwardRef((props, ref) => {
         }
     }, [PartyTypes])
 
+    useEffect(() => {
+        let retailerParty = PartyTypes.find(i => (i.IsRetailer))
+        
+        if ((subPageMode === url.RETAILER_MASTER) && !(retailerParty === undefined)) {
+            setState((i) => {
+                let a = { ...i }
+                let supilerArr = [{
+                    value: loginPartyID()
+                }]
+
+                a.values.PartyType = {
+                    value: retailerParty.id,
+                    label: retailerParty.Name
+                }
+                a.values.Supplier = supilerArr
+                a.hasValid.PartyType.valid = true;
+                a.hasValid.Supplier.valid = true;
+
+                delete a.required.PartyType
+                delete a.required.Supplier
+                return a
+            })
+        }
+    }, [PartyTypes, pageField])
+
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -135,33 +160,10 @@ const BaseTabForm = forwardRef((props, ref) => {
     }
 
     function partyTypeOnChange(hasSelect, evn) {
-        debugger
+        
         onChangeSelect({ hasSelect, evn, state, setState })
         setPriceListSelect({ label: '' })
         dispatch(priceListByPartyAction(hasSelect.value))
-        if (hasSelect.IsRetailer === true) {
-            setState((i) => {
-             
-                const a = { ...i }
-                delete a.required.Email
-                delete a.required.SAPPartyCode
-                delete a.required.GSTIN
-                a.isError.Email = "";
-                a.isError.SAPPartyCode = "";
-                a.isError.GSTIN = "";
-                
-                return a
-            })
-        }
-        else {
-            setState((i) => {
-                const a = { ...i }
-                a.required.Email = true;
-                a.required.SAPPartyCode = true;
-                a.required.GSTIN = true;
-                return a
-            })
-        }
     }
 
     const priceListOnClick = function () {
@@ -295,38 +297,42 @@ const BaseTabForm = forwardRef((props, ref) => {
                 <Card className=" text-black mt-n2" style={{ backgroundColor: "whitesmoke" }} >
                     <CardBody >
                         <Row className="mt-3 ">
-                            <Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Label > {fieldLabel.PartyType}</Label>
-                                    <Col sm={12}>
-                                        <Select
-                                            name="PartyType"
-                                            value={values.PartyType}
-                                            isSearchable={true}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            options={PartyTypeDropdown_Options}
-                                            onChange={partyTypeOnChange}
-                                        />
-                                        {isError.PartyType.length > 0 && (
-                                            <span className="text-danger f-8"><small>{isError.PartyType}</small></span>
-                                        )}
+                            {(subPageMode === url.PARTY) &&
+                                <Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Label > {fieldLabel.PartyType}</Label>
+                                        <Col sm={12}>
+                                            <Select
+                                                name="PartyType"
+                                                value={values.PartyType}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={PartyTypeDropdown_Options}
+                                                onChange={partyTypeOnChange}
+                                            />
+                                            {isError.PartyType.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.PartyType}</small></span>
+                                            )}
 
-                                    </Col>
-                                </FormGroup>
-                            </Col>
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                            }
                             {
-                                (findAddMasterAccess) ?
-                                    <Col md="1" className=" mt-3">
-                                        <AddMaster
-                                            masterModal={PartyType}
-                                            masterPath={url.PARTYTYPE}
-                                        />
-                                    </Col> : <Col md="1">  </Col>
+                                (subPageMode === url.PARTY) ?
+                                    (findAddMasterAccess) ?
+                                        <Col md="1" className=" mt-3">
+                                            <AddMaster
+                                                masterModal={PartyType}
+                                                masterPath={url.PARTYTYPE}
+                                            />
+                                        </Col> : <Col md="1"> </Col>
+                                    : null
                             }
 
-                            {/* <Col md="1">  </Col> */}
-                            <Col md="3">
+                 
+                            <Col md="3" className="mb-3">
                                 <FormGroup>
                                     <Label>Price List </Label>
                                     <Input
@@ -346,28 +352,30 @@ const BaseTabForm = forwardRef((props, ref) => {
                             </Col>
                             <Col md="1">  </Col>
 
-                            <Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Label> {fieldLabel.Supplier} </Label>
-                                    <Col sm={12}>
-                                        <Select
-                                            name="Supplier"
-                                            value={values.Supplier}
-                                            isSearchable={false}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            options={SupplierOptions}
-                                            isMulti={true}
-                                            onChange={(hasSelect, evn) => {
-                                                onChangeSelect({ hasSelect, evn, state, setState })
-                                            }}
-                                        />
-                                        {isError.Supplier.length > 0 && (
-                                            <span className="text-danger f-8"><small>{isError.Supplier}</small></span>
-                                        )}
-                                    </Col>
-                                </FormGroup>
-                            </Col>
+                            {(subPageMode === url.PARTY) && // SUPLIER dropdown  show only (Party Master) mode
+                                < Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Label> {fieldLabel.Supplier} </Label>
+                                        <Col sm={12}>
+                                            <Select
+                                                name="Supplier"
+                                                value={values.Supplier}
+                                                isSearchable={false}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={SupplierOptions}
+                                                isMulti={true}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState })
+                                                }}
+                                            />
+                                            {isError.Supplier.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Supplier}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                            }
                         </Row>
                         <Row>
                             <Col md="3">
@@ -505,7 +513,7 @@ const BaseTabForm = forwardRef((props, ref) => {
                     </CardBody>
                 </Card>
             </Row>
-        </div>
+        </div >
     )
     return FirstTab
 })

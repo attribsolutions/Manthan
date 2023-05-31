@@ -17,7 +17,14 @@ export const FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN = "/GetUserDetails"
 export const DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE = "/PartyDropdownforloginpage"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
+export const CHANGEPASSWORD_API = "/ChangePassword"
+
+
 export const SUPER_ADMIN_API = '/SuperAdmin'
+
+export const TOKEN_REFRESH_API = '/api/token/refresh/'
+
+
 
 export const PAGE_FIELD = '/PageMaster'
 
@@ -336,6 +343,11 @@ export const CREDIT_DEBIT = '/CreditDebitNote'
 export const CREDIT_DEBIT_FILTER = '/CreditDebitNoteFilter'
 export const INVOICE_RETURN = '/InvoiceReturnCRDR'
 export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
+
+
+export const PARTY_LEDGER_API = 'http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?'
+
+
 
 
 // Dashboard

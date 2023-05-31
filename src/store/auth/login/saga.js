@@ -9,8 +9,10 @@ import {
 } from "./actionTypes"
 import {
   apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess,
+  loginSuccess,
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
+  roleAceessActionError,
   roleAceessActionSuccess
 } from "./actions"
 
@@ -32,21 +34,8 @@ function* loginUser({ payload: { user, history } }) {
         LoginName: user.UserName,
         password: user.Password
       })
-    try {
-      if (response.StatusCode === 200) {
-
-        localStorage.setItem("token", (response.token))
-        localStorage.setItem("userId", (response.UserID))
-
-        history.push("/division")
-      }
-      else {
-        yield put(apiError("Incorrect UserName And Password"))
-      }
-
-    } catch (e) {
-      yield put(apiError("Incorrect UserName And Password"))
-    }
+    yield put(loginSuccess(response))
+    
 
   } catch (error) {
     yield put(apiError("Incorrect UserName And Password"))
@@ -143,18 +132,9 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
     }
 
   } catch (error) {
-
-    let redirect = yield customAlert({
-      Type: 2,
-      Message: `RoleAccess get Api Error `
-    })
-    if (redirect) { history.go(0) }
-    else {
-      history.go(0)
-    }
-
-
-  }
+  
+    yield put(roleAceessActionError(true))
+   }
 }
 
 function* Post_SuperAdmin_API_GenratorFunction() {

@@ -153,6 +153,7 @@ import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
 import ImportMasterMap from "../pages/Adminisrator/ImportMaster/ImportMasterMap/ImportMasterMap";
 import Debit from "../pages/Accounting/Debit/Debit";
 import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"
+import SapLedger from "../Reports/SapLedgerReport/SapLedger";
 
 
 const userRoutes = [
@@ -191,6 +192,10 @@ const userRoutes = [
 
   { path: path.PARTY_lIST, component: PartyList },
   { path: path.PARTY, component: PartyMaster },
+
+  { path: path.RETAILER_LIST, component: PartyList },
+  { path: path.RETAILER_MASTER, component: PartyMaster },
+
 
   { path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
   { path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },
@@ -368,6 +373,8 @@ const userRoutes = [
 
   { path: path.CREDIT, component: Credit },
   { path: path.DEBIT, component: Debit },
+
+  { path: path.SAP_LEDGER, component: SapLedger },
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

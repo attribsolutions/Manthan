@@ -6,6 +6,8 @@ import AuthSaga from "./auth/login/saga"
 import ForgetSaga from "./auth/forgetpwd/saga"
 import ProfileSaga from "./auth/profile/saga"
 import LayoutSaga from "./layout/saga"
+import ChangePasswordSaga from "./auth/changepassword/saga"
+
 
 // {/*   *********************** spinner ***********************
 import Spinner_Saga from "./Utilites/Spinner/saga"
@@ -80,6 +82,8 @@ import ReceiptSaga from "./Accounting/Receipt/saga"
 import SalesReturnSaga from "./Sales/SalesReturnRedux/saga"
 import CreditDebitSaga from "./Accounting/CreditRedux/saga"
 import DashboardSaga from "./Dashboard/Dashboard_1_Redux/saga"
+import { sessionAlive_saga } from "./auth/sessionAlive/saga"
+import SapLedgerSaga from "./Report/SapLedger Redux/saga"
 
 
 export default function* rootSaga() {
@@ -88,7 +92,8 @@ export default function* rootSaga() {
     fork(ImportExcelFieldMap_Saga),
     fork(ImportFieldAdd_Saga),
     fork(ImportMasterMap_Saga),
-
+    
+    fork(sessionAlive_saga),
     fork(AuthSaga),
     fork(ForgetSaga),
     fork(ProfileSaga),
@@ -148,6 +153,11 @@ export default function* rootSaga() {
     fork(ReceiptSaga),
     fork(SalesReturnSaga),
     fork(CreditDebitSaga),
-    fork(DashboardSaga)
+    fork(DashboardSaga),
+    fork(ChangePasswordSaga),
+    fork(SapLedgerSaga)
+
+    
+
   ])
 }

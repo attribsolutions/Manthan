@@ -21,6 +21,7 @@ import BreadcrumbNew from "../../components/Common/BreadcrumbNew"
 
 import { useHistory } from "react-router-dom";
 import "./loader.scss";
+import LogoutChecker from "../LogoutChecker/TabSessionAlive";
 
 
 const Layout = props => {
@@ -76,14 +77,14 @@ const Layout = props => {
 
         setTimeout(function () {
           try {
-          document.getElementById("preloader").style.display = "none";
-          }catch(e){}
+            document.getElementById("preloader").style.display = "none";
+          } catch (e) { }
         }, 4000);
-       
+
       } else {
         try {
-        document.getElementById("preloader").style.display = "none";
-      }catch(e){}
+          document.getElementById("preloader").style.display = "none";
+        } catch (e) { }
       }
     } catch (e) { }
   }, [isPreloader]);
@@ -156,7 +157,7 @@ const Layout = props => {
     <React.Fragment>
 
       {/* <div id="overlay" > */}
-        {/* <div className="cv-spinner">
+      {/* <div className="cv-spinner">
           <span className="spinner"></span>
           <button className="btn btn-primary" type="button" disabled>
             <span className="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
@@ -168,11 +169,12 @@ const Layout = props => {
 
 
       <div className="pace pace-active" id="preloader">
-        <div className="pace-progress"  data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
+        <div className="pace-progress" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
         </div>
       </div>
 
       <div id="layout-wrapper">
+        <LogoutChecker />
         <CustomAlert />
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
         <BreadcrumbNew />

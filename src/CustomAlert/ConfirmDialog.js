@@ -98,7 +98,7 @@ const AlertSucc = () => {
 const AlertWarning = () => {
 
     const { onCancel, confirmState } = useConfirm();
-    const { Status = false, Message = "400 Error", } = confirmState;
+    const { Status = false, Message = " Warning Error", } = confirmState;
 
     const outerNo = (e, no) => {
         if (no === 2) {

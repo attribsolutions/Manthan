@@ -2,43 +2,48 @@
 
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useCallback } from "react";
-
-//Import Icons
 import FeatherIcon from "feather-icons-react";
-
-// //Import Scrollbar
 import SimpleBar from "simplebar-react";
-
-//Import images
-
-
-//i18n
 import { withTranslation } from "react-i18next";
-
-// MetisMenu
 import MetisMenu from "metismenujs";
-import { withRouter } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { roleAceessAction } from "../../store/actions";
+import { roleAceessAction, roleAceessActionError } from "../../store/actions";
 import { loginCompanyID, loginUserDetails, loginEmployeeID, loginPartyID } from "../Common/CommonFunction";
 import * as urlRel from "../../routes/urlRalations";
 import { useDispatch, useSelector } from "react-redux";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const SidebarContent = (props) => {
-
   const dispatch = useDispatch();
   const ref = useRef();
+  const history = useHistory();
 
   const {
     RoleAccessData,
     RoleAccessUpdateData,
+    roleAccesssForSidbarError = false,
   } = useSelector((state) => ({
     RoleAccessData: state.Login.roleAccessSidbarData,
     RoleAccessUpdateData: state.Login.RoleAccessUpdateData,
+    roleAccesssForSidbarError: state.Login.roleAccesssForSidbarError,
   }));
 
+
+  useEffect(async () => {
+    if (roleAccesssForSidbarError) {
+      await customAlert({
+        Type: 2,
+        Message: `RoleAccess get Api Error `
+      })
+
+      dispatch(roleAceessActionError(false))
+      history.push({ pathname: '/logout' })
+    }
+  }, [roleAccesssForSidbarError])
+
   useEffect(() => {
-    
+
     if (RoleAccessUpdateData.length <= 0) {
       let role = loginUserDetails()
       if (role) {

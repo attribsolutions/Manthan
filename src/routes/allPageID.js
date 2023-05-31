@@ -50,6 +50,9 @@ export const DRIVER_lIST = 34
 export const PARTY = 57
 export const PARTY_lIST = 18
 
+export const RETAILER_MASTER = 195
+export const RETAILER_LIST = 196
+
 export const PARTYTYPE = 31
 export const PARTYTYPE_lIST = 32
 
@@ -210,5 +213,8 @@ export const BULK_RECIPT = 181
 
 export const PAYMENT_ENTRY = 177
 export const PAYMENT_ENTRY_LIST = 178
+
+export const SAP_LEDGER  = 197
+
 
 
