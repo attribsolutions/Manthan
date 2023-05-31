@@ -1,4 +1,5 @@
 import { 
+  GET_EXCELBUTTON_API_SUCCESS,
   GO_BUTTON_API_SAP_LEDGER_SUCCESS,
 
   } from "./actionType";
@@ -6,6 +7,7 @@ import {
 const INIT_STATE = {
  
   goBtnSapLedger: [],
+  Data:[],
 
 }
 
@@ -17,6 +19,12 @@ const SapLedgerReducer = (state = INIT_STATE, action) => {
           ...state,
           goBtnSapLedger: action.payload,
       }
+
+      case GET_EXCELBUTTON_API_SUCCESS:
+        return {
+            ...state,
+            Data: action.payload,
+        }
 
     default:
       return state
