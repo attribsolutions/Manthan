@@ -111,23 +111,14 @@ function* DeleteInvoiceGenFunc({ config }) {
 
 // GO-Botton SO-invoice Add Page API
 export function invoice_GoButton_dataConversion_Func(response) {
-
+  
   try {
     let con_Qty = 0
     let tAmount = 0;
     let convResp = response.OrderItemDetails.map(i1 => {
 
-      let defaultunit = i1.UnitDetails.find(findEle => (findEle.UnitID === i1.Unit))
-
       i1["OrderQty"] = i1.Quantity
-      i1["default_UnitDropvalue"] = {
-        "value": i1.Unit,
-        "label": i1.UnitName,
-        "ConversionUnit": '1',
-        "Unitlabel": i1.UnitName,
-        "BaseUnitQuantity": defaultunit.BaseUnitQuantity,
-        "BaseUnitQuantityNoUnit": defaultunit.BaseUnitQuantity,
-      }
+      i1["UnitDrop"] = { value: i1.Unit, label: i1.UnitName, ConversionUnit: '1', Unitlabel: i1.UnitName }
       i1["InpStockQtyTotal"] = `${Number(i1.Quantity) * Number(i1.ConversionUnit)}`
       i1["StockTotal"] = 0
       i1["StockUnit"] = '';
@@ -137,14 +128,7 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
       let con_Qty = Number(i1.Quantity) * Number(i1.ConversionUnit);
       let tAmount = 0;
-
       i1.StockDetails = i1.StockDetails.map(i2 => {
-
-
-
-        i2['initialRate'] = i2.Rate;
-        debugger
-        i2.Rate = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * i2.initialRate).toFixed(2)
 
         i1.StockUnit = i2.UnitName;
         i1.StockTotal = (Number(i2.BaseUnitQuantity) + Number(i1.StockTotal));
@@ -184,7 +168,7 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
       return i1
     })
-    debugger
+
     response.OrderItemDetails = convResp
     return response
 
