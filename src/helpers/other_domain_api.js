@@ -1,31 +1,29 @@
 import axios from "axios"
-import { CheckAPIResponse, CommonConsole } from '../components/Common/CommonFunction';
-debugger
-// const axios = require('axios');
-debugger
-
-// export const chitalebandhu_get = (url) => {
-
-//     debugger
-//     var config = {
-//         method: 'get',
-//         url: url,
-//         // headers: {}
-//     };
-
-//     let response = axios(config).then(response => response.data)
-//         .catch(error => error)
-//     CommonConsole(response);
-//     return response;
-
-// }
 
 
+export const chitalebandhu_get = async () => {
+    let url = "/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=2023-05-22&ToDate=2023-05-25&SAPCode=500023"
 
-export const chitalebandhu_get = (url) => {
-    debugger
-    axios.get(url)
-    .then(res =>  console.log(res.data ))
-    .catch(err => console.log(err))
+    return axios.get(`/chitaleApi${url}`).then(response => response.data)
+    
 
+
+};
+
+export const sapApi_post = async (abc, body) => {
+
+    var config = {
+        method: 'post',
+        url: '/sapApi/sap/opu/odata/sap/ZCBM_OD_SD_CSCMFOODERP_SRV/OrderHeaderSet',
+        headers: {
+            'X-Requested-With': 'X',
+            'Authorization': 'Basic SW50ZXJmYWNlOkFkbWluQDEyMzQ=',
+            'Content-Type': 'application/json',
+            'Cookie': 'SAP_SESSIONID_CSP_900=jOHNTLeVip1UwHDneeeC-49rx4__dBHtptICAEHiAA8%3d; sap-usercontext=sap-client=900'
+        },
+        data: body
+    };
+    console.log("sapApi_post", body)
+    return axios(config)
+        .then(response => response.data)
 };
