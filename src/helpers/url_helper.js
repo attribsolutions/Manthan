@@ -345,8 +345,7 @@ export const INVOICE_RETURN = '/InvoiceReturnCRDR'
 export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
 
 
-export const PARTY_LEDGER_API = 'http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?'
-
+export const PARTY_LEDGER_API = '/SAPLedger'
 
 
 

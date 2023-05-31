@@ -39,39 +39,17 @@ const SapLedger = (props) => {
     const {
         userAccess,
         List,
-        makeReceipt,
-        OpeningBalance,
+        LoginPartydata,
         pageField,
     } = useSelector((state) => ({
         List: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        makeReceipt: state.ReceiptReducer.ReceiptGoButton,
-        OpeningBalance: state.ReceiptReducer.OpeningBalance,
+         LoginPartydata:state.Login.divisionDropdown
     }));
-    const { InvoiceParent = [], PartyDetails = {} } = List
+    const { data = [], PartyDetails = {} } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
-
-    // const lastColumn = () => ({
-    //     text: "Action",
-    //     dataField: "",
-    //     formatter: (cellContent, row) => {
-
-    //         return (<span style={{ justifyContent: 'center' }}>
-    //             <Button
-    //                 type="button"
-    //                 id={`btn-makeBtn-${row.id}`}
-    //                 title={"Make Receipt"}
-    //                 className={makeBtnCss}
-    //                 onClick={(e) => {
-    //                     makeBtnFunc(e, row)
-    //                 }}
-    //             >
-    //                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
-    //                     className=" fas fa-file-invoice" ></span> </Button></span>)
-    //     }
-    // })
     
     const [tableColumns] = DynamicColumnHook({ pageField })
     
@@ -102,57 +80,22 @@ const SapLedger = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
-
-        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
-            dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
-
-            history.push({
-                pathname: makeReceipt.path,
-                pageMode: makeReceipt.pageMode,
-                editValue: makeReceipt.ListData,
-            })
-        }
-    }, [makeReceipt, OpeningBalance])
-
-    // function makeBtnFunc(e, row) {
-    //     var { CustomerID, id } = row
-    //     try {
-    //         const jsonBody = JSON.stringify({
-    //             PartyID: _cfunc.loginPartyID(),
-    //             CustomerID: CustomerID,
-    //             InvoiceID: (id).toString()
-    //         });
-
-    //         const jsonBody1 = JSON.stringify({
-    //             PartyID: _cfunc.loginPartyID(),
-    //             CustomerID: CustomerID,
-    //             ReceiptDate: currentDate_ymd
-    //         });
-
-    //         const body = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row }
-    //         dispatch(ReceiptGoButtonMaster(body));
-    //         dispatch(GetOpeningBalance(jsonBody1));
-
-    //     } catch (e) { }
-    // }
-   
-    // function rowSelected() {
-    //     return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
-    // }
-
-  
-
-
+    // const Sapcode = LoginPartydata.map((index) => ({
+    //     Sapcode: index.SAPPartyCode,
+        
+    // }));
+    debugger
+  let partdata =  localStorage.getItem("roleId")
+  var partyDivisiondata  = JSON.parse(partdata);
+ 
     function goButtonHandler() {
-        debugger
+        
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            SAPCode:500023
+            SAPCode:partyDivisiondata.SAPPartyCode
         });
-        const SAPCode = 500023
-        dispatch(SapLedger_Go_Button_API(fromdate,todate,SAPCode));
+        dispatch(SapLedger_Go_Button_API(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
@@ -169,34 +112,34 @@ const SapLedger = (props) => {
 
 
 
-    function MakeReceiptForAll() {
-        const result = InvoiceParent.map((index) => {
-            if (index.selectCheck === true) {
-                return index.id
-            }
-        })
+    // function MakeReceiptForAll() {
+    //     const result = data.map((index) => {
+    //         if (index.selectCheck === true) {
+    //             return index.id
+    //         }
+    //     })
 
-        const LoadingNumber = result.toString()
+    //     const LoadingNumber = result.toString()
 
-        const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginPartyID(),
-            CustomerID: "",
-            InvoiceID: LoadingNumber
-        });
+    //     const jsonBody = JSON.stringify({
+    //         PartyID: _cfunc.loginPartyID(),
+    //         CustomerID: "",
+    //         InvoiceID: LoadingNumber
+    //     });
 
-        const body = { jsonBody }
+    //     const body = { jsonBody }
 
-        if (LoadingNumber === ",") {
-            customAlert({
-                Type: 3,
-                Message: "Select At Least One Invoice",
-            })
-        }
-        else {
-            dispatch(ReceiptGoButtonMaster(body))
-            history.push(url.BULK_RECIPT);
-        }
-    }
+    //     if (LoadingNumber === ",") {
+    //         customAlert({
+    //             Type: 3,
+    //             Message: "Select At Least One Invoice",
+    //         })
+    //     }
+    //     else {
+    //         dispatch(ReceiptGoButtonMaster(body))
+    //         history.push(url.BULK_RECIPT);
+    //     }
+    // }
 
     if (!(userPageAccessState === '')) {
         return (
@@ -245,13 +188,13 @@ const SapLedger = (props) => {
                 </div>
                 <ToolkitProvider
                             keyField="id"
-                            data={InvoiceParent}
+                            data={data}
                             columns={tableColumns}
                             search
                         >
                             {toolkitProps => (
                                 <React.Fragment>
-                                    <div className="table">
+                                    <div  className="table-responsive" id="TableDiv" >
                                         <BootstrapTable
                                             keyField={"id"}
                                             bordered={true}
