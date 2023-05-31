@@ -1,6 +1,6 @@
 import axios from "axios"
 import { del, get, put, post, postForget, postRefreshToken, } from "./api_helper"
-import { chitalebandhu_get } from "./other_domain_api"
+import { chitalebandhu_get, sapApi_post } from "./other_domain_api"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session

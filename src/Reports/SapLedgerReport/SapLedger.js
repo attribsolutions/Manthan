@@ -89,7 +89,7 @@ const SapLedger = (props) => {
   var partyDivisiondata  = JSON.parse(partdata);
  
     function goButtonHandler() {
-        
+
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
