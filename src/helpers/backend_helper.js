@@ -581,7 +581,7 @@ export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, js
 
 
 export const PartyLedger_API = (FromDate,ToDate,SAPCode) => chitalebandhu_get(`${url.PARTY_LEDGER_API}FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
-export const GetExcelButton = (id) => get(`${url.EXCEL_BUTTON_API}/${id}`)
+export const GetExcelButton = () => get(url.EXCEL_BUTTON_API)
 
 
 

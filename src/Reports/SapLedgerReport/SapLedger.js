@@ -358,12 +358,68 @@ const SapLedger = (props) => {
         LoginPartydata: state.Login.divisionDropdown
     }));
 
-    debugger
+  
+    
     const { data = [], PartyDetails = {} } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
 
-    const [tableColumns] = DynamicColumnHook({ pageField })
+
+
+    const tableColumns = [
+        {
+            text: "Document No",
+            dataField: "DocumentNo",
+        },
+        {
+            text: "FiscalYear",
+            dataField: "Fiscalyear",
+        },
+        {
+            text: "DocumentType",
+            dataField: "DocumentType",
+        },
+        {
+            text: "	DocumentDesc",
+            dataField: "DocumentDesc",
+        },
+        {
+            text: "PostingDate",
+            dataField: "PostingDate",
+        },
+        {
+            text: "DebitCredit",
+            dataField: "DebitCredit",
+        },
+        {
+            text: "Debit Amount",
+            dataField: "Debit_Amount",
+           
+        },
+        {
+            text: "	Credit Amount",
+            dataField: "Credit_Amount",
+        
+        },
+        {
+            text: "	ItemText",
+            dataField: "ItemText",
+        },
+
+    ];
+
+
+
+
+
+
+
+
+
+
+
+
+    // const [tableColumns] = DynamicColumnHook({ pageField })
 
     useEffect(() => {
         dispatch(SapLedger_Go_Button_API_Success([]))
@@ -429,7 +485,7 @@ const SapLedger = (props) => {
                         <div className="row">
                             <div className=" row">
                                 <Col sm="5" className="">
-                                    <FormGroup className="mb- row mt-3 " >
+                                    <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "83px" }}>From Date</Label>
                                         <Col sm="7">
@@ -442,7 +498,7 @@ const SapLedger = (props) => {
                                     </FormGroup>
                                 </Col>
                                 <Col sm="5" className="">
-                                    <FormGroup className="mb- row mt-3 " >
+                                    <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "65px" }}>To Date</Label>
                                         <Col sm="7">
@@ -454,7 +510,7 @@ const SapLedger = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm="2" className="mt-3 ">
+                                <Col sm="2" className="mt-2 ">
                                     <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
                                         onClick={() => goButtonHandler()}
                                     >Go</Button>
@@ -473,14 +529,14 @@ const SapLedger = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col sm={9}>
-                                        <Label className="col-sm-6"
-                                            style={{ width: "400px" }}>Opening Balance :{List.OpeingBal}
+                                        <Label className="col-sm-6 mt-1 p-1 text-black"
+                                            style={{ width: "270px" ,background:"#efefef", borderRadius:"5px" }}>Opening Balance :{List.OpeingBal}
                                         </Label>
                                     </Col>
                                     <Col sm={3}>
 
-                                        <Label className="col-sm-6"
-                                            style={{ width: "200px" }}>Closing Balance :{List.ClosingBal}
+                                        <Label className="col-sm-6 mt-1 p-1 text-black"
+                                            style={{width: "258px" ,background:"#efefef", borderRadius:"5px" }}>Closing Balance :{List.ClosingBal}
                                         </Label>
                                     </Col>
 

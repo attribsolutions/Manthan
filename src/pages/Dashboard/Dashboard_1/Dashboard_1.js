@@ -23,8 +23,8 @@ import InvoiceForGRN from './GRNList';
 import SalesReturnListForDashboard from './SalesReturnListForDashboard';
 import { orderApprovalAction, orderApprovalActionSuccess } from '../../../store/Purchase/OrderPageRedux/actions';
 import { customAlert } from '../../../CustomAlert/ConfirmDialog';
-import { getExcel_Button_API } from '../../../store/Report/SapLedger Redux/action';
-
+import { getExcel_Button_API, getExcel_Button_API_Success } from '../../../store/Report/SapLedger Redux/action';
+import * as XLSX from 'xlsx';
 
 const Dashboard_1 = (props) => {
 
@@ -39,9 +39,11 @@ const Dashboard_1 = (props) => {
     const {
         getDashboard,
         userAccess,
+        ProductMarginData,
         orderApprovalMsg } = useSelector((state) => ({
             getDashboard: state.DashboardReducer.getDashboard,
             userAccess: state.Login.RoleAccessUpdateData,
+            ProductMarginData: state.SapLedgerReducer.ProductMargin,
             pageField: state.CommonPageFieldReducer.pageField,
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
         }));
@@ -53,6 +55,7 @@ const Dashboard_1 = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getDashbordDetails())
+
     }, []);
 
     const location = { ...history.location }
@@ -134,227 +137,215 @@ const Dashboard_1 = (props) => {
     //     dispatch(orderApprovalAction({ jsonBody, btnId }))
     // }
 
+
+    useEffect(() => {
+
+        if (ProductMarginData.length > 1) {
+
+            let newArray = []
+            ProductMarginData.forEach(i => {
+                let obj = i
+                i.ItemMargins.forEach(ele => {
+                    const keys = Object.keys(ele);
+                    keys.forEach(key => {
+                        obj[key] = ele[key]
+                    })
+                })
+                delete obj.ItemMargins
+                newArray.push(obj)
+            })
+     
+            const worksheet = XLSX.utils.json_to_sheet(newArray);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin1");
+            XLSX.writeFile(workbook, "Excel File.xlsx");
+
+            dispatch(getExcel_Button_API_Success([]));
+        }
+    }, [ProductMarginData]);
+
     function excelhandler(event) {
         event.preventDefault();
         const btnId = "excelbtn-id"
-        const Data = []
-        let jsonBody = {
-        // const arr = ItemMargins.map((i) => ({
-
-        //     SuperStockistMargin: 22.00,
-        //     SuperStockistRateWithGST: 656.09,
-        //     SuperStockistRateWithOutGST: 649.59,
-
-        //     DistributorMargin: 34.00,
-        //     DistributorRateWithGST: 800.43,
-        //     DistributorRateWithOutGST: 792.5,
-
-        //     GeneralTradeMargin: 13.00,
-        //     GeneralTradeRateWithGST: 1072.57,
-        //     GeneralTradeRateWithOutGST: 1061.95,
-
-        //     ModernTradeMargin: 0,
-        //     ModernTradeRateWithGST: 1212.0,
-        //     ModernTradeRateWithOutGST: 1200.0,
-
-        //     DMartMargin: 0,
-        //     DMartRateWithGST: 1212.0,
-        //     DMartRateWithOutGST: 1200.0,
-
-        //     RelianceMartMargin: 0,
-        //     RelianceMartRateWithGST: 1212.0,
-        //     RelianceMartRateWithOutGST: 1200.0,
-
-        //     BigBazarMargin: 0,
-        //     BigBazarRateWithGST: 1212.0,
-        //     BigBazarRateWithOutGST: 1200.0,
-
-        //     WholesaleMargin: 0,
-        //     WholesaleRateWithGST: 1212.0,
-        //     WholesaleRateWithOutGST: 1200.0
-
-        // }))
-        // Data.push(arr)
+        const ProductMargin = []
+        dispatch(getExcel_Button_API())
     }
-    dispatch(getExcel_Button_API({ jsonBody, btnId }))
-}
 
-
-return (
-    <React.Fragment>
-        <div className="page-content">
-            <MetaTags>
-                <title>Dashboard | FoodERP 2.0 - React Admin & Dashboard Template</title>
-            </MetaTags>
-            <Container fluid>
-                <Row>
-                    {/* {(WidgetsData || []).map((widget, key) => ( */}
-                    <Col xl={4} md={4} >
-                        <Card className="card-h-100">
-                            <CardBody>
-                                <Row className="align-items-center">
-                                    <Col xs={4}>
-                                        <span className="text-black mb-3 lh-1 d-block text-truncate">Total Orders</span>
-                                        <h4 className="mb-3">
-                                            {/* {widget.isDoller === true ? '$' : ''} */}
-                                            <span className="counter-value">
-                                                {/* <CountUp
+    return (
+        <React.Fragment>
+            <div className="page-content">
+                <MetaTags>
+                    <title>Dashboard | FoodERP 2.0 - React Admin & Dashboard Template</title>
+                </MetaTags>
+                <Container fluid>
+                    <Row>
+                        {/* {(WidgetsData || []).map((widget, key) => ( */}
+                        <Col xl={4} md={4} >
+                            <Card className="card-h-100">
+                                <CardBody>
+                                    <Row className="align-items-center">
+                                        <Col xs={4}>
+                                            <span className="text-black mb-3 lh-1 d-block text-truncate">Total Orders</span>
+                                            <h4 className="mb-3">
+                                                {/* {widget.isDoller === true ? '$' : ''} */}
+                                                <span className="counter-value">
+                                                    {/* <CountUp
                                                             start={0}
                                                             end={widget.price}
                                                             duration={12}
                                                         /> */}
-                                                {OrderCount}
-                                            </span>
-                                        </h4>
-                                    </Col>
-                                    <Col xs={4}>
-                                        <ReactApexChart
-                                            options={options}
-                                            // series={[{ data: [...widget['series']] }]}
-                                            series={[2, 10, 18, 22, 36, 15, 47, 75, 65, 19, 14, 2, 47, 42, 15]}
-                                            type="line"
-                                            className="apex-charts"
-                                            dir="ltr"
-                                        />
-                                    </Col>
-                                </Row>
+                                                    {OrderCount}
+                                                </span>
+                                            </h4>
+                                        </Col>
+                                        <Col xs={4}>
+                                            <ReactApexChart
+                                                options={options}
+                                                // series={[{ data: [...widget['series']] }]}
+                                                series={[2, 10, 18, 22, 36, 15, 47, 75, 65, 19, 14, 2, 47, 42, 15]}
+                                                type="line"
+                                                className="apex-charts"
+                                                dir="ltr"
+                                            />
+                                        </Col>
+                                    </Row>
 
-                                <div className="text-nowrap">
-                                    <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
-                                        +$20.9k
-                                    </span>
-                                    <span className="ms-1 text-muted font-size-13">Since last week</span>
-                                </div>
+                                    <div className="text-nowrap">
+                                        <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
+                                            +$20.9k
+                                        </span>
+                                        <span className="ms-1 text-muted font-size-13">Since last week</span>
+                                    </div>
 
-                            </CardBody>
-                        </Card>
-                    </Col>
+                                </CardBody>
+                            </Card>
+                        </Col>
 
-                    <Col xl={4} md={4} >
-                        <Card className="card-h-100">
-                            <CardBody>
-                                <Row className="align-items-center">
-                                    <Col xs={4}>
-                                        <span className="text-black mb-3 lh-1 d-block text-truncate">Total Invoices</span>
-                                        <h4 className="mb-3">
-                                            {/* {widget.isDoller === true ? '$' : ''} */}
-                                            <span className="counter-value">
-                                                {/* <CountUp
+                        <Col xl={4} md={4} >
+                            <Card className="card-h-100">
+                                <CardBody>
+                                    <Row className="align-items-center">
+                                        <Col xs={4}>
+                                            <span className="text-black mb-3 lh-1 d-block text-truncate">Total Invoices</span>
+                                            <h4 className="mb-3">
+                                                {/* {widget.isDoller === true ? '$' : ''} */}
+                                                <span className="counter-value">
+                                                    {/* <CountUp
                                                             start={0}
                                                             end={widget.price}
                                                             duration={12}
                                                         /> */}
-                                                {InvoiceCount}
-                                            </span>
-                                        </h4>
-                                    </Col>
-                                    <Col xs={4}>
-                                        <ReactApexChart
-                                            options={options}
-                                            // series={[{ data: [...widget['series']] }]}
-                                            series={[2, 10, 18, 22, 36, 15, 47, 75, 65, 19, 14, 2, 47, 42, 15]}
-                                            type="line"
-                                            className="apex-charts"
-                                            dir="ltr"
-                                        />
-                                    </Col>
-                                </Row>
+                                                    {InvoiceCount}
+                                                </span>
+                                            </h4>
+                                        </Col>
+                                        <Col xs={4}>
+                                            <ReactApexChart
+                                                options={options}
+                                                // series={[{ data: [...widget['series']] }]}
+                                                series={[2, 10, 18, 22, 36, 15, 47, 75, 65, 19, 14, 2, 47, 42, 15]}
+                                                type="line"
+                                                className="apex-charts"
+                                                dir="ltr"
+                                            />
+                                        </Col>
+                                    </Row>
 
-                                <div className="text-nowrap">
-                                    <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
-                                        +$20.9k
-                                    </span>
-                                    <span className="ms-1 text-muted font-size-13">Since last week</span>
-                                </div>
+                                    <div className="text-nowrap">
+                                        <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
+                                            +$20.9k
+                                        </span>
+                                        <span className="ms-1 text-muted font-size-13">Since last week</span>
+                                    </div>
 
-                            </CardBody>
-                        </Card>
-                    </Col>
+                                </CardBody>
+                            </Card>
+                        </Col>
 
-                    <Col xl={4} md={4} >
-                        <Card className="card-h-100">
-                            <CardBody>
-                                <Row className="align-items-center">
-                                    <Col xs={4}>
-                                        <span className="text-black mb-3 lh-1 d-block text-truncate">Total GRNs</span>
-                                        <h4 className="mb-3">
-                                            {/* {widget.isDoller === true ? '$' : ''} */}
-                                            <span className="counter-value">
-                                                {/* <CountUp
+                        <Col xl={4} md={4} >
+                            <Card className="card-h-100">
+                                <CardBody>
+                                    <Row className="align-items-center">
+                                        <Col xs={4}>
+                                            <span className="text-black mb-3 lh-1 d-block text-truncate">Total GRNs</span>
+                                            <h4 className="mb-3">
+                                                {/* {widget.isDoller === true ? '$' : ''} */}
+                                                <span className="counter-value">
+                                                    {/* <CountUp
                                                             start={0}
                                                             end={widget.price}
                                                             duration={12}
                                                         /> */}
-                                                {GRNsCount}
-                                            </span>
-                                        </h4>
-                                    </Col>
-                                    <Col xs={4}>
-                                        <ReactApexChart
-                                            options={options}
-                                            // series={[{ data: [...widget['series']] }]}
-                                            series={[2, 10, 18, 22, 36, 15, 47, 75, 65, 19, 14, 2, 47, 42, 15]}
-                                            type="line"
-                                            className="apex-charts"
-                                            dir="ltr"
-                                        />
-                                    </Col>
-                                </Row>
+                                                    {GRNsCount}
+                                                </span>
+                                            </h4>
+                                        </Col>
+                                        <Col xs={4}>
+                                            <ReactApexChart
+                                                options={options}
+                                                // series={[{ data: [...widget['series']] }]}
+                                                series={[2, 10, 18, 22, 36, 15, 47, 75, 65, 19, 14, 2, 47, 42, 15]}
+                                                type="line"
+                                                className="apex-charts"
+                                                dir="ltr"
+                                            />
+                                        </Col>
+                                    </Row>
 
-                                <div className="text-nowrap">
-                                    <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
-                                        +$20.9k
-                                    </span>
-                                    <span className="ms-1 text-muted font-size-13">Since last week</span>
-                                </div>
+                                    <div className="text-nowrap">
+                                        <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
+                                            +$20.9k
+                                        </span>
+                                        <span className="ms-1 text-muted font-size-13">Since last week</span>
+                                    </div>
 
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    {/* ))} */}
-                </Row>
-                <Row>
-                    <Col lg={6}>
-                        <Card >
-                            <CardHeader style={{ backgroundColor: "whitesmoke" }}
-                                className="card-header align-items-center d-flex text-center">
-                                <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
-                                    onClick={paymentEntry_onClick}
-                                >
-                                    Todays Payment Entry</Label>
-                            </CardHeader>
-                            <PaymentEntryList />
-                        </Card>
-                    </Col>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                        {/* ))} */}
+                    </Row>
+                    <Row>
+                        <Col lg={6}>
+                            <Card >
+                                <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                    className="card-header align-items-center d-flex text-center">
+                                    <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                        onClick={paymentEntry_onClick}
+                                    >
+                                        Todays Payment Entry</Label>
+                                </CardHeader>
+                                <PaymentEntryList />
+                            </Card>
+                        </Col>
 
-                    <Col lg={6}>
-                        <Card >
-                            <CardHeader style={{ backgroundColor: "whitesmoke" }}
-                                className="card-header align-items-center d-flex">
-                                <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
-                                    onClick={InvoiceFoRGRN_onClick}
-                                >
-                                    Invoices For GRN</Label>
-                            </CardHeader>
-                            <InvoiceForGRN />
-                        </Card>
-                    </Col>
-                </Row>
+                        <Col lg={6}>
+                            <Card >
+                                <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                    className="card-header align-items-center d-flex">
+                                    <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                        onClick={InvoiceFoRGRN_onClick}
+                                    >
+                                        Invoices For GRN</Label>
+                                </CardHeader>
+                                <InvoiceForGRN />
+                            </Card>
+                        </Col>
+                    </Row>
 
-                <Row>
-                    <Col lg={6}>
-                        <Card >
-                            <CardHeader style={{ backgroundColor: "whitesmoke" }}
-                                className="card-header align-items-center d-flex text-center">
-                                <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
-                                    onClick={salesReturn_onClick}
-                                >
-                                    Sales Return List</Label>
-                            </CardHeader>
-                            <SalesReturnListForDashboard />
-                        </Card>
-                    </Col>
-                    {/* <Col lg={6}>
+                    <Row>
+                        <Col lg={6}>
+                            <Card >
+                                <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                    className="card-header align-items-center d-flex text-center">
+                                    <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                        onClick={salesReturn_onClick}
+                                    >
+                                        Sales Return List</Label>
+                                </CardHeader>
+                                <SalesReturnListForDashboard />
+                            </Card>
+                        </Col>
+                        {/* <Col lg={6}>
                             <Button type='button'
                                 className='btn btn-success'
                                 id="sapbtn-id"
@@ -362,18 +353,18 @@ return (
                             </Button>
                         </Col> */}
 
-                    <Col lg={6}>
-                        <Button type='button'
-                            className='btn btn-success'
-                            id="excelbtn-id"
-                            onClick={excelhandler}>excelBtnView
-                        </Button>
-                    </Col>
-                </Row>
+                        <Col lg={6}>
+                            <Button type='button'
+                                className='btn btn-success'
+                                id="excelbtn-id"
+                                onClick={excelhandler}>excelBtnView
+                            </Button>
+                        </Col>
+                    </Row>
 
 
 
-                {/* <div className="card">
+                    {/* <div className="card">
                         <div className="card-header align-items-center d-flex">
                             <h4 className="card-title mb-0 flex-grow-1">Transactions</h4>
                             <Label className=" text-primary text-bold mb-n2 text-decoration-underline"
@@ -385,10 +376,10 @@ return (
                         <InvoiceForGRN />
                     </div> */}
 
-            </Container>
-        </div>
-    </React.Fragment>
-);
+                </Container>
+            </div>
+        </React.Fragment>
+    );
 }
 
 export default Dashboard_1;
