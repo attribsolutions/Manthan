@@ -232,7 +232,7 @@ const Order = (props) => {
 
             setTermsAndConTable([])
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
-            const liveMode = true
+            const liveMode = false
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
             if ((subPageMode === url.ORDER_2) && liveMode) { //        SAP OEDER-APROVUAL CODE
