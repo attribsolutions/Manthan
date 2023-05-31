@@ -232,26 +232,28 @@ const Order = (props) => {
 
             setTermsAndConTable([])
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
-            // ??******************************+++++++++++++++++++++++++++++++++++++++++
-            // if (subPageMode === url.ORDER_2) { //        SAP OEDER-APROVUAL CODE
-            //     let btnId = postMsg.btnId;
-            //     _cfunc.btnIsDissablefunc({ btnId, state: true })
-            //     let config = { btnId }
-            //     config.orderId = postMsg.OrderID;
-            //     dispatch(_act.getOrderApprovalDetailAction(config));
-            // }
-            // ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
-            // else {
-                const a = await customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
-                if (a) {
-                    history.push({
-                        pathname: listPath,
-                    });
+            const devMode = false
+            if (devMode)
+                // ??******************************+++++++++++++++++++++++++++++++++++++++++
+                if ((subPageMode === url.ORDER_2) && devMode) { //        SAP OEDER-APROVUAL CODE
+                    let btnId = postMsg.btnId;
+                    _cfunc.btnIsDissablefunc({ btnId, state: true })
+                    let config = { btnId }
+                    config.orderId = postMsg.OrderID;
+                    dispatch(_act.getOrderApprovalDetailAction(config));
+
+                } else {// ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
+
+                    const a = await customAlert({
+                        Type: 1,
+                        Message: postMsg.Message,
+                    })
+                    if (a) {
+                        history.push({
+                            pathname: listPath,
+                        });
+                    }
                 }
-            // }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
@@ -428,7 +430,8 @@ const Order = (props) => {
                         row["po_Unit_id"] = i.UnitID;
                         row["UnitName"] = i.UnitName;
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
-                        row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
+                        row["Rate"] = i.Rate;
+                        // row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
                     }
 
                 } else {

@@ -1,6 +1,6 @@
 import axios from "axios"
 import { del, get, put, post, postForget, postRefreshToken, } from "./api_helper"
-import { chitalebandhu_get } from "./other_domain_api"
+import { chitalebandhu_get, sapApi_post } from "./other_domain_api"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -579,11 +579,11 @@ export const Edit_Credit_List_API = ({ editId, btnId }) => get(`${url.CREDIT_DEB
 export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// Invoice Return api
 export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, jsonBody)//  postapi
 debugger
-export const PartyLedger_API = (FromDate,ToDate,SAPCode) => chitalebandhu_get(`${url.PARTY_LEDGER_API}FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
-debugger
+export const PartyLedger_API = (jsonBody) => post(url.PARTY_LEDGER_API,jsonBody)//  postapi
+
 // export const PartyLedger_API = (FromDate,ToDate,SAPCode) => get(`http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
 
-debugger
+
 
 
 // Dashboard 
