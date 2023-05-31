@@ -125,7 +125,7 @@ export const MANAGEMENT_PARTIES = "/ManagementParties"
 export const BANK = "/BankMaster"
 export const BANK_LIST = "/BankList"
 
-
+export const PRODUCT_MARGIN_REPORT = "/ProductMarginReport"
 
 
 //******************************* Purchase Module ************************************//
