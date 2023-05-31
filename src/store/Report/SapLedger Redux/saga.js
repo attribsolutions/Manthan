@@ -11,18 +11,18 @@ import {
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
-function* goBtn_Get_API_GenFun( fillter ) {
+function* goBtn_Get_API_GenFun( { filters } ) {
 
   try {
     debugger
-      const response = yield call(PartyLedger_API, fillter.fromdate,fillter.todate,fillter.SAPCode);
+      const response = yield call(PartyLedger_API, filters);
       debugger
       // response.Data.map((index) => {
       //     index["selectCheck"] = false
       //     return index
       // });
 
-      yield put(SapLedger_Go_Button_API_Success(response));
+      yield put(SapLedger_Go_Button_API_Success(response.Data  ));
   } catch (error) { CommonConsole(error) }
 }
 
