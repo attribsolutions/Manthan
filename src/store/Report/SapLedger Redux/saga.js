@@ -22,7 +22,7 @@ function* goBtn_Get_API_GenFun( { filters } ) {
       //     return index
       // });
 
-      yield put(SapLedger_Go_Button_API_Success(response.Data  ));
+      yield put(SapLedger_Go_Button_API_Success(response ));
   } catch (error) { CommonConsole(error) }
 }
 
