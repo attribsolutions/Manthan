@@ -97,7 +97,7 @@ const Invoice = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-    
+
         dispatch(GetVenderSupplierCustomer(subPageMode))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
@@ -311,15 +311,16 @@ const Invoice = (props) => {
                                 classNamePrefix="select2-selection"
                                 id={"ddlUnit"}
                                 isDisabled={pageMode === 'edit' ? true : false}
-                                defaultValue={row.UnitDrop}
-                                // value={{value:row.Unit,label:row.UnitName}}
-                                // className=" width-100"
+                                defaultValue={row.default_UnitDropvalue}
+                                
                                 options={
                                     row.UnitDetails.map(i => ({
-                                        label: i.UnitName,
-                                        value: i.Unit,
-                                        ConversionUnit: i.ConversionUnit,
-                                        Unitlabel: i.Unitlabel
+                                        "label": i.UnitName,
+                                        "value": i.UnitID,
+                                        "ConversionUnit": i.ConversionUnit,
+                                        "Unitlabel": i.Unitlabel,
+                                        "BaseUnitQuantity": i.BaseUnitQuantity,
+                                        "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
                                     }))
                                 }
                                 onChange={(event) => orderQtyUnit_SelectOnchange(event, row)}
@@ -336,38 +337,7 @@ const Invoice = (props) => {
 
             )
         },
-        {//***************Unit Dropdown********************************************************************* */
-            text: "Unit",
-            dataField: "id",
-            hidden: true,
-            classes: () => ('invoice-unit-row'),
-
-            formatter: (value, row, key) => {
-
-                return (
-
-
-                    <Select
-                        classNamePrefix="select2-selection"
-                        id={"ddlUnit"}
-                        isDisabled={pageMode === 'edit' ? true : false}
-                        defaultValue={row.UnitDrop}
-                        // value={{value:row.Unit,label:row.UnitName}}
-                        className=" width-100"
-                        options={
-                            row.UnitDetails.map(i => ({
-                                label: i.UnitName,
-                                value: i.Unit,
-                                ConversionUnit: i.ConversionUnit,
-                                Unitlabel: i.Unitlabel
-                            }))
-                        }
-                        onChange={(event) => orderQtyUnit_SelectOnchange(event, row)}
-                    >
-                    </Select >
-                )
-            },
-        },
+      
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
@@ -433,7 +403,8 @@ const Invoice = (props) => {
                                             {`Total Stock:${index1.StockTotal}`}</samp>
                                     </samp>
                                 </>
-                                : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>
+                                :
+                                 <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>
                         }
 
                         <samp key={`minus-circle${index1.id}`} id={`minus-circle${index1.id}`}
@@ -479,7 +450,7 @@ const Invoice = (props) => {
                             </Thead>
                             <Tbody  >
                                 {cellContent.map((index2) => {
-                                    
+
                                     return (
                                         < tr key={index1.id} >
                                             <td>
@@ -516,7 +487,7 @@ const Invoice = (props) => {
                                             </td>
                                             <td>
                                                 <div style={{ width: "50px" }}>
-                                                    {index1.Rate}
+                                                    <span id={`stockItemRate-${index1.id}-${index2.id}`}> {index2.Rate}</span>
                                                 </div>
                                             </td>
                                             <td>
@@ -581,10 +552,7 @@ const Invoice = (props) => {
 
     ];
 
-    const pageOptions = {
-        sizePerPage: 10,
-        custom: true,
-    };
+  
 
     function showAllStockOnclick(isplus = false) {
         try {
@@ -711,8 +679,14 @@ const Invoice = (props) => {
 
     function orderQtyUnit_SelectOnchange(event, index) {
 
-        index.UnitDrop = event;
+        index.default_UnitDropvalue = event;
         index.ConversionUnit = event.ConversionUnit;
+        debugger
+        index.StockDetails.forEach(index2 => {
+            index2.Rate = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2)
+            document.getElementById(`stockItemRate-${index.id}-${index2.id}`).innerText = index2.Rate;
+        })
+
         stockDistributeFunc(index)
     };
 
@@ -763,7 +737,7 @@ const Invoice = (props) => {
 
                         invoiceItems.push({
                             Item: index.Item,
-                            Unit: index.UnitDrop.value,
+                            Unit: index.default_UnitDropvalue.value,
                             BatchCode: ele.BatchCode,
                             Quantity: ele.Qty,
                             BatchDate: ele.BatchDate,
@@ -921,41 +895,41 @@ const Invoice = (props) => {
                         </Col>
 
 
-               
-                                <ToolkitProvider
-                                    keyField={"id"}
-                                    data={OrderItemDetails}
-                                    columns={pagesListColumns}
 
-                                    search
-                                >
-                                    {(toolkitProps) => (
-                                        <React.Fragment>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive">
-                                                        <BootstrapTable
-                                                            id="table_Arrow"
-                                                            keyField={"id"}
-                                                            responsive
-                                                            bordered={false}
-                                                            striped={false}
-                                                            classes={"table  table-bordered"}
-                                                            noDataIndication={
-                                                                <div className="text-danger text-center ">
-                                                                    Items Not available
-                                                                </div>
-                                                            }
-                                                            {...toolkitProps.baseProps}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
-                            
+                        <ToolkitProvider
+                            keyField={"id"}
+                            data={OrderItemDetails}
+                            columns={pagesListColumns}
+
+                            search
+                        >
+                            {(toolkitProps) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive">
+                                                <BootstrapTable
+                                                    id="table_Arrow"
+                                                    keyField={"id"}
+                                                    responsive
+                                                    bordered={false}
+                                                    striped={false}
+                                                    classes={"table  table-bordered"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Items Not available
+                                                        </div>
+                                                    }
+                                                    {...toolkitProps.baseProps}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+
 
                         {OrderItemDetails.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
