@@ -39,20 +39,24 @@ const Dashboard_1 = (props) => {
     const {
         getDashboard,
         userAccess,
+        Data,
         orderApprovalMsg } = useSelector((state) => ({
             getDashboard: state.DashboardReducer.getDashboard,
             userAccess: state.Login.RoleAccessUpdateData,
+            Data: state.SapLedgerReducer.Data,
             pageField: state.CommonPageFieldReducer.pageField,
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
         }));
 
     const { OrderCount, InvoiceCount, GRNsCount } = getDashboard
 
+debugger
     useEffect(() => {
         const page_Id = pageId.DASHBORD_1//changes
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getDashbordDetails())
+        dispatch(getExcel_Button_API())
     }, []);
 
     const location = { ...history.location }
@@ -134,50 +138,51 @@ const Dashboard_1 = (props) => {
     //     dispatch(orderApprovalAction({ jsonBody, btnId }))
     // }
 
-    function excelhandler(event) {
+   function excelhandler(event) {
         event.preventDefault();
         const btnId = "excelbtn-id"
         const Data = []
-        let jsonBody = {
-        // const arr = ItemMargins.map((i) => ({
+//         let jsonBody = {
+//         // const arr = ItemMargins.map((i) => ({
 
-        //     SuperStockistMargin: 22.00,
-        //     SuperStockistRateWithGST: 656.09,
-        //     SuperStockistRateWithOutGST: 649.59,
+//         //     SuperStockistMargin: 22.00,
+//         //     SuperStockistRateWithGST: 656.09,
+//         //     SuperStockistRateWithOutGST: 649.59,
 
-        //     DistributorMargin: 34.00,
-        //     DistributorRateWithGST: 800.43,
-        //     DistributorRateWithOutGST: 792.5,
+//         //     DistributorMargin: 34.00,
+//         //     DistributorRateWithGST: 800.43,
+//         //     DistributorRateWithOutGST: 792.5,
 
-        //     GeneralTradeMargin: 13.00,
-        //     GeneralTradeRateWithGST: 1072.57,
-        //     GeneralTradeRateWithOutGST: 1061.95,
+//         //     GeneralTradeMargin: 13.00,
+//         //     GeneralTradeRateWithGST: 1072.57,
+//         //     GeneralTradeRateWithOutGST: 1061.95,
 
-        //     ModernTradeMargin: 0,
-        //     ModernTradeRateWithGST: 1212.0,
-        //     ModernTradeRateWithOutGST: 1200.0,
+//         //     ModernTradeMargin: 0,
+//         //     ModernTradeRateWithGST: 1212.0,
+//         //     ModernTradeRateWithOutGST: 1200.0,
 
-        //     DMartMargin: 0,
-        //     DMartRateWithGST: 1212.0,
-        //     DMartRateWithOutGST: 1200.0,
+//         //     DMartMargin: 0,
+//         //     DMartRateWithGST: 1212.0,
+//         //     DMartRateWithOutGST: 1200.0,
 
-        //     RelianceMartMargin: 0,
-        //     RelianceMartRateWithGST: 1212.0,
-        //     RelianceMartRateWithOutGST: 1200.0,
+//         //     RelianceMartMargin: 0,
+//         //     RelianceMartRateWithGST: 1212.0,
+//         //     RelianceMartRateWithOutGST: 1200.0,
 
-        //     BigBazarMargin: 0,
-        //     BigBazarRateWithGST: 1212.0,
-        //     BigBazarRateWithOutGST: 1200.0,
+//         //     BigBazarMargin: 0,
+//         //     BigBazarRateWithGST: 1212.0,
+//         //     BigBazarRateWithOutGST: 1200.0,
 
-        //     WholesaleMargin: 0,
-        //     WholesaleRateWithGST: 1212.0,
-        //     WholesaleRateWithOutGST: 1200.0
+//         //     WholesaleMargin: 0,
+//         //     WholesaleRateWithGST: 1212.0,
+//         //     WholesaleRateWithOutGST: 1200.0
 
-        // }))
-        // Data.push(arr)
-    }
-    dispatch(getExcel_Button_API({ jsonBody, btnId }))
-}
+//         // }))
+//     }
+
+   Data.push()
+ }
+
 
 
 return (
