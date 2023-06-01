@@ -15,7 +15,7 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 function* goBtn_Get_API_GenFun({ filters }) {
 
   try {
-
+debugger
     const response = yield call(PartyLedger_API, filters);
 
     let TotalDebitAmount = 0

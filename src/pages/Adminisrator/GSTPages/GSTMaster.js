@@ -481,8 +481,7 @@ const GSTMaster = (props) => {
                                 </Card>
 
                                 {Data.length > 0 ?
-                                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                                        {({ paginationProps, paginationTableProps }) => (
+ 
                                             <ToolkitProvider
                                                 keyField="Item"
                                                 data={Data}
@@ -503,23 +502,16 @@ const GSTMaster = (props) => {
                                                                         classes={"table  table-bordered"}
                                                                         noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}
-                                                                        {...paginationTableProps}
                                                                     />
                                                                     {mySearchProps(toolkitProps.searchProps)}
 
                                                                 </div>
                                                             </Col>
                                                         </Row>
-                                                        <Row className="align-items-md-center mt-30">
-                                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                                <PaginationListStandalone {...paginationProps} />
-                                                            </Col>
-                                                        </Row>
+                                                     
                                                     </React.Fragment>
                                                 )}
                                             </ToolkitProvider>
-                                        )}
-                                    </PaginationProvider>
                                     : null}
 
                                 {Data.length > 0 ?
