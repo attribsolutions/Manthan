@@ -1,12 +1,12 @@
 import axios from "axios"
 
-
+debugger
 export const chitalebandhu_get = async () => {
     let url = "/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=2023-05-22&ToDate=2023-05-25&SAPCode=500023"
 
     return axios.get(`/chitaleApi${url}`).then(response => response.data)
     
-
+debugger
 
 };
 
