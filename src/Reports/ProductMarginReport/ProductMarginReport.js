@@ -89,7 +89,7 @@ const ProductMarginReport = (props) => {
             const worksheet = XLSX.utils.json_to_sheet(newArray);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin1");
-            XLSX.writeFile(workbook, "Excel File.xlsx");
+            XLSX.writeFile(workbook, "Product Margin Report.xlsx");
 
             dispatch(getExcel_Button_API_Success([]));
         }
