@@ -88,7 +88,7 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     async function deleteHandler(rowData, btnId) {
-        
+
         try {
             if (deleteBodyfunc) {
                 const config = { rowData, subPageMode, btnId }
@@ -120,7 +120,7 @@ export const listPageActionsButtonFunc = (props) => {
         arr.push(rowData)
         makeBtnFunc(arr)
     }
-   
+
     return ({
         text: "Action",
         hidden:
@@ -137,7 +137,8 @@ export const listPageActionsButtonFunc = (props) => {
 
         formatter: (cellContent, rowData) => {
 
-            const forceEdit = rowData.forceEdit;
+            const forceEditHide = rowData.forceEditHide;
+            const forceDeleteHide = rowData.forceDeleteHide;
             const forceMakeBtn = rowData.forceMakeBtn;
             rowData["hasSelect"] = false
             return (
@@ -147,7 +148,7 @@ export const listPageActionsButtonFunc = (props) => {
                     {
                         //** if condition start
 
-                        (userAccState.RoleAccess_IsEdit && !forceEdit) //condtion:1
+                        (userAccState.RoleAccess_IsEdit && !forceEditHide) //condtion:1
                             ?
                             (<Button
                                 type="button"
@@ -164,7 +165,7 @@ export const listPageActionsButtonFunc = (props) => {
 
                             : // **Else-If Condition start 
 
-                            ((userAccState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated) && !forceEdit) //**condition :2
+                            ((userAccState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated) && !forceEditHide) //**condition :2
                                 ?
                                 <Button
                                     type="button"
@@ -273,7 +274,7 @@ export const listPageActionsButtonFunc = (props) => {
                     }
 
                     {
-                        (userAccState.RoleAccess_IsDelete)
+                        (userAccState.RoleAccess_IsDelete && !forceDeleteHide)
                             ?
                             <Button
                                 type="button"
@@ -291,7 +292,7 @@ export const listPageActionsButtonFunc = (props) => {
                             line no 88 to 108
                             */
                             :
-                            ((userAccState.RoleAccess_IsDeleteSelf) && (rowData.CreatedBy === userCreated))
+                            ((userAccState.RoleAccess_IsDeleteSelf) && (rowData.CreatedBy === userCreated) && !forceDeleteHide)
                                 ?
                                 <Button
                                     type="button"
