@@ -353,16 +353,14 @@ const Dashboard_1 = (props) => {
                             </Button>
                         </Col> */}
 
-                        <Col lg={6}>
+                         {/* <Col lg={6}>
                             <Button type='button'
                                 className='btn btn-success'
                                 id="excelbtn-id"
                                 onClick={excelhandler}>excelBtnView
                             </Button>
-                        </Col>
-                    </Row>
-
-
+                        </Col> */}
+                    </Row> 
 
                     {/* <div className="card">
                         <div className="card-header align-items-center d-flex">

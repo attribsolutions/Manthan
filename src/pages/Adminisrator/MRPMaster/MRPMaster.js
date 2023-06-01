@@ -404,14 +404,14 @@ const MRPMaster = (props) => {
             }))
 
             const Find = ItemData.filter((index) => {
-                return (!(index.MRP === '') && (index.id === ''))
+                return (!(index.MRP === ''))
             })
             const jsonBody = JSON.stringify(Find)
 
             if (!(Find.length > 0)) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter Margin"
+                    Message: "Please Enter MRP"
                 })
                 return _cfunc.btnIsDissablefunc({ btnId, state: false })
             }
@@ -523,8 +523,7 @@ const MRPMaster = (props) => {
                                 </Card>
 
                                 {Data.length > 0 ?
-                                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                                        {({ paginationProps, paginationTableProps }) => (
+                                  
                                             <ToolkitProvider
                                                 keyField="Item"
                                                 data={Data}
@@ -545,22 +544,17 @@ const MRPMaster = (props) => {
                                                                         classes={"table  table-bordered"}
                                                                         noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}
-                                                                        {...paginationTableProps}
                                                                     />
                                                                     {mySearchProps(toolkitProps.searchProps)}
                                                                 </div>
                                                             </Col>
                                                         </Row>
-                                                        <Row className="align-items-md-center mt-30">
-                                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                                <PaginationListStandalone {...paginationProps} />
-                                                            </Col>
-                                                        </Row>
+                                                        
                                                     </React.Fragment>
                                                 )}
                                             </ToolkitProvider>
-                                        )}
-                                    </PaginationProvider>
+                                       
+                                    
                                     : null}
 
                                 {Data.length > 0 ?

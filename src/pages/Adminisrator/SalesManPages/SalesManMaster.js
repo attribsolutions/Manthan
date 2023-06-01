@@ -234,7 +234,6 @@ const SalesManMaster = (props) => {
 
     const SaveHandler = async (event) => {
  
-        debugger
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -399,9 +398,7 @@ const SalesManMaster = (props) => {
                                     </Row>
                                 </form>
                             </CardBody>
-
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment >
