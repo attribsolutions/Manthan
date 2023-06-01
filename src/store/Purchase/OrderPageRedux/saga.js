@@ -143,6 +143,10 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
       i.DeliveryDate = (`${DeliveryDate}`)
 
+
+
+
+
       if (i.Inward === 0) {
         i.Inward = "Open"
         i.forceEditHide = false
@@ -159,6 +163,10 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.forceMakeBtn = false
       }
       if (i.SAPResponse) {// for sap_code order page 
+
+        var numb = i.SAPResponse.match(/\d/g);
+        i.SAPResponse = numb.join("");
+        i.FullOrderNumber = `${i.FullOrderNumber} (${i.SAPResponse})`//concate sap code and full order number
         i.forceEditHide = true
         i.forceDeleteHide = true
       } else {
