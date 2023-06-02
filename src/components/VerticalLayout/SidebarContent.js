@@ -159,7 +159,7 @@ const SidebarContent = (props) => {
                 if (item.ModuleData.length > 0) { isdashboard = item.ModuleData[0] }
                 return (
                   <li >
-                    <Link  >
+                    <Link to={{ pathname: `/${isdashboard.ActualPagePath}` }}>
                       <FeatherIcon icon={item.ModuleIcon} />
                       <span>{props.t(isdashboard.ModuleName)}</span>
                     </Link>
@@ -180,8 +180,8 @@ const SidebarContent = (props) => {
                           return (
                             <li>
                               <div id='_sidbar_div_link'
-                              title={`Download ${index.Name}`}
-                               onClick={productMarginReport_Link_Onclick}>
+                                title={`Download ${index.Name}`}
+                                onClick={productMarginReport_Link_Onclick}>
                                 {props.t(index.Name)}
                               </div>
                             </li>
