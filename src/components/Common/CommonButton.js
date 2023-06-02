@@ -23,12 +23,11 @@ export function SaveButton(props) {
 }
 const SaveBtn = ({ onClick, userAcc }) => {
   const { Name } = userAcc;
-
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
     <div>
       <button
-        type="submit"
+        type="button"
         id={btnId}
         title={`Save ${Name}`}
         className="btn btn-primary w-md"
@@ -46,7 +45,7 @@ const UpdateBtn = ({ onClick, userAcc }) => {
   return (
     <div>
       <button
-        type="submit"
+        type="button"
         id={btnId}
         title={`Update ${Name}`}
         className="btn btn-success w-md"

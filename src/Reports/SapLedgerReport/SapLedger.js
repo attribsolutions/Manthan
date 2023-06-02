@@ -48,7 +48,7 @@ const SapLedger = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
      
     }));
-debugger
+
 
     const { data = [], Data = [] } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
