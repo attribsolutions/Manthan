@@ -162,6 +162,7 @@ const userRoutes = [
   { path: path.DASHBORD, component: Dashboard },
 
   { path: path.DASHBORD_1, component: Dashboard_1 },
+  { path: path.DASHBORD_2, component: Dashboard_1 },
   // *************************** Administration *******************************//
   { path: path.MODULE, component: Modules },
   { path: path.MODULE_lIST, component: ModulesList },
@@ -387,17 +388,18 @@ const userRoutes = [
   { path: "/auth-404", component: Error404 },
   { path: "/auth-500", component: Error500 },
 
+
 ]
 
 const authRoutes = [
   //authencation page
+  { path: "/division", component: SelectDivisionPage },
   { path: "/logout", component: Logout },
   { path: "/login", component: Login },
   { path: "/forgot-password", component: ForgetPwd },
   { path: "/ResetPassword", component: ResetPassword },
   { path: "/SendOTP", component: SendOTP },
   { path: "/EnterOTP", component: EnterOTP },
-  { path: "/division", component: SelectDivisionPage },
   { path: "/pages-404", component: Error404 },
   // { component:() => <Redirect to="/login" /> },
   { path: "/pages-500", component: Error500 },

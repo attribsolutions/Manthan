@@ -1,5 +1,5 @@
 
-import reportHederPng from "../../assets/images/reportHeder.png"
+import cbm_logo from "../../assets/images/cbm_logo.png"
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
 import { date_dmy_func } from "../../components/Common/CommonFunction";
@@ -15,11 +15,11 @@ export const pageBorder = (doc) => {
 }
 
 export const pageHeder = (doc, data) => {
-    doc.addImage(reportHederPng, 'PNG', 32, 18, 75, 40)
+    doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
-    doc.text('PURCHASE ORDER', 200, 40,)
+    doc.text('PURCHASE ORDER', 180, 45,)
 }
 
 export const reportHeder1 = (doc, data) => {
