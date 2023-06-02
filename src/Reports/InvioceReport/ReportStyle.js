@@ -1,5 +1,5 @@
 
-import reportHederPng from "../../assets/images/reportHeder.png"
+import cbm_logo from "../../assets/images/cbm_logo.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { date_dmy_func } from "../../components/Common/CommonFunction";
 import { invoice } from "../ReportIndex";
@@ -14,15 +14,15 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
-    doc.addImage(reportHederPng, 'PNG', 32, 18, 75, 40)
+    doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.setDrawColor(0, 0, 0);
     doc.line(408, 63, 408, 16);//vertical right 1
     doc.line(570, 63, 30, 63)  //horizontal line 1 billby upper for repeat header
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     if (data.ReportType === invoice) {
-        doc.setFontSize(15)
-        doc.text('TAX INVOICE', 200, 40,)
+        doc.setFontSize(18)
+        doc.text('TAX INVOICE', 200, 45,)
     } else {
         doc.setFontSize(15)
         doc.text('INTER BRANCH INVOICE', 200, 40,)
