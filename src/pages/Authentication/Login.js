@@ -29,10 +29,12 @@ const Login = props => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const { loginError, loginSuccess, divisionDropdown_redux = [] } = useSelector(state => ({
+  const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess } = useSelector(state => ({
     loginError: state.Login.loginError,
     loginSuccess: state.Login.loginSuccess,
     divisionDropdown_redux: state.Login.divisionDropdown,
+    userAccess: state.Login.RoleAccessUpdateData,
+
 
   }))
 
@@ -84,11 +86,39 @@ const Login = props => {
 
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
 
-      history.push("/Dashboard")
-    } else if (divisionDropdown_redux.length > 1) {
-      history.push("/division")
+      // history.push("/Dashboard")
     }
+
   }, [divisionDropdown_redux])
+
+  useEffect(() => {
+   
+    let dashboardFound = userAccess.find((i) => {
+      return i.ModuleName === "Dashboard"
+    })
+
+    if ((divisionDropdown_redux.length === 1) && (userAccess.length > 1)) {
+
+      if (dashboardFound) {
+        history.push(`/${dashboardFound.ActualPagePath}`)
+      }
+      else {
+        history.push("/Dashboard")
+      }
+    }
+    else if ((divisionDropdown_redux.length > 1) && (userAccess.length > 1)) {
+      if (dashboardFound) {
+        history.push(`/${dashboardFound.ActualPagePath}`)
+      }
+      else {
+        history.push("/division")
+
+      }
+    }
+
+
+  }, [userAccess])
+
 
   const handleValidSubmit = (event, values) => {
 
@@ -153,7 +183,7 @@ const Login = props => {
                           <div className="mb-3">
                             <AvField
                               name="Password"
-                              
+
                               type="password"
                               className="form-control"
                               required
