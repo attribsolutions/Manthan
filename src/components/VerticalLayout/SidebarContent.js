@@ -13,6 +13,7 @@ import { loginCompanyID, loginUserDetails, loginEmployeeID, loginPartyID } from 
 import * as urlRel from "../../routes/urlRalations";
 import { useDispatch, useSelector } from "react-redux";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import { getExcel_Button_API } from "../../store/Report/SapLedger Redux/action";
 
 const SidebarContent = (props) => {
   const dispatch = useDispatch();
@@ -141,6 +142,10 @@ const SidebarContent = (props) => {
       }
     }
   }
+  const productMarginReport_Link_Onclick = () => {
+
+    dispatch(getExcel_Button_API())
+  }
   return (
     <React.Fragment>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
@@ -154,13 +159,14 @@ const SidebarContent = (props) => {
                 if (item.ModuleData.length > 0) { isdashboard = item.ModuleData[0] }
                 return (
                   <li >
-                    <Link to={`/${isdashboard.ActualPagePath}`} >
+                    <Link  >
                       <FeatherIcon icon={item.ModuleIcon} />
                       <span>{props.t(isdashboard.ModuleName)}</span>
                     </Link>
                   </li >
                 )
               }
+
               else return (
                 <li >
                   <Link to="/#" className="has-arrow">
@@ -170,6 +176,17 @@ const SidebarContent = (props) => {
                   <ul className="sub-menu">
                     {item.ModuleData.map((index, j) => {
                       if (index.RoleAccess_IsShowOnMenu === true) {
+                        if (index.ActualPagePath === "ProductMarginReport") {
+                          return (
+                            <li>
+                              <div id='_sidbar_div_link'
+                              title={`Download ${index.Name}`}
+                               onClick={productMarginReport_Link_Onclick}>
+                                {props.t(index.Name)}
+                              </div>
+                            </li>
+                          )
+                        }
                         return (
                           <li>
                             <Link to={{ pathname: `/${index.ActualPagePath}` }}>
