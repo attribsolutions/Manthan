@@ -77,6 +77,8 @@ const AddEmployee = (props) => {
     EmployeeTypeName: "",
     StateName: "",
     DistrictName: "",
+    PIN:"",
+    City:"",
     EmployeeParties: []
   }
 
@@ -226,11 +228,10 @@ const AddEmployee = (props) => {
 
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
-        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
+        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,PIN,City,
           State_id, District_id, Company_id, EmployeeType_id, } = hasEditVal
 
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
         hasValid.id.valid = id
         hasValid.Name.valid = true;
         hasValid.Address.valid = true;
@@ -243,6 +244,9 @@ const AddEmployee = (props) => {
         hasValid.StateName.valid = true;
         hasValid.DistrictName.valid = true;
         hasValid.EmployeeParties.valid = true;
+        hasValid.PIN.valid = true;
+        hasValid.City.valid = true;
+
 
         values.id = id
         values.Address = Address;
@@ -252,6 +256,8 @@ const AddEmployee = (props) => {
         values.PAN = PAN;
         values.AadharNo = AadharNo
         values.Name = Name;
+        values.PIN = PIN;
+        values.City = City;
         values.EmployeeTypeName = { label: EmployeeTypeName, value: EmployeeType_id };
         values.StateName = { label: StateName, value: State_id };
         values.DistrictName = { label: DistrictName, value: District_id };
@@ -385,6 +391,8 @@ const AddEmployee = (props) => {
           State: values.StateName.value,
           District: values.DistrictName.value,
           EmployeeParties: emplPartie,
+          City:values.City,
+          PIN:values.PIN,
           Company: loginCompanyID(),
           CreatedBy: loginUserID(),
           UpdatedBy: loginUserID()
@@ -489,7 +497,7 @@ const AddEmployee = (props) => {
                           <C_DatePicker
                             name="DOB"
                             value={values.DOB}
-                            placeholder = {"DD/MM/YYYY"}
+                            placeholder={"DD/MM/YYYY"}
                             onChange={(y, v, e) => {
                               onChangeDate({ e, v, state, setState })
                             }}
@@ -599,6 +607,48 @@ const AddEmployee = (props) => {
                             )}
                           </Col>
                         </FormGroup>
+                      </Row>
+                      <Row>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.City} </Label>
+                          <Input
+                            name="City"
+                            value={values.City}
+                            type="text"
+                            className={isError.City.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter City"
+                            autoComplete='off'
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.City.length > 0 && (
+                            <span className="invalid-feedback">{isError.City}</span>
+                          )}
+                        </FormGroup>
+
+                        <Col md="1"></Col>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.PIN} </Label>
+                          <Input
+                            name="PIN"
+                            value={values.PIN}
+                            type="text"
+                            className={isError.PIN.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter PIN"
+                            autoComplete='off'
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.PIN.length > 0 && (
+                            <span className="invalid-feedback">{isError.PIN}</span>
+                          )}
+                        </FormGroup>
+
+
+
+
                       </Row>
                     </CardBody>
                   </Card>
