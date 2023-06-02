@@ -40,7 +40,7 @@ import {
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { discountCalculate, stockDistributeFunc } from "./invoiceCaculations";
+import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit_SelectOnchange, showAllStockOnclick, showStockOnclick, stockDistributeFunc, stockQtyOnChange } from "./invoiceCaculations";
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -235,7 +235,7 @@ const Invoice = (props) => {
 
 
     useEffect(() => {
-        showAllStockOnclick(showAllStockState)
+        showAllStockOnclick(OrderItemDetails, showAllStockState)
     }, [showAllStockState]);
 
 
@@ -273,7 +273,7 @@ const Invoice = (props) => {
                 return (
                     <>
                         <div className="invoice-item-row-div-1">
-                            <samp id={`ItemName${index1.id}`}>{cellContent}</samp>
+                            <samp id={`ItemName${index1.id}`}>{index1.ItemName}</samp>
                         </div>
                         {
                             (index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
@@ -289,19 +289,19 @@ const Invoice = (props) => {
             text: "Quantity/Unit",
             dataField: "",
             classes: () => ('invoice-quantity-row'),
-            formatter: (cellContent, row) => (
+            formatter: (cellContent, index1) => (
                 <>
                     <div className="div-1">
                         <label className="label">Qty</label>
                         <Input type="text"
                             disabled={pageMode === 'edit' ? true : false}
-                            id={`OrderQty${row.id}`}
+                            id={`OrderQty-${index1.id}`}
                             className="input"
                             style={{ textAlign: "right" }}
-                            key={row.id}
+                            key={index1.id}
                             autoComplete="off"
-                            defaultValue={row.Quantity}
-                            onChange={(event) => orderQtyOnChange(event, row)}
+                            defaultValue={index1.Quantity}
+                            onChange={(event) => orderQtyOnChange(event, index1)}
                         />
                     </div>
                     <div className="div-1 ">
@@ -311,10 +311,10 @@ const Invoice = (props) => {
                                 classNamePrefix="select2-selection"
                                 id={"ddlUnit"}
                                 isDisabled={pageMode === 'edit' ? true : false}
-                                defaultValue={row.default_UnitDropvalue}
+                                defaultValue={index1.default_UnitDropvalue}
 
                                 options={
-                                    row.UnitDetails.map(i => ({
+                                    index1.UnitDetails.map(i => ({
                                         "label": i.UnitName,
                                         "value": i.UnitID,
                                         "ConversionUnit": i.ConversionUnit,
@@ -323,7 +323,7 @@ const Invoice = (props) => {
                                         "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
                                     }))
                                 }
-                                onChange={(event) => orderQtyUnit_SelectOnchange(event, row)}
+                                onChange={(event) => orderQtyUnit_SelectOnchange(event, index1)}
                             >
                             </Select >
                         </div>
@@ -331,14 +331,14 @@ const Invoice = (props) => {
                     </div>
                     <div className="bottom-div">
                         <span>Order-Qty :</span>
-                        <samp >{row.OrderQty}</samp>
-                        <samp >{row.UnitName}</samp></div>
+                        <samp >{index1.OrderQty}</samp>
+                        <samp >{index1.UnitName}</samp></div>
                 </>
 
             )
         },
 
-      
+
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
@@ -355,7 +355,6 @@ const Invoice = (props) => {
                                     }}
                                     onClick={(e) => {
                                         setShowAllStockState(!showAllStockState)
-                                        // showAllStockOnclick(true) 
                                     }}
                                 >
                                 </i>
@@ -364,12 +363,10 @@ const Invoice = (props) => {
                                 <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
                                     style={{
                                         position: "",
-                                        // display: "none"
                                         display: showAllStockState ? "block" : "none"
                                     }}
                                     onClick={(e) => {
                                         setShowAllStockState(!showAllStockState)
-                                        // showAllStockOnclick(false)
                                     }}
                                 ></i>
                             </samp>
@@ -388,26 +385,6 @@ const Invoice = (props) => {
             formatter: (cellContent, index1) => (
                 <div>
                     <div key={`plus-circle-icon${index1.id}`}>
-                        {/* {
-                            (index1.StockTotal > 0) ?
-                                <>
-                                    <samp key={`plus-circle${index1.id}`} id={`plus-circle${index1.id}`}
-                                        style={{
-                                            display: showAllStockState ? "none" : "block"
-                                        }}
-                                    >
-                                        <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
-                                            style={{ position: "absolute", }}
-                                            onClick={(e) => { showStockOnclick(index1, true) }}>
-                                        </i>
-                                        <samp style={{ fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
-                                            {`Total Stock:${index1.StockTotal}`}</samp>
-                                    </samp>
-                                </>
-                                :
-                                 <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>
-                        } */}
-
                         <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock'}</samp>
 
                         <samp key={`minus-circle${index1.id}`} id={`minus-circle${index1.id}`}
@@ -440,14 +417,11 @@ const Invoice = (props) => {
                                         <div>
                                             <samp >Stock Quantity</samp>
                                         </div>
-                                        {/* <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp> */}
-                                        </th>
+                                    </th>
                                     <th className="" >
                                         <div>
                                             <samp >Quantity</samp>
                                         </div>
-                                        {/* 
-                                        <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp> */}
                                     </th>
                                     <th  >Rate</th>
                                     <th  >MRP</th>
@@ -475,7 +449,7 @@ const Invoice = (props) => {
                                             </td>
                                             <td>
                                                 <div style={{ width: "120px", textAlign: "right" }}>
-                                                    {`${index2.BaseUnitQuantity} ${index1.StockUnit}`}
+                                                    <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
                                                 </div>
                                             </td>
                                             <td>
@@ -486,7 +460,7 @@ const Invoice = (props) => {
                                                         key={`batchQty${index1.id}-${index2.id}`}
                                                         id={`batchQty${index1.id}-${index2.id}`}
                                                         defaultValue={index2.Qty}
-                                                        onChange={(event) => StockQtyOnChange(event, index1, index2)}
+                                                        onChange={(event) => stockQtyOnChange(event, index1, index2)}
                                                     ></Input>
                                                 </div>
                                             </td>
@@ -513,9 +487,9 @@ const Invoice = (props) => {
             text: "Discount",
             dataField: "",
             classes: () => ('invoice-discount-row'),
-            formatter: (Rate, row, key) => {
-                if (!row.DiscountType) row.DiscountType = 2
-                if (!row.Discount) row.Discount = 0
+            formatter: (Rate, index1, key) => {
+                if (!index1.DiscountType) index1.DiscountType = 2
+                if (!index1.Discount) index1.Discount = 0
                 return (
                     <>
                         <div className="div-1">
@@ -527,8 +501,8 @@ const Invoice = (props) => {
                                     options={[{ value: 1, label: "Rs" },
                                     { value: 2, label: "%" }]}
                                     onChange={(e) => {
-                                        row.DiscountType = e.value
-                                        stockDistributeFunc(row)
+                                        index1.DiscountType = e.value
+                                        innerStockCaculation(index1)
                                     }}
                                 /></div>
 
@@ -538,16 +512,19 @@ const Invoice = (props) => {
                             <Input
                                 className="input"
                                 style={{ textAlign: "right" }}
-                                type="text" defaultValue={row.Discount}
+                                type="text" defaultValue={index1.Discount}
                                 onChange={(e) => {
-                                    row.Discount = e.target.value
-                                    stockDistributeFunc(row)
+                                    if (e.target.value === '') {
+                                        e.target.value = 0
+                                    }
+                                    index1.Discount = e.target.value
+                                    innerStockCaculation(index1)
                                 }}
                             />
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
-                            <samp id={`tAmount${row.id}`}>{row.tAmount}</samp>
+                            <samp id={`tAmount-${index1.id}`}>{index1.tAmount}</samp>
                         </div>
 
                     </>
@@ -559,56 +536,14 @@ const Invoice = (props) => {
 
 
 
-    function showAllStockOnclick(isplus = false) {
-        try {
-            if (isplus) {
-                document.getElementById("allplus-circle").style.display = "none";
-                document.getElementById("allminus-circle").style.display = "block";
-            } else {
-                document.getElementById("allplus-circle").style.display = "block";
-                document.getElementById("allminus-circle").style.display = "none";
-            }
-        } catch (w) { }
 
-        OrderItemDetails.forEach(index1 => {
-            if (!index1.StockTotal > 0) {
-                return
-            }
-            try {
-                if (isplus) {
-                    document.getElementById(`view${index1.id}`).style.display = "block";
-                    document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-                    document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-                } else {
-                    document.getElementById(`view${index1.id}`).style.display = "none";
-                    document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-                    document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-                }
-            } catch (w) { }
-        })
-
-
-    }
-    function showStockOnclick(index1, isplus = false) {
-        try {
-            if (isplus) {
-                document.getElementById(`view${index1.id}`).style.display = "block";
-                document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-                document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-            } else {
-                document.getElementById(`view${index1.id}`).style.display = "none";
-                document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-                document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-            }
-        } catch (w) { }
-    }
 
     function InvoiceDateOnchange(y, v, e) {
         dispatch(GoButtonForinvoiceAddSuccess([]))
         onChangeDate({ e, v, state, setState })
     };
 
-    function CustomerOnchange(hasSelect, evn) {
+    function CustomerOnchange(hasSelect,) {
 
         setState((i) => {
             const v1 = { ...i }
@@ -616,84 +551,16 @@ const Invoice = (props) => {
             v1.hasValid.Customer.valid = true
             return v1
         })
-        // dispatch(GoButtonForinvoiceAddSuccess([]))
-    };
-
-    const StockQtyOnChange = (event, index1, index2) => {
-
-        let input = event.target.value
-        let result = /^\d*(\.\d{0,3})?$/.test(input);
-        let val1 = 0;
-        let v3 = index2.Qty
-        if (result) {
-            let v1 = Number(index2.BaseUnitQuantity);
-            let v2 = Number(input)
-            if (v1 >= v2) { val1 = input }
-            else { val1 = v1 };
-
-        } else if (((v3 >= 0) && (!(input === '')))) {
-            val1 = v3
-        } else {
-            val1 = 0
-        }
-
-        event.target.value = val1;
-        index2.Qty = val1
-
-        let t1 = 0  //L1 Current StockDetails QTY Sum="t1"
-        let t2 = index1.StockUnit//L2 Current StockDetails QTY Unit="t2"
-
-        //C1 start* for loop for Stock Sum 
-        index1.StockDetails.forEach(i2 => {
-            t1 = Number(t1) + Number(i2.Qty);
-        });
-        //C1 end*
-
-        index1.Quantity = (t1 / index1.ConversionUnit).toFixed(3)
-        try {
-            // C2 start ** Total stock Qty label
-            document.getElementById(`stocktotal${index1.id}`).innerText = `Total:${t1} ${t2}`
-            document.getElementById(`OrderQty${index1.id}`).value = index1.Quantity
-            // C2 end
-        } catch (e) { };
     };
 
 
-    function orderQtyOnChange(event, index) {
 
-        let input = event.target.value
-        let result = /^\d*(\.\d{0,3})?$/.test(input);
-        let val1 = 0;
-        if (result) {
-            let v1 = Number(index.StockTotal);
-            let v2 = Number(input) * Number(index.ConversionUnit)
-            if (v1 >= v2) { val1 = input }
-            else { val1 = v1 / Number(index.ConversionUnit) };
 
-        } else if (((index.Quantity >= 0) && (!(input === '')))) {
-            val1 = index.Quantity
-        } else {
-            val1 = 0
-        }
 
-        event.target.value = val1;
-        index.Quantity = val1
 
-        stockDistributeFunc(index)
-    };
 
-    function orderQtyUnit_SelectOnchange(event, index) {
 
-        index.default_UnitDropvalue = event;
-        index.ConversionUnit = event.ConversionUnit;
-        debugger
-        index.StockDetails.forEach(index2 => {
-            index2.Rate = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2)
-            document.getElementById(`stockItemRate-${index.id}-${index2.id}`).innerText = index2.Rate;
-        })
 
-        stockDistributeFunc(index)
-    };
 
     function goButtonHandler(makeIBInvoice) {
         const btnId = goBtnId;
@@ -769,7 +636,6 @@ const Invoice = (props) => {
                             Discount: index.Discount,
                             DiscountAmount: calculate.disCountAmt,
                         })
-
                     }
                 })
             })
@@ -831,131 +697,131 @@ const Invoice = (props) => {
 
     }
 
-if (!(userPageAccessState === '')) {
-    return (
-        <React.Fragment>
-            <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+    if (!(userPageAccessState === '')) {
+        return (
+            <React.Fragment>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-            <div className="page-content" >
+                <div className="page-content" >
 
-                <form noValidate>
-                    <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
-                        <Row>
-                            <Col className=" mt-1 row  " sm={11} >
-                                <Col sm="6">
-                                    <FormGroup className="row mt-2 mb-3  ">
-                                        <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
-                                        <Col sm="7">
-                                            <C_DatePicker
-                                                name="InvoiceDate"
-                                                value={values.InvoiceDate}
-                                                id="myInput11"
-                                                disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
-                                                onChange={InvoiceDateOnchange}
-                                            />
-                                            {isError.InvoiceDate.length > 0 && (
-                                                <span className="invalid-feedback">{isError.InvoiceDate}</span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
+                    <form noValidate>
+                        <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
+                            <Row>
+                                <Col className=" mt-1 row  " sm={11} >
+                                    <Col sm="6">
+                                        <FormGroup className="row mt-2 mb-3  ">
+                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
+                                            <Col sm="7">
+                                                <C_DatePicker
+                                                    name="InvoiceDate"
+                                                    value={values.InvoiceDate}
+                                                    id="myInput11"
+                                                    disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
+                                                    onChange={InvoiceDateOnchange}
+                                                />
+                                                {isError.InvoiceDate.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.InvoiceDate}</span>
+                                                )}
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
+
+                                    <Col sm="6">
+                                        <FormGroup className="row mt-2 mb-3 ">
+                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Customer} </Label>
+                                            <Col sm={7}>
+                                                <Select
+
+                                                    name="Customer"
+                                                    value={values.Customer}
+                                                    isSearchable={true}
+                                                    isDisabled={OrderItemDetails.length > 0 ? true : false}
+                                                    id={'customerselect'}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    options={CustomerDropdown_Options}
+                                                    onChange={CustomerOnchange}
+
+                                                />
+                                                {isError.Customer.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                                )}
+                                            </Col>
+                                        </FormGroup>
+                                    </Col >
                                 </Col>
 
-                                <Col sm="6">
-                                    <FormGroup className="row mt-2 mb-3 ">
-                                        <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Customer} </Label>
-                                        <Col sm={7}>
-                                            <Select
-
-                                                name="Customer"
-                                                value={values.Customer}
-                                                isSearchable={true}
-                                                isDisabled={OrderItemDetails.length > 0 ? true : false}
-                                                id={'customerselect'}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                options={CustomerDropdown_Options}
-                                                onChange={CustomerOnchange}
-
-                                            />
-                                            {isError.Customer.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-                            </Col>
-
-                            <Col sm={1} className="mt-3">
-                                {pageMode === mode.defaultsave ?
-                                    (OrderItemDetails.length === 0) ?
-                                        < Go_Button onClick={(e) => goButtonHandler()} />
-                                        :
-                                        <Change_Button onClick={(e) => dispatch(GoButtonForinvoiceAddSuccess([]))} />
-                                    : null
-                                }
-                            </Col>
-                            <Col>
-                            </Col>
-                        </Row>
-                    </Col>
-
-
-
-                    <ToolkitProvider
-                        keyField={"id"}
-                        data={OrderItemDetails}
-                        columns={pagesListColumns}
-
-                        search
-                    >
-                        {(toolkitProps) => (
-                            <React.Fragment>
-                                <Row>
-                                    <Col xl="12">
-                                        <div className="table-responsive">
-                                            <BootstrapTable
-                                                id="table_Arrow"
-                                                keyField={"id"}
-                                                responsive
-                                                bordered={false}
-                                                striped={false}
-                                                classes={"table  table-bordered"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Items Not available
-                                                    </div>
-                                                }
-                                                {...toolkitProps.baseProps}
-                                            />
-                                        </div>
-                                    </Col>
-                                </Row>
-
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
-
-
-                    {OrderItemDetails.length > 0 ? <FormGroup>
-                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                            <SaveButton
-                                pageMode={pageMode}
-                                onClick={SaveHandler}
-                                id={saveBtnid}
-                                userAcc={userPageAccessState}
-                            />
+                                <Col sm={1} className="mt-3">
+                                    {pageMode === mode.defaultsave ?
+                                        (OrderItemDetails.length === 0) ?
+                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            :
+                                            <Change_Button onClick={(e) => dispatch(GoButtonForinvoiceAddSuccess([]))} />
+                                        : null
+                                    }
+                                </Col>
+                                <Col>
+                                </Col>
+                            </Row>
                         </Col>
-                    </FormGroup > : null}
-                </form>
-            </div>
-        </React.Fragment>
-    );
-}
-else {
-    return (
-        <React.Fragment></React.Fragment>
-    )
-}
+
+
+
+                        <ToolkitProvider
+                            keyField={"id"}
+                            data={OrderItemDetails}
+                            columns={pagesListColumns}
+
+                            search
+                        >
+                            {(toolkitProps) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive">
+                                                <BootstrapTable
+                                                    id="table_Arrow"
+                                                    keyField={"id"}
+                                                    responsive
+                                                    bordered={false}
+                                                    striped={false}
+                                                    classes={"table  table-bordered"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Items Not available
+                                                        </div>
+                                                    }
+                                                    {...toolkitProps.baseProps}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+
+
+                        {OrderItemDetails.length > 0 ? <FormGroup>
+                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    onClick={SaveHandler}
+                                    id={saveBtnid}
+                                    userAcc={userPageAccessState}
+                                />
+                            </Col>
+                        </FormGroup > : null}
+                    </form>
+                </div>
+            </React.Fragment>
+        );
+    }
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        )
+    }
 };
 
 export default Invoice
