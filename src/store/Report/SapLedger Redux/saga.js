@@ -15,13 +15,13 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 function* goBtn_Get_API_GenFun({ filters }) {
 
   try {
-debugger
-    const response = yield call(PartyLedger_API, filters);
 
+    const response = yield call(PartyLedger_API, filters);
     let TotalDebitAmount = 0
     let TotalCreditAmount = 0
 
-    const newresponse = yield response.data.map((i, key) => {
+    const newresponse = yield response.Data.data.map((i, key) => {
+      
       i.id = key + 1
       if (i.DebitCredit === "S") {
         i.Debit_Amount = i.Amount
@@ -38,8 +38,8 @@ debugger
     newresponse.push({
       id: response.length - 1,
       PostingDate: "Total",
-      Credit_Amount: TotalCreditAmount,
-      Debit_Amount: TotalDebitAmount
+      Credit_Amount: TotalCreditAmount.toFixed(2),
+      Debit_Amount: TotalDebitAmount.toFixed(2)
     })
     response.data = newresponse
 

@@ -580,7 +580,7 @@ export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// In
 export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, jsonBody)//  postapi
 
 
-export const PartyLedger_API = (FromDate,ToDate,SAPCode) => chitalebandhu_get(`${url.PARTY_LEDGER_API}FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
+export const PartyLedger_API = (FromDate,ToDate,SAPCode) => post(url.PARTY_LEDGER_API,FromDate,ToDate,SAPCode)//  postapi
 export const GetExcelButton = () => get(url.EXCEL_BUTTON_API)
 
 

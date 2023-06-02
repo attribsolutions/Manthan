@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux"
 
 import { Link, useHistory } from "react-router-dom"
 
-import { getUserDetailsAction, resetRoleAccessAction, roleAceessAction } from "../../store/actions"
+import {  roleAceessAction } from "../../store/actions"
 import logo from "../../assets/images/cbm_logo.png"
 
 //Import config
@@ -21,20 +21,41 @@ const SelectDivisionPage = props => {
 
   const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
 
-  const { divisionDropdown_redux, } = useSelector(state => ({
-    loginError: state.Login.loginError,
+  const { divisionDropdown_redux,userAccess } = useSelector(state => ({
     divisionDropdown_redux: state.Login.divisionDropdown,
+    userAccess: state.Login.RoleAccessUpdateData,
+
   }));
 
+ 
+
   useLayoutEffect(() => {
-    // dispatch(resetRoleAccessAction())
-    // if (!(localStorage.getItem("userId"))) {
-    //   history.push("/login")
-    // }
-    // else {
-    //   dispatch(getUserDetailsAction(localStorage.getItem("userId")))
-    // }
-  }, [])
+   
+    let dashboardFound = userAccess.find((i) => {
+      return i.ModuleName === "Dashboard"
+    })
+
+    if ((divisionDropdown_redux.length === 1) && (userAccess.length > 1)) {
+
+      if (dashboardFound) {
+        history.push(`/${dashboardFound.ActualPagePath}`)
+      }
+      else {
+        history.push("/Dashboard")
+      }
+    }
+    else if ((divisionDropdown_redux.length > 1) && (userAccess.length > 1)) {
+      if (dashboardFound) {
+        history.push(`/${dashboardFound.ActualPagePath}`)
+      }
+      else {
+        history.push("/division")
+
+      }
+    }
+
+
+  }, [userAccess])
 
 
 
@@ -56,7 +77,6 @@ const SelectDivisionPage = props => {
 
       localStorage.setItem("roleId", JSON.stringify(value))
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
-      history.push("/Dashboard")
     }
 
 

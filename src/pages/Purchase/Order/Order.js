@@ -316,7 +316,7 @@ const Order = (props) => {
     }, [approvalDetail]);
 
     useEffect(() => {
-        orderApprovalMessage({ dispatch, orderApprovalMsg })
+        orderApprovalMessage({ dispatch, orderApprovalMsg ,listPath,history })
     }, [orderApprovalMsg]);
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({

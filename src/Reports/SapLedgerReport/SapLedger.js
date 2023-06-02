@@ -50,7 +50,7 @@ const SapLedger = (props) => {
     }));
 
 
-    const { data = [], PartyDetails = {} } = List
+    const { data = [], Data = [] } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     const tableColumns = [
@@ -217,13 +217,13 @@ const SapLedger = (props) => {
                                 <Row>
                                     <Col sm={9}>
                                         <Label className="col-sm-6 mt-1 p-1 text-black"
-                                            style={{ width: "270px" ,background:"#efefef", borderRadius:"5px" }}>Opening Balance :{List.OpeingBal}
+                                            style={{ width: "270px" ,background:"#efefef", borderRadius:"5px" }}>Opening Balance :{Data.OpeingBal}
                                         </Label>
                                     </Col>
                                     <Col sm={3}>
 
                                         <Label className="col-sm-6 mt-1 p-1 text-black"
-                                            style={{width: "257px" ,background:"#efefef", borderRadius:"5px" }}>Closing Balance :{List.ClosingBal}
+                                            style={{width: "257px" ,background:"#efefef", borderRadius:"5px" }}>Closing Balance :{Data.ClosingBal}
                                         </Label>
                                     </Col>
 

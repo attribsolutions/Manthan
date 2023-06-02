@@ -23,7 +23,6 @@ export function SaveButton(props) {
 }
 const SaveBtn = ({ onClick, userAcc }) => {
   const { Name } = userAcc;
-
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
     <div>

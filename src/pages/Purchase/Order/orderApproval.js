@@ -6,7 +6,7 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
     if ((approvalDetail.Status === true)) {
 
         const { Data, btnId } = approvalDetail;
-        
+
         let isorderItemSet = [];
         Data.OrderItem.forEach(i => {
             if (i.Quantity > 0) {
@@ -20,7 +20,8 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
                     "Batch": ""// blank
                 })
             }
-        })
+        });
+
         let body = {
             "Customer": (Data.CustomerSAPCode).toString(),//parent--CustomerSAPCode 
             "DocDate": sap_date_dmy_func(Data.OrderDate), //parent--OrderDate
@@ -37,14 +38,21 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
     }
 }
 
-export const orderApprovalMessage = ({ dispatch, orderApprovalMsg }) => {
+export const orderApprovalMessage = async({ dispatch, orderApprovalMsg ,listPath,history}) => {
     try {
         if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
             dispatch(orderApprovalActionSuccess({ Status: false }))
-            customAlert({
+        
+            const a = await customAlert({
                 Type: 1,
                 Message: orderApprovalMsg.Message,
             })
+            if (a) {
+                history.push({
+                    pathname: listPath,
+                });
+            }
+
         } else if (orderApprovalMsg.Status === true) {
             dispatch(orderApprovalActionSuccess({ Status: false }))
             customAlert({
