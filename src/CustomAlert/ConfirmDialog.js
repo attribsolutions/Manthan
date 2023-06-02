@@ -87,7 +87,7 @@ const AlertSucc = () => {
                         className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
                             className="mdi mdi-check-all d-block display-6 mt-2 mb-3  text-success"></i>
                         <MessageFun msg={Message} />
-                        <button type="button" className="btn btn-primary" onClick={innerYes}>OK</button>
+                        <button type="button" autoFocus className="btn btn-primary" onClick={innerYes}>OK</button>
                     </div>
                 </div>
             </div>
@@ -125,7 +125,7 @@ const AlertWarning = () => {
                                 className="mdi mdi-alert-outline  d-block display-4 mt-2 mb-3 text-warning"></i>
 
                             <MessageFun msg={Message} />
-                            <button type="button" className="btn btn-primary " onClick={innerOk}>OK</button>
+                            <button type="button" autoFocus className="btn btn-primary " onClick={innerOk}>OK</button>
                         </div>
                     </div>
                 </div>
@@ -162,7 +162,7 @@ const AlertInfo = () => {
                             className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
                                 className="mdi mdi-alert-circle-outline d-block display-4 mt-2 mb-3 text-info"></i>
                             <MessageFun msg={Message} />
-                            <button type="button" className="btn btn-primary " onClick={innerOk}>OK</button>
+                            <button type="button" autoFocus className="btn btn-primary " onClick={innerOk}>OK</button>
                         </div>
                     </div>
                 </div>
@@ -202,7 +202,7 @@ const AlertDanger = () => {
                             aria-hidden="true">×</span></button><i
                                 className="mdi mdi-block-helper d-block display-4 mt-2 mb-3  text-danger"></i>
                         <MessageFun msg={Message} />
-                        <button type="button" className="btn btn-primary" onClick={innerOk}>OK</button>
+                        <button type="button" autoFocus className="btn btn-primary" onClick={innerOk}>OK</button>
                     </div>
                 </div>
             </div>

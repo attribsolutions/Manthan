@@ -265,7 +265,7 @@ const GroupTypeMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black"  >
 
-                                <form noValidate>
+                                {/* <form noValidate> */}
 
                                     <Row className="">
                                         <Col md={12}>
@@ -333,7 +333,7 @@ const GroupTypeMaster = (props) => {
                                             </Card>
                                         </Col>
                                     </Row>
-                                </form>
+                                {/* </form> */}
                             </CardBody>
                         </Card>
                     </Container>

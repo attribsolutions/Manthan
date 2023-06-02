@@ -153,6 +153,7 @@ const Login = props => {
                           <div className="mb-3">
                             <AvField
                               name="Password"
+                              
                               type="password"
                               className="form-control"
                               required
@@ -166,7 +167,7 @@ const Login = props => {
 
                         </div>
                         <div className="mb-3">
-                          <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Login</button>
+                          <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit">Login</button>
                         </div>
                       </AvForm>
 
