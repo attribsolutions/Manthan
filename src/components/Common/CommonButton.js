@@ -27,7 +27,7 @@ const SaveBtn = ({ onClick, userAcc }) => {
   return (
     <div>
       <button
-        type="button"
+        type="submit"
         id={btnId}
         title={`Save ${Name}`}
         className="btn btn-primary w-md"
@@ -45,7 +45,7 @@ const UpdateBtn = ({ onClick, userAcc }) => {
   return (
     <div>
       <button
-        type="button"
+        type="submit"
         id={btnId}
         title={`Update ${Name}`}
         className="btn btn-success w-md"
