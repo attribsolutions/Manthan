@@ -331,42 +331,43 @@ const PartyItems = (props) => {
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
                                 <PartyDropdown ></PartyDropdown>
-                              
-                                        <ToolkitProvider
-                                            keyField="Item"
-                                            data={tableList}
-                                            columns={tableColumns}
-                                            search
-                                        >
-                                            {toolkitProps => (
-                                                <React.Fragment>
-                                                    <div className="table">
-                                                        <BootstrapTable
-                                                            keyField={"Item"}
-                                                            Item="table_Arrow"
-                                                            bordered={true}
-                                                            striped={false}
-                                                            selectRow={selectAllCheck(rowSelected())}
-                                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                            classes={"table align-middle table-nowrap table-hover"}
-                                                            headerWrapperClasses={"thead-light"}
 
-                                                            {...toolkitProps.baseProps}
-                                                            
-                                                        />
-                                                        {mySearchProps(toolkitProps.searchProps)}
-                                                    </div>
-                                                </React.Fragment>
-                                            )
-                                            }
-                                        </ToolkitProvider>
-                                   
+                                <ToolkitProvider
+                                    keyField="Item"
+                                    data={tableList}
+                                    columns={tableColumns}
+                                    search
+                                >
+                                    {toolkitProps => (
+                                        <React.Fragment>
+                                            <div className="table">
+                                                <BootstrapTable
+                                                    keyField={"Item"}
+                                                    Item="table_Arrow"
+                                                    bordered={true}
+                                                    striped={false}
+                                                    selectRow={selectAllCheck(rowSelected())}
+                                                    noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                    classes={"table align-middle table-nowrap table-hover"}
+                                                    headerWrapperClasses={"thead-light"}
 
-                                <SaveButton
-                                    pageMode={pageMode}
-                                    userAcc={userPageAccessState}
-                                    module={"PartyItems"} onClick={SaveHandler}
-                                />
+                                                    {...toolkitProps.baseProps}
+
+                                                />
+                                                {mySearchProps(toolkitProps.searchProps)}
+                                            </div>
+                                        </React.Fragment>
+                                    )
+                                    }
+                                </ToolkitProvider>
+
+                                <div className="row save1">
+                                    <SaveButton
+                                        pageMode={pageMode}
+                                        userAcc={userPageAccessState}
+                                        module={"PartyItems"} onClick={SaveHandler}
+                                    />
+                                </div>
 
                             </CardBody>
                         </Card>
