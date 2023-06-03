@@ -8,6 +8,8 @@ import {
   UPDATE_EMPLOYEE_ID, UPDATE_EMPLOYEE_ID_SUCCESS,
   GET_COMPANYNAME_BY_EMPLOYEETYPES_ID,
   GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS,
+  GET_CITY_ON_DISTRICT,
+  GET_CITY_ON_DISTRICT_SUCCESS
 
 } from "./actionTypes"
 
@@ -31,6 +33,19 @@ export const getStateESuccess = (State) => ({
   type: GET_STATE_SUCCESS,
   payload: State,
 });
+
+// GetCityOnDistrict API dependent on state api
+export const getCityOnDistrict = (id) => ({
+  type: GET_CITY_ON_DISTRICT,
+  id,
+
+});
+
+export const getCityOnDistrictSuccess = (DistrictId) => ({
+  type: GET_CITY_ON_DISTRICT_SUCCESS,
+  payload: DistrictId,
+});
+
 
 ///post api
 export const saveEmployeeAction = (config) => ({

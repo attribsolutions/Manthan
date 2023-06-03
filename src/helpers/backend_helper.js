@@ -113,6 +113,7 @@ export const commonPageFiled_API = (pageId) => get(`${url.PAGE_FIELD}/${pageId}`
 // Employees  Component All Api 
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getState_For_Dropdown = () => get(url.GET_STATE)
+export const getCity_For_Dropdown = (DistrictId) => get(`${url.GET_CITY_ON_DISTRICT}/${DistrictId}`)
 export const getComapny_For_Dropdown = () => get(url.COMPANY_API_URL)
 export const save_Employee_API = ({ jsonBody, btnId }) => post(url.EMPLOYEE_API_URL, jsonBody, btnId) //save And Update
 export const get_EmployeelistApi = (filters) => post(url.EMPLOYEE_FILTER_API_URL, filters) // list api using post method
@@ -586,8 +587,7 @@ export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, js
 
 
 export const PartyLedger_API = (FromDate,ToDate,SAPCode) => post(url.PARTY_LEDGER_API,FromDate,ToDate,SAPCode)//  postapi
-export const GetExcelButton = () => get(url.EXCEL_BUTTON_API)
-
+export const Get_Product_Margin_Report = () => get(url.PRODUCT_MARGIN_REPORT_API)
 
 
 

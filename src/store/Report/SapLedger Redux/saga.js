@@ -3,7 +3,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
   SapLedger_Go_Button_API_Success} from "./action";
 import {
-  GetExcelButton, PartyLedger_API,
+  GetExcelButton, Get_Product_Margin_Report, PartyLedger_API,
 } from "../../../helpers/backend_helper";
 import {
   GET_EXCELBUTTON_API, GO_BUTTON_API_SAP_LEDGER,
@@ -49,7 +49,7 @@ function* goBtn_Get_API_GenFun({ filters }) {
 
 function* GetExcelButton_saga() {
   try {
-    const response = yield call(GetExcelButton);
+    const response = yield call(Get_Product_Margin_Report);
     if (response.Data.StatusCode === 200) {
       let newArray = []
       response.Data.forEach(i => {
