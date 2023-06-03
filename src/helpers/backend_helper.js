@@ -351,6 +351,11 @@ export const Party_Dropdown_Get_API = (id) => get(`${url.MANAGEMENT_PARTIES}/${i
 export const ImportField_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_FILTER, jsonBody, btnId)//get api
 export const ImportField_Add_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_SAVE, jsonBody, btnId)// post api
 
+// City API
+export const Post_City_Master_API = ({ jsonBody, btnId }) => post(url.CITY, jsonBody, btnId)// post api
+
+
+
 // ImportMaster_Map API
 export const ImportMaster_Map_Customer_GoButton_API = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_CUSTOMER}/${partyId}`, btnId)//get api
 export const ImportMaster_Map_Customer_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_CUSTOMER, jsonBody, btnId)// post api

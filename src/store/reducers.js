@@ -59,6 +59,7 @@ import BankAssignReducer from "./Accounting/BankAssignRedux/reducer"
 import ImportExportFieldMap_Reducer from "./Administrator/ImportExportFieldMapRedux/reducer"
 import ImportFieldAdd_Reducer from "./Administrator/ImportFieldAddRedux/reducer"
 import ImportMasterMap_Reducer from "./Administrator/ImportMasterMapRedux/reducer"
+import CityReducer from "./Administrator/CityRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -159,7 +160,8 @@ const rootReducer = combineReducers({
   CredietDebitReducer,
   DashboardReducer,
   ChangePasswordReducer,
-  SapLedgerReducer
+  SapLedgerReducer,
+  CityReducer
 
 })
 export default rootReducer
