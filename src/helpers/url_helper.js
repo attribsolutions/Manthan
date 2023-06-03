@@ -59,6 +59,8 @@ export const EMPLOYEE_LIST_FOR_DROPDOWN_API_URL = "/GetEmployeeForUserCreation"
 export const GET_DESIGNATIONID = "/Designations"
 export const GET_EMPLOYEE_TYPE = "/EmployeeTypes"
 export const GET_STATE = "/States"
+ export const GET_CITY_ON_DISTRICT='/GetCityOnDistrict'
+
 // export const GET_REGION="/Region"
 export const EMPLOYEE_API_URL = "/Employees"
 export const EMPLOYEE_FILTER_API_URL = "/EmployeesFilter"
@@ -348,7 +350,7 @@ export const INVOICE_RETURN = '/InvoiceReturnCRDR'
 export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
 
 export const PARTY_LEDGER_API = '/SAPLedger'
-export const EXCEL_BUTTON_API='/ProductMarginReport'
+export const PRODUCT_MARGIN_REPORT_API='/ProductMarginReport'
 
 
 // Dashboard

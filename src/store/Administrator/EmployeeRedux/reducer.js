@@ -7,18 +7,20 @@ import {
   EDIT_EMPLOYEE_ID_SUCCESS,
   UPDATE_EMPLOYEE_ID_SUCCESS,
   GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS,
+  GET_CITY_ON_DISTRICT_SUCCESS
 } from "./actionTypes";
 
 const INIT_STATE = {
   designation: [],
   State: [],
+  City: [],
   employeeList: [],
   postMessage: { Status: false },
   deleteMessage: { Status: false },
   editData: { Status: false },
   updateMessage: { Status: false },
-  CompanyNames:[],
-  PartyTypes:[]
+  CompanyNames: [],
+  PartyTypes: []
 };
 
 const EmployeesReducer = (state = INIT_STATE, action) => {
@@ -36,6 +38,13 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         State: action.payload,
+      };
+
+    // CITY Dropdown api
+    case GET_CITY_ON_DISTRICT_SUCCESS:
+      return {
+        ...state,
+        City: action.payload,
       };
 
     case SAVE_EMPLOYEE_MASTER_SUCCESS:

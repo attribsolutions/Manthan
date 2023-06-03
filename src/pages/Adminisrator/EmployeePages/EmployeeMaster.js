@@ -22,7 +22,8 @@ import {
   updateEmployeeAction,
   PostEmployeeSuccess,
   editEmployeeSuccess,
-  updateEmployeeIDSuccess
+  updateEmployeeIDSuccess,
+  getCityOnDistrict
 } from "../../../store/Administrator/EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import {
@@ -78,7 +79,7 @@ const AddEmployee = (props) => {
     StateName: "",
     DistrictName: "",
     PIN: "",
-    City: "",
+    CityName: "",
     EmployeeParties: []
   }
 
@@ -95,6 +96,7 @@ const AddEmployee = (props) => {
   const {
     employeeType,
     State,
+    City,
     district,
     partyList,
     postMsg,
@@ -103,6 +105,7 @@ const AddEmployee = (props) => {
     updateMsg } = useSelector((state) => ({
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       State: state.EmployeesReducer.State,
+      City: state.EmployeesReducer.City,
       district: state.PartyMasterReducer.DistrictOnState,
       partyList: state.PartyMasterReducer.partyList,
       postMsg: state.EmployeesReducer.postMessage,
@@ -110,7 +113,7 @@ const AddEmployee = (props) => {
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
     }));
-
+debugger
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -228,8 +231,8 @@ const AddEmployee = (props) => {
 
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
-        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties, PIN, City,
-          State_id, District_id, Company_id, EmployeeType_id, } = hasEditVal
+        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties, PIN, City,CityName,
+          State_id, District_id, Company_id,City_id, EmployeeType_id, } = hasEditVal
 
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
         hasValid.id.valid = id
@@ -245,7 +248,7 @@ const AddEmployee = (props) => {
         hasValid.DistrictName.valid = true;
         hasValid.EmployeeParties.valid = true;
         hasValid.PIN.valid = true;
-        hasValid.City.valid = true;
+        hasValid.CityName.valid = true;
 
 
         values.id = id
@@ -257,7 +260,7 @@ const AddEmployee = (props) => {
         values.AadharNo = AadharNo
         values.Name = Name;
         values.PIN = PIN;
-        values.City = City;
+        values.CityName ={ label: CityName, value: City_id };
         values.EmployeeTypeName = { label: EmployeeTypeName, value: EmployeeType_id };
         values.StateName = { label: StateName, value: State_id };
         values.DistrictName = { label: DistrictName, value: District_id };
@@ -347,6 +350,11 @@ const AddEmployee = (props) => {
     label: data.Name
   }));
 
+  const City_DropdownOptions = City.map((data) => ({
+    value: data.id,
+    label: data.Name
+  }));
+
   function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
     setState((i) => {
@@ -357,7 +365,20 @@ const AddEmployee = (props) => {
     })
   }
 
+  function District_Dropdown_Handler(e) {
+    dispatch(getCityOnDistrict(e.value))
+    setState((i) => {
+      const a = { ...i }
+      a.values.Name = "";
+      a.hasValid.Name.valid = false
+
+
+      return a
+    })
+  }
+
   const SaveHandler = (event) => {
+    debugger
     event.preventDefault();
     const btnId = event.target.id;
     try {
@@ -390,8 +411,8 @@ const AddEmployee = (props) => {
           EmployeeType: values.EmployeeTypeName.value,
           State: values.StateName.value,
           District: values.DistrictName.value,
+          City: values.CityName.value,
           EmployeeParties: emplPartie,
-          City: values.City,
           PIN: values.PIN,
           Company: loginCompanyID(),
           CreatedBy: loginUserID(),
@@ -402,6 +423,7 @@ const AddEmployee = (props) => {
           dispatch(updateEmployeeAction({ jsonBody, updateId: values.id, btnId }));
         }
         else {
+          debugger
           dispatch(saveEmployeeAction({ jsonBody, btnId }));
         }
       }
@@ -600,6 +622,7 @@ const AddEmployee = (props) => {
                               options={District_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState, })
+                                District_Dropdown_Handler(hasSelect)
                               }}
                             />
                             {isError.DistrictName.length > 0 && (
@@ -610,17 +633,16 @@ const AddEmployee = (props) => {
                       </Row>
                       <Row>
                         <FormGroup className="mb-2 col col-sm-3 ">
-                          <Label htmlFor="validationCustom01">{fieldLabel.City} </Label>
+                          <Label htmlFor="validationCustom01">{fieldLabel.CityName} </Label>
                           <Select
                             name="CityName"
                             id="CityName"
                             value={values.CityName}
                             isSearchable={true}
                             classNamePrefix="dropdown"
-                            // options={City_DropdownOptions}
+                            options={City_DropdownOptions}
                             onChange={(hasSelect, evn) => {
                               onChangeSelect({ hasSelect, evn, state, setState, })
-                              State_Dropdown_Handler(hasSelect)
                             }}
                           />
                           {isError.CityName.length > 0 && (
