@@ -77,8 +77,8 @@ const AddEmployee = (props) => {
     EmployeeTypeName: "",
     StateName: "",
     DistrictName: "",
-    PIN:"",
-    City:"",
+    PIN: "",
+    City: "",
     EmployeeParties: []
   }
 
@@ -228,7 +228,7 @@ const AddEmployee = (props) => {
 
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
-        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,PIN,City,
+        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties, PIN, City,
           State_id, District_id, Company_id, EmployeeType_id, } = hasEditVal
 
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -391,8 +391,8 @@ const AddEmployee = (props) => {
           State: values.StateName.value,
           District: values.DistrictName.value,
           EmployeeParties: emplPartie,
-          City:values.City,
-          PIN:values.PIN,
+          City: values.City,
+          PIN: values.PIN,
           Company: loginCompanyID(),
           CreatedBy: loginUserID(),
           UpdatedBy: loginUserID()
@@ -611,19 +611,20 @@ const AddEmployee = (props) => {
                       <Row>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.City} </Label>
-                          <Input
-                            name="City"
-                            value={values.City}
-                            type="text"
-                            className={isError.City.length > 0 ? "is-invalid form-control" : "form-control"}
-                            placeholder="Please Enter City"
-                            autoComplete='off'
-                            onChange={(event) => {
-                              onChangeText({ event, state, setState })
+                          <Select
+                            name="CityName"
+                            id="CityName"
+                            value={values.CityName}
+                            isSearchable={true}
+                            classNamePrefix="dropdown"
+                            options={City_DropdownOptions}
+                            onChange={(hasSelect, evn) => {
+                              onChangeSelect({ hasSelect, evn, state, setState, })
+                              State_Dropdown_Handler(hasSelect)
                             }}
                           />
-                          {isError.City.length > 0 && (
-                            <span className="invalid-feedback">{isError.City}</span>
+                          {isError.CityName.length > 0 && (
+                            <span className="text-danger f-8"><small>{isError.CityName}</small></span>
                           )}
                         </FormGroup>
 
