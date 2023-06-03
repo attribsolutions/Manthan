@@ -15,7 +15,8 @@ import {
   GET_SUPER_ADMIN_API_SUCCESS,
   LOGOUT_REST,
   RESET_ROLE_ACCESS_ACTION,
-  ROLE_ACCESS_API_CALL_ERROR
+  ROLE_ACCESS_API_CALL_ERROR,
+  API_ERROR_SUCCESS
 } from "./actionTypes"
 
 export const loginUser = (user, history) => {
@@ -51,6 +52,14 @@ export const apiError = (error) => {
   return {
     type: API_ERROR,
     payload: error,
+  }
+}
+
+
+export const apiErrorSuccess = (error) => {
+  return {
+    type: API_ERROR_SUCCESS,
+    payload: null,
   }
 }
 
