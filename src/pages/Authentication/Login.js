@@ -294,7 +294,7 @@ const Login = props => {
 
 
   useEffect(() => {
-    
+
 
     try {
       if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
@@ -332,7 +332,7 @@ const Login = props => {
 
   }, [divisionDropdown_redux])
 
- 
+
 
   useEffect(() => {
 
@@ -417,22 +417,31 @@ const Login = props => {
 
 
                       <div className="mb-3">
-                        <Input
-                          name="UserName"
-                          type="text"
-                          value={currentUserName}
-                          autocomplete="off"
-                          autoFocus={true}
-                          required
-                          onChange={currentUserOnchange}
-                          placeholder="Enter Old Password"
-                        />
+                        <div className="d-flex align-items-start">
+                          <div className="flex-grow-1">
+                            <label className="form-label">User Name</label>
+                          </div>
+                        </div>
 
-                        {(currentPwdError.length > 0) && (
-                          <span className="text-danger font-size-12">{currentPwdError}</span>
-                        )}
+                        <div className="mb-3">
+                          <Input
+                            name="UserName"
+                            type="text"
+                            value={currentUserName}
+                            autocomplete="off"
+                            autoFocus={true}
+                            required
+                            onChange={currentUserOnchange}
+                            placeholder="Enter Old User Name"
+                          />
 
+                          {(currentPwdError.length > 0) && (
+                            <span className="text-danger font-size-12">{currentPwdError}</span>
+                          )}
+
+                        </div>
                       </div>
+
                       <div className="mb-3">
                         <div className="d-flex align-items-start">
                           <div className="flex-grow-1">
