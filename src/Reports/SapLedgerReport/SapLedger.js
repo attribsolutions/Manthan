@@ -36,17 +36,17 @@ const SapLedger = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
     const [headerFilters, setHeaderFilters] = useState('');
-   
+
     const {
         userAccess,
         List,
-        
+
         pageField,
     } = useSelector((state) => ({
         List: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-     
+
     }));
 
 
@@ -81,12 +81,12 @@ const SapLedger = (props) => {
         {
             text: "Debit Amount",
             dataField: "Debit_Amount",
-           
+
         },
         {
             text: "	Credit Amount",
             dataField: "Credit_Amount",
-        
+
         },
         {
             text: "	ItemText",
@@ -102,6 +102,22 @@ const SapLedger = (props) => {
 
 
 
+    const rowStyle = (row, rowIndex) => {
+        debugger
+        const style = {};
+        if (row.id  >0) {
+      
+        } else {
+            style.backgroundColor = 'rgb(239, 239, 239)';
+            style.fontWeight = 'bold';
+            style.fontSize = '4';
+
+        }
+
+       
+
+        return style;
+    };
 
 
 
@@ -148,7 +164,7 @@ const SapLedger = (props) => {
         });
         dispatch(SapLedger_Go_Button_API_Success([]))
         dispatch(SapLedger_Go_Button_API(jsonBody));
-        
+
 
     }
 
@@ -220,13 +236,13 @@ const SapLedger = (props) => {
                                 <Row>
                                     <Col sm={9}>
                                         <Label className="col-sm-6 mt-1 p-1 text-black"
-                                            style={{ width: "270px" ,background:"#efefef", borderRadius:"5px" }}>Opening Balance :{Data.OpeingBal}
+                                            style={{ width: "270px", background: "#efefef", borderRadius: "5px" }}>Opening Balance :{Data.OpeingBal}
                                         </Label>
                                     </Col>
                                     <Col sm={3}>
 
                                         <Label className="col-sm-6 mt-1 p-1 text-black"
-                                            style={{width: "257px" ,background:"#efefef", borderRadius:"5px" }}>Closing Balance :{Data.ClosingBal}
+                                            style={{ width: "257px", background: "#efefef", borderRadius: "5px" }}>Closing Balance :{Data.ClosingBal}
                                         </Label>
                                     </Col>
 
@@ -237,6 +253,7 @@ const SapLedger = (props) => {
                                         keyField={"id"}
                                         bordered={true}
                                         striped={false}
+                                        rowStyle={rowStyle}
                                         // selectRow={selectAllCheck(rowSelected())}
                                         noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                         classes={"table align-middle table-nowrap table-hover"}
