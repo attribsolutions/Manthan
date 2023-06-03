@@ -227,6 +227,9 @@ export const GENERAL_MASTER_SUB_TYPE = '/GeneralMasterSubType'
 export const BANK = '/Bank'
 export const BANK_LIST_FILTER = '/BankFilter'
 
+export const CITY = '/Cities'
+export const DISTRICT = '/GetCityOnDistrict'
+
 // BankAssign
 export const BANK_ASSIGN = '/PartyBankSave'
 export const PARTY_BANK_FILTER = '/PartyBanksFilter'

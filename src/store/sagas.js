@@ -56,6 +56,7 @@ import BankAssignSaga from "./Accounting/BankAssignRedux/saga"
 import ImportExcelFieldMap_Saga from "./Administrator/ImportExportFieldMapRedux/saga"
 import ImportFieldAdd_Saga from "./Administrator/ImportFieldAddRedux/saga"
 import ImportMasterMap_Saga from "./Administrator/ImportMasterMapRedux/saga"
+import CitySaga from "./Administrator/CityRedux/saga"
 
 
 //    *********************** Purchase ***********************
@@ -155,9 +156,9 @@ export default function* rootSaga() {
     fork(CreditDebitSaga),
     fork(DashboardSaga),
     fork(ChangePasswordSaga),
-    fork(SapLedgerSaga)
+    fork(SapLedgerSaga),
+    fork(CitySaga),
 
     
-
   ])
 }

@@ -103,6 +103,9 @@ export const SUBGROUP_LIST = "/SubGroupList"
 export const GENERAL = "/GeneralMaster"
 export const GENERAL_LIST = "/GeneralList"
 
+export const CITY = "/CityMaster"
+export const CITY_LIST = "/CityList"
+
 // export const CREDITLIMIT = "/CreditLimit"
 // export const CREDITLIMIT_LIST = "/CreditLimitList"
 
