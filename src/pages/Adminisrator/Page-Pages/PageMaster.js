@@ -466,6 +466,7 @@ const PageMaster = (props) => {
       dispatch(updateHPages(jsonBody, EditData.id));
 
     } else {
+      debugger
       dispatch(saveHPages(jsonBody));
 
     }

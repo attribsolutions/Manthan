@@ -111,64 +111,77 @@ function* DeleteInvoiceGenFunc({ config }) {
 
 // GO-Botton SO-invoice Add Page API
 export function invoice_GoButton_dataConversion_Func(response) {
-  
+
   try {
-    let con_Qty = 0
-    let tAmount = 0;
-    let convResp = response.OrderItemDetails.map(i1 => {
 
-      i1["OrderQty"] = i1.Quantity
-      i1["UnitDrop"] = { value: i1.Unit, label: i1.UnitName, ConversionUnit: '1', Unitlabel: i1.UnitName }
-      i1["InpStockQtyTotal"] = `${Number(i1.Quantity) * Number(i1.ConversionUnit)}`
-      i1["StockTotal"] = 0
-      i1["StockUnit"] = '';
-      i1["StockInValid"] = false;
-      i1["StockInvalidMsg"] = '';
+    let convResp = response.OrderItemDetails.map(index1 => {
 
-
-      let con_Qty = Number(i1.Quantity) * Number(i1.ConversionUnit);
+      const defaultunit = index1.UnitDetails.find(findEle => (findEle.UnitID === index1.Unit))
       let tAmount = 0;
-      i1.StockDetails = i1.StockDetails.map(i2 => {
 
-        i1.StockUnit = i2.UnitName;
-        i1.StockTotal = (Number(i2.BaseUnitQuantity) + Number(i1.StockTotal));
-        let qty = Number(i2.BaseUnitQuantity);
+      index1["OrderQty"] = index1.Quantity
+      index1["default_UnitDropvalue"] = {
+        "value": index1.Unit,
+        "label": index1.UnitName,
+        "ConversionUnit": '1',
+        "Unitlabel": index1.UnitName,
+        "BaseUnitQuantity": defaultunit.BaseUnitQuantity,
+        "BaseUnitQuantityNoUnit": defaultunit.BaseUnitQuantity,
+      }
+      index1["InpStockQtyTotal"] = `${Number(index1.Quantity) * Number(index1.ConversionUnit)}`
+      index1["ItemTotalStock"] = 0
+      index1["StockInValid"] = false;
+      index1["StockInvalidMsg"] = '';
 
-        if ((con_Qty > qty) && !(con_Qty === 0)) {
-          con_Qty = con_Qty - qty
-          i2.Qty = qty.toFixed(3)
-        } else if ((con_Qty <= qty) && (con_Qty > 0)) {
-          i2.Qty = con_Qty.toFixed(3)
-          con_Qty = 0
+      index1.StockDetails = index1.StockDetails.map(index2 => {
+
+        index2['initialRate'] = index2.Rate;
+
+        index2.Rate = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
+        index2.ActualQuantity = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity).toFixed(2);
+        index1.Quantity = Number(index1.Quantity).toFixed(2);
+
+        index1.ItemTotalStock = (Number(index2.ActualQuantity) + Number(index1.ItemTotalStock));
+
+        let orderQty = Number(index1.Quantity);
+
+        let stockQty = Number(index2.ActualQuantity);
+
+        if ((orderQty > stockQty) && !(orderQty === 0)) {
+          orderQty = orderQty - stockQty
+          index2.Qty = stockQty.toFixed(2)
+        } else if ((orderQty <= stockQty) && (orderQty > 0)) {
+          index2.Qty = orderQty.toFixed(2)
+          orderQty = 0
         }
         else {
-          i2.Qty = 0;
+          index2.Qty = 0;
         }
-        if (i2.Qty > 0) {
-          const calculate = discountCalculate(i2, i1)
+        if (index2.Qty > 0) {
+          const calculate = discountCalculate(index2, index1)
           tAmount = tAmount + Number(calculate.tAmount)
         }
-        return i2
+        return index2
       });
 
-      let t1 = Number(i1.StockTotal);
-      let t2 = Number(i1.Quantity) * i1.ConversionUnit;
+      let t1 = Number(index1.ItemTotalStock);
+      let t2 = Number(index1.Quantity);
       let tA4 = tAmount.toFixed(2);
 
-      i1.tAmount = tA4;
+      index1.tAmount = tA4;
 
       if (t1 < t2) {
-        i1.StockInValid = true
-        let diffrence = Math.abs(i1.Quantity * i1.ConversionUnit - i1.StockTotal);
-        var msg1 = `Short Stock Quantity ${i1.Quantity} ${i1.UnitName}`
-        var msg2 = `Short Stock Quantity ${diffrence} ${i1.StockUnit}`
-        i1.StockInvalidMsg = (i1.StockTotal === 0) ? msg1 : msg2
+        index1.StockInValid = true
+        let diffrence = Math.abs(t1 - t2);
+
+        var msg1 = `Short Stock Quantity ${index1.Quantity}`
+        var msg2 = `Short Stock Quantity ${diffrence}`
+        index1.StockInvalidMsg = (index1.ItemTotalStock === 0) ? msg1 : msg2
       };
 
 
-      return i1
+      return index1
     })
-
     response.OrderItemDetails = convResp
     return response
 
