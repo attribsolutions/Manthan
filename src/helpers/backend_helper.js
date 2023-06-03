@@ -1,5 +1,5 @@
 import axios from "axios"
-import { del, get, put, post, postForget, postRefreshToken, } from "./api_helper"
+import { del, get, put, post, postWithoutToken, postRefreshToken, } from "./api_helper"
 import { chitalebandhu_get, sapApi_post } from "./other_domain_api"
 import * as url from "./url_helper"
 
@@ -91,15 +91,15 @@ const postJwtRegister = (url, data) => {
     })
 }
 
-export const Python_FoodERP_postJwtLogin = data => post(url.FOOD_ERP_POST_JWT_LOGIN, data)
+export const Python_FoodERP_postJwtLogin = data => postWithoutToken(url.FOOD_ERP_POST_JWT_LOGIN, data)
 export const getUserDetails_afterLogin_ApiCall = data => post(url.FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN, data)
 export const divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall = (id1) => get(`${url.DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE}/${id1}`)
 export const ChangePassword_API = ({ jsonBody, btnId }) => post(url.CHANGEPASSWORD_API, jsonBody, btnId)// post api
 
 
 // postForgetPwd
-export const Python_FoodERP_postJwtForgetPwd_Verify_OTP = data => postForget(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP, data)
-export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => postForget(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP, data)
+export const Python_FoodERP_postJwtForgetPwd_Verify_OTP = data => postWithoutToken(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP, data)
+export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => postWithoutToken(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP, data)
 
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
