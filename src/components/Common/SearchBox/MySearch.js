@@ -55,6 +55,7 @@ export const MySearch = () => {
                     onChange={handleClick}
                     name="myCountry"
                     autoComplete="off"
+                    autoFocus={true}
                 />
                 <button className="btn btn-primary"
                     type="butten">

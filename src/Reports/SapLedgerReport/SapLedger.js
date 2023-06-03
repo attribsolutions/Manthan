@@ -12,17 +12,13 @@ import { commonPageFieldSuccess } from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useHistory } from "react-router-dom";
-import { url, mode, pageId } from "../../routes/index"
-import { LoadingSheet_GoBtn_API_Succcess } from "../../store/Sales/LoadingSheetRedux/action";
+import { mode, pageId } from "../../routes/index"
+
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { makeBtnCss } from "../../components/Common/ListActionsButtons";
-import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../store/Accounting/Receipt/action";
 
-import DynamicColumnHook, { selectAllCheck } from "../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../CustomValidateForm";
 import { commonPageField } from "../../store/actions";
 import { SapLedger_Go_Button_API, SapLedger_Go_Button_API_Success } from "../../store/Report/SapLedger Redux/action";
@@ -40,7 +36,6 @@ const SapLedger = (props) => {
     const {
         userAccess,
         List,
-
         pageField,
     } = useSelector((state) => ({
         List: state.SapLedgerReducer.goBtnSapLedger,
@@ -48,7 +43,6 @@ const SapLedger = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
 
     }));
-
 
     const { data = [], Data = [] } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
@@ -95,32 +89,18 @@ const SapLedger = (props) => {
 
     ];
 
-
-
-
-
-
-
-
     const rowStyle = (row, rowIndex) => {
         debugger
         const style = {};
-        if (row.id  >0) {
-      
+        if (row.id > 0) {
+
         } else {
             style.backgroundColor = 'rgb(239, 239, 239)';
             style.fontWeight = 'bold';
             style.fontSize = '4';
-
         }
-
-       
-
         return style;
     };
-
-
-
 
     // const [tableColumns] = DynamicColumnHook({ pageField })
 
@@ -164,8 +144,6 @@ const SapLedger = (props) => {
         });
         dispatch(SapLedger_Go_Button_API_Success([]))
         dispatch(SapLedger_Go_Button_API(jsonBody));
-
-
     }
 
     function fromdateOnchange(e, date) {
