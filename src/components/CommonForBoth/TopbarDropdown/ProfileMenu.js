@@ -40,7 +40,7 @@ const ProfileMenu = props => {
     password: "",
     newpassword: ""
   }
-  
+
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
 
@@ -144,9 +144,10 @@ const ProfileMenu = props => {
 
 
   const SaveHandler = async (event) => {
+
     event.preventDefault();
 
-    if ((!(newPwd.length > 3) || !(newPwd.length <= 8)) || (!(currentPwd.length > 3) || !(currentPwd.length <= 8))) {
+    if (((newPwd.length < 3) || (newPwd.length < 8)) || ((currentPwd.length < 3) || (currentPwd.length < 8))) {
       return
     }
 

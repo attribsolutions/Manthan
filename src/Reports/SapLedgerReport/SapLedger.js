@@ -146,7 +146,10 @@ const SapLedger = (props) => {
             ToDate: todate,
             SAPCode: partyDivisiondata.SAPPartyCode
         });
+        dispatch(SapLedger_Go_Button_API_Success([]))
         dispatch(SapLedger_Go_Button_API(jsonBody));
+        
+
     }
 
     function fromdateOnchange(e, date) {

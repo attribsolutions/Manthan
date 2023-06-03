@@ -11,10 +11,12 @@ import {
   GET_SUPER_ADMIN_API_SUCCESS,
   LOGOUT_REST,
   RESET_ROLE_ACCESS_ACTION,
-  ROLE_ACCESS_API_CALL_ERROR
+  ROLE_ACCESS_API_CALL_ERROR,
+  API_ERROR_SUCCESS
 } from "./actionTypes"
 
 const initialState = {
+
   loginError: null,
   loading: false,
   loginSuccess: { Status: false },
@@ -45,6 +47,10 @@ const Login = (state = initialState, action) => {
       break
     case API_ERROR:
       state = { ...state, loginError: action.payload, loading: false }
+      break
+
+    case API_ERROR_SUCCESS:
+      state = { ...state, loginError: null, loading: false }
       break
 
     case GET_USER_DETAILS_AFTER_LOGIN_SUCCESS:

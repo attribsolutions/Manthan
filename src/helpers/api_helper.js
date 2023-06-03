@@ -88,7 +88,7 @@ export function del(url, btnId) {
 }
 
 // for forget password
-export function postForget(url, body,) {
+export function postWithoutToken(url, body,) {
   return axiosApi
     .post(url, body, {
       headers: {
@@ -98,10 +98,17 @@ export function postForget(url, body,) {
       }
     })
     .then(response => {
-      return CheckAPIResponse({ method: "postForget", body, url, response });
+      console.log(`${url} Body :`,body )
+      console.log(`${url} response :`,response )
+      return response.data
+      // return CheckAPIResponse({ method: "postWithoutToken", body, url, response });
     })
     .catch(error => {
-      return CheckAPIResponse({ method: "postForget", url, error });
+      console.log(`${url} Body :`,body )
+      console.log(`${url} error :`, error )
+      return Promise.reject(error)
+
+      // return CheckAPIResponse({ method: "postWithoutToken", url, error });
     });
 
 }

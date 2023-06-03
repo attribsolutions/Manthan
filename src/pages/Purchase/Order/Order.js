@@ -36,6 +36,7 @@ import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 
 
 let editVal = {}
+let initial_BredcrumbMsg="Order Amount :0.000"
 
 function initialState(history) {
 
@@ -180,7 +181,7 @@ const Order = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount.toFixed(3)}`))
                 setorderdate(hasEditVal.OrderDate)
 
                 if (subPageMode === url.ORDER_4) {
@@ -222,7 +223,7 @@ const Order = (props) => {
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
         } else {
-            dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :0`))
+            dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
         }
     }, []);
 
@@ -430,7 +431,7 @@ const Order = (props) => {
                         row["po_Unit_id"] = i.UnitID;
                         row["UnitName"] = i.UnitName;
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
-                        row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
+                        row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(3);
                     }
 
                 } else {
@@ -467,7 +468,7 @@ const Order = (props) => {
                             row["UnitName"] = e.label
                             row["BaseUnitQuantity"] = e.BaseUnitQuantity;
 
-                            row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
+                            row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(3);
                             itemWise_CalculationFunc(row)
                             document.getElementById(`Rate-${key}`).innerText = row.Rate
 
@@ -580,8 +581,8 @@ const Order = (props) => {
             var amt = parseFloat(ind.Amount)
             sum = sum + amt
         });
-        setOrderAmount(sum.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+        setOrderAmount(sum.toFixed(3))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(3)}`))
     };
 
     const goButtonHandler = async () => {
@@ -597,7 +598,7 @@ const Order = (props) => {
         let btnId = `go-btn${subPageMode}`
         _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
+        dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
 
 
         let PO_Body = {
@@ -771,14 +772,14 @@ const Order = (props) => {
                     MRPValue: i.MRPValue,
                     Rate: i.Rate,
                     Unit: i.Unit_id,
-                    BaseUnitQuantity: (Number(i.BaseUnitQuantity) * Number(i.Quantity)).toFixed(2),
+                    BaseUnitQuantity: (Number(i.BaseUnitQuantity) * Number(i.Quantity)).toFixed(3),
                     Margin: "",
-                    BasicAmount: basicAmt.toFixed(2),
-                    GSTAmount: cgstAmt.toFixed(2),
+                    BasicAmount: basicAmt.toFixed(3),
+                    GSTAmount: cgstAmt.toFixed(3),
                     GST: i.GST_id,
                     GSTPercentage: i.GSTPercentage,
-                    CGST: (cgstAmt / 2).toFixed(2),
-                    SGST: (cgstAmt / 2).toFixed(2),
+                    CGST: (cgstAmt / 2).toFixed(3),
+                    SGST: (cgstAmt / 2).toFixed(3),
                     IGST: 0,
                     CGSTPercentage: (i.GSTPercentage / 2),
                     SGSTPercentage: (i.GSTPercentage / 2),

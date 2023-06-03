@@ -1,10 +1,8 @@
-
-
 import PropTypes from "prop-types"
 import MetaTags from "react-meta-tags"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 
-import { Row, Col, Alert, Container } from "reactstrap"
+import { Row, Col, Alert, Container, Input } from "reactstrap"
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
@@ -12,9 +10,8 @@ import { useSelector, useDispatch } from "react-redux"
 import { withRouter, Link, useHistory } from "react-router-dom"
 
 // availity-reactstrap-validation
-import { AvForm, AvField, } from "availity-reactstrap-validation"
 
-import { divisionDropdownSelectSuccess, getUserDetailsAction, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
+import { apiErrorSuccess, divisionDropdownSelectSuccess, getUserDetailsAction, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
 
 import logo from "../../assets/images/cbm_logo.png"
 
@@ -28,6 +25,12 @@ const Login = props => {
 
   const dispatch = useDispatch()
   const history = useHistory()
+
+  const [currentUserName, setcurrentUserName] = useState("");
+  const [Password, setPassword] = useState("");
+
+  const [currentPwdError, setCurrentPwdError] = useState("");
+
 
   const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess } = useSelector(state => ({
     loginError: state.Login.loginError,
@@ -54,6 +57,7 @@ const Login = props => {
 
 
   useEffect(() => {
+
 
     try {
       if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
@@ -85,14 +89,14 @@ const Login = props => {
       localStorage.setItem("roleId2", JSON.stringify(value))
 
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
-
-      // history.push("/Dashboard")
     }
 
   }, [divisionDropdown_redux])
 
+
+
   useEffect(() => {
-   
+
     let dashboardFound = userAccess.find((i) => {
       return i.ModuleName === "Dashboard"
     })
@@ -116,14 +120,30 @@ const Login = props => {
       }
     }
 
-
   }, [userAccess])
 
-
-  const handleValidSubmit = (event, values) => {
-
-    dispatch(loginUser(values, props.history))
+  const currentUserOnchange = (e) => {
+    setcurrentUserName(e.target.value)
+    dispatch(apiErrorSuccess(null))
   }
+
+  const PasswordOnchange = (e) => {
+    setPassword(e.target.value)
+    dispatch(apiErrorSuccess(null))
+
+  }
+
+
+  const SaveHandler = async (event) => {
+    debugger
+    event.preventDefault();
+    const values = {
+      UserName: currentUserName,
+      Password: Password
+    }
+    dispatch(loginUser(values, props.history))
+
+  };
 
   return (
     <React.Fragment>
@@ -155,56 +175,58 @@ const Login = props => {
                           {loginError}
                         </Alert>
                       ) : null}
-                      <AvForm
-                        className="custom-form mt-4 pt-2"
-                        onValidSubmit={(e, v) => {
-                          handleValidSubmit(e, v)
-                        }}
-                      >
+
+
+                      <div className="mb-3">
+                        <div className="d-flex align-items-start">
+                          <div className="flex-grow-1">
+                            <label className="form-label">User Name</label>
+                          </div>
+                        </div>
 
                         <div className="mb-3">
-                          <AvField
+                          <Input
                             name="UserName"
-                            label="UserName"
-                            className="form-control"
-                            placeholder="Enter User Name"
                             type="text"
+                            value={currentUserName}
+                            autocomplete="off"
+                            autoFocus={true}
                             required
+                            onChange={currentUserOnchange}
+                            placeholder="Enter User Name"
                           />
-
                         </div>
-                        <div className="mb-3">
-                          <div className="d-flex align-items-start">
-                            <div className="flex-grow-1">
-                              <label className="form-label">Password</label>
-                            </div>
-                          </div>
+                      </div>
 
-                          <div className="mb-3">
-                            <AvField
-                              name="Password"
-
-                              type="password"
-                              className="form-control"
-                              required
-                              placeholder="Enter Password"
-                            />
+                      <div className="mb-3">
+                        <div className="d-flex align-items-start">
+                          <div className="flex-grow-1">
+                            <label className="form-label">Password</label>
                           </div>
                         </div>
-                        <div className="row mb-4">
 
-                          <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
-
-                        </div>
                         <div className="mb-3">
-                          <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit">Login</button>
+                          <Input
+                            name="Password"
+                            defaultValue={Password}
+                            autocomplete="off"
+                            autoFocus={true}
+                            onChange={PasswordOnchange}
+                            type="password"
+                            className="form-control"
+                            required
+                            placeholder="Enter Password"
+                          />
                         </div>
-                      </AvForm>
+                      </div>
+                      <div className="row mb-4">
 
-                      {/* <div className="mt-4 mt-md-5 text-center">
-                        <p className="mb-0 text-primary fw-semibold" onClick={() => { createSuperAdminHandler() }}> Create SuperAdmin </p>
-                      </div> */}
+                        <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
 
+                      </div>
+                      <div className="mb-3">
+                        <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit" onClick={SaveHandler}  >Login</button>
+                      </div>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
                       <p className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>

@@ -53,9 +53,9 @@ const ForgetPasswordPage = props => {
 
 
 
-  debugger
+  
   useEffect(() => {
-    debugger
+    
     if (sendPasswordMsg_reducx) {
       setSendPasswordMsg(sendPasswordMsg_reducx)
       setSendPasswordError(null)
@@ -75,7 +75,7 @@ const ForgetPasswordPage = props => {
   }, [sendPasswordMsg_reducx, sendPasswordError_reducx])
 
   useEffect(() => {
-    debugger
+    
     if (sendOTPSuccessMsg_redux) {
       setSendOTPSuccessMsg(sendOTPSuccessMsg_redux)
       setSendOtpMegError(null)
@@ -92,7 +92,7 @@ const ForgetPasswordPage = props => {
   }, [sendOTPSuccessMsg_redux, sendOtpMegError_reducx])
 
   function handleValidSubmit(event, values) {
-    debugger
+    
   event.preventDefault();
     var jsonBody = JSON.stringify({
       Email: values.email,
@@ -102,7 +102,7 @@ const ForgetPasswordPage = props => {
   }
 
   function handleValidSubmit1(event, values) {
-    debugger
+    
     event.preventDefault();
     var paswd = values.password1
     var pawdcn = values.passwordcon
@@ -115,7 +115,7 @@ const ForgetPasswordPage = props => {
     else {
       // setPaswErr("form-control is-valid mb-2")
       setPaswErr(false)
-debugger
+
       var jsonBody = JSON.stringify({
         LoginName: values.LoginName,
         OTP: values.OTP,
