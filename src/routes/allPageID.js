@@ -122,8 +122,8 @@ export const MANAGEMENT_PARTIES = 172
 export const BANK = 175
 export const BANK_LIST = 176
 
-export const CITY = 201
-export const CITY_LIST = 202
+export const CITY = 200
+
 
 export const BANK_ASSIGN = 182
 
