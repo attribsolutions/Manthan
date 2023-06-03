@@ -5,16 +5,6 @@ import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { sessionAliveNewToken } from "../../store/auth/sessionAlive/actions"
 
-
-let count1 = 0
-let count2 = 0
-let count3 = 0
-let count4 = 0
-let count5 = 0
-let count6 = 0
-let count7 = 0
-
-
 let intervalId
 
 const Authmiddleware = ({
@@ -33,40 +23,45 @@ const Authmiddleware = ({
 
     if (isAuthProtected) {
 
-      //console.log("inside useEffect", count2)//________________________
-      ++count2                             //________________________
 
       let timer
 
       const hasNoActivity = () => {
 
-        // console.log(" hasNoActivity", count3) //________________________
-        // ++count3                               //________________________
+        const now = new Date().getTime();
+        const timeSinceLastActivity = now - sessionStorage.getItem('keepSessionAlive2');
+        const minutesSinceLastActivity = Math.floor((timeSinceLastActivity / 1000) / 60);
+      
+        if (minutesSinceLastActivity >= 29) {
+          //console.log(" hasNoActivity===minutesSinceLastActivity==lesstahn 1", new Date())  //##########################
 
-        clearInterval(intervalId);
-        clearInterval(timer);
-        sessionStorage.clear()
-        setIsLogOut(true)
-        history.push({ pathname: '/logout' })
-        window.location.reload(true)
+          clearInterval(intervalId);
+          clearInterval(timer);
+          sessionStorage.clear()
+          localStorage.clear()
+          setIsLogOut(true)
+          history.push({ pathname: '/logout' })
+          window.location.reload(true)
+        } else {
+          //console.log(" hasNoActivity===reset==less", new Date()) //##########################
+          resetTimer();
+        }
+
       }
 
       const startTimer = () => {
-
-        //console.log(" startTimer", count4) //________________________
-        // ++count4                              //________________________
-
+        //console.log(" startTimer", new Date()) //##########################
         timer = setInterval(hasNoActivity, 30 * 60 * 1000);
       };
 
       const resetTimer = () => {
-        //console.log(" resetTimer", count5) //________________________
-        ++count5
+        //console.log(" resetTimer", new Date())  //##########################
+        sessionStorage.setItem('keepSessionAlive2', new Date().getTime())
         clearInterval(timer);
         startTimer();
       };
 
-      let hasActivity = sessionStorage.getItem('lastActivityTime', new Date().getTime())
+      let hasActivity = sessionStorage.getItem('lastActivityTime', new Date())
       !hasActivity && keepSessionAlive(dispatch);
       localStorage.getItem("token") && startTimer()
 
@@ -76,8 +71,8 @@ const Authmiddleware = ({
 
 
       return () => {
-        //console.log(" return", count6) //________________________
-        // ++count6
+        //console.log(" return autologout will mount", new Date())  //##########################
+
         clearInterval(timer);
         document.removeEventListener('keydown', resetTimer);
         window.removeEventListener('mousemove', resetTimer);
@@ -123,18 +118,20 @@ export default Authmiddleware;
 
 
 const updateTokan = (dispatch) => {
-  // console.log(" keepSessionAlive  api call", count7)
   let istoken = localStorage.getItem("refreshToken")
   if (istoken) {
+    //console.log(" keepSessionAlive  api call", new Date()) //##########################
+
     let jsonBody = { "refresh": `${istoken}` }
     dispatch(sessionAliveNewToken(jsonBody))
   }
 }
 
 const keepSessionAlive = (dispatch) => {
-  console.log(" keepSessionAlive", count7) //________________________
-  ++count7
+  //console.log(" keepSessionAlive", new Date()) //##########################
 
-  sessionStorage.setItem('keepSessionAlive', new Date().getTime())
+  sessionStorage.setItem('keepSessionAlive', new Date())
   intervalId = setInterval(() => updateTokan(dispatch), 28 * 60 * 1000)
 };
+
+
