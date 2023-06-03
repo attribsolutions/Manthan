@@ -41,7 +41,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import {  saveCityMaster_Success } from "../../../store/Administrator/CityRedux/action";
+import {  saveCityMaster, saveCityMaster_Success } from "../../../store/Administrator/CityRedux/action";
 import { getDistrictOnState, getDistrictOnStateSuccess } from "../../../store/Administrator/PartyRedux/action";
 
 
@@ -237,7 +237,7 @@ const CityMaster = (props) => {
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
                 });
-                dispatch(saveCityMaster_Success({ jsonBody, btnId }));
+                 dispatch(saveCityMaster({ jsonBody, btnId }))
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
