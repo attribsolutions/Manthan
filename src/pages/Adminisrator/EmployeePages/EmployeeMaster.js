@@ -617,7 +617,7 @@ const AddEmployee = (props) => {
                             value={values.CityName}
                             isSearchable={true}
                             classNamePrefix="dropdown"
-                            options={City_DropdownOptions}
+                            // options={City_DropdownOptions}
                             onChange={(hasSelect, evn) => {
                               onChangeSelect({ hasSelect, evn, state, setState, })
                               State_Dropdown_Handler(hasSelect)
