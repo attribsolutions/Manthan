@@ -45,10 +45,10 @@ function* State_saga() { // State  dropdown api
   } catch (error) { CommonConsole(error) }
 }
 
-function* City_saga() { // City  dropdown api
-  const DistrictId=1;
+function* City_saga(id) { // City  dropdown api
   try {
-    const response = yield call(getCity_For_Dropdown, DistrictId);
+    
+    const response = yield call(getCity_For_Dropdown, id.id);
     yield put(getCityOnDistrictSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
