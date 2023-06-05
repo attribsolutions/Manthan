@@ -16,7 +16,7 @@ import {
 import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import { getCityOnDistrict, getState } from "../../../../store/Administrator/EmployeeRedux/action"
+import { getCityOnDistrict, getCityOnDistrictSuccess, getState } from "../../../../store/Administrator/EmployeeRedux/action"
 import {
     editPartyIDSuccess,
     getDistrictOnState,
@@ -202,6 +202,7 @@ const PartyMaster = (props) => {
                     setPriceList(editPriceList);
 
                     dispatch(getDistrictOnState(hasEditVal.State.id))
+                    dispatch(getCityOnDistrict(hasEditVal.District.id))
                     dispatch(priceListByPartyAction(hasEditVal.PartyType.id,))
                     dispatch(editPartyIDSuccess({ Status: false }));
                 }
@@ -212,6 +213,7 @@ const PartyMaster = (props) => {
     useLayoutEffect(() => {
 
         dispatch(getDistrictOnStateSuccess([]))//clear district privious options
+        dispatch(getCityOnDistrictSuccess([]))
         dispatch(commonPageFieldSuccess(null));//clear privious PageField
         dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
         dispatch(commonPageField(page_id))
