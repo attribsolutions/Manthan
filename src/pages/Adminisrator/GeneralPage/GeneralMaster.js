@@ -282,6 +282,7 @@ const GeneralMaster = (props) => {
                                                                         <Select
                                                                             name="TypeName"
                                                                             value={values.TypeName}
+                                                                            autoFocus={true}
                                                                             isSearchable={true}
                                                                             isDisabled={(pageMode === "edit") ? true : false}
                                                                             className="react-dropdown"
@@ -307,7 +308,6 @@ const GeneralMaster = (props) => {
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
-                                                                autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(Breadcrumb_inputName(event.target.value))

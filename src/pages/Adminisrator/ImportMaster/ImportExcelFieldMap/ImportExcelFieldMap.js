@@ -302,7 +302,7 @@ const ImportExcelFieldMap = (props) => {
                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                             {(goButtonItem.length > 0) && <SaveButton pageMode={pageMode}
                                 userAcc={userPageAccessState}
-                                module={"LoadingSheet"}
+                                module={"ImportExcelFieldMap"}
                             />}
                         </Col>
                     </FormGroup >

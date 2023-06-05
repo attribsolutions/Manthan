@@ -281,7 +281,8 @@ const VehicleMaster = (props) => {
                                                             id="VehicleDropDown "
                                                             name="VehicleTypeName"
                                                             value={values.VehicleTypeName}
-                                                            isSearchable={false}
+                                                            isSearchable={true}
+                                                            autoFocus={true}
                                                             className="react-dropdown"
                                                             classNamePrefix="dropdown"
                                                             options={VehicleType_DropdownOptions}

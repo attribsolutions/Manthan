@@ -16,7 +16,7 @@ import {
 import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import { getState } from "../../../../store/Administrator/EmployeeRedux/action"
+import { getCityOnDistrict, getState } from "../../../../store/Administrator/EmployeeRedux/action"
 import {
     editPartyIDSuccess,
     getDistrictOnState,
@@ -111,6 +111,7 @@ const PartyMaster = (props) => {
 
 
     useEffect(() => {
+        debugger
         try {
             if ((hasShowloction || hasShowModal)) {
 
@@ -158,6 +159,10 @@ const PartyMaster = (props) => {
                         District: {
                             label: hasEditVal.District.Name,
                             value: hasEditVal.District.id,
+                        },
+                        City: {
+                            label: hasEditVal.City.Name,
+                            value: hasEditVal.City.id,
                         },
                         GSTIN: hasEditVal.GSTIN,
                         MkUpMkDn: hasEditVal.MkUpMkDn,
@@ -323,9 +328,10 @@ const PartyMaster = (props) => {
                 "AlternateContactNo": baseValue.AlternateContactNo,
                 "State": baseValue.State.value,
                 "District": baseValue.District.value,
+                "City":baseValue.CityName.value,
                 "SAPPartyCode": baseValue.SAPPartyCode,
                 "Taluka": 0,
-                "City": 0,
+                // "City": 0,
                 "GSTIN": baseValue.GSTIN,
                 "MkUpMkDn": baseValue.MkUpMkDn,
                 "isActive": baseValue.IsActive,

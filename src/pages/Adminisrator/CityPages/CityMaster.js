@@ -274,6 +274,7 @@ const CityMaster = (props) => {
                                                             value={values.StateName}
                                                             isSearchable={true}
                                                             classNamePrefix="dropdown"
+                                                            autoFocus={true}
                                                             options={State_DropdownOptions}
                                                             onChange={(hasSelect, evn) => {
                                                                 onChangeSelect({ hasSelect, evn, state, setState, })
@@ -321,7 +322,6 @@ const CityMaster = (props) => {
                                                         className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                         placeholder="Please Enter CityName"
                                                         autoComplete="off"
-                                                        autoFocus={true}
                                                         onChange={(event) => {
                                                             onChangeText({ event, state, setState })
                                                             dispatch(Breadcrumb_inputName(event.target.value))

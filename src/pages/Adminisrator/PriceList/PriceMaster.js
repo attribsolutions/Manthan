@@ -524,6 +524,7 @@ const PriceMaster = (props) => {
                                                                 options={PartyTypeDropdown_Options}
                                                                 className="rounded-bottom"
                                                                 placeholder="select"
+                                                                autoFocus={true}
                                                                 onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
                                                                 classNamePrefix="select2-selection"
                                                             />

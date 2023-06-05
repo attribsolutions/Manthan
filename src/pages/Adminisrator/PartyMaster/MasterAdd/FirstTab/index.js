@@ -12,6 +12,7 @@ import * as url from "../../../../../routes/route_url";
 import AddMaster from "../../../EmployeePages/Drodown";
 import * as pageId from "../../../../../routes/allPageID"
 import { loginPartyID } from '../../../../../components/Common/CommonFunction'
+import { getCityOnDistrict } from '../../../../../store/Administrator/EmployeeRedux/action'
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
@@ -29,6 +30,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         State: "",
         District: "",
         GSTIN: "",
+        CityName: "",
         MkUpMkDn: false,
         isActive: true,
 
@@ -64,10 +66,12 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         priceListByPartyType,
         SupplierRedux,
         pageField,
+        CityOnDistrict,
         userAccess
     } = useSelector((state) => ({
         stateRedux: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
+        CityOnDistrict: state.EmployeesReducer.City,
         PartyTypes: state.PartyTypeReducer.ListData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         SupplierRedux: state.CommonAPI_Reducer.SSDD_List,
@@ -106,6 +110,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             dispatch(priceListByPartyAction(PartyTypes[0].id))
         }
     }, [PartyTypes])
+
+  
 
     useEffect(() => {
         let retailerParty = PartyTypes.find(i => (i.IsRetailer))
@@ -157,6 +163,12 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         label: index.Name
     }));
 
+    const City_DropdownOptions = CityOnDistrict.map((index) => ({
+        value: index.id,
+        label: index.Name
+    }));
+
+
     function handllerState(hasSelect, evn,) {
         onChangeSelect({ hasSelect, evn, state, setState })
         dispatch(getDistrictOnState(hasSelect.value))
@@ -167,6 +179,16 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         onChangeSelect({ hasSelect, evn, state, setState })
         setPriceListSelect({ label: '' })
         dispatch(priceListByPartyAction(hasSelect.value))
+    }
+
+    function District_Dropdown_Handler(e) {
+        dispatch(getCityOnDistrict(e.value))
+        setState((i) => {
+            const a = { ...i }
+            a.values.Name = "";
+            a.hasValid.Name.valid = false
+            return a
+        })
     }
 
     const priceListOnClick = function () {
@@ -200,6 +222,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                         placeholder="Please Enter Name"
                                         autoComplete='off'
+                                        autoFocus={true}
                                         onChange={(event) => {
                                             onChangeText({ event, state, setState })
                                             dispatch(Breadcrumb_inputName(event.target.value))
@@ -295,6 +318,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     </FormGroup>
                                 </Col>
                             }
+
                         </Row>
                     </CardBody>
                 </Card>
@@ -483,13 +507,35 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                             classNamePrefix="dropdown"
                                             options={DistrictOnStateValues}
                                             onChange={(hasSelect, evn) => {
-                                                onChangeSelect({ hasSelect, evn, state, setState })
+                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                                District_Dropdown_Handler(hasSelect)
                                             }}
                                         />
                                         {isError.District.length > 0 && (
                                             <span className="text-danger f-8"><small>{isError.District}</small></span>
                                         )}
                                     </Col>
+                                </FormGroup>
+                            </Col>
+
+                            <Col md="1"></Col>
+                            <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Label htmlFor="validationCustom01">{fieldLabel.CityName} </Label>
+                                    <Select
+                                        name="CityName"
+                                        id="CityName"
+                                        value={values.CityName}
+                                        isSearchable={true}
+                                        classNamePrefix="dropdown"
+                                        options={City_DropdownOptions}
+                                        onChange={(hasSelect, evn) => {
+                                            onChangeSelect({ hasSelect, evn, state, setState, })
+                                        }}
+                                    />
+                                    {isError.CityName.length > 0 && (
+                                        <span className="text-danger f-8"><small>{isError.CityName}</small></span>
+                                    )}
                                 </FormGroup>
                             </Col>
 
