@@ -589,6 +589,7 @@ const PageMaster = (props) => {
                                     id="txtName"
                                     value={EditData.Name}
                                     type="text"
+                                    autoFocus={true}
                                     placeholder="Please Enter Name"
                                     autoComplete="off"
                                     validate={{

@@ -460,6 +460,7 @@ const MarginMaster = (props) => {
                                                             options={PriceList_DropdownOptions}
                                                             isDisabled={pageMode === mode.edit ? true : false}
                                                             isSearchable={true}
+                                                            autoFocus={true}
                                                             placeholder="select"
                                                             onChange={(hasSelect, evn) => {
                                                                 onChangeSelect({ hasSelect, evn, state, setState, })

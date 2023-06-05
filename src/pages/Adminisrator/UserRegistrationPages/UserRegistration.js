@@ -417,6 +417,7 @@ const AddUser = (props) => {
                                     isDisabled={pageMode === mode.edit ? true : false}
                                     value={values.EmployeeName}
                                     options={EmployeeOptions}
+                                    autoFocus={true}
                                     onChange={(hasSelect, evn) => {
                                       handllerEmployeeID(hasSelect)
                                       onChangeSelect({ hasSelect, evn, state, setState, })
