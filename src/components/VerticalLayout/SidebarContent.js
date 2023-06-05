@@ -24,10 +24,13 @@ const SidebarContent = (props) => {
     RoleAccessData,
     RoleAccessUpdateData,
     roleAccesssForSidbarError = false,
+    dounloadProductMargin = false
   } = useSelector((state) => ({
     RoleAccessData: state.Login.roleAccessSidbarData,
     RoleAccessUpdateData: state.Login.RoleAccessUpdateData,
     roleAccesssForSidbarError: state.Login.roleAccesssForSidbarError,
+
+
   }));
 
 
@@ -148,6 +151,7 @@ const SidebarContent = (props) => {
   }
   return (
     <React.Fragment>
+
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled " id="side-menu">
@@ -179,6 +183,7 @@ const SidebarContent = (props) => {
                         if (index.ActualPagePath === "ProductMarginReport") {
                           return (
                             <li>
+
                               <div id='_sidbar_div_link'
                                 title={`Download ${index.Name}`}
                                 onClick={productMarginReport_Link_Onclick}>

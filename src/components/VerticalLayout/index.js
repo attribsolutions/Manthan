@@ -42,6 +42,7 @@ const Layout = props => {
     leftSidebarTypes,
     userAccess,
     pageField,
+    dounloadProductMargin = false
   } = useSelector(state => ({
     isPreloader: state.Layout.isPreloader,
     leftSideBarType: state.Layout.leftSideBarType,
@@ -52,7 +53,8 @@ const Layout = props => {
     layoutType: state.Layout.layoutType,
     leftSidebarTypes: state.Layout.leftSidebarTypes,
     userAccess: state.Login.RoleAccessUpdateData,
-    pageField: state.CommonPageFieldReducer.pageFieldList
+    pageField: state.CommonPageFieldReducer.pageFieldList,
+    dounloadProductMargin: state.SapLedgerReducer.dounloadProductMargin,
   }));
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -155,16 +157,12 @@ const Layout = props => {
 
   return (
     <React.Fragment>
-
-      {/* <div id="overlay" > */}
-      {/* <div className="cv-spinner">
-          <span className="spinner"></span>
-          <button className="btn btn-primary" type="button" disabled>
-            <span className="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
-            Loading...
-          </button>
-        </div> */}
-      {/* </div> */}
+      {dounloadProductMargin &&
+        <div id="api_spinner" >
+          <div className="api_spinner_body">
+            <span className="spinner"></span>
+          </div>
+        </div>}
 
 
 
@@ -172,6 +170,14 @@ const Layout = props => {
         <div className="pace-progress" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
         </div>
       </div>
+
+      <div className="_linkLoading_body">
+        <div className="cv-spinner">
+          <div className="_linkLoading "></div >
+        </div>
+
+      </div>
+
 
       <div id="layout-wrapper">
         <LogoutChecker />

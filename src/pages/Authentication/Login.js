@@ -22,7 +22,7 @@ import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 
 const Login = props => {
 
-
+debugger
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -133,6 +133,13 @@ const Login = props => {
 
   }
 
+//   useEffect(() => {
+//     debugger
+//  document.getElementById("loginbtn").focus()
+   
+//   }, [currentUserName,Password])
+  
+
 
   const SaveHandler = async (event) => {
     debugger
@@ -175,58 +182,58 @@ const Login = props => {
                           {loginError}
                         </Alert>
                       ) : null}
+                      <form >
+                        <div className="mb-3">
+                          <div className="d-flex align-items-start">
+                            <div className="flex-grow-1">
+                              <label className="form-label">User Name</label>
+                            </div>
+                          </div>
 
-
-                      <div className="mb-3">
-                        <div className="d-flex align-items-start">
-                          <div className="flex-grow-1">
-                            <label className="form-label">User Name</label>
+                          <div className="mb-3">
+                            <Input
+                              name="UserName"
+                              type="text"
+                              value={currentUserName}
+                              autocomplete="off"
+                              autoFocus={false}
+                              required
+                              onChange={currentUserOnchange}
+                              placeholder="Enter User Name"
+                            />
                           </div>
                         </div>
 
                         <div className="mb-3">
-                          <Input
-                            name="UserName"
-                            type="text"
-                            value={currentUserName}
-                            autocomplete="off"
-                            autoFocus={true}
-                            required
-                            onChange={currentUserOnchange}
-                            placeholder="Enter User Name"
-                          />
-                        </div>
-                      </div>
+                          <div className="d-flex align-items-start">
+                            <div className="flex-grow-1">
+                              <label className="form-label">Password</label>
+                            </div>
+                          </div>
 
-                      <div className="mb-3">
-                        <div className="d-flex align-items-start">
-                          <div className="flex-grow-1">
-                            <label className="form-label">Password</label>
+                          <div className="mb-3">
+                            <Input
+                              name="Password"
+                              defaultValue={Password}
+                              autocomplete="off"
+                              autoFocus={false}
+                              onChange={PasswordOnchange}
+                              type="password"
+                              className="form-control"
+                              required
+                              placeholder="Enter Password"
+                            />
                           </div>
                         </div>
+                        <div className="row mb-4">
 
-                        <div className="mb-3">
-                          <Input
-                            name="Password"
-                            defaultValue={Password}
-                            autocomplete="off"
-                            autoFocus={true}
-                            onChange={PasswordOnchange}
-                            type="password"
-                            className="form-control"
-                            required
-                            placeholder="Enter Password"
-                          />
+                          <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
+
                         </div>
-                      </div>
-                      <div className="row mb-4">
-
-                        <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
-
-                      </div>
-                      <div className="mb-3">
-                        <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit" onClick={SaveHandler}  >Login</button>
-                      </div>
+                        <div className="mb-3">
+                          <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit" id="loginbtn" onClick={SaveHandler}  >Login</button>
+                        </div>
+                      </form>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
                       <p className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>

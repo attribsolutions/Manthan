@@ -1,7 +1,8 @@
 
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
-  SapLedger_Go_Button_API_Success} from "./action";
+  SapLedger_Go_Button_API_Success, getExcel_Button_API_Success
+} from "./action";
 import {
   GetExcelButton, Get_Product_Margin_Report, PartyLedger_API,
 } from "../../../helpers/backend_helper";
@@ -47,11 +48,16 @@ function* goBtn_Get_API_GenFun({ filters }) {
   } catch (error) { CommonConsole(error) }
 }
 
-function* GetExcelButton_saga() {
+function* GetExcelButton_saga({ }) {
+
   try {
+
     const response = yield call(Get_Product_Margin_Report);
-    if (response.Data.StatusCode === 200) {
+
+    if (response.StatusCode === 200) {
+
       let newArray = []
+
       response.Data.forEach(i => {
         let obj = i
         i.ItemMargins.forEach(ele => {
@@ -69,8 +75,11 @@ function* GetExcelButton_saga() {
       XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin1");
       XLSX.writeFile(workbook, "Product Margin Report.xlsx");
     }
-    // yield put(getExcel_Button_API_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+    yield put(getExcel_Button_API_Success([]));
+  } catch (error) {
+    yield put(getExcel_Button_API_Success([]));
+    CommonConsole(error)
+  }
 }
 
 
