@@ -75,11 +75,14 @@ const SapLedger = (props) => {
         {
             text: "Debit Amount",
             dataField: "Debit_Amount",
+            align: "right"
 
         },
         {
             text: "	Credit Amount",
             dataField: "Credit_Amount",
+            align: "right"
+
 
         },
         {
@@ -214,13 +217,13 @@ const SapLedger = (props) => {
                                 <Row>
                                     <Col sm={9}>
                                         <Label className="col-sm-6 mt-1 p-1 text-black"
-                                            style={{ width: "270px", background: "#efefef", borderRadius: "5px" }}>Opening Balance :{Data.OpeingBal}
+                                            style={{ width: "270px", background: "#efefef", borderRadius: "5px" }}>Opening Balance:  {Data.OpeingBal}
                                         </Label>
                                     </Col>
                                     <Col sm={3}>
 
                                         <Label className="col-sm-6 mt-1 p-1 text-black"
-                                            style={{ width: "257px", background: "#efefef", borderRadius: "5px" }}>Closing Balance :{Data.ClosingBal}
+                                            style={{ width: "257px", background: "#efefef", borderRadius: "5px" }}>Closing Balance: {Data.ClosingBal}
                                         </Label>
                                     </Col>
 
