@@ -337,9 +337,7 @@ export async function CheckAPIResponse({
     const { data = "", response } = error;
     const tokenXp = response.data.code === "token_not_valid";
 
-    const err3 = data.StatusCode === 226; //reject
-    const err4 = data.StatusCode === 400; //reject
-    const err5 = data.StatusCode === 406; //reject);
+   
 
     // **********************************************************************************
     if (con6) {                             // print post and Put method body
@@ -348,10 +346,10 @@ export async function CheckAPIResponse({
     
     if (tokenXp) {
     
-     await customAlert({
-        Type: 3,
-        Message: "Token Exprire"
-      })
+    //  await customAlert({
+    //     Type: 3,
+    //     Message: "Token Exprire"
+    //   })
   
       history.push({ pathname: "/logout" })
       window.location.reload(true)
