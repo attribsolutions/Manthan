@@ -1,9 +1,10 @@
 
-import reportHederPng from "../../assets/images/reportHeder.png"
+import cbm_logo from "../../assets/images/cbm_logo.png"
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
 import { date_dmy_func } from "../../components/Common/CommonFunction";
 let initial_y = 0
+
 
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
@@ -12,13 +13,15 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 570, 16);//vertical line (Right)
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)    
 }
+
 export const pageHeder = (doc, data) => {
-    doc.addImage(reportHederPng, 'PNG', 32, 18, 75, 40)
+    doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
-    doc.text('PURCHASE ORDER', 200, 40,)
+    doc.text('PURCHASE ORDER', 180, 45,)
 }
+
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
@@ -27,61 +30,16 @@ export const reportHeder1 = (doc, data) => {
     doc.text('Customer', 280, 75)
     doc.text('Shipping Address', 440, 75)
     doc.setDrawColor(0, 0, 0);
-    // doc.text(`GSTIN:${data.Total.TotalAmount}`, 570,95)
-    doc.line(570, 63, 30, 63) //horizontal line 1 billby upper
+    doc.line(570, 63, 30, 63)  //Image below line  1
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
-    // doc.line(409, 100, 30, 100) //horizontal line 4
     doc.line(30, 789, 30, 16);//vertical left 1
+
     doc.line(570, 789, 570, 16);//vertical left 2
     doc.line(408, 160, 408, 16);//vertical right 1
     doc.line(220, 160, 220, 63);//vertical right 2
-    // doc.line(570, 815, 30, 815);//horizontal line buttom 1
-    // doc.line(570, 795, 410, 795);//horizontal line buttom Amount 2
-
 
     //Header Table Style 
-
-    // var options3 = {
-    //     margin: {
-    //         top: 45, left: 35, right: 35,// bottom:100 
-    //     },
-    //     showHead: 'always',
-    //     theme: 'plain',
-    //     styles: {
-    //         overflow: 'linebreak',
-    //         fontSize: 8,
-    //         height: 0,
-    //     },
-    //     bodyStyles: {
-    //         columnWidth: 'wrap',
-    //         textColor: [30, 30, 30],
-    //         cellPadding: 2,
-    //         fontSize: 8,
-    //         fontStyle: 'bold',
-    //         lineColor: [0, 0, 0]
-    //     },
-    //     columnStyles: {
-    //         0: {
-    //             valign: "top",
-    //             columnWidth: 185,
-    //             halign: 'left',
-    //         },
-    //         1: {
-    //             columnWidth: 189,
-    //             halign: 'left',
-    //         },
-    //         2: {
-    //             columnWidth: 160,
-    //             halign: 'left',
-    //         },
-
-    //     },
-    //     startY: 85
-
-    // };
-    // doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
-
     var BilledByStyle = {
         margin: {
             top: 45, left: 30, right: 35,
@@ -142,7 +100,6 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
         startY: 80,
-        // endY: doc.previousAutoTable.finalY+3
 
     };
     var DetailsOfTransportStyle = {
@@ -182,7 +139,6 @@ export const reportHeder1 = (doc, data) => {
     const priLength = () => {
         
         let final_y = doc.previousAutoTable.finalY
-
         if (final_y > initial_y) {
             initial_y = final_y
         }
@@ -216,6 +172,12 @@ export const reportHeder3 = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
     doc.line(570, 45, 408, 45) //horizontal line 2 billby upper
+
+
+    doc.line(408, 65, 408, 16);//vertical right 1
+
+
+
     doc.setFont(undefined, 'bold')
     doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
     var date = date_dmy_func(data.OrderDate)
@@ -272,21 +234,13 @@ export const reportFooter = (doc, data) => {
 }
 
 
-
-
-
 export const tableBody = (doc, data) => {
-
     const tableRow = table.Rows(data);
     console.log(tableRow)
     const { OrderItem = [] } = data
-
     //Body table  Css
     var options = {
-
         didParseCell: (data1) => {
-
-
             if (data1.row.cells[5].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 2
                 data1.row.cells[2].colSpan = 2
@@ -305,20 +259,10 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[4].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
-            }
-            
-
-    // OrderItem.forEach((element, key) => {
-    //     
-    //     if (data1.row.cells[1].raw === element.Comment) {
-    //         data1.row.cells[0].styles.fontSize = 8    
-    //     }
-    // })
-
-            
+            }      
         },
         margin: {
-            left: 30, right: 25,//200 bottom
+            left: 30, right: 25,top: 65
         },
         theme: 'grid',
         headerStyles: {
@@ -407,8 +351,6 @@ export const tableBody = (doc, data) => {
             }
         }
     })
-
-
 }
 
 export const pageFooter = (doc, data) => {
@@ -504,28 +446,16 @@ export const pageFooter = (doc, data) => {
     doc.setFont(undefined, 'Normal')
     doc.text(`${stringNumber}`, 65, 762,)
 
-    let finalY = doc.previousAutoTable.finalY;
-
-    if (finalY > 675) {
-        pageBorder(doc)
-        reportFooter(doc, data)
-        pageHeder(doc, data)
-        reportHeder1(doc, data)
-        reportHeder2(doc, data)
-        reportHeder3(doc, data)
-    } else {
-        pageBorder(doc)
-        reportFooter(doc, data)
-        pageHeder(doc, data)
-        reportHeder1(doc, data)
-        reportHeder2(doc, data)
-        reportHeder3(doc, data)
-    }
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
-    doc.setFontSize(8)
+    // doc.setFontSize(8)
     for (var i = 1; i <= pageCount; i++) {
+
         doc.setPage(i)
+        pageHeder(doc, data)
+        pageBorder(doc)
+        reportHeder3(doc, data)
+        doc.setFont('helvetica', 'Normal')
         doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 828, {
             align: 'center'
         })

@@ -22,7 +22,8 @@ import {
   updateEmployeeAction,
   PostEmployeeSuccess,
   editEmployeeSuccess,
-  updateEmployeeIDSuccess
+  updateEmployeeIDSuccess,
+  getCityOnDistrict
 } from "../../../store/Administrator/EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import {
@@ -77,6 +78,8 @@ const AddEmployee = (props) => {
     EmployeeTypeName: "",
     StateName: "",
     DistrictName: "",
+    PIN: "",
+    CityName: "",
     EmployeeParties: []
   }
 
@@ -93,6 +96,7 @@ const AddEmployee = (props) => {
   const {
     employeeType,
     State,
+    City,
     district,
     partyList,
     postMsg,
@@ -101,6 +105,7 @@ const AddEmployee = (props) => {
     updateMsg } = useSelector((state) => ({
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       State: state.EmployeesReducer.State,
+      City: state.EmployeesReducer.City,
       district: state.PartyMasterReducer.DistrictOnState,
       partyList: state.PartyMasterReducer.partyList,
       postMsg: state.EmployeesReducer.postMessage,
@@ -226,11 +231,10 @@ const AddEmployee = (props) => {
 
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
-        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
-          State_id, District_id, Company_id, EmployeeType_id, } = hasEditVal
+        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties, PIN, City,CityName,
+          State_id, District_id, Company_id,City_id, EmployeeType_id, } = hasEditVal
 
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
         hasValid.id.valid = id
         hasValid.Name.valid = true;
         hasValid.Address.valid = true;
@@ -243,6 +247,9 @@ const AddEmployee = (props) => {
         hasValid.StateName.valid = true;
         hasValid.DistrictName.valid = true;
         hasValid.EmployeeParties.valid = true;
+        hasValid.PIN.valid = true;
+        hasValid.CityName.valid = true;
+
 
         values.id = id
         values.Address = Address;
@@ -252,6 +259,8 @@ const AddEmployee = (props) => {
         values.PAN = PAN;
         values.AadharNo = AadharNo
         values.Name = Name;
+        values.PIN = PIN;
+        values.CityName ={ label: CityName, value: City_id };
         values.EmployeeTypeName = { label: EmployeeTypeName, value: EmployeeType_id };
         values.StateName = { label: StateName, value: State_id };
         values.DistrictName = { label: DistrictName, value: District_id };
@@ -340,6 +349,12 @@ const AddEmployee = (props) => {
     value: data.id,
     label: data.Name
   }));
+  
+  const City_DropdownOptions = City.map((data) => ({
+    
+    value: data.id,
+    label: data.Name
+  }));
 
   function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
@@ -351,7 +366,21 @@ const AddEmployee = (props) => {
     })
   }
 
+  function District_Dropdown_Handler(e) {
+    
+    dispatch(getCityOnDistrict(e.value))
+    setState((i) => {
+      const a = { ...i }
+      a.values.Name = "";
+      a.hasValid.Name.valid = false
+
+
+      return a
+    })
+  }
+
   const SaveHandler = (event) => {
+    
     event.preventDefault();
     const btnId = event.target.id;
     try {
@@ -384,7 +413,9 @@ const AddEmployee = (props) => {
           EmployeeType: values.EmployeeTypeName.value,
           State: values.StateName.value,
           District: values.DistrictName.value,
+          City: values.CityName.value,
           EmployeeParties: emplPartie,
+          PIN: values.PIN,
           Company: loginCompanyID(),
           CreatedBy: loginUserID(),
           UpdatedBy: loginUserID()
@@ -394,6 +425,7 @@ const AddEmployee = (props) => {
           dispatch(updateEmployeeAction({ jsonBody, updateId: values.id, btnId }));
         }
         else {
+          
           dispatch(saveEmployeeAction({ jsonBody, btnId }));
         }
       }
@@ -489,7 +521,7 @@ const AddEmployee = (props) => {
                           <C_DatePicker
                             name="DOB"
                             value={values.DOB}
-                            placeholder = {"DD/MM/YYYY"}
+                            placeholder={"DD/MM/YYYY"}
                             onChange={(y, v, e) => {
                               onChangeDate({ e, v, state, setState })
                             }}
@@ -592,6 +624,7 @@ const AddEmployee = (props) => {
                               options={District_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState, })
+                                District_Dropdown_Handler(hasSelect)
                               }}
                             />
                             {isError.DistrictName.length > 0 && (
@@ -599,6 +632,48 @@ const AddEmployee = (props) => {
                             )}
                           </Col>
                         </FormGroup>
+                      </Row>
+                      <Row>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.CityName} </Label>
+                          <Select
+                            name="CityName"
+                            id="CityName"
+                            value={values.CityName}
+                            isSearchable={true}
+                            classNamePrefix="dropdown"
+                            options={City_DropdownOptions}
+                            onChange={(hasSelect, evn) => {
+                              onChangeSelect({ hasSelect, evn, state, setState, })
+                            }}
+                          />
+                          {isError.CityName.length > 0 && (
+                            <span className="text-danger f-8"><small>{isError.CityName}</small></span>
+                          )}
+                        </FormGroup>
+
+                        <Col md="1"></Col>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.PIN} </Label>
+                          <Input
+                            name="PIN"
+                            value={values.PIN}
+                            type="text"
+                            className={isError.PIN.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter PIN"
+                            autoComplete='off'
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.PIN.length > 0 && (
+                            <span className="invalid-feedback">{isError.PIN}</span>
+                          )}
+                        </FormGroup>
+
+
+
+
                       </Row>
                     </CardBody>
                   </Card>

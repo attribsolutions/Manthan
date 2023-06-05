@@ -13,6 +13,7 @@ const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-
 export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 export const printBtnCss = "badge badge-soft-primary font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+const dissableBtnCss = "badge badge-soft- font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
 
 export const listPageActionsButtonFunc = (props) => {
@@ -88,7 +89,7 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     async function deleteHandler(rowData, btnId) {
-        
+
         try {
             if (deleteBodyfunc) {
                 const config = { rowData, subPageMode, btnId }
@@ -120,7 +121,7 @@ export const listPageActionsButtonFunc = (props) => {
         arr.push(rowData)
         makeBtnFunc(arr)
     }
-   
+
     return ({
         text: "Action",
         hidden:
@@ -132,12 +133,14 @@ export const listPageActionsButtonFunc = (props) => {
                     && !(userAccState.RoleAccess_IsDelete)
                     && !(userAccState.RoleAccess_IsDeleteSelf)
                     && !(userAccState.RoleAccess_IsEditSelf)
-                    && !(makeBtnShow) ? true : false
+                    && !(makeBtnShow)
+                    && !(oderAprovalBtnFunc) ? true : false
             ),
 
         formatter: (cellContent, rowData) => {
 
-            const forceEdit = rowData.forceEdit;
+            const forceEditHide = rowData.forceEditHide;
+            const forceDeleteHide = rowData.forceDeleteHide;
             const forceMakeBtn = rowData.forceMakeBtn;
             rowData["hasSelect"] = false
             return (
@@ -147,7 +150,7 @@ export const listPageActionsButtonFunc = (props) => {
                     {
                         //** if condition start
 
-                        (userAccState.RoleAccess_IsEdit && !forceEdit) //condtion:1
+                        (userAccState.RoleAccess_IsEdit && !forceEditHide) //condtion:1
                             ?
                             (<Button
                                 type="button"
@@ -164,7 +167,7 @@ export const listPageActionsButtonFunc = (props) => {
 
                             : // **Else-If Condition start 
 
-                            ((userAccState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated) && !forceEdit) //**condition :2
+                            ((userAccState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated) && !forceEditHide) //**condition :2
                                 ?
                                 <Button
                                     type="button"
@@ -196,7 +199,15 @@ export const listPageActionsButtonFunc = (props) => {
                                         <i className="bx bxs-show font-size-18 "></i>
                                     </Button>
 
-                                    : null  // **else null
+                                    :// btn dissable only show body
+                                    <Button
+                                        type="button"
+                                        title={'Access Not Allow'}
+                                        className={dissableBtnCss}
+                                        disabled={true}
+                                    >
+                                        <i className="mdi mdi-pencil font-size-18" ></i>
+                                    </Button>  // **else null
 
                     }
 
@@ -214,8 +225,21 @@ export const listPageActionsButtonFunc = (props) => {
                                 }}
                             >
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                    className=" fas fa-file-invoice" ></span> </Button>
-                            : null
+                                    className=" fas fa-file-invoice" ></span>
+                            </Button>
+                            :  // btn dissable only show body           #####//else if  
+                            ((pageMode === mode.modeSTPList) && (makeBtnShow))
+                                ?
+                                <Button
+                                    type="button"
+                                    title={'Access Not Allow'}
+                                    className={dissableBtnCss}
+                                    disabled={true}
+                                >
+                                    <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                        className=" fas fa-file-invoice" ></span>
+                                </Button>
+                                : null // **else null
                     }
 
 
@@ -233,7 +257,15 @@ export const listPageActionsButtonFunc = (props) => {
                             >
                                 <i className="bx bx-printer font-size-18"></i>
                             </Button>
-                            : null
+                            :// btn dissable only show body
+                            <Button
+                                type="button"
+                                title={'Access Not Allow'}
+                                className={dissableBtnCss}
+                                disabled={true}
+                            >
+                                <i className="bx bx-printer font-size-18"></i>
+                            </Button>  // **else null
                     }
                     {
                         (userAccState.RoleAccess_IsMultipleInvoicePrint) ?
@@ -273,7 +305,7 @@ export const listPageActionsButtonFunc = (props) => {
                     }
 
                     {
-                        (userAccState.RoleAccess_IsDelete)
+                        (userAccState.RoleAccess_IsDelete && !forceDeleteHide)
                             ?
                             <Button
                                 type="button"
@@ -291,7 +323,7 @@ export const listPageActionsButtonFunc = (props) => {
                             line no 88 to 108
                             */
                             :
-                            ((userAccState.RoleAccess_IsDeleteSelf) && (rowData.CreatedBy === userCreated))
+                            ((userAccState.RoleAccess_IsDeleteSelf) && (rowData.CreatedBy === userCreated) && !forceDeleteHide)
                                 ?
                                 <Button
                                     type="button"
@@ -305,7 +337,15 @@ export const listPageActionsButtonFunc = (props) => {
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
-                                : null
+                                :// btn dissable only show body
+                                <Button
+                                    type="button"
+                                    title={'Access Not Allow'}
+                                    className={dissableBtnCss}
+                                    disabled={true}
+                                >
+                                    <i className="mdi mdi-delete font-size-18"></i>
+                                </Button>  // **else null
                     }
                     {
                         ((userAccState.RoleAccess_IsSave) && (userAccState.RoleAccess_IsCopy)) ?
@@ -324,7 +364,7 @@ export const listPageActionsButtonFunc = (props) => {
                             : null
                     }
                     {
-                        ((oderAprovalBtnFunc)) ?
+                        (((oderAprovalBtnFunc) && !forceDeleteHide && !forceDeleteHide)) ?
                             <Button
                                 type="button"
                                 id={`btn-orderApproval-${rowData.id}`}
@@ -337,7 +377,17 @@ export const listPageActionsButtonFunc = (props) => {
                             >
                                 <i className="bx bx-check-shield font-size-20"></i>
                             </Button>
-                            : null
+                            : (oderAprovalBtnFunc) ?
+                                // btn dissable only show body
+                                <Button
+                                    type="button"
+                                    title={'Access Not Allow'}
+                                    className={dissableBtnCss}
+                                    disabled={true}
+                                >
+                                    <i className="bx bx-check-shield font-size-20"></i>
+                                </Button>  // **else null
+                                : null
                     }
 
                 </div >

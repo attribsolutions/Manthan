@@ -24,7 +24,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useRef } from "react";
-import { CInput, C_DatePicker, onlyNumberRegx } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/index";
 
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -36,6 +36,7 @@ import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 
 
 let editVal = {}
+let initial_BredcrumbMsg="Order Amount :0.00"
 
 function initialState(history) {
 
@@ -222,7 +223,7 @@ const Order = (props) => {
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
         } else {
-            dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :0`))
+            dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
         }
     }, []);
 
@@ -231,17 +232,19 @@ const Order = (props) => {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
 
             setTermsAndConTable([])
-            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+
+            const liveMode = true
+
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
-            // if (subPageMode === url.ORDER_2) { //        SAP OEDER-APROVUAL CODE
-            //     let btnId = postMsg.btnId;
-            //     _cfunc.btnIsDissablefunc({ btnId, state: true })
-            //     let config = { btnId }
-            //     config.orderId = postMsg.OrderID;
-            //     dispatch(_act.getOrderApprovalDetailAction(config));
-            // }
-            // ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
-            // else {
+            if ((subPageMode === url.ORDER_2) && liveMode) { //        SAP OEDER-APROVUAL CODE
+                let btnId = postMsg.btnId;
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
+                let config = { btnId }
+                config.orderId = postMsg.OrderID;
+                dispatch(_act.getOrderApprovalDetailAction(config));
+
+            } else {// ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
+
                 const a = await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
@@ -251,7 +254,7 @@ const Order = (props) => {
                         pathname: listPath,
                     });
                 }
-            // }
+            }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
@@ -314,7 +317,7 @@ const Order = (props) => {
     }, [approvalDetail]);
 
     useEffect(() => {
-        orderApprovalMessage({ dispatch, orderApprovalMsg })
+        orderApprovalMessage({ dispatch, orderApprovalMsg ,listPath,history })
     }, [orderApprovalMsg]);
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
@@ -428,7 +431,7 @@ const Order = (props) => {
                         row["po_Unit_id"] = i.UnitID;
                         row["UnitName"] = i.UnitName;
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
-                        row["Rate"] = i.Rate;
+                        row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
                     }
 
                 } else {
@@ -454,19 +457,21 @@ const Order = (props) => {
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
                                 value: i.UnitID,
-                                baseUnitQty: i.BaseUnitQuantity,
-                                Rate: i.Rate
+
+                                BaseUnitQuantity: i.BaseUnitQuantity,
+                                Rate: i.Rate,
+                                BaseUnitQuantityNoUnit: i.BaseUnitQuantityNoUnit
                             }))
                         }
                         onChange={e => {
                             row["Unit_id"] = e.value;
                             row["UnitName"] = e.label
-                            row["BaseUnitQuantity"] = e.baseUnitQty;
-                            if (!(subPageMode === url.ORDER_1)) {
-                                row["Rate"] = e.Rate
-                                itemWise_CalculationFunc(row)
-                                document.getElementById(`Rate-${key}`).innerText = e.Rate
-                            }
+                            row["BaseUnitQuantity"] = e.BaseUnitQuantity;
+
+                            row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
+                            itemWise_CalculationFunc(row)
+                            document.getElementById(`Rate-${key}`).innerText = row.Rate
+
 
                         }}
                     >
@@ -488,7 +493,7 @@ const Order = (props) => {
                             <CInput
                                 type="text"
                                 id={`Rate-${k}`}
-                                cpattern={onlyNumberRegx}
+                                cpattern={decimalRegx}
                                 defaultValue={row.Rate}
                                 onChange={(event) => {
                                     row.Rate = event.target.value;
@@ -593,7 +598,7 @@ const Order = (props) => {
         let btnId = `go-btn${subPageMode}`
         _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
+        dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
 
 
         let PO_Body = {
@@ -1199,4 +1204,3 @@ const Order = (props) => {
 
 
 export default Order
-

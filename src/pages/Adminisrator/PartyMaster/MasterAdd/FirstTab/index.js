@@ -102,14 +102,16 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 a.hasValid.valid = true;
                 return a
             })
+
             dispatch(priceListByPartyAction(PartyTypes[0].id))
         }
     }, [PartyTypes])
 
     useEffect(() => {
         let retailerParty = PartyTypes.find(i => (i.IsRetailer))
-        
+
         if ((subPageMode === url.RETAILER_MASTER) && !(retailerParty === undefined)) {
+
             setState((i) => {
                 let a = { ...i }
                 let supilerArr = [{
@@ -128,6 +130,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 delete a.required.Supplier
                 return a
             })
+            dispatch(priceListByPartyAction(retailerParty.id))
         }
     }, [PartyTypes, pageField])
 
@@ -160,7 +163,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     }
 
     function partyTypeOnChange(hasSelect, evn) {
-        
+
         onChangeSelect({ hasSelect, evn, state, setState })
         setPriceListSelect({ label: '' })
         dispatch(priceListByPartyAction(hasSelect.value))
@@ -269,26 +272,29 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     )}
                                 </FormGroup>
                             </Col>
+
                             <Col md="1"></Col>
-                            <Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Label htmlFor="validationCustom01">{fieldLabel.SAPPartyCode} </Label>
-                                    <Input
-                                        name="SAPPartyCode"
-                                        value={values.SAPPartyCode}
-                                        type="text"
-                                        className={isError.SAPPartyCode.length > 0 ? "is-invalid form-control" : "form-control"}
-                                        placeholder="Please Enter SAP Code"
-                                        autoComplete='off'
-                                        onChange={(event) => {
-                                            onChangeText({ event, state, setState })
-                                        }}
-                                    />
-                                    {isError.SAPPartyCode.length > 0 && (
-                                        <span className="invalid-feedback">{isError.SAPPartyCode}</span>
-                                    )}
-                                </FormGroup>
-                            </Col>
+                            {(subPageMode === url.PARTY) && // SAPPartyCode   show only (Party Master) mode
+                                <Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom01">{fieldLabel.SAPPartyCode} </Label>
+                                        <Input
+                                            name="SAPPartyCode"
+                                            value={values.SAPPartyCode}
+                                            type="text"
+                                            className={isError.SAPPartyCode.length > 0 ? "is-invalid form-control" : "form-control"}
+                                            placeholder="Please Enter SAP Code"
+                                            autoComplete='off'
+                                            onChange={(event) => {
+                                                onChangeText({ event, state, setState })
+                                            }}
+                                        />
+                                        {isError.SAPPartyCode.length > 0 && (
+                                            <span className="invalid-feedback">{isError.SAPPartyCode}</span>
+                                        )}
+                                    </FormGroup>
+                                </Col>
+                            }
                         </Row>
                     </CardBody>
                 </Card>
@@ -331,7 +337,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     : null
                             }
 
-                 
+
                             <Col md="3" className="mb-3">
                                 <FormGroup>
                                     <Label>Price List </Label>
@@ -507,7 +513,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     </Row>
                                 </FormGroup>
                             </Col>
-
 
                         </Row>
                     </CardBody>

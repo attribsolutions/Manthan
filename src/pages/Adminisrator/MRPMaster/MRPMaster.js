@@ -35,6 +35,8 @@ import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+
 import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, getMRPList, GoButtonForMRP_Master, GoButtonForMRP_MasterSuccess, saveMRPMaster, saveMRPMasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 
 const MRPMaster = (props) => {
@@ -318,6 +320,9 @@ const MRPMaster = (props) => {
                 return { width: '200px' };
             },
             formatter: (cellContent, row, key) => {
+                if (!cellContent) {
+                    return null
+                }
                 return (<span style={{ justifyContent: 'center' }}>
                     <Label
                         style={{ color: "black", textAlign: "center", display: "block", }}
@@ -399,14 +404,14 @@ const MRPMaster = (props) => {
             }))
 
             const Find = ItemData.filter((index) => {
-                return (!(index.MRP === '') && (index.id === ''))
+                return (!(index.MRP === ''))
             })
             const jsonBody = JSON.stringify(Find)
 
             if (!(Find.length > 0)) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter Margin"
+                    Message: "Please Enter MRP"
                 })
                 return _cfunc.btnIsDissablefunc({ btnId, state: false })
             }
@@ -518,8 +523,7 @@ const MRPMaster = (props) => {
                                 </Card>
 
                                 {Data.length > 0 ?
-                                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                                        {({ paginationProps, paginationTableProps }) => (
+                                  
                                             <ToolkitProvider
                                                 keyField="Item"
                                                 data={Data}
@@ -540,21 +544,17 @@ const MRPMaster = (props) => {
                                                                         classes={"table  table-bordered"}
                                                                         noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}
-                                                                        {...paginationTableProps}
                                                                     />
+                                                                    {mySearchProps(toolkitProps.searchProps)}
                                                                 </div>
                                                             </Col>
                                                         </Row>
-                                                        <Row className="align-items-md-center mt-30">
-                                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                                <PaginationListStandalone {...paginationProps} />
-                                                            </Col>
-                                                        </Row>
+                                                        
                                                     </React.Fragment>
                                                 )}
                                             </ToolkitProvider>
-                                        )}
-                                    </PaginationProvider>
+                                       
+                                    
                                     : null}
 
                                 {Data.length > 0 ?

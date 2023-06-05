@@ -153,7 +153,9 @@ import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
 import ImportMasterMap from "../pages/Adminisrator/ImportMaster/ImportMasterMap/ImportMasterMap";
 import Debit from "../pages/Accounting/Debit/Debit";
 import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"
-
+import SapLedger from "../Reports/SapLedgerReport/SapLedger";
+import ProductMarginReport from "../Reports/ProductMarginReport/ProductMarginReport";
+import CityMaster from "../pages/Adminisrator/CityPages/CityMaster";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -161,6 +163,7 @@ const userRoutes = [
   { path: path.DASHBORD, component: Dashboard },
 
   { path: path.DASHBORD_1, component: Dashboard_1 },
+  { path: path.DASHBORD_2, component: Dashboard_1 },
   // *************************** Administration *******************************//
   { path: path.MODULE, component: Modules },
   { path: path.MODULE_lIST, component: ModulesList },
@@ -260,6 +263,8 @@ const userRoutes = [
   { path: path.SALESMAN, component: SalesManMaster },
   { path: path.SALESMAN_LIST, component: SalesManList },
 
+  { path: path.CITY, component: CityMaster },
+
   // { path: path.CREDITLIMIT, component: CreditLimitMaster },
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
@@ -279,7 +284,7 @@ const userRoutes = [
   { path: path.BANK, component: BankMaster },
   { path: path.BANK_LIST, component: BankList },
 
-
+  { path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
@@ -373,6 +378,8 @@ const userRoutes = [
   { path: path.CREDIT, component: Credit },
   { path: path.DEBIT, component: Debit },
 
+  { path: path.SAP_LEDGER, component: SapLedger },
+
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
@@ -384,17 +391,18 @@ const userRoutes = [
   { path: "/auth-404", component: Error404 },
   { path: "/auth-500", component: Error500 },
 
+
 ]
 
 const authRoutes = [
   //authencation page
+  { path: "/division", component: SelectDivisionPage },
   { path: "/logout", component: Logout },
   { path: "/login", component: Login },
   { path: "/forgot-password", component: ForgetPwd },
   { path: "/ResetPassword", component: ResetPassword },
   { path: "/SendOTP", component: SendOTP },
   { path: "/EnterOTP", component: EnterOTP },
-  { path: "/division", component: SelectDivisionPage },
   { path: "/pages-404", component: Error404 },
   // { component:() => <Redirect to="/login" /> },
   { path: "/pages-500", component: Error500 },

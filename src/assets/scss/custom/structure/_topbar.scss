@@ -151,7 +151,7 @@ body[data-layout-mode="dark"] {
     padding-top: calc(#{$header-height} + 60px);
     padding-right: 5px;
     padding-left: 5px;
-    padding-bottom: $footer-height +100px;
+    padding-bottom: $footer-height+27px;
     // padding: calc(#{$header-height} + #{$grid-gutter-width}+40px) calc(#{$grid-gutter-width} / 2 - 5px) $footer-height calc(#{$grid-gutter-width} / 2 -5px);
 }
 

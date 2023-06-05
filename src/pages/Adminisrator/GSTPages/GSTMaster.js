@@ -46,6 +46,7 @@ import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -480,8 +481,7 @@ const GSTMaster = (props) => {
                                 </Card>
 
                                 {Data.length > 0 ?
-                                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                                        {({ paginationProps, paginationTableProps }) => (
+ 
                                             <ToolkitProvider
                                                 keyField="Item"
                                                 data={Data}
@@ -502,21 +502,16 @@ const GSTMaster = (props) => {
                                                                         classes={"table  table-bordered"}
                                                                         noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}
-                                                                        {...paginationTableProps}
                                                                     />
+                                                                    {mySearchProps(toolkitProps.searchProps)}
+
                                                                 </div>
                                                             </Col>
                                                         </Row>
-                                                        <Row className="align-items-md-center mt-30">
-                                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                                <PaginationListStandalone {...paginationProps} />
-                                                            </Col>
-                                                        </Row>
+                                                     
                                                     </React.Fragment>
                                                 )}
                                             </ToolkitProvider>
-                                        )}
-                                    </PaginationProvider>
                                     : null}
 
                                 {Data.length > 0 ?

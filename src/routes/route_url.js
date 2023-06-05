@@ -2,6 +2,7 @@
 export const DASHBORD = "/Dashboard"
 
 export const DASHBORD_1 = "/Dashboard_1"
+export const DASHBORD_2 = "/Dashboard_2"
 // ***************************** Utility **************************************//
 
 export const SEARCH_BOX2 = "/SearchBoxSecond"
@@ -102,6 +103,9 @@ export const SUBGROUP_LIST = "/SubGroupList"
 export const GENERAL = "/GeneralMaster"
 export const GENERAL_LIST = "/GeneralList"
 
+export const CITY = "/CityMaster"
+export const CITY_LIST = "/CityList"
+
 // export const CREDITLIMIT = "/CreditLimit"
 // export const CREDITLIMIT_LIST = "/CreditLimitList"
 
@@ -125,7 +129,7 @@ export const MANAGEMENT_PARTIES = "/ManagementParties"
 export const BANK = "/BankMaster"
 export const BANK_LIST = "/BankList"
 
-
+export const PRODUCT_MARGIN_REPORT = "/ProductMarginReport"
 
 
 //******************************* Purchase Module ************************************//
@@ -221,3 +225,5 @@ export const CREDIT = "/Credit"
 
 export const DEBIT_LIST = "/Debit_List"
 export const DEBIT = "/Debit"
+
+export const SAP_LEDGER = "/SapLedger"

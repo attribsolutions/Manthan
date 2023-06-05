@@ -462,7 +462,7 @@ const OrderList = () => {
                             deleteName={"FullOrderNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}
-                            // oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
+                            oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
 
                         />
                         : null

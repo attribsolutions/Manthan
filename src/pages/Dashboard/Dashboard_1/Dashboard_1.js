@@ -23,7 +23,8 @@ import InvoiceForGRN from './GRNList';
 import SalesReturnListForDashboard from './SalesReturnListForDashboard';
 import { orderApprovalAction, orderApprovalActionSuccess } from '../../../store/Purchase/OrderPageRedux/actions';
 import { customAlert } from '../../../CustomAlert/ConfirmDialog';
-
+import { getExcel_Button_API, getExcel_Button_API_Success } from '../../../store/Report/SapLedger Redux/action';
+import * as XLSX from 'xlsx';
 
 const Dashboard_1 = (props) => {
 
@@ -38,9 +39,11 @@ const Dashboard_1 = (props) => {
     const {
         getDashboard,
         userAccess,
+        ProductMarginData,
         orderApprovalMsg } = useSelector((state) => ({
             getDashboard: state.DashboardReducer.getDashboard,
             userAccess: state.Login.RoleAccessUpdateData,
+            ProductMarginData: state.SapLedgerReducer.ProductMargin,
             pageField: state.CommonPageFieldReducer.pageField,
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
         }));
@@ -52,6 +55,7 @@ const Dashboard_1 = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getDashbordDetails())
+
     }, []);
 
     const location = { ...history.location }
@@ -109,30 +113,63 @@ const Dashboard_1 = (props) => {
 
     }, [orderApprovalMsg]);
 
-    function demoSAPhandler(event) {
-        event.preventDefault();
-        const btnId = "sapbtn-id"
-        let jsonBody = {
-            "Customer": "500581",
-            "DocDate": "04.05.2023",
-            "Indicator": "F",
-            "OrderNo": "127407",
-            "Stats": "1",
-            "OrderItemSet": [{
-                "OrderNo": "127407",
-                "ItemNo": "3706465",
-                "Material": "1200249",
-                "Quantity": "1.000",
-                "Unit": "KG",
-                "Plant": "IW03",
-                "Batch": ""
-            }],
-            "CancelFlag": " "
+    // function demoSAPhandler(event) {
+    //     event.preventDefault();
+    //     const btnId = "sapbtn-id"
+    //     let jsonBody = {
+    //         "Customer": "500581",
+    //         "DocDate": "04.05.2023",
+    //         "Indicator": "F",
+    //         "OrderNo": "127407",
+    //         "Stats": "1",
+    //         "OrderItemSet": [{
+    //             "OrderNo": "127407",
+    //             "ItemNo": "3706465",
+    //             "Material": "1200249",
+    //             "Quantity": "1.000",
+    //             "Unit": "KG",
+    //             "Plant": "IW03",
+    //             "Batch": ""
+    //         }],
+    //         "CancelFlag": " "
+    //     }
+
+    //     dispatch(orderApprovalAction({ jsonBody, btnId }))
+    // }
+
+
+    useEffect(() => {
+
+        if (ProductMarginData.length > 1) {
+
+            let newArray = []
+            ProductMarginData.forEach(i => {
+                let obj = i
+                i.ItemMargins.forEach(ele => {
+                    const keys = Object.keys(ele);
+                    keys.forEach(key => {
+                        obj[key] = ele[key]
+                    })
+                })
+                delete obj.ItemMargins
+                newArray.push(obj)
+            })
+     
+            const worksheet = XLSX.utils.json_to_sheet(newArray);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin1");
+            XLSX.writeFile(workbook, "Excel File.xlsx");
+
+            dispatch(getExcel_Button_API_Success([]));
         }
+    }, [ProductMarginData]);
 
-        dispatch(orderApprovalAction({ jsonBody, btnId }))
+    function excelhandler(event) {
+        event.preventDefault();
+        const btnId = "excelbtn-id"
+        const ProductMargin = []
+        dispatch(getExcel_Button_API())
     }
-
 
     return (
         <React.Fragment>
@@ -308,14 +345,22 @@ const Dashboard_1 = (props) => {
                                 <SalesReturnListForDashboard />
                             </Card>
                         </Col>
-                        <Col lg={6}>
+                        {/* <Col lg={6}>
                             <Button type='button'
                                 className='btn btn-success'
                                 id="sapbtn-id"
                                 onClick={demoSAPhandler}>demoSAP
                             </Button>
-                        </Col>
-                    </Row>
+                        </Col> */}
+
+                         {/* <Col lg={6}>
+                            <Button type='button'
+                                className='btn btn-success'
+                                id="excelbtn-id"
+                                onClick={excelhandler}>excelBtnView
+                            </Button>
+                        </Col> */}
+                    </Row> 
 
                     {/* <div className="card">
                         <div className="card-header align-items-center d-flex">

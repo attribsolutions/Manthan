@@ -29,16 +29,22 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 
 function* loginUser({ payload: { user, history } }) {
   try {
-    const response =
-      yield call(Python_FoodERP_postJwtLogin, {
-        LoginName: user.UserName,
-        password: user.Password
-      })
-    yield put(loginSuccess(response))
-    
+    const response = yield call(Python_FoodERP_postJwtLogin, {
+      LoginName: user.UserName,
+      password: user.Password
+    })
+    if (response.StatusCode===200) {
+      yield put(loginSuccess(response))
+
+      
+    }else{
+    yield put(apiError(response.Message))
+      
+    }
+
 
   } catch (error) {
-    yield put(apiError("Incorrect UserName And Password"))
+    yield put(apiError("Incorrect Password"))
   }
 }
 function* afterLoginUserDetails_genFun({ id }) {
@@ -132,9 +138,9 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
     }
 
   } catch (error) {
-  
+
     yield put(roleAceessActionError(true))
-   }
+  }
 }
 
 function* Post_SuperAdmin_API_GenratorFunction() {

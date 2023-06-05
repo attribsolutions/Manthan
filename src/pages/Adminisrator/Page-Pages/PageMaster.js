@@ -466,6 +466,7 @@ const PageMaster = (props) => {
       dispatch(updateHPages(jsonBody, EditData.id));
 
     } else {
+      
       dispatch(saveHPages(jsonBody));
 
     }
@@ -518,7 +519,7 @@ const PageMaster = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "-70px" }}>
+        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
           <Container fluid>
             <AvForm

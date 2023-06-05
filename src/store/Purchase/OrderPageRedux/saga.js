@@ -33,15 +33,14 @@ import {
   ORDER_APPROVAL_ACTION,
   GET_ORDER_APPROVAL_DETAIL
 } from "./actionType";
-import { btnIsDissablefunc, CommonConsole, concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
+import {  CommonConsole, concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
-import { orderApproval } from "../../../routes/PageMode";
 
 
 function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
 
   try {
-    
+
     const { subPageMode, } = config
     let response;
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4)) {
@@ -70,14 +69,14 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
 
 function* saveOrder_GenFunc({ config }) {
 
-  const { subPageMode, btnId,jsonBody } = config;
+  const { subPageMode, btnId, jsonBody } = config;
 
-    let newConfig = config;
-// **************************************** for aorde Sap aproval********************************
-  if (subPageMode === url.ORDER_2) { 
-     newConfig = { jsonBody, btnId: undefined }
+  let newConfig = config;
+  // **************************************** for aorde Sap aproval********************************
+  if (subPageMode === url.ORDER_2) {
+    newConfig = { jsonBody, btnId: undefined }
   }
-// ********************************************************
+  // ********************************************************
 
   let response = {}
   try {
@@ -85,7 +84,7 @@ function* saveOrder_GenFunc({ config }) {
       response = yield call(IBOrderPage_Save_API, newConfig);
     } else {
       response = yield call(OrderPage_Save_API_ForPO, config);
-      response.btnId=btnId
+      response.btnId = btnId
     }
     yield put(saveOrderActionSuccess(response));
   } catch (error) { CommonConsole(error) }
@@ -143,19 +142,36 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
       i.DeliveryDate = (`${DeliveryDate}`)
 
+
+
+
+
       if (i.Inward === 0) {
         i.Inward = "Open"
-        i.forceEdit = false
+        i.forceEditHide = false
       } else {
         i.Inward = "Close"
-        i.forceEdit = true
+        i.forceEditHide = true
       }
+
       if (i.InvoiceCreated === true) {
         i.InvoiceCreated = "Invoice Created"
         i.forceMakeBtn = true
       } else {
         i.InvoiceCreated = ""
         i.forceMakeBtn = false
+      }
+      if (i.SAPResponse) {// for sap_code order page 
+
+        var numb = i.SAPResponse.match(/\d/g);
+        i.SAPResponse = numb.join("");
+        i.FullOrderNumber = `${i.FullOrderNumber} (${i.SAPResponse})`//concate sap code and full order number
+        i.forceEditHide = true
+        i.forceDeleteHide = true
+      } else {
+        i.forceEditHide = false
+        i.forceDeleteHide = false
+
       }
       return i
     })

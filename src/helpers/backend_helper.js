@@ -1,6 +1,6 @@
 import axios from "axios"
-import { del, get, put, post, postForget, } from "./api_helper"
-import { orderApporval } from "./sapApi"
+import { del, get, put, post, postWithoutToken, postRefreshToken, } from "./api_helper"
+import { chitalebandhu_get, sapApi_post } from "./other_domain_api"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -55,7 +55,10 @@ const postFakeForgetPwd = data => post(url.POST_FAKE_PASSWORD_FORGET, data)
 // Edit profile
 const postJwtProfile = data => post(url.POST_EDIT_JWT_PROFILE, data)
 
-const postFakeProfile = data => post(url.POST_EDIT_PROFILE, data)
+const postFakeProfile = jsonBody => post(url.POST_EDIT_PROFILE, jsonBody)
+
+
+export const getSessionAlive_Api = jsonBody => postRefreshToken(url.TOKEN_REFRESH_API, jsonBody)
 
 // Register Method
 const postJwtRegister = (url, data) => {
@@ -88,13 +91,15 @@ const postJwtRegister = (url, data) => {
     })
 }
 
-export const Python_FoodERP_postJwtLogin = data => post(url.FOOD_ERP_POST_JWT_LOGIN, data)
+export const Python_FoodERP_postJwtLogin = data => postWithoutToken(url.FOOD_ERP_POST_JWT_LOGIN, data)
 export const getUserDetails_afterLogin_ApiCall = data => post(url.FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN, data)
 export const divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall = (id1) => get(`${url.DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE}/${id1}`)
+export const ChangePassword_API = ({ jsonBody, btnId }) => post(url.CHANGEPASSWORD_API, jsonBody, btnId)// post api
+
 
 // postForgetPwd
-export const Python_FoodERP_postJwtForgetPwd_Verify_OTP = data => postForget(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP, data)
-export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => postForget(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP, data)
+export const Python_FoodERP_postJwtForgetPwd_Verify_OTP = data => postWithoutToken(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP, data)
+export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => postWithoutToken(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP, data)
 
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
@@ -108,6 +113,7 @@ export const commonPageFiled_API = (pageId) => get(`${url.PAGE_FIELD}/${pageId}`
 // Employees  Component All Api 
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getState_For_Dropdown = () => get(url.GET_STATE)
+export const getCity_For_Dropdown = (DistrictId) => get(`${url.GET_CITY_ON_DISTRICT}/${DistrictId}`)
 export const getComapny_For_Dropdown = () => get(url.COMPANY_API_URL)
 export const save_Employee_API = ({ jsonBody, btnId }) => post(url.EMPLOYEE_API_URL, jsonBody, btnId) //save And Update
 export const get_EmployeelistApi = (filters) => post(url.EMPLOYEE_FILTER_API_URL, filters) // list api using post method
@@ -346,6 +352,11 @@ export const Party_Dropdown_Get_API = (id) => get(`${url.MANAGEMENT_PARTIES}/${i
 export const ImportField_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_FILTER, jsonBody, btnId)//get api
 export const ImportField_Add_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_SAVE, jsonBody, btnId)// post api
 
+// City API
+export const Post_City_Master_API = ({ jsonBody, btnId }) => post(url.CITY, jsonBody, btnId)// post api
+
+
+
 // ImportMaster_Map API
 export const ImportMaster_Map_Customer_GoButton_API = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_CUSTOMER}/${partyId}`, btnId)//get api
 export const ImportMaster_Map_Customer_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_CUSTOMER, jsonBody, btnId)// post api
@@ -429,11 +440,11 @@ export const post_SelectFieldAPI = (jsonBody) => post(url.GENERAL_MASTER_SUB_TYP
 export const Update_Party_Bulk = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_BULK_UPDATE}/${updateId}`, jsonBody, btnId)// update api
 
 // Order Page api  
-export const OrderPage_GoButton_API = ({ jsonBody, btnId }) => post(url.ORDER_Edit_API,  jsonBody, btnId)//get api
+export const OrderPage_GoButton_API = ({ jsonBody, btnId }) => post(url.ORDER_Edit_API, jsonBody, btnId)//get api
 export const OrderList_get_Filter_API = ({ filtersBody, btnId }) => post(url.ORDER_LiST_BY_FILTERS, filtersBody, btnId)
 export const OrderPage_Save_API_ForPO = ({ jsonBody, btnId }) => post(url.ORDER_PAGE_API, jsonBody, btnId)//get api
 export const OrderPage_Edit_Post_API = ({ jsonBody, btnId }) => post(url.ORDER_Edit_API, jsonBody, btnId)//Edit Order
-export const OrderPage_Edit_Get_API = ({ orderId}) => get(`${url.ORDER_PAGE_API}/${orderId}`)//Order edit single get api
+export const OrderPage_Edit_Get_API = ({ orderId }) => get(`${url.ORDER_PAGE_API}/${orderId}`)//Order edit single get api
 export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
 export const OrderPage_Delete_API = ({ deleteId, btnId }) => del(`${url.ORDER_PAGE_API}/${deleteId}`, btnId)//Delete Order
 export const OrderPage_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.ORDER_PAGE_API}/${updateId}`, jsonBody, btnId)// update api
@@ -519,7 +530,7 @@ export const IB_Invoice_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.
 //************************************Inter Branch ************************************/
 
 // IBOrder
-export const IBOrderPage_GoButton_API = ( jsonBody, btnId) => post(url.GO_BUTTON_POST_API_FOR_IBORDER,  jsonBody, btnId)//go button api
+export const IBOrderPage_GoButton_API = (jsonBody, btnId) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, jsonBody, btnId)//go button api
 export const IBOrderPage_Save_API = (data) => post(url.SAVE_API_FOR_IBORDER, data)//post api
 export const IBOrderList_get_Filter_API = ({ filtersBody, btnId }) => post(url.IBORDER_LiST_BY_FILTERS, filtersBody, btnId)//list page
 
@@ -573,6 +584,17 @@ export const del_Credit_List_API = ({ deleteId, btnId }) => del(`${url.CREDIT_DE
 export const Edit_Credit_List_API = ({ editId, btnId }) => get(`${url.CREDIT_DEBIT}/${editId}`, btnId)// Edit api
 export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// Invoice Return api
 export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, jsonBody)//  postapi
+
+
+export const PartyLedger_API = (FromDate,ToDate,SAPCode) => post(url.PARTY_LEDGER_API,FromDate,ToDate,SAPCode)//  postapi
+export const Get_Product_Margin_Report = () => get(url.PRODUCT_MARGIN_REPORT_API)
+
+
+
+// export const PartyLedger_API = (FromDate,ToDate,SAPCode) => get(`http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
+
+
+
 
 
 // Dashboard 

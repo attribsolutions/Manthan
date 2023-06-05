@@ -8,7 +8,7 @@ import {
     FormGroup,
     Input,
     Label,
-    Row,
+    Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
@@ -31,7 +31,15 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, loginRoleID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginCompanyID,
+    loginPartyID,
+    loginUserID,
+    btnIsDissablefunc,
+    loginRoleID,
+    metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -111,8 +119,6 @@ const RoutesMaster = (props) => {
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-
-
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -175,6 +181,7 @@ const RoutesMaster = (props) => {
                     Message: postMsg.Message,
                 }))
             }
+
             else {
                 dispatch(AlertState({
                     Type: 1,
@@ -184,6 +191,7 @@ const RoutesMaster = (props) => {
                 }))
             }
         }
+
         else if (postMsg.Status === true) {
             dispatch(GetRoutesListSuccess({ Status: false }))
             dispatch(AlertState({
@@ -197,12 +205,15 @@ const RoutesMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: url.ROUTES_LIST,
             })
-        } else if (updateMsg.Status === true && !modalCss) {
+        }
+
+        else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateRoutesIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -227,6 +238,7 @@ const RoutesMaster = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id
+
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
@@ -250,10 +262,10 @@ const RoutesMaster = (props) => {
                 if (pageMode === mode.edit) {
                     dispatch(updateRoutesID({ jsonBody, updateId: values.id, btnId }));
                 }
+
                 else {
                     dispatch(SaveRoutesMaster({ jsonBody, btnId }));
                 }
-
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -315,9 +327,9 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01" >{fieldLabel.Sunday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "50px" }}
+                                                                style={{ marginLeft: "53px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Sunday"
                                                                 checked={values.Sunday}
                                                                 onChange={(e) => {
@@ -328,7 +340,6 @@ const RoutesMaster = (props) => {
                                                                     })
                                                                 }}
                                                             >
-
                                                             </Input>
                                                         </FormGroup>
 
@@ -336,9 +347,9 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Monday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "48px" }}
+                                                                style={{ marginLeft: "51px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Monday"
                                                                 checked={values.Monday}
                                                                 onChange={(e) => {
@@ -356,9 +367,9 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Tuesday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "46px" }}
+                                                                style={{ marginLeft: "49px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Tuesday"
                                                                 checked={values.Tuesday}
                                                                 onChange={(e) => {
@@ -376,9 +387,9 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Wednesday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "25px" }}
+                                                                style={{ marginLeft: "28px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Wednesday"
                                                                 checked={values.Wednesday}
                                                                 onChange={(e) => {
@@ -396,9 +407,9 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Thursday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "39px" }}
+                                                                style={{ marginLeft: "43px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Thursday"
                                                                 checked={values.Thursday}
                                                                 onChange={(e) => {
@@ -415,9 +426,9 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Friday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "58px" }}
+                                                                style={{ marginLeft: "62px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Friday"
                                                                 checked={values.Friday}
                                                                 onChange={(e) => {
@@ -434,9 +445,9 @@ const RoutesMaster = (props) => {
                                                         <FormGroup className="mt-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Saturday}</Label>
                                                             <Input
-                                                                style={{ marginLeft: "39px" }}
+                                                                style={{ marginLeft: "43px" }}
                                                                 type="checkbox"
-                                                                className="p-2"
+                                                                className="p-1"
                                                                 name="Saturday"
                                                                 checked={values.Saturday}
                                                                 onChange={(e) => {
@@ -486,16 +497,13 @@ const RoutesMaster = (props) => {
                                                             </Col>
                                                         </Row>
                                                     </FormGroup>
-
                                                 </CardBody>
                                             </Card>
                                         </Col>
                                     </Row>
                                 </form>
                             </CardBody>
-
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment>

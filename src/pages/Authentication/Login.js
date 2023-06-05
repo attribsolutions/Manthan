@@ -1,10 +1,8 @@
-
-
 import PropTypes from "prop-types"
 import MetaTags from "react-meta-tags"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 
-import { Row, Col, Alert, Container } from "reactstrap"
+import { Row, Col, Alert, Container, Input } from "reactstrap"
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
@@ -12,9 +10,8 @@ import { useSelector, useDispatch } from "react-redux"
 import { withRouter, Link, useHistory } from "react-router-dom"
 
 // availity-reactstrap-validation
-import { AvForm, AvField, } from "availity-reactstrap-validation"
 
-import { divisionDropdownSelectSuccess, getUserDetailsAction, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
+import { apiErrorSuccess, divisionDropdownSelectSuccess, getUserDetailsAction, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
 
 import logo from "../../assets/images/cbm_logo.png"
 
@@ -25,14 +22,22 @@ import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 
 const Login = props => {
 
-
+debugger
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const { loginError, loginSuccess, divisionDropdown_redux = [] } = useSelector(state => ({
+  const [currentUserName, setcurrentUserName] = useState("");
+  const [Password, setPassword] = useState("");
+
+  const [currentPwdError, setCurrentPwdError] = useState("");
+
+
+  const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess } = useSelector(state => ({
     loginError: state.Login.loginError,
     loginSuccess: state.Login.loginSuccess,
     divisionDropdown_redux: state.Login.divisionDropdown,
+    userAccess: state.Login.RoleAccessUpdateData,
+
 
   }))
 
@@ -53,10 +58,12 @@ const Login = props => {
 
   useEffect(() => {
 
+
     try {
       if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
 
         localStorage.setItem("token", (loginSuccess.token))
+        localStorage.setItem("refreshToken", (loginSuccess.refreshtoken))
         localStorage.setItem("userId", (loginSuccess.UserID))
 
         dispatch(getUserDetailsAction(loginSuccess.UserID))
@@ -82,17 +89,68 @@ const Login = props => {
       localStorage.setItem("roleId2", JSON.stringify(value))
 
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
-
-      history.push("/Dashboard")
-    } else if (divisionDropdown_redux.length > 1) {
-      history.push("/division")
     }
+
   }, [divisionDropdown_redux])
 
-  const handleValidSubmit = (event, values) => {
 
-    dispatch(loginUser(values, props.history))
+
+  useEffect(() => {
+
+    let dashboardFound = userAccess.find((i) => {
+      return i.ModuleName === "Dashboard"
+    })
+
+    if ((divisionDropdown_redux.length === 1) && (userAccess.length > 1)) {
+
+      if (dashboardFound) {
+        history.push(`/${dashboardFound.ActualPagePath}`)
+      }
+      else {
+        history.push("/Dashboard")
+      }
+    }
+    else if ((divisionDropdown_redux.length > 1) && (userAccess.length > 1)) {
+      if (dashboardFound) {
+        history.push(`/${dashboardFound.ActualPagePath}`)
+      }
+      else {
+        history.push("/division")
+
+      }
+    }
+
+  }, [userAccess])
+
+  const currentUserOnchange = (e) => {
+    setcurrentUserName(e.target.value)
+    dispatch(apiErrorSuccess(null))
   }
+
+  const PasswordOnchange = (e) => {
+    setPassword(e.target.value)
+    dispatch(apiErrorSuccess(null))
+
+  }
+
+//   useEffect(() => {
+//     debugger
+//  document.getElementById("loginbtn").focus()
+   
+//   }, [currentUserName,Password])
+  
+
+
+  const SaveHandler = async (event) => {
+    debugger
+    event.preventDefault();
+    const values = {
+      UserName: currentUserName,
+      Password: Password
+    }
+    dispatch(loginUser(values, props.history))
+
+  };
 
   return (
     <React.Fragment>
@@ -124,24 +182,28 @@ const Login = props => {
                           {loginError}
                         </Alert>
                       ) : null}
-                      <AvForm
-                        className="custom-form mt-4 pt-2"
-                        onValidSubmit={(e, v) => {
-                          handleValidSubmit(e, v)
-                        }}
-                      >
-
+                      <form >
                         <div className="mb-3">
-                          <AvField
-                            name="UserName"
-                            label="UserName"
-                            className="form-control"
-                            placeholder="Enter User Name"
-                            type="text"
-                            required
-                          />
+                          <div className="d-flex align-items-start">
+                            <div className="flex-grow-1">
+                              <label className="form-label">User Name</label>
+                            </div>
+                          </div>
 
+                          <div className="mb-3">
+                            <Input
+                              name="UserName"
+                              type="text"
+                              value={currentUserName}
+                              autocomplete="off"
+                              autoFocus={false}
+                              required
+                              onChange={currentUserOnchange}
+                              placeholder="Enter User Name"
+                            />
+                          </div>
                         </div>
+
                         <div className="mb-3">
                           <div className="d-flex align-items-start">
                             <div className="flex-grow-1">
@@ -150,8 +212,12 @@ const Login = props => {
                           </div>
 
                           <div className="mb-3">
-                            <AvField
+                            <Input
                               name="Password"
+                              defaultValue={Password}
+                              autocomplete="off"
+                              autoFocus={false}
+                              onChange={PasswordOnchange}
                               type="password"
                               className="form-control"
                               required
@@ -165,14 +231,9 @@ const Login = props => {
 
                         </div>
                         <div className="mb-3">
-                          <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Login</button>
+                          <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit" id="loginbtn" onClick={SaveHandler}  >Login</button>
                         </div>
-                      </AvForm>
-
-                      {/* <div className="mt-4 mt-md-5 text-center">
-                        <p className="mb-0 text-primary fw-semibold" onClick={() => { createSuperAdminHandler() }}> Create SuperAdmin </p>
-                      </div> */}
-
+                      </form>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
                       <p className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>

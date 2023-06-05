@@ -102,6 +102,10 @@ export const SubGroupMaster = url.SUBGROUP_LIST
 export const GeneralList = url.GENERAL
 export const GeneralMaster = url.GENERAL_LIST
 
+export const CityList = url.CITY
+export const CityMaster = url.CITY_LIST
+
+
 // export const CreditLimitMaster = url.CREDITLIMIT_LIST
 // export const CreditLimitList = url.CREDITLIMIT
 
@@ -120,7 +124,10 @@ export const ManagementParties = url.MANAGEMENT_PARTIES
 export const BankMaster = url.BANK_LIST
 export const BankList = url.BANK
 
+export const RetailerMaster = url.RETAILER_LIST
+export const RetailerList = url.RETAILER_MASTER
 
+export const ProductMarginReport = url.PRODUCT_MARGIN_REPORT
 
 //******************************* Purchase Module ************************************//
 
@@ -207,5 +214,7 @@ export const CreditList = url.CREDIT
 
 export const Debit = url.DEBIT_LIST
 export const DebitList = url.DEBIT
+
+export const SapLedger = url.SAP_LEDGER
 
 

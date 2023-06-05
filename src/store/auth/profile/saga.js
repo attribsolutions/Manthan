@@ -39,6 +39,9 @@ function* editProfile({ payload: { user } }) {
     yield put(profileError(error))
   }
 }
+
+
+
 export function* watchProfile() {
   yield takeEvery(EDIT_PROFILE, editProfile)
 }

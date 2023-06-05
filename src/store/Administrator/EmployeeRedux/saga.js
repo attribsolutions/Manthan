@@ -6,18 +6,28 @@ import {
   getState_For_Dropdown, Get_CompanyBy_EmployeeType_For_Dropdown,
   get_EmployeelistApi,
   save_Employee_API,
-  update_EmployeeAPI
+  update_EmployeeAPI,
+  getCity_For_Dropdown
 } from "../../../helpers/backend_helper";
 import {
   GET_DESIGNATIONID,
-  GET_STATE, SAVE_EMPLOYEE_MASTER, GET_EMPLOYEE_LIST, UPDATE_EMPLOYEE_ID,
-  DELETE_EMPLOYEE_ID, EDIT_EMPLOYEE_ID, GET_COMPANYNAME_BY_EMPLOYEETYPES_ID,
+  GET_STATE, SAVE_EMPLOYEE_MASTER,
+  GET_EMPLOYEE_LIST,
+  UPDATE_EMPLOYEE_ID,
+  DELETE_EMPLOYEE_ID,
+  EDIT_EMPLOYEE_ID,
+  GET_COMPANYNAME_BY_EMPLOYEETYPES_ID,
+  GET_CITY_ON_DISTRICT,
 } from './actionTypes'
 import {
   getDesignationIDSuccess,
   getStateESuccess, PostEmployeeSuccess,
   getEmployeelistSuccess,
-  deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, Get_CompanyName_By_EmployeeTypeID_Success,
+  deleteEmployeeIDSuccess,
+  editEmployeeSuccess,
+  updateEmployeeIDSuccess,
+  Get_CompanyName_By_EmployeeTypeID_Success,
+  getCityOnDistrictSuccess,
 } from "./action";
 import { CommonConsole, loginJsonBody, } from "../../../components/Common/CommonFunction";
 
@@ -32,6 +42,14 @@ function* State_saga() { // State  dropdown api
   try {
     const response = yield call(getState_For_Dropdown);
     yield put(getStateESuccess(response.Data));
+  } catch (error) { CommonConsole(error) }
+}
+
+function* City_saga(id) { // City  dropdown api
+  try {
+    
+    const response = yield call(getCity_For_Dropdown, id.id);
+    yield put(getCityOnDistrictSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
@@ -86,6 +104,7 @@ function* Get_CompanyName_By_EmployeeTypesID_GenFunc({ id }) {
 function* M_EmployeeSaga() {
   yield takeEvery(GET_DESIGNATIONID, DesignationID_saga);
   yield takeEvery(GET_STATE, State_saga);
+  yield takeEvery(GET_CITY_ON_DISTRICT, City_saga);
   yield takeEvery(GET_EMPLOYEE_LIST, Get_EmployeeList_GenFunc)
   yield takeEvery(SAVE_EMPLOYEE_MASTER, Save_Employee_GenFunc)
   yield takeEvery(EDIT_EMPLOYEE_ID, Edit_EmployeeID_GenFunc)

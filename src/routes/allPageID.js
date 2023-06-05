@@ -122,9 +122,12 @@ export const MANAGEMENT_PARTIES = 172
 export const BANK = 175
 export const BANK_LIST = 176
 
+export const CITY = 200
+
+
 export const BANK_ASSIGN = 182
 
-
+export const PRODUCT_MARGIN_REPORT = 198
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
@@ -213,5 +216,8 @@ export const BULK_RECIPT = 181
 
 export const PAYMENT_ENTRY = 177
 export const PAYMENT_ENTRY_LIST = 178
+
+export const SAP_LEDGER  = 197
+
 
 

@@ -3,9 +3,9 @@ import { CheckAPIResponse, CommonConsole } from "../components/Common/CommonFunc
 
 
 
-  const API_URL = "http://192.168.1.114:8000"
+const API_URL = "http://192.168.1.114:8000"
 
-// const API_URL = "http://103.135.203.145:8000"
+// const API_URL = "http://117.248.109.234:8000"
 
 const axiosApi = axios.create({
   baseURL: API_URL,
@@ -88,30 +88,41 @@ export function del(url, btnId) {
 }
 
 // for forget password
-export function postForget(url, body,) {
+export function postWithoutToken(url, body,) {
   return axiosApi
     .post(url, body, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        "Authorization":null
       }
     })
     .then(response => {
-      return CheckAPIResponse({ method: "postForget", body, url, response });
+      console.log(`${url} Body :`,body )
+      console.log(`${url} response :`,response )
+      return response.data
+      // return CheckAPIResponse({ method: "postWithoutToken", body, url, response });
     })
     .catch(error => {
-      return CheckAPIResponse({ method: "postForget", url, error });
+      console.log(`${url} Body :`,body )
+      console.log(`${url} error :`, error )
+      return Promise.reject(error)
+
+      // return CheckAPIResponse({ method: "postWithoutToken", url, error });
     });
 
 }
 
-export async function getModify(url) {
+export async function postRefreshToken(url,body) {
   AuthonticationFunction();
-  return axiosApi.get(url).then(response => {
-    return CheckAPIResponse({ method: "get", url, response });
+  return axiosApi.post(url, body, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    }
+  }).then(response => {
+    return response.data;
   })
-    .catch(error => {
-      return CheckAPIResponse({ method: "get", url, error });
-    });
+
 }
 

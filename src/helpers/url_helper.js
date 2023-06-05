@@ -17,7 +17,14 @@ export const FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN = "/GetUserDetails"
 export const DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE = "/PartyDropdownforloginpage"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
+export const CHANGEPASSWORD_API = "/ChangePassword"
+
+
 export const SUPER_ADMIN_API = '/SuperAdmin'
+
+export const TOKEN_REFRESH_API = '/api/token/refresh/'
+
+
 
 export const PAGE_FIELD = '/PageMaster'
 
@@ -52,6 +59,8 @@ export const EMPLOYEE_LIST_FOR_DROPDOWN_API_URL = "/GetEmployeeForUserCreation"
 export const GET_DESIGNATIONID = "/Designations"
 export const GET_EMPLOYEE_TYPE = "/EmployeeTypes"
 export const GET_STATE = "/States"
+ export const GET_CITY_ON_DISTRICT='/GetCityOnDistrict'
+
 // export const GET_REGION="/Region"
 export const EMPLOYEE_API_URL = "/Employees"
 export const EMPLOYEE_FILTER_API_URL = "/EmployeesFilter"
@@ -220,6 +229,9 @@ export const GENERAL_MASTER_SUB_TYPE = '/GeneralMasterSubType'
 export const BANK = '/Bank'
 export const BANK_LIST_FILTER = '/BankFilter'
 
+export const CITY = '/Cities'
+export const DISTRICT = '/GetCityOnDistrict'
+
 // BankAssign
 export const BANK_ASSIGN = '/PartyBankSave'
 export const PARTY_BANK_FILTER = '/PartyBanksFilter'
@@ -336,6 +348,9 @@ export const CREDIT_DEBIT = '/CreditDebitNote'
 export const CREDIT_DEBIT_FILTER = '/CreditDebitNoteFilter'
 export const INVOICE_RETURN = '/InvoiceReturnCRDR'
 export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
+
+export const PARTY_LEDGER_API = '/SAPLedger'
+export const PRODUCT_MARGIN_REPORT_API='/ProductMarginReport'
 
 
 // Dashboard
