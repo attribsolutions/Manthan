@@ -160,7 +160,7 @@ const PartyMaster = (props) => {
                             label: hasEditVal.District.Name,
                             value: hasEditVal.District.id,
                         },
-                        City: {
+                        CityName: {
                             label: hasEditVal.City.Name,
                             value: hasEditVal.City.id,
                         },
