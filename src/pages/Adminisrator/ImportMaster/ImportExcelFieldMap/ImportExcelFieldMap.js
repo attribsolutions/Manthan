@@ -68,7 +68,7 @@ const ImportExcelFieldMap = (props) => {
     }));
 
     useEffect(() => {
-        const page_Id = pageId.IMPORT_EXCEL_FIELD_MAP_add
+        const page_Id = pageId.IMPORT_EXCEL_FIELD_MAP
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));

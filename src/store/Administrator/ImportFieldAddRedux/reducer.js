@@ -1,17 +1,19 @@
 import {
   DELETE_IMPORT_FIELD_ADD_SUCCESS,
   EDIT_IMPORT_FIELD_ADD_SUCCESS,
+  IMPORT_EXCEL_TYPE_SUCCESS,
   POST_IMPORT_FIELD_ADD_SUCCESS,
   SAVE_IMPORT_FIELD_ADD_SUCCESS,
-   UPDATE_IMPORT_FIELD_ADD_SUCCESS,
+  UPDATE_IMPORT_FIELD_ADD_SUCCESS,
 } from "./actionType";
 
 const INIT_STATE = {
-  getList:[],
+  getList: [],
   postMsg: { Status: false },
   deleteMsg: { Status: false },
   editData: { Status: false },
   updateMsg: { Status: false },
+  importExcelType: []
 }
 
 const ImportFieldAdd_Reducer = (state = INIT_STATE, action) => {
@@ -31,7 +33,7 @@ const ImportFieldAdd_Reducer = (state = INIT_STATE, action) => {
     case POST_IMPORT_FIELD_ADD_SUCCESS:
       return {
         ...state,
-       getList: action.payload,
+        getList: action.payload,
       }
     //  del
     case DELETE_IMPORT_FIELD_ADD_SUCCESS:
@@ -52,6 +54,14 @@ const ImportFieldAdd_Reducer = (state = INIT_STATE, action) => {
         ...state,
         updateMsg: action.payload,
       };
+
+    case IMPORT_EXCEL_TYPE_SUCCESS:
+      return {
+        ...state,
+        importExcelType: action.payload,
+      };
+
+
 
     default:
       return state

@@ -373,6 +373,7 @@ export const ImportFieldAdd_Post_API = (jsonBody) => post(url.IMPORT_FIELD_ADD_F
 export const ImportFieldAdd_Delete_API = ({ deleteId, btnId }) => del(`${url.IMPORT_FIELD_ADD_SAVE}/${deleteId}`, btnId)// delete api
 export const ImportFieldAdd_Edit_API = ({ editId, btnId }) => get(`${url.IMPORT_FIELD_ADD_SAVE}/${editId}`, btnId)// edit api
 export const ImportFieldAdd_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.IMPORT_FIELD_ADD_SAVE}/${updateId}`, jsonBody, btnId)// update api
+export const ImportExcelType_API = ({ jsonBody, updateId, btnId }) => put(`${url.IMPORT_FIELD_ADD_SAVE}/${updateId}`, jsonBody, btnId)// update api
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api

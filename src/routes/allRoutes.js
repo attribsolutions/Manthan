@@ -272,11 +272,11 @@ const userRoutes = [
   { path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload },
   { path: path.RETAILER_EXCEL_UPLOAD, component: RetailerExcelUpload },
 
-  { path: path.IMPORT_EXCEL_FIELD_MAP_add, component: ImportExcelFieldMap },
+  { path: path.IMPORT_EXCEL_FIELD_MAP, component: ImportExcelFieldMap },
   { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd },
   { path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList },
 
-  { path: path.IMPORT_FIELD_MASTER, component: ImportMasterMap },
+  { path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportMasterMap },
 
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
