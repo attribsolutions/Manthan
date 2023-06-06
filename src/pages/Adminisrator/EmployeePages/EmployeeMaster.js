@@ -113,7 +113,7 @@ const AddEmployee = (props) => {
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
     }));
-debugger
+
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -349,8 +349,9 @@ debugger
     value: data.id,
     label: data.Name
   }));
-
+  
   const City_DropdownOptions = City.map((data) => ({
+    
     value: data.id,
     label: data.Name
   }));
@@ -366,6 +367,7 @@ debugger
   }
 
   function District_Dropdown_Handler(e) {
+    
     dispatch(getCityOnDistrict(e.value))
     setState((i) => {
       const a = { ...i }
@@ -378,7 +380,7 @@ debugger
   }
 
   const SaveHandler = (event) => {
-    debugger
+    
     event.preventDefault();
     const btnId = event.target.id;
     try {
@@ -423,7 +425,7 @@ debugger
           dispatch(updateEmployeeAction({ jsonBody, updateId: values.id, btnId }));
         }
         else {
-          debugger
+          
           dispatch(saveEmployeeAction({ jsonBody, btnId }));
         }
       }

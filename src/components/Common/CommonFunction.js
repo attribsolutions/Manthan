@@ -150,6 +150,18 @@ export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company 
   return user_Details;
 };
 
+
+
+export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+  try {
+    const detail = JSON.parse(localStorage.getItem("roleId"));
+    return (detail.Role === 2);
+  } catch (e) {
+    CommonConsole("Common loginUserAdminRole  Error");
+  }
+  return false;
+};
+
 export const loginRoleID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
     const detail = JSON.parse(localStorage.getItem("roleId"));
@@ -287,14 +299,14 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
 
   if (btnId) {
     try {
-     let btn= document.getElementById(btnId);
-     btn .disabled = state
-// if(state){
-//   btn.innerText='Loging'
-// }else{
-//   btn.innerText=""
+      let btn = document.getElementById(btnId);
+      btn.disabled = state
+      // if(state){
+      //   btn.innerText='Loging'
+      // }else{
+      //   btn.innerText=""
 
-// }
+      // }
 
       // document.getElementById("overlay").style.display = true
       //   ? "block"
@@ -322,7 +334,7 @@ export async function CheckAPIResponse({
     // await new Promise(r => setTimeout(r, 0));
     btnIsDissablefunc({ btnId, state: false });
   }
-  
+
 
   const { data = "", code } = response;
   const con1 = data.StatusCode === 200;
@@ -337,25 +349,23 @@ export async function CheckAPIResponse({
     const { data = "", response } = error;
     const tokenXp = response.data.code === "token_not_valid";
 
-    const err3 = data.StatusCode === 226; //reject
-    const err4 = data.StatusCode === 400; //reject
-    const err5 = data.StatusCode === 406; //reject);
+
 
     // **********************************************************************************
     if (con6) {                             // print post and Put method body
       console.log(`${url}***=> ${method} Body =>`, body);
     }
-    
+
     if (tokenXp) {
-    
-     await customAlert({
-        Type: 3,
-        Message: "Token Exprire"
-      })
-  
+
+      //  await customAlert({
+      //     Type: 3,
+      //     Message: "Token Exprire"
+      //   })
+
       history.push({ pathname: "/logout" })
       window.location.reload(true)
-      
+
       return
     }
     console.log(`${url}***${method} apiCall response:=>`, error);
@@ -363,7 +373,7 @@ export async function CheckAPIResponse({
       Type: 2,
       Message: `${url}:This API ${method} Method Execution Error`,
     });
-   
+
     return Promise.reject(error);
     // }
   }
