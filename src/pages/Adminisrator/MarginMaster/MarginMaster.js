@@ -410,11 +410,14 @@ const MarginMaster = (props) => {
             }))
 
             const Find = ItemData.filter((index) => {
-                return (!(index.Margin === '') && (index.id === ''))
+                
+                return (!(index.Margin === '0.00') )
             })
+         
             const jsonBody = JSON.stringify(Find)
 
             if (!(Find.length > 0)) {
+             
                 customAlert({
                     Type: 4,
                     Message: "Please Enter Margin"
@@ -438,7 +441,7 @@ const MarginMaster = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
 
-                    <form noValidate>
+                    {/* <form noValidate> */}
                         <Card className="text-black ">
                             <CardHeader className="card-header  text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -573,7 +576,7 @@ const MarginMaster = (props) => {
 
                             </CardBody>
                         </Card>
-                    </form>
+                    {/* </form> */}
                 </Container>
             </div>
         </React.Fragment>
