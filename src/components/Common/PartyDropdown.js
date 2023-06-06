@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Card, Col, FormGroup, Label, } from "reactstrap";
 import Select from "react-select";
 import { getPartyListAPI } from "../../store/Administrator/PartyRedux/action";
+import { Change_Button, Go_Button } from "./CommonButton";
 
 
 const PartyDropdown_Common = (props) => {
 
     const dispatch = useDispatch();
 
-    const { partySelect, setPartyFunc, goButtonHandler } = props
+    const { partySelect, setPartyFunc, goButtonHandler, change_ButtonHandler, changeBtnShow } = props
 
 
     const { partyList } = useSelector((state) => ({
@@ -28,10 +29,10 @@ const PartyDropdown_Common = (props) => {
 
     return (
         <React.Fragment>
-            <div className="px-2   c_card_header text-black" >
-                <div className="row">
+            <div className="px-2   c_card_header text-black  " >
+                <div className="row pt-2">
                     <Col sm="5">
-                        <FormGroup className=" row mt-3 " >
+                        <FormGroup className=" row " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>Party</Label>
                             <Col sm="6">
@@ -48,10 +49,12 @@ const PartyDropdown_Common = (props) => {
                     </Col>
 
                     {goButtonHandler &&
-                        <Col sm="1" className="mx-4 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
-                                onClick={() => goButtonHandler()}
-                            >Go</Button>
+                        <Col sm="1" >
+                            {!changeBtnShow ?
+                                < Go_Button onClick={() => goButtonHandler()} />
+                                :
+                                <Change_Button onClick={() => change_ButtonHandler()} />
+                            }
                         </Col>
                     }
                 </div>

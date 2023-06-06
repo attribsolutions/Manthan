@@ -295,7 +295,7 @@ const RoutesMaster = (props) => {
                                 partySelect={values.Party}
                                 setPartyFunc={partyOnChngeHandler} />
                         }
-                        <Card className="text-black">
+                        <Card className="text-black" style={{marginTop:"3px"}}>
                             <CardHeader className="card-header   text-black c_card_header">
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
