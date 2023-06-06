@@ -1,8 +1,8 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
-  ExcelUpload_save_action_Success,
-  GoButton_ImportMasterMap_Success,
-  save_ImportMasterMap_Success
+  InvoiceExcelUpload_save_Success,
+  GoButton_ImportExcelPartyMap_Success,
+  save_ImportExcelPartyMap_Sucess
 } from "./action";
 import {
   ExcelUpload_Invoice_Save_API,
@@ -14,9 +14,9 @@ import {
   ImportMaster_Map_Unit_Save_API,
 } from "../../../helpers/backend_helper";
 import {
-  EXCEL_UPLOAD_SAVE,
-  GO_BUTTON_IMPORT_MASTER_MAP,
-  SAVE_IMPORT_MASTER_MAP,
+  INVOICE_EXCEL_UPLOAD_SAVE,
+  GO_BUTTON_IMPORT_EXCEL_PARTY_MAP,
+  SAVE_IMPORT_EXCEL_PARTY_MAP,
 } from "./actionType";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 
@@ -58,7 +58,7 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
       }))
     }
 
-    yield put(GoButton_ImportMasterMap_Success(newResp));
+    yield put(GoButton_ImportExcelPartyMap_Success(newResp));
 
   } catch (error) { CommonConsole(error) }
 }
@@ -68,15 +68,15 @@ function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {  // Save API
   try {
     if (mapType === 1) {
       const response = yield call(ImportMaster_Map_Customer_Save_API, config);
-      yield put(save_ImportMasterMap_Success(response));
+      yield put(save_ImportExcelPartyMap_Sucess(response));
     }
     else if (mapType === 2) {
       const response = yield call(ImportMaster_Map_Item_Save_API, config);
-      yield put(save_ImportMasterMap_Success(response));
+      yield put(save_ImportExcelPartyMap_Sucess(response));
     }
     else {
       const response = yield call(ImportMaster_Map_Unit_Save_API, config);
-      yield put(save_ImportMasterMap_Success(response));
+      yield put(save_ImportExcelPartyMap_Sucess(response));
     }
 
   } catch (error) { CommonConsole(error) }
@@ -86,15 +86,15 @@ function* ExcelUpload_save_GenFun({ config }) {  // Save API
 
   try {
     const response = yield call(ExcelUpload_Invoice_Save_API, config);
-    yield put(ExcelUpload_save_action_Success(response));
+    yield put(InvoiceExcelUpload_save_Success(response));
 
   } catch (error) { CommonConsole(error) }
 }
 
-function* ImportMasterMap_Saga() {
-  yield takeEvery(GO_BUTTON_IMPORT_MASTER_MAP, GoButtonExcel_ImportMaster_GenFun)
-  yield takeEvery(SAVE_IMPORT_MASTER_MAP, Save_Method_ForExcel_ImportMaster_GenFun)
-  yield takeEvery(EXCEL_UPLOAD_SAVE, ExcelUpload_save_GenFun )
+function* ImportExcelPartyMap_Saga() {
+  yield takeEvery(GO_BUTTON_IMPORT_EXCEL_PARTY_MAP, GoButtonExcel_ImportMaster_GenFun)
+  yield takeEvery(SAVE_IMPORT_EXCEL_PARTY_MAP, Save_Method_ForExcel_ImportMaster_GenFun)
+  yield takeEvery(INVOICE_EXCEL_UPLOAD_SAVE, ExcelUpload_save_GenFun )
 }
 
-export default ImportMasterMap_Saga;
+export default ImportExcelPartyMap_Saga;
