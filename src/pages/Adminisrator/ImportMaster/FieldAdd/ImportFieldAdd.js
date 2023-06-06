@@ -228,10 +228,7 @@ const ImportFieldAdd = (props) => {
         value: index.id,
         label: index.Name,
     }));
-<<<<<<< Updated upstream
-=======
-    
->>>>>>> Stashed changes
+
     const importExcelType_Options = importExcelType.map((index) => ({
         value: index.id,
         label: index.Name,
