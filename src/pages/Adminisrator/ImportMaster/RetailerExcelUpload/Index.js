@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
     Card,
     Col,
     FormGroup,
+    Input,
     Label,
     Row,
 } from "reactstrap";
@@ -10,43 +11,38 @@ import { MetaTags } from "react-meta-tags";
 import { commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import Select from "react-select";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
-import {
-    comAddPageFieldFunc,
-    initialFiledFunc,
-} from "../../../../components/Common/validationFunction";
+
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
-import { fileDetails, readExcelFile } from "./readFile";
 import {
     GoButton_ImportFiledMap_Add,
     GoButton_ImportFiledMap_AddSuccess
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import {
-    InvoiceExcelUpload_save_action,
     InvoiceExcelUpload_save_Success
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
+import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
+import PriceDropOptions from "../../PartyMaster/MasterAdd/FirstTab/PriceDropOptions";
+import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
+import { getPartyTypelist } from "../../../../store/Administrator/PartyTypeRedux/action";
+import { readExcelFile, retailer_FileDetails, retailer_SaveHandler } from "./AllHndlerFunc";
 
 
 const RetailerExcelUpload = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const userAdminRole = _cfunc.loginUserAdminRole();
 
     const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [], partyNO: [] }
-    const fileds = {
-        id: "",
-        Party: "",
-        ImportType: "",
-        PatternType: ""
-    }
 
-    const [state, setState] = useState(initialFiledFunc(fileds))
+
+    const [priceListSelect, setPriceListSelect] = useState({ value: '' });
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [selectedFiles, setselectedFiles] = useState([])
@@ -60,23 +56,28 @@ const RetailerExcelUpload = (props) => {
         postMsg,
         pageField,
         userAccess,
-        partyList,
-        compareParameter = []
+        priceListByPartyType = [],
+        compareParameter = [],
+        partyTypes
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        partyList: state.PartyMasterReducer.partyList,
+        partyTypes: state.PartyTypeReducer.ListData,
+        priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
     }));
 
-    useEffect(() => {
-        const page_Id = pageId.RETAILER_EXCEL_UPLOAD
+    useLayoutEffect(() => {
+        const page_Id = pageId.INVOICE_EXCEL_UPLOAD
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
-        if ((_cfunc.loginIsSCMCompany() === 1)) {
+        dispatch(priceListByPartyActionSuccess([]))
+        dispatch(getPartyListAPI());
+        dispatch(getPartyTypelist());
+
+        if (!userAdminRole) {
             goButtonHandler()
         }
         return () => {
@@ -88,11 +89,8 @@ const RetailerExcelUpload = (props) => {
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
 
-    // userAccess useEffect
+
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
@@ -109,12 +107,7 @@ const RetailerExcelUpload = (props) => {
     }, [userAccess])
 
 
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
+
 
     useEffect(async () => {
 
@@ -134,23 +127,27 @@ const RetailerExcelUpload = (props) => {
         }
     }, [postMsg])
 
-    const PartyDropdown_Options = partyList.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
+    useEffect(() => {
+
+        if ((partyTypes.length > 0)) {
+            let isRetailer = partyTypes.find(i => (i.IsRetailer))
+            if (!(isRetailer === undefined)) {
+                dispatch(priceListByPartyAction(isRetailer.id))
+            }
+        }
+    }, [partyTypes])
 
 
     function goButtonHandler(e) {
-        let partyId = ((_cfunc.loginIsSCMCompany() === 1)) ? _cfunc.loginPartyID() : e.value;
         const jsonBody = JSON.stringify({
-            PartyID: partyId,
-            CompanyID: _cfunc.loginCompanyID()
+            PartyID: "",
+            CompanyID: ""
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
 
 
-    async function upload() {
+    async function uploadBtnFunc() {
 
         if (compareParameter.length === 0) {
             customAlert({
@@ -176,8 +173,11 @@ const RetailerExcelUpload = (props) => {
 
             const readjson = await readExcelFile({ file: files[0], compareParameter, })
             if (readjson.length > 0) {
+                
+                setPreUploadjson(readjson)
+                setPreViewDivShow(true)
 
-                const isdetails = await fileDetails({ compareParameter, readjson })
+                const isdetails = await retailer_FileDetails({ compareParameter, readjson })
                 let { invoiceNO } = isdetails;
                 if ((invoiceNO.length > 0)) {
                     setReadJsonDetail(isdetails)
@@ -189,12 +189,7 @@ const RetailerExcelUpload = (props) => {
                         Message: "Mapping not match."
                     })
                 }
-                // const btnerify = document.getElementById("btn-verify");
-                // const btnupload = document.getElementById('btn-upload');
-                // const filedetail = document.getElementById('filedetail');
-
-                // btnerify.style.display = "none"
-                // btnupload.style.display = "block"
+                
             }
 
         } else {
@@ -231,7 +226,7 @@ const RetailerExcelUpload = (props) => {
         setPreViewDivShow(false)
         // try {
         //     const btnerify = document.getElementById("btn-verify")
-        //     const btnupload = document.getElementById('btn-upload')
+        //     const btnupload = document.getElementById('btn-uploadBtnFunc')
         //     const progDiv = document.getElementById("file-proccess")
 
         //     btnerify.style.display = "block"
@@ -258,78 +253,21 @@ const RetailerExcelUpload = (props) => {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     }
 
+    const priceListOnClick = function () {
 
-    const SaveHandler = async (event) => {
+        const hasNone = document.getElementById("price-drop").style;
 
-        event.preventDefault();
-        const btnId = event.target.id
-        try {
-            _cfunc.btnIsDissablefunc({ btnId, state: true })
-            const parArr = readJsonDetail.fileFiled
-            const outerArr = []
+        if ((priceListByPartyType.length > 0)) {
+            if ((hasNone.display === "none") || (hasNone.display === "")) {
+                hasNone.display = "block";
+            } else {
+                hasNone.display = "none";
+            }
+        }
 
-            compareParameter.forEach(ele => {
-                if ((ele.Value !== null)) {
-                    parArr[ele.FieldName] = ele.Value
-                }
-            })
-
-            readJsonDetail.invoice.forEach(inv => {
-                let parentObj;
-                let invoiceItems = []
-                inv.forEach(ele => {
-                    parentObj = {
-                        "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
-                        "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
-                        "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
-                        "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
-                        "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
-                        "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
-                        "Party": _cfunc.loginPartyID(),
-                        CreatedBy: _cfunc.loginUserID(),
-                        UpdatedBy: _cfunc.loginUserID(),
-                        "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
-                    }
-
-                    invoiceItems.push({
-                        "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
-                        "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
-                        "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
-                        "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
-                        "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
-                        "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
-                        "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                        "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
-                        "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
-                        "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
-                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
-                        "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
-                        "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
-                        "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,
-                        "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : 0,
-                        "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : 0,
-                        "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
-                        "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
-                        "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : 0,
-                        "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : 0,
-                        "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
-                        "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
-                        "TaxType": ele[parArr.TaxType] ? ele[parArr.TaxType] : '',
-                        "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
-                        "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
-                        "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
-
-                    })
-                })
-
-                outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
-            });
-
-            const jsonBody = JSON.stringify({ "BulkData": outerArr })
-            dispatch(InvoiceExcelUpload_save_action({ jsonBody, btnId }));
-
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
+
+
 
 
     if (!(userPageAccessState === '')) {
@@ -340,57 +278,63 @@ const RetailerExcelUpload = (props) => {
                 <form noValidate>
                     <div className="page-content">
 
-                        <div className="px-2 c_card_header text-black" >
-                            <div className="px-2   c_card_filter text-black" >
-                                {
-                                    (!(_cfunc.loginIsSCMCompany() === 1)) ? <>
-                                        <div className="row">
-                                            <Col sm="3">
-                                                <FormGroup className="mb-2 row mt-3 " >
-                                                    <Label className=" p-2"
 
-                                                        style={{ width: "115px" }}>{fieldLabel.Party}</Label>
-                                                    <Col >
-                                                        <Select
-                                                            classNamePrefix="select2-Customer"
-                                                            value={partySelect}
-                                                            options={PartyDropdown_Options}
-                                                            onChange={(e) => {
-                                                                SetPartySelect(e)
-                                                                goButtonHandler(e)
-                                                            }}
+                        {
+
+                            userAdminRole ? <>
+                                <div className="px-2 c_card_header text-black" >
+                                    <div className="   c_card_filter text-black" style={{ paddingBottom: "3px" }} >
+
+                                        <PartyDropdown_Common
+                                            partySelect={partySelect}
+                                            setPartyFunc={(e) => SetPartySelect(e)}
+                                            goButtonHandler={goButtonHandler}
+                                        />
+
+                                        <row className='mb-2'>
+                                            < Col md={6}>
+                                                <FormGroup className=" row px-1">
+                                                    <Label className="col col-sm-1" style={{ width: "83px" }}>PriceList </Label>
+                                                    <Col md={5}>
+                                                        <Input
+                                                            value={priceListSelect.label}
+                                                            autoComplete={"off"}
+                                                            placeholder="Select..."
+                                                            onClick={priceListOnClick}
                                                         />
+                                                        <PriceDropOptions
+                                                            data={priceListByPartyType}
+                                                            priceList={priceListSelect}
+                                                            setPriceSelect={setPriceListSelect} />
                                                     </Col>
                                                 </FormGroup>
-                                            </Col >
-                                        </div>
-                                    </>
-                                        : <>
-                                            {(!(compareParameter.length > 0)) ?
-                                                <div className="row ">
-                                                    <div className="d-flex justify-content-start p-2 ">
-                                                        <div>Please wait Downloading field Details.</div>
-                                                        <div >
-                                                            <div className="dot-pulse">
-                                                                <div className="bounce1"></div>
-                                                                <div className="bounce2"></div>
-                                                                <div className="bounce3"></div>
-                                                            </div>
-                                                        </div>
+                                            </Col>
+                                        </row>
+                                    </div>
+                                </div>
+                            </>
+                                : <>
+                                    {(!(compareParameter.length > 0)) ?
+                                        <div className="row ">
+                                            <div className="d-flex justify-content-start p-2 ">
+                                                <div>Please wait Downloading field Details.</div>
+                                                <div >
+                                                    <div className="dot-pulse">
+                                                        <div className="bounce1"></div>
+                                                        <div className="bounce2"></div>
+                                                        <div className="bounce3"></div>
                                                     </div>
                                                 </div>
-                                                :
-                                                <div >
-                                                    <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
-                                                </div>}
+                                            </div>
+                                        </div>
+                                        :
+                                        <div >
+                                            <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
+                                        </div>}
 
 
-                                        </>
-                                }
-
-                            </div>
-
-                        </div>
+                                </>
+                        }
 
 
                         <div className="mb-3 mt-3">
@@ -410,9 +354,9 @@ const RetailerExcelUpload = (props) => {
                                         >
                                             <input {...getInputProps()} />
                                             <div className="mb-3">
-                                                <i className="display-4 text-muted bx bxs-cloud-upload" />
+                                                <i className="display-4 text-muted bx bxs-cloud-uploadBtnFunc" />
                                             </div>
-                                            <h4>Drop files here or click to upload.</h4>
+                                            <h4>Drop files here or click to uploadBtnFunc.</h4>
                                         </div>
                                     </div>
                                 )}
@@ -489,10 +433,7 @@ const RetailerExcelUpload = (props) => {
                                             <details>
                                                 <summary>Total Amount :{readJsonDetail.amount}</summary>
                                             </details>
-                                            {/* <div className="error-msg">
-    <i className="fa fa-error"></i>
-    Total Amount:5454
-</div> */}
+
                                         </div>
                                     </Card>
                                 }
@@ -506,9 +447,9 @@ const RetailerExcelUpload = (props) => {
                                 <button
                                     type="button"
                                     // style={{ display: "none" }}
-                                    id='btn-upload'
+                                    id='btn-uploadBtnFunc'
                                     className="btn btn-success "
-                                    onClick={SaveHandler}
+                                    onClick={(event) => retailer_SaveHandler(event, dispatch,compareParameter,readJsonDetail)}
                                 >
                                     Upload Files
                                 </button>
@@ -517,7 +458,7 @@ const RetailerExcelUpload = (props) => {
                                     type="button"
                                     id='btn-verify'
                                     className="btn btn-primary "
-                                    onClick={upload}
+                                    onClick={uploadBtnFunc}
                                 >
                                     Verify Files
                                 </button>
@@ -528,7 +469,7 @@ const RetailerExcelUpload = (props) => {
 
                     </div>
 
-                </form>
+                </form >
 
 
             </React.Fragment >

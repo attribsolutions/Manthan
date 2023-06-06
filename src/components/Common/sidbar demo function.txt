@@ -1,0 +1,29 @@
+function aa(pathName) {
+  
+    const menu = document.getElementById("side-menu");
+    // new MetisMenu("#side-menu");
+   
+    // const items = ul.getElementsByTagName("a");
+    let li = menu.getElementsByTagName("li")
+    for (let l1 = 0; l1 < li.length; ++l1) {
+       
+      const ul = li[l1].getElementsByTagName("ul")
+      for (let u1 = 0; u1 < ul.length; ++u1) {
+        let items = ul[u1].getElementsByTagName("a")
+        for (let i = 0; i < items.length; ++i) {
+           
+          if (pathName === items[i].pathname) {
+            let a=li[l1]
+            ul[u1].classList.add("mm-show")
+            li[l1].classList.add("mm-active")
+            items[i].classList.add("active");
+          }
+          else {
+            ul[u1].classList.add("mm-collapse")
+          }
+
+        }
+      }
+
+    }
+  }

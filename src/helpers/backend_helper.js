@@ -373,7 +373,8 @@ export const ImportFieldAdd_Post_API = (jsonBody) => post(url.IMPORT_FIELD_ADD_F
 export const ImportFieldAdd_Delete_API = ({ deleteId, btnId }) => del(`${url.IMPORT_FIELD_ADD_SAVE}/${deleteId}`, btnId)// delete api
 export const ImportFieldAdd_Edit_API = ({ editId, btnId }) => get(`${url.IMPORT_FIELD_ADD_SAVE}/${editId}`, btnId)// edit api
 export const ImportFieldAdd_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.IMPORT_FIELD_ADD_SAVE}/${updateId}`, jsonBody, btnId)// update api
-export const ImportExcelType_API = ({ jsonBody, updateId, btnId }) => put(`${url.IMPORT_FIELD_ADD_SAVE}/${updateId}`, jsonBody, btnId)// update api
+
+export const ImportExcelType_API = () => get(url.IMPORT_EXCEL_TYPE)// update api
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
@@ -587,7 +588,7 @@ export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// In
 export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, jsonBody)//  postapi
 
 
-export const PartyLedger_API = (FromDate,ToDate,SAPCode) => post(url.PARTY_LEDGER_API,FromDate,ToDate,SAPCode)//  postapi
+export const PartyLedger_API = (FromDate, ToDate, SAPCode) => post(url.PARTY_LEDGER_API, FromDate, ToDate, SAPCode)//  postapi
 export const Get_Product_Margin_Report = () => get(url.PRODUCT_MARGIN_REPORT_API)
 
 

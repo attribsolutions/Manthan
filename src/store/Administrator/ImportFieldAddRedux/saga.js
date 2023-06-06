@@ -56,20 +56,21 @@ function* Edit_ImportFieldAdd_GenFun({ config }) {                      // edit 
     response.pageMode = btnmode;
     yield put(edit_ImportFiledAdd_Success(response));
   } catch (error) { CommonConsole(error) }
-}
+};
 
 function* Update_ImportFieldAdd_GenFun({ config }) {                    // update API
   try {
     const response = yield call(ImportFieldAdd_Update_API, config);
     yield put(update_ImportFiledAdd_Success(response))
   } catch (error) { CommonConsole(error) }
-}
+};
+
 function* Get_ImportEXcelType_GenFun({ config }) {                    
   try {
-    const response = yield call(ImportExcelType_API, config);
-    yield put(get_ImportExcelType_Success(response))
+    const response = yield call(ImportExcelType_API);
+    yield put(get_ImportExcelType_Success(response.Data))
   } catch (error) { CommonConsole(error) }
-}
+};
 
 
 
