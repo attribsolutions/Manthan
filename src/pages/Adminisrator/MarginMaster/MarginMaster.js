@@ -413,11 +413,11 @@ const MarginMaster = (props) => {
                 
                 return (!(index.Margin === '0.00') )
             })
-            debugger
+         
             const jsonBody = JSON.stringify(Find)
 
             if (!(Find.length > 0)) {
-                debugger
+             
                 customAlert({
                     Type: 4,
                     Message: "Please Enter Margin"
