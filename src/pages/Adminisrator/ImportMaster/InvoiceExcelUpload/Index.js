@@ -33,7 +33,7 @@ import {
 import './scss.scss'
 
 
-const UploadExcel = (props) => {
+const InvoiceExcelUpload = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -71,7 +71,7 @@ const UploadExcel = (props) => {
     }));
 
     useEffect(() => {
-        const page_Id = pageId.UPLOAD_EXCEL
+        const page_Id = pageId.INVOICE_EXCEL_UPLOAD
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
@@ -150,7 +150,7 @@ const UploadExcel = (props) => {
     };
 
 
-    async function upload() {
+    async function uploadBtnFunc() {
 
         if (compareParameter.length === 0) {
             customAlert({
@@ -190,7 +190,7 @@ const UploadExcel = (props) => {
                     })
                 }
                 // const btnerify = document.getElementById("btn-verify");
-                // const btnupload = document.getElementById('btn-upload');
+                // const btnupload = document.getElementById('btn-uploadBtnFunc');
                 // const filedetail = document.getElementById('filedetail');
 
                 // btnerify.style.display = "none"
@@ -225,13 +225,13 @@ const UploadExcel = (props) => {
                 return
             }
         };
-        
+
         setReadJsonDetail(preDetails)
         setPreUploadjson([])
         setPreViewDivShow(false)
         // try {
         //     const btnerify = document.getElementById("btn-verify")
-        //     const btnupload = document.getElementById('btn-upload')
+        //     const btnupload = document.getElementById('btn-uploadBtnFunc')
         //     const progDiv = document.getElementById("file-proccess")
 
         //     btnerify.style.display = "block"
@@ -410,9 +410,9 @@ const UploadExcel = (props) => {
                                         >
                                             <input {...getInputProps()} />
                                             <div className="mb-3">
-                                                <i className="display-4 text-muted bx bxs-cloud-upload" />
+                                                <i className="display-4 text-muted bx bxs-cloud-uploadBtnFunc" />
                                             </div>
-                                            <h4>Drop files here or click to upload.</h4>
+                                            <h4>Drop files here or click to uploadBtnFunc.</h4>
                                         </div>
                                     </div>
                                 )}
@@ -469,17 +469,23 @@ const UploadExcel = (props) => {
                                             </details>
 
                                             <details>
-                                                <summary>No. of Party :{readJsonDetail.party.size}</summary>
+                                                <summary>No. of Party :{readJsonDetail.partyNO.length}</summary>
                                                 <div className="error-msg">
                                                     <p>
                                                         {readJsonDetail.partyNO.map(i => (<Label>{i} ,&#160;</Label>))}
                                                     </p>
                                                 </div>
                                             </details>
-                                            <details>
-                                                <summary> From Dates :20-01-2021</summary>
 
+                                            <details>
+                                                <summary>No. of Dates :{readJsonDetail.invoiceDate.length}</summary>
+                                                <div className="error-msg">
+                                                    <p>
+                                                        {readJsonDetail.invoiceDate.map(i => (<Label>{i} ,&#160;</Label>))}
+                                                    </p>
+                                                </div>
                                             </details>
+
                                             <details>
                                                 <summary>Total Amount :{readJsonDetail.amount}</summary>
                                             </details>
@@ -500,7 +506,7 @@ const UploadExcel = (props) => {
                                 <button
                                     type="button"
                                     // style={{ display: "none" }}
-                                    id='btn-upload'
+                                    id='btn-uploadBtnFunc'
                                     className="btn btn-success "
                                     onClick={SaveHandler}
                                 >
@@ -511,7 +517,7 @@ const UploadExcel = (props) => {
                                     type="button"
                                     id='btn-verify'
                                     className="btn btn-primary "
-                                    onClick={upload}
+                                    onClick={uploadBtnFunc}
                                 >
                                     Verify Files
                                 </button>
@@ -535,7 +541,7 @@ const UploadExcel = (props) => {
     }
 };
 
-export default UploadExcel
+export default InvoiceExcelUpload
 
 
 

@@ -14,12 +14,13 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import PartyDropdownList from "../../../components/Common/PartyDropdownComp/PartyDropdownList";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const DriverList = () => {
 
   const dispatch = useDispatch();
-  const RoleID = _cfunc.loginRoleID()
+  const userAdminRole = _cfunc.loginUserAdminRole();
+
 
   const [party, setParty] = useState({ value: _cfunc.loginPartyID(), label: "Select..." });
 
@@ -35,7 +36,7 @@ const DriverList = () => {
     })
   );
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField, } = reducers
 
   const action = {
     getList: getDriverList,
@@ -50,7 +51,7 @@ const DriverList = () => {
     const page_Id = pageId.DRIVER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    goButtonHandler(true)
+    if (!userAdminRole) { goButtonHandler() }
   }, []);
 
   const goButtonHandler = () => {
@@ -62,33 +63,20 @@ const DriverList = () => {
     dispatch(getDriverList(jsonBody));
   }
 
+  const partyOnChngeHandler = (e) => {
+    setParty(e)
+  }
   return (
-    // <React.Fragment>
-    //   <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-    //   {
-    //     (pageField) ?
-    //       <CommonListPage
-    //         action={action}
-    //         reducers={reducers}
-    //         MasterModal={DriverMaster}
-    //         masterPath={url.DRIVER}
-    //         ButtonMsgLable={"Driver"}
-    //         deleteName={"Name"}
-    //       />
-    //       : null
-    //   }
-    // </React.Fragment>
-
     <React.Fragment>
       <div className="page-content">
 
-        {RoleID === 2 ?
-          <PartyDropdownList
-            state={party}
-            setState={setParty}
-            action={goButtonHandler}
+        {userAdminRole &&
+          <PartyDropdown_Common
+            partySelect={party}
+            setPartyFunc={partyOnChngeHandler}
+            goButtonHandler={goButtonHandler}
           />
-          : null}
+        }
         {
           (pageField) ?
             <CommonPurchaseList

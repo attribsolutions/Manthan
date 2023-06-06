@@ -147,7 +147,8 @@ import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
 import ImportFieldAddList from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAddList";
 import ImportExcelFieldMap from "../pages/Adminisrator/ImportMaster/ImportExcelFieldMap/ImportExcelFieldMap";
-import UploadExcel from "../pages/Adminisrator/ImportMaster/ExcelUpload/UploadExcel";
+import InvoiceExcelUpload from "../pages/Adminisrator/ImportMaster/InvoiceExcelUpload/Index";
+import RetailerExcelUpload from "../pages/Adminisrator/ImportMaster/RetailerExcelUpload/Index";
 
 import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
 import ImportMasterMap from "../pages/Adminisrator/ImportMaster/ImportMasterMap/ImportMasterMap";
@@ -268,7 +269,8 @@ const userRoutes = [
   // { path: path.CREDITLIMIT, component: CreditLimitMaster },
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
-  { path: path.UPLOAD_EXCEL, component: UploadExcel },
+  { path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload },
+  { path: path.RETAILER_EXCEL_UPLOAD, component: RetailerExcelUpload },
 
   { path: path.IMPORT_EXCEL_FIELD_MAP_add, component: ImportExcelFieldMap },
   { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd },
