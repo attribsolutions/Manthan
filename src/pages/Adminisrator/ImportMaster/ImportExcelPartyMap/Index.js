@@ -24,7 +24,7 @@ import {
 } from "../../../../components/Common/CommonFunction";
 import {
     comAddPageFieldFunc,
-    formValid, initialFiledFunc,
+    initialFiledFunc,
     onChangeSelect,
 } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
@@ -32,14 +32,14 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import {
-    GoButton_ImportMasterMap,
-    GoButton_ImportMasterMap_Success,
-    save_ImportMasterMap,
-    save_ImportMasterMap_Success
-} from "../../../../store/Administrator/ImportMasterMapRedux/action";
+    GoButton_ImportExcelPartyMap,
+    GoButton_ImportExcelPartyMap_Success,
+    save_ImportExcelPartyMap,
+    save_ImportExcelPartyMap_Sucess
+} from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 
-const ImportMasterMap = (props) => {
+const ImportExcelPartyMap = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -65,11 +65,11 @@ const ImportMasterMap = (props) => {
         goButtonArr,
         partyList
     } = useSelector((state) => ({
-        postMsg: state.ImportMasterMap_Reducer.postMsg,
+        postMsg: state.ImportExcelPartyMap_Reducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        goButtonArr: state.ImportMasterMap_Reducer.addGoButton,
+        goButtonArr: state.ImportExcelPartyMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
     useEffect(() => {
@@ -77,7 +77,7 @@ const ImportMasterMap = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
-        dispatch(GoButton_ImportMasterMap_Success([]));
+        dispatch(GoButton_ImportExcelPartyMap_Success([]));
 
     }, []);
 
@@ -120,14 +120,14 @@ const ImportMasterMap = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(save_ImportMasterMap_Success({ Status: false }))
+            dispatch(save_ImportExcelPartyMap_Sucess({ Status: false }))
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
         }
         else if (postMsg.Status === true) {
-            dispatch(save_ImportMasterMap_Success({ Status: false }))
+            dispatch(save_ImportExcelPartyMap_Sucess({ Status: false }))
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
@@ -191,12 +191,12 @@ const ImportMasterMap = (props) => {
             let partyId = (((loginIsSCMCompany()) === 1)) ? loginPartyID() : values.Party.value;
             let mapType = values.MapType.value;
 
-            dispatch(GoButton_ImportMasterMap({ partyId, mapType }))
+            dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType }))
         } catch (error) { }
     };
 
     function change_ButtonHandler(e) {
-        dispatch(GoButton_ImportMasterMap_Success([]))
+        dispatch(GoButton_ImportExcelPartyMap_Success([]))
     }
 
     async function SaveHandler(event) {
@@ -260,7 +260,7 @@ const ImportMasterMap = (props) => {
             (mapType === 1) ? await funcForParty() :
                 (mapType === 2) ? await funcForItem() : await funcForUnit());
 
-        dispatch(save_ImportMasterMap({ jsonBody, mapType, }));
+        dispatch(save_ImportExcelPartyMap({ jsonBody, mapType, }));
 
     };
 
@@ -380,4 +380,4 @@ const ImportMasterMap = (props) => {
     }
 };
 
-export default ImportMasterMap
+export default ImportExcelPartyMap

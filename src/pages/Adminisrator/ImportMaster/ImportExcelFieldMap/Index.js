@@ -31,11 +31,13 @@ import {
     save_ImportFiledMap_Success
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
+import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
 
 const ImportExcelFieldMap = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const userAdminRole = _cfunc.loginUserAdminRole();
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -53,11 +55,9 @@ const ImportExcelFieldMap = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        updateMsg,
         pageField,
         userAccess,
         goButtonItem,
-        partyList
     } = useSelector((state) => ({
         postMsg: state.ImportExportFieldMap_Reducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -68,21 +68,17 @@ const ImportExcelFieldMap = (props) => {
     }));
 
     useEffect(() => {
-        const page_Id = pageId.IMPORT_EXCEL_FIELD_MAP_add
+        const page_Id = pageId.IMPORT_EXCEL_FIELD_MAP
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
-        if ((_cfunc.loginIsSCMCompany() === 1)) {
-            goButtonHandler()
-        }
+        if (!userAdminRole) { goButtonHandler() }
     }, []);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -135,13 +131,6 @@ const ImportExcelFieldMap = (props) => {
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonItem]);
 
 
-    const partyDropdown_Options = partyList.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
-
-
-
     const pagesListColumns = [
         {
             text: "Field Name",
@@ -180,7 +169,7 @@ const ImportExcelFieldMap = (props) => {
     ];
 
     async function goButtonHandler() {
-        let partyId = ((_cfunc.loginIsSCMCompany() === 1)) ? _cfunc.loginPartyID() : partySelect.value;
+        let partyId = userAdminRole ? _cfunc.loginPartyID() : partySelect.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
             CompanyID: _cfunc.loginCompanyID()
@@ -190,6 +179,10 @@ const ImportExcelFieldMap = (props) => {
 
     function change_ButtonHandler(e) {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]))
+    }
+
+    const partyOnChngeHandler = (e) => {
+        SetPartySelect(e)
     }
 
     function SaveHandler(event) {
@@ -230,51 +223,27 @@ const ImportExcelFieldMap = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <form onSubmit={(event) => SaveHandler(event)} noValidate>
+                <form >
                     <div className="page-content">
-                        <div style={{ display: ((_cfunc.loginIsSCMCompany() === 1)) && "none" }}>
-                            <div className="px-2 c_card_header text-black" >
-                                <div className="px-2   c_card_filter text-black" >
-                                    <div className="row" >
-                                        <Col sm="10">
-                                            <FormGroup className="mb-2 row mt-3 " >
-                                                <Label className=" p-2"
-
-                                                    style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
-                                                <Col style={{ maxWidth: "300px" }} >
-                                                    <Select
-                                                        classNamePrefix="select2-Customer"
-                                                        isDisabled={!(goButtonItem.length === 0) && true}
-                                                        value={partySelect}
-                                                        options={partyDropdown_Options}
-                                                        onChange={(e) => { SetPartySelect(e) }}
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
-
-                                        <Col sm="2" className="mt-3 ">
-                                            {(goButtonItem.length === 0) ?
-                                                < Go_Button onClick={goButtonHandler} />
-                                                :
-                                                <Change_Button onClick={change_ButtonHandler} />
-                                            }
-                                        </Col>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {userAdminRole &&
+                            <PartyDropdown_Common
+                                partySelect={partySelect}
+                                setPartyFunc={partyOnChngeHandler}
+                                goButtonHandler={goButtonHandler}
+                                changeBtnShow={!(goButtonItem.length === 0)}
+                                change_ButtonHandler={change_ButtonHandler}
+                            />
+                        }
                         <div >
                             <ToolkitProvider
                                 keyField="id"
                                 data={goButtonItem}
                                 columns={pagesListColumns}
-
                                 search
                             >
                                 {toolkitProps => (
                                     <React.Fragment>
-                                        <div className="table">
+                                        <div className="table mt-1">
                                             <BootstrapTable
                                                 bordered={true}
                                                 striped={false}
@@ -287,23 +256,20 @@ const ImportExcelFieldMap = (props) => {
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
                                         </div>
-
-
                                     </React.Fragment>
                                 )
                                 }
                             </ToolkitProvider>
-
-
                         </div>
                     </div>
 
                     <FormGroup>
                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                            {(goButtonItem.length > 0) && <SaveButton pageMode={pageMode}
-                                userAcc={userPageAccessState}
-                                module={"ImportExcelFieldMap"}
-                            />}
+                            {(goButtonItem.length > 0) &&
+                                <SaveButton pageMode={pageMode}
+                                    userAcc={userPageAccessState}
+                                    onClick={SaveHandler}
+                                />}
                         </Col>
                     </FormGroup >
                 </form>

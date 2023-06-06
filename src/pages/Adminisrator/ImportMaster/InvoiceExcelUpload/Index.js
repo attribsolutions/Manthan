@@ -27,9 +27,9 @@ import {
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import {
-    ExcelUpload_save_action,
-    ExcelUpload_save_action_Success
-} from "../../../../store/Administrator/ImportMasterMapRedux/action";
+    InvoiceExcelUpload_save_action,
+    InvoiceExcelUpload_save_Success
+} from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
 
 
@@ -63,7 +63,7 @@ const InvoiceExcelUpload = (props) => {
         partyList,
         compareParameter = []
     } = useSelector((state) => ({
-        postMsg: state.ImportMasterMap_Reducer.excelPostMsg,
+        postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         partyList: state.PartyMasterReducer.partyList,
@@ -119,14 +119,14 @@ const InvoiceExcelUpload = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(ExcelUpload_save_action_Success({ Status: false }))
+            dispatch(InvoiceExcelUpload_save_Success({ Status: false }))
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
         }
         else if (postMsg.Status === true) {
-            dispatch(ExcelUpload_save_action_Success({ Status: false }))
+            dispatch(InvoiceExcelUpload_save_Success({ Status: false }))
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
@@ -326,7 +326,7 @@ const InvoiceExcelUpload = (props) => {
             });
 
             const jsonBody = JSON.stringify({ "BulkData": outerArr })
-            dispatch(ExcelUpload_save_action({ jsonBody, btnId }));
+            dispatch(InvoiceExcelUpload_save_action({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
