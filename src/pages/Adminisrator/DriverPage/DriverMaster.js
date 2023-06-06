@@ -35,16 +35,16 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
-import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 
 const DriverMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const RoleID = _cfunc.loginRoleID()
+    const userAdminRole = _cfunc.loginUserAdminRole();
 
     const fileds = {
         id: "",
@@ -206,6 +206,14 @@ const DriverMaster = (props) => {
         }
     }, [pageField])
 
+    const partyOnChngeHandler = (e) => {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Party = e;
+            return a
+        })
+    }
+
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -217,7 +225,7 @@ const DriverMaster = (props) => {
                     Name: values.Name,
                     Address: values.Address,
                     DOB: values.DOB,
-                    Party: RoleID === 2 ? values.Party.value : _cfunc.loginPartyID(),
+                    Party: userAdminRole ? values.Party.value : _cfunc.loginPartyID(),
                     Company: _cfunc.loginCompanyID(),
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID()
@@ -245,11 +253,11 @@ const DriverMaster = (props) => {
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        {RoleID === 2 ?
-                            <PartyDropdownMaster
-                                state={state}
-                                setState={setState} />
-                            : null}
+                        {userAdminRole &&
+                            <PartyDropdown_Common
+                                partySelect={values.Party}
+                                setPartyFunc={partyOnChngeHandler} />
+                        }
 
                         <Card className="text-black ">
                             <CardHeader className="card-header   text-black c_card_header"  >
@@ -295,7 +303,7 @@ const DriverMaster = (props) => {
                                                                 <C_DatePicker
                                                                     name="DOB"
                                                                     value={values.DOB}
-                                                                    placeholder = {"DD/MM/YYYY"}
+                                                                    placeholder={"DD/MM/YYYY"}
                                                                     onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                                 />
                                                             </FormGroup>

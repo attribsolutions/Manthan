@@ -39,20 +39,21 @@ import {
     loginPartyID,
     loginUserID,
     btnIsDissablefunc,
-    loginRoleID,
-    metaTagLabel
+    metaTagLabel,
+    loginUserAdminRole
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const SalesManMaster = (props) => {
 
-    const history = useHistory()
+    const history = useHistory();
     const dispatch = useDispatch();
-    const RoleID = loginRoleID()
+    const userAdminRole = loginUserAdminRole();
+
 
     const fileds = {
         id: "",
@@ -118,7 +119,7 @@ const SalesManMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -231,9 +232,16 @@ const SalesManMaster = (props) => {
         return index.IsActive === true
     });
 
+    const partyOnChngeHandler = (e) => {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Party = e;
+            return a
+        })
+    };
 
     const SaveHandler = async (event) => {
- 
+
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -249,7 +257,7 @@ const SalesManMaster = (props) => {
                     Name: values.Name,
                     MobileNo: values.MobileNo,
                     IsActive: values.IsActive,
-                    Party: RoleID === 2 ? values.Party.value : loginPartyID(),
+                    Party: userAdminRole ? values.Party.value : loginPartyID(),
                     SalesmanRoute: routeArr,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
@@ -278,11 +286,12 @@ const SalesManMaster = (props) => {
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        {RoleID === 2 ?
-                            <PartyDropdownMaster
-                                state={state}
-                                setState={setState} />
-                            : null}
+
+                        {userAdminRole &&
+                            <PartyDropdown_Common
+                                partySelect={values.Party}
+                                setPartyFunc={partyOnChngeHandler} />
+                        }
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header">
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

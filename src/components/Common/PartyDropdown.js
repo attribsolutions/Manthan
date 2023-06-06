@@ -1,28 +1,29 @@
-import React, {  useLayoutEffect,  } from "react";
+import React, { useLayoutEffect, } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import { Button, Card, Col, FormGroup, Label, } from "reactstrap";
 import Select from "react-select";
-import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { getPartyListAPI } from "../../store/Administrator/PartyRedux/action";
 
-const PartyDropdownList = (props) => {
+
+const PartyDropdown_Common = (props) => {
 
     const dispatch = useDispatch();
 
-    const { state, setState, action } = props
+    const { partySelect, setPartyFunc, goButtonHandler } = props
 
-    const { PartyList } = useSelector((state) => ({
-        PartyList: state.PartyMasterReducer.partyList
+
+    const { partyList } = useSelector((state) => ({
+        partyList: state.PartyMasterReducer.partyList,
     }));
 
     useLayoutEffect(() => {
         dispatch(getPartyListAPI())
     }, []);
 
-    const Party_DropdownOptions = PartyList.map((data) => ({
+    const party_DropdownOptions = partyList.map((data) => ({
         value: data.id,
         label: data.Name
     }));
-
 
 
     return (
@@ -35,28 +36,27 @@ const PartyDropdownList = (props) => {
                                 style={{ width: "83px" }}>Party</Label>
                             <Col sm="6">
                                 <Select
-                                    name="Party"
-                                    value={state}
+                                    value={partySelect}
                                     isSearchable={true}
                                     className="react-dropdown"
                                     classNamePrefix="dropdown"
-                                    options={Party_DropdownOptions}
-                                    onChange={(e) => { setState(e) }}
+                                    options={party_DropdownOptions}
+                                    onChange={(e) => { setPartyFunc(e) }}
                                 />
                             </Col>
                         </FormGroup>
                     </Col>
 
-                    <Col sm="1" className="mx-4 ">
-                        <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
-                            onClick={() => action()}
-                        >Go</Button>
-                    </Col>
+                    {goButtonHandler &&
+                        <Col sm="1" className="mx-4 ">
+                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
+                                onClick={() => goButtonHandler()}
+                            >Go</Button>
+                        </Col>
+                    }
                 </div>
             </div>
         </React.Fragment >
-    );
+    )
 }
-
-export default PartyDropdownList
-
+export default PartyDropdown_Common

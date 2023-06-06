@@ -111,7 +111,8 @@ export const CITY_LIST = "/CityList"
 
 export const IMPORT_EXCEL_FIELD_MAP_add = "/Import_ExcelFieldMap_add"
 
-export const UPLOAD_EXCEL = "/Upload_Excel"
+export const INVOICE_EXCEL_UPLOAD = "/Invoice_Excel_Upload"
+export const RETAILER_EXCEL_UPLOAD = "/Retailer_Excel_Upload"
 
 export const IMPORT_FIELD_ADD = "/ImportFieldAdd"
 export const IMPORT_FIELD_ADD_LIST = "/ImportFieldAddList"
