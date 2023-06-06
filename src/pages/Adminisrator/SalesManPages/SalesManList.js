@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import SalesManMaster from "./SalesManMaster";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import {
     deleteSalesManID_Success,
     deleteSalesManID,
@@ -14,14 +12,14 @@ import {
     getSalesManlist,
     updateSalesManIDSuccess
 } from "../../../store/Administrator/SalesManRedux/actions";
-import { loginCompanyID, loginPartyID, loginRoleID } from "../../../components/Common/CommonFunction";
-import PartyDropdownList from "../../../components/Common/PartyDropdownComp/PartyDropdownList";
+import { loginCompanyID, loginPartyID, loginUserAdminRole } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const SalesManList = (props) => {
 
     const dispatch = useDispatch();
-    const RoleID = loginRoleID()
+    const userAdminRole = loginUserAdminRole();
 
     const [party, setParty] = useState({ value: loginPartyID(), label: "Select..." });
 
@@ -37,7 +35,7 @@ const SalesManList = (props) => {
         })
     );
 
-    const { pageField, userAccess = [] } = reducers;
+    const { pageField, } = reducers;
 
     const action = {
         getList: getSalesManlist,
@@ -53,7 +51,7 @@ const SalesManList = (props) => {
         const page_Id = pageId.SALESMAN_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        goButtonHandler(true)
+        if (!userAdminRole) { goButtonHandler() }
     }, []);
 
     const goButtonHandler = () => {
@@ -65,50 +63,35 @@ const SalesManList = (props) => {
         dispatch(getSalesManlist(jsonBody));
     }
 
+    const partyOnChngeHandler = (e) => {
+        setParty(e)
+    }
+
     return (
-        // <React.Fragment>
-        //     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
-        //     {
-        //         (pageField) ?
-        //             <CommonListPage
-        //                 action={action}
-        //                 reducers={reducers}
-        //                 MasterModal={SalesManMaster}
-        //                 masterPath={url.SALESMAN}
-        //                 ButtonMsgLable={"SalesMan"}
-        //                 deleteName={"Name"}
-        //             />
-        //             : null
-        //     }
-
-        // </React.Fragment>
 
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <div className="page-content">
 
-                {RoleID === 2 ?
-                    <PartyDropdownList
-                        state={party}
-                        setState={setParty}
-                        action={goButtonHandler}
+                {userAdminRole &&
+                    <PartyDropdown_Common
+                        partySelect={party}
+                        setPartyFunc={partyOnChngeHandler}
+                        goButtonHandler={goButtonHandler}
                     />
-                    : null}
+                }
                 {
-                    (pageField) ?
-                        <CommonPurchaseList 
-                            action={action}
-                            reducers={reducers}
-                            showBreadcrumb={false}
-                            MasterModal={SalesManMaster}
-                            masterPath={url.SALESMAN}
-                            newBtnPath={url.SALESMAN}
-                            ButtonMsgLable={"SalesMan"}
-                            deleteName={"Name"}
-                            goButnFunc={goButtonHandler}
-                        />
-                        : null
+                    (pageField) &&
+                    <CommonPurchaseList
+                        action={action}
+                        reducers={reducers}
+                        showBreadcrumb={false}
+                        MasterModal={SalesManMaster}
+                        masterPath={url.SALESMAN}
+                        newBtnPath={url.SALESMAN}
+                        ButtonMsgLable={"SalesMan"}
+                        deleteName={"Name"}
+                        goButnFunc={goButtonHandler}
+                    />
                 }
             </div>
         </React.Fragment>

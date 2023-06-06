@@ -24,7 +24,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useRef } from "react";
-import { CInput, C_DatePicker, onlyNumberRegx } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/index";
 
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -493,7 +493,7 @@ const Order = (props) => {
                             <CInput
                                 type="text"
                                 id={`Rate-${k}`}
-                                cpattern={onlyNumberRegx}
+                                cpattern={decimalRegx}
                                 defaultValue={row.Rate}
                                 onChange={(event) => {
                                     row.Rate = event.target.value;

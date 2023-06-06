@@ -21,7 +21,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import {
     saveVehicleMaster,
-    getVehicleList,
     getVehicleType_for_dropdown,
     saveVehicleMasterSuccess,
     getVehicleListSuccess,
@@ -39,17 +38,18 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, loginRoleID, metaTagLabel, } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, metaTagLabel, loginUserAdminRole, } from "../../../components/Common/CommonFunction";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
 
 const VehicleMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const RoleID = loginRoleID()
+    const userAdminRole = loginUserAdminRole();
 
     const fileds = {
         id: "",
@@ -219,6 +219,14 @@ const VehicleMaster = (props) => {
         label: data.Name
     }));
 
+    const partyOnChngeHandler = (e) => {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Party = e;
+            return a
+        })
+    }
+
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -231,7 +239,7 @@ const VehicleMaster = (props) => {
                     VehicleNumber: values.VehicleNumber,
                     Description: values.Description,
                     VehicleType: values.VehicleTypeName.value,
-                    Party: RoleID === 2 ? values.Party.value : loginPartyID(),
+                    Party: userAdminRole ? values.Party.value : loginPartyID(),
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
@@ -256,13 +264,15 @@ const VehicleMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-                        {RoleID === 2 ?
-                            <PartyDropdownMaster
-                                state={state}
-                                setState={setState} />
-                            : null}
-                        <Card className="text-black">
+                        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+
+                        {userAdminRole &&
+                            <PartyDropdown_Common
+                                partySelect={values.Party}
+                                setPartyFunc={partyOnChngeHandler} />
+                        }
+
+                        <Card className="text-black" style={{marginTop:"3px"}}>
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
@@ -281,7 +291,8 @@ const VehicleMaster = (props) => {
                                                             id="VehicleDropDown "
                                                             name="VehicleTypeName"
                                                             value={values.VehicleTypeName}
-                                                            isSearchable={false}
+                                                            isSearchable={true}
+                                                            autoFocus={true}
                                                             className="react-dropdown"
                                                             classNamePrefix="dropdown"
                                                             options={VehicleType_DropdownOptions}

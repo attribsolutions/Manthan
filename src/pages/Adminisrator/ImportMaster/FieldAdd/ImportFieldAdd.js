@@ -43,6 +43,7 @@ import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
 import {
     edit_ImportFiledAdd_Success,
+    get_ImportExcelType,
     save_ImportFiledAdd,
     save_ImportFiledAdd_Success,
     update_ImportFiledAdd,
@@ -93,6 +94,8 @@ const ImportFieldAdd = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getControlTypes());
+        dispatch(get_ImportExcelType());
+        
     }, []);
 
     const values = { ...state.values }
@@ -225,6 +228,10 @@ const ImportFieldAdd = (props) => {
         value: index.id,
         label: index.Name,
     }));
+<<<<<<< Updated upstream
+=======
+    
+>>>>>>> Stashed changes
     const importExcelType_Options = importExcelType.map((index) => ({
         value: index.id,
         label: index.Name,

@@ -282,6 +282,7 @@ const ManagementEmpParties = (props) => {
                                             isSearchable={true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
+                                            autoFocus={true}
                                             options={employeeListOptions}
                                             isDisabled={(partyList.length > 0) ? true : false}
                                             // onChange={(e) => { setEmployeeSelect(e) }}

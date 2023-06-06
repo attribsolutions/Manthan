@@ -106,18 +106,16 @@ export const GENERAL_LIST = "/GeneralList"
 export const CITY = "/CityMaster"
 export const CITY_LIST = "/CityList"
 
-// export const CREDITLIMIT = "/CreditLimit"
-// export const CREDITLIMIT_LIST = "/CreditLimitList"
+export const IMPORT_EXCEL_FIELD_MAP = "/Import_ExcelFieldMap"
 
-export const IMPORT_EXCEL_FIELD_MAP_add = "/Import_ExcelFieldMap_add"
-
-export const UPLOAD_EXCEL = "/Upload_Excel"
+export const INVOICE_EXCEL_UPLOAD = "/Invoice_Excel_Upload"
+export const RETAILER_EXCEL_UPLOAD = "/Retailer_Excel_Upload"
 
 export const IMPORT_FIELD_ADD = "/ImportFieldAdd"
 export const IMPORT_FIELD_ADD_LIST = "/ImportFieldAddList"
 
 
-export const IMPORT_FIELD_MASTER = "/ImportMasterMap"
+export const IMPORT_EXCEL_PARTY_MAP = "/ImpotExcelPartyMap"
 
 
 export const ROUTE_UPDATE = "/RouteUpdate"

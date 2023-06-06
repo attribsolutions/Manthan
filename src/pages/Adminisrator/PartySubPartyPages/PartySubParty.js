@@ -449,6 +449,7 @@ const PartySubParty = (props) => {
                                                                         name="PartyName"
                                                                         value={values.PartyName}
                                                                         isSearchable={true}
+                                                                        autoFocus={true}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={PartyDropdown_Options}
@@ -476,7 +477,6 @@ const PartySubParty = (props) => {
                                                                             name="IsRetailerTransfer"
                                                                             onChange={(e) => {
                                                                                 IsRetailerTransfer(e)
-
                                                                             }}
                                                                         />
                                                                     </div>
