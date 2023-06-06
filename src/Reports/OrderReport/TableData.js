@@ -117,7 +117,7 @@ export const ReportRows = (data, doc) => {
 export const BilledByRow = (data) => {
     var BilledByArray = [
         [`${data.SupplierName}`],
-        [`${data.ShippingAddress}`],
+        [`${data.SupplierAddress}`],
         [`FSSAI:${data.SupplierFssai}`],
     ]
     return BilledByArray;
