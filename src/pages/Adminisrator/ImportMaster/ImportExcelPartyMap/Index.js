@@ -24,7 +24,7 @@ import {
 } from "../../../../components/Common/CommonFunction";
 import {
     comAddPageFieldFunc,
-    formValid, initialFiledFunc,
+    initialFiledFunc,
     onChangeSelect,
 } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
@@ -39,7 +39,7 @@ import {
 } from "../../../../store/Administrator/ImportMasterMapRedux/action";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 
-const ImportMasterMap = (props) => {
+const ImportExcelPartyMap = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -380,4 +380,4 @@ const ImportMasterMap = (props) => {
     }
 };
 
-export default ImportMasterMap
+export default ImportExcelPartyMap

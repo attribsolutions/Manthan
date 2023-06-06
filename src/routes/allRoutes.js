@@ -146,12 +146,12 @@ import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
 import ImportFieldAddList from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAddList";
-import ImportExcelFieldMap from "../pages/Adminisrator/ImportMaster/ImportExcelFieldMap/ImportExcelFieldMap";
+import ImportExcelFieldMap from "../pages/Adminisrator/ImportMaster/ImportExcelFieldMap/Index";
 import InvoiceExcelUpload from "../pages/Adminisrator/ImportMaster/InvoiceExcelUpload/Index";
 import RetailerExcelUpload from "../pages/Adminisrator/ImportMaster/RetailerExcelUpload/Index";
 
 import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
-import ImportMasterMap from "../pages/Adminisrator/ImportMaster/ImportMasterMap/ImportMasterMap";
+import ImportExcelPartyMap from "../pages/Adminisrator/ImportMaster/ImportExcelPartyMap/Index";
 import Debit from "../pages/Accounting/Debit/Debit";
 import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"
 import SapLedger from "../Reports/SapLedgerReport/SapLedger";
@@ -276,7 +276,7 @@ const userRoutes = [
   { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd },
   { path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList },
 
-  { path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportMasterMap },
+  { path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportExcelPartyMap },
 
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
