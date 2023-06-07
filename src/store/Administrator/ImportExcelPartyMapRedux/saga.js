@@ -2,10 +2,13 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
   InvoiceExcelUpload_save_Success,
   GoButton_ImportExcelPartyMap_Success,
-  save_ImportExcelPartyMap_Sucess
+  save_ImportExcelPartyMap_Sucess,
+  PartyExcelUpload_save_Success,
+  RetailerExcelUpload_save_action_Success
 } from "./action";
 import {
   ExcelUpload_Invoice_Save_API,
+  ExcelUpload_Retailer_Save_API,
   ImportMaster_Map_Customer_GoButton_API,
   ImportMaster_Map_Customer_Save_API,
   ImportMaster_Map_Item_GoButton_API,
@@ -17,6 +20,7 @@ import {
   INVOICE_EXCEL_UPLOAD_SAVE,
   GO_BUTTON_IMPORT_EXCEL_PARTY_MAP,
   SAVE_IMPORT_EXCEL_PARTY_MAP,
+  RETAILER_EXCEL_UPLOAD_SAVE,
 } from "./actionType";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 
@@ -82,7 +86,7 @@ function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {  // Save API
   } catch (error) { CommonConsole(error) }
 }
 
-function* ExcelUpload_save_GenFun({ config }) {  // Save API
+function* InvoiceExcelUpload_save_GenFun({ config }) {  // Save API
 
   try {
     const response = yield call(ExcelUpload_Invoice_Save_API, config);
@@ -91,10 +95,20 @@ function* ExcelUpload_save_GenFun({ config }) {  // Save API
   } catch (error) { CommonConsole(error) }
 }
 
+function* RetailerExcelUpload_save_GenFun({ config }) {  // Save API
+
+  try {
+    const response = yield call(ExcelUpload_Retailer_Save_API, config);
+    yield put(RetailerExcelUpload_save_action_Success(response));
+
+  } catch (error) { CommonConsole(error) }
+}
+
 function* ImportExcelPartyMap_Saga() {
   yield takeEvery(GO_BUTTON_IMPORT_EXCEL_PARTY_MAP, GoButtonExcel_ImportMaster_GenFun)
   yield takeEvery(SAVE_IMPORT_EXCEL_PARTY_MAP, Save_Method_ForExcel_ImportMaster_GenFun)
-  yield takeEvery(INVOICE_EXCEL_UPLOAD_SAVE, ExcelUpload_save_GenFun )
+  yield takeEvery(INVOICE_EXCEL_UPLOAD_SAVE, InvoiceExcelUpload_save_GenFun)
+  yield takeEvery(RETAILER_EXCEL_UPLOAD_SAVE, RetailerExcelUpload_save_GenFun)
 }
 
 export default ImportExcelPartyMap_Saga;

@@ -366,6 +366,7 @@ export const ImportMaster_Map_Unit_GoButton_API = ({ partyId, btnId }) => get(`$
 export const ImportMaster_Map_Unit_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_UNIT, jsonBody, btnId)// post api
 
 export const ExcelUpload_Invoice_Save_API = ({ jsonBody, btnId }) => post(url.BULK_INVOICES, jsonBody, btnId)// post api
+export const ExcelUpload_Retailer_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_BULK_RETAIER, jsonBody, btnId)// post api
 
 
 export const ImportFieldAdd_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_ADD_SAVE, jsonBody, btnId)// post api

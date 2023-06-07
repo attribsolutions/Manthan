@@ -23,7 +23,7 @@ import {
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import {
-    InvoiceExcelUpload_save_Success
+    InvoiceExcelUpload_save_Success, RetailerExcelUpload_save_action_Success
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
 import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
@@ -45,11 +45,13 @@ const RetailerExcelUpload = (props) => {
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
 
     const [userPageAccessState, setUserAccState] = useState('');
+    const [retailerId, setRetailerId] = useState('')
     const [selectedFiles, setselectedFiles] = useState([])
+
     const [preUploadjson, setPreUploadjson] = useState([])
     const [readJsonDetail, setReadJsonDetail] = useState(preDetails)
     const [preViewDivShow, setPreViewDivShow] = useState(false)
-    const [partySelect, SetPartySelect] = useState([])
+    const [partySelect, SetPartySelect] = useState('')
 
 
     const {
@@ -60,7 +62,7 @@ const RetailerExcelUpload = (props) => {
         compareParameter = [],
         partyTypes
     } = useSelector((state) => ({
-        postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
+        postMsg: state.ImportExcelPartyMap_Reducer.partyExcelUploadMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         partyTypes: state.PartyTypeReducer.ListData,
@@ -77,9 +79,8 @@ const RetailerExcelUpload = (props) => {
         dispatch(getPartyListAPI());
         dispatch(getPartyTypelist());
 
-        if (!userAdminRole) {
-            goButtonHandler()
-        }
+        goButtonHandler()
+
         return () => {
             dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         }
@@ -112,14 +113,14 @@ const RetailerExcelUpload = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(InvoiceExcelUpload_save_Success({ Status: false }))
+            dispatch(RetailerExcelUpload_save_action_Success({ Status: false }))
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
         }
         else if (postMsg.Status === true) {
-            dispatch(InvoiceExcelUpload_save_Success({ Status: false }))
+            dispatch(RetailerExcelUpload_save_action_Success({ Status: false }))
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
@@ -132,6 +133,7 @@ const RetailerExcelUpload = (props) => {
         if ((partyTypes.length > 0)) {
             let isRetailer = partyTypes.find(i => (i.IsRetailer))
             if (!(isRetailer === undefined)) {
+                setRetailerId(isRetailer.id)
                 dispatch(priceListByPartyAction(isRetailer.id))
             }
         }
@@ -147,7 +149,7 @@ const RetailerExcelUpload = (props) => {
     };
 
 
-    async function uploadBtnFunc() {
+    async function veifyExcelBtn_Handler() {
 
         if (compareParameter.length === 0) {
             customAlert({
@@ -173,23 +175,10 @@ const RetailerExcelUpload = (props) => {
 
             const readjson = await readExcelFile({ file: files[0], compareParameter, })
             if (readjson.length > 0) {
-                
+
                 setPreUploadjson(readjson)
                 setPreViewDivShow(true)
-
-                const isdetails = await retailer_FileDetails({ compareParameter, readjson })
-                let { invoiceNO } = isdetails;
-                if ((invoiceNO.length > 0)) {
-                    setReadJsonDetail(isdetails)
-                    setPreUploadjson(readjson)
-                    setPreViewDivShow(true)
-                } else {
-                    customAlert({
-                        Type: 3,
-                        Message: "Mapping not match."
-                    })
-                }
-                
+                setReadJsonDetail(readjson)
             }
 
         } else {
@@ -224,15 +213,6 @@ const RetailerExcelUpload = (props) => {
         setReadJsonDetail(preDetails)
         setPreUploadjson([])
         setPreViewDivShow(false)
-        // try {
-        //     const btnerify = document.getElementById("btn-verify")
-        //     const btnupload = document.getElementById('btn-uploadBtnFunc')
-        //     const progDiv = document.getElementById("file-proccess")
-
-        //     btnerify.style.display = "block"
-        //     btnupload.style.display = "none"
-        //     progDiv.style.display = "none"
-        // } catch (d) { }
 
         files.map(file =>
             Object.assign(file, {
@@ -268,6 +248,32 @@ const RetailerExcelUpload = (props) => {
     };
 
 
+    const uploadSaveHandler = (event) => {
+        let validMsg = []
+        if ((partySelect === "")) {
+            validMsg.push({ Msg: "Please Select Party." })
+        }
+        if ((priceListSelect.value === '')) {
+            validMsg.push({ Msg: "Please Select PriceList." })
+        }
+        if (validMsg.length > 0) {
+            customAlert({
+                Type: 3,
+                Message: validMsg
+            })
+            return
+        }
+
+        retailer_SaveHandler({
+            event,
+            dispatch,
+            compareParameter,
+            readJsonDetail,
+            partySelect,
+            priceListSelect,
+            retailerId
+        })
+    }
 
 
     if (!(userPageAccessState === '')) {
@@ -288,7 +294,6 @@ const RetailerExcelUpload = (props) => {
                                         <PartyDropdown_Common
                                             partySelect={partySelect}
                                             setPartyFunc={(e) => SetPartySelect(e)}
-                                            goButtonHandler={goButtonHandler}
                                         />
 
                                         <row className='mb-2'>
@@ -354,9 +359,9 @@ const RetailerExcelUpload = (props) => {
                                         >
                                             <input {...getInputProps()} />
                                             <div className="mb-3">
-                                                <i className="display-4 text-muted bx bxs-cloud-uploadBtnFunc" />
+                                                <i className="display-4 text-muted bx bxs-cloud-upload" />
                                             </div>
-                                            <h4>Drop files here or click to uploadBtnFunc.</h4>
+                                            <h4>Drop files here or click to upload.</h4>
                                         </div>
                                     </div>
                                 )}
@@ -398,7 +403,7 @@ const RetailerExcelUpload = (props) => {
                                         </Card>
                                     )
                                 })}
-                                {preViewDivShow &&
+                                {/* {preViewDivShow &&
                                     <Card style={{ borderTop: "0px" }}>
                                         <div id="filedetail">
 
@@ -436,7 +441,7 @@ const RetailerExcelUpload = (props) => {
 
                                         </div>
                                     </Card>
-                                }
+                                } */}
                             </div>
 
 
@@ -449,7 +454,7 @@ const RetailerExcelUpload = (props) => {
                                     // style={{ display: "none" }}
                                     id='btn-uploadBtnFunc'
                                     className="btn btn-success "
-                                    onClick={(event) => retailer_SaveHandler(event, dispatch,compareParameter,readJsonDetail)}
+                                    onClick={uploadSaveHandler}
                                 >
                                     Upload Files
                                 </button>
@@ -458,7 +463,7 @@ const RetailerExcelUpload = (props) => {
                                     type="button"
                                     id='btn-verify'
                                     className="btn btn-primary "
-                                    onClick={uploadBtnFunc}
+                                    onClick={veifyExcelBtn_Handler}
                                 >
                                     Verify Files
                                 </button>

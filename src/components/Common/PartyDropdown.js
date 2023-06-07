@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Card, Col, FormGroup, Label, } from "reactstrap";
+import { Col, FormGroup, Label, } from "reactstrap";
 import Select from "react-select";
 import { getPartyListAPI } from "../../store/Administrator/PartyRedux/action";
 import { Change_Button, Go_Button } from "./CommonButton";
