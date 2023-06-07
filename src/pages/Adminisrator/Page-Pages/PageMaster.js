@@ -67,7 +67,7 @@ const PageMaster = (props) => {
   const [modal_center, setmodal_center] = useState(false);
   const [pageAccessData, setPageAccessData] = useState([]);
   const [editCreatedBy, seteditCreatedBy] = useState("");
-  const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
+  const [moduleMaster_AddAccess, setModuleMaster_AddAccess] = useState(false)
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
@@ -128,7 +128,7 @@ const PageMaster = (props) => {
     };
     userAccess.find((index) => {
       if (index.id === pageId.MODULE) {
-        return setFindAddMasterAccess(true)
+        return setModuleMaster_AddAccess(true)
       }
     });
   }, [userAccess])
@@ -681,7 +681,7 @@ const PageMaster = (props) => {
                                   />
                                 </FormGroup>
                               </Col>
-                              {(findAddMasterAccess) ?
+                              {(moduleMaster_AddAccess) ?
                                 <Col md="1" className=" mt-3">
                                   <AddMaster
                                     masterModal={Modules}
