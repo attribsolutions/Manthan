@@ -31,12 +31,14 @@ import {
     InvoiceExcelUpload_save_Success
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
+import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
 
 
 const InvoiceExcelUpload = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const userAdminRole = _cfunc.loginUserAdminRole();
 
     const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [], partyNO: [] }
     const fileds = {
@@ -45,8 +47,6 @@ const InvoiceExcelUpload = (props) => {
         ImportType: "",
         PatternType: ""
     }
-
-    const [state, setState] = useState(initialFiledFunc(fileds))
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [selectedFiles, setselectedFiles] = useState([])
@@ -58,25 +58,19 @@ const InvoiceExcelUpload = (props) => {
 
     const {
         postMsg,
-        pageField,
         userAccess,
-        partyList,
         compareParameter = []
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField,
         partyList: state.PartyMasterReducer.partyList,
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
     }));
 
     useEffect(() => {
-        const page_Id = pageId.INVOICE_EXCEL_UPLOAD
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
-        if ((_cfunc.loginIsSCMCompany() === 1)) {
+        if (!userAdminRole) {
             goButtonHandler()
         }
         return () => {
@@ -85,12 +79,8 @@ const InvoiceExcelUpload = (props) => {
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -109,12 +99,6 @@ const InvoiceExcelUpload = (props) => {
     }, [userAccess])
 
 
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
 
     useEffect(async () => {
 
@@ -123,25 +107,25 @@ const InvoiceExcelUpload = (props) => {
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
-            })
+            });
+            setselectedFiles([]);
+            setPreUploadjson([]);
+            setPreViewDivShow(false);
+            SetPartySelect('');
+            setReadJsonDetail(preDetails);
         }
         else if (postMsg.Status === true) {
             dispatch(InvoiceExcelUpload_save_Success({ Status: false }))
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
-            })
-        }
+            });
+        };
     }, [postMsg])
-
-    const PartyDropdown_Options = partyList.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
 
 
     function goButtonHandler(e) {
-        let partyId = ((_cfunc.loginIsSCMCompany() === 1)) ? _cfunc.loginPartyID() : e.value;
+        let partyId = (userAdminRole) ? _cfunc.loginPartyID() : e.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
             CompanyID: _cfunc.loginCompanyID()
@@ -189,12 +173,6 @@ const InvoiceExcelUpload = (props) => {
                         Message: "Mapping not match."
                     })
                 }
-                // const btnerify = document.getElementById("btn-verify");
-                // const btnupload = document.getElementById('btn-uploadBtnFunc');
-                // const filedetail = document.getElementById('filedetail');
-
-                // btnerify.style.display = "none"
-                // btnupload.style.display = "block"
             }
 
         } else {
@@ -343,27 +321,12 @@ const InvoiceExcelUpload = (props) => {
                         <div className="px-2 c_card_header text-black" >
                             <div className="px-2   c_card_filter text-black" >
                                 {
-                                    (!(_cfunc.loginIsSCMCompany() === 1)) ? <>
-                                        <div className="row">
-                                            <Col sm="3">
-                                                <FormGroup className="mb-2 row mt-3 " >
-                                                    <Label className=" p-2"
-
-                                                        style={{ width: "115px" }}>{fieldLabel.Party}</Label>
-                                                    <Col >
-                                                        <Select
-                                                            classNamePrefix="select2-Customer"
-                                                            value={partySelect}
-                                                            options={PartyDropdown_Options}
-                                                            onChange={(e) => {
-                                                                SetPartySelect(e)
-                                                                goButtonHandler(e)
-                                                            }}
-                                                        />
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col >
-                                        </div>
+                                    userAdminRole ? <>
+                                        <PartyDropdown_Common
+                                            partySelect={partySelect}
+                                            setPartyFunc={(e) => SetPartySelect(e)}
+                                            goButtonHandler={goButtonHandler}
+                                        />
                                     </>
                                         : <>
                                             {(!(compareParameter.length > 0)) ?
@@ -383,8 +346,6 @@ const InvoiceExcelUpload = (props) => {
                                                 <div >
                                                     <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
                                                 </div>}
-
-
                                         </>
                                 }
 
@@ -489,10 +450,7 @@ const InvoiceExcelUpload = (props) => {
                                             <details>
                                                 <summary>Total Amount :{readJsonDetail.amount}</summary>
                                             </details>
-                                            {/* <div className="error-msg">
-    <i className="fa fa-error"></i>
-    Total Amount:5454
-</div> */}
+                                           
                                         </div>
                                     </Card>
                                 }
