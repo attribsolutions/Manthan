@@ -58,22 +58,16 @@ const InvoiceExcelUpload = (props) => {
 
     const {
         postMsg,
-        pageField,
         userAccess,
-        partyList,
         compareParameter = []
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField,
         partyList: state.PartyMasterReducer.partyList,
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
     }));
 
     useEffect(() => {
-        const page_Id = pageId.INVOICE_EXCEL_UPLOAD
-        // dispatch(commonPageFieldSuccess(null));
-        // dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         if (!userAdminRole) {
@@ -179,12 +173,6 @@ const InvoiceExcelUpload = (props) => {
                         Message: "Mapping not match."
                     })
                 }
-                // const btnerify = document.getElementById("btn-verify");
-                // const btnupload = document.getElementById('btn-uploadBtnFunc');
-                // const filedetail = document.getElementById('filedetail');
-
-                // btnerify.style.display = "none"
-                // btnupload.style.display = "block"
             }
 
         } else {
@@ -462,10 +450,7 @@ const InvoiceExcelUpload = (props) => {
                                             <details>
                                                 <summary>Total Amount :{readJsonDetail.amount}</summary>
                                             </details>
-                                            {/* <div className="error-msg">
-    <i className="fa fa-error"></i>
-    Total Amount:5454
-</div> */}
+                                           
                                         </div>
                                     </Card>
                                 }
