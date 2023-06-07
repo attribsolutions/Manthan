@@ -149,7 +149,7 @@ function MRPTab(props) {
                       type="text"
                       id={`txtMRP${0}`}
                       value={MRP}
-                      placeholder="Please Enter Margin"
+                      placeholder="Please Enter MRP"
                       onChange={MRPHandler}
                     />
                   </div>
