@@ -6,6 +6,7 @@ let pageid = ''
 
 
 export const mySearchProps = (props, pageID) => {
+    debugger
     props1 = props;
     pageid = pageID
 };
@@ -27,7 +28,8 @@ export const defaultSearch = (defaultid,) => {
     return retn
 }
 
-export const MySearch = () => {
+export const MySearch = () => {//compont start
+
     function handleClick(e) {
         var len = e.target.value
         input = e.target.value

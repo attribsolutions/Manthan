@@ -48,7 +48,7 @@ const GroupList = () => {
     dispatch(getGroupList());
   }, []);
 
-  const { pageField,userAccess=[] } = reducers
+  const { pageField} = reducers
   return (
     <React.Fragment>
       {

@@ -146,11 +146,12 @@ import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
 import ImportFieldAddList from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAddList";
-import ImportExcelFieldMap from "../pages/Adminisrator/ImportMaster/ImportExcelFieldMap/ImportExcelFieldMap";
-import UploadExcel from "../pages/Adminisrator/ImportMaster/ExcelUpload/UploadExcel";
+import ImportExcelFieldMap from "../pages/Adminisrator/ImportMaster/ImportExcelFieldMap/Index";
+import InvoiceExcelUpload from "../pages/Adminisrator/ImportMaster/InvoiceExcelUpload/Index";
+import RetailerExcelUpload from "../pages/Adminisrator/ImportMaster/RetailerExcelUpload/Index";
 
 import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
-import ImportMasterMap from "../pages/Adminisrator/ImportMaster/ImportMasterMap/ImportMasterMap";
+import ImportExcelPartyMap from "../pages/Adminisrator/ImportMaster/ImportExcelPartyMap/Index";
 import Debit from "../pages/Accounting/Debit/Debit";
 import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"
 import SapLedger from "../Reports/SapLedgerReport/SapLedger";
@@ -268,13 +269,14 @@ const userRoutes = [
   // { path: path.CREDITLIMIT, component: CreditLimitMaster },
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
-  { path: path.UPLOAD_EXCEL, component: UploadExcel },
+  { path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload },
+  { path: path.RETAILER_EXCEL_UPLOAD, component: RetailerExcelUpload },
 
-  { path: path.IMPORT_EXCEL_FIELD_MAP_add, component: ImportExcelFieldMap },
+  { path: path.IMPORT_EXCEL_FIELD_MAP, component: ImportExcelFieldMap },
   { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd },
   { path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList },
 
-  { path: path.IMPORT_FIELD_MASTER, component: ImportMasterMap },
+  { path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportExcelPartyMap },
 
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },

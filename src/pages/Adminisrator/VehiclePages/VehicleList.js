@@ -13,15 +13,15 @@ import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-import PartyDropdownList from "../../../components/Common/PartyDropdownComp/PartyDropdownList";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
 
 const VehicleList = () => {
 
   const dispatch = useDispatch();
-  const RoleID = _cfunc.loginRoleID()
+  const userAdminRole = _cfunc.loginUserAdminRole();
+
 
   const [party, setParty] = useState({ value: _cfunc.loginPartyID(), label: "Select..." });
 
@@ -36,7 +36,7 @@ const VehicleList = () => {
       pageField: state.CommonPageFieldReducer.pageFieldList,
     })
   );
-  const { pageField, userAccess = [] } = reducers
+  const { pageField, } = reducers
 
   const action = {
     getList: getVehicleList,
@@ -52,8 +52,8 @@ const VehicleList = () => {
     const page_Id = pageId.VEHICLE_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(getPartyListAPI())
-    goButtonHandler(true)
+
+    if (!userAdminRole) { goButtonHandler() }
   }, []);
 
   const goButtonHandler = () => {
@@ -64,19 +64,24 @@ const VehicleList = () => {
     });
     dispatch(getVehicleList(jsonBody));
   }
+  const partyOnChngeHandler = (e) => {
+    setParty(e)
+  }
 
   return (
 
     <React.Fragment>
       <div className="page-content">
 
-        {RoleID === 2 ?
-          <PartyDropdownList
-            state={party}
-            setState={setParty}
-            action={goButtonHandler}
+        {userAdminRole &&
+          <PartyDropdown_Common
+            partySelect={party}
+            setPartyFunc={partyOnChngeHandler}
+            goButtonHandler={goButtonHandler}
           />
-          : null}
+        }
+
+
         {
           (pageField) ?
             <CommonPurchaseList

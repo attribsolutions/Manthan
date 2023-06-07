@@ -55,7 +55,7 @@ import BankSaga from "./Accounting/BankRedux/saga"
 import BankAssignSaga from "./Accounting/BankAssignRedux/saga"
 import ImportExcelFieldMap_Saga from "./Administrator/ImportExportFieldMapRedux/saga"
 import ImportFieldAdd_Saga from "./Administrator/ImportFieldAddRedux/saga"
-import ImportMasterMap_Saga from "./Administrator/ImportMasterMapRedux/saga"
+import ImportExcelPartyMap_Saga from "./Administrator/ImportExcelPartyMapRedux/saga"
 import CitySaga from "./Administrator/CityRedux/saga"
 
 
@@ -92,7 +92,7 @@ export default function* rootSaga() {
     fork(AccountSaga),
     fork(ImportExcelFieldMap_Saga),
     fork(ImportFieldAdd_Saga),
-    fork(ImportMasterMap_Saga),
+    fork(ImportExcelPartyMap_Saga),
     
     fork(sessionAlive_saga),
     fork(AuthSaga),

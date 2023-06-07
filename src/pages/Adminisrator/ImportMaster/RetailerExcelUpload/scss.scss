@@ -1,0 +1,91 @@
+.error-msg {
+  margin: 10px 0;
+  padding: 10px;
+  // max-width: 100%;
+  border-radius: 3px 3px 3px 3px;
+}
+
+.error-msg {
+  color: #021009;
+  background-color: #c7d8fd;
+}
+
+details[open]>summary {
+  list-style-type: '🔽';
+}
+
+details>summary {
+  list-style-type: '▶️';
+  padding: 4px;
+  // width: 30%;
+  background-color: #fcfcfc;
+  border: none;
+  box-shadow: 1px 1px 2px #b8b7b7;
+  cursor: pointer;
+}
+
+details>p {
+  background-color: #eeeeee;
+  padding: 4px;
+  margin: 0;
+  box-shadow: 1px 1px 2px #bbbbbb;
+}
+
+
+
+
+
+
+/*Huge thanks to @tobiasahlin at http://tobiasahlin.com/spinkit/ */
+.dot-pulse {
+  padding-left: 10px;
+}
+
+.dot-pulse>div {
+  width: 10px;
+  height: 10px;
+  background-color: #4549a2;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.dot-pulse .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.dot-pulse .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0)
+  }
+
+  40% {
+    -webkit-transform: scale(1.0)
+  }
+}
+
+@keyframes sk-bouncedelay {
+
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+
+  40% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}

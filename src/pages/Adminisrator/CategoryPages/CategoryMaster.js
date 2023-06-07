@@ -66,7 +66,7 @@ const CategoryMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
+    const [categoryType_AddAccess, setCategoryType_AddAccess] = useState(false)
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -123,7 +123,7 @@ const CategoryMaster = (props) => {
         };
         userAccess.find((index) => {
             if (index.id === pageId.CATEGORYTYPE) {
-                return setFindAddMasterAccess(true)
+                return setCategoryType_AddAccess(true)
             }
 
         });
@@ -321,7 +321,7 @@ const CategoryMaster = (props) => {
                                                     </FormGroup>
                                                 </Col>
 
-                                                {(findAddMasterAccess) &&
+                                                {(categoryType_AddAccess) &&
                                                     <Col md="1" className=" mt-3">
                                                         <AddMaster
                                                             masterModal={CategoryTypeMaster}

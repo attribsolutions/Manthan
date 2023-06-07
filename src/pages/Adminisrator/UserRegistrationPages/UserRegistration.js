@@ -35,7 +35,6 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/validationFunction";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import AddMaster from "../EmployeePages/Drodown";
-import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
 import * as url from "../../../routes/route_url";
 import AddEmployee from "../EmployeePages/EmployeeMaster";
 
@@ -58,12 +57,12 @@ const AddUser = (props) => {
   }
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
+  const [employeeMaster_AddAccess, setEmployeeMaster_AddAccess] = useState(false)
 
   //SetState  Edit data Geting From Modules List component
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserAccState] = useState('');
-  const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [editCreatedBy, seteditCreatedBy] = useState("");
 
 
@@ -143,8 +142,11 @@ const AddUser = (props) => {
       locationPath = props.masterPath;
     };
 
-    userAcc = userAccess.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
+    userAcc = userAccess.find((index) => {
+      if (index.id === pageId.EMPLOYEE) {
+        setEmployeeMaster_AddAccess(true)
+     }
+      return (`/${index.ActualPagePath}` === locationPath)
     })
 
     if (userAcc) {
@@ -218,7 +220,6 @@ const AddUser = (props) => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
-      setEmployeeSelect('')
 
       if (pageMode === mode.dropdownAdd) {
         dispatch(AlertState({
@@ -263,7 +264,6 @@ const AddUser = (props) => {
   }));
 
   function handllerEmployeeID(e) {
-    setEmployeeSelect(e)
     dispatch(GetUserPartiesForUserMastePage({ id: e.value }))
   }
 
@@ -417,6 +417,7 @@ const AddUser = (props) => {
                                     isDisabled={pageMode === mode.edit ? true : false}
                                     value={values.EmployeeName}
                                     options={EmployeeOptions}
+                                    autoFocus={true}
                                     onChange={(hasSelect, evn) => {
                                       handllerEmployeeID(hasSelect)
                                       onChangeSelect({ hasSelect, evn, state, setState, })
@@ -427,12 +428,16 @@ const AddUser = (props) => {
                                   )}
                                 </Col>
                               </FormGroup>
-                              <Col md="1" className=" mt-3">
-                                <AddMaster
-                                  masterModal={AddEmployee}
-                                  masterPath={url.EMPLOYEE}
-                                />
-                              </Col>
+
+                              {
+                                (employeeMaster_AddAccess) && <Col md="1" className=" mt-3">
+                                  <AddMaster
+                                    masterModal={AddEmployee}
+                                    masterPath={url.EMPLOYEE}
+                                  />
+                                </Col>
+                              }
+
                             </Row>
 
                             <Row>

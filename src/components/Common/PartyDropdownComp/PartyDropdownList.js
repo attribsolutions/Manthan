@@ -26,7 +26,7 @@ const PartyDropdownList = (props) => {
     // const goButtonHandler = () => {
     //     
     //     if (state.length === 0) {
-    //         customAlert({
+    //         CustomAlert({
     //             Type: 3,
     //             Message: "Select Party",
     //         })

@@ -13,7 +13,7 @@ import { Link, useHistory } from "react-router-dom";
 import Select from "react-select";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
-import * as _cfunc from "../../../../components/Common/CommonFunction";
+import * as commonFunc from "../../../../components/Common/CommonFunction";
 import {
     comAddPageFieldFunc,
     initialFiledFunc,
@@ -25,7 +25,7 @@ import {
     GoButton_ImportFiledMap_Add,
     GoButton_ImportFiledMap_AddSuccess
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
-import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import {
     ExcelUpload_save_action,
     ExcelUpload_save_action_Success
@@ -52,7 +52,6 @@ const UploadExcel = (props) => {
     const [selectedFiles, setselectedFiles] = useState([])
     const [preUploadjson, setPreUploadjson] = useState([])
     const [readJsonDetail, setReadJsonDetail] = useState(preDetails)
-    const [preViewDivShow, setPreViewDivShow] = useState(false)
     const [partySelect, SetPartySelect] = useState([])
 
 
@@ -61,13 +60,14 @@ const UploadExcel = (props) => {
         pageField,
         userAccess,
         partyList,
-        compareParameter = []
+        compareParam = []
     } = useSelector((state) => ({
         postMsg: state.ImportMasterMap_Reducer.excelPostMsg,
+
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         partyList: state.PartyMasterReducer.partyList,
-        compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
+        compareParam: state.ImportExportFieldMap_Reducer.addGoButton,
     }));
 
     useEffect(() => {
@@ -76,11 +76,8 @@ const UploadExcel = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
-        if ((_cfunc.loginIsSCMCompany() === 1)) {
+        if ((commonFunc.loginIsSCMCompany() === 1)) {
             goButtonHandler()
-        }
-        return () => {
-            dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         }
     }, []);
 
@@ -104,7 +101,7 @@ const UploadExcel = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
+            commonFunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -120,14 +117,14 @@ const UploadExcel = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(ExcelUpload_save_action_Success({ Status: false }))
-            customAlert({
+            CustomAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
         }
         else if (postMsg.Status === true) {
             dispatch(ExcelUpload_save_action_Success({ Status: false }))
-            customAlert({
+            CustomAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
             })
@@ -141,10 +138,10 @@ const UploadExcel = (props) => {
 
 
     function goButtonHandler(e) {
-        let partyId = ((_cfunc.loginIsSCMCompany() === 1)) ? _cfunc.loginPartyID() : e.value;
+        let partyId = ((commonFunc.loginIsSCMCompany() === 1)) ? commonFunc.loginPartyID() : e.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
-            CompanyID: _cfunc.loginCompanyID()
+            CompanyID: commonFunc.loginCompanyID()
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
@@ -152,92 +149,64 @@ const UploadExcel = (props) => {
 
     async function upload() {
 
-        if (compareParameter.length === 0) {
-            customAlert({
-                Type: 3,
-                Message: "Please wait Downloading field Details.",
-            })
-            return
-        }
-
         var files = selectedFiles;
         if (files.length == 0) {
-            customAlert({
+            CustomAlert({
                 Type: 3,
                 Message: "Please choose any file...",
             })
             return;
         }
-
         var filename = files[0].name;
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
         if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
 
 
-            const readjson = await readExcelFile({ file: files[0], compareParameter, })
+            const readjson = await readExcelFile({ file: files[0], compareParam, })
             if (readjson.length > 0) {
 
-                const isdetails = await fileDetails({ compareParameter, readjson })
-                let { invoiceNO } = isdetails;
-                if ((invoiceNO.length > 0)) {
-                    setReadJsonDetail(isdetails)
-                    setPreUploadjson(readjson)
-                    setPreViewDivShow(true)
-                } else {
-                    customAlert({
-                        Type: 3,
-                        Message: "Mapping not match."
-                    })
-                }
-                // const btnerify = document.getElementById("btn-verify");
-                // const btnupload = document.getElementById('btn-upload');
-                // const filedetail = document.getElementById('filedetail');
+                const aa = await fileDetails({ compareParam, readjson })
 
-                // btnerify.style.display = "none"
-                // btnupload.style.display = "block"
+                const btnerify = document.getElementById("btn-verify");
+                const btnupload = document.getElementById('btn-upload');
+                const filedetail = document.getElementById('filedetail');
+
+                setReadJsonDetail(aa)
+                setPreUploadjson(readjson)
+
+                // filedetail.style.display = "block"
+                btnerify.style.display = "none"
+                btnupload.style.display = "block"
             }
 
         } else {
-            customAlert({
+            CustomAlert({
                 Type: 3,
                 Message: "Please select a valid excel file.",
             })
         }
     }
 
-
     async function handleAcceptedFiles(files) {
-        if (compareParameter.length === 0) {
-            customAlert({
-                Type: 3,
-                Message: "Please wait Downloading field Details.",
-            })
-            return
-        }
 
         if (selectedFiles.length > 0) {
-            const isConfirmed = await customAlert({
+            const isConfirmed = await CustomAlert({
                 Type: 8,
                 Message: "Do you confirm your choice?",
             });
             if (!isConfirmed) {
-
                 return
             }
         };
-        
-        setReadJsonDetail(preDetails)
-        setPreUploadjson([])
-        setPreViewDivShow(false)
-        // try {
-        //     const btnerify = document.getElementById("btn-verify")
-        //     const btnupload = document.getElementById('btn-upload')
-        //     const progDiv = document.getElementById("file-proccess")
+        try {
+            const btnerify = document.getElementById("btn-verify")
+            const btnupload = document.getElementById('btn-upload')
+            const progDiv = document.getElementById("file-proccess")
 
-        //     btnerify.style.display = "block"
-        //     btnupload.style.display = "none"
-        //     progDiv.style.display = "none"
-        // } catch (d) { }
+            btnerify.style.display = "block"
+            btnupload.style.display = "none"
+            progDiv.style.display = "none"
+        } catch (d) { }
 
         files.map(file =>
             Object.assign(file, {
@@ -259,135 +228,115 @@ const UploadExcel = (props) => {
     }
 
 
-    const SaveHandler = async (event) => {
-
+    const SaveHandler = (event) => {
         event.preventDefault();
-        const btnId = event.target.id
-        try {
-            _cfunc.btnIsDissablefunc({ btnId, state: true })
-            const parArr = readJsonDetail.fileFiled
-            const outerArr = []
 
-            compareParameter.forEach(ele => {
-                if ((ele.Value !== null)) {
-                    parArr[ele.FieldName] = ele.Value
+        const parArr = readJsonDetail.fileFiled
+        const outerArr = []
+
+        compareParam.forEach(ele => {
+            if ((ele.Value !== null)) {
+                parArr[ele.FieldName] = ele.Value
+            }
+        })
+
+        // const c_invoice = compareParam.find(i => (i.FieldName === "InvoiceNumber"))
+        // const invoiceGroup = await groupBy(preUploadjson, (party) => (party[c_invoice.Value]))
+
+        readJsonDetail.invoice.forEach(inv => {
+            let parentObj;
+            let invoiceItems = []
+            inv.forEach(ele => {
+                parentObj = {
+                    "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
+                    "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
+                    "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
+                    "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
+                    "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
+                    "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
+                    "Party": commonFunc.loginPartyID(),
+                    CreatedBy: commonFunc.loginUserID(),
+                    UpdatedBy: commonFunc.loginUserID(),
+                    "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
                 }
+
+
+
+                invoiceItems.push({
+                    "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
+                    "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
+                    "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
+                    "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
+                    "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
+                    "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
+                    "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
+                    "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
+                    "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
+                    "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
+                    "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
+                    "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
+                    "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
+                    "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,
+                    "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : 0,
+                    "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : 0,
+                    "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
+                    "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
+                    "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : 0,
+                    "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : 0,
+                    "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
+                    "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
+                    "TaxType": ele[parArr.TaxType] ? ele[parArr.TaxType] : '',
+                    "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
+                    "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
+                    "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
+
+                })
             })
 
-            readJsonDetail.invoice.forEach(inv => {
-                let parentObj;
-                let invoiceItems = []
-                inv.forEach(ele => {
-                    parentObj = {
-                        "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
-                        "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
-                        "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
-                        "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
-                        "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
-                        "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
-                        "Party": _cfunc.loginPartyID(),
-                        CreatedBy: _cfunc.loginUserID(),
-                        UpdatedBy: _cfunc.loginUserID(),
-                        "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
-                    }
+            outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
+        });
 
-                    invoiceItems.push({
-                        "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
-                        "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
-                        "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
-                        "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
-                        "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
-                        "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
-                        "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                        "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
-                        "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
-                        "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
-                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
-                        "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
-                        "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
-                        "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,
-                        "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : 0,
-                        "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : 0,
-                        "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
-                        "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
-                        "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : 0,
-                        "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : 0,
-                        "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
-                        "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
-                        "TaxType": ele[parArr.TaxType] ? ele[parArr.TaxType] : '',
-                        "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
-                        "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
-                        "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
-
-                    })
-                })
-
-                outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
-            });
-
-            const jsonBody = JSON.stringify({ "BulkData": outerArr })
-            dispatch(ExcelUpload_save_action({ jsonBody, btnId }));
-
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        console.log('Upload data', outerArr)
+        const jsonBody = JSON.stringify({ "BulkData": outerArr })
+        dispatch(ExcelUpload_save_action({ jsonBody, }));
     };
+
 
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{commonFunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <form noValidate>
+                <form onSubmit={(event) => SaveHandler(event)} noValidate>
                     <div className="page-content">
 
                         <div className="px-2 c_card_header text-black" >
                             <div className="px-2   c_card_filter text-black" >
-                                {
-                                    (!(_cfunc.loginIsSCMCompany() === 1)) ? <>
-                                        <div className="row">
-                                            <Col sm="3">
-                                                <FormGroup className="mb-2 row mt-3 " >
-                                                    <Label className=" p-2"
+                                <div className="row" style={{ display: ((commonFunc.loginIsSCMCompany() === 1)) ? 'none' : "block" }} >
+                                    <Col sm="3">
+                                        <FormGroup className="mb-2 row mt-3 " >
+                                            <Label className=" p-2"
 
-                                                        style={{ width: "115px" }}>{fieldLabel.Party}</Label>
-                                                    <Col >
-                                                        <Select
-                                                            classNamePrefix="select2-Customer"
-                                                            value={partySelect}
-                                                            options={PartyDropdown_Options}
-                                                            onChange={(e) => {
-                                                                SetPartySelect(e)
-                                                                goButtonHandler(e)
-                                                            }}
-                                                        />
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col >
-                                        </div>
-                                    </>
-                                        : <>
-                                            {(!(compareParameter.length > 0)) ?
-                                                <div className="row ">
-                                                    <div className="d-flex justify-content-start p-2 ">
-                                                        <div>Please wait Downloading field Details.</div>
-                                                        <div >
-                                                            <div className="dot-pulse">
-                                                                <div className="bounce1"></div>
-                                                                <div className="bounce2"></div>
-                                                                <div className="bounce3"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                :
-                                                <div >
-                                                    <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
-                                                </div>}
+                                                style={{ width: "115px" }}>{fieldLabel.Party}</Label>
+                                            <Col >
+                                                <Select
+                                                    classNamePrefix="select2-Customer"
+                                                    value={partySelect}
+                                                    options={PartyDropdown_Options}
+                                                    onChange={(e) => {
+                                                        SetPartySelect(e)
+                                                        goButtonHandler(e)
+                                                    }}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col >
+                                </div>
+                                <div className="row " style={{ display: ((commonFunc.loginIsSCMCompany() === 1)) ? 'block' : "none" }} >
 
-
-                                        </>
-                                }
-
+                                    <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
+                                </div>
                             </div>
 
                         </div>
@@ -451,71 +400,90 @@ const UploadExcel = (props) => {
                                                 </Row>
                                             </div>
 
+
+                                            <div id="filedetail">
+
+
+                                                <details>
+                                                    <summary>No. of Invoice: {readJsonDetail.invoice.size}</summary>
+                                                    <div className="error-msg">
+                                                        <p>
+                                                            {readJsonDetail.invoiceNO.map(i => (<Label>{i} ,&#160;</Label>))}
+                                                        </p>
+                                                    </div>
+
+                                                </details>
+
+                                                <details>
+                                                    <summary>No. of Party :{readJsonDetail.party.size}</summary>
+                                                    <div className="error-msg">
+                                                        <p>
+                                                            {readJsonDetail.partyNO.map(i => (<Label>{i} ,&#160;</Label>))}
+                                                        </p>
+                                                    </div>
+                                                </details>
+                                                <details>
+                                                    <summary> From Dates :20-01-2021</summary>
+
+                                                </details>
+                                                <details>
+                                                    <summary>Total Amount :{readJsonDetail.amount}</summary>
+                                                </details>
+                                                {/* <div className="error-msg">
+                                                    <i className="fa fa-error"></i>
+                                                    Total Amount:5454
+                                                </div> */}
+                                            </div>
+                                            {/* <div id="file-proccess" style={{
+                                                width: "80%",
+                                                paddingRight: "40%",
+                                                marginBottom: "10px",
+                                                display: "none"
+                                            }}>
+                                                <div className='progress'>
+                                                    <div className='progress-bar progress-bar-animated bg-primary progress-bar-striped'
+                                                        id="_progressbar"
+                                                        role='progressbar'
+                                                        aria-valuenow={10}
+                                                        aria-valuemin={0}
+                                                        aria-valuemax={100}
+                                                        style={{ width: '0%' }}>
+                                                        <span id='file-proccess-lable'>0% </span>
+                                                    </div>
+                                                </div>
+                                            </div> */}
+
+
+
+
+
                                         </Card>
                                     )
                                 })}
-                                {preViewDivShow &&
-                                    <Card style={{ borderTop: "0px" }}>
-                                        <div id="filedetail">
-
-                                            <details>
-                                                <summary>No. of Invoice: {readJsonDetail.invoice.size}</summary>
-                                                <div className="error-msg">
-                                                    <p>
-                                                        {readJsonDetail.invoiceNO.map(i => (<Label>{i} ,&#160;</Label>))}
-                                                    </p>
-                                                </div>
-
-                                            </details>
-
-                                            <details>
-                                                <summary>No. of Party :{readJsonDetail.party.size}</summary>
-                                                <div className="error-msg">
-                                                    <p>
-                                                        {readJsonDetail.partyNO.map(i => (<Label>{i} ,&#160;</Label>))}
-                                                    </p>
-                                                </div>
-                                            </details>
-                                            <details>
-                                                <summary> From Dates :20-01-2021</summary>
-
-                                            </details>
-                                            <details>
-                                                <summary>Total Amount :{readJsonDetail.amount}</summary>
-                                            </details>
-                                            {/* <div className="error-msg">
-    <i className="fa fa-error"></i>
-    Total Amount:5454
-</div> */}
-                                        </div>
-                                    </Card>
-                                }
                             </div>
 
 
                         </div>
 
                         <div className="text- mt-4" >
-                            {preViewDivShow ?
-                                <button
-                                    type="button"
-                                    // style={{ display: "none" }}
-                                    id='btn-upload'
-                                    className="btn btn-success "
-                                    onClick={SaveHandler}
-                                >
-                                    Upload Files
-                                </button>
-                                :
-                                <button
-                                    type="button"
-                                    id='btn-verify'
-                                    className="btn btn-primary "
-                                    onClick={upload}
-                                >
-                                    Verify Files
-                                </button>
-                            }
+
+                            <button
+                                type="button"
+                                style={{ display: "none" }}
+                                id='btn-upload'
+                                className="btn btn-success "
+                                onClick={SaveHandler}
+                            >
+                                Upload Files
+                            </button>
+                            <button
+                                type="button"
+                                id='btn-verify'
+                                className="btn btn-primary "
+                                onClick={upload}
+                            >
+                                Verify Files
+                            </button>
                         </div>
 
 

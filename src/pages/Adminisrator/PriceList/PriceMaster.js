@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import './pricemaster.scss'
 import {
     Button,
@@ -28,6 +28,7 @@ import {
     editPriceListSuccess,
     priceListByCompay_Action,
     priceListByPartyAction,
+    priceListByPartyActionSuccess,
     savePriceMasterAction,
     savePriceMasterActionSuccess,
     updatePriceList,
@@ -100,11 +101,11 @@ const PriceMaster = (props) => {
         }
     }, [userAccess]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+        dispatch(priceListByPartyActionSuccess([]))
         dispatch(getPartyTypelist());
         dispatch(priceListByCompay_Action());
-
-    }, [dispatch]);
+    }, []);
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
@@ -196,6 +197,7 @@ const PriceMaster = (props) => {
         })
         return optionArr
     }
+    
     const calculatepathOptions = priceListByCompany.map(i => ({
         label: i.Name, value: i.id
     }))
@@ -524,6 +526,7 @@ const PriceMaster = (props) => {
                                                                 options={PartyTypeDropdown_Options}
                                                                 className="rounded-bottom"
                                                                 placeholder="select"
+                                                                autoFocus={true}
                                                                 onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
                                                                 classNamePrefix="select2-selection"
                                                             />

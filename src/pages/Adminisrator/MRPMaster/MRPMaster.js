@@ -455,6 +455,7 @@ const MRPMaster = (props) => {
                                                                 options={Division_DropdownOptions}
                                                                 isDisabled={pageMode === mode.edit ? true : false}
                                                                 isSearchable={true}
+                                                                autoFocus={true}
                                                                 placeholder="select"
                                                                 onChange={(hasSelect, evn) => {
                                                                     onChangeSelect({ hasSelect, evn, state, setState, })

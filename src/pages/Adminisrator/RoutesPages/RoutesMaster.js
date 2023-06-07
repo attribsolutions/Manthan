@@ -37,19 +37,20 @@ import {
     loginPartyID,
     loginUserID,
     btnIsDissablefunc,
-    loginRoleID,
-    metaTagLabel
+    metaTagLabel,
+    loginUserAdminRole
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const RoutesMaster = (props) => {
 
-    const history = useHistory()
+    const history = useHistory();
     const dispatch = useDispatch();
-    const RoleID = loginRoleID()
+    const userAdminRole = loginUserAdminRole();
+
 
     const fileds = {
         id: "",
@@ -233,6 +234,13 @@ const RoutesMaster = (props) => {
         }
     }, [pageField])
 
+    const partyOnChngeHandler = (e) => {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Party = e;
+            return a
+        })
+    }
 
     const SaveHandler = async (event) => {
 
@@ -246,7 +254,7 @@ const RoutesMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     IsActive: values.IsActive,
-                    Party: RoleID === 2 ? values.Party.value : loginPartyID(),
+                    Party: userAdminRole ? values.Party.value : loginPartyID(),
                     Sunday: values.Sunday,
                     Monday: values.Monday,
                     Tuesday: values.Tuesday,
@@ -282,13 +290,12 @@ const RoutesMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
 
-                        {RoleID === 2 ?
-                            <PartyDropdownMaster
-                                state={state}
-                                setState={setState} />
-                            : null}
-
-                        <Card className="text-black">
+                        {userAdminRole &&
+                            <PartyDropdown_Common
+                                partySelect={values.Party}
+                                setPartyFunc={partyOnChngeHandler} />
+                        }
+                        <Card className="text-black" style={{marginTop:"3px"}}>
                             <CardHeader className="card-header   text-black c_card_header">
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>

@@ -56,7 +56,7 @@ const ImportFieldAddList = () => {
   }
  
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField,  } = reducers
   return (
     <React.Fragment>
       {

@@ -973,6 +973,7 @@ const ItemsMaster = (props) => {
                                                                             placeholder=" Please Enter Name "
                                                                             defaultValue={EditData.Name}
                                                                             autoComplete="off"
+                                                                            autoFocus={true}
                                                                             // value={searchTerm}
                                                                             onClick={onclickselect}
                                                                             onChange={handleChange}

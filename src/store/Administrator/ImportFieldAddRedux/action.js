@@ -3,6 +3,8 @@ import {
   DELETE_IMPORT_FIELD_ADD_SUCCESS,
   EDIT_IMPORT_FIELD_ADD,
   EDIT_IMPORT_FIELD_ADD_SUCCESS,
+  IMPORT_EXCEL_TYPE,
+  IMPORT_EXCEL_TYPE_SUCCESS,
   POST_IMPORT_FIELD_ADD,
   POST_IMPORT_FIELD_ADD_SUCCESS,
   SAVE_IMPORT_FIELD_ADD,
@@ -23,7 +25,7 @@ export const save_ImportFiledAdd_Success = (resp) => ({// Save  success
 });
 
 export const post_ImportFiledAdd = (jsonBody) => ({// get List Action
-   type: POST_IMPORT_FIELD_ADD,
+  type: POST_IMPORT_FIELD_ADD,
   jsonBody,
 });
 
@@ -52,7 +54,7 @@ export const update_ImportFiledAdd_Success = (resp) => ({ //Update Success
   payload: resp,
 })
 
-export const delete_ImportFiledAdd = (config={}) => ({// Delete  Action
+export const delete_ImportFiledAdd = (config = {}) => ({// Delete  Action
   type: DELETE_IMPORT_FIELD_ADD,
   config,
 });
@@ -61,6 +63,19 @@ export const delete_ImportFiledAdd_Success = (resp) => ({// Delete Success
   type: DELETE_IMPORT_FIELD_ADD_SUCCESS,
   payload: resp
 });
+
+export const get_ImportExcelType = (config = {}) => ({
+  type: IMPORT_EXCEL_TYPE,
+  config,
+});
+
+export const get_ImportExcelType_Success = (resp) => ({
+  type: IMPORT_EXCEL_TYPE_SUCCESS,
+  payload: resp
+});
+
+
+
 
 
 

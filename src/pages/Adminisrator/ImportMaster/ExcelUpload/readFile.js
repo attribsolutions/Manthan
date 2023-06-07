@@ -1,15 +1,18 @@
 // import { groupBy } from 'lodash';
-import { groupBy, date_ymd_func } from '../../../../components/Common/CommonFunction';
-import { customAlert } from '../../../../CustomAlert/ConfirmDialog';
+import { groupBy, invertDatefunc } from '../../../../components/Common/CommonFunction';
+import { CustomAlert } from '../../../../CustomAlert/ConfirmDialog';
 
 const XLSX = require('xlsx');
 
 
-export const readExcelFile = async ({ file, compareParameter }) => {
+export const readExcelFile = async ({ file, compareParam }) => {
 
 
   try {
-   
+    // const progDiv = document.getElementById("file-proccess")
+    // const progBar = document.getElementById("_progressbar")
+    // const progLabe = document.getElementById("file-proccess-lable")
+    // progDiv.style.display = 'block'
     processing(5)
 
     function processing(t) {
@@ -39,16 +42,15 @@ export const readExcelFile = async ({ file, compareParameter }) => {
 
     });
 
+    processing(10)
 
     let invalidMsg = []
     let count = 0
-    const comparefilter = compareParameter.filter(f => (f.Value !== null))
-   
+    const comparefilter = compareParam.filter(f => (f.Value !== null))
 
     jsonResult.forEach((r1, k) => {
-      // 
       comparefilter.forEach((c1) => {
-        if (c1.ControlTypeName === "Date") { r1[c1.Value] = date_ymd_func(r1[c1.Value]) }
+        if (c1.ControlTypeName === "Date") { r1[c1.Value] = invertDatefunc(r1[c1.Value]) }
         const regExp = RegExp(c1.RegularExpression)
         if (!(regExp.test(r1[c1.Value]))) {
           invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)
@@ -58,13 +60,17 @@ export const readExcelFile = async ({ file, compareParameter }) => {
       processing(count)
     })
     if (invalidMsg.length > 0) {
-      customAlert({
+      CustomAlert({
         Type: 3,
         Message: JSON.stringify(invalidMsg),
       })
       return []
     }
 
+
+    // groupBy(jsonResult, (party) => (party))
+    // console.log('Upload data', jsonResult)
+    // const aad = await commonPageFiled_API(184)
 
     return jsonResult
 
@@ -76,12 +82,12 @@ export const readExcelFile = async ({ file, compareParameter }) => {
 
 
 
-export async function fileDetails({ compareParameter = [], readjson = [] }) {
+export async function fileDetails({ compareParam = [], readjson = [] }) {
 
 
   const fileFiled = {}
 
-  await compareParameter.forEach(ele => {
+  await compareParam.forEach(ele => {
     if ((ele.Value !== null)) {
       fileFiled[ele.FieldName] = ele.Value
     }

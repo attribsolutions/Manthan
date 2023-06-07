@@ -244,51 +244,42 @@ export const listPageActionsButtonFunc = (props) => {
 
 
                     {
-                        ((userAccState.RoleAccess_IsPrint)) ?
-                            <Button
-                                type="button"
-                                id={`btn-dounload-${rowData.id}`}
-                                className={downBtnCss}
-                                title={` ${ButtonMsgLable}`}
-                                onClick={() => {
-                                    const btnId = `btn-dounload-${rowData.id}`
-                                    downHandler(rowData, btnId)
-                                }}
-                            >
-                                <i className="bx bx-printer font-size-18"></i>
-                            </Button>
-                            :// btn dissable only show body
-                            <Button
-                                type="button"
-                                title={'Access Not Allow'}
-                                className={dissableBtnCss}
-                                disabled={true}
-                            >
-                                <i className="bx bx-printer font-size-18"></i>
-                            </Button>  // **else null
-                    }
-                    {
-                        (userAccState.RoleAccess_IsMultipleInvoicePrint) ?
-                            < Button
-                                type="button"
-                                id={`btn-MultiInvoice-${rowData.id}`}
-                                className={printBtnCss}
-                                title={`MultipleInvoices`}
-                                onClick={() => {
-                                    const btnId = `btn-MultiInvoice-${rowData.id}`
-                                    const downbtnType = "IsMultipleInvoicePrint"
-                                    downHandler(rowData, downbtnType)
-
-
-                                }}
-                            >
-                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                    className=" fas fa-file-download" ></span> </Button>
-                            : null
+                        ((userAccState.RoleAccess_IsPrint)) &&
+                        <Button
+                            type="button"
+                            id={`btn-dounload-${rowData.id}`}
+                            className={downBtnCss}
+                            title={`Print ${ButtonMsgLable}`}
+                            onClick={() => {
+                                const btnId = `btn-dounload-${rowData.id}`
+                                downHandler(rowData, btnId)
+                            }}
+                        >
+                            <i className="bx bx-printer font-size-18"></i>
+                        </Button>
                     }
 
                     {
-                        (updateBtnFunc) ?
+                        (userAccState.RoleAccess_IsMultipleInvoicePrint) &&
+                        < Button
+                            type="button"
+                            id={`btn-MultiInvoice-${rowData.id}`}
+                            className={printBtnCss}
+                            title={`MultipleInvoices`}
+                            onClick={() => {
+                                const btnId = `btn-MultiInvoice-${rowData.id}`
+                                const downbtnType = "IsMultipleInvoicePrint"
+                                downHandler(rowData, downbtnType)
+
+
+                            }}
+                        >
+                            <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                className=" fas fa-file-download" ></span> </Button>
+                    }
+
+                    {
+                        (updateBtnFunc) &&
                             <Button style={{ width: "30px" }}
                                 type="button"
                                 id={`btn-delete-${rowData.id}`}
@@ -301,7 +292,6 @@ export const listPageActionsButtonFunc = (props) => {
                             >
                                 <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
                             </Button>
-                            : null
                     }
 
                     {

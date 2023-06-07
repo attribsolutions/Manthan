@@ -37,7 +37,14 @@ import {
   resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginIsSCMCompany, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import {
+  breadcrumbReturnFunc,
+  btnIsDissablefunc,
+  loginCompanyID,
+  loginIsSCMCompany,
+  loginUserID,
+  metaTagLabel
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -66,7 +73,7 @@ const RoleMaster = (props) => {
   const [modalCss, setModalCss] = useState(false);
   const [userPageAccessState, setUserAccState] = useState(123);
   const [editCreatedBy, seteditCreatedBy] = useState("");
-  const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
+  const [employeeTypes_AddAccess, setEmployeeTypes_AddAccess] = useState(false)
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
     postMsg,
@@ -102,16 +109,14 @@ const RoleMaster = (props) => {
     let locationPath = location.pathname;
 
     if (hasShowModal) {
-      userAccess.find((index) => {
-        if (index.id === pageId.PARTYTYPE) {
-          return setFindAddMasterAccess(true)
-        }
-      });
       locationPath = props.masterPath;
     };
 
-    userAcc = userAccess.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
+    userAcc = userAccess.find((index) => {
+      if (index.id === pageId.PARTYTYPE) {
+        setEmployeeTypes_AddAccess(true)
+     }
+      return (`/${index.ActualPagePath}` === locationPath)
     })
 
     if (userAcc) {
@@ -121,7 +126,7 @@ const RoleMaster = (props) => {
 
     userAccess.find((index) => {
       if (index.id === pageId.PARTYTYPE) {
-        return setFindAddMasterAccess(true)
+        return setEmployeeTypes_AddAccess(true)
       }
     });
   }, [userAccess])
@@ -333,7 +338,7 @@ const RoleMaster = (props) => {
                           )}
                         </FormGroup>
                         {
-                          (findAddMasterAccess) && <Col md="1" className=" mt-3">
+                          (employeeTypes_AddAccess) && <Col md="1" className=" mt-3">
                             <AddMaster
                               masterModal={EmployeeTypesMaster}
                               masterPath={url.EMPLOYEETYPE}
@@ -354,7 +359,6 @@ const RoleMaster = (props) => {
                             className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
                             placeholder="Please Enter Description"
                             autoComplete='off'
-                            autoFocus={true}
                             onChange={(event) => {
                               onChangeText({ event, state, setState })
                             }}
@@ -375,7 +379,6 @@ const RoleMaster = (props) => {
                             className={isError.Dashboard.length > 0 ? "is-invalid form-control" : "form-control"}
                             placeholder="Please Enter Dashboard"
                             autoComplete='off'
-                            autoFocus={true}
                             onChange={(event) => {
                               onChangeText({ event, state, setState })
                             }}

@@ -16,7 +16,7 @@ import {
 import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import { getState } from "../../../../store/Administrator/EmployeeRedux/action"
+import { getCityOnDistrict, getCityOnDistrictSuccess, getState } from "../../../../store/Administrator/EmployeeRedux/action"
 import {
     editPartyIDSuccess,
     getDistrictOnState,
@@ -111,6 +111,7 @@ const PartyMaster = (props) => {
 
 
     useEffect(() => {
+        debugger
         try {
             if ((hasShowloction || hasShowModal)) {
 
@@ -159,6 +160,10 @@ const PartyMaster = (props) => {
                             label: hasEditVal.District.Name,
                             value: hasEditVal.District.id,
                         },
+                        CityName: {
+                            label: hasEditVal.City.Name,
+                            value: hasEditVal.City.id,
+                        },
                         GSTIN: hasEditVal.GSTIN,
                         MkUpMkDn: hasEditVal.MkUpMkDn,
                         isActive: hasEditVal.isActive,
@@ -197,6 +202,7 @@ const PartyMaster = (props) => {
                     setPriceList(editPriceList);
 
                     dispatch(getDistrictOnState(hasEditVal.State.id))
+                    dispatch(getCityOnDistrict(hasEditVal.District.id))
                     dispatch(priceListByPartyAction(hasEditVal.PartyType.id,))
                     dispatch(editPartyIDSuccess({ Status: false }));
                 }
@@ -207,6 +213,7 @@ const PartyMaster = (props) => {
     useLayoutEffect(() => {
 
         dispatch(getDistrictOnStateSuccess([]))//clear district privious options
+        dispatch(getCityOnDistrictSuccess([]))
         dispatch(commonPageFieldSuccess(null));//clear privious PageField
         dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
         dispatch(commonPageField(page_id))
@@ -323,9 +330,10 @@ const PartyMaster = (props) => {
                 "AlternateContactNo": baseValue.AlternateContactNo,
                 "State": baseValue.State.value,
                 "District": baseValue.District.value,
+                "City":baseValue.CityName.value,
                 "SAPPartyCode": baseValue.SAPPartyCode,
                 "Taluka": 0,
-                "City": 0,
+                // "City": 0,
                 "GSTIN": baseValue.GSTIN,
                 "MkUpMkDn": baseValue.MkUpMkDn,
                 "isActive": baseValue.IsActive,

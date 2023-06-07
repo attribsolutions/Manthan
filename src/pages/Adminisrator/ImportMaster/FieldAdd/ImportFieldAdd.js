@@ -43,6 +43,7 @@ import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
 import {
     edit_ImportFiledAdd_Success,
+    get_ImportExcelType,
     save_ImportFiledAdd,
     save_ImportFiledAdd_Success,
     update_ImportFiledAdd,
@@ -57,6 +58,7 @@ const ImportFieldAdd = (props) => {
 
     const fileds = {
         id: "",
+        ImportExcelType: '',
         FieldName: "",
         ControlTypeName: "",
         FieldValidationName: "",
@@ -75,12 +77,14 @@ const ImportFieldAdd = (props) => {
         pageField,
         updateMsg,
         controlType = [],
+        importExcelType = [],
         validationType = [],
         userAccess } = useSelector((state) => ({
             postMsg: state.ImportFieldAdd_Reducer.postMsg,
             updateMsg: state.ImportFieldAdd_Reducer.updateMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             controlType: state.H_Pages.ControlTypes,
+            importExcelType: state.ImportFieldAdd_Reducer.importExcelType,
             validationType: state.H_Pages.FieldValidations,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -90,6 +94,8 @@ const ImportFieldAdd = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getControlTypes());
+        dispatch(get_ImportExcelType());
+        
     }, []);
 
     const values = { ...state.values }
@@ -223,6 +229,11 @@ const ImportFieldAdd = (props) => {
         label: index.Name,
     }));
 
+    const importExcelType_Options = importExcelType.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
+
     const validationType_Options = validationType.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -244,6 +255,7 @@ const ImportFieldAdd = (props) => {
                     FieldName: values.FieldName,
                     IsCompulsory: values.IsCompulsory,
                     ControlType: values.ControlTypeName.value,
+                    ImportExcelType: values.ImportExcelType.value,
                     FieldValidation: values.FieldValidationName.value,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
@@ -282,6 +294,23 @@ const ImportFieldAdd = (props) => {
                                         <Col md={12} >
                                             <Card >
                                                 <CardBody className="c_card_body">
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <Label>{fieldLabel.ImportExcelType} </Label>
+                                                            <Select
+                                                                name="ImportExcelType"
+                                                                value={values.ImportExcelType}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
+                                                                options={importExcelType_Options}
+                                                                onChange={controlTypeHandler}
+                                                            />
+                                                            {isError.ImportExcelType.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.ImportExcelType}</small></span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Row>
+
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 " >
                                                             <Label htmlFor="validationCustom01">{fieldLabel.FieldName} </Label>
