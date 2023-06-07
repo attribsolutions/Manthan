@@ -410,9 +410,9 @@ const InvoiceExcelUpload = (props) => {
                                         >
                                             <input {...getInputProps()} />
                                             <div className="mb-3">
-                                                <i className="display-4 text-muted bx bxs-cloud-uploadBtnFunc" />
+                                                <i className="display-4 text-muted bx bxs-cloud-upload" />
                                             </div>
-                                            <h4>Drop files here or click to uploadBtnFunc.</h4>
+                                            <h4>Drop files here or click to upload.</h4>
                                         </div>
                                     </div>
                                 )}

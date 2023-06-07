@@ -4,7 +4,9 @@ import {
   GO_BUTTON_IMPORT_EXCEL_PARTY_MAP,
   GO_BUTTON_IMPORT_EXCEL_PARTY_MAP_SUCCESS,
   SAVE_IMPORT_EXCEL_PARTY_MAP,
-  SAVE_IMPORT_EXCEL_PARTY_MAP_SUCCESS
+  SAVE_IMPORT_EXCEL_PARTY_MAP_SUCCESS,
+  RETAILER_EXCEL_UPLOAD_SAVE,
+  RETAILER_EXCEL_UPLOAD_SAVE_SUCCESS
 } from "./actionType";
 
 
@@ -35,6 +37,17 @@ export const InvoiceExcelUpload_save_action = (config = {}) => ({// save Action
 
 export const InvoiceExcelUpload_save_Success = (resp) => ({// Save  success
   type: INVOICE_EXCEL_UPLOAD_SAVE_SUCCESS,
+  payload: resp,
+});
+
+
+export const RetailerExcelUpload_save_action = (config = {}) => ({// save Action
+  type: RETAILER_EXCEL_UPLOAD_SAVE,
+  config,
+});
+
+export const RetailerExcelUpload_save_action_Success = (resp) => ({// Save  success
+  type: RETAILER_EXCEL_UPLOAD_SAVE_SUCCESS,
   payload: resp,
 });
 

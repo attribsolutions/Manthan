@@ -1,8 +1,8 @@
 
 // import { groupBy } from 'lodash';
-import { groupBy, date_ymd_func, date_dmy_func, btnIsDissablefunc, loginPartyID, loginUserID } from '../../../../components/Common/CommonFunction';
+import { groupBy, date_ymd_func, date_dmy_func, btnIsDissablefunc, loginPartyID, loginUserID, loginCompanyID } from '../../../../components/Common/CommonFunction';
 import { customAlert } from '../../../../CustomAlert/ConfirmDialog';
-import { InvoiceExcelUpload_save_action } from '../../../../store/Administrator/ImportExcelPartyMapRedux/action';
+import { InvoiceExcelUpload_save_action, RetailerExcelUpload_save_action } from '../../../../store/Administrator/ImportExcelPartyMapRedux/action';
 
 const XLSX = require('xlsx');
 
@@ -88,7 +88,7 @@ export const readExcelFile = async ({ file, compareParameter }) => {
 //###############################################################################################
 
 
-export async function retailer_FileDetails({ compareParameter = [], readjson = [] }) {
+export async function retailer_FileDetails({ compareParameter = [], readjson = [], }) {
 
 
     const fileFiled = {}
@@ -138,74 +138,86 @@ export async function retailer_FileDetails({ compareParameter = [], readjson = [
 
 
 
-export const retailer_SaveHandler = async (event, dispatch, compareParameter, readJsonDetail) => {
+export const retailer_SaveHandler = async ({
+    event,
+    dispatch,
+    compareParameter,
+    readJsonDetail,
+    partySelect,
+    priceListSelect,
+    retailerId }) => {
+    debugger
 
     event.preventDefault();
     const btnId = event.target.id
     try {
         btnIsDissablefunc({ btnId, state: true })
-        const parArr = readJsonDetail.fileFiled
-        const outerArr = []
+        const parArr = {}
 
-        compareParameter.forEach(ele => {
+        await compareParameter.forEach(ele => {
             if ((ele.Value !== null)) {
                 parArr[ele.FieldName] = ele.Value
             }
         })
+        const outerArr = []
 
-        readJsonDetail.invoice.forEach(inv => {
-            let parentObj;
-            let invoiceItems = []
-            inv.forEach(ele => {
-                parentObj = {
-                    "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
-                    "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
-                    "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
-                    "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
-                    "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
-                    "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
-                    "Party": loginPartyID(),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
-                    "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
-                }
 
-                invoiceItems.push({
-                    "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
-                    "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
-                    "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
-                    "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
-                    "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
-                    "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
-                    "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                    "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
-                    "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
-                    "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
-                    "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
-                    "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
-                    "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
-                    "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,
-                    "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : 0,
-                    "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : 0,
-                    "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
-                    "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
-                    "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : 0,
-                    "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : 0,
-                    "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
-                    "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
-                    "TaxType": ele[parArr.TaxType] ? ele[parArr.TaxType] : '',
-                    "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
-                    "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
-                    "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
 
-                })
-            })
+        readJsonDetail.forEach(ele => {
+            var a = {
+                "Name": ele[parArr.Name] ? ele[parArr.Name] : "",
+                "PriceList": priceListSelect.value,
+                "PartyType": retailerId,
+                "Company": loginCompanyID(),
+                "PAN": ele[parArr.PAN] ? ele[parArr.PAN] : "",
+                "Email": ele[parArr.Email] ? ele[parArr.Email] : "",
+                "MobileNo": ele[parArr.MobileNo] ? ele[parArr.MobileNo] : "",
+                "AlternateContactNo": ele[parArr.AlternateContactNo] ? ele[parArr.AlternateContactNo] : "",
+                "State": ele[parArr.State] ? ele[parArr.State] : "",
+                "District": ele[parArr.District] ? ele[parArr.District] : "",
+                "City": ele[parArr.City] ? ele[parArr.City] : "",
+                "GSTIN": ele[parArr.GSTIN] ? ele[parArr.GSTIN] : "",
+                "MkUpMkDn": ele[parArr.MkUpMkDn] ? ele[parArr.MkUpMkDn] : false,
+                "CreatedBy": loginUserID(),
+                "UpdatedBy": loginUserID(),
+                "PartySubParty": [
+                    {
+                        "Party": partySelect.value,
+                        "CreatedBy": loginUserID(),
+                        "UpdatedBy": loginUserID()
+                    }
+                ],
+                "PartyAddress": [
+                    {
+                        "Address": ele[parArr.Address] ? ele[parArr.Address] : "",
+                        "FSSAINo": ele[parArr.FSSAINo] ? ele[parArr.FSSAINo] : "",
+                        "FSSAIExipry": ele[parArr.FSSAIExipry] ? ele[parArr.FSSAIExipry] : "",
+                        "PIN": ele[parArr.PIN] ? ele[parArr.PIN] : "",
+                        "IsDefault": ele[parArr.IsDefault] ? ele[parArr.IsDefault] : true,
+                        "fssaidocument": ele[parArr.fssaidocument] ? ele[parArr.fssaidocument] : "",
+                    }
+                ],
+                "PartyPrefix": [
+                    {
+                        "Orderprefix": "",
+                        "Invoiceprefix": "",
+                        "Grnprefix": "",
+                        "Receiptprefix": "",
+                        "WorkOrderprefix": "",
+                        "MaterialIssueprefix": "",
+                        "Demandprefix": "",
+                        "IBChallanprefix": "",
+                        "IBInwardprefix": ""
+                    }
+                ]
+            }
 
-            outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
+            outerArr.push(a)
+
         });
 
         const jsonBody = JSON.stringify({ "BulkData": outerArr })
-        dispatch(InvoiceExcelUpload_save_action({ jsonBody, btnId }));
+        dispatch(RetailerExcelUpload_save_action({ jsonBody, btnId }));
 
     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
 };

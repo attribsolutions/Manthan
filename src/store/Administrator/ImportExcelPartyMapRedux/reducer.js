@@ -2,6 +2,8 @@ import {
   INVOICE_EXCEL_UPLOAD_SAVE_SUCCESS,
   GO_BUTTON_IMPORT_EXCEL_PARTY_MAP_SUCCESS,
   SAVE_IMPORT_EXCEL_PARTY_MAP_SUCCESS,
+  PARTY_EXCEL_UPLOAD_SAVE_SUCCESS,
+  RETAILER_EXCEL_UPLOAD_SAVE_SUCCESS,
 } from "./actionType";
 
 const INIT_STATE = {
@@ -11,7 +13,9 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   editData: { Status: false },
   updateMsg: { Status: false },
-  invoiceExcelUploadMsg: { Status: false }
+  invoiceExcelUploadMsg: { Status: false },
+  partyExcelUploadMsg: { Status: false }
+
 }
 
 const ImportExcelPartyMap_Reducer = (state = INIT_STATE, action) => {
@@ -37,6 +41,12 @@ const ImportExcelPartyMap_Reducer = (state = INIT_STATE, action) => {
         invoiceExcelUploadMsg: action.payload,
       }
 
+      case RETAILER_EXCEL_UPLOAD_SAVE_SUCCESS:
+        return {
+          ...state,
+          partyExcelUploadMsg: action.payload,
+        }
+  
 
     default:
       return state

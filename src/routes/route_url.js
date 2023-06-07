@@ -115,7 +115,7 @@ export const IMPORT_FIELD_ADD = "/ImportFieldAdd"
 export const IMPORT_FIELD_ADD_LIST = "/ImportFieldAddList"
 
 
-export const IMPORT_EXCEL_PARTY_MAP = "/ImpotExcelPartyMap"
+export const IMPORT_EXCEL_PARTY_MAP = "/ImportExcelPartyMap"
 
 
 export const ROUTE_UPDATE = "/RouteUpdate"
