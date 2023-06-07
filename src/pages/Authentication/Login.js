@@ -2,7 +2,7 @@ import PropTypes from "prop-types"
 import MetaTags from "react-meta-tags"
 import React, { useEffect, useState } from "react"
 
-import { Row, Col, Alert, Container, Input } from "reactstrap"
+import { Row, Col, Alert, Container, Input, Spinner } from "reactstrap"
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
@@ -22,7 +22,7 @@ import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 
 const Login = props => {
 
-debugger
+  debugger
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -32,7 +32,8 @@ debugger
   const [currentPwdError, setCurrentPwdError] = useState("");
 
 
-  const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess } = useSelector(state => ({
+  const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess, loading } = useSelector(state => ({
+    loading: state.Login.loading,
     loginError: state.Login.loginError,
     loginSuccess: state.Login.loginSuccess,
     divisionDropdown_redux: state.Login.divisionDropdown,
@@ -133,12 +134,12 @@ debugger
 
   }
 
-//   useEffect(() => {
-//     debugger
-//  document.getElementById("loginbtn").focus()
-   
-//   }, [currentUserName,Password])
-  
+  //   useEffect(() => {
+  //     debugger
+  //  document.getElementById("loginbtn").focus()
+
+  //   }, [currentUserName,Password])
+
 
 
   const SaveHandler = async (event) => {
@@ -231,7 +232,15 @@ debugger
 
                         </div>
                         <div className="mb-3">
-                          <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit" id="loginbtn" onClick={SaveHandler}  >Login</button>
+                          {loading ?
+                            <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit" id="loginbtn" onClick={SaveHandler}  >
+                              <div className="dot-pulse"> <span> Login</span>     &nbsp;
+                                <div className="bounce1" style={{ background: "white" }}></div>
+                                <div className="bounce2" style={{ background: "white" }}></div>
+                                <div className="bounce3" style={{ background: "white" }}></div>
+                              </div> </button>
+                            : <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit" id="loginbtn" onClick={SaveHandler} >Login</button>}
+
                         </div>
                       </form>
                     </div>

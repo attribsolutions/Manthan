@@ -11,6 +11,7 @@ import {
   FormGroup,
   Label,
   Col,
+  Spinner,
 } from "reactstrap"
 
 //i18n
@@ -58,7 +59,9 @@ const ProfileMenu = props => {
 
 
 
-  const { user, postMsg, divisionDropdown_redux = [] } = useSelector((state) => ({
+  const { user, postMsg, divisionDropdown_redux = [], loading } = useSelector((state) => ({
+
+    loading: state.ChangePasswordReducer.loading,
     user: state.Login.afterLoginUserDetails,
     postMsg: state.ChangePasswordReducer.postMsg,
     divisionDropdown_redux: state.Login.divisionDropdown,
@@ -86,31 +89,15 @@ const ProfileMenu = props => {
       dispatch(ChangePassword_Succes({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values  
       setmodal_backdrop(false)
-
-      // if (props.pageMode === mode.dropdownAdd) {
       customAlert({
         Type: 1,
         Message: postMsg.Message,
       })
-      // }
-      // else if (pageMode === mode.edit) {
-      //     customAlert({
-      //         Type: 1,
-      //         Message: postMsg.Message,
-      //     })
-      //     history.push({ pathname: url.GROUPTYPE_lIST })
-      // }
-      // else {
-      //     // dispatch(Breadcrumb_inputName(''))
-      //     const promise = await customAlert({
-      //         Type: 1,
-      //         Message: postMsg.Message,
-      //     })
-      //     if (promise) { history.push({ pathname: url.GROUPTYPE_lIST }) }
-      // }
+
 
     } else if
       (postMsg.Status === true) {
+      dispatch(ChangePassword_Succes({ Status: false }))
       customAlert({
         Type: 3,
         Message: JSON.stringify(postMsg.Message),
@@ -144,10 +131,11 @@ const ProfileMenu = props => {
 
 
   const SaveHandler = async (event) => {
+    debugger
 
     event.preventDefault();
 
-    if (((newPwd.length < 3) || (newPwd.length < 8)) || ((currentPwd.length < 3) || (currentPwd.length < 8))) {
+    if (((newPwd.length < 3) || (newPwd.length < 8))) {
       return
     }
 
@@ -243,9 +231,19 @@ const ProfileMenu = props => {
           <button type="button" className="btn btn-light" onClick={() => {
             setmodal_backdrop(false)
           }}>Close</button>
-          <button type="button" className="btn btn-primary"
+          {loading ? <button type="button"  className="btn btn-primary  "
             onClick={SaveHandler}
-          >Change Password</button>
+          >
+            <div className="dot-pulse"> <span> Change Password</span>     &nbsp;
+              <div className="bounce1" style={{ background: "white" }}></div>
+              <div className="bounce2" style={{ background: "white" }}></div>
+              <div className="bounce3" style={{ background: "white" }}></div>
+            </div>
+          </button>
+            : <button type="button" className="btn btn-primary w-20"
+              onClick={SaveHandler}
+            >Change Password</button>}
+
         </div>
       </Modal>
 
