@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import './pricemaster.scss'
 import {
     Button,
@@ -28,6 +28,7 @@ import {
     editPriceListSuccess,
     priceListByCompay_Action,
     priceListByPartyAction,
+    priceListByPartyActionSuccess,
     savePriceMasterAction,
     savePriceMasterActionSuccess,
     updatePriceList,
@@ -100,11 +101,11 @@ const PriceMaster = (props) => {
         }
     }, [userAccess]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+        dispatch(priceListByPartyActionSuccess([]))
         dispatch(getPartyTypelist());
         dispatch(priceListByCompay_Action());
-
-    }, [dispatch]);
+    }, []);
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
