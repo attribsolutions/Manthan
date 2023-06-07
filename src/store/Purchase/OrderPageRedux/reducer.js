@@ -12,6 +12,7 @@ import {
 
 
 const INIT_STATE = {
+  loading:false,
   goBtnOrderAdd: null,
   postMsg: { Status: false },
   editData: { Status: false, Items: [] },
@@ -60,6 +61,14 @@ const OrderReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         orderList: action.payload,
+        loading: false
+
+      }
+
+    case GET_ORDER_LIST_PAGE:
+      return {
+        ...state,
+        loading: true
       }
     // Order List Clear Previous list 
     case GET_ORDER_LIST_PAGE:
