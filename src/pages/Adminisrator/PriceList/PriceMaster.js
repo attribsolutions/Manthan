@@ -197,6 +197,7 @@ const PriceMaster = (props) => {
         })
         return optionArr
     }
+    
     const calculatepathOptions = priceListByCompany.map(i => ({
         label: i.Name, value: i.id
     }))
