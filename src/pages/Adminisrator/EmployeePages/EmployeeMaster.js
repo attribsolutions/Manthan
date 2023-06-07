@@ -60,6 +60,7 @@ import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
 import AddMaster from "./Drodown";
 import PartyMaster from "../PartyMaster/MasterAdd/PartyIndex";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import CityMaster from "../CityPages/CityMaster";
 
 const AddEmployee = (props) => {
 
@@ -89,8 +90,9 @@ const AddEmployee = (props) => {
   const [userPageAccessState, setUserAccState] = useState('');
   const [modalCss, setModalCss] = useState(false);
   const [editCreatedBy, seteditCreatedBy] = useState("");
-  const [findEmployeeTypeMasterAccess, setFindEmployeeTypeMasterAccess] = useState(false)
-  const [findPartyMasterAccess, setPartyMasterAccess] = useState(false)
+  const [employeeType_AddAccess, setEmployeeType_AddAccess] = useState(false)
+  const [partyMaster_AddAccess, setPartyMaster_AddAccess] = useState(false)
+  const [cityMaster_AddAccess, setCityMaster_AddAccess] = useState(false)
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -131,45 +133,6 @@ const AddEmployee = (props) => {
     dispatch(getState());
   }, [dispatch]);
 
-  // useEffect(() => {
-
-  //   if ((location.Data)) {
-  //     const { id, Name } = location.Data
-  //     const values = {
-  //       ...state.values.EmployeeTypeName = { value: id, label: Name }
-  //     }
-  //   }
-  // }, [location])
-
-  // userAccess useEffect
-  // useEffect(() => {
-
-  //   let userAcc = null;
-  //   let locationPath = location.pathname;
-
-  //   if (hasShowModal) {
-  //     locationPath = props.masterPath;
-  //   };
-
-  //   userAcc = userAccess.find((inx) => {
-  //     return (`/${inx.ActualPagePath}` === locationPath)
-  //   })
-
-  //   if (userAcc) {
-  //     setUserAccState(userAcc)
-  //     breadcrumbReturnFunc({ dispatch, userAcc });
-  //   };
-
-  //   userAccess.find((index) => {
-  //     if (index.id === pageId.EMPLOYEETYPE) {
-  //       return setFindEmployeeTypeMasterAccess(true)
-  //     }
-  //     if (index.id === pageId.PARTY) {
-  //       return setPartyMasterAccess(true)
-  //     }
-  //   });
-
-  // }, [userAccess])
 
   useEffect(() => {
 
@@ -198,10 +161,13 @@ const AddEmployee = (props) => {
     };
     userAccess.find((index) => {
       if (index.id === pageId.EMPLOYEETYPE) {
-        return setFindEmployeeTypeMasterAccess(true)
+        return setEmployeeType_AddAccess(true)
       }
       if (index.id === pageId.PARTY) {
-        return setPartyMasterAccess(true)
+        return setPartyMaster_AddAccess(true)
+      }
+      if (index.id === pageId.CITY) {
+        return setCityMaster_AddAccess(true)
       }
     });
   }, [userAccess])
@@ -231,8 +197,8 @@ const AddEmployee = (props) => {
 
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
-        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties, PIN, City,CityName,
-          State_id, District_id, Company_id,City_id, EmployeeType_id, } = hasEditVal
+        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties, PIN, City, CityName,
+          State_id, District_id, Company_id, City_id, EmployeeType_id, } = hasEditVal
 
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
         hasValid.id.valid = id
@@ -260,7 +226,7 @@ const AddEmployee = (props) => {
         values.AadharNo = AadharNo
         values.Name = Name;
         values.PIN = PIN;
-        values.CityName ={ label: CityName, value: City_id };
+        values.CityName = { label: CityName, value: City_id };
         values.EmployeeTypeName = { label: EmployeeTypeName, value: EmployeeType_id };
         values.StateName = { label: StateName, value: State_id };
         values.DistrictName = { label: DistrictName, value: District_id };
@@ -349,9 +315,9 @@ const AddEmployee = (props) => {
     value: data.id,
     label: data.Name
   }));
-  
+
   const City_DropdownOptions = City.map((data) => ({
-    
+
     value: data.id,
     label: data.Name
   }));
@@ -367,7 +333,7 @@ const AddEmployee = (props) => {
   }
 
   function District_Dropdown_Handler(e) {
-    
+
     dispatch(getCityOnDistrict(e.value))
     setState((i) => {
       const a = { ...i }
@@ -380,7 +346,7 @@ const AddEmployee = (props) => {
   }
 
   const SaveHandler = (event) => {
-    
+
     event.preventDefault();
     const btnId = event.target.id;
     try {
@@ -425,7 +391,7 @@ const AddEmployee = (props) => {
           dispatch(updateEmployeeAction({ jsonBody, updateId: values.id, btnId }));
         }
         else {
-          
+
           dispatch(saveEmployeeAction({ jsonBody, btnId }));
         }
       }
@@ -652,7 +618,13 @@ const AddEmployee = (props) => {
                           )}
                         </FormGroup>
 
-                        <Col md="1"></Col>
+                        {cityMaster_AddAccess ? <Col md="1" className=" mt-3">
+                          <AddMaster
+                            masterModal={CityMaster}
+                            masterPath={url.CITY}
+                          />
+                        </Col> : <Col md="1"></Col>
+                        }
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.PIN} </Label>
                           <Input
@@ -702,7 +674,7 @@ const AddEmployee = (props) => {
                           </FormGroup>
                         </Col>
 
-                        {findEmployeeTypeMasterAccess ? <Col md="1" className=" mt-3">
+                        {employeeType_AddAccess ? <Col md="1" className=" mt-3">
                           <AddMaster
                             masterModal={EmployeeTypesMaster}
                             masterPath={url.EMPLOYEETYPE}
@@ -727,7 +699,7 @@ const AddEmployee = (props) => {
                           </FormGroup>
                         </Col>
 
-                        {findPartyMasterAccess ? <Col md="1" className=" mt-3">
+                        {partyMaster_AddAccess ? <Col md="1" className=" mt-3">
                           <AddMaster
                             masterModal={PartyMaster}
                             masterPath={url.PARTY}

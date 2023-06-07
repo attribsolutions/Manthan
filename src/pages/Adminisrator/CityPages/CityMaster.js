@@ -10,8 +10,6 @@ import {
     CardHeader,
     FormGroup,
     Input,
-    Button,
-    Modal
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -41,7 +39,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import {  saveCityMaster, saveCityMaster_Success } from "../../../store/Administrator/CityRedux/action";
+import { saveCityMaster, saveCityMaster_Success } from "../../../store/Administrator/CityRedux/action";
 import { getDistrictOnState, getDistrictOnStateSuccess } from "../../../store/Administrator/PartyRedux/action";
 
 
@@ -162,37 +160,50 @@ const CityMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+ 
+
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveCityMaster_Success({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
-
+            setState(() => resetFunction(fileds, state))// Clear form values  
             if (props.pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
+                // dispatch(getPartyTypelist())
+                props.isOpenModal(false)
+            }
+            else if (pageMode === mode.edit) {
+                customAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                // history.push({ pathname: url.CITY })  list page not desing
             }
             else {
-                dispatch(AlertState({
+                dispatch(Breadcrumb_inputName(''))
+                const promise = await customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.CITY,
-                }))
+                })
+                if (promise) {
+                    // history.push({ pathname: url.CITY })  list page not desing
+                }
             }
-        }
-        else if (postMsg.Status === true) {
+
+        } else if
+            (postMsg.Status === true) {
             dispatch(saveCityMaster_Success({ Status: false }))
             customAlert({
-                Type: 4,
+                Type: 3,
                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
+
 
 
     useEffect(() => {
@@ -217,12 +228,12 @@ const CityMaster = (props) => {
     function State_Dropdown_Handler(e) {
         dispatch(getDistrictOnState(e.value))
         setState((i) => {
-          const a = { ...i }
-          a.values.DistrictName = "";
-          a.hasValid.DistrictName.valid = false
-          return a
+            const a = { ...i }
+            a.values.DistrictName = "";
+            a.hasValid.DistrictName.valid = false
+            return a
         })
-      }
+    }
 
     const SaveHandler = (event) => {
         event.preventDefault();
@@ -237,7 +248,7 @@ const CityMaster = (props) => {
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
                 });
-                 dispatch(saveCityMaster({ jsonBody, btnId }))
+                dispatch(saveCityMaster({ jsonBody, btnId }))
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -286,9 +297,9 @@ const CityMaster = (props) => {
                                                         )}
                                                     </Col>
                                                 </FormGroup>
-                                                </Row>
+                                            </Row>
 
-                                              <Row>
+                                            <Row>
                                                 <FormGroup className="mb-2 col col-sm-3 ">
                                                     <Label htmlFor="validationCustom01"> {fieldLabel.DistrictName} </Label>
                                                     <Col sm={12}>
@@ -306,30 +317,30 @@ const CityMaster = (props) => {
                                                         {isError.DistrictName.length > 0 && (
                                                             <span className="text-danger f-8"><small>{isError.DistrictName}</small></span>
                                                         )}
-                                                 </Col>
+                                                    </Col>
                                                 </FormGroup>
-                                                </Row>
+                                            </Row>
 
-                                              <Row>
+                                            <Row>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
                                                     <Label htmlFor="validationCustom01">City</Label>
                                                     <Col sm={9}>
-                                                    <Input
-                                                        name="Name"
-                                                        id="txtName"
-                                                        value={values.Name}
-                                                        type="text"
-                                                        className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                        placeholder="Please Enter CityName"
-                                                        autoComplete="off"
-                                                        onChange={(event) => {
-                                                            onChangeText({ event, state, setState })
-                                                            dispatch(Breadcrumb_inputName(event.target.value))
-                                                        }}
-                                                    />
-                                                    {isError.Name.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.Name}</span>
-                                                    )}
+                                                        <Input
+                                                            name="Name"
+                                                            id="txtName"
+                                                            value={values.Name}
+                                                            type="text"
+                                                            className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter CityName"
+                                                            autoComplete="off"
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                                dispatch(Breadcrumb_inputName(event.target.value))
+                                                            }}
+                                                        />
+                                                        {isError.Name.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.Name}</span>
+                                                        )}
                                                     </Col>
                                                 </FormGroup>
                                             </Row>

@@ -13,6 +13,7 @@ import AddMaster from "../../../EmployeePages/Drodown";
 import * as pageId from "../../../../../routes/allPageID"
 import { loginPartyID } from '../../../../../components/Common/CommonFunction'
 import { getCityOnDistrict } from '../../../../../store/Administrator/EmployeeRedux/action'
+import CityMaster from '../../../CityPages/CityMaster'
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
@@ -38,7 +39,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
-    const [findAddMasterAccess, setFindAddMasterAccess] = useState(false)
+    const [partyType_AddMasterAccess, setPartyType_AddMasterAccess] = useState(false)
+    const [city_AddMasterAccess, setCity_AddMasterAccess] = useState(false)
 
     const { values } = state;
     const { isError } = state;
@@ -81,11 +83,15 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     useEffect(() => {
 
-        userAccess.find((index) => {
+        userAccess.forEach((index) => {
             if (index.id === pageId.PARTYTYPE) {
-                return setFindAddMasterAccess(true)
+                return setPartyType_AddMasterAccess(true)
+            }
+            if (index.id === pageId.CITY) {
+                return setCity_AddMasterAccess(true)
             }
         });
+      
     }, [userAccess])
 
     useEffect(() => {
@@ -111,7 +117,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         }
     }, [PartyTypes])
 
-  
+
 
     useEffect(() => {
         let retailerParty = PartyTypes.find(i => (i.IsRetailer))
@@ -351,7 +357,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             }
                             {
                                 (subPageMode === url.PARTY) ?
-                                    (findAddMasterAccess) ?
+                                    (partyType_AddMasterAccess) ?
                                         <Col md="1" className=" mt-3">
                                             <AddMaster
                                                 masterModal={PartyType}
@@ -538,8 +544,20 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     )}
                                 </FormGroup>
                             </Col>
+                            {
 
-                            <Col md="1"></Col>
+                                (city_AddMasterAccess) ?
+                                    <Col md="1" className=" mt-3">
+                                        <AddMaster
+                                            masterModal={CityMaster}
+                                            masterPath={url.CITY}
+                                        />
+                                    </Col> : <Col md="1"> </Col>
+
+                            }
+                        </Row>
+                        <Row>
+
                             <Col md="3">
                                 <FormGroup className="mb-3">
                                     <Row style={{ marginTop: '25px' }}>
