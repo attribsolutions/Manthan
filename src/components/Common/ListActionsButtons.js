@@ -249,7 +249,7 @@ export const listPageActionsButtonFunc = (props) => {
                             type="button"
                             id={`btn-dounload-${rowData.id}`}
                             className={downBtnCss}
-                            title={` ${ButtonMsgLable}`}
+                            title={`Print ${ButtonMsgLable}`}
                             onClick={() => {
                                 const btnId = `btn-dounload-${rowData.id}`
                                 downHandler(rowData, btnId)
