@@ -9,13 +9,15 @@ import { Python_FoodERP_postJwtForgetPwd_SendOTP, Python_FoodERP_postJwtForgetPw
 
 
 function* sendOTP_GnerFun({ user }) {
-  
+  debugger
   try {
     const response = yield call(Python_FoodERP_postJwtForgetPwd_SendOTP, user)
     if (response.StatusCode === 200) {
+      debugger
       yield put(userForgetPassword_sendOTP_Success(response.Message))
     }
     else {
+      debugger
       yield put(userForgetPassword_sendOTP_Error(response.Message))
     }
   } catch (error) {
