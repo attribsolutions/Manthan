@@ -118,6 +118,16 @@ const RetailerExcelUpload = (props) => {
                 Type: 1,
                 Message: postMsg.Message,
             })
+            //clear all states
+            setPriceListSelect({ value: '' });
+            setPriceListSelect({ value: '' });
+            setRetailerId('')
+            setselectedFiles([])
+            setPreUploadjson([])
+            setPreViewDivShow(false)
+            SetPartySelect('')
+
+           
         }
         else if (postMsg.Status === true) {
             dispatch(RetailerExcelUpload_save_action_Success({ Status: false }))
