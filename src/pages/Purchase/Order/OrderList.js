@@ -46,6 +46,8 @@ const OrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
+        
+            loading: state.OrderReducer.loading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
@@ -432,7 +434,7 @@ const OrderList = () => {
                     </Col >
 
                     <Col sm="1" className="mt-3 ">
-                        <Go_Button id={gobtnId} onClick={goButtonHandler} />
+                        <Go_Button loading={reducers.loading} id={gobtnId} onClick={goButtonHandler} />
                     </Col>
                 </div>
             </div>

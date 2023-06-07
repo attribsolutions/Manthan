@@ -1,4 +1,4 @@
-import { Button } from "reactstrap"
+import { Button, Spinner } from "reactstrap"
 import { loginUserID } from "./CommonFunction";
 import * as mode from "../../routes/PageMode"
 
@@ -58,12 +58,18 @@ const UpdateBtn = ({ onClick, userAcc }) => {
 }
 
 export function Go_Button(props) {
-  const { onClick, id, type = "button" } = props
-  return <Button
+  const { onClick, id, type = "button", loading } = props
+
+  return loading ? <Button
     id={id}
     type={type}
-    color="btn btn-outline-success border-1 font-size-12 mb-2 "
-    onClick={onClick} > Go</Button>
+    color="btn btn-outline-success border-1   "
+    onClick={onClick} > <Spinner style={{ height: "13px", width: "13px" }} className="ms-1" color="success" /> </Button>
+    : <Button
+      id={id}
+      type={type}
+      color="btn btn-outline-success border-1 font-size-12 mb-2 "
+      onClick={onClick} > Go</Button>
 }
 
 export function Change_Button(props) {
@@ -75,3 +81,18 @@ export function Change_Button(props) {
     onClick={onClick}>Change</Button>
 
 }
+
+
+
+export function Loader() {
+
+  return <div className="dot-pulse"> <span> </span>     &nbsp;
+    <div className="bounce1" style={{ background: "white" }}></div>
+    <div className="bounce2" style={{ background: "white" }}></div>
+    <div className="bounce3" style={{ background: "white" }}></div>
+  </div>
+
+}
+
+
+
