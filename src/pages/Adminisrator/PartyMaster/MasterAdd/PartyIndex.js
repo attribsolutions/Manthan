@@ -213,7 +213,7 @@ const PartyMaster = (props) => {
     useLayoutEffect(() => {
 
         dispatch(getDistrictOnStateSuccess([]))//clear district privious options
-        dispatch(getCityOnDistrictSuccess([]))
+        dispatch(getCityOnDistrictSuccess([]))//clear City privious options
         dispatch(commonPageFieldSuccess(null));//clear privious PageField
         dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
         dispatch(commonPageField(page_id))

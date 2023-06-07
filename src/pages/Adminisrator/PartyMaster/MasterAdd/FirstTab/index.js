@@ -12,7 +12,7 @@ import * as url from "../../../../../routes/route_url";
 import AddMaster from "../../../EmployeePages/Drodown";
 import * as pageId from "../../../../../routes/allPageID"
 import { loginPartyID } from '../../../../../components/Common/CommonFunction'
-import { getCityOnDistrict } from '../../../../../store/Administrator/EmployeeRedux/action'
+import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../store/Administrator/EmployeeRedux/action'
 import CityMaster from '../../../CityPages/CityMaster'
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
@@ -91,7 +91,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 return setCity_AddMasterAccess(true)
             }
         });
-      
+
     }, [userAccess])
 
     useEffect(() => {
@@ -174,12 +174,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         label: index.Name
     }));
 
-
-    function handllerState(hasSelect, evn,) {
-        onChangeSelect({ hasSelect, evn, state, setState })
-        dispatch(getDistrictOnState(hasSelect.value))
-    }
-
     function partyTypeOnChange(hasSelect, evn) {
 
         onChangeSelect({ hasSelect, evn, state, setState })
@@ -187,12 +181,29 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         dispatch(priceListByPartyAction(hasSelect.value))
     }
 
+    function handllerState(hasSelect, evn,) {
+        onChangeSelect({ hasSelect, evn, state, setState })
+        dispatch(getDistrictOnState(hasSelect.value))
+        dispatch(getCityOnDistrictSuccess([]))
+
+        setState((i) => {
+            const a = { ...i }
+            a.values.District = "";
+            a.hasValid.District.valid = false
+
+            a.values.CityName = "";
+            a.hasValid.CityName.valid = false
+            return a
+        })
+    }
+
+
     function District_Dropdown_Handler(e) {
         dispatch(getCityOnDistrict(e.value))
         setState((i) => {
             const a = { ...i }
-            a.values.Name = "";
-            a.hasValid.Name.valid = false
+            a.values.CityName = "";
+            a.hasValid.CityName.valid = false
             return a
         })
     }
