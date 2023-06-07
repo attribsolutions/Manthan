@@ -561,7 +561,7 @@ const RoleAccessAdd1 = () => {
                                                 <Col sm={3}>
                                                     <FormGroup className="mb-3 row ">
                                                         <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
-                                                        <Col sm={9}>
+                                                        <Col sm={9} style={{ zIndex: "4" }}>
                                                             <Select
                                                                 value={role_dropdown_Select}
                                                                 options={Role_DropdownOption}
@@ -577,7 +577,7 @@ const RoleAccessAdd1 = () => {
                                                 <Col sm={4} className="">
                                                     <FormGroup className="mb-3 row" >
                                                         <Label className="col-sm-3 p-2">Division</Label>
-                                                        <Col md="9">
+                                                        <Col md="9" style={{ zIndex: "4" }}>
                                                             <Select
                                                                 value={division_dropdown_Select}
                                                                 className="rounded-bottom"
@@ -592,7 +592,7 @@ const RoleAccessAdd1 = () => {
                                                 <Col sm={4} className="">
                                                     <FormGroup className="mb-3 row" >
                                                         <Label className="col-sm-3 p-2">Company</Label>
-                                                        <Col md="9">
+                                                        <Col md="9" style={{ zIndex: "4" }}>
                                                             <Select
                                                                 value={company_dropdown_Select}
                                                                 className="rounded-bottom"
@@ -640,7 +640,7 @@ const RoleAccessAdd1 = () => {
                                     </>
                                     :
                                     <>
-                                        <Row style={{ backgroundColor: "#dddddd", }} className='mb-1 mt-n3 head '>
+                                        <Row style={{ backgroundColor: "#dddddd",  }} className='mb-1 mt-n3 head '>
                                             <Row sm={12} >
                                                 <Col sm={3} className="p-2 ">
                                                     <Label className="p-2 col-sm-3">Role</Label>
@@ -648,7 +648,7 @@ const RoleAccessAdd1 = () => {
                                                         <h className="text-black">{role_dropdown_Select.label}</h></Button>
                                                 </Col>
 
-                                                <Col sm={4} className="p-2 ">
+                                                <Col sm={4} className="p-2 " >
                                                     {(division_dropdown_Select.value > 0)
                                                         ?
                                                         <> <Label className=" p-2 col-sm-3">Division</Label>
@@ -658,7 +658,7 @@ const RoleAccessAdd1 = () => {
                                                         : null}
                                                 </Col>
 
-                                                <Col sm={4} className="p-2 ">
+                                                <Col sm={4} className="p-2 " >
                                                     <Label className="p-2 col-sm-4">Company</Label>
                                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
                                                         <h className="text-black">{company_dropdown_Select.label}</h></Button>
@@ -1409,7 +1409,7 @@ const RoleAccessAdd = () => {
                                 <Col sm={3}>
                                     <FormGroup className="mb-3 row ">
                                         <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
-                                        <Col sm={9}>
+                                        <Col sm={9} style={{zIndex:"3"}}>
                                             <Select
                                                 value={role_dropdown_Select}
                                                 options={Role_DropdownOption}
@@ -1425,7 +1425,7 @@ const RoleAccessAdd = () => {
                                 <Col sm={4} className="">
                                     <FormGroup className="mb-3 row" >
                                         <Label className="col-sm-3 p-2">Division</Label>
-                                        <Col md="9">
+                                        <Col md="9" style={{zIndex:"3"}}>
                                             <Select
                                                 value={division_dropdown_Select}
                                                 className="rounded-bottom"
@@ -1440,7 +1440,7 @@ const RoleAccessAdd = () => {
                                 <Col sm={4} className="">
                                     <FormGroup className="mb-3 row" >
                                         <Label className="col-sm-3 p-2">Company</Label>
-                                        <Col md="9">
+                                        <Col md="9" style={{zIndex:"3"}}>
                                             <Select
                                                 value={company_dropdown_Select}
                                                 className="rounded-bottom"

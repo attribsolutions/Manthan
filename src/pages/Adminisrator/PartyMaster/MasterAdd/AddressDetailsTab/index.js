@@ -122,7 +122,7 @@ const AddressTabForm = forwardRef((props, ref) => {
                                     value={values.PartyAddress}
                                     type="text"
                                     className={isError.PartyAddress.length > 0 ? "is-invalid form-control" : "form-control"}
-                                    placeholder="Please Enter Mobile"
+                                    placeholder="Please Enter Address"
                                     autoComplete='off'
                                     onChange={(event) => {
                                         onChangeText({ event, state, setState })
