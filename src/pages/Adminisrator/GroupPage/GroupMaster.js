@@ -64,7 +64,7 @@ const GroupMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [groupTypeMasterAccess, setGroupTypeMasterAccess] = useState(false)
+    const [groupTypeMaster_AddAccess, setGroupTypeMaster_AddAccess] = useState(false)
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -105,8 +105,11 @@ const GroupMaster = (props) => {
         otherloginAccss
     }), [userAccess]);
     
-    const otherloginAccss = (ind) => {
-
+    const otherloginAccss = (index) => {
+        if (index.id === pageId.GROUPTYPE) {
+            setGroupTypeMaster_AddAccess(true)
+         }
+        
     }
   
 
@@ -309,7 +312,7 @@ const GroupMaster = (props) => {
                                                     </FormGroup>
                                                 </Col>
 
-                                                {(groupTypeMasterAccess) &&
+                                                {(groupTypeMaster_AddAccess) &&
                                                     <Col md="1" className=" mt-3">
                                                         <AddMaster
                                                             masterModal={GroupTypeMaster}
