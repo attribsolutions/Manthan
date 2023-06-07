@@ -53,9 +53,9 @@ const ForgetPasswordPage = props => {
 
 
 
-  
+
   useEffect(() => {
-    
+
     if (sendPasswordMsg_reducx) {
       setSendPasswordMsg(sendPasswordMsg_reducx)
       setSendPasswordError(null)
@@ -75,7 +75,7 @@ const ForgetPasswordPage = props => {
   }, [sendPasswordMsg_reducx, sendPasswordError_reducx])
 
   useEffect(() => {
-    
+
     if (sendOTPSuccessMsg_redux) {
       setSendOTPSuccessMsg(sendOTPSuccessMsg_redux)
       setSendOtpMegError(null)
@@ -92,8 +92,8 @@ const ForgetPasswordPage = props => {
   }, [sendOTPSuccessMsg_redux, sendOtpMegError_reducx])
 
   function handleValidSubmit(event, values) {
-    
-  event.preventDefault();
+
+    event.preventDefault();
     var jsonBody = JSON.stringify({
       Email: values.email,
       Phone: ""
@@ -102,7 +102,7 @@ const ForgetPasswordPage = props => {
   }
 
   function handleValidSubmit1(event, values) {
-    
+
     event.preventDefault();
     var paswd = values.password1
     var pawdcn = values.passwordcon
@@ -247,7 +247,11 @@ const ForgetPasswordPage = props => {
                               </div>
 
                               <div className="mb-3 mt-4">
-                                <button disabled={Loading} className="btn btn-primary w-100 waves-effect waves-light" type="submit">Reset</button>
+                                {Loading ? <button  className="btn btn-primary w-100 waves-effect waves-light" type="submit"> <div className="dot-pulse"> <span> Reset</span>     &nbsp;
+                                  <div className="bounce1" style={{ background: "white" }}></div>
+                                  <div className="bounce2" style={{ background: "white" }}></div>
+                                  <div className="bounce3" style={{ background: "white" }}></div>
+                                </div></button> : <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Reset</button>}
                               </div>
                             </AvForm>
                           }
