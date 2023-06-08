@@ -6,7 +6,7 @@ let pageid = ''
 
 
 export const mySearchProps = (props, pageID) => {
-    debugger
+  
     props1 = props;
     pageid = pageID
 };
