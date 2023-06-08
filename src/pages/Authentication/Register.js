@@ -6,7 +6,7 @@ import { Row, Col, Alert, Container } from "reactstrap"
 import { AvForm, AvField } from "availity-reactstrap-validation"
 
 // action
-import { registerUser, apiError } from "../../store/actions"
+import { registerUser } from "../../store/actions"
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
@@ -31,9 +31,6 @@ const Register = props => {
     dispatch(registerUser(values))
   }
 
-  useEffect(() => {
-    dispatch(apiError(""))
-  }, [dispatch])
 
   return (
     <React.Fragment>

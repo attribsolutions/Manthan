@@ -101,14 +101,12 @@ export function postWithoutToken(url, body,) {
       console.log(`${url} Body :`,body )
       console.log(`${url} response :`,response )
       return response.data
-      // return CheckAPIResponse({ method: "postWithoutToken", body, url, response });
     })
     .catch(error => {
       console.log(`${url} Body :`,body )
       console.log(`${url} error :`, error )
       return Promise.reject(error)
 
-      // return CheckAPIResponse({ method: "postWithoutToken", url, error });
     });
 
 }
@@ -125,4 +123,23 @@ export async function postRefreshToken(url,body) {
   })
 
 }
+
+export function getWithotMsg(url, btnId) {
+
+  CommonConsole( `${url} :get api call `);
+  AuthonticationFunction();
+  return axiosApi.get(url)
+  .then(response => {
+    console.log(`${url} response :`,response )
+    return response.data
+  })
+  .catch(error => {
+    console.log(`${url} error :`, error )
+    return Promise.reject(error)
+  })
+}
+
+
+
+
 

@@ -11,7 +11,7 @@ import { withRouter, Link, useHistory } from "react-router-dom"
 
 // availity-reactstrap-validation
 
-import { apiErrorSuccess, divisionDropdownSelectSuccess, getUserDetailsAction, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
+import { apiErrorSuccess, divisionDropdownSelectSuccess, getUserDetailsAction, loginError_Action, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
 
 import logo from "../../assets/images/cbm_logo.png"
 
@@ -22,7 +22,6 @@ import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 
 const Login = props => {
 
-  debugger
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -62,7 +61,7 @@ const Login = props => {
 
     try {
       if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
-
+debugger
         localStorage.setItem("token", (loginSuccess.token))
         localStorage.setItem("refreshToken", (loginSuccess.refreshtoken))
         localStorage.setItem("userId", (loginSuccess.UserID))
@@ -125,21 +124,14 @@ const Login = props => {
 
   const currentUserOnchange = (e) => {
     setcurrentUserName(e.target.value)
-    dispatch(apiErrorSuccess(null))
+    dispatch(loginError_Action(null))
+   
   }
 
   const PasswordOnchange = (e) => {
     setPassword(e.target.value)
-    dispatch(apiErrorSuccess(null))
-
+    dispatch(loginError_Action(null))
   }
-
-  //   useEffect(() => {
-  //     debugger
-  //  document.getElementById("loginbtn").focus()
-
-  //   }, [currentUserName,Password])
-
 
 
   const SaveHandler = async (event) => {

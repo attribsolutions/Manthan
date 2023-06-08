@@ -9,6 +9,7 @@ import {
 } from "./actionTypes"
 import {
   apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess,
+  loginError_Action,
   loginSuccess,
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
@@ -23,38 +24,37 @@ import {
   Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List,
 } from "../../../helpers/backend_helper"
 import { AlertState } from "../../actions"
-import { history } from "../../../components/Common/CommonFunction"
-import { customAlert } from "../../../CustomAlert/ConfirmDialog"
-
 
 function* loginUser({ payload: { user, history } }) {
   try {
-    
+    debugger
     const response = yield call(Python_FoodERP_postJwtLogin, {
       LoginName: user.UserName,
       password: user.Password
     })
-    if (response.StatusCode===200) {
+    
+    if (response.StatusCode === 200) {
       yield put(loginSuccess(response))
+    } else {
+      yield put(loginError_Action(response.Message))
 
-      
-    }else{
-    yield put(apiError(response.Message))
-      
     }
-
-
   } catch (error) {
-    yield put(apiError("Incorrect Password"))
+    yield put(loginError_Action("Incorrect Password"))
   }
 }
 function* afterLoginUserDetails_genFun({ id }) {
 
   try {
-
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
       UserId: id,
     })
+    if ((response.StatusCode === 200)) {
+      yield put(getUserDetailsActionSuccess(response.Data))
+    } else {
+      throw new Error('Exception message');
+    }
+
     yield put(getUserDetailsActionSuccess(response.Data))
     localStorage.setItem("UserName", (response.Data.UserName))
     localStorage.setItem("Company", response.Data.CompanyID)
@@ -69,10 +69,14 @@ function* afterLoginUserDetails_genFun({ id }) {
     var employee = response.Data.EmployeeID;
 
     const response2 = yield call(divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall, employee,)
-    yield put(divisionDropdownSelectSuccess(response2.Data))
+    if ((response2.StatusCode === 200)) {
+      yield put(divisionDropdownSelectSuccess(response2.Data))
+    } else {
+      throw new Error('Exception message');
+    }
 
-  } catch (e) {
-
+  } catch (error) {
+    yield put(loginError_Action('Login Erorr...'))
   }
 }
 
@@ -81,7 +85,7 @@ function* logoutUser({ payload: { history } }) {
     localStorage.removeItem("authUser")
     history.push("/login")
   } catch (error) {
-    yield put(apiError(error))
+    yield put(loginError_Action(error))
   }
 }
 function* RoleAccessGenratorFunction({ party, employee, company }) {
@@ -113,26 +117,21 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
           child.RolePageAccess.forEach((role) => {
             child[`RoleAccess_${role.Name}`] = true;
           })
-
           arrayChild.push(objChild)
           delete objMain.ModuleData
           objMain["ModuleData"] = arrayChild
           objChild = {};
-
         });
         arrayMain.push(objMain)
         arrayChild = []
         objMain = {}
-
       })
-
       arrayMain.forEach((i) => {
         i.ModuleData.forEach((index) => {
           index.ModuleName = i.ModuleName;
           all_DataInSinlgeArray.push(index)
         })
       })
-
 
       yield put(roleAceessActionSuccess(arrayMain))
       yield put(RoleAccessUpdateSuccess(all_DataInSinlgeArray))
