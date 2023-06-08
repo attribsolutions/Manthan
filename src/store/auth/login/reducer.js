@@ -12,11 +12,12 @@ import {
   LOGOUT_REST,
   RESET_ROLE_ACCESS_ACTION,
   ROLE_ACCESS_API_CALL_ERROR,
-  API_ERROR_SUCCESS
+  API_ERROR_SUCCESS,
+  GET_USER_DETAILS_AFTER_LOGIN,
+  LOGIN_ERROR_ACTION
 } from "./actionTypes"
 
 const initialState = {
-
   loginError: null,
   loading: false,
   loginSuccess: { Status: false },
@@ -31,27 +32,48 @@ const initialState = {
 const Login = (state = initialState, action) => {
 
   switch (action.type) {
+
     case LOGIN_USER:
       state = { ...state, loading: true, }
-      break
+      break;
+
     case LOGIN_SUCCESS:
       state = {
         ...state,
-        loading: false,
         loginSuccess: action.payload,
       }
-      break
-    case LOGOUT_USER: state = { ...state, }
-      break
-    case LOGOUT_USER_SUCCESS: state = { ...state, }
-      break
-    case API_ERROR:
-      state = { ...state, loginError: action.payload, loading: false }
-      break
+      break;
+
+    case LOGIN_ERROR_ACTION:
+      state = {
+        ...state,
+        loading: false,
+        loginError: action.payload
+      }
+      break;
+
+    // case API_ERROR:
+    //   state = {
+    //     ...state,
+    //     loginError: action.payload,
+    //     loading: false
+    //   }
+    //   break
 
     case API_ERROR_SUCCESS:
-      state = { ...state, loginError: null, loading: false }
+      state = {
+        ...state,
+        loginError: null,
+        loading: false
+      }
       break
+
+    case GET_USER_DETAILS_AFTER_LOGIN:
+      return {
+        ...state,
+        loading: true,
+        afterLoginUserDetails: action.payload,
+      }
 
     case GET_USER_DETAILS_AFTER_LOGIN_SUCCESS:
       return {
@@ -62,8 +84,10 @@ const Login = (state = initialState, action) => {
     case DIVISION_DROPDOWN_SUCCESS_AFTER_LOGIN:
       return {
         ...state,
+        loading: false,
         divisionDropdown: action.payload,
       }
+
 
     case ROLE_ACCESS_API_CALL_SUCCESS:
 
