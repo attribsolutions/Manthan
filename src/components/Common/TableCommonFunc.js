@@ -47,9 +47,13 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, userA
     const [defaultSorted, setDefaultSorted] = useState('')
     const [pageOptions, setPageOptions] = useState('')
     const { PageFieldMaster = [] } = { ...pageField };
-
+   
     useEffect(() => {
-        
+
+        if (userAccState === "") {
+            return
+        };
+       
         let sortLabel = ""
         let sortType = "asc"
         let columns = []
@@ -107,8 +111,9 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, userA
             sizePerPage: 15,
             custom: true,
         })
+
     }, [pageField, userAccState])
-    
+
     return [tableColumns, defaultSorted, pageOptions]
 }
 export default DynamicColumnHook

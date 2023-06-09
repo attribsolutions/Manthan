@@ -96,7 +96,7 @@ const SapLedger = (props) => {
     ];
 
     const rowStyle = (row, rowIndex) => {
-        debugger
+        
         const style = {};
         if (row.id > 0) {
 

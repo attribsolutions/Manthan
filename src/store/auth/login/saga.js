@@ -27,7 +27,7 @@ import { AlertState } from "../../actions"
 
 function* loginUser({ payload: { user, history } }) {
   try {
-    debugger
+    
     const response = yield call(Python_FoodERP_postJwtLogin, {
       LoginName: user.UserName,
       password: user.Password

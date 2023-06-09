@@ -111,7 +111,7 @@ const PartyMaster = (props) => {
 
 
     useEffect(() => {
-        debugger
+        
         try {
             if ((hasShowloction || hasShowModal)) {
 

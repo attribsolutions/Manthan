@@ -21,56 +21,83 @@ export function SaveButton(props) {
   }
   return null
 }
-const SaveBtn = ({ onClick, userAcc }) => {
+const SaveBtn = ({ onClick, userAcc, loading }) => {
   const { Name } = userAcc;
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
     <div>
-      <button
-        type="submit"
-        id={btnId}
-        title={`Save ${Name}`}
-        className="btn btn-primary w-md"
-        onClick={onClick}
-      > <i className="fas fa-save me-2"></i> Save
-      </button>
+      {loading ?
+        <button
+          id={btnId}
+          title={`Save ${Name} Loging...`}
+          // disabled
+          className="btn btn-primary w-md"
+        // onClick={onClick}
+        >  Saving.. &nbsp;
+          <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+        </button>
+
+        :
+        <button
+          type="submit"
+          id={btnId}
+          title={`Save ${Name}`}
+          className="btn btn-primary w-md"
+          onClick={onClick}
+        > <i className="fas fa-save me-2"></i> Save
+        </button>}
     </div>
   )
 
 }
-const UpdateBtn = ({ onClick, userAcc }) => {
+const UpdateBtn = ({ onClick, userAcc, loading }) => {
   const { Name } = userAcc;
   const btnId = `Update-${Name.replace(/ /g, "")}`;
 
   return (
     <div>
-      <button
-        type="submit"
-        id={btnId}
-        title={`Update ${Name}`}
-        className="btn btn-success w-md"
-        onClick={onClick}
-      >
-        <i class="fas fa-edit me-2"></i>Update
-      </button >
+      {loading ?
+        <button
+          id={btnId}
+          title={`Updating.. ${Name} `}
+          className="btn btn-success w-md"
+        >  Updating.. &nbsp;
+          <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+        </button>
+        :
+        <button
+          type="submit"
+          id={btnId}
+          title={`Update ${Name}`}
+          className="btn btn-success w-md"
+          onClick={onClick}
+        >
+          <i class="fas fa-edit me-2"></i>Update
+        </button >
+      }
     </div>
   )
 }
 
 export function Go_Button(props) {
-  
+
   const { onClick, id, type = "button", loading } = props
 
-  return loading ? <Button
-    id={id}
-    type={type}
-    color="btn btn-outline-success border-1   "
-    onClick={onClick} > <Spinner style={{ height: "13px", width: "13px" }} className="ms-1" color="success" /> </Button>
+  return loading ?
+    <Button
+      id={id}
+      type={type}
+      disabled
+      title={`Go Button Loging...`}
+      color="btn btn-outline-success border-1   "
+      onClick={onClick} >
+      <Spinner style={{ height: "13px", width: "13px" }} color="success" />
+    </Button>
     : <Button
       id={id}
       type={type}
-      color="btn btn-outline-success border-1 font-size-12 mb-2 "
-      onClick={onClick} > Go</Button>
+      color="btn btn-success border-1 font-size-12  "
+      onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "900" }}>Go</span></Button>
 }
 
 export function Change_Button(props) {

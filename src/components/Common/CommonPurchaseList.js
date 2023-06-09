@@ -74,10 +74,10 @@ const CommonPurchaseList = (props) => {
     pageField = { id: "" },
     tableList = [],
   } = props.reducers;
-  
+
   const { getList, editId, deleteId, postSucc, updateSucc, deleteSucc } =
-  props.action;
-  
+    props.action;
+
   const {
 
     editBodyfunc,
@@ -186,7 +186,7 @@ const CommonPurchaseList = (props) => {
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
 
-    if ((editData.Status === true) ) {
+    if ((editData.Status === true)) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
           pathname: masterPath,
@@ -282,11 +282,12 @@ const CommonPurchaseList = (props) => {
     pageField,
     lastColumn,
     secondLastColumn,
-    userAccState
+    userAccState: userAccState
   })
 
 
   if (!(userAccState === "")) {
+
     return (
       <React.Fragment>
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>

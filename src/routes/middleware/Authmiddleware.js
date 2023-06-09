@@ -31,9 +31,10 @@ const Authmiddleware = ({
         const now = new Date().getTime();
         const timeSinceLastActivity = now - sessionStorage.getItem('keepSessionAlive2');
         const minutesSinceLastActivity = Math.floor((timeSinceLastActivity / 1000) / 60);
-      
-        if (minutesSinceLastActivity >= 29) {
-          //console.log(" hasNoActivity===minutesSinceLastActivity==lesstahn 1", new Date())  //##########################
+        //console.log(" hasNoActivity main body", timeSinceLastActivity, "---- " ,(timeSinceLastActivity > 50000), "-----", new Date()) //##########################
+
+        if ((timeSinceLastActivity > 1700000)) {//29 min
+          //console.log(" hasNoActivity  **logOut** ", new Date())  //##########################
 
           clearInterval(intervalId);
           clearInterval(timer);
@@ -43,19 +44,19 @@ const Authmiddleware = ({
           history.push({ pathname: '/logout' })
           window.location.reload(true)
         } else {
-          //console.log(" hasNoActivity===reset==less", new Date()) //##########################
+          //console.log(" hasNoActivity  **reset**", new Date()) //##########################
           resetTimer();
         }
 
       }
 
       const startTimer = () => {
-        //console.log(" startTimer", new Date()) //##########################
+        // //console.log(" startTimer", new Date()) //##########################
         timer = setInterval(hasNoActivity, 30 * 60 * 1000);
       };
 
       const resetTimer = () => {
-        //console.log(" resetTimer", new Date())  //##########################
+        // //console.log(" resetTimer", new Date())  //##########################
         sessionStorage.setItem('keepSessionAlive2', new Date().getTime())
         clearInterval(timer);
         startTimer();
@@ -131,7 +132,7 @@ const keepSessionAlive = (dispatch) => {
   //console.log(" keepSessionAlive", new Date()) //##########################
 
   sessionStorage.setItem('keepSessionAlive', new Date())
-  intervalId = setInterval(() => updateTokan(dispatch), 28 * 60 * 1000)
+  intervalId = setInterval(() => {updateTokan(dispatch)}, 28 * 60 * 1000)
 };
 
 

@@ -273,6 +273,7 @@ const CommonListPage = (props) => {
   const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({ pageField, lastColumn, userAccState })
 
   if (!(userAccState === '')) {
+    
     return (
       <React.Fragment>
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
@@ -289,7 +290,7 @@ const CommonListPage = (props) => {
                   <React.Fragment>
                     <Row>
                       <Col xl="12">
-                        <div className="table-responsive table " >
+                        <div className="table-responsive table  "  style={{maxHeight: "76vh"}}>
                           <BootstrapTable
                             keyField={"id"}
                             responsive

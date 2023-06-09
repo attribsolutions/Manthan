@@ -131,7 +131,7 @@ const ProfileMenu = props => {
 
 
   const SaveHandler = async (event) => {
-    debugger
+    
 
     event.preventDefault();
 
