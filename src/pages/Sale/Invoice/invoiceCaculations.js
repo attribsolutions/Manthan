@@ -89,7 +89,7 @@ export function stockDistributeFunc(index1) {
 
         let stockqty = Number(index2.ActualQuantity);
 
-        _ItemTotalStock = _ItemTotalStock + Number(index2.ActualQuantity)// addition of total index2.ActualQuantity
+        _ItemTotalStock = _ItemTotalStock +stockqty// addition of total index2.ActualQuantity
 
         if ((orderqty > stockqty) && !(orderqty === 0)) {
             orderqty = orderqty - stockqty
@@ -103,12 +103,14 @@ export function stockDistributeFunc(index1) {
         }
 
         if (index2.Qty > 0) {
+         
             const calculate = discountCalculate(index2, index1)
             tAmount = tAmount + Number(calculate.tAmount)
         }
 
         try {
             document.getElementById(`batchQty${index1.id}-${index2.id}`).value = index2.Qty
+      
         } catch (e) { }
 
 
@@ -117,8 +119,10 @@ export function stockDistributeFunc(index1) {
     });
 
     index1.ItemTotalStock = _ItemTotalStock;
+
     const t2 = index1.ItemTotalStock;
-    const tA4 = tAmount.toFixed(2)
+    const tA4 = tAmount.toFixed(2);
+
     index1.tAmount = tA4
 
     if (orderqty > t2) {
@@ -129,11 +133,14 @@ export function stockDistributeFunc(index1) {
     try {
         index1.StockInValid = false
         index1.StockInvalidMsg = null
-        document.getElementById(`StockInvalidMsg${index1.id}`).style.display = "none";
+        document.getElementById(`StockInvalidMsg-${index1.id}`).style.display = "none";
     } catch (e) { };
-
+debugger
     try {
-        document.getElementById(`tAmount${index1.id}`).innerText = tA4;
+        document.getElementById(`tAmount-${index1.id}`).innerText = tA4;
+
+        debugger
+        var aa
     } catch (e) { };
 
 };
@@ -169,8 +176,8 @@ export function orderQtyUnit_SelectOnchange(event, index1) {
     index1.ConversionUnit = event.ConversionUnit;
 
     index1.StockDetails.forEach(index2 => {
-        index2["Rate"] = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
-        index2["ActualQuantity"] = (index2.BaseUnitQuantity / event.BaseUnitQuantity).toFixed(2);
+        index2.Rate = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
+        index2.ActualQuantity = (index2.BaseUnitQuantity / event.BaseUnitQuantity).toFixed(2);
 
         document.getElementById(`stockItemRate-${index1.id}-${index2.id}`).innerText = index2.Rate;
         document.getElementById(`ActualQuantity-${index1.id}-${index2.id}`).innerText = index2.ActualQuantity;

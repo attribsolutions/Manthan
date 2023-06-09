@@ -276,7 +276,7 @@ const Invoice = (props) => {
                             <samp id={`ItemName${index1.id}`}>{index1.ItemName}</samp>
                         </div>
                         {
-                            (index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
+                            (index1.StockInValid) ? <div><samp id={`StockInvalidMsg-${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
                                 : <></>
                         }
                     </>
@@ -741,7 +741,9 @@ const Invoice = (props) => {
                                                     classNamePrefix="dropdown"
                                                     options={CustomerDropdown_Options}
                                                     onChange={CustomerOnchange}
-
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                 />
                                                 {isError.Customer.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.Customer}</small></span>
@@ -766,41 +768,41 @@ const Invoice = (props) => {
                         </Col>
 
 
+                        <div className="table-responsive">
+                            <ToolkitProvider
+                                keyField={"id"}
+                                data={OrderItemDetails}
+                                columns={pagesListColumns}
 
-                        <ToolkitProvider
-                            keyField={"id"}
-                            data={OrderItemDetails}
-                            columns={pagesListColumns}
+                                search
+                            >
+                                {(toolkitProps) => (
+                                    <React.Fragment>
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive">
+                                                    <BootstrapTable
+                                                        id="table_Arrow"
+                                                        keyField={"id"}
+                                                        responsive
+                                                        bordered={false}
+                                                        striped={false}
+                                                        classes={"table  table-bordered"}
+                                                        noDataIndication={
+                                                            <div className="text-danger text-center ">
+                                                                Items Not available
+                                                            </div>
+                                                        }
+                                                        {...toolkitProps.baseProps}
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
 
-                            search
-                        >
-                            {(toolkitProps) => (
-                                <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive">
-                                                <BootstrapTable
-                                                    id="table_Arrow"
-                                                    keyField={"id"}
-                                                    responsive
-                                                    bordered={false}
-                                                    striped={false}
-                                                    classes={"table  table-bordered"}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-                                                    {...toolkitProps.baseProps}
-                                                />
-                                            </div>
-                                        </Col>
-                                    </Row>
-
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        </div>
 
                         {OrderItemDetails.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
