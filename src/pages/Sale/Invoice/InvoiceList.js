@@ -204,10 +204,13 @@ const InvoiceList = () => {
                             <Col sm="5">
 
                                 <Select
-                                    classNamePrefix="select2-Customer"
+                                    classNamePrefix="react-select"
                                     value={supplierSelect}
                                     options={supplierOptions}
                                     onChange={supplierOnchange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                 />
                             </Col>
                         </FormGroup>

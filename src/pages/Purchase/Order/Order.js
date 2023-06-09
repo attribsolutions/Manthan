@@ -238,7 +238,7 @@ const Order = (props) => {
 
             setTermsAndConTable([])
 
-            const liveMode = false
+            const liveMode = true
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
             if ((subPageMode === url.ORDER_2) && liveMode) { //        SAP OEDER-APROVUAL CODE
@@ -330,11 +330,34 @@ const Order = (props) => {
             document.getElementById("__assignItem_onClick").style.display = ((supplierSelect.value > 0) && (findPartyItemAccess) && !goBtnloading) ? "block" : "none"
         } catch (e) { }
     }, [goBtnloading, supplierSelect, findPartyItemAccess]);
-
-    const supplierOptions = vendorSupplierCustomer.map((i) => ({
+    var a = [
+        {
+            value: "data.id1",
+            label: "data.Name"
+        },
+        {
+            value: "data.id2",
+            label: "data.Name"
+        },
+        {
+            value: "data.id13",
+            label: "data.Name"
+        },
+        {
+            value: "data.id14",
+            label: "data.Name"
+        },
+        {
+            value: "data.id15",
+            label: "data.Name"
+        }
+    ]
+    const supplierOptions = [...a, ...vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
-    }));
+    }))]
+
+
 
     const orderTypeOptions = orderType.map((i) => ({
         value: i.id,
@@ -417,6 +440,10 @@ const Order = (props) => {
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
+
+            headerStyle: () => {
+                return { width: '150px', textAlign: 'center' };
+            },
             formatter: (value, row, key) => {
 
                 if (!row.UnitName) {
@@ -459,39 +486,40 @@ const Order = (props) => {
                 }
 
                 return (
-                    <Select
-                        classNamePrefix="select2-selection"
-                        id={"ddlUnit"}
-                        key={`ddlUnit${row.id}`}
-                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
-                        options={
-                            row.UnitDetails.map(i => ({
-                                label: i.UnitName,
-                                value: i.UnitID,
+                    <div >
+                        <Select
 
-                                BaseUnitQuantity: i.BaseUnitQuantity,
-                                Rate: i.Rate,
-                                BaseUnitQuantityNoUnit: i.BaseUnitQuantityNoUnit
-                            }))
-                        }
-                        onChange={e => {
-                            row["Unit_id"] = e.value;
-                            row["UnitName"] = e.label
-                            row["BaseUnitQuantity"] = e.BaseUnitQuantity;
+                            classNamePrefix="select2-selection"
+                            id={"ddlUnit"}
+                            key={`ddlUnit${row.id}`}
+                            defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                            options={
+                                row.UnitDetails.map(i => ({
+                                    label: i.UnitName,
+                                    value: i.UnitID,
 
-                            row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
-                            itemWise_CalculationFunc(row)
-                            document.getElementById(`Rate-${key}`).innerText = row.Rate
+                                    BaseUnitQuantity: i.BaseUnitQuantity,
+                                    Rate: i.Rate,
+                                    BaseUnitQuantityNoUnit: i.BaseUnitQuantityNoUnit
+                                }))
+                            }
+                            onChange={e => {
+                                row["Unit_id"] = e.value;
+                                row["UnitName"] = e.label
+                                row["BaseUnitQuantity"] = e.BaseUnitQuantity;
+
+                                row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
+                                itemWise_CalculationFunc(row)
+                                document.getElementById(`Rate-${key}`).innerText = row.Rate
 
 
-                        }}
-                    >
-                    </Select >
+                            }}
+                        >
+                        </Select >
+                    </div>
                 )
             },
-            headerStyle: () => {
-                return { width: '150px', textAlign: 'center' };
-            }
+
         },
 
         {//------------- Rate column ----------------------------------
@@ -931,6 +959,9 @@ const Order = (props) => {
                                                 isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
                                                 options={Party_DropdownOptions}
                                                 onChange={partyOnchange}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                             />
                                         </Col>
                                     </FormGroup>
@@ -967,10 +998,12 @@ const Order = (props) => {
                                     <Col sm="6">
                                         <Select
                                             value={supplierSelect}
-                                            classNamePrefix="select2-Customer"
                                             isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
                                             options={supplierOptions}
                                             onChange={supplierOnchange}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
                                         />
                                     </Col>
                                     <Col sm="1" className="mx-4 ">                      {/*Go_Button  */}
@@ -1042,15 +1075,11 @@ const Order = (props) => {
                                                 <Select
                                                     value={billAddr}
                                                     classNamePrefix="select2-Customer"
-
                                                     options={supplierAddress}
-                                                    styles={{
-                                                        control: base => ({
-                                                            ...base,
-                                                            border: 'non',
-                                                        })
-                                                    }}
                                                     onChange={(e) => { setbillAddr(e) }}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                 />
                                             </div>
                                         </FormGroup>
@@ -1065,10 +1094,7 @@ const Order = (props) => {
                                                     value={shippAddr}
                                                     classNamePrefix="select2-Customer"
                                                     styles={{
-                                                        control: base => ({
-                                                            ...base,
-                                                            border: 'non',
-                                                        })
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
                                                     options={supplierAddress}
                                                     onChange={(e) => { setshippAddr(e) }}
@@ -1089,6 +1115,9 @@ const Order = (props) => {
                                                     classNamePrefix="select2-Customer"
                                                     options={orderTypeOptions}
                                                     onChange={(e) => { setorderTypeSelect(e) }}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                 />
                                             </div>
                                         </FormGroup>
