@@ -12,11 +12,11 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
 function* Save_Method_ForCityMaster_GenFun({ config }) {             // Save API
-    debugger
+    
     try {
-        debugger
+        
         const response = yield call(Post_City_Master_API, config);
-        debugger
+        
         yield put(saveCityMaster_Success(response));
     } catch (error) { CommonConsole(error) }
 }

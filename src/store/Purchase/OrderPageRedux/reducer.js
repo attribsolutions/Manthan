@@ -8,11 +8,15 @@ import {
   GET_ORDER_LIST_PAGE,
   ORDER_APPROVAL_ACTION_SUCCESS,
   GET_ORDER_APPROVAL_DETAIL_SUCCESS,
+  UPDATE_ORDER_ID_FROM_ORDER_PAGE,
+  SAVE_ORDER_FROM_ORDER_PAGE,
+  GO_BUTTON_FOR_ORDER_PAGE,
 } from "./actionType"
 
 
 const INIT_STATE = {
-  loading:false,
+  loading: false,
+  saveBtnloading: false,
   goBtnOrderAdd: null,
   postMsg: { Status: false },
   editData: { Status: false, Items: [] },
@@ -26,15 +30,29 @@ const INIT_STATE = {
 const OrderReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
+
+    case GO_BUTTON_FOR_ORDER_PAGE:
+      return {
+        ...state,
+        loading: true,
+      }
+
     case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
+        loading: false,
         goBtnOrderAdd: action.payload,
       }
 
+      case SAVE_ORDER_FROM_ORDER_PAGE:
+      return {
+        ...state,
+        saveBtnloading: true,
+      }
     case SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS:
       return {
         ...state,
+        saveBtnloading: false,
         postMsg: action.payload,
       }
 
@@ -44,9 +62,16 @@ const OrderReducer = (state = INIT_STATE, action) => {
         editData: action.payload,
       }
 
+    case UPDATE_ORDER_ID_FROM_ORDER_PAGE:
+      return {
+        ...state,
+        saveBtnloading: true,
+      }
+
     case UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS:
       return {
         ...state,
+        saveBtnloading: false,
         updateMsg: action.payload,
       }
 

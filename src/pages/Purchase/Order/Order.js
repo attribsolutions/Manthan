@@ -36,7 +36,7 @@ import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 
 
 let editVal = {}
-let initial_BredcrumbMsg="Order Amount :0.00"
+let initial_BredcrumbMsg = "Order Amount :0.00"
 
 function initialState(history) {
 
@@ -115,7 +115,9 @@ const Order = (props) => {
         PartyList,
         assingItemData = '',
         approvalDetail,
-        orderApprovalMsg
+        orderApprovalMsg,
+        goBtnloading,
+        saveBtnloading,
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -128,7 +130,10 @@ const Order = (props) => {
         orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
         approvalDetail: state.OrderReducer.approvalDetail,
         assingItemData: state.PartyItemsReducer.editData,
-        PartyList: state.PartyMasterReducer.partyList
+        PartyList: state.PartyMasterReducer.partyList,
+        goBtnloading: state.OrderReducer.loading,
+        saveBtnloading: state.OrderReducer.saveBtnloading,
+
     }));;
 
     const { fieldLabel } = state;
@@ -233,7 +238,7 @@ const Order = (props) => {
 
             setTermsAndConTable([])
 
-            const liveMode = true
+            const liveMode = false
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
             if ((subPageMode === url.ORDER_2) && liveMode) { //        SAP OEDER-APROVUAL CODE
@@ -317,8 +322,14 @@ const Order = (props) => {
     }, [approvalDetail]);
 
     useEffect(() => {
-        orderApprovalMessage({ dispatch, orderApprovalMsg ,listPath,history })
+        orderApprovalMessage({ dispatch, orderApprovalMsg, listPath, history })
     }, [orderApprovalMsg]);
+
+    useEffect(() => {
+        try {
+            document.getElementById("__assignItem_onClick").style.display = ((supplierSelect.value > 0) && (findPartyItemAccess) && !goBtnloading) ? "block" : "none"
+        } catch (e) { }
+    }, [goBtnloading, supplierSelect, findPartyItemAccess]);
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
@@ -349,7 +360,7 @@ const Order = (props) => {
                             Item Name
                         </div>
                         <div className="cursor-pointer" onClick={assignItem_onClick}>
-                            <samp style={{ display: (supplierSelect.value > 0) && (findPartyItemAccess) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
+                            <samp id={"__assignItem_onClick"} style={{ display: "none" }} className="text-primary fst-italic text-decoration-underline"
                             >
                                 Assign-Items</samp>
                         </div>
@@ -966,6 +977,7 @@ const Order = (props) => {
                                         {pageMode === mode.defaultsave ?
                                             (orderItemTable.length === 0) ?
                                                 < Go_Button
+                                                    loading={goBtnloading}
                                                     id={`go-btn${subPageMode}`}
                                                     onClick={(e) => goButtonHandler()} />
                                                 :
@@ -1134,14 +1146,12 @@ const Order = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table table-Rresponsive ">
+                                        <div className="table-responsive table">
                                             <BootstrapTable
                                                 keyField={"Item_id"}
                                                 id="table_Arrow"
                                                 ref={ref1}
                                                 defaultSorted={defaultSorted}
-                                                bordered={false}
-                                                striped={false}
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
@@ -1166,6 +1176,7 @@ const Order = (props) => {
                     {
                         ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton
+                                loading={saveBtnloading}
                                 pageMode={pageMode}
                                 userAcc={userPageAccessState}
                                 onClick={saveHandeller}

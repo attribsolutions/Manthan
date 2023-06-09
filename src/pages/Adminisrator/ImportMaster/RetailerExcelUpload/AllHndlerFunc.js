@@ -52,11 +52,11 @@ export const readExcelFile = async ({ file, compareParameter }) => {
         if (comparefilter.length === 0) {
             invalidMsg.push(`Import filed Not Map`)
         }
-        debugger
+        
         jsonResult.forEach((r1, k) => {
             // 
             comparefilter.forEach((c1) => {
-                debugger
+                
                 if (c1.ControlTypeName === "Date") { r1[c1.Value] = date_ymd_func(r1[c1.Value]) }
                 const regExp = RegExp(c1.RegularExpression)
 
@@ -98,7 +98,7 @@ export async function retailer_FileDetails({ compareParameter = [], readjson = [
             fileFiled[ele.FieldName] = ele.Value
         }
     })
-    debugger
+    
 
     let invoiceNO = []
     let partyNO = []
@@ -146,7 +146,7 @@ export const retailer_SaveHandler = async ({
     partySelect,
     priceListSelect,
     retailerId }) => {
-    debugger
+    
 
     event.preventDefault();
     const btnId = event.target.id

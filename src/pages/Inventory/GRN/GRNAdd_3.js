@@ -278,7 +278,7 @@ const GRNAdd3 = (props) => {
     const saveHandeller = (event) => {
 
         event.preventDefault();
-debugger
+
         const btnId = event.target.id
         _cfunc.btnIsDissablefunc({ btnId, state: true })
 
