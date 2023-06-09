@@ -630,7 +630,6 @@ const PartyMaster = (props) => {
                                                                             <Select
                                                                                 name="Suppiler"
                                                                                 value={suppilerSelect}
-                                                                                isSearchable={false}
                                                                                 isMulti={true}
                                                                                 options={SupplierOptions}
                                                                                 onChange={(e) => setSuppilerSelect(e)}
@@ -771,7 +770,6 @@ const PartyMaster = (props) => {
                                                                     <Select
                                                                         name="Suppiler"
                                                                         value={suppilerSelect}
-                                                                        isSearchable={false}
                                                                         isMulti={true}
                                                                         // options={EmployeeType_DropdownOptions}
                                                                         // onChange={(e) => SuppilerOnChange(e)}

@@ -45,7 +45,6 @@ const PartyDropdownMaster = (props) => {
                         id="Party "
                         name="Party"
                         value={company}
-                        isSearchable={false}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
                         options={[{ value: 1, label:"dfsd" }]}

@@ -3,7 +3,7 @@ import Select from "react-select";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    Button, Col, Dropdown, DropdownMenu, DropdownToggle, Input, Label, Row,FormGroup
+    Button, Col, Dropdown, DropdownMenu, DropdownToggle, Input, Label, Row, FormGroup
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -560,7 +560,7 @@ const GRNAdd = (props) => {
                     GST: i.GST,
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
-                    Amount: i.Amount,
+                    Amount: i.Amount.toFixed(2),
 
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
@@ -625,14 +625,13 @@ const GRNAdd = (props) => {
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
-                GrandTotal: orderAmount,
+                GrandTotal: orderAmount.toFixed(2),
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArr,
-                GRNReferences: openPOdata
-
+                GRNReferences: openPOdata,
             });
 
             if (pageMode === mode.edit) {

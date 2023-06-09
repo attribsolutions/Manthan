@@ -278,7 +278,7 @@ const GRNAdd3 = (props) => {
     const saveHandeller = (event) => {
 
         event.preventDefault();
-
+debugger
         const btnId = event.target.id
         _cfunc.btnIsDissablefunc({ btnId, state: true })
 
@@ -336,19 +336,17 @@ const GRNAdd3 = (props) => {
                 })
                 return returnFunc()
             }
-
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
-                GrandTotal: sum,
+                GrandTotal: sum.toFixed(2),
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArr,
-                GRNReferences: openPOdata
-
+                GRNReferences: openPOdata,
             });
 
             if (pageMode === mode.edit) {

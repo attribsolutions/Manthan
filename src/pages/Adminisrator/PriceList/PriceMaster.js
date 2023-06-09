@@ -608,7 +608,6 @@ const PriceMaster = (props) => {
                                                                 className="col-3 col-form-label" >CalculationPath</Label>
                                                             <Col className=" col col-9" style={{ marginTop: '9px' }} >
                                                                 <Select
-                                                                    isSearchable={false}
                                                                     isMulti={true}
                                                                     value={calculationPathstate}
                                                                     onChange={(e) => { calculatedPathOnChange(e, "node") }}

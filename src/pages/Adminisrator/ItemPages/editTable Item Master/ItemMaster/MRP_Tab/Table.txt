@@ -97,7 +97,6 @@ function MRPTable(props) {
               label: row.DivisionName,
               value: row.Division
             }}
-            isSearchable={false}
             className="react-dropdown"
             // onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
             classNamePrefix="dropdown"
@@ -136,7 +135,6 @@ function MRPTable(props) {
               label: row.PartyName,
               value: row.Party
             }}
-            isSearchable={false}
             className="react-dropdown"
             // onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
             classNamePrefix="dropdown"

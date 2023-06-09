@@ -28,8 +28,6 @@ const Login = props => {
   const [currentUserName, setcurrentUserName] = useState("");
   const [Password, setPassword] = useState("");
 
-  const [currentPwdError, setCurrentPwdError] = useState("");
-
 
   const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess, loading } = useSelector(state => ({
     loading: state.Login.loading,
@@ -61,7 +59,7 @@ const Login = props => {
 
     try {
       if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
-debugger
+
         localStorage.setItem("token", (loginSuccess.token))
         localStorage.setItem("refreshToken", (loginSuccess.refreshtoken))
         localStorage.setItem("userId", (loginSuccess.UserID))
@@ -135,7 +133,7 @@ debugger
 
 
   const SaveHandler = async (event) => {
-    debugger
+
     event.preventDefault();
     const values = {
       UserName: currentUserName,

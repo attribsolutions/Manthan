@@ -327,7 +327,6 @@ const RoleMaster = (props) => {
                           <Select
                             name="RoleEmployeeTypes"
                             value={values.RoleEmployeeTypes}
-                            isSearchable={false}
                             isMulti={true}
                             options={EmployeeType_DropdownOptions}
                             onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}

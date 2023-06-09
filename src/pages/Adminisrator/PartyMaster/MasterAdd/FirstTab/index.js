@@ -407,7 +407,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                             <Select
                                                 name="Supplier"
                                                 value={values.Supplier}
-                                                isSearchable={false}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={SupplierOptions}
