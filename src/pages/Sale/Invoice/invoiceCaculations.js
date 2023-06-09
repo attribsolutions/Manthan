@@ -83,10 +83,13 @@ export function stockDistributeFunc(index1) {
 
     let tAmount = 0
     let orderqty = Number(index1.Quantity);
+    let _ItemTotalStock = 0
 
     index1.StockDetails = index1.StockDetails.map(index2 => {
 
         let stockqty = Number(index2.ActualQuantity);
+
+        _ItemTotalStock = _ItemTotalStock +stockqty// addition of total index2.ActualQuantity
 
         if ((orderqty > stockqty) && !(orderqty === 0)) {
             orderqty = orderqty - stockqty
@@ -100,22 +103,26 @@ export function stockDistributeFunc(index1) {
         }
 
         if (index2.Qty > 0) {
+         
             const calculate = discountCalculate(index2, index1)
             tAmount = tAmount + Number(calculate.tAmount)
         }
-        
+
         try {
             document.getElementById(`batchQty${index1.id}-${index2.id}`).value = index2.Qty
+      
         } catch (e) { }
 
-        
+
 
         return index2
     });
 
+    index1.ItemTotalStock = _ItemTotalStock;
 
     const t2 = index1.ItemTotalStock;
-    const tA4 = tAmount.toFixed(2)
+    const tA4 = tAmount.toFixed(2);
+
     index1.tAmount = tA4
 
     if (orderqty > t2) {
@@ -126,11 +133,14 @@ export function stockDistributeFunc(index1) {
     try {
         index1.StockInValid = false
         index1.StockInvalidMsg = null
-        document.getElementById(`StockInvalidMsg${index1.id}`).style.display = "none";
+        document.getElementById(`StockInvalidMsg-${index1.id}`).style.display = "none";
     } catch (e) { };
-
+debugger
     try {
-        document.getElementById(`tAmount${index1.id}`).innerText = tA4;
+        document.getElementById(`tAmount-${index1.id}`).innerText = tA4;
+
+        debugger
+        var aa
     } catch (e) { };
 
 };
