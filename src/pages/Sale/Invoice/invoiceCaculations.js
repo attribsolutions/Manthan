@@ -83,10 +83,13 @@ export function stockDistributeFunc(index1) {
 
     let tAmount = 0
     let orderqty = Number(index1.Quantity);
+    let _ItemTotalStock = 0
 
     index1.StockDetails = index1.StockDetails.map(index2 => {
 
         let stockqty = Number(index2.ActualQuantity);
+
+        _ItemTotalStock = _ItemTotalStock + Number(index2.ActualQuantity)// addition of total index2.ActualQuantity
 
         if ((orderqty > stockqty) && !(orderqty === 0)) {
             orderqty = orderqty - stockqty
@@ -103,17 +106,17 @@ export function stockDistributeFunc(index1) {
             const calculate = discountCalculate(index2, index1)
             tAmount = tAmount + Number(calculate.tAmount)
         }
-        
+
         try {
             document.getElementById(`batchQty${index1.id}-${index2.id}`).value = index2.Qty
         } catch (e) { }
 
-        
+
 
         return index2
     });
 
-
+    index1.ItemTotalStock = _ItemTotalStock;
     const t2 = index1.ItemTotalStock;
     const tA4 = tAmount.toFixed(2)
     index1.tAmount = tA4
@@ -166,8 +169,8 @@ export function orderQtyUnit_SelectOnchange(event, index1) {
     index1.ConversionUnit = event.ConversionUnit;
 
     index1.StockDetails.forEach(index2 => {
-        index2.Rate = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
-        index2.ActualQuantity = (index2.BaseUnitQuantity / event.BaseUnitQuantity).toFixed(2);
+        index2["Rate"] = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
+        index2["ActualQuantity"] = (index2.BaseUnitQuantity / event.BaseUnitQuantity).toFixed(2);
 
         document.getElementById(`stockItemRate-${index1.id}-${index2.id}`).innerText = index2.Rate;
         document.getElementById(`ActualQuantity-${index1.id}-${index2.id}`).innerText = index2.ActualQuantity;

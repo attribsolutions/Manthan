@@ -330,32 +330,11 @@ const Order = (props) => {
             document.getElementById("__assignItem_onClick").style.display = ((supplierSelect.value > 0) && (findPartyItemAccess) && !goBtnloading) ? "block" : "none"
         } catch (e) { }
     }, [goBtnloading, supplierSelect, findPartyItemAccess]);
-    var a = [
-        {
-            value: "data.id1",
-            label: "data.Name"
-        },
-        {
-            value: "data.id2",
-            label: "data.Name"
-        },
-        {
-            value: "data.id13",
-            label: "data.Name"
-        },
-        {
-            value: "data.id14",
-            label: "data.Name"
-        },
-        {
-            value: "data.id15",
-            label: "data.Name"
-        }
-    ]
-    const supplierOptions = [...a, ...vendorSupplierCustomer.map((i) => ({
+
+    const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
-    }))]
+    }))
 
 
 
