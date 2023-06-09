@@ -3,13 +3,15 @@ import { invoice } from "../ReportIndex";
 export const columns =[
     "HSN Item Name",
     "Quantity",
+    "MRP",
     "Rate",
     "Basic Amt",
     "CGST ",
     "CGST Amt",
     "SGST ",
     "SGST Amt",
-    "Total Amt" 
+    "Total Amt" ,
+
 ];
 
 export const columns1 =[
@@ -59,6 +61,7 @@ export const Rows = (data) => {
         const tableitemRow = [
             element.ItemName ,
             `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
+            element.MRPValue,
             element.Rate,
             element.BasicAmount,
             `${element.CGSTPercentage}%`,
@@ -66,6 +69,7 @@ export const Rows = (data) => {
             `${element.SGSTPercentage}%`,
             element.SGST,
             element.Amount,
+
             
            
         ];
@@ -84,13 +88,14 @@ export const Rows = (data) => {
             return [
                 `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}${element.UnitName}`,
                 " ",
+                "",
                 `BasicAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
                 "",
                 `CGSTAmt:${parseFloat(totalCGst).toFixed(2)}`,
                 "isaddition",
                 `SGSTAmt:${parseFloat(totalSGst).toFixed(2)}`,
                 "",
-                `Amount:${parseFloat(totalAmount).toFixed(2)}`,
+                `Amt:${parseFloat(totalAmount).toFixed(2)}`,
             ];
         };
 
