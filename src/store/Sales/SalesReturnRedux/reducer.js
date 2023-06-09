@@ -2,10 +2,12 @@ import {
     SAVE_SALES_RETURN_MASTER_SUCCESS,
     INVOICE_NUMBER_SUCCESS,
     SALES_RETURN_LIST_API_SUCCESS,
-    DELETE_SALES_RETURN_ID_SUCCESS
+    DELETE_SALES_RETURN_ID_SUCCESS,
+    SALES_RETURN_LIST_API
 } from "./actionType"
 
 const INIT_STATE = {
+    loading: false,
     InvoiceNo: [],
     postMsg: { Status: false },
     salesReturnList: [],
@@ -26,10 +28,18 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 ...state,
                 postMsg: action.payload,
             }
+        case SALES_RETURN_LIST_API:
+            return {
+                ...state,
+                loading: true,
+            }
+
         case SALES_RETURN_LIST_API_SUCCESS:
             return {
                 ...state,
                 salesReturnList: action.payload,
+                loading: false
+
             }
         case DELETE_SALES_RETURN_ID_SUCCESS:
             return {

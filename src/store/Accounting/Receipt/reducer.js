@@ -10,9 +10,11 @@ import {
   BANK_LIST_API_SUCCESS,
   RECEIPT_LIST_FILTERS,
   PAYMENT_ENTRY_LIST_FILTERS,
+  RECEIPT_LIST_API,
 } from "./actionType"
 
 const INIT_STATE = {
+  loading:false,
   ReceiptGoButton: [],
   ReceiptList: [],
   postMsg: { Status: false },
@@ -55,10 +57,19 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         postMsg: action.payload,
       }
 
+    case RECEIPT_LIST_API:
+      return {
+        ...state,
+        loading: true,
+      }
+
+
     case RECEIPT_LIST_API_SUCCESS:
       return {
         ...state,
         ReceiptList: action.payload,
+        loading: false,
+
       }
 
     case RECEIPT_TYPE_API_SUCCESS:

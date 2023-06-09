@@ -20,7 +20,7 @@ import {
     onChangeSelect,
     resetFunction,
 } from "../../../components/Common/validationFunction";
-import { Change_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     loginCompanyID,
@@ -61,7 +61,9 @@ const ManagementEmpParties = (props) => {
         employeeList,
         partyList,
         pageField,
+        loading,
         userAccess } = useSelector((state) => ({
+            loading: state.ManagementPartiesReducer.loading,
             postMsg: state.ManagementPartiesReducer.postMsg,
             employeeList: state.ManagementPartiesReducer.employeeList,
             partyList: state.ManagementPartiesReducer.partyList,
@@ -272,7 +274,7 @@ const ManagementEmpParties = (props) => {
                     <div className="px-2   c_card_header text-black mb-1" >
                         <div className="row">
                             <Col sm="5">
-                                <FormGroup className=" row mt-3 " >
+                                <FormGroup className=" row mt-2 " >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "83px" }}> {fieldLabel.Employee}</Label>
                                     <Col sm="6">
@@ -298,10 +300,11 @@ const ManagementEmpParties = (props) => {
                                 </FormGroup>
                             </Col>
                             {partyList.length === 0 ?
-                                <Col sm="1" className="mx-4 ">
-                                    <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
-                                        onClick={(e) => goButtonHandler(e)}
-                                    >Go</Button>
+                                <Col sm="1" className="mt-2 ">
+                                    <Go_Button
+                                        loading={loading}
+                                        onClick={goButtonHandler}
+                                    />
                                 </Col> :
                                 <Col sm="1" className="mx-4 mt-3">
                                     <Change_Button onClick={(e) => dispatch(getPartyTableListSuccess([]))} />

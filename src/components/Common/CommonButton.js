@@ -58,6 +58,7 @@ const UpdateBtn = ({ onClick, userAcc }) => {
 }
 
 export function Go_Button(props) {
+  
   const { onClick, id, type = "button", loading } = props
 
   return loading ? <Button
@@ -93,6 +94,9 @@ export function Loader() {
   </div>
 
 }
+
+
+
 
 
 
