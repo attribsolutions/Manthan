@@ -38,6 +38,7 @@ const SalesReturnList = () => {
 
     const reducers = useSelector(
         (state) => ({
+            loading: state.SalesReturnReducer.loading,
             tableList: state.SalesReturnReducer.salesReturnList,
             deleteMsg: state.SalesReturnReducer.deleteMsg,
             postMsg: state.OrderReducer.postMsg,
@@ -185,7 +186,7 @@ const SalesReturnList = () => {
                     </Col >
 
                     <Col sm="1" className="mt-3 ">
-                        <Go_Button onClick={goButtonHandler} />
+                        <Go_Button loading={reducers.loading} onClick={goButtonHandler} />
                     </Col>
                 </div>
             </div>

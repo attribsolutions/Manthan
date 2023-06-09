@@ -21,6 +21,7 @@ import { useHistory } from "react-router-dom";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../../routes/index"
+import { Go_Button } from "../../../../components/Common/CommonButton";
 
 const LoadingSheetList = () => {
     const history = useHistory();
@@ -33,6 +34,7 @@ const LoadingSheetList = () => {
 
     const reducers = useSelector(
         (state) => ({
+            loading: state.LoadingSheetReducer.loading,
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
             deleteMsg: state.LoadingSheetReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -116,7 +118,7 @@ const LoadingSheetList = () => {
                                     </Col>
                                 </FormGroup>
                             </Col>
-                            <Col sm="5" className="">
+                            <Col sm="6" className="">
                                 <FormGroup className="mb- row mt-3 " >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "65px" }}>To Date</Label>
@@ -129,10 +131,8 @@ const LoadingSheetList = () => {
                                     </Col>
                                 </FormGroup>
                             </Col>
-                            <Col sm="2" className="mt-3 ">
-                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                    onClick={() => goButtonHandler()}
-                                >Go</Button>
+                            <Col sm="1" className="mt-3 ">
+                                <Go_Button loading={reducers.loading} id={'LoadingSheet'} onClick={goButtonHandler} />
                             </Col>
                         </div>
 
