@@ -291,6 +291,9 @@ const SalesReturn = (props) => {
                         className="react-dropdown"
                         classNamePrefix="dropdown"
                         options={row.ItemUnitDetails}
+                        styles={{
+                            menu: provided => ({ ...provided, zIndex: 2 })
+                        }}
                         onChange={(event) => {
                             row.Unit = event.value
                             row.BaseUnitQuantity = event.BaseUnitQuantity
