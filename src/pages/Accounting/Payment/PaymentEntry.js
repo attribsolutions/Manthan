@@ -284,7 +284,7 @@ const PaymentEntry = (props) => {
                 })
 
                 dispatch(saveReceiptMaster({ jsonBody, btnId }));
-
+ 
             }
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
