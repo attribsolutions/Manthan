@@ -97,9 +97,8 @@ export function Go_Button(props) {
       id={id}
       type={type}
       color="btn btn-success border-1 font-size-12  "
-      onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "900" }}>Go</span></Button>
+      onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold" ,fontSize:"16px" }}>Go</span></Button>
 }
-
 export function Change_Button(props) {
   const { onClick, id, type = "button" } = props
   return <Button
