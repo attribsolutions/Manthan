@@ -354,6 +354,11 @@ export const ImportField_Add_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT
 
 // City API
 export const Post_City_Master_API = ({ jsonBody, btnId }) => post(url.CITY, jsonBody, btnId)// post api
+export const get_City_List_Api = () => get(url.CITY_LIST_API)// get api
+
+
+
+
 
 
 

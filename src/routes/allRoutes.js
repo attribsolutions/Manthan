@@ -157,6 +157,7 @@ import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"
 import SapLedger from "../Reports/SapLedgerReport/SapLedger";
 import ProductMarginReport from "../Reports/ProductMarginReport/ProductMarginReport";
 import CityMaster from "../pages/Adminisrator/CityPages/CityMaster";
+import CityList from "../pages/Adminisrator/CityPages/CityList";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -265,6 +266,7 @@ const userRoutes = [
   { path: path.SALESMAN_LIST, component: SalesManList },
 
   { path: path.CITY, component: CityMaster },
+  { path: path.CITY_LIST, component: CityList },
 
   // { path: path.CREDITLIMIT, component: CreditLimitMaster },
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },

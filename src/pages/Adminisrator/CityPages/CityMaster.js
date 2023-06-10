@@ -376,4 +376,4 @@ const CityMaster = (props) => {
         )
     }
 };
-export default CityMaster
+export default CityMaster;
