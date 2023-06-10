@@ -32,6 +32,7 @@ const SaveBtn = ({ onClick, userAcc, loading }) => {
           title={`Save ${Name} Loging...`}
           // disabled
           className="btn btn-primary w-md"
+          autoFocus={false}
         // onClick={onClick}
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
@@ -41,6 +42,7 @@ const SaveBtn = ({ onClick, userAcc, loading }) => {
         <button
           type="submit"
           id={btnId}
+          autoFocus={false}
           title={`Save ${Name}`}
           className="btn btn-primary w-md"
           onClick={onClick}
@@ -97,8 +99,8 @@ export function Go_Button(props) {
       id={id}
       type={type}
       color="btn btn-success border-1 font-size-12  "
-      onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold" ,fontSize:"16px" }}>Go</span></Button>
-} 
+      onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "16px" }}>Go</span></Button>
+}
 export function Change_Button(props) {
   const { onClick, id, type = "button" } = props
   return <Button
