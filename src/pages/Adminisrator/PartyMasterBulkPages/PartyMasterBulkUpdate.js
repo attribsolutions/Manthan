@@ -202,7 +202,7 @@ const PartyMasterBulkUpdate = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-    
+
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -556,7 +556,7 @@ const PartyMasterBulkUpdate = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                  <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <Container fluid>
@@ -584,6 +584,9 @@ const PartyMasterBulkUpdate = (props) => {
                                                                 isSearchable={true}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
+                                                                styles={{
+                                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                                }}
                                                                 options={SelectFieldDropdown_options}
                                                                 onChange={(event) => SelectFieldHandler(event)}
                                                             />
@@ -603,6 +606,9 @@ const PartyMasterBulkUpdate = (props) => {
                                                                 value={values.Routes}
                                                                 isSearchable={true}
                                                                 className="react-dropdown"
+                                                                styles={{
+                                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                                }}
                                                                 classNamePrefix="dropdown"
                                                                 options={RouteName_Options}
                                                                 // onChange={(e) => { setRouteSelect(e) }}
@@ -627,6 +633,9 @@ const PartyMasterBulkUpdate = (props) => {
                                                                 isSearchable={true}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
+                                                                styles={{
+                                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                                }}
                                                                 options={PartyDropdown_Options}
                                                                 // onChange={(e) => { setParty(e) }}
                                                                 onChange={partyOnchange}

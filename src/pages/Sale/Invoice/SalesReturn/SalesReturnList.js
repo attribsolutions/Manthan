@@ -180,6 +180,9 @@ const SalesReturnList = () => {
                                     value={values.Customer}
                                     options={customerOptions}
                                     onChange={CustomerOnChange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                 />
                             </Col>
                         </FormGroup>

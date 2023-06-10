@@ -48,7 +48,7 @@ const PaymentEntryList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            loading:state.ReceiptReducer.loading,
+            loading: state.ReceiptReducer.loading,
             tableList: state.ReceiptReducer.ReceiptList,
             deleteMsg: state.ReceiptReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
@@ -294,6 +294,9 @@ const PaymentEntryList = () => {
                                     value={values.Customer}
                                     options={(subPageMode === url.RECEIPTS_LIST_2) ? customerOptionsForReceipt : customerOptionsForPayment}
                                     onChange={CustomerOnChange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                 />
                             </Col>
                         </FormGroup>
