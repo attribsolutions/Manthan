@@ -286,6 +286,9 @@ const ImportExcelPartyMap = (props) => {
                                                     isDisabled={!(goButtonArr.length === 0) && true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                     options={partyDropdown_Options}
                                                     onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                 />
@@ -305,6 +308,9 @@ const ImportExcelPartyMap = (props) => {
                                                     name="MapType"
                                                     value={values.MapType}
                                                     isSearchable={true}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                     isDisabled={!(goButtonArr.length === 0) && true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"

@@ -46,7 +46,7 @@ const OrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
-        
+
             loading: state.OrderReducer.loading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.OrderReducer.orderList,
@@ -150,7 +150,7 @@ const OrderList = () => {
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(_act.GetVenderSupplierCustomer(subPageMode))
         goButtonHandler("event", IBType)
-        return ()=>{
+        return () => {
             dispatch(_act.commonPageFieldListSuccess(null))
             dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list   
         }
@@ -428,6 +428,9 @@ const OrderList = () => {
                                     value={values.Supplier}
                                     options={supplierOptions}
                                     onChange={supplierOnchange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                 />
                             </Col>
                         </FormGroup>
