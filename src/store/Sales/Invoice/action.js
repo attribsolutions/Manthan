@@ -10,7 +10,8 @@ import {
     INVOICE_SAVE_ADD_PAGE_ACTION,
     INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS,
     MAKE_IB_INVOICE_ACTION,
-    MAKE_IB_INVOICE_ACTION_SUCCESS
+    MAKE_IB_INVOICE_ACTION_SUCCESS,
+    INVOICE_API_ERROR_ACTION
 } from "./actionType";
 
 
@@ -83,3 +84,7 @@ export const makeIB_InvoiceActionSuccess = (data) => ({
     type: MAKE_IB_INVOICE_ACTION_SUCCESS,
     payload: data,
 });
+
+export const InvoiceApiErrorAction= (data) => ({
+    type: INVOICE_API_ERROR_ACTION,
+})

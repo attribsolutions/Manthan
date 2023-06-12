@@ -69,77 +69,53 @@
 .invoice-discount-row {
     position: relative;
     table-layout: fixed;
-    width: 100px;
+    min-width: 100px;
     position: relative;
-}
 
-.invoice-discount-row .div-1 {
-    // padding-bottom: 5px;
-    display: flex;
-}
+    .parent {
+        display: flex;
+        min-width: 100px;
+    }
 
-.invoice-discount-row .div-1 .input {
-    display: block;
-    text-align: "right" !important;
-    margin-left: 5px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
-    // background-color: azure;
-    height: 38px;
-}
+    .child {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
 
-.invoice-discount-row .div-1 .label {
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    padding: 8px 5px 7px 5px;
-    align-items: center;
-    border-color: #0000002e;
-    // padding-right: 5px;
-    // padding-top: 7px;
-}
+    .child:first-child {
+        flex-basis: 30%;
+    }
 
-.invoice-discount-row .div-1 #select {
-    margin-left: 10px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
-    // background-color: rgb(3, 27, 27);
-}
+    .child:last-child {
+        flex-basis: 70%;
+    }
 
-.invoice-discount-row .bottom-div {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
+    .bottom-div {
+        samp {
+            padding-top: 6px;
+            padding-left: 4px;
+            font-size: 130%;
+        }
 
-.invoice-discount-row .bottom-div samp {
-    padding-top: 6px;
-    padding-left: 4px;
-    font-size: 130%;
-}
+        span {
+            flex-grow: 3;
+            padding-top: 6px;
+            margin-left: 8px;
+            flex-basis: 50px
+        }
+    }
 
-.invoice-discount-row .bottom-div span {
-    flex-grow: 3;
-    padding-top: 6px;
-    margin-left: 8px;
-    flex-basis: 50px
 }
 
 
-.multiinvoice{
+
+
+
+
+.invoice-discount-row .invoice-discount-row .bottom-div .multiinvoice {
     border: none;
     margin-bottom: 15px;
 }
-
-// .multiinvoice:nth-of-type(odd)
-// {
-// background:#d6d4e0;
-// }
-
-// .multiinvoice:nth-of-type(even)
-// {
-// background:#b8a9c9;
-// }
 
 
 .multiinvoice ._heder {
@@ -161,11 +137,11 @@
     padding: 5px 5px 5px 5px;
 }
 
-.multiinvoice ._heder  label {
-    min-width:80px;
+.multiinvoice ._heder label {
+    min-width: 80px;
     font-weight: bold;
     margin: 0%;
-    color:#01020f;
+    color: #01020f;
 }
 
 .multiinvoice ._heder .div-2 {
@@ -173,6 +149,7 @@
     align-items: center;
     justify-content: space-between;
 }
+
 .invoice-savebtn {
     position: fixed;
     display: flex;
@@ -180,7 +157,7 @@
     gap: 7px;
     bottom: 10px;
     text-align: center;
-    left:25560;
+    left: 25560;
     z-index: 99;
     font-size: 10px;
     border: none;
@@ -188,4 +165,4 @@
     color: rgb(161, 160, 160);
     cursor: pointer;
     padding: 10px;
-  }
+}

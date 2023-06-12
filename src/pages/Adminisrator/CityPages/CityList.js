@@ -186,7 +186,7 @@ const CityList = () => {
 
 
     function goButtonHandler() {
-        debugger
+        
         dispatch(getCityOnDistrict(values.DistrictName.value))
 
     }

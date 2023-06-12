@@ -52,13 +52,6 @@ const Login = (state = initialState, action) => {
       }
       break;
 
-    // case API_ERROR:
-    //   state = {
-    //     ...state,
-    //     loginError: action.payload,
-    //     loading: false
-    //   }
-    //   break
 
     case API_ERROR_SUCCESS:
       state = {

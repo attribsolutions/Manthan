@@ -11,6 +11,8 @@ import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
   SAVE_ORDER_FROM_ORDER_PAGE,
   GO_BUTTON_FOR_ORDER_PAGE,
+  ORDER_APPROVAL_ACTION,
+  GET_ORDER_APPROVAL_DETAIL,
 } from "./actionType"
 
 
@@ -44,7 +46,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
         goBtnOrderAdd: action.payload,
       }
 
-      case SAVE_ORDER_FROM_ORDER_PAGE:
+    case SAVE_ORDER_FROM_ORDER_PAGE:
       return {
         ...state,
         saveBtnloading: true,
@@ -93,22 +95,32 @@ const OrderReducer = (state = INIT_STATE, action) => {
     case GET_ORDER_LIST_PAGE:
       return {
         ...state,
-        loading: true
-      }
-    // Order List Clear Previous list 
-    case GET_ORDER_LIST_PAGE:
-      return {
-        ...state,
+        loading: true,
         orderList: [],
       }
+
+      case GET_ORDER_APPROVAL_DETAIL:
+      return {
+        ...state,
+        saveBtnloading: true,
+      }
+
     case GET_ORDER_APPROVAL_DETAIL_SUCCESS:
       return {
         ...state,
+        saveBtnloading: false,
         approvalDetail: action.payload,
+      }
+
+    case ORDER_APPROVAL_ACTION:
+      return {
+        ...state,
+        saveBtnloading: true,
       }
     case ORDER_APPROVAL_ACTION_SUCCESS:
       return {
         ...state,
+        saveBtnloading: false,
         orderApprovalMsg: action.payload,
       }
 
