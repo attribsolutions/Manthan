@@ -258,29 +258,28 @@ const CommonPurchaseList = (props) => {
 
   const lastColumn = () => {  // ======================== for List Page Action Button ================================
 
-    if (
-      !makeBtnShow &&
-      !pageMode === mode.modeSTPsave
-    ) return listPageActionsButtonFunc({
-      dispatchHook: dispatch,
-      subPageMode: history.location.pathname,
-      ButtonMsgLable: ButtonMsgLable,
-      deleteName: deleteName,
-      userAccState: userAccState,
-      editActionFun: editId,
-      deleteActionFun: deleteId,
-      downBtnFunc: downBtnFunc,
-      updateBtnFunc: updateBtnFunc,
-      makeBtnShow: makeBtnShow,
-      makeBtnName: makeBtnName,
-      editBodyfunc: editBodyfunc,
-      deleteBodyfunc: deleteBodyfunc,
-      copyBodyfunc: copyBodyfunc,
-      makeBtnFunc: makeBtnFunc,
-      pageMode: pageMode,
-      oderAprovalBtnFunc: oderAprovalBtnFunc
-    })
-
+    if (!(pageMode === mode.modeSTPsave)) {
+ 
+      return listPageActionsButtonFunc({
+        dispatchHook: dispatch,
+        subPageMode: history.location.pathname,
+        ButtonMsgLable: ButtonMsgLable,
+        deleteName: deleteName,
+        userAccState: userAccState,
+        editActionFun: editId,
+        deleteActionFun: deleteId,
+        downBtnFunc: downBtnFunc,
+        updateBtnFunc: updateBtnFunc,
+        makeBtnShow: makeBtnShow,
+        makeBtnName: makeBtnName,
+        editBodyfunc: editBodyfunc,
+        deleteBodyfunc: deleteBodyfunc,
+        copyBodyfunc: copyBodyfunc,
+        makeBtnFunc: makeBtnFunc,
+        pageMode: pageMode,
+        oderAprovalBtnFunc: oderAprovalBtnFunc
+      })
+    }
   }
   const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({
     pageField,

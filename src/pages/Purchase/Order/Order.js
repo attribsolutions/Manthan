@@ -239,9 +239,10 @@ const Order = (props) => {
             setTermsAndConTable([])
 
             const liveMode = true
+            const aprovalSapMode = postMsg.OrderID > 0
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
-            if ((subPageMode === url.ORDER_2) && liveMode) { //        SAP OEDER-APROVUAL CODE
+            if ((subPageMode === url.ORDER_2) && liveMode && aprovalSapMode) { //        SAP OEDER-APROVUAL CODE
                 let btnId = postMsg.btnId;
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
                 let config = { btnId }
