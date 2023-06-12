@@ -497,11 +497,11 @@ const RoleAccessAdd = () => {
 
                 if (isAccess || showList || showAdd) {
                     jsonArray.push(listRowOBJFunc());
-                    if (isrelated && isSTP_page) jsonArray.push(addRowOBJFunc());
+                    if (isrelated && !isSTP_page) jsonArray.push(addRowOBJFunc());
                 }
             })
             const jsonBody = JSON.stringify(jsonArray)
-debugger
+
             dispatch(saveRoleAccessAddAction({ jsonBody, btnId }));
 
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
