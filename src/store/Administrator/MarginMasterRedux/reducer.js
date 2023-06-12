@@ -4,6 +4,7 @@ import {
     GET_MARGIN_LIST_SUCCESS,
     GO_BUTTON_FOR_MARGIN_MASTER,
     GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS,
+    SAVE_MARGIN_MASTER,
     SAVE_MARGIN_MASTER_SUCCESS,
 } from "./actionType";
 
@@ -13,16 +14,24 @@ const INIT_STATE = {
     deleteMsg: { Status: false },
     MarginGoButton: { Status: false },
     deleteId_For_MarginMaster: { Status: false },
+    saveBtnloading: false,
 };
 
 const MarginMasterReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
         // post api
+        case SAVE_MARGIN_MASTER:
+            return {
+                ...state,
+                saveBtnloading: true,
+            };
+
         case SAVE_MARGIN_MASTER_SUCCESS:
             return {
                 ...state,
                 postMsg: action.payload,
+                saveBtnloading: false,
             };
 
         // GET api

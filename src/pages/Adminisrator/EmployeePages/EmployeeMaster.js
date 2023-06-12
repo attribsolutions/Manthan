@@ -105,7 +105,9 @@ const AddEmployee = (props) => {
     postMsg,
     userAccess,
     pageField,
+    saveBtnloading,
     updateMsg } = useSelector((state) => ({
+      saveBtnloading: state.EmployeeTypeReducer.saveBtnloading,
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       State: state.EmployeesReducer.State,
       City: state.EmployeesReducer.City,
@@ -715,6 +717,7 @@ const AddEmployee = (props) => {
                         <Row>
                           <Col sm={2}>
                             <SaveButton
+                              loading={saveBtnloading}
                               pageMode={pageMode}
                               onClick={SaveHandler}
                               userAcc={userPageAccessState}

@@ -2,7 +2,9 @@ import {
   DELETE_GROUP_TYPE_ID_SUCCESS,
   EDIT_GROUP_TYPE_ID_SUCCESS,
   GET_GROUP_TYPES_LIST_SUCCESS,
+  SAVE_GROUP_TYPE_MASTER,
   SAVE_GROUP_TYPE_MASTER_SUCCESS,
+  UPDATE_GROUP_TYPE_ID,
   UPDATE_GROUP_TYPE_ID_SUCCESS
 } from "./actionType"
 
@@ -12,6 +14,7 @@ const INIT_STATE = {
   deleteMessage: { Status: false },
   editData: { Status: false },
   updateMessage: { Status: false },
+  saveBtnloading: false
 }
 
 const GroupTypeReducer = (state = INIT_STATE, action) => {
@@ -23,10 +26,19 @@ const GroupTypeReducer = (state = INIT_STATE, action) => {
         GroupType: action.payload,
       }
 
+    case SAVE_GROUP_TYPE_MASTER:
+      return {
+        ...state,
+        saveBtnloading: true
+
+      }
+
     case SAVE_GROUP_TYPE_MASTER_SUCCESS:
       return {
         ...state,
         PostData: action.payload,
+        saveBtnloading: false
+
       }
 
     case EDIT_GROUP_TYPE_ID_SUCCESS:
@@ -35,10 +47,19 @@ const GroupTypeReducer = (state = INIT_STATE, action) => {
         editData: action.payload,
       }
 
+    case UPDATE_GROUP_TYPE_ID:
+      return {
+        ...state,
+        saveBtnloading: true
+
+      }
+
     case UPDATE_GROUP_TYPE_ID_SUCCESS:
       return {
         ...state,
         updateMessage: action.payload,
+        saveBtnloading: false
+
       }
 
     case DELETE_GROUP_TYPE_ID_SUCCESS:

@@ -246,6 +246,9 @@ const ImportExcelFieldMap = (props) => {
                                                         isDisabled={!(goButtonItem.length === 0) && true}
                                                         value={partySelect}
                                                         options={partyDropdown_Options}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
                                                         onChange={(e) => { SetPartySelect(e) }}
                                                     />
                                                 </Col>

@@ -95,7 +95,7 @@ const ImportFieldAdd = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(getControlTypes());
         dispatch(get_ImportExcelType());
-        
+
     }, []);
 
     const values = { ...state.values }
@@ -302,6 +302,9 @@ const ImportFieldAdd = (props) => {
                                                                 value={values.ImportExcelType}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
+                                                                styles={{
+                                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                                }}
                                                                 options={importExcelType_Options}
                                                                 onChange={controlTypeHandler}
                                                             />

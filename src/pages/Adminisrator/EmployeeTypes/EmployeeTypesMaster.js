@@ -70,7 +70,9 @@ const EmployeeTypesMaster = (props) => {
     const { postMsg,
         updateMsg,
         pageField,
+        saveBtnloading,
         userAccess, } = useSelector((state) => ({
+            saveBtnloading: state.EmployeeTypeReducer.saveBtnloading,
             postMsg: state.EmployeeTypeReducer.PostEmployeeType,
             updateMsg: state.EmployeeTypeReducer.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -328,7 +330,9 @@ const EmployeeTypesMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode}
+                                                                    <SaveButton
+                                                                        loading={saveBtnloading}
+                                                                        pageMode={pageMode}
                                                                         onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}

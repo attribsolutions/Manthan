@@ -72,7 +72,9 @@ const CompanyModule = (props) => {
     updateMsg,
     CompanyGroup,
     userAccess,
+    saveBtnloading,
     pageField } = useSelector((state) => ({
+      saveBtnloading: state.Company.saveBtnloading,
       postMsg: state.Company.postMsg,
       updateMsg: state.Company.updateMessage,
       CompanyGroup: state.Company.CompanyGroup,
@@ -448,6 +450,7 @@ const CompanyModule = (props) => {
                             <Row >
                               <Col sm={2}>
                                 <SaveButton
+                                  loading={saveBtnloading}
                                   onClick={SaveHandler}
                                   pageMode={pageMode}
                                   userAcc={userPageAccessState}

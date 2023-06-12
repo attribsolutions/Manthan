@@ -595,7 +595,7 @@ export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, js
 
 
 export const PartyLedger_API = (FromDate, ToDate, SAPCode) => post(url.PARTY_LEDGER_API, FromDate, ToDate, SAPCode)//  postapi
-export const Get_Product_Margin_Report = () => get(url.PRODUCT_MARGIN_REPORT_API)
+export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODUCT_MARGIN_REPORT_API}/${IsSCM_ID}/${PartyID}`)
 
 
 

@@ -68,8 +68,10 @@ const CreditLimitMaster = (props) => {
         pageField,
         userAccess,
         RoutesList,
-        Data
+        Data,
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.CreditLimitReducer.saveBtnloading,
         postMsg: state.CreditLimitReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -370,7 +372,9 @@ const CreditLimitMaster = (props) => {
                                     {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
                                         <Row >
                                             <Col sm={2} className="mt-n4">
-                                                <SaveButton pageMode={pageMode}
+                                                <SaveButton
+                                                    loading={saveBtnloading}
+                                                    pageMode={pageMode}
                                                     onClick={SaveHandler}
                                                     userAcc={userPageAccessState}
                                                     module={"CreditLimitMaster"}

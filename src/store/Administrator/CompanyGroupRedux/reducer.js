@@ -4,6 +4,8 @@ import {
   EDIT_COMPANY_GROUP_ID_SUCCESS,
   UPDATE_COMPANY_GROUP_ID_SUCCESS,
   DELETE_COMPANY_GROUP_ID_SUCCESS,
+  SAVE_COMPANY_GROUP_MASTER,
+  UPDATE_COMPANY_GROUP_ID,
 } from "./actionType";
 
 const INIT_STATE = {
@@ -16,10 +18,18 @@ const INIT_STATE = {
 const CompanyGroupReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
+
+    case SAVE_COMPANY_GROUP_MASTER:
+      return {
+        ...state,
+        saveBtnloading: true
+      }
+
     case SAVE_COMPANY_GROUP_MASTER_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
+        saveBtnloading: false
       }
 
     case GET_COMPANY_GROUP_LIST_SUCCESS:
@@ -34,10 +44,20 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
         editData: action.payload,
       };
 
+
+    case UPDATE_COMPANY_GROUP_ID:
+      return {
+        ...state,
+        saveBtnloading: true
+
+      };
+
     case UPDATE_COMPANY_GROUP_ID_SUCCESS:
       return {
         ...state,
         updateMessage: action.payload,
+        saveBtnloading: false
+
       };
 
     case DELETE_COMPANY_GROUP_ID_SUCCESS:

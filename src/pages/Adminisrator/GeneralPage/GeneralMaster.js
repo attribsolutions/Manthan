@@ -74,7 +74,9 @@ const GeneralMaster = (props) => {
         Type = [],
         pageField,
         updateMsg,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.GeneralReducer.saveBtnloading,
             postMsg: state.GeneralReducer.postMsg,
             updateMsg: state.GeneralReducer.updateMessage,
             Type: state.GeneralReducer.Type,
@@ -257,7 +259,7 @@ const GeneralMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-               <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
                     <Container fluid>
@@ -344,7 +346,9 @@ const GeneralMaster = (props) => {
                                                         <FormGroup className="mt-1">
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode}
+                                                                    <SaveButton
+                                                                        loading={saveBtnloading}
+                                                                        pageMode={pageMode}
                                                                         onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
