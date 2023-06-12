@@ -239,10 +239,10 @@ const Order = (props) => {
             setTermsAndConTable([])
 
             const liveMode = true
-            const aprovalSapMode = postMsg.OrderID > 0
+            const aprovalSapCallMode = postMsg.IsSAPCustomer > 0
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
-            if ((subPageMode === url.ORDER_2) && liveMode && aprovalSapMode) { //        SAP OEDER-APROVUAL CODE
+            if ((subPageMode === url.ORDER_2) && liveMode && aprovalSapCallMode) { //        SAP OEDER-APROVUAL CODE
                 let btnId = postMsg.btnId;
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
                 let config = { btnId }
@@ -453,9 +453,6 @@ const Order = (props) => {
                     }
 
                 } else {
-                    row["edit_Qty"] = row.Quantity;
-                    row["edit_Unit_id"] = row.Unit_id;
-
                     row.UnitDetails.forEach(i => {
                         if ((row.Unit_id === i.UnitID)) {
                             row["BaseUnitQuantity"] = i.BaseUnitQuantity;
@@ -464,12 +461,27 @@ const Order = (props) => {
                     });
 
                 }
+                if (pageMode === mode.edit) {
+
+                    if (!row["edit_Qty"]) {
+                        if (row.Quantity > 0) {
+                            row["editrowId"] = true
+                            row["edit_Qty"] = row.Quantity
+
+                        } else {
+                            row["edit_Qty"] = 0
+                            row["editrowId"] = false
+                        }
+                    }
+
+                    if (!row["edit_Unit_id"]) {
+                        row["edit_Unit_id"] = row.Unit_id;
+                    }
+                }
 
                 return (
                     <div >
                         <Select
-
-                            classNamePrefix="select2-selection"
                             id={"ddlUnit"}
                             key={`ddlUnit${row.id}`}
                             defaultValue={{ value: row.Unit_id, label: row.UnitName }}
@@ -491,8 +503,6 @@ const Order = (props) => {
                                 row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
                                 itemWise_CalculationFunc(row)
                                 document.getElementById(`Rate-${key}`).innerText = row.Rate
-
-
                             }}
                         >
                         </Select >
@@ -722,30 +732,33 @@ const Order = (props) => {
 
                     if (ischange && (i.edit_Qty === 0)) {
                         var isedit = 0;
-                        orderItem({ i, isedit })
+                        orderItemFunc({ i, isedit })
                     }
+
                     else if (ischange) {
                         var isedit = 1;
-                        orderItem({ i, isedit })
+                        orderItemFunc({ i, isedit })
                     } else {
                         var isedit = 0;
-                        orderItem({ i, isedit })
+                        orderItemFunc({ i, isedit })
                     }
                 }
                 else {
                     const isedit = 0;
-                    orderItem({ i, isedit })
+                    orderItemFunc({ i, isedit })
                 };
             })
 
 
-            function orderItem({ i, isedit }) {  //isvdc_po logic
+            function orderItemFunc({ i, isedit }) {  //isvdc_po logic
+
+                i.Quantity = ((i.Quantity === null) || (i.Quantity === undefined)) && 0
 
                 if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
                     var isdel = false;
                     isRowValueChanged({ i, isedit, isdel })
                 }
-                else if ((i.Quantity < 1) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
+                else if ((i.Quantity === 0) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
                     var isdel = true;
                     isRowValueChanged({ i, isedit, isdel })
                 }
@@ -783,8 +796,9 @@ const Order = (props) => {
             function isRowValueChanged({ i, isedit, isdel }) {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
+                debugger
                 const arr = {
-                    id: i.editrowId,
+                    // id: i.editrowId,
                     Item: i.Item_id,
                     Quantity: isdel ? 0 : i.Quantity,
                     MRP: i.MRP_id,
@@ -907,13 +921,13 @@ const Order = (props) => {
                 jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
             }
             // +*********************************
+            console.log(jsonBody)
+            // if (pageMode === mode.edit) {
+            //     dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
 
-            if (pageMode === mode.edit) {
-                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
-
-            } else {
-                dispatch(_act.saveOrderAction({ jsonBody, subPageMode, btnId }))
-            }
+            // } else {
+            //     dispatch(_act.saveOrderAction({ jsonBody, subPageMode, btnId }))
+            // }
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
