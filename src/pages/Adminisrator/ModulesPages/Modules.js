@@ -70,7 +70,9 @@ const Modules = (props) => {
     const { postMsg,
         pageField,
         userAccess,
+        saveBtnloading,
         updateMsg } = useSelector((state) => ({
+            saveBtnloading: state.Modules.saveBtnloading,
             postMsg: state.Modules.modulesSubmitSuccesss,
             updateMsg: state.Modules.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -399,6 +401,7 @@ const Modules = (props) => {
                                                         <Row >
                                                             <Col sm={2}>
                                                                 <SaveButton pageMode={pageMode}
+                                                                    loading={saveBtnloading}
                                                                     onClick={SaveHandler}
                                                                     userAcc={userPageAccessState}
                                                                     editCreatedBy={editCreatedBy}

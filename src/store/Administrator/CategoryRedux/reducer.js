@@ -3,7 +3,9 @@ import {
   UPDATE_CATEGORY_ID_SUCCESS,
   DELETE_CATEGORY_ID_SUCCESS,
   EDIT_CATEGORY_ID_SUCCESS,
-  GET_CATEGORY_LIST_SUCCESS
+  GET_CATEGORY_LIST_SUCCESS,
+  SAVE_CATEGORY_MASTER,
+  UPDATE_CATEGORY_ID
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -13,16 +15,26 @@ const INIT_STATE = {
   deleteMessage: { Status: false },
   editData: { Status: false },
   updateMessage: { Status: false },
+  saveBtnloading: false
 }
 
 const CategoryReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
+    case SAVE_CATEGORY_MASTER:
+      return {
+        ...state,
+        saveBtnloading: true
+
+      }
+
     case SAVE_CATEGORY_MASTER_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
+        saveBtnloading: false
       }
+
 
     // get api
     case GET_CATEGORY_LIST_SUCCESS:
@@ -44,10 +56,20 @@ const CategoryReducer = (state = INIT_STATE, action) => {
       };
 
     // update api
+
+    case UPDATE_CATEGORY_ID:
+      return {
+        ...state,
+        saveBtnloading: true
+
+      };
+
     case UPDATE_CATEGORY_ID_SUCCESS:
       return {
         ...state,
         updateMessage: action.payload,
+        saveBtnloading: false
+
       };
 
     default:

@@ -59,7 +59,9 @@ const CategoryTypeMaster = (props) => {
         postMsg,
         updateMsg,
         pageField,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.categoryTypeReducer.saveBtnloading,
             postMsg: state.categoryTypeReducer.PostData,
             updateMsg: state.categoryTypeReducer.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -126,7 +128,7 @@ const CategoryTypeMaster = (props) => {
                 breadcrumbReturnFunc({ dispatch, userAcc });
             }
         };
-   
+
     }, [userAccess])
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -172,7 +174,7 @@ const CategoryTypeMaster = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                
+
                 dispatch(getCategoryTypelist())
 
                 props.isOpenModal(false)
@@ -302,6 +304,7 @@ const CategoryTypeMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        loading={saveBtnloading}
                                                                         onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}

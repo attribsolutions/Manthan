@@ -66,8 +66,9 @@ const DriverMaster = (props) => {
         updateMsg,
         pageField,
         userAccess,
-
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.DriverReducer.saveBtnloading,
         postMsg: state.DriverReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         updateMsg: state.DriverReducer.updateMessage,
@@ -259,7 +260,7 @@ const DriverMaster = (props) => {
                                 setPartyFunc={partyOnChngeHandler} />
                         }
 
-                        <Card className="text-black" style={{marginTop:"3px"}}>
+                        <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
@@ -334,6 +335,7 @@ const DriverMaster = (props) => {
                                                         <Row>
                                                             <Col sm={2}>
                                                                 <SaveButton
+                                                                    loading={saveBtnloading}
                                                                     pageMode={pageMode}
                                                                     onClick={SaveHandler}
                                                                     userAcc={userPageAccessState}

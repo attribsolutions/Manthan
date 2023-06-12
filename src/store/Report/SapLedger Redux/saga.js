@@ -48,11 +48,11 @@ function* goBtn_Get_API_GenFun({ filters }) {
   } catch (error) { CommonConsole(error) }
 }
 
-function* GetExcelButton_saga({ }) {
+function* GetExcelButton_saga({ IsSCM_ID, PartyID }) {
 
   try {
 
-    const response = yield call(Get_Product_Margin_Report);
+    const response = yield call(Get_Product_Margin_Report, IsSCM_ID, PartyID);
 
     if (response.StatusCode === 200) {
 

@@ -146,8 +146,9 @@ const SidebarContent = (props) => {
     }
   }
   const productMarginReport_Link_Onclick = () => {
-
-    dispatch(getExcel_Button_API())
+    debugger
+    const userDetails = loginUserDetails()
+    dispatch(getExcel_Button_API(userDetails.IsSCMPartyType === null ? 0 : userDetails.IsSCMPartyType, userDetails.Party_id))
   }
   return (
     <React.Fragment>

@@ -4,6 +4,7 @@ import {
   GET_GST_LIST_SUCCESS,
   GO_BUTTON_FOR_GST_MASTER,
   GO_BUTTON_FOR_GST_MASTER_SUCCESS,
+  SAVE_GST_MASTER,
   SAVE_GST_MASTER_SUCCESS
 } from "./actionType"
 
@@ -13,16 +14,27 @@ const INIT_STATE = {
   postMsg: { Status: false },
   GSTList: [],
   deleteMsgForMaster: { Status: false },
+  saveBtnloading: false,
 }
 
 const GSTReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
     // post api
+
+    case SAVE_GST_MASTER:
+      return {
+        ...state,
+        saveBtnloading: true,
+      };
+
     case SAVE_GST_MASTER_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
+        saveBtnloading: false,
+
       };
+
 
     case GO_BUTTON_FOR_GST_MASTER:
       return {

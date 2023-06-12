@@ -62,7 +62,9 @@ const ManagementEmpParties = (props) => {
         partyList,
         pageField,
         loading,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.ManagementPartiesReducer.saveBtnloading,
             loading: state.ManagementPartiesReducer.loading,
             postMsg: state.ManagementPartiesReducer.postMsg,
             employeeList: state.ManagementPartiesReducer.employeeList,
@@ -375,6 +377,7 @@ const ManagementEmpParties = (props) => {
                                 <Row >
                                     <Col sm={2} className="mt-n4">
                                         <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
                                             module={"RouteUpdate"}

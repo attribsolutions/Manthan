@@ -10,7 +10,7 @@ import {
     Col,
     Container, Label, Row,
 } from "reactstrap";
-import { breadcrumbReturnFunc } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginUserDetails } from '../../components/Common/CommonFunction';
 import * as url from "../../routes/route_url";
 import * as pageId from "../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../store/actions';
@@ -31,12 +31,12 @@ const ProductMarginReport = (props) => {
     const {
         userAccess,
         ProductMarginData,
-       } = useSelector((state) => ({
-            userAccess: state.Login.RoleAccessUpdateData,
-            ProductMarginData: state.SapLedgerReducer.ProductMargin,
-            pageField: state.CommonPageFieldReducer.pageField,
-           
-        }));
+    } = useSelector((state) => ({
+        userAccess: state.Login.RoleAccessUpdateData,
+        ProductMarginData: state.SapLedgerReducer.ProductMargin,
+        pageField: state.CommonPageFieldReducer.pageField,
+
+    }));
 
 
     useEffect(() => {
@@ -96,7 +96,9 @@ const ProductMarginReport = (props) => {
     }, [ProductMarginData]);
 
     function excelhandler(event) {
+        debugger
         event.preventDefault();
+        const userDetails = loginUserDetails()
         const btnId = "excelbtn-id"
         const ProductMargin = []
         dispatch(getExcel_Button_API())
@@ -111,17 +113,17 @@ const ProductMarginReport = (props) => {
                 <Container fluid>
                     <Row>
                         <Col xl={4} md={4} >
-                                <CardBody>
-                                    <Row>
-                                        <Col lg={6}>
-                                            <Button type='button'
-                                                className='btn btn-success'
-                                                id="excelbtn-id"
-                                                onClick={excelhandler}>ProductMarginReport
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                </CardBody>
+                            <CardBody>
+                                <Row>
+                                    <Col lg={6}>
+                                        <Button type='button'
+                                            className='btn btn-success'
+                                            id="excelbtn-id"
+                                            onClick={excelhandler}>ProductMarginReport
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </CardBody>
                         </Col>
                     </Row>
                 </Container>

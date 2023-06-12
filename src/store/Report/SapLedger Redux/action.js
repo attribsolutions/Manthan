@@ -16,8 +16,9 @@ export const SapLedger_Go_Button_API_Success = (resp) => ({ // Save  success
   payload: resp,
 });
 
-export const getExcel_Button_API = () => ({ // save Action
+export const getExcel_Button_API = (IsSCM_ID, PartyID) => ({ // save Action
   type: GET_EXCELBUTTON_API,
+  IsSCM_ID, PartyID
 });
 
 export const getExcel_Button_API_Success = (pages) => ({ // Save  success

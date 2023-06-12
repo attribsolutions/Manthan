@@ -55,7 +55,7 @@ const GSTMaster = (props) => {
     const fileds = {
         EffectiveDate: "",
     }
-    
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //SetState  Edit data Geting From Modules List component
@@ -68,8 +68,10 @@ const GSTMaster = (props) => {
         tableData,
         deleteMessage,
         userAccess,
-        pageField
+        pageField,
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.GSTReducer.saveBtnloading,
         tableData: state.GSTReducer.GSTGoButton,
         deleteMessage: state.GSTReducer.deleteMsgForMaster,
         postMsg: state.GSTReducer.postMsg,
@@ -481,43 +483,44 @@ const GSTMaster = (props) => {
                                 </Card>
 
                                 {Data.length > 0 ?
- 
-                                            <ToolkitProvider
-                                                keyField="Item"
-                                                data={Data}
-                                                columns={pagesListColumns}
-                                                search
-                                            >
-                                                {(toolkitProps) => (
-                                                    <React.Fragment>
-                                                        <Row>
-                                                            <Col xl="12">
-                                                                <div className="table-responsive">
-                                                                    <BootstrapTable
-                                                                        keyField={"Item"}
-                                                                        id="table_Arrow"
-                                                                        responsive
-                                                                        bordered={false}
-                                                                        striped={false}
-                                                                        classes={"table  table-bordered"}
-                                                                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                                        {...toolkitProps.baseProps}
-                                                                    />
-                                                                    {mySearchProps(toolkitProps.searchProps)}
 
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                     
-                                                    </React.Fragment>
-                                                )}
-                                            </ToolkitProvider>
+                                    <ToolkitProvider
+                                        keyField="Item"
+                                        data={Data}
+                                        columns={pagesListColumns}
+                                        search
+                                    >
+                                        {(toolkitProps) => (
+                                            <React.Fragment>
+                                                <Row>
+                                                    <Col xl="12">
+                                                        <div className="table-responsive">
+                                                            <BootstrapTable
+                                                                keyField={"Item"}
+                                                                id="table_Arrow"
+                                                                responsive
+                                                                bordered={false}
+                                                                striped={false}
+                                                                classes={"table  table-bordered"}
+                                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                                {...toolkitProps.baseProps}
+                                                            />
+                                                            {mySearchProps(toolkitProps.searchProps)}
+
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+
+                                            </React.Fragment>
+                                        )}
+                                    </ToolkitProvider>
                                     : null}
 
                                 {Data.length > 0 ?
                                     <FormGroup>
                                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                             <SaveButton pageMode={pageMode}
+                                                loading={saveBtnloading}
                                                 onClick={SaveHandler}
                                                 userAcc={userPageAccessState}
                                                 editCreatedBy={editCreatedBy}
