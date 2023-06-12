@@ -85,6 +85,6 @@ export const makeIB_InvoiceActionSuccess = (data) => ({
     payload: data,
 });
 
-export const InvoiceApiErrorAction= (data) => ({
+export const InvoiceApiErrorAction= () => ({
     type: INVOICE_API_ERROR_ACTION,
 })

@@ -257,7 +257,11 @@ const CommonPurchaseList = (props) => {
   }
 
   const lastColumn = () => {  // ======================== for List Page Action Button ================================
-    return listPageActionsButtonFunc({
+
+    if (
+      !makeBtnShow &&
+      !pageMode === mode.modeSTPsave
+    ) return listPageActionsButtonFunc({
       dispatchHook: dispatch,
       subPageMode: history.location.pathname,
       ButtonMsgLable: ButtonMsgLable,

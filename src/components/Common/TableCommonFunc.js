@@ -47,13 +47,13 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, userA
     const [defaultSorted, setDefaultSorted] = useState('')
     const [pageOptions, setPageOptions] = useState('')
     const { PageFieldMaster = [] } = { ...pageField };
-   
+
     useEffect(() => {
 
         if (userAccState === "") {
             return
         };
-       
+
         let sortLabel = ""
         let sortType = "asc"
         let columns = []
@@ -94,7 +94,11 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, userA
                 if (isCol) { columns.push(isCol) }
             }
             if ((PageFieldMaster.length - 1 === k) && lastColumn) {
-                columns.push(lastColumn())
+                let islastCol = lastColumn()
+                if (islastCol) {
+                    columns.push(lastColumn())
+                }
+
             }
         })
         if (columns.length > 0) {
