@@ -87,7 +87,9 @@ const PartyMaster = (props) => {
         postMsg,
         userAccess,
         updateMsg,
+        saveBtnloading
     } = useSelector((state) => ({
+        saveBtnloading: state.PartyMasterReducer.saveBtnloading,
         postMsg: state.PartyMasterReducer.postMsg,
         updateMsg: state.PartyMasterReducer.updateMsg,
         Company: state.Company.companyList,
@@ -111,7 +113,7 @@ const PartyMaster = (props) => {
 
 
     useEffect(() => {
-        
+
         try {
             if ((hasShowloction || hasShowModal)) {
 
@@ -471,6 +473,7 @@ const PartyMaster = (props) => {
 
                                     <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
                                         <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
                                             module={"PartyMaster"}

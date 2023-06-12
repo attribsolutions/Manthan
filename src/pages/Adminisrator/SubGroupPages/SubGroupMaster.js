@@ -68,7 +68,9 @@ const SubGroupMaster = (props) => {
         groupList,
         updateMsg,
         pageField,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.SubGroupReducer.saveBtnloading,
             postMsg: state.SubGroupReducer.postMsg,
             updateMsg: state.SubGroupReducer.updateMsg,
             groupList: state.GroupReducer.groupList,
@@ -151,7 +153,7 @@ const SubGroupMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => { 
+    useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveSubGroupSuccess({ Status: false }))
@@ -217,7 +219,7 @@ const SubGroupMaster = (props) => {
     }));
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -252,7 +254,7 @@ const SubGroupMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                         {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.SUBGROUP} /> */}
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
@@ -315,6 +317,7 @@ const SubGroupMaster = (props) => {
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
                                                                         onClick={SaveHandler}
+                                                                        loading={saveBtnloading}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"GroupMaster"}

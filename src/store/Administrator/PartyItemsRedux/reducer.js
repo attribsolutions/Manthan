@@ -2,6 +2,7 @@ import {
   EDIT_PARTY_ITEM_ID_SUCCESS,
   GET_PARTY_ITEM_LIST_SUCCESS,
   GET_PARTY_LIST_SUCCESS,
+  POST_PARTYITEMS,
   POST_PARTYITEMS_SUCCESS,
 } from "./actionType"
 const INIT_STATE = {
@@ -11,17 +12,26 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   partyItem: [],
-  partyList: []
+  partyList: [],
+  saveBtnloading: false
 }
 
 const PartyItemsReducer = (state = INIT_STATE, action) => {
 
   switch (action.type) {
 
+    case POST_PARTYITEMS:
+      return {
+        ...state,
+        saveBtnloading: true
+      }
+
     case POST_PARTYITEMS_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
+        saveBtnloading: false
+
       }
 
     case GET_PARTY_LIST_SUCCESS:
@@ -36,7 +46,7 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
         partyItem: action.payload,
       }
 
-      case EDIT_PARTY_ITEM_ID_SUCCESS:
+    case EDIT_PARTY_ITEM_ID_SUCCESS:
       return {
         ...state,
         editData: action.payload,

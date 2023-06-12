@@ -7,7 +7,9 @@ import {
     GET_ADDRESSTYPES_SUCCESS,
     GET_PARTY_LIST_API_SUCCESS,
     POST_PARTY_DATA_SUCCESS,
-    UPDATE_PARTY_ID_SUCCESS
+    UPDATE_PARTY_ID_SUCCESS,
+    POST_PARTY_DATA,
+    UPDATE_PARTY_ID
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -17,7 +19,8 @@ const INIT_STATE = {
     editData: { Status: false },
     updateMsg: { Status: false },
     DistrictOnState: [],
-    AddressTypes: []
+    AddressTypes: [],
+    saveBtnloading: false,
 };
 
 const PartyMasterReducer = (state = INIT_STATE, action) => {
@@ -30,10 +33,18 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             }
 
         // post api
+        case POST_PARTY_DATA:
+            return {
+                ...state,
+                saveBtnloading: true,
+            };
+
         case POST_PARTY_DATA_SUCCESS:
             return {
                 ...state,
                 postMsg: action.payload,
+                saveBtnloading: false,
+
             };
 
         // delete api
@@ -51,10 +62,18 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             };
 
         // update api
+
+        case UPDATE_PARTY_ID:
+            return {
+                ...state,
+                saveBtnloading: true,
+            };
+
         case UPDATE_PARTY_ID_SUCCESS:
             return {
                 ...state,
                 updateMsg: action.payload,
+                saveBtnloading: false,
             };
 
         // GetDistrictOnState API

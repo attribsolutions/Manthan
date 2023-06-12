@@ -72,7 +72,9 @@ const VehicleMaster = (props) => {
         updateMsg,
         VehicleTypes,
         pageField,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.VehicleReducer.saveBtnloading,
             postMsg: state.VehicleReducer.postMsg,
             updateMsg: state.VehicleReducer.updateMsg,
             VehicleList: state.VehicleReducer.VehicleList,
@@ -272,7 +274,7 @@ const VehicleMaster = (props) => {
                                 setPartyFunc={partyOnChngeHandler} />
                         }
 
-                        <Card className="text-black" style={{marginTop:"3px"}}>
+                        <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
@@ -365,6 +367,7 @@ const VehicleMaster = (props) => {
                                                     <Row>
                                                         <Col sm={2} className="mt-3">
                                                             <SaveButton pageMode={pageMode}
+                                                                loading={saveBtnloading}
                                                                 onClick={SaveHandler}
                                                                 userAcc={userPageAccessState}
                                                                 editCreatedBy={editCreatedBy}

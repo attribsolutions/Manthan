@@ -90,8 +90,10 @@ const PartyMasterBulkUpdate = (props) => {
         PartyName,
         Data,
         DistrictOnState,
-        State
+        State,
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.PartyMasterBulkUpdateReducer.saveBtnloading,
         postMsg: state.PartyMasterBulkUpdateReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -707,6 +709,7 @@ const PartyMasterBulkUpdate = (props) => {
                                 <Row >
                                     <Col sm={2} className="mt-n4">
                                         <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
                                             module={"PartyMasterBulkUpdate"}
