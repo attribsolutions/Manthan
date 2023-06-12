@@ -532,6 +532,7 @@ const GRNAdd = (props) => {
     }
 
     const saveHandeller = (event) => {
+
         event.preventDefault();
 
         const btnId = event.target.id
@@ -545,6 +546,7 @@ const GRNAdd = (props) => {
             const isvalidMsg = [];
 
             grnItemList.forEach(i => {
+
 
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
@@ -560,8 +562,7 @@ const GRNAdd = (props) => {
                     GST: i.GST,
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
-                    Amount: i.Amount.toFixed(2),
-
+                    Amount: Number(i.Amount).toFixed(2),
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
@@ -575,8 +576,12 @@ const GRNAdd = (props) => {
                     DiscountAmount: "0.00",
                     TaxType: "GST",
                 }
+                console.log(arr)
+
                 let isfound = itemArr.filter(ind => {
+
                     return ind.Item === i.Item
+
                 })
 
                 if (isfound.length > 0) {
@@ -587,6 +592,7 @@ const GRNAdd = (props) => {
                     })
 
                     if ((i.Quantity > 0)) {
+
                         if (dubli.length === 0) {
                             itemArr.push(arr)
 
@@ -601,6 +607,7 @@ const GRNAdd = (props) => {
             })
 
             if (invoiceNo.length === 0) {
+
                 customAlert({
                     Type: 3,
                     Message: "Please Enter Invoice Number",
@@ -608,6 +615,7 @@ const GRNAdd = (props) => {
                 return returnFunc()
             }
             if (itemArr.length === 0) {
+
                 customAlert({
                     Type: 3,
                     Message: "Please Enter One Item Quantity",
@@ -615,17 +623,19 @@ const GRNAdd = (props) => {
                 return returnFunc()
             }
             if (isvalidMsg.length > 0) {
+
                 customAlert({
                     Type: 3,
                     Message: isvalidMsg,
                 })
                 return returnFunc()
             }
+            debugger
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
-                GrandTotal: orderAmount.toFixed(2),
+                GrandTotal: Number(orderAmount).toFixed(2),
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
@@ -635,10 +645,13 @@ const GRNAdd = (props) => {
             });
 
             if (pageMode === mode.edit) {
+
                 returnFunc()
             } else {
+
                 dispatch(_act.saveGRNAction({ jsonBody, btnId }))
             }
+            debugger
         } catch (error) { returnFunc() }
     }
 
@@ -781,14 +794,12 @@ const GRNAdd = (props) => {
                                                     </DropdownMenu>
                                                 </Dropdown>
                                         }
-
                                     </Col>
                                 </FormGroup>
 
                             </Col>
                         </Row>
                     </div>
-
 
                     <ToolkitProvider
                         keyField="id"
@@ -823,8 +834,6 @@ const GRNAdd = (props) => {
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
-
-
 
                     {
                         (grnItemList.length > 0) ?
