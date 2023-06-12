@@ -84,7 +84,9 @@ const PartySubParty = (props) => {
         updateMsg,
         pageField,
         PartySubParty,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.PartySubPartyReducer.saveBtnloading,
             postMsg: state.PartySubPartyReducer.postMsg,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
@@ -368,7 +370,7 @@ const PartySubParty = (props) => {
     };
 
     const SaveHandler = async (event) => {
-       
+
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -628,6 +630,7 @@ const PartySubParty = (props) => {
                                                 <Row>
                                                     <Col sm={2}>
                                                         <SaveButton pageMode={pageMode}
+                                                            loading={saveBtnloading}
                                                             onClick={SaveHandler}
                                                             userAcc={userPageAccessState}
                                                             editCreatedBy={editCreatedBy}

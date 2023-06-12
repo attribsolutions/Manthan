@@ -75,7 +75,9 @@ const SalesManMaster = (props) => {
         updateMsg,
         pageField,
         RoutesList,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.SalesManReducer.saveBtnloading,
             postMsg: state.SalesManReducer.PostData,
             updateMsg: state.SalesManReducer.updateMessage,
             RoutesList: state.RoutesReducer.RoutesList,
@@ -292,7 +294,7 @@ const SalesManMaster = (props) => {
                                 partySelect={values.Party}
                                 setPartyFunc={partyOnChngeHandler} />
                         }
-                        <Card className="text-black" style={{marginTop:"3px"}}>
+                        <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header">
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
@@ -392,6 +394,7 @@ const SalesManMaster = (props) => {
                                                         <Row>
                                                             <Col sm={2}>
                                                                 <SaveButton pageMode={pageMode}
+                                                                    loading={saveBtnloading}
                                                                     onClick={SaveHandler}
                                                                     userAcc={userPageAccessState}
                                                                     editCreatedBy={editCreatedBy}

@@ -57,7 +57,8 @@ const TermsAndConditionsMaster = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
+    const { postMsg, updateMsg, pageField, userAccess, saveBtnloading } = useSelector((state) => ({
+        saveBtnloading: state.TermsAndConditionsReducer.saveBtnloading,
         postMsg: state.TermsAndConditionsReducer.PostData,
         updateMsg: state.TermsAndConditionsReducer.TermsAndConditionsupdateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -91,7 +92,7 @@ const TermsAndConditionsMaster = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({dispatch,userAcc});
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -129,7 +130,7 @@ const TermsAndConditionsMaster = (props) => {
             dispatch(EditTermsAndCondtions_Success({ Status: false }))
         }
     }, [])
-    useEffect(async() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveTermAndConditionSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
@@ -152,8 +153,8 @@ const TermsAndConditionsMaster = (props) => {
                     })
                 }
             }
-           
-            
+
+
         }
         else if (postMsg.Status === true) {
             dispatch(saveTermAndConditionSuccess({ Status: false }))
@@ -217,13 +218,13 @@ const TermsAndConditionsMaster = (props) => {
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
-    
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                         {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.TERMS_AND_CONDITION} /> */}
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
@@ -285,7 +286,8 @@ const TermsAndConditionsMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton
-                                                                    onClick={SaveHandler}
+                                                                        loading={saveBtnloading}
+                                                                        onClick={SaveHandler}
                                                                         pageMode={pageMode}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
