@@ -8,6 +8,8 @@ import {
   UPDATE_ROLE_ACCESS_lIST_SUCCESS,
   EDIT_ROLE_ACCESS_lIST_SUCCESS,
   SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE_SUCCESS,
+  SAVE_ROLE_ACCESS_ADD_ACTION,
+  UPDATE_ROLE_ACCESS_lIST,
 } from "./actionType"
 
 
@@ -21,6 +23,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   AddPageTableDataRedux: [],
+  saveBtnloading: false,
 }
 
 const RoleAccessReducer = (state = INIT_STATE, action) => {
@@ -38,12 +41,22 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
         PageDropdownForRoleAccess: action.payload,
       }
 
+    case SAVE_ROLE_ACCESS_ADD_ACTION://  save AddRoleAccess 
+      return {
+        ...state,
+        saveBtnloading: true,
+
+      }
+
     case SAVE_ROLE_ACCESS_ADD_ACTION_SUCCESS://  save AddRoleAccess 
       return {
         ...state,
         postMsg: action.payload,
+        saveBtnloading: false,
+
+
       }
-   
+
     case GET_ROLEACCESS_LIST_PAGE_SUCCESS: // get RoleAccess List Page
       return {
         ...state,
@@ -66,10 +79,17 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
         ...state,
         deleteMsg: action.payload,
       }
+
+    case UPDATE_ROLE_ACCESS_lIST:
+      return {
+        ...state,
+        saveBtnloading: true,
+      }
     case UPDATE_ROLE_ACCESS_lIST_SUCCESS:
       return {
         ...state,
         updateMsg: action.payload,
+        saveBtnloading: false,
       }
 
     case SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE_SUCCESS:

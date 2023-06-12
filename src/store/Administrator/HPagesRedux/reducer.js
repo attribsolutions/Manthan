@@ -10,7 +10,9 @@ import {
   GET_PAGELIST_SUCCESS,
   SAVE_HPAGES_SUCCESS,
   UPDATE_H_PAGES_SUCCESS,
-  GET_PAGETYPE_SUCCESS
+  GET_PAGETYPE_SUCCESS,
+  SAVE_HPAGES,
+  UPDATE_H_PAGES
 } from "./actionType"
 
 const INIT_STATE = {
@@ -27,7 +29,8 @@ const INIT_STATE = {
   PageType: [],
   PageAccess: [],
   ControlTypes: [],
-  FieldValidations: []
+  FieldValidations: [],
+  saveBtnloading: false
 }
 
 const H_Pages = (state = INIT_STATE, action) => {
@@ -53,20 +56,39 @@ const H_Pages = (state = INIT_STATE, action) => {
         ...state,
         editData: action.payload,
       }
+
+    case SAVE_HPAGES:
+      return {
+        ...state,
+        saveBtnloading: true
+      }
+
     case SAVE_HPAGES_SUCCESS:
       return {
         ...state,
         saveMessage: action.payload,
+        saveBtnloading: false
+
       }
     case DELETE_H_MODULE_ID_SUCCESS:
       return {
         ...state,
         deleteModuleID: action.payload,
       }
+
+    case UPDATE_H_PAGES:
+      return {
+        ...state,
+        saveBtnloading: true
+
+      }
+
     case UPDATE_H_PAGES_SUCCESS:
       return {
         ...state,
         updateMessage: action.payload,
+        saveBtnloading: false
+
       }
 
     // PageList Dropdown api

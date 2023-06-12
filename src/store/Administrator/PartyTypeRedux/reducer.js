@@ -6,15 +6,26 @@ const INIT_STATE = {
   deleteMessage: { Status: false },
   editData: { Status: false },
   updateMessage: { Status: false },
+  saveBtnloading: false,
 }
 
 const PartyTypeReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
+
+    case actionType.SAVE_PARTY_TYPE_API:
+      return {
+        ...state,
+        saveBtnloading: true,
+
+      }
+
     case actionType.SAVE_PARTY_TYPE_API_SUCCESS:
       return {
         ...state,
         PostData: action.payload,
+        saveBtnloading: false,
+
       }
 
     case actionType.GET_PARTY_TYPE_LIST_SUCCESS:
@@ -35,10 +46,19 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
         editData: action.payload,
       };
 
+    case actionType.UPDATE_PARTY_TYPE_ID:
+      return {
+        ...state,
+        saveBtnloading: true,
+
+      };
+
     case actionType.UPDATE_PARTY_TYPE_ID_SUCCESS:
       return {
         ...state,
         updateMessage: action.payload,
+        saveBtnloading: false,
+
       };
 
 

@@ -57,7 +57,9 @@ const RouteUpdate = (props) => {
         RouteUpdateList,
         pageField,
         RoutesList,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.RouteUpdateReducer.saveBtnloading,
             postMsg: state.RouteUpdateReducer.postMsg,
             RouteUpdateList: state.RouteUpdateReducer.RouteUpdateList,
             RoutesList: state.RoutesReducer.RoutesList,
@@ -283,6 +285,7 @@ const RouteUpdate = (props) => {
                                 <Row >
                                     <Col sm={2} className="mt-n4">
                                         <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
                                             module={"RouteUpdate"}

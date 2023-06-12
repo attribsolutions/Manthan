@@ -6,6 +6,7 @@ import {
     GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
     DELETE_MRP_MASTER_ID_SUCCESS,
     GO_BUTTON_FOR_MRP_MASTER,
+    SAVE_MRP_MASTER,
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -14,16 +15,25 @@ const INIT_STATE = {
     MRPList: [],
     deleteMsg: { Status: false },
     deleteIdForMRPMaster: { Status: false },
+    saveBtnloading: false
 };
 
 const MRPMasterReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
         // post api
+        case SAVE_MRP_MASTER:
+            return {
+                ...state,
+                saveBtnloading: true,
+            };
+
         case SAVE_MRP_MASTER_SUCCESS:
             return {
                 ...state,
                 postMsg: action.payload,
+                saveBtnloading: false,
+
             };
 
         case GO_BUTTON_FOR_MRP_MASTER:
