@@ -159,6 +159,7 @@ const CityList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(getState());
+        dispatch(getCityOnDistrictSuccess([]))
     }, []);
 
     useEffect(() => {
@@ -217,7 +218,7 @@ const CityList = () => {
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
                     <Col sm="5" className="">
-                        <FormGroup className="mb- row mt-3 " >
+                        <FormGroup className="mb- row mt-2 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>State</Label>
                             <Col sm="7">
@@ -242,7 +243,7 @@ const CityList = () => {
                     </Col>
 
                     <Col sm="6" className="">
-                        <FormGroup className="mb- row mt-3 " >
+                        <FormGroup className="mb- row mt-2 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>District</Label>
                             <Col sm="7">
@@ -264,7 +265,7 @@ const CityList = () => {
                             </Col>
                         </FormGroup>
                     </Col>
-                    <Col sm="1" className="mt-3 ">
+                    <Col sm="1" className="mt-2 ">
                         <Go_Button loading={reducers.loading} onClick={goButtonHandler} />
                     </Col>
                 </div>
