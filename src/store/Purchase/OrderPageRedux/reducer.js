@@ -14,6 +14,7 @@ import {
   ORDER_APPROVAL_ACTION,
   GET_ORDER_APPROVAL_DETAIL,
   ORDER_API_ERROR_ACTION,
+  POST_ORDER_CONFIRM_API_SUCCESS,
 } from "./actionType"
 
 
@@ -28,6 +29,7 @@ const INIT_STATE = {
   orderList: [],
   orderApprovalMsg: { Status: false },
   approvalDetail: { Status: false },
+  orderConfirm:{ Status: false },
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
@@ -131,6 +133,11 @@ const OrderReducer = (state = INIT_STATE, action) => {
           saveBtnloading: false,
         }
       
+        case POST_ORDER_CONFIRM_API_SUCCESS:
+          return {
+              ...state,
+              orderConfirm: action.payload,
+          }
 
     default:
       return state

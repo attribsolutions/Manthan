@@ -158,7 +158,7 @@ import SapLedger from "../Reports/SapLedgerReport/SapLedger";
 import ProductMarginReport from "../Reports/ProductMarginReport/ProductMarginReport";
 import CityMaster from "../pages/Adminisrator/CityPages/CityMaster";
 import CityList from "../pages/Adminisrator/CityPages/CityList";
-import OrderSummaryReport from "../Reports/OrderSummary/OrderSummaryReport";
+import OrderSummary from "../Reports/OrderSummaryReport/OrderSummary";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -388,7 +388,7 @@ const userRoutes = [
 
 //**************************** Reports ***********************************//
 
-{ path: path.ORDER_SUMMARY_REPORT, component:OrderSummaryReport  },
+{ path: path.ORDER_SUMMARY_REPORT, component:OrderSummary },
 
 // ************************************ Utility **************************************//
 { path: path.SEARCH_BOX2, component: SearchBoxSecond },
