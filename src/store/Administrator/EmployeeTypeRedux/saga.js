@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import { detelet_EmployeeType_List_Api, edit_EmployeeType_List_Api, Employee_Type_API, get_EmployeeType_List_Api, update_EmployeeType_List_Api } from "../../../helpers/backend_helper";
-import { deleteEmployeeTypeIDSuccess, editEmployeeTypeSuccess, getEmployeeTypelistSuccess, PostEmployeeTypeSubmitSuccess, updateEmployeeTypeIDSuccess } from "./action";
+import { deleteEmployeeTypeIDSuccess, editEmployeeTypeSuccess, EmployeeTypeApiErrorAction, getEmployeeTypelistSuccess, PostEmployeeTypeSubmitSuccess, updateEmployeeTypeIDSuccess } from "./action";
 import { DELETE_EMPLOYEE_TYPE_ID, EDIT_EMPLOYEE_TYPE_ID, GET_EMPLOYEE_TYPE_LIST, POST_EMPLOYEETYPE_SUBMIT, UPDATE_EMPLOYEE_TYPE_ID } from "./actionTypes";
 
 function* Post_EmployeeType_GneratorFunction({ config }) {           // post api
@@ -10,7 +10,7 @@ function* Post_EmployeeType_GneratorFunction({ config }) {           // post api
     const response = yield call(Employee_Type_API, config);
     // response.Data = { id: 1, Name: "label" }
     yield put(PostEmployeeTypeSubmitSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeTypeApiErrorAction()) }
 }
 
 function* Get_EmployeeTypeList_GenratorFunction() {
@@ -18,14 +18,14 @@ function* Get_EmployeeTypeList_GenratorFunction() {
   try {
     const response = yield call(get_EmployeeType_List_Api, filters);
     yield put(getEmployeeTypelistSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeTypeApiErrorAction()) }
 }
 
 function* Delete_EmployeeTypeList_ID_GenratorFunction({ config }) {         // delete api 
   try {
     const response = yield call(detelet_EmployeeType_List_Api, config);
     yield put(deleteEmployeeTypeIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeTypeApiErrorAction()) }
 }
 
 function* Edit_EmployeeTypeList_ID_GenratorFunction({ config }) {         // edit api
@@ -34,14 +34,14 @@ function* Edit_EmployeeTypeList_ID_GenratorFunction({ config }) {         // edi
     const response = yield call(edit_EmployeeType_List_Api, config);
     response.pageMode = btnmode
     yield put(editEmployeeTypeSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeTypeApiErrorAction()) }
 }
 
 function* Update_EmployeeTypeList_ID_GenratorFunction({ config }) {        // update api
   try {
     const response = yield call(update_EmployeeType_List_Api, config);
     yield put(updateEmployeeTypeIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeTypeApiErrorAction()) }
 }
 
 function* EmployeeTypeSaga() {

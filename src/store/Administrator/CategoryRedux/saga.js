@@ -14,6 +14,7 @@ import {
   update_Category_List_Api
 } from "../../../helpers/backend_helper";
 import {
+  categoryApiErrorAction,
   deleteCategoryIDSuccess,
   editCategoryIDSuccess,
   getCategorylistSuccess,
@@ -27,21 +28,21 @@ function* save_Method_ForCategory_GenFun({ config }) {              // Save API
   try {
     const response = yield call(Post_Category_API, config);
     yield put(saveCategoryMaster_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(categoryApiErrorAction()) }
 }
 
 function* Get_Category_List_GenratorFunction() {                    // getList API
   try {
     const response = yield call(get_Category_List_Api);
     yield put(getCategorylistSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(categoryApiErrorAction()) }
 }
 
 function* Delete_Category_ID_GenratorFunction({ config }) {          // delete API
   try {
     const response = yield call(detelet_Category_List_Api, config);
     yield put(deleteCategoryIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(categoryApiErrorAction()) }
 }
 
 function* Edit_Category_ID_GenratorFunction({ config }) {           // edit API 
@@ -50,14 +51,15 @@ function* Edit_Category_ID_GenratorFunction({ config }) {           // edit API
     const response = yield call(edit_Category_List_Api, config);
     response.pageMode = btnmode;
     yield put(editCategoryIDSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(categoryApiErrorAction()) }
 }
+
 
 function* Update_Category_ID_GenratorFunction({ config }) {         // update API
   try {
     const response = yield call(update_Category_List_Api, config);
     yield put(updateCategoryIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(categoryApiErrorAction()) }
 }
 
 function* CategorySaga() {

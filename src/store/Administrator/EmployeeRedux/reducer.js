@@ -9,10 +9,13 @@ import {
   GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS,
   GET_CITY_ON_DISTRICT_SUCCESS,
   SAVE_EMPLOYEE_MASTER,
-  UPDATE_EMPLOYEE_ID
+  UPDATE_EMPLOYEE_ID,
+  GET_EMPLOYEE_LIST,
+  EMPLOYEE_API_ERROR_ACTION
 } from "./actionTypes";
 
 const INIT_STATE = {
+  listLoading: false,
   saveBtnloading: false,
   designation: [],
   State: [],
@@ -65,10 +68,17 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       };
 
     // get api
+    case GET_EMPLOYEE_LIST:
+      return {
+        ...state,
+        listLoading: true,
+      }
+
     case GET_EMPLOYEE_LIST_SUCCESS:
       return {
         ...state,
         employeeList: action.payload,
+        listLoading: false,
       }
 
 
@@ -106,6 +116,13 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         CompanyNames: action.payload,
+      };
+
+    case EMPLOYEE_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
       };
 
     default:

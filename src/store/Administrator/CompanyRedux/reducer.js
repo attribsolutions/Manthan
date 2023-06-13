@@ -1,6 +1,8 @@
 import {
+  COMPANY_API_ERROR_ACTION,
   DELETE_COMPANY_ID_SUCCESS,
   EDIT_COMPANY_ID_SUCCESS,
+  FETCH_COMPANY_LIST,
   FETCH_COMPANY_LIST_SUCCESS,
   GET_COMPANYGROUP_SUCCESS,
   POST_COMPANY_SUBMIT,
@@ -16,16 +18,24 @@ const INIT_STATE = {
   postMsg: { Status: false },
   updateMessage: { Status: false },
   CompanyGroup: [],
-  saveBtnloading: false
+  saveBtnloading: false,
+  listLoading: false,
 }
 
 const Company = (state = INIT_STATE, action) => {
   switch (action.type) {
 
+    case FETCH_COMPANY_LIST:
+      return {
+        ...state,
+        listLoading: true,
+      }
+
     case FETCH_COMPANY_LIST_SUCCESS:
       return {
         ...state,
         companyList: action.payload,
+        listLoading: false,
       }
 
 
@@ -83,6 +93,14 @@ const Company = (state = INIT_STATE, action) => {
 
     case "RESET_ALL":
       return state = INIT_STATE;
+
+    case COMPANY_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
+      };
+
 
     default:
       return state
