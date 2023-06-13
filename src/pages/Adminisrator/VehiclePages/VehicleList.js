@@ -72,29 +72,31 @@ const VehicleList = () => {
 
     <React.Fragment>
       <div className="page-content">
-
         {userAdminRole &&
-          <PartyDropdown_Common
-            partySelect={party}
-            setPartyFunc={partyOnChngeHandler}
-            goButtonHandler={goButtonHandler}
-          />
+          <div className="mb-2">
+            <PartyDropdown_Common
+              partySelect={party}
+              setPartyFunc={partyOnChngeHandler}
+              goButtonHandler={goButtonHandler}
+            />
+          </div>
         }
-
 
         {
           (pageField) ?
-            <CommonPurchaseList
-              action={action}
-              reducers={reducers}
-              showBreadcrumb={false}
-              MasterModal={VehicleMaster}
-              masterPath={url.VEHICLE}
-              newBtnPath={url.VEHICLE}
-              ButtonMsgLable={"Vehicle"}
-              deleteName={"VehicleNumber"}
-              goButnFunc={goButtonHandler}
-            />
+            <div className="mt-n1">
+              <CommonPurchaseList
+                action={action}
+                reducers={reducers}
+                showBreadcrumb={false}
+                MasterModal={VehicleMaster}
+                masterPath={url.VEHICLE}
+                newBtnPath={url.VEHICLE}
+                ButtonMsgLable={"Vehicle"}
+                deleteName={"VehicleNumber"}
+                goButnFunc={goButtonHandler}
+              />
+            </div>
             : null
         }
       </div>

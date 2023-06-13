@@ -73,25 +73,29 @@ const SalesManList = (props) => {
             <div className="page-content">
 
                 {userAdminRole &&
-                    <PartyDropdown_Common
-                        partySelect={party}
-                        setPartyFunc={partyOnChngeHandler}
-                        goButtonHandler={goButtonHandler}
-                    />
+                    <div className="mb-2">
+                        <PartyDropdown_Common
+                            partySelect={party}
+                            setPartyFunc={partyOnChngeHandler}
+                            goButtonHandler={goButtonHandler}
+                        />
+                    </div>
                 }
                 {
                     (pageField) &&
-                    <CommonPurchaseList
-                        action={action}
-                        reducers={reducers}
-                        showBreadcrumb={false}
-                        MasterModal={SalesManMaster}
-                        masterPath={url.SALESMAN}
-                        newBtnPath={url.SALESMAN}
-                        ButtonMsgLable={"SalesMan"}
-                        deleteName={"Name"}
-                        goButnFunc={goButtonHandler}
-                    />
+                    <div className="mt-n1">
+                        <CommonPurchaseList
+                            action={action}
+                            reducers={reducers}
+                            showBreadcrumb={false}
+                            MasterModal={SalesManMaster}
+                            masterPath={url.SALESMAN}
+                            newBtnPath={url.SALESMAN}
+                            ButtonMsgLable={"SalesMan"}
+                            deleteName={"Name"}
+                            goButnFunc={goButtonHandler}
+                        />
+                    </div>
                 }
             </div>
         </React.Fragment>

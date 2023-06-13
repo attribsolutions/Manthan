@@ -259,7 +259,7 @@ const CommonPurchaseList = (props) => {
   const lastColumn = () => {  // ======================== for List Page Action Button ================================
 
     if (!(pageMode === mode.modeSTPsave)) {
- 
+
       return listPageActionsButtonFunc({
         dispatchHook: dispatch,
         subPageMode: history.location.pathname,
@@ -295,7 +295,7 @@ const CommonPurchaseList = (props) => {
       <React.Fragment>
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <HeaderContent />
-        <div>
+        <div className="table-responsive mt-1" >
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
@@ -308,7 +308,7 @@ const CommonPurchaseList = (props) => {
                   <React.Fragment>
                     <Row>
                       <Col xl="12">
-                        <div className="table-responsive mt-1">
+                        <div className="">
                           <BootstrapTable
                             keyField={"id"}
                             responsive
