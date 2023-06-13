@@ -219,6 +219,44 @@ const CommonPurchaseList = (props) => {
     setmodal_edit(false);
   }
 
+  const makeBtnColumn = () => {// ======================== for sale order (orderConform) Page Action Button ================================
+    if (
+      makeBtnShow &&
+      pageMode === mode.modeSTPsave
+    ) {
+      return {
+        text: "Select",
+        dataField: "hasSelect",
+        sort: true,
+        formatter: (cellContent, rowData, key) => {
+          rowData["hasSelect"] = false;
+
+          return (
+            <div>
+              <Button
+                type="button"
+                className={makeBtnCss}
+                data-mdb-toggle="tooltip"
+                data-mdb-placement="top"
+                title={makeBtnName}
+                onClick={() => {
+                  makeBtnHandler(rowData);
+                }}
+              >
+                <span
+                  style={{ marginLeft: "6px", marginRight: "6px" }}
+                  className=" fas fa-file-invoice"
+                ></span>
+              </Button>
+            </div>
+          );
+          // }
+        },
+      }
+    }
+  }
+
+
   const secondLastColumn = () => {// ======================== for GRNMode2 Page Action Button ================================
     if (
       makeBtnShow &&
@@ -281,10 +319,12 @@ const CommonPurchaseList = (props) => {
       })
     }
   }
+
   const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({
     pageField,
     lastColumn,
     secondLastColumn,
+    makeBtnColumn,
     userAccState: userAccState
   })
 

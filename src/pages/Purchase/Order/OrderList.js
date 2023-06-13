@@ -29,7 +29,8 @@ const OrderList = () => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Supplier: { value: "", label: "All" }
+        Supplier: { value: "", label: "All" },
+        CustomerType: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -58,14 +59,14 @@ const OrderList = () => {
             editData: state.OrderReducer.editData,
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
             approvalDetail: state.OrderReducer.approvalDetail,
+            customerType: state.PartyMasterBulkUpdateReducer.SelectField,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, GRNitem, supplier, makeIBInvoice, orderApprovalMsg, approvalDetail } = reducers;
+    const { pageField, GRNitem, supplier, makeIBInvoice, orderApprovalMsg, approvalDetail, customerType } = reducers;
 
     const values = { ...state.values }
     const { fieldLabel } = state;
@@ -76,7 +77,6 @@ const OrderList = () => {
         postSucc: _act.saveOrderActionSuccess,
         updateSucc: _act.updateOrderIdSuccess,
         deleteSucc: _act.deleteOrderIdSuccess,
-
     }
 
     // Featch Modules List data  First Rendering
@@ -163,6 +163,15 @@ const OrderList = () => {
         }
     }, [pageField])
 
+    // Customer type dropdown Values
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: _cfunc.loginCompanyID(),
+            TypeID: 64
+        });
+        dispatch(_act.postSelect_Field_for_dropdown(jsonBody));
+    }, []);
+
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -172,6 +181,11 @@ const OrderList = () => {
         value: "",
         label: " All"
     });
+
+    const customerTypeOptions = customerType.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
@@ -313,6 +327,7 @@ const OrderList = () => {
                 "Supplier": values.Supplier.value,
                 "Customer": _cfunc.loginPartyID(),
                 "OrderType": order_Type.PurchaseOrder,
+                "CustomerType": "",
                 "IBType": IBType ? IBType : otherState.IBType
             }
             const SO_filters = {
@@ -321,6 +336,7 @@ const OrderList = () => {
                 "Supplier": _cfunc.loginPartyID(),//Suppiler swipe
                 "Customer": values.Supplier.value,//customer swipe
                 "OrderType": order_Type.SaleOrder,
+                "CustomerType": values.CustomerType.value,
                 "IBType": IBType ? IBType : otherState.IBType
             }
             const GRN_STP_3_filters = {
@@ -329,6 +345,7 @@ const OrderList = () => {
                 "Supplier": values.Supplier.value,
                 "Customer": _cfunc.loginPartyID(),
                 "OrderType": order_Type.InvoiceToGRN,
+                "CustomerType": "",
                 "IBType": IBType ? IBType : otherState.IBType
             }
             if (subPageMode === url.ORDER_LIST_4) {
@@ -352,7 +369,6 @@ const OrderList = () => {
             a.hasValid.FromDate.valid = true
             return a
         })
-
     }
 
     function todateOnchange(e, date) {
@@ -362,29 +378,31 @@ const OrderList = () => {
             a.hasValid.ToDate.valid = true
             return a
         })
-
     }
 
     function supplierOnchange(e) {
-
         setState((i) => {
             const a = { ...i }
             a.values.Supplier = e;
             a.hasValid.Supplier.valid = true
             return a
         })
-        // let newObj = { ...orderlistFilter }
-        // newObj.supplierSelect = e
-        // setorderlistFilter(newObj)
     }
 
-
+    function customerTypeOnchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.CustomerType = e;
+            a.hasValid.CustomerType.valid = true
+            return a
+        })
+    }
 
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
-                    <Col sm="3" className="">
+                    <Col sm="2" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>
@@ -399,7 +417,8 @@ const OrderList = () => {
                             </Col>
                         </FormGroup>
                     </Col>
-                    <Col sm="3" className="">
+
+                    <Col sm="2" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
@@ -415,13 +434,35 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col sm="5">
+                    {subPageMode === url.ORDER_LIST_4 && <Col sm="3">
+                        <FormGroup className="mb-2 row mt-3 " >
+                            <Label className="col-md-4 p-2"
+                                style={{ width: "115px" }}>
+                                {!(fieldLabel.CustomerType === '') ? fieldLabel.CustomerType : "Customer Type"}
+                            </Label>
+                            <Col sm="7">
+                                <Select
+                                    name="CustomerType"
+                                    classNamePrefix="select2-Customer"
+                                    value={values.CustomerType}
+                                    options={customerTypeOptions}
+                                    onChange={customerTypeOnchange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col >}
+
+
+                    <Col sm="3">
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
                                 style={{ width: "115px" }}>
                                 {!(fieldLabel.Supplier === '') ? fieldLabel.Supplier : "Supplier"}
                             </Label>
-                            <Col sm="5">
+                            <Col sm="7">
                                 <Select
                                     name="Supplier"
                                     classNamePrefix="select2-Customer"
@@ -435,6 +476,7 @@ const OrderList = () => {
                             </Col>
                         </FormGroup>
                     </Col >
+
 
                     <Col sm="1" className="mt-3 ">
                         <Go_Button loading={reducers.loading} id={gobtnId} onClick={goButtonHandler} />
