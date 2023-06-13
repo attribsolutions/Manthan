@@ -1,5 +1,6 @@
 
 import {
+    GO_BUTTON_FOR_CREDITLIMIT_PAGE,
     GO_BUTTON_FOR_CREDITLIMIT_PAGE_SUCCESS,
     POST_CREDITLIMIT_PAGE,
     POST_CREDITLIMIT_PAGE_SUCCESS,
@@ -8,7 +9,8 @@ import {
 const INIT_STATE = {
     goButtonCreditLimit: [],
     postMsg: { Status: false },
-    saveBtnloading:false,
+    saveBtnloading: false,
+    listLoading: false,
 }
 
 const CreditLimitReducer = (state = INIT_STATE, action) => {
@@ -28,10 +30,17 @@ const CreditLimitReducer = (state = INIT_STATE, action) => {
                 saveBtnloading: false
             }
 
+        case GO_BUTTON_FOR_CREDITLIMIT_PAGE:
+            return {
+                ...state,
+                listLoading: true,
+            };
+
         case GO_BUTTON_FOR_CREDITLIMIT_PAGE_SUCCESS:
             return {
                 ...state,
                 goButtonCreditLimit: action.payload,
+                listLoading: false,
             };
 
         default:
