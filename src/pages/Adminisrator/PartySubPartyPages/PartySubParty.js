@@ -440,8 +440,6 @@ const PartySubParty = (props) => {
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody className="c_card_body">
-
-
                                                     <Row className="mb-3">
                                                         <Col sm="4">
                                                             <FormGroup className="mb-1">
@@ -458,6 +456,9 @@ const PartySubParty = (props) => {
                                                                         onChange={(hasSelect, evn) => {
                                                                             onChangeSelect({ hasSelect, evn, state, setState, })
                                                                             handllerParty(hasSelect)
+                                                                        }}
+                                                                        styles={{
+                                                                            menu: provided => ({ ...provided, zIndex: 2 })
                                                                         }}
                                                                     />
                                                                     {isError.PartyName.length > 0 && (
@@ -503,6 +504,9 @@ const PartySubParty = (props) => {
                                                                             onChangeSelect({ hasSelect, evn, state, setState, })
                                                                             handller_SSDD(hasSelect)
                                                                         }}
+                                                                        styles={{
+                                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                                        }}
                                                                     />
 
                                                                 </FormGroup>
@@ -524,6 +528,9 @@ const PartySubParty = (props) => {
                                                                     onChange={(hasSelect, evn) => {
                                                                         onChangeSelect({ hasSelect, evn, state, setState, })
                                                                         handllerSub_Party(hasSelect)
+                                                                    }}
+                                                                    styles={{
+                                                                        menu: provided => ({ ...provided, zIndex: 2 })
                                                                     }}
                                                                 />
                                                             </FormGroup>
