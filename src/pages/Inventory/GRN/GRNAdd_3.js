@@ -55,9 +55,11 @@ const GRNAdd3 = (props) => {
         items,
         postMsg,
         userAccess,
-        pageField
+        pageField,
+        saveBtnloading,
     } = useSelector((state) => ({
         // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
+        saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
@@ -501,6 +503,7 @@ const GRNAdd3 = (props) => {
                         (grnItemList.length > 0) ?
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
                                     editCreatedBy={editCreatedBy}
                                     userAcc={userPageAccessState}
                                     module={"GRN"} onClick={saveHandeller}

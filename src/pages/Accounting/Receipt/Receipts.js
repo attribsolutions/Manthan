@@ -70,7 +70,9 @@ const Receipts = (props) => {
         BankList,
         ReceiptModeList,
         ReceiptType,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.ReceiptReducer.saveBtnloading,
             postMsg: state.ReceiptReducer.postMsg,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             OpeningBalance: state.ReceiptReducer.OpeningBalance,
@@ -875,6 +877,7 @@ const Receipts = (props) => {
                             <FormGroup>
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                     <SaveButton pageMode={pageMode}
+                                        loading={saveBtnloading}
                                         onClick={saveHandeller}
                                         userAcc={userPageAccessState}
                                         editCreatedBy={editCreatedBy}

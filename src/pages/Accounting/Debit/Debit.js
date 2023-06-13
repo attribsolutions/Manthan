@@ -69,14 +69,16 @@ const Debit = (props) => {
         ReceiptModeList,
         CreditDebitType,
         ReceiptNumber,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.CredietDebitReducer.saveBtnloading,
             postMsg: state.CredietDebitReducer.postMsg,
             ReceiptNumber: state.CredietDebitReducer.ReceiptNumber,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             CreditDebitType: state.CredietDebitReducer.CreditDebitType,
             userAccess: state.Login.RoleAccessUpdateData,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
-            pageField: state.CommonPageFieldReducer.pageField
+            pageField: state.CommonPageFieldReducer.pageField,
         }));
 
     useEffect(() => {
@@ -541,6 +543,7 @@ const Debit = (props) => {
                         <FormGroup>
                             <Col sm={2} style={{ marginLeft: "3px" }} >
                                 <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
                                     onClick={saveHandeller}
                                     userAcc={userPageAccessState}
                                     editCreatedBy={editCreatedBy}

@@ -72,8 +72,10 @@ const LoadingSheet = (props) => {
         VehicleNumber,
         RoutesList,
         GoButton,
-        Driver
+        Driver,
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.LoadingSheetReducer.saveBtnloading,
         postMsg: state.LoadingSheetReducer.postMsg,
         GoButton: state.LoadingSheetReducer.goBtnLoadingSheet,
         updateMsg: state.BOMReducer.updateMsg,
@@ -530,6 +532,7 @@ const LoadingSheet = (props) => {
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
                                             onClick={saveHandeller}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}

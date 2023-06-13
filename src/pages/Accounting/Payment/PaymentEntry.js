@@ -60,7 +60,9 @@ const PaymentEntry = (props) => {
         BankList,
         ReceiptModeList,
         ReceiptType,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.ReceiptReducer.saveBtnloading,
             postMsg: state.ReceiptReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.supplier,
             OpeningBalance: state.ReceiptReducer.OpeningBalance,
@@ -284,7 +286,7 @@ const PaymentEntry = (props) => {
                 })
 
                 dispatch(saveReceiptMaster({ jsonBody, btnId }));
- 
+
             }
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -526,6 +528,7 @@ const PaymentEntry = (props) => {
                         <FormGroup>
                             <Col>
                                 <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
                                     onClick={saveHandeller}
                                     userAcc={userPageAccessState}
                                     editCreatedBy={editCreatedBy}
