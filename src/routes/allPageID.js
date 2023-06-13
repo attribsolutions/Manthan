@@ -207,8 +207,6 @@ export const CREDIT = 190
 export const DEBIT = 192
 export const DEBIT_LIST = 193
 
-
-
 export const RECEIPTS = 173
 export const RECEIPTS_LIST = 174
 
@@ -216,11 +214,11 @@ export const RECEIPTS_LIST_2 = 180
 
 export const BULK_RECIPT = 181
 
-
 export const PAYMENT_ENTRY = 177
 export const PAYMENT_ENTRY_LIST = 178
 
 export const SAP_LEDGER = 197
 
+//**************************** Reports ***********************************//
 
-
+export const ORDER_SUMMARY_REPORT = 203
