@@ -9,7 +9,10 @@ import {
     POST_PARTY_DATA_SUCCESS,
     UPDATE_PARTY_ID_SUCCESS,
     POST_PARTY_DATA,
-    UPDATE_PARTY_ID
+    UPDATE_PARTY_ID,
+    GET_PARTY_LIST_API,
+    PARTY_API_ERROR_ACTION,
+    PARTY_RESET_REDUX_ACTION
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -21,15 +24,24 @@ const INIT_STATE = {
     DistrictOnState: [],
     AddressTypes: [],
     saveBtnloading: false,
+    listLoading: false
 };
 
 const PartyMasterReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
         // get api
+        case GET_PARTY_LIST_API:
+            return {
+                ...state,
+                listLoading: true,
+
+            }
+
         case GET_PARTY_LIST_API_SUCCESS:
             return {
                 ...state,
                 partyList: action.payload,
+                listLoading: false
             }
 
         // post api
@@ -103,6 +115,14 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
                 ...state,
                 CompanyName: action.payload,
             };
+
+        case PARTY_API_ERROR_ACTION:
+            return {
+                ...state,
+                saveBtnloading: false,
+                listLoading: false
+            };
+
         default:
             return state;
     }

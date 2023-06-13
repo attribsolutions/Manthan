@@ -21,6 +21,7 @@ import {
   postPartyDataSuccess,
   updatePartyIDSuccess,
   getAddressTypesSuccess,
+  PartyApiErrorAction,
 } from "./action";
 import {
   DELETE_PARTY_ID, EDIT_PARTY_ID,
@@ -56,8 +57,12 @@ function* Get_Party_GenFun() {   // Only CompanyID is Required
       index["Check"] = false
       return index;
     });
+
     yield put(getPartyListAPISuccess(data1))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error)
+
+  }
 }
 
 function* save_Party_Master_GenFun({ config }) {
@@ -85,14 +90,14 @@ function* Edit_Party_GenFun({ config }) {
     response["pageMode"] = config.btnmode
 
     yield put(editPartyIDSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PartyApiErrorAction()) }
 }
 
 function* Update_Party_GenFun({ config }) {
   try {
     const response = yield call(Party_Master_Update_API, config);
     yield put(updatePartyIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PartyApiErrorAction()) }
 }
 
 // GetDistrictOnState API
@@ -100,7 +105,7 @@ function* GetDistrictOnState_saga({ id }) {
   try {
     const response = yield call(GetDistrictOnState_For_Dropdown, id);
     yield put(getDistrictOnStateSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PartyApiErrorAction()) }
 }
 
 
@@ -109,7 +114,7 @@ function* GetAddressTypes_saga() {
   try {
     const response = yield call(GetAddressTypes_For_Dropdown);
     yield put(getAddressTypesSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PartyApiErrorAction()) }
 }
 
 // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
@@ -117,7 +122,7 @@ function* GetPartyTypeByDivisionTypeID_GenFun({ id }) {
   try {
     const response = yield call(GetPartyTypeByDivisionTypeID_For_Dropdown, id);
     yield put(GetPartyTypeByDivisionTypeIDSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PartyApiErrorAction()) }
 }
 
 // GetCompanyByDivisionTypeID/1 API dependent on DivisionTypes api
@@ -125,7 +130,7 @@ function* GetCompanyByDivisionTypeID_GenFun({ id }) {
   try {
     const response = yield call(GetCompanyByDivisionTypeID_For_Dropdown, id);
     yield put(GetCompanyByDivisionTypeIDSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PartyApiErrorAction()) }
 }
 
 function* PartyMasterSaga() {
