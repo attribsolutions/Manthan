@@ -9,6 +9,7 @@ import {
   orderApprovalActionSuccess,
   getOrderApprovalDetailActionSucc,
   orderApiErrorAction,
+  getDivisionOrdersSuccess,
 } from "./actions";
 import {
   OrderPage_Update_API,
@@ -23,6 +24,7 @@ import {
   orderApproval_Save_API,
   OrderPage_Edit_Get_API,
   OrderPage_Edit_Post_API,
+  OrderConfirm_post_API,
 } from "../../../helpers/backend_helper";
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -32,9 +34,10 @@ import {
   SAVE_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE,
   ORDER_APPROVAL_ACTION,
-  GET_ORDER_APPROVAL_DETAIL
+  GET_ORDER_APPROVAL_DETAIL,
+  POST_ORDER_CONFIRM_API
 } from "./actionType";
-import {  concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
+import { concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
 
 
@@ -154,9 +157,6 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.DeliveryDate = (`${DeliveryDate}`)
 
 
-
-
-
       if (i.Inward === 0) {
         i.Inward = "Open"
         i.forceEditHide = false
@@ -213,6 +213,15 @@ function* getOrderApproval_Detail_GenFunc({ config }) {
   }
 }
 
+function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageMode
+  try {
+    const response = yield call(OrderConfirm_post_API, config);
+    yield put(getDivisionOrdersSuccess(response))
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
+}
+
 function* OrderPageSaga() {
   yield takeEvery(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
   yield takeEvery(SAVE_ORDER_FROM_ORDER_PAGE, saveOrder_GenFunc);
@@ -222,6 +231,7 @@ function* OrderPageSaga() {
   yield takeEvery(GET_ORDER_LIST_PAGE, orderList_GoBtn_GenFunc);
   yield takeEvery(ORDER_APPROVAL_ACTION, orderApproval_GenFunc);
   yield takeEvery(GET_ORDER_APPROVAL_DETAIL, getOrderApproval_Detail_GenFunc);
+  yield takeEvery(POST_ORDER_CONFIRM_API, OrderConfirm_GenFunc);
 
 }
 

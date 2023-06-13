@@ -462,6 +462,8 @@ export const orderApproval_Save_API = ({ jsonBody, btnId }) => post(url.ORDER_AP
 // OrderType Dropdown API
 export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
 
+export const OrderConfirm_post_API = ({ jsonBody, btnId }) =>post(url.ORDER_CONFIRM_API, jsonBody, btnId)// update api
+
 //GRN PAGE grn 
 export const GRN_STP_for_orderList_goBtn = ({ filtersBody, btnId }) => post(url.GRN_STP_FOR_ORDER_lIST_goBtn, filtersBody, btnId)// Get subModule For H_pages
 export const GRN_get_API = ({ filtersBody, btnId }) => post(url.GRN_LiST_BY_FILTERS, filtersBody, btnId)
