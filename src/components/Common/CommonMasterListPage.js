@@ -17,6 +17,7 @@ import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc } from "./ListActionsButtons";
 import DynamicColumnHook from "./TableCommonFunc";
+import { Listloader } from "./CommonButton";
 
 
 let sortType = "asc"
@@ -58,7 +59,8 @@ const CommonListPage = (props) => {
     deleteMsg,
     userAccess,
     postMsg,
-    pageField
+    pageField = '',
+    listLoading
 
   } = props.reducers;
 
@@ -273,7 +275,6 @@ const CommonListPage = (props) => {
   const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({ pageField, lastColumn, userAccState })
 
   if (!(userAccState === '')) {
-
     return (
       <React.Fragment>
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
@@ -331,7 +332,7 @@ const CommonListPage = (props) => {
   }
   else {
     return (
-      <React.Fragment></React.Fragment>
+      <React.Fragment> </React.Fragment>
     )
   }
 }

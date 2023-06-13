@@ -108,10 +108,7 @@ export function Change_Button(props) {
     type={type}
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>
-
 }
-
-
 
 export function Loader() {
 
@@ -122,6 +119,20 @@ export function Loader() {
   </div>
 
 }
+
+export function Listloader() {
+  return <div id="api_spinner" >
+    <div className="api_spinner_body " color="fade" >
+      <span className="spinner" style={{ left: "-5cm" }}></span>
+    </div>
+  </div>
+
+
+}
+
+
+
+
 
 
 
