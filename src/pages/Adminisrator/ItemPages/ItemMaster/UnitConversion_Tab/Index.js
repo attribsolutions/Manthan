@@ -202,6 +202,9 @@ export default function UnitConverstion(props) {
                                 isDisabled={pageMode === "edit" ? true : false}
                                 options={BaseUnit_DropdownOptions}
                                 onChange={baseunitOnchange}
+                                styles={{
+                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                }}
                             />
                         </FormGroup>
                     </Row>
