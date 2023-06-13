@@ -721,6 +721,20 @@ const Order = (props) => {
             const itemArr = []
             const isVDC_POvalidMsg = []
 
+            // if (pageMode === mode.edit) {
+            //     orderItemTable.filter(f => (f.editrowId)).forEach(i => {
+
+            //     })
+            // }
+            // if (pageMode === mode.defaultsave) {
+            //     orderItemTable.filter(f => (f.Quantity > 0)).forEach(i => {
+            //         if (!(i.Rate > 0)) {
+            //             validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
+            //         }
+            //     })
+            // }
+
+
             await orderItemTable.forEach(i => {
 
                 if ((i.Quantity > 0) && !(i.Rate > 0)) {
@@ -728,20 +742,13 @@ const Order = (props) => {
                 }
                 else if (pageMode === mode.edit) {
 
-                    var ischange = (!(Number(i.edit_Qty) === Number(i.Quantity)) || !(i.edit_Unit_id === i.Unit_id));
+                    const ischange = (!(Number(i.edit_Qty) === Number(i.Quantity)) || !(i.edit_Unit_id === i.Unit_id));
 
-                    if (ischange && (i.edit_Qty === 0)) {
-                        var isedit = 0;
-                        orderItemFunc({ i, isedit })
+                    let isedit = 0
+                    if (ischange && !(i.edit_Qty === 0)) {
+                        isedit = 1
                     }
-
-                    else if (ischange) {
-                        var isedit = 1;
-                        orderItemFunc({ i, isedit })
-                    } else {
-                        var isedit = 0;
-                        orderItemFunc({ i, isedit })
-                    }
+                    orderItemFunc({ i, isedit })
                 }
                 else {
                     const isedit = 0;
@@ -750,19 +757,25 @@ const Order = (props) => {
             })
 
 
-            function orderItemFunc({ i, isedit }) {  //isvdc_po logic
-
-                i.Quantity = ((i.Quantity === null) || (i.Quantity === undefined)) && 0
+            function orderItemFunc({ i, isedit }) {  
+               
+                i.Quantity = ((i.Quantity === null) || (i.Quantity === undefined)) ? 0 : i.Quantity
 
                 if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
                     var isdel = false;
                     isRowValueChanged({ i, isedit, isdel })
                 }
-                else if ((i.Quantity === 0) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
+                else if (!(i.Quantity < 0) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
                     var isdel = true;
                     isRowValueChanged({ i, isedit, isdel })
                 }
-                else if ((i.Quantity > 0) && (i.Rate > 0)) {
+                else if (!(i.Quantity < 0) && !(i.editrowId) && !(orderTypeSelect.value === 3)) {
+                    return
+                }
+
+
+
+                else if ((i.Quantity > 0) && (i.Rate > 0)) {//isvdc_po logic
 
                     if (i.Bom) {
                         if ((itemArr.length === 0)) {
@@ -794,9 +807,10 @@ const Order = (props) => {
             }
 
             function isRowValueChanged({ i, isedit, isdel }) {
+
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
-                debugger
+               
                 const arr = {
                     // id: i.editrowId,
                     Item: i.Item_id,
@@ -922,12 +936,12 @@ const Order = (props) => {
             }
             // +*********************************
             console.log(jsonBody)
-            // if (pageMode === mode.edit) {
-            //     dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
+            if (pageMode === mode.edit) {
+                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
 
-            // } else {
-            //     dispatch(_act.saveOrderAction({ jsonBody, subPageMode, btnId }))
-            // }
+            } else {
+                dispatch(_act.saveOrderAction({ jsonBody, subPageMode, btnId }))
+            }
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
