@@ -75,25 +75,29 @@ const RoutesList = (props) => {
       <div className="page-content">
 
         {userAdminRole &&
-          <PartyDropdown_Common
-            partySelect={party}
-            setPartyFunc={partyOnChngeHandler}
-            goButtonHandler={goButtonHandler}
-          />
+          <div className="mb-2">
+            <PartyDropdown_Common
+              partySelect={party}
+              setPartyFunc={partyOnChngeHandler}
+              goButtonHandler={goButtonHandler}
+            />
+          </div>
         }
         {
           (pageField) ?
-            <CommonPurchaseList
-              action={action}
-              reducers={reducers}
-              showBreadcrumb={false}
-              MasterModal={RoutesMaster}
-              masterPath={url.ROUTES}
-              newBtnPath={url.ROUTES}
-              ButtonMsgLable={"Routes"}
-              deleteName={"Name"}
-              goButnFunc={goButtonHandler}
-            />
+            <div className="mt-n1">
+              <CommonPurchaseList
+                action={action}
+                reducers={reducers}
+                showBreadcrumb={false}
+                MasterModal={RoutesMaster}
+                masterPath={url.ROUTES}
+                newBtnPath={url.ROUTES}
+                ButtonMsgLable={"Routes"}
+                deleteName={"Name"}
+                goButnFunc={goButtonHandler}
+              />
+            </div>
             : null
         }
       </div>

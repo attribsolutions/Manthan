@@ -562,105 +562,94 @@ const PartyMasterBulkUpdate = (props) => {
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <Container fluid>
-                        {/* <Card className="text-black"> */}
-                        {/* <CardHeader className="card-header   text-black c_card_header" >
-                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                            </CardHeader> */}
-
-                        {/* <CardBody className=" vh-10 0 text-black c_card_header" > */}
                         <form noValidate>
-                            <Row>
-                                <Col md={12}>
-                                    <Card style={{ marginBottom: "6px" }}>
-                                        <CardBody className="c_card_header text-black">
-                                            <Row>
-                                                <Col sm={3} >
-                                                    <FormGroup className=" row" >
-                                                        <Label className="mt-1"
-                                                            style={{ width: "95px" }}>SelectField </Label>
-                                                        <div className="col col-7 sm-1">
-                                                            <Select
-                                                                name="SelectField"
-                                                                value={val}
-                                                                isSearchable={true}
-                                                                className="react-dropdown"
-                                                                classNamePrefix="dropdown"
-                                                                styles={{
-                                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                                }}
-                                                                options={SelectFieldDropdown_options}
-                                                                onChange={(event) => SelectFieldHandler(event)}
-                                                            />
-                                                            {isError.SelectField.length > 0 && (
-                                                                <span className="text-danger f-8"><small>{isError.SelectField}</small></span>
-                                                            )}
-                                                        </div>
-                                                    </FormGroup>
-                                                </Col>
-                                                <Col sm={3} >
-                                                    <FormGroup className=" row ">
-                                                        <Label className="mt-1"
-                                                            style={{ width: "104px" }}>RoutesName </Label>
-                                                        <div className="col col-7 sm-1">
-                                                            <Select
-                                                                name="RoutesName"
-                                                                value={values.Routes}
-                                                                isSearchable={true}
-                                                                className="react-dropdown"
-                                                                styles={{
-                                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                                }}
-                                                                classNamePrefix="dropdown"
-                                                                options={RouteName_Options}
-                                                                // onChange={(e) => { setRouteSelect(e) }}
-                                                                onChange={RoutesNameOnchange}
 
-                                                            />
-                                                            {isError.RoutesName.length > 0 && (
-                                                                <span className="text-danger f-8"><small>{isError.RoutesName}</small></span>
-                                                            )}
-                                                        </div>
-                                                    </FormGroup>
-                                                </Col>
+                            <Card className="mb-1" style={{ marginBottom: "6px" }}>
+                                <CardBody className="c_card_header text-black">
+                                    <Row>
+                                        <Col sm={3} >
+                                            <FormGroup className=" row" >
+                                                <Label className="mt-1"
+                                                    style={{ width: "95px" }}>SelectField </Label>
+                                                <div className="col col-7 sm-1">
+                                                    <Select
+                                                        name="SelectField"
+                                                        value={val}
+                                                        isSearchable={true}
+                                                        className="react-dropdown"
+                                                        classNamePrefix="dropdown"
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
+                                                        options={SelectFieldDropdown_options}
+                                                        onChange={(event) => SelectFieldHandler(event)}
+                                                    />
+                                                    {isError.SelectField.length > 0 && (
+                                                        <span className="text-danger f-8"><small>{isError.SelectField}</small></span>
+                                                    )}
+                                                </div>
+                                            </FormGroup>
+                                        </Col>
+                                        <Col sm={3} >
+                                            <FormGroup className=" row ">
+                                                <Label className="mt-1"
+                                                    style={{ width: "104px" }}>RoutesName </Label>
+                                                <div className="col col-7 sm-1">
+                                                    <Select
+                                                        name="RoutesName"
+                                                        value={values.Routes}
+                                                        isSearchable={true}
+                                                        className="react-dropdown"
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
+                                                        classNamePrefix="dropdown"
+                                                        options={RouteName_Options}
+                                                        // onChange={(e) => { setRouteSelect(e) }}
+                                                        onChange={RoutesNameOnchange}
 
-                                                <Col sm={4} >
-                                                    <FormGroup className=" row " >
-                                                        <Label htmlFor="validationCustom01" className="mt-1"
-                                                            style={{ width: "100px" }}>PartyName </Label>
-                                                        <div className="col col-7 sm-1">
-                                                            <Select
-                                                                name="PartyName"
-                                                                value={values.Party}
-                                                                isSearchable={true}
-                                                                className="react-dropdown"
-                                                                classNamePrefix="dropdown"
-                                                                styles={{
-                                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                                }}
-                                                                options={PartyDropdown_Options}
-                                                                // onChange={(e) => { setParty(e) }}
-                                                                onChange={partyOnchange}
+                                                    />
+                                                    {isError.RoutesName.length > 0 && (
+                                                        <span className="text-danger f-8"><small>{isError.RoutesName}</small></span>
+                                                    )}
+                                                </div>
+                                            </FormGroup>
+                                        </Col>
 
-                                                            />
-                                                        </div>
-                                                        {isError.PartyName.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                        )}
-                                                    </FormGroup>
-                                                </Col>
+                                        <Col sm={4} >
+                                            <FormGroup className=" row " >
+                                                <Label htmlFor="validationCustom01" className="mt-1"
+                                                    style={{ width: "100px" }}>PartyName </Label>
+                                                <div className="col col-7 sm-1">
+                                                    <Select
+                                                        name="PartyName"
+                                                        value={values.Party}
+                                                        isSearchable={true}
+                                                        className="react-dropdown"
+                                                        classNamePrefix="dropdown"
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
+                                                        options={PartyDropdown_Options}
+                                                        // onChange={(e) => { setParty(e) }}
+                                                        onChange={partyOnchange}
 
-                                                <Col sm={1}>
-                                                    <div className="col col-1 px-5">
-                                                        < Go_Button onClick={(e) => goButtonHandler()} />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </CardBody>
-                                    </Card>
-                                </Col>
-                            </Row>
+                                                    />
+                                                </div>
+                                                {isError.PartyName.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                )}
+                                            </FormGroup>
+                                        </Col>
 
+                                        <Col sm={1}>
+                                            <div className="col col-1 px-5">
+                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </CardBody>
+                            </Card>
                             <PaginationProvider
                                 pagination={paginationFactory(pageOptions)}
                             >
