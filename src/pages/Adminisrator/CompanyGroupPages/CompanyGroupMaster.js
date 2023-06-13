@@ -66,7 +66,6 @@ const CompanyGroupMaster = (props) => {
         pageField,
         saveBtnloading,
         userAccess } = useSelector((state) => ({
-
             saveBtnloading: state.CompanyGroupReducer.saveBtnloading,
             postMsg: state.CompanyGroupReducer.postMsg,
             updateMsg: state.CompanyGroupReducer.updateMessage,

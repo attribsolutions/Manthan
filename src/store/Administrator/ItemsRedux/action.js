@@ -123,7 +123,7 @@ export const get_MRPTypes_ForDropDown = () => ({
 });
 
 export const get_MRPTypes_ForDropDown_Success = (data) => ({
-  type:actionType. GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
+  type: actionType.GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
   payload: data,
 });
 
@@ -181,4 +181,9 @@ export const get_Category_By_CategoryType_ForDropDownAPI_Success = (data) => ({
   type: actionType.GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS,
   payload: data,
 });
+
+
+export const ItemsApiErrorAction = () => ({
+  type: actionType.ITEMS_API_ERROR_ACTION,
+})
 

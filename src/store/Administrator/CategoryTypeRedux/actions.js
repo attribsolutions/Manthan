@@ -9,6 +9,7 @@ import {
   GET_CATEGORY_TYPE_LIST_SUCCESS,
   UPDATE_CATEGORY_TYPE_ID,
   UPDATE_CATEGORY_TYPE_ID_SUCCESS,
+  CATEGORY_TYPE_API_ERROR_ACTION,
 } from "./actionTypes";
 
 
@@ -51,7 +52,7 @@ export const updateCategoryTypeIDSuccess = (resp) => ({ //Update Success
   payload: resp,
 })
 
-export const delete_CategoryType_ID = (config={}) => ({// Delete  Action
+export const delete_CategoryType_ID = (config = {}) => ({// Delete  Action
   type: DELETE_CATEGORY_TYPE_ID,
   config,
 });
@@ -60,4 +61,8 @@ export const deleteCategoryTypeIDSuccess = (resp) => ({// Delete Success
   type: DELETE_CATEGORY_TYPE_ID_SUCCESS,
   payload: resp
 });
+
+export const categoryTypeApiErrorAction = () => ({
+  type: CATEGORY_TYPE_API_ERROR_ACTION,
+})
 

@@ -6,9 +6,13 @@ import {
   DELETE_COMPANY_GROUP_ID_SUCCESS,
   SAVE_COMPANY_GROUP_MASTER,
   UPDATE_COMPANY_GROUP_ID,
+  GET_COMPANY_GROUP_LIST,
+  COMPANY_GROUP_API_ERROR_ACTION,
 } from "./actionType";
 
 const INIT_STATE = {
+  saveBtnloading: false,
+  listLoading: false,
   CompanyGroupList: [],
   postMsg: { Status: false },
   editData: { Status: false },
@@ -32,10 +36,18 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false
       }
 
+    case GET_COMPANY_GROUP_LIST:
+      return {
+        ...state,
+        listLoading: true,
+
+      }
+
     case GET_COMPANY_GROUP_LIST_SUCCESS:
       return {
         ...state,
         CompanyGroupList: action.payload,
+        listLoading: false,
       }
 
     case EDIT_COMPANY_GROUP_ID_SUCCESS:
@@ -65,6 +77,14 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
         ...state,
         deleteMessage: action.payload,
       };
+
+    case COMPANY_GROUP_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
+      };
+
 
     default:
       return state
