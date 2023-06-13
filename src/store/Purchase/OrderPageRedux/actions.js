@@ -18,6 +18,7 @@ import {
   ORDER_APPROVAL_ACTION_SUCCESS,
   GET_ORDER_APPROVAL_DETAIL,
   GET_ORDER_APPROVAL_DETAIL_SUCCESS,
+  ORDER_API_ERROR_ACTION,
 } from './actionType'
 
 export const GoButton_For_Order_Add = (config) => ({
@@ -111,4 +112,7 @@ export const orderApprovalActionSuccess = resp => ({
   payload: resp,
 })
 
+export const orderApiErrorAction= () => ({
+  type: ORDER_API_ERROR_ACTION,
+})
 

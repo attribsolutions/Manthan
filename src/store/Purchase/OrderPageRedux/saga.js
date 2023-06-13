@@ -8,6 +8,7 @@ import {
   GoButton_For_Order_AddSuccess,
   orderApprovalActionSuccess,
   getOrderApprovalDetailActionSucc,
+  orderApiErrorAction,
 } from "./actions";
 import {
   OrderPage_Update_API,
@@ -33,7 +34,7 @@ import {
   ORDER_APPROVAL_ACTION,
   GET_ORDER_APPROVAL_DETAIL
 } from "./actionType";
-import {  CommonConsole, concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
+import {  concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
 
 
@@ -64,7 +65,9 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
       response = yield call(IBOrderPage_GoButton_API, config); // GO-Botton IB-invoice Add Page API
     }
     yield put(GoButton_For_Order_AddSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
 }
 
 function* saveOrder_GenFunc({ config }) {
@@ -87,7 +90,9 @@ function* saveOrder_GenFunc({ config }) {
       response.btnId = btnId
     }
     yield put(saveOrderActionSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
 }
 
 function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
@@ -98,7 +103,9 @@ function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
     response.pageMode = btnmode
     response.btnId = btnId
     yield put(editOrderIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
 }
 
 function* DeleteOrder_GenFunc({ config }) {                  // Delete Order by subPageMode
@@ -106,14 +113,18 @@ function* DeleteOrder_GenFunc({ config }) {                  // Delete Order by 
 
     const response = yield call(OrderPage_Delete_API, config);
     yield put(deleteOrderIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
 }
 
 function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPageMode
   try {
     const response = yield call(OrderPage_Update_API, config);
     yield put(updateOrderIdSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
 
 }
 
@@ -177,14 +188,19 @@ function* orderList_GoBtn_GenFunc({ config }) {
     })
     yield put(getOrderListPageSuccess(newList))
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
 }
 
 function* orderApproval_GenFunc({ config }) {
   try {
     const response = yield call(orderApproval_Save_API, config)
     yield put(orderApprovalActionSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
+
 }
 
 function* getOrderApproval_Detail_GenFunc({ config }) {
@@ -192,7 +208,9 @@ function* getOrderApproval_Detail_GenFunc({ config }) {
     const response = yield call(OrderPage_Edit_Get_API, config)
     response.btnId = config.btnId
     yield put(getOrderApprovalDetailActionSucc(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
 }
 
 function* OrderPageSaga() {

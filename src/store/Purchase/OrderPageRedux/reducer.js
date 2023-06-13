@@ -13,6 +13,7 @@ import {
   GO_BUTTON_FOR_ORDER_PAGE,
   ORDER_APPROVAL_ACTION,
   GET_ORDER_APPROVAL_DETAIL,
+  ORDER_API_ERROR_ACTION,
 } from "./actionType"
 
 
@@ -89,7 +90,6 @@ const OrderReducer = (state = INIT_STATE, action) => {
         ...state,
         orderList: action.payload,
         loading: false
-
       }
 
     case GET_ORDER_LIST_PAGE:
@@ -123,7 +123,14 @@ const OrderReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false,
         orderApprovalMsg: action.payload,
       }
-
+      
+      case ORDER_API_ERROR_ACTION:
+        return {
+          ...state,
+          loading: true,
+          saveBtnloading: false,
+        }
+      
 
     default:
       return state
