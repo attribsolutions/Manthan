@@ -57,7 +57,9 @@ const GRNAdd = (props) => {
         postMsg,
         userAccess,
         pageField,
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
@@ -839,6 +841,7 @@ const GRNAdd = (props) => {
                         (grnItemList.length > 0) ?
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
                                     editCreatedBy={editCreatedBy}
                                     userAcc={userPageAccessState}
                                     module={"GRN"} onClick={saveHandeller}

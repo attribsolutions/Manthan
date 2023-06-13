@@ -5,6 +5,7 @@ import {
   GET_CREDIT_LIST_SUCCESS,
   INVOICE_RETURN_ID_SUCCESS,
   RECEIPT_NUMBER_LIST_SUCCESS,
+  SAVE_CREDIT,
   SAVE_CREDIT_SUCCESS,
 } from "./actionType";
 
@@ -16,16 +17,26 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   CreditDebitType: [],
   InvoiceReturn: [],
-  ReceiptNumber: []
+  ReceiptNumber: [],
+  saveBtnloading: false,
 }
 
 const CredietDebitReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
     // post
+
+    case SAVE_CREDIT:
+      return {
+        ...state,
+        saveBtnloading: true,
+
+      }
     case SAVE_CREDIT_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
+        saveBtnloading: false,
+
       }
 
     // get 

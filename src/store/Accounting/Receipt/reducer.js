@@ -11,10 +11,12 @@ import {
   RECEIPT_LIST_FILTERS,
   PAYMENT_ENTRY_LIST_FILTERS,
   RECEIPT_LIST_API,
+  SAVE_RECEIPT_MASTER,
 } from "./actionType"
 
 const INIT_STATE = {
-  loading:false,
+  saveBtnloading: false,
+  loading: false,
   ReceiptGoButton: [],
   ReceiptList: [],
   postMsg: { Status: false },
@@ -51,10 +53,17 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         OpeningBalance: action.payload,
       }
 
+    case SAVE_RECEIPT_MASTER:
+      return {
+        ...state,
+        saveBtnloading: true,
+      }
+
     case SAVE_RECEIPT_MASTER_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
+        saveBtnloading: false
       }
 
     case RECEIPT_LIST_API:
@@ -62,7 +71,6 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         ...state,
         loading: true,
       }
-
 
     case RECEIPT_LIST_API_SUCCESS:
       return {

@@ -71,7 +71,9 @@ const SalesReturn = (props) => {
         InvoiceNo,
         pageField,
         userAccess,
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.SalesReturnReducer.saveBtnloading,
         postMsg: state.SalesReturnReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.RetailerList,
         ItemList: state.PartyItemsReducer.partyItem,
@@ -928,6 +930,7 @@ const SalesReturn = (props) => {
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}

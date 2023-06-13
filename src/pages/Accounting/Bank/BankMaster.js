@@ -68,7 +68,9 @@ const BankMaster = (props) => {
         postMsg,
         pageField,
         updateMsg,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.BankReducer.saveBtnloading,
             postMsg: state.BankReducer.postMsg,
             updateMsg: state.BankReducer.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -276,6 +278,7 @@ const BankMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        loading={saveBtnloading}
                                                                         onClick={saveHandeller}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
