@@ -158,6 +158,7 @@ import SapLedger from "../Reports/SapLedgerReport/SapLedger";
 import ProductMarginReport from "../Reports/ProductMarginReport/ProductMarginReport";
 import CityMaster from "../pages/Adminisrator/CityPages/CityMaster";
 import CityList from "../pages/Adminisrator/CityPages/CityList";
+import OrderSummaryReport from "../Reports/OrderSummary/OrderSummaryReport";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -384,16 +385,21 @@ const userRoutes = [
 
   { path: path.SAP_LEDGER, component: SapLedger },
 
-  // ************************************ Utility **************************************//
-  { path: path.SEARCH_BOX2, component: SearchBoxSecond },
-  { path: path.SEARCH_BOX3, component: SerachBox3 },
 
-  { path: "/dashboard", component: Dashboard },
+//**************************** Reports ***********************************//
 
-  { path: "/", exact: true, component: () => <Redirect to="/login" /> },
-  // { component:() => <Redirect to="/login" /> },
-  { path: "/auth-404", component: Error404 },
-  { path: "/auth-500", component: Error500 },
+{ path: path.ORDER_SUMMARY_REPORT, component:OrderSummaryReport  },
+
+// ************************************ Utility **************************************//
+{ path: path.SEARCH_BOX2, component: SearchBoxSecond },
+{ path: path.SEARCH_BOX3, component: SerachBox3 },
+
+{ path: "/dashboard", component: Dashboard },
+
+{ path: "/", exact: true, component: () => <Redirect to="/login" /> },
+// { component:() => <Redirect to="/login" /> },
+{ path: "/auth-404", component: Error404 },
+{ path: "/auth-500", component: Error500 },
 
 
 ]
