@@ -182,7 +182,7 @@ const PartySubParty = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.PARTY_SUB_PARTY_lIST,
+                    RedirectPath: url.PARTY_SUB_PARTY,
                 }))
             }
         }
