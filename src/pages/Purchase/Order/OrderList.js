@@ -347,6 +347,8 @@ const OrderList = () => {
         _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
             let filtersBody = {}
+            const isCustomerType = values.CustomerType.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+            debugger
             const PO_filters = {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
@@ -362,7 +364,7 @@ const OrderList = () => {
                 "Supplier": _cfunc.loginPartyID(),//Suppiler swipe
                 "Customer": values.Supplier.value,//customer swipe
                 "OrderType": order_Type.SaleOrder,
-                "CustomerType": "",
+                "CustomerType": isCustomerType,
                 "IBType": IBType ? IBType : otherState.IBType
             }
             const GRN_STP_3_filters = {
@@ -371,7 +373,7 @@ const OrderList = () => {
                 "Supplier": values.Supplier.value,
                 "Customer": _cfunc.loginPartyID(),
                 "OrderType": order_Type.InvoiceToGRN,
-                "CustomerType": "",
+                "CustomerType": '',
                 "IBType": IBType ? IBType : otherState.IBType
             }
             if (subPageMode === url.ORDER_LIST_4) {
@@ -384,7 +386,7 @@ const OrderList = () => {
                 filtersBody = JSON.stringify(PO_filters);
             }
             dispatch(_act.getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
-
+            debugger
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: false }) }
     }
 
@@ -449,7 +451,7 @@ const OrderList = () => {
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
 
-                <Col sm={subPageMode === url.ORDER_LIST_4 ?2:3} >
+                    <Col sm={subPageMode === url.ORDER_LIST_4 ? 2 : 3} >
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>
@@ -465,7 +467,7 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col sm={subPageMode === url.ORDER_LIST_4 ?2:3} >
+                    <Col sm={subPageMode === url.ORDER_LIST_4 ? 2 : 3} >
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
@@ -482,29 +484,29 @@ const OrderList = () => {
                     </Col>
 
                     {subPageMode === url.ORDER_LIST_4 ?
-                     <Col sm="3">
-                        <FormGroup className="mb-2 row mt-3 " >
-                            <Label className="col-md-4 p-2"
-                                style={{ width: "115px" }}>
-                                {!(fieldLabel.CustomerType === '') ? fieldLabel.CustomerType : "Customer Type"}
-                            </Label>
-                            <Col sm="7">
-                                <Select
-                                    name="CustomerType"
-                                    classNamePrefix="select2-Customer"
-                                    value={values.CustomerType}
-                                    options={customerTypeOptions}
-                                    onChange={customerTypeOnchange}
-                                    isMulti={true}
-                                    styles={{
-                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                    }}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col >
-                    :
-                    <Col sm='1' />
+                        <Col sm="3">
+                            <FormGroup className="mb-2 row mt-3 " >
+                                <Label className="col-md-4 p-2"
+                                    style={{ width: "115px" }}>
+                                    {!(fieldLabel.CustomerType === '') ? fieldLabel.CustomerType : "Customer Type"}
+                                </Label>
+                                <Col sm="7">
+                                    <Select
+                                        name="CustomerType"
+                                        classNamePrefix="select2-Customer"
+                                        value={values.CustomerType}
+                                        options={customerTypeOptions}
+                                        onChange={customerTypeOnchange}
+                                        isMulti={true}
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col >
+                        :
+                        <Col sm='1' />
                     }
 
 
