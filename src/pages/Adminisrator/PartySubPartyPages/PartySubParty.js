@@ -10,6 +10,7 @@ import {
     Input,
     Label,
     Row,
+    Table,
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
@@ -54,6 +55,8 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { Retailer_List, SSDD_List_under_Company, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import CustomTable2 from "../../../CustomTable2/Table";
+import { Tbody, Thead } from "react-super-responsive-table";
 
 const PartySubParty = (props) => {
 
@@ -304,7 +307,7 @@ const PartySubParty = (props) => {
 
     // Role Table Validation
     function AddPartyHandler() {
-        debugger
+
         const find = partyTableArr.find((element) => {
             return element.value === values.Subparty.value
         });
@@ -333,7 +336,6 @@ const PartySubParty = (props) => {
         }
     }
 
-
     const pagesListColumns = [
         {
             text: "SubPartyName",
@@ -353,7 +355,7 @@ const PartySubParty = (props) => {
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
                                     onClick={() => { dispatch(deleteIDForMasterPage(Party.value)) }}
-                                    // onClick={() => { deleteHandler(Party.value) }}
+                                // onClick={() => { deleteHandler(Party.value) }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
@@ -369,6 +371,34 @@ const PartySubParty = (props) => {
         totalSize: partyTableArr.length,
         custom: true,
     };
+
+    const onDeleteHandeler = (id) => {
+        var filerData = partyTableArr.filter((index) => {
+            return !(index.value === id);
+        });
+        setPartyTableArr(filerData)
+    };
+
+    const tableRows = partyTableArr.map((info) => {
+        return (
+            <tr>
+                <td>{info.label}</td>
+                <td>
+                    <Button
+                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                        data-mdb-toggle="tooltip"
+                        data-mdb-placement="top"
+                        title="Delete Party Type"
+                        onClick={(e) => {
+                            onDeleteHandeler(info.value);
+                        }}
+                    >
+                        <i className="mdi mdi-delete font-size-18"></i>
+                    </Button>
+                </td>
+            </tr>
+        );
+    });
 
     const SaveHandler = async (event) => {
 
@@ -417,6 +447,7 @@ const PartySubParty = (props) => {
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -589,7 +620,13 @@ const PartySubParty = (props) => {
                                                 </CardBody>
                                             </Card>
 
-                                            <PaginationProvider
+                                            {/* <CustomTable2 keyField="id"
+                                                data={[...partyTableArr]}
+                                                columns={pagesListColumns}
+                                                classes={"table align-middle table-nowrap table-hover"} /> */}
+
+
+                                            {/* <PaginationProvider
                                                 pagination={paginationFactory(pageOptions)}
                                             >
                                                 {({ paginationProps, paginationTableProps }) => (
@@ -632,7 +669,17 @@ const PartySubParty = (props) => {
                                                 )
                                                 }
 
-                                            </PaginationProvider>
+                                            </PaginationProvider> */}
+
+                                            <Table className="table table-bordered table-hover">
+                                                <Thead>
+                                                    <tr>
+                                                        <th className="col col-sm-3">SubPartyName</th>
+                                                        <th className="col col-sm-3">{"Action"}</th>
+                                                    </tr>
+                                                </Thead>
+                                                <Tbody>{tableRows}</Tbody>
+                                            </Table>
 
                                             <FormGroup>
                                                 <Row>
