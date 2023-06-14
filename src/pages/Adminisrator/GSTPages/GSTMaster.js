@@ -45,7 +45,7 @@ import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 const GSTMaster = (props) => {
@@ -70,7 +70,9 @@ const GSTMaster = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
+        listLoading,
     } = useSelector((state) => ({
+        listLoading: state.GSTReducer.listLoading,
         saveBtnloading: state.GSTReducer.saveBtnloading,
         tableData: state.GSTReducer.GSTGoButton,
         deleteMessage: state.GSTReducer.deleteMsgForMaster,
@@ -297,7 +299,6 @@ const GSTMaster = (props) => {
                 }
                 return (
                     <span style={{ justifyContent: 'center' }}>
-
                         <CInput
                             key={`GSTPercentage${row.Item}`}
                             id=""
@@ -308,7 +309,6 @@ const GSTMaster = (props) => {
                             className="col col-sm text-end"
                             onChange={(e) => { row["GSTPercentage"] = e.target.value }}
                         />
-
                     </span>
                 )
             },
@@ -348,7 +348,6 @@ const GSTMaster = (props) => {
                 }
                 return (
                     <span style={{ justifyContent: 'center' }}>
-
                         <CInput
                             key={`HSNCode${row.Item}`}
                             type="text"
@@ -475,8 +474,7 @@ const GSTMaster = (props) => {
                                                 </FormGroup>
                                             </Col>
                                             <Col sm={1}>
-                                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                                    onClick={(event) => { GoButton_Handler(event) }} >Go</Button>
+                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
                                             </Col>
                                         </Row>
                                     </CardHeader>

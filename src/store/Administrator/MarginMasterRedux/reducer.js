@@ -1,9 +1,11 @@
 import {
     DELETE_ID_FOR_MARGIN_MASTER_SUCCESS,
     DELETE_MARGIN_LIST_ID_SUCCESS,
+    GET_MARGIN_LIST,
     GET_MARGIN_LIST_SUCCESS,
     GO_BUTTON_FOR_MARGIN_MASTER,
     GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS,
+    MARGIN_API_ERROR_ACTION,
     SAVE_MARGIN_MASTER,
     SAVE_MARGIN_MASTER_SUCCESS,
 } from "./actionType";
@@ -15,6 +17,7 @@ const INIT_STATE = {
     MarginGoButton: { Status: false },
     deleteId_For_MarginMaster: { Status: false },
     saveBtnloading: false,
+    listLoading: false,
 };
 
 const MarginMasterReducer = (state = INIT_STATE, action) => {
@@ -35,10 +38,19 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
             };
 
         // GET api
+
+        case GET_MARGIN_LIST:
+            return {
+                ...state,
+                listLoading: true
+            };
+
         case GET_MARGIN_LIST_SUCCESS:
             return {
                 ...state,
                 MarginList: action.payload,
+                listLoading: false
+
             };
 
         // DELETE api
@@ -52,6 +64,8 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 MarginGoButton: [],
+                listLoading: true,
+
             };
 
         // Go Button post api
@@ -59,6 +73,8 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 MarginGoButton: action.payload,
+                listLoading: false,
+
             };
 
         // delete api Margin Master Page
@@ -67,6 +83,15 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
                 ...state,
                 deleteId_For_MarginMaster: action.payload,
             };
+
+        case MARGIN_API_ERROR_ACTION:
+            return {
+                ...state,
+                saveBtnloading: false,
+                listLoading: false,
+            };
+
+
 
         default:
             return state;

@@ -7,6 +7,7 @@ import {
   GET_SUBGROUP_LIST_SUCCESS,
   SAVE_SUBGROUPLIST,
   SAVE_SUBGROUPLIST_SUCCESS,
+  SUBGROUP_API_ERROR_ACTION,
   UPDATE_SUBGROUPMASTER_ID,
   UPDATE_SUBGROUPMASTER_ID_SUCCESS
 } from "./actionType";
@@ -23,12 +24,12 @@ export const getSubGroupListSuccess = (pages) => ({// get List success
 
 
 
-export const saveSubGroupList =(config={}) => ({// save Action
+export const saveSubGroupList = (config = {}) => ({// save Action
   type: SAVE_SUBGROUPLIST,
   config,
 });
 
-export const saveSubGroupSuccess =  (resp) => ({// Save  success
+export const saveSubGroupSuccess = (resp) => ({// Save  success
   type: SAVE_SUBGROUPLIST_SUCCESS,
   payload: resp,
 });
@@ -53,7 +54,7 @@ export const updateSubgroupIDSuccess = (resp) => ({ //Update Success
   payload: resp,
 })
 
-export const delete_SubGroupList_ID = (config={}) => ({// Delete  Action
+export const delete_SubGroupList_ID = (config = {}) => ({// Delete  Action
   type: DELETE_SUBGROUP_LIST_ID,
   config,
 });
@@ -61,6 +62,10 @@ export const delete_SubGroupList_ID = (config={}) => ({// Delete  Action
 export const deleteSubGrouplistSuccess = (resp) => ({// Delete Success
   type: DELETE_SUBGROUP_LIST_ID_SUCCESS,
   payload: resp
+});
+
+export const SubGroupApiErrorAction = () => ({
+  type: SUBGROUP_API_ERROR_ACTION,
 });
 
 

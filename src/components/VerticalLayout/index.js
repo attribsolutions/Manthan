@@ -165,11 +165,11 @@ const Layout = props => {
         </div>}
 
 
-
+      {/* 
       <div className="pace pace-active" id="preloader">
         <div className="pace-progress" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
         </div>
-      </div>
+      </div> */}
 
       <div className="_linkLoading_body">
         <div className="cv-spinner">

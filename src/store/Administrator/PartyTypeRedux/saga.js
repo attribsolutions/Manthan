@@ -19,7 +19,7 @@ function* save_Party_Type_GneFunc({ config }) {// post api
   try {
     const response = yield call(Save_Party_Type_API, config);
     yield put(action.SavePartyTypeAPISuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.PartyTypeApiErrorAction()) }
 }
 
 function* Get_PartyType_List_GneFunc() { // get api
@@ -27,14 +27,14 @@ function* Get_PartyType_List_GneFunc() { // get api
     const jsonBody = { ...loginJsonBody(), "id": 0 }
     const response = yield call(get_PartyType_List_Api, jsonBody);
     yield put(action.getPartyTypelistSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.PartyTypeApiErrorAction()) }
 }
 
 function* Delete_PartyType_ID_GneFunc({ config }) { // delete api 
   try {
     const response = yield call(detelet_PartyType_List_Api, config);
     yield put(action.deletePartyTypeIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.PartyTypeApiErrorAction()) }
 }
 
 function* Edit_PartyType_ID_GneFunc({ config }) { // edit api
@@ -46,14 +46,14 @@ function* Edit_PartyType_ID_GneFunc({ config }) { // edit api
     const response = yield call(edit_PartyType_List_Api, config);
     response.pageMode = btnmode
     yield put(action.editPartyTypeSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.PartyTypeApiErrorAction()) }
 }
 
 function* Update_PartyType_ID_GneFunc({ config }) {// update api
   try {
     const response = yield call(update_PartyType_List_Api, config);
     yield put(action.updatePartyTypeIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.PartyTypeApiErrorAction()) }
 }
 
 function* PartyTypeSaga() {

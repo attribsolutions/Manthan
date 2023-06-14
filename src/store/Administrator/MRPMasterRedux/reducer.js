@@ -8,6 +8,7 @@ import {
     GO_BUTTON_FOR_MRP_MASTER,
     SAVE_MRP_MASTER,
     GET_MRP_LIST,
+    MRP_API_ERROR_ACTION,
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -80,6 +81,13 @@ const MRPMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 deleteIdForMRPMaster: action.payload,
+            };
+
+            case MRP_API_ERROR_ACTION:
+            return {
+                ...state,
+                saveBtnloading: false,
+                listLoading: false,
             };
 
         default:
