@@ -13,25 +13,26 @@ const selectRow = (row, event) => {
     row.selectCheck = event
 }
 
-export const selectAllCheck = (selected) => ({
-
+export const selectAllCheck = (selected, position, headLabel) => ({
     mode: "checkbox",
     onSelectAll: onSelectAll,
     onSelect: selectRow,
     selected: selected,
-    selectColumnPosition: "right",
+    selectColumnPosition: position ? position : "right",
+
+    selectionDisabled: (row) => row.forceSelectDissabled,
 
     selectionHeaderRenderer: (head) => {
 
         return <div className="">
             <Input type="checkbox" checked={head.checked} />
-            <label style={{ paddingLeft: "7px" }}>SelectAll</label>
+            <label style={{ paddingLeft: "7px" }}>{headLabel ? headLabel : "SelectAll"}</label>
         </div>
     },
-    selectionRenderer: (head) => {
+    selectionRenderer: (head, s, c, d) => {
 
         return <div className="">
-            <Input type="checkbox" checked={head.checked} />
+            <Input type="checkbox" disabled={head.dissabel} checked={head.checked} />
         </div>
     }
 

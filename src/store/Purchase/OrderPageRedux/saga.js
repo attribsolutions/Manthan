@@ -10,6 +10,7 @@ import {
   getOrderApprovalDetailActionSucc,
   orderApiErrorAction,
   getDivisionOrdersSuccess,
+  postOrderConfirms_API_Success,
 } from "./actions";
 import {
   OrderPage_Update_API,
@@ -156,10 +157,14 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
       i.DeliveryDate = (`${DeliveryDate}`)
 
+      i.forceEditHide = false
+      i.forceMakeBtn = false
+      i.forceDeleteHide = false
+      i.forceSelectDissabled = false
+      i.selectCheck = false
 
       if (i.Inward === 0) {
         i.Inward = "Open"
-        i.forceEditHide = false
       } else {
         i.Inward = "Close"
         i.forceEditHide = true
@@ -170,8 +175,16 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.forceMakeBtn = true
       } else {
         i.InvoiceCreated = ""
-        i.forceMakeBtn = false
       }
+
+      if (i.IsConfirm === true) {
+        i.forceEditHide = true;
+        i.forceDeleteHide = true;
+        i.forceSelectDissabled = true;
+        i.selectCheck = true
+      }
+
+
       if (i.SAPResponse) {// for sap_code order page 
 
         var numb = i.SAPResponse.match(/\d/g);
@@ -216,7 +229,7 @@ function* getOrderApproval_Detail_GenFunc({ config }) {
 function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageMode
   try {
     const response = yield call(OrderConfirm_post_API, config);
-    yield put(getDivisionOrdersSuccess(response))
+    yield put(postOrderConfirms_API_Success(response))
   } catch (error) {
     yield put(orderApiErrorAction())
   }

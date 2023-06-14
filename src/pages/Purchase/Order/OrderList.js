@@ -16,8 +16,9 @@ import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
-import { getOrderApprovalDetailAction, orderApprovalAction } from "../../../store/actions";
+import { getOrderApprovalDetailAction, orderApprovalAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
+import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 
 
 const OrderList = () => {
@@ -30,7 +31,7 @@ const OrderList = () => {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         Supplier: { value: "", label: "All" },
-        CustomerType: ""
+        CustomerType: [{ value: "", label: "All" }]
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -59,14 +60,26 @@ const OrderList = () => {
             editData: state.OrderReducer.editData,
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
             approvalDetail: state.OrderReducer.approvalDetail,
-            customerType: state.PartyMasterBulkUpdateReducer.SelectField,
+            customerType: state.PriceListReducer.priceListByCompany,
+            orderConfirmMsg: state.OrderReducer.orderConfirmMsg,
+            orderConfirmLoading: state.OrderReducer.orderConfirmLoading,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, GRNitem, supplier, makeIBInvoice, orderApprovalMsg, approvalDetail, customerType } = reducers;
+    const {
+        pageField,
+        GRNitem,
+        supplier,
+        makeIBInvoice,
+        orderApprovalMsg,
+        approvalDetail,
+        customerType,
+        orderConfirmMsg,
+    } = reducers;
 
     const values = { ...state.values }
     const { fieldLabel } = state;
@@ -150,6 +163,7 @@ const OrderList = () => {
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(_act.GetVenderSupplierCustomer(subPageMode))
         goButtonHandler("event", IBType)
+        dispatch(priceListByCompay_Action());
         return () => {
             dispatch(_act.commonPageFieldListSuccess(null))
             dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list   
@@ -163,14 +177,6 @@ const OrderList = () => {
         }
     }, [pageField])
 
-    // Customer type dropdown Values
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Company: _cfunc.loginCompanyID(),
-            TypeID: 64
-        });
-        dispatch(_act.postSelect_Field_for_dropdown(jsonBody));
-    }, []);
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -205,6 +211,25 @@ const OrderList = () => {
             })
         }
     }, [makeIBInvoice]);
+
+    useEffect(() => {
+
+        if (orderConfirmMsg.Status === true && orderConfirmMsg.StatusCode === 200) {
+            dispatch(postOrderConfirms_API_Success({ Status: false }))
+            customAlert({
+                Type: 1,
+                Message: orderConfirmMsg.Message,
+            })
+
+
+        } else if (orderApprovalMsg.Status === true) {
+            dispatch(postOrderConfirms_API_Success({ Status: false }))
+            customAlert({
+                Type: 2,
+                Message: JSON.stringify(orderConfirmMsg.Message),
+            })
+        }
+    }, [orderConfirmMsg]);
 
     useEffect(() => {
         orderApprovalMessage({ dispatch, orderApprovalMsg })
@@ -336,7 +361,7 @@ const OrderList = () => {
                 "Supplier": _cfunc.loginPartyID(),//Suppiler swipe
                 "Customer": values.Supplier.value,//customer swipe
                 "OrderType": order_Type.SaleOrder,
-                "CustomerType": values.CustomerType.value,
+                "CustomerType": "",
                 "IBType": IBType ? IBType : otherState.IBType
             }
             const GRN_STP_3_filters = {
@@ -397,6 +422,20 @@ const OrderList = () => {
             return a
         })
     }
+    const selectAllRowFunc = (row = []) => {
+        debugger
+        let ischeck = row.filter(i => (i.selectCheck))
+        if (!ischeck.length > 0) {
+            customAlert({
+                Type: 2,
+                Message: "Please Select One Order",
+            });
+            return
+        }
+        let idString = ischeck.map(obj => obj.id).join(',')
+        let jsonBody = { OrderIDs: idString }
+        dispatch(postOrderConfirms_API({ jsonBody }))
+    }
 
     const HeaderContent = () => {
         return (
@@ -447,6 +486,7 @@ const OrderList = () => {
                                     value={values.CustomerType}
                                     options={customerTypeOptions}
                                     onChange={customerTypeOnchange}
+                                    isMulti={true}
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
                                     }}
@@ -510,6 +550,8 @@ const OrderList = () => {
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
+                            selectAllRow={(subPageMode === url.ORDER_LIST_4) && selectAllRowFunc}
+                            orderConfirmLoading={reducers.orderConfirmLoading}
 
                         />
                         : null
