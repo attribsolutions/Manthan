@@ -27,20 +27,20 @@ const OrderSummary = (props) => {
 
     const reducers = useSelector(
         (state) => ({
-
+            orderSummaryGobtn: state.OrderSummaryReducer.orderSummaryGobtn,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-
-    const { userAccess,} = reducers;
+    const { userAccess, orderSummaryGobtn } = reducers;
+    const { Data = [] } = orderSummaryGobtn;
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-      // userAccess useEffect
+    // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
@@ -56,38 +56,23 @@ const OrderSummary = (props) => {
         };
     }, [userAccess])
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if (ProductMarginData.length > 1) {
-
-    //         let newArray = []
-    //         ProductMarginData.forEach(i => {
-    //             let obj = i
-    //             i.ItemMargins.forEach(ele => {
-    //                 const keys = Object.keys(ele);
-    //                 keys.forEach(key => {
-    //                     obj[key] = ele[key]
-    //                 })
-    //             })
-    //             delete obj.ItemMargins
-    //             newArray.push(obj)
-    //         })
-
-    //         const worksheet = XLSX.utils.json_to_sheet(newArray);
-    //         const workbook = XLSX.utils.book_new();
-    //         XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin1");
-    //         XLSX.writeFile(workbook, "Product Margin Report.xlsx");
-
-    //         dispatch(postOrderSummary_API_Success([]));
-    //     }
-    // }, [ProductMarginData]);
+        if (Data.length > 0) {
+            const worksheet = XLSX.utils.json_to_sheet(Data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
+            XLSX.writeFile(workbook, "Order Summary Report.xlsx");
+            dispatch(postOrderSummary_API_Success([]));
+        }
+    }, [Data]);
 
     function goButtonHandler() {
         const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
-            CompanyID: _cfunc.loginCompanyID(),
+            CompanyID: 3,
         });
         dispatch(postOrderSummary_API({ jsonBody, btnId }));
     }
@@ -117,7 +102,7 @@ const OrderSummary = (props) => {
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm="3" className="">
-                            <FormGroup className="mb- row mt-3 " >
+                            <FormGroup className="mb- row mt-3 mb-2 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="7">
@@ -131,7 +116,7 @@ const OrderSummary = (props) => {
                         </Col>
 
                         <Col sm="3" className="">
-                            <FormGroup className="mb- row mt-3 " >
+                            <FormGroup className="mb- row mt-3 mb-2" >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
                                 <Col sm="7">

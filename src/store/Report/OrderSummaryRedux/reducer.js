@@ -1,7 +1,7 @@
 import { POST_ORDER_SUMMARY_API_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
-    orderConfirm: { Status: false },
+    orderSummaryGobtn: [],
 }
 
 const OrderSummaryReducer = (state = INIT_STATE, action) => {
@@ -10,7 +10,7 @@ const OrderSummaryReducer = (state = INIT_STATE, action) => {
         case POST_ORDER_SUMMARY_API_SUCCESS:
             return {
                 ...state,
-                orderConfirm: action.payload,
+                orderSummaryGobtn: action.payload,
             }
 
         default:
