@@ -11,7 +11,8 @@ import {
   getRoleSuccess,
   PostSuccess, userEditActionSuccess,
   userUpdateActionSuccess,
-  userDeleteActionSuccess
+  userDeleteActionSuccess,
+  RoleApiErrorAction
 } from "./action";
 import {
   GET_ROLE_LIST_API,
@@ -25,21 +26,21 @@ function* Get_Roles_GenratorFunction() {                                    //Ge
   try {
     const response = yield call(Role_Master_Get_API, loginJsonBody());
     yield put(getRoleSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(RoleApiErrorAction()) }
 }
 
 function* Submit_Roles_GenratorFunction({ config }) {                       //Save Role Master
   try {
     const response = yield call(Role_Master_Post_API, config);
     yield put(PostSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(RoleApiErrorAction()) }
 }
 
 function* Delete_Roles_GenratorFunction({ config }) {                       //Delete Role Master
   try {
     const response = yield call(Role_Master_Delete_API, config);
     yield put(userDeleteActionSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(RoleApiErrorAction()) }
 }
 
 function* Edit_Roles_GenratorFunction({ config }) {                         //Edit Role Master
@@ -48,7 +49,7 @@ function* Edit_Roles_GenratorFunction({ config }) {                         //Ed
     const response = yield call(Role_Master_Edit_API, config);
     response.pageMode = btnmode;
     yield put(userEditActionSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(RoleApiErrorAction()) }
 }
 
 
@@ -56,7 +57,7 @@ function* Update_Roles_GenratorFunction({ config }) {                       //Up
   try {
     const response = yield call(Role_Master_Update_API, config);
     yield put(userUpdateActionSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(RoleApiErrorAction()) }
 }
 
 function* RoleMaster_Saga() {
