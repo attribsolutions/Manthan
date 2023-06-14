@@ -16,12 +16,14 @@ import {
 import GroupTypeMaster from "./GroupTypeMaster";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const GroupTypeList = (props) => {
   const dispatch = useDispatch();
 
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.GroupTypeReducer.listLoading,
       tableList: state.GroupTypeReducer.GroupType,
       editData: state.GroupTypeReducer.editData,
       updateMsg: state.GroupTypeReducer.updateMessage,
@@ -47,21 +49,24 @@ const GroupTypeList = (props) => {
     dispatch(getGroupTypeslist())
   }, []);
 
-  const { pageField ,userAccess=[]} = reducers
+  const { pageField, userAccess = [] } = reducers
 
   return (
     <React.Fragment>
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={GroupTypeMaster}
-            masterPath={url.GROUPTYPE}
-            ButtonMsgLable={"Group Type"}
-            deleteName={"Name"}
-          />
-          : null
+        reducers.listLoading ?
+          <Listloader />
+          :
+          (pageField) ?
+            <CommonListPage
+              action={action}
+              reducers={reducers}
+              MasterModal={GroupTypeMaster}
+              masterPath={url.GROUPTYPE}
+              ButtonMsgLable={"Group Type"}
+              deleteName={"Name"}
+            />
+            : <>  <Listloader /></>
       }
     </React.Fragment>
   )

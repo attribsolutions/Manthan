@@ -1,9 +1,11 @@
 import {
   DELETE_SUBGROUP_LIST_ID_SUCCESS,
   EDIT_SUBGROUPMASTER_ID_SUCCESS,
+  GET_SUBGROUP_LIST,
   GET_SUBGROUP_LIST_SUCCESS,
   SAVE_SUBGROUPLIST,
   SAVE_SUBGROUPLIST_SUCCESS,
+  SUBGROUP_API_ERROR_ACTION,
   UPDATE_SUBGROUPMASTER_ID,
   UPDATE_SUBGROUPMASTER_ID_SUCCESS
 } from "./actionType";
@@ -15,6 +17,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   saveBtnloading: false,
+  listLoading: false
 }
 
 const SubGroupReducer = (state = INIT_STATE, action) => {
@@ -34,10 +37,18 @@ const SubGroupReducer = (state = INIT_STATE, action) => {
       }
 
     // get 
+    case GET_SUBGROUP_LIST:
+      return {
+        ...state,
+        listLoading: true
+      }
+
     case GET_SUBGROUP_LIST_SUCCESS:
       return {
         ...state,
         SubgroupList: action.payload,
+        listLoading: false
+
       }
     //  del
     case DELETE_SUBGROUP_LIST_ID_SUCCESS:
@@ -66,6 +77,13 @@ const SubGroupReducer = (state = INIT_STATE, action) => {
         updateMsg: action.payload,
         saveBtnloading: false,
 
+      };
+
+    case SUBGROUP_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
       };
 
     default:

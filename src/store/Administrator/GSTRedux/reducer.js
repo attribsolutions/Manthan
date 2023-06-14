@@ -1,9 +1,11 @@
 import {
   DELETE_GST_ID_FOR_MASTER_SUCCESS,
   DELETE_GST_LIST_ID_SUCCESS,
+  GET_GST_LIST,
   GET_GST_LIST_SUCCESS,
   GO_BUTTON_FOR_GST_MASTER,
   GO_BUTTON_FOR_GST_MASTER_SUCCESS,
+  GST_API_ERROR_ACTION,
   SAVE_GST_MASTER,
   SAVE_GST_MASTER_SUCCESS
 } from "./actionType"
@@ -15,6 +17,8 @@ const INIT_STATE = {
   GSTList: [],
   deleteMsgForMaster: { Status: false },
   saveBtnloading: false,
+  listLoading: false,
+
 }
 
 const GSTReducer = (state = INIT_STATE, action) => {
@@ -40,6 +44,8 @@ const GSTReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         GSTGoButton: [],
+        listLoading: true
+
       };
 
     // Go Button post api
@@ -47,13 +53,24 @@ const GSTReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         GSTGoButton: action.payload,
+        listLoading: false
+
       };
 
     // GET api
+    case GET_GST_LIST:
+      return {
+        ...state,
+        listLoading: true
+      };
+
+
     case GET_GST_LIST_SUCCESS:
       return {
         ...state,
         GSTList: action.payload,
+        listLoading: false
+
       };
 
     // DELETE api
@@ -68,6 +85,13 @@ const GSTReducer = (state = INIT_STATE, action) => {
         ...state,
         deleteMsgForMaster: action.payload,
       }
+
+    case GST_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
+      };
 
     default:
       return state

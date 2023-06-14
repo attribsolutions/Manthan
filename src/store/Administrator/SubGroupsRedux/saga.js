@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
+  SubGroupApiErrorAction,
   deleteSubGrouplistSuccess,
   editSubGroupIDSuccess,
   getSubGroupListSuccess,
@@ -26,21 +27,22 @@ function* save_Method_ForSubGroupMaster_GenFun({ config }) {          // Save AP
   try {
     const response = yield call(Post_SubGroupList_API, config);
     yield put(saveSubGroupSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(SubGroupApiErrorAction()) }
+
 }
 
 function* Get_SubGroup_List_genFunc() {                             // getList API
   try {
     const response = yield call(get_SubGroup_List_Api);
     yield put(getSubGroupListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(SubGroupApiErrorAction()) }
 }
 
 function* Delete_SubGroupList_ID_GenratorFunction({ config }) {        // delete API
   try {
     const response = yield call(del_SubGroup_List_API, config);
     yield put(deleteSubGrouplistSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(SubGroupApiErrorAction()) }
 }
 
 function* Edit_SubGrouplist_ID_GenratorFunction({ config }) {          // edit API 
@@ -49,14 +51,14 @@ function* Edit_SubGrouplist_ID_GenratorFunction({ config }) {          // edit A
     const response = yield call(edit_SubGroup_List_Api, config);
     response.pageMode = btnmode;
     yield put(editSubGroupIDSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(SubGroupApiErrorAction()) }
 }
 
 function* Update_SubGrouplist_ID_GenratorFunction({ config }) {        // update API
   try {
     const response = yield call(update_SubGroup_List_Api, config);
     yield put(updateSubgroupIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(SubGroupApiErrorAction()) }
 }
 
 function* SubGroupSaga() {

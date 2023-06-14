@@ -8,6 +8,8 @@ import {
   GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
   ADD_USER,
   UPDATE_USER_ACTION,
+  GET_USER_LIST_FOR_USER,
+  USER_API_ERROR_ACTION,
 } from './actionType'
 
 const INIT_STATE = {
@@ -19,6 +21,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   userPartiesForUserMaster: [],
   saveBtnloading: false,
+  listLoading: false,
 };
 
 const User_Registration_Reducer = (state = INIT_STATE, action) => {
@@ -45,10 +48,18 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
       };
 
     //// get Registration api
+
+    case GET_USER_LIST_FOR_USER:
+      return {
+        ...state,
+        listLoading: true,
+      }
+
     case GET_USER_LIST_FOR_USER_SUCCESS:
       return {
         ...state,
         pages: action.payload,
+        listLoading: false,
       }
 
     //// delete api
@@ -85,6 +96,13 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         userPartiesForUserMaster: action.payload,
+      };
+
+    case USER_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
       };
     default:
       return state;

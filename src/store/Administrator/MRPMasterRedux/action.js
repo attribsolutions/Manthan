@@ -9,6 +9,7 @@ import {
     GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
     DELETE_MRP_MASTER_ID,
     DELETE_MRP_MASTER_ID_SUCCESS,
+    MRP_API_ERROR_ACTION,
 } from "./actionTypes";
 
 // MRP Post API
@@ -64,3 +65,7 @@ export const deleteMRPMaster_Id_Success = (resp) => ({
     type: DELETE_MRP_MASTER_ID_SUCCESS,
     payload: resp,
 });
+
+export const MRPApiErrorAction = () => ({
+    type: MRP_API_ERROR_ACTION,
+})
