@@ -348,7 +348,7 @@ const OrderList = () => {
         try {
             let filtersBody = {}
             const isCustomerType = values.CustomerType.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
-            debugger
+          
             const PO_filters = {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
