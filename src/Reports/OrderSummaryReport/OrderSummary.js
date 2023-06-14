@@ -68,11 +68,12 @@ const OrderSummary = (props) => {
     }, [Data]);
 
     function goButtonHandler() {
+        debugger
         const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
         const jsonBody = JSON.stringify({
-            FromDate: values.FromDate,
-            ToDate: values.ToDate,
-            CompanyID: _cfunc.loginCompanyID,
+            "FromDate": values.FromDate,
+            "ToDate": values.ToDate,
+            "CompanyID": _cfunc.loginCompanyID(),
         });
         dispatch(postOrderSummary_API({ jsonBody, btnId }));
     }
