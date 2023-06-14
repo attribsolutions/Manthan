@@ -15,6 +15,7 @@ import * as url from "../../../routes/route_url";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 
 const VehicleList = () => {
@@ -27,6 +28,7 @@ const VehicleList = () => {
 
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.VehicleReducer.listLoading,
       tableList: state.VehicleReducer.VehicleList,
       postMsg: state.VehicleReducer.postMsg,
       editData: state.VehicleReducer.editData,
@@ -83,21 +85,24 @@ const VehicleList = () => {
         }
 
         {
-          (pageField) ?
-            <div className="mt-n1">
-              <CommonPurchaseList
-                action={action}
-                reducers={reducers}
-                showBreadcrumb={false}
-                MasterModal={VehicleMaster}
-                masterPath={url.VEHICLE}
-                newBtnPath={url.VEHICLE}
-                ButtonMsgLable={"Vehicle"}
-                deleteName={"VehicleNumber"}
-                goButnFunc={goButtonHandler}
-              />
-            </div>
-            : null
+          reducers.listLoading ?
+            <Listloader />
+            :
+            (pageField) ?
+              <div className="mt-n1">
+                <CommonPurchaseList
+                  action={action}
+                  reducers={reducers}
+                  showBreadcrumb={false}
+                  MasterModal={VehicleMaster}
+                  masterPath={url.VEHICLE}
+                  newBtnPath={url.VEHICLE}
+                  ButtonMsgLable={"Vehicle"}
+                  deleteName={"VehicleNumber"}
+                  goButnFunc={goButtonHandler}
+                />
+              </div>
+              : <><Listloader /></>
         }
       </div>
     </React.Fragment>

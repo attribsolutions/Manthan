@@ -92,7 +92,9 @@ const PartyMasterBulkUpdate = (props) => {
         DistrictOnState,
         State,
         saveBtnloading,
+        listLoading,
     } = useSelector((state) => ({
+        listLoading: state.PartyMasterBulkUpdateReducer.listLoading,
         saveBtnloading: state.PartyMasterBulkUpdateReducer.saveBtnloading,
         postMsg: state.PartyMasterBulkUpdateReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -235,7 +237,7 @@ const PartyMasterBulkUpdate = (props) => {
         label: index.Name
     }));
 
-    const goButtonHandler = () => {
+    const GoButton_Handler = () => {
 
         if (SelectFieldName.length === 0) {
             customAlert({
@@ -644,7 +646,8 @@ const PartyMasterBulkUpdate = (props) => {
 
                                         <Col sm={1}>
                                             <div className="col col-1 px-5">
-                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
+
                                             </div>
                                         </Col>
                                     </Row>

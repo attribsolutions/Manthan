@@ -355,6 +355,9 @@ const PartyItems = (props) => {
                                         isSearchable={true}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
                                         options={supplierOptions}
                                         onChange={(hasSelect, evn) => {
                                             onChangeSelect({ hasSelect, evn, state, setState, })

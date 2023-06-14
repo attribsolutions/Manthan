@@ -376,7 +376,8 @@ const Order = (props) => {
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
             sort: true,
-            hidden: !(pageMode === mode.defaultsave) && true,
+           // hidden: !(pageMode === mode.defaultsave) && true,
+           hidden: true,
             dataField: "StockQuantity",
             formatter: (value, row, k) => {
 
