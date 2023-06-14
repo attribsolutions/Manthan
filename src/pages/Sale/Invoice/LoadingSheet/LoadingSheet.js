@@ -69,7 +69,7 @@ const LoadingSheet = (props) => {
         postMsg,
         pageField,
         userAccess,
-        VehicleNumber,
+        VehicleNumber = [],
         RoutesList,
         GoButton,
         Driver,
@@ -190,7 +190,7 @@ const LoadingSheet = (props) => {
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             Party: _cfunc.loginPartyID(),
-            Route: "",
+            Route: values.RouteName === "" ? "" : values.RouteName.value,
             LoadingSheetID: ""
         });
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
