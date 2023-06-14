@@ -72,7 +72,7 @@ const OrderSummary = (props) => {
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
-            CompanyID: 3,
+            CompanyID: _cfunc.loginCompanyID,
         });
         dispatch(postOrderSummary_API({ jsonBody, btnId }));
     }
