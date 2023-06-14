@@ -7,7 +7,8 @@ import {
   getCompanyListSuccess,
   getCompanyGroupSuccess,
   saveCompany_Success,
-  updateCompanyIDSuccess
+  updateCompanyIDSuccess,
+  companyApiErrorAction
 } from "./actions";
 import {
   DELETE_COMPANY_ID,
@@ -23,37 +24,37 @@ function* Save_Method_ForCompany_GenFun({ config }) {         // Save API
   try {
     const response = yield call(postSubmit_Company, config);
     yield put(saveCompany_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyApiErrorAction()) }
 }
 
 function* Get_Company_List_GenFunc() {                          // getList API
   try {
     const response = yield call(fetch_CompanyList, loginJsonBody());
     yield put(getCompanyListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyApiErrorAction()) }
 }
 
 function* deleteCompany_ID({ config }) {                      // delete API
   try {
     const response = yield call(delete_CompanyID, config);
     yield put(deleteCompanyIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyApiErrorAction()) }
 }
 
-function* editCompany_ID({ config}) {               //Edit API
+function* editCompany_ID({ config }) {               //Edit API
   const { btnmode } = config;
   try {
     const response = yield call(edit_CompanyID, config);
     response.pageMode = btnmode
     yield put(editCompanyIDSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyApiErrorAction()) }
 }
 
 function* update_Company({ config }) {             //Update API
   try {
-    const response = yield call(updateCompany_ID, config );
+    const response = yield call(updateCompany_ID, config);
     yield put(updateCompanyIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyApiErrorAction()) }
 }
 
 /// CompanyGroupDropdown
@@ -61,7 +62,7 @@ function* CompanyGroup() {
   try {
     const response = yield call(getCompanyGroup);
     yield put(getCompanyGroupSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyApiErrorAction()) }
 }
 
 function* CompanySaga() {

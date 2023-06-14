@@ -13,6 +13,7 @@ import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { deleteMRPList_Id, deleteMRPList_Id_Success, getMRPList, GoButtonForMRP_MasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 import MRPMaster from "./MRPMaster";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const MRPList = () => {
 
@@ -25,6 +26,7 @@ const MRPList = () => {
 
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.MRPMasterReducer.listLoading,
       tableList: state.MRPMasterReducer.MRPList,
       MRPGoButton: state.MRPMasterReducer.MRPGoButton,
       deleteMsg: state.MRPMasterReducer.deleteMsg,
@@ -82,7 +84,7 @@ const MRPList = () => {
   }, [MRPGoButton]);
 
   function editBodyfunc(index) {
-    
+
     const { rowData, btnId } = index
     let { Division_id, Party_id, preEffectiveDate } = rowData;
     _cfunc.btnIsDissablefunc({ btnId, state: true })
@@ -124,21 +126,24 @@ const MRPList = () => {
 
         <div className="mt-n1">
           {
-            (pageField) ?
-              <CommonPurchaseList
-                action={action}
-                reducers={reducers}
-                showBreadcrumb={false}
-                MasterModal={MRPMaster}
-                masterPath={url.MRP}
-                newBtnPath={url.MRP}
-                ButtonMsgLable={"MRP"}
-                deleteName={"EffectiveDate"}
-                pageMode={pageMode}
-                editBodyfunc={editBodyfunc}
-                deleteBodyfunc={deleteBodyfunc}
-              />
-              : null
+            reducers.listLoading ?
+              <Listloader />
+              :
+              (pageField) ?
+                <CommonPurchaseList
+                  action={action}
+                  reducers={reducers}
+                  showBreadcrumb={false}
+                  MasterModal={MRPMaster}
+                  masterPath={url.MRP}
+                  newBtnPath={url.MRP}
+                  ButtonMsgLable={"MRP"}
+                  deleteName={"EffectiveDate"}
+                  pageMode={pageMode}
+                  editBodyfunc={editBodyfunc}
+                  deleteBodyfunc={deleteBodyfunc}
+                />
+                : <Listloader />
           }
         </div>
 

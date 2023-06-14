@@ -13,13 +13,14 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const CompanyGroupList = (props) => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.CompanyGroupReducer.listLoading,
       tableList: state.CompanyGroupReducer.CompanyGroupList,
       editData: state.CompanyGroupReducer.editData,
       updateMsg: state.CompanyGroupReducer.updateMessage,
@@ -52,16 +53,19 @@ const CompanyGroupList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={CompanyGroupMaster}
-            masterPath={url.COMPANYGROUP}
-            ButtonMsgLable={"Company Group"}
-            deleteName={"Name"}
-          />
-          : null
+        reducers.listLoading ?
+          <Listloader />
+          :
+          (pageField) ?
+            <CommonListPage
+              action={action}
+              reducers={reducers}
+              MasterModal={CompanyGroupMaster}
+              masterPath={url.COMPANYGROUP}
+              ButtonMsgLable={"Company Group"}
+              deleteName={"Name"}
+            />
+            : <><Listloader /></>
       }
 
     </React.Fragment>

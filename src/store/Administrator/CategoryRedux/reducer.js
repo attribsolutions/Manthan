@@ -5,7 +5,9 @@ import {
   EDIT_CATEGORY_ID_SUCCESS,
   GET_CATEGORY_LIST_SUCCESS,
   SAVE_CATEGORY_MASTER,
-  UPDATE_CATEGORY_ID
+  UPDATE_CATEGORY_ID,
+  GET_CATEGORY_LIST,
+  CATEGORY_API_ERROR_ACTION
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -15,7 +17,8 @@ const INIT_STATE = {
   deleteMessage: { Status: false },
   editData: { Status: false },
   updateMessage: { Status: false },
-  saveBtnloading: false
+  saveBtnloading: false,
+  listLoading: false,
 }
 
 const CategoryReducer = (state = INIT_STATE, action) => {
@@ -35,12 +38,18 @@ const CategoryReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false
       }
 
-
     // get api
+    case GET_CATEGORY_LIST:
+      return {
+        ...state,
+        listLoading: true,
+      }
+
     case GET_CATEGORY_LIST_SUCCESS:
       return {
         ...state,
         CategoryListData: action.payload,
+        listLoading: false,
       }
 
     case DELETE_CATEGORY_ID_SUCCESS:
@@ -70,6 +79,13 @@ const CategoryReducer = (state = INIT_STATE, action) => {
         updateMessage: action.payload,
         saveBtnloading: false
 
+      };
+
+    case CATEGORY_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
       };
 
     default:

@@ -105,7 +105,6 @@ const PartyList = () => {
                         />
                         : <><Listloader /></>
             }
-
         </React.Fragment>
     )
 }

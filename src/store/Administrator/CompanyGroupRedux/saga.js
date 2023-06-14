@@ -4,7 +4,8 @@ import {
   getCompanyGroupListSuccess,
   deleteCompanyGroupIDSuccess,
   editCompanyGroupSuccess,
-  updateCompanyGroupIDSuccess
+  updateCompanyGroupIDSuccess,
+  companyGroupApiErrorAction
 } from "./action";
 import {
   CompanyGroup_Get_API,
@@ -27,14 +28,14 @@ function* Get_CompanyGroup_GenratorFunction() {//get API
   try {
     const response = yield call(CompanyGroup_Get_API);
     yield put(getCompanyGroupListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyGroupApiErrorAction()) }
 }
 
 function* Post_Method_For_CompanyGroup_GenFun({ config }) { //Post API
   try {
     const response = yield call(CompanyGroup_Post_API, config);
     yield put(saveCompanyGroupMasterSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyGroupApiErrorAction()) }
 }
 
 function* Edit_CompanyGroupType_ID_GenratorFunction({ config }) { // Edit API
@@ -43,21 +44,21 @@ function* Edit_CompanyGroupType_ID_GenratorFunction({ config }) { // Edit API
     const response = yield call(CompanyGroup_edit_API, config);
     response.pageMode = btnmode;
     yield put(editCompanyGroupSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyGroupApiErrorAction()) }
 }
 
 function* Update_CompanyGroupType_ID_GenratorFunction({ config }) { // Update API
   try {
     const response = yield call(CompanyGroup_update_API, config);
     yield put(updateCompanyGroupIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyGroupApiErrorAction()) }
 }
 
 function* Delete_CompanyGroupType_ID_GenratorFunction({ config }) { //Delete API
   try {
     const response = yield call(CompanyGroup_Delete_API, config);
     yield put(deleteCompanyGroupIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(companyGroupApiErrorAction()) }
 }
 
 function* CompanyGroupSaga() {

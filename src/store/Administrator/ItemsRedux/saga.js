@@ -47,49 +47,50 @@ function* Update_Items_GenFunc({ config }) {
   try {
     const response = yield call(apiCall.Items_Master_Update_API, config);
     yield put(action.updateItemMasterActionSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
+
 
 function* BaseUnit_DropDown_GenFunc() {
   try {
     const response = yield call(apiCall.BaseUnit_Get_DropDown_API);
     yield put(action.getBaseUnit_ForDropDownSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
 
 function* CategoryType_DropDown_GenFunc() {
   try {
     const response = yield call(apiCall.CategoryType_Get_DropDown_API);
     yield put(action.get_CategoryTypes_ForDropDown_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
 
 function* ImageType_DropDown_GenFunc() {
   try {
     const response = yield call(apiCall.ImageType_Get_DropDown_API);
     yield put(action.get_ImageType_ForDropDown_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
 
 function* MRPType_DropDown_GenFunc() {
   try {
     const response = yield call(apiCall.MRPType_Get_DropDown_API);
     yield put(action.get_MRPTypes_ForDropDown_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
 
 function* Division_DropDown_GenFunc({ id = 1 }) {
   try {
     const response = yield call(apiCall.Division_Get_DropDown_API, id);
     yield put(action.get_Division_ForDropDown_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
 
 function* Party_DropDown_GenFunc({ id = 0 }) {
   try {
     const response = yield call(apiCall.Party_Get_DropDown_API, id);
     yield put(action.get_Party_ForDropDown_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
 
 // Item tag Name 
@@ -97,7 +98,7 @@ function* Item_tagname_GenFunc() {
   try {
     const response = yield call(apiCall.Get_Item_Tag);
     yield put(action.getItemtagSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
 
 // Brand tag Name 
@@ -112,14 +113,14 @@ function* Group_DropDown_GenFunc({ id }) {
   try {
     const response = yield call(apiCall.Group_By_GroupTypes_DropDown_API, id);
     yield put(action.get_Group_By_GroupType_ForDropDown_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
 
 function* SubGroup_DropDown_GenFunc({ id }) {
   try {
     const response = yield call(apiCall.SubGroup_By_Group_DropDown_API, id);
     yield put(action.get_Sub_Group_By_Group_ForDropDown_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
 
 // Category  API dependent on CategoryType api
@@ -127,7 +128,7 @@ function* Category_DropDown_API_GenFunc({ id }) {
   try {
     const response = yield call(apiCall.Category_By_CategoryTypes_DropDown_API, id);
     yield put(action.get_Category_By_CategoryType_ForDropDownAPI_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }
 
 function* ItemsMastersSaga() {
