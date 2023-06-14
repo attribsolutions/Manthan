@@ -279,7 +279,7 @@ const CommonListPage = (props) => {
       <React.Fragment>
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <div className="page-content">
-          <div className="table-responsive" >
+          <div >
             <PaginationProvider pagination={paginationFactory(pageOptions)}>
               {({ paginationProps, paginationTableProps }) => (
                 <ToolkitProvider
@@ -292,7 +292,7 @@ const CommonListPage = (props) => {
                     <React.Fragment>
                       <Row>
                         <Col xl="12">
-                          <div >
+                          <div className="table-responsive" >
                             <BootstrapTable
                               keyField={"id"}
                               responsive
