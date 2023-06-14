@@ -65,7 +65,7 @@ const OrderList = () => {
             orderConfirmLoading: state.OrderReducer.orderConfirmLoading,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-            
+
         })
     );
 
@@ -216,6 +216,7 @@ const OrderList = () => {
 
         if (orderConfirmMsg.Status === true && orderConfirmMsg.StatusCode === 200) {
             dispatch(postOrderConfirms_API_Success({ Status: false }))
+            goButtonHandler("event",)
             customAlert({
                 Type: 1,
                 Message: orderConfirmMsg.Message,
@@ -414,7 +415,13 @@ const OrderList = () => {
         })
     }
 
-    function customerTypeOnchange(e) {
+    function customerTypeOnchange(e = []) {
+
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
         setState((i) => {
             const a = { ...i }
             a.values.CustomerType = e;
@@ -423,7 +430,7 @@ const OrderList = () => {
         })
     }
     const selectAllRowFunc = (row = []) => {
-        debugger
+
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
             customAlert({
@@ -441,7 +448,8 @@ const OrderList = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
-                    <Col sm="2" className="">
+
+                <Col sm={subPageMode === url.ORDER_LIST_4 ?2:3} >
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>
@@ -457,7 +465,7 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col sm="2" className="">
+                    <Col sm={subPageMode === url.ORDER_LIST_4 ?2:3} >
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
@@ -473,7 +481,8 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    {subPageMode === url.ORDER_LIST_4 && <Col sm="3">
+                    {subPageMode === url.ORDER_LIST_4 ?
+                     <Col sm="3">
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
                                 style={{ width: "115px" }}>
@@ -493,7 +502,11 @@ const OrderList = () => {
                                 />
                             </Col>
                         </FormGroup>
-                    </Col >}
+                    </Col >
+                    :
+                    <Col sm='1' />
+                    }
+
 
 
                     <Col sm="3">
@@ -517,7 +530,7 @@ const OrderList = () => {
                         </FormGroup>
                     </Col >
 
-
+                    <Col sm="1" />
                     <Col sm="1" className="mt-3 ">
                         <Go_Button loading={reducers.loading} id={gobtnId} onClick={goButtonHandler} />
                     </Col>

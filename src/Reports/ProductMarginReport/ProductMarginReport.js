@@ -96,7 +96,7 @@ const ProductMarginReport = (props) => {
     }, [ProductMarginData]);
 
     function excelhandler(event) {
-        debugger
+     
         event.preventDefault();
         const userDetails = loginUserDetails()
         const btnId = "excelbtn-id"

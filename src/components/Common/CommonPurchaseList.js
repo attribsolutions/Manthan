@@ -104,7 +104,7 @@ const CommonPurchaseList = (props) => {
     oderAprovalBtnFunc,
     selectAllRow = ''
   } = props;
-  debugger
+
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
@@ -222,11 +222,11 @@ const CommonPurchaseList = (props) => {
   }
 
   const makeBtnColumn = () => {// ======================== for makeBtnColumn Page Action Button ================================
-    var aa=2
+    var aa = 2
     if (
       makeBtnShow &&
       pageMode === mode.modeSTPsave
-      &&aa===1
+      && aa === 1
     ) {
       // return {
       //   text: "Select",
@@ -334,8 +334,11 @@ const CommonPurchaseList = (props) => {
   function rowSelected() {
     return tableList.map((index) => { return (index.selectCheck) })
   }
+  const nonSelectedRow = () => {
 
+    return tableList.filter(row => row.forceSelectDissabled).map(row => row.id)
 
+  }
 
   if (!(userAccState === "")) {
 
@@ -343,7 +346,7 @@ const CommonPurchaseList = (props) => {
       <React.Fragment>
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <HeaderContent />
-        <div className="table-responsive mt-1" >
+        <div >
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
@@ -356,12 +359,12 @@ const CommonPurchaseList = (props) => {
                   <React.Fragment>
                     <Row>
                       <Col xl="12">
-                        <div className="">
+                        <div className="table-responsive mt-1" >
                           <BootstrapTable
                             keyField={"id"}
                             responsive
                             bordered={false}
-                            selectRow={selectAllRow ? selectAllCheck(rowSelected(), "left", "Confirm"):undefined}
+                            selectRow={selectAllRow ? selectAllCheck(rowSelected(), nonSelectedRow(), "left", "Confirm") : undefined}
                             defaultSorted={defaultSorted}
                             striped={true}
                             classes={"table  table-bordered table-hover"}

@@ -161,7 +161,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceMakeBtn = false
       i.forceDeleteHide = false
       i.forceSelectDissabled = false
-      i.selectCheck = false
+      // i.selectCheck = false
 
       if (i.Inward === 0) {
         i.Inward = "Open"
@@ -181,7 +181,6 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.forceEditHide = true;
         i.forceDeleteHide = true;
         i.forceSelectDissabled = true;
-        i.selectCheck = true
       }
 
 
@@ -192,11 +191,8 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.FullOrderNumber = `${i.FullOrderNumber} (${i.SAPResponse})`//concate sap code and full order number
         i.forceEditHide = true
         i.forceDeleteHide = true
-      } else {
-        i.forceEditHide = false
-        i.forceDeleteHide = false
-
       }
+
       return i
     })
     yield put(getOrderListPageSuccess(newList))
