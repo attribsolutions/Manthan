@@ -15,6 +15,7 @@ import {
 import { loginCompanyID, loginPartyID, loginUserAdminRole } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const SalesManList = (props) => {
 
@@ -25,6 +26,7 @@ const SalesManList = (props) => {
 
     const reducers = useSelector(
         (state) => ({
+            listLoading: state.SalesManReducer.listLoading,
             tableList: state.SalesManReducer.SalesManList,
             postMsg: state.SalesManReducer.PostData,
             editData: state.SalesManReducer.editData,
@@ -82,20 +84,23 @@ const SalesManList = (props) => {
                     </div>
                 }
                 {
-                    (pageField) &&
-                    <div className="mt-n1">
-                        <CommonPurchaseList
-                            action={action}
-                            reducers={reducers}
-                            showBreadcrumb={false}
-                            MasterModal={SalesManMaster}
-                            masterPath={url.SALESMAN}
-                            newBtnPath={url.SALESMAN}
-                            ButtonMsgLable={"SalesMan"}
-                            deleteName={"Name"}
-                            goButnFunc={goButtonHandler}
-                        />
-                    </div>
+                    reducers.listLoading ?
+                        <Listloader />
+                        :
+                        (pageField) &&
+                        <div className="mt-n1">
+                            <CommonPurchaseList
+                                action={action}
+                                reducers={reducers}
+                                showBreadcrumb={false}
+                                MasterModal={SalesManMaster}
+                                masterPath={url.SALESMAN}
+                                newBtnPath={url.SALESMAN}
+                                ButtonMsgLable={"SalesMan"}
+                                deleteName={"Name"}
+                                goButnFunc={goButtonHandler}
+                            />
+                        </div>
                 }
             </div>
         </React.Fragment>
