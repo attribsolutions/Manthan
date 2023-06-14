@@ -4,7 +4,8 @@ import {
     editRoutesIDSuccess,
     SaveRoutesMasterSuccess,
     GetRoutesListSuccess,
-    updateRoutesIDSuccess
+    updateRoutesIDSuccess,
+    RouteApiErrorAction
 } from "./actions";
 import {
     Routes_Delete_API,
@@ -26,15 +27,15 @@ function* save_Routes_Master_GenFun({ config = {} }) {
     try {
         const response = yield call(Routes_Post_API, config);
         yield put(SaveRoutesMasterSuccess(response));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(RouteApiErrorAction()) }
 }
 
-function* Routes_List_GenratorFunction({jsonBody}) { //Routes List Api Using Post Method
+function* Routes_List_GenratorFunction({ jsonBody }) { //Routes List Api Using Post Method
     const filters = (jsonBody === undefined || null ? loginJsonBody() : jsonBody);
     try {
         const response = yield call(Routes_Get_API, filters);
         yield put(GetRoutesListSuccess(response.Data));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(RouteApiErrorAction()) }
 }
 
 function* Edit_Routes_ID_GenratorFunction({ config = {} }) {
@@ -43,21 +44,21 @@ function* Edit_Routes_ID_GenratorFunction({ config = {} }) {
         const response = yield call(Routes_Edit_API, config);
         response.pageMode = btnmode
         yield put(editRoutesIDSuccess(response));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(RouteApiErrorAction()) }
 }
 
-function* Update_Routes_ID_GenratorFunction({ config = {}}) {
+function* Update_Routes_ID_GenratorFunction({ config = {} }) {
     try {
         const response = yield call(Routes_Update_API, config);
         yield put(updateRoutesIDSuccess(response))
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(RouteApiErrorAction()) }
 }
 
 function* Delete_Routes_ID_GenratorFunction({ config = {} }) {
     try {
         const response = yield call(Routes_Delete_API, config);
         yield put(deleteRoutesID_Success(response))
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(RouteApiErrorAction()) }
 }
 
 function* RoutesSaga() {

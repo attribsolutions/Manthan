@@ -9,7 +9,8 @@ import {
   GET_ROUTES_LIST,
   GET_ROUTES_LIST_SUCCESS,
   UPDATE_ROUTES_ID,
-  UPDATE_ROUTES_ID_SUCCESS
+  UPDATE_ROUTES_ID_SUCCESS,
+  ROUTES_API_ERROR_ACTION
 } from "./actionTypes";
 
 export const GetRoutesList = (jsonBody) => ({
@@ -61,4 +62,8 @@ export const deleteRoutesID_Success = (resp) => ({
   type: DELETE_ROUTES_ID_SUCCESS,
   payload: resp
 });
+
+export const RouteApiErrorAction = () => ({
+  type: ROUTES_API_ERROR_ACTION,
+})
 

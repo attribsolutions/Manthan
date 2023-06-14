@@ -5,7 +5,9 @@ import {
   EDIT_DRIVER_TYPE_ID_SUCCESS,
   UPDATE_DRIVER_TYPE_ID_SUCCESS,
   SAVE_DRIVER_MASTER,
-  UPDATE_DRIVER_TYPE_ID
+  UPDATE_DRIVER_TYPE_ID,
+  GET_DRIVER_LIST,
+  DRIVER_API_ERROR_ACTION
 } from "./actionType";
 
 const INIT_STATE = {
@@ -15,6 +17,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   deleteMessage: { Status: false },
   saveBtnloading: false,
+  listLoading: false,
 }
 const DriverReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
@@ -34,10 +37,17 @@ const DriverReducer = (state = INIT_STATE, action) => {
 
       }
 
+    case GET_DRIVER_LIST:
+      return {
+        ...state,
+        listLoading: true,
+      }
+
     case GET_DRIVER_LIST_SUCCESS:
       return {
         ...state,
         DriverList: action.payload,
+        listLoading: false,
       }
 
     case DELETE_DRIVER_TYPE_ID_SUCCESS:
@@ -64,7 +74,13 @@ const DriverReducer = (state = INIT_STATE, action) => {
         ...state,
         updateMessage: action.payload,
         saveBtnloading: false,
+      };
 
+    case DRIVER_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
       };
 
     default:
