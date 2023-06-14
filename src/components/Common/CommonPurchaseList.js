@@ -222,82 +222,43 @@ const CommonPurchaseList = (props) => {
   }
 
   const makeBtnColumn = () => {// ======================== for makeBtnColumn Page Action Button ================================
-    var aa = 2
+  
     if (
       makeBtnShow &&
       pageMode === mode.modeSTPsave
-      && aa === 1
     ) {
-      // return {
-      //   text: "Select",
-      //   dataField: "hasSelect",
-      //   sort: true,
-      //   formatter: (cellContent, rowData, key) => {
-      //     rowData["hasSelect"] = false;
+      return {
+        text: "Select",
+        dataField: "hasSelect",
+        sort: true,
+        formatter: (cellContent, rowData, key) => {
+          rowData["hasSelect"] = false;
 
-      //     return (
-      //       <div>
-      //         <Button
-      //           type="button"
-      //           className={makeBtnCss}
-      //           data-mdb-toggle="tooltip"
-      //           data-mdb-placement="top"
-      //           title={makeBtnName}
-      //           onClick={() => {
-      //             makeBtnHandler(rowData);
-      //           }}
-      //         >
-      //           <span
-      //             style={{ marginLeft: "6px", marginRight: "6px" }}
-      //             className=" fas fa-file-invoice"
-      //           ></span>
-      //         </Button>
-      //       </div>
-      //     );
-      //     // }
-      //   },
-      // }
+          return (
+            <div>
+              <Button
+                type="button"
+                className={makeBtnCss}
+                data-mdb-toggle="tooltip"
+                data-mdb-placement="top"
+                title={makeBtnName}
+                onClick={() => {
+                  makeBtnHandler(rowData);
+                }}
+              >
+                <span
+                  style={{ marginLeft: "6px", marginRight: "6px" }}
+                  className=" fas fa-file-invoice"
+                ></span>
+              </Button>
+            </div>
+          );
+          // }
+        },
+      }
     }
   }
-  // orderConfiorm
-
-  // const secondLastColumn = () => {// ======================== for GRNMode2 Page Action Button ================================
-  //   if (
-  //     makeBtnShow &&
-  //     pageMode === mode.modeSTPsave
-  //   ) {
-  //     return {
-  //       text: "Action",
-  //       dataField: "hasSelect",
-  //       sort: true,
-  //       formatter: (cellContent, rowData, key) => {
-  //         rowData["hasSelect"] = false;
-
-  //         return (
-  //           <div>
-  //             <Button
-  //               type="button"
-  //               className={makeBtnCss}
-  //               data-mdb-toggle="tooltip"
-  //               data-mdb-placement="top"
-  //               title={makeBtnName}
-  //               onClick={() => {
-  //                 makeBtnHandler(rowData);
-  //               }}
-  //             >
-  //               <span
-  //                 style={{ marginLeft: "6px", marginRight: "6px" }}
-  //                 className=" fas fa-file-invoice"
-  //               ></span>
-  //             </Button>
-  //           </div>
-  //         );
-  //         // }
-  //       },
-  //     }
-  //   }
-  // }
-
+ 
   const lastColumn = () => {  // ======================== for List Page Action Button ================================
 
     if (!(pageMode === mode.modeSTPsave)) {
