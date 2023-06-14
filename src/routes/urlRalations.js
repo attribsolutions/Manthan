@@ -217,4 +217,6 @@ export const DebitList = url.DEBIT
 
 export const SapLedger = url.SAP_LEDGER
 
+//**************************** Reports ***********************************//
 
+export const OrderSummaryReport = url.ORDER_SUMMARY_REPORT

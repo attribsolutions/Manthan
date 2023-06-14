@@ -95,7 +95,7 @@ function* getPartySubPartyGenFunc({ id }) {                                     
 // }
 
 function* deletePartySubPartyGenFunc({ id }) {
-      
+      debugger
     const getState = (state) => state.PartySubPartyReducer.PartySubParty;
     const tableList = yield select(getState);
     const newList = tableList.filter((index) => {

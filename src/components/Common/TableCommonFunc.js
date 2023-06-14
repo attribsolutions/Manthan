@@ -13,31 +13,32 @@ const selectRow = (row, event) => {
     row.selectCheck = event
 }
 
-export const selectAllCheck = (selected) => ({
-
+export const selectAllCheck = (selected, position, headLabel) => ({
     mode: "checkbox",
     onSelectAll: onSelectAll,
     onSelect: selectRow,
     selected: selected,
-    selectColumnPosition: "right",
+    selectColumnPosition: position ? position : "right",
+
+    selectionDisabled: (row) => row.forceSelectDissabled,
 
     selectionHeaderRenderer: (head) => {
 
         return <div className="">
             <Input type="checkbox" checked={head.checked} />
-            <label style={{ paddingLeft: "7px" }}>SelectAll</label>
+            <label style={{ paddingLeft: "7px" }}>{headLabel ? headLabel : "SelectAll"}</label>
         </div>
     },
-    selectionRenderer: (head) => {
+    selectionRenderer: (head, s, c, d) => {
 
         return <div className="">
-            <Input type="checkbox" checked={head.checked} />
+            <Input type="checkbox" disabled={head.dissabel} checked={head.checked} />
         </div>
     }
 
 })
 
-const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, userAccState }) => {
+const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeBtnColumn, userAccState }) => {
 
     const [tableColumns, setTableColumns] = useState([{
         text: "ID",
@@ -89,10 +90,16 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, userA
                 }
             }
 
-            if ((PageFieldMaster.length - 1 === k) && secondLastColumn) {
+            if ((PageFieldMaster.length - 2 === k) && secondLastColumn) {
                 let isCol = secondLastColumn();
                 if (isCol) { columns.push(isCol) }
             }
+
+            if ((PageFieldMaster.length - 1 === k) && makeBtnColumn) {
+                let isCol = makeBtnColumn();
+                if (isCol) { columns.push(isCol) }
+            }
+
             if ((PageFieldMaster.length - 1 === k) && lastColumn) {
                 let islastCol = lastColumn()
                 if (islastCol) {

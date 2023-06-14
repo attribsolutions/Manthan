@@ -304,7 +304,7 @@ const PartySubParty = (props) => {
 
     // Role Table Validation
     function AddPartyHandler() {
-
+        debugger
         const find = partyTableArr.find((element) => {
             return element.value === values.Subparty.value
         });
@@ -333,6 +333,7 @@ const PartySubParty = (props) => {
         }
     }
 
+
     const pagesListColumns = [
         {
             text: "SubPartyName",
@@ -341,8 +342,8 @@ const PartySubParty = (props) => {
         {
             text: "Action ",
             dataField: "",
-            formatter: (cellContent, Party, k) => (
-                <>
+            formatter: (cellContent, Party, k) => {
+                return (<>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
@@ -352,14 +353,14 @@ const PartySubParty = (props) => {
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
                                     onClick={() => { dispatch(deleteIDForMasterPage(Party.value)) }}
+                                    // onClick={() => { deleteHandler(Party.value) }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
                             </FormGroup>
                         </Col>
-                    </div>
-                </>
-            ),
+                    </div></>)
+            }
         },
     ];
 

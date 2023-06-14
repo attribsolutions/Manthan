@@ -19,7 +19,9 @@ import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
-import DynamicColumnHook from "./TableCommonFunc";
+import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
+import { url } from "../../routes";
+import { SaveButton } from "./CommonButton";
 
 let sortType = "asc";
 let searchCount = 0;
@@ -100,9 +102,9 @@ const CommonPurchaseList = (props) => {
       return null;
     },
     oderAprovalBtnFunc,
-
+    selectAllRow = ''
   } = props;
-
+  debugger
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
@@ -219,42 +221,82 @@ const CommonPurchaseList = (props) => {
     setmodal_edit(false);
   }
 
-  const secondLastColumn = () => {// ======================== for GRNMode2 Page Action Button ================================
+  const makeBtnColumn = () => {// ======================== for makeBtnColumn Page Action Button ================================
+    var aa=2
     if (
       makeBtnShow &&
       pageMode === mode.modeSTPsave
+      &&aa===1
     ) {
-      return {
-        text: "Action",
-        dataField: "hasSelect",
-        sort: true,
-        formatter: (cellContent, rowData, key) => {
-          rowData["hasSelect"] = false;
+      // return {
+      //   text: "Select",
+      //   dataField: "hasSelect",
+      //   sort: true,
+      //   formatter: (cellContent, rowData, key) => {
+      //     rowData["hasSelect"] = false;
 
-          return (
-            <div>
-              <Button
-                type="button"
-                className={makeBtnCss}
-                data-mdb-toggle="tooltip"
-                data-mdb-placement="top"
-                title={makeBtnName}
-                onClick={() => {
-                  makeBtnHandler(rowData);
-                }}
-              >
-                <span
-                  style={{ marginLeft: "6px", marginRight: "6px" }}
-                  className=" fas fa-file-invoice"
-                ></span>
-              </Button>
-            </div>
-          );
-          // }
-        },
-      }
+      //     return (
+      //       <div>
+      //         <Button
+      //           type="button"
+      //           className={makeBtnCss}
+      //           data-mdb-toggle="tooltip"
+      //           data-mdb-placement="top"
+      //           title={makeBtnName}
+      //           onClick={() => {
+      //             makeBtnHandler(rowData);
+      //           }}
+      //         >
+      //           <span
+      //             style={{ marginLeft: "6px", marginRight: "6px" }}
+      //             className=" fas fa-file-invoice"
+      //           ></span>
+      //         </Button>
+      //       </div>
+      //     );
+      //     // }
+      //   },
+      // }
     }
   }
+  // orderConfiorm
+
+  // const secondLastColumn = () => {// ======================== for GRNMode2 Page Action Button ================================
+  //   if (
+  //     makeBtnShow &&
+  //     pageMode === mode.modeSTPsave
+  //   ) {
+  //     return {
+  //       text: "Action",
+  //       dataField: "hasSelect",
+  //       sort: true,
+  //       formatter: (cellContent, rowData, key) => {
+  //         rowData["hasSelect"] = false;
+
+  //         return (
+  //           <div>
+  //             <Button
+  //               type="button"
+  //               className={makeBtnCss}
+  //               data-mdb-toggle="tooltip"
+  //               data-mdb-placement="top"
+  //               title={makeBtnName}
+  //               onClick={() => {
+  //                 makeBtnHandler(rowData);
+  //               }}
+  //             >
+  //               <span
+  //                 style={{ marginLeft: "6px", marginRight: "6px" }}
+  //                 className=" fas fa-file-invoice"
+  //               ></span>
+  //             </Button>
+  //           </div>
+  //         );
+  //         // }
+  //       },
+  //     }
+  //   }
+  // }
 
   const lastColumn = () => {  // ======================== for List Page Action Button ================================
 
@@ -281,12 +323,18 @@ const CommonPurchaseList = (props) => {
       })
     }
   }
+
   const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({
     pageField,
     lastColumn,
-    secondLastColumn,
+    makeBtnColumn,
     userAccState: userAccState
   })
+
+  function rowSelected() {
+    return tableList.map((index) => { return (index.selectCheck) })
+  }
+
 
 
   if (!(userAccState === "")) {
@@ -313,6 +361,7 @@ const CommonPurchaseList = (props) => {
                             keyField={"id"}
                             responsive
                             bordered={false}
+                            selectRow={selectAllRow ? selectAllCheck(rowSelected(), "left", "Confirm"):undefined}
                             defaultSorted={defaultSorted}
                             striped={true}
                             classes={"table  table-bordered table-hover"}
@@ -346,25 +395,23 @@ const CommonPurchaseList = (props) => {
               </ToolkitProvider>
             )}
           </PaginationProvider>
+          {
 
-          {/* {
-                        (`/${userAccState.ActualPagePath}` === url.GRN_STP_1) ?
-                            (tableList.length == 0) ? null :
-                                <div className=" " style={{ paddingBottom: 'center' }}>
-                                    <button
-                                        style={{ marginTop: "-10px" }}
-                                        id='form_submmit'
-                                        type="submit"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top"
-                                        className="btn btn-primary w-md  "
-                                        onClick={onSaveBtnClick}
-                                    >
-                                        <i class="fas fa-edit me-2"></i>{makeBtnName}
-                                    </button>
-                                </div>
-                            :
-                            null
-                    } */}
+            ((tableList.length > 0) && (typeof selectAllRow === 'function')) &&
+
+            <div className="row save1 " style={{ paddingBottom: 'center' }}>
+              <button
+                disabled={props.orderConfirmLoading}
+                style={{ marginTop: "-10px" }}
+                type="button"
+                className="btn btn-primary w-md  "
+                onClick={() => { selectAllRow(tableList) }}
+              >
+                <i class="fas fa-edit me-2"></i>{"Confirm"}
+              </button>
+            </div>
+          }
+
           <Modal
             isOpen={modal_edit}
             toggle={() => {

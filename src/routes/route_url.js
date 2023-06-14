@@ -225,3 +225,8 @@ export const DEBIT_LIST = "/Debit_List"
 export const DEBIT = "/Debit"
 
 export const SAP_LEDGER = "/SapLedger"
+
+
+//**************************** Reports ***********************************//
+
+export const ORDER_SUMMARY_REPORT = "/OrderSummaryReport"

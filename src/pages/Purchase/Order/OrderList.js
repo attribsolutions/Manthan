@@ -16,8 +16,9 @@ import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
-import { getOrderApprovalDetailAction, orderApprovalAction } from "../../../store/actions";
+import { getOrderApprovalDetailAction, orderApprovalAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
+import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 
 
 const OrderList = () => {
@@ -29,7 +30,8 @@ const OrderList = () => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Supplier: { value: "", label: "All" }
+        Supplier: { value: "", label: "All" },
+        CustomerType: [{ value: "", label: "All" }]
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -58,14 +60,26 @@ const OrderList = () => {
             editData: state.OrderReducer.editData,
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
             approvalDetail: state.OrderReducer.approvalDetail,
+            customerType: state.PriceListReducer.priceListByCompany,
+            orderConfirmMsg: state.OrderReducer.orderConfirmMsg,
+            orderConfirmLoading: state.OrderReducer.orderConfirmLoading,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-
+            
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, GRNitem, supplier, makeIBInvoice, orderApprovalMsg, approvalDetail } = reducers;
+    const {
+        pageField,
+        GRNitem,
+        supplier,
+        makeIBInvoice,
+        orderApprovalMsg,
+        approvalDetail,
+        customerType,
+        orderConfirmMsg,
+    } = reducers;
 
     const values = { ...state.values }
     const { fieldLabel } = state;
@@ -76,7 +90,6 @@ const OrderList = () => {
         postSucc: _act.saveOrderActionSuccess,
         updateSucc: _act.updateOrderIdSuccess,
         deleteSucc: _act.deleteOrderIdSuccess,
-
     }
 
     // Featch Modules List data  First Rendering
@@ -150,6 +163,7 @@ const OrderList = () => {
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(_act.GetVenderSupplierCustomer(subPageMode))
         goButtonHandler("event", IBType)
+        dispatch(priceListByCompay_Action());
         return () => {
             dispatch(_act.commonPageFieldListSuccess(null))
             dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list   
@@ -163,6 +177,7 @@ const OrderList = () => {
         }
     }, [pageField])
 
+
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -172,6 +187,11 @@ const OrderList = () => {
         value: "",
         label: " All"
     });
+
+    const customerTypeOptions = customerType.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
@@ -191,6 +211,25 @@ const OrderList = () => {
             })
         }
     }, [makeIBInvoice]);
+
+    useEffect(() => {
+
+        if (orderConfirmMsg.Status === true && orderConfirmMsg.StatusCode === 200) {
+            dispatch(postOrderConfirms_API_Success({ Status: false }))
+            customAlert({
+                Type: 1,
+                Message: orderConfirmMsg.Message,
+            })
+
+
+        } else if (orderApprovalMsg.Status === true) {
+            dispatch(postOrderConfirms_API_Success({ Status: false }))
+            customAlert({
+                Type: 2,
+                Message: JSON.stringify(orderConfirmMsg.Message),
+            })
+        }
+    }, [orderConfirmMsg]);
 
     useEffect(() => {
         orderApprovalMessage({ dispatch, orderApprovalMsg })
@@ -313,6 +352,7 @@ const OrderList = () => {
                 "Supplier": values.Supplier.value,
                 "Customer": _cfunc.loginPartyID(),
                 "OrderType": order_Type.PurchaseOrder,
+                "CustomerType": "",
                 "IBType": IBType ? IBType : otherState.IBType
             }
             const SO_filters = {
@@ -321,6 +361,7 @@ const OrderList = () => {
                 "Supplier": _cfunc.loginPartyID(),//Suppiler swipe
                 "Customer": values.Supplier.value,//customer swipe
                 "OrderType": order_Type.SaleOrder,
+                "CustomerType": "",
                 "IBType": IBType ? IBType : otherState.IBType
             }
             const GRN_STP_3_filters = {
@@ -329,6 +370,7 @@ const OrderList = () => {
                 "Supplier": values.Supplier.value,
                 "Customer": _cfunc.loginPartyID(),
                 "OrderType": order_Type.InvoiceToGRN,
+                "CustomerType": "",
                 "IBType": IBType ? IBType : otherState.IBType
             }
             if (subPageMode === url.ORDER_LIST_4) {
@@ -352,7 +394,6 @@ const OrderList = () => {
             a.hasValid.FromDate.valid = true
             return a
         })
-
     }
 
     function todateOnchange(e, date) {
@@ -362,29 +403,45 @@ const OrderList = () => {
             a.hasValid.ToDate.valid = true
             return a
         })
-
     }
 
     function supplierOnchange(e) {
-
         setState((i) => {
             const a = { ...i }
             a.values.Supplier = e;
             a.hasValid.Supplier.valid = true
             return a
         })
-        // let newObj = { ...orderlistFilter }
-        // newObj.supplierSelect = e
-        // setorderlistFilter(newObj)
     }
 
-
+    function customerTypeOnchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.CustomerType = e;
+            a.hasValid.CustomerType.valid = true
+            return a
+        })
+    }
+    const selectAllRowFunc = (row = []) => {
+        debugger
+        let ischeck = row.filter(i => (i.selectCheck))
+        if (!ischeck.length > 0) {
+            customAlert({
+                Type: 2,
+                Message: "Please Select One Order",
+            });
+            return
+        }
+        let idString = ischeck.map(obj => obj.id).join(',')
+        let jsonBody = { OrderIDs: idString }
+        dispatch(postOrderConfirms_API({ jsonBody }))
+    }
 
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
-                    <Col sm="3" className="">
+                    <Col sm="2" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>
@@ -399,7 +456,8 @@ const OrderList = () => {
                             </Col>
                         </FormGroup>
                     </Col>
-                    <Col sm="3" className="">
+
+                    <Col sm="2" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
@@ -415,13 +473,36 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col sm="5">
+                    {subPageMode === url.ORDER_LIST_4 && <Col sm="3">
+                        <FormGroup className="mb-2 row mt-3 " >
+                            <Label className="col-md-4 p-2"
+                                style={{ width: "115px" }}>
+                                {!(fieldLabel.CustomerType === '') ? fieldLabel.CustomerType : "Customer Type"}
+                            </Label>
+                            <Col sm="7">
+                                <Select
+                                    name="CustomerType"
+                                    classNamePrefix="select2-Customer"
+                                    value={values.CustomerType}
+                                    options={customerTypeOptions}
+                                    onChange={customerTypeOnchange}
+                                    isMulti={true}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col >}
+
+
+                    <Col sm="3">
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
                                 style={{ width: "115px" }}>
                                 {!(fieldLabel.Supplier === '') ? fieldLabel.Supplier : "Supplier"}
                             </Label>
-                            <Col sm="5">
+                            <Col sm="7">
                                 <Select
                                     name="Supplier"
                                     classNamePrefix="select2-Customer"
@@ -435,6 +516,7 @@ const OrderList = () => {
                             </Col>
                         </FormGroup>
                     </Col >
+
 
                     <Col sm="1" className="mt-3 ">
                         <Go_Button loading={reducers.loading} id={gobtnId} onClick={goButtonHandler} />
@@ -468,6 +550,8 @@ const OrderList = () => {
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
+                            selectAllRow={(subPageMode === url.ORDER_LIST_4) && selectAllRowFunc}
+                            orderConfirmLoading={reducers.orderConfirmLoading}
 
                         />
                         : null
