@@ -8,6 +8,7 @@ import {
   GET_GRN_LIST_PAGE,
   SAVE_GRN_FROM_GRN_PAGE_ACTION,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
+  GRN_API_ERROR_ACTION,
 } from "./actionType"
 
 
@@ -87,7 +88,7 @@ const GRNReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         updateMsg: action.payload,
-        saveBtnloading: true
+        saveBtnloading: false
       }
 
     case DELETE_GRN_FOR_GRN_PAGE_SUCCESS:
@@ -96,10 +97,18 @@ const GRNReducer = (state = INIT_STATE, action) => {
         deleteMsg: action.payload,
       }
 
+    case GRN_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
+      };
+
+
     default:
       return state
   }
 
 }
 
-export default GRNReducer
+export default GRNReducer;

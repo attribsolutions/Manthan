@@ -1,9 +1,11 @@
 import {
   DELETE_ROLE_LIST_ID_SUCCESS,
   EDIT_ROLE_LIST_ID_SUCCESS,
+  GET_ROLE_LIST_API,
   GET_ROLE_LIST_API_SUCCESS,
   POST_ROLE_MASTER,
   POST_ROLE_MASTER_SUCCESS,
+  ROLE_API_ERROR_ACTION,
   UPDATE_ROLE_LIST_ID,
   UPDATE_ROLE_LIST_ID_SUCCESS
 } from "./actionTypes";
@@ -15,15 +17,26 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   saveBtnloading: false,
+  listLoading: false,
 };
 
 const RoleMaster_Reducer = (state = INIT_STATE, action) => {
   switch (action.type) {
     // get api
+
+    case GET_ROLE_LIST_API:
+      return {
+        ...state,
+        roleList: action.payload,
+        listLoading: true,
+      }
+
+
     case GET_ROLE_LIST_API_SUCCESS:
       return {
         ...state,
         roleList: action.payload,
+        listLoading: false,
       }
 
     case POST_ROLE_MASTER:
@@ -67,8 +80,15 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
         ...state,
         updateMsg: action.payload,
         saveBtnloading: false,
-
       };
+
+    case ROLE_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
+      };
+
 
     default:
       return state;
