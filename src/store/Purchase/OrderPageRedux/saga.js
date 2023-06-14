@@ -161,17 +161,30 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceMakeBtn = false
       i.forceDeleteHide = false
       i.forceSelectDissabled = false
+      i.Status = "Open"
+
       // i.selectCheck = false
+
+      if (i.SAPResponse) {
+        i.Status = "Order send To SAP"
+      }
+      else if (i.InvoiceCreated === true) {
+        i.Status = "Invoice Created"
+      }
+      else if (i.IsConfirm === true) {
+        i.Status = "Order Confirm"
+      }
 
       if (i.Inward === 0) {
         i.Inward = "Open"
       } else {
         i.Inward = "Close"
+        i.Status = "Close"
         i.forceEditHide = true
       }
 
       if (i.InvoiceCreated === true) {
-        i.InvoiceCreated = "Invoice Created"
+
         i.forceMakeBtn = true
       } else {
         i.InvoiceCreated = ""
