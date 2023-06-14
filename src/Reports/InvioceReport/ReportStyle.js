@@ -424,26 +424,30 @@ export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
 
-            if (data1.row.cells[5].raw === "isaddition") {
-                data1.row.cells[2].colSpan = 2
+            if (data1.row.cells[6].raw === "isaddition") {
+                data1.row.cells[3].colSpan = 2
                 data1.row.cells[0].colSpan = 2
-                data1.row.cells[4].colSpan = 2
-                data1.row.cells[6].colSpan = 2
+                data1.row.cells[5].colSpan = 2
+                data1.row.cells[7].colSpan = 2
 
                 data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[2].styles.fontSize = 8
-                data1.row.cells[4].styles.fontSize = 8
-                data1.row.cells[6].styles.fontSize = 8
+                data1.row.cells[3].styles.fontSize = 8
+                data1.row.cells[5].styles.fontSize = 8
+                data1.row.cells[7].styles.fontSize = 8
+                data1.row.cells[9].styles.fontSize = 8
+
 
                 data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[2].styles.fontStyle = "bold"
-                data1.row.cells[4].styles.fontStyle = "bold"
-                data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
+
             }
 
             if (data1.row.cells[0].raw === "HSN Item Name") {
-                data1.row.cells[4].colSpan = 2
-                data1.row.cells[6].colSpan = 2
+                data1.row.cells[5].colSpan = 2
+                data1.row.cells[7].colSpan = 2
 
 
             }
@@ -481,30 +485,35 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             2: {
-                columnWidth: 40,
+                columnWidth: 37,
                 halign: 'right',
             },
             3: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+
+            4: {
                 columnWidth: 50,
                 halign: 'right',
             },
-            4: {
-                columnWidth: 28,
-                halign: 'right',
-            },
             5: {
-                columnWidth: 40,
+                columnWidth: 28,
                 halign: 'right',
             },
             6: {
-                columnWidth: 28,
-                halign: 'right',
-            },
-            7: {
                 columnWidth: 40,
                 halign: 'right',
             },
+            7: {
+                columnWidth: 28,
+                halign: 'right',
+            },
             8: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            9: {
                 fontStyle: 'bold',
                 halign: 'right',
             },
@@ -519,27 +528,7 @@ export const tableBody = (doc, data) => {
 
 export const pageFooter = (doc, data) => {
 
-    //   
-    // let finalY = doc.previousAutoTable.finalY;
 
-    // if (finalY > 700) {
-
-    //     pageBorder(doc)
-    //     // reportFooter(doc, data)
-    //     // pageHeder(doc, data)
-    //     // reportHeder1(doc, data)
-    //     // reportHeder2(doc, data)
-    //     // reportHeder3(doc, data)
-
-    // } else {
-    //     pageBorder(doc)
-    //     // reportFooter(doc, data)
-    //     // pageHeder(doc, data)
-    // //     reportHeder1(doc, data)
-    // //     reportHeder2(doc, data)
-
-    //     // reportHeder3(doc, data)
-    // }
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)

@@ -22,6 +22,7 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../CustomValidateForm";
 import { commonPageField } from "../../store/actions";
 import { SapLedger_Go_Button_API, SapLedger_Go_Button_API_Success } from "../../store/Report/SapLedger Redux/action";
+import { Go_Button } from "../../components/Common/CommonButton";
 
 const SapLedger = (props) => {
 
@@ -36,8 +37,10 @@ const SapLedger = (props) => {
     const {
         userAccess,
         List,
+        loading,
         pageField,
     } = useSelector((state) => ({
+        loading: state.SapLedgerReducer.loading,
         List: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -93,7 +96,7 @@ const SapLedger = (props) => {
     ];
 
     const rowStyle = (row, rowIndex) => {
-        debugger
+        
         const style = {};
         if (row.id > 0) {
 
@@ -184,7 +187,7 @@ const SapLedger = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm="5" className="">
+                                <Col sm="6" className="">
                                     <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "65px" }}>To Date</Label>
@@ -197,10 +200,9 @@ const SapLedger = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm="2" className="mt-2 ">
-                                    <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                        onClick={() => goButtonHandler()}
-                                    >Go</Button>
+                                <Col sm="1" className="mt-2 ">
+                                    <Go_Button loading={loading} onClick={goButtonHandler} />
+
                                 </Col>
                             </div>
 

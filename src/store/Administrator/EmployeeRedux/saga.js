@@ -28,6 +28,7 @@ import {
   updateEmployeeIDSuccess,
   Get_CompanyName_By_EmployeeTypeID_Success,
   getCityOnDistrictSuccess,
+  EmployeeApiErrorAction,
 } from "./action";
 import { CommonConsole, loginJsonBody, } from "../../../components/Common/CommonFunction";
 
@@ -35,29 +36,29 @@ function* DesignationID_saga() { // DesignationID dropdown list
   try {
     const response = yield call(getDesignationID_For_Dropdown);
     yield put(getDesignationIDSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeApiErrorAction()) }
 }
 
 function* State_saga() { // State  dropdown api
   try {
     const response = yield call(getState_For_Dropdown);
     yield put(getStateESuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeApiErrorAction()) }
 }
 
 function* City_saga(id) { // City  dropdown api
   try {
-    
+
     const response = yield call(getCity_For_Dropdown, id.id);
     yield put(getCityOnDistrictSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeApiErrorAction()) }
 }
 
 function* Save_Employee_GenFunc({ config }) { // post api
   try {
     const response = yield call(save_Employee_API, config);
     yield put(PostEmployeeSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeApiErrorAction()) }
 }
 
 function* Get_EmployeeList_GenFunc() { // get api  
@@ -65,14 +66,14 @@ function* Get_EmployeeList_GenFunc() { // get api
     const filters = loginJsonBody();
     const response = yield call(get_EmployeelistApi, filters);
     yield put(getEmployeelistSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeApiErrorAction()) }
 }
 
 function* Delete_EmployeeID_GenFunc({ config }) {//// delete api 
   try {
     const response = yield call(detelet_EmployeeID, config);
     yield put(deleteEmployeeIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeApiErrorAction()) }
 }
 
 function* Edit_EmployeeID_GenFunc({ config }) {
@@ -83,14 +84,14 @@ function* Edit_EmployeeID_GenFunc({ config }) {
     yield put(editEmployeeSuccess(response));
     console.log("response in saga", response)
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeApiErrorAction()) }
 }
 
 function* Update_EmployeeID_GenFunc({ config }) {
   try {
     const response = yield call(update_EmployeeAPI, config);
     yield put(updateEmployeeIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeApiErrorAction()) }
 }
 
 // Company Name API dependent on Employee Types api
@@ -98,7 +99,7 @@ function* Get_CompanyName_By_EmployeeTypesID_GenFunc({ id }) {
   try {
     const response = yield call(Get_CompanyBy_EmployeeType_For_Dropdown, id);
     yield put(Get_CompanyName_By_EmployeeTypeID_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(EmployeeApiErrorAction()) }
 }
 
 function* M_EmployeeSaga() {

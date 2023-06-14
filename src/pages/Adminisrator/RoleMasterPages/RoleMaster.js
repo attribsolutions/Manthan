@@ -80,7 +80,9 @@ const RoleMaster = (props) => {
     updateMsg,
     pageField,
     userAccess,
+    saveBtnloading,
     EmployeeType } = useSelector((state) => ({
+      saveBtnloading: state.RoleMaster_Reducer.saveBtnloading,
       postMsg: state.RoleMaster_Reducer.postMsg,
       updateMsg: state.RoleMaster_Reducer.updateMsg,
       EmployeeType: state.EmployeeTypeReducer.EmployeeTypeList,
@@ -115,7 +117,7 @@ const RoleMaster = (props) => {
     userAcc = userAccess.find((index) => {
       if (index.id === pageId.PARTYTYPE) {
         setEmployeeTypes_AddAccess(true)
-     }
+      }
       return (`/${index.ActualPagePath}` === locationPath)
     })
 
@@ -327,7 +329,6 @@ const RoleMaster = (props) => {
                           <Select
                             name="RoleEmployeeTypes"
                             value={values.RoleEmployeeTypes}
-                            isSearchable={false}
                             isMulti={true}
                             options={EmployeeType_DropdownOptions}
                             onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
@@ -459,6 +460,7 @@ const RoleMaster = (props) => {
                           <Row>
                             <Col sm={2}>
                               <SaveButton pageMode={pageMode}
+                                loading={saveBtnloading}
                                 onClick={SaveHandler}
                                 userAcc={userPageAccessState}
                                 editCreatedBy={editCreatedBy}

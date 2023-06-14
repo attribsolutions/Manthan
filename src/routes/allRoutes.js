@@ -157,6 +157,8 @@ import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"
 import SapLedger from "../Reports/SapLedgerReport/SapLedger";
 import ProductMarginReport from "../Reports/ProductMarginReport/ProductMarginReport";
 import CityMaster from "../pages/Adminisrator/CityPages/CityMaster";
+import CityList from "../pages/Adminisrator/CityPages/CityList";
+import OrderSummary from "../Reports/OrderSummaryReport/OrderSummary";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -265,6 +267,7 @@ const userRoutes = [
   { path: path.SALESMAN_LIST, component: SalesManList },
 
   { path: path.CITY, component: CityMaster },
+  { path: path.CITY_LIST, component: CityList },
 
   // { path: path.CREDITLIMIT, component: CreditLimitMaster },
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
@@ -382,16 +385,21 @@ const userRoutes = [
 
   { path: path.SAP_LEDGER, component: SapLedger },
 
-  // ************************************ Utility **************************************//
-  { path: path.SEARCH_BOX2, component: SearchBoxSecond },
-  { path: path.SEARCH_BOX3, component: SerachBox3 },
 
-  { path: "/dashboard", component: Dashboard },
+//**************************** Reports ***********************************//
 
-  { path: "/", exact: true, component: () => <Redirect to="/login" /> },
-  // { component:() => <Redirect to="/login" /> },
-  { path: "/auth-404", component: Error404 },
-  { path: "/auth-500", component: Error500 },
+{ path: path.ORDER_SUMMARY_REPORT, component:OrderSummary },
+
+// ************************************ Utility **************************************//
+{ path: path.SEARCH_BOX2, component: SearchBoxSecond },
+{ path: path.SEARCH_BOX3, component: SerachBox3 },
+
+{ path: "/dashboard", component: Dashboard },
+
+{ path: "/", exact: true, component: () => <Redirect to="/login" /> },
+// { component:() => <Redirect to="/login" /> },
+{ path: "/auth-404", component: Error404 },
+{ path: "/auth-500", component: Error500 },
 
 
 ]

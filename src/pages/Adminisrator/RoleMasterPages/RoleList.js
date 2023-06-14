@@ -14,12 +14,14 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const RoleList = (props) => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.RoleMaster_Reducer.listLoading,
       tableList: state.RoleMaster_Reducer.roleList,
       editData: state.RoleMaster_Reducer.editData,
       updateMsg: state.RoleMaster_Reducer.updateMsg,
@@ -47,21 +49,24 @@ const RoleList = (props) => {
     dispatch(getRole());
   }, []);
 
-  const { pageField ,userAccess=[]} = reducers
+  const { pageField, userAccess = [] } = reducers
 
   return (
     <React.Fragment>
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={RoleMaster}
-            masterPath={url.ROLE}
-            ButtonMsgLable={"Role"}
-            deleteName={"Name"}
-          />
-          : null
+        reducers.listLoading ?
+          <Listloader />
+          :
+          (pageField) ?
+            <CommonListPage
+              action={action}
+              reducers={reducers}
+              MasterModal={RoleMaster}
+              masterPath={url.ROLE}
+              ButtonMsgLable={"Role"}
+              deleteName={"Name"}
+            />
+            : <Listloader />
       }
 
     </React.Fragment>

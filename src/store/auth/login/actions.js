@@ -3,7 +3,6 @@ import {
   LOGIN_SUCCESS,
   LOGOUT_USER,
   LOGOUT_USER_SUCCESS,
-  API_ERROR,
   SOCIAL_LOGIN,
   ROLE_ACCESS_API_CALL,
   ROLE_ACCESS_API_CALL_SUCCESS,
@@ -16,7 +15,8 @@ import {
   LOGOUT_REST,
   RESET_ROLE_ACCESS_ACTION,
   ROLE_ACCESS_API_CALL_ERROR,
-  API_ERROR_SUCCESS
+  API_ERROR_SUCCESS,
+  LOGIN_ERROR_ACTION
 } from "./actionTypes"
 
 export const loginUser = (user, history) => {
@@ -32,6 +32,12 @@ export const loginSuccess = user => {
     payload: user,
   }
 }
+export const loginError_Action = state => {
+  return {
+    type: LOGIN_ERROR_ACTION,
+    payload: state,
+  }
+}
 
 export const logoutUser = history => {
   return {
@@ -40,23 +46,20 @@ export const logoutUser = history => {
     user: null
   }
 }
-
 export const logoutUserSuccess = () => {
   return {
     type: LOGOUT_USER_SUCCESS,
     payload: {},
   }
 }
+// export const apiError = (error) => {
+//   return {
+//     type: API_ERROR,
+//     payload: error,
+//   }
+// }
 
-export const apiError = (error) => {
-  return {
-    type: API_ERROR,
-    payload: error,
-  }
-}
-
-
-export const apiErrorSuccess = (error) => {
+export const apiErrorSuccess = () => {
   return {
     type: API_ERROR_SUCCESS,
     payload: null,

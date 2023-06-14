@@ -6,16 +6,18 @@ import {
     deletePartyIDSuccess,
     editPartyID,
     getPartyListAPI,
+    partyResetReduxAction,
     postPartyDataSuccess,
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './MasterAdd/PartyIndex';
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { mode,url,pageId} from "../../../routes/index";
+import { mode, url, pageId } from "../../../routes/index";
 import { useLayoutEffect } from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Listloader } from '../../../components/Common/CommonButton';
 
 const PartyList = () => {
 
@@ -33,6 +35,7 @@ const PartyList = () => {
     const reducers = useSelector(
 
         (state) => ({
+            listLoading: state.PartyMasterReducer.listLoading,
             tableList: state.PartyMasterReducer.partyList,
             editData: state.PartyMasterReducer.editData,
             updateMsg: state.PartyMasterReducer.updateMsg,
@@ -57,7 +60,7 @@ const PartyList = () => {
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
-        let newBtnPath='';
+        let newBtnPath = '';
         if (subPageMode === url.PARTY_lIST) {
             page_Id = pageId.PARTY_lIST;
             masterPath = url.PARTY;
@@ -68,14 +71,14 @@ const PartyList = () => {
             masterPath = url.RETAILER_MASTER;
             newBtnPath = url.RETAILER_MASTER;
         }
-       
-     
-        setOtherState({ masterPath, newBtnPath,})
+
+
+        setOtherState({ masterPath, newBtnPath, })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(getPartyListAPI());
-        return ()=>{
+        return () => {
             dispatch(commonPageFieldListSuccess(null))
             dispatch(updatePartyIDSuccess([]))//for clear privious order list   
         }
@@ -86,20 +89,22 @@ const PartyList = () => {
     return (
         <React.Fragment>
             {
-                (pageField) ?
-                    <CommonListPage
-                        action={action}
-                        reducers={reducers}
-                        MasterModal={PartyMaster}
-                        masterPath={otherState.masterPath}
-                        newBtnPath={otherState.newBtnPath}
-                        pageMode={pageMode}
-                        ButtonMsgLable={"Party"}
-                        deleteName={"Name"}
-                    />
-                    : null
+                reducers.listLoading ?
+                    <Listloader />
+                    :
+                    (pageField) ?
+                        <CommonListPage
+                            action={action}
+                            reducers={reducers}
+                            MasterModal={PartyMaster}
+                            masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
+                            pageMode={pageMode}
+                            ButtonMsgLable={"Party"}
+                            deleteName={"Name"}
+                        />
+                        : <><Listloader /></>
             }
-
         </React.Fragment>
     )
 }

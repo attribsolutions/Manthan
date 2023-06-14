@@ -125,7 +125,8 @@ const InvoiceExcelUpload = (props) => {
 
 
     function goButtonHandler(e) {
-        let partyId = (userAdminRole) ? _cfunc.loginPartyID() : e.value;
+        
+        let partyId = (!userAdminRole) ? _cfunc.loginPartyID() : e.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
             CompanyID: _cfunc.loginCompanyID()

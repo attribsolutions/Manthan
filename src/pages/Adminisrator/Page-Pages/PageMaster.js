@@ -92,7 +92,8 @@ const PageMaster = (props) => {
     PageAccess,
     modulePostAPIResponse,
     PageList,
-    PageType
+    PageType,
+    saveBtnloading
   } = useSelector((state) => ({
     postMsg: state.H_Pages.saveMessage,
     updateMsg: state.H_Pages.updateMessage,
@@ -101,7 +102,9 @@ const PageMaster = (props) => {
     PageAccess: state.H_Pages.PageAccess,
     modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
     PageList: state.H_Pages.PageList,
-    PageType: state.H_Pages.PageType
+    PageType: state.H_Pages.PageType,
+    saveBtnloading: state.H_Pages.saveBtnloading,
+
   }));
 
   const location = { ...history.location }
@@ -200,7 +203,7 @@ const PageMaster = (props) => {
             IsCompulsory: index.IsCompulsory,
             DefaultSort: index.DefaultSort,
             ListPageSeq: index.ListPageSeq,
-            Alignment:index.Alignment,
+            Alignment: index.Alignment,
             ShowInListPage: index.ShowInListPage,
             ShowInDownload: index.ShowInDownload,
             DownloadDefaultSelect: index.ShownloadDefaultSelect
@@ -228,7 +231,7 @@ const PageMaster = (props) => {
             IsCompulsory: index.IsCompulsory,
             DefaultSort: index.DefaultSort,
             ListPageSeq: index.ListPageSeq,
-            Alignment:index.Alignment,
+            Alignment: index.Alignment,
             ShowInListPage: index.ShowInListPage,
             ShowInDownload: index.ShowInDownload,
             DownloadDefaultSelect: index.ShownloadDefaultSelect
@@ -466,7 +469,7 @@ const PageMaster = (props) => {
       dispatch(updateHPages(jsonBody, EditData.id));
 
     } else {
-      
+
       dispatch(saveHPages(jsonBody));
 
     }
@@ -1021,7 +1024,9 @@ const PageMaster = (props) => {
                     </Row>
                   </CardBody>
                   <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
-                    <SaveButton pageMode={pageMode}
+                    <SaveButton
+                      loading={saveBtnloading}
+                      pageMode={pageMode}
                       userAcc={userPageAccessState}
                       editCreatedBy={editCreatedBy}
                       module={"PageMaster"}

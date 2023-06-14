@@ -69,7 +69,9 @@ const CityMaster = (props) => {
         postMsg,
         userAccess,
         pageField,
+        saveBtnloading
     } = useSelector((state) => ({
+        saveBtnloading: state.CityReducer.saveBtnloading,
         State: state.EmployeesReducer.State,
         district: state.PartyMasterReducer.DistrictOnState,
         postMsg: state.CityReducer.PostData,
@@ -160,7 +162,7 @@ const CityMaster = (props) => {
         }
     }, [])
 
- 
+
 
     useEffect(async () => {
 
@@ -351,6 +353,7 @@ const CityMaster = (props) => {
                                         <Row>
                                             <Col sm={2}>
                                                 <SaveButton
+                                                    loading={saveBtnloading}
                                                     pageMode={pageMode}
                                                     onClick={SaveHandler}
                                                     userAcc={userPageAccessState}
@@ -376,4 +379,4 @@ const CityMaster = (props) => {
         )
     }
 };
-export default CityMaster
+export default CityMaster;

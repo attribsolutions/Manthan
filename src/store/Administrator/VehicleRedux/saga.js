@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
   saveVehicleMasterSuccess, getVehicleListSuccess,
   getVehicleType_for_dropdown_Success, deleteVehicleID_Success,
-  editVehicleID_Success, updateVehicleID_Success
+  editVehicleID_Success, updateVehicleID_Success, VehicleErrorAction
 } from "./action";
 import {
   Vehicle_Get_API,
@@ -30,7 +30,7 @@ function* Get_Vehicle_GenFun({ jsonBody }) {
   try {
     const response = yield call(Vehicle_Get_API, filters);
     yield put(getVehicleListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(VehicleErrorAction()) }
 }
 
 // post api
@@ -38,8 +38,9 @@ function* Post_Vehicle_Master_GenFun({ config }) {
   try {
     const response = yield call(Vehicle_Post_API, config);
     yield put(saveVehicleMasterSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(VehicleErrorAction()) }
 }
+
 
 // edit api
 function* Edit_Vehicle_ID_GenFun({ config }) {
@@ -48,7 +49,7 @@ function* Edit_Vehicle_ID_GenFun({ config }) {
     const response = yield call(Vehicle_Edit_API, config);
     response.pageMode = btnmode
     yield put(editVehicleID_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(VehicleErrorAction()) }
 }
 
 // update api
@@ -56,7 +57,7 @@ function* Update_Vehicle_ID_GenFun({ config }) {
   try {
     const response = yield call(Vehicle_Update_API, config);
     yield put(updateVehicleID_Success(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(VehicleErrorAction()) }
 }
 
 // delete api 
@@ -64,7 +65,7 @@ function* Delete_Vehicle_ID_GenFun({ config }) {
   try {
     const response = yield call(Vehicle_Delete_API, config);
     yield put(deleteVehicleID_Success(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(VehicleErrorAction()) }
 }
 
 // get VehicleTypes Dropdown API
@@ -73,7 +74,7 @@ function* get_VehicleTypes_DropDown_GenFun() {
   try {
     const response = yield call(VehicleTypes_Get_API_for_Dropdown, filters);
     yield put(getVehicleType_for_dropdown_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(VehicleErrorAction()) }
 }
 
 function* VehicleSaga() {

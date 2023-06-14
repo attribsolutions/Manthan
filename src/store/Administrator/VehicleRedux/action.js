@@ -10,7 +10,8 @@ import {
   EDIT_VEHICLE_ID,
   EDIT_VEHICLE_ID_SUCCESS,
   UPDATE_VEHICLE_ID,
-  UPDATE_VEHICLE_ID_SUCCESS
+  UPDATE_VEHICLE_ID_SUCCESS,
+  VEHICLE_API_ERROR_ACTION
 } from "./actionType";
 
 export const saveVehicleMaster = (config = {}) => ({  // Post Action
@@ -70,3 +71,7 @@ export const getVehicleType_for_dropdown_Success = (resp) => ({ // get Success
   type: GET_VEHICLE_TYPES_FOR_DROPDOWN_SUCCESS,
   payload: resp,
 });
+
+export const VehicleErrorAction = () => ({
+  type: VEHICLE_API_ERROR_ACTION,
+})

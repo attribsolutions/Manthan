@@ -16,12 +16,14 @@ import {
 } from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const GroupList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.PartyTypeReducer.listLoading,
       tableList: state.GroupReducer.groupList,
       editData: state.GroupReducer.editData,
       updateMsg: state.GroupReducer.updateMsg,
@@ -48,20 +50,23 @@ const GroupList = () => {
     dispatch(getGroupList());
   }, []);
 
-  const { pageField} = reducers
+  const { pageField } = reducers
   return (
     <React.Fragment>
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={GroupMaster}
-            masterPath={url.GROUP}
-            ButtonMsgLable={"Group"}
-            deleteName={"Name"}
-          />
-          : null
+        reducers.listLoading ?
+          <Listloader />
+          :
+          (pageField) ?
+            <CommonListPage
+              action={action}
+              reducers={reducers}
+              MasterModal={GroupMaster}
+              masterPath={url.GROUP}
+              ButtonMsgLable={"Group"}
+              deleteName={"Name"}
+            />
+            : <><Listloader /></>
       }
     </React.Fragment>
   )

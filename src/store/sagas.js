@@ -85,6 +85,7 @@ import CreditDebitSaga from "./Accounting/CreditRedux/saga"
 import DashboardSaga from "./Dashboard/Dashboard_1_Redux/saga"
 import { sessionAlive_saga } from "./auth/sessionAlive/saga"
 import SapLedgerSaga from "./Report/SapLedger Redux/saga"
+import OrderSummarySaga from "./Report/OrderSummaryRedux/saga"
 
 
 export default function* rootSaga() {
@@ -93,7 +94,7 @@ export default function* rootSaga() {
     fork(ImportExcelFieldMap_Saga),
     fork(ImportFieldAdd_Saga),
     fork(ImportExcelPartyMap_Saga),
-    
+
     fork(sessionAlive_saga),
     fork(AuthSaga),
     fork(ForgetSaga),
@@ -158,7 +159,7 @@ export default function* rootSaga() {
     fork(ChangePasswordSaga),
     fork(SapLedgerSaga),
     fork(CitySaga),
+    fork(OrderSummarySaga),
 
-    
   ])
 }

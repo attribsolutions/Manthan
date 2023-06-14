@@ -6,6 +6,7 @@ import { CheckAPIResponse, CommonConsole } from "../components/Common/CommonFunc
 const API_URL = "http://192.168.1.114:8000"
 
 // const API_URL = "http://117.248.109.234:8000"
+// const API_URL = "http://10.4.5.64:8000"
 
 const axiosApi = axios.create({
   baseURL: API_URL,
@@ -101,14 +102,12 @@ export function postWithoutToken(url, body,) {
       console.log(`${url} Body :`,body )
       console.log(`${url} response :`,response )
       return response.data
-      // return CheckAPIResponse({ method: "postWithoutToken", body, url, response });
     })
     .catch(error => {
       console.log(`${url} Body :`,body )
       console.log(`${url} error :`, error )
       return Promise.reject(error)
 
-      // return CheckAPIResponse({ method: "postWithoutToken", url, error });
     });
 
 }
@@ -125,4 +124,23 @@ export async function postRefreshToken(url,body) {
   })
 
 }
+
+export function getWithotMsg(url, btnId) {
+
+  CommonConsole( `${url} :get api call `);
+  AuthonticationFunction();
+  return axiosApi.get(url)
+  .then(response => {
+    console.log(`${url} response :`,response )
+    return response.data
+  })
+  .catch(error => {
+    console.log(`${url} error :`, error )
+    return Promise.reject(error)
+  })
+}
+
+
+
+
 

@@ -64,7 +64,9 @@ const CompanyGroupMaster = (props) => {
     const { postMsg,
         updateMsg,
         pageField,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.CompanyGroupReducer.saveBtnloading,
             postMsg: state.CompanyGroupReducer.postMsg,
             updateMsg: state.CompanyGroupReducer.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -290,7 +292,9 @@ const CompanyGroupMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode}
+                                                                    <SaveButton
+                                                                        loading={saveBtnloading}
+                                                                        pageMode={pageMode}
                                                                         onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}

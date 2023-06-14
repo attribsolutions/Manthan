@@ -26,6 +26,7 @@ const GRNList = () => {
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
     const reducers = useSelector(
         (state) => ({
+            loading: state.GRNReducer.loading,
             customer: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,
@@ -184,6 +185,9 @@ const GRNList = () => {
                                     classNamePrefix="select2-Customer"
                                     options={venderOptions}
                                     onChange={venderOnchange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                 />
                             </Col>
                         </FormGroup>
@@ -192,6 +196,7 @@ const GRNList = () => {
                     <Col sm="1" className="mt-3 ">
                         <Go_Button
                             id={gobtnId}
+                            loading={reducers.loading}
                             onClick={goButtonHandler}
                         />
                     </Col>

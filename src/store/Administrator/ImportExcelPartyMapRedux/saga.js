@@ -4,7 +4,8 @@ import {
   GoButton_ImportExcelPartyMap_Success,
   save_ImportExcelPartyMap_Sucess,
   PartyExcelUpload_save_Success,
-  RetailerExcelUpload_save_action_Success
+  RetailerExcelUpload_save_action_Success,
+  RetailerExcelUploadApiErrorAction
 } from "./action";
 import {
   ExcelUpload_Invoice_Save_API,
@@ -64,7 +65,7 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
 
     yield put(GoButton_ImportExcelPartyMap_Success(newResp));
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(RetailerExcelUploadApiErrorAction()) }
 }
 
 function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {  // Save API
@@ -83,7 +84,7 @@ function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {  // Save API
       yield put(save_ImportExcelPartyMap_Sucess(response));
     }
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(RetailerExcelUploadApiErrorAction()) }
 }
 
 function* InvoiceExcelUpload_save_GenFun({ config }) {  // Save API
@@ -92,7 +93,7 @@ function* InvoiceExcelUpload_save_GenFun({ config }) {  // Save API
     const response = yield call(ExcelUpload_Invoice_Save_API, config);
     yield put(InvoiceExcelUpload_save_Success(response));
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(RetailerExcelUploadApiErrorAction()) }
 }
 
 function* RetailerExcelUpload_save_GenFun({ config }) {  // Save API
@@ -101,7 +102,7 @@ function* RetailerExcelUpload_save_GenFun({ config }) {  // Save API
     const response = yield call(ExcelUpload_Retailer_Save_API, config);
     yield put(RetailerExcelUpload_save_action_Success(response));
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(RetailerExcelUploadApiErrorAction()) }
 }
 
 function* ImportExcelPartyMap_Saga() {

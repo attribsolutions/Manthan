@@ -10,6 +10,7 @@ import {
     Input,
     Label,
     Row,
+    Table,
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
@@ -54,6 +55,8 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { Retailer_List, SSDD_List_under_Company, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import CustomTable2 from "../../../CustomTable2/Table";
+import { Tbody, Thead } from "react-super-responsive-table";
 
 const PartySubParty = (props) => {
 
@@ -84,7 +87,9 @@ const PartySubParty = (props) => {
         updateMsg,
         pageField,
         PartySubParty,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.PartySubPartyReducer.saveBtnloading,
             postMsg: state.PartySubPartyReducer.postMsg,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
@@ -180,7 +185,7 @@ const PartySubParty = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.PARTY_SUB_PARTY_lIST,
+                    RedirectPath: url.PARTY_SUB_PARTY,
                 }))
             }
         }
@@ -339,8 +344,8 @@ const PartySubParty = (props) => {
         {
             text: "Action ",
             dataField: "",
-            formatter: (cellContent, Party, k) => (
-                <>
+            formatter: (cellContent, Party, k) => {
+                return (<>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
@@ -350,14 +355,14 @@ const PartySubParty = (props) => {
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
                                     onClick={() => { dispatch(deleteIDForMasterPage(Party.value)) }}
+                                // onClick={() => { deleteHandler(Party.value) }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
                             </FormGroup>
                         </Col>
-                    </div>
-                </>
-            ),
+                    </div></>)
+            }
         },
     ];
 
@@ -367,8 +372,36 @@ const PartySubParty = (props) => {
         custom: true,
     };
 
+    const onDeleteHandeler = (id) => {
+        var filerData = partyTableArr.filter((index) => {
+            return !(index.value === id);
+        });
+        setPartyTableArr(filerData)
+    };
+
+    const tableRows = partyTableArr.map((info) => {
+        return (
+            <tr>
+                <td>{info.label}</td>
+                <td>
+                    <Button
+                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                        data-mdb-toggle="tooltip"
+                        data-mdb-placement="top"
+                        title="Delete Party Type"
+                        onClick={(e) => {
+                            onDeleteHandeler(info.value);
+                        }}
+                    >
+                        <i className="mdi mdi-delete font-size-18"></i>
+                    </Button>
+                </td>
+            </tr>
+        );
+    });
+
     const SaveHandler = async (event) => {
-       
+
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -415,6 +448,7 @@ const PartySubParty = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -438,8 +472,6 @@ const PartySubParty = (props) => {
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody className="c_card_body">
-
-
                                                     <Row className="mb-3">
                                                         <Col sm="4">
                                                             <FormGroup className="mb-1">
@@ -456,6 +488,9 @@ const PartySubParty = (props) => {
                                                                         onChange={(hasSelect, evn) => {
                                                                             onChangeSelect({ hasSelect, evn, state, setState, })
                                                                             handllerParty(hasSelect)
+                                                                        }}
+                                                                        styles={{
+                                                                            menu: provided => ({ ...provided, zIndex: 2 })
                                                                         }}
                                                                     />
                                                                     {isError.PartyName.length > 0 && (
@@ -501,6 +536,9 @@ const PartySubParty = (props) => {
                                                                             onChangeSelect({ hasSelect, evn, state, setState, })
                                                                             handller_SSDD(hasSelect)
                                                                         }}
+                                                                        styles={{
+                                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                                        }}
                                                                     />
 
                                                                 </FormGroup>
@@ -522,6 +560,9 @@ const PartySubParty = (props) => {
                                                                     onChange={(hasSelect, evn) => {
                                                                         onChangeSelect({ hasSelect, evn, state, setState, })
                                                                         handllerSub_Party(hasSelect)
+                                                                    }}
+                                                                    styles={{
+                                                                        menu: provided => ({ ...provided, zIndex: 2 })
                                                                     }}
                                                                 />
                                                             </FormGroup>
@@ -579,7 +620,13 @@ const PartySubParty = (props) => {
                                                 </CardBody>
                                             </Card>
 
-                                            <PaginationProvider
+                                            {/* <CustomTable2 keyField="id"
+                                                data={[...partyTableArr]}
+                                                columns={pagesListColumns}
+                                                classes={"table align-middle table-nowrap table-hover"} /> */}
+
+
+                                            {/* <PaginationProvider
                                                 pagination={paginationFactory(pageOptions)}
                                             >
                                                 {({ paginationProps, paginationTableProps }) => (
@@ -622,12 +669,23 @@ const PartySubParty = (props) => {
                                                 )
                                                 }
 
-                                            </PaginationProvider>
+                                            </PaginationProvider> */}
+
+                                            <Table className="table table-bordered table-hover">
+                                                <Thead>
+                                                    <tr>
+                                                        <th className="col col-sm-3">SubPartyName</th>
+                                                        <th className="col col-sm-3">{"Action"}</th>
+                                                    </tr>
+                                                </Thead>
+                                                <Tbody>{tableRows}</Tbody>
+                                            </Table>
 
                                             <FormGroup>
                                                 <Row>
                                                     <Col sm={2}>
                                                         <SaveButton pageMode={pageMode}
+                                                            loading={saveBtnloading}
                                                             onClick={SaveHandler}
                                                             userAcc={userPageAccessState}
                                                             editCreatedBy={editCreatedBy}

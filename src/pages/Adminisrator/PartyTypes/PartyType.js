@@ -65,8 +65,9 @@ const PartyType = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, pageField, updateMsg, userAccess } =
+    const { postMsg, pageField, updateMsg, userAccess, saveBtnloading } =
         useSelector((state) => ({
+            saveBtnloading: state.PartyTypeReducer.saveBtnloading,
             postMsg: state.PartyTypeReducer.PostData,
             pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -449,6 +450,7 @@ const PartyType = (props) => {
                                                     <Row>
                                                         <Col sm={2}>
                                                             <SaveButton pageMode={pageMode}
+                                                                loading={saveBtnloading}
                                                                 onClick={SaveHandler}
                                                                 userAcc={userPageAccessState}
                                                                 editCreatedBy={editCreatedBy}

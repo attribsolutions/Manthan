@@ -13,6 +13,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 
 const PartyTypeList = (props) => {
@@ -20,6 +21,7 @@ const PartyTypeList = (props) => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.PartyTypeReducer.listLoading,
       tableList: state.PartyTypeReducer.ListData,
       editData: state.PartyTypeReducer.editData,
       updateMsg: state.PartyTypeReducer.updateMessage,
@@ -47,22 +49,25 @@ const PartyTypeList = (props) => {
     dispatch(getPartyTypelist());
   }, []);
 
-  const { pageField,userAccess=[] } = reducers
+  const { pageField, userAccess = [] } = reducers
 
   return (
     <React.Fragment>
 
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={PartyType}
-            masterPath={url.PARTYTYPE}
-            ButtonMsgLable={"Party Type"}
-            deleteName={"Name"}
-          />
-          : null
+        reducers.listLoading ?
+          <Listloader />
+          :
+          (pageField) ?
+            <CommonListPage
+              action={action}
+              reducers={reducers}
+              MasterModal={PartyType}
+              masterPath={url.PARTYTYPE}
+              ButtonMsgLable={"Party Type"}
+              deleteName={"Name"}
+            />
+            : <><Listloader /></>
       }
     </React.Fragment>
   )

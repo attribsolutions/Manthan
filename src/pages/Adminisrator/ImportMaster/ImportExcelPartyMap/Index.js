@@ -63,8 +63,12 @@ const ImportExcelPartyMap = (props) => {
         pageField,
         userAccess,
         goButtonArr,
-        partyList
+        partyList,
+        listLoading,
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.GroupReducer.saveBtnloading,
+        listLoading: state.ImportExcelPartyMap_Reducer.listLoading,
         postMsg: state.ImportExcelPartyMap_Reducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -286,6 +290,9 @@ const ImportExcelPartyMap = (props) => {
                                                     isDisabled={!(goButtonArr.length === 0) && true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                     options={partyDropdown_Options}
                                                     onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                 />
@@ -305,6 +312,9 @@ const ImportExcelPartyMap = (props) => {
                                                     name="MapType"
                                                     value={values.MapType}
                                                     isSearchable={true}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                     isDisabled={!(goButtonArr.length === 0) && true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
@@ -320,7 +330,7 @@ const ImportExcelPartyMap = (props) => {
 
                                     <Col sm="2" className="mt-3 ">
                                         {(goButtonArr.length === 0) ?
-                                            < Go_Button onClick={goButtonHandler} type="submit" />
+                                            <Go_Button onClick={goButtonHandler} loading={listLoading} />
                                             :
                                             <Change_Button onClick={change_ButtonHandler} />
                                         }
@@ -364,6 +374,7 @@ const ImportExcelPartyMap = (props) => {
                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                             {(goButtonArr.length > 0) &&
                                 <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                    loading={saveBtnloading}
                                 // module={"Import Master Map"} 
                                 />
                             }

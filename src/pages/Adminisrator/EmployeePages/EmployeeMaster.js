@@ -23,7 +23,8 @@ import {
   PostEmployeeSuccess,
   editEmployeeSuccess,
   updateEmployeeIDSuccess,
-  getCityOnDistrict
+  getCityOnDistrict,
+  getCityOnDistrictSuccess
 } from "../../../store/Administrator/EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import {
@@ -104,7 +105,9 @@ const AddEmployee = (props) => {
     postMsg,
     userAccess,
     pageField,
+    saveBtnloading,
     updateMsg } = useSelector((state) => ({
+      saveBtnloading: state.EmployeeTypeReducer.saveBtnloading,
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       State: state.EmployeesReducer.State,
       City: state.EmployeesReducer.City,
@@ -324,22 +327,24 @@ const AddEmployee = (props) => {
 
   function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
+    dispatch(getCityOnDistrictSuccess([]))
     setState((i) => {
       const a = { ...i }
       a.values.DistrictName = "";
       a.hasValid.DistrictName.valid = false
+
+      a.values.CityName = "";
+      a.hasValid.CityName.valid = false
       return a
     })
   }
 
   function District_Dropdown_Handler(e) {
-
     dispatch(getCityOnDistrict(e.value))
     setState((i) => {
       const a = { ...i }
-      a.values.Name = "";
-      a.hasValid.Name.valid = false
-
+      a.values.CityName = "";
+      a.hasValid.CityName.valid = false
 
       return a
     })
@@ -712,6 +717,7 @@ const AddEmployee = (props) => {
                         <Row>
                           <Col sm={2}>
                             <SaveButton
+                              loading={saveBtnloading}
                               pageMode={pageMode}
                               onClick={SaveHandler}
                               userAcc={userPageAccessState}

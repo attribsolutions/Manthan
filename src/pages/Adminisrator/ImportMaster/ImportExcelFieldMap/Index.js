@@ -169,7 +169,8 @@ const ImportExcelFieldMap = (props) => {
     ];
 
     async function goButtonHandler() {
-        let partyId = userAdminRole ? _cfunc.loginPartyID() : partySelect.value;
+       
+        let partyId = !userAdminRole ? _cfunc.loginPartyID() : partySelect.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
             CompanyID: _cfunc.loginCompanyID()

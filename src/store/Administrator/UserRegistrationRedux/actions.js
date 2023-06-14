@@ -14,6 +14,7 @@ import {
   GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
   GET_EMPLOYEE_FOR_USER_REGISTRATION,
   GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
+  USER_API_ERROR_ACTION,
 } from './actionType'
 
 /// M_Employee
@@ -48,7 +49,7 @@ export const getUserListSuccess = (resp) => ({
 });
 
 ////delete api
-export const userDeleteAction = (config={}) => ({
+export const userDeleteAction = (config = {}) => ({
   type: DELETE_USER_ACTION,
   config,
 
@@ -87,4 +88,8 @@ export const GetUserPartiesForUserMastePage = (editDetail) => ({
 export const GetUserPartiesForUserMastePageSuccess = (resp) => ({
   type: GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
   payload: resp,
+});
+
+export const UserApiErrorAction = () => ({
+  type: USER_API_ERROR_ACTION,
 });

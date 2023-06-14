@@ -10,12 +10,16 @@ import {
     GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
     GET_ITEMTAG_API_SUCCESS,
     GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
+    GET_ITEM_LIST_API,
     GET_ITEM_LIST_API_SUCCESS,
     GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
     GET_PARTY_FOR_DROPDOWN_SUCCESS,
     GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS,
     GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS,
+    ITEMS_API_ERROR_ACTION,
+    SAVE_ITEM_MASTER,
     SAVE_ITEM_MASTER_SUCCESS,
+    UPDATE_ITEM_ID,
     UPDATE_ITEM_ID_SUCCESS
 } from "./actionType";
 
@@ -39,16 +43,27 @@ const INIT_STATE = {
     SubGroupList: [],
     ItemTagList: [],
     BrandTagList: [],
+    saveBtnloading: false,
+    listLoading: false,
 
 };
 
 const ItemMastersReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
         // get api
+
+        case GET_ITEM_LIST_API:
+            return {
+                ...state,
+                listLoading: true,
+            }
+
         case GET_ITEM_LIST_API_SUCCESS:
             return {
                 ...state,
                 pages: action.payload,
+                listLoading: false,
+
             }
 
         case GET_BASEUNIT_FOR_DROPDOWN_SUCCESS:
@@ -76,10 +91,19 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 BrandTagList: action.payload,
             }
 
+        case SAVE_ITEM_MASTER:
+            return {
+                ...state,
+                saveBtnloading: true,
+
+            };
+
         case SAVE_ITEM_MASTER_SUCCESS:
             return {
                 ...state,
                 postMsg: action.payload,
+                saveBtnloading: false,
+
             };
 
         // delete api
@@ -97,17 +121,26 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
             };
 
         // update api
+        case UPDATE_ITEM_ID:
+            return {
+                ...state,
+                saveBtnloading: true,
+
+            };
+
         case UPDATE_ITEM_ID_SUCCESS:
             return {
                 ...state,
                 updateMsg: action.payload,
+                saveBtnloading: false,
+
             };
 
         case GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,
                 CategoryType: action.payload,
-                Category:[]
+                Category: []
             }
 
         // case GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS:
@@ -116,7 +149,7 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
         //         CategoryByCategoryType: action.payload,
         //     }
 
-     
+
         case GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,
@@ -138,7 +171,7 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 Party: action.payload,
             }
-   
+
         case GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,
@@ -155,6 +188,13 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 Category: action.payload,
             }
+
+        case ITEMS_API_ERROR_ACTION:
+            return {
+                ...state,
+                saveBtnloading: false,
+                listLoading: false,
+            };
 
         case "RESET_ALL":
             return state = INIT_STATE;

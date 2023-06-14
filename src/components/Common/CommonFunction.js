@@ -121,22 +121,6 @@ export function concatDateAndTime(date, time) {//+++++++++++time and date concat
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
   try {

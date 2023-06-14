@@ -60,7 +60,9 @@ const PaymentEntry = (props) => {
         BankList,
         ReceiptModeList,
         ReceiptType,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.ReceiptReducer.saveBtnloading,
             postMsg: state.ReceiptReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.supplier,
             OpeningBalance: state.ReceiptReducer.OpeningBalance,
@@ -331,6 +333,9 @@ const PaymentEntry = (props) => {
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                                 classNamePrefix="dropdown"
                                                 options={customerOptions}
                                                 onChange={(hasSelect, evn) => {
@@ -375,6 +380,9 @@ const PaymentEntry = (props) => {
                                                 value={values.ReceiptModeName}
                                                 isSearchable={true}
                                                 className="react-dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
@@ -400,6 +408,9 @@ const PaymentEntry = (props) => {
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                     options={BankListOptions}
                                                     onChange={(hasSelect, evn) => {
                                                         onChangeSelect({ hasSelect, evn, state, setState });
@@ -517,6 +528,7 @@ const PaymentEntry = (props) => {
                         <FormGroup>
                             <Col>
                                 <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
                                     onClick={saveHandeller}
                                     userAcc={userPageAccessState}
                                     editCreatedBy={editCreatedBy}

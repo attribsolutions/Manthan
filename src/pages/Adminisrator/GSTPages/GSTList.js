@@ -13,6 +13,7 @@ import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import GSTMaster from "./GSTMaster";
 import { deleteGSTListId, deleteGSTListId_Success, getGSTList, goButtonForGST_Master_Success } from "../../../store/Administrator/GSTRedux/action";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const GSTList = () => {
 
@@ -25,6 +26,7 @@ const GSTList = () => {
 
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.GSTReducer.listLoading,
       tableList: state.GSTReducer.GSTList,
       GSTGoButton: state.GSTReducer.GSTGoButton,
       deleteMsg: state.GSTReducer.deleteMsg,
@@ -82,7 +84,7 @@ const GSTList = () => {
   }, [GSTGoButton]);
 
   function editBodyfunc(index) {
-    
+
     const { rowData, btnId } = index
     let { preEffectiveDate } = rowData;
     _cfunc.btnIsDissablefunc({ btnId, state: true })
@@ -122,21 +124,24 @@ const GSTList = () => {
 
         <div className="mt-n1">
           {
-            (pageField) ?
-              <CommonPurchaseList
-                action={action}
-                reducers={reducers}
-                showBreadcrumb={false}
-                MasterModal={GSTMaster}
-                masterPath={url.GST}
-                newBtnPath={url.GST}
-                ButtonMsgLable={"GST"}
-                deleteName={"EffectiveDate"}
-                pageMode={pageMode}
-                editBodyfunc={editBodyfunc}
-                deleteBodyfunc={deleteBodyfunc}
-              />
-              : null
+            reducers.listLoading ?
+              <Listloader />
+              :
+              (pageField) ?
+                <CommonPurchaseList
+                  action={action}
+                  reducers={reducers}
+                  showBreadcrumb={false}
+                  MasterModal={GSTMaster}
+                  masterPath={url.GST}
+                  newBtnPath={url.GST}
+                  ButtonMsgLable={"GST"}
+                  deleteName={"EffectiveDate"}
+                  pageMode={pageMode}
+                  editBodyfunc={editBodyfunc}
+                  deleteBodyfunc={deleteBodyfunc}
+                />
+                : <> <Listloader/></>
           }
         </div>
 

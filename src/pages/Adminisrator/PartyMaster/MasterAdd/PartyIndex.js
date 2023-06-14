@@ -26,8 +26,8 @@ import {
     updatePartyID,
     updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
-import {  Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
-import {  btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
+import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
+import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -87,7 +87,9 @@ const PartyMaster = (props) => {
         postMsg,
         userAccess,
         updateMsg,
+        saveBtnloading
     } = useSelector((state) => ({
+        saveBtnloading: state.PartyMasterReducer.saveBtnloading,
         postMsg: state.PartyMasterReducer.postMsg,
         updateMsg: state.PartyMasterReducer.updateMsg,
         Company: state.Company.companyList,
@@ -111,7 +113,7 @@ const PartyMaster = (props) => {
 
 
     useEffect(() => {
-        debugger
+
         try {
             if ((hasShowloction || hasShowModal)) {
 
@@ -127,7 +129,7 @@ const PartyMaster = (props) => {
                 }
 
                 if (hasEditVal) {
-                    
+
                     setEditData(hasEditVal);
                     dispatch(Breadcrumb_inputName(hasEditVal.Name))
                     seteditCreatedBy(hasEditVal.CreatedBy);
@@ -145,9 +147,9 @@ const PartyMaster = (props) => {
                         Supplier: hasEditVal.PartySubParty.map(i => ({
                             value: i.Party,
                             label: i.PartyName,
-                            Creditlimit:i.Creditlimit,
-                            Route:i.Route,
-                            Subparty:i.Subparty
+                            Creditlimit: i.Creditlimit,
+                            Route: i.Route,
+                            Subparty: i.Subparty
                         })),
                         PAN: hasEditVal.PAN,
                         Email: hasEditVal.Email,
@@ -213,7 +215,7 @@ const PartyMaster = (props) => {
     useLayoutEffect(() => {
 
         dispatch(getDistrictOnStateSuccess([]))//clear district privious options
-        dispatch(getCityOnDistrictSuccess([]))
+        dispatch(getCityOnDistrictSuccess([]))//clear City privious options
         dispatch(commonPageFieldSuccess(null));//clear privious PageField
         dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
         dispatch(commonPageField(page_id))
@@ -309,14 +311,14 @@ const PartyMaster = (props) => {
             btnIsDissablefunc({ btnId, state: true })
 
             const baseValue = baseTabDetail.values
-            
+
             const supplierArr = baseValue.Supplier.map((i) => ({
-            
+
                 Party: i.value,
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
-                Creditlimit: pageMode === mode.edit? i.Creditlimit:"",
-                Route:pageMode === mode.edit? i.Route:"",
+                Creditlimit: pageMode === mode.edit ? i.Creditlimit : "",
+                Route: pageMode === mode.edit ? i.Route : "",
             }))
 
             const jsonBody = JSON.stringify({
@@ -330,8 +332,8 @@ const PartyMaster = (props) => {
                 "AlternateContactNo": baseValue.AlternateContactNo,
                 "State": baseValue.State.value,
                 "District": baseValue.District.value,
-                "City":baseValue.CityName.value,
-                "SAPPartyCode": baseValue.SAPPartyCode,
+                "City": baseValue.CityName.value,
+                "SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
                 "Taluka": 0,
                 // "City": 0,
                 "GSTIN": baseValue.GSTIN,
@@ -471,6 +473,7 @@ const PartyMaster = (props) => {
 
                                     <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
                                         <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
                                             module={"PartyMaster"}

@@ -9,6 +9,7 @@ import {
     POST_PARTY_NAME_SUCCESS,
     UPDATE_PARTY_MASTER_BULK,
     UPDATE_PARTY_MASTER_BULK_SUCCESS,
+    PARTYBULK_API_ERROR_ACTION,
   } from './actionTypes'
   
   export const GoButton_For_Party_Master_Bulk_Update_Add = (jsonBody) => ({
@@ -59,3 +60,8 @@ import {
     type: UPDATE_PARTY_MASTER_BULK_SUCCESS,
     payload: data,
   })
+
+  export const PartyBulkApiErrorAction = () => ({
+    type: PARTYBULK_API_ERROR_ACTION,
+  })
+  

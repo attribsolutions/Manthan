@@ -55,9 +55,11 @@ const GRNAdd3 = (props) => {
         items,
         postMsg,
         userAccess,
-        pageField
+        pageField,
+        saveBtnloading,
     } = useSelector((state) => ({
         // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
+        saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
@@ -336,19 +338,17 @@ const GRNAdd3 = (props) => {
                 })
                 return returnFunc()
             }
-
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
-                GrandTotal: sum,
+                GrandTotal: sum.toFixed(2),
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArr,
-                GRNReferences: openPOdata
-
+                GRNReferences: openPOdata,
             });
 
             if (pageMode === mode.edit) {
@@ -503,6 +503,7 @@ const GRNAdd3 = (props) => {
                         (grnItemList.length > 0) ?
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
                                     editCreatedBy={editCreatedBy}
                                     userAcc={userPageAccessState}
                                     module={"GRN"} onClick={saveHandeller}

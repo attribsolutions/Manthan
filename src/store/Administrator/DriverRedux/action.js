@@ -8,7 +8,8 @@ import {
   EDIT_DRIVER_TYPE_ID,
   EDIT_DRIVER_TYPE_ID_SUCCESS,
   UPDATE_DRIVER_TYPE_ID,
-  UPDATE_DRIVER_TYPE_ID_SUCCESS
+  UPDATE_DRIVER_TYPE_ID_SUCCESS,
+  DRIVER_API_ERROR_ACTION
 } from "./actionType";
 
 export const getDriverList = (jsonBody) => ({ //get action
@@ -60,3 +61,7 @@ export const deleteDriverID_Success = (resp) => ({// delete success
   type: DELETE_DRIVER_TYPE_ID_SUCCESS,
   payload: resp
 });
+
+export const DriverApiErrorAction = () => ({
+  type: DRIVER_API_ERROR_ACTION,
+})

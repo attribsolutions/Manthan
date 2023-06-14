@@ -8,6 +8,7 @@ import {
   Post_MarginMaster_API,
 } from "../../../helpers/backend_helper";
 import {
+  MarginApiErrorAction,
   deleteIdForMarginMasterSuccess,
   delete_MarginList_ID_Success,
   getMarginListSuccess,
@@ -26,7 +27,7 @@ function* post_Margin_GenFunc({ config }) {
   try {
     const response = yield call(Post_MarginMaster_API, config);
     yield put(saveMarginMasterSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(MarginApiErrorAction()) }
 }
 
 //listpage
@@ -38,7 +39,7 @@ function* get_Margin_GenFunc() {
       i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
     })
     yield put(getMarginListSuccess(response.Data))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(MarginApiErrorAction()) }
 }
 
 //delete
@@ -47,27 +48,29 @@ function* delete_Margin_GenFunc({ config }) {
   try {
     const response = yield call(delete_MarginList_API, config);
     yield put(delete_MarginList_ID_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(MarginApiErrorAction()) }
 }
 
 function* goButton_Margin_GenFunc({ data }) {
   const { jsonBody, pathname, btnmode, rowData } = data
   try {
+    debugger
     const response = yield call(GoButton_Post_API_For_MarginMaster, jsonBody);
     response.pageMode = btnmode
     response.pathname = pathname
     response.rowData = rowData
     yield put(goButtonForMarginSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(MarginApiErrorAction()) }
 }
 
 // delete api Margin Master Page
+
 function* delete_Margin_Master_table_GenFunc({ id }) {
   try {
     const response = yield call(Margin_MasterPage_delete_API, id);
     response["deletedId"] = id
     yield put(deleteIdForMarginMasterSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(MarginApiErrorAction()) }
 }
 
 function* MarginMasterSaga() {

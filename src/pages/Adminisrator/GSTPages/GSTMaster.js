@@ -45,7 +45,7 @@ import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 const GSTMaster = (props) => {
@@ -55,7 +55,7 @@ const GSTMaster = (props) => {
     const fileds = {
         EffectiveDate: "",
     }
-    
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //SetState  Edit data Geting From Modules List component
@@ -68,8 +68,12 @@ const GSTMaster = (props) => {
         tableData,
         deleteMessage,
         userAccess,
-        pageField
+        pageField,
+        saveBtnloading,
+        listLoading,
     } = useSelector((state) => ({
+        listLoading: state.GSTReducer.listLoading,
+        saveBtnloading: state.GSTReducer.saveBtnloading,
         tableData: state.GSTReducer.GSTGoButton,
         deleteMessage: state.GSTReducer.deleteMsgForMaster,
         postMsg: state.GSTReducer.postMsg,
@@ -295,7 +299,6 @@ const GSTMaster = (props) => {
                 }
                 return (
                     <span style={{ justifyContent: 'center' }}>
-
                         <CInput
                             key={`GSTPercentage${row.Item}`}
                             id=""
@@ -306,7 +309,6 @@ const GSTMaster = (props) => {
                             className="col col-sm text-end"
                             onChange={(e) => { row["GSTPercentage"] = e.target.value }}
                         />
-
                     </span>
                 )
             },
@@ -346,7 +348,6 @@ const GSTMaster = (props) => {
                 }
                 return (
                     <span style={{ justifyContent: 'center' }}>
-
                         <CInput
                             key={`HSNCode${row.Item}`}
                             type="text"
@@ -473,51 +474,51 @@ const GSTMaster = (props) => {
                                                 </FormGroup>
                                             </Col>
                                             <Col sm={1}>
-                                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                                    onClick={(event) => { GoButton_Handler(event) }} >Go</Button>
+                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
                                             </Col>
                                         </Row>
                                     </CardHeader>
                                 </Card>
 
                                 {Data.length > 0 ?
- 
-                                            <ToolkitProvider
-                                                keyField="Item"
-                                                data={Data}
-                                                columns={pagesListColumns}
-                                                search
-                                            >
-                                                {(toolkitProps) => (
-                                                    <React.Fragment>
-                                                        <Row>
-                                                            <Col xl="12">
-                                                                <div className="table-responsive">
-                                                                    <BootstrapTable
-                                                                        keyField={"Item"}
-                                                                        id="table_Arrow"
-                                                                        responsive
-                                                                        bordered={false}
-                                                                        striped={false}
-                                                                        classes={"table  table-bordered"}
-                                                                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                                        {...toolkitProps.baseProps}
-                                                                    />
-                                                                    {mySearchProps(toolkitProps.searchProps)}
 
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                     
-                                                    </React.Fragment>
-                                                )}
-                                            </ToolkitProvider>
+                                    <ToolkitProvider
+                                        keyField="Item"
+                                        data={Data}
+                                        columns={pagesListColumns}
+                                        search
+                                    >
+                                        {(toolkitProps) => (
+                                            <React.Fragment>
+                                                <Row>
+                                                    <Col xl="12">
+                                                        <div className="table-responsive">
+                                                            <BootstrapTable
+                                                                keyField={"Item"}
+                                                                id="table_Arrow"
+                                                                responsive
+                                                                bordered={false}
+                                                                striped={false}
+                                                                classes={"table  table-bordered"}
+                                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                                {...toolkitProps.baseProps}
+                                                            />
+                                                            {mySearchProps(toolkitProps.searchProps)}
+
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+
+                                            </React.Fragment>
+                                        )}
+                                    </ToolkitProvider>
                                     : null}
 
                                 {Data.length > 0 ?
                                     <FormGroup>
                                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                             <SaveButton pageMode={pageMode}
+                                                loading={saveBtnloading}
                                                 onClick={SaveHandler}
                                                 userAcc={userPageAccessState}
                                                 editCreatedBy={editCreatedBy}

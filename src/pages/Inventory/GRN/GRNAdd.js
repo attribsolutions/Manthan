@@ -3,7 +3,7 @@ import Select from "react-select";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    Button, Col, Dropdown, DropdownMenu, DropdownToggle, Input, Label, Row,FormGroup
+    Button, Col, Dropdown, DropdownMenu, DropdownToggle, Input, Label, Row, FormGroup
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -57,7 +57,9 @@ const GRNAdd = (props) => {
         postMsg,
         userAccess,
         pageField,
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
@@ -532,6 +534,7 @@ const GRNAdd = (props) => {
     }
 
     const saveHandeller = (event) => {
+
         event.preventDefault();
 
         const btnId = event.target.id
@@ -545,6 +548,7 @@ const GRNAdd = (props) => {
             const isvalidMsg = [];
 
             grnItemList.forEach(i => {
+
 
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
@@ -560,8 +564,7 @@ const GRNAdd = (props) => {
                     GST: i.GST,
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
-                    Amount: i.Amount,
-
+                    Amount: Number(i.Amount).toFixed(2),
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
@@ -575,8 +578,12 @@ const GRNAdd = (props) => {
                     DiscountAmount: "0.00",
                     TaxType: "GST",
                 }
+                console.log(arr)
+
                 let isfound = itemArr.filter(ind => {
+
                     return ind.Item === i.Item
+
                 })
 
                 if (isfound.length > 0) {
@@ -587,6 +594,7 @@ const GRNAdd = (props) => {
                     })
 
                     if ((i.Quantity > 0)) {
+
                         if (dubli.length === 0) {
                             itemArr.push(arr)
 
@@ -601,6 +609,7 @@ const GRNAdd = (props) => {
             })
 
             if (invoiceNo.length === 0) {
+
                 customAlert({
                     Type: 3,
                     Message: "Please Enter Invoice Number",
@@ -608,6 +617,7 @@ const GRNAdd = (props) => {
                 return returnFunc()
             }
             if (itemArr.length === 0) {
+
                 customAlert({
                     Type: 3,
                     Message: "Please Enter One Item Quantity",
@@ -615,31 +625,35 @@ const GRNAdd = (props) => {
                 return returnFunc()
             }
             if (isvalidMsg.length > 0) {
+
                 customAlert({
                     Type: 3,
                     Message: isvalidMsg,
                 })
                 return returnFunc()
             }
+         
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
-                GrandTotal: orderAmount,
+                GrandTotal: Number(orderAmount).toFixed(2),
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArr,
-                GRNReferences: openPOdata
-
+                GRNReferences: openPOdata,
             });
 
             if (pageMode === mode.edit) {
+
                 returnFunc()
             } else {
+
                 dispatch(_act.saveGRNAction({ jsonBody, btnId }))
             }
+  
         } catch (error) { returnFunc() }
     }
 
@@ -782,14 +796,12 @@ const GRNAdd = (props) => {
                                                     </DropdownMenu>
                                                 </Dropdown>
                                         }
-
                                     </Col>
                                 </FormGroup>
 
                             </Col>
                         </Row>
                     </div>
-
 
                     <ToolkitProvider
                         keyField="id"
@@ -825,12 +837,11 @@ const GRNAdd = (props) => {
                         )}
                     </ToolkitProvider>
 
-
-
                     {
                         (grnItemList.length > 0) ?
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
                                     editCreatedBy={editCreatedBy}
                                     userAcc={userPageAccessState}
                                     module={"GRN"} onClick={saveHandeller}

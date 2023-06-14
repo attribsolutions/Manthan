@@ -31,13 +31,13 @@ import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import  {CInput, C_DatePicker} from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const Receipts = (props) => {
-    
+
     const history = useHistory()
     const dispatch = useDispatch();
 
@@ -70,7 +70,9 @@ const Receipts = (props) => {
         BankList,
         ReceiptModeList,
         ReceiptType,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.ReceiptReducer.saveBtnloading,
             postMsg: state.ReceiptReducer.postMsg,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             OpeningBalance: state.ReceiptReducer.OpeningBalance,
@@ -163,7 +165,7 @@ const Receipts = (props) => {
 
     // loction useEffect
     useEffect(() => {
-        
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -279,7 +281,7 @@ const Receipts = (props) => {
         {
             text: "InvoiceDate",
             dataField: "InvoiceDate",
-           
+
         },
         {
             text: "Bill No",
@@ -288,17 +290,17 @@ const Receipts = (props) => {
         {
             text: "Bill Amount",
             dataField: "GrandTotal",
-            align:()=>("right")
+            align: () => ("right")
         },
         {
             text: "Paid",
             dataField: "PaidAmount",
-            align:()=>("right")
+            align: () => ("right")
         },
         {
             text: "Bal Amt",
             dataField: "BalanceAmount",
-            align:()=>("right")
+            align: () => ("right")
         },
         {
             text: "Calculate",
@@ -617,6 +619,9 @@ const Receipts = (props) => {
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                                 classNamePrefix="dropdown"
                                                 options={customerOptions}
                                                 onChange={(hasSelect, evn) => {
@@ -663,6 +668,9 @@ const Receipts = (props) => {
                                                 isDisabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 isSearchable={true}
                                                 className="react-dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => {
@@ -691,6 +699,9 @@ const Receipts = (props) => {
                                                     value={values.BankName}
                                                     isDisabled={page_Mode === mode.modeSTPsave ? true : false}
                                                     isSearchable={true}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={BankListOptions}
@@ -714,7 +725,9 @@ const Receipts = (props) => {
                                                 <Select
                                                     name="DepositorBankName"
                                                     value={values.DepositorBankName}
-
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
@@ -864,6 +877,7 @@ const Receipts = (props) => {
                             <FormGroup>
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                     <SaveButton pageMode={pageMode}
+                                        loading={saveBtnloading}
                                         onClick={saveHandeller}
                                         userAcc={userPageAccessState}
                                         editCreatedBy={editCreatedBy}

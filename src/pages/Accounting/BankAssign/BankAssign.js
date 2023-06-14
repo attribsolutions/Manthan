@@ -57,7 +57,9 @@ const BankAssign = (props) => {
     const {
         postMsg,
         Data,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.BankAssignReducer.saveBtnloading,
             postMsg: state.BankAssignReducer.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             updateMsg: state.BankAssignReducer.updateMessage,
@@ -402,6 +404,7 @@ const BankAssign = (props) => {
 
                                                     <Col sm={2}>
                                                         <SaveButton pageMode={pageMode}
+                                                            loading={saveBtnloading}
                                                             onClick={saveHandeller}
                                                             userAcc={userPageAccessState}
                                                             editCreatedBy={editCreatedBy}

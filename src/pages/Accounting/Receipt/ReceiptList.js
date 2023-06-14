@@ -48,6 +48,7 @@ const ReceiptList = () => {
 
     const reducers = useSelector(
         (state) => ({
+            loading: state.ReceiptReducer.loading,
             tableList: state.ReceiptReducer.ReceiptList,
             deleteMsg: state.ReceiptReducer.deleteMsg,
             // updateMsg: state.BOMReducer.updateMsg,
@@ -232,13 +233,16 @@ const ReceiptList = () => {
                                     value={values.Customer}
                                     options={customerOptions}
                                     onChange={CustomerOnChange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                 />
                             </Col>
                         </FormGroup>
                     </Col >
 
                     <Col sm="1" className="mt-3 ">
-                        <Go_Button onClick={goButtonHandler} />
+                        <Go_Button loading={reducers.loading} onClick={goButtonHandler} />
                     </Col>
                 </div>
             </div>

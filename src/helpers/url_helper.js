@@ -59,7 +59,7 @@ export const EMPLOYEE_LIST_FOR_DROPDOWN_API_URL = "/GetEmployeeForUserCreation"
 export const GET_DESIGNATIONID = "/Designations"
 export const GET_EMPLOYEE_TYPE = "/EmployeeTypes"
 export const GET_STATE = "/States"
- export const GET_CITY_ON_DISTRICT='/GetCityOnDistrict'
+export const GET_CITY_ON_DISTRICT = '/GetCityOnDistrict'
 
 // export const GET_REGION="/Region"
 export const EMPLOYEE_API_URL = "/Employees"
@@ -231,6 +231,8 @@ export const BANK = '/Bank'
 export const BANK_LIST_FILTER = '/BankFilter'
 
 export const CITY = '/Cities'
+export const CITY_LIST_API = '/CityList'
+
 export const DISTRICT = '/GetCityOnDistrict'
 
 // BankAssign
@@ -248,7 +250,7 @@ export const ORDER_PAGE_API = "Orders"
 export const ORDER_Edit_API = "OrderEdit"
 export const ORDER_TYPE_API = '/POType'
 export const ORDER_APPROVAL_API = '/SAPOrder'
-
+export const ORDER_CONFIRM_API = '/OrderConfirms'
 
 // GRN
 
@@ -352,8 +354,11 @@ export const INVOICE_RETURN = '/InvoiceReturnCRDR'
 export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
 
 export const PARTY_LEDGER_API = '/SAPLedger'
-export const PRODUCT_MARGIN_REPORT_API='/ProductMarginReport'
+export const PRODUCT_MARGIN_REPORT_API = '/ProductMarginReport'
 
 
 // Dashboard
 export const DASHBOARD = '/getdashboard'
+
+//Report
+export const ORDER_SUMMARY = '/OrderSummaryReport'

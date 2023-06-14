@@ -92,6 +92,9 @@ import SapLedgerReducer from "./Report/SapLedger Redux/reducer"
 //***************************Accounting ************************** */
 import ReceiptReducer from "./Accounting/Receipt/reducer"
 
+//***************************Reports ************************** */
+import OrderSummaryReducer from "./Report/OrderSummaryRedux/reducer"
+
 const rootReducer = combineReducers({
   Layout,
   Login,
@@ -161,7 +164,8 @@ const rootReducer = combineReducers({
   DashboardReducer,
   ChangePasswordReducer,
   SapLedgerReducer,
-  CityReducer
+  CityReducer,
+  OrderSummaryReducer,
 
 })
 export default rootReducer
