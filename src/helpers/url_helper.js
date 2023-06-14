@@ -359,3 +359,6 @@ export const PRODUCT_MARGIN_REPORT_API = '/ProductMarginReport'
 
 // Dashboard
 export const DASHBOARD = '/getdashboard'
+
+//Report
+export const ORDER_SUMMARY = '/OrderSummaryReport'

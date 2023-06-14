@@ -13,12 +13,14 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { ITEM } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const ItemsList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.ItemMastersReducer.listLoading,
       tableList: state.ItemMastersReducer.pages,
       editData: state.ItemMastersReducer.editData,
       updateMsg: state.ItemMastersReducer.updateMsg,
@@ -45,22 +47,24 @@ const ItemsList = () => {
     dispatch(getItemList());
   }, []);
 
-  const { pageField,userAccess=[] } = reducers
+  const { pageField, userAccess = [] } = reducers
 
   return (
     <React.Fragment>
-     
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={ItemsMaster}
-            masterPath={ITEM}
-            ButtonMsgLable={"Item"}
-            deleteName={"Name"}
-          />
-          : null
+        reducers.listLoading ?
+          <Listloader />
+          :
+          (pageField) ?
+            <CommonListPage
+              action={action}
+              reducers={reducers}
+              MasterModal={ItemsMaster}
+              masterPath={ITEM}
+              ButtonMsgLable={"Item"}
+              deleteName={"Name"}
+            />
+            : <Listloader />
       }
 
     </React.Fragment>

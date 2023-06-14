@@ -13,13 +13,14 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const EmployeeTypeList = (props) => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.EmployeeTypeReducer.listLoading,
       tableList: state.EmployeeTypeReducer.EmployeeTypeList,
       editData: state.EmployeeTypeReducer.editData,
       updateMsg: state.EmployeeTypeReducer.updateMessage,
@@ -47,21 +48,24 @@ const EmployeeTypeList = (props) => {
     dispatch(getEmployeeTypelist());
   }, []);
 
-  const { pageField,userAccess=[] } = reducers
+  const { pageField, userAccess = [] } = reducers
 
   return (
     <React.Fragment>
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={EmployeeTypesMaster}
-            masterPath={url.EMPLOYEETYPE}
-            ButtonMsgLable={"Employee Type"}
-            deleteName={"Name"}
-          />
-          : null
+        reducers.listLoading ?
+          <Listloader />
+          :
+          (pageField) ?
+            <CommonListPage
+              action={action}
+              reducers={reducers}
+              MasterModal={EmployeeTypesMaster}
+              masterPath={url.EMPLOYEETYPE}
+              ButtonMsgLable={"Employee Type"}
+              deleteName={"Name"}
+            />
+            : <><Listloader /></>
       }
     </React.Fragment>
   )

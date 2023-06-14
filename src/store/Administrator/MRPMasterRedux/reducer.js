@@ -7,6 +7,7 @@ import {
     DELETE_MRP_MASTER_ID_SUCCESS,
     GO_BUTTON_FOR_MRP_MASTER,
     SAVE_MRP_MASTER,
+    GET_MRP_LIST,
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -15,7 +16,8 @@ const INIT_STATE = {
     MRPList: [],
     deleteMsg: { Status: false },
     deleteIdForMRPMaster: { Status: false },
-    saveBtnloading: false
+    saveBtnloading: false,
+    listLoading: false,
 };
 
 const MRPMasterReducer = (state = INIT_STATE, action) => {
@@ -33,13 +35,13 @@ const MRPMasterReducer = (state = INIT_STATE, action) => {
                 ...state,
                 postMsg: action.payload,
                 saveBtnloading: false,
-
             };
 
         case GO_BUTTON_FOR_MRP_MASTER:
             return {
                 ...state,
                 MRPGoButton: [],
+                listLoading: true,
             };
 
         // Go Button post api
@@ -47,13 +49,23 @@ const MRPMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 MRPGoButton: action.payload,
+                listLoading: false,
             };
 
         // GET api
+
+        case GET_MRP_LIST:
+            return {
+                ...state,
+                listLoading: true,
+            };
+
+
         case GET_MRP_LIST_SUCCESS:
             return {
                 ...state,
                 MRPList: action.payload,
+                listLoading: false,
             };
 
         // DELETE api

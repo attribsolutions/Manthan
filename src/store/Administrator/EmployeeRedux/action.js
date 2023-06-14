@@ -9,7 +9,8 @@ import {
   GET_COMPANYNAME_BY_EMPLOYEETYPES_ID,
   GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS,
   GET_CITY_ON_DISTRICT,
-  GET_CITY_ON_DISTRICT_SUCCESS
+  GET_CITY_ON_DISTRICT_SUCCESS,
+  EMPLOYEE_API_ERROR_ACTION
 
 } from "./actionTypes"
 
@@ -112,3 +113,7 @@ export const Get_CompanyName_By_EmployeeTypeID_Success = (data) => ({
   payload: data,
 });
 
+
+export const EmployeeApiErrorAction = () => ({
+  type: EMPLOYEE_API_ERROR_ACTION,
+})

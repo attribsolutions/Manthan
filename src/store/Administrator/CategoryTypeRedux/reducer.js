@@ -1,6 +1,8 @@
 import {
+  CATEGORY_TYPE_API_ERROR_ACTION,
   DELETE_CATEGORY_TYPE_ID_SUCCESS,
   EDIT_CATEGORY_TYPE_ID_SUCCESS,
+  GET_CATEGORY_TYPE_LIST,
   GET_CATEGORY_TYPE_LIST_SUCCESS,
   SAVE_CATEGORYTYPE_MASTER,
   SAVE_CATEGORYTYPE_MASTER_SUCCESS,
@@ -14,7 +16,8 @@ const INIT_STATE = {
   deleteMessage: { Status: false },
   editData: { Status: false },
   updateMessage: { Status: false },
-  saveBtnloading: false
+  saveBtnloading: false,
+  listLoading: false,
 }
 
 const categoryTypeReducer = (state = INIT_STATE, action) => {
@@ -35,10 +38,17 @@ const categoryTypeReducer = (state = INIT_STATE, action) => {
       }
 
     // get api
+    case GET_CATEGORY_TYPE_LIST:
+      return {
+        ...state,
+        listLoading: true,
+      }
+
     case GET_CATEGORY_TYPE_LIST_SUCCESS:
       return {
         ...state,
         categoryTypeListData: action.payload,
+        listLoading: false,
       }
 
     case DELETE_CATEGORY_TYPE_ID_SUCCESS:
@@ -67,6 +77,13 @@ const categoryTypeReducer = (state = INIT_STATE, action) => {
         updateMessage: action.payload,
         saveBtnloading: false
 
+      };
+
+    case CATEGORY_TYPE_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
       };
 
     default:

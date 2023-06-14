@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-    BreadcrumbShowCountlabel,
-    commonPageFieldList,
-    commonPageFieldListSuccess
-} from "../../store/actions";
-import Select from "react-select";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
-import { Retailer_List } from "../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../components/Common/CommonButton";
-import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI } from "../../store/Sales/SalesReturnRedux/action";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
+import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
+import * as XLSX from 'xlsx';
 
 const OrderSummary = (props) => {
 
@@ -26,61 +20,27 @@ const OrderSummary = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: { value: "", label: "All" }
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const hasPagePath = history.location.pathname
-
-    const [pageMode, setpageMode] = useState(mode.defaultList)
     const [userPageAccessState, setUserAccState] = useState('');
 
     const reducers = useSelector(
         (state) => ({
-            loading: state.SalesReturnReducer.loading,
-            tableList: state.SalesReturnReducer.salesReturnList,
-            deleteMsg: state.SalesReturnReducer.deleteMsg,
-            postMsg: state.OrderReducer.postMsg,
-            RetailerList: state.CommonAPI_Reducer.RetailerList,
-            ReceiptType: state.ReceiptReducer.ReceiptType,
+
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
 
-    const { userAccess, pageField, RetailerList, } = reducers;
+    const { userAccess,} = reducers;
     const values = { ...state.values }
 
-    const action = {
-        getList: salesReturnListAPI,
-        deleteId: delete_SalesReturn_Id,
-        postSucc: postMessage,
-        deleteSucc: delete_SalesReturn_Id_Succcess
-    }
-
     // Featch Modules List data  First Rendering
-    useEffect(() => {
-        const page_Id = pageId.SALES_RETURN_LIST
-        setpageMode(hasPagePath)
-        dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Sales Return Count"} :0`))
-        goButtonHandler(true)
-    }, []);
-
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 1,
-            PartyID: _cfunc.loginPartyID(),
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
-
-    // userAccess useEffect
+      // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
@@ -95,16 +55,6 @@ const OrderSummary = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
-
-    const customerOptions = RetailerList.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
-
-    customerOptions.unshift({
-        value: "",
-        label: " All"
-    });
 
     // useEffect(() => {
 
@@ -128,29 +78,18 @@ const OrderSummary = (props) => {
     //         XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin1");
     //         XLSX.writeFile(workbook, "Product Margin Report.xlsx");
 
-    //         dispatch(getExcel_Button_API_Success([]));
+    //         dispatch(postOrderSummary_API_Success([]));
     //     }
     // }, [ProductMarginData]);
 
-    // function excelhandler(event) {
-    //     debugger
-    //     event.preventDefault();
-    //     const userDetails = loginUserDetails()
-    //     const btnId = "excelbtn-id"
-    //     const ProductMargin = []
-    //     dispatch(getExcel_Button_API())
-    // }
-
     function goButtonHandler() {
-
+        const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
-            CustomerID: values.Customer.value,
-            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID(),
         });
-        dispatch(salesReturnListAPI(jsonBody));
-
+        dispatch(postOrderSummary_API({ jsonBody, btnId }));
     }
 
     function fromdateOnchange(e, date) {
@@ -170,17 +109,6 @@ const OrderSummary = (props) => {
             return a
         })
     }
-
-    function CustomerOnChange(e) {
-
-        setState((i) => {
-            const a = { ...i }
-            a.values.Customer = e;
-            a.hasValid.Customer.valid = true
-            return a
-        })
-    }
-
 
     return (
         <React.Fragment>
@@ -216,27 +144,8 @@ const OrderSummary = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm="5">
-                            <FormGroup className="mb-2 row mt-3 " >
-                                <Label className="col-md-4 p-2"
-                                    style={{ width: "115px" }}>Customer</Label>
-                                <Col sm="5">
-                                    <Select
-                                        name="Customer"
-                                        classNamePrefix="select2-Customer"
-                                        value={values.Customer}
-                                        options={customerOptions}
-                                        onChange={CustomerOnChange}
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col >
-
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button loading={reducers.loading} onClick={goButtonHandler} />
+                            <Go_Button onClick={goButtonHandler} />
                         </Col>
                     </div>
                 </div>

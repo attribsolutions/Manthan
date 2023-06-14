@@ -1,4 +1,5 @@
 import {
+  COMPANY_API_ERROR_ACTION,
   DELETE_COMPANY_ID,
   DELETE_COMPANY_ID_SUCCESS,
   EDIT_COMPANY_ID,
@@ -13,7 +14,6 @@ import {
   UPDATE_COMPANY_ID,
   UPDATE_COMPANY_ID_SUCCESS
 } from "./actionType";
-
 
 export const getcompanyList = () => ({ // get List Action
   type: FETCH_COMPANY_LIST,
@@ -74,3 +74,7 @@ export const deleteCompanyIDSuccess = (resp) => ({  // Delete Success
   type:DELETE_COMPANY_ID_SUCCESS,
   payload: resp,
 });
+
+export const companyApiErrorAction = () => ({
+  type: COMPANY_API_ERROR_ACTION,
+})

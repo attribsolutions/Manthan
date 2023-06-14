@@ -1,6 +1,8 @@
 import {
   DELETE_EMPLOYEE_TYPE_ID_SUCCESS,
   EDIT_EMPLOYEE_TYPE_ID_SUCCESS,
+  EMPLOYEE_TYPE_API_ERROR_ACTION,
+  GET_EMPLOYEE_TYPE_LIST,
   GET_EMPLOYEE_TYPE_LIST_SUCCESS,
   POST_EMPLOYEETYPE_SUBMIT,
   POST_EMPLOYEETYPE_SUBMIT_SUCCESS,
@@ -15,6 +17,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMessage: { Status: false },
   saveBtnloading: false,
+  listLoading: false,
 }
 
 const EmployeeTypeReducer = (state = INIT_STATE, action) => {
@@ -36,10 +39,17 @@ const EmployeeTypeReducer = (state = INIT_STATE, action) => {
       }
 
     // get api
+    case GET_EMPLOYEE_TYPE_LIST:
+      return {
+        ...state,
+        listLoading: true,
+      }
+
     case GET_EMPLOYEE_TYPE_LIST_SUCCESS:
       return {
         ...state,
         EmployeeTypeList: action.payload,
+        listLoading: false,
       }
 
     case DELETE_EMPLOYEE_TYPE_ID_SUCCESS:
@@ -68,7 +78,13 @@ const EmployeeTypeReducer = (state = INIT_STATE, action) => {
         ...state,
         updateMessage: action.payload,
         saveBtnloading: false,
+      };
 
+    case EMPLOYEE_TYPE_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
       };
 
 
