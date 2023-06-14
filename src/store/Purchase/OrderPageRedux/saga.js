@@ -177,10 +177,10 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.InvoiceCreated = ""
       }
 
-      if (i.IsConfirm === true) {
+      if (i.IsConfirm === true) {// is confirm is true the show force dlete and edit true po ans so mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
-        i.forceSelectDissabled = true;
+        i.forceSelectDissabled = true;//select row check box dessible 
       }
 
 
