@@ -11,7 +11,8 @@ import {
   SAVE_GRN_FROM_GRN_PAGE_ACTION,
   SAVE_GRN_FROM_GRN_PAGE_SUCCESS,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
-  UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS
+  UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS,
+  GRN_API_ERROR_ACTION
 } from './actionType'
 
 
@@ -38,7 +39,7 @@ export const saveGRNSuccess = (msg) => ({
 
 export const editGRNAction = (config = {}) => ({
   type: EDIT_GRN_FOR_GRN_PAGE,
-  config ,
+  config,
 });
 export const editGRNIdSuccess = (resp) => ({
   type: EDIT_GRN_FOR_GRN_PAGE_SUCCESS,
@@ -57,7 +58,7 @@ export const updateGRNIdSuccess = (resp) => ({
 
 export const deleteGRNId = (config = {}) => ({
   type: DELETE_GRN_FOR_GRN_PAGE,
-  config ,
+  config,
 });
 export const deleteGRNIdSuccess = (resp) => ({
   type: DELETE_GRN_FOR_GRN_PAGE_SUCCESS,
@@ -73,6 +74,11 @@ export const makeGRN_Mode_1Action = (data, pageMode, path) => ({
 export const makeGRN_Mode_1ActionSuccess = list => ({
   type: MAKE_GRN_MODE_1_ACTION_SUCCESS,
   payload: list,
+})
+
+
+export const GrnApiErrorAction = () => ({
+  type: GRN_API_ERROR_ACTION,
 })
 
 
