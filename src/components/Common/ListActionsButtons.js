@@ -148,7 +148,7 @@ export const listPageActionsButtonFunc = (props) => {
             const forceDeleteHide = rowData.forceDeleteHide;
             const forceMakeBtn = rowData.forceMakeBtn;
             rowData["hasSelect"] = false
-debugger
+
             return (
                 // <div className="d-flex gap-3" style={{ display:'', justifyContent: 'right'}} >
                 <div id="ActionBtn" className="center gap-3" >
