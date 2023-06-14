@@ -83,7 +83,7 @@ const AddUser = (props) => {
   const {
     PostAPIResponse,
     employeelistForDropdown,
-    Roles,
+    Roles=[],
     employePartyWiseRoleState,
     userAccess,
     pageField,
