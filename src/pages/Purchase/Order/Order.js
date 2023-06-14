@@ -524,6 +524,7 @@ const Order = (props) => {
                                 id={`Rate-${k}`}
                                 cpattern={decimalRegx}
                                 defaultValue={row.Rate}
+                                className="text-end"
                                 onChange={(event) => {
                                     row.Rate = event.target.value;
                                     itemWise_CalculationFunc(row);
@@ -890,6 +891,7 @@ const Order = (props) => {
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
+                IsConfirm:false  // PO Order then IsConfirm true
             }
             const SO_JsonBody = {
                 OrderDate: orderdate,
@@ -898,6 +900,7 @@ const Order = (props) => {
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
+                IsConfirm:true   // SO Order then IsConfirm true
             }
             const IB_JsonBody = {
                 DemandDate: orderdate,
