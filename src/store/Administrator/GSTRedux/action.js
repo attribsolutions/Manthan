@@ -7,12 +7,13 @@ import {
     GET_GST_LIST_SUCCESS,
     GO_BUTTON_FOR_GST_MASTER,
     GO_BUTTON_FOR_GST_MASTER_SUCCESS,
+    GST_API_ERROR_ACTION,
     SAVE_GST_MASTER,
     SAVE_GST_MASTER_SUCCESS
 } from "./actionType";
 
 // post api
-export const saveGSTMaster = (config={}) => ({
+export const saveGSTMaster = (config = {}) => ({
     type: SAVE_GST_MASTER,
     config,
 });
@@ -28,12 +29,12 @@ export const getGSTList = () => ({
 });
 
 export const getGSTListSuccess = (resp) => ({
-    type:GET_GST_LIST_SUCCESS,
+    type: GET_GST_LIST_SUCCESS,
     payload: resp,
 });
 
 //delete for List Page
-export const deleteGSTListId = (config={}) => ({
+export const deleteGSTListId = (config = {}) => ({
     type: DELETE_GST_LIST_ID,
     config,
 });
@@ -64,3 +65,7 @@ export const deleteGSTId_ForMaster_Success = (resp) => ({
     type: DELETE_GST_ID_FOR_MASTER_SUCCESS,
     payload: resp,
 });
+
+export const GSTApiErrorAction = () => ({
+    type: GST_API_ERROR_ACTION,
+})

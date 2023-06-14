@@ -8,7 +8,7 @@ function* save_MRPMaster_GenFunc({ config }) {
   try {
     const response = yield call(apiCall.MRPMaster_Post_API, config);
     yield put(action.saveMRPMasterSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.MRPApiErrorAction()) }
 }
 
 // List Page API
@@ -20,7 +20,7 @@ function* get_MRPMaster_GenFunc() {
       i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
     })
     yield put(action.getMRPList_Success(response.Data))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.MRPApiErrorAction()) }
 }
 
 //delete
@@ -28,7 +28,7 @@ function* delete_MRPList_Id_GenFunc({ config }) {
   try {
     const response = yield call(apiCall.MRPMaster_Delete_API_For_List, config);
     yield put(action.deleteMRPList_Id_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.MRPApiErrorAction()) }
 }
 
 function* goButton_MRPMaster_GenFunc({ data }) {
@@ -39,7 +39,7 @@ function* goButton_MRPMaster_GenFunc({ data }) {
     response.pathname = pathname
     response.rowData = rowData
     yield put(action.GoButtonForMRP_MasterSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.MRPApiErrorAction()) }
 }
 
 // delete api MRP Master PageL
@@ -48,7 +48,7 @@ function* delete_MRPMaster_Id_GenFunc({ id }) {
     const response = yield call(apiCall.MRPMaster_Delete_API_For_Master, id);
     response["deletedId"] = id
     yield put(action.deleteMRPMaster_Id_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.MRPApiErrorAction()) }
 }
 
 function* MRPMasterSaga() {

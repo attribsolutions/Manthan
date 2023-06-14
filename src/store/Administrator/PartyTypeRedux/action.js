@@ -49,3 +49,7 @@ export const updatePartyTypeIDSuccess = (resp) => ({
   type: actionType.UPDATE_PARTY_TYPE_ID_SUCCESS,
   payload: resp,
 })
+
+export const PartyTypeApiErrorAction = () => ({
+  type: actionType.PARTY_TYPE_API_ERROR_ACTION,
+})

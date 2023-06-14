@@ -1,7 +1,9 @@
 import {
   DELETE_GROUP_LIST_ID_SUCCESS,
   EDIT_GROUPMASTER_ID_SUCCESS,
+  GET_GROUP_LIST,
   GET_GROUP_LIST_SUCCESS,
+  GROUP_API_ERROR_ACTION,
   SAVE_GROUP_MASTER,
   SAVE_GROUP_MASTER_SUCCESS,
   UPDATE_GROUPMASTER_ID,
@@ -15,6 +17,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   saveBtnloading: false,
+  listLoading: false,
 
 }
 
@@ -38,11 +41,20 @@ const GroupReducer = (state = INIT_STATE, action) => {
       }
 
     // get 
+
+    case GET_GROUP_LIST:
+      return {
+        ...state,
+        listLoading: true,
+      }
+
     case GET_GROUP_LIST_SUCCESS:
       return {
         ...state,
         groupList: action.payload,
+        listLoading: false,
       }
+
     //  del
     case DELETE_GROUP_LIST_ID_SUCCESS:
       return {
@@ -71,6 +83,15 @@ const GroupReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false,
 
       };
+
+
+    case GROUP_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
+      };
+
 
     default:
       return state

@@ -122,7 +122,7 @@ export function Loader() {
 
 export function Listloader() {
   return <div id="api_spinner" >
-    <div className="api_spinner_body " color="fade" >
+    <div className="api_spinner_body " >
       <span className="spinner" style={{ left: "-5cm" }}></span>
     </div>
   </div>

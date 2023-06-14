@@ -5,6 +5,7 @@ import {
   EDIT_GROUPMASTER_ID_SUCCESS,
   GET_GROUP_LIST,
   GET_GROUP_LIST_SUCCESS,
+  GROUP_API_ERROR_ACTION,
   SAVE_GROUP_MASTER,
   SAVE_GROUP_MASTER_SUCCESS,
   UPDATE_GROUPMASTER_ID,
@@ -21,7 +22,7 @@ export const getGroupListSuccess = (pages) => ({// get List success
   payload: pages,
 });
 
-export const saveGroupMaster = (config={}) => ({// save Action
+export const saveGroupMaster = (config = {}) => ({// save Action
   type: SAVE_GROUP_MASTER,
   config,
 });
@@ -51,7 +52,7 @@ export const updateGroupIDSuccess = (resp) => ({ //Update Success
   payload: resp,
 })
 
-export const delete_GroupList_ID = (config={}) => ({// Delete  Action
+export const delete_GroupList_ID = (config = {}) => ({// Delete  Action
   type: DELETE_GROUP_LIST_ID,
   config,
 });
@@ -59,6 +60,11 @@ export const delete_GroupList_ID = (config={}) => ({// Delete  Action
 export const deleteGrouplistSuccess = (resp) => ({// Delete Success
   type: DELETE_GROUP_LIST_ID_SUCCESS,
   payload: resp
+});
+
+
+export const GroupApiErrorAction = () => ({
+  type: GROUP_API_ERROR_ACTION,
 });
 
 

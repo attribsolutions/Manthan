@@ -8,7 +8,7 @@ function* save_GSTMaster_GenFunc({ config }) {
   try {
     const response = yield call(apiCall.Post_GSTMaster_API, config);
     yield put(action.saveGSTMasterSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.GSTApiErrorAction()) }
 }
 
 //listpage
@@ -21,7 +21,7 @@ function* get_GSTList_GenFunc() {
       i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
     })
     yield put(action.getGSTListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.GSTApiErrorAction()) }
 }
 
 // delete api for GST List
@@ -29,7 +29,8 @@ function* delete_GSTList_ID_GenFunc({ config }) {
   try {
     const response = yield call(apiCall.delete_GSTList_API, config);
     yield put(action.deleteGSTListId_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.GSTApiErrorAction()) }
+
 }
 
 function* goButton_GST_GenFunc({ data }) {
@@ -40,17 +41,17 @@ function* goButton_GST_GenFunc({ data }) {
     response.pathname = pathname
     response.rowData = rowData
     yield put(action.goButtonForGST_Master_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.GSTApiErrorAction()) }
 }
 
 // delete api for GST Master
 function* delete_GSTMaster_ID_GenFunc({ id }) {
-  
+
   try {
     const response = yield call(apiCall.GST_MasterPage_delete_API, id);
     response["deletedId"] = id
     yield put(action.deleteGSTId_ForMaster_Success(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.GSTApiErrorAction()) }
 }
 
 function* GSTSaga() {

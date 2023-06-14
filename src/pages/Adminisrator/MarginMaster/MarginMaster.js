@@ -44,7 +44,7 @@ import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 const MarginMaster = (props) => {
@@ -71,8 +71,10 @@ const MarginMaster = (props) => {
         PriceList,
         userAccess,
         pageField,
-        saveBtnloading
+        saveBtnloading,
+        listLoading,
     } = useSelector((state) => ({
+        listLoading: state.MarginMasterReducer.listLoading,
         saveBtnloading: state.MarginMasterReducer.saveBtnloading,
         tableData: state.MarginMasterReducer.MarginGoButton,
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
@@ -522,8 +524,7 @@ const MarginMaster = (props) => {
                                             </FormGroup>
                                         </Col>
                                         <Col sm={1}>
-                                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                                onClick={(event) => { GoButton_Handler(event) }} >Go</Button>
+                                            <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
                                         </Col>
                                     </Row>
                                 </CardHeader>

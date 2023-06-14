@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
+  GroupApiErrorAction,
   deleteGrouplistSuccess,
   editGroupIDSuccess,
   getGroupListSuccess,
@@ -20,28 +21,26 @@ import {
   SAVE_GROUP_MASTER,
   UPDATE_GROUPMASTER_ID
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
-
 
 function* Save_Method_ForGroupMaster_GenFun({ config }) {              // Save API
   try {
     const response = yield call(save_Group_API, config);
     yield put(saveGroupMaster_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GroupApiErrorAction()) }
 }
 
 function* Get_Group_List_GenFunc() {                                   // getList API
   try {
     const response = yield call(get_Group_List_Api);
     yield put(getGroupListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GroupApiErrorAction()) }
 }
 
 function* Delete_GroupList_ID_GenFunc({ config }) {                    // delete API
   try {
     const response = yield call(del_Group_List_API, config);
     yield put(deleteGrouplistSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GroupApiErrorAction()) }
 }
 
 function* Edit_Grouplist_ID_GenFunc({ config }) {                      // edit API 
@@ -50,14 +49,14 @@ function* Edit_Grouplist_ID_GenFunc({ config }) {                      // edit A
     const response = yield call(edit_Group_List_Api, config);
     response.pageMode = btnmode;
     yield put(editGroupIDSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GroupApiErrorAction()) }
 }
 
 function* Update_Grouplist_ID_GenFunc({ config }) {                    // update API
   try {
     const response = yield call(update_Group_List_Api, config);
     yield put(updateGroupIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GroupApiErrorAction()) }
 }
 
 function* GroupSaga() {
