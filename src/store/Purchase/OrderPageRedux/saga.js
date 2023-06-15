@@ -158,7 +158,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.DeliveryDate = (`${DeliveryDate}`)
 
       i.forceEditHide = false
-      i.forceMakeBtn = false
+      i.forceMakeBtn = true
       i.forceDeleteHide = false
       i.forceSelectDissabled = false
       i.Status = "Open"
@@ -173,6 +173,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       }
       else if (i.IsConfirm === true) {
         i.Status = "Order Confirm"
+        i.forceMakeBtn = false
       }
 
       if (i.Inward === 0) {
