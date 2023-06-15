@@ -315,11 +315,11 @@ export async function CheckAPIResponse({
   error,
 }) {
   if (btnId) {
+    
     // await new Promise(r => setTimeout(r, 0));
     btnIsDissablefunc({ btnId, state: false });
   }
-
-
+  
   const { data = "", code } = response;
   const con1 = data.StatusCode === 200;
   const con2 = data.StatusCode === 204; //data nao avalable
@@ -333,7 +333,7 @@ export async function CheckAPIResponse({
     const { data = "", response } = error;
     const tokenXp = response.data.code === "token_not_valid";
 
-
+    
 
     // **********************************************************************************
     if (con6) {                             // print post and Put method body
@@ -389,7 +389,7 @@ export async function CheckAPIResponse({
     });
     return Promise.reject(response.data);
   } else if (con5) {
-
+    
     console.log(`${url}***${method} apiCall response:=>`, response.data);
     await customAlert({ Type: 3, Message: JSON.stringify(response.data.Message) });
     return Promise.reject(response.data);
