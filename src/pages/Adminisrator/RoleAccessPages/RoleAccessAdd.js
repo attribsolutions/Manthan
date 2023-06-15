@@ -137,7 +137,7 @@ const RoleAccessAdd = () => {
         ModuleData,
         PageDropdownRedux,
         postMsg,
-        Roles,
+        Roles=[],
         partyList,
         userAccess = [],
         company,
