@@ -43,23 +43,23 @@ export const Rows = (data) => {
     let TotalQuantity = 0
     let SrNO = 1
 
-    
+
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
-        const { ItemName, MRP, BatchCode, Box, Outer, Quantity, UnitName } = currentItem;
+        const { ItemName, MRP, BatchCode, Box, Outer, Quantity, UnitName, MRPValue } = currentItem;
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
-            // accumulator[key].MRP += parseInt(MRP);
+            accumulator[key].MRPValue += parseInt(MRPValue);
             accumulator[key].Quantity += parseInt(Quantity);
 
         } else {
-            accumulator[key] = { ItemName, MRP: parseInt(MRP), BatchCode, Box, Outer, Quantity: parseInt(Quantity), UnitName };
+            accumulator[key] = { ItemName, MRPValue: parseInt(MRPValue), BatchCode, Box, Outer, Quantity: parseInt(Quantity), UnitName };
         }
         return accumulator;
     }, {});
-    
 
-    // Object.values(groupedItems).forEach((element, key) => {
-    InvoiceItems.forEach((element, key) => {
+
+    Object.values(groupedItems).forEach((element, key) => {
+        // InvoiceItems.forEach((element, key) => {
 
         const tableitemRow = [
             SrNO++,

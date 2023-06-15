@@ -12,8 +12,8 @@ const onSelectAll = (event, allarray, a, c, v) => {
 const selectRow = (row, event) => {
     row.selectCheck = event
 }
-
 export const selectAllCheck = (selected, nonSelectable, position, headLabel) => ({
+
     mode: "checkbox",
     onSelectAll: onSelectAll,
     onSelect: selectRow,
