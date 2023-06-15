@@ -803,7 +803,9 @@ const PartyItems = (props) => {
             return (index.selectCheck === true)
         })
         const btnId = event.target.id
+
         try {
+
             btnIsDissablefunc({ btnId, state: true })
             var PartyData = Find.map((index) => ({
                 Item: index.Item,
@@ -811,7 +813,7 @@ const PartyItems = (props) => {
             }))
 
             const jsonBody = JSON.stringify(PartyData)
-            // dispatch(SavePartyItems({ jsonBody, btnId }));
+            dispatch(SavePartyItems({ jsonBody, btnId }));
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
