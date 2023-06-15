@@ -487,7 +487,7 @@ const Invoice = (props) => {
 
         },
         {//***************Discount********************************************************************* */
-            text: "Discount",
+            text: "Discount/unit",
             dataField: "",
             classes: () => ('invoice-discount-row'),
             formatter: (Rate, index1, key) => {
@@ -593,16 +593,17 @@ const Invoice = (props) => {
     };
 
     const SaveHandler = async (event) => {
-
+        
         event.preventDefault();
 
         const btnId = event.target.id
         _cfunc.btnIsDissablefunc({ btnId, state: true })
-
+        
         function returnFunc() {
             _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
+            
             const validMsg = []
             const invoiceItems = []
             let grand_total = 0;
@@ -795,20 +796,20 @@ const Invoice = (props) => {
                                 <React.Fragment>
                                     <Row>
                                         <Col xl="12">
-                                                <BootstrapTable
-                                                    id="table_Arrow"
-                                                    keyField={"id"}
-                                                    responsive
-                                                    bordered={false}
-                                                    striped={false}
-                                                    classes={"table  table-bordered"}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-                                                    {...toolkitProps.baseProps}
-                                                />
+                                            <BootstrapTable
+                                                id="table_Arrow"
+                                                keyField={"id"}
+                                                responsive
+                                                bordered={false}
+                                                striped={false}
+                                                classes={"table  table-bordered"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Items Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
                                         </Col>
                                     </Row>
 

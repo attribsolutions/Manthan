@@ -77,6 +77,7 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
             columns.push({ text: "Page Field Is Blank..." });
         }
 
+
         PageFieldMaster.forEach((i, k) => {
 
             if (i.ShowInListPage) {
@@ -86,6 +87,23 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
                     sort: true,
                     align: () => {
                         if (i.Alignment) return i.Alignment;
+                    },
+
+                    formatter: (cell, row) => {
+                        debugger
+                        if (cell === "Invoice Created") {
+                            return (
+                                <h5><span class="label label-primary" style={{ color: '#2ab57d' }} >{cell}</span></h5>
+                            )
+                        }
+                        if (cell === "Order Confirm") {
+                            return (
+                                <h5><span class="label label-primary" style={{ color: '#4ba6ef' }} >{cell}</span></h5>
+                            )
+                        }
+                        return (
+                            <span> {cell} </span>
+                        );
                     }
                 })
 
