@@ -141,6 +141,8 @@ export function invoice_GoButton_dataConversion_Func(response) {
       index1["ItemTotalStock"] = 0
       index1["StockInValid"] = false;
       index1["StockInvalidMsg"] = '';
+      
+      let orderQty = Number(index1.Quantity);
 
       index1.StockDetails = index1.StockDetails.map(index2 => {
 
@@ -152,7 +154,6 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
         index1.ItemTotalStock = (Number(index2.ActualQuantity) + Number(index1.ItemTotalStock));
 
-        let orderQty = Number(index1.Quantity);
 
         let stockQty = Number(index2.ActualQuantity);
 
