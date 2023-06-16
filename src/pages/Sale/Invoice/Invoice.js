@@ -567,15 +567,6 @@ const Invoice = (props) => {
         })
     };
 
-
-
-
-
-
-
-
-
-
     function goButtonHandler(makeIBInvoice) {
         const btnId = goBtnId;
         _cfunc.btnIsDissablefunc({ btnId, state: true })
@@ -593,17 +584,17 @@ const Invoice = (props) => {
     };
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
 
         const btnId = event.target.id
         _cfunc.btnIsDissablefunc({ btnId, state: true })
-        
+
         function returnFunc() {
             _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
-            
+
             const validMsg = []
             const invoiceItems = []
             let grand_total = 0;
@@ -629,27 +620,27 @@ const Invoice = (props) => {
                             Quantity: ele.Qty,
                             BatchDate: ele.BatchDate,
                             BatchID: ele.id,
-                            BaseUnitQuantity: ele.BaseUnitQuantity,
+                            BaseUnitQuantity: Number(ele.BaseUnitQuantity).toFixed(3),
                             LiveBatch: ele.LiveBatche,
                             MRP: ele.LiveBatcheMRPID,
                             MRPValue: ele.MRP,//changes
-                            Rate: ele.Rate,
-                            BasicAmount: (calculate.discountBaseAmt).toFixed(2),
-                            GSTAmount: calculate.gstAmt,
+                            Rate: Number(ele.Rate).toFixed(2),
+                            BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
+                            GSTAmount: Number(calculate.gstAmt).toFixed(2),
                             GST: ele.LiveBatcheGSTID,
                             GSTPercentage: ele.GST,// changes
-                            CGST: calculate.CGST,
-                            SGST: calculate.SGST,
+                            CGST: Number(calculate.CGST).toFixed(2),
+                            SGST: Number(calculate.SGST).toFixed(2),
                             IGST: 0,
                             GSTPercentage: ele.GST,
                             CGSTPercentage: (ele.GST / 2),
                             SGSTPercentage: (ele.GST / 2),
                             IGSTPercentage: 0,
-                            Amount: calculate.tAmount,
+                            Amount: Number(calculate.tAmount).toFixed(2),
                             TaxType: 'GST',
                             DiscountType: index.DiscountType,
-                            Discount: index.Discount,
-                            DiscountAmount: calculate.disCountAmt,
+                            Discount: Number(index.Discount).toFixed(2),
+                            DiscountAmount: Number(calculate.disCountAmt),
                         })
                     }
                 })
@@ -708,6 +699,7 @@ const Invoice = (props) => {
             else {
                 dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId }));
             }
+
         } catch (e) { returnFunc() }
 
     }

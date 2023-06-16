@@ -1,7 +1,7 @@
 import { groupBy } from "../../../components/Common/CommonFunction"
 
 export const discountCalculate = (row, index1) => {
-debugger
+    
     let rate = 0
     let qty = 0
     let gstPercentage = 0
@@ -13,13 +13,13 @@ debugger
     if (!(row.Rate == '')) { rate = row.Rate; };
     if (!(row.Qty == '')) { qty = row.Qty; };
 
-    let baseAmt = parseFloat(rate) * parseFloat(qty)
+    let baseAmt = Number(rate) * Number(qty)
     if (!baseAmt) { baseAmt = 0 }
 
     if (index1.DiscountType === 2) {// DiscountType 2 = discount in percentage
-        disCountAmt = (baseAmt * index1.Discount) / 100
+        disCountAmt = (Number(baseAmt) * (Number(index1.Discount) / 100));
     } else {
-        disCountAmt = (parseFloat(qty) * index1.Discount)
+        disCountAmt = (Number(qty) * Number(index1.Discount))
     }
 
     if (!(row.GST == '')) {
@@ -27,7 +27,7 @@ debugger
     };
 
     let discountBaseAmt = (baseAmt - disCountAmt)
-    const gstAmt1 = ((discountBaseAmt * parseFloat(gstPercentage) / 100))
+    const gstAmt1 = ((discountBaseAmt * Number(gstPercentage) / 100))
     const total = gstAmt1 + parseFloat(discountBaseAmt)
     const CGST = (gstAmt1 / 2).toFixed(2);
     const SGST = (gstAmt1 / 2).toFixed(2);
@@ -89,7 +89,7 @@ export function stockDistributeFunc(index1) {
 
         let stockqty = Number(index2.ActualQuantity);
 
-        _ItemTotalStock = _ItemTotalStock +stockqty// addition of total index2.ActualQuantity
+        _ItemTotalStock = _ItemTotalStock + stockqty// addition of total index2.ActualQuantity
 
         if ((orderqty > stockqty) && !(orderqty === 0)) {
             orderqty = orderqty - stockqty
@@ -103,14 +103,14 @@ export function stockDistributeFunc(index1) {
         }
 
         if (index2.Qty > 0) {
-         
+
             const calculate = discountCalculate(index2, index1)
             tAmount = tAmount + Number(calculate.tAmount)
         }
 
         try {
             document.getElementById(`batchQty${index1.id}-${index2.id}`).value = index2.Qty
-      
+
         } catch (e) { }
 
 
@@ -139,7 +139,7 @@ export function stockDistributeFunc(index1) {
     try {
         document.getElementById(`tAmount-${index1.id}`).innerText = tA4;
 
-        
+
         var aa
     } catch (e) { };
 

@@ -157,21 +157,21 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
       i.DeliveryDate = (`${DeliveryDate}`)
 
-      i.forceEditHide = false
-      i.forceMakeBtn = true
-      i.forceDeleteHide = false
-      i.forceSelectDissabled = false
-      i.Status = "Open"
-      i.Inward = "Open"
-    
+      i.forceEditHide = false;
+      i.forceMakeBtn = true;
+      i.forceDeleteHide = false;
+      i.forceSelectDissabled = false;
+      i.forceHideOrderAprovalBtn = false;
 
+      i.Status = "Open";
+      i.Inward = "Open";
 
       if (i.Inward > 0) {
         i.Inward = "Close"
         i.Status = "Close"
         i.forceEditHide = true
       }
-      
+
       if (i.SAPResponse) {
         i.Status = "Order send To SAP"
       }
@@ -183,9 +183,6 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.forceMakeBtn = false
       }
 
-
-
-     
 
       if (i.InvoiceCreated === true) {
         i.forceMakeBtn = true

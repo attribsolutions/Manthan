@@ -113,7 +113,7 @@ const OrderSummary = (props) => {
 
 
     function goButtonHandler() {
-        debugger
+        
         const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
