@@ -196,7 +196,7 @@ const PartyMaster = (props) => {
                         nextId++;
                         return newObj;
                     })
-                   
+
                     let getBaseTab = baseTabRef.current.getCurrentState();
                     let setBaseTab = baseTabRef.current.setCurrentState;
                     let getPrefixtab = prefixTabRef.current.getCurrentState();
@@ -296,8 +296,6 @@ const PartyMaster = (props) => {
         let priceListSelect = baseTabRef.current.getPriceListSelect()
         let setBaseTabDetail = baseTabRef.current.setCurrentState
         let addressTabDetail = addressTabRef.current.getCurrentState()
-        console.log("addressTabDetail", addressTabDetail)
-
         let prefixValue = prefixTabRef.current.getCurrentState().values
 
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
@@ -312,6 +310,26 @@ const PartyMaster = (props) => {
             customAlert({
                 Type: 4,
                 Message: "Address details is required",
+            })
+            return;
+        };
+        debugger
+        const trueValues = addressTabDetail.map((index) => {
+            return (index.IsDefault === true)
+        })
+
+        const totalIsDefault = trueValues.reduce((count, value) => {
+            if (value === true) {
+                count++
+            }
+            return count
+        }, 0)
+
+        if (totalIsDefault === 0) {
+            setactiveTab1("2")
+            customAlert({
+                Type: 4,
+                Message: "Atleast One Default Address is Select ",
             })
             return;
         };
