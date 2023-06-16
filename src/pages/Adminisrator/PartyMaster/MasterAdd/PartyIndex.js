@@ -313,7 +313,6 @@ const PartyMaster = (props) => {
             })
             return;
         };
-        debugger
         const trueValues = addressTabDetail.map((index) => {
             return (index.IsDefault === true)
         })
@@ -349,7 +348,7 @@ const PartyMaster = (props) => {
             }))
 
             addressTabDetail.map((i) => {
-                if (i.RowId) {
+                if (i.id === undefined) {
                     i["id"] = "0"
                 }
             })

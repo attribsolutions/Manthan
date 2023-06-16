@@ -6,7 +6,9 @@ import { PartyAddressDeleteID, PartyAddressDeleteIDSuccess } from '../../../../.
 import { AlertState } from '../../../../../store/actions';
 
 function AddressDetailsTable({ addressTable = [], setAddressTable }) {
+
     const dispatch = useDispatch();
+
     const {
         deleteMessage,
     } = useSelector((state) => ({
@@ -43,8 +45,7 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
     }, [deleteMessage]);
 
     const ondeleteHandeler = (ele) => {
-        debugger
-        // (info.RowId) ? ondeleteHandeler(info.RowId) : 
+
         if (ele.id === undefined) {
             if (!(ele.RowId === 0)) {
                 var fil = addressTable.filter((i) => {
@@ -58,8 +59,8 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
         }
     };
 
-
     function defaultChangeHandler(key) {
+   
         const newtableData = addressTable.map((ele, k) => {
             ele.IsDefault = false;
             if (k === key) {
@@ -69,7 +70,6 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
         });
         setAddressTable(newtableData)
     }
-
 
     function myFunction(row) {
 
@@ -84,7 +84,7 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
     }
 
     const tableRows = addressTable.map((info, key) => {
-        debugger
+
         return (
             <tr>
                 <td>{info.Address}</td>
