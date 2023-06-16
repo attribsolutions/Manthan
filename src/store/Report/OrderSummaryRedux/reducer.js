@@ -19,7 +19,6 @@ const OrderSummaryReducer = (state = INIT_STATE, action) => {
                 ...state,
                 orderSummaryGobtn: action.payload,
                 listLoading: false
-
             }
 
         case ORDER_SUMMARY_API_ERROR_ACTION:
