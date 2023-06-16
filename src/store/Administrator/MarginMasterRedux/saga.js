@@ -54,7 +54,7 @@ function* delete_Margin_GenFunc({ config }) {
 function* goButton_Margin_GenFunc({ data }) {
   const { jsonBody, pathname, btnmode, rowData } = data
   try {
-    debugger
+    
     const response = yield call(GoButton_Post_API_For_MarginMaster, jsonBody);
     response.pageMode = btnmode
     response.pathname = pathname

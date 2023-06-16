@@ -696,7 +696,7 @@ export default PartyItems
 
 
 //     const checkSelect = (e) => {
-//         debugger
+//         
 //         let checked = e.target.checked
 
 //     }

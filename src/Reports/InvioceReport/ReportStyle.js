@@ -350,7 +350,7 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(12)
     doc.setFont(undefined, 'bold')
     doc.text(`Amount :`, 440, 803,)
-    const GrandTotal = Math.round(data.GrandTotal)
+    const GrandTotal = Number(data.GrandTotal)
     const Total = numberWithCommas((GrandTotal).toFixed(2))
     doc.text(`${Total}`, 560, 803, 'right')
     doc.setFont(undefined, 'Normal')
@@ -478,7 +478,7 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 170,
+                columnWidth: 165,
             },
             1: {
                 columnWidth: 50,

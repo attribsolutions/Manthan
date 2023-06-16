@@ -190,6 +190,13 @@ const PartyMaster = (props) => {
                         label: hasEditVal.PriceList.Name, value: hasEditVal.PriceList.id,
                     } : { label: '' };
 
+                    let nextId = 1;
+                    let addressTabPreIncrementId = hasEditVal.PartyAddress.map((obj) => {
+                        const newObj = { ...obj, RowId: nextId };
+                        nextId++;
+                        return newObj;
+                    })
+
                     let getBaseTab = baseTabRef.current.getCurrentState();
                     let setBaseTab = baseTabRef.current.setCurrentState;
                     let getPrefixtab = prefixTabRef.current.getCurrentState();
@@ -200,7 +207,7 @@ const PartyMaster = (props) => {
 
                     bulkSetState(baseValue, getBaseTab, setBaseTab)
                     bulkSetState(prefixValue, getPrefixtab, setPrefixtab)
-                    setAddressTab(hasEditVal.PartyAddress)
+                    setAddressTab(addressTabPreIncrementId)
                     setPriceList(editPriceList);
 
                     dispatch(getDistrictOnState(hasEditVal.State.id))
@@ -306,6 +313,25 @@ const PartyMaster = (props) => {
             })
             return;
         };
+        const trueValues = addressTabDetail.map((index) => {
+            return (index.IsDefault === true)
+        })
+
+        const totalIsDefault = trueValues.reduce((count, value) => {
+            if (value === true) {
+                count++
+            }
+            return count
+        }, 0)
+
+        if (totalIsDefault === 0) {
+            setactiveTab1("2")
+            customAlert({
+                Type: 4,
+                Message: "Atleast One Default Address is Select ",
+            })
+            return;
+        };
 
         try {
             btnIsDissablefunc({ btnId, state: true })
@@ -320,6 +346,12 @@ const PartyMaster = (props) => {
                 Creditlimit: pageMode === mode.edit ? i.Creditlimit : "",
                 Route: pageMode === mode.edit ? i.Route : "",
             }))
+
+            addressTabDetail.map((i) => {
+                if (i.id === undefined) {
+                    i["id"] = "0"
+                }
+            })
 
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,

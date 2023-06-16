@@ -261,8 +261,8 @@ export function metaTagLabel(userPageAccess = '') {
   return <title>{userPageAccess.PageHeading}| FoodERP-2.0</title>
 
 }
-export function CommonConsole(error) {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
-  console.log("CommonConsole =>:", error);
+export function CommonConsole(msg1,msg2='',msg3='') {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
+  console.log("CommonConsole =>:", msg1,msg2,msg3);
 }
 
 export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Function +++++++++++++++++++++++++++++++
@@ -285,17 +285,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
     try {
       let btn = document.getElementById(btnId);
       btn.disabled = state
-      // if(state){
-      //   btn.innerText='Loging'
-      // }else{
-      //   btn.innerText=""
-
-      // }
-
-      // document.getElementById("overlay").style.display = true
-      //   ? "block"
-      //   : "none";
-
+      
       document.getElementById("preloader").style.display = state
         ? "block"
         : "none";

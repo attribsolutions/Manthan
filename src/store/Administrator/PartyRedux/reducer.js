@@ -12,7 +12,8 @@ import {
     UPDATE_PARTY_ID,
     GET_PARTY_LIST_API,
     PARTY_API_ERROR_ACTION,
-    PARTY_RESET_REDUX_ACTION
+    PARTY_RESET_REDUX_ACTION,
+    PARTY_ADDRESS_DELETE_ID_SUCCESS
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -24,7 +25,8 @@ const INIT_STATE = {
     DistrictOnState: [],
     AddressTypes: [],
     saveBtnloading: false,
-    listLoading: false
+    listLoading: false,
+    PartyAddressDelete: { Status: false },
 };
 
 const PartyMasterReducer = (state = INIT_STATE, action) => {
@@ -121,6 +123,12 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
                 ...state,
                 saveBtnloading: false,
                 listLoading: false
+            };
+
+            case PARTY_ADDRESS_DELETE_ID_SUCCESS:
+            return {
+                ...state,
+                PartyAddressDelete: action.payload,
             };
 
         default:

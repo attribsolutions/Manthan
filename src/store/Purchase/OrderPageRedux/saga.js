@@ -157,14 +157,22 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
       i.DeliveryDate = (`${DeliveryDate}`)
 
-      i.forceEditHide = false
-      i.forceMakeBtn = true
-      i.forceDeleteHide = false
-      i.forceSelectDissabled = false
-      i.Status = "Open"
+      i.forceEditHide = false;
+      i.forceMakeBtn = true;
+      i.forceDeleteHide = false;
+      i.forceSelectDissabled = false;
+      i.forceHideOrderAprovalBtn = true;
+      i.Status = "Open";
+      i.Inward = "Open";
 
-      // i.selectCheck = false
 
+      if (i.Inward > 0) {
+        i.Inward = "Close"
+        i.Status = "Close"
+        i.forceEditHide = true
+      }
+
+      //+++++++++++++++++++++++++  Status colonm show Status    ++++++++++++++++++++++++++++++++++++++
       if (i.SAPResponse) {
         i.Status = "Order send To SAP"
       }
@@ -176,29 +184,25 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.forceMakeBtn = false
       }
 
-      if (i.Inward === 0) {
-        i.Inward = "Open"
-      } else {
-        i.Inward = "Close"
-        i.Status = "Close"
-        i.forceEditHide = true
+      //**********************************order Aproval button Show Condition ********************************************************** */
+      if (!i.SAPResponse && i.CustomerSAPCode) {//order Aproval button Show Condition 
+        i.forceHideOrderAprovalBtn = false;
       }
 
+      //++++++++++++++++++++++++++++++++++++++ make invoice Button dessiable/vissbble ++++++++++++++++++++++++++++++++++++++
       if (i.InvoiceCreated === true) {
-
         i.forceMakeBtn = true
-      } else {
-        i.InvoiceCreated = ""
       }
 
-      if (i.IsConfirm === true) {// is confirm is true the show force dlete and edit true po ans so mode 
+      //**********************************order Aproval button Show Condition ********************************************************** */
+            if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
         i.forceSelectDissabled = true;//select row check box dessible 
       }
 
-
-      if (i.SAPResponse) {// for sap_code order page 
+      //**********sap_code order page********************************************************************************************
+           if (i.SAPResponse) {  //If sapcode true the edit and delete btn  dissbale
 
         var numb = i.SAPResponse.match(/\d/g);
         i.SAPResponse = numb.join("");
