@@ -22,7 +22,7 @@ const OrderSummary = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        PartyName: "",
+        PartyName: { value: "", label: "All" },
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -67,9 +67,7 @@ const OrderSummary = (props) => {
         dispatch(SSDD_List_under_Company());
     }, [])
 
-
     useEffect(() => {
-
         if (Data.length > 0) {
             const worksheet = XLSX.utils.json_to_sheet(Data);
             const workbook = XLSX.utils.book_new();
@@ -82,11 +80,21 @@ const OrderSummary = (props) => {
     const Party_Option = SSDD_List.map(i => ({
         value: i.id,
         label: i.Name
-
     }));
+    Party_Option.unshift({
+        value: "",
+        label: " All"
+    });
 
     const onselecthandel = (e) => {
-        setParty(e.value)
+
+        setState((i) => {
+            const a = { ...i }
+            a.values.PartyName = e;
+            a.hasValid.PartyName.valid = true
+            return a
+        })
+        // setParty(e.value)
     }
 
 
@@ -97,7 +105,7 @@ const OrderSummary = (props) => {
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "CompanyID": _cfunc.loginCompanyID(),
-            "PartyID": Party
+            "PartyID": values.PartyName.value
 
         });
         dispatch(postOrderSummary_API({ jsonBody, btnId }));
@@ -162,7 +170,7 @@ const OrderSummary = (props) => {
                                 <Col sm="7">
                                     <Select
                                         name="DistrictName"
-                                        value={values.Party}
+                                        value={values.PartyName}
                                         isSearchable={true}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
