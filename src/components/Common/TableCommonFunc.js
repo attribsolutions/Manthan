@@ -90,22 +90,22 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
                         if (i.Alignment) return i.Alignment;
                     },
 
-                    formatter: (cell, row) => {
-                        if (cell === "Invoice Created") {
-                            return (
-                                <span class="label label-primary" style={{ color: '#2ab57d' }}>{cell}</span>
-                            )
-                        }
-                        if (cell === "Order Confirm") {
-                            return (
-                                <span class="label label-primary" style={{ color: '#4ba6ef' }} >{cell}</span>
-                            )
-                        }
-                        return (
-                            <span>{cell.toString()}</span>
+                    // formatter: (cell, row) => {
+                    //     if (cell === "Invoice Created") {
+                    //         return (
+                    //             <span class="label label-primary" style={{ color: '#2ab57d' }}>{cell}</span>
+                    //         )
+                    //     }
+                    //     if (cell === "Order Confirm") {
+                    //         return (
+                    //             <span class="label label-primary" style={{ color: '#4ba6ef' }} >{cell}</span>
+                    //         )
+                    //     }
+                    //     return (
+                    //         <span>{cell}</span>
 
-                        );
-                    }
+                    //     );
+                    // }
                 })
 
                 if (i.DefaultSort === 1) {
