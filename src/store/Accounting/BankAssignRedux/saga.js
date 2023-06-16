@@ -19,25 +19,20 @@ import {
 } from "./actionType";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 
-
-function* Save_Method_ForBankAssign_GenFun({ config }) {
-               // Save API
+function* Save_Method_ForBankAssign_GenFun({ config }) {   // Save API
     try {
         const response = yield call(Post_Bank_Assign_API, config);
         yield put(saveBankAssign_Success(response));
     } catch (error) { CommonConsole(error) }
 }
 
-
 function* PartyBank_Assign_GenFunc() {
-    
     const filters = loginJsonBody();// required only PartyID and CompanyID
     try {
         const response = yield call(PartyBankfilter_API, filters);
         yield put(PartyBankfilterSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
-
 
 function* Edit_Bank_Assign_GenratorFunction({ config }) {                 // edit API 
     const { btnmode } = config;
@@ -54,7 +49,6 @@ function* Update_Bank_Assign_GenratorFunction({ config }) {             // updat
         yield put(updateBankAssignIDSuccess(response))
     } catch (error) { CommonConsole(error) }
 }
-
 
 function* BankSaga() {
     yield takeEvery(SAVE_BANK_ASSIGN, Save_Method_ForBankAssign_GenFun)

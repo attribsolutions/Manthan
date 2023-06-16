@@ -12,6 +12,7 @@ const INIT_STATE = {
   editMsg: { Status: false },
   updateMessage: { Status: false },
   saveBtnloading: false,
+  loading: false,
 }
 
 const BankAssignReducer = (state = INIT_STATE, action) => {
