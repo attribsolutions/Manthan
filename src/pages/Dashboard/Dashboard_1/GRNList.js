@@ -87,26 +87,17 @@ export default function InvoiceForGRN() {
 
     const pagesListColumns = [
         {
-            text: "OrderDate",
+            text: "InvoiceDate",
             dataField: "OrderDate",
         },
         {
-            text: "FullOrderNumber",
+            text: "InvoiceNo",
             dataField: "FullOrderNumber",
         },
         {
-            text: "Supplier",
-            dataField: "Supplier",
-        },
-        {
-            text: "OrderAmount",
+            text: "InvoiceAmount",
             dataField: "OrderAmount",
         },
-        {
-            text: "Inward",
-            dataField: "Inward",
-        },
-
         {
             text: "Action",
             dataField: "",
