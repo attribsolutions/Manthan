@@ -15,11 +15,13 @@ import { USER } from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 
 import * as pageId from "../../../routes/allPageID"
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const UserList = () => {
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
+            listLoading: state.User_Registration_Reducer.listLoading,
             tableList: state.User_Registration_Reducer.pages,
             editData: state.User_Registration_Reducer.editData,
             updateMsg: state.User_Registration_Reducer.updateMessage,
@@ -46,24 +48,27 @@ const UserList = () => {
         dispatch(getUserList());
     }, []);
 
- 
+
     const { pageField, userAccess = [] } = reducers
 
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             {
-                (pageField) ?
-                    <CommonListPage
-                        action={action}
-                        showBreadcrumb={true}
-                        reducers={reducers}
-                        MasterModal={AddUser}
-                        masterPath={USER}
-                        ButtonMsgLable={"User"}
-                        deleteName={"LoginName"}
-                    />
-                    : null
+                reducers.listLoading ?
+                    <Listloader />
+                    :
+                    (pageField) ?
+                        <CommonListPage
+                            action={action}
+                            showBreadcrumb={true}
+                            reducers={reducers}
+                            MasterModal={AddUser}
+                            masterPath={USER}
+                            ButtonMsgLable={"User"}
+                            deleteName={"LoginName"}
+                        />
+                        : <><Listloader /></>
             }
 
         </React.Fragment>

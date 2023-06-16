@@ -69,11 +69,13 @@ const LoadingSheet = (props) => {
         postMsg,
         pageField,
         userAccess,
-        VehicleNumber,
+        VehicleNumber = [],
         RoutesList,
         GoButton,
-        Driver
+        Driver,
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.LoadingSheetReducer.saveBtnloading,
         postMsg: state.LoadingSheetReducer.postMsg,
         GoButton: state.LoadingSheetReducer.goBtnLoadingSheet,
         updateMsg: state.BOMReducer.updateMsg,
@@ -172,6 +174,7 @@ const LoadingSheet = (props) => {
     const RouteName_Options = RoutesListOptions.filter((index) => {
         return index.IsActive === true
     });
+    debugger
 
     const VehicleNumber_Options = VehicleNumber.map((index) => ({
         value: index.id,
@@ -188,7 +191,7 @@ const LoadingSheet = (props) => {
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             Party: _cfunc.loginPartyID(),
-            Route: "",
+            Route: values.RouteName === "" ? "" : values.RouteName.value,
             LoadingSheetID: ""
         });
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
@@ -375,6 +378,9 @@ const LoadingSheet = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                                 options={Driver_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
@@ -527,6 +533,7 @@ const LoadingSheet = (props) => {
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
                                             onClick={saveHandeller}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}

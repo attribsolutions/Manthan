@@ -74,7 +74,9 @@ const Invoice = (props) => {
         userAccess,
         GoButton = '',
         vendorSupplierCustomer,
-        makeIBInvoice
+        makeIBInvoice,
+        goBtnloading,
+        saveBtnloading
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -84,6 +86,8 @@ const Invoice = (props) => {
         GoButton: state.InvoiceReducer.gobutton_Add,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
+        saveBtnloading: state.InvoiceReducer.saveBtnloading,
+        goBtnloading: state.InvoiceReducer.goBtnloading,
     }));
 
     const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
@@ -288,11 +292,10 @@ const Invoice = (props) => {
         {//***************Quantity********************************************************************* */
             text: "Quantity/Unit",
             dataField: "",
-            classes: () => ('invoice-quantity-row'),
+            // classes: () => ('invoice-quantity-row1'),
             formatter: (cellContent, index1) => (
                 <>
-                    <div className="div-1">
-                        <label className="label">Qty</label>
+                    <div className="div-1 mb-2" style={{ minWidth: "200px" }}>
                         <Input type="text"
                             disabled={pageMode === 'edit' ? true : false}
                             id={`OrderQty-${index1.id}`}
@@ -305,7 +308,7 @@ const Invoice = (props) => {
                         />
                     </div>
                     <div className="div-1 ">
-                        <label className="label">Unit</label>
+                        {/* <label className="label">Unit</label> */}
                         <div id="select">
                             <Select
                                 classNamePrefix="select2-selection"
@@ -484,7 +487,7 @@ const Invoice = (props) => {
 
         },
         {//***************Discount********************************************************************* */
-            text: "Discount",
+            text: "Discount/unit",
             dataField: "",
             classes: () => ('invoice-discount-row'),
             formatter: (Rate, index1, key) => {
@@ -492,35 +495,46 @@ const Invoice = (props) => {
                 if (!index1.Discount) index1.Discount = 0
                 return (
                     <>
-                        <div className="div-1">
-                            <label className="label" >Type</label>
-                            <div id="select">
-                                <Select
-                                    classNamePrefix="select2-selection"
-                                    defaultValue={{ value: 2, label: " % " }}
-                                    options={[{ value: 1, label: "Rs" },
-                                    { value: 2, label: "%" }]}
-                                    onChange={(e) => {
-                                        index1.DiscountType = e.value
-                                        innerStockCaculation(index1)
-                                    }}
-                                /></div>
+                        <div className="mb-2">
+                            <div className="parent">
+                                <div className="child">
+                                    <label className="label" >Type&nbsp;&nbsp;&nbsp;</label>
+                                </div>
 
+                                <div className="child">
+                                    <Select
+                                        classNamePrefix="select2-selection"
+                                        defaultValue={{ value: 2, label: " % " }}
+                                        options={[{ value: 1, label: "Rs" },
+                                        { value: 2, label: "%" }]}
+                                        onChange={(e) => {
+                                            index1.DiscountType = e.value
+                                            innerStockCaculation(index1)
+                                        }}
+                                    />
+                                </div>
+                            </div>
                         </div>
-                        <div className="div-1">
-                            <label className="label">Value</label>
-                            <Input
-                                className="input"
-                                style={{ textAlign: "right" }}
-                                type="text" defaultValue={index1.Discount}
-                                onChange={(e) => {
-                                    if (e.target.value === '') {
-                                        e.target.value = 0
-                                    }
-                                    index1.Discount = e.target.value
-                                    innerStockCaculation(index1)
-                                }}
-                            />
+                        <div >
+                            <div className="parent">
+                                <div className="child">
+                                    <label className="label">Value&nbsp;</label>
+                                </div>
+                                <div className="child">
+                                    <Input
+                                        className="input"
+                                        style={{ textAlign: "right" }}
+                                        type="text" defaultValue={index1.Discount}
+                                        onChange={(e) => {
+                                            if (e.target.value === '') {
+                                                e.target.value = 0
+                                            }
+                                            index1.Discount = e.target.value
+                                            innerStockCaculation(index1)
+                                        }}
+                                    />
+                                </div>
+                            </div>
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
@@ -579,16 +593,17 @@ const Invoice = (props) => {
     };
 
     const SaveHandler = async (event) => {
-
+        
         event.preventDefault();
 
         const btnId = event.target.id
         _cfunc.btnIsDissablefunc({ btnId, state: true })
-
+        
         function returnFunc() {
             _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
+            
             const validMsg = []
             const invoiceItems = []
             let grand_total = 0;
@@ -704,117 +719,117 @@ const Invoice = (props) => {
 
                 <div className="page-content" >
 
-                    <form noValidate>
-                        <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
-                            <Row>
-                                <Col className=" mt-1 row  " sm={11} >
-                                    <Col sm="6">
-                                        <FormGroup className="row mt-2 mb-3  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
-                                            <Col sm="7">
-                                                <C_DatePicker
-                                                    name="InvoiceDate"
-                                                    value={values.InvoiceDate}
-                                                    id="myInput11"
-                                                    disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
-                                                    onChange={InvoiceDateOnchange}
-                                                />
-                                                {isError.InvoiceDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.InvoiceDate}</span>
-                                                )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
-
-                                    <Col sm="6">
-                                        <FormGroup className="row mt-2 mb-3 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Customer} </Label>
-                                            <Col sm={7}>
-                                                <Select
-
-                                                    name="Customer"
-                                                    value={values.Customer}
-                                                    isSearchable={true}
-                                                    isDisabled={OrderItemDetails.length > 0 ? true : false}
-                                                    id={'customerselect'}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={CustomerDropdown_Options}
-                                                    onChange={CustomerOnchange}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                                {isError.Customer.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.Customer}</small></span>
-                                                )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
+                    {/* <form noValidate> */}
+                    <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
+                        <Row>
+                            <Col className=" mt-1 row  " sm={11} >
+                                <Col sm="6">
+                                    <FormGroup className="row mt-2 mb-3  ">
+                                        <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
+                                        <Col sm="7">
+                                            <C_DatePicker
+                                                name="InvoiceDate"
+                                                value={values.InvoiceDate}
+                                                id="myInput11"
+                                                disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
+                                                onChange={InvoiceDateOnchange}
+                                            />
+                                            {isError.InvoiceDate.length > 0 && (
+                                                <span className="invalid-feedback">{isError.InvoiceDate}</span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
                                 </Col>
 
-                                <Col sm={1} className="mt-3">
-                                    {pageMode === mode.defaultsave ?
-                                        (OrderItemDetails.length === 0) ?
-                                            < Go_Button onClick={(e) => goButtonHandler()} />
-                                            :
-                                            <Change_Button onClick={(e) => dispatch(GoButtonForinvoiceAddSuccess([]))} />
-                                        : null
-                                    }
-                                </Col>
-                                <Col>
-                                </Col>
-                            </Row>
-                        </Col>
+                                <Col sm="6">
+                                    <FormGroup className="row mt-2 mb-3 ">
+                                        <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Customer} </Label>
+                                        <Col sm={7}>
+                                            <Select
 
-
-                        <div className="table-responsive">
-                            <ToolkitProvider
-                                keyField={"id"}
-                                data={OrderItemDetails}
-                                columns={pagesListColumns}
-
-                                search
-                            >
-                                {(toolkitProps) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive">
-                                                    <BootstrapTable
-                                                        id="table_Arrow"
-                                                        keyField={"id"}
-                                                        responsive
-                                                        bordered={false}
-                                                        striped={false}
-                                                        classes={"table  table-bordered"}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        </Row>
-
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        </div>
-
-                        {OrderItemDetails.length > 0 ? <FormGroup>
-                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                <SaveButton
-                                    pageMode={pageMode}
-                                    onClick={SaveHandler}
-                                    id={saveBtnid}
-                                    userAcc={userPageAccessState}
-                                />
+                                                name="Customer"
+                                                value={values.Customer}
+                                                isSearchable={true}
+                                                isDisabled={OrderItemDetails.length > 0 ? true : false}
+                                                id={'customerselect'}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={CustomerDropdown_Options}
+                                                onChange={CustomerOnchange}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                            />
+                                            {isError.Customer.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
                             </Col>
-                        </FormGroup > : null}
-                    </form>
+
+                            <Col sm={1} className="mt-3">
+                                {pageMode === mode.defaultsave ?
+                                    (OrderItemDetails.length === 0) ?
+                                        < Go_Button onClick={(e) => goButtonHandler()}
+                                            loading={goBtnloading} />
+                                        :
+                                        <Change_Button onClick={(e) => dispatch(GoButtonForinvoiceAddSuccess([]))} />
+                                    : null
+                                }
+                            </Col>
+                            <Col>
+                            </Col>
+                        </Row>
+                    </Col>
+
+
+                    <div className="table-responsive mb-4">
+                        <ToolkitProvider
+                            keyField={"id"}
+                            data={OrderItemDetails}
+                            columns={pagesListColumns}
+
+                            search
+                        >
+                            {(toolkitProps) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <BootstrapTable
+                                                id="table_Arrow"
+                                                keyField={"id"}
+                                                responsive
+                                                bordered={false}
+                                                striped={false}
+                                                classes={"table  table-bordered"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Items Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
+                                        </Col>
+                                    </Row>
+
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+                    </div>
+
+                    {OrderItemDetails.length > 0 ? <FormGroup>
+                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                            <SaveButton
+                                pageMode={pageMode}
+                                onClick={SaveHandler}
+                                id={saveBtnid}
+                                loading={saveBtnloading}
+                                userAcc={userPageAccessState}
+                            />
+                        </Col>
+                    </FormGroup > : null}
+                    {/* </form> */}
                 </div>
             </React.Fragment>
         );

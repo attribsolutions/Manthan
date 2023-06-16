@@ -83,11 +83,13 @@ const AddUser = (props) => {
   const {
     PostAPIResponse,
     employeelistForDropdown,
-    Roles,
+    Roles=[],
     employePartyWiseRoleState,
     userAccess,
-    pageField
+    pageField,
+    saveBtnloading,
   } = useSelector((state) => ({
+    saveBtnloading: state.User_Registration_Reducer.saveBtnloading,
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
     employePartyWiseRoleState: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
@@ -145,7 +147,7 @@ const AddUser = (props) => {
     userAcc = userAccess.find((index) => {
       if (index.id === pageId.EMPLOYEE) {
         setEmployeeMaster_AddAccess(true)
-     }
+      }
       return (`/${index.ActualPagePath}` === locationPath)
     })
 
@@ -251,8 +253,6 @@ const AddUser = (props) => {
     }
   }, [PostAPIResponse.Status])
 
-
-
   const EmployeeOptions = employeelistForDropdown.map((Data) => ({
     value: Data.id,
     label: Data.Name
@@ -263,6 +263,8 @@ const AddUser = (props) => {
     label: Data.Name
   }));
 
+
+  
   function handllerEmployeeID(e) {
     dispatch(GetUserPartiesForUserMastePage({ id: e.value }))
   }
@@ -591,6 +593,7 @@ const AddUser = (props) => {
                                   <div>
                                     <SaveButton
                                       pageMode={pageMode}
+                                      loading={saveBtnloading}
                                       onClick={saveHandler}
                                       userAcc={userPageAccessState}
                                       editCreatedBy={editCreatedBy}

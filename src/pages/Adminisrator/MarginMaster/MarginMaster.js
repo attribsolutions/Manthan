@@ -44,7 +44,7 @@ import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 const MarginMaster = (props) => {
@@ -70,8 +70,12 @@ const MarginMaster = (props) => {
         Party,
         PriceList,
         userAccess,
-        pageField
+        pageField,
+        saveBtnloading,
+        listLoading,
     } = useSelector((state) => ({
+        listLoading: state.MarginMasterReducer.listLoading,
+        saveBtnloading: state.MarginMasterReducer.saveBtnloading,
         tableData: state.MarginMasterReducer.MarginGoButton,
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
         postMsg: state.MarginMasterReducer.postMsg,
@@ -207,7 +211,7 @@ const MarginMaster = (props) => {
         value: data.id,
         label: data.Name
     }));
- 
+
     const GoButton_Handler = (event) => {
 
         event.preventDefault();
@@ -410,14 +414,14 @@ const MarginMaster = (props) => {
             }))
 
             const Find = ItemData.filter((index) => {
-                
-                return (!(index.Margin === '0.00') )
+
+                return (!(index.Margin === '0.00'))
             })
-         
+
             const jsonBody = JSON.stringify(Find)
 
             if (!(Find.length > 0)) {
-             
+
                 customAlert({
                     Type: 4,
                     Message: "Please Enter Margin"
@@ -442,140 +446,140 @@ const MarginMaster = (props) => {
                 <Container fluid>
 
                     {/* <form noValidate> */}
-                        <Card className="text-black ">
-                            <CardHeader className="card-header  text-black c_card_header" >
-                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                            </CardHeader>
-                            <CardBody className=" vh-10 0 text-black" style={{ marginBottom: "4cm" }}>
+                    <Card className="text-black ">
+                        <CardHeader className="card-header  text-black c_card_header" >
+                            <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                            <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                        </CardHeader>
+                        <CardBody className=" vh-10 0 text-black" style={{ marginBottom: "4cm" }}>
 
-                                <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
-                                    <CardHeader className="c_card_body"  >
-                                        <Row className="mt-3">
-                                            <Col sm={3}>
-                                                <FormGroup className="mb-3 row">
-                                                    <Label htmlFor="validationCustom01" className="col-sm-4 p-2 ml-n2 ">{fieldLabel.PriceListName}</Label>
-                                                    <Col sm={8}>
-                                                        <Select
-                                                            name="PriceListName"
-                                                            value={values.PriceListName}
-                                                            id={"PriceListName"}
-                                                            options={PriceList_DropdownOptions}
-                                                            isDisabled={pageMode === mode.edit ? true : false}
-                                                            isSearchable={true}
-                                                            autoFocus={true}
-                                                            placeholder="select"
-                                                            onChange={(hasSelect, evn) => {
-                                                                onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                dispatch(Breadcrumb_inputName(hasSelect.label))
-                                                            }}
-                                                            classNamePrefix="dropdown"
-                                                        />
-                                                        {isError.PriceListName.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.PriceListName}</small></span>
-                                                        )}
+                            <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
+                                <CardHeader className="c_card_body"  >
+                                    <Row className="mt-3">
+                                        <Col sm={3}>
+                                            <FormGroup className="mb-3 row">
+                                                <Label htmlFor="validationCustom01" className="col-sm-4 p-2 ml-n2 ">{fieldLabel.PriceListName}</Label>
+                                                <Col sm={8}>
+                                                    <Select
+                                                        name="PriceListName"
+                                                        value={values.PriceListName}
+                                                        id={"PriceListName"}
+                                                        options={PriceList_DropdownOptions}
+                                                        isDisabled={pageMode === mode.edit ? true : false}
+                                                        isSearchable={true}
+                                                        autoFocus={true}
+                                                        placeholder="select"
+                                                        onChange={(hasSelect, evn) => {
+                                                            onChangeSelect({ hasSelect, evn, state, setState, })
+                                                            dispatch(Breadcrumb_inputName(hasSelect.label))
+                                                        }}
+                                                        classNamePrefix="dropdown"
+                                                    />
+                                                    {isError.PriceListName.length > 0 && (
+                                                        <span className="text-danger f-8"><small>{isError.PriceListName}</small></span>
+                                                    )}
 
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col>
-                                            <Col sm={3}>
-                                                <FormGroup className="mb-3 row ">
-                                                    <Label htmlFor="validationCustom01" className="col-sm-3 p-2" style={{ width: "2.5cm" }}>{fieldLabel.PartyName}</Label>
-                                                    <Col sm={8} >
-                                                        <Select
-                                                            name="PartyName"
-                                                            value={values.PartyName}
-                                                            id={"PartyName"}
-                                                            options={PartyTypeDropdown_Options}
-                                                            isDisabled={pageMode === mode.edit ? true : false}
-                                                            isSearchable={true}
-                                                            placeholder="select"
-                                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                            classNamePrefix="dropdown"
-                                                        />
-                                                        {isError.PartyName.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                        )}
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col>
-                                            <Col sm={4}>
-                                                <FormGroup className="mb-3 row ">
-                                                    <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>{fieldLabel.EffectiveDate}</Label>
-                                                    <Col sm={6}>
-                                                        <C_DatePicker
-                                                            id="EffectiveDate"
-                                                            name="EffectiveDate"
-                                                            placeholder={"DD/MM/YYYY"}
-                                                            value={values.EffectiveDate}
-                                                            isDisabled={pageMode === mode.edit ? true : false}
-                                                            onChange={(y, v, e) => {
-                                                                onChangeDate({ e, v, state, setState })
-                                                            }}
-                                                        />
-                                                        {isError.EffectiveDate.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.EffectiveDate}</span>
-                                                        )}
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col>
-                                            <Col sm={1}>
-                                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                                    onClick={(event) => { GoButton_Handler(event) }} >Go</Button>
-                                            </Col>
-                                        </Row>
-                                    </CardHeader>
-                                </Card>
-
-                                {Data.length > 0 ?
-                                            <ToolkitProvider
-                                                keyField="Item"
-                                                data={Data}
-                                                columns={pagesListColumns}
-                                                search
-                                            >
-                                                {(toolkitProps) => (
-                                                    <React.Fragment>
-                                                        <Row>
-                                                            <Col xl="12">
-                                                                <div className="table-responsive">
-                                                                    <BootstrapTable
-                                                                        keyField={"Item"}
-                                                                        id="table_Arrow"
-                                                                        responsive
-                                                                        bordered={false}
-                                                                        striped={false}
-                                                                        classes={"table  table-bordered"}
-                                                                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                                        {...toolkitProps.baseProps}
-                                                                    />
-                                                                    {mySearchProps(toolkitProps.searchProps)}
-
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                       
-                                                    </React.Fragment>
-                                                )}
-                                            </ToolkitProvider>
-                                    : null
-                                    }
-
-                                {Data.length > 0 ?
-                                    <FormGroup>
-                                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                            <SaveButton pageMode={pageMode}
-                                                onClick={SaveHandler}
-                                                userAcc={userPageAccessState}
-                                                editCreatedBy={editCreatedBy}
-                                            />
+                                                </Col>
+                                            </FormGroup>
                                         </Col>
-                                    </FormGroup >
-                                    : null
-                                }
+                                        <Col sm={3}>
+                                            <FormGroup className="mb-3 row ">
+                                                <Label htmlFor="validationCustom01" className="col-sm-3 p-2" style={{ width: "2.5cm" }}>{fieldLabel.PartyName}</Label>
+                                                <Col sm={8} >
+                                                    <Select
+                                                        name="PartyName"
+                                                        value={values.PartyName}
+                                                        id={"PartyName"}
+                                                        options={PartyTypeDropdown_Options}
+                                                        isDisabled={pageMode === mode.edit ? true : false}
+                                                        isSearchable={true}
+                                                        placeholder="select"
+                                                        onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                        classNamePrefix="dropdown"
+                                                    />
+                                                    {isError.PartyName.length > 0 && (
+                                                        <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                    )}
+                                                </Col>
+                                            </FormGroup>
+                                        </Col>
+                                        <Col sm={4}>
+                                            <FormGroup className="mb-3 row ">
+                                                <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>{fieldLabel.EffectiveDate}</Label>
+                                                <Col sm={6}>
+                                                    <C_DatePicker
+                                                        id="EffectiveDate"
+                                                        name="EffectiveDate"
+                                                        placeholder={"DD/MM/YYYY"}
+                                                        value={values.EffectiveDate}
+                                                        isDisabled={pageMode === mode.edit ? true : false}
+                                                        onChange={(y, v, e) => {
+                                                            onChangeDate({ e, v, state, setState })
+                                                        }}
+                                                    />
+                                                    {isError.EffectiveDate.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.EffectiveDate}</span>
+                                                    )}
+                                                </Col>
+                                            </FormGroup>
+                                        </Col>
+                                        <Col sm={1}>
+                                            <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
+                                        </Col>
+                                    </Row>
+                                </CardHeader>
+                            </Card>
 
-                            </CardBody>
-                        </Card>
+                            {Data.length > 0 ?
+                                <ToolkitProvider
+                                    keyField="Item"
+                                    data={Data}
+                                    columns={pagesListColumns}
+                                    search
+                                >
+                                    {(toolkitProps) => (
+                                        <React.Fragment>
+                                            <Row>
+                                                <Col xl="12">
+                                                    <div className="table-responsive">
+                                                        <BootstrapTable
+                                                            keyField={"Item"}
+                                                            id="table_Arrow"
+                                                            responsive
+                                                            bordered={false}
+                                                            striped={false}
+                                                            classes={"table  table-bordered"}
+                                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                            {...toolkitProps.baseProps}
+                                                        />
+                                                        {mySearchProps(toolkitProps.searchProps)}
+
+                                                    </div>
+                                                </Col>
+                                            </Row>
+
+                                        </React.Fragment>
+                                    )}
+                                </ToolkitProvider>
+                                : null
+                            }
+
+                            {Data.length > 0 ?
+                                <FormGroup>
+                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            onClick={SaveHandler}
+                                            userAcc={userPageAccessState}
+                                            editCreatedBy={editCreatedBy}
+                                        />
+                                    </Col>
+                                </FormGroup >
+                                : null
+                            }
+
+                        </CardBody>
+                    </Card>
                     {/* </form> */}
                 </Container>
             </div>

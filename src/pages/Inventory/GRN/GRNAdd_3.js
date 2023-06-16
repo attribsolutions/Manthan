@@ -55,9 +55,11 @@ const GRNAdd3 = (props) => {
         items,
         postMsg,
         userAccess,
-        pageField
+        pageField,
+        saveBtnloading,
     } = useSelector((state) => ({
         // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
+        saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
@@ -104,8 +106,11 @@ const GRNAdd3 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true)) {
+
+            //Unused code  **start** $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
             const grnDetails = { ...items.Data }
-            let arr = []
+            let tableArr = []
             let initial = ''
             let tAmount = 0
             let tQty = 0
@@ -115,7 +120,7 @@ const GRNAdd3 = (props) => {
                 i.BatchDate_conv = _cfunc.date_dmy_func(i.BatchDate)
                 if (k === 0) {
                     i.id = id
-                    arr.push(i)
+                    tableArr.push(i)
                     initial = i.Item
                     tAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
@@ -126,39 +131,42 @@ const GRNAdd3 = (props) => {
                     tAmount = tAmount + Number(i.Amount)
                     tQty = tQty + Number(i.Quantity)
                     initial = i.Item
-                    arr.push(i)
-                    arr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push(i)
+                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                 }
                 else if ((k === grnDetails.OrderItem.length - 1)) {
                     ++id;
-                    arr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                     ++id;
                     i.id = id
                     tAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
-                    arr.push(i)
-                    arr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push(i)
+                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                 }
                 else if (initial === i.Item) {
                     // i.ItemName=''
                     ++id;
                     i.id = id
-                    arr.push(i)
+                    tableArr.push(i)
                     tAmount = tAmount + Number(i.Amount)
                     tQty = tQty + Number(i.Quantity)
                     initial = i.Item
                 } else {
                     ++id;
-                    arr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                     ++id;
-                    arr.push(i)
+                    tableArr.push(i)
                     tAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
                     initial = i.Item
                 }
 
             })
-            grnDetails.OrderItem = arr
+            // grnDetails.OrderItem = tableArr
+
+            //Unused code **End** $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
             setgrnItemList(grnDetails.OrderItem)
 
             setInvoiceNo(grnDetails.InvoiceNumber)
@@ -219,6 +227,7 @@ const GRNAdd3 = (props) => {
         {//------------- Quntity  column ----------------------------------
             text: "Invoice-Qty",
             dataField: "Quantity",
+            align: () => ('right')
         },
 
         {  //------------- Unit column ----------------------------------
@@ -229,15 +238,18 @@ const GRNAdd3 = (props) => {
         {  //-------------MRP column ----------------------------------
             text: "MRP",
             dataField: "MRP",
+            align: () => ('right')
         },
         {  //-------------Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
+            align: () => ('right')
         },
 
         {//------------- ItemName column ----------------------------------
             text: "Amount",
             dataField: "Amount",
+            align: () => ('right')
         },
 
         {//------------- Batch Code column ----------------------------------
@@ -261,6 +273,7 @@ const GRNAdd3 = (props) => {
         }
         return style;
     };
+
     const defaultSorted = [
         {
             dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
@@ -268,11 +281,6 @@ const GRNAdd3 = (props) => {
         },
     ];
 
-    const pageOptions = {
-        sizePerPage: (grnItemList.length + 2),
-        totalSize: 0,
-        custom: true,
-    };
 
 
     const saveHandeller = (event) => {
@@ -450,57 +458,42 @@ const GRNAdd3 = (props) => {
                             </Col>
                         </Row>
                     </div>
+                    <ToolkitProvider
+                        keyField="id"
+                        id="table_Arrow"
+                        defaultSorted={defaultSorted}
+                        data={grnItemList}
+                        columns={tableColumns}>
+                        {(toolkitProps,) => (
+                            <React.Fragment>
 
-                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                        {({ paginationProps, paginationTableProps }) => (
-                            <ToolkitProvider
-                                keyField="id"
-                                id="table_Arrow"
-                                defaultSorted={defaultSorted}
-                                data={grnItemList}
-                                columns={tableColumns}
-                                search
-                            >
-                                {(toolkitProps,) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table table-Rresponsive">
-                                                    <BootstrapTable
-                                                        responsive
-                                                        bordered={false}
-                                                        striped={false}
-                                                        rowStyle={rowStyle2}
-                                                        classes={"table  table-bordered table-hover"}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
-                                                    />
-                                                    {mySearchProps(toolkitProps.searchProps)}
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row className="align-items-md-center mt-30">
-                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                <PaginationListStandalone {...paginationProps} />
-                                            </Col>
-                                        </Row>
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
+                                <div className="table table-Rresponsive">
+                                    <BootstrapTable
+                                        responsive
+                                        bordered={false}
+                                        striped={false}
+                                        rowStyle={rowStyle2}
+                                        classes={"table  table-bordered table-hover"}
+                                        noDataIndication={
+                                            <div className="text-danger text-center ">
+                                                Items Not available
+                                            </div>
+                                        }
+                                        {...toolkitProps.baseProps}
+                                    />
+                                    {mySearchProps(toolkitProps.searchProps)}
+                                </div>
+
+
+                            </React.Fragment>
                         )}
-
-                    </PaginationProvider>
-
+                    </ToolkitProvider>
 
                     {
                         (grnItemList.length > 0) ?
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
                                     editCreatedBy={editCreatedBy}
                                     userAcc={userPageAccessState}
                                     module={"GRN"} onClick={saveHandeller}

@@ -28,7 +28,7 @@ const RoleAccessCopyFunctionality = (props) => {
     const history = useHistory()
 
     //Access redux store Data 
-    const { Roles_redux,
+    const { Roles_redux=[],
         DivisionTypes_redux,
         company
     } = useSelector((state) => ({

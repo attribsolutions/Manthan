@@ -17,6 +17,7 @@ import {
 import { loginCompanyID, loginPartyID, loginUserAdminRole } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const RoutesList = (props) => {
 
@@ -27,6 +28,7 @@ const RoutesList = (props) => {
 
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.RoutesReducer.listLoading,
       tableList: state.RoutesReducer.RoutesList,
       postMsg: state.RoutesReducer.PostData,
       editData: state.RoutesReducer.editData,
@@ -75,26 +77,33 @@ const RoutesList = (props) => {
       <div className="page-content">
 
         {userAdminRole &&
-          <PartyDropdown_Common
-            partySelect={party}
-            setPartyFunc={partyOnChngeHandler}
-            goButtonHandler={goButtonHandler}
-          />
+          <div className="mb-2">
+            <PartyDropdown_Common
+              partySelect={party}
+              setPartyFunc={partyOnChngeHandler}
+              goButtonHandler={goButtonHandler}
+            />
+          </div>
         }
         {
-          (pageField) ?
-            <CommonPurchaseList
-              action={action}
-              reducers={reducers}
-              showBreadcrumb={false}
-              MasterModal={RoutesMaster}
-              masterPath={url.ROUTES}
-              newBtnPath={url.ROUTES}
-              ButtonMsgLable={"Routes"}
-              deleteName={"Name"}
-              goButnFunc={goButtonHandler}
-            />
-            : null
+          reducers.listLoading ?
+            <Listloader />
+            :
+            (pageField) ?
+              <div className="mt-n1">
+                <CommonPurchaseList
+                  action={action}
+                  reducers={reducers}
+                  showBreadcrumb={false}
+                  MasterModal={RoutesMaster}
+                  masterPath={url.ROUTES}
+                  newBtnPath={url.ROUTES}
+                  ButtonMsgLable={"Routes"}
+                  deleteName={"Name"}
+                  goButnFunc={goButtonHandler}
+                />
+              </div>
+              : <><Listloader /></>
         }
       </div>
     </React.Fragment>

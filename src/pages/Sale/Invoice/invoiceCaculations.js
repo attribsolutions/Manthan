@@ -135,11 +135,11 @@ export function stockDistributeFunc(index1) {
         index1.StockInvalidMsg = null
         document.getElementById(`StockInvalidMsg-${index1.id}`).style.display = "none";
     } catch (e) { };
-debugger
+
     try {
         document.getElementById(`tAmount-${index1.id}`).innerText = tA4;
 
-        debugger
+        
         var aa
     } catch (e) { };
 

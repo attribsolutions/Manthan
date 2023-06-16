@@ -44,14 +44,28 @@ export const Rows = (data) => {
     let SrNO = 1
 
 
+    const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
+        const { ItemName, MRP, BatchCode, Box, Outer, Quantity, UnitName, MRPValue } = currentItem;
+        const key = ItemName + '_' + MRP;
+        if (accumulator[key]) {
+            accumulator[key].MRPValue += parseInt(MRPValue);
+            accumulator[key].Quantity += parseInt(Quantity);
 
-    InvoiceItems.forEach((element, key) => {
+        } else {
+            accumulator[key] = { ItemName, MRPValue: parseInt(MRPValue), BatchCode, Box, Outer, Quantity: parseInt(Quantity), UnitName };
+        }
+        return accumulator;
+    }, {});
+
+
+    Object.values(groupedItems).forEach((element, key) => {
+        // InvoiceItems.forEach((element, key) => {
 
         const tableitemRow = [
             SrNO++,
             element.ItemName,
             element.BatchCode,
-            element.MRP,
+            element.MRPValue,
             element.Box,
             element.Outer,
             // element.Pcs,
@@ -60,7 +74,7 @@ export const Rows = (data) => {
         ];
 
         function totalLots() {
-            TotalMRP = Number(TotalMRP) + Number(element.MRP)
+            TotalMRP = Number(TotalMRP) + Number(element.MRPValue)
             TotalBox = Number(TotalBox) + Number(element.Box)
             TotalPcs = Number(TotalPcs) + Number(element.Pcs)
             TotalQuantity = Number(TotalQuantity) + Number(element.Quantity)
@@ -154,7 +168,7 @@ export const Rows1 = (data) => {
 
 
 export const ReportHederRows = (doc, data) => {
-      
+
     const Address = data.PartyDetails.PartyAddress
     const Routes = data.PartyDetails.RouteName
     const DriverName = data.PartyDetails.DriverName
@@ -164,7 +178,7 @@ export const ReportHederRows = (doc, data) => {
         ["Address:", `${Address}`,],
 
         // ["Routes:", `${Routes}                   DriverName:${  DriverName}                      Vehicle No:${VehicleNo}     `],
-        ["Routes:", `${Routes} `," DriverName:", `${DriverName}`,   "Vehicle No:",`${VehicleNo}`],
+        ["Routes:", `${Routes} `, " DriverName:", `${DriverName}`, "Vehicle No:", `${VehicleNo}`],
 
 
         //

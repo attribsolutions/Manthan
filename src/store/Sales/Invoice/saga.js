@@ -21,7 +21,8 @@ import {
   invoiceListGoBtnfilterSucccess,
   GoButtonForinvoiceAddSuccess,
   invoiceSaveActionSuccess,
-  makeIB_InvoiceActionSuccess
+  makeIB_InvoiceActionSuccess,
+  InvoiceApiErrorAction
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -31,7 +32,7 @@ import {
   MAKE_IB_INVOICE_ACTION
 } from "./actionType";
 import *as url from "../../../routes/route_url"
-import { discountCalculate, stockDistributeFunc } from "../../../pages/Sale/Invoice/invoiceCaculations";
+import { discountCalculate } from "../../../pages/Sale/Invoice/invoiceCaculations";
 
 
 //post api for Invoice Master
@@ -46,7 +47,9 @@ function* save_Invoice_Genfun({ config }) {
       let response = yield call(IB_Invoice_Save_API, config);
       yield put(invoiceSaveActionSuccess(response))
     }
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
 }
 
 // Invoice List
@@ -73,7 +76,9 @@ function* InvoiceListGenFunc({ config }) {
     })
     yield put(invoiceListGoBtnfilterSucccess(newList));
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
 }
 
 // edit List page
@@ -106,8 +111,12 @@ function* DeleteInvoiceGenFunc({ config }) {
     }
 
     yield put(deleteInvoiceIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
+
 }
+
 
 // GO-Botton SO-invoice Add Page API
 export function invoice_GoButton_dataConversion_Func(response) {
@@ -132,6 +141,8 @@ export function invoice_GoButton_dataConversion_Func(response) {
       index1["ItemTotalStock"] = 0
       index1["StockInValid"] = false;
       index1["StockInvalidMsg"] = '';
+      
+      let orderQty = Number(index1.Quantity);
 
       index1.StockDetails = index1.StockDetails.map(index2 => {
 
@@ -143,7 +154,6 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
         index1.ItemTotalStock = (Number(index2.ActualQuantity) + Number(index1.ItemTotalStock));
 
-        let orderQty = Number(index1.Quantity);
 
         let stockQty = Number(index2.ActualQuantity);
 
@@ -164,7 +174,7 @@ export function invoice_GoButton_dataConversion_Func(response) {
         return index2
       });
 
-      let t1 = Number(index1.ItemTotalStock);
+      let t1 = Number(index1.ItemTotalStock).toFixed(3);
       let t2 = Number(index1.Quantity);
       let tA4 = tAmount.toFixed(2);
 
@@ -174,8 +184,8 @@ export function invoice_GoButton_dataConversion_Func(response) {
         index1.StockInValid = true
         let diffrence = Math.abs(t1 - t2);
 
-        var msg1 = `Short Stock Quantity ${index1.Quantity}`
-        var msg2 = `Short Stock Quantity ${diffrence}`
+        var msg1 = `Short Stock Quantity ${Number(index1.Quantity).toFixed(3)}`
+        var msg2 = `Short Stock Quantity ${Number(diffrence).toFixed(3)}`
         index1.StockInvalidMsg = (index1.ItemTotalStock === 0) ? msg1 : msg2
       };
 
@@ -204,7 +214,10 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
 
     yield put(GoButtonForinvoiceAddSuccess(invoice_GoButton_dataConversion_Func(response.Data)));
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+    CommonConsole(error)
+  }
 }
 
 function* makeIB_InvoiceGenFunc({ body }) {
@@ -218,7 +231,10 @@ function* makeIB_InvoiceGenFunc({ body }) {
     yield invoice_GoButton_dataConversion_Func({ response, goBtnId })
     yield put(makeIB_InvoiceActionSuccess(response))
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+    CommonConsole(error)
+  }
 }
 
 

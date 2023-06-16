@@ -72,7 +72,9 @@ const GroupMaster = (props) => {
         GroupTypeAPI,
         updateMsg,
         pageField,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.GroupReducer.saveBtnloading,
             postMsg: state.GroupReducer.postMsg,
             updateMsg: state.GroupReducer.updateMsg,
             GroupTypeAPI: state.GroupTypeReducer.GroupType,
@@ -95,7 +97,7 @@ const GroupMaster = (props) => {
         dispatch(getGroupTypeslist())
 
     }, []);
-  
+
     // userAccess useEffect
     useEffect(() => userAccessUseEffect({
         props,
@@ -104,14 +106,14 @@ const GroupMaster = (props) => {
         setUserAccState,
         otherloginAccss
     }), [userAccess]);
-    
+
     const otherloginAccss = (index) => {
         if (index.id === pageId.GROUPTYPE) {
             setGroupTypeMaster_AddAccess(true)
-         }
-        
+        }
+
     }
-  
+
 
     useEffect(() => {
 
@@ -325,6 +327,7 @@ const GroupMaster = (props) => {
                                                 <Row>
                                                     <Col sm={2}>
                                                         <SaveButton
+                                                            loading={saveBtnloading}
                                                             pageMode={pageMode}
                                                             onClick={SaveHandler}
                                                             userAcc={userPageAccessState}

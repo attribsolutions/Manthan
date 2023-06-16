@@ -14,11 +14,13 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
+import { Listloader } from "../../../components/Common/CommonButton";
 const CategoryTypeList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.categoryTypeReducer.listLoading,
       tableList: state.categoryTypeReducer.categoryTypeListData,
       postMsg: state.categoryTypeReducer.PostData,
       editData: state.categoryTypeReducer.editData,
@@ -46,21 +48,24 @@ const CategoryTypeList = () => {
     dispatch(getCategoryTypelist());
   }, []);
 
-  const { pageField, userAccess=[] } = reducers;
+  const { pageField, userAccess = [] } = reducers;
 
   return (
     <React.Fragment>
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={CategoryTypeMaster}
-            masterPath={url.CATEGORYTYPE}
-            ButtonMsgLable={"Category Type"}
-            deleteName={"Name"}
-          />
-          : null
+        reducers.listLoading ?
+          <Listloader />
+          :
+          (pageField) ?
+            <CommonListPage
+              action={action}
+              reducers={reducers}
+              MasterModal={CategoryTypeMaster}
+              masterPath={url.CATEGORYTYPE}
+              ButtonMsgLable={"Category Type"}
+              deleteName={"Name"}
+            />
+            : <><Listloader /></>
       }
 
     </React.Fragment>

@@ -137,12 +137,14 @@ const RoleAccessAdd = () => {
         ModuleData,
         PageDropdownRedux,
         postMsg,
-        Roles,
+        Roles=[],
         partyList,
         userAccess = [],
         company,
-        tableDataRedux = []
+        tableDataRedux = [],
+        saveBtnloading,
     } = useSelector((state) => ({
+        saveBtnloading: state.RoleAccessReducer.saveBtnloading,
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         companyList: state.Company.companyList,
         partyList: state.PartyMasterReducer.partyList,
@@ -218,7 +220,7 @@ const RoleAccessAdd = () => {
                 },
 
                 formatter: (cellContent, user) => {
-                    
+
                     let isSTP_page = user.PageType === 3 //PageTypeName :"SourceTransactionPage"
                     let isShowinlistAdd = (ischeck === "RoleAccess_IsShowOnMenuForMaster")
 
@@ -497,7 +499,7 @@ const RoleAccessAdd = () => {
 
                 if (isAccess || showList || showAdd) {
                     jsonArray.push(listRowOBJFunc());
-                    if (isrelated && isSTP_page) jsonArray.push(addRowOBJFunc());
+                    if (isrelated && !isSTP_page) jsonArray.push(addRowOBJFunc());
                 }
             })
             const jsonBody = JSON.stringify(jsonArray)
@@ -699,6 +701,7 @@ const RoleAccessAdd = () => {
                                     <Col sm={1} >
                                         {/* <Button type="button" color="primary" onClick={() => { saveHandeller() }}>Save</Button> */}
                                         <SaveButton
+                                            loading={saveBtnloading}
                                             pageMode={pageMode}
                                             userAcc={userPageAccessState}
                                             module={"RoleAccess"}

@@ -23,7 +23,8 @@ import {
   userEditActionSuccess,
   userUpdateActionSuccess,
   GetUserPartiesForUserMastePageSuccess,
-  getEmployeeForUseRegistrationSuccess
+  getEmployeeForUseRegistrationSuccess,
+  UserApiErrorAction
 } from "./actions";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 
@@ -32,7 +33,7 @@ function* EmployeelistDropdown_GenFunc() {
   try {
     const response = yield call(getEmployee_Dropdown_For_UserRegistration_API);
     yield put(getEmployeeForUseRegistrationSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(UserApiErrorAction()) }
 }
 
 // post api
@@ -40,7 +41,7 @@ function* user_save_GenFunc({ config }) {
   try {
     const response = yield call(User_Component_PostMethod_API, config);
     yield put(saveUserMasterActionSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(UserApiErrorAction()) }
 
 }
 
@@ -49,7 +50,7 @@ function* userList_GenFunc() { //  Get  Users list  for List page  POST_api
   try {
     const response = yield call(User_Component_GetMethod_API, filters);
     yield put(getUserListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(UserApiErrorAction()) }
 }
 
 // delete api 
@@ -57,7 +58,7 @@ function* Delete_UserList_GenFunc({ config }) {
   try {
     const response = yield call(User_Component_Delete_Method_API, config);
     yield put(userDeleteActionSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(UserApiErrorAction()) }
 
 }
 
@@ -68,7 +69,7 @@ function* Edit_UserList_GenFunc({ config }) {
     const response = yield call(User_Component_EditById_API, config);
     response.pageMode = btnmode
     yield put(userEditActionSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(UserApiErrorAction()) }
 
 }
 
@@ -76,7 +77,7 @@ function* Update_User_GenFunc({ config }) {
   try {
     const response = yield call(User_Component_Update_API, config);
     yield put(userUpdateActionSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(UserApiErrorAction()) }
 }
 
 function* Get_UserPartiesForUserMaster_GenFunc({ editDetail }) {
@@ -103,7 +104,7 @@ function* Get_UserPartiesForUserMaster_GenFunc({ editDetail }) {
     })
     yield put(GetUserPartiesForUserMastePageSuccess(rewRes))
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(UserApiErrorAction()) }
 
 }
 

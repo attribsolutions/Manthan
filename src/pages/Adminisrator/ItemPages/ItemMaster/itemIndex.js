@@ -139,8 +139,10 @@ const ItemsMaster = (props) => {
         ItemTagList,
         BrandTagList,
         updateMsg,
-        BrandName
+        BrandName,
+        saveBtnloading
     } = useSelector((state) => ({
+        saveBtnloading: state.ItemMastersReducer.saveBtnloading,
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -1283,8 +1285,8 @@ const ItemsMaster = (props) => {
 
                                             <Row >{/* +++++++++++++++++++++++++++ Save Button  ++++++++++++++++++++++++++++++++++++++++++ */}
                                                 <Col sm={2}>
-
                                                     <SaveButton
+                                                        loading={saveBtnloading}
                                                         pageMode={pageMode}
                                                         onClick={SaveHandler}
                                                         userAcc={userPageAccessState}

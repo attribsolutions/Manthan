@@ -4,7 +4,8 @@ import {
   deleteCategoryTypeIDSuccess,
   editCategoryTypeIDSuccess,
   getCategoryTypelistSuccess,
-  updateCategoryTypeIDSuccess
+  updateCategoryTypeIDSuccess,
+  categoryTypeApiErrorAction
 } from "./actions";
 import {
   detelet_CategoryType_List_Api,
@@ -27,21 +28,21 @@ function* Save_Method_ForCategoryTypeMaster_GenFun({ config }) {             // 
   try {
     const response = yield call(Post_Category_Type_Master_API, config);
     yield put(saveCategoryTypeMaster_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(categoryTypeApiErrorAction()) }
 }
 
 function* Get_CategoryType_List_GenratorFunction() {                        // getList API
   try {
     const response = yield call(get_CategoryType_List_Api);
     yield put(getCategoryTypelistSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(categoryTypeApiErrorAction()) }
 }
 
 function* Delete_CategoryType_ID_GenratorFunction({ config }) {              // delete API
   try {
     const response = yield call(detelet_CategoryType_List_Api, config);
     yield put(deleteCategoryTypeIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(categoryTypeApiErrorAction()) }
 }
 
 function* Edit_CategoryType_ID_GenratorFunction({ config }) {                 // edit API 
@@ -50,14 +51,14 @@ function* Edit_CategoryType_ID_GenratorFunction({ config }) {                 //
     const response = yield call(edit_CategoryType_List_Api, config);
     response.pageMode = btnmode;
     yield put(editCategoryTypeIDSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(categoryTypeApiErrorAction()) }
 }
 
 function* Update_CategoryType_ID_GenratorFunction({ config }) {             // update API
   try {
     const response = yield call(update_CategoryType_List_Api, config);
     yield put(updateCategoryTypeIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(categoryTypeApiErrorAction()) }
 }
 
 function* CategoryTypeSaga() {

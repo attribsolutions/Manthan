@@ -13,8 +13,13 @@ const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-
 export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 export const printBtnCss = "badge badge-soft-primary font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-const dissableBtnCss = "badge badge-soft- font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+const dissableBtnCss = "badge badge-soft- font-size-12  waves-effect waves-light w-xxs border border-light"
 
+const dissableStyle = {
+    opacity: 0.5,
+    cursor: 'not-allowed',
+    backgroundColor: "#adb5bd",
+};
 
 export const listPageActionsButtonFunc = (props) => {
 
@@ -143,7 +148,7 @@ export const listPageActionsButtonFunc = (props) => {
             const forceDeleteHide = rowData.forceDeleteHide;
             const forceMakeBtn = rowData.forceMakeBtn;
             rowData["hasSelect"] = false
-            
+
             return (
                 // <div className="d-flex gap-3" style={{ display:'', justifyContent: 'right'}} >
                 <div id="ActionBtn" className="center gap-3" >
@@ -206,6 +211,7 @@ export const listPageActionsButtonFunc = (props) => {
                                         title={'Access Not Allow'}
                                         className={dissableBtnCss}
                                         disabled={true}
+                                        style={dissableStyle}
                                     >
                                         <i className="mdi mdi-pencil font-size-18" ></i>
                                     </Button>  // **else null
@@ -236,6 +242,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     title={'Access Not Allow'}
                                     className={dissableBtnCss}
                                     disabled={true}
+                                    style={dissableStyle}
                                 >
                                     <span style={{ marginLeft: "6px", marginRight: "6px" }}
                                         className=" fas fa-file-invoice" ></span>
@@ -281,18 +288,18 @@ export const listPageActionsButtonFunc = (props) => {
 
                     {
                         (updateBtnFunc) &&
-                            <Button style={{ width: "30px" }}
-                                type="button"
-                                id={`btn-delete-${rowData.id}`}
-                                className={makeBtnCss}
-                                title={`Update ${ButtonMsgLable}`}
-                                onClick={() => {
-                                    const btnId = `btn-delete-${rowData.id}`
-                                    updateBtnFunc(rowData, mode.copy, btnId)
-                                }}
-                            >
-                                <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
-                            </Button>
+                        <Button style={{ width: "30px" }}
+                            type="button"
+                            id={`btn-delete-${rowData.id}`}
+                            className={makeBtnCss}
+                            title={`Update ${ButtonMsgLable}`}
+                            onClick={() => {
+                                const btnId = `btn-delete-${rowData.id}`
+                                updateBtnFunc(rowData, mode.copy, btnId)
+                            }}
+                        >
+                            <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
+                        </Button>
                     }
 
                     {
@@ -334,6 +341,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     title={'Access Not Allow'}
                                     className={dissableBtnCss}
                                     disabled={true}
+                                    style={dissableStyle}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>  // **else null
@@ -375,6 +383,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     title={'Access Not Allow'}
                                     className={dissableBtnCss}
                                     disabled={true}
+                                    style={dissableStyle}
                                 >
                                     <i className="bx bx-check-shield font-size-20"></i>
                                 </Button>  // **else null

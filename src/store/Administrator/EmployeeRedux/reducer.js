@@ -7,10 +7,16 @@ import {
   EDIT_EMPLOYEE_ID_SUCCESS,
   UPDATE_EMPLOYEE_ID_SUCCESS,
   GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS,
-  GET_CITY_ON_DISTRICT_SUCCESS
+  GET_CITY_ON_DISTRICT_SUCCESS,
+  SAVE_EMPLOYEE_MASTER,
+  UPDATE_EMPLOYEE_ID,
+  GET_EMPLOYEE_LIST,
+  EMPLOYEE_API_ERROR_ACTION
 } from "./actionTypes";
 
 const INIT_STATE = {
+  listLoading: false,
+  saveBtnloading: false,
   designation: [],
   State: [],
   City: [],
@@ -47,17 +53,32 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
         City: action.payload,
       };
 
+    case SAVE_EMPLOYEE_MASTER:
+      return {
+        ...state,
+        saveBtnloading: true,
+      };
+
     case SAVE_EMPLOYEE_MASTER_SUCCESS:
       return {
         ...state,
         postMessage: action.payload,
+        saveBtnloading: false,
+
       };
 
     // get api
+    case GET_EMPLOYEE_LIST:
+      return {
+        ...state,
+        listLoading: true,
+      }
+
     case GET_EMPLOYEE_LIST_SUCCESS:
       return {
         ...state,
         employeeList: action.payload,
+        listLoading: false,
       }
 
 
@@ -74,10 +95,20 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       };
 
     // update api
+
+    case UPDATE_EMPLOYEE_ID:
+      return {
+        ...state,
+        saveBtnloading: true,
+
+      };
+
     case UPDATE_EMPLOYEE_ID_SUCCESS:
       return {
         ...state,
         updateMessage: action.payload,
+        saveBtnloading: false,
+
       };
 
     // Company Name API dependent on Employee Types api
@@ -85,6 +116,13 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         CompanyNames: action.payload,
+      };
+
+    case EMPLOYEE_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
       };
 
     default:

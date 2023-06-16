@@ -73,7 +73,9 @@ const CategoryMaster = (props) => {
         CategoryAPI,
         pageField,
         updateMsg,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.CategoryReducer.saveBtnloading ,
             postMsg: state.CategoryReducer.postMsg,
             updateMsg: state.CategoryReducer.updateMessage,
             CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
@@ -273,7 +275,7 @@ const CategoryMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form noValidate>
-                                   
+
                                     <Card>
                                         <CardBody className="c_card_body">
                                             <Row>
@@ -334,6 +336,7 @@ const CategoryMaster = (props) => {
                                                 <Row>
                                                     <Col sm={2}>
                                                         <SaveButton pageMode={pageMode}
+                                                            loading={saveBtnloading}
                                                             onClick={saveHandeller}
                                                             userAcc={userPageAccessState}
                                                             editCreatedBy={editCreatedBy}

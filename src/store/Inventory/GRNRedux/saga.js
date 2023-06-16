@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
+  GrnApiErrorAction,
   deleteGRNIdSuccess,
   editGRNIdSuccess,
   getGRNListPageSuccess,
@@ -27,14 +28,15 @@ function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
   try {
     const response = yield call(GRN_Post_API, config);
     yield put(saveGRNSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GrnApiErrorAction()) }
 }
+
 
 function* DeleteGRNGenFunc({ config }) {            // Delete GRN  genrator function
   try {
     const response = yield call(GRN_delete_API, config);
     yield put(deleteGRNIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GrnApiErrorAction()) }
 }
 
 function* Edit_GRN_GenratorFunction({ config }) { // Edit  GRN  genrator function
@@ -44,14 +46,14 @@ function* Edit_GRN_GenratorFunction({ config }) { // Edit  GRN  genrator functio
     response.pageMode = btnmode
     response.Data = response.Data[0];
     yield put(editGRNIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GrnApiErrorAction()) }
 }
 
 function* UpdateGRNGenFunc({ config }) {             // Upadte GRN  genrator function
   try {
     const response = yield call(GRN_update_API, config);
     yield put(updateGRNIdSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GrnApiErrorAction()) }
 }
 
 function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrator function
@@ -64,28 +66,28 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
       return i
     })
     yield put(getGRNListPageSuccess(newList))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GrnApiErrorAction()) }
 }
 
 function* makeGRN_Mode1_GenFunc({ data }) {         // Make_GRN Items  genrator function
-  
+
   const { jsonBody, pageMode = '', path = '', grnRef = [], challanNo = '' } = data
   try {
-    const response =yield call(GRN_Make_API, jsonBody);
+    const response = yield call(GRN_Make_API, jsonBody);
 
     response.Data.OrderItem.sort(function (a, b) {
       if (a.Item > b.Item) { return 1; }
       else if (a.Item < b.Item) { return -1; }
       return 0;
     });
-  
-    
+
+
     response["pageMode"] = pageMode;
     response["path"] = path; //Pagepath
     response.Data["GRNReferences"] = grnRef;
     response.Data["challanNo"] = challanNo;
     yield put(makeGRN_Mode_1ActionSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(GrnApiErrorAction()) }
 }
 // 
 

@@ -65,8 +65,8 @@ const LoadingSheetUpdate = (props) => {
                         className=" fas fa-file-invoice" ></span> </Button></span>)
         }
     })
-    const [tableColumns] = DynamicColumnHook({ pageField,lastColumn })
-    
+    const [tableColumns] = DynamicColumnHook({ pageField, lastColumn })
+
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
         const page_Id = pageId.LOADING_SHEET_LIST_UPDATE
@@ -128,7 +128,7 @@ const LoadingSheetUpdate = (props) => {
 
         } catch (e) { }
     }
-   
+
     function rowSelected() {
         return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
     }
@@ -203,35 +203,37 @@ const LoadingSheetUpdate = (props) => {
                                 </Col >
                             </div>
                         </div>
+                        <div className="mt-n1">
+                            <ToolkitProvider
+                                keyField="id"
+                                data={InvoiceParent}
+                                columns={tableColumns}
+                                search
+                            >
+                                {toolkitProps => (
+                                    <React.Fragment>
+                                        <div className="table">
+                                            <BootstrapTable
+                                                keyField={"id"}
+                                                bordered={true}
+                                                striped={false}
+                                                selectRow={selectAllCheck(rowSelected())}
+                                                noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                                classes={"table align-middle table-nowrap table-hover"}
+                                                headerWrapperClasses={"thead-light"}
 
-                        <ToolkitProvider
-                            keyField="id"
-                            data={InvoiceParent}
-                            columns={tableColumns}
-                            search
-                        >
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    <div className="table">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            bordered={true}
-                                            striped={false}
-                                            selectRow={selectAllCheck(rowSelected())}
-                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                            classes={"table align-middle table-nowrap table-hover"}
-                                            headerWrapperClasses={"thead-light"}
+                                                {...toolkitProps.baseProps}
 
-                                            {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
 
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
+                                    </React.Fragment>
+                                )
+                                }
+                            </ToolkitProvider>
+                        </div>
 
-                                </React.Fragment>
-                            )
-                            }
-                        </ToolkitProvider>
 
                         {
                             InvoiceParent.length > 0 ?

@@ -13,6 +13,7 @@ import MarginMaster from "./MarginMaster";
 import { delete_MarginList_ID, delete_MarginList_ID_Success, getMarginList, goButtonForMarginSuccess } from "../../../store/Administrator/MarginMasterRedux/action";
 import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const MarginList = () => {
 
@@ -25,6 +26,7 @@ const MarginList = () => {
 
   const reducers = useSelector(
     (state) => ({
+      listLoading:state.MarginMasterReducer.listLoading,
       tableList: state.MarginMasterReducer.MarginList,
       MarginGoButton: state.MarginMasterReducer.MarginGoButton,
       deleteMsg: state.MarginMasterReducer.deleteMsg,
@@ -82,7 +84,7 @@ const MarginList = () => {
   }, [MarginGoButton]);
 
   function editBodyfunc(index) {
-    
+
     const { rowData, btnId } = index
     let { PriceList_id, Party_id, preEffectiveDate } = rowData;
     _cfunc.btnIsDissablefunc({ btnId, state: true })
@@ -121,24 +123,26 @@ const MarginList = () => {
   return (
     <React.Fragment>
       <div className="page-content">
-
         <div className="mt-n1">
           {
-            (pageField) ?
-              <CommonPurchaseList
-                action={action}
-                reducers={reducers}
-                showBreadcrumb={false}
-                MasterModal={MarginMaster}
-                masterPath={url.MARGIN}
-                newBtnPath={url.MARGIN}
-                ButtonMsgLable={"Margin"}
-                deleteName={"EffectiveDate"}
-                pageMode={pageMode}
-                editBodyfunc={editBodyfunc}
-                deleteBodyfunc={deleteBodyfunc}
-              />
-              : null
+            reducers.listLoading ?
+              <Listloader />
+              :
+              (pageField) ?
+                <CommonPurchaseList
+                  action={action}
+                  reducers={reducers}
+                  showBreadcrumb={false}
+                  MasterModal={MarginMaster}
+                  masterPath={url.MARGIN}
+                  newBtnPath={url.MARGIN}
+                  ButtonMsgLable={"Margin"}
+                  deleteName={"EffectiveDate"}
+                  pageMode={pageMode}
+                  editBodyfunc={editBodyfunc}
+                  deleteBodyfunc={deleteBodyfunc}
+                />
+                : <> <Listloader /></>
           }
         </div>
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, } from "react";
 import {
-    Button,
     Col,
     FormGroup,
     Label,
@@ -62,7 +61,9 @@ const ManagementEmpParties = (props) => {
         partyList,
         pageField,
         loading,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.ManagementPartiesReducer.saveBtnloading,
             loading: state.ManagementPartiesReducer.loading,
             postMsg: state.ManagementPartiesReducer.postMsg,
             employeeList: state.ManagementPartiesReducer.employeeList,
@@ -192,28 +193,6 @@ const ManagementEmpParties = (props) => {
             text: "District",
             dataField: "District",
         },
-        // {
-        //     text: "Select",
-        //     mode: 'checkbox',
-        //     clickToSelect: true,
-        //     getSelection: () => <><Input type="checkbox"></Input></>,
-        //     selectionRenderer: ({ mode, ...rest }) => (
-        //         <Input type={mode} {...rest} />
-        //     ),
-        //     dataField: "Check",
-        //     formatter: (cellContent, row, key) => {
-        //         return (<span style={{ justifyContent: 'center' }}>
-        //             <Input
-        //                 id=""
-        //                 key={row.id}
-        //                 defaultChecked={row.Check}
-        //                 type="checkbox"
-        //                 className="col col-sm text-center"
-        //                 onChange={e => { SelectAll(e.target.checked, row, key) }}
-        //             />
-        //         </span>)
-        //     }
-        // }
     ];
 
     const pageOptions = {
@@ -257,7 +236,6 @@ const ManagementEmpParties = (props) => {
             return;
         }
         const jsonBody = JSON.stringify(PartiesJson)
-        // console.log(jsonBody)
         dispatch(saveManagementParties({ jsonBody, btnId }));
     };
 
@@ -270,7 +248,6 @@ const ManagementEmpParties = (props) => {
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
-                    {/* <Container fluid> */}
                     <div className="px-2   c_card_header text-black mb-1" >
                         <div className="row">
                             <Col sm="5">
@@ -287,10 +264,11 @@ const ManagementEmpParties = (props) => {
                                             autoFocus={true}
                                             options={employeeListOptions}
                                             isDisabled={(partyList.length > 0) ? true : false}
-                                            // onChange={(e) => { setEmployeeSelect(e) }}
                                             onChange={(hasSelect, evn) => {
                                                 onChangeSelect({ hasSelect, evn, state, setState, })
-                                                // State_Dropdown_Handler(hasSelect)
+                                            }}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
                                         />
                                         {isError.Employee.length > 0 && (
@@ -311,14 +289,6 @@ const ManagementEmpParties = (props) => {
                                 </Col>
                             }
 
-
-                            {/* {pageMode === mode.defaultsave ?
-                                (orderItemTable.length === 0) ?
-                                    < Go_Button onClick={(e) => goButtonHandler()} />
-                                    :
-                                    <Change_Button onClick={(e) => dispatch(GoButton_For_Order_AddSuccess([]))} />
-                                : null
-                            } */}
                         </div>
                     </div>
 
@@ -350,7 +320,7 @@ const ManagementEmpParties = (props) => {
                                                     {...toolkitProps.baseProps}
                                                     {...paginationTableProps}
                                                 />
-                                                {/* {countlabelFunc(toolkitProps, paginationProps, dispatch, "Route Update")} */}
+                                               
                                                 {mySearchProps(toolkitProps.searchProps)}
                                             </div>
 
@@ -375,6 +345,7 @@ const ManagementEmpParties = (props) => {
                                 <Row >
                                     <Col sm={2} className="mt-n4">
                                         <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
                                             module={"RouteUpdate"}

@@ -7,7 +7,12 @@ import {
     GET_ADDRESSTYPES_SUCCESS,
     GET_PARTY_LIST_API_SUCCESS,
     POST_PARTY_DATA_SUCCESS,
-    UPDATE_PARTY_ID_SUCCESS
+    UPDATE_PARTY_ID_SUCCESS,
+    POST_PARTY_DATA,
+    UPDATE_PARTY_ID,
+    GET_PARTY_LIST_API,
+    PARTY_API_ERROR_ACTION,
+    PARTY_RESET_REDUX_ACTION
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -17,23 +22,41 @@ const INIT_STATE = {
     editData: { Status: false },
     updateMsg: { Status: false },
     DistrictOnState: [],
-    AddressTypes: []
+    AddressTypes: [],
+    saveBtnloading: false,
+    listLoading: false
 };
 
 const PartyMasterReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
         // get api
+        case GET_PARTY_LIST_API:
+            return {
+                ...state,
+                listLoading: true,
+
+            }
+
         case GET_PARTY_LIST_API_SUCCESS:
             return {
                 ...state,
                 partyList: action.payload,
+                listLoading: false
             }
 
         // post api
+        case POST_PARTY_DATA:
+            return {
+                ...state,
+                saveBtnloading: true,
+            };
+
         case POST_PARTY_DATA_SUCCESS:
             return {
                 ...state,
                 postMsg: action.payload,
+                saveBtnloading: false,
+
             };
 
         // delete api
@@ -51,10 +74,18 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             };
 
         // update api
+
+        case UPDATE_PARTY_ID:
+            return {
+                ...state,
+                saveBtnloading: true,
+            };
+
         case UPDATE_PARTY_ID_SUCCESS:
             return {
                 ...state,
                 updateMsg: action.payload,
+                saveBtnloading: false,
             };
 
         // GetDistrictOnState API
@@ -84,6 +115,14 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
                 ...state,
                 CompanyName: action.payload,
             };
+
+        case PARTY_API_ERROR_ACTION:
+            return {
+                ...state,
+                saveBtnloading: false,
+                listLoading: false
+            };
+
         default:
             return state;
     }

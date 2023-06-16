@@ -48,6 +48,7 @@ const InvoiceList = () => {
             editData: state.InvoiceReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            goBtnloading: state.InvoiceReducer.goBtnloading,
         })
     );
 
@@ -217,7 +218,8 @@ const InvoiceList = () => {
                     </Col >
 
                     <Col sm="1" className="mt-3 ">
-                        <Go_Button id={gobtnId} onClick={goButtonHandler} />
+                        <Go_Button id={gobtnId} onClick={goButtonHandler}
+                            loading={reducers.goBtnloading} />
                     </Col>
                 </div>
             </div>
