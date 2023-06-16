@@ -93,6 +93,7 @@ export const ADDRESSTYPES = "/AddressTypes"
 export const PARTYTYPES = "/PartyTypes"
 export const GET_PARTYTYPE_BY_DIVISIONTYPES_ID = "/GetPartyTypeByDivisionTypeID"
 export const GET_COMPANY_BY_DIVISIONTYPES_ID = "/GetCompanyByDivisionTypeID"
+export const PARTY_ADDRESS_DELETE_API = "/PartyAddressDelete"
 
 //Role Access
 export const PAGE_DROPDOWN_FOR_ROLE_ACCESS_ADD_PAGE = "/RoleAccessGetPages"
