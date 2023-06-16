@@ -190,6 +190,13 @@ const PartyMaster = (props) => {
                         label: hasEditVal.PriceList.Name, value: hasEditVal.PriceList.id,
                     } : { label: '' };
 
+                    let nextId = 1;
+                    let addressTabPreIncrementId = hasEditVal.PartyAddress.map((obj) => {
+                        const newObj = { ...obj, RowId: nextId };
+                        nextId++;
+                        return newObj;
+                    })
+                   
                     let getBaseTab = baseTabRef.current.getCurrentState();
                     let setBaseTab = baseTabRef.current.setCurrentState;
                     let getPrefixtab = prefixTabRef.current.getCurrentState();
@@ -200,7 +207,7 @@ const PartyMaster = (props) => {
 
                     bulkSetState(baseValue, getBaseTab, setBaseTab)
                     bulkSetState(prefixValue, getPrefixtab, setPrefixtab)
-                    setAddressTab(hasEditVal.PartyAddress)
+                    setAddressTab(addressTabPreIncrementId)
                     setPriceList(editPriceList);
 
                     dispatch(getDistrictOnState(hasEditVal.State.id))
@@ -289,6 +296,8 @@ const PartyMaster = (props) => {
         let priceListSelect = baseTabRef.current.getPriceListSelect()
         let setBaseTabDetail = baseTabRef.current.setCurrentState
         let addressTabDetail = addressTabRef.current.getCurrentState()
+        console.log("addressTabDetail", addressTabDetail)
+
         let prefixValue = prefixTabRef.current.getCurrentState().values
 
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
@@ -320,6 +329,12 @@ const PartyMaster = (props) => {
                 Creditlimit: pageMode === mode.edit ? i.Creditlimit : "",
                 Route: pageMode === mode.edit ? i.Route : "",
             }))
+
+            addressTabDetail.map((i) => {
+                if (i.RowId) {
+                    i["id"] = "0"
+                }
+            })
 
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,

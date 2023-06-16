@@ -11,7 +11,7 @@ import {
   GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
   GET_PARTY_LIST_API, GET_PARTY_LIST_API_SUCCESS,
   POST_PARTY_DATA, POST_PARTY_DATA_SUCCESS,
-  UPDATE_PARTY_ID, UPDATE_PARTY_ID_SUCCESS, PARTY_API_ERROR_ACTION, RESET_PARTY_ACTION, PARTY_RESET_REDUX_ACTION
+  UPDATE_PARTY_ID, UPDATE_PARTY_ID_SUCCESS, PARTY_API_ERROR_ACTION, RESET_PARTY_ACTION, PARTY_RESET_REDUX_ACTION, PARTY_ADDRESS_DELETE_ID, PARTY_ADDRESS_DELETE_ID_SUCCESS
 } from "./actionTypes";
 
 // get api
@@ -125,7 +125,16 @@ export const PartyApiErrorAction = () => ({
   type: PARTY_API_ERROR_ACTION,
 })
 
+// PartyAddressDelete api
+export const PartyAddressDeleteID = (config = {}) => ({
+  type: PARTY_ADDRESS_DELETE_ID,
+  config,
 
+});
+export const PartyAddressDeleteIDSuccess = (resp) => ({
+  type: PARTY_ADDRESS_DELETE_ID_SUCCESS,
+  payload: resp
+});
 
 
 

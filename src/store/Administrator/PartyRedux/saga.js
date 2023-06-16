@@ -10,6 +10,7 @@ import {
   Party_Master_Post_API,
   Party_Master_Update_API,
   GetAddressTypes_For_Dropdown,
+  Party_Address_Delete_API,
 } from "../../../helpers/backend_helper";
 import {
   deletePartyIDSuccess,
@@ -22,6 +23,7 @@ import {
   updatePartyIDSuccess,
   getAddressTypesSuccess,
   PartyApiErrorAction,
+  PartyAddressDeleteIDSuccess,
 } from "./action";
 import {
   DELETE_PARTY_ID, EDIT_PARTY_ID,
@@ -32,6 +34,7 @@ import {
   GET_PARTY_LIST_API,
   POST_PARTY_DATA,
   UPDATE_PARTY_ID,
+  PARTY_ADDRESS_DELETE_ID,
 } from "./actionTypes";
 
 function* Get_Party_GenFun() {   // Only CompanyID is Required
@@ -133,6 +136,16 @@ function* GetCompanyByDivisionTypeID_GenFun({ id }) {
   } catch (error) { yield put(PartyApiErrorAction()) }
 }
 
+
+function* PartyAddressDelete_GenFun({ config }) {
+  const { deleteId } = config
+  try {
+    const response = yield call(Party_Address_Delete_API, config);
+    response["deleteId"] = deleteId
+    yield put(PartyAddressDeleteIDSuccess(response))
+  } catch (error) { CommonConsole(error) }
+}
+
 function* PartyMasterSaga() {
   yield takeEvery(GET_PARTY_LIST_API, Get_Party_GenFun);
   yield takeEvery(POST_PARTY_DATA, save_Party_Master_GenFun);
@@ -143,6 +156,8 @@ function* PartyMasterSaga() {
   yield takeEvery(GET_ADDRESSTYPES, GetAddressTypes_saga);
   yield takeEvery(GET_PARTTYPE_BY_DIVISIONTYPES_ID, GetPartyTypeByDivisionTypeID_GenFun);
   yield takeEvery(GET_COMPANY_BY_DIVISIONTYPES_ID, GetCompanyByDivisionTypeID_GenFun);
+  yield takeEvery(PARTY_ADDRESS_DELETE_ID, PartyAddressDelete_GenFun);
+
 }
 
 export default PartyMasterSaga;
