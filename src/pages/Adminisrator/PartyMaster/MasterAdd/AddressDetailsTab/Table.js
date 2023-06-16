@@ -60,7 +60,7 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
     };
 
     function defaultChangeHandler(key) {
-   
+
         const newtableData = addressTable.map((ele, k) => {
             ele.IsDefault = false;
             if (k === key) {
@@ -106,18 +106,22 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
                     onClick={(e) => defaultChangeHandler(key)} />
                     {`${info.IsDefault}`}
                 </td>
-                <td>
+
+                {/* {info.IsDefault === false ? */}
+                 <td>
                     <Button
                         className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"
+                        disabled={info.IsDefault === false ? false : true}
                         onClick={(e) =>
                             ondeleteHandeler(info)
                         }
                     >
                         <i className="mdi mdi-delete font-size-18"></i>
                     </Button>
-
                 </td>
+                 {/* : null} */}
+
             </tr >
         );
     });
