@@ -87,7 +87,7 @@ const OrderSummary = (props) => {
             const worksheet = XLSX.utils.json_to_sheet(Data);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
-            XLSX.writeFile(workbook, "Order Summary Report.xlsx");
+            XLSX.writeFile(workbook, "Order Summary Report.XLSX");
             dispatch(postOrderSummary_API_Success([]));
         }
     }, [Data]);
