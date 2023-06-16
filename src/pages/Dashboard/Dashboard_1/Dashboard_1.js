@@ -212,7 +212,7 @@ const Dashboard_1 = (props) => {
 
                                     <div className="text-nowrap">
                                         <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
-                                            +$20.9k
+                                            +20.9k
                                         </span>
                                         <span className="ms-1 text-muted font-size-13">Since last week</span>
                                     </div>
@@ -253,7 +253,7 @@ const Dashboard_1 = (props) => {
 
                                     <div className="text-nowrap">
                                         <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
-                                            +$20.9k
+                                            +20.9k
                                         </span>
                                         <span className="ms-1 text-muted font-size-13">Since last week</span>
                                     </div>
@@ -294,7 +294,7 @@ const Dashboard_1 = (props) => {
 
                                     <div className="text-nowrap">
                                         <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
-                                            +$20.9k
+                                            +20.9k
                                         </span>
                                         <span className="ms-1 text-muted font-size-13">Since last week</span>
                                     </div>
