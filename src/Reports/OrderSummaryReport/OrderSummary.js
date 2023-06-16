@@ -20,7 +20,7 @@ const OrderSummary = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const userAdminRole = _cfunc.loginUserAdminRole();
+    const isSCMParty = _cfunc.loginIsSCMParty();
 
 
     const fileds = {
@@ -113,13 +113,13 @@ const OrderSummary = (props) => {
 
 
     function goButtonHandler() {
-        
+        debugger
         const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "CompanyID": _cfunc.loginCompanyID(),
-            "PartyID": userAdminRole ? values.PartyName.value : _cfunc.loginPartyID()
+            "PartyID": isSCMParty ? values.PartyName.value : _cfunc.loginPartyID()
 
         });
         dispatch(postOrderSummary_API({ jsonBody, btnId }));
@@ -177,7 +177,7 @@ const OrderSummary = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {userAdminRole &&
+                        {isSCMParty &&
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3" >
                                     <Label className="col-sm-4 p-2"
