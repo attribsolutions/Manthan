@@ -231,6 +231,17 @@ const PaymentEntry = (props) => {
         dispatch(GetOpeningBalance(jsonBody));
     }
 
+    function ReceiptModeOnchange(hasSelect, evn) {
+
+        onChangeSelect({ hasSelect, evn, state, setState, })
+        if ((hasSelect.label === "Cheque") || (hasSelect.label === "RTGS")) {
+            dispatch(BankListAPI())
+        }
+        else {
+            dispatch(BankListAPISuccess([]))
+        }
+    }
+
     const saveHandeller = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -293,16 +304,6 @@ const PaymentEntry = (props) => {
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    function ReceiptModeName(hasSelect, evn) {
-
-        onChangeSelect({ hasSelect, evn, state, setState, })
-        if ((hasSelect.label === "Cheque") || (hasSelect.label === "RTGS")) {
-            dispatch(BankListAPI())
-        }
-        else {
-            dispatch(BankListAPISuccess([]))
-        }
-    }
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -398,14 +399,7 @@ const PaymentEntry = (props) => {
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => {
-                                                    ReceiptModeName(hasSelect, evn)
-                                                    // onChangeSelect({ hasSelect, evn, state, setState, })
-                                                    // if ((values.ReceiptModeName.label === "Cheque") || (values.ReceiptModeName.label === "RTGS")) {
-                                                    //     dispatch(BankListAPI())
-                                                    // }
-                                                    // else {
-                                                    //     dispatch(BankListAPISuccess([]))
-                                                    // }
+                                                    ReceiptModeOnchange(hasSelect, evn)
                                                 }}
                                             />
                                             {isError.ReceiptModeName.length > 0 && (
