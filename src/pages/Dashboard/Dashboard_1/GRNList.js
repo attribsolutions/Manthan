@@ -97,6 +97,7 @@ export default function InvoiceForGRN() {
         {
             text: "InvoiceAmount",
             dataField: "OrderAmount",
+            align:"right"
         },
         {
             text: "Action",
