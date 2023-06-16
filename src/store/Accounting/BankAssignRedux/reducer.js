@@ -4,7 +4,8 @@ import {
   EDIT_BANK_ASSIGN_ID_SUCCESS,
   UPDATE_BANK_ASSIGN_ID_SUCCESS,
   UPDATE_BANK_ASSIGN_ID,
-  BANK_ASSIGN_API_ERROR_ACTION
+  BANK_ASSIGN_API_ERROR_ACTION,
+  SAVE_BANK_ASSIGN
 } from "./actionType";
 
 const INIT_STATE = {
@@ -19,7 +20,7 @@ const INIT_STATE = {
 const BankAssignReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
-    case SAVE_BANK_ASSIGN_SUCCESS:
+    case SAVE_BANK_ASSIGN:
       return {
         ...state,
         saveBtnloading: true,
