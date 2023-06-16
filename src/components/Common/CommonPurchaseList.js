@@ -228,7 +228,7 @@ const CommonPurchaseList = (props) => {
       pageMode === mode.modeSTPsave
     ) {
       return {
-        text: "Select",
+        text: "Action",
         dataField: "hasSelect",
         sort: true,
         formatter: (cellContent, rowData, key) => {
