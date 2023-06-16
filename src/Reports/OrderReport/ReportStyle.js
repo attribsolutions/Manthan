@@ -137,7 +137,7 @@ export const reportHeder1 = (doc, data) => {
 
     // let initial_y = 0
     const priLength = () => {
-        
+
         let final_y = doc.previousAutoTable.finalY
         if (final_y > initial_y) {
             initial_y = final_y
@@ -146,15 +146,15 @@ export const reportHeder1 = (doc, data) => {
     }
 
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
-    console.log("first",doc.previousAutoTable.finalY)
+    console.log("first", doc.previousAutoTable.finalY)
     priLength()
 
     doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
-    console.log("Second",doc.previousAutoTable.finalY)
+    console.log("Second", doc.previousAutoTable.finalY)
     priLength()
 
     doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
-    console.log("third",doc.previousAutoTable.finalY)
+    console.log("third", doc.previousAutoTable.finalY)
     priLength()
 }
 
@@ -190,12 +190,12 @@ export const reportHeder3 = (doc, data) => {
 export const reportFooter = (doc, data) => {
     var options1 = {
         didParseCell: (data1) => {
-              
+
             if (data1.row.cells[0].raw === "Terms And Condition") {
                 data1.row.cells[0].styles.fontSize = 10
                 data1.row.cells[0].styles.fontStyle = "bold"
             }
-        
+
         },
         margin: {
             top: 45, left: 35, right: 35, bottom: 10
@@ -259,10 +259,10 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[4].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
-            }      
+            }
         },
         margin: {
-            left: 30, right: 25,top: 65
+            left: 30, right: 25, top: 65
         },
         theme: 'grid',
         headerStyles: {
@@ -354,7 +354,8 @@ export const tableBody = (doc, data) => {
 }
 
 export const pageFooter = (doc, data) => {
-    const GrandTotal = Math.round(data.OrderAmount)
+    debugger
+    const GrandTotal = Number(data.OrderAmount)
     const Total = numberWithCommas((GrandTotal).toFixed(2))
     let stringNumber = toWords(Number(GrandTotal))
     // doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
