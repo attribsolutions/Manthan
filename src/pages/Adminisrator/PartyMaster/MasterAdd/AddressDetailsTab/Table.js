@@ -107,7 +107,6 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
                     {`${info.IsDefault}`}
                 </td>
 
-                {/* {info.IsDefault === false ? */}
                  <td>
                     <Button
                         className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -120,7 +119,6 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
                         <i className="mdi mdi-delete font-size-18"></i>
                     </Button>
                 </td>
-                 {/* : null} */}
 
             </tr >
         );
