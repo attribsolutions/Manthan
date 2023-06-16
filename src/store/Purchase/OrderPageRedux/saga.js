@@ -163,6 +163,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceSelectDissabled = false
       i.Status = "Open"
       i.Inward = "Open"
+    
 
 
       if (i.Inward > 0) {
@@ -170,7 +171,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.Status = "Close"
         i.forceEditHide = true
       }
-      //****************************************************************************************************/
+      
       if (i.SAPResponse) {
         i.Status = "Order send To SAP"
       }
@@ -179,12 +180,15 @@ function* orderList_GoBtn_GenFunc({ config }) {
       }
       else if (i.IsConfirm === true) {
         i.Status = "Order Confirm"
-      }
-      //*************************************************************************************************** */
-      const orderApprovallBtnShow = ((i.CustomerSAPCod) && !(i.SAPResponse) && (i.IsConfirm === true));
-
-      if (orderApprovallBtnShow) {// Order ApprovalButton Condition
         i.forceMakeBtn = false
+      }
+
+
+
+     
+
+      if (i.InvoiceCreated === true) {
+        i.forceMakeBtn = true
       }
 
       if (i.IsConfirm === true) {// is confirm is true the show force dlete and edit true po ans so mode 
@@ -192,6 +196,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.forceDeleteHide = true;
         i.forceSelectDissabled = true;//select row check box dessible 
       }
+
 
       if (i.SAPResponse) {// for sap_code order page 
 
