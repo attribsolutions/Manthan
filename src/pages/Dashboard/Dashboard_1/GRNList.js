@@ -70,7 +70,6 @@ export default function InvoiceForGRN() {
                 isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
                 challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
 
-
                 const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect,
                     Mode: 3
@@ -86,12 +85,16 @@ export default function InvoiceForGRN() {
     }
 
     const pagesListColumns = [
+        // {
+        //     text: "id",
+        //     dataField: "id",
+        // },
         {
-            text: "OrderDate",
+            text: "InvoiceDate",
             dataField: "OrderDate",
         },
         {
-            text: "FullOrderNumber",
+            text: "InvoiceNo",
             dataField: "FullOrderNumber",
         },
         {
@@ -99,14 +102,10 @@ export default function InvoiceForGRN() {
             dataField: "Supplier",
         },
         {
-            text: "OrderAmount",
+            text: "InvoiceAmount",
             dataField: "OrderAmount",
+            align:"right"
         },
-        {
-            text: "Inward",
-            dataField: "Inward",
-        },
-
         {
             text: "Action",
             dataField: "",

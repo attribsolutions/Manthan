@@ -19,7 +19,7 @@ const AddressTabForm = forwardRef((props, ref) => {
     const fileds = {
         PartyAddress: "",
         FSSAINo: '',
-        FSSAIExipry: '',
+        FSSAIExipry: null,
         PIN: '',
         IsDefault: false
     }
@@ -61,7 +61,7 @@ const AddressTabForm = forwardRef((props, ref) => {
         try {
             const isvalid = formValid(state, setState)
             if (isvalid) {
-
+              
                 const val = {
                     Address: values.PartyAddress,
                     FSSAINo: values.FSSAINo,
@@ -76,7 +76,7 @@ const AddressTabForm = forwardRef((props, ref) => {
                     });
                 }
                 const tableleth = addressTable.length;
-                val.id = tableleth + 1;
+                val.RowId= tableleth + 1;
                 const updatedTableData = [...addressTable];
                 updatedTableData.push(val);
                 setAddressTable(updatedTableData)
@@ -152,7 +152,6 @@ const AddressTabForm = forwardRef((props, ref) => {
                     </Row>
 
                     <Row>
-
                         <Col md="4">
                             <FormGroup className="mb-3">
                                 <Label htmlFor="validationCustom01">{fieldLabel.FSSAINo} </Label>
@@ -182,7 +181,7 @@ const AddressTabForm = forwardRef((props, ref) => {
                                 <C_DatePicker
                                     name="FSSAIExipry"
                                     value={values.FSSAIExipry}
-                                    placeholder = {"DD/MM/YYYY"}
+                                    placeholder={"DD/MM/YYYY"}
                                     onChange={(c, v, e) => onChangeDate({ v, e, state, setState })}
                                 />
                                 {(isError.FSSAIExipry.length > 0) && (

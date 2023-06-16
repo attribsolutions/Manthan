@@ -43,7 +43,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit_SelectOnchange, showAllStockOnclick, showStockOnclick, stockDistributeFunc, stockQtyOnChange } from "./invoiceCaculations";
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm";
 
 const Invoice = (props) => {
 
@@ -487,7 +487,7 @@ const Invoice = (props) => {
 
         },
         {//***************Discount********************************************************************* */
-            text: "Discount",
+            text: "Discount/unit",
             dataField: "",
             classes: () => ('invoice-discount-row'),
             formatter: (Rate, index1, key) => {
@@ -521,18 +521,31 @@ const Invoice = (props) => {
                                     <label className="label">Value&nbsp;</label>
                                 </div>
                                 <div className="child">
-                                    <Input
+                                    <CInput
                                         className="input"
                                         style={{ textAlign: "right" }}
                                         type="text" defaultValue={index1.Discount}
+                                        cpattern={decimalRegx}
                                         onChange={(e) => {
-                                            if (e.target.value === '') {
+                                            let e_val = e.target.value;
+
+                                            if (e_val === '') {
                                                 e.target.value = 0
                                             }
-                                            index1.Discount = e.target.value
+                                            //******************  if discount type=2 == "percentage"  then only 100% iput enter*/
+                                            if ((index1.DiscountType === 2)) {//discount type=2 === "percentage"
+                                                if ((e_val > 100)) {
+                                                    e.target.value = 100
+                                                } else if (e_val < 0) {
+                                                    e.target.value = 0
+                                                }
+                                            }
+                                          
+                                            index1.Discount = e.target.value;
                                             innerStockCaculation(index1)
                                         }}
                                     />
+
                                 </div>
                             </div>
                         </div>
@@ -567,15 +580,6 @@ const Invoice = (props) => {
         })
     };
 
-
-
-
-
-
-
-
-
-
     function goButtonHandler(makeIBInvoice) {
         const btnId = goBtnId;
         _cfunc.btnIsDissablefunc({ btnId, state: true })
@@ -603,6 +607,7 @@ const Invoice = (props) => {
             _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
+
             const validMsg = []
             const invoiceItems = []
             let grand_total = 0;
@@ -625,30 +630,30 @@ const Invoice = (props) => {
                             Item: index.Item,
                             Unit: index.default_UnitDropvalue.value,
                             BatchCode: ele.BatchCode,
-                            Quantity: ele.Qty,
+                            Quantity: Number(ele.Qty).toFixed(3),
                             BatchDate: ele.BatchDate,
                             BatchID: ele.id,
-                            BaseUnitQuantity: ele.BaseUnitQuantity,
+                            BaseUnitQuantity: Number(ele.BaseUnitQuantity).toFixed(3),
                             LiveBatch: ele.LiveBatche,
                             MRP: ele.LiveBatcheMRPID,
                             MRPValue: ele.MRP,//changes
-                            Rate: ele.Rate,
-                            BasicAmount: (calculate.discountBaseAmt).toFixed(2),
-                            GSTAmount: calculate.gstAmt,
+                            Rate: Number(ele.Rate).toFixed(2),
+                            BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
+                            GSTAmount: Number(calculate.gstAmt).toFixed(2),
                             GST: ele.LiveBatcheGSTID,
                             GSTPercentage: ele.GST,// changes
-                            CGST: calculate.CGST,
-                            SGST: calculate.SGST,
+                            CGST: Number(calculate.CGST).toFixed(2),
+                            SGST: Number(calculate.SGST).toFixed(2),
                             IGST: 0,
                             GSTPercentage: ele.GST,
                             CGSTPercentage: (ele.GST / 2),
                             SGSTPercentage: (ele.GST / 2),
                             IGSTPercentage: 0,
-                            Amount: calculate.tAmount,
+                            Amount: Number(calculate.tAmount).toFixed(2),
                             TaxType: 'GST',
                             DiscountType: index.DiscountType,
-                            Discount: index.Discount,
-                            DiscountAmount: calculate.disCountAmt,
+                            Discount: Number(index.Discount).toFixed(2),
+                            DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
                         })
                     }
                 })
@@ -707,6 +712,7 @@ const Invoice = (props) => {
             else {
                 dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId }));
             }
+
         } catch (e) { returnFunc() }
 
     }
@@ -795,20 +801,20 @@ const Invoice = (props) => {
                                 <React.Fragment>
                                     <Row>
                                         <Col xl="12">
-                                                <BootstrapTable
-                                                    id="table_Arrow"
-                                                    keyField={"id"}
-                                                    responsive
-                                                    bordered={false}
-                                                    striped={false}
-                                                    classes={"table  table-bordered"}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-                                                    {...toolkitProps.baseProps}
-                                                />
+                                            <BootstrapTable
+                                                id="table_Arrow"
+                                                keyField={"id"}
+                                                responsive
+                                                bordered={false}
+                                                striped={false}
+                                                classes={"table  table-bordered"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Items Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
                                         </Col>
                                     </Row>
 

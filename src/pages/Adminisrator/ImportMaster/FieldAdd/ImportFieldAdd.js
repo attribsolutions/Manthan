@@ -300,6 +300,7 @@ const ImportFieldAdd = (props) => {
                                                             <Select
                                                                 name="ImportExcelType"
                                                                 value={values.ImportExcelType}
+                                                                autoFocus={true}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
                                                                 styles={{
@@ -324,7 +325,6 @@ const ImportFieldAdd = (props) => {
                                                                 className={isError.FieldName.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
-                                                                autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(Breadcrumb_inputName(event.target.value))

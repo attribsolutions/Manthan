@@ -6,7 +6,8 @@ import {
   SAVE_IMPORT_EXCEL_PARTY_MAP,
   SAVE_IMPORT_EXCEL_PARTY_MAP_SUCCESS,
   RETAILER_EXCEL_UPLOAD_SAVE,
-  RETAILER_EXCEL_UPLOAD_SAVE_SUCCESS
+  RETAILER_EXCEL_UPLOAD_SAVE_SUCCESS,
+  RETAILER_EXCEL_UPLOAD_API_ERROR_ACTION
 } from "./actionType";
 
 
@@ -50,6 +51,11 @@ export const RetailerExcelUpload_save_action_Success = (resp) => ({// Save  succ
   type: RETAILER_EXCEL_UPLOAD_SAVE_SUCCESS,
   payload: resp,
 });
+
+export const RetailerExcelUploadApiErrorAction = () => ({
+  type: RETAILER_EXCEL_UPLOAD_API_ERROR_ACTION,
+})
+
 
 
 

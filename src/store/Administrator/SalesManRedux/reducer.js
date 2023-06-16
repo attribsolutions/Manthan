@@ -1,7 +1,9 @@
 import {
   DELETE_SALESMAN_ID_SUCCESS,
   EDIT_SALESMAN_ID_SUCCESS,
+  GET_SALESMAN_LIST,
   GET_SALESMAN_LIST_SUCCESS,
+  SALESMAN_API_ERROR_ACTION,
   SAVE_SALES_MAN_MASTER,
   SAVE_SALES_MAN_MASTER_SUCCESS,
   UPDATE_SALESMAN_ID,
@@ -15,6 +17,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMessage: { Status: false },
   saveBtnloading: false,
+  listLoading: false,
 }
 
 const SalesManReducer = (state = INIT_STATE, action) => {
@@ -33,10 +36,18 @@ const SalesManReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false,
       }
 
+    case GET_SALESMAN_LIST:
+      return {
+        ...state,
+        listLoading: true
+      }
+
     case GET_SALESMAN_LIST_SUCCESS:
       return {
         ...state,
         SalesManList: action.payload,
+        listLoading: false
+
       }
 
     case DELETE_SALESMAN_ID_SUCCESS:
@@ -62,6 +73,13 @@ const SalesManReducer = (state = INIT_STATE, action) => {
         ...state,
         updateMessage: action.payload,
         saveBtnloading: false,
+      };
+
+    case SALESMAN_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
       };
 
     default:

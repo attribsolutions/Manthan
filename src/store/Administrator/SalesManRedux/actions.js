@@ -9,10 +9,11 @@ import {
   GET_SALESMAN_LIST,
   GET_SALESMAN_LIST_SUCCESS,
   UPDATE_SALESMAN_ID,
-  UPDATE_SALESMAN_ID_SUCCESS
+  UPDATE_SALESMAN_ID_SUCCESS,
+  SALESMAN_API_ERROR_ACTION
 } from "./actionTypes";
 
-export const saveSalesManMaster = (config = {}) => ({ 
+export const saveSalesManMaster = (config = {}) => ({
   type: SAVE_SALES_MAN_MASTER,
   config,
 });
@@ -61,3 +62,7 @@ export const deleteSalesManID_Success = (resp) => ({
   type: DELETE_SALESMAN_ID_SUCCESS,
   payload: resp
 });
+
+export const SalesManApiErrorAction = () => ({
+  type: SALESMAN_API_ERROR_ACTION,
+})

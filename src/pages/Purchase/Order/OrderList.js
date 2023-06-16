@@ -386,7 +386,7 @@ const OrderList = () => {
                 filtersBody = JSON.stringify(PO_filters);
             }
             dispatch(_act.getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
-            debugger
+            
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: false }) }
     }
 

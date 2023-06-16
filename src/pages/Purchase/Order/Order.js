@@ -235,9 +235,8 @@ const Order = (props) => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
-
+            dispatch(_act.GoButton_For_Order_AddSuccess([]))
             setTermsAndConTable([])
-
             const liveMode = true
             const aprovalSapCallMode = postMsg.IsSAPCustomer > 0
 
@@ -376,8 +375,8 @@ const Order = (props) => {
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
             sort: true,
-           // hidden: !(pageMode === mode.defaultsave) && true,
-           hidden: true,
+            // hidden: !(pageMode === mode.defaultsave) && true,
+            hidden: true,
             dataField: "StockQuantity",
             formatter: (value, row, k) => {
 
@@ -759,8 +758,8 @@ const Order = (props) => {
             })
 
 
-            function orderItemFunc({ i, isedit }) {  
-               
+            function orderItemFunc({ i, isedit }) {
+
                 i.Quantity = ((i.Quantity === null) || (i.Quantity === undefined)) ? 0 : i.Quantity
 
                 if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
@@ -812,7 +811,7 @@ const Order = (props) => {
 
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
-               
+
                 const arr = {
                     // id: i.editrowId,
                     Item: i.Item_id,
@@ -892,7 +891,7 @@ const Order = (props) => {
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
-                IsConfirm:false  // PO Order then IsConfirm true
+                IsConfirm: false  // PO Order then IsConfirm true
             }
             const SO_JsonBody = {
                 OrderDate: orderdate,
@@ -901,7 +900,7 @@ const Order = (props) => {
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
-                IsConfirm:true   // SO Order then IsConfirm true
+                IsConfirm: true   // SO Order then IsConfirm true
             }
             const IB_JsonBody = {
                 DemandDate: orderdate,

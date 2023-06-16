@@ -200,7 +200,7 @@ export const GetAddressTypes_For_Dropdown = () => get(url.ADDRESSTYPES)//  get a
 export const GetPartyTypes_For_Dropdown = () => get(url.PARTYTYPES)//  get partytypes
 export const GetPartyTypeByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_PARTYTYPE_BY_DIVISIONTYPES_ID}/${id}`)//  GetDistrictOnState DropDown API
 export const GetCompanyByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_COMPANY_BY_DIVISIONTYPES_ID}/${id}`)//  GetCompanyByDivisionTypeID DropDown API
-
+export const Party_Address_Delete_API = ({ deleteId, btnId }) => del(`${url.PARTY_ADDRESS_DELETE_API}/${deleteId}`, btnId)// delete api
 //RoleAccess
 
 export const RoleAccessAdd_PageDropdown_Api = (id1, id2) => get(`${url.PAGE_DROPDOWN_FOR_ROLE_ACCESS_ADD_PAGE}/${id1}/${id2}`)//get api Pages

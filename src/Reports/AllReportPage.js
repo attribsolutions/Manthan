@@ -26,17 +26,18 @@ const Report = () => {
 
     function downlodeinvoiceReport() {
         var ReportType = report.invoice;
-        dispatch(getpdfReportdata(get_Group_List_Api,ReportType))
+        dispatch(getpdfReportdata(get_Group_List_Api, ReportType))
 
     }
     function downlodePartyWiseinvoice() {
+        
         var ReportType = report.VanLoadingSheetSKU;
-        dispatch(getpdfReportdata(LoadingSheet_API, ReportType, 1))
+        dispatch(getpdfReportdata(get_Group_List_Api, ReportType))
 
 
     }
     function downlodeinvoice() {
-    
+
         var ReportType = report.Receipt;
         dispatch(getpdfReportdata(get_Group_List_Api, ReportType))
 

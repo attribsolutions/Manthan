@@ -83,7 +83,7 @@ const AddUser = (props) => {
   const {
     PostAPIResponse,
     employeelistForDropdown,
-    Roles,
+    Roles=[],
     employePartyWiseRoleState,
     userAccess,
     pageField,
@@ -253,8 +253,6 @@ const AddUser = (props) => {
     }
   }, [PostAPIResponse.Status])
 
-
-
   const EmployeeOptions = employeelistForDropdown.map((Data) => ({
     value: Data.id,
     label: Data.Name
@@ -265,6 +263,8 @@ const AddUser = (props) => {
     label: Data.Name
   }));
 
+
+  
   function handllerEmployeeID(e) {
     dispatch(GetUserPartiesForUserMastePage({ id: e.value }))
   }

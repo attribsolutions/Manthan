@@ -122,28 +122,28 @@ const GSTList = () => {
     <React.Fragment>
       <div className="page-content">
 
-        <div className="mt-n1">
-          {
-            reducers.listLoading ?
-              <Listloader />
-              :
-              (pageField) ?
-                <CommonPurchaseList
-                  action={action}
-                  reducers={reducers}
-                  showBreadcrumb={false}
-                  MasterModal={GSTMaster}
-                  masterPath={url.GST}
-                  newBtnPath={url.GST}
-                  ButtonMsgLable={"GST"}
-                  deleteName={"EffectiveDate"}
-                  pageMode={pageMode}
-                  editBodyfunc={editBodyfunc}
-                  deleteBodyfunc={deleteBodyfunc}
-                />
-                : <> <Listloader/></>
-          }
-        </div>
+        {/* <div className="mt-n1"> */}
+        {
+          reducers.listLoading ?
+            <Listloader />
+            :
+            (pageField) ?
+              <CommonPurchaseList
+                action={action}
+                reducers={reducers}
+                showBreadcrumb={false}
+                MasterModal={GSTMaster}
+                masterPath={url.GST}
+                newBtnPath={url.GST}
+                ButtonMsgLable={"GST"}
+                deleteName={"EffectiveDate"}
+                pageMode={pageMode}
+                editBodyfunc={editBodyfunc}
+                deleteBodyfunc={deleteBodyfunc}
+              />
+              : <> <Listloader /></>
+        }
+        {/* </div> */}
 
       </div>
     </React.Fragment>

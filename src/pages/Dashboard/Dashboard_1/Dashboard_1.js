@@ -210,12 +210,12 @@ const Dashboard_1 = (props) => {
                                         </Col>
                                     </Row>
 
-                                    <div className="text-nowrap">
+                                    {/* <div className="text-nowrap">
                                         <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
-                                            +$20.9k
+                                            +20.9k
                                         </span>
                                         <span className="ms-1 text-muted font-size-13">Since last week</span>
-                                    </div>
+                                    </div> */}
 
                                 </CardBody>
                             </Card>
@@ -251,12 +251,12 @@ const Dashboard_1 = (props) => {
                                         </Col>
                                     </Row>
 
-                                    <div className="text-nowrap">
+                                    {/* <div className="text-nowrap">
                                         <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
-                                            +$20.9k
+                                            +20.9k
                                         </span>
                                         <span className="ms-1 text-muted font-size-13">Since last week</span>
-                                    </div>
+                                    </div> */}
 
                                 </CardBody>
                             </Card>
@@ -292,12 +292,12 @@ const Dashboard_1 = (props) => {
                                         </Col>
                                     </Row>
 
-                                    <div className="text-nowrap">
+                                    {/* <div className="text-nowrap">
                                         <span className={"badge badge-soft-" + "success" + " text-" + "success"}>
-                                            +$20.9k
+                                            +20.9k
                                         </span>
                                         <span className="ms-1 text-muted font-size-13">Since last week</span>
-                                    </div>
+                                    </div> */}
 
                                 </CardBody>
                             </Card>

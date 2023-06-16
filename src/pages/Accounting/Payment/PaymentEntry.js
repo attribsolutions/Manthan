@@ -21,7 +21,7 @@ import {
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { BankListAPI, BankListAPISuccess, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -79,7 +79,9 @@ const PaymentEntry = (props) => {
         const page_Id = pageId.PAYMENT_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(BankListAPI())
+        // if ((values.ReceiptModeName.label === "Cheque") || (values.ReceiptModeName.label === "RTGS")) {
+        //     dispatch(BankListAPI())
+        // }
         dispatch(getSupplier())
         dispatch(GetOpeningBalance_Success([]))
     }, []);
@@ -229,6 +231,17 @@ const PaymentEntry = (props) => {
         dispatch(GetOpeningBalance(jsonBody));
     }
 
+    function ReceiptModeOnchange(hasSelect, evn) {
+
+        onChangeSelect({ hasSelect, evn, state, setState, })
+        if ((hasSelect.label === "Cheque") || (hasSelect.label === "RTGS")) {
+            dispatch(BankListAPI())
+        }
+        else {
+            dispatch(BankListAPISuccess([]))
+        }
+    }
+
     const saveHandeller = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -270,9 +283,9 @@ const PaymentEntry = (props) => {
                     "DocumentNo": values.DocumentNo,
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
-                    "Customer": values.Customer.value,
+                    "Customer": _cfunc.loginPartyID(),
                     "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
-                    "Party": _cfunc.loginPartyID(),
+                    "Party": values.Customer.value,
                     "ReceiptMode": values.ReceiptModeName.value,
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": _cfunc.loginUserID(),
@@ -385,7 +398,9 @@ const PaymentEntry = (props) => {
                                                 }}
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
-                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                onChange={(hasSelect, evn) => {
+                                                    ReceiptModeOnchange(hasSelect, evn)
+                                                }}
                                             />
                                             {isError.ReceiptModeName.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ReceiptModeName}</small></span>
@@ -396,6 +411,7 @@ const PaymentEntry = (props) => {
                             </Row>
 
                             {(values.ReceiptModeName.label === "Cheque") || (values.ReceiptModeName.label === "RTGS") ?
+
                                 < Row >
                                     <Col sm="6">
                                         <FormGroup className=" row mt-2 " >

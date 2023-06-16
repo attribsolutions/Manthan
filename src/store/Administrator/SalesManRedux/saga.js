@@ -4,7 +4,8 @@ import {
     editSalesManIDSuccess,
     saveSalesManMasterSuccess,
     getSalesManlistSuccess,
-    updateSalesManIDSuccess
+    updateSalesManIDSuccess,
+    SalesManApiErrorAction
 } from "./actions";
 import {
     SalesMan_Delete_API,
@@ -26,15 +27,15 @@ function* save_SalesMan_Master_GenFun({ config = {} }) {
     try {
         const response = yield call(SalesMan_Post_API, config);
         yield put(saveSalesManMasterSuccess(response));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(SalesManApiErrorAction()) }
 }
 
-function* Post_SalesMan_List_GenratorFunction({jsonBody}) {
+function* Post_SalesMan_List_GenratorFunction({ jsonBody }) {
     const filters = (jsonBody === undefined || null ? loginJsonBody() : jsonBody);// required only PartyID and CompanyID
     try {
         const response = yield call(SalesMan_Get_API, filters);
         yield put(getSalesManlistSuccess(response.Data));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(SalesManApiErrorAction()) }
 }
 
 function* Edit_SalesMan_ID_GenratorFunction({ config = {} }) {
@@ -43,21 +44,21 @@ function* Edit_SalesMan_ID_GenratorFunction({ config = {} }) {
         const response = yield call(SalesMan_Edit_API, config);
         response.pageMode = btnmode
         yield put(editSalesManIDSuccess(response));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(SalesManApiErrorAction()) }
 }
 
 function* Update_SalesMan_ID_GenratorFunction({ config = {} }) {
     try {
         const response = yield call(SalesMan_Update_API, config);
         yield put(updateSalesManIDSuccess(response))
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(SalesManApiErrorAction()) }
 }
 
 function* Delete_SalesMan_ID_GenratorFunction({ config = {} }) {
     try {
         const response = yield call(SalesMan_Delete_API, config);
         yield put(deleteSalesManID_Success(response))
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(SalesManApiErrorAction()) }
 }
 
 function* SalesManSaga() {
