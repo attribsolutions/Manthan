@@ -85,6 +85,7 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
                     text: i.FieldLabel,
                     dataField: i.ControlID,
                     sort: true,
+                    
                     align: () => {
                         if (i.Alignment) return i.Alignment;
                     },
