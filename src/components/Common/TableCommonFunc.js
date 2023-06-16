@@ -85,16 +85,15 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
                     text: i.FieldLabel,
                     dataField: i.ControlID,
                     sort: true,
-                    
+
                     align: () => {
                         if (i.Alignment) return i.Alignment;
                     },
 
                     formatter: (cell, row) => {
-                   
                         if (cell === "Invoice Created") {
                             return (
-                                <span class="label label-primary" style={{ color: '#2ab57d' }} >{cell}</span>
+                                <span class="label label-primary" style={{ color: '#2ab57d' }}>{cell}</span>
                             )
                         }
                         if (cell === "Order Confirm") {
@@ -103,7 +102,8 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
                             )
                         }
                         return (
-                            <span> {cell} </span>
+                            <span>{cell.toString()}</span>
+
                         );
                     }
                 })
