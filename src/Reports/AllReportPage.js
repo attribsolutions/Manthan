@@ -30,7 +30,7 @@ const Report = () => {
 
     }
     function downlodePartyWiseinvoice() {
-        debugger
+        
         var ReportType = report.VanLoadingSheetSKU;
         dispatch(getpdfReportdata(get_Group_List_Api, ReportType))
 

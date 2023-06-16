@@ -28,7 +28,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { BankListAPI, BankListAPISuccess, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
@@ -100,7 +100,6 @@ const Receipts = (props) => {
         const page_Id = pageId.RECEIPTS
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(BankListAPI())
     }, []);
 
     // useEffect(() => {
@@ -173,7 +172,6 @@ const Receipts = (props) => {
             let Data = null
             if (hasShowloction) {
                 insidePageMode = location.pageMode;
-                // setPageMode(location.pageMode)
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
@@ -422,7 +420,8 @@ const Receipts = (props) => {
         })
     }
 
-    function ReceiptModeOnchange(event) {
+    function ReceiptModeOnchange(hasSelect, evn,) {
+        onChangeSelect({ hasSelect, evn, state, setState, })
         setState((i) => {
             i.values.BankName = '';
             i.values.DepositorBankName = '';
@@ -432,6 +431,12 @@ const Receipts = (props) => {
             i.hasValid.DocumentNo.valid = true;
             return i
         })
+        if ((hasSelect.label === "Cheque") || (hasSelect.label === "RTGS")) {
+            dispatch(BankListAPI())
+        }
+        else {
+            dispatch(BankListAPISuccess([]))
+        }
     }
 
     function ReceiptDate_Onchange(e, date) {
@@ -674,8 +679,8 @@ const Receipts = (props) => {
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
-                                                    ReceiptModeOnchange(hasSelect)
+                                                    ReceiptModeOnchange(hasSelect, evn)
+                                                    // onChangeSelect({ hasSelect, evn, state, setState, })
                                                 }}
                                             />
 

@@ -77,6 +77,7 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
             columns.push({ text: "Page Field Is Blank..." });
         }
 
+
         PageFieldMaster.forEach((i, k) => {
 
             if (i.ShowInListPage) {
@@ -84,9 +85,27 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
                     text: i.FieldLabel,
                     dataField: i.ControlID,
                     sort: true,
+
                     align: () => {
                         if (i.Alignment) return i.Alignment;
-                    }
+                    },
+
+                    // formatter: (cell, row) => {
+                    //     if (cell === "Invoice Created") {
+                    //         return (
+                    //             <span class="label label-primary" style={{ color: '#2ab57d' }}>{cell}</span>
+                    //         )
+                    //     }
+                    //     if (cell === "Order Confirm") {
+                    //         return (
+                    //             <span class="label label-primary" style={{ color: '#4ba6ef' }} >{cell}</span>
+                    //         )
+                    //     }
+                    //     return (
+                    //         <span>{cell}</span>
+
+                    //     );
+                    // }
                 })
 
                 if (i.DefaultSort === 1) {

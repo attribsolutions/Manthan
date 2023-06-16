@@ -1,20 +1,66 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
+import { useDispatch, useSelector } from 'react-redux';
+import { PartyAddressDeleteID, PartyAddressDeleteIDSuccess } from '../../../../../store/Administrator/PartyRedux/action';
+import { AlertState } from '../../../../../store/actions';
 
-function AddressDetailsTable({addressTable=[],setAddressTable}) {
+function AddressDetailsTable({ addressTable = [], setAddressTable }) {
+
+    const dispatch = useDispatch();
+
+    const {
+        deleteMessage,
+    } = useSelector((state) => ({
+        deleteMessage: state.PartyMasterReducer.PartyAddressDelete,
+    }));
+
+    useEffect(() => {
+        if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
+            dispatch(PartyAddressDeleteIDSuccess({ Status: false }));
+            if (!(deleteMessage.deleteId === 0)) {
+                var fil = addressTable.filter((i) => {
+                    return !(i.id === deleteMessage.deleteId);
+                });
+                setAddressTable(fil);
+            }
+            dispatch(
+                AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: deleteMessage.Message,
+
+                })
+            );
+        } else if (deleteMessage.Status === true) {
+            dispatch(PartyAddressDeleteIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(deleteMessage.Message),
+                })
+            );
+        }
+    }, [deleteMessage]);
 
     const ondeleteHandeler = (ele) => {
 
-        if (!(ele === 0)) {
-            var fil = addressTable.filter((i) => {
-                return !(i.id === ele);
-            });
-            setAddressTable(fil);
+        if (ele.id === undefined) {
+            if (!(ele.RowId === 0)) {
+                var fil = addressTable.filter((i) => {
+                    return !(i.RowId === ele.RowId);
+                });
+                setAddressTable(fil);
+            }
+        }
+        else {
+            dispatch(PartyAddressDeleteID({ deleteId: ele.id, btnId: `btn-delete-${ele.id}` }))
         }
     };
 
     function defaultChangeHandler(key) {
+
         const newtableData = addressTable.map((ele, k) => {
             ele.IsDefault = false;
             if (k === key) {
@@ -24,7 +70,6 @@ function AddressDetailsTable({addressTable=[],setAddressTable}) {
         });
         setAddressTable(newtableData)
     }
-   
 
     function myFunction(row) {
 
@@ -39,7 +84,7 @@ function AddressDetailsTable({addressTable=[],setAddressTable}) {
     }
 
     const tableRows = addressTable.map((info, key) => {
-       
+
         return (
             <tr>
                 <td>{info.Address}</td>
@@ -61,19 +106,21 @@ function AddressDetailsTable({addressTable=[],setAddressTable}) {
                     onClick={(e) => defaultChangeHandler(key)} />
                     {`${info.IsDefault}`}
                 </td>
-                <td>
+
+                 <td>
                     <Button
                         className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"
-                        onClick={(e) => {
-                            ondeleteHandeler(info.id);
-                        }}
+                        disabled={info.IsDefault === false ? false : true}
+                        onClick={(e) =>
+                            ondeleteHandeler(info)
+                        }
                     >
                         <i className="mdi mdi-delete font-size-18"></i>
                     </Button>
-
                 </td>
-            </tr>
+
+            </tr >
         );
     });
 

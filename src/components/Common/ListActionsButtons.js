@@ -146,6 +146,7 @@ export const listPageActionsButtonFunc = (props) => {
 
             const forceEditHide = rowData.forceEditHide;
             const forceDeleteHide = rowData.forceDeleteHide;
+            const forceHideOrderAprovalBtn = rowData.forceHideOrderAprovalBtn;
             const forceMakeBtn = rowData.forceMakeBtn;
             rowData["hasSelect"] = false
 
@@ -363,7 +364,7 @@ export const listPageActionsButtonFunc = (props) => {
                             : null
                     }
                     {
-                        (((oderAprovalBtnFunc) && !forceDeleteHide && !forceDeleteHide)) ?
+                        ((oderAprovalBtnFunc && !forceDeleteHide && !forceDeleteHide && !forceHideOrderAprovalBtn)) ?
                             <Button
                                 type="button"
                                 id={`btn-orderApproval-${rowData.id}`}

@@ -226,6 +226,18 @@ export const loginCompanyGroup = () => {//+++++++++++++++++++++ Session loginPar
   return CompanyGroup;
 };
 
+
+export const loginIsSCMParty = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+  try {
+    const detail = JSON.parse(localStorage.getItem("roleId"));
+    return (detail.IsSCMPartyType === 0) || (detail.IsSCMPartyType === null);
+  } catch (e) {
+    CommonConsole("Common loginUserAdminRole  Error");
+  }
+  return false;
+};
+
+
 export const loginJsonBody = () => ({
   UserID: loginUserID(),
   RoleID: loginRoleID(),
@@ -261,8 +273,8 @@ export function metaTagLabel(userPageAccess = '') {
   return <title>{userPageAccess.PageHeading}| FoodERP-2.0</title>
 
 }
-export function CommonConsole(error) {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
-  console.log("CommonConsole =>:", error);
+export function CommonConsole(msg1, msg2 = '', msg3 = '') {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
+  console.log("CommonConsole =>:", msg1, msg2, msg3);
 }
 
 export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Function +++++++++++++++++++++++++++++++
@@ -285,16 +297,6 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
     try {
       let btn = document.getElementById(btnId);
       btn.disabled = state
-      // if(state){
-      //   btn.innerText='Loging'
-      // }else{
-      //   btn.innerText=""
-
-      // }
-
-      // document.getElementById("overlay").style.display = true
-      //   ? "block"
-      //   : "none";
 
       document.getElementById("preloader").style.display = state
         ? "block"
@@ -315,10 +317,10 @@ export async function CheckAPIResponse({
   error,
 }) {
   if (btnId) {
+
     // await new Promise(r => setTimeout(r, 0));
     btnIsDissablefunc({ btnId, state: false });
   }
-
 
   const { data = "", code } = response;
   const con1 = data.StatusCode === 200;
