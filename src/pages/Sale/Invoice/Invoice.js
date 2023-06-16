@@ -617,7 +617,7 @@ const Invoice = (props) => {
                             Item: index.Item,
                             Unit: index.default_UnitDropvalue.value,
                             BatchCode: ele.BatchCode,
-                            Quantity: ele.Qty,
+                            Quantity: Number(ele.Qty).toFixed(3),
                             BatchDate: ele.BatchDate,
                             BatchID: ele.id,
                             BaseUnitQuantity: Number(ele.BaseUnitQuantity).toFixed(3),
@@ -640,7 +640,7 @@ const Invoice = (props) => {
                             TaxType: 'GST',
                             DiscountType: index.DiscountType,
                             Discount: Number(index.Discount).toFixed(2),
-                            DiscountAmount: Number(calculate.disCountAmt),
+                            DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
                         })
                     }
                 })

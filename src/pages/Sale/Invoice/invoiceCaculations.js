@@ -93,9 +93,9 @@ export function stockDistributeFunc(index1) {
 
         if ((orderqty > stockqty) && !(orderqty === 0)) {
             orderqty = orderqty - stockqty
-            index2.Qty = stockqty.toFixed(2)
+            index2.Qty = stockqty.toFixed(3)
         } else if ((orderqty <= stockqty) && (orderqty > 0)) {
-            index2.Qty = orderqty.toFixed(2)
+            index2.Qty = orderqty.toFixed(3)
             orderqty = 0
         }
         else {
@@ -127,7 +127,7 @@ export function stockDistributeFunc(index1) {
 
     if (orderqty > t2) {
         try {
-            document.getElementById(`OrderQty${index1.id}`).value = t2.toFixed(2)
+            document.getElementById(`OrderQty${index1.id}`).value = t2.toFixed(3)
         } catch (e) { }
     };
     try {
@@ -177,7 +177,7 @@ export function orderQtyUnit_SelectOnchange(event, index1) {
 
     index1.StockDetails.forEach(index2 => {
         index2.Rate = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
-        index2.ActualQuantity = (index2.BaseUnitQuantity / event.BaseUnitQuantity).toFixed(2);
+        index2.ActualQuantity = (index2.BaseUnitQuantity / event.BaseUnitQuantity).toFixed(3);
 
         document.getElementById(`stockItemRate-${index1.id}-${index2.id}`).innerText = index2.Rate;
         document.getElementById(`ActualQuantity-${index1.id}-${index2.id}`).innerText = index2.ActualQuantity;
@@ -225,7 +225,7 @@ export const innerStockCaculation = (index1) => {
     });
 
     index1.tAmount = tAmount.toFixed(2)
-    index1.Quantity = QuantityTatal.toFixed(2);
+    index1.Quantity = QuantityTatal.toFixed(3);
 
     try {
         document.getElementById(`OrderQty-${index1.id}`).value = index1.Quantity
