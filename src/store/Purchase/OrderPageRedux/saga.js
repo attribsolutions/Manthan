@@ -161,10 +161,10 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceMakeBtn = true;
       i.forceDeleteHide = false;
       i.forceSelectDissabled = false;
-      i.forceHideOrderAprovalBtn = false;
-
+      i.forceHideOrderAprovalBtn = true;
       i.Status = "Open";
       i.Inward = "Open";
+
 
       if (i.Inward > 0) {
         i.Inward = "Close"
@@ -172,6 +172,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.forceEditHide = true
       }
 
+      //+++++++++++++++++++++++++  Status colonm show Status    ++++++++++++++++++++++++++++++++++++++
       if (i.SAPResponse) {
         i.Status = "Order send To SAP"
       }
@@ -183,19 +184,25 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.forceMakeBtn = false
       }
 
+      //**********************************order Aproval button Show Condition ********************************************************** */
+      if (!i.SAPResponse && i.CustomerSAPCode) {//order Aproval button Show Condition 
+        i.forceHideOrderAprovalBtn = false;
+      }
 
+      //++++++++++++++++++++++++++++++++++++++ make invoice Button dessiable/vissbble ++++++++++++++++++++++++++++++++++++++
       if (i.InvoiceCreated === true) {
         i.forceMakeBtn = true
       }
 
-      if (i.IsConfirm === true) {// is confirm is true the show force dlete and edit true po ans so mode 
+      //**********************************order Aproval button Show Condition ********************************************************** */
+            if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
         i.forceSelectDissabled = true;//select row check box dessible 
       }
 
-
-      if (i.SAPResponse) {// for sap_code order page 
+      //**********sap_code order page********************************************************************************************
+           if (i.SAPResponse) {  //If sapcode true the edit and delete btn  dissbale
 
         var numb = i.SAPResponse.match(/\d/g);
         i.SAPResponse = numb.join("");
