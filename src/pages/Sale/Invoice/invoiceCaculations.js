@@ -1,7 +1,7 @@
 import { groupBy } from "../../../components/Common/CommonFunction"
 
 export const discountCalculate = (row, index1) => {
-
+debugger
     let rate = 0
     let qty = 0
     let gstPercentage = 0
@@ -16,7 +16,7 @@ export const discountCalculate = (row, index1) => {
     let baseAmt = parseFloat(rate) * parseFloat(qty)
     if (!baseAmt) { baseAmt = 0 }
 
-    if (index1.DiscountType === 2) {
+    if (index1.DiscountType === 2) {// DiscountType 2 = discount in percentage
         disCountAmt = (baseAmt * index1.Discount) / 100
     } else {
         disCountAmt = (parseFloat(qty) * index1.Discount)

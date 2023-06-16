@@ -5,6 +5,7 @@ import {
   GET_ROUTES_LIST,
   GET_ROUTES_LIST_SUCCESS,
   ROUTES_API_ERROR_ACTION,
+  SAVE_ROUTES_MASTER,
   SAVE_ROUTES_MASTER_API_SUCCESS,
   UPDATE_ROUTES_ID,
   UPDATE_ROUTES_ID_SUCCESS
@@ -23,7 +24,7 @@ const INIT_STATE = {
 const RoutesReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
-    case SAVE_ROUTES_MASTER_API_SUCCESS:
+    case SAVE_ROUTES_MASTER:
       return {
         ...state,
         saveBtnloading: true,
@@ -86,7 +87,6 @@ const RoutesReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false,
         listLoading: false,
       };
-
 
 
     default:

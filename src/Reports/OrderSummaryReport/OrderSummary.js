@@ -11,13 +11,17 @@ import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
 import * as XLSX from 'xlsx';
-import { SSDD_List_under_Company } from "../../store/actions";
+import { AlertState, SSDD_List_under_Company } from "../../store/actions";
+import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const OrderSummary = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const userAdminRole = _cfunc.loginUserAdminRole();
+
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -68,6 +72,17 @@ const OrderSummary = (props) => {
     }, [])
 
     useEffect(() => {
+        if ((orderSummaryGobtn.Status === true) && (orderSummaryGobtn.StatusCode === 204)) {
+            dispatch(postOrderSummary_API_Success([]))
+            customAlert({
+                Type: 3,
+                Message: orderSummaryGobtn.Message,
+            })
+            return
+        }
+    }, [orderSummaryGobtn])
+
+    useEffect(() => {
         if (Data.length > 0) {
             const worksheet = XLSX.utils.json_to_sheet(Data);
             const workbook = XLSX.utils.book_new();
@@ -94,7 +109,6 @@ const OrderSummary = (props) => {
             a.hasValid.PartyName.valid = true
             return a
         })
-        // setParty(e.value)
     }
 
 
@@ -105,7 +119,7 @@ const OrderSummary = (props) => {
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "CompanyID": _cfunc.loginCompanyID(),
-            "PartyID": values.PartyName.value
+            "PartyID": userAdminRole ? values.PartyName.value : _cfunc.loginPartyID()
 
         });
         dispatch(postOrderSummary_API({ jsonBody, btnId }));
@@ -163,27 +177,30 @@ const OrderSummary = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3" >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "65px" }}>Party</Label>
-                                <Col sm="7">
-                                    <Select
-                                        name="DistrictName"
-                                        value={values.PartyName}
-                                        isSearchable={true}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={Party_Option}
-                                        onChange={(e) => { onselecthandel(e) }}
+                        {userAdminRole &&
+                            <Col sm={3} className="">
+                                <FormGroup className="mb- row mt-3" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px" }}>Party</Label>
+                                    <Col sm="7">
+                                        <Select
+                                            name="DistrictName"
+                                            value={values.PartyName}
+                                            isSearchable={true}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={Party_Option}
+                                            onChange={(e) => { onselecthandel(e) }}
 
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        }
+
                         <Col sm="1" className="mt-3 ">
                             <Go_Button onClick={goButtonHandler} loading={reducers.listLoading} />
                         </Col>
