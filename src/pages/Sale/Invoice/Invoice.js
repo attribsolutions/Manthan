@@ -43,7 +43,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit_SelectOnchange, showAllStockOnclick, showStockOnclick, stockDistributeFunc, stockQtyOnChange } from "./invoiceCaculations";
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm";
 
 const Invoice = (props) => {
 
@@ -521,18 +521,31 @@ const Invoice = (props) => {
                                     <label className="label">Value&nbsp;</label>
                                 </div>
                                 <div className="child">
-                                    <Input
+                                    <CInput
                                         className="input"
                                         style={{ textAlign: "right" }}
                                         type="text" defaultValue={index1.Discount}
+                                        cpattern={decimalRegx}
                                         onChange={(e) => {
-                                            if (e.target.value === '') {
+                                            let e_val = e.target.value;
+
+                                            if (e_val === '') {
                                                 e.target.value = 0
                                             }
-                                            index1.Discount = e.target.value
+                                            //******************  if discount type=2 == "percentage"  then only 100% iput enter*/
+                                            if ((index1.DiscountType === 2)) {//discount type=2 === "percentage"
+                                                if ((e_val > 100)) {
+                                                    e.target.value = 100
+                                                } else if (e_val < 0) {
+                                                    e.target.value = 0
+                                                }
+                                            }
+                                          
+                                            index1.Discount = e.target.value;
                                             innerStockCaculation(index1)
                                         }}
                                     />
+
                                 </div>
                             </div>
                         </div>
