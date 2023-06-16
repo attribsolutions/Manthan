@@ -523,7 +523,6 @@ export const tableBody = (doc, data) => {
     };
 
     doc.autoTable(table.columns, table.Rows(data), options,);
-
 }
 
 export const pageFooter = (doc, data) => {
