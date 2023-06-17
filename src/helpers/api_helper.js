@@ -31,7 +31,7 @@ axiosApi.interceptors.response.use(
 
 export function get(url, btnId) {
 
-  CommonConsole("get api call");
+  CommonConsole("get api call",url);
   AuthonticationFunction();
   return axiosApi.get(url)
     .then(response => {
@@ -44,7 +44,7 @@ export function get(url, btnId) {
 
 export function post(url, body, btnId) {
 
-  CommonConsole("Post api call");
+  CommonConsole("Post api call",url,body);
   AuthonticationFunction();
 
   return axiosApi.post(url, body, {

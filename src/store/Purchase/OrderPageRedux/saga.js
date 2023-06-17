@@ -195,14 +195,14 @@ function* orderList_GoBtn_GenFunc({ config }) {
       }
 
       //**********************************order Aproval button Show Condition ********************************************************** */
-            if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
+      if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
         i.forceSelectDissabled = true;//select row check box dessible 
       }
 
       //**********sap_code order page********************************************************************************************
-           if (i.SAPResponse) {  //If sapcode true the edit and delete btn  dissbale
+      if (i.SAPResponse) {  //If sapcode true the edit and delete btn  dissbale
 
         var numb = i.SAPResponse.match(/\d/g);
         i.SAPResponse = numb.join("");
@@ -227,7 +227,6 @@ function* orderApproval_GenFunc({ config }) {
   } catch (error) {
     yield put(orderApiErrorAction())
   }
-
 }
 
 function* getOrderApproval_Detail_GenFunc({ config }) {
@@ -236,6 +235,7 @@ function* getOrderApproval_Detail_GenFunc({ config }) {
     response.btnId = config.btnId
     yield put(getOrderApprovalDetailActionSucc(response));
   } catch (error) {
+
     yield put(orderApiErrorAction())
   }
 }
