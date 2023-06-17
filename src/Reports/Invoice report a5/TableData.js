@@ -209,6 +209,8 @@ export const columns =[
     "Quantity",
     "MRP",
     "Rate",
+    "Discount",
+    "Discount Amt ",
     "Taxable Amt",
     "CGST ",
     "CGST Amt",
@@ -267,15 +269,14 @@ export const Rows = (data) => {
             `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
             element.MRPValue,
             element.Rate,
+            element.Discount,
+            element.DiscountAmount,
             element.BasicAmount,
-            `${element.CGSTPercentage}%`,
+            `${Number(element.CGSTPercentage).toFixed(1)}%`,
             element.CGST,
-            `${element.SGSTPercentage}%`,
+            `${Number(element.SGSTPercentage).toFixed(1)}%`,
             element.SGST,
             element.Amount,
-
-            
-           
         ];
 
         function totalLots() {
@@ -292,12 +293,14 @@ export const Rows = (data) => {
             return [
                 `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}${element.UnitName}`,
                 " ",
-                "",
                 `TaxableAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
                 "",
-                `CGSTAmt:${parseFloat(totalCGst).toFixed(2)}`,
+                "",
+                "",
+                "",
+                `CGST:${parseFloat(totalCGst).toFixed(2)}`,
                 "isaddition",
-                `SGSTAmt:${parseFloat(totalSGst).toFixed(2)}`,
+                `SGST:${parseFloat(totalSGst).toFixed(2)}`,
                 "",
                 `Amt:${parseFloat(totalAmount).toFixed(2)}`,
             ];
