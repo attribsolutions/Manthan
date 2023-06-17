@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import {date_ymd_func, loginPartyID } from '../../../components/Common/CommonFunction';
+import { date_ymd_func, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
 import { salesReturnListAPI } from '../../../store/Sales/SalesReturnRedux/action';
@@ -59,8 +59,8 @@ export default function SalesReturnListForDashboard() {
         >
             {toolkitProps => (
                 <React.Fragment>
-                    <div className="table table-responsive">
-                        <BootstrapTable 
+                    <div className="table-container">
+                        <BootstrapTable
                             keyField={"id"}
                             bordered={true}
                             striped={false}

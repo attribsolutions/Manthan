@@ -81,14 +81,9 @@ export default function InvoiceForGRN() {
                 alert("Please Select Order1")
             }
         }
-
     }
 
     const pagesListColumns = [
-        // {
-        //     text: "id",
-        //     dataField: "id",
-        // },
         {
             text: "InvoiceDate",
             dataField: "OrderDate",
@@ -137,7 +132,7 @@ export default function InvoiceForGRN() {
         >
             {toolkitProps => (
                 <React.Fragment>
-                    <div className="table table-responsive">
+                     <div className="table-container">
                         <BootstrapTable
                             keyField={"Invoice"}
                             bordered={true}
