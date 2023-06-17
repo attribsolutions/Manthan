@@ -9,6 +9,7 @@ import {
 } from "reactstrap";
 
 function WeightageTab(props) {
+    
     const { weightageTabMaster, setWeightageTabMaster } = props;
 
     const handleInputChange = (event) => {
