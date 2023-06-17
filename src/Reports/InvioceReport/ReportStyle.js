@@ -368,92 +368,39 @@ export const reportFooter = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.text(`${stringNumber}`, 65, 740,)
 
-    // const optionsTable4 = {
-    //     margin: {
-    //         top: 100, left: 50, right: 30,
-    //     },
-    //     showHead: 'never',
-    //     theme: 'grid',
-    //     headerStyles: {
-    //         cellPadding: 1,
-    //         lineWidth: 0,
-    //         valign: 'top',
-    //         fontStyle: 'bold',
-    //         halign: 'left',
-    //         fillColor: "white",
-    //         textColor: [0, 0, 0],
-    //         fontSize: 8,
-    //         rowHeight: 10,
-    //         lineColor: [0, 0, 0]
-    //     },
-    //     bodyStyles: {
-    //         columnWidth: 'wrap',
-    //         textColor: [30, 30, 30],
-    //         cellPadding: 2,
-    //         fontSize: 7,
-    //         fontStyle: 'bold',
-    //         lineColor: [0, 0, 0]
-    //     },
-    //     columnStyles: {
-    //         0: {
-    //             valign: "top",
-    //         },
-    //         1: {
-    //             halign: 'right',
-    //             valign: "top",
-    //         },
-    //     },
-    //     didParseCell: function (cell, data) {
-    //         console.log("didParseCell", cell)
-    //         console.log(" didParse data", data)
-
-    //         if (cell.row.index === 4) {
-    //             cell.cell.styles.fontSize = 12;
-    //             cell.cell.styles.lineWidth = 1
-    //         }
-    //     },
-    //     startY: 100
-    // };
-    // doc.setFontSize(9)
-    // doc.autoTable(optionsTable4,);
 }
 
 
-export const tableBody = (doc, data) => {
 
+export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
+            if (data1.row.cells[9].raw === "isaddition") {
+                data1.row.cells[1].colSpan = 2
+                data1.row.cells[3].colSpan = 5
+                data1.row.cells[8].colSpan = 2
+                data1.row.cells[10].colSpan = 2
 
-            if (data1.row.cells[6].raw === "isaddition") {
-                data1.row.cells[3].colSpan = 2
-                data1.row.cells[0].colSpan = 2
-                data1.row.cells[5].colSpan = 2
-                data1.row.cells[7].colSpan = 2
+                data1.row.cells[1].styles.fontSize = 7
+                data1.row.cells[3].styles.fontSize = 7
+                data1.row.cells[8].styles.fontSize = 7
+                data1.row.cells[10].styles.fontSize = 7
+                data1.row.cells[12].styles.fontSize = 7
 
-                data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[3].styles.fontSize = 8
-                data1.row.cells[5].styles.fontSize = 8
-                data1.row.cells[7].styles.fontSize = 8
-                data1.row.cells[9].styles.fontSize = 8
-
-
-                data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[1].styles.fontStyle = "bold"
                 data1.row.cells[3].styles.fontStyle = "bold"
-                data1.row.cells[5].styles.fontStyle = "bold"
-                data1.row.cells[7].styles.fontStyle = "bold"
-                data1.row.cells[9].styles.fontStyle = "bold"
-
+                data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[10].styles.fontStyle = "bold"
+                data1.row.cells[12].styles.fontStyle = "bold"
             }
 
-            if (data1.row.cells[0].raw === "HSN Item Name") {
-                data1.row.cells[5].colSpan = 2
-                data1.row.cells[7].colSpan = 2
-
-
+            if (data1.row.cells[1].raw === "HSN Item Name") {
+                data1.row.cells[8].colSpan = 2
+                data1.row.cells[10].colSpan = 2
             }
         },
         margin: {
-            left: 30, right: 25, top: 65
+            left: 30, right: 25, top: 43
         },
         theme: 'grid',
         headerStyles: {
@@ -464,7 +411,7 @@ export const tableBody = (doc, data) => {
             halign: 'center',    //'center' or 'right'
             fillColor: "white",
             textColor: [0, 0, 0], //Black     
-            fontSize: 8,
+            fontSize: 7,
             rowHeight: 10,
             lineColor: [0, 0, 0]
         },
@@ -478,43 +425,55 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 165,
+                columnWidth: 15,
             },
             1: {
-                columnWidth: 50,
-                halign: 'right',
+                valign: "top",
+                columnWidth: 137,
             },
             2: {
-                columnWidth: 37,
+                columnWidth: 50,
                 halign: 'right',
             },
             3: {
-                columnWidth: 40,
+                columnWidth: 28,
                 halign: 'right',
             },
-
             4: {
-                columnWidth: 50,
+                columnWidth: 33,
                 halign: 'right',
             },
             5: {
-                columnWidth: 28,
+                columnWidth: 35,
                 halign: 'right',
             },
             6: {
-                columnWidth: 40,
+                columnWidth: 35,
                 halign: 'right',
             },
+
             7: {
-                columnWidth: 28,
+                columnWidth: 45,
                 halign: 'right',
             },
             8: {
-                columnWidth: 40,
+                columnWidth: 24,
                 halign: 'right',
             },
             9: {
-                fontStyle: 'bold',
+                columnWidth: 34,
+                halign: 'right',
+            },
+            10: {
+                columnWidth: 24,
+                halign: 'right',
+            },
+            11: {
+                columnWidth: 34,
+                halign: 'right',
+            },
+            12: {
+                columnWidth: 46,
                 halign: 'right',
             },
         },
