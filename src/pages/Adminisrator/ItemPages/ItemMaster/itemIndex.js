@@ -305,8 +305,7 @@ const ItemsMaster = (props) => {
                 };
 
                 setBaseUnitTableData(UnitDetails)
-                // ====================== Unit Conversion tab  end ======================
-
+              
                 // ====================== Weightage tab =================================
               
                 setWeightageTabMaster({
@@ -675,7 +674,7 @@ const ItemsMaster = (props) => {
                     })
                     return btnIsDissablefunc({ btnId, state: false });
                 }
-                debugger
+                
                 const jsonBody = JSON.stringify({
                     Name: formValue.Name,
                     ShortName: formValue.ShortName,
