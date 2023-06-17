@@ -364,7 +364,7 @@ export const DetailsOfTransportRow = (data) => {
 let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
     const PONumber =result.toString()
     var DetailsOfTransportArray = [
-        [data.ReportType===invoice?` PO Number:${PONumber}`:`Driver Name :${data.DriverName}`],
+        [data.ReportType===invoice?` PO Number:${PONumber}`:data.DriverName ===null?"Driver Name:": `Driver Name :${data.DriverName}`],
         [`vehical No :${data.VehicleNo === null ?"":data.VehicleNo}`],
         [`E-way Bill :`],
         [`IRN NO :${data.FullInvoiceNumber}`]
