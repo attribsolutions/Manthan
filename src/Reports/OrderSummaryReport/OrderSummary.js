@@ -11,10 +11,8 @@ import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
 import * as XLSX from 'xlsx';
-import { AlertState, SSDD_List_under_Company } from "../../store/actions";
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+import {  SSDD_List_under_Company } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { groupByColumnsWithSumFunc } from "./demoGrouplife";
 const OrderSummary = (props) => {
 
     const dispatch = useDispatch();
@@ -94,7 +92,7 @@ const OrderSummary = (props) => {
             }
 
             const groupData = groupByColumnsWithSumFunc(Data, [...arr, ...['Group', 'SubGroup', 'MaterialName']]);
-            _cfunc.CommonConsole(JSON.stringify(groupData))
+            _cfunc.CommonConsole(JSON.stringify("groupData",Data))
             const worksheet = XLSX.utils.json_to_sheet(groupData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
@@ -102,6 +100,40 @@ const OrderSummary = (props) => {
             dispatch(postOrderSummary_API_Success([]));
         }
     }, [Data]);
+
+    const groupByColumnsWithSumFunc = (jsonData, columnNames) => {
+        const columnSumsByGroup = jsonData.reduce((result, item) => {
+            const groupKey = columnNames.map(columnName => item[columnName]).join('|');
+            if (!result[groupKey]) {
+                result[groupKey] = {
+                    sums: {},
+                    data: []
+                };
+    
+                columnNames.forEach((key) => {
+                    result[groupKey].sums[key] = item[key];
+                })
+            }
+    
+            const group = result[groupKey];
+            group.data.push(item);
+    
+            Object.entries(item).forEach(([key, value]) => {
+                if (typeof value === 'number') {
+                    group.sums[key] = (group.sums[key] || 0) + value;
+                }
+            });
+    
+            return result;
+        }, {});
+        let arr = []
+        Object.keys(columnSumsByGroup).forEach(i => {
+            delete columnSumsByGroup[i].sums.Orderid
+            arr.push(columnSumsByGroup[i].sums)
+        })
+        
+        return arr
+    };
 
     const Party_Option = SSDD_List.map(i => ({
         value: i.id,
