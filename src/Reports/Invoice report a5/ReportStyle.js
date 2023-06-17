@@ -45,46 +45,6 @@ export const reportHeder1 = (doc, data) => {
 
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
 
-    // var options3 = {
-    //     margin: {
-    //         top: 45, left: 35, right: 35, //bottom:100 
-    //     },
-    //     showHead: 'always',
-    //     theme: 'plain',
-    //     styles: {
-    //         overflow: 'linebreak',
-    //         fontSize: 8,
-    //         height: 0,
-    //     },
-    //     bodyStyles: {
-    //         columnWidth: 'wrap',
-    //         textColor: [30, 30, 30],
-    //         cellPadding: 2,
-    //         fontSize: 8,
-    //         fontStyle: 'bold',
-    //         lineColor: [0, 0, 0]
-    //     },
-    //     columnStyles: {
-    //         0: {
-    //             valign: "top",
-    //             columnWidth: 185,
-    //             halign: 'lfet',
-    //         },
-    //         1: {
-    //             columnWidth: 188,
-    //             halign: 'left'
-    //         },
-    //         2: {
-    //             columnWidth: 162,
-    //             halign: 'left',
-    //         },
-
-    //     },
-    //     tableLineColor: "black",
-
-    //     startY: 55,
-
-    // };
 
     var BilledByStyle = {
         margin: {
@@ -366,28 +326,28 @@ export const reportFooter = (doc, data) => {
 export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
-            if (data1.row.cells[8].raw === "isaddition") {
-                data1.row.cells[2].colSpan = 5
-                data1.row.cells[0].colSpan = 2
-                data1.row.cells[7].colSpan = 2
-                data1.row.cells[9].colSpan = 2
+            if (data1.row.cells[9].raw === "isaddition") {
+                data1.row.cells[1].colSpan = 2
+                data1.row.cells[3].colSpan = 5
+                data1.row.cells[8].colSpan = 2
+                data1.row.cells[10].colSpan = 2
 
-                data1.row.cells[0].styles.fontSize = 7
-                data1.row.cells[2].styles.fontSize = 7
-                data1.row.cells[7].styles.fontSize = 7
-                data1.row.cells[9].styles.fontSize = 7
-                data1.row.cells[11].styles.fontSize = 7
+                data1.row.cells[1].styles.fontSize = 7
+                data1.row.cells[3].styles.fontSize = 7
+                data1.row.cells[8].styles.fontSize = 7
+                data1.row.cells[10].styles.fontSize = 7
+                data1.row.cells[12].styles.fontSize = 7
 
-                data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[2].styles.fontStyle = "bold"
-                data1.row.cells[7].styles.fontStyle = "bold"
-                data1.row.cells[9].styles.fontStyle = "bold"
-                data1.row.cells[11].styles.fontStyle = "bold"
+                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+                data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[10].styles.fontStyle = "bold"
+                data1.row.cells[12].styles.fontStyle = "bold"
             }
 
-            if (data1.row.cells[0].raw === "HSN Item Name") {
-                data1.row.cells[7].colSpan = 2
-                data1.row.cells[9].colSpan = 2
+            if (data1.row.cells[1].raw === "HSN Item Name") {
+                data1.row.cells[8].colSpan = 2
+                data1.row.cells[10].colSpan = 2
             }
         },
         margin: {
@@ -416,50 +376,54 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 152,
+                columnWidth: 15,
             },
             1: {
+                valign: "top",
+                columnWidth: 137,
+            },
+            2: {
                 columnWidth: 50,
                 halign: 'right',
             },
-            2: {
+            3: {
                 columnWidth: 28,
                 halign: 'right',
             },
-            3: {
-                columnWidth: 33,
-                halign: 'right',
-            },
             4: {
-                columnWidth: 35,
+                columnWidth: 33,
                 halign: 'right',
             },
             5: {
                 columnWidth: 35,
                 halign: 'right',
             },
-
             6: {
+                columnWidth: 35,
+                halign: 'right',
+            },
+
+            7: {
                 columnWidth: 45,
                 halign: 'right',
             },
-            7: {
-                columnWidth: 24,
-                halign: 'right',
-            },
             8: {
-                columnWidth: 34,
+                columnWidth: 24,
                 halign: 'right',
             },
             9: {
-                columnWidth: 24,
-                halign: 'right',
-            },
-            10: {
                 columnWidth: 34,
                 halign: 'right',
             },
+            10: {
+                columnWidth: 24,
+                halign: 'right',
+            },
             11: {
+                columnWidth: 34,
+                halign: 'right',
+            },
+            12: {
                 columnWidth: 46,
                 halign: 'right',
             },

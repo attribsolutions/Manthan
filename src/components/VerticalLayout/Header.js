@@ -86,7 +86,7 @@ const Header = props => {
                   <img src={logoSvg} alt="" height="35" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="35" /> <span className="logo-txt" style={{color:'white'}}>FoodERP</span>
+                  <img src={logoSvg} alt="" height="35" /> <span className="logo-txt" style={{color:'white'}}>FoodERP 2.0</span>
                 </span>
               </Link>
 
