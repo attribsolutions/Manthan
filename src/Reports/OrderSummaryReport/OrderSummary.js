@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Card, CardBody, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, onChangeSelect } from "../../components/Common/validationFunction";
 import { Go_Button } from "../../components/Common/CommonButton";
@@ -14,7 +14,7 @@ import * as XLSX from 'xlsx';
 import { AlertState, SSDD_List_under_Company } from "../../store/actions";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-
+import { groupByColumnsWithSumFunc } from "./demoGrouplife";
 const OrderSummary = (props) => {
 
     const dispatch = useDispatch();
@@ -31,7 +31,8 @@ const OrderSummary = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [Party, setParty] = useState('');
+    const [groupByDate, setGroupByDate] = useState(false);
+    const [groupByParty, setGroupByParty] = useState(false);
 
 
     const reducers = useSelector(
@@ -84,7 +85,17 @@ const OrderSummary = (props) => {
 
     useEffect(() => {
         if (Data.length > 0) {
-            const worksheet = XLSX.utils.json_to_sheet(Data);
+            var arr = []
+            if (groupByDate) {
+                arr.push('OrderDate')
+            }
+            if (groupByParty) {
+                arr.push('CustomerName')
+            }
+
+            const groupData = groupByColumnsWithSumFunc(Data, [...arr, ...['Group', 'SubGroup', 'MaterialName']]);
+            _cfunc.CommonConsole(JSON.stringify(groupData))
+            const worksheet = XLSX.utils.json_to_sheet(groupData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
             XLSX.writeFile(workbook, "Order Summary Report.XLSX");
@@ -113,7 +124,7 @@ const OrderSummary = (props) => {
 
 
     function goButtonHandler() {
-        debugger
+
         const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
@@ -206,8 +217,37 @@ const OrderSummary = (props) => {
                         </Col>
                     </div>
                 </div>
+
+                <Card className="mt-1">
+                    <CardBody className="c_card_body">
+                        <Row>
+                            <Col sm={4} >
+                                <FormGroup className="mb- row mt-3 mb-2" >
+                                    <Label className="col-8 p-2" >By Date Group</Label>
+                                    <Col sm="4">
+                                        <Input type="checkbox"
+                                            checked={groupByDate}
+                                            onChange={(e) => setGroupByDate(e.target.checked)} />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+
+                            <Col sm={4} >
+                                <FormGroup className="mb- row mt-3 mb-2" >
+                                    <Label className="col-8 p-2" >By Party Name</Label>
+                                    <Col sm="4">
+                                        <Input type="checkbox"
+                                            checked={groupByParty}
+                                            onChange={(e) => setGroupByParty(e.target.checked)}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                    </CardBody>
+                </Card>
             </div>
-        </React.Fragment>
+        </React.Fragment >
     )
 }
 
