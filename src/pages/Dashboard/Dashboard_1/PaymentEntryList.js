@@ -4,14 +4,13 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { ReceiptListAPI } from '../../../store/Accounting/Receipt/action';
 import { currentDate_ymd, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import * as url from "../../../routes/route_url";
 import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
+import "./table1.scss";
 
 export default function PaymentEntryList() {
 
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const { tableList, } = useSelector((state) => ({
         tableList: state.ReceiptReducer.ReceiptList,
@@ -41,6 +40,7 @@ export default function PaymentEntryList() {
         {
             text: "AmountPaid",
             dataField: "AmountPaid",
+            align: "right"
         },
         {
             text: "DocumentNo",
@@ -50,7 +50,6 @@ export default function PaymentEntryList() {
             text: "ChequeDate",
             dataField: "ChequeDate",
         },
-
     ];
 
     return (
@@ -60,13 +59,12 @@ export default function PaymentEntryList() {
             keyField="Invoice"
             data={tableList}
             columns={pagesListColumns}
-
             search
         >
             {toolkitProps => (
                 <React.Fragment>
-                    <div className="table table-responsive">
-                        <BootstrapTable 
+                    <div className="table-container">
+                        <BootstrapTable
                             keyField={"Invoice"}
                             bordered={true}
                             striped={false}

@@ -59,7 +59,7 @@ export const Rows = (data) => {
     InvoiceItems.forEach((element, key) => {
       
         const tableitemRow = [
-            element.ItemName ,
+            `(${element.HSNCode})${element.ItemName}`,
             `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
             element.MRPValue,
             element.Rate,
