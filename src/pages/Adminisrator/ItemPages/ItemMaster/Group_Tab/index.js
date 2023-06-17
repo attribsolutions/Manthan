@@ -33,10 +33,7 @@ function GroupTab(props) {
 
     useEffect(() => {
         dispatch(getGroupTypeslist());
-        // dispatch(get_Group_By_GroupType_ForDropDown());
-        // dispatch(get_Sub_Group_By_Group_ForDropDown());
     }, [dispatch]);
-
 
     const GroupType_DropdownOptions = GroupType.map((index) => ({
         value: index.id,
@@ -72,7 +69,7 @@ function GroupTab(props) {
     };
 
     const Group_Handler = (event) => {
-        
+
         const found = props.tableData.find(element => {
             return element.Group == event.value
         });
@@ -91,8 +88,6 @@ function GroupTab(props) {
     };
 
     const addRowsHandler = (e) => {
-
-        
         const val = {
             GroupType: groupTypeDropdownSelect === "" ? "" : groupTypeDropdownSelect.value,
             GroupTypeName: groupTypeDropdownSelect.label,
@@ -113,7 +108,7 @@ function GroupTab(props) {
             );
             return;
         }
-         if ((groupDropdownSelect.value === undefined) ){
+        if ((groupDropdownSelect.value === undefined)) {
             dispatch(
                 AlertState({
                     Type: 4,
@@ -155,31 +150,36 @@ function GroupTab(props) {
                                     <FormGroup className="col-sm-4 ">
                                         <Label>Group Type</Label>
                                         <Select
-
-                                            // id={`dropGroupType-${0}`}
                                             value={groupTypeDropdownSelect}
                                             options={GroupType_DropdownOptions}
                                             onChange={GroupType_Handler}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
                                         />
                                     </FormGroup>
 
                                     <FormGroup className=" col col-sm-4 ">
                                         <Label>Group</Label>
                                         <Select
-                                            // id={`dropGroup-${0}`}
                                             value={groupDropdownSelect}
                                             options={Group_DropdownOptions}
                                             onChange={Group_Handler}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
                                         />
                                     </FormGroup>
 
                                     <FormGroup className="mb-3 col col-sm-4 ">
                                         <Label>Sub Group</Label>
                                         <Select
-                                            // id={`dropSubGroup-${0}`}
                                             value={subGroupDropdownSelect}
                                             options={SubGroup_DropdownOptions}
                                             onChange={SubGroup_Handler}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
                                         />
                                     </FormGroup>
 
@@ -189,8 +189,8 @@ function GroupTab(props) {
                                 <Row className="mt-3 ">
                                     <Col >
                                         <Button
-                                             className=" button_add"
-                                             color="btn btn-outline-primary border-2 font-size-12"
+                                            className=" button_add"
+                                            color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"
                                             onClick={addRowsHandler}
                                         >
