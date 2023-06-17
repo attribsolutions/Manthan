@@ -23,30 +23,28 @@ function pageFooter(doc, data, islast, array) {
 }
 
 const InvioceReporta5 = (data) => {
-    //    const data = Data
+    const Data = []
+    Data.push(data)
     var doc = new jsPDF('l', 'pt', 'a5');
     // const array = dataGenrator()
-
-    data.forEach((data, islast, array) => {
-
+    Data.forEach((data, islast, array) => {
         pageHeder(doc, data);
         reportBody(doc, data);
         pageFooter(doc, data, islast, array);
-
         if (!(array.length - 1 === islast)) {
-
             doc.addPage();
-
         }
-
     })
     // doc.deletePage(1)
     doc.setProperties({
         title: "Report"
     });
-    // window.open(doc.output('dataurlnewwindow'));
+
     const options = { filename: "Invoice Report" }
     doc.output('dataurlnewwindow', options);
+
+
+
     return (<></>);
 }
 export default InvioceReporta5;

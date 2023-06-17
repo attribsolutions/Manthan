@@ -182,7 +182,7 @@ export const reportHeder1 = (doc, data) => {
 
     // let initial_y = 0
     const priLength = () => {
-        
+
         let final_y = doc.previousAutoTable.finalY
 
         if (final_y > initial_y) {
@@ -192,15 +192,15 @@ export const reportHeder1 = (doc, data) => {
     }
 
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
-    console.log("first",doc.previousAutoTable.finalY)
+    console.log("first", doc.previousAutoTable.finalY)
     priLength()
 
     doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
-    console.log("Second",doc.previousAutoTable.finalY)
+    console.log("Second", doc.previousAutoTable.finalY)
     priLength()
 
     doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
-    console.log("third",doc.previousAutoTable.finalY)
+    console.log("third", doc.previousAutoTable.finalY)
     priLength()
 
 
@@ -361,54 +361,54 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
     // doc.autoTable(optionsTable4,);
 }
+
+
 export const tableBody = (doc, data) => {
-      
-      
     var options = {
         didParseCell: (data1) => {
-            if (data1.row.cells[4].raw === "isaddition") {
-                data1.row.cells[0].colSpan = 1
-                data1.row.cells[1].colSpan = 4
+            if (data1.row.cells[6].raw === "isaddition") {
+                data1.row.cells[3].colSpan = 2
+                data1.row.cells[0].colSpan = 2
                 data1.row.cells[5].colSpan = 2
                 data1.row.cells[7].colSpan = 2
 
                 data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[1].styles.fontSize = 8
+                data1.row.cells[3].styles.fontSize = 8
                 data1.row.cells[5].styles.fontSize = 8
                 data1.row.cells[7].styles.fontSize = 8
                 data1.row.cells[9].styles.fontSize = 8
 
                 data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
                 data1.row.cells[5].styles.fontStyle = "bold"
                 data1.row.cells[7].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
             }
+
             if (data1.row.cells[0].raw === "HSN Item Name") {
                 data1.row.cells[5].colSpan = 2
                 data1.row.cells[7].colSpan = 2
-
-                
             }
         },
         margin: {
-            left: 30, right: 22, top: 43
+            left: 30, right: 25, top: 45
         },
         theme: 'grid',
         headerStyles: {
-            cellPadding: 4,
+            cellPadding: 2,
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'center',
+            halign: 'center',    //'center' or 'right'
             fillColor: "white",
-            textColor: [0, 0, 0],
-            fontSize: 7,
+            textColor: [0, 0, 0], //Black     
+            fontSize: 8,
             rowHeight: 10,
             lineColor: [0, 0, 0]
         },
         bodyStyles: {
             textColor: [30, 30, 30],
-            cellPadding: 4,
+            cellPadding: 3,
             fontSize: 7,
             columnWidth: 'wrap',
             lineColor: [0, 0, 0],
@@ -419,23 +419,24 @@ export const tableBody = (doc, data) => {
                 columnWidth: 160,
             },
             1: {
-                columnWidth: 30,
+                columnWidth: 50,
                 halign: 'right',
             },
             2: {
-                columnWidth: 45,
+                columnWidth: 37,
                 halign: 'right',
             },
             3: {
                 columnWidth: 40,
                 halign: 'right',
             },
+
             4: {
-                columnWidth: 47,
+                columnWidth: 50,
                 halign: 'right',
             },
             5: {
-                columnWidth: 30,
+                columnWidth: 28,
                 halign: 'right',
             },
             6: {
@@ -443,49 +444,23 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             7: {
-                columnWidth: 30,
+                columnWidth: 28,
                 halign: 'right',
             },
             8: {
                 columnWidth: 40,
-                fontStyle: 'bold',
                 halign: 'right',
             },
             9: {
-                columnWidth: 78,
                 fontStyle: 'bold',
                 halign: 'right',
             },
-
-
         },
         tableLineColor: "black",
-
-        startY: initial_y,// 45,
-
-
-        // startY:60
+        startY: initial_y,
     };
-
 
     doc.autoTable(table.columns, table.Rows(data), options,);
-    const optionsTable4 = {
-        margin: {
-            left: 30, right: 30, bottom: 110
-        },
-        showHead: 'never',
-        theme: '',
-    };
-    doc.autoTable(optionsTable4);
-    doc.autoTable({
-        html: '#table',
-        didParseCell(data) {
-            if (data.cell.row.index === 0) {
-                data.cell.styles.textColor = [255, 255, 255];
-                data.cell.styles.fillColor = '#FF5783';
-            }
-        }
-    })
 }
 
 export const pageFooter = (doc, data, islast = 0, array = []) => {
@@ -517,7 +492,6 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
     if (condition1) {
         for (let j = 1; j <= pageCount; j++) {
             doc.setPage(j)
-
             doc.text('PageAll ' + String(j) + ' of ' + String(pageCount), 500, 390,)
 
         }
