@@ -40,6 +40,7 @@ import {
 } from "./actionType";
 import { concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
@@ -230,12 +231,19 @@ function* orderApproval_GenFunc({ config }) {
 }
 
 function* getOrderApproval_Detail_GenFunc({ config }) {
+  debugger
   try {
+
     const response = yield call(OrderPage_Edit_Get_API, config)
     response.btnId = config.btnId
+    debugger
     yield put(getOrderApprovalDetailActionSucc(response));
+    debugger
   } catch (error) {
-
+    customAlert({
+      Type: 3,
+      Message: JSON.stringify(`Orders Get Api Error/ id:${config.orderId}`),
+    });
     yield put(orderApiErrorAction())
   }
 }
