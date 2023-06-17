@@ -352,12 +352,12 @@ const Order = (props) => {
     const pagesListColumns = [
         {
             dataField: "GroupName",
-            text: "Group Name",
+            text: "Group",
             sort: true,
         },
         {
             dataField: "SubGroupName",
-            text: "SubGroup Name",
+            text: "SubGroup",
             sort: true,
         },
 
