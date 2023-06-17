@@ -27,17 +27,12 @@ export const groupByColumnsWithSumFunc = (jsonData, columnNames) => {
     }, {});
     let arr = []
     Object.keys(columnSumsByGroup).forEach(i => {
+        delete columnSumsByGroup[i].sums.Orderid
         arr.push(columnSumsByGroup[i].sums)
     })
     
     return arr
 };
-
-
-
-
-var data1 = groupByColumnsWithSumFunc(Data, ['Group', 'SubGroup', 'MaterialName'], 'OrderAmount');
-debugger
 
 
 
