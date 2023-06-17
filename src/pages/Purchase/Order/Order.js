@@ -235,17 +235,15 @@ const Order = (props) => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
-            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+
             setTermsAndConTable([])
             const liveMode = true
-            const aprovalSapCallMode = postMsg.IsSAPCustomer > 0
+            const aprovalSapCallMode = (postMsg.IsSAPCustomer > 0)
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
             if ((subPageMode === url.ORDER_2) && liveMode && aprovalSapCallMode) { //        SAP OEDER-APROVUAL CODE
-                let btnId = postMsg.btnId;
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
-                let config = { btnId }
-                config.orderId = postMsg.OrderID;
+                let config = { orderId: postMsg.OrderID }
+                
                 dispatch(_act.getOrderApprovalDetailAction(config));
 
             } else {// ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
@@ -254,6 +252,7 @@ const Order = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
+                dispatch(_act.GoButton_For_Order_AddSuccess([]))
                 if (a) {
                     history.push({
                         pathname: listPath,

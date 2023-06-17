@@ -226,6 +226,18 @@ export const loginCompanyGroup = () => {//+++++++++++++++++++++ Session loginPar
   return CompanyGroup;
 };
 
+
+export const loginIsSCMParty = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+  try {
+    const detail = JSON.parse(localStorage.getItem("roleId"));
+    return (detail.IsSCMPartyType === 0) || (detail.IsSCMPartyType === null);
+  } catch (e) {
+    CommonConsole("Common loginUserAdminRole  Error");
+  }
+  return false;
+};
+
+
 export const loginJsonBody = () => ({
   UserID: loginUserID(),
   RoleID: loginRoleID(),
@@ -261,8 +273,8 @@ export function metaTagLabel(userPageAccess = '') {
   return <title>{userPageAccess.PageHeading}| FoodERP-2.0</title>
 
 }
-export function CommonConsole(msg1,msg2='',msg3='') {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
-  console.log("CommonConsole =>:", msg1,msg2,msg3);
+export function CommonConsole(msg1, msg2 = '', msg3 = '') {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
+  console.log("CommonConsole =>:", msg1, msg2, msg3);
 }
 
 export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Function +++++++++++++++++++++++++++++++
@@ -285,7 +297,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
     try {
       let btn = document.getElementById(btnId);
       btn.disabled = state
-      
+
       document.getElementById("preloader").style.display = state
         ? "block"
         : "none";
@@ -305,11 +317,11 @@ export async function CheckAPIResponse({
   error,
 }) {
   if (btnId) {
-    
+
     // await new Promise(r => setTimeout(r, 0));
     btnIsDissablefunc({ btnId, state: false });
   }
-  
+
   const { data = "", code } = response;
   const con1 = data.StatusCode === 200;
   const con2 = data.StatusCode === 204; //data nao avalable
@@ -323,7 +335,7 @@ export async function CheckAPIResponse({
     const { data = "", response } = error;
     const tokenXp = response.data.code === "token_not_valid";
 
-    
+
 
     // **********************************************************************************
     if (con6) {                             // print post and Put method body
@@ -379,7 +391,7 @@ export async function CheckAPIResponse({
     });
     return Promise.reject(response.data);
   } else if (con5) {
-    
+
     console.log(`${url}***${method} apiCall response:=>`, response.data);
     await customAlert({ Type: 3, Message: JSON.stringify(response.data.Message) });
     return Promise.reject(response.data);
