@@ -240,10 +240,11 @@ function* getOrderApproval_Detail_GenFunc({ config }) {
     yield put(getOrderApprovalDetailActionSucc(response));
     debugger
   } catch (error) {
-    customAlert({
-      Type: 3,
-      Message: JSON.stringify(`Orders Get Api Error/ id:${config.orderId}`),
-    });
+    yield put(getOrderApprovalDetailActionSucc({ Status: false }))
+    yield put(orderApprovalActionSuccess({
+      Status: true,
+      Message: "Order Save Successfully But Can't Send in 'SAP'"
+    }))
     yield put(orderApiErrorAction())
   }
 }
