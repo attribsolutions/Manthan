@@ -113,8 +113,8 @@ const OrderReducer = (state = INIT_STATE, action) => {
     case GET_ORDER_APPROVAL_DETAIL_SUCCESS:
       return {
         ...state,
-        saveBtnloading: false,
         approvalDetail: action.payload,
+        saveBtnloading: false,
       }
 
     case ORDER_APPROVAL_ACTION:

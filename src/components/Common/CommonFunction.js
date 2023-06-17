@@ -330,6 +330,8 @@ export async function CheckAPIResponse({
   const con5 = data.StatusCode === 406; //reject
   const con6 = method === "post" || method === "put" || method === "postForget" //for console body
   const con7 = data.StatusCode === 100;
+  // const con8 = data.StatusCode === 500;  //Internal server Error
+
 
   if (!(error === undefined)) {
     const { data = "", response } = error;
