@@ -47,7 +47,6 @@ export default function SalesReturnListForDashboard() {
             text: "Return Reason",
             dataField: "ReturnReasonName",
         },
-
     ];
 
     return (
