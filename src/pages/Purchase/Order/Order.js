@@ -243,7 +243,7 @@ const Order = (props) => {
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
             if ((subPageMode === url.ORDER_2) && liveMode && aprovalSapCallMode) { //        SAP OEDER-APROVUAL CODE
                 let config = { orderId: postMsg.OrderID }
-                
+
                 dispatch(_act.getOrderApprovalDetailAction(config));
 
             } else {// ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
@@ -261,6 +261,7 @@ const Order = (props) => {
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+            debugger
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             customAlert({
                 Type: 4,
@@ -349,8 +350,18 @@ const Order = (props) => {
 
 
     const pagesListColumns = [
-        {//------------- ItemName column ----------------------------------
+        {
+            dataField: "GroupName",
+            text: "Group",
+            sort: true,
+        },
+        {
+            dataField: "SubGroupName",
+            text: "SubGroup",
+            sort: true,
+        },
 
+        {//------------- ItemName column ----------------------------------
             dataField: "ItemName",
             sort: true,
             sortValue: (cell, row) => row["ItemName"],

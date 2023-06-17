@@ -53,7 +53,7 @@ export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPat
             dispatch(orderApprovalActionSuccess({ Status: false }))
 
             dispatch(GoButton_For_Order_AddSuccess([]))
-            
+
             const a = await customAlert({
                 Type: 1,
                 Message: orderApprovalMsg.Message,
@@ -67,7 +67,7 @@ export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPat
         } else if (orderApprovalMsg.Status === true) {
             dispatch(orderApprovalActionSuccess({ Status: false }))
             customAlert({
-                Type: 2,
+                Type: 3,
                 Message: JSON.stringify(orderApprovalMsg.Message),
             })
         }

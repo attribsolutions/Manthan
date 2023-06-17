@@ -32,6 +32,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         District: "",
         GSTIN: "",
         CityName: "",
+        Distance:"",
         MkUpMkDn: false,
         isActive: true,
 
@@ -331,6 +332,29 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         />
                                         {isError.SAPPartyCode.length > 0 && (
                                             <span className="invalid-feedback">{isError.SAPPartyCode}</span>
+                                        )}
+                                    </FormGroup>
+                                </Col>
+                            }
+
+                            <Col md="1"></Col>
+                            {(subPageMode === url.PARTY) && // Distance   show only (Party Master) mode
+                                <Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom01">{fieldLabel.Distance} </Label>
+                                        <Input
+                                            name="Distance"
+                                            value={values.Distance}
+                                            type="text"
+                                            className={isError.Distance.length > 0 ? "is-invalid form-control" : "form-control"}
+                                            placeholder="Please Enter Distance"
+                                            autoComplete='off'
+                                            onChange={(event) => {
+                                                onChangeText({ event, state, setState })
+                                            }}
+                                        />
+                                        {isError.Distance.length > 0 && (
+                                            <span className="invalid-feedback">{isError.Distance}</span>
                                         )}
                                     </FormGroup>
                                 </Col>

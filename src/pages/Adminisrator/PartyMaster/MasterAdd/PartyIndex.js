@@ -149,6 +149,7 @@ const PartyMaster = (props) => {
                             label: i.PartyName,
                             Creditlimit: i.Creditlimit,
                             Route: i.Route,
+                            Distance:i.Distance,
                             Subparty: i.Subparty
                         })),
                         PAN: hasEditVal.PAN,
@@ -337,10 +338,11 @@ const PartyMaster = (props) => {
             btnIsDissablefunc({ btnId, state: true })
 
             const baseValue = baseTabDetail.values
-
+                  
             const supplierArr = baseValue.Supplier.map((i) => ({
 
                 Party: i.value,
+                Distance:i.value,
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
                 Creditlimit: pageMode === mode.edit ? i.Creditlimit : "",

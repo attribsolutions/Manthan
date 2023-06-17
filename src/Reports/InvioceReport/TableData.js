@@ -1,40 +1,21 @@
 import { invoice } from "../ReportIndex";
-
 export const columns =[
+    "SR",
     "HSN Item Name",
     "Quantity",
     "MRP",
     "Rate",
+    "Discount",
+    "Discount Amt ",
     "Taxable Amt",
     "CGST ",
     "CGST Amt",
     "SGST ",
     "SGST Amt",
-    "Total Amt" ,
-
-];
-
-export const columns1 =[
-    "HSN Item Name",
-    "Quantity",
-    "Rate",
-    "Basic Amt",
-    "CGST %",
-    "CGST Amt",
-    "SGST %",
-    "SGST Amt",
-    "Debit note",
-    "Credit note",
-    "Total Amt" 
+   "Total Amt" ,
 ];
 
 
-
-// export const PageHedercolumns = [
-//     "Billed by",
-//     "Billed to",
-//     ''
-// ]
 export const BilledBy = [
     "Billed by",  
 ]
@@ -55,23 +36,24 @@ export const Rows = (data) => {
     let totalSGst = 0
     let totalAmount = 0
     let totalQuantity = 0
+    let SrNO = 1
 
     InvoiceItems.forEach((element, key) => {
       
         const tableitemRow = [
-            element.ItemName ,
+            SrNO++,
+            `(${element.HSNCode})${element.ItemName}` ,
             `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
             element.MRPValue,
             element.Rate,
+            element.Discount,
+            element.DiscountAmount,
             element.BasicAmount,
-            `${element.CGSTPercentage}%`,
+            `${Number(element.CGSTPercentage).toFixed(1)}%`,
             element.CGST,
-            `${element.SGSTPercentage}%`,
+            `${Number(element.SGSTPercentage).toFixed(1)}%`,
             element.SGST,
             element.Amount,
-
-            
-           
         ];
 
         function totalLots() {
@@ -86,14 +68,17 @@ export const Rows = (data) => {
 
         function totalrow() {
             return [
+                "",
                 `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}${element.UnitName}`,
                 " ",
-                "",
                 `TaxableAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
                 "",
-                `CGSTAmt:${parseFloat(totalCGst).toFixed(2)}`,
+                "",
+                "",
+                "",
+                `CGST:${parseFloat(totalCGst).toFixed(2)}`,
                 "isaddition",
-                `SGSTAmt:${parseFloat(totalSGst).toFixed(2)}`,
+                `SGST:${parseFloat(totalSGst).toFixed(2)}`,
                 "",
                 `Amt:${parseFloat(totalAmount).toFixed(2)}`,
             ];
@@ -160,7 +145,7 @@ export const DetailsOfTransportRow = (data) => {
 let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
     const PONumber =result.toString()
     var DetailsOfTransportArray = [
-        [data.ReportType===invoice?` PO Number:${PONumber}`:`Driver Name :${data.DriverName}`],
+        [data.ReportType===invoice?` PO Number:${PONumber}`:data.DriverName ===null?"Driver Name:": `Driver Name :${data.DriverName}`],
         [`vehical No :${data.VehicleNo === null ?"":data.VehicleNo}`],
         [`E-way Bill :`],
         [`IRN NO :${data.FullInvoiceNumber}`]
@@ -168,6 +153,7 @@ let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
   
     return DetailsOfTransportArray;
 }
+
 
 
 
@@ -182,3 +168,8 @@ let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
 //     ]
 //     return reportArray;
 // }
+
+
+
+
+
