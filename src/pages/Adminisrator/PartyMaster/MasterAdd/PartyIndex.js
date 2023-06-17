@@ -338,7 +338,7 @@ const PartyMaster = (props) => {
             btnIsDissablefunc({ btnId, state: true })
 
             const baseValue = baseTabDetail.values
-                  debugger
+                  
             const supplierArr = baseValue.Supplier.map((i) => ({
 
                 Party: i.value,
