@@ -42,9 +42,6 @@ const InvioceReporta5 = (data) => {
 
     const options = { filename: "Invoice Report" }
     doc.output('dataurlnewwindow', options);
-
-
-
     return (<></>);
 }
 export default InvioceReporta5;

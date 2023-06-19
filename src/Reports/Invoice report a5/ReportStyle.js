@@ -195,7 +195,7 @@ export const reportHeder4 = (doc, data) => {
     doc.setFont(undefined, 'bold')
     // var time = convertTimefunc(i.CreatedOn)
     //   i.GRNDate = (`${date} ${time}`)
-    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 30, 23) //Invoice Id
+    doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 30, 23) //Invoice Id
     doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 35) //Invoice date
 }
 
