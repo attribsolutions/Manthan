@@ -61,18 +61,19 @@ const Invoice = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const [orderItemDetails, setOrderItemDetails] = useState([])
+    const [orderIDs, setOrderIDs] = useState([])
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
-
     const {
         postMsg,
         updateMsg,
         pageField,
         userAccess,
-        GoButton = '',
+        gobutton_Add = { Status: false },
         vendorSupplierCustomer,
         makeIBInvoice,
         goBtnloading,
@@ -83,17 +84,16 @@ const Invoice = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.CommonAPI_Reducer.customer,
-        GoButton: state.InvoiceReducer.gobutton_Add,
+        gobutton_Add: state.InvoiceReducer.gobutton_Add,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         goBtnloading: state.InvoiceReducer.goBtnloading,
     }));
 
-    const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
+
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
     const values = { ...state.values }
@@ -127,54 +127,6 @@ const Invoice = (props) => {
         };
     }, [userAccess])
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
-
-        if ((hasShowloction || hasShowModal || (location.state))) {
-
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
-            else if (location) {
-
-                setPageMode(mode.defaultsave)
-
-                let Customer = location.state.CustomerID
-                let CustomerName = location.state.Customer
-
-                hasEditVal = { Customer, CustomerName }
-
-            }
-
-            if (hasEditVal) {
-
-                const { Customer, CustomerName, } = hasEditVal
-                const { values, hasValid, } = { ...state }
-                hasValid.Customer.valid = true;
-
-                values.Customer = { label: CustomerName, value: Customer };
-
-                //++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
-                const jsonBody = JSON.stringify({
-                    FromDate: hasEditVal.InvoiceDate,
-                    Customer: hasEditVal.Customer,
-                    Party: _cfunc.loginPartyID(),
-                    OrderIDs: ""
-                });
-                dispatch(GoButtonForinvoiceAdd({ jsonBody, }));
-                dispatch(editInvoiceListSuccess({ Status: false }))
-
-            }
-        }
-    }, []);
 
     useEffect(async () => {
 
@@ -239,7 +191,7 @@ const Invoice = (props) => {
 
 
     useEffect(() => {
-        showAllStockOnclick(OrderItemDetails, showAllStockState)
+        showAllStockOnclick(orderItemDetails, showAllStockState)
     }, [showAllStockState]);
 
 
@@ -252,14 +204,28 @@ const Invoice = (props) => {
                 obj.hasValid.Customer.valid = true;
                 return obj
             })
-            goButtonHandler(makeIBInvoice);
+
             dispatch(makeIB_InvoiceActionSuccess({ Status: false }))
         }
     }, [makeIBInvoice]);
 
+    useEffect(() => {
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [OrderItemDetails]);
+        if (gobutton_Add.Status === true && gobutton_Add.StatusCode === 200) {
+            setState((i) => {
+                const obj = { ...i }
+                obj.values.Customer = gobutton_Add.customer;
+                obj.hasValid.Customer.valid = true;
+                return obj
+            })
+            setOrderItemDetails(gobutton_Add.Data.OrderItemDetails)
+            setOrderIDs(gobutton_Add.Data.OrderIDs)
+            dispatch(GoButtonForinvoiceAddSuccess({ Status: false }))
+        }
+    }, [gobutton_Add]);
 
+    
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [orderItemDetails]);
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
         value: index.id,
@@ -349,7 +315,7 @@ const Invoice = (props) => {
 
                 return (
                     <div className="d-flex flex-content-start">
-                        {OrderItemDetails.length > 0 ? <div>
+                        {orderItemDetails.length > 0 ? <div>
                             <samp id="allplus-circle">
                                 <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
                                     style={{
@@ -540,7 +506,7 @@ const Invoice = (props) => {
                                                     e.target.value = 0
                                                 }
                                             }
-                                          
+
                                             index1.Discount = e.target.value;
                                             innerStockCaculation(index1)
                                         }}
@@ -612,7 +578,7 @@ const Invoice = (props) => {
             const invoiceItems = []
             let grand_total = 0;
 
-            OrderItemDetails.forEach((index) => {
+            orderItemDetails.forEach((index) => {
                 if (index.StockInValid) {
                     validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
                     return returnFunc()
@@ -678,13 +644,13 @@ const Invoice = (props) => {
             const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
-                InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
+                InvoicesReferences: orderIDs.map(i => ({ Order: i }))
             });
 
             const forIB_Invoice_json = async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 IBChallanDate: values.InvoiceDate,
                 IBChallanItems: invoiceItems,
-                IBChallansReferences: await OrderIDs.map(i => ({ Demand: i }))
+                IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
             });
 
             const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -736,7 +702,7 @@ const Invoice = (props) => {
                                                 name="InvoiceDate"
                                                 value={values.InvoiceDate}
                                                 id="myInput11"
-                                                disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
+                                                disabled={(orderItemDetails.length > 0 || pageMode === "edit") ? true : false}
                                                 onChange={InvoiceDateOnchange}
                                             />
                                             {isError.InvoiceDate.length > 0 && (
@@ -755,7 +721,7 @@ const Invoice = (props) => {
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
-                                                isDisabled={OrderItemDetails.length > 0 ? true : false}
+                                                isDisabled={orderItemDetails.length > 0 ? true : false}
                                                 id={'customerselect'}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -775,7 +741,7 @@ const Invoice = (props) => {
 
                             <Col sm={1} className="mt-3">
                                 {pageMode === mode.defaultsave ?
-                                    (OrderItemDetails.length === 0) ?
+                                    (orderItemDetails.length === 0) ?
                                         < Go_Button onClick={(e) => goButtonHandler()}
                                             loading={goBtnloading} />
                                         :
@@ -792,7 +758,7 @@ const Invoice = (props) => {
                     <div className="table-responsive mb-4">
                         <ToolkitProvider
                             keyField={"id"}
-                            data={OrderItemDetails}
+                            data={orderItemDetails}
                             columns={pagesListColumns}
 
                             search
@@ -823,7 +789,7 @@ const Invoice = (props) => {
                         </ToolkitProvider>
                     </div>
 
-                    {OrderItemDetails.length > 0 ? <FormGroup>
+                    {orderItemDetails.length > 0 ? <FormGroup>
                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                             <SaveButton
                                 pageMode={pageMode}

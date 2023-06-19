@@ -32,6 +32,8 @@ const INIT_STATE = {
   approvalDetail: { Status: false },
   orderConfirmMsg: { Status: false },
   orderConfirmLoading: false,
+  gotoInvoiceBtnLoading: false,
+
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
@@ -52,15 +54,21 @@ const OrderReducer = (state = INIT_STATE, action) => {
       }
 
     case SAVE_ORDER_FROM_ORDER_PAGE:
+   
+      let { gotoInvoiceMode } = action.config
+      debugger
       return {
         ...state,
-        saveBtnloading: true,
+        saveBtnloading: !gotoInvoiceMode,
+        gotoInvoiceBtnLoading: gotoInvoiceMode,
       }
 
     case SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS:
+
       return {
         ...state,
         saveBtnloading: false,
+        gotoInvoiceBtnLoading: false,
         postMsg: action.payload,
       }
 
@@ -120,6 +128,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
     case ORDER_APPROVAL_ACTION:
       return {
         ...state,
+
         saveBtnloading: true,
       }
     case ORDER_APPROVAL_ACTION_SUCCESS:
@@ -148,6 +157,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
         loading: false,
         saveBtnloading: false,
         orderConfirmLoading: false,
+        gotoInvoiceBtnLoading: false
       }
 
 

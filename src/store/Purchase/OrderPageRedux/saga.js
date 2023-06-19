@@ -77,7 +77,7 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
 
 function* saveOrder_GenFunc({ config }) {
 
-  const { subPageMode, btnId, jsonBody } = config;
+  const { subPageMode, btnId, jsonBody, gotoInvoiceMode } = config;
 
   let newConfig = config;
   // **************************************** for aorde Sap aproval********************************
@@ -92,7 +92,8 @@ function* saveOrder_GenFunc({ config }) {
       response = yield call(IBOrderPage_Save_API, newConfig);
     } else {
       response = yield call(OrderPage_Save_API_ForPO, config);
-      response.btnId = btnId
+      response["btnId"] = btnId
+      response["gotoInvoiceMode"] = gotoInvoiceMode
     }
     yield put(saveOrderActionSuccess(response));
   } catch (error) {

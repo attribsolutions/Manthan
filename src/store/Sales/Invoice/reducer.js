@@ -10,7 +10,7 @@ import {
 } from "./actionType"
 
 const INIT_STATE = {
-    gobutton_Add: [],
+    gobutton_Add: { Status: false },
     saveBtnloading: false,
     goBtnloading: false,
     makeIBInvoice: { Status: false },

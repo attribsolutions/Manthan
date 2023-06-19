@@ -14,7 +14,7 @@ import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { basicAmount, GstAmount, Amount } from "./OrderPageCalulation";
-import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
+import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
@@ -112,10 +112,11 @@ const Order = (props) => {
         updateMsg,
         supplierAddress,
         pageField,
-        PartyList,
+        partyList_redux,
         assingItemData = '',
         approvalDetail,
         orderApprovalMsg,
+        gobutton_Add_invoice,
         goBtnloading,
         saveBtnloading,
     } = useSelector((state) => ({
@@ -130,9 +131,12 @@ const Order = (props) => {
         orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
         approvalDetail: state.OrderReducer.approvalDetail,
         assingItemData: state.PartyItemsReducer.editData,
-        PartyList: state.PartyMasterReducer.partyList,
+        partyList_redux: state.PartyMasterReducer.partyList,
+        gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
+
         goBtnloading: state.OrderReducer.loading,
         saveBtnloading: state.OrderReducer.saveBtnloading,
+        gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
 
     }));;
 
@@ -252,6 +256,21 @@ const Order = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
+                if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
+
+                    const customer = supplierSelect
+                    const jsonBody = JSON.stringify({
+                        OrderIDs: postMsg.OrderID.toString(),
+                        FromDate: orderdate,
+                        Customer: supplierSelect.value,
+                        Party: _cfunc.loginPartyID(),
+                    });
+                    dispatch(_act.GoButtonForinvoiceAdd({
+                        jsonBody, subPageMode: url.INVOICE_1, path: url.INVOICE_1, pageMode: mode.defaultsave, customer,
+                        errorMsg: "Order Save Successfully But Can't Make Invoice"
+                    }));
+                }
+
                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
                 if (a) {
                     history.push({
@@ -321,9 +340,11 @@ const Order = (props) => {
         orderApprovalFunc({ dispatch, approvalDetail })
     }, [approvalDetail]);
 
+
     useEffect(() => {
         orderApprovalMessage({ dispatch, orderApprovalMsg, listPath, history })
     }, [orderApprovalMsg]);
+
 
     useEffect(() => {
         try {
@@ -331,22 +352,31 @@ const Order = (props) => {
         } catch (e) { }
     }, [goBtnloading, supplierSelect, findPartyItemAccess]);
 
+
+    useEffect(() => {
+        if (gobutton_Add_invoice.Status === true && gobutton_Add_invoice.StatusCode === 200) {
+            history.push({
+                pathname: gobutton_Add_invoice.path,
+            })
+        }
+    }, [gobutton_Add_invoice]);
+
+
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
     }))
-
-
 
     const orderTypeOptions = orderType.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
 
-    const Party_DropdownOptions = PartyList.map((data) => ({
+    const Party_DropdownOptions = partyList_redux.map((data) => ({
         value: data.id,
         label: data.Name
     }));
+
 
 
     const pagesListColumns = [
@@ -719,11 +749,8 @@ const Order = (props) => {
         event.preventDefault();
 
         const btnId = event.target.id
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
-
-        function returnFunc() {
-            _cfunc.btnIsDissablefunc({ btnId, state: false })
-        }
+        const gotoInvoiceMode = btnId.substring(0, 14) === "gotoInvoiceBtn";
+        debugger
         try {
             const division = _cfunc.loginPartyID();
             const supplier = supplierSelect.value;
@@ -731,20 +758,6 @@ const Order = (props) => {
             const validMsg = []
             const itemArr = []
             const isVDC_POvalidMsg = []
-
-            // if (pageMode === mode.edit) {
-            //     orderItemTable.filter(f => (f.editrowId)).forEach(i => {
-
-            //     })
-            // }
-            // if (pageMode === mode.defaultsave) {
-            //     orderItemTable.filter(f => (f.Quantity > 0)).forEach(i => {
-            //         if (!(i.Rate > 0)) {
-            //             validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
-            //         }
-            //     })
-            // }
-
 
             await orderItemTable.forEach(i => {
 
@@ -859,7 +872,7 @@ const Order = (props) => {
                     Type: 4,
                     Message: isVDC_POvalidMsg,
                 })
-                return returnFunc();
+                return
             };
             if (validMsg.length > 0) {
                 customAlert({
@@ -867,7 +880,7 @@ const Order = (props) => {
                     Message: validMsg,
                 })
 
-                return returnFunc();
+                return
             }
             if (itemArr.length === 0) {
                 customAlert({
@@ -875,14 +888,14 @@ const Order = (props) => {
                     Message: "Please Enter One Item Quantity",
                 })
 
-                return returnFunc();
+                return
             }
             if (orderTypeSelect.length === 0) {
                 customAlert({
                     Type: 4,
                     Message: "Please Select PO Type",
                 })
-                return returnFunc();
+                return
             }
             if ((termsAndCondition.length === 0) && !(subPageMode === url.ORDER_2)
                 && !(subPageMode === url.ORDER_4) && !(subPageMode === url.IB_ORDER)
@@ -891,7 +904,7 @@ const Order = (props) => {
                     Type: 4,
                     Message: "Please Enter One Terms And Condition",
                 })
-                return returnFunc();
+                return
             }
 
             const po_JsonBody = {
@@ -948,15 +961,15 @@ const Order = (props) => {
                 jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
             }
             // +*********************************
-            console.log(jsonBody)
+
             if (pageMode === mode.edit) {
-                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
+                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
 
             } else {
-                dispatch(_act.saveOrderAction({ jsonBody, subPageMode, btnId }))
+                dispatch(_act.saveOrderAction({ jsonBody, subPageMode, gotoInvoiceMode }))
             }
 
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.CommonConsole("order_save_", e) }
     }
 
 
@@ -1019,7 +1032,7 @@ const Order = (props) => {
                                     <Col sm="6">
                                         <Select
                                             value={supplierSelect}
-                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit"||goBtnloading) ? true : false}
                                             options={supplierOptions}
                                             onChange={supplierOnchange}
                                             styles={{
@@ -1225,12 +1238,24 @@ const Order = (props) => {
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <SaveButton
-                                loading={saveBtnloading}
-                                pageMode={pageMode}
-                                userAcc={userPageAccessState}
-                                onClick={saveHandeller}
-                            />
+                            <Col>
+                                <SaveButton
+                                    loading={saveBtnloading}
+                                    pageMode={pageMode}
+                                    userAcc={userPageAccessState}
+                                    onClick={saveHandeller}
+                                />
+                            </Col>
+                            {
+                                (subPageMode === url.ORDER_4) &&
+                                <Col>
+                                    <GotoInvoiceBtn
+                                        loading={saveBtnloading}
+                                        pageMode={pageMode}
+                                        userAcc={userPageAccessState}
+                                        onClick={saveHandeller}
+                                    />
+                                </Col>}
                         </div>
                             : <div className="row save1"></div>
                     }

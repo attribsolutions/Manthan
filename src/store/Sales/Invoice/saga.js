@@ -33,6 +33,7 @@ import {
 } from "./actionType";
 import *as url from "../../../routes/route_url"
 import { discountCalculate } from "../../../pages/Sale/Invoice/invoiceCaculations";
+import { orderApprovalActionSuccess } from "../../actions";
 
 
 //post api for Invoice Master
@@ -141,7 +142,7 @@ export function invoice_GoButton_dataConversion_Func(response) {
       index1["ItemTotalStock"] = 0
       index1["StockInValid"] = false;
       index1["StockInvalidMsg"] = '';
-      
+
       let orderQty = Number(index1.Quantity);
 
       index1.StockDetails = index1.StockDetails.map(index2 => {
@@ -202,9 +203,12 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
+  const { subPageMode, path, pageMode, customer, errorMsg } = config;
+
   try {
-    const { subPageMode } = config
+
     let response;
+
     if (subPageMode === url.INVOICE_1) {
       response = yield call(Invoice_1_GoButton_API, config); // GO-Botton SO-invoice Add Page API
     }
@@ -212,10 +216,22 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
       response = yield call(IB_Invoice_GoButton_API, config); // GO-Botton IB-invoice Add Page API
     }
 
-    yield put(GoButtonForinvoiceAddSuccess(invoice_GoButton_dataConversion_Func(response.Data)));
+    response["path"] = path
+    response["page_Mode"] = pageMode
+    response["customer"] = customer
+    response.Data = yield invoice_GoButton_dataConversion_Func(response.Data)
+
+    yield put(GoButtonForinvoiceAddSuccess(response));
 
   } catch (error) {
     yield put(InvoiceApiErrorAction())
+
+    if (errorMsg) {//if ErrorMsg True means the SO-Order GOTo-Invoice Button hit After GoBtnAdd Api Hitt and get error
+      yield put(orderApprovalActionSuccess({
+        Status: true,
+        Message: errorMsg
+      }))
+    }
     CommonConsole(error)
   }
 }

@@ -110,6 +110,40 @@ export function Change_Button(props) {
     onClick={onClick}>Change</Button>
 }
 
+
+
+export const GotoInvoiceBtn = ({ onClick, userAcc, loading }) => {
+  const { Name } = userAcc;
+  const btnId = `gotoInvoiceBtn-${Name.replace(/ /g, "")}`;
+  return (
+    <div>
+      {loading ?
+        <button
+          id={btnId}
+          title={`gotoInvoiceBtn ${Name} Loging...`}
+          className="btn btn-info w-md"
+          autoFocus={false}
+        >  Saving.. &nbsp;
+          <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+        </button>
+
+        :
+        <button
+          type="submit"
+          id={btnId}
+          autoFocus={false}
+          title={`Save ${Name}`}
+          className="btn btn-info w-md"
+          onClick={onClick}
+        >  Go to Invoice
+        </button>}
+    </div>
+  )
+
+}
+
+
+
 export function Loader() {
 
   return <div className="dot-pulse"> <span> </span>     &nbsp;
@@ -121,10 +155,6 @@ export function Loader() {
 }
 
 export function Listloader() {
-
-
-
-
   return <div id="api_spinner" >
     <div className="api_spinner_body " >
       <span className="spinner" style={{ left: "-5cm" }}></span>
