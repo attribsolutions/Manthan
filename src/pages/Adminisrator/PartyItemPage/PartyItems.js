@@ -321,7 +321,7 @@ const PartyItems = (props) => {
         if (Find.length === 0) {
             customAlert({
                 Type: 4,
-                Message: "Minimum one Item is Select"
+                Message: "Select Atleast One Item"
             })
             return
         }

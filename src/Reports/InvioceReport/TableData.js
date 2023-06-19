@@ -69,7 +69,7 @@ export const Rows = (data) => {
         function totalrow() {
             return [
                 "",
-                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}${element.UnitName}`,
+                ``,
                 " ",
                 `TaxableAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
                 "",
@@ -148,7 +148,7 @@ let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
         [data.ReportType===invoice?` PO Number:${PONumber}`:data.DriverName ===null?"Driver Name:": `Driver Name :${data.DriverName}`],
         [`vehical No :${data.VehicleNo === null ?"":data.VehicleNo}`],
         [`E-way Bill :`],
-        [`IRN NO :${data.FullInvoiceNumber}`]
+        [`IRN NO :`]
     ]
   
     return DetailsOfTransportArray;

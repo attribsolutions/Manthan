@@ -218,14 +218,14 @@ export const reportHeder3 = (doc, data) => {
         doc.setFontSize(10)
         doc.line(570, 40, 408, 40) //horizontal line 1 billby upper
         doc.setFont(undefined, 'bold')
-        doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
+        doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 30) //Invoice Id
         doc.text(`Invoice Date: ${date}`, 415, 54) //Invoice date
     } else {
         doc.setFont('Tahoma')
         doc.setFontSize(10)
         doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
         doc.setFont(undefined, 'bold')
-        doc.text(`IB Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
+        doc.text(`IB Invoice No:   ${data.FullInvoiceNumber}`, 415, 30) //Invoice Id
         doc.text(`IB Invoice Date: ${date}`, 415, 50) //Invoice date
     }
 
@@ -351,6 +351,7 @@ export const reportFooter = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`Amount :`, 440, 803,)
     const GrandTotal = Number(data.GrandTotal)
+    debugger
     const Total = numberWithCommas((GrandTotal).toFixed(2))
     doc.text(`${Total}`, 560, 803, 'right')
     doc.setFont(undefined, 'Normal')
