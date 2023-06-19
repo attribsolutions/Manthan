@@ -342,6 +342,7 @@ const GeneralMaster = (props) => {
                                                     </Row>
                                                 </FormGroup>
                                             </Row>
+                                            
                                             <FormGroup className="mt-1">
                                                 <Row>
                                                     <Col sm={2}>
