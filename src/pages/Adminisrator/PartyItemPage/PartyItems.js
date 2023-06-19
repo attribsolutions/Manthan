@@ -9,7 +9,7 @@ import {
     FormGroup,
     Label,
     Row,
-    
+
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
@@ -219,13 +219,9 @@ const PartyItems = (props) => {
         label: i.Name,
     }));
 
-
     function onSearch(text) {
         setSearchQuery(text)
     }
-
-
-
 
     useEffect(() => {
         const string = searchQuery//"Mango"
@@ -288,11 +284,6 @@ const PartyItems = (props) => {
         },
     ];
 
-    const pageOptions = {
-        sizePerPage: 15,
-        custom: true,
-    };
-
     const GoButton_Handler = async (e) => {
         let supplier = e.value
         if (!supplier > 0) {
@@ -313,6 +304,11 @@ const PartyItems = (props) => {
         dispatch(getpartyItemList(jsonBody))
     };
 
+
+    function rowSelected() {
+        return tableList.map((index) => { return (index.selectCheck) && index.Item })
+    }
+
     const SaveHandler = async (event) => {
 
         event.preventDefault();
@@ -321,6 +317,14 @@ const PartyItems = (props) => {
             return (index.selectCheck === true)
         })
         const btnId = event.target.id
+
+        if (Find.length === 0) {
+            customAlert({
+                Type: 4,
+                Message: "Minimum one Item is Select"
+            })
+            return
+        }
         try {
             btnIsDissablefunc({ btnId, state: true })
             var PartyData = Find.map((index) => ({
@@ -332,10 +336,6 @@ const PartyItems = (props) => {
             dispatch(SavePartyItems({ jsonBody, btnId }));
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
-
-    function rowSelected() {
-        return tableList.map((index) => { return (index.selectCheck) && index.Item })
-    }
 
     const PartyDropdown = () => {
         if (loginIsSCMCompany() === 1) {
@@ -696,7 +696,7 @@ export default PartyItems
 
 
 //     const checkSelect = (e) => {
-//         
+//
 //         let checked = e.target.checked
 
 //     }
