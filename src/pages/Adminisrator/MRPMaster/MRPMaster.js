@@ -210,18 +210,19 @@ const MRPMaster = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id
+        if (values.EffectiveDate === '') {
+            customAlert({
+                Type: 4,
+                Message: "Please select EffectiveDate",
+            })
+            return
+        }
         try {
             if (formValid(state, setState)) {
 
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-                if (values.EffectiveDate === '') {
-                    customAlert({
-                        Type: 4,
-                        Message: "Please select EffectiveDate",
-                    })
-                    return
-                }
+                
 
                 const jsonBody = JSON.stringify({
                     Division: values.DivisionName.value ? values.DivisionName.value : 0,
