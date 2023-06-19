@@ -230,7 +230,7 @@ const MarginMaster = (props) => {
                 }
 
                 const jsonBody = JSON.stringify({
-                    PriceList: values.PriceListName.value ? values.PriceListName.value : " ",
+                    PriceList: values.PriceListName.value ? values.PriceListName.value : "",
                     Party: values.PartyName.value ? values.PartyName.value : 0,
                     EffectiveDate: values.EffectiveDate
                 });

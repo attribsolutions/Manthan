@@ -127,7 +127,7 @@ const RoleMaster = (props) => {
     };
 
     userAccess.find((index) => {
-      if (index.id === pageId.PARTYTYPE) {
+      if (index.id === pageId.EMPLOYEETYPE) {
         return setEmployeeTypes_AddAccess(true)
       }
     });

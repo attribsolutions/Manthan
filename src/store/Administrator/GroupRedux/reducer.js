@@ -37,7 +37,6 @@ const GroupReducer = (state = INIT_STATE, action) => {
         ...state,
         postMsg: action.payload,
         saveBtnloading: false,
-
       }
 
     // get 
@@ -84,14 +83,12 @@ const GroupReducer = (state = INIT_STATE, action) => {
 
       };
 
-
     case GROUP_API_ERROR_ACTION:
       return {
         ...state,
         saveBtnloading: false,
         listLoading: false,
       };
-
 
     default:
       return state

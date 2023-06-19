@@ -11,7 +11,7 @@ import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
 import * as XLSX from 'xlsx';
-import {  SSDD_List_under_Company } from "../../store/actions";
+import { SSDD_List_under_Company } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 const OrderSummary = (props) => {
 
@@ -92,7 +92,7 @@ const OrderSummary = (props) => {
             }
 
             const groupData = groupByColumnsWithSumFunc(Data, [...arr, ...['Group', 'SubGroup', 'MaterialName']]);
-            _cfunc.CommonConsole(JSON.stringify("groupData",Data))
+            _cfunc.CommonConsole(JSON.stringify("groupData", Data))
             const worksheet = XLSX.utils.json_to_sheet(groupData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
@@ -109,21 +109,21 @@ const OrderSummary = (props) => {
                     sums: {},
                     data: []
                 };
-    
+
                 columnNames.forEach((key) => {
                     result[groupKey].sums[key] = item[key];
                 })
             }
-    
+
             const group = result[groupKey];
             group.data.push(item);
-    
+
             Object.entries(item).forEach(([key, value]) => {
                 if (typeof value === 'number') {
                     group.sums[key] = (group.sums[key] || 0) + value;
                 }
             });
-    
+
             return result;
         }, {});
         let arr = []
@@ -131,7 +131,7 @@ const OrderSummary = (props) => {
             delete columnSumsByGroup[i].sums.Orderid
             arr.push(columnSumsByGroup[i].sums)
         })
-        
+
         return arr
     };
 
@@ -251,11 +251,11 @@ const OrderSummary = (props) => {
                 </div>
 
                 <Card className="mt-1">
-                    <CardBody className="c_card_body">
+                    <CardBody className="c_card_body text-black">
                         <Row>
                             <Col sm={4} >
-                                <FormGroup className="mb- row mt-3 mb-2" >
-                                    <Label className="col-8 p-2" >By Date Group</Label>
+                                <FormGroup className="row">
+                                    <Label className="col-4 p-2" >By Date Group</Label>
                                     <Col sm="4">
                                         <Input type="checkbox"
                                             checked={groupByDate}
@@ -265,9 +265,9 @@ const OrderSummary = (props) => {
                             </Col>
 
                             <Col sm={4} >
-                                <FormGroup className="mb- row mt-3 mb-2" >
-                                    <Label className="col-8 p-2" >By Party Name</Label>
-                                    <Col sm="4">
+                                <FormGroup className="row">
+                                    <Label className="col-4 p-2" >By Party Name</Label>
+                                    <Col sm="4" style={{ marginTop: '9px', }}>
                                         <Input type="checkbox"
                                             checked={groupByParty}
                                             onChange={(e) => setGroupByParty(e.target.checked)}
