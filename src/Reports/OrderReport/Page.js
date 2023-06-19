@@ -22,7 +22,6 @@ function pageFooter(doc, data) {
 }
 
 const ordeRreport = (data) => {
-   
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
