@@ -119,6 +119,7 @@ const Order = (props) => {
         gobutton_Add_invoice,
         goBtnloading,
         saveBtnloading,
+        gotoInvoiceBtnLoading
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -280,7 +281,7 @@ const Order = (props) => {
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
-            debugger
+      
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             customAlert({
                 Type: 4,
@@ -750,7 +751,7 @@ const Order = (props) => {
 
         const btnId = event.target.id
         const gotoInvoiceMode = btnId.substring(0, 14) === "gotoInvoiceBtn";
-        debugger
+   
         try {
             const division = _cfunc.loginPartyID();
             const supplier = supplierSelect.value;
@@ -1244,13 +1245,14 @@ const Order = (props) => {
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
                                     onClick={saveHandeller}
+                                    forceDisabled={gotoInvoiceBtnLoading}
                                 />
                             </Col>
                             {
                                 (subPageMode === url.ORDER_4) &&
                                 <Col>
                                     <GotoInvoiceBtn
-                                        loading={saveBtnloading}
+                                        loading={gotoInvoiceBtnLoading}
                                         pageMode={pageMode}
                                         userAcc={userPageAccessState}
                                         onClick={saveHandeller}

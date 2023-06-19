@@ -21,7 +21,7 @@ export function SaveButton(props) {
   }
   return null
 }
-const SaveBtn = ({ onClick, userAcc, loading }) => {
+const SaveBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
   const { Name } = userAcc;
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
@@ -42,6 +42,7 @@ const SaveBtn = ({ onClick, userAcc, loading }) => {
         <button
           type="submit"
           id={btnId}
+          disabled={forceDisabled}
           autoFocus={false}
           title={`Save ${Name}`}
           className="btn btn-primary w-md"
@@ -120,7 +121,7 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading }) => {
       {loading ?
         <button
           id={btnId}
-          title={`gotoInvoiceBtn ${Name} Loging...`}
+      
           className="btn btn-info w-md"
           autoFocus={false}
         >  Saving.. &nbsp;
@@ -132,7 +133,7 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading }) => {
           type="submit"
           id={btnId}
           autoFocus={false}
-          title={`Save ${Name}`}
+          title={` save & goto Invoice ${Name}`}
           className="btn btn-info w-md"
           onClick={onClick}
         >  Go to Invoice

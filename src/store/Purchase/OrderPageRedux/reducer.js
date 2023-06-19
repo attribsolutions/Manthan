@@ -55,8 +55,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
 
     case SAVE_ORDER_FROM_ORDER_PAGE:
    
-      let { gotoInvoiceMode } = action.config
-      debugger
+      let { gotoInvoiceMode=false } = action.config
       return {
         ...state,
         saveBtnloading: !gotoInvoiceMode,
