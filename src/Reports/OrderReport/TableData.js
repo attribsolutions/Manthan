@@ -32,7 +32,7 @@ export const DetailsOfTransport = [
 ]
 
 export const Rows = (data) => {
-    
+
     const { OrderItem = [] } = data
     let hasHedRow = []
     const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
@@ -40,13 +40,13 @@ export const Rows = (data) => {
     grouped.forEach(i => {
 
         if (i.length > 0) {
-          
+
             let totalBasicAmount = 0
             let totalCGst = 0
             let totalSGst = 0
             let totalAmount = 0
             let totalQuantity = 0
-           
+
             i.forEach(element => {
                 const tableitemRow = [
                     `(${element.HSNCode}) ${element.ItemName}     
@@ -67,7 +67,7 @@ export const Rows = (data) => {
                 totalSGst = Number(totalSGst) + Number(element.SGST)
                 totalAmount = Number(totalAmount) + Number(element.Amount)
                 totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
-            
+
                 hasHedRow.push(tableitemRow);
             })
 
@@ -102,14 +102,14 @@ export const ReportFotterColumns2 = [
 ];
 
 export const ReportRows = (data, doc) => {
-    
+
     const terms = data.OrderTermsAndCondition
     const slicedArray = terms.slice(0, 2);
     var TableArray = [["Terms And Condition"],
     [`${slicedArray[0] === undefined ? "" : slicedArray[0].TermsAndCondition}`,
     ],
     [`${slicedArray[1] === undefined ? "" : slicedArray[1].TermsAndCondition}`,
-    ],    
+    ],
     ]
     return TableArray
 }

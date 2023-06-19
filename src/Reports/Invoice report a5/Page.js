@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { Data, dataGenrator } from "./DemoData";
+import { Data1, dataGenrator } from "./DemoData";
 
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);                           // Page Border
@@ -26,7 +26,6 @@ const InvioceReporta5 = (data) => {
     const Data = []
     Data.push(data)
     var doc = new jsPDF('l', 'pt', 'a5');
-    // const array = dataGenrator()
     Data.forEach((data, islast, array) => {
         pageHeder(doc, data);
         reportBody(doc, data);

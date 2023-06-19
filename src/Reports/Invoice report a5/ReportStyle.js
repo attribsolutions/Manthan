@@ -186,7 +186,6 @@ export const reportHeder3 = (doc, data) => {
     var time = convertOnlyTimefunc(data.CreatedOn)
     doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date
 
-
 }
 export const reportHeder4 = (doc, data) => {
 
@@ -225,11 +224,8 @@ export const reportFooter = (doc, data) => {
         TotalBasicAmount += arg.BasicAmount
 
     });
-
     const TotalGST = totalCGST + totalSGST;
-
     doc.setFontSize(8)
-
     doc.text(`CGST:`, 440, 310,)
     doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
 
@@ -272,56 +268,7 @@ export const reportFooter = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.text(`${stringNumber}`, 65, 305,)
 
-    // const optionsTable4 = {
-    //     margin: {
-    //         top: 100, left: 50, right: 30,
-    //     },
-    //     showHead: 'never',
-    //     theme: 'grid',
-    //     headerStyles: {
-    //         cellPadding: 1,
-    //         lineWidth: 0,
-    //         valign: 'top',
-    //         fontStyle: 'bold',
-    //         halign: 'center',
-    //         fillColor: "white",
-    //         textColor: [0, 0, 0],
-    //         fontSize: 8,
-    //         rowHeight: 10,
-    //         lineColor: [0, 0, 0]
-    //     },
-    //     bodyStyles: {
-    //         columnWidth: 'wrap',
-    //         textColor: [30, 30, 30],
-    //         cellPadding: 2,
-    //         fontSize: 7,
-    //         fontStyle: 'bold',
-    //         lineColor: [0, 0, 0]
-    //     },
-    //     columnStyles: {
-    //         0: {
-    //             valign: "top",
-    //         },
-    //         1: {
-    //             halign: 'right',
-    //             valign: "top",
-    //         },
-    //     },
-    //     didParseCell: function (cell, data) {
-    //         console.log("didParseCell", cell)
-    //         console.log(" didParse data", data)
-
-    //         if (cell.row.index === 4) {
-    //             cell.cell.styles.fontSize = 12;
-    //             cell.cell.styles.lineWidth = 1
-    //         }
-    //     },
-    //     startY: 100
-    // };
-    doc.setFontSize(9)
-    // doc.autoTable(optionsTable4,);
 }
-
 
 export const tableBody = (doc, data) => {
     var options = {
@@ -433,22 +380,16 @@ export const tableBody = (doc, data) => {
     };
 
     doc.autoTable(table.columns, table.Rows(data), options,);
+    const optionsTable4 = {
+        margin: {
+            left: 30, right: 30, bottom: 110
+        },
+    };
+
+    doc.autoTable(optionsTable4);
 }
 
 export const pageFooter = (doc, data, islast = 0, array = []) => {
-
-    let finalY = doc.previousAutoTable.finalY;
-    if (finalY > 110) {
-        pageBorder(doc)
-        reportFooter(doc, data)
-        pageHeder(doc, data)
-        reportHeder3(doc, data)
-    } else {
-        pageBorder(doc)
-        reportFooter(doc, data)
-        pageHeder(doc, data)
-        reportHeder3(doc, data)
-    }
 
     const pageCount = doc.internal.getNumberOfPages()
     console.log(pageCount)
@@ -457,6 +398,9 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
     doc.setFontSize(8)
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i)
+        pageHeder(doc, data)
+        pageBorder(doc)
+        reportHeder3(doc, data)
         doc.text('Page' + String(i) + ' of ' + String(pageCount), 40, 390,)
     }
 
