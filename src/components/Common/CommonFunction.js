@@ -248,6 +248,12 @@ export const loginJsonBody = () => ({
 });
 
 
+export const compareGSTINState = (gstin1, gstin2) => {
+  const stateCode1 = gstin1.substring(0, 2);
+  const stateCode2 = gstin2.substring(0, 2);
+  return stateCode1 === stateCode2;
+}
+
 export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true }) {
   const isnewBtnView = userAcc.PageType === 2 && userAcc.RoleAccess_IsSave;
   const isCountLabel = userAcc.CountLabel;
@@ -269,6 +275,7 @@ export function isEditMode_CssFun(pageMode) {
   }
   return ""
 }
+
 export function metaTagLabel(userPageAccess = '') {
   return <title>{userPageAccess.PageHeading}| FoodERP-2.0</title>
 

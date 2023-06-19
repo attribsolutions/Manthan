@@ -46,7 +46,7 @@ export const selectAllCheck = (selected, nonSelectable, position, headLabel) => 
 
 })
 
-const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeBtnColumn, userAccState }) => {
+const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondLastColumn, makeBtnColumn, userAccState }) => {
 
     const [tableColumns, setTableColumns] = useState([{
         text: "ID",
@@ -54,7 +54,12 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
     }])
 
     const [defaultSorted, setDefaultSorted] = useState('')
-    const [pageOptions, setPageOptions] = useState('')
+    const [pageOptions, setPageOptions] = useState({
+        custom: true,
+        sizePerPage: 15,
+        totalSize: tableList.length
+    })
+
     const { PageFieldMaster = [] } = { ...pageField };
 
     useEffect(() => {
@@ -146,8 +151,9 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
         ])
 
         setPageOptions({
-            sizePerPage: 15,
             custom: true,
+            sizePerPage: 15,
+            totalSize: tableList.length
         })
 
     }, [pageField, userAccState])
