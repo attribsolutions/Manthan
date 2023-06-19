@@ -42,17 +42,6 @@ function WeightageTab(props) {
                                     </div>
 
                                     <div className="mb-3 col col-sm-4">
-                                        <Label>Grammage</Label>
-                                        <Input
-                                            type="text"
-                                            name="Grammage"
-                                            value={weightageTabMaster.Grammage}
-                                            placeholder="Please Enter Grammage"
-                                            onChange={handleInputChange}
-                                        />
-                                    </div>
-
-                                    <div className="mb-3 col col-sm-4">
                                         <Label>Height</Label>
                                         <Input
                                             type="text"
@@ -70,6 +59,17 @@ function WeightageTab(props) {
                                             name="Length"
                                             value={weightageTabMaster.Length}
                                             placeholder="Please Enter Length"
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+
+                                    <div className="mb-3 col col-sm-4">
+                                        <Label>Grammage</Label>
+                                        <Input
+                                            type="text"
+                                            name="Grammage"
+                                            value={weightageTabMaster.Grammage}
+                                            placeholder="Please Enter Grammage"
                                             onChange={handleInputChange}
                                         />
                                     </div>
