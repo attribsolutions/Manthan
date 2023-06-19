@@ -413,9 +413,9 @@ const Invoice = (props) => {
                             <Thead  >
 
                                 <tr style={{ zIndex: -3 }}>
-                                    <th >Batch Code </th>
-                                    <th  >Supplier BatchCode</th>
-                                    <th  >Batch Date</th>
+                                    {/* <th >Batch Code </th> */}
+                                    <th>BatchCode</th>
+                                    {/* <th  >Batch Date</th> */}
                                     <th >
                                         <div>
                                             <samp >Stock Quantity</samp>
@@ -435,21 +435,21 @@ const Invoice = (props) => {
 
                                     return (
                                         < tr key={index1.id} >
-                                            <td>
+                                            {/* <td>
                                                 <div style={{ width: "120px" }}>
                                                     {index2.SystemBatchCode}
                                                 </div>
-                                            </td>
+                                            </td> */}
                                             <td>
                                                 <div style={{ width: "120px" }}>
                                                     {index2.BatchCode}
                                                 </div>
                                             </td>
-                                            <td>
+                                            {/* <td>
                                                 <div style={{ width: "90px" }}>
                                                     {_cfunc.date_dmy_func(index2.BatchDate)}
                                                 </div>
-                                            </td>
+                                            </td> */}
                                             <td>
                                                 <div style={{ width: "120px", textAlign: "right" }}>
                                                     <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
