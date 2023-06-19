@@ -232,14 +232,14 @@ function* orderApproval_GenFunc({ config }) {
 }
 
 function* getOrderApproval_Detail_GenFunc({ config }) {
-  debugger
+
   try {
 
     const response = yield call(OrderPage_Edit_Get_API, config)
     response.btnId = config.btnId
-    debugger
+  
     yield put(getOrderApprovalDetailActionSucc(response));
-    debugger
+   
   } catch (error) {
     yield put(getOrderApprovalDetailActionSucc({ Status: false }))
     yield put(orderApprovalActionSuccess({
