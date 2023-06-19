@@ -155,10 +155,7 @@ let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
 }
 
 
-
-
 // export const ReportHederRows = (data) => {
-   
 //     var reportArray = [
 //         [, ,data.ReportType===invoice?`Purches Order No: 1`:'Driver Name : Sameer'],
 //         [`${data.PartyName}`, `${data.CustomerName}`,data.ReportType===invoice?`Driver Name : Sameer`:`vehical No :MH34566` ,],

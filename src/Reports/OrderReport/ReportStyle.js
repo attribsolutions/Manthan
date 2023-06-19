@@ -451,7 +451,6 @@ export const pageFooter = (doc, data) => {
     doc.setFont('helvetica', 'Normal')
     // doc.setFontSize(8)
     for (var i = 1; i <= pageCount; i++) {
-
         doc.setPage(i)
         pageHeder(doc, data)
         pageBorder(doc)

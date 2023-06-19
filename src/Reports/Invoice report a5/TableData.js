@@ -15,6 +15,9 @@ export const columns =[
     "SGST Amt",
    "Total Amt" ,
 ];
+export const Footercolumn = [
+    "",
+]
 
 
 export const BilledBy = [
@@ -111,7 +114,6 @@ export const Rows = (data) => {
     })
     return returnArr;
 }
-
 
 
 export const BilledByRow = (data) => {

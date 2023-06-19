@@ -20,6 +20,7 @@ export const pageHeder = (doc, data) => {
     doc.line(570, 63, 30, 63)  //horizontal line 1 billby upper for repeat header
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
+    debugger
     if (data.ReportType === invoice) {
         doc.setFontSize(18)
         doc.text('TAX INVOICE', 200, 45,)
@@ -306,7 +307,7 @@ export const reportFooter = (doc, data) => {
     //  Without Signature
 
     let stringNumber = toWords(Number(data.GrandTotal))
-    doc.addImage(upi_qr_code, 'PNG', 359, 747, 75, 65)
+    doc.addImage(upi_qr_code,'PNG', 359, 747, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
     doc.line(435, 745, 30, 745);//horizontal line Footer 2
@@ -401,7 +402,7 @@ export const tableBody = (doc, data) => {
             }
         },
         margin: {
-            left: 30, right: 25, top: 43
+            left: 30, right: 25, top: 63,
         },
         theme: 'grid',
         headerStyles: {
@@ -483,6 +484,13 @@ export const tableBody = (doc, data) => {
     };
 
     doc.autoTable(table.columns, table.Rows(data), options,);
+    const optionsTable4 = {
+        margin: {
+            left: 30, right: 30, bottom: 140
+        },
+    };
+    doc.autoTable(optionsTable4);
+
 }
 
 export const pageFooter = (doc, data) => {
