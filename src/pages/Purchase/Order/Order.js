@@ -281,7 +281,7 @@ const Order = (props) => {
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
-      
+
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             customAlert({
                 Type: 4,
@@ -751,7 +751,7 @@ const Order = (props) => {
 
         const btnId = event.target.id
         const gotoInvoiceMode = btnId.substring(0, 14) === "gotoInvoiceBtn";
-   
+
         try {
             const division = _cfunc.loginPartyID();
             const supplier = supplierSelect.value;
@@ -1033,7 +1033,7 @@ const Order = (props) => {
                                     <Col sm="6">
                                         <Select
                                             value={supplierSelect}
-                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit"||goBtnloading) ? true : false}
+                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
                                             options={supplierOptions}
                                             onChange={supplierOnchange}
                                             styles={{
@@ -1252,6 +1252,7 @@ const Order = (props) => {
                                 (subPageMode === url.ORDER_4) &&
                                 <Col>
                                     <GotoInvoiceBtn
+                                        forceDisabled={gotoInvoiceBtnLoading}
                                         loading={gotoInvoiceBtnLoading}
                                         pageMode={pageMode}
                                         userAcc={userPageAccessState}

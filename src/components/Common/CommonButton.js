@@ -113,7 +113,7 @@ export function Change_Button(props) {
 
 
 
-export const GotoInvoiceBtn = ({ onClick, userAcc, loading }) => {
+export const GotoInvoiceBtn = ({ onClick, userAcc, loading ,forceDisabled}) => {
   const { Name } = userAcc;
   const btnId = `gotoInvoiceBtn-${Name.replace(/ /g, "")}`;
   return (
@@ -132,6 +132,7 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading }) => {
         <button
           type="submit"
           id={btnId}
+          disabled={forceDisabled}
           autoFocus={false}
           title={` save & goto Invoice ${Name}`}
           className="btn btn-info w-md"
