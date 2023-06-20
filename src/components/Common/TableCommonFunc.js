@@ -137,7 +137,6 @@ const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondL
                 if (islastCol) {
                     columns.push(lastColumn())
                 }
-
             }
         })
         if (columns.length > 0) {
