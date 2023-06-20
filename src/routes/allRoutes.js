@@ -201,6 +201,7 @@ const userRoutes = [
   { path: path.RETAILER_LIST, component: PartyList },
   { path: path.RETAILER_MASTER, component: PartyMaster },
 
+  { path: path.PARTY_SELF_EDIT, component: PartyMaster },
 
   { path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
   { path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },
