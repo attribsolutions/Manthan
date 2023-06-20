@@ -181,7 +181,7 @@ export const reportHeder3 = (doc, data) => {
     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
     doc.line(408, 42, 408, 16);//vertical right 1
     doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 25) //Invoice Id
+    doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 25) //Invoice Id
     var date = date_dmy_func(data.InvoiceDate)
     var time = convertOnlyTimefunc(data.CreatedOn)
     doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date

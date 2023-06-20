@@ -23,6 +23,7 @@ function pageFooter(doc, data, islast, array) {
 }
 
 const InvioceReporta5 = (data) => {
+    debugger
     const Data = []
     Data.push(data)
     var doc = new jsPDF('l', 'pt', 'a5');
