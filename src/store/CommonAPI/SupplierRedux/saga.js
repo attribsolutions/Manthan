@@ -71,7 +71,7 @@ function* OrderType_GenFunc() {
 function* getVendorGenFunc() {
 
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
     yield put(GetVenderSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
@@ -79,14 +79,14 @@ function* getVendorGenFunc() {
 function* getSupplierGenFunc() {
 
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": loginPartyID(), "Company": loginCompanyID() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": loginPartyID(), "Company": loginCompanyID() , Route: ""});
     yield put(getSupplierSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 function* getCustomerGenFunc() {
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID() , Route: ""});
     yield put(GetCustomerSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
