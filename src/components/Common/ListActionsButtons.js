@@ -369,7 +369,7 @@ export const listPageActionsButtonFunc = (props) => {
                                 type="button"
                                 id={`btn-orderApproval-${rowData.id}`}
                                 className={makeBtnCss}
-                                title={`Order Approval ${ButtonMsgLable}`}
+                                title={`Order Approval `}
                                 onClick={() => {
                                     const btnId = `btn-orderApproval-${rowData.id}`;
                                     oderAprovalBtnFunc(rowData, mode.orderApproval, btnId)

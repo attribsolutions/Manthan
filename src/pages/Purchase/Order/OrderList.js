@@ -252,7 +252,7 @@ const OrderList = () => {
     }));
 
     function oderAprovalBtnFunc(rowData, ismode, btnId) {
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: false })
         let config = {}
         config.btnId = btnId;
         config.orderId = rowData.id;
@@ -260,7 +260,7 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
         const obj = list[0]
 
         const customer = {
