@@ -92,7 +92,7 @@ function* getCustomerGenFunc() {
 }
 
 function* vendorSupplierCustomer_genFunc({ data }) {
-  
+
   const { subPageMode, RouteID } = data
 
   let response;
@@ -123,16 +123,16 @@ function* vendorSupplierCustomer_genFunc({ data }) {
 
   try {
     if (isVender) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 1 });//vendor mode 1
+      response = yield call(VendorSupplierCustomer, { ...json, Type: 1, RouteID: "" });//vendor mode 1
     }
     else if (isSuppiler) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 2 });//supplier mode 2
+      response = yield call(VendorSupplierCustomer, { ...json, Type: 2, RouteID: "" });//supplier mode 2
     }
     else if (isCustomer) {
       response = yield call(VendorSupplierCustomer, { ...json, Type: 3, Route: RouteID });//Customer mode 3
     }
     else if (isDivisions) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 4 });//divisions mode 4
+      response = yield call(VendorSupplierCustomer, { ...json, Type: 4, RouteID: "" });//divisions mode 4
     }
     else {
       response = { Data: [] }
