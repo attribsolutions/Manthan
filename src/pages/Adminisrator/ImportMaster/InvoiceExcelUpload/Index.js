@@ -124,9 +124,9 @@ const InvoiceExcelUpload = (props) => {
     }, [postMsg])
 
 
-    function goButtonHandler(e) {
-        
-        let partyId = (!userAdminRole) ? _cfunc.loginPartyID() : e.value;
+    function goButtonHandler() {
+        debugger
+        let partyId = (!userAdminRole) ? _cfunc.loginPartyID() : partySelect.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
             CompanyID: _cfunc.loginCompanyID()
@@ -451,7 +451,7 @@ const InvoiceExcelUpload = (props) => {
                                             <details>
                                                 <summary>Total Amount :{readJsonDetail.amount}</summary>
                                             </details>
-                                           
+
                                         </div>
                                     </Card>
                                 }
