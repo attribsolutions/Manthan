@@ -56,6 +56,8 @@ export const PARTY_lIST = "/PartyList"
 export const RETAILER_MASTER = "/RetailerMaster"
 export const RETAILER_LIST = "/RetailerList"
 
+export const PARTY_SELF_EDIT = "/PartySelfEdit"
+
 export const PARTYTYPE = "/PartyType"
 export const PARTYTYPE_lIST = "/PartyTypeList"
 

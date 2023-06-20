@@ -53,6 +53,8 @@ export const PARTY_lIST = 18
 export const RETAILER_MASTER = 195
 export const RETAILER_LIST = 196
 
+export const PARTY_SELF_EDIT = 204
+
 export const PARTYTYPE = 31
 export const PARTYTYPE_lIST = 32
 

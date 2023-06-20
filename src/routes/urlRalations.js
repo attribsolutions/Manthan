@@ -54,6 +54,8 @@ export const DriverList = url.DRIVER
 export const PartyMaster = url.PARTY_lIST
 export const PartyList = url.PARTY
 
+export const PartySelfEdit = url.PARTY_SELF_EDIT
+
 export const PartyType = url.PARTYTYPE_lIST
 export const PartyTypeList = url.PARTYTYPE
 
