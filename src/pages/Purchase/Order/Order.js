@@ -33,6 +33,8 @@ import { editPartyItemID } from "../../../store/Administrator/PartyItemsRedux/ac
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { pageFieldUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
+import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
+import { ORDER_4 } from "../../../routes/route_url";
 
 
 let editVal = {}
@@ -74,6 +76,7 @@ const Order = (props) => {
     const fileds = {
         id: "",
         Supplier: "",
+        Route: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -94,6 +97,7 @@ const Order = (props) => {
     const [orderdate, setorderdate] = useState(currentDate_ymd);
 
     const [supplierSelect, setsupplierSelect] = useState('');
+    const [routeSelect, setRouteSelect] = useState('');
     const [partySelect, setPartySelect] = useState('');
 
     const [orderAmount, setOrderAmount] = useState(0);
@@ -119,7 +123,8 @@ const Order = (props) => {
         gobutton_Add_invoice,
         goBtnloading,
         saveBtnloading,
-        gotoInvoiceBtnLoading
+        gotoInvoiceBtnLoading,
+        RoutesList
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -134,7 +139,7 @@ const Order = (props) => {
         assingItemData: state.PartyItemsReducer.editData,
         partyList_redux: state.PartyMasterReducer.partyList,
         gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
-
+        RoutesList: state.RoutesReducer.RoutesList,
         goBtnloading: state.OrderReducer.loading,
         saveBtnloading: state.OrderReducer.saveBtnloading,
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
@@ -151,12 +156,13 @@ const Order = (props) => {
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.GoButton_For_Order_AddSuccess(null))
         dispatch(_act.commonPageField(page_id))
-        dispatch(_act.GetVenderSupplierCustomer(subPageMode, RoleID))
         dispatch(_act.getTermAndCondition())
         dispatch(_act.getOrderType())
+        dispatch(GetRoutesList());
         dispatch(getPartyListAPI())
         if (!(subPageMode === url.ORDER_4)) {
             dispatch(_act.getSupplierAddress(_cfunc.loginPartyID()))
+            dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         }
     }, []);
 
@@ -238,14 +244,16 @@ const Order = (props) => {
     }, []);
 
     useEffect(async () => {
+        debugger
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
 
             setTermsAndConTable([])
-            const liveMode = true
-            const aprovalSapCallMode = (postMsg.IsSAPCustomer > 0)
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
+            const liveMode = false  // temporary not working code thats why false use line no. 253 to 289
+            const aprovalSapCallMode = (postMsg.IsSAPCustomer > 0)
+
             if ((subPageMode === url.ORDER_2) && liveMode && aprovalSapCallMode) { //        SAP OEDER-APROVUAL CODE
                 let config = { orderId: postMsg.OrderID }
 
@@ -379,6 +387,15 @@ const Order = (props) => {
     }));
 
 
+    const RoutesListOptions = RoutesList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+        IsActive: index.IsActive
+    }));
+
+    const RouteOptions = RoutesListOptions.filter((index) => {
+        return index.IsActive === true
+    });
 
     const pagesListColumns = [
         {
@@ -721,6 +738,12 @@ const Order = (props) => {
         goButtonHandler()
     };
 
+    function RouteOnChange(event) {
+        setsupplierSelect('')
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: event.value }))
+        setRouteSelect(event)
+    }
+
     async function assignItem_onClick(event) {
         event.stopPropagation();
         const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : _cfunc.loginPartyID()
@@ -973,27 +996,63 @@ const Order = (props) => {
         } catch (e) { _cfunc.CommonConsole("order_save_", e) }
     }
 
-
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
 
-                    {RoleID === 2 ?
-                        <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
-                            <div className=" mt-1 mb-2 row ">
-                                <Col sm="6">
+                    <div>
+                        <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
+
+                            {(subPageMode === ORDER_4) && <div className="row" >
+
+                                <Col sm="3" className="">
+                                    <FormGroup className=" row mt-3 " >
+                                        <Label className="col-sm-5 p-1"
+                                            style={{ width: "83px" }}>Order Date</Label>
+                                        <Col sm="7">
+                                            <C_DatePicker
+                                                name="orderdate"
+                                                value={orderdate}
+                                                disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                                onChange={orderdateOnchange}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm="4">
                                     <FormGroup className=" row mt-3 " >
                                         <Label className="col-sm-5 p-2"
-                                            style={{ width: "115px" }}>Party</Label>
-                                        <Col sm="6">
+
+                                            style={{ width: "115px" }}>{fieldLabel.Route}</Label>
+                                        <Col sm="7">
+
                                             <Select
-                                                value={partySelect}
-                                                classNamePrefix="select2-Customer"
-                                                isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                options={Party_DropdownOptions}
-                                                onChange={partyOnchange}
+                                                classNamePrefix="react-select"
+                                                value={routeSelect}
+                                                options={RouteOptions}
+                                                // onChange={(e) => { setRouteSelect(e) }}
+                                                onChange={(e) => { RouteOnChange(e) }}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
+
+                                <Col sm="4" className="">
+                                    <FormGroup className=" row mt-3 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "65px" }}>{fieldLabel.Supplier}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                value={supplierSelect}
+                                                isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
+                                                options={supplierOptions}
+                                                onChange={supplierOnchange}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
@@ -1002,14 +1061,26 @@ const Order = (props) => {
                                     </FormGroup>
                                 </Col>
 
-                            </div>
-                        </div>
-                        : null}
 
 
-                    <div>
-                        <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
-                            <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name,Go_Button*/}
+                                <Col sm="1" className="mt-3 ">
+                                    {pageMode === mode.defaultsave ?
+                                        (orderItemTable.length === 0) ?
+                                            < Go_Button
+                                                loading={goBtnloading}
+                                                id={`go-btn${subPageMode}`}
+                                                onClick={(e) => goButtonHandler()} />
+                                            :
+                                            <Change_Button
+                                                id={`change-btn${subPageMode}`}
+                                                onClick={(e) => dispatch(_act.GoButton_For_Order_AddSuccess([]))} />
+                                        : null
+                                    }
+                                </Col>
+                            </div>}
+
+
+                            {!(subPageMode === ORDER_4) && <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name,Go_Button*/}
                                 <Col sm="6">                                              {/* Order Date*/}
                                     <FormGroup className=" row mt-3 " >
                                         <Label className="col-sm-5 p-2"
@@ -1025,7 +1096,6 @@ const Order = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-
 
                                 <Col sm="6">                                              {/*Supplier Name And Go_Button*/}                                <FormGroup className="mb-1 row mt-3 " >
                                     <Label className="col-sm-1 p-2"
@@ -1058,7 +1128,8 @@ const Order = (props) => {
                                 </FormGroup>
                                 </Col >
 
-                            </div>
+                            </div>}
+
                         </div>
 
                         <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
@@ -1196,9 +1267,8 @@ const Order = (props) => {
                                 : null}
 
                         </div>
+
                     </div>
-
-
 
                     <ToolkitProvider
                         keyField={"Item_id"}
