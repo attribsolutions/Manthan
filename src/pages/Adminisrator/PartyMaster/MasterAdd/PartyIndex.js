@@ -44,8 +44,6 @@ import PrefixTab from "./PrefixTab/PrefixTab";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
 
-
-
 function initialState(history) {
 
     let page_Id = '';
@@ -58,7 +56,7 @@ function initialState(history) {
     }
     else if (sub_Mode === url.PARTY_SELF_EDIT) {
         page_Id = pageId.PARTY_SELF_EDIT;
-        listPath = url.RETAILER_LIST
+        // listPath = url.RETAILER_LIST
     }
     else {
         page_Id = pageId.RETAILER_MASTER;
@@ -110,7 +108,6 @@ const PartyMaster = (props) => {
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-
     useEffect(() => userAccessUseEffect({
         props,
         userAccess,
@@ -149,7 +146,7 @@ const PartyMaster = (props) => {
                     if ((editData.Status === true) && (subPageMode === url.PARTY_SELF_EDIT)) {
                         hasEditVal = editData.Data
                         setPageMode(mode.edit)
-                        setModalCss(true)
+                        setModalCss(false)
                         dispatch(editPartyIDSuccess({ Status: false }));
                     }
 
@@ -291,20 +288,28 @@ const PartyMaster = (props) => {
     }, [postMsg.Status])
 
     useEffect(() => {
-      
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            history.push({
-                pathname: listPath,
-            })
-           
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updatePartyIDSuccess({ Status: false }));
-            dispatch(
+            if (subPageMode === url.PARTY_SELF_EDIT) {
+                dispatch(updatePartyIDSuccess({ Status: false }));
                 customAlert({
-                    Type: 3,
+                    Type: 1,
                     Message: JSON.stringify(updateMsg.Message),
                 })
-            );
+            }
+            else {
+                history.push({
+                    pathname: listPath,
+                })
+            }
+        }
+        else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updatePartyIDSuccess({ Status: false }));
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+
         }
     }, [updateMsg, modalCss]);
 
