@@ -160,9 +160,9 @@ const Order = (props) => {
         dispatch(_act.getOrderType())
         dispatch(GetRoutesList());
         dispatch(getPartyListAPI())
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         if (!(subPageMode === url.ORDER_4)) {
             dispatch(_act.getSupplierAddress(_cfunc.loginPartyID()))
-            dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         }
     }, []);
 
