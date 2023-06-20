@@ -35,7 +35,7 @@ import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components
 import * as url from "../../../routes/route_url";
 
 function* supplierAddressGenFunc({ editId }) {
-  const config = { editId: editId  }
+  const config = { editId: editId }
   try {
     const response = yield call(Party_Master_Edit_API, config);
     let first = [], secd = [], newArr = []
@@ -91,7 +91,9 @@ function* getCustomerGenFunc() {
   } catch (error) { CommonConsole(error) }
 }
 
-function* vendorSupplierCustomer_genFunc({ subPageMode, RoleID }) {
+function* vendorSupplierCustomer_genFunc({ data }) {
+  
+  const { subPageMode, RouteID } = data
 
   let response;
 
@@ -127,7 +129,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode, RoleID }) {
       response = yield call(VendorSupplierCustomer, { ...json, Type: 2 });//supplier mode 2
     }
     else if (isCustomer) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 3 });//Customer mode 3
+      response = yield call(VendorSupplierCustomer, { ...json, Type: 3, Route: RouteID });//Customer mode 3
     }
     else if (isDivisions) {
       response = yield call(VendorSupplierCustomer, { ...json, Type: 4 });//divisions mode 4
