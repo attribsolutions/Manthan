@@ -57,7 +57,7 @@ const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondL
     const [pageOptions, setPageOptions] = useState({
         custom: true,
         sizePerPage: 15,
-        totalSize: tableList.length
+        // totalSize: tableList.length
     })
 
     const { PageFieldMaster = [] } = { ...pageField };
@@ -153,7 +153,7 @@ const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondL
         setPageOptions({
             custom: true,
             sizePerPage: 15,
-            totalSize: tableList.length
+            // totalSize: tableList.length
         })
 
     }, [pageField, userAccState])
