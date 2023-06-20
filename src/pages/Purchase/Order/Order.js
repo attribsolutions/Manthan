@@ -397,6 +397,11 @@ const Order = (props) => {
         return index.IsActive === true
     });
 
+    RouteOptions.unshift({
+        value: "",
+        label: "Select..."
+    });
+
     const pagesListColumns = [
         {
             dataField: "GroupName",
@@ -1033,6 +1038,7 @@ const Order = (props) => {
                                                 classNamePrefix="react-select"
                                                 value={routeSelect}
                                                 options={RouteOptions}
+                                                isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
                                                 // onChange={(e) => { setRouteSelect(e) }}
                                                 onChange={(e) => { RouteOnChange(e) }}
                                                 styles={{
