@@ -7,7 +7,7 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../store/actions";
@@ -17,7 +17,7 @@ import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc } from "./ListActionsButtons";
 import DynamicColumnHook from "./TableCommonFunc";
-import { Listloader } from "./CommonButton";
+import CustomTable from "../../CustomTable2/Custom/index";
 
 
 let sortType = "asc"
@@ -59,8 +59,7 @@ const CommonListPage = (props) => {
     deleteMsg,
     userAccess,
     postMsg,
-    pageField = '',
-    listLoading
+    pageField,
 
   } = props.reducers;
 
@@ -261,7 +260,18 @@ const CommonListPage = (props) => {
   //   // totalSize: tableList.length,
   //   custom: true,
   // };
-  const lastColumn = () => {
+
+  const { btnLoding } = useSelector(
+
+    (state) => ({
+
+      btnLoding: state.PartyMasterReducer.btnLoding,
+    })
+  );
+
+
+  const lastColumn = (btnLoding) => {
+
     return listPageActionsButtonFunc({
       dispatchHook: dispatch,
       ButtonMsgLable: ButtonMsgLable,
@@ -270,57 +280,67 @@ const CommonListPage = (props) => {
       editActionFun: editId,
       deleteActionFun: deleteId,
       editBodyfunc: editBodyfunc,
+      btnLoding: btnLoding
     })
   }
-  const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({ pageField, lastColumn, userAccState })
+  const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({ pageField, lastColumn, userAccState, btnLoding })
 
   if (!(userAccState === '')) {
     return (
       <React.Fragment>
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <div className="page-content">
-          <div >
-            <PaginationProvider pagination={paginationFactory(pageOptions)}>
-              {({ paginationProps, paginationTableProps }) => (
-                <ToolkitProvider
-                  keyField="id"
-                  data={tableList}
-                  columns={tableColumns}
-                  search={defaultSearch(pageField.id)}
-                >
-                  {(toolkitProps, a) => (
-                    <React.Fragment>
-                      <Row>
-                        <Col xl="12">
-                          <div className="table-responsive" >
-                            <BootstrapTable
-                              keyField={"id"}
-                              responsive
-                              bordered={false}
-                              defaultSorted={defaultSorted}
-                              striped={true}
-                              classes={"table  table-bordered table-hover"}
-                              noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
-                              {...toolkitProps.baseProps}
-                              {...paginationTableProps}
-                            />
-                          </div>
-                        </Col>
-
-                        {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
-                        {mySearchProps(toolkitProps.searchProps, pageField.id)}
-                      </Row>
-                      <Row className="align-items-md-center mt-30">
-                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                          <PaginationListStandalone {...paginationProps} />
-                        </Col>
-                      </Row>
-                    </React.Fragment>
-                  )}
-                </ToolkitProvider>
-              )}
-            </PaginationProvider>
+          <div className="table-responsive table " >
+            <CustomTable
+              keyField={"id"}
+              data={tableList}
+              columns={tableColumns}
+              itemsPerPage={15}
+              defaultSorted={defaultSorted}
+              classes={"table table-bordered table-hover"}
+            />
           </div>
+          {/* <PaginationProvider pagination={paginationFactory(pageOptions)}>
+            {({ paginationProps, paginationTableProps }) => (
+              <ToolkitProvider
+                keyField="id"
+                data={tableList}
+                columns={tableColumns}
+                search={defaultSearch(pageField.id)}
+              >
+                {(toolkitProps, a) => (
+                  <React.Fragment>
+                    <Row>
+                      <Col xl="12">
+                        <div className="table-responsive table " >
+                          <BootstrapTable
+                            keyField={"id"}
+                            responsive
+                            bordered={false}
+                            defaultSorted={defaultSorted}
+                            striped={true}
+                            classes={"table table-bordered table-hover"}
+                            noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
+                            {...toolkitProps.baseProps}
+                            {...paginationTableProps}
+                          />
+                        </div>
+                      </Col>
+
+                      {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
+                      {mySearchProps(toolkitProps.searchProps, pageField.id)}
+                    </Row>
+                    <Row className="align-items-md-center mt-30">
+                      <Col className="pagination pagination-rounded justify-content-end mb-2">
+                        <PaginationListStandalone {...paginationProps} />
+                      </Col>
+                    </Row>
+                  </React.Fragment>
+                )}
+              </ToolkitProvider>
+            )}
+          </PaginationProvider> */}
+
 
           <Modal isOpen={modal_edit} toggle={() => { tog_center() }} size="xl">
             <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} pageHeading={userAccess.pageHeading} />
@@ -332,7 +352,7 @@ const CommonListPage = (props) => {
   }
   else {
     return (
-      <React.Fragment> </React.Fragment>
+      <React.Fragment></React.Fragment>
     )
   }
 }

@@ -1,15 +1,21 @@
 
-let props1 = { onSearch: function onSearch() { } }
+let props1 = { onSearch: () => { } }
 let input = '';
 let priviousSerach = []
 let pageid = ''
 
+let props22 = { onSearch: () => { } }
 
 export const mySearchProps = (props, pageID) => {
-  
+
     props1 = props;
     pageid = pageID
 };
+
+export const customTableSearch = (props) => {
+    props22 = props
+}
+
 
 export const defaultSearch = (defaultid,) => {
     let retn = { defaultSearch: '' }
@@ -35,6 +41,7 @@ export const MySearch = () => {//compont start
         input = e.target.value
         if (!(len[0] === "/")) {
             props1.onSearch(len);
+            props22.onSearch(len);
             const found = priviousSerach.find((i, k) => {
                 if ((i.id === pageid)) {
                     priviousSerach[k] = { id: i.id, text: len }

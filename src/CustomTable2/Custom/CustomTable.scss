@@ -1,0 +1,33 @@
+ .search-input {
+     margin-bottom: 1rem;
+     padding: 0.5rem;
+     width: 100%;
+     font-size: 1rem;
+ }
+
+
+
+ .pagination1 {
+     list-style: none;
+     display: flex;
+     justify-content: end;
+
+
+     li {
+         display: inline-block;
+         padding: 5px 10px;
+         margin: 0 2px;
+         border-radius: 35%;
+         cursor: pointer;
+         transition: background-color 0.3s ease;
+     }
+
+     li:hover {
+         background-color: #ddd;
+     }
+
+     li.active {
+         background-color: rgb(72, 90, 247);
+         color: #fff;
+     }
+ }

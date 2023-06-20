@@ -22,6 +22,7 @@ import { listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
 import { SaveButton } from "./CommonButton";
+import CustomTable from "../../CustomTable2/Custom";
 
 let sortType = "asc";
 let searchCount = 0;
@@ -222,7 +223,7 @@ const CommonPurchaseList = (props) => {
   }
 
   const makeBtnColumn = () => {// ======================== for makeBtnColumn Page Action Button ================================
-  
+
     if (
       makeBtnShow &&
       pageMode === mode.modeSTPsave
@@ -258,7 +259,7 @@ const CommonPurchaseList = (props) => {
       }
     }
   }
- 
+
   const lastColumn = () => {  // ======================== for List Page Action Button ================================
 
     if (!(pageMode === mode.modeSTPsave)) {
@@ -319,6 +320,16 @@ const CommonPurchaseList = (props) => {
                 {(toolkitProps, a) => (
                   <React.Fragment>
                     <Row>
+                      {/* <div className="table-responsive table " >
+                        <CustomTable
+                          keyField={"id"}
+                          data={tableList}
+                          columns={tableColumns}
+                          itemsPerPage={15}
+                          defaultSorted={defaultSorted}
+                          classes={"table table-bordered table-hover"}
+                        />
+                      </div> */}
                       <Col xl="12">
                         <div className="table-responsive mt-1" >
                           <BootstrapTable
