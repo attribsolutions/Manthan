@@ -44,6 +44,7 @@ import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm";
+import { map } from "leaflet";
 
 const Invoice = (props) => {
 
@@ -63,6 +64,12 @@ const Invoice = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [orderItemDetails, setOrderItemDetails] = useState([])
     const [orderIDs, setOrderIDs] = useState([])
+    const [DiscountValue, setDiscountValue] = useState('');
+    const [TypeValue, setTypeValue] = useState({});
+
+
+
+
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -210,7 +217,6 @@ const Invoice = (props) => {
     }, [makeIBInvoice]);
 
     useEffect(() => {
-
         if (gobutton_Add.Status === true && gobutton_Add.StatusCode === 200) {
             setState((i) => {
                 const obj = { ...i }
@@ -224,15 +230,13 @@ const Invoice = (props) => {
         }
     }, [gobutton_Add]);
 
-    
+
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [orderItemDetails]);
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
         value: index.id,
         label: index.Name,
-
     }));
-
 
     const pagesListColumns = [
         {//***************ItemName********************************************************************* */
@@ -455,10 +459,52 @@ const Invoice = (props) => {
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
             dataField: "",
+            formatExtraData: { DiscountValue: Number(DiscountValue), TypeValue: TypeValue },
+            headerFormatter: () => {
+                return (<div className=" ">
+                    {orderItemDetails.length <= 0 ?
+                        <div className="col col-3 mt-2" >
+                            <Label>Discount/unit</Label>
+                        </div> :
+                        <div className="row" >
+                            <div className="col col-4 mt-2" >
+                                <Label>Discount/unit</Label>
+                            </div>
+                            <div className="col col-4" style={{ width: "100px" }}><Input type="text"
+                                style={{ textAlign: "right" }}
+                                onChange={(e) => setDiscountValue(e.target.value)}
+                            />
+                            </div>
+                            <div className="col col-4" style={{ width: "100px" }} >
+                                <Select type="text"
+                                    defaultValue={{ value: 2, label: " % " }}
+                                    options={[{ value: 1, label: "Rs" },
+                                    { value: 2, label: "%" }]}
+                                    style={{ textAlign: "right" }}
+                                    onChange={(e) => setTypeValue(e)}
+                                />
+                            </div>
+                        </div>
+                    }
+                </div>)
+            },
             classes: () => ('invoice-discount-row'),
-            formatter: (Rate, index1, key) => {
+            formatter: (Rate, index1, key, formatExtraData) => {
+                const { TypeValue, DiscountValue } = formatExtraData
+                debugger
                 if (!index1.DiscountType) index1.DiscountType = 2
                 if (!index1.Discount) index1.Discount = 0
+                debugger
+                if (Object.keys(TypeValue).length > 0) {
+                    index1.DiscountType = formatExtraData.TypeValue
+                    innerStockCaculation(index1)
+                }
+                if (formatExtraData.DiscountValue || formatExtraData.DiscountValue === 0) {
+                    if (!index1.Discount) index1.Discount = 0
+                    index1.Discount = formatExtraData.DiscountValue
+                    innerStockCaculation(index1)
+                }
+
                 return (
                     <>
                         <div className="mb-2">
@@ -469,12 +515,14 @@ const Invoice = (props) => {
 
                                 <div className="child">
                                     <Select
+                                        id={`Dicount_${key}`}
                                         classNamePrefix="select2-selection"
-                                        defaultValue={{ value: 2, label: " % " }}
+                                        value={index1.DiscountType}
+                                        // defaultValue={index1.DiscountType}
                                         options={[{ value: 1, label: "Rs" },
                                         { value: 2, label: "%" }]}
                                         onChange={(e) => {
-                                            index1.DiscountType = e.value
+                                            index1.DiscountType = e
                                             innerStockCaculation(index1)
                                         }}
                                     />
@@ -489,12 +537,13 @@ const Invoice = (props) => {
                                 <div className="child">
                                     <CInput
                                         className="input"
+                                        id={index1.id}
                                         style={{ textAlign: "right" }}
-                                        type="text" defaultValue={index1.Discount}
+                                        type="text"
+                                        Value={index1.Discount}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
                                             let e_val = e.target.value;
-
                                             if (e_val === '') {
                                                 e.target.value = 0
                                             }
@@ -506,9 +555,9 @@ const Invoice = (props) => {
                                                     e.target.value = 0
                                                 }
                                             }
-
                                             index1.Discount = e.target.value;
                                             innerStockCaculation(index1)
+
                                         }}
                                     />
 
@@ -760,7 +809,6 @@ const Invoice = (props) => {
                             keyField={"id"}
                             data={orderItemDetails}
                             columns={pagesListColumns}
-
                             search
                         >
                             {(toolkitProps) => (
