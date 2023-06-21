@@ -312,7 +312,7 @@ const Order = (props) => {
     useEffect(() => updateMsgUseEffect({
         updateMsg, modalCss,
         history, dispatch,
-        updateSuccss: _act.saveOrderActionSuccess,
+        updateSuccss: _act.updateOrderIdSuccess,
         listPath: listPath
     }), [updateMsg])
 
