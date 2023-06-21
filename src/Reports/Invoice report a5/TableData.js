@@ -42,7 +42,32 @@ export const Rows = (data) => {
     let totalQuantity = 0
     let SrNO = 1
 
-    InvoiceItems.forEach((element, key) => {
+    const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
+        
+        const {HSNCode, ItemName, MRP, Rate, Discount, CGST,SGST,Amount,DiscountAmount,BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage,SGSTPercentage,GSTPercentage,BatchCode,BatchDate} = currentItem;
+        const key = ItemName + '_' + MRP;
+        if (accumulator[key]) {
+            accumulator[key].DiscountAmount += Number(DiscountAmount);
+            accumulator[key].Quantity += parseInt(Quantity);
+            accumulator[key].BasicAmount += Number(BasicAmount);
+            accumulator[key].CGST += Number(CGST);
+            accumulator[key].SGST += Number(SGST);
+            accumulator[key].Amount += parseInt(Amount);
+            accumulator[key].BatchCode += BatchCode ;
+            accumulator[key].BatchDate += BatchDate ;
+            accumulator[key].quantityString += `,${BatchCode} ${BatchDate} `;
+
+            
+
+
+        } else {
+            accumulator[key] = { ItemName,HSNCode,
+                 MRPValue, Rate, Discount, CGST:Number(CGST),SGST: Number(SGST),Amount:Number(Amount),DiscountAmount:Number(DiscountAmount),BasicAmount:Number(BasicAmount), Quantity:parseInt(Quantity), UnitName ,CGSTPercentage,SGSTPercentage,GSTPercentage,BatchDate,BatchCode:BatchCode,BatchDate:BatchDate,quantityString:`${BatchCode}  ${BatchDate}`};
+        }
+        return accumulator;
+    }, {});
+debugger
+    Object.values(groupedItems).forEach((element, key) => {
       
         const tableitemRow = [
             SrNO++,
@@ -70,6 +95,8 @@ export const Rows = (data) => {
             return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
         };
 
+
+
         function totalrow() {
             return [
                 "",
@@ -88,13 +115,31 @@ export const Rows = (data) => {
             ];
         };
 
+        const BatchRow =[
+            `Batch ${element.quantityString} `,
+            `Batch`,
+            " ",
+            ``,
+            "",
+            "",
+            "",
+            "",
+            ``,
+            "",
+            ``,
+            "",
+            ``,
 
+        ]
+
+        
         if (Gst === 0) { Gst = element.GSTPercentage };
         let aa = { TotalCGst: 0, totalSGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow);
+            returnArr.push((BatchRow))
         }
         else {
             returnArr.push(totalrow());
@@ -108,7 +153,9 @@ export const Rows = (data) => {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
-        if (key === InvoiceItems.length - 1) {
+        
+        if (key === Object.keys(groupedItems).length - 1) {
+          
             returnArr.push(totalrow());
         }
     })

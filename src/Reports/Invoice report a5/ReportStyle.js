@@ -296,6 +296,11 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
             }
+
+            if (data1.row.cells[1].raw === "Batch") {
+                data1.row.cells[0].colSpan = 12
+
+            }
         },
         margin: {
             left: 30, right: 25, top: 43
