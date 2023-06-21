@@ -70,9 +70,9 @@ const Invoice = (props) => {
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
     const [changeAllDiscount, setChangeAllDiscount] = useState(false)
     const [forceReload, setForceReload] = useState(false)
-// ****************************************************************************
+    // ****************************************************************************
 
-const [modalCss] = useState(false);
+    const [modalCss] = useState(false);
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
@@ -452,7 +452,10 @@ const [modalCss] = useState(false);
                                                         key={`batchQty${index1.id}-${index2.id}`}
                                                         id={`batchQty${index1.id}-${index2.id}`}
                                                         defaultValue={index2.Qty}
-                                                        onChange={(event) => stockQtyOnChange(event, index1, index2)}
+                                                        onChange={(event) => {
+                                                            stockQtyOnChange(event, index1, index2)
+                                                            totalAmountCalcuationFunc(tableList)
+                                                        }}
                                                     ></Input>
                                                 </div>
                                             </td>
@@ -480,7 +483,8 @@ const [modalCss] = useState(false);
             dataField: "",
             formatExtraData: {
                 discountValueAll: Number(discountValueAll), discountTypeAll: discountTypeAll,
-                changeAllDiscount: changeAllDiscount, forceReload: forceReload
+                changeAllDiscount: changeAllDiscount, forceReload: forceReload,
+                tableList: orderItemDetails
             },
             headerFormatter: () => {
                 return (<div className=" ">
@@ -504,6 +508,7 @@ const [modalCss] = useState(false);
                                         setChangeAllDiscount(true)
                                         setDiscountTypeAll(e)
                                         setDiscountValueAll(0)
+
                                     }}
                                 />
                             </div>
@@ -532,6 +537,7 @@ const [modalCss] = useState(false);
 
                                         setChangeAllDiscount(true)
                                         setDiscountValueAll(Number(e.target.value))
+
                                     }}
                                 />
                             </div>
@@ -542,14 +548,16 @@ const [modalCss] = useState(false);
             classes: () => ('invoice-discount-row'),
             formatter: (cellContent, index1, key, formatExtraData) => {
 
-                debugger
+                let  { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+
                 if (formatExtraData.changeAllDiscount) {
-                    index1.Discount = formatExtraData.discountValueAll
-                    index1.DiscountType = formatExtraData.discountTypeAll.value
+                    index1.Discount = discountValueAll
+                    index1.DiscountType = discountTypeAll.value
                     innerStockCaculation(index1)
+                    totalAmountCalcuationFunc(tableList)
                 }
 
-                let defaultDiscountTypelabel = (index1.DiscountType === 2) ? discountDropOption[1] : discountDropOption[0];
+                const defaultDiscountTypelabel = (index1.DiscountType === 2) ? discountDropOption[1] : discountDropOption[0];
 
                 return (
                     <>
@@ -565,7 +573,6 @@ const [modalCss] = useState(false);
                                         classNamePrefix="select2-selection"
                                         key={`DicountType_${key}-${index1.id}`}
                                         value={defaultDiscountTypelabel}
-                                        // defaultValue={(index1.DiscountType === 2) ? discountDropOption[1] : discountDropOption[0]}
                                         options={discountDropOption}
                                         onChange={(e) => {
 
@@ -574,6 +581,7 @@ const [modalCss] = useState(false);
                                             index1.DiscountType = e.value
                                             index1.Discount = 0;
                                             innerStockCaculation(index1)
+                                            totalAmountCalcuationFunc(tableList)
                                         }}
                                     />
                                 </div>
@@ -610,7 +618,7 @@ const [modalCss] = useState(false);
                                             }
                                             index1.Discount = Number(e.target.value);
                                             innerStockCaculation(index1)
-
+                                            totalAmountCalcuationFunc(tableList)
                                         }}
                                     />
 
