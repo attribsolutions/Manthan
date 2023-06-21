@@ -329,8 +329,20 @@ const PartyMaster = (props) => {
         let setBaseTabDetail = baseTabRef.current.setCurrentState
         let addressTabDetail = addressTabRef.current.getCurrentState()
         let prefixValue = prefixTabRef.current.getCurrentState().values
-
+        let addressTabIsAddressEnter = addressTabRef.current.IsAddressEnter()
+       
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
+
+        let isError = addressTabIsAddressEnter.isError
+        let values = addressTabIsAddressEnter.values
+
+        if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "")) {
+            customAlert({
+                Type: 4,
+                Message: "Please Address Details Add In Table",
+            })
+            return;
+        }
 
         if (!validBasetab) {
             setactiveTab1("1")
