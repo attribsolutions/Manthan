@@ -84,6 +84,7 @@ const Order = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const [editCreatedBy, seteditCreatedBy] = useState("");
     const [page_id] = useState(() => initialState(history).page_Id)
     const [listPath] = useState(() => initialState(history).listPath)
     const [subPageMode] = useState(history.location.pathname)
@@ -247,6 +248,7 @@ const Order = (props) => {
                 setTermsAndConTable(termsAndCondition)
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
+            seteditCreatedBy(hasEditVal.CreatedBy)
         } else {
             dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
         }
@@ -273,8 +275,9 @@ const Order = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
+                dispatch(_act.GoButton_For_Order_AddSuccess([]))
                 if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
-
+                    
                     const customer = supplierSelect
                     const jsonBody = JSON.stringify({
                         OrderIDs: postMsg.OrderID.toString(),
@@ -287,9 +290,7 @@ const Order = (props) => {
                         errorMsg: "Order Save Successfully But Can't Make Invoice"
                     }));
                 }
-
-                dispatch(_act.GoButton_For_Order_AddSuccess([]))
-                if (a) {
+                else if (a) {
                     history.push({
                         pathname: listPath,
                     });
@@ -1304,8 +1305,9 @@ const Order = (props) => {
                                     </FormGroup>
                                 </div >
 
-                                {!(subPageMode === url.IB_ORDER) ?
-                                    <div className="col col-6" >                            {/*  Delivery Date field */}
+                                {/*  Delivery Date field */}
+                                {/* {!(subPageMode === url.IB_ORDER) ?
+                                    <div className="col col-6" >
                                         <FormGroup className=" row mt-3 " >
                                             <Label className=" p-2"
                                                 style={{ width: "130px" }}>Delivery Date</Label>
@@ -1320,7 +1322,7 @@ const Order = (props) => {
                                             </div>
 
                                         </FormGroup>
-                                    </div > : null}
+                                    </div > : null} */}
 
                             </div>
 
@@ -1478,6 +1480,7 @@ const Order = (props) => {
                             <Col>
                                 <SaveButton
                                     loading={saveBtnloading}
+                                    editCreatedBy={editCreatedBy}
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
                                     onClick={saveHandeller}
@@ -1485,16 +1488,16 @@ const Order = (props) => {
                                 />
                             </Col>
                             {
-                                (subPageMode === url.ORDER_4) &&
-                                <Col>
-                                    <GotoInvoiceBtn
-                                        forceDisabled={gotoInvoiceBtnLoading}
-                                        loading={gotoInvoiceBtnLoading}
-                                        pageMode={pageMode}
-                                        userAcc={userPageAccessState}
-                                        onClick={saveHandeller}
-                                    />
-                                </Col>}
+                                (subPageMode === url.ORDER_4) && (pageMode === mode.defaultsave) ?
+                                    <Col>
+                                        <GotoInvoiceBtn
+                                            forceDisabled={gotoInvoiceBtnLoading}
+                                            loading={gotoInvoiceBtnLoading}
+                                            pageMode={pageMode}
+                                            userAcc={userPageAccessState}
+                                            onClick={saveHandeller}
+                                        />
+                                    </Col> : null}
                         </div>
                             : <div className="row save1"></div>
                     }
