@@ -418,7 +418,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
 
     // select all on focus
     this.find('input').keydown(function (e) {
-
+ 
       // shortcut for key other than arrow keys
       if ($.inArray(e.which, [arrow.left, arrow.up, arrow.right, arrow.down]) < 0) { return; }
 
@@ -518,6 +518,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
 
           if (tdPreInput) {
             tdPreInput.focus()
+            tdPreInput.select();
             return
           }
           var tr = td.closest('tr');
@@ -555,7 +556,9 @@ export const tableInputArrowUpDounFunc = (tableId) => {
           });
 
           if (tdNextInput) {
-            tdNextInput.focus()
+            tdNextInput.focus();
+            tdNextInput .select()
+           
             return
           }
           var tr = td.closest('tr');
