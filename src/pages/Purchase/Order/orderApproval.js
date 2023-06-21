@@ -48,7 +48,9 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
 }
 
 export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPath, history }) => {
+   
     try {
+
         if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
             dispatch(orderApprovalActionSuccess({ Status: false }))
 
@@ -62,6 +64,7 @@ export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPat
                 history.push({
                     pathname: listPath,
                 });
+                window.location.reload()
             }
 
         } else if (orderApprovalMsg.Status === true) {
