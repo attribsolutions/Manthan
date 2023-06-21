@@ -463,7 +463,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     <Input
                                         name="PAN"
                                         value={values.PAN}
-                                        disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                         type="text"
                                         className={isError.PAN.length > 0 ? "is-invalid form-control" : "form-control"}
                                         placeholder="Please Enter PAN"
@@ -486,7 +485,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         type="text"
                                         name="GSTIN"
                                         value={values.GSTIN}
-                                        disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                         className={isError.GSTIN.length > 0 ? "is-invalid form-control" : "form-control"}
                                         placeholder="Please Enter GSTIN"
                                         autoComplete='off'
@@ -513,6 +511,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                                 <Input
                                                     name="MkUpMkDn"
                                                     type="checkbox"
+                                                    disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                                     className="form-check-input"
                                                     checked={values.MkUpMkDn}
                                                     onChange={(event) => onChangeCheckbox({ event, state, setState })}
@@ -615,8 +614,11 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         </Label>
                                         <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
                                             <div className="form-check form-switch form-switch-md mb-3">
-                                                <Input type="checkbox" className="form-check-input"
+                                                <Input
+                                                    type="checkbox"
+                                                    className="form-check-input"
                                                     checked={values.isActive}
+                                                    disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                                     name="isActive"
                                                     onChange={(event) => onChangeCheckbox({ event, state, setState })}
                                                 />
