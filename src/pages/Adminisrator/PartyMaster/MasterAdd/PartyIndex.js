@@ -490,7 +490,7 @@ const PartyMaster = (props) => {
 
                                                 </NavLink>
                                             </NavItem>
-                                            {subPageMode === url.PARTY &&// only view when party  master Mode
+                                            {!(subPageMode === url.RETAILER_MASTER) &&// only view when party  master Mode
                                                 <NavItem>
                                                     <NavLink
                                                         id="nave-link-3"
