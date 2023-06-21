@@ -106,7 +106,9 @@ const Order = (props) => {
     const [partySelect, setPartySelect] = useState('');
     const [itemSelect, setItemSelect] = useState({ value: '', label: "All" });
     const [itemSelectDropOptions, setitemSelectOptions] = useState([]);
-    const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(false)
+    const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
+    const [goBtnDissable, setGoBtnDissable] = useState(false)
+
 
 
     const [orderAmount, setOrderAmount] = useState(0);
@@ -277,7 +279,7 @@ const Order = (props) => {
                 })
                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
                 if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
-                    
+
                     const customer = supplierSelect
                     const jsonBody = JSON.stringify({
                         OrderIDs: postMsg.OrderID.toString(),
@@ -331,7 +333,7 @@ const Order = (props) => {
     useEffect(() => {
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
-            setorderItemTable(OrderItems)
+            if (!selecedItemWiseOrder) { setorderItemTable(OrderItems) }
             setitemSelectOptions(OrderItems.map(i => ({ ...i, value: i.Item_id, label: i.ItemName })))
 
             setTermsAndConTable(TermsAndConditions)
@@ -446,25 +448,6 @@ const Order = (props) => {
                 )
             },
         },
-
-        // {//------------- Stock Quantity column ----------------------------------
-        //     text: "Stock Qty",
-        //     sort: true,
-        //     // hidden: !(pageMode === mode.defaultsave) && true,
-        //     hidden: true,
-        //     dataField: "StockQuantity",
-        //     formatter: (value, row, k) => {
-
-        //         return (
-        //             <div key={row.id} className="text-end">
-        //                 <span>{row.StockQuantity}</span>
-        //             </div>
-        //         )
-        //     },
-        //     headerStyle: (colum, colIndex) => {
-        //         return { width: '140px', textAlign: 'center' };
-        //     },
-        // },
 
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
@@ -674,64 +657,6 @@ const Order = (props) => {
 
 
 
-    function itemWise_CalculationFunc(row) {
-
-        row["Amount"] = Amount(row)
-
-        let sum = 0
-        orderItemTable.forEach(ind => {
-            if (ind.Amount === null) {
-                ind.Amount = 0
-            }
-            var amt = parseFloat(ind.Amount)
-            sum = sum + amt
-        });
-        setOrderAmount(sum.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
-    };
-
-    const goButtonHandler = async () => {
-
-
-        if (!supplierSelect > 0) {
-            await customAlert({
-                Type: 4,
-                Message: `Please select ${fieldLabel.Supplier}`
-            })
-            return;
-        }
-        let btnId = `go-btn${subPageMode}`
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
-
-        dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
-
-
-        let PO_Body = {
-            Party: supplierSelect.value,
-            Customer: _cfunc.loginPartyID(),
-            RateParty: _cfunc.loginPartyID(),
-            EffectiveDate: orderdate,
-            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
-        }
-        let SO_body = {
-            Party: _cfunc.loginPartyID(), //swap  party and customer for sale oerder
-            Customer: supplierSelect.value,//swap  party and customer for sale oerder
-            RateParty: supplierSelect.value,
-            EffectiveDate: orderdate,
-            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
-        }
-
-
-        let jsonBody;   //json body decleration 
-        if (subPageMode === url.ORDER_4) {
-            jsonBody = JSON.stringify({ ...SO_body, });
-        }
-        else {
-            jsonBody = JSON.stringify({ ...PO_Body, });
-        }
-        let config = { subPageMode, jsonBody, btnId }
-        dispatch(_act.GoButton_For_Order_Add(config))
-    };
 
     function orderdateOnchange(e, date) {
         setorderdate(date)
@@ -742,13 +667,15 @@ const Order = (props) => {
         if (subPageMode === url.ORDER_4) {
             dispatch(_act.getSupplierAddress(e.value))
         }
+        setorderItemTable([])
+        setItemSelect('')
+        goButtonHandler({ selectSupplier: e.value })
     };
 
     function partyOnchange(e) {
         setPartySelect(e)
     };
     function itemSelectOnchange(e) {
-
         setItemSelect(e)
     };
 
@@ -790,7 +717,24 @@ const Order = (props) => {
         };
     };
 
+    function itemWise_CalculationFunc(row) {
+
+        row["Amount"] = Amount(row)
+
+        let sum = 0
+        orderItemTable.forEach(ind => {
+            if (ind.Amount === null) {
+                ind.Amount = 0
+            }
+            var amt = parseFloat(ind.Amount)
+            sum = sum + amt
+        });
+        setOrderAmount(sum.toFixed(2))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+    };
+
     const item_AddButtonHandler = () => {
+        setGoBtnDissable(true)
         let isfound = orderItemTable.find(i => i.value === itemSelect.value);
 
         if (isfound === undefined) {
@@ -801,6 +745,50 @@ const Order = (props) => {
         }
         setItemSelect('')
     }
+
+    const goButtonHandler = async ({ selectSupplier, }) => {
+
+
+        if (!supplierSelect > 0 && !selectSupplier) {
+            await customAlert({
+                Type: 4,
+                Message: `Please Select ${fieldLabel.Supplier}`
+            })
+            return;
+        }
+        let btnId = `go-btn${subPageMode}`
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
+
+        dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
+
+
+        let PO_Body = {
+            Party: selectSupplier ? selectSupplier : supplierSelect.value,
+            Customer: _cfunc.loginPartyID(),
+            RateParty: _cfunc.loginPartyID(),
+            EffectiveDate: orderdate,
+            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+        }
+        let SO_body = {
+            Party: _cfunc.loginPartyID(), //swap  party and customer for sale oerder
+            Customer: selectSupplier ? selectSupplier : supplierSelect.value,//swap  party and customer for sale oerder
+            RateParty: selectSupplier ? selectSupplier : supplierSelect.value,
+            EffectiveDate: orderdate,
+            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+        }
+
+
+        let jsonBody;   //json body decleration 
+        if (subPageMode === url.ORDER_4) {
+            jsonBody = JSON.stringify({ ...SO_body, });
+        }
+        else {
+            jsonBody = JSON.stringify({ ...PO_Body, });
+        }
+        let config = { subPageMode, jsonBody, btnId }
+        dispatch(_act.GoButton_For_Order_Add(config))
+    };
+
     const saveHandeller = async (event) => {
         event.preventDefault();
 
@@ -1063,25 +1051,25 @@ const Order = (props) => {
                     <div>
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
 
-                            {(subPageMode === ORDER_4) &&
-                                <div>
-                                    <Row >
-                                        <Col sm="4" >
-                                            <FormGroup className=" row mt-3 " >
-                                                <Label className="col-sm-5 p-1"
-                                                    style={{ width: "83px" }}>Order Date</Label>
-                                                <Col sm="7">
-                                                    <C_DatePicker
-                                                        name="orderdate"
-                                                        value={orderdate}
-                                                        disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                        onChange={orderdateOnchange}
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
 
-                                        <Col sm="4">
+                            <div>
+                                <Row >
+                                    <Col sm="4" >
+                                        <FormGroup className=" row mt-2" >
+                                            <Label className="col-sm-5 p-2"
+                                                style={{ width: "115px" }}>Order Date</Label>
+                                            <Col sm="7">
+                                                <C_DatePicker
+                                                    name="orderdate"
+                                                    value={orderdate}
+                                                    disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                                    onChange={orderdateOnchange}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
+                                    {(subPageMode === ORDER_4) ?
+                                        <Col sm="3">
                                             <FormGroup className=" row mt-3 " >
                                                 <Label className="col-sm-5 p-2"
                                                     style={{ width: "65px" }}>{fieldLabel.Route}</Label>
@@ -1101,117 +1089,14 @@ const Order = (props) => {
                                                 </Col>
                                             </FormGroup>
                                         </Col >
+                                        : <Col sm='3' />
+                                    }
 
-                                        <Col sm="4" className="">
-                                            <FormGroup className=" row mt-3 " >
-                                                <Label className="col-sm-5 p-2"
-                                                    style={{ width: "65px" }}>{fieldLabel.Supplier}</Label>
-                                                <Col sm="7">
-                                                    <Select
-                                                        value={supplierSelect}
-                                                        isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
-                                                        options={supplierOptions}
-                                                        onChange={supplierOnchange}
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                    />
-                                                </Col>
-                                                <Col sm="1">                      {/*Go_Button  */}
-                                                    {pageMode === mode.defaultsave ?
-                                                        (!itemSelectDropOptions.length > 0) ?
-                                                            < Go_Button
-                                                                loading={goBtnloading}
-                                                                id={`go-btn${subPageMode}`}
-                                                                onClick={(e) => goButtonHandler()} />
-                                                            :
-                                                            <Change_Button
-                                                                id={`change-btn${subPageMode}`}
-                                                                onClick={(e) => dispatch(_act.GoButton_For_Order_AddSuccess([]))}
-                                                            />
-                                                        : null
-                                                    }
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
-
-                                    </Row>
-                                    <Row>
-                                        <Col sm="4" />
-                                        <Col sm="4" />
-                                        <Col sm="4" className="">
-                                            <FormGroup className=" row mt-3 " >
-                                                <Col sm="3">
-                                                    <Label className="p-2"
-                                                    >{fieldLabel.Item}</Label>
-                                                </Col>
-                                                <Col sm="7">
-                                                    <Select
-                                                        value={itemSelect}
-                                                        // isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
-                                                        options={itemSelectDropOptions}
-                                                        onChange={itemSelectOnchange}
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                    />
-                                                </Col>
-                                                <Col sm="2" >
-                                                    {pageMode === mode.defaultsave ?
-                                                        <>
-                                                            {(selecedItemWiseOrder) &&
-                                                                <Button
-
-                                                                    className
-                                                                    color="btn btn-outline-info border-1 font-size-12 "
-                                                                    onClick={() => item_AddButtonHandler()} >
-                                                                    Add Item
-                                                                </Button>}
-                                                            {(orderItemTable.length > 0) && !selecedItemWiseOrder &&
-                                                                <Button
-                                                                    color="btn btn-secondary border-1 font-size-12"
-                                                                    className='text-blac1k'
-                                                                    onClick={() => {
-                                                                        setorderItemTable([])
-                                                                        setSelecedItemWiseOrder(true)
-                                                                    }} >
-                                                                    Item Wise
-                                                                </Button>
-                                                            }
-
-                                                        </> : null
-                                                    }
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
-
-
-                                    </Row>
-                                </div>}
-
-                            <Row>
-                                {!(subPageMode === ORDER_4) &&
-                                    <div className="row mt-1 ">                                  {/* Order Date And Supplier Name,Go_Button*/}
-                                        <Col sm="3">                                              {/* Order Date*/}
-                                            <FormGroup className=" row mt-3 " >
-                                                <Label className="col-sm-5 p-2"
-                                                    style={{ width: "115px" }}>Order Date</Label>
-                                                <Col sm="6">
-
-                                                    <C_DatePicker
-                                                        name="orderdate"
-                                                        value={orderdate}
-                                                        disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                        onChange={orderdateOnchange}
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
-
-                                        <Col sm="4">                                              {/*Supplier Name And Go_Button*/}                                <FormGroup className="mb-1 row mt-3 " >
-                                            <Label className="col-sm-1 p-2"
-                                                style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Supplier}</Label>
-                                            <Col sm="6">
+                                    <Col sm="4" className="">
+                                        <FormGroup className="row mt-2" >
+                                            <Label className="col-sm-5 p-2"
+                                                style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
+                                            <Col sm="7">
                                                 <Select
                                                     value={supplierSelect}
                                                     isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
@@ -1222,88 +1107,120 @@ const Order = (props) => {
                                                     }}
                                                 />
                                             </Col>
-                                            <Col sm="1" className="mx-4 ">                      {/*Go_Button  */}
-                                                {pageMode === mode.defaultsave ?
-                                                    (orderItemTable.length === 0) ?
-                                                        < Go_Button
-                                                            loading={goBtnloading}
-                                                            id={`go-btn${subPageMode}`}
-                                                            onClick={(e) => goButtonHandler()} />
-                                                        :
-                                                        <Change_Button
-                                                            id={`change-btn${subPageMode}`}
-                                                            onClick={(e) => dispatch(_act.GoButton_For_Order_AddSuccess([]))} />
-                                                    : null
-                                                }
-                                            </Col>
+
                                         </FormGroup>
-                                        </Col >
-                                        <Col sm="4" className="">
-                                            <FormGroup className=" row mt-3 " >
-                                                <Col sm="3">
-                                                    <Label className="p-2"
-                                                    >{fieldLabel.Item}</Label>
-                                                </Col>
-                                                <Col sm="7">
-                                                    <Select
-                                                        value={itemSelect}
-                                                        // isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
-                                                        options={itemSelectDropOptions}
-                                                        onChange={itemSelectOnchange}
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                    </Col>
+                                    <Col sm="1">                      {/*Go_Button  */}
+
+                                        <div className="row mt-2  pr-1">
+                                            {pageMode === mode.defaultsave ?
+                                                // (!selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
+                                                (!goBtnDissable) ?
+
+                                                    < Go_Button
+                                                        loading={goBtnloading}
+                                                        id={`go-btn${subPageMode}`}
+                                                        onClick={(e) => {
+                                                            if (!itemSelectDropOptions.length > 0) {
+                                                                goButtonHandler()
+                                                            }
+                                                            setSelecedItemWiseOrder(false)
+                                                            setorderItemTable(itemSelectDropOptions)
+                                                            setItemSelect('')
+                                                            setGoBtnDissable(true)
+                                                        }} />
+                                                    :(!selecedItemWiseOrder)&&
+                                                    <Change_Button
+                                                        id={`change-btn${subPageMode}`}
+                                                        onClick={(e) => {
+                                                            setGoBtnDissable(false)
+                                                            setSelecedItemWiseOrder(true)
+                                                            setorderItemTable([])
+                                                            setItemSelect('')
+                                                            dispatch(_act.GoButton_For_Order_AddSuccess([]))
                                                         }}
                                                     />
-                                                </Col>
-                                                <Col sm="2" >
-                                                    {pageMode === mode.defaultsave ?
-                                                        <>
-                                                            {(selecedItemWiseOrder) &&
-                                                                <Button
+                                                : null
+                                            }
+                                        </div>
+                                    </Col>
 
-                                                                    className
-                                                                    color="btn btn-outline-info border-1 font-size-12 "
-                                                                    onClick={() => item_AddButtonHandler()} >
-                                                                    Add Item
-                                                                </Button>}
-                                                            {(orderItemTable.length > 0) && !selecedItemWiseOrder &&
-                                                                <Button
-                                                                    color="btn btn-secondary border-1 font-size-12"
-                                                                    className='text-blac1k'
-                                                                    onClick={() => {
-                                                                        setorderItemTable([])
-                                                                        setSelecedItemWiseOrder(true)
-                                                                    }} >
-                                                                    Item Wise
-                                                                </Button>
-                                                            }
+                                </Row>
+                                <Row>
+                                    <Col sm="4">                               {/*  Description field */}
+                                        <FormGroup className="row mt-1" >
+                                            <Label className="col-sm-5 p-2"
+                                                style={{ width: "115px" }}>Description</Label>
+                                            <div className="col-7">
+                                                <Input type="text"
+                                                    value={description}
+                                                    placeholder='Enter Order Description'
+                                                    onChange={e => setDescription(e.target.value)}
+                                                />
 
-                                                        </> : null
-                                                    }
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
-                                    </div>}
-                            </Row>
+                                            </div>
+
+                                        </FormGroup>
+                                    </Col >
+                                    <Col sm="3" />
+                                    <Col sm="4">
+                                        <FormGroup className="row mt-1" >
+                                            <Label className="col-sm-5 p-2"
+                                                style={{ width: "115px" }}>{fieldLabel.Item}</Label>
+
+                                            <Col sm="7">
+                                                <Select
+                                                    value={itemSelect}
+                                                    isDisabled={(pageMode === "edit" || goBtnloading) ? true : false}
+                                                    options={itemSelectDropOptions}
+                                                    onChange={itemSelectOnchange}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                />
+                                            </Col>
+
+                                        </FormGroup>
+                                    </Col>
+                                    <Col sm="1"  >
+                                        {pageMode === mode.defaultsave ?
+                                            <div className="row mt-2 pr-1"  >
+                                                {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
+                                                    <Button
+
+                                                        className
+                                                        color="btn btn-outline-info border-1 font-size-12 "
+                                                        disabled={goBtnloading}
+                                                        onClick={() => item_AddButtonHandler()} >
+                                                        Add Item
+                                                    </Button>
+                                                    :
+                                                    ((itemSelectDropOptions.length > 0)) &&
+                                                    <Button
+                                                        color="btn btn-secondary border-1 font-size-12"
+                                                        className='text-blac1k'
+                                                        disabled={goBtnloading}
+                                                        onClick={() => {
+                                                            setorderItemTable([])
+                                                            setSelecedItemWiseOrder(true)
+                                                        }} >
+                                                        Item Wise
+                                                    </Button>
+
+                                                }
+
+                                            </div> : null
+                                        }
+                                    </Col>
+
+                                </Row>
+                            </div>
+
                         </div>
 
                         <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
                             <div className="row">                                         {/*  Description and Delivery Date  field */}
-                                <div className="col col-6">                               {/*  Description field */}
-                                    <FormGroup className=" row  mt-3" >
-                                        <Label className="   p-2"
-                                            style={{ width: "115px" }}>Description</Label>
-                                        <div className="col-6">
-                                            <Input type="text"
-                                                value={description}
-                                                placeholder='Enter Order Description'
-                                                onChange={e => setDescription(e.target.value)}
-                                            />
 
-                                        </div>
-
-                                    </FormGroup>
-                                </div >
 
                                 {/*  Delivery Date field */}
                                 {/* {!(subPageMode === url.IB_ORDER) ?
@@ -1427,18 +1344,9 @@ const Order = (props) => {
                     </div>
 
                     <div className="table-responsive table " >
-                        <CustomTable
-                            id="table_Arrow"
-                            keyField={"Item_id"}
-                            data={orderItemTable}
-                            columns={pagesListColumns}
-                            itemsPerPage={15}
-                            defaultSorted={defaultSorted}
-                            classes={"table table-bordered table-hover"}
-                            showPagination={false}
-                        />
+
                     </div>
-                    {/* <ToolkitProvider
+                    <ToolkitProvider
                         keyField={"Item_id"}
                         data={orderItemTable}
                         columns={pagesListColumns}
@@ -1460,6 +1368,9 @@ const Order = (props) => {
                                                         Items Not available
                                                     </div>
                                                 }
+                                                onDataSizeChange={(e) => {
+                                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                }}
                                                 {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
@@ -1469,7 +1380,7 @@ const Order = (props) => {
 
                             </React.Fragment>
                         )}
-                    </ToolkitProvider> */}
+                    </ToolkitProvider>
 
 
                     <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />

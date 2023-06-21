@@ -888,10 +888,10 @@ const Invoice = (props) => {
                                                         Items Not available
                                                     </div>
                                                 }
+                                                {...toolkitProps.baseProps}
                                                 onDataSizeChange={(e) => {
                                                     _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
                                                 }}
-                                                {...toolkitProps.baseProps}
                                             />
                                         </Col>
                                         {mySearchProps(toolkitProps.searchProps,)}
