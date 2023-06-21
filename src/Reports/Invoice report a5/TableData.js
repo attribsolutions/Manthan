@@ -55,14 +55,14 @@ export const Rows = (data) => {
             accumulator[key].Amount += parseInt(Amount);
             accumulator[key].BatchCode += BatchCode ;
             accumulator[key].BatchDate += BatchDate ;
-            accumulator[key].quantityString += `,${BatchCode} ${BatchDate} `;
+            accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
 
             
 
 
         } else {
             accumulator[key] = { ItemName,HSNCode,
-                 MRPValue, Rate, Discount, CGST:Number(CGST),SGST: Number(SGST),Amount:Number(Amount),DiscountAmount:Number(DiscountAmount),BasicAmount:Number(BasicAmount), Quantity:parseInt(Quantity), UnitName ,CGSTPercentage,SGSTPercentage,GSTPercentage,BatchDate,BatchCode:BatchCode,BatchDate:BatchDate,quantityString:`${BatchCode}  ${BatchDate}`};
+                 MRPValue, Rate, Discount, CGST:Number(CGST),SGST: Number(SGST),Amount:Number(Amount),DiscountAmount:Number(DiscountAmount),BasicAmount:Number(BasicAmount), Quantity:parseInt(Quantity), UnitName ,CGSTPercentage,SGSTPercentage,GSTPercentage,BatchDate,BatchCode:BatchCode,BatchDate:BatchDate,quantityString:`  ${BatchCode}  ${BatchDate}`};
         }
         return accumulator;
     }, {});
@@ -116,7 +116,7 @@ debugger
         };
 
         const BatchRow =[
-            `Batch ${element.quantityString} `,
+            `Batch:  ${element.quantityString} `,
             `Batch`,
             " ",
             ``,
