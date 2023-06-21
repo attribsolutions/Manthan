@@ -260,7 +260,6 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = []) => {
-        
         const obj = list[0]
 
         const customer = {

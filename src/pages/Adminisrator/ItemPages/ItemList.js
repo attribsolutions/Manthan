@@ -21,7 +21,7 @@ const ItemsList = () => {
   const reducers = useSelector(
     (state) => ({
       listLoading: state.ItemMastersReducer.listLoading,
-      tableList: state.ItemMastersReducer.pages,
+      tableList: state.ItemMastersReducer.ItemList,
       editData: state.ItemMastersReducer.editData,
       updateMsg: state.ItemMastersReducer.updateMsg,
       deleteMsg: state.ItemMastersReducer.deleteMsg,

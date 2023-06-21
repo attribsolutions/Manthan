@@ -23,7 +23,7 @@ function ItemTab(props) {
     const [ItemUnitOptions, setItemUnitOptions] = useState([]);
 
     const { Items } = useSelector((state) => ({
-        Items: state.ItemMastersReducer.pages,
+        Items: state.ItemMastersReducer.ItemList,
     }));
 
     useEffect(() => {

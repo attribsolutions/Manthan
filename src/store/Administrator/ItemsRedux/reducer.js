@@ -25,7 +25,7 @@ import {
 
 
 const INIT_STATE = {
-    pages: [],
+    ItemList: [],
     postMsg: { Status: false },
     deleteRoleID: [],
     deleteMsg: { Status: false },
@@ -61,7 +61,7 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
         case GET_ITEM_LIST_API_SUCCESS:
             return {
                 ...state,
-                pages: action.payload,
+                ItemList: action.payload,
                 listLoading: false,
 
             }
