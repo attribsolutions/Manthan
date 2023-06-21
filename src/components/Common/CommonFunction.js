@@ -120,6 +120,24 @@ export function concatDateAndTime(date, time) {//+++++++++++time and date concat
   return `${d} ${t}`;
 }
 
+export function CurrentTime() {
+
+  function addLeadingZero(number) {
+    return number < 10 ? '0' + number : number;
+  }
+  var currentTimeInMillis = Date.now();
+  var currentTime = new Date(currentTimeInMillis);
+  var hours = currentTime.getHours();
+  var amPm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12; // Convert 0 to 12
+  var minutes = currentTime.getMinutes();
+  var seconds = currentTime.getSeconds();
+  var formattedTime = addLeadingZero(hours) + ':' + addLeadingZero(minutes) + ':' + addLeadingZero(seconds) + ' ' + amPm;
+
+  return formattedTime
+
+}
+
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
@@ -418,7 +436,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
 
     // select all on focus
     this.find('input').keydown(function (e) {
- 
+
       // shortcut for key other than arrow keys
       if ($.inArray(e.which, [arrow.left, arrow.up, arrow.right, arrow.down]) < 0) { return; }
 
@@ -557,8 +575,8 @@ export const tableInputArrowUpDounFunc = (tableId) => {
 
           if (tdNextInput) {
             tdNextInput.focus();
-            tdNextInput .select()
-           
+            tdNextInput.select()
+
             return
           }
           var tr = td.closest('tr');

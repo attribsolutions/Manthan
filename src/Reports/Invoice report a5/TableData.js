@@ -3,17 +3,17 @@ import { invoice } from "../ReportIndex";
 export const columns =[
     "SR",
     "HSN Item Name",
-    "Quantity",
+    "Quantity (UOM)" ,
     "MRP",
     "Rate",
     "Discount",
-    "Discount Amt ",
-    "Taxable Amt",
+    "Discount Amount ",
+    "Taxable Amount",
     "CGST ",
-    "CGST Amt",
+    "CGST Amount",
     "SGST ",
-    "SGST Amt",
-   "Total Amt" ,
+    "SGST Amount",
+   "Amount" ,
 ];
 export const Footercolumn = [
     "",
@@ -41,6 +41,8 @@ export const Rows = (data) => {
     let totalAmount = 0
     let totalQuantity = 0
     let SrNO = 1
+    let TotalGst = 0
+    let GSTPercentage=0
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
         
@@ -57,16 +59,13 @@ export const Rows = (data) => {
             accumulator[key].BatchDate += BatchDate ;
             accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
 
-            
-
-
         } else {
             accumulator[key] = { ItemName,HSNCode,
                  MRPValue, Rate, Discount, CGST:Number(CGST),SGST: Number(SGST),Amount:Number(Amount),DiscountAmount:Number(DiscountAmount),BasicAmount:Number(BasicAmount), Quantity:parseInt(Quantity), UnitName ,CGSTPercentage,SGSTPercentage,GSTPercentage,BatchDate,BatchCode:BatchCode,BatchDate:BatchDate,quantityString:`  ${BatchCode}  ${BatchDate}`};
         }
         return accumulator;
     }, {});
-debugger
+
     Object.values(groupedItems).forEach((element, key) => {
       
         const tableitemRow = [
@@ -91,55 +90,56 @@ debugger
             totalSGst = Number(totalSGst) + Number(element.SGST)
             totalAmount = Number(totalAmount) + Number( element.Amount)
             totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
+            TotalGst =totalCGst +totalSGst;
+            GSTPercentage = Number(element.CGSTPercentage) + Number(element.SGSTPercentage)
             let cgst = data["tableTot"].TotalCGst
             return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
+          
         };
 
-
+         
 
         function totalrow() {
+        
             return [
                 "",
-                ``,
+                `GST Pescentage :${(parseFloat(GSTPercentage))}%       Total Gst:${(parseFloat(TotalGst).toFixed(2))} `,
                 " ",
-                `TaxableAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                ``,
                 "",
                 "",
-                "",
-                "",
-                `CGST:${parseFloat(totalCGst).toFixed(2)}`,
+                ``,
+                `${parseFloat(totalBasicAmount).toFixed(2)}`,
+                `${parseFloat(totalCGst).toFixed(2)}`,
                 "isaddition",
-                `SGST:${parseFloat(totalSGst).toFixed(2)}`,
+                `${parseFloat(totalSGst).toFixed(2)}`,
                 "",
-                `Amt:${parseFloat(totalAmount).toFixed(2)}`,
+                `${parseFloat(totalAmount).toFixed(2)}`,
             ];
         };
+        // const BatchRow =[
+        //     `Batch:  ${element.quantityString} `,
+        //     `Batch`,
+        //     " ",
+        //     ``,
+        //     "",
+        //     "",
+        //     "",
+        //     "",
+        //     ``,
+        //     "",
+        //     ``,
+        //     "",
+        //     ``,
+        // ]
 
-        const BatchRow =[
-            `Batch:  ${element.quantityString} `,
-            `Batch`,
-            " ",
-            ``,
-            "",
-            "",
-            "",
-            "",
-            ``,
-            "",
-            ``,
-            "",
-            ``,
-
-        ]
-
-        
         if (Gst === 0) { Gst = element.GSTPercentage };
         let aa = { TotalCGst: 0, totalSGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow);
-            returnArr.push((BatchRow))
+            // returnArr.push((BatchRow))
         }
         else {
             returnArr.push(totalrow());

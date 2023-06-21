@@ -3,7 +3,7 @@ import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { numberWithCommas, toWords } from "../Report_common_function";
-import { date_dmy_func, convertOnlyTimefunc, convertTimefunc } from "../../components/Common/CommonFunction";
+import { date_dmy_func, convertOnlyTimefunc, convertTimefunc, currentDate_dmy, CurrentTime } from "../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {
@@ -20,31 +20,30 @@ export const pageHeder = (doc, data) => {
     doc.setFont('Arial')
     doc.setFont(undefined, 'bold')
     doc.setFontSize(15)
-    doc.text('TAX INVOICE', 180, 34,)
+    doc.text('TAX INVOICE', 180, 40,)
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
+    doc.line(570, 56, 30, 56) //Full horizontal line Bill by Upper line
+    doc.setFontSize(7)
+    doc.text('Original For Buyer', 500, 11,)
+
+
 }
 
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text("Billed by", 80, 52)  //bill by 
-    doc.text('Billed to', 280, 52) //billed to
-    doc.text('Details of Transport', 440, 52)
-
+    doc.text("Billed by", 80, 65)  //bill by 
+    doc.text('Billed to', 280, 65) //billed to
+    doc.text('Details of Transport', 440, 65) //Details of Transport
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
-    doc.line(570, 16, 30, 16);//horizontal line 2
-    doc.line(570, 55, 30, 55);//horizontal line 3
-    // doc.line(409, 69, 30, 69)//horizontal line 4
+    doc.line(570, 56, 30, 56);//horizontal line  when header on next page bottom line
+    doc.line(570, 68, 30, 68);// full horizontal bill by bill to below line 
     doc.line(30, 350, 30, 16);//vertical left 1
     doc.line(570, 350, 570, 16);//vertical left 2
     doc.line(408, 145, 408, 16);//vertical right 1
-    doc.line(220, 145, 220, 43);//vertical right 2
-
+    doc.line(220, 145, 220, 56);//vertical line between billby billto
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
-
 
     var BilledByStyle = {
         margin: {
@@ -60,7 +59,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 2,
+            cellPadding: 1,
             fontSize: 8,
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
@@ -74,7 +73,7 @@ export const reportHeder1 = (doc, data) => {
 
         },
         tableLineColor: "black",
-        startY: 55,
+        startY: 68,
 
     };
     var BilledToStyle = {
@@ -91,7 +90,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 2,
+            cellPadding: 1,
             fontSize: 8,
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
@@ -104,7 +103,7 @@ export const reportHeder1 = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        startY: 55,
+        startY: 68,
 
     };
     var DetailsOfTransportStyle = {
@@ -113,6 +112,7 @@ export const reportHeder1 = (doc, data) => {
         },
         showHead: 'always',
         theme: 'plain',
+        headerStyles: { cellPadding: 1, },
         styles: {
             overflow: 'linebreak',
             fontSize: 8,
@@ -121,7 +121,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 2,
+            cellPadding: 1,
             fontSize: 8,
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
@@ -136,7 +136,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
 
-        startY: 55,
+        startY: 68,
 
     };
 
@@ -179,16 +179,20 @@ export const reportHeder3 = (doc, data) => {
     doc.setFontSize(9)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
-    doc.line(408, 42, 408, 16);//vertical right 1
+    doc.line(408, 57, 408, 16);//vertical Line header
+    doc.line(570, 44, 408, 44) //horizontal line 1 billby upper
+
     doc.setFont(undefined, 'bold')
     doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 25) //Invoice Id
     var date = date_dmy_func(data.InvoiceDate)
     var time = convertOnlyTimefunc(data.CreatedOn)
+
     doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date
+    doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 53) //Invoice date
+
 
 }
 export const reportHeder4 = (doc, data) => {
-
     doc.setFont('Tahoma')
     doc.setFontSize(8)
     doc.setFont(undefined, 'bold')
@@ -209,6 +213,7 @@ export const reportFooter = (doc, data) => {
     doc.line(360, 308, 360, 379);//vertical right1 Sub Total
     doc.setFont('Tahoma')
     doc.line(360, 340, 30, 340);//horizontal line (Bottom)
+    doc.line(360, 362, 30, 362); //horizontal line Sginature upper line 
 
     const a = data.InvoiceItems.map((data) => ({
         CGST: Number(data.CGST),
@@ -257,42 +262,49 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(10)
     doc.text(`${data.CustomerName} `, 140, 811,)
     doc.setFontSize(9)
-    doc.text(`Signature `, 400, 811,)
+
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-     of the nature and quantity which it/these purports to be `, 34, 350,)
+     of the nature and quantity which it/these purports to be `, 34, 348,)
     doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
+
+    doc.text(`Signature `, 280, 372,)
+    doc.text(`Prepared by :${data.PartyName} `, 35, 372,)
+
+    doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
+
     doc.setFont(undefined, 'bold')
     doc.text(`Rupees:`, 33, 305,)
     doc.addFont("Arial", 'Normal')
     doc.text(`${stringNumber}`, 65, 305,)
-
 }
 
 export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
             if (data1.row.cells[9].raw === "isaddition") {
-                data1.row.cells[1].colSpan = 2
-                data1.row.cells[3].colSpan = 5
+                data1.row.cells[1].colSpan = 5
+                // data1.row.cells[3].colSpan = 5
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
 
                 data1.row.cells[1].styles.fontSize = 7
-                data1.row.cells[3].styles.fontSize = 7
                 data1.row.cells[8].styles.fontSize = 7
+                data1.row.cells[7].styles.fontSize = 7
                 data1.row.cells[10].styles.fontSize = 7
                 data1.row.cells[12].styles.fontSize = 7
 
                 data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[3].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
                 data1.row.cells[10].styles.fontStyle = "bold"
                 data1.row.cells[12].styles.fontStyle = "bold"
             }
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
+
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length})`
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
             }
@@ -303,11 +315,11 @@ export const tableBody = (doc, data) => {
             }
         },
         margin: {
-            left: 30, right: 25, top: 43
+            left: 30, right: 25, top: 55
         },
         theme: 'grid',
         headerStyles: {
-            cellPadding: 2,
+            cellPadding: 1,
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
@@ -328,6 +340,7 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
+                fontSize: 6,
                 columnWidth: 15,
             },
             1: {
@@ -374,6 +387,7 @@ export const tableBody = (doc, data) => {
             11: {
                 columnWidth: 34,
                 halign: 'right',
+
             },
             12: {
                 columnWidth: 46,
@@ -406,14 +420,14 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
         pageHeder(doc, data)
         pageBorder(doc)
         reportHeder3(doc, data)
-        doc.text('Page' + String(i) + ' of ' + String(pageCount), 40, 390,)
+        doc.text('Page' + String(i) + ' of ' + String(pageCount), 500, 390,)
     }
 
     let condition1 = (array.length - 1 === islast)
     if (condition1) {
         for (let j = 1; j <= pageCount; j++) {
             doc.setPage(j)
-            doc.text('PageAll ' + String(j) + ' of ' + String(pageCount), 500, 390,)
+            doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
 
         }
     }
