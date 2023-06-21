@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { customTableSearch, mySearchProps } from '../../components/Common/SearchBox/MySearch';
 
 const CustomTable = ({
+    id,
     data,        // table row data
     columns,     // table colomn 
     classes,     //custome table  css class
@@ -41,7 +42,6 @@ const CustomTable = ({
 
 
     const handleSearch = (val) => {
-        debugger
         setSearchText(val);
         setCurrentPage(1);
     };
@@ -89,7 +89,7 @@ const CustomTable = ({
 
 
 
-    const formatRow = (row) => {
+    const formatRow = (row,rowkey) => {
         return (
             <tr key={row[keyField]}>
                 {columns1.map((column) => {
@@ -100,7 +100,7 @@ const CustomTable = ({
                             dataField={column.dataField} style={column.rowStyle && column.rowStyle()}
                         >
                             {column.formatter ?
-                                column.formatter(row[column.dataField], row,)
+                                column.formatter(row[column.dataField], row,rowkey)
                                 : (typeof row[column.dataField] === 'boolean' ? String(row[column.dataField]) : row[column.dataField])
                             }
                         </td>
@@ -114,10 +114,10 @@ const CustomTable = ({
         if (column.hidden) return null;
         return (
             <th dataField={column.dataField}
-                style={column.hederStyle && column.hederStyle()}
+                style={column.headerStyle && column.headerStyle()}
                 onClick={() => handleSort(column)}>
 
-                {column.hederFormatter ? column.hederFormatter(column, data) : column.text}
+                {column.headerFormatter ? column.headerFormatter(column, data) : column.text}
                 {sortConfig && sortConfig.column === column.dataField && (
                     <span>{sortConfig.direction === 'asc' ? '▲' : '▼'}</span>
                 )}
@@ -128,13 +128,13 @@ const CustomTable = ({
     const tBody = useMemo(() => {
         dataChange({ dataCount: sortedData.length, })
         return showPagination ?
-            sortedData.slice(startIndex, endIndex).map((row) => formatRow(row))
-            : sortedData.map((row) => formatRow(row));
+            sortedData.slice(startIndex, endIndex).map((row,rowkey) => formatRow(row,rowkey))
+            : sortedData.map((row,rowkey) => formatRow(row,rowkey));
     }, [sortedData, startIndex, endIndex]);
 
     return (
         <div>
-            <Table className={classes}>
+            <Table className={classes} id={id}>
                 <thead>
                     <tr>
                         {tHeder}

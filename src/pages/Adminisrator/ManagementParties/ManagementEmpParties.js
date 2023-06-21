@@ -293,63 +293,65 @@ const ManagementEmpParties = (props) => {
                     </div>
 
                     <form noValidate>
-                        <PaginationProvider
+
+                        {/* <PaginationProvider
 
                             pagination={paginationFactory(pageOptions)}
                         >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
+                            {({ paginationProps, paginationTableProps }) => ( */}
+                        <ToolkitProvider
 
-                                    keyField="id"
-                                    data={partyList}
-                                    columns={pagesListColumns}
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <div className="table">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    bordered={true}
-                                                    striped={false}
-                                                    selectRow={selectAllCheck(rowSelected())}
-                                                    noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
+                            keyField="id"
+                            data={partyList}
+                            columns={pagesListColumns}
+                            search
+                        >
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    <div className="table">
+                                        <BootstrapTable
+                                            keyField={"id"}
+                                            bordered={true}
+                                            striped={false}
+                                            selectRow={selectAllCheck(rowSelected())}
+                                            noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
+                                            classes={"table align-middle table-nowrap table-hover"}
+                                            headerWrapperClasses={"thead-light"}
 
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
-                                               
-                                                {mySearchProps(toolkitProps.searchProps)}
-                                            </div>
+                                            {...toolkitProps.baseProps}
+                                        // {...paginationTableProps}
+                                        />
 
-                                            <Row className="align-items-md-center mt-30">
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
+
+                                    {/* <Row className="align-items-md-center mt-30">
                                                 <Col className="pagination pagination-rounded justify-content-end mb-2">
                                                     <PaginationListStandalone
                                                         {...paginationProps}
                                                     />
                                                 </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
+                                            </Row> */}
+                                </React.Fragment>
                             )
                             }
+                        </ToolkitProvider>
+                        {/* )
+                            }
 
-                        </PaginationProvider>
+                        </PaginationProvider> */}
 
                         {partyList.length > 0 ?
                             <FormGroup style={{ marginTop: "-25px" }}>
                                 <Row >
-                                    <Col sm={2} className="mt-n4">
+                                    <Col sm={2} className="mt-n4">  <div className="row save1" style={{ paddingBottom: 'center' }}>
                                         <SaveButton pageMode={pageMode}
                                             loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
                                             module={"RouteUpdate"}
                                         />
+                                    </div>
                                     </Col>
                                 </Row>
                             </FormGroup >
