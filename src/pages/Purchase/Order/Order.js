@@ -1005,6 +1005,7 @@ const Order = (props) => {
                 dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
 
             } else {
+                debugger
                 dispatch(_act.saveOrderAction({ jsonBody, subPageMode, gotoInvoiceMode }))
             }
 
