@@ -12,7 +12,9 @@ import {
   UPDATE_H_PAGES_SUCCESS,
   GET_PAGETYPE_SUCCESS,
   SAVE_HPAGES,
-  UPDATE_H_PAGES
+  UPDATE_H_PAGES,
+  PAGEMASTER_API_ERROR_ACTION,
+  GET_PAGELIST
 } from "./actionType"
 
 const INIT_STATE = {
@@ -30,7 +32,9 @@ const INIT_STATE = {
   PageAccess: [],
   ControlTypes: [],
   FieldValidations: [],
-  saveBtnloading: false
+  saveBtnloading: false,
+  listLoading: false,
+
 }
 
 const H_Pages = (state = INIT_STATE, action) => {
@@ -88,14 +92,21 @@ const H_Pages = (state = INIT_STATE, action) => {
         ...state,
         updateMessage: action.payload,
         saveBtnloading: false
-
       }
 
     // PageList Dropdown api
+
+    case GET_PAGELIST:
+      return {
+        ...state,
+        listLoading: true,
+      };
+
     case GET_PAGELIST_SUCCESS:
       return {
         ...state,
         PageList: action.payload,
+        listLoading: false,
       };
 
     // PageType Dropdown api
@@ -123,9 +134,22 @@ const H_Pages = (state = INIT_STATE, action) => {
         ...state,
         FieldValidations: action.payload,
       }
+
+    case PAGEMASTER_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listLoading: false,
+
+
+      };
+
+
+
     default:
       return state
   }
+
 
 }
 
