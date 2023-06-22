@@ -210,43 +210,59 @@ export const reportFooter = (doc, data) => {
     doc.line(360, 308, 360, 379);//vertical right1 Sub Total
     doc.setFont('Tahoma')
     doc.line(360, 340, 30, 340);//horizontal line (Bottom)
-    doc.line(360, 362, 30, 362); //horizontal line Sginature upper line 
+    doc.line(360, 362, 30, 362); //horizontal line Sginature upper line
+    doc.line(570, 365, 435, 365); //horizontal line Sginature upper line 
 
+    debugger
     const a = data.InvoiceItems.map((data) => ({
+
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
         BasicAmount: Number(data.BasicAmount),
+        Discount: Number(data.DiscountAmount)
     }));
     var totalCGST = 0;
     var totalSGST = 0;
     var TotalBasicAmount = 0;
+    var TotalDiscount = 0
     a.forEach(arg => {
         totalCGST += arg.CGST;
         totalSGST += arg.SGST;
-        TotalBasicAmount += arg.BasicAmount
-
+        TotalBasicAmount += arg.BasicAmount;
+        TotalDiscount += arg.Discount;
     });
     const TotalGST = totalCGST + totalSGST;
     doc.setFontSize(8)
-    doc.text(`CGST:`, 440, 310,)
-    doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
 
-    doc.text(`SGST:`, 440, 322,)
-    doc.text(`${totalSGST.toFixed(2)}`, 560, 322, 'right')
+    doc.text(`Total Basic:`, 440, 302,)
+    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 302, 'right')
 
-    doc.text(`TotalGST:`, 440, 334,)
-    doc.text(` ${TotalGST.toFixed(2)}`, 560, 334, 'right')
+    doc.text(`Total Disc:`, 440, 312,)
+    doc.text(` ${TotalDiscount.toFixed(2)}`, 560, 312, 'right')
 
-    doc.text(`BasicAmount:`, 440, 346,)
-    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 346, 'right')
+    doc.text(`Total CGST:`, 440, 322)
+    doc.text(`${totalCGST.toFixed(2)}`, 560, 322, 'right')
+
+    doc.text(`Total SGST:`, 440, 332,)
+    doc.text(`${totalSGST.toFixed(2)}`, 560, 332, 'right')
+
+    doc.text(`Total GST:`, 440, 342,)
+    doc.text(` ${TotalGST.toFixed(2)}`, 560, 342, 'right')
+
+    doc.text(`Round Off:`, 440, 352,)
+    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 560, 352, 'right')
+
+    doc.text(`Total TCS:`, 440, 362,)
+    doc.text(` `, 560, 362, 'right')
+
+
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text(`Amount :`, 439, 365,)
-    const GrandTotal = Math.round(data.GrandTotal)
-    const Total = numberWithCommas((GrandTotal).toFixed(2))
-    doc.text(`${Total}`, 560, 365, 'right')
+    doc.text(`Amount :`, 439, 375,)
+    const Total = numberWithCommas(Number(data.GrandTotal).toFixed(2))
+    doc.text(`${Total}`, 560, 376, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -279,7 +295,9 @@ export const reportFooter = (doc, data) => {
 
 export const tableBody = (doc, data) => {
     var options = {
+
         didParseCell: (data1) => {
+            debugger
             if (data1.row.cells[9].raw === "isaddition") {
                 data1.row.cells[1].colSpan = 5
                 // data1.row.cells[3].colSpan = 5
@@ -287,11 +305,12 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[10].colSpan = 2
 
                 data1.row.cells[1].styles.fontSize = 7
+                data1.row.cells[1].styles.halign = "right"    // Alignment for  cgst and Total in spanrow
+
                 data1.row.cells[8].styles.fontSize = 7
                 data1.row.cells[7].styles.fontSize = 7
                 data1.row.cells[10].styles.fontSize = 7
                 data1.row.cells[12].styles.fontSize = 7
-
                 data1.row.cells[1].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
                 data1.row.cells[7].styles.fontStyle = "bold"
