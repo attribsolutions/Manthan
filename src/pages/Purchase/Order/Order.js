@@ -273,10 +273,7 @@ const Order = (props) => {
 
             } else {// ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
 
-                const a = await customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
+
                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
                 if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
 
@@ -292,11 +289,18 @@ const Order = (props) => {
                         errorMsg: "Order Save Successfully But Can't Make Invoice"
                     }));
                 }
-                else if (a) {
-                    history.push({
-                        pathname: listPath,
-                    });
+                else {
+                    const a = await customAlert({
+                        Type: 1,
+                        Message: postMsg.Message,
+                    })
+                    if (a) {
+                        history.push({
+                            pathname: listPath,
+                        });
+                    }
                 }
+
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
@@ -1057,7 +1061,7 @@ const Order = (props) => {
                                     <Col sm="4" >
                                         <FormGroup className=" row mt-2" >
                                             <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>Order Date</Label>
+                                                style={{ width: "115px" }}>Delivery Date</Label>
                                             <Col sm="7">
                                                 <C_DatePicker
                                                     name="orderdate"
@@ -1129,7 +1133,7 @@ const Order = (props) => {
                                                             setItemSelect('')
                                                             setGoBtnDissable(true)
                                                         }} />
-                                                    :(!selecedItemWiseOrder)&&
+                                                    : (!selecedItemWiseOrder) &&
                                                     <Change_Button
                                                         id={`change-btn${subPageMode}`}
                                                         onClick={(e) => {
