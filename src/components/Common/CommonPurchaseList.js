@@ -99,6 +99,7 @@ const CommonPurchaseList = (props) => {
     pageMode,
     newBtnPath,
     forceNewBtnView,
+    Uploaded_EInvoiceBtnFunc= () => { },
     HeaderContent = () => {
       return null;
     },
@@ -109,7 +110,7 @@ const CommonPurchaseList = (props) => {
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
-    debugger
+    
     const locationPath = history.location.pathname;
     let userAcc = userAccess.find((inx) => {
       return `/${inx.ActualPagePath}` === locationPath;
@@ -282,7 +283,8 @@ const CommonPurchaseList = (props) => {
         copyBodyfunc: copyBodyfunc,
         makeBtnFunc: makeBtnFunc,
         pageMode: pageMode,
-        oderAprovalBtnFunc: oderAprovalBtnFunc
+        oderAprovalBtnFunc: oderAprovalBtnFunc,
+        Uploaded_EInvoiceBtnFunc:Uploaded_EInvoiceBtnFunc
       })
     }
   }

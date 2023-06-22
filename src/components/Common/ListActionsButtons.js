@@ -3,7 +3,7 @@ import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { btnIsDissablefunc, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
-
+import * as url from "../../routes/route_url";
 
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
@@ -38,6 +38,7 @@ export const listPageActionsButtonFunc = (props) => {
         copyBodyfunc,
         updateBtnFunc,
         makeBtnFunc = () => { },
+        Uploaded_EInvoiceBtnFunc = () => { },
         pageMode,
         makeBtnName,
         makeBtnShow = false,
@@ -126,6 +127,14 @@ export const listPageActionsButtonFunc = (props) => {
         arr.push(rowData)
         makeBtnFunc(arr)
     }
+
+    function Uploaded_EInvoiceHandler(e, RowData) {
+
+        try {
+            Uploaded_EInvoiceBtnFunc(RowData.id)
+        } catch (error) { }
+
+    };
 
     return ({
         text: "Action",
@@ -390,6 +399,47 @@ export const listPageActionsButtonFunc = (props) => {
                                 </Button>  // **else null
                                 : null
                     }
+                    {
+                        ((subPageMode === url.INVOICE_LIST_1)) &&
+                        // <Button
+                        //     type="button"
+                        //     id={`btn-dounload-${rowData.id}`}
+                        //     className={downBtnCss}
+                        //     title={`E-Invoice`}
+                        //     onClick={() => {
+                        //         const btnId = `btn-dounload-${rowData.id}`
+                        //         // downHandler(rowData, btnId)
+                        //     }}
+                        // >
+                        //     <i className="fas fa-file-invoice  font-size-18"></i>
+                        // </Button>
+                        <Button type="button" color="btn btn-outline-info border-1 font-size-10 text-center"
+                        // onClick={(e,) => AddPartyHandler(e, "Select")}
+                        >        <i > </i>EwayBill</Button>
+
+                    }
+
+                    {
+                        ((subPageMode === url.INVOICE_LIST_1)) &&
+                        // <Button
+                        //     type="button"
+                        //     id={`btn-dounload-${rowData.id}`}
+                        //     className={downBtnCss}
+                        //     title={`E-Invoice`}
+                        //     onClick={() => {
+                        //         const btnId = `btn-dounload-${rowData.id}`
+                        //         // downHandler(rowData, btnId)
+                        //     }}
+                        // >
+                        //     <i className="fas fa-file-invoice  font-size-18"></i>
+                        // </Button>
+                        <Button type="button" color="btn btn-outline-success border-1 font-size-10 text-center"
+                            onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}
+                        >        <i > </i>E-Invoice</Button>
+
+                    }
+
+
 
                 </div >
             )
