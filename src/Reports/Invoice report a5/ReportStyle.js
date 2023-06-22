@@ -1,5 +1,5 @@
 
-import reportHederPng from "../../assets/images/reportHeder.png"
+// import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { numberWithCommas, toWords } from "../Report_common_function";
@@ -25,8 +25,6 @@ export const pageHeder = (doc, data) => {
     doc.line(570, 56, 30, 56) //Full horizontal line Bill by Upper line
     doc.setFontSize(7)
     doc.text('Original For Buyer', 500, 11,)
-
-
 }
 
 export const reportHeder1 = (doc, data) => {
