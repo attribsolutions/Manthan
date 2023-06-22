@@ -640,7 +640,7 @@ const SalesReturn = (props) => {
                 "MRPValue": returnMode === 1 ? i.RowData.MRPValue : i.MRPValue,
                 "Rate": i.Rate,
                 "BasicAmount": calculate.baseAmt,
-                "GSTAmount": calculate.gstAmt,
+                "GSTAmount": calculate.gstAmt.toFixed(2),
                 "GST": returnMode === 1 ? i.RowData.GST : i.GST_ID,
                 "GSTPercentage": gstPercentage,
                 "CGST": calculate.CGST,
@@ -725,8 +725,8 @@ const SalesReturn = (props) => {
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
-                        <div className="px-2 c_card_filter header text-black mb-2" >
-                            < img id='add-img' className='abc1' src={''} style={{ top: "400px" }} />
+                        <div className="px-2 c_card_filter header text-black mb-1" >
+                            {/* < img id='add-img' className='abc1' src={''} style={{ top: "400px" }} /> */}
 
                             <Row>
                                 <Col sm="6">
@@ -775,7 +775,7 @@ const SalesReturn = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReturnReason} </Label>
                                         <Col sm="7">
@@ -802,7 +802,7 @@ const SalesReturn = (props) => {
                                 </Col >
 
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment} </Label>
                                         <Col sm="7">
@@ -829,7 +829,7 @@ const SalesReturn = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
                                         <Col sm="7">
@@ -865,7 +865,7 @@ const SalesReturn = (props) => {
                                     </FormGroup>
                                 </Col >
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.InvoiceNumber}</Label>
                                         <Col sm="7">
