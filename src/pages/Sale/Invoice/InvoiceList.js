@@ -118,7 +118,7 @@ const InvoiceList = () => {
                 Message: Uploaded_EInvoice.Message,
             })
         }
-        else if (orderApprovalMsg.Status === true) {
+        else if (Uploaded_EInvoice.Status === true) {
             dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
             customAlert({
                 Type: 2,
