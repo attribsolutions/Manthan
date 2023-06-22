@@ -110,7 +110,6 @@ const CommonPurchaseList = (props) => {
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
-    
     const locationPath = history.location.pathname;
     let userAcc = userAccess.find((inx) => {
       return `/${inx.ActualPagePath}` === locationPath;
@@ -299,11 +298,12 @@ const CommonPurchaseList = (props) => {
   function rowSelected() {
     return tableList.map((index) => { return (index.selectCheck) })
   }
+  debugger
   const nonSelectedRow = () => {
-
-    return tableList.filter(row => row.forceSelectDissabled).map(row => row.id)
-
+    debugger
+    return tableList.filter(row => row.forceSelectDissabled || row.forceHideOrderAprovalBtn === false).map(row => row.id)       //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
   }
+  console.log("row id", nonSelectedRow())
 
   if (!(userAccState === "")) {
 
