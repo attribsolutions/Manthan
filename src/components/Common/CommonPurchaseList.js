@@ -20,14 +20,8 @@ import * as mode from "../../routes/PageMode";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
-import { url } from "../../routes";
-import { SaveButton } from "./CommonButton";
-import CustomTable from "../../CustomTable2/Custom";
 
-let sortType = "asc";
 let searchCount = 0;
-let downList = [];
-let listObj = {};
 
 let searchProps = {
   onClear: function onClear() { },
@@ -99,6 +93,7 @@ const CommonPurchaseList = (props) => {
     pageMode,
     newBtnPath,
     forceNewBtnView,
+    Uploaded_EInvoiceBtnFunc= () => { },
     HeaderContent = () => {
       return null;
     },
@@ -282,7 +277,8 @@ const CommonPurchaseList = (props) => {
         copyBodyfunc: copyBodyfunc,
         makeBtnFunc: makeBtnFunc,
         pageMode: pageMode,
-        oderAprovalBtnFunc: oderAprovalBtnFunc
+        oderAprovalBtnFunc: oderAprovalBtnFunc,
+        Uploaded_EInvoiceBtnFunc:Uploaded_EInvoiceBtnFunc
       })
     }
   }
@@ -321,16 +317,7 @@ const CommonPurchaseList = (props) => {
                 {(toolkitProps, a) => (
                   <React.Fragment>
                     <Row>
-                      {/* <div className="table-responsive table " >
-                        <CustomTable
-                          keyField={"id"}
-                          data={tableList}
-                          columns={tableColumns}
-                          itemsPerPage={15}
-                          defaultSorted={defaultSorted}
-                          classes={"table table-bordered table-hover"}
-                        />
-                      </div> */}
+                    
                       <Col xl="12">
                         <div className="table-responsive mt-1" >
                           <BootstrapTable

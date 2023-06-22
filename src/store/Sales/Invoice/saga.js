@@ -2,6 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
   CommonConsole,
   concatDateAndTime,
+  loginUserID,
 } from "../../../components/Common/CommonFunction";
 import {
   Invoice_1_GoButton_API,
@@ -13,7 +14,8 @@ import {
   IB_Invoice_Save_API,
   IB_Invoice_Get_Filter_API,
   IB_Invoice_Edit_API_Singel_Get,
-  IB_Invoice_Delete_API
+  IB_Invoice_Delete_API,
+  Uploade_EInvoice_Get_API
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -22,14 +24,18 @@ import {
   GoButtonForinvoiceAddSuccess,
   invoiceSaveActionSuccess,
   makeIB_InvoiceActionSuccess,
-  InvoiceApiErrorAction
+  InvoiceApiErrorAction,
+  Uploaded_EInvoiceSuccess,
+  Uploaded_EwayBillSuccess
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
   EDIT_INVOICE_LIST, INVOICE_LIST_GO_BUTTON_FILTER,
   GO_BUTTON_FOR_INVOICE_ADD,
   INVOICE_SAVE_ADD_PAGE_ACTION,
-  MAKE_IB_INVOICE_ACTION
+  MAKE_IB_INVOICE_ACTION,
+  UPLOADED_E_INVOICE_ACTION,
+  UPLOADED_E_WAY_BILL_ACTION
 } from "./actionType";
 import *as url from "../../../routes/route_url"
 import { discountCalculate } from "../../../pages/Sale/Invoice/invoiceCaculations";
@@ -255,6 +261,30 @@ function* makeIB_InvoiceGenFunc({ body }) {
   }
 }
 
+//Uploaded_EInvoicea/RowId/UserID
+function* Uploade_EInvoiceGenFunc({ RowId }) {
+  debugger
+  let UserID = loginUserID()
+  try {
+    const response = yield call(Uploade_EInvoice_Get_API, { RowId, UserID })
+    yield put(Uploaded_EInvoiceSuccess(response));
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
+}
+
+//Uploaded_EwayBill//RowId/UserID
+function* Uploade_EwayBillGenFunc({ RowId }) {
+  debugger
+  let UserID = loginUserID()
+  try {
+    const response = yield call(Uploade_EInvoice_Get_API, { RowId, UserID })
+    yield put(Uploaded_EwayBillSuccess(response));
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
+}
+
 
 // MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
@@ -265,6 +295,9 @@ function* InvoiceSaga() {
   yield takeEvery(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
   yield takeEvery(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)
   yield takeEvery(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
+  yield takeEvery(UPLOADED_E_INVOICE_ACTION, Uploade_EInvoiceGenFunc)
+  yield takeEvery(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc)
+
 
 }
 
