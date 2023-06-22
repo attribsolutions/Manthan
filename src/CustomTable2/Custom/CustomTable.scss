@@ -7,13 +7,13 @@
 
 
 
- .pagination1 {
+ #c__pagination {
      list-style: none;
      display: flex;
      justify-content: end;
 
-
-     li {
+ }
+ #c__pagination li {
          display: inline-block;
          padding: 5px 10px;
          margin: 0 2px;
@@ -22,12 +22,12 @@
          transition: background-color 0.3s ease;
      }
 
-     li:hover {
+     #c__pagination li:hover {
          background-color: #ddd;
      }
 
-     li.active {
+     #c__pagination li.active {
          background-color: rgb(72, 90, 247);
          color: #fff;
      }
- }
+ 

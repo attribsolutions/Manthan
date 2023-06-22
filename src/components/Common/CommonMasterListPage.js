@@ -291,16 +291,16 @@ const CommonListPage = (props) => {
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <div className="page-content">
           <div className="table-responsive table " >
-            <CustomTable
+            {/* <CustomTable
               keyField={"id"}
               data={tableList}
               columns={tableColumns}
               itemsPerPage={15}
               defaultSorted={defaultSorted}
               classes={"table table-bordered table-hover"}
-            />
+            /> */}
           </div>
-          {/* <PaginationProvider pagination={paginationFactory(pageOptions)}>
+           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
                 keyField="id"
@@ -339,7 +339,7 @@ const CommonListPage = (props) => {
                 )}
               </ToolkitProvider>
             )}
-          </PaginationProvider> */}
+          </PaginationProvider> 
 
 
           <Modal isOpen={modal_edit} toggle={() => { tog_center() }} size="xl">

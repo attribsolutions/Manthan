@@ -242,7 +242,7 @@ function CustomPagination({ pageCount, currentPage, handlePageChange }) {
         pages.push(endItem);
     }
 
-    return <ul className="pagination1">{pages}</ul>;
+    return <ul id='c__pagination'>{pages}</ul>;
 }
 
 
