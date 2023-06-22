@@ -49,9 +49,9 @@ const InvioceReporta5 = (data) => {
     }
 
     // doc.deletePage(1)
-    // doc.setProperties({
-    //     title: "Report"
-    // });
+    doc.setProperties({
+        title: " Invoice Report"
+    });
 
     const options = { filename: "Invoice Report" }
     doc.output('dataurlnewwindow', options);
