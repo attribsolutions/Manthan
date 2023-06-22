@@ -135,6 +135,7 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
 }
 
 function* orderList_GoBtn_GenFunc({ config }) {
+
   //  Order List Filter by subPageMode
   try {
     const { subPageMode } = config
@@ -152,11 +153,12 @@ function* orderList_GoBtn_GenFunc({ config }) {
     // else if ((subPageMode === url.ORDER_LIST_4)) {
     //   response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     // }
+    
     newList = yield response.Data.map((i) => {
 
       const numericValue = parseFloat(i.OrderAmount);
       i.OrderAmount = numericValue.toLocaleString(); //  Order Amount show with commas
-      
+
       i["preOrderDate"] = i.OrderDate
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
@@ -169,6 +171,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceHideOrderAprovalBtn = true;
       i.Status = "Open";
       i.Inward = "Open";
+
 
 
       if (i.Inward > 0) {
@@ -190,9 +193,14 @@ function* orderList_GoBtn_GenFunc({ config }) {
       }
 
       //**********************************order Aproval button Show Condition ********************************************************** */
+
+
+
       if (!i.SAPResponse && i.CustomerSAPCode) {//order Aproval button Show Condition 
         i.forceHideOrderAprovalBtn = false;
       }
+
+
 
       //++++++++++++++++++++++++++++++++++++++ make invoice Button dessiable/vissbble ++++++++++++++++++++++++++++++++++++++
       if (i.InvoiceCreated === true) {
@@ -218,6 +226,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
       return i
     })
+
     yield put(getOrderListPageSuccess(newList))
 
   } catch (error) {

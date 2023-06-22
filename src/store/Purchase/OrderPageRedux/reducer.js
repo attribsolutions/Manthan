@@ -33,6 +33,7 @@ const INIT_STATE = {
   orderConfirmMsg: { Status: false },
   orderConfirmLoading: false,
   gotoInvoiceBtnLoading: false,
+  btndisable: false
 
 }
 
@@ -54,8 +55,8 @@ const OrderReducer = (state = INIT_STATE, action) => {
       }
 
     case SAVE_ORDER_FROM_ORDER_PAGE:
-   
-      let { gotoInvoiceMode=false } = action.config
+
+      let { gotoInvoiceMode = false } = action.config
       return {
         ...state,
         saveBtnloading: !gotoInvoiceMode,
@@ -135,6 +136,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         orderApprovalMsg: action.payload,
+        btndisable: true
       }
 
     case POST_ORDER_CONFIRM_API:

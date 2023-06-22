@@ -5,7 +5,6 @@ import { btnIsDissablefunc, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 import * as url from "../../routes/route_url";
 
-
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 export const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -22,6 +21,11 @@ const dissableStyle = {
 };
 
 export const listPageActionsButtonFunc = (props) => {
+
+
+
+
+
 
     const dispatch = props.dispatchHook;
     const userCreated = loginUserID()
@@ -373,6 +377,7 @@ export const listPageActionsButtonFunc = (props) => {
                             : null
                     }
                     {
+
                         ((oderAprovalBtnFunc && !forceDeleteHide && !forceDeleteHide && !forceHideOrderAprovalBtn)) ?
                             <Button
                                 type="button"
