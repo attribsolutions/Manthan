@@ -46,7 +46,7 @@ export const Rows = (data) => {
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
         
-        const {HSNCode, ItemName, MRP, Rate, Discount, CGST,SGST,Amount,DiscountAmount,BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage,SGSTPercentage,GSTPercentage,BatchCode,BatchDate} = currentItem;
+        const {HSNCode, ItemName, MRP, Rate, Discount, CGST,SGST,Amount,DiscountAmount,BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage,SGSTPercentage,GSTPercentage,BatchCode,BatchDate,DiscountType} = currentItem;
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
             accumulator[key].DiscountAmount += Number(DiscountAmount);
@@ -61,20 +61,20 @@ export const Rows = (data) => {
 
         } else {
             accumulator[key] = { ItemName,HSNCode,
-                 MRPValue, Rate, Discount, CGST:Number(CGST),SGST: Number(SGST),Amount:Number(Amount),DiscountAmount:Number(DiscountAmount),BasicAmount:Number(BasicAmount), Quantity:parseInt(Quantity), UnitName ,CGSTPercentage,SGSTPercentage,GSTPercentage,BatchDate,BatchCode:BatchCode,BatchDate:BatchDate,quantityString:`  ${BatchCode}  ${BatchDate}`};
+                 MRPValue, DiscountType, Rate, Discount, CGST:Number(CGST),SGST: Number(SGST),Amount:Number(Amount),DiscountAmount:Number(DiscountAmount),BasicAmount:Number(BasicAmount), Quantity:parseInt(Quantity), UnitName ,CGSTPercentage,SGSTPercentage,GSTPercentage,BatchDate,BatchCode:BatchCode,BatchDate:BatchDate,quantityString:`  ${BatchCode}  ${BatchDate}`};
         }
         return accumulator;
     }, {});
 
     Object.values(groupedItems).forEach((element, key) => {
-      
+      debugger
         const tableitemRow = [
             SrNO++,
             `(${element.HSNCode})${element.ItemName}` ,
             `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
             element.MRPValue,
             element.Rate,
-            element.Discount,
+            `${element.Discount}  ${element.DiscountType=== "1"? "Rs":"%" }`,
             element.DiscountAmount,
             element.BasicAmount,
             `${Number(element.CGSTPercentage).toFixed(1)}%`,
