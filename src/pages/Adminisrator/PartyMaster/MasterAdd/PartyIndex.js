@@ -320,7 +320,7 @@ const PartyMaster = (props) => {
     }
 
     const SaveHandler = (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -330,11 +330,19 @@ const PartyMaster = (props) => {
         let addressTabDetail = addressTabRef.current.getCurrentState()
         let prefixValue = prefixTabRef.current.getCurrentState().values
         let addressTabIsAddressEnter = addressTabRef.current.IsAddressEnter()
-       
+
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
 
         let isError = addressTabIsAddressEnter.isError
         let values = addressTabIsAddressEnter.values
+
+        if ((priceListSelect.label === "") && (subPageMode === url.RETAILER_MASTER)) {
+            customAlert({
+                Type: 4,
+                Message: "Please Select PriceList ",
+            })
+            return;
+        }
 
         if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "")) {
             customAlert({
@@ -343,7 +351,7 @@ const PartyMaster = (props) => {
             })
             return;
         }
-
+        
         if (!validBasetab) {
             setactiveTab1("1")
             return
