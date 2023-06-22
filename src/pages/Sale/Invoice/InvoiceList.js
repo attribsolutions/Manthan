@@ -118,6 +118,13 @@ const InvoiceList = () => {
                 Message: Uploaded_EInvoice.Message,
             })
         }
+        else if (orderApprovalMsg.Status === true) {
+            dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
+            customAlert({
+                Type: 2,
+                Message: JSON.stringify(Uploaded_EInvoice.Message),
+            })
+        }
     }, [Uploaded_EInvoice]);
 
     const supplierOptions = supplier.map((i) => ({
