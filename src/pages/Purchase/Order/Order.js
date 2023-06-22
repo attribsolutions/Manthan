@@ -752,7 +752,7 @@ const Order = (props) => {
 
     const goButtonHandler = async ({ selectSupplier, }) => {
 
-
+        
         if (!supplierSelect > 0 && !selectSupplier) {
             await customAlert({
                 Type: 4,
@@ -1024,7 +1024,7 @@ const Order = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-                <div className="page-content">
+                <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     {RoleID === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
@@ -1053,8 +1053,7 @@ const Order = (props) => {
                         : null}
 
                     <div>
-                        <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
-
+                        <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
 
                             <div>
                                 <Row >
@@ -1074,7 +1073,7 @@ const Order = (props) => {
                                     </Col>
                                     {(subPageMode === ORDER_4) ?
                                         <Col sm="3">
-                                            <FormGroup className=" row mt-3 " >
+                                            <FormGroup className=" row mt-2 " >
                                                 <Label className="col-sm-5 p-2"
                                                     style={{ width: "65px" }}>{fieldLabel.Route}</Label>
                                                 <Col sm="7">
@@ -1347,7 +1346,7 @@ const Order = (props) => {
 
                     </div>
 
-                    <div className="table-responsive table " >
+                    <div className="table-responsive table mt-n3" >
 
                     </div>
                     <ToolkitProvider
