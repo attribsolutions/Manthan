@@ -74,8 +74,8 @@ export const Rows = (data) => {
             `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
             element.MRPValue,
             element.Rate,
-            `${element.Discount}  ${element.DiscountType=== "1"? "Rs":"%" }`,
-            element.DiscountAmount,
+            `${element.Discount} ${element.DiscountType=== "1"? "Rs":"%" }`,
+            `${Number(element.DiscountAmount).toFixed(2)}`,
             element.BasicAmount,
             `${Number(element.CGSTPercentage).toFixed(1)}%`,
             element.CGST,
@@ -103,7 +103,7 @@ export const Rows = (data) => {
         
             return [
                 "",
-                `GST Pescentage :${(parseFloat(GSTPercentage))}%       Total Gst:${(parseFloat(TotalGst).toFixed(2))} `,
+                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(parseFloat(TotalGst).toFixed(2))} `,
                 " ",
                 ``,
                 "",

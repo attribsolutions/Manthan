@@ -48,7 +48,7 @@ const InvioceReporta5 = (data) => {
         })
     }
 
-    // doc.deletePage(1)
+
     doc.setProperties({
         title: " Invoice Report"
     });

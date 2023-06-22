@@ -109,8 +109,6 @@ const Order = (props) => {
     const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
     const [goBtnDissable, setGoBtnDissable] = useState(false)
 
-
-
     const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
     const [orderTypeSelect, setorderTypeSelect] = useState('');
@@ -178,7 +176,6 @@ const Order = (props) => {
         }
     }, []);
 
-
     useEffect(() => userAccessUseEffect({ // userAccess useEffect 
         props,
         userAccess,
@@ -192,7 +189,6 @@ const Order = (props) => {
             setFindPartyItemAccess(true)
         }
     };
-
 
     useEffect(() => { // hasEditVal useEffect
 
@@ -273,10 +269,7 @@ const Order = (props) => {
 
             } else {// ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
 
-                const a = await customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
+
                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
                 if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
 
@@ -292,11 +285,18 @@ const Order = (props) => {
                         errorMsg: "Order Save Successfully But Can't Make Invoice"
                     }));
                 }
-                else if (a) {
-                    history.push({
-                        pathname: listPath,
-                    });
+                else {
+                    const a = await customAlert({
+                        Type: 1,
+                        Message: postMsg.Message,
+                    })
+                    if (a) {
+                        history.push({
+                            pathname: listPath,
+                        });
+                    }
                 }
+
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
@@ -366,7 +366,6 @@ const Order = (props) => {
         orderApprovalMessage({ dispatch, orderApprovalMsg, listPath, history })
     }, [orderApprovalMsg]);
 
-
     useEffect(() => {
         try {
             document.getElementById("__assignItem_onClick").style.display = ((supplierSelect.value > 0) && (findPartyItemAccess) && !goBtnloading) ? "block" : "none"
@@ -382,7 +381,6 @@ const Order = (props) => {
         }
     }, [gobutton_Add_invoice]);
 
-
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -397,8 +395,6 @@ const Order = (props) => {
         value: data.id,
         label: data.Name
     }));
-
-
 
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
@@ -648,6 +644,7 @@ const Order = (props) => {
             }
         },
     ];
+
     const defaultSorted = [
         {
             dataField: "ItemName", // if dataField is not match to any column you defined, it will be ignored.
@@ -655,26 +652,25 @@ const Order = (props) => {
         },
     ];
 
-
-
-
     function orderdateOnchange(e, date) {
         setorderdate(date)
     };
 
     function supplierOnchange(e) {
+
         setsupplierSelect(e);
         if (subPageMode === url.ORDER_4) {
             dispatch(_act.getSupplierAddress(e.value))
         }
         setorderItemTable([])
         setItemSelect('')
-        goButtonHandler({ selectSupplier: e.value })
+        goButtonHandler(e.value)
     };
 
     function partyOnchange(e) {
         setPartySelect(e)
     };
+
     function itemSelectOnchange(e) {
         setItemSelect(e)
     };
@@ -746,8 +742,7 @@ const Order = (props) => {
         setItemSelect('')
     }
 
-    const goButtonHandler = async ({ selectSupplier, }) => {
-
+    const goButtonHandler = async (selectSupplier) => {
 
         if (!supplierSelect > 0 && !selectSupplier) {
             await customAlert({
@@ -1020,7 +1015,7 @@ const Order = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-                <div className="page-content">
+                <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     {RoleID === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
@@ -1049,15 +1044,14 @@ const Order = (props) => {
                         : null}
 
                     <div>
-                        <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
-
+                        <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
 
                             <div>
                                 <Row >
                                     <Col sm="4" >
                                         <FormGroup className=" row mt-2" >
                                             <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>Order Date</Label>
+                                                style={{ width: "115px" }}>Delivery Date</Label>
                                             <Col sm="7">
                                                 <C_DatePicker
                                                     name="orderdate"
@@ -1068,9 +1062,10 @@ const Order = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col>
+
                                     {(subPageMode === ORDER_4) ?
                                         <Col sm="3">
-                                            <FormGroup className=" row mt-3 " >
+                                            <FormGroup className=" row mt-2 " >
                                                 <Label className="col-sm-5 p-2"
                                                     style={{ width: "65px" }}>{fieldLabel.Route}</Label>
                                                 <Col sm="7">
@@ -1121,7 +1116,7 @@ const Order = (props) => {
                                                         loading={goBtnloading}
                                                         id={`go-btn${subPageMode}`}
                                                         onClick={(e) => {
-                                                            if (!itemSelectDropOptions.length > 0) {
+                                                            if (itemSelectDropOptions.length > 0) {
                                                                 goButtonHandler()
                                                             }
                                                             setSelecedItemWiseOrder(false)
@@ -1129,7 +1124,7 @@ const Order = (props) => {
                                                             setItemSelect('')
                                                             setGoBtnDissable(true)
                                                         }} />
-                                                    :(!selecedItemWiseOrder)&&
+                                                    : (!selecedItemWiseOrder) &&
                                                     <Change_Button
                                                         id={`change-btn${subPageMode}`}
                                                         onClick={(e) => {
@@ -1183,6 +1178,7 @@ const Order = (props) => {
                                         </FormGroup>
                                     </Col>
                                     <Col sm="1"  >
+
                                         {pageMode === mode.defaultsave ?
                                             <div className="row mt-2 pr-1"  >
                                                 {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
@@ -1343,7 +1339,7 @@ const Order = (props) => {
 
                     </div>
 
-                    <div className="table-responsive table " >
+                    <div className="table-responsive table mt-n3" >
 
                     </div>
                     <ToolkitProvider
@@ -1382,9 +1378,7 @@ const Order = (props) => {
                         )}
                     </ToolkitProvider>
 
-
                     <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
-
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
@@ -1440,6 +1434,5 @@ const Order = (props) => {
     }
 
 }
-
 
 export default Order

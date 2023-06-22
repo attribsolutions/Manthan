@@ -104,9 +104,9 @@ const LoadingSheetList = () => {
             <div className="page-content">
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">
-                        <div className=" row">
+                        <div className=" row mt-3">
                             <Col sm="5" className="">
-                                <FormGroup className="mb- row mt-3 " >
+                                <FormGroup className=" row" >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "83px" }}>From Date</Label>
                                     <Col sm="7">
@@ -119,7 +119,7 @@ const LoadingSheetList = () => {
                                 </FormGroup>
                             </Col>
                             <Col sm="6" className="">
-                                <FormGroup className="mb- row mt-3 " >
+                                <FormGroup className="row" >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "65px" }}>To Date</Label>
                                     <Col sm="7">

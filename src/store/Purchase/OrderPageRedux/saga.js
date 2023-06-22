@@ -154,6 +154,9 @@ function* orderList_GoBtn_GenFunc({ config }) {
     // }
     newList = yield response.Data.map((i) => {
 
+      const numericValue = parseFloat(i.OrderAmount);
+      i.OrderAmount = numericValue.toLocaleString(); //  Order Amount show with commas
+      
       i["preOrderDate"] = i.OrderDate
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
@@ -237,9 +240,9 @@ function* getOrderApproval_Detail_GenFunc({ config }) {
 
     const response = yield call(OrderPage_Edit_Get_API, config)
     response.btnId = config.btnId
-  
+
     yield put(getOrderApprovalDetailActionSucc(response));
-   
+
   } catch (error) {
     yield put(getOrderApprovalDetailActionSucc({ Status: false }))
     yield put(orderApprovalActionSuccess({
