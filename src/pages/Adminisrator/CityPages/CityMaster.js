@@ -192,7 +192,7 @@ const CityMaster = (props) => {
                     Message: postMsg.Message,
                 })
                 if (promise) {
-                    // history.push({ pathname: url.CITY })  list page not desing
+                    history.push({ pathname: url.CITY_LIST })
                 }
             }
 

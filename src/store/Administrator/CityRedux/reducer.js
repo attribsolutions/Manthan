@@ -1,4 +1,5 @@
 import {
+    CITY_API_ERROR_ACTION,
     GET_CITY_LIST_SUCCESS,
     SAVE_CITY_MASTER,
     SAVE_CITY_MASTER_SUCCESS,
@@ -31,6 +32,15 @@ const CityReducer = (state = INIT_STATE, action) => {
                 ...state,
                 cityListData: action.payload,
             }
+
+        case CITY_API_ERROR_ACTION:
+            return {
+                ...state,
+                saveBtnloading: false,
+
+            };
+
+
 
         default:
             return state

@@ -14,11 +14,13 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { PAGE } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
+import { Listloader } from "../../../components/Common/CommonButton";
 export default function PageList() {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      listLoading: state.H_Pages.listLoading,
       tableList: state.H_Pages.HPagesListData,
       editData: state.H_Pages.editData,
       updateMsg: state.H_Pages.updateMessage,
@@ -46,21 +48,24 @@ export default function PageList() {
     dispatch(GetHpageListData());
   }, []);
 
-  const { pageField ,userAccess=[]} = reducers;
+  const { pageField, userAccess = [] } = reducers;
 
   return (
     <React.Fragment>
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={HPageMaster}
-            masterPath={PAGE}
-            ButtonMsgLable={"Page"}
-            deleteName={"Name"}
-          />
-          : null
+        reducers.listLoading ?
+          <Listloader />
+          :
+          (pageField) ?
+            <CommonListPage
+              action={action}
+              reducers={reducers}
+              MasterModal={HPageMaster}
+              masterPath={PAGE}
+              ButtonMsgLable={"Page"}
+              deleteName={"Name"}
+            />
+            : <> <Listloader /></>
       }
 
     </React.Fragment>
