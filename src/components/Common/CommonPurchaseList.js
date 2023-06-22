@@ -109,7 +109,7 @@ const CommonPurchaseList = (props) => {
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
-    debugger
+
     const locationPath = history.location.pathname;
     let userAcc = userAccess.find((inx) => {
       return `/${inx.ActualPagePath}` === locationPath;

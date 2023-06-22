@@ -39,7 +39,7 @@ import {
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit_SelectOnchange, showAllStockOnclick, showStockOnclick, stockDistributeFunc, stockQtyOnChange } from "./invoiceCaculations";
+import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit_SelectOnchange, stockDistributeFunc, stockQtyOnChange } from "./invoiceCaculations";
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
@@ -65,7 +65,7 @@ const Invoice = (props) => {
     const [orderIDs, setOrderIDs] = useState([])
 
     // for invoicer page heder dicount functionality useSate ************************************
-    const [discountValueAll, setDiscountValueAll] = useState(0);
+    const [discountValueAll, setDiscountValueAll] = useState("");
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
     const [changeAllDiscount, setChangeAllDiscount] = useState(false)
@@ -199,11 +199,6 @@ const Invoice = (props) => {
 
 
     useEffect(() => {
-        showAllStockOnclick(orderItemDetails, showAllStockState)
-    }, [showAllStockState]);
-
-
-    useEffect(() => {
 
         if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
             setState((i) => {
@@ -226,6 +221,7 @@ const Invoice = (props) => {
                 obj.hasValid.Customer.valid = true;
                 return obj
             })
+            
             setOrderItemDetails(gobutton_Add.Data.OrderItemDetails);
 
             // **********************************************************
@@ -267,8 +263,6 @@ const Invoice = (props) => {
                     </>
                 )
             },
-
-
         },
         {//***************Quantity********************************************************************* */
             text: "Quantity/Unit",
@@ -278,7 +272,8 @@ const Invoice = (props) => {
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <>
                     <div className="div-1 mb-2" style={{ minWidth: "200px" }}>
-                        <Input type="text"
+                        <Input
+                            type="text"
                             disabled={pageMode === 'edit' ? true : false}
                             id={`OrderQty-${index1.id}`}
                             className="input"
@@ -287,8 +282,8 @@ const Invoice = (props) => {
                             autoComplete="off"
                             defaultValue={index1.Quantity}
                             onChange={(event) => {
-                                orderQtyOnChange(event, index1,);
-                                totalAmountCalcuationFunc(tableList)
+                                orderQtyOnChange(event, index1);
+                                totalAmountCalcuationFunc(tableList);
                             }}
                         />
                     </div>
@@ -299,274 +294,182 @@ const Invoice = (props) => {
                                 id={"ddlUnit"}
                                 isDisabled={pageMode === 'edit' ? true : false}
                                 defaultValue={index1.default_UnitDropvalue}
-
-                                options={
-                                    index1.UnitDetails.map(i => ({
-                                        "label": i.UnitName,
-                                        "value": i.UnitID,
-                                        "ConversionUnit": i.ConversionUnit,
-                                        "Unitlabel": i.Unitlabel,
-                                        "BaseUnitQuantity": i.BaseUnitQuantity,
-                                        "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
-                                    }))
-                                }
+                                options={index1.UnitDetails.map(i => ({
+                                    "label": i.UnitName,
+                                    "value": i.UnitID,
+                                    "ConversionUnit": i.ConversionUnit,
+                                    "Unitlabel": i.Unitlabel,
+                                    "BaseUnitQuantity": i.BaseUnitQuantity,
+                                    "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
+                                }))}
                                 onChange={(event) => {
-                                    orderQtyUnit_SelectOnchange(event, index1)
-                                    totalAmountCalcuationFunc(tableList)
+                                    orderQtyUnit_SelectOnchange(event, index1);
+                                    totalAmountCalcuationFunc(tableList);
                                 }}
-                            >
-                            </Select >
+                            ></Select>
                         </div>
-
                     </div>
                     <div className="bottom-div">
                         <span>Order-Qty :</span>
-                        <samp >{index1.OrderQty}</samp>
-                        <samp >{index1.UnitName}</samp></div>
+                        <samp>{index1.OrderQty}</samp>
+                        <samp>{index1.UnitName}</samp>
+                    </div>
                 </>
-
-            )
+            ),
         },
-
-
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
-            formatExtraData: {
-                tableList: orderItemDetails
-            },
-            headerFormatter: (cell, index1 = [], k) => {
-
-                return (
-                    <div className="d-flex flex-content-start">
-                        {orderItemDetails.length > 0 ? <div>
-                            <samp id="allplus-circle">
-                                <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
-                                    style={{
-                                        position: "",
-                                        display: showAllStockState ? "none" : "block"
-                                    }}
-                                    onClick={(e) => {
-                                        setShowAllStockState(!showAllStockState)
-                                    }}
-                                >
-                                </i>
-                            </samp>
-                            <samp id="allminus-circle"  >
-                                <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                    style={{
-                                        position: "",
-                                        display: showAllStockState ? "block" : "none"
-                                    }}
-                                    onClick={(e) => {
-                                        setShowAllStockState(!showAllStockState)
-                                    }}
-                                ></i>
-                            </samp>
-                        </div>
-                            : null
-                        }
-
-                        <div style={{ paddingLeft: "1px", paddingTop: "1px" }}>
-                            <samp > Stock Details</samp>
-                        </div>
-
-                    </div>
-                )
-            },
+            formatExtraData: { tableList: orderItemDetails },
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <div>
-                    <div key={`plus-circle-icon${index1.id}`}>
-                        <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock'}</samp>
-
-                        <samp key={`minus-circle${index1.id}`} id={`minus-circle${index1.id}`}
-                            style={{ display: showAllStockState ? "block" : "none" }}
-                        >
-                            <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                style={{ position: "absolute", }}
-                                onClick={(e) => { showStockOnclick(index1, false) }}
-                            ></i>
-                        </samp>
-
-                    </div >
-
-                    <div id={`view${index1.id}`}
-                        style={{
-                            backgroundColor: "#b9be511a",
-                            display: showAllStockState ? "bolck" : "none"
-                        }}
-
-                    >
-                        <Table className="table table-bordered table-responsive mb-1" >
-
-                            <Thead  >
-
-                                <tr style={{ zIndex: -3 }}>
-                                    {/* <th >Batch Code </th> */}
-                                    <th>BatchCode</th>
-                                    {/* <th  >Batch Date</th> */}
-                                    <th >
-                                        <div>
-                                            <samp >Stock Quantity</samp>
+                    <Table className="table table-bordered table-responsive mb-1">
+                        <Thead>
+                            <tr style={{ zIndex: -3 }}>
+                                <th>BatchCode</th>
+                                <th>
+                                    <div>
+                                        <samp>Stock Quantity</samp>
+                                    </div>
+                                </th>
+                                <th className="">
+                                    <div>
+                                        <samp>Quantity</samp>
+                                    </div>
+                                </th>
+                                <th>Rate</th>
+                                <th>MRP</th>
+                            </tr>
+                        </Thead>
+                        <Tbody>
+                            {cellContent.map((index2) => (
+                                <tr key={index1.id}>
+                                    <td>
+                                        <div style={{ width: "120px" }}>{index2.BatchCode}</div>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "120px", textAlign: "right" }}>
+                                            <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
                                         </div>
-                                    </th>
-                                    <th className="" >
-                                        <div>
-                                            <samp >Quantity</samp>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "150px" }}>
+                                            <Input
+                                                type="text"
+                                                disabled={pageMode === 'edit' ? true : false}
+                                                style={{ textAlign: "right" }}
+                                                key={`batchQty${index1.id}-${index2.id}`}
+                                                id={`batchQty${index1.id}-${index2.id}`}
+                                                defaultValue={index2.Qty}
+                                                onChange={(event) => {
+                                                    stockQtyOnChange(event, index1, index2);
+                                                    totalAmountCalcuationFunc(tableList);
+                                                }}
+                                            ></Input>
                                         </div>
-                                    </th>
-                                    <th  >Rate</th>
-                                    <th  >MRP</th>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "50px" }}>
+                                            <span id={`stockItemRate-${index1.id}-${index2.id}`}>{index2.Rate}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "50px" }}>{index1.MRPValue}</div>
+                                    </td>
                                 </tr>
-                            </Thead>
-                            <Tbody  >
-                                {cellContent.map((index2) => {
-
-                                    return (
-                                        < tr key={index1.id} >
-                                            {/* <td>
-                                                <div style={{ width: "120px" }}>
-                                                    {index2.SystemBatchCode}
-                                                </div>
-                                            </td> */}
-                                            <td>
-                                                <div style={{ width: "120px" }}>
-                                                    {index2.BatchCode}
-                                                </div>
-                                            </td>
-                                            {/* <td>
-                                                <div style={{ width: "90px" }}>
-                                                    {_cfunc.date_dmy_func(index2.BatchDate)}
-                                                </div>
-                                            </td> */}
-                                            <td>
-                                                <div style={{ width: "120px", textAlign: "right" }}>
-                                                    <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "150px" }}>
-                                                    <Input type="text"
-                                                        disabled={pageMode === 'edit' ? true : false}
-                                                        style={{ textAlign: "right" }}
-                                                        key={`batchQty${index1.id}-${index2.id}`}
-                                                        id={`batchQty${index1.id}-${index2.id}`}
-                                                        defaultValue={index2.Qty}
-                                                        onChange={(event) => {
-                                                            stockQtyOnChange(event, index1, index2)
-                                                            totalAmountCalcuationFunc(tableList)
-                                                        }}
-                                                    ></Input>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "50px" }}>
-                                                    <span id={`stockItemRate-${index1.id}-${index2.id}`}> {index2.Rate}</span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "50px" }}>
-                                                    {index1.MRPValue}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                            </Tbody>
-                        </Table></div>
-                </div >
+                            ))}
+                        </Tbody>
+                    </Table>
+                </div>
             ),
-
         },
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
             dataField: "",
             formatExtraData: {
-                discountValueAll: Number(discountValueAll), discountTypeAll: discountTypeAll,
-                changeAllDiscount: changeAllDiscount, forceReload: forceReload,
+                discountValueAll: discountValueAll,
+                discountTypeAll: discountTypeAll,
+                changeAllDiscount: changeAllDiscount,
+                forceReload: forceReload,
                 tableList: orderItemDetails
             },
             headerFormatter: () => {
-                return (<div className=" ">
-                    {orderItemDetails.length <= 0 ?
-                        <div className="col col-3 mt-2" >
-                            <Label>Discount/unit</Label>
-                        </div> :
-                        <div className="row" >
-
-
-                            <div className="col col-4 mt-2" >
+                return (
+                    <div className="">
+                        {orderItemDetails.length <= 0 ? (
+                            <div className="col col-3 mt-2">
                                 <Label>Discount/unit</Label>
                             </div>
-                            <div className="col col-4" style={{ width: "100px" }} >
-                                <Select type="text"
-                                    defaultValue={discountTypeAll}
-                                    classNamePrefix="select2-selection"
-                                    options={discountDropOption}
-                                    style={{ textAlign: "right" }}
-                                    onChange={(e) => {
-                                        setChangeAllDiscount(true)
-                                        setDiscountTypeAll(e)
-                                        setDiscountValueAll(0)
+                        ) : (
+                            <div className="row">
+                                <div className="col col-4 mt-2">
+                                    <Label>Discount/unit</Label>
+                                </div>
+                                <div className="col col-4" style={{ width: "100px" }}>
+                                    <Select
+                                        type="text"
+                                        defaultValue={discountTypeAll}
+                                        classNamePrefix="select2-selection"
+                                        options={discountDropOption}
+                                        style={{ textAlign: "right" }}
+                                        onChange={(e) => {
+                                            setChangeAllDiscount(true);
+                                            setDiscountTypeAll(e);
+                                            setDiscountValueAll('');
+                                        }}
+                                    />
+                                </div>
+                                <div className="col col-4" style={{ width: "100px" }}>
+                                    <CInput
+                                        type="text"
+                                        className="input"
+                                        style={{ textAlign: "right" }}
+                                        cpattern={decimalRegx}
+                                        value={discountValueAll}
+                                        onChange={(e) => {
+                                            let e_val = Number(e.target.value);
 
-                                    }}
-                                />
-                            </div>
-                            <div className="col col-4" style={{ width: "100px" }}>
-                                <CInput
-                                    type="text"
-                                    className="input"
-                                    style={{ textAlign: "right" }}
-                                    cpattern={decimalRegx}
-                                    value={discountValueAll}
-                                    onChange={(e) => {
-
-                                        let e_val = e.target.value;
-                                        if (e_val === '') {
-                                            e.target.value = 0
-                                        }
-
-                                        //******************  if discount type=2 == "percentage"  then only 100% iput enter*/
-                                        if ((discountTypeAll.value === 2)) {//discount type=2 === "percentage"
-                                            if ((e_val > 100)) {
-                                                e.target.value = 100
-                                            } else if (e_val < 0) {
-                                                e.target.value = 0
+                                            // Check if discount type is "percentage"
+                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
                                             }
-                                        }
 
-                                        setChangeAllDiscount(true)
-                                        setDiscountValueAll(Number(e.target.value))
-
-                                    }}
-                                />
+                                            setChangeAllDiscount(true);
+                                            setDiscountValueAll(e.target.value);
+                                        }}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>)
+                        )}
+                    </div>
+                );
             },
-            classes: () => ('invoice-discount-row'),
+            classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
-
-                let  { tableList, discountValueAll, discountTypeAll } = formatExtraData;
-
+                let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+                
                 if (formatExtraData.changeAllDiscount) {
-                    index1.Discount = discountValueAll
-                    index1.DiscountType = discountTypeAll.value
-                    innerStockCaculation(index1)
-                    totalAmountCalcuationFunc(tableList)
+                    index1.Discount = discountValueAll;
+                    index1.DiscountType = discountTypeAll.value;
+                    innerStockCaculation(index1);
+                    totalAmountCalcuationFunc(tableList);
                 }
 
-                const defaultDiscountTypelabel = (index1.DiscountType === 2) ? discountDropOption[1] : discountDropOption[0];
+                const defaultDiscountTypelabel =
+                    index1.DiscountType === 2 ? discountDropOption[1] : discountDropOption[0];
 
                 return (
                     <>
                         <div className="mb-2">
                             <div className="parent">
                                 <div className="child">
-                                    <label className="label" >Type&nbsp;&nbsp;&nbsp;</label>
+                                    <label className="label">Type&nbsp;&nbsp;&nbsp;</label>
                                 </div>
-
                                 <div className="child">
                                     <Select
                                         id={`DicountType_${key}`}
@@ -575,19 +478,18 @@ const Invoice = (props) => {
                                         value={defaultDiscountTypelabel}
                                         options={discountDropOption}
                                         onChange={(e) => {
-
-                                            setChangeAllDiscount(false)
-                                            setForceReload(!forceReload)
-                                            index1.DiscountType = e.value
-                                            index1.Discount = 0;
-                                            innerStockCaculation(index1)
-                                            totalAmountCalcuationFunc(tableList)
+                                            setChangeAllDiscount(false);
+                                            setForceReload(!forceReload);
+                                            index1.DiscountType = e.value;
+                                            index1.Discount = '';
+                                            innerStockCaculation(index1);
+                                            totalAmountCalcuationFunc(tableList);
                                         }}
                                     />
                                 </div>
                             </div>
                         </div>
-                        <div >
+                        <div>
                             <div className="parent">
                                 <div className="child">
                                     <label className="label">Value&nbsp;</label>
@@ -601,27 +503,25 @@ const Invoice = (props) => {
                                         value={index1.Discount}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
-                                            setChangeAllDiscount(false)
-                                            setForceReload(!forceReload)
 
-                                            let e_val = e.target.value;
-                                            if (e_val === '') {
-                                                e.target.value = 0
-                                            }
-                                            //******************  if discount type=2 == "percentage"  then only 100% iput enter*/
-                                            if ((index1.DiscountType === 2)) {//discount type=2 === "percentage"
-                                                if ((e_val > 100)) {
-                                                    e.target.value = 100
-                                                } else if (e_val < 0) {
-                                                    e.target.value = 0
+                                            let e_val = Number(e.target.value);
+                                            // Check if discount type is "percentage"
+                                            if (index1.DiscountType === 2) { // Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ''; // Clear the input value if it is less than 0
                                                 }
                                             }
-                                            index1.Discount = Number(e.target.value);
-                                            innerStockCaculation(index1)
-                                            totalAmountCalcuationFunc(tableList)
+                                            index1.Discount = e.target.value;
+                                            setChangeAllDiscount(false);
+                                            setForceReload(!forceReload);
+                                            innerStockCaculation(index1);
+                                            totalAmountCalcuationFunc(tableList);
                                         }}
-                                    />
 
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -629,16 +529,11 @@ const Invoice = (props) => {
                             <span>Amount:</span>
                             <samp id={`tAmount-${index1.id}`}>{index1.tAmount}</samp>
                         </div>
-
                     </>
-                )
+                );
             },
         },
-
     ];
-
-
-
 
 
     function InvoiceDateOnchange(y, v, e) {
