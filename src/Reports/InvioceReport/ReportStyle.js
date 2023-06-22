@@ -20,7 +20,7 @@ export const pageHeder = (doc, data) => {
     doc.line(570, 63, 30, 63)  //horizontal line 1 billby upper for repeat header
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
-    debugger
+    
     if (data.ReportType === invoice) {
         doc.setFontSize(18)
         doc.text('TAX INVOICE', 200, 45,)
@@ -352,7 +352,7 @@ export const reportFooter = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`Amount :`, 440, 803,)
     const GrandTotal = Number(data.GrandTotal)
-    debugger
+    
     const Total = numberWithCommas((GrandTotal).toFixed(2))
     doc.text(`${Total}`, 560, 803, 'right')
     doc.setFont(undefined, 'Normal')

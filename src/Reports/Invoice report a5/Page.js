@@ -23,22 +23,35 @@ function pageFooter(doc, data, islast, array) {
 }
 
 const InvioceReporta5 = (data) => {
-    debugger
-    const Data = []
-    Data.push(data)
+
     var doc = new jsPDF('l', 'pt', 'a5');
-    Data.forEach((data, islast, array) => {
-        pageHeder(doc, data);
-        reportBody(doc, data);
-        pageFooter(doc, data, islast, array);
-        if (!(array.length - 1 === islast)) {
-            doc.addPage();
-        }
-    })
+
+    if (Array.isArray(data)) {
+        data.forEach((data, islast, array) => {
+            pageHeder(doc, data);
+            reportBody(doc, data);                                   // condition for Mulitinvoice invoice
+            pageFooter(doc, data, islast, array);
+            if (!(array.length - 1 === islast)) {
+                doc.addPage();
+            }
+        })
+    } else {
+        const Data = []
+        Data.push(data)
+        Data.forEach((data, islast, array) => {
+            pageHeder(doc, data);                                    // condition for singel invoice
+            reportBody(doc, data);
+            pageFooter(doc, data, islast, array);
+            if (!(array.length - 1 === islast)) {
+                doc.addPage();
+            }
+        })
+    }
+
     // doc.deletePage(1)
-    doc.setProperties({
-        title: "Report"
-    });
+    // doc.setProperties({
+    //     title: "Report"
+    // });
 
     const options = { filename: "Invoice Report" }
     doc.output('dataurlnewwindow', options);
