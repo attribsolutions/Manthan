@@ -96,7 +96,7 @@ const OrderSummary = (props) => {
             const worksheet = XLSX.utils.json_to_sheet(groupData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
-            XLSX.writeFile(workbook, "Order Summary Report.XLSX");
+            XLSX.writeFile(workbook, ` From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName} `);
             dispatch(postOrderSummary_API_Success([]));
         }
     }, [Data]);
