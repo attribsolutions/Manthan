@@ -127,37 +127,39 @@ const CityMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-        if ((hasShowloction || hasShowModal)) {
+        if (!(props.pageMode === mode.dropdownAdd)) {
+            if ((hasShowloction || hasShowModal)) {
 
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
+                let hasEditVal = null
+                if (hasShowloction) {
+                    setPageMode(location.pageMode)
+                    hasEditVal = location.editValue
+                }
+                else if (hasShowModal) {
+                    hasEditVal = props.editValue
+                    setPageMode(props.pageMode)
+                    setModalCss(true)
+                }
 
-            if (hasEditVal) {
-                const { id, StateName, DistrictName, Name, State_id, District_id } = hasEditVal
+                if (hasEditVal) {
+                    const { id, StateName, DistrictName, Name, State_id, District_id } = hasEditVal
 
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                    const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                hasValid.id.valid = id
-                hasValid.Name.valid = true
-                hasValid.StateName.valid = true;
-                hasValid.DistrictName.valid = true;
+                    hasValid.id.valid = id
+                    hasValid.Name.valid = true
+                    hasValid.StateName.valid = true;
+                    hasValid.DistrictName.valid = true;
 
-                values.id = id;
-                values.StateName = { label: StateName, value: State_id };
-                values.DistrictName = { label: DistrictName, value: District_id };
-                values.Name = Name
-                dispatch(getDistrictOnState(State_id))
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.Name))
-                seteditCreatedBy(hasEditVal.CreatedBy)
+                    values.id = id;
+                    values.StateName = { label: StateName, value: State_id };
+                    values.DistrictName = { label: DistrictName, value: District_id };
+                    values.Name = Name
+                    dispatch(getDistrictOnState(State_id))
+                    setState({ values, fieldLabel, hasValid, required, isError })
+                    dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                    seteditCreatedBy(hasEditVal.CreatedBy)
+                }
             }
         }
     }, [])

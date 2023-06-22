@@ -119,44 +119,47 @@ const PartyType = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+       
+        if (!(props.pageMode === mode.dropdownAdd)) {
+            if ((hasShowloction || hasShowModal)) {
 
-        if ((hasShowloction || hasShowModal)) {
+                let hasEditVal = null
+                if (hasShowloction) {
+                    setPageMode(location.pageMode)
+                    hasEditVal = location.editValue
+                }
+                else if (hasShowModal) {
+                    hasEditVal = props.editValue
+                    setPageMode(props.pageMode)
+                    setModalCss(true)
+                }
 
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
+                if (hasEditVal) {
+                    const { id, Name, IsSCM, IsDivision, IsRetailer, IsVendor, IsAdminDivision } = hasEditVal
+                    const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                    values.Name = Name;
+                    values.IsSCM = IsSCM;
+                    values.IsDivision = IsDivision;
+                    values.IsRetailer = IsRetailer
+                    values.IsVendor = IsVendor
+                    values.IsAdminDivision = IsAdminDivision
+
+                    values.id = id
+                    hasValid.Name.valid = true;
+                    hasValid.IsSCM.valid = true;
+                    hasValid.IsDivision.valid = true;
+                    hasValid.IsRetailer.valid = true
+                    hasValid.IsVendor.valid = true
+                    hasValid.IsAdminDivision.valid = true
+
+                    setState({ values, fieldLabel, hasValid, required, isError })
+                    dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                    seteditCreatedBy(hasEditVal.CreatedBy)
+                }
+                dispatch(editPartyTypeSuccess({ Status: false }))
             }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
-
-            if (hasEditVal) {
-                const { id, Name, IsSCM, IsDivision, IsRetailer, IsVendor, IsAdminDivision } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                values.Name = Name;
-                values.IsSCM = IsSCM;
-                values.IsDivision = IsDivision;
-                values.IsRetailer = IsRetailer
-                values.IsVendor = IsVendor
-                values.IsAdminDivision = IsAdminDivision
-
-                values.id = id
-                hasValid.Name.valid = true;
-                hasValid.IsSCM.valid = true;
-                hasValid.IsDivision.valid = true;
-                hasValid.IsRetailer.valid = true
-                hasValid.IsVendor.valid = true
-                hasValid.IsAdminDivision.valid = true
-
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.Name))
-                seteditCreatedBy(hasEditVal.CreatedBy)
-            }
-            dispatch(editPartyTypeSuccess({ Status: false }))
         }
+
     }, [])
 
 
