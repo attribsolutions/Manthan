@@ -50,11 +50,12 @@ const PartyTypeList = (props) => {
   }, []);
 
   const { pageField, userAccess = [] } = reducers
-
+  debugger
   return (
     <React.Fragment>
 
       {
+
         reducers.listLoading ?
           <Listloader />
           :

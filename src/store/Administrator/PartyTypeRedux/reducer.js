@@ -46,10 +46,21 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
         deleteMessage: action.payload,
       };
 
+
+
+    case actionType.EDIT_PARTY_TYPE_ID:
+      return {
+        ...state,
+        listLoading: true,
+
+      };
+
     case actionType.EDIT_PARTY_TYPE_ID_SUCCESS:
       return {
         ...state,
         editData: action.payload,
+        listLoading: false,
+
       };
 
     case actionType.UPDATE_PARTY_TYPE_ID:
