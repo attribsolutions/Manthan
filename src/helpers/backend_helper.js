@@ -462,7 +462,7 @@ export const orderApproval_Save_API = ({ jsonBody, btnId }) => post(url.ORDER_AP
 // OrderType Dropdown API
 export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
 
-export const OrderConfirm_post_API = ({ jsonBody, btnId }) =>post(url.ORDER_CONFIRM_API, jsonBody, btnId)// update api
+export const OrderConfirm_post_API = ({ jsonBody, btnId }) => post(url.ORDER_CONFIRM_API, jsonBody, btnId)// update api
 
 //GRN PAGE grn 
 export const GRN_STP_for_orderList_goBtn = ({ filtersBody, btnId }) => post(url.GRN_STP_FOR_ORDER_lIST_goBtn, filtersBody, btnId)// Get subModule For H_pages
@@ -530,6 +530,9 @@ export const Invoice_1_Get_Filter_API = ({ filtersBody, btnId }) => post(url.INV
 export const Invoice_1_Delete_API = ({ deleteId, btnId }) => del(`${url.INVOICE_1_SAVE}/${deleteId}`, btnId)// delete api
 export const Invoice_1_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.INVOICE_1_SAVE}/${editId}`, btnId)// delete api
 
+export const Uploade_EInvoice_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_E_INVOICE}/${RowId}/${UserID}`)// delete api
+export const Uploade_EwayBill_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_E_WAY_BILL}/${RowId}/${UserID}`)// delete api
+
 
 //IB Invoice 2 
 export const IB_Invoice_GoButton_API = ({ jsonBody, btnId }) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, jsonBody, btnId)// go button postapi
@@ -537,6 +540,10 @@ export const IB_Invoice_Save_API = ({ jsonBody, btnId }) => post(url.IB_INVOICE_
 export const IB_Invoice_Get_Filter_API = ({ filtersBody, btnId }) => post(url.IB_INVOICE_lIST_FILTER, filtersBody, btnId)//  postapi
 export const IB_Invoice_Delete_API = ({ deleteId, btnId }) => del(`${url.IB_INVOICE_SAVE}/${deleteId}`, btnId)// delete api
 export const IB_Invoice_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.IB_INVOICE_SAVE}/${editId}`, btnId)// delete api
+
+
+
+
 //************************************Inter Branch ************************************/
 
 // IBOrder

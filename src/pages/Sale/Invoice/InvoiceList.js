@@ -19,12 +19,15 @@ import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
+    Uploaded_EInvoiceAction,
+    Uploaded_EInvoiceSuccess,
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
     invoiceListGoBtnfilter
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const InvoiceList = () => {
 
@@ -49,11 +52,12 @@ const InvoiceList = () => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             goBtnloading: state.InvoiceReducer.goBtnloading,
+            Uploaded_EInvoice: state.InvoiceReducer.Uploaded_EInvoice,
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, supplier } = reducers;
+    const { pageField, supplier, Uploaded_EInvoice } = reducers;
     const { fromdate, todate, supplierSelect } = hederFilters;
 
     const action = {
@@ -104,6 +108,17 @@ const InvoiceList = () => {
         dispatch(GetVenderSupplierCustomer(subPageMode))
         goButtonHandler("event", IBType)
     }, [dispatch]);
+
+    useEffect(() => {
+
+        if (Uploaded_EInvoice.Status === true && Uploaded_EInvoice.StatusCode === 200) {
+            dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
+            customAlert({
+                Type: 1,
+                Message: Uploaded_EInvoice.Message,
+            })
+        }
+    }, [Uploaded_EInvoice]);
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -165,6 +180,7 @@ const InvoiceList = () => {
             pathname: url.INWARD,
         })
     };
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -225,6 +241,11 @@ const InvoiceList = () => {
             </div>
         )
     }
+
+    const Uploaded_EInvoiceBtnFunc = (RowId) => {
+        dispatch(Uploaded_EInvoiceAction(RowId))
+    };
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -247,6 +268,7 @@ const InvoiceList = () => {
                             makeBtnName={"Make GRN"}
                             filters={hederFilters}
                             forceNewBtnView={false}
+                            Uploaded_EInvoiceBtnFunc={Uploaded_EInvoiceBtnFunc}
                         />
                         : null
                 }
