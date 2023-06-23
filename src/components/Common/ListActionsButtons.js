@@ -43,6 +43,7 @@ export const listPageActionsButtonFunc = (props) => {
         updateBtnFunc,
         makeBtnFunc = () => { },
         Uploaded_EInvoiceBtnFunc = () => { },
+        Uploaded_EwayBillBtnFunc = () => { },
         pageMode,
         makeBtnName,
         makeBtnShow = false,
@@ -136,6 +137,14 @@ export const listPageActionsButtonFunc = (props) => {
 
         try {
             Uploaded_EInvoiceBtnFunc(RowData.id)
+        } catch (error) { }
+
+    };
+
+    function Uploaded_EwayBillHander(e, RowData) {
+
+        try {
+            Uploaded_EwayBillBtnFunc(RowData.id)
         } catch (error) { }
 
     };
@@ -419,7 +428,7 @@ export const listPageActionsButtonFunc = (props) => {
                         //     <i className="fas fa-file-invoice  font-size-18"></i>
                         // </Button>
                         <Button type="button" color="btn btn-outline-info border-1 font-size-10 text-center"
-                        // onClick={(e,) => AddPartyHandler(e, "Select")}
+                            onClick={(e,) => Uploaded_EwayBillHander(e, rowData)}
                         >        <i > </i>EwayBill</Button>
 
                     }

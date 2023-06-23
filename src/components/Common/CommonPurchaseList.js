@@ -100,6 +100,7 @@ const CommonPurchaseList = (props) => {
     newBtnPath,
     forceNewBtnView,
     Uploaded_EInvoiceBtnFunc= () => { },
+    Uploaded_EwayBillBtnFunc= () => { },
     HeaderContent = () => {
       return null;
     },
@@ -283,7 +284,8 @@ const CommonPurchaseList = (props) => {
         makeBtnFunc: makeBtnFunc,
         pageMode: pageMode,
         oderAprovalBtnFunc: oderAprovalBtnFunc,
-        Uploaded_EInvoiceBtnFunc:Uploaded_EInvoiceBtnFunc
+        Uploaded_EInvoiceBtnFunc:Uploaded_EInvoiceBtnFunc,
+        Uploaded_EwayBillBtnFunc:Uploaded_EwayBillBtnFunc
       })
     }
   }
@@ -298,12 +300,11 @@ const CommonPurchaseList = (props) => {
   function rowSelected() {
     return tableList.map((index) => { return (index.selectCheck) })
   }
-  debugger
+
   const nonSelectedRow = () => {
-    debugger
+
     return tableList.filter(row => row.forceSelectDissabled || row.forceHideOrderAprovalBtn === false).map(row => row.id)       //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
   }
-  console.log("row id", nonSelectedRow())
 
   if (!(userAccState === "")) {
 
