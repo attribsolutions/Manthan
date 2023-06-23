@@ -1,7 +1,7 @@
 
 import cbm_logo from "../../assets/images/cbm_logo.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
-import { date_dmy_func } from "../../components/Common/CommonFunction";
+import { CurrentTime, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
 import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
 import * as table from './TableData'
@@ -20,7 +20,7 @@ export const pageHeder = (doc, data) => {
     doc.line(570, 63, 30, 63)  //horizontal line 1 billby upper for repeat header
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
-    
+
     if (data.ReportType === invoice) {
         doc.setFontSize(18)
         doc.text('TAX INVOICE', 200, 45,)
@@ -50,46 +50,7 @@ export const reportHeder1 = (doc, data) => {
     doc.line(408, 160, 408, 16);//vertical right 1
     doc.line(220, 160, 220, 63);//vertical right 2
 
-    // var options3 = {
-    //     margin: {
-    //         top: 45, left: 35, right: 35,// bottom:100 
-    //     },
-    //     showHead: 'always',
-    //     theme: "plain",
-    //     styles: {
-    //         overflow: 'linebreak',
-    //         fontSize: 8,
-    //         height: 0,
-    //     },
-    //     bodyStyles: {
-    //         columnWidth: 'wrap',
-    //         textColor: [30, 30, 30],
-    //         cellPadding: 2,
-    //         fontSize: 8,
-    //         fontStyle: 'bold',
-    //         lineColor: [0, 0, 0]
-    //     },
-    //     columnStyles: {
-    //         0: {
-    //             valign: "top",
-    //             columnWidth: 185,
-    //             halign: 'lfet',
-    //         },
-    //         1: {
-    //             columnWidth: 190,
-    //             halign: 'left',
-    //         },
-    //         2: {
-    //             columnWidth: 160,
-    //             halign: 'left',
-    //         },
 
-    //     },
-    //     tableLineColor: "black",
-    //     startY: 85
-
-    // };
-    // doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 
     var BilledByStyle = {
         margin: {
@@ -235,83 +196,14 @@ export const reportHeder3 = (doc, data) => {
 
 export const reportFooter = (doc, data) => {
 
-    //  If Footer With Signiture
-
-    // let stringNumber = toWords(Number(data.GrandTotal))
-    //     doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
-    //     doc.setDrawColor(0, 0, 0);
-    //     doc.line(570, 745, 30, 745);//horizontal line Footer 2
-    //     doc.line(570, 680, 30, 680);//horizontal line Footer 3
-    //     doc.line(430, 700, 30, 700);//horizontal line Footer 3 Ruppe section
-    //     doc.line(460, 745, 460, 815);//vertical right1 Qr Left 1
-    //     doc.line(430, 680, 430, 745);//vertical right1 Sub Total
-    //     doc.setFont('Tahoma')
-    //     doc.line(460, 775, 30, 775);//horizontal line (Bottom)
-
-    //     const a = data.InvoiceItems.map((data) => ({
-    //         CGST: Number(data.CGST),
-    //         SGST: Number(data.SGST),
-    //         BasicAmount: Number(data.BasicAmount),
-    //     }));
-    //     var totalCGST = 0;
-    //     var totalSGST = 0;
-    //     var TotalBasicAmount = 0;
-    //     a.forEach(arg => {
-    //         totalCGST += arg.CGST;
-    //         totalSGST += arg.SGST;
-    //         TotalBasicAmount += arg.BasicAmount
-    //     });
-
-    //     const TotalGST = totalCGST + totalSGST;
-
-    //     doc.setFontSize(8)
-
-    //     doc.text(`CGST:`, 434, 689,)
-    //     doc.text(`${totalCGST.toFixed(2)}`, 560, 689, 'right')
-
-    //     doc.text(`SGST:`, 434, 700,)
-    //     doc.text(`${totalSGST.toFixed(2)}`, 560, 700, 'right')
-
-    //     doc.text(`TotalGST:`, 434, 712,)
-    //     doc.text(` ${TotalGST.toFixed(2)}`, 560, 712, 'right')
-
-    //     doc.text(`BasicAmount:`, 434, 724,)
-    //     doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 724, 'right')
-
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.setFontSize(12)
-    //     doc.setFont(undefined, 'bold')
-    //     doc.text(`Amount :`, 434, 740,)
-    //     doc.text(`${data.GrandTotal}`, 560, 740, 'right')
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.setFont('Tahoma')
-    //     doc.setFontSize(9)
-    //     doc.setFont('Tahoma')
-    //     doc.setFontSize(8)
-    //     doc.text(`Prepared by `, 35, 785,)
-    //     doc.text(`Received By `, 180, 785,)
-    //     doc.setFontSize(10)
-    //     doc.text(`${data.PartyName} `, 390, 785,)
-    //     doc.setFontSize(10)
-    //     doc.text(`${data.CustomerName} `, 140, 811,)
-    //     doc.setFontSize(9)
-    //     doc.text(`Signature `, 400, 811,)
-    //     doc.setFont("Arimo");
-    //     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and
-    //    quantity whitch it/these purports to be `, 34, 760,)
-    //     doc.text(`A/C No: 2715500356 IFSC Code:BKID00015422 `, 34, 710,)
-    //     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
-    //     doc.text(`Ruppe:${stringNumber} `, 33, 693,)
-
-
-    //  Without Signature
-
     let stringNumber = toWords(Number(data.GrandTotal))
-    doc.addImage(upi_qr_code,'PNG', 359, 747, 75, 65)
+    doc.addImage(upi_qr_code, 'PNG', 359, 747, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
     doc.line(435, 745, 30, 745);//horizontal line Footer 2
     doc.line(360, 775, 30, 775);//horizontal line Footer 3
+    doc.line(360, 795, 30, 795);//horizontal line Footer 3
+
     doc.line(435, 730, 435, 815);//vertical right Sub Total
     doc.line(360, 745, 360, 815);//vertical right Qr Code 
     doc.setFont('Tahoma')
@@ -320,41 +212,57 @@ export const reportFooter = (doc, data) => {
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
         BasicAmount: Number(data.BasicAmount),
+        Discount: Number(data.DiscountAmount)
+
     }));
     var totalCGST = 0;
     var totalSGST = 0;
     var TotalBasicAmount = 0;
+    var TotalDiscount = 0
+
     a.forEach(arg => {
         totalCGST += arg.CGST;
         totalSGST += arg.SGST;
         TotalBasicAmount += arg.BasicAmount
+        TotalDiscount += arg.Discount;
 
     });
 
     const TotalGST = totalCGST + totalSGST;
-
     doc.setFontSize(8)
 
-    doc.text(`CGST:`, 440, 752,)
-    doc.text(`${totalCGST.toFixed(2)}`, 560, 752, 'right')
 
-    doc.text(`SGST:`, 440, 764,)
-    doc.text(`${totalSGST.toFixed(2)}`, 560, 764, 'right')
+    doc.text(`Total Basic:`, 440, 738,)
+    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 738, 'right')
 
-    doc.text(`TotalGST:`, 440, 776,)
-    doc.text(` ${TotalGST.toFixed(2)}`, 560, 776, 'right')
+    doc.text(`Total Disc:`, 440, 748,)
+    doc.text(` ${TotalDiscount.toFixed(2)}`, 560, 748, 'right')
 
-    doc.text(`BasicAmount:`, 440, 788,)
-    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 788, 'right')
+    doc.text(`Total CGST:`, 440, 758)
+    doc.text(`${totalCGST.toFixed(2)}`, 560, 758, 'right')
+
+    doc.text(`Total SGST:`, 440, 768,)
+    doc.text(`${totalSGST.toFixed(2)}`, 560, 768, 'right')
+
+    doc.text(`Total GST:`, 440, 778,)
+    doc.text(` ${TotalGST.toFixed(2)}`, 560, 778, 'right')
+
+    doc.text(`Round Off:`, 440, 788,)
+    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 560, 788, 'right')
+
+    doc.text(`Total TCS:`, 440, 798,)
+    doc.text(`0.00 `, 560, 798, 'right')
+
+
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(12)
     doc.setFont(undefined, 'bold')
-    doc.text(`Amount :`, 440, 803,)
+    doc.text(`Amount :`, 440, 812,)
     const GrandTotal = Number(data.GrandTotal)
-    
+
     const Total = numberWithCommas((GrandTotal).toFixed(2))
-    doc.text(`${Total}`, 560, 803, 'right')
+    doc.text(`${Total}`, 560, 812, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -362,7 +270,12 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(8)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-         of the nature and quantity which it/these purports to be `, 34, 790,)
+         of the nature and quantity which it/these purports to be `, 34, 782,)
+    doc.setFontSize(10)
+    doc.text(`Signature `, 280, 810,)
+    doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
+    doc.setFontSize(8)
+
     doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 755,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 765,)
     doc.setFont(undefined, 'bold')
@@ -378,25 +291,29 @@ export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
             if (data1.row.cells[9].raw === "isaddition") {
-                data1.row.cells[1].colSpan = 2
-                data1.row.cells[3].colSpan = 5
+                data1.row.cells[1].colSpan = 5
+                // data1.row.cells[3].colSpan = 5
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
 
                 data1.row.cells[1].styles.fontSize = 7
-                data1.row.cells[3].styles.fontSize = 7
+                data1.row.cells[1].styles.halign = "right"    // Alignment for  cgst and Total in spanrow
+
                 data1.row.cells[8].styles.fontSize = 7
+                data1.row.cells[7].styles.fontSize = 7
                 data1.row.cells[10].styles.fontSize = 7
                 data1.row.cells[12].styles.fontSize = 7
-
                 data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[3].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
                 data1.row.cells[10].styles.fontStyle = "bold"
                 data1.row.cells[12].styles.fontStyle = "bold"
             }
 
+
             if (data1.row.cells[1].raw === "HSN Item Name") {
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length})`
+
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
             }
@@ -427,6 +344,7 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
+                fontSize: 6,
                 columnWidth: 15,
             },
             1: {
@@ -505,9 +423,9 @@ export const pageFooter = (doc, data) => {
         pageBorder(doc)
         reportHeder3(doc, data)
         doc.setFont('helvetica', 'Normal')
-        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 828, {
-            align: 'center'
-        })
+        doc.text('Page ' + String(i) + ' of ' + String(pageCount), 520, 828,)
+
+        doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 828,)
         console.log("aaa", doc.internal.pageSize.height)
     }
 }
