@@ -16,7 +16,9 @@ import {
   IB_Invoice_Edit_API_Singel_Get,
   IB_Invoice_Delete_API,
   Uploade_EInvoice_Get_API,
-  Uploade_EwayBill_Get_API
+  Uploade_EwayBill_Get_API,
+  Cancel_EwayBill_Get_API,
+  Cancel_EInvoice_Get_API
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -27,7 +29,9 @@ import {
   makeIB_InvoiceActionSuccess,
   InvoiceApiErrorAction,
   Uploaded_EInvoiceSuccess,
-  Uploaded_EwayBillSuccess
+  Uploaded_EwayBillSuccess,
+  Cancel_EInvoiceSuccess,
+  Cancel_EwayBillSuccess
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -36,12 +40,15 @@ import {
   INVOICE_SAVE_ADD_PAGE_ACTION,
   MAKE_IB_INVOICE_ACTION,
   UPLOADED_E_INVOICE_ACTION,
-  UPLOADED_E_WAY_BILL_ACTION
+  UPLOADED_E_WAY_BILL_ACTION,
+  CANCLE_E_WAY_BILL_ACTION,
+  CANCLE_E_INVOICE_ACTION
 } from "./actionType";
 import *as url from "../../../routes/route_url"
 import { discountCalculate } from "../../../pages/Sale/Invoice/invoiceCaculations";
 import { orderApprovalActionSuccess } from "../../actions";
 
+let UserID = loginUserID()
 
 //post api for Invoice Master
 function* save_Invoice_Genfun({ config }) {
@@ -122,9 +129,7 @@ function* DeleteInvoiceGenFunc({ config }) {
   } catch (error) {
     yield put(InvoiceApiErrorAction())
   }
-
 }
-
 
 // GO-Botton SO-invoice Add Page API
 export function invoice_GoButton_dataConversion_Func(response) {
@@ -197,7 +202,6 @@ export function invoice_GoButton_dataConversion_Func(response) {
         index1.StockInvalidMsg = (index1.ItemTotalStock === 0) ? msg1 : msg2
       };
 
-
       return index1
     })
     response.OrderItemDetails = convResp
@@ -207,7 +211,6 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
   }
 }
-
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
   const { subPageMode, path, pageMode, customer, errorMsg } = config;
@@ -262,8 +265,6 @@ function* makeIB_InvoiceGenFunc({ body }) {
 
 //Uploaded_EInvoicea/RowId/UserID
 function* Uploade_EInvoiceGenFunc({ RowId }) {
-  debugger
-  let UserID = loginUserID()
   try {
     const response = yield call(Uploade_EInvoice_Get_API, { RowId, UserID })
     yield put(Uploaded_EInvoiceSuccess(response));
@@ -274,8 +275,6 @@ function* Uploade_EInvoiceGenFunc({ RowId }) {
 
 //Uploaded_EwayBill//RowId/UserID
 function* Uploade_EwayBillGenFunc({ RowId }) {
-  debugger
-  let UserID = loginUserID()
   try {
     const response = yield call(Uploade_EwayBill_Get_API, { RowId, UserID })
     yield put(Uploaded_EwayBillSuccess(response));
@@ -284,6 +283,25 @@ function* Uploade_EwayBillGenFunc({ RowId }) {
   }
 }
 
+//Cancle_EwayBill//RowId/UserID
+function* Cancle_EwayBillGenFunc({ RowId }) {
+  try {
+    const response = yield call(Cancel_EwayBill_Get_API, { RowId, UserID })
+    yield put(Cancel_EwayBillSuccess(response));
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
+}
+
+//Cancle_EInvoicea/RowId/UserID
+function* Cancle_EInvoiceGenFunc({ RowId }) {
+  try {
+    const response = yield call(Cancel_EInvoice_Get_API, { RowId, UserID })
+    yield put(Cancel_EInvoiceSuccess(response));
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
+}
 
 // MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
@@ -296,7 +314,8 @@ function* InvoiceSaga() {
   yield takeEvery(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
   yield takeEvery(UPLOADED_E_INVOICE_ACTION, Uploade_EInvoiceGenFunc)
   yield takeEvery(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc)
-
+  yield takeEvery(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc)
+  yield takeEvery(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc)
 }
 
 export default InvoiceSaga;
