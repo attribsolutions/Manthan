@@ -16,7 +16,7 @@ import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
-import { getOrderApprovalDetailAction,  postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
+import { getOrderApprovalDetailAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 
@@ -137,6 +137,8 @@ const OrderList = () => {
             newBtnPath = url.ORDER_4;
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
+            showAprovalBtn = true                      //Showing  AprovalBtn  in sales order list
+
         }
         else if (subPageMode === url.IB_INVOICE_STP) {
             page_Id = pageId.IB_INVOICE_STP
@@ -217,7 +219,7 @@ const OrderList = () => {
                 Message: orderConfirmMsg.Message,
             })
 
-
+ 
         } else if (orderApprovalMsg.Status === true) {
             dispatch(postOrderConfirms_API_Success({ Status: false }))
             customAlert({
@@ -228,7 +230,9 @@ const OrderList = () => {
     }, [orderConfirmMsg]);
 
     useEffect(() => {
-        orderApprovalMessage({ dispatch, orderApprovalMsg })
+
+        orderApprovalMessage({ dispatch, orderApprovalMsg ,goButtonHandler})
+
     }, [orderApprovalMsg]);
 
     useEffect(() => {

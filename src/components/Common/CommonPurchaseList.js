@@ -20,8 +20,14 @@ import * as mode from "../../routes/PageMode";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
+import { url } from "../../routes";
+import { SaveButton } from "./CommonButton";
+import CustomTable from "../../CustomTable2/Custom";
 
+let sortType = "asc";
 let searchCount = 0;
+let downList = [];
+let listObj = {};
 
 let searchProps = {
   onClear: function onClear() { },
@@ -104,7 +110,6 @@ const CommonPurchaseList = (props) => {
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
-
     const locationPath = history.location.pathname;
     let userAcc = userAccess.find((inx) => {
       return `/${inx.ActualPagePath}` === locationPath;
@@ -293,11 +298,12 @@ const CommonPurchaseList = (props) => {
   function rowSelected() {
     return tableList.map((index) => { return (index.selectCheck) })
   }
+  debugger
   const nonSelectedRow = () => {
-
-    return tableList.filter(row => row.forceSelectDissabled).map(row => row.id)
-
+    debugger
+    return tableList.filter(row => row.forceSelectDissabled || row.forceHideOrderAprovalBtn === false).map(row => row.id)       //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
   }
+  console.log("row id", nonSelectedRow())
 
   if (!(userAccState === "")) {
 
@@ -317,7 +323,16 @@ const CommonPurchaseList = (props) => {
                 {(toolkitProps, a) => (
                   <React.Fragment>
                     <Row>
-                    
+                      {/* <div className="table-responsive table " >
+                        <CustomTable
+                          keyField={"id"}
+                          data={tableList}
+                          columns={tableColumns}
+                          itemsPerPage={15}
+                          defaultSorted={defaultSorted}
+                          classes={"table table-bordered table-hover"}
+                        />
+                      </div> */}
                       <Col xl="12">
                         <div className="table-responsive mt-1" >
                           <BootstrapTable

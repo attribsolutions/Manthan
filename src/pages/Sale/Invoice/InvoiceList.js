@@ -121,7 +121,7 @@ const InvoiceList = () => {
         else if (Uploaded_EInvoice.Status === true) {
             dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
             customAlert({
-                Type: 2,
+                Type: 3,
                 Message: JSON.stringify(Uploaded_EInvoice.Message),
             })
         }
