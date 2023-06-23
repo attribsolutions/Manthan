@@ -289,10 +289,16 @@ const CommonPurchaseList = (props) => {
     }
   }
 
+  const thirdLastColumn = () => {  // ======================== for List Page Action Button ================================
+    if ((history.location.pathname === url.INVOICE_LIST_1)) {// INVOICE_LIST_1 E_WayBill buttons
+      return E_WayBill_ActionsButtonFunc({ ...props, dispatch, userAccState, })
+    }
+  }
 
   const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({
     pageField,
     secondLastColumn,
+    thirdLastColumn,
     lastColumn,
     makeBtnColumn,
     userAccState: userAccState

@@ -46,7 +46,7 @@ export const selectAllCheck = (selected, nonSelectable, position, headLabel) => 
 
 })
 
-const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondLastColumn, makeBtnColumn, userAccState }) => {
+const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondLastColumn, thirdLastColumn, makeBtnColumn, userAccState }) => {
 
     const [tableColumns, setTableColumns] = useState([{
         text: "ID",
@@ -122,9 +122,13 @@ const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondL
                 }
             }
 
-            
+
             if ((PageFieldMaster.length - 1 === k) && makeBtnColumn) {
                 let isCol = makeBtnColumn();
+                if (isCol) { columns.push(isCol) }
+            }
+            if ((PageFieldMaster.length - 1 === k) && thirdLastColumn) {
+                let isCol = thirdLastColumn();
                 if (isCol) { columns.push(isCol) }
             }
             if ((PageFieldMaster.length - 1 === k) && secondLastColumn) {
