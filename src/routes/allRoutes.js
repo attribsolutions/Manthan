@@ -159,6 +159,7 @@ import ProductMarginReport from "../Reports/ProductMarginReport/ProductMarginRep
 import CityMaster from "../pages/Adminisrator/CityPages/CityMaster";
 import CityList from "../pages/Adminisrator/CityPages/CityList";
 import OrderSummary from "../Reports/OrderSummaryReport/OrderSummary";
+import InvoiceConfiguration from "../pages/Adminisrator/InvoiceConfiguration/InvoiceConfiguration";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -292,6 +293,11 @@ const userRoutes = [
 
   { path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
 
+  { path: path.INVOICE_CONFIGURATION, component: InvoiceConfiguration },
+
+
+
+
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
   { path: path.CHALLAN, component: Challan },
@@ -387,20 +393,20 @@ const userRoutes = [
   { path: path.SAP_LEDGER, component: SapLedger },
 
 
-//**************************** Reports ***********************************//
+  //**************************** Reports ***********************************//
 
-{ path: path.ORDER_SUMMARY_REPORT, component:OrderSummary },
+  { path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
 
-// ************************************ Utility **************************************//
-{ path: path.SEARCH_BOX2, component: SearchBoxSecond },
-{ path: path.SEARCH_BOX3, component: SerachBox3 },
+  // ************************************ Utility **************************************//
+  { path: path.SEARCH_BOX2, component: SearchBoxSecond },
+  { path: path.SEARCH_BOX3, component: SerachBox3 },
 
-{ path: "/dashboard", component: Dashboard },
+  { path: "/dashboard", component: Dashboard },
 
-{ path: "/", exact: true, component: () => <Redirect to="/login" /> },
-// { component:() => <Redirect to="/login" /> },
-{ path: "/auth-404", component: Error404 },
-{ path: "/auth-500", component: Error500 },
+  { path: "/", exact: true, component: () => <Redirect to="/login" /> },
+  // { component:() => <Redirect to="/login" /> },
+  { path: "/auth-404", component: Error404 },
+  { path: "/auth-500", component: Error500 },
 
 
 ]

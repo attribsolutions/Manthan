@@ -222,6 +222,7 @@ export const BANK_ASSIGN = "/BankAssign"
 export const CREDIT_LIST = "/Credit_List"
 export const CREDIT = "/Credit"
 
+export const INVOICE_CONFIGURATION = "/InvoiceConfiguration"
 
 export const DEBIT_LIST = "/Debit_List"
 export const DEBIT = "/Debit"
