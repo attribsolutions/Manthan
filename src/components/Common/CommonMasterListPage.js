@@ -211,76 +211,18 @@ const CommonListPage = (props) => {
     setmodal_edit(false)
   }
 
-  // PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
-  //   return a.ListPageSeq - b.ListPageSeq
-  // });
-
-  // let sortLabel = ""
-  // const columns = []
-
-  // PageFieldMaster.forEach((i, k) => {
-  //   if (i.ShowInListPage) {
-  //     columns.push({
-  //       text: i.FieldLabel,
-  //       dataField: i.ControlID,
-  //       sort: true,
-  //     })
-
-  //     if (i.DefaultSort === 1) {
-  //       sortLabel = i.ControlID
-  //       sortType = "asc"
-  //     } else if (i.DefaultSort === 2) {
-  //       sortLabel = i.ControlID;
-  //       sortType = "desc"
-  //     }
-  //   }
-  //   if (PageFieldMaster.length - 1 === k) {
-  //     columns.push(listPageActionsButtonFunc({
-  //       dispatchHook: dispatch,
-  //       ButtonMsgLable: ButtonMsgLable,
-  //       deleteName: deleteName,
-  //       userAccState: userAccState,
-  //       editActionFun: editId,
-  //       deleteActionFun: deleteId,
-  //       editBodyfunc: editBodyfunc,
-  //     })
-  //     )
-  //   }
-  // })
-
-  // const defaultSorted = [
-  //   {
-  //     dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
-  //     order: sortType, // desc or asc
-  //   },
-  // ];
-
-  // const pageOptions = {
-  //   sizePerPage: 15,
-  //   // totalSize: tableList.length,
-  //   custom: true,
-  // };
-
   const { btnLoding } = useSelector(
-
     (state) => ({
-
       btnLoding: state.PartyMasterReducer.btnLoding,
     })
   );
 
 
-  const lastColumn = (btnLoding) => {
-
+  const lastColumn = () => {
     return listPageActionsButtonFunc({
-      dispatchHook: dispatch,
-      ButtonMsgLable: ButtonMsgLable,
-      deleteName: deleteName,
-      userAccState: userAccState,
+      ...props, dispatch, history, userAccState,
       editActionFun: editId,
       deleteActionFun: deleteId,
-      editBodyfunc: editBodyfunc,
-      btnLoding: btnLoding
     })
   }
   const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({ pageField, lastColumn, userAccState, btnLoding })
@@ -290,16 +232,7 @@ const CommonListPage = (props) => {
       <React.Fragment>
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <div className="page-content">
-          <div className="table-responsive table " >
-            {/* <CustomTable
-              keyField={"id"}
-              data={tableList}
-              columns={tableColumns}
-              itemsPerPage={15}
-              defaultSorted={defaultSorted}
-              classes={"table table-bordered table-hover"}
-            /> */}
-          </div>
+          
            <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider

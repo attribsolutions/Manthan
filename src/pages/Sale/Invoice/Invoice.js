@@ -324,21 +324,21 @@ const Invoice = (props) => {
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <div>
                     <Table className="table table-bordered table-responsive mb-1">
-                        <Thead>
-                            <tr style={{ zIndex: -3 }}>
-                                <th>BatchCode</th>
-                                <th>
+                        <Thead >
+                            <tr >
+                                <th style={{ zIndex: -1 }}>BatchCode</th>
+                                <th style={{ zIndex: -1 }}>
                                     <div>
                                         <samp>Stock Quantity</samp>
                                     </div>
-                                </th>
-                                <th className="">
+                                </th >
+                                <th style={{ zIndex: -1 }}>
                                     <div>
                                         <samp>Quantity</samp>
                                     </div>
                                 </th>
-                                <th>Rate</th>
-                                <th>MRP</th>
+                                <th style={{ zIndex: -1 }}>Rate</th>
+                                <th style={{ zIndex: -1 }}>MRP</th>
                             </tr>
                         </Thead>
                         <Tbody>
@@ -396,16 +396,16 @@ const Invoice = (props) => {
             headerFormatter: () => {
                 return (
                     <div className="">
-                        {orderItemDetails.length <= 0 ? (
+                        {orderItemDetails.length <= 0 ?
                             <div className="col col-3 mt-2">
                                 <Label>Discount/unit</Label>
                             </div>
-                        ) : (
+                            :
                             <div className="row">
-                                <div className="col col-4 mt-2">
+                                <div className=" mt-n2 mb-n2">
                                     <Label>Discount/unit</Label>
                                 </div>
-                                <div className="col col-4" style={{ width: "100px" }}>
+                                <div className="col col-6" style={{ width: "100px" }}>
                                     <Select
                                         type="text"
                                         defaultValue={discountTypeAll}
@@ -419,7 +419,7 @@ const Invoice = (props) => {
                                         }}
                                     />
                                 </div>
-                                <div className="col col-4" style={{ width: "100px" }}>
+                                <div className="col col-6" style={{ width: "100px" }}>
                                     <CInput
                                         type="text"
                                         className="input"
@@ -445,7 +445,7 @@ const Invoice = (props) => {
                                     />
                                 </div>
                             </div>
-                        )}
+                        }
                     </div>
                 );
             },

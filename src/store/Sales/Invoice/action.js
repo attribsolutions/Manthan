@@ -19,7 +19,11 @@ import {
     CANCLE_E_INVOICE_ACTION,
     CANCLE_E_INVOICE_ACTION_SUCCESS,
     CANCLE_E_WAY_BILL_ACTION,
-    CANCLE_E_WAY_BILL_ACTION_SUCCESS
+    CANCLE_E_WAY_BILL_ACTION_SUCCESS,
+    PRINT_E_WAY_BILL_ACTION,
+    PRINT_E_WAY_BILL_SUCCESS,
+    PRINT_E_INVOICE_ACTION,
+    PRINT_E_INVOICE_SUCCESS
 } from "./actionType";
 
 
@@ -97,7 +101,8 @@ export const InvoiceApiErrorAction = () => ({
     type: INVOICE_API_ERROR_ACTION,
 })
 
-//Uploaded_EInvoicea/RowId/UserID
+//**************************** E-Invoice (upload ,cancel) ***************************************/
+
 export const Uploaded_EInvoiceAction = (RowId) => ({
     type: UPLOADED_E_INVOICE_ACTION,
     RowId
@@ -108,7 +113,6 @@ export const Uploaded_EInvoiceSuccess = (data) => ({
     payload: data,
 });
 
-//Cancel_EInvoicea/RowId/UserID
 export const Cancel_EInvoiceAction = (RowId) => ({
     type: CANCLE_E_INVOICE_ACTION,
     RowId
@@ -119,7 +123,8 @@ export const Cancel_EInvoiceSuccess = (data) => ({
     payload: data,
 });
 
-//Uploaded_EwayBill/RowId/UserID
+//**************************** E-WayBill (upload ,cancel) actions ***************************************/
+
 export const Uploaded_EwayBillAction = (RowId) => ({
     type: UPLOADED_E_WAY_BILL_ACTION,
     RowId
@@ -130,7 +135,6 @@ export const Uploaded_EwayBillSuccess = (data) => ({
     payload: data,
 });
 
-//Cancel_EwayBill/RowId/UserID
 export const Cancel_EwayBillAction = (RowId) => ({
     type: CANCLE_E_WAY_BILL_ACTION,
     RowId
@@ -140,3 +144,4 @@ export const Cancel_EwayBillSuccess = (data) => ({
     type: CANCLE_E_WAY_BILL_ACTION_SUCCESS,
     payload: data,
 });
+

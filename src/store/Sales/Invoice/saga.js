@@ -15,10 +15,10 @@ import {
   IB_Invoice_Get_Filter_API,
   IB_Invoice_Edit_API_Singel_Get,
   IB_Invoice_Delete_API,
-  Uploade_EInvoice_Get_API,
-  Uploade_EwayBill_Get_API,
-  Cancel_EwayBill_Get_API,
-  Cancel_EInvoice_Get_API
+  EInvoice_Uploade_Get_API,
+  EInvoice_Cancel_Get_API,
+  EwayBill_Uploade_Get_API,
+  EwayBill_Cancel_Get_API,
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -31,7 +31,9 @@ import {
   Uploaded_EInvoiceSuccess,
   Uploaded_EwayBillSuccess,
   Cancel_EInvoiceSuccess,
-  Cancel_EwayBillSuccess
+  Cancel_EwayBillSuccess,
+  Print_EInvoiceAction,
+  Print_EwayBillSuccess
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -42,7 +44,8 @@ import {
   UPLOADED_E_INVOICE_ACTION,
   UPLOADED_E_WAY_BILL_ACTION,
   CANCLE_E_WAY_BILL_ACTION,
-  CANCLE_E_INVOICE_ACTION
+  CANCLE_E_INVOICE_ACTION,
+
 } from "./actionType";
 import *as url from "../../../routes/route_url"
 import { discountCalculate } from "../../../pages/Sale/Invoice/invoiceCaculations";
@@ -262,42 +265,41 @@ function* makeIB_InvoiceGenFunc({ body }) {
     CommonConsole(error)
   }
 }
+//**************************** E-Invoice (upload ,cancel,) ***************************************/
 
-//Uploaded_EInvoicea/RowId/UserID
 function* Uploade_EInvoiceGenFunc({ RowId }) {
   try {
-    const response = yield call(Uploade_EInvoice_Get_API, { RowId, UserID })
+    const response = yield call(EInvoice_Uploade_Get_API, { RowId, UserID })
     yield put(Uploaded_EInvoiceSuccess(response));
   } catch (error) {
     yield put(InvoiceApiErrorAction())
   }
 }
 
-//Uploaded_EwayBill//RowId/UserID
+function* Cancle_EInvoiceGenFunc({ RowId }) {
+  try {
+    const response = yield call(EInvoice_Cancel_Get_API, { RowId, UserID })
+    yield put(Cancel_EInvoiceSuccess(response));
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
+}
+
+//**************************** E-WayBill (upload ,cancel) actions ***************************************/
+
 function* Uploade_EwayBillGenFunc({ RowId }) {
   try {
-    const response = yield call(Uploade_EwayBill_Get_API, { RowId, UserID })
+    const response = yield call(EwayBill_Uploade_Get_API, { RowId, UserID })
     yield put(Uploaded_EwayBillSuccess(response));
   } catch (error) {
     yield put(InvoiceApiErrorAction())
   }
 }
 
-//Cancle_EwayBill//RowId/UserID
 function* Cancle_EwayBillGenFunc({ RowId }) {
   try {
-    const response = yield call(Cancel_EwayBill_Get_API, { RowId, UserID })
+    const response = yield call(EwayBill_Cancel_Get_API, { RowId, UserID })
     yield put(Cancel_EwayBillSuccess(response));
-  } catch (error) {
-    yield put(InvoiceApiErrorAction())
-  }
-}
-
-//Cancle_EInvoicea/RowId/UserID
-function* Cancle_EInvoiceGenFunc({ RowId }) {
-  try {
-    const response = yield call(Cancel_EInvoice_Get_API, { RowId, UserID })
-    yield put(Cancel_EInvoiceSuccess(response));
   } catch (error) {
     yield put(InvoiceApiErrorAction())
   }
@@ -305,7 +307,7 @@ function* Cancle_EInvoiceGenFunc({ RowId }) {
 
 // MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
-  // yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonSOInvoice_genfun)
+
   yield takeEvery(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
   yield takeEvery(INVOICE_LIST_GO_BUTTON_FILTER, InvoiceListGenFunc)
   yield takeEvery(EDIT_INVOICE_LIST, editInvoiceListGenFunc)

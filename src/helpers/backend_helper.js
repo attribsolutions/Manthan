@@ -530,10 +530,15 @@ export const Invoice_1_Get_Filter_API = ({ filtersBody, btnId }) => post(url.INV
 export const Invoice_1_Delete_API = ({ deleteId, btnId }) => del(`${url.INVOICE_1_SAVE}/${deleteId}`, btnId)// delete api
 export const Invoice_1_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.INVOICE_1_SAVE}/${editId}`, btnId)// delete api
 
-export const Uploade_EInvoice_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_E_INVOICE}/${RowId}/${UserID}`)// Uploade_EInvoice
-export const Uploade_EwayBill_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_E_WAY_BILL}/${RowId}/${UserID}`)// Uploade_EwayBill
-export const Cancel_EwayBill_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_E_WAY_BILL}/${RowId}/${UserID}`)// Cancel_EwayBill
-export const Cancel_EInvoice_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_E_INVOICE}/${RowId}/${UserID}`)// Cancel_EInvoice
+//**************************** E-Invoice (upload ,cancel,print) ***************************************/
+
+export const EInvoice_Uploade_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_E_INVOICE}/${RowId}/${UserID}`)// Uploade_EInvoice
+export const EInvoice_Cancel_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_E_INVOICE}/${RowId}/${UserID}`)// Cancel_EInvoice
+
+//**************************** E-WayBill (upload ,cancel,print) actions ***************************************/
+
+export const EwayBill_Uploade_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_E_WAY_BILL}/${RowId}/${UserID}`)// Uploade_EwayBill
+export const EwayBill_Cancel_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_E_WAY_BILL}/${RowId}/${UserID}`)// Cancel_EwayBill
 
 //IB Invoice 2 
 export const IB_Invoice_GoButton_API = ({ jsonBody, btnId }) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, jsonBody, btnId)// go button postapi

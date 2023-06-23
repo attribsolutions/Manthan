@@ -22,12 +22,9 @@ const dissableStyle = {
 };
 
 export const listPageActionsButtonFunc = (props) => {
-
-
-    const dispatch = props.dispatchHook;
-    const userCreated = loginUserID()
     const {
-        subPageMode = '',
+        dispatch,
+        history,
         userAccState,
         editActionFun,
         deleteActionFun,
@@ -45,9 +42,15 @@ export const listPageActionsButtonFunc = (props) => {
         oderAprovalBtnFunc,
     } = props;
 
+    const { editBtnLoading, deleteBtnLoading } = props.reducers;
+
+    const userCreated = loginUserID();
+    const subPageMode = history.location.pathname;
+
+
     function editHandler(rowData, btnmode, btnId) {
         try {
-            const config = { editId: rowData.id, btnmode, subPageMode, btnId }
+            let config = { editId: rowData.id, btnmode, subPageMode, btnId }
             btnIsDissablefunc({ btnId, state: true })
 
             if (editBodyfunc) {
@@ -65,7 +68,7 @@ export const listPageActionsButtonFunc = (props) => {
 
     function copyHandler(rowData, btnmode, btnId) {
         try {
-            const config = { editId: rowData.id, btnmode, subPageMode, btnId }
+            let config = { editId: rowData.id, btnmode, subPageMode, btnId }
             btnIsDissablefunc({ btnId, state: true })
 
             if (copyBodyfunc) {
@@ -98,17 +101,17 @@ export const listPageActionsButtonFunc = (props) => {
 
         try {
             if (deleteBodyfunc) {
-                const config = { rowData, subPageMode, btnId }
+                let config = { rowData, subPageMode, btnId }
                 deleteBodyfunc({ ...config })
                 return
             } else {
-                const rep = await customAlert({
+                let alertRepsponse = await customAlert({
                     Type: 8,
                     Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
                 })
-                if (rep) {
+                if (alertRepsponse) {
                     btnIsDissablefunc({ btnId, state: true })
-                    const config = { deleteId: rowData.id, subPageMode, btnId }
+                    let config = { deleteId: rowData.id, subPageMode, btnId }
                     dispatch(deleteActionFun({ ...config }))
                 }
             }
@@ -131,6 +134,7 @@ export const listPageActionsButtonFunc = (props) => {
 
     return ({
         text: "Action",
+        formatExtraData: { editBtnLoading, deleteBtnLoading },
         hidden:
             (
                 !(userAccState.RoleAccess_IsEdit)
@@ -144,12 +148,13 @@ export const listPageActionsButtonFunc = (props) => {
                     && !(oderAprovalBtnFunc) ? true : false
             ),
 
-        formatter: (cellContent, rowData) => {
-
-            const forceEditHide = rowData.forceEditHide;
-            const forceDeleteHide = rowData.forceDeleteHide;
-            const forceHideOrderAprovalBtn = rowData.forceHideOrderAprovalBtn;
-            const forceMakeBtn = rowData.forceMakeBtn;
+        formatter: (__cell, rowData, __key, formatExtra = '') => {
+            let { editBtnLoading, deleteBtnLoading } = formatExtra;
+            
+            let forceEditHide = rowData.forceEditHide;
+            let forceDeleteHide = rowData.forceDeleteHide;
+            let forceHideOrderAprovalBtn = rowData.forceHideOrderAprovalBtn;
+            let forceMakeBtn = rowData.forceMakeBtn;
             rowData["hasSelect"] = false
 
             return (
