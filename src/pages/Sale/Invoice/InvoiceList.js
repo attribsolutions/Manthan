@@ -21,6 +21,8 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
     Uploaded_EInvoiceAction,
     Uploaded_EInvoiceSuccess,
+    Uploaded_EwayBillAction,
+    Uploaded_EwayBillSuccess,
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
     invoiceListGoBtnfilter
@@ -53,11 +55,13 @@ const InvoiceList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
             goBtnloading: state.InvoiceReducer.goBtnloading,
             Uploaded_EInvoice: state.InvoiceReducer.Uploaded_EInvoice,
+            Uploaded_EwayBill: state.InvoiceReducer.Uploaded_EwayBill,
+
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, supplier, Uploaded_EInvoice } = reducers;
+    const { pageField, supplier, Uploaded_EInvoice, Uploaded_EwayBill } = reducers;
     const { fromdate, todate, supplierSelect } = hederFilters;
 
     const action = {
@@ -127,10 +131,29 @@ const InvoiceList = () => {
         }
     }, [Uploaded_EInvoice]);
 
+    useEffect(() => {
+
+        if (Uploaded_EwayBill.Status === true && Uploaded_EwayBill.StatusCode === 200) {
+            dispatch(Uploaded_EwayBillSuccess({ Status: false }))
+            customAlert({
+                Type: 1,
+                Message: Uploaded_EwayBill.Message,
+            })
+        }
+        else if (Uploaded_EwayBill.Status === true) {
+            dispatch(Uploaded_EwayBillSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Uploaded_EwayBill.Message),
+            })
+        }
+    }, [Uploaded_EwayBill]);
+
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
+
     supplierOptions.unshift({
         value: "",
         label: " All"
@@ -253,6 +276,10 @@ const InvoiceList = () => {
         dispatch(Uploaded_EInvoiceAction(RowId))
     };
 
+    const Uploaded_EwayBillBtnFunc = (RowId) => {
+        dispatch(Uploaded_EwayBillAction(RowId))
+    };
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -276,6 +303,7 @@ const InvoiceList = () => {
                             filters={hederFilters}
                             forceNewBtnView={false}
                             Uploaded_EInvoiceBtnFunc={Uploaded_EInvoiceBtnFunc}
+                            Uploaded_EwayBillBtnFunc={Uploaded_EwayBillBtnFunc}
                         />
                         : null
                 }
