@@ -592,7 +592,7 @@ const Receipts = (props) => {
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
-                        <div className="px-2 c_card_filter header text-black mb-2" >
+                        <div className="px-2 c_card_filter header text-black mb-1" >
 
                             <Row>
                                 <Col sm="6">
@@ -614,7 +614,7 @@ const Receipts = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
@@ -644,7 +644,7 @@ const Receipts = (props) => {
                                 </Col >
 
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.OpeningBalanceAmt}</Label>
                                         <Col sm="7">
@@ -662,7 +662,7 @@ const Receipts = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptModeName} </Label>
                                         <Col sm="7">
@@ -695,7 +695,7 @@ const Receipts = (props) => {
                             {(values.ReceiptModeName.label === "Cheque") || (values.ReceiptModeName.label === "RTGS") ?
                                 < Row >
                                     <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
+                                        <FormGroup className=" row mt-1 " >
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.BankName} </Label>
                                             <Col sm="7">
@@ -723,7 +723,7 @@ const Receipts = (props) => {
                                     </Col >
 
                                     <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
+                                        <FormGroup className=" row mt-1 " >
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.DepositorBankName} </Label>
                                             <Col sm="7">
@@ -757,7 +757,7 @@ const Receipts = (props) => {
                                 <Row>
 
                                     <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
+                                        <FormGroup className=" row mt-1 " >
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.DocumentNo}</Label>
                                             <Col sm="7">
@@ -782,7 +782,7 @@ const Receipts = (props) => {
                                     </Col >
 
                                     <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
+                                        <FormGroup className=" row mt-1 " >
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeDate}</Label>
                                             <Col sm="7">
@@ -800,7 +800,7 @@ const Receipts = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.AmountPaid}</Label>
                                         <Col sm="7">
@@ -827,7 +827,7 @@ const Receipts = (props) => {
                                 </Col >
 
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.Description}</Label>
                                         <Col sm="7">
