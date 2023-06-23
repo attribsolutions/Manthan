@@ -18,7 +18,7 @@ import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { E_WayBill_ActionsButtonFunc, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
+import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
 import { SaveButton } from "./CommonButton";
@@ -284,8 +284,8 @@ const CommonPurchaseList = (props) => {
   }
 
   const secondLastColumn = () => {  // ======================== for List Page Action Button ================================
-    if ((history.location.pathname === url.INVOICE_LIST_1)) {// INVOICE_LIST_1 E_WayBill buttons
-      return E_WayBill_ActionsButtonFunc({ ...props, dispatch, userAccState, })
+    if ((history.location.pathname === url.INVOICE_LIST_1)) {// INVOICE_LIST_1 E_Invoice buttons
+      return E_Invoice_ActionsButtonFunc({ ...props, dispatch, userAccState, })
     }
   }
 
