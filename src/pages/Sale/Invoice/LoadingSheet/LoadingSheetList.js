@@ -104,7 +104,7 @@ const LoadingSheetList = () => {
             <div className="page-content">
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">
-                        <div className=" row mt-3">
+                        <div className=" row mt-2 mb-1">
                             <Col sm="5" className="">
                                 <FormGroup className=" row" >
                                     <Label className="col-sm-5 p-2"
@@ -131,8 +131,10 @@ const LoadingSheetList = () => {
                                     </Col>
                                 </FormGroup>
                             </Col>
-                            <Col sm="1" className="mt-3 ">
-                                <Go_Button loading={reducers.loading} id={'LoadingSheet'} onClick={goButtonHandler} />
+                            <Col sm="1" className="">
+                                <Go_Button loading={reducers.loading}
+                                    id={'LoadingSheet'}
+                                    onClick={goButtonHandler} />
                             </Col>
                         </div>
 
