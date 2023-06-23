@@ -14,6 +14,7 @@ export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves
 export const printBtnCss = "badge badge-soft-primary font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 const dissableBtnCss = "badge badge-soft- font-size-12  waves-effect waves-light w-xxs border border-light"
+const printInvoiceBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
 
 const dissableStyle = {
     opacity: 0.5,
@@ -150,7 +151,7 @@ export const listPageActionsButtonFunc = (props) => {
 
         formatter: (__cell, rowData, __key, formatExtra = '') => {
             let { editBtnLoading, deleteBtnLoading } = formatExtra;
-            
+
             let forceEditHide = rowData.forceEditHide;
             let forceDeleteHide = rowData.forceDeleteHide;
             let forceHideOrderAprovalBtn = rowData.forceHideOrderAprovalBtn;
@@ -406,6 +407,8 @@ export const listPageActionsButtonFunc = (props) => {
     });
 }
 
+
+
 export const E_WayBill_ActionsButtonFunc = (props) => {
     const {
         dispatch,
@@ -423,37 +426,76 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
         } catch (error) { }
     };
 
+    function Print_EwayBillHander(e, RowData) {
+        const { InvoiceUploads } = RowData;
+        if (!(InvoiceUploads === undefined) && (InvoiceUploads.length > 0)) {
+            const pdfUrl = `https://${InvoiceUploads[0].EwayBillUrl}`;
+            window.open(pdfUrl, '_blank');
+        }
+    };
+
     return ({
         text: "E-Way Bill",
         formatter: (__cell, rowData) => {
 
             return (
                 <div id="ActionBtn" className="center gap-3" >
-                    <Button
-                        type="button"
-                        className={editBtnCss}
-                        // id={`btn-delete-${rowData.id}`}
-                        title={`E-WayBill Upload`}
-                        onClick={(e,) => Uploaded_EwayBillHander(e, rowData)}
-                    >
-                        <i className="bx bx-upload font-size-14"></i>
-                    </Button>
 
+                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EwayBillNo === "")) ?
+                        <Button
+                            type="button"
+                            className={editBtnCss}
+                            title={`E-WayBill Upload`}
+                            onClick={(e,) => Uploaded_EwayBillHander(e, rowData)}
+                        >
+                            <i className="bx bx-upload font-size-14"></i>
+                        </Button> :
+                        !(rowData.InvoiceUploads[0].EwayBillNo === "") &&
+                        <Button
+                            type="button"
+                            title={'Access Not Allow'}
+                            className={dissableBtnCss}
+                            disabled={true}
+                            style={dissableStyle}
+                        >
+                            <i className="bx bx-upload font-size-14"></i>
+                        </Button>
+                    }
+
+                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EwayBillIsCancel === false)) ?
+                        < Button
+                            type="button"
+                            className={deltBtnCss}
+                            title={`Cancel E-WayBill`
+                            }
+                            onClick={(e,) => Cancel_EwayBillHander(e, rowData)}
+                        >
+                            <i className="mdi mdi-cancel font-size-14"></i>
+                        </Button > :
+                        (rowData.InvoiceUploads[0].EwayBillIsCancel === true) &&
+                        <Button
+                            type="button"
+                            title={'Access Not Allow'}
+                            className={dissableBtnCss}
+                            disabled={true}
+                            style={dissableStyle}
+                        >
+                            <i className="mdi mdi-cancel font-size-14"></i>
+                        </Button>
+                    }
                     <Button
                         type="button"
-                        className={deltBtnCss}
-                        // id={`btn-delete-${rowData.id}`}
-                        title={`Cancel E-WayBill`}
-                        onClick={(e,) => Cancel_EwayBillHander(e, rowData)}
+                        className={printInvoiceBtnCss}
+                        title={`Print E-WayBill`}
+                        onClick={(e,) => Print_EwayBillHander(e, rowData)}
                     >
-                        <i className="mdi mdi-cancel font-size-14"></i>
+                        <i className="bx bx-printer font-size-14"></i>
                     </Button>
 
                 </div >
             )
         }
     });
-
 }
 
 export const E_Invoice_ActionsButtonFunc = (props) => {
@@ -473,28 +515,71 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
         } catch (error) { }
     };
 
+    function Print_InvoiceHander(e, RowData) {
+        const { InvoiceUploads } = RowData;
+        if (!(InvoiceUploads === undefined) && (InvoiceUploads.length > 0)) {
+            const pdfUrl = InvoiceUploads[0].EInvoicePdf;
+            window.open(pdfUrl, '_blank');
+        }
+    };
+
+
     return ({
         text: "E-Invoice",
         formatter: (__cell, rowData) => {
 
             return (
                 <div id="ActionBtn" className="center gap-3" >
-                    <Button
-                        type="button"
-                        className={editBtnCss}
-                        title={`E-Invoice Upload`}
-                        onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}
-                    >
-                        <i className="bx bx-upload font-size-14"></i>
-                    </Button>
+
+                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].Irn === "")) ?
+                        <Button
+                            type="button"
+                            className={editBtnCss}
+                            title={`E-Invoice Upload`}
+                            onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}
+                        >
+                            <i className="bx bx-upload font-size-14"></i>
+                        </Button> :
+                        !(rowData.InvoiceUploads[0].Irn === "") &&
+                        <Button
+                            type="button"
+                            title={'Access Not Allow'}
+                            className={dissableBtnCss}
+                            disabled={true}
+                            style={dissableStyle}
+                        >
+                            <i className="bx bx-upload font-size-14"></i>
+                        </Button>
+                    }
+
+                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EInvoiceIsCancel === false)) ?
+                        <Button
+                            type="button"
+                            className={deltBtnCss}
+                            title={`Cancel E-Invoice`}
+                            onClick={(e,) => Cancel_EInvoiceHandler(e, rowData)}
+                        >
+                            <i className="mdi mdi-cancel font-size-14"></i>
+                        </Button> :
+                        (rowData.InvoiceUploads[0].EInvoiceIsCancel === true) &&
+                        <Button
+                            type="button"
+                            title={'Access Not Allow'}
+                            className={dissableBtnCss}
+                            disabled={true}
+                            style={dissableStyle}
+                        >
+                            <i className="mdi mdi-cancel font-size-14"></i>
+                        </Button>
+                    }
 
                     <Button
                         type="button"
-                        className={deltBtnCss}
-                        title={`Cancel E-Invoice`}
-                        onClick={(e,) => Cancel_EInvoiceHandler(e, rowData)}
+                        className={printInvoiceBtnCss}
+                        title={`Print E-Invoice`}
+                        onClick={(e,) => Print_InvoiceHander(e, rowData)}
                     >
-                        <i className="mdi mdi-cancel font-size-14"></i>
+                        <i className="bx bx-printer font-size-14"></i>
                     </Button>
                 </div >
             )
@@ -502,4 +587,5 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
     });
 
 }
+
 
