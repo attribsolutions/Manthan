@@ -26,6 +26,7 @@ const INIT_STATE = {
     Uploaded_EwayBill: { Status: false },
     Cancel_EInvoice: { Status: false },
     Cancel_EwayBill: { Status: false },
+    listBtnLoading: false,
 }
 
 const InvoiceReducer = (state = INIT_STATE, action) => {
@@ -35,6 +36,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 goBtnloading: true,
+                listBtnLoading: action.config.btnId,
             }
 
         // GO Button 
@@ -42,6 +44,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 goBtnloading: false,
+                listBtnLoading: false,
                 gobutton_Add: action.payload,
             }
 
@@ -117,6 +120,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 ...state,
                 Cancel_EInvoice: action.payload,
             }
+            
 
         default:
             return state

@@ -111,6 +111,14 @@ const OrderReducer = (state = INIT_STATE, action) => {
         deleteMsg: action.payload,
       }
 
+      
+    case GET_ORDER_LIST_PAGE:
+      return {
+        ...state,
+        loading: true,
+        orderList: [],
+      }
+
     // Order List Page 
     case GET_ORDER_LIST_PAGE_SUCCESS:
       return {
@@ -119,16 +127,10 @@ const OrderReducer = (state = INIT_STATE, action) => {
         loading: false
       }
 
-    case GET_ORDER_LIST_PAGE:
-      return {
-        ...state,
-        loading: true,
-        orderList: [],
-      }
-
     case GET_ORDER_APPROVAL_DETAIL:
       return {
         ...state,
+        listBtnLoading: action.config.btnId,
         saveBtnloading: true,
       }
 
@@ -136,18 +138,20 @@ const OrderReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         approvalDetail: action.payload,
+        listBtnLoading: false,
         saveBtnloading: false,
       }
 
     case ORDER_APPROVAL_ACTION:
       return {
         ...state,
-
         saveBtnloading: true,
+        listBtnLoading: action.config.btnId,
       }
     case ORDER_APPROVAL_ACTION_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         saveBtnloading: false,
         orderApprovalMsg: action.payload,
       }
@@ -156,12 +160,14 @@ const OrderReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         orderConfirmLoading: true,
+        listBtnLoading: action.config.btnId,
       }
 
     case POST_ORDER_CONFIRM_API_SUCCESS:
       return {
         ...state,
         orderConfirmLoading: false,
+        listBtnLoading: false,
         orderConfirmMsg: action.payload,
       }
 

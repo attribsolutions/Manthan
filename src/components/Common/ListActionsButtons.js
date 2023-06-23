@@ -86,9 +86,9 @@ export const listPageActionsButtonFunc = (props) => {
 
     };
 
-    function downHandler(rowData, downbtnType) {
+    function downHandler(rowData, downbtnType, btnId) {
         try {
-            downBtnFunc(rowData, downbtnType);
+            downBtnFunc(rowData, downbtnType, btnId);
         } catch (error) {
             customAlert({
                 Type: 3,
@@ -125,11 +125,11 @@ export const listPageActionsButtonFunc = (props) => {
 
     }
 
-    function makeBtnHandler(rowData) {
+    function makeBtnHandler(rowData, btnId) {
         rowData["hasSelect"] = true;
         let arr = []
         arr.push(rowData)
-        makeBtnFunc(arr)
+        makeBtnFunc(arr, btnId)
     }
 
 
@@ -291,10 +291,10 @@ export const listPageActionsButtonFunc = (props) => {
                             title={`Print ${ButtonMsgLable}`}
                             onClick={() => {
                                 const btnId = `btn-dounload-${rowData.id}`
-                                downHandler(rowData, btnId)
+                                downHandler(rowData, undefined, btnId)
                             }}
                         >
-                            {(listBtnLoading === `Print ${ButtonMsgLable}`) ?
+                            {(listBtnLoading === `btn-dounload-${rowData.id}`) ?
                                 <Spinner style={{ height: "16px", width: "16px" }} color="white" />
                                 : <i className="bx bx-printer font-size-16"></i>
                             }
@@ -413,11 +413,11 @@ export const listPageActionsButtonFunc = (props) => {
                                 }}
                             >
                                 {(listBtnLoading === `Copy ${ButtonMsgLable}`) ?
-                                        <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                        : <i className="bx bxs-copy font-size-18 "></i>
-                                    }
+                                    <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                    : <i className="bx bxs-copy font-size-18 "></i>
+                                }
 
-                                
+
                             </Button>
                             : null
                     }
