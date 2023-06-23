@@ -17,7 +17,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMessage: { Status: false },
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
 }
 
 const EmployeeTypeReducer = (state = INIT_STATE, action) => {
@@ -42,14 +42,14 @@ const EmployeeTypeReducer = (state = INIT_STATE, action) => {
     case GET_EMPLOYEE_TYPE_LIST:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
       }
 
     case GET_EMPLOYEE_TYPE_LIST_SUCCESS:
       return {
         ...state,
         EmployeeTypeList: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
       }
 
     case DELETE_EMPLOYEE_TYPE_ID_SUCCESS:
@@ -84,7 +84,7 @@ const EmployeeTypeReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
 

@@ -16,6 +16,8 @@ import {
   ORDER_API_ERROR_ACTION,
   POST_ORDER_CONFIRM_API_SUCCESS,
   POST_ORDER_CONFIRM_API,
+  EDIT_ORDER_FOR_ORDER_PAGE,
+  DELETE_ORDER_FOR_ORDER_PAGE,
 } from "./actionType"
 
 
@@ -33,8 +35,7 @@ const INIT_STATE = {
   orderConfirmMsg: { Status: false },
   orderConfirmLoading: false,
   gotoInvoiceBtnLoading: false,
-  btndisable: false
-
+  listBtnLoading: false,
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
@@ -72,9 +73,15 @@ const OrderReducer = (state = INIT_STATE, action) => {
         postMsg: action.payload,
       }
 
+    case EDIT_ORDER_FOR_ORDER_PAGE:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
     case EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       }
 
@@ -91,9 +98,16 @@ const OrderReducer = (state = INIT_STATE, action) => {
         updateMsg: action.payload,
       }
 
+    case DELETE_ORDER_FOR_ORDER_PAGE:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+        deleteMsg: action.payload,
+      }
     case DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMsg: action.payload,
       }
 
@@ -136,7 +150,6 @@ const OrderReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         orderApprovalMsg: action.payload,
-        btndisable: true
       }
 
     case POST_ORDER_CONFIRM_API:
@@ -157,6 +170,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
         ...state,
         loading: false,
         saveBtnloading: false,
+        listBtnLoading: false,
         orderConfirmLoading: false,
         gotoInvoiceBtnLoading: false
       }

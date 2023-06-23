@@ -7,7 +7,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMessage: { Status: false },
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
 }
 
 const PartyTypeReducer = (state = INIT_STATE, action) => {
@@ -28,7 +28,7 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
     case actionType.GET_PARTY_TYPE_LIST:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
       }
 
 
@@ -36,7 +36,7 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         ListData: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
 
       }
 
@@ -51,7 +51,7 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
     case actionType.EDIT_PARTY_TYPE_ID:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
 
       };
 
@@ -59,7 +59,7 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         editData: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
 
       };
 
@@ -82,7 +82,7 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
 

@@ -35,7 +35,7 @@ const OrderSummary = (props) => {
 
     const reducers = useSelector(
         (state) => ({
-            listLoading: state.OrderSummaryReducer.listLoading,
+            listBtnLoading: state.OrderSummaryReducer.listBtnLoading,
             orderSummaryGobtn: state.OrderSummaryReducer.orderSummaryGobtn,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
@@ -245,7 +245,7 @@ const OrderSummary = (props) => {
                         }
 
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.listLoading} />
+                            <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
                         </Col>
                     </div>
                 </div>

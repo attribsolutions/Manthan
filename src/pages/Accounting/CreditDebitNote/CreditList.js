@@ -58,7 +58,7 @@ const CreditList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            listLoading: state.CredietDebitReducer.listLoading,
+            listBtnLoading: state.CredietDebitReducer.listBtnLoading,
             tableList: state.CredietDebitReducer.CreditList,
             deleteMsg: state.CredietDebitReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
@@ -301,7 +301,7 @@ const CreditList = () => {
                     </Col >
 
                     <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
-                        <Go_Button onClick={goButtonHandler} loading={reducers.listLoading} />
+                        <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
                     </Col>
                 </div>
             </div>

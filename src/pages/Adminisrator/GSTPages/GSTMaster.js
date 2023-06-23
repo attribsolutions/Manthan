@@ -70,9 +70,9 @@ const GSTMaster = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
-        listLoading,
+        listBtnLoading,
     } = useSelector((state) => ({
-        listLoading: state.GSTReducer.listLoading,
+        listBtnLoading: state.GSTReducer.listBtnLoading,
         saveBtnloading: state.GSTReducer.saveBtnloading,
         tableData: state.GSTReducer.GSTGoButton,
         deleteMessage: state.GSTReducer.deleteMsgForMaster,
@@ -474,7 +474,7 @@ const GSTMaster = (props) => {
                                                 </FormGroup>
                                             </Col>
                                             <Col sm={1}>
-                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
+                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
                                             </Col>
                                         </Row>
                                     </CardHeader>

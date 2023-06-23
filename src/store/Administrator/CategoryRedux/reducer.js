@@ -18,7 +18,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMessage: { Status: false },
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
 }
 
 const CategoryReducer = (state = INIT_STATE, action) => {
@@ -42,14 +42,14 @@ const CategoryReducer = (state = INIT_STATE, action) => {
     case GET_CATEGORY_LIST:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
       }
 
     case GET_CATEGORY_LIST_SUCCESS:
       return {
         ...state,
         CategoryListData: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
       }
 
     case DELETE_CATEGORY_ID_SUCCESS:
@@ -85,7 +85,7 @@ const CategoryReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
     default:

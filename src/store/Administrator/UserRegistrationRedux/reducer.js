@@ -21,7 +21,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   userPartiesForUserMaster: [],
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
 };
 
 const User_Registration_Reducer = (state = INIT_STATE, action) => {
@@ -52,14 +52,14 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
     case GET_USER_LIST_FOR_USER:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
       }
 
     case GET_USER_LIST_FOR_USER_SUCCESS:
       return {
         ...state,
         pages: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
       }
 
     //// delete api
@@ -102,7 +102,7 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
     default:
       return state;

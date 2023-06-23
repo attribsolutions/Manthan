@@ -46,8 +46,8 @@ export const selectAllCheck = (selected, nonSelectable, position, headLabel) => 
 
 })
 
-const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondLastColumn, thirdLastColumn, makeBtnColumn, userAccState }) => {
-
+const DynamicColumnHook = ({props, tableList = [], pageField = '', lastColumn, secondLastColumn, thirdLastColumn, makeBtnColumn, userAccState }) => {
+    const { listBtnLoading }=props.reducers
     const [tableColumns, setTableColumns] = useState([{
         text: "ID",
         dataField: "id",
@@ -175,7 +175,7 @@ const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondL
             // totalSize: tableList.length
         })
 
-    }, [pageField, userAccState])
+    }, [pageField, userAccState,listBtnLoading])
 
     return [tableColumns, defaultSorted, pageOptions]
 }

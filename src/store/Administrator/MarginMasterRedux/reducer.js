@@ -17,7 +17,7 @@ const INIT_STATE = {
     MarginGoButton: { Status: false },
     deleteId_For_MarginMaster: { Status: false },
     saveBtnloading: false,
-    listLoading: false,
+    listBtnLoading: false,
 };
 
 const MarginMasterReducer = (state = INIT_STATE, action) => {
@@ -42,14 +42,14 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
         case GET_MARGIN_LIST:
             return {
                 ...state,
-                listLoading: true
+                listBtnLoading: true
             };
 
         case GET_MARGIN_LIST_SUCCESS:
             return {
                 ...state,
                 MarginList: action.payload,
-                listLoading: false
+                listBtnLoading: false
 
             };
 
@@ -64,7 +64,7 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 MarginGoButton: [],
-                listLoading: true,
+                listBtnLoading: true,
 
             };
 
@@ -73,7 +73,7 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 MarginGoButton: action.payload,
-                listLoading: false,
+                listBtnLoading: false,
 
             };
 
@@ -88,7 +88,7 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 saveBtnloading: false,
-                listLoading: false,
+                listBtnLoading: false,
             };
 
 

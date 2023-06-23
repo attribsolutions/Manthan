@@ -65,9 +65,9 @@ const MRPMaster = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
-        listLoading,
+        listBtnLoading,
     } = useSelector((state) => ({
-        listLoading: state.MRPMasterReducer.listLoading,
+        listBtnLoading: state.MRPMasterReducer.listBtnLoading,
         saveBtnloading: state.MRPMasterReducer.saveBtnloading,
         tableData: state.MRPMasterReducer.MRPGoButton,
         deleteMessage: state.MRPMasterReducer.deleteIdForMRPMaster,
@@ -521,7 +521,7 @@ const MRPMaster = (props) => {
                                                 </FormGroup>
                                             </Col>
                                             <Col sm={1}>
-                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
+                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
                                             </Col>
                                         </Row>
                                     </CardHeader>

@@ -16,7 +16,7 @@ const INIT_STATE = {
     PartyName: [],
     SelectField: [],
     saveBtnloading: false,
-    listLoading: false
+    listBtnLoading: false
 }
 
 const PartyMasterBulkUpdateReducer = (state = INIT_STATE, action) => {
@@ -31,14 +31,14 @@ const PartyMasterBulkUpdateReducer = (state = INIT_STATE, action) => {
         case GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE:
             return {
                 ...state,
-                listLoading: true
+                listBtnLoading: true
             };
 
         case GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE_SUCCESS:
             return {
                 ...state,
                 goButton: action.payload,
-                listLoading: false
+                listBtnLoading: false
             };
 
         case POST_PARTY_NAME_SUCCESS:
@@ -72,7 +72,7 @@ const PartyMasterBulkUpdateReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 saveBtnloading: false,
-                listLoading: false,
+                listBtnLoading: false,
             };
 
         default:

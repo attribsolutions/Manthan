@@ -92,9 +92,9 @@ const PartyMasterBulkUpdate = (props) => {
         DistrictOnState,
         State,
         saveBtnloading,
-        listLoading,
+        listBtnLoading,
     } = useSelector((state) => ({
-        listLoading: state.PartyMasterBulkUpdateReducer.listLoading,
+        listBtnLoading: state.PartyMasterBulkUpdateReducer.listBtnLoading,
         saveBtnloading: state.PartyMasterBulkUpdateReducer.saveBtnloading,
         postMsg: state.PartyMasterBulkUpdateReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -646,7 +646,7 @@ const PartyMasterBulkUpdate = (props) => {
 
                                         <Col sm={1}>
                                             <div className="col col-1 px-5">
-                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
+                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
 
                                             </div>
                                         </Col>

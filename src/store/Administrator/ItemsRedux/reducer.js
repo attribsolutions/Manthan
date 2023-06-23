@@ -44,7 +44,7 @@ const INIT_STATE = {
     ItemTagList: [],
     BrandTagList: [],
     saveBtnloading: false,
-    listLoading: false,
+    listBtnLoading: false,
 
 };
 
@@ -55,14 +55,14 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
         case GET_ITEM_LIST_API:
             return {
                 ...state,
-                listLoading: true,
+                listBtnLoading: true,
             }
 
         case GET_ITEM_LIST_API_SUCCESS:
             return {
                 ...state,
                 ItemList: action.payload,
-                listLoading: false,
+                listBtnLoading: false,
 
             }
 
@@ -193,7 +193,7 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 saveBtnloading: false,
-                listLoading: false,
+                listBtnLoading: false,
             };
 
         case "RESET_ALL":

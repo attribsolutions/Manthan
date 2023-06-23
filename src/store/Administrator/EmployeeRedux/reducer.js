@@ -15,7 +15,7 @@ import {
 } from "./actionTypes";
 
 const INIT_STATE = {
-  listLoading: false,
+  listBtnLoading: false,
   saveBtnloading: false,
   designation: [],
   State: [],
@@ -71,14 +71,14 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
     case GET_EMPLOYEE_LIST:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
       }
 
     case GET_EMPLOYEE_LIST_SUCCESS:
       return {
         ...state,
         employeeList: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
       }
 
 
@@ -122,7 +122,7 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
     default:

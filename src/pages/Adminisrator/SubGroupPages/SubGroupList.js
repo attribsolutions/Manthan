@@ -24,7 +24,7 @@ const SubGroupList = () => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      listLoading: state.SubGroupReducer.listLoading,
+      listBtnLoading: state.SubGroupReducer.listBtnLoading,
       tableList: state.SubGroupReducer.SubgroupList,
       editData: state.SubGroupReducer.editData,
       updateMsg: state.SubGroupReducer.updateMsg,
@@ -56,7 +56,7 @@ const SubGroupList = () => {
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {
-        reducers.listLoading ?
+        reducers.listBtnLoading ?
           <Listloader />
           :
           (pageField) ?
