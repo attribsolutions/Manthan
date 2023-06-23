@@ -23,10 +23,6 @@ const dissableStyle = {
 export const listPageActionsButtonFunc = (props) => {
 
 
-
-
-
-
     const dispatch = props.dispatchHook;
     const userCreated = loginUserID()
     const {
@@ -42,8 +38,6 @@ export const listPageActionsButtonFunc = (props) => {
         copyBodyfunc,
         updateBtnFunc,
         makeBtnFunc = () => { },
-        Uploaded_EInvoiceBtnFunc = () => { },
-        Uploaded_EwayBillBtnFunc = () => { },
         pageMode,
         makeBtnName,
         makeBtnShow = false,
@@ -133,22 +127,7 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnFunc(arr)
     }
 
-    function Uploaded_EInvoiceHandler(e, RowData) {
-
-        try {
-            Uploaded_EInvoiceBtnFunc(RowData.id)
-        } catch (error) { }
-
-    };
-
-    function Uploaded_EwayBillHander(e, RowData) {
-
-        try {
-            Uploaded_EwayBillBtnFunc(RowData.id)
-        } catch (error) { }
-
-    };
-
+    
     return ({
         text: "Action",
         hidden:
@@ -413,46 +392,6 @@ export const listPageActionsButtonFunc = (props) => {
                                 </Button>  // **else null
                                 : null
                     }
-                    {
-                        ((subPageMode === url.INVOICE_LIST_1)) &&
-                        // <Button
-                        //     type="button"
-                        //     id={`btn-dounload-${rowData.id}`}
-                        //     className={downBtnCss}
-                        //     title={`E-Invoice`}
-                        //     onClick={() => {
-                        //         const btnId = `btn-dounload-${rowData.id}`
-                        //         // downHandler(rowData, btnId)
-                        //     }}
-                        // >
-                        //     <i className="fas fa-file-invoice  font-size-18"></i>
-                        // </Button>
-                        <Button type="button" color="btn btn-outline-info border-1 font-size-10 text-center"
-                            onClick={(e,) => Uploaded_EwayBillHander(e, rowData)}
-                        >        <i > </i>EwayBill</Button>
-
-                    }
-
-                    {
-                        ((subPageMode === url.INVOICE_LIST_1)) &&
-                        // <Button
-                        //     type="button"
-                        //     id={`btn-dounload-${rowData.id}`}
-                        //     className={downBtnCss}
-                        //     title={`E-Invoice`}
-                        //     onClick={() => {
-                        //         const btnId = `btn-dounload-${rowData.id}`
-                        //         // downHandler(rowData, btnId)
-                        //     }}
-                        // >
-                        //     <i className="fas fa-file-invoice  font-size-18"></i>
-                        // </Button>
-                        <Button type="button" color="btn btn-outline-success border-1 font-size-10 text-center"
-                            onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}
-                        >        <i > </i>E-Invoice</Button>
-
-                    }
-
 
 
                 </div >
@@ -461,3 +400,55 @@ export const listPageActionsButtonFunc = (props) => {
     });
 
 }
+
+
+export const E_WayBill_ActionsButtonFunc = (props) => {
+    const {
+        dispatch,
+        Uploaded_EInvoiceBtnFunc = () => { },
+        Uploaded_EwayBillBtnFunc = () => { },
+    } = props;
+
+
+
+    function Uploaded_EInvoiceHandler(e, RowData) {
+
+        try {
+            Uploaded_EInvoiceBtnFunc(RowData.id)
+        } catch (error) { }
+
+    };
+
+    function Uploaded_EwayBillHander(e, RowData) {
+
+        try {
+            Uploaded_EwayBillBtnFunc(RowData.id)
+        } catch (error) { }
+
+    };
+
+    return ({
+        text: "E-Way Bill",
+        formatter: (__cell, rowData) => {
+
+            return (
+                <div id="ActionBtn" className="center gap-3" >
+                    <Button type="button" color="btn btn-outline-info border-1 font-size-10 text-center"
+                        onClick={(e,) => Uploaded_EwayBillHander(e, rowData)}>
+                        EwayBill
+                    </Button>
+
+                    <Button type="button" color="btn btn-outline-success border-1 font-size-10 text-center"
+                        onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}>
+                        E-Invoice
+                    </Button>
+
+                </div >
+            )
+        }
+    });
+
+}
+
+
+

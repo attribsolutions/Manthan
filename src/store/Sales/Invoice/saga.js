@@ -134,82 +134,79 @@ function* DeleteInvoiceGenFunc({ config }) {
 // GO-Botton SO-invoice Add Page API
 export function invoice_GoButton_dataConversion_Func(response) {
 
-  try {
+  // Iterate over OrderItemDetails array and perform data conversion
+  response.OrderItemDetails = response.OrderItemDetails.map(index1 => {
+    const defaultunit = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
+    let tAmount = 0;
 
-    let convResp = response.OrderItemDetails.map(index1 => {
+    // Set properties for data conversion
+    index1["OrderQty"] = index1.Quantity;
+    index1["default_UnitDropvalue"] = {
+      value: index1.Unit,
+      label: index1.UnitName,
+      ConversionUnit: '1',
+      Unitlabel: index1.UnitName,
+      BaseUnitQuantity: defaultunit.BaseUnitQuantity,
+      BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantity,
+    };
 
-      const defaultunit = index1.UnitDetails.find(findEle => (findEle.UnitID === index1.Unit))
-      let tAmount = 0;
+    index1["InpStockQtyTotal"] = `${Number(index1.Quantity) * Number(index1.ConversionUnit)}`;
+    index1["ItemTotalStock"] = 0;
+    index1["StockInValid"] = false;
+    index1["StockInvalidMsg"] = '';
 
-      index1["OrderQty"] = index1.Quantity
-      index1["default_UnitDropvalue"] = {
-        "value": index1.Unit,
-        "label": index1.UnitName,
-        "ConversionUnit": '1',
-        "Unitlabel": index1.UnitName,
-        "BaseUnitQuantity": defaultunit.BaseUnitQuantity,
-        "BaseUnitQuantityNoUnit": defaultunit.BaseUnitQuantity,
+    let orderQty = Number(index1.Quantity);
+
+    // Iterate over StockDetails array and perform data conversion
+    index1.StockDetails = index1.StockDetails.map(index2 => {
+      index2["initialRate"] = index2.Rate;
+      index2["Rate"] = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
+      index2["ActualQuantity"] = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity).toFixed(2);
+      index1["Quantity"] = Number(index1.Quantity).toFixed(2);
+
+      index1["ItemTotalStock"] += Number(index2.ActualQuantity);
+
+      let stockQty = Number(index2.ActualQuantity);
+
+      // Adjust order quantity based on stock availability
+      if (orderQty > stockQty && orderQty !== 0) {
+        orderQty -= stockQty;
+        index2.Qty = stockQty.toFixed(2);
+      } else if (orderQty <= stockQty && orderQty > 0) {
+        index2.Qty = orderQty.toFixed(2);
+        orderQty = 0;
+      } else {
+        index2.Qty = 0;
       }
-      index1["InpStockQtyTotal"] = `${Number(index1.Quantity) * Number(index1.ConversionUnit)}`
-      index1["ItemTotalStock"] = 0
-      index1["StockInValid"] = false;
-      index1["StockInvalidMsg"] = '';
 
-      let orderQty = Number(index1.Quantity);
+      // Calculate total amount if quantity is greater than 0
+      if (index2.Qty > 0) {
+        const calculate = discountCalculate(index2, index1);
+        tAmount += Number(calculate.tAmount);
+      }
 
-      index1.StockDetails = index1.StockDetails.map(index2 => {
+      return index2;
+    });
 
-        index2['initialRate'] = index2.Rate;
+    const t1 = Number(index1.ItemTotalStock).toFixed(3);
+    const t2 = Number(index1.Quantity);
+    const tA4 = tAmount.toFixed(2);
 
-        index2.Rate = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
-        index2.ActualQuantity = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity).toFixed(2);
-        index1.Quantity = Number(index1.Quantity).toFixed(2);
+    index1["tAmount"] = tA4;
 
-        index1.ItemTotalStock = (Number(index2.ActualQuantity) + Number(index1.ItemTotalStock));
+    // Check for stock availability and set corresponding message
+    if (t1 < t2) {
+      index1["StockInValid"] = true;
+      const diffrence = Math.abs(t1 - t2);
+      const msg1 = `Short Stock Quantity ${Number(index1.Quantity).toFixed(3)}`;
+      const msg2 = `Short Stock Quantity ${Number(diffrence).toFixed(3)}`;
+      index1["StockInvalidMsg"] = index1.ItemTotalStock === 0 ? msg1 : msg2;
+    }
 
+    return index1;
+  });
 
-        let stockQty = Number(index2.ActualQuantity);
-
-        if ((orderQty > stockQty) && !(orderQty === 0)) {
-          orderQty = orderQty - stockQty
-          index2.Qty = stockQty.toFixed(2)
-        } else if ((orderQty <= stockQty) && (orderQty > 0)) {
-          index2.Qty = orderQty.toFixed(2)
-          orderQty = 0
-        }
-        else {
-          index2.Qty = 0;
-        }
-        if (index2.Qty > 0) {
-          const calculate = discountCalculate(index2, index1)
-          tAmount = tAmount + Number(calculate.tAmount)
-        }
-        return index2
-      });
-
-      let t1 = Number(index1.ItemTotalStock).toFixed(3);
-      let t2 = Number(index1.Quantity);
-      let tA4 = tAmount.toFixed(2);
-
-      index1.tAmount = tA4;
-
-      if (t1 < t2) {
-        index1.StockInValid = true
-        let diffrence = Math.abs(t1 - t2);
-
-        var msg1 = `Short Stock Quantity ${Number(index1.Quantity).toFixed(3)}`
-        var msg2 = `Short Stock Quantity ${Number(diffrence).toFixed(3)}`
-        index1.StockInvalidMsg = (index1.ItemTotalStock === 0) ? msg1 : msg2
-      };
-
-      return index1
-    })
-    response.OrderItemDetails = convResp
-    return response
-
-  } catch (error) {
-
-  }
+  return response;
 }
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
@@ -229,11 +226,14 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     response["path"] = path
     response["page_Mode"] = pageMode
     response["customer"] = customer
-    response.Data = yield invoice_GoButton_dataConversion_Func(response.Data)
-
+    debugger
+    const newData = invoice_GoButton_dataConversion_Func(response.Data)
+    debugger
+    response.Data = newData
     yield put(GoButtonForinvoiceAddSuccess(response));
 
   } catch (error) {
+    debugger
     yield put(InvoiceApiErrorAction())
 
     if (errorMsg) {//if ErrorMsg True means the SO-Order GOTo-Invoice Button hit After GoBtnAdd Api Hitt and get error
