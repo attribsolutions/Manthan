@@ -15,7 +15,8 @@ import {
   IB_Invoice_Get_Filter_API,
   IB_Invoice_Edit_API_Singel_Get,
   IB_Invoice_Delete_API,
-  Uploade_EInvoice_Get_API
+  Uploade_EInvoice_Get_API,
+  Uploade_EwayBill_Get_API
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -278,7 +279,7 @@ function* Uploade_EwayBillGenFunc({ RowId }) {
   debugger
   let UserID = loginUserID()
   try {
-    const response = yield call(Uploade_EInvoice_Get_API, { RowId, UserID })
+    const response = yield call(Uploade_EwayBill_Get_API, { RowId, UserID })
     yield put(Uploaded_EwayBillSuccess(response));
   } catch (error) {
     yield put(InvoiceApiErrorAction())
@@ -297,7 +298,6 @@ function* InvoiceSaga() {
   yield takeEvery(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
   yield takeEvery(UPLOADED_E_INVOICE_ACTION, Uploade_EInvoiceGenFunc)
   yield takeEvery(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc)
-
 
 }
 

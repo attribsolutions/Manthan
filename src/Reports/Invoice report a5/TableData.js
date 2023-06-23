@@ -9,9 +9,9 @@ export const columns =[
     "Discount",
     "Discount Amount ",
     "Taxable Amount",
-    "CGST ",
+    "          CGST           %        Amount",
     "CGST Amount",
-    "SGST ",
+    "          SGST           %        Amount",
     "SGST Amount",
    "Amount" ,
 ];
@@ -70,7 +70,7 @@ export const Rows = (data) => {
       debugger
         const tableitemRow = [
             SrNO++,
-            `(${element.HSNCode})${element.ItemName}` ,
+            `${element.HSNCode} ${element.ItemName}` ,
             `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
             element.MRPValue,
             element.Rate,
