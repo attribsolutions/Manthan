@@ -127,7 +127,7 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnFunc(arr)
     }
 
-    
+
     return ({
         text: "Action",
         hidden:
@@ -170,7 +170,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     editHandler(rowData, mode.edit, btnId)
                                 }}
                             >
-                                <i className="mdi mdi-pencil font-size-18" ></i>
+                                <i className="mdi mdi-pencil font-size-16" ></i>
                             </Button>)
 
                             : // **Else-If Condition start 
@@ -187,7 +187,7 @@ export const listPageActionsButtonFunc = (props) => {
                                         editHandler(rowData, mode.edit, btnId)
                                     }}
                                 >
-                                    <i className="mdi mdi-pencil font-size-18" ></i>
+                                    <i className="mdi mdi-pencil font-size-16" ></i>
                                 </Button>
 
                                 : // **second else-if condition
@@ -204,7 +204,7 @@ export const listPageActionsButtonFunc = (props) => {
                                             editHandler(rowData, mode.view, btnId)
                                         }}
                                     >
-                                        <i className="bx bxs-show font-size-18 "></i>
+                                        <i className="bx bxs-show font-size-16 "></i>
                                     </Button>
 
                                     :// btn dissable only show body
@@ -215,7 +215,7 @@ export const listPageActionsButtonFunc = (props) => {
                                         disabled={true}
                                         style={dissableStyle}
                                     >
-                                        <i className="mdi mdi-pencil font-size-18" ></i>
+                                        <i className="mdi mdi-pencil font-size-16" ></i>
                                     </Button>  // **else null
 
                     }
@@ -265,7 +265,7 @@ export const listPageActionsButtonFunc = (props) => {
                                 downHandler(rowData, btnId)
                             }}
                         >
-                            <i className="bx bx-printer font-size-18"></i>
+                            <i className="bx bx-printer font-size-16"></i>
                         </Button>
                     }
 
@@ -317,7 +317,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     deleteHandler(rowData, btnId)
                                 }}
                             >
-                                <i className="mdi mdi-delete font-size-18"></i>
+                                <i className="mdi mdi-delete font-size-16"></i>
                             </Button>
                             /*chnage delete-self functionality  autho by- Rohit date: 22-08-022 
                             line no 88 to 108
@@ -335,7 +335,7 @@ export const listPageActionsButtonFunc = (props) => {
                                         deleteHandler(rowData, btnId)
                                     }}
                                 >
-                                    <i className="mdi mdi-delete font-size-18"></i>
+                                    <i className="mdi mdi-delete font-size-16"></i>
                                 </Button>
                                 :// btn dissable only show body
                                 <Button
@@ -345,7 +345,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     disabled={true}
                                     style={dissableStyle}
                                 >
-                                    <i className="mdi mdi-delete font-size-18"></i>
+                                    <i className="mdi mdi-delete font-size-16"></i>
                                 </Button>  // **else null
                     }
                     {
@@ -405,26 +405,13 @@ export const listPageActionsButtonFunc = (props) => {
 export const E_WayBill_ActionsButtonFunc = (props) => {
     const {
         dispatch,
-        Uploaded_EInvoiceBtnFunc = () => { },
         Uploaded_EwayBillBtnFunc = () => { },
     } = props;
 
-
-
-    function Uploaded_EInvoiceHandler(e, RowData) {
-
-        try {
-            Uploaded_EInvoiceBtnFunc(RowData.id)
-        } catch (error) { }
-
-    };
-
     function Uploaded_EwayBillHander(e, RowData) {
-
         try {
             Uploaded_EwayBillBtnFunc(RowData.id)
         } catch (error) { }
-
     };
 
     return ({
@@ -433,14 +420,24 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
 
             return (
                 <div id="ActionBtn" className="center gap-3" >
-                    <Button type="button" color="btn btn-outline-info border-1 font-size-10 text-center"
-                        onClick={(e,) => Uploaded_EwayBillHander(e, rowData)}>
-                        EwayBill
+                    <Button
+                        type="button"
+                        className={editBtnCss}
+                        // id={`btn-delete-${rowData.id}`}
+                        title={`E-WayBill Upload`}
+                        onClick={(e,) => Uploaded_EwayBillHander(e, rowData)}
+                    >
+                        <i className="bx bx-upload font-size-14"></i>
                     </Button>
 
-                    <Button type="button" color="btn btn-outline-success border-1 font-size-10 text-center"
-                        onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}>
-                        E-Invoice
+                    <Button
+                        type="button"
+                        className={deltBtnCss}
+                        // id={`btn-delete-${rowData.id}`}
+                        title={`Cancel E-WayBill`}
+                        // onClick={(e,) => Uploaded_EwayBillHander(e, rowData)}
+                    >
+                        <i className="mdi mdi-cancel font-size-14"></i>
                     </Button>
 
                 </div >
@@ -450,5 +447,52 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
 
 }
 
+export const E_Invoice_ActionsButtonFunc = (props) => {
+    const {
+        dispatch,
+        Uploaded_EInvoiceBtnFunc = () => { },
+    } = props;
 
+    function Uploaded_EInvoiceHandler(e, RowData) {
+        try {
+            Uploaded_EInvoiceBtnFunc(RowData.id)
+        } catch (error) { }
+
+    };
+
+    return ({
+        text: "E-Invoice",
+        formatter: (__cell, rowData) => {
+
+            return (
+                <div id="ActionBtn" className="center gap-3" >
+                    {/* <Button type="button" color="btn btn-outline-success border-1 font-size-10 text-center"
+                        onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}>
+                        E-Invoice
+                    </Button> */}
+                    <Button
+                        type="button"
+                        className={editBtnCss}
+                        // id={`btn-delete-${rowData.id}`}
+                        title={`E-Invoice Upload`}
+                        onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}
+                    >
+                        <i className="bx bx-upload font-size-14"></i>
+                    </Button>
+
+                    <Button
+                        type="button"
+                        className={deltBtnCss}
+                        // id={`btn-delete-${rowData.id}`}
+                        title={`Cancel E-Invoice`}
+                        // onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}
+                    >
+                        <i className="mdi mdi-cancel font-size-14"></i>
+                    </Button>
+                </div >
+            )
+        }
+    });
+
+}
 
