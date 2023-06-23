@@ -117,10 +117,10 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 ...state,
                 Cancel_EInvoice: action.payload,
             }
+
         default:
             return state
     }
-
 }
 
 export default InvoiceReducer
