@@ -493,7 +493,7 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
         formatter: (__cell, rowData) => {
 
             return (
-                <div id="ActionBtn" className="center gap-3" >
+                <div id="ActionBtn" className="center gap-3 p-0" >
 
                     {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EwayBillNo === null)) ?
                         <Button
@@ -597,7 +597,7 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
         formatter: (__cell, rowData) => {
 
             return (
-                <div id="ActionBtn" className="center gap-3" >
+                <div id="ActionBtn" className="center gap-3 p-0" >
 
                     {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].Irn === null)) ?
                         <Button
