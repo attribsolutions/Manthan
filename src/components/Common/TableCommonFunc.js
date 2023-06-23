@@ -99,7 +99,7 @@ const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondL
                         if (cell === "Invoice Created") {
                             return (
                                 <span class="label label-" style={{
-                                    backgroundColor: '#b6efdcf7', color: "#0e0d0d",
+                                    backgroundColor: '#b6efdcf7', color: "#0e0d0d",fontSize: "12px",
                                     padding: "2px 4px 2px 4px", borderRadius: "5px"
                                 }}>{cell}</span>
                             )
@@ -107,7 +107,7 @@ const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondL
                         if (cell === "Order Confirm") {
                             return (
                                 <span class="label label" style={{
-                                    backgroundColor: '#f7dfb6', color: "#0e0d0d",
+                                    backgroundColor: '#f7dfb6', color: "#0e0d0d",fontSize: "12px",
                                     padding: "2px 4px 2px 4px", borderRadius: "5px"
                                 }} >{cell}</span>
                             )
@@ -115,12 +115,12 @@ const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondL
                         if (cell === "Open") {
                             return (
                                 <span class="label label" style={{
-                                    backgroundColor: '#c3bfc7a6', color: "#0e0d0d",
+                                    backgroundColor: '#c3bfc7a6', color: "#0e0d0d", fontSize: "12px",
                                     padding: "2px 4px 2px 4px", borderRadius: "5px"
                                 }} >{cell}</span>
                             )
                         }
-                       
+
                         return (
                             <span>{typeof cell === 'boolean' ? String(cell) : cell}</span>
 
