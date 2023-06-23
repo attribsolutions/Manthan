@@ -122,15 +122,16 @@ const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondL
                 }
             }
 
-            if ((PageFieldMaster.length - 2 === k) && secondLastColumn) {
-                let isCol = secondLastColumn();
-                if (isCol) { columns.push(isCol) }
-            }
-
+            
             if ((PageFieldMaster.length - 1 === k) && makeBtnColumn) {
                 let isCol = makeBtnColumn();
                 if (isCol) { columns.push(isCol) }
             }
+            if ((PageFieldMaster.length - 1 === k) && secondLastColumn) {
+                let isCol = secondLastColumn();
+                if (isCol) { columns.push(isCol) }
+            }
+
 
             if ((PageFieldMaster.length - 1 === k) && lastColumn) {
                 let islastCol = lastColumn()
