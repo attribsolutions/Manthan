@@ -377,7 +377,7 @@ const Debit = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer}</Label>
                                         <Col sm="7">
@@ -402,7 +402,7 @@ const Debit = (props) => {
                                 </Col >
 
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment}</Label>
                                         <Col sm="7">
@@ -430,7 +430,7 @@ const Debit = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ServiceItems}</Label>
                                         <Col sm="7">
@@ -455,7 +455,7 @@ const Debit = (props) => {
                                     </FormGroup>
                                 </Col >
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.GrandTotal}</Label>
                                         <Col sm="7">
@@ -485,7 +485,7 @@ const Debit = (props) => {
 
                             {values.ServiceItems.label === "Cheque Bounce" ? <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptNO}</Label>
                                         <Col sm="7">
@@ -511,7 +511,7 @@ const Debit = (props) => {
                                 </Col >
 
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptDate}</Label>
                                         <Col sm="7">

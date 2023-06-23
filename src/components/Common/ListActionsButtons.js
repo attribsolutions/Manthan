@@ -495,7 +495,7 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
             return (
                 <div id="ActionBtn" className="center gap-3" >
 
-                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EwayBillNo === "")) ?
+                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EwayBillNo === null)) ?
                         <Button
                             type="button"
                             className={editBtnCss}
@@ -504,7 +504,7 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
                         >
                             <i className="bx bx-upload font-size-14"></i>
                         </Button> :
-                        !(rowData.InvoiceUploads[0].EwayBillNo === "") &&
+                        !(rowData.InvoiceUploads[0].EwayBillNo === null) &&
                         <Button
                             type="button"
                             title={'Access Not Allow'}
@@ -537,14 +537,28 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
                             <i className="mdi mdi-cancel font-size-14"></i>
                         </Button>
                     }
-                    <Button
-                        type="button"
-                        className={printInvoiceBtnCss}
-                        title={`Print E-WayBill`}
-                        onClick={(e,) => Print_EwayBillHander(e, rowData)}
-                    >
-                        <i className="bx bx-printer font-size-14"></i>
-                    </Button>
+
+                    {((rowData.InvoiceUploads.length === 0) || !(rowData.InvoiceUploads[0].EwayBillUrl === null)) ?
+                        <Button
+                            type="button"
+                            className={printInvoiceBtnCss}
+                            title={`Print E-WayBill`}
+                            onClick={(e,) => Print_EwayBillHander(e, rowData)}
+                        >
+                            <i className="bx bx-printer font-size-14"></i>
+                        </Button> :
+                        (rowData.InvoiceUploads[0].EwayBillUrl === null) &&
+                        <Button
+                            type="button"
+                            title={'Access Not Allow'}
+                            className={dissableBtnCss}
+                            disabled={true}
+                            style={dissableStyle}
+                        >
+                            <i className="bx bx-printer font-size-14"></i>
+                        </Button>
+                    }
+
 
                 </div >
             )
@@ -585,7 +599,7 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
             return (
                 <div id="ActionBtn" className="center gap-3" >
 
-                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].Irn === "")) ?
+                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].Irn === null)) ?
                         <Button
                             type="button"
                             className={editBtnCss}
@@ -594,7 +608,7 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
                         >
                             <i className="bx bx-upload font-size-14"></i>
                         </Button> :
-                        !(rowData.InvoiceUploads[0].Irn === "") &&
+                        !(rowData.InvoiceUploads[0].Irn === null) &&
                         <Button
                             type="button"
                             title={'Access Not Allow'}
@@ -627,14 +641,27 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
                         </Button>
                     }
 
-                    <Button
-                        type="button"
-                        className={printInvoiceBtnCss}
-                        title={`Print E-Invoice`}
-                        onClick={(e,) => Print_InvoiceHander(e, rowData)}
-                    >
-                        <i className="bx bx-printer font-size-14"></i>
-                    </Button>
+                    {((rowData.InvoiceUploads.length === 0) || !(rowData.InvoiceUploads[0].EInvoicePdf === null)) ?
+                        <Button
+                            type="button"
+                            className={printInvoiceBtnCss}
+                            title={`Print E-Invoice`}
+                            onClick={(e,) => Print_InvoiceHander(e, rowData)}
+                        >
+                            <i className="bx bx-printer font-size-14"></i>
+                        </Button> :
+                        (rowData.InvoiceUploads[0].EInvoicePdf === null) &&
+                        <Button
+                            type="button"
+                            title={'Access Not Allow'}
+                            className={dissableBtnCss}
+                            disabled={true}
+                            style={dissableStyle}
+                        >
+                            <i className="bx bx-printer font-size-14"></i>
+                        </Button>
+                    }
+
                 </div >
             )
         }

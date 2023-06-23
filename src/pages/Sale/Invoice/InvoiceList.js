@@ -19,6 +19,8 @@ import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
+    Cancel_EInvoiceSuccess,
+    Cancel_EwayBillSuccess,
     Uploaded_EInvoiceAction,
     Uploaded_EInvoiceSuccess,
     Uploaded_EwayBillAction,
@@ -56,12 +58,14 @@ const InvoiceList = () => {
             goBtnloading: state.InvoiceReducer.goBtnloading,
             Uploaded_EInvoice: state.InvoiceReducer.Uploaded_EInvoice,
             Uploaded_EwayBill: state.InvoiceReducer.Uploaded_EwayBill,
+            Cancel_EInvoice: state.InvoiceReducer.Cancel_EInvoice,
+            Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
 
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, supplier, Uploaded_EInvoice, Uploaded_EwayBill } = reducers;
+    const { pageField, supplier, Uploaded_EInvoice, Uploaded_EwayBill, Cancel_EInvoice, Cancel_EwayBill } = reducers;
     const { fromdate, todate, supplierSelect } = hederFilters;
 
     const action = {
@@ -113,15 +117,19 @@ const InvoiceList = () => {
         goButtonHandler("event", IBType)
     }, [dispatch]);
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if (Uploaded_EInvoice.Status === true && Uploaded_EInvoice.StatusCode === 200) {
             dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
-            customAlert({
+            const a = await customAlert({
                 Type: 1,
-                Message: Uploaded_EInvoice.Message,
+                Message: JSON.stringify(Uploaded_EInvoice.Message),
             })
+            if (a) {
+                window.location.reload()
+            }
         }
+
         else if (Uploaded_EInvoice.Status === true) {
             dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
             customAlert({
@@ -131,23 +139,69 @@ const InvoiceList = () => {
         }
     }, [Uploaded_EInvoice]);
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if (Uploaded_EwayBill.Status === true && Uploaded_EwayBill.StatusCode === 200) {
             dispatch(Uploaded_EwayBillSuccess({ Status: false }))
-            customAlert({
+            const a = await customAlert({
                 Type: 1,
-                Message: Uploaded_EwayBill.Message,
+                Message: JSON.stringify(Uploaded_EwayBill.Message),
             })
+            if (a) {
+                window.location.reload()
+            }
         }
+
         else if (Uploaded_EwayBill.Status === true) {
             dispatch(Uploaded_EwayBillSuccess({ Status: false }))
             customAlert({
                 Type: 3,
                 Message: JSON.stringify(Uploaded_EwayBill.Message),
             })
+            return
         }
     }, [Uploaded_EwayBill]);
+
+    useEffect(async () => {
+
+        if (Cancel_EInvoice.Status === true && Cancel_EInvoice.StatusCode === 200) {
+            dispatch(Cancel_EInvoiceSuccess({ Status: false }))
+            customAlert({
+                Type: 1,
+                Message: Cancel_EInvoice.Message,
+            })
+            return
+        }
+
+        else if (Cancel_EInvoice.Status === true) {
+            dispatch(Cancel_EInvoiceSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Cancel_EInvoice.Message),
+            })
+            return
+        }
+    }, [Cancel_EInvoice]);
+
+    useEffect(async () => {
+
+        if (Cancel_EwayBill.Status === true && Cancel_EwayBill.StatusCode === 200) {
+            dispatch(Cancel_EwayBillSuccess({ Status: false }))
+            customAlert({
+                Type: 1,
+                Message: Cancel_EwayBill.Message,
+            })
+            return
+        }
+        else if (Cancel_EwayBill.Status === true) {
+            dispatch(Cancel_EwayBillSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Cancel_EwayBill.Message),
+            })
+            return
+        }
+    }, [Cancel_EwayBill]);
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
