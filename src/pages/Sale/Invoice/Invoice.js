@@ -221,7 +221,7 @@ const Invoice = (props) => {
                 obj.hasValid.Customer.valid = true;
                 return obj
             })
-            
+
             setOrderItemDetails(gobutton_Add.Data.OrderItemDetails);
 
             // **********************************************************
@@ -452,7 +452,7 @@ const Invoice = (props) => {
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
-                
+
                 if (formatExtraData.changeAllDiscount) {
                     index1.Discount = discountValueAll;
                     index1.DiscountType = discountTypeAll.value;
@@ -623,7 +623,7 @@ const Invoice = (props) => {
                             Amount: Number(calculate.tAmount).toFixed(2),
                             TaxType: 'GST',
                             DiscountType: index.DiscountType,
-                            Discount: Number(index.Discount).toFixed(2),
+                            Discount: Number(index.Discount) || 0,
                             DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
                         })
                     }
