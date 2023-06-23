@@ -95,22 +95,28 @@ const DynamicColumnHook = ({ tableList = [], pageField = '', lastColumn, secondL
                         if (i.Alignment) return i.Alignment;
                     },
 
-                    // formatter: (cell, row) => {
-                    //     if (cell === "Invoice Created") {
-                    //         return (
-                    //             <span class="label label-primary" style={{ color: '#2ab57d' }}>{cell}</span>
-                    //         )
-                    //     }
-                    //     if (cell === "Order Confirm") {
-                    //         return (
-                    //             <span class="label label-primary" style={{ color: '#4ba6ef' }} >{cell}</span>
-                    //         )
-                    //     }
-                    //     return (
-                    //         <span>{cell}</span>
+                    formatter: (cell, row) => {
+                        if (cell === "Invoice Created") {
+                            return (
+                                <span class="label label-" style={{
+                                    backgroundColor: '#73bfa6f7', color: "white",
+                                    padding: "2px 4px 2px 4px", borderRadius: "5px"
+                                }}>{cell}</span>
+                            )
+                        }
+                        if (cell === "Order Confirm") {
+                            return (
+                                <span class="label label" style={{
+                                    backgroundColor: '#dbbc86', color: "white",
+                                    padding: "2px 4px 2px 4px", borderRadius: "5px"
+                                }} >{cell}</span>
+                            )
+                        }
+                        return (
+                            <span>{typeof cell === 'boolean' ? String(cell) : cell}</span>
 
-                    //     );
-                    // }
+                        );
+                    }
                 })
 
                 if (i.DefaultSort === 1) {
