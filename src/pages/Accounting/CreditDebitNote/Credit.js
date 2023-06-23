@@ -39,7 +39,6 @@ import Flatpickr from "react-flatpickr"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { currentDate } from "../../../components/Common/CommonFunction"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -48,13 +47,11 @@ import { decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/RegexPa
 import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { CustomAlert, customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
-import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-
 
 const Credit = (props) => {
     const history = useHistory();
@@ -70,7 +67,6 @@ const Credit = (props) => {
         GrandTotal: 0,
         InvoiceNO: "",
         calculate: ""
-
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds));
@@ -88,7 +84,6 @@ const Credit = (props) => {
         postMsg,
         pageField,
         ReceiptGoButton,
-        updateMsg,
         RetailerList,
         InvoiceNo,
         CreditDebitType,
@@ -118,7 +113,6 @@ const Credit = (props) => {
         dispatch(InvoiceNumberSuccess([]))
     }, []);
 
-
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -127,8 +121,6 @@ const Credit = (props) => {
     const location = { ...history.location };
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
     const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
-
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -169,13 +161,10 @@ const Credit = (props) => {
                 const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber, NoteType } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                // hasValid.Name.valid = true;
-
                 values.CRDRNoteDate = CRDRNoteDate;
                 values.Customer = { label: Customer, value: CustomerID };
                 values.NoteReason = { label: NoteReason, value: "" };
                 values.InvoiceNO = { label: NoteType === "CreditNote" ? null : FullNoteNumber, value: "" };
-                // values.BalanceAmount
                 values.servicesItem = servicesItem;
                 values.Narration = Narration;
                 values.GrandTotal = GrandTotal;
@@ -186,7 +175,6 @@ const Credit = (props) => {
                 setTable(CRDRInvoices)
 
                 setTable1(CRDRNoteItems)
-
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -229,24 +217,6 @@ const Credit = (props) => {
             }));
         }
     }, [postMsg])
-
-    // useEffect(() => {
-    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-    //         setState(() => resetFunction(fileds, state)) // Clear form values 
-    //         history.push({
-    //             pathname: url.BANK_LIST,
-    //         })
-    //     } else if (updateMsg.Status === true && !modalCss) {
-    //         dispatch(updateBankIDSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(updateMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [updateMsg, modalCss]);
 
     useEffect(() => {
         if (pageField) {
@@ -304,7 +274,6 @@ const Credit = (props) => {
 
     const GoodsCreditType = CreditDebitType.find((index) => {
         return index.Name === "Goods CreditNote"
-
     })
 
     function DateOnchange(e, date) {
@@ -317,14 +286,11 @@ const Credit = (props) => {
     };
 
     function InvoiceNoOnChange(e) {
-
         let id = e.value
         dispatch(Invoice_Return_ID(id));
     };
 
     function CustomerOnChange(e) { // Customer dropdown function
-
-
         setState((i) => {
             i.values.GrandTotal = 0
             i.hasValid.GrandTotal.valid = true;
@@ -368,7 +334,6 @@ const Credit = (props) => {
 
     function AmountPaid_onChange(event) {
         let input = event.target.value
-        // let result = /^\d*(\.\d{0,2})?$/.test(input);
         let sum = 0
         Data.forEach(element => {
             sum = sum + Number(element.BalanceAmount)
@@ -382,8 +347,6 @@ const Credit = (props) => {
         onChangeText({ event, state, setState })
         AmountPaidDistribution(event.target.value)
         dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(event.target.value).toFixed(2)}`))
-
-
     }
 
     function AmountPaidDistribution(val1) {
@@ -452,8 +415,6 @@ const Credit = (props) => {
         try {
             document.getElementById(`Qty${key}`).value = val
         } catch (e) { }
-
-
     };
 
     function UnitOnchange(e, row, key) {
@@ -476,7 +437,6 @@ const Credit = (props) => {
             headerStyle: (colum, colIndex) => {
                 return { width: '60px', textAlign: 'center' };
             },
-
         },
 
         {
@@ -485,30 +445,7 @@ const Credit = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span >
-                    {/* <Input
-                        key={`Qty${row.Item}${key}`}
-                        id={`Qty${key}`}
-                        pattern={decimalRegx}
-                        defaultValue={null}
-                        // defaultValue={pageMode === mode.view ? row.Quantity : null}
-                        disabled={pageMode === mode.view ? true : false}
-                        placeholder="Enter Quantity"
-                        autoComplete="off"
-                        className="col col-sm"
-                        // onChange={(event) => val_onChange(event, row, "qty")}
-                        onChange={(e) => {
-                            const val = e.target.value
-                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                            if ((isnum) || (val === '')) {
-                                val_onChange(val, row, "qty")
-                            } else {
-                                document.getElementById(`Qty${key}`).value = row.Quantity
-                            }
-                        }}
-                        onKeyDown={(e) => handleKeyDown(e, InvoiceItems)}
 
-
-                    /> */}
                     <CInput
                         key={`Qty${row.Item}${key}`}
                         id={`Qty${key}`}
@@ -519,7 +456,6 @@ const Credit = (props) => {
                         onChange={(e) => {
                             const val = e.target.value
                             val_onChange(val, row, "qty", key)
-
                         }}
                     />
                 </span>)
@@ -562,7 +498,6 @@ const Credit = (props) => {
                             isSearchable={true}
                             className="react-dropdown"
                             classNamePrefix="dropdown"
-                            // options={Units}
                             onChange={(e) => UnitOnchange(e, row, key)}
 
                         />
@@ -578,29 +513,6 @@ const Credit = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span >
-                    {/* <Input
-                        type="text"
-                        key={`Ratey${row.Item}${key}`}
-                        id={`Ratey${key}`}
-                        defaultValue={row.Rate}
-                        disabled={pageMode === mode.view ? true : false}
-                        autoComplete="off"
-                        className="col col-sm"
-                        // onChange={(event) => val_onChange(event, row, "Rate")}
-                        onChange={(e) => {
-                            const val = e.target.value
-                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                            if ((isnum) || (val === '')) {
-                                val_onChange(val, row, "Rate")
-                            } else {
-                                document.getElementById(`Ratey${key}`).value = row.Rate
-                            }
-                        }}
-                        onKeyDown={(e) => handleKeyDown(e, InvoiceItems)}
-
-
-                    /> */}
-
                     <CInput
                         type="text"
                         key={`Ratey${row.Item}${key}`}
@@ -655,8 +567,6 @@ const Credit = (props) => {
                         pattern={decimalRegx}
                         defaultValue={pageMode === mode.view ? row.Amount : row.Calculate}
                         disabled={pageMode === mode.view ? true : false}
-                        // value={row.Calculate}
-                        // type="text"
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
@@ -700,13 +610,7 @@ const Credit = (props) => {
             }
 
             if (index.Qty) {
-                // if ((!index.unit)) {
-                //     CustomAlert({
-                //         Type: 3,
-                //         Message: `Please Select Unit ${index.ItemName}`,
-                //     })
-                //     // return btnIsDissablefunc({ btnId, state: false })
-                // }
+
                 const CRDRNoteItems = {
                     CRDRNoteDate: values.CRDRNoteDate,
                     Item: index.Item,
@@ -775,7 +679,7 @@ const Credit = (props) => {
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <form noValidate>
-                        <div className="px-2 c_card_filter header text-black mb-2" >
+                        <div className="px-2 c_card_filter header text-black mb-1" >
                             <Row>
                                 <Col sm="6">
                                     <FormGroup className="row mt-2" >
@@ -827,7 +731,7 @@ const Credit = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
@@ -843,6 +747,9 @@ const Credit = (props) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                     CustomerOnChange(hasSelect)
                                                 }}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                             />
                                             {isError.Customer.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.Customer}</small></span>
@@ -852,7 +759,7 @@ const Credit = (props) => {
                                     </FormGroup>
                                 </Col >
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.NoteReason}</Label>
                                         <Col sm="7">
@@ -864,10 +771,14 @@ const Credit = (props) => {
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => { onChangeSelect({ hasSelect, evn, state, setState, }) }}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                             />
                                             {isError.NoteReason.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.NoteReason}</small></span>
                                             )}
+
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -875,7 +786,7 @@ const Credit = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.GrandTotal}</Label>
                                         <Col sm="7">
@@ -888,7 +799,6 @@ const Credit = (props) => {
                                                 placeholder="Please Enter Amount"
                                                 autoComplete='off'
                                                 autoFocus={true}
-                                                // onChange={(event) => { onChangeText({ event, state, setState }) }}
                                                 onChange={AmountPaid_onChange}
                                             />
                                             {isError.GrandTotal.length > 0 && (
@@ -901,7 +811,7 @@ const Credit = (props) => {
                                     </FormGroup>
                                 </Col >
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.InvoiceNO}</Label>
                                         <Col sm="7">
@@ -916,11 +826,11 @@ const Credit = (props) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                     InvoiceNoOnChange(hasSelect)
                                                 }}
-
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                             />
-                                            {/* {isError.InvoiceNO.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.InvoiceNO}</small></span>
-                                            )} */}
+
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -951,7 +861,6 @@ const Credit = (props) => {
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
 
-
                                     }
                                     {Table1.length <= 0 ? null : <div className="table">
                                         <BootstrapTable
@@ -968,16 +877,12 @@ const Credit = (props) => {
 
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
-
-
                                     }
 
                                 </React.Fragment>
                             )
                             }
                         </ToolkitProvider>
-
-
                         {
                             <ToolkitProvider
 
@@ -1009,8 +914,6 @@ const Credit = (props) => {
                                 )
                                 }
                             </ToolkitProvider>}
-
-
 
                         {Data.length > 0 ?
                             <FormGroup>
