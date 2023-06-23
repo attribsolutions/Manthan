@@ -8,7 +8,9 @@ import {
     INVOICE_LIST_GO_BUTTON_FILTER,
     INVOICE_API_ERROR_ACTION,
     UPLOADED_E_INVOICE_ACTION_SUCCESS,
-    UPLOADED_E_WAY_BILL_ACTION_SUCCESS
+    UPLOADED_E_WAY_BILL_ACTION_SUCCESS,
+    CANCLE_E_WAY_BILL_ACTION_SUCCESS,
+    CANCLE_E_INVOICE_ACTION_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -22,6 +24,8 @@ const INIT_STATE = {
     deleteMsg: { Status: false },
     Uploaded_EInvoice: { Status: false },
     Uploaded_EwayBill: { Status: false },
+    Cancel_EInvoice: { Status: false },
+    Cancel_EwayBill: { Status: false },
 }
 
 const InvoiceReducer = (state = INIT_STATE, action) => {
@@ -32,7 +36,6 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 ...state,
                 goBtnloading: true,
             }
-
 
         // GO Button 
         case GO_BUTTON_FOR_INVOICE_ADD_SUCCESS:
@@ -103,6 +106,17 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 Uploaded_EwayBill: action.payload,
             }
 
+        case CANCLE_E_WAY_BILL_ACTION_SUCCESS:
+            return {
+                ...state,
+                Cancel_EwayBill: action.payload,
+            }
+
+        case CANCLE_E_INVOICE_ACTION_SUCCESS:
+            return {
+                ...state,
+                Cancel_EInvoice: action.payload,
+            }
         default:
             return state
     }
