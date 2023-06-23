@@ -4,6 +4,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { btnIsDissablefunc, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 import * as url from "../../routes/route_url";
+import { Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
@@ -398,19 +399,22 @@ export const listPageActionsButtonFunc = (props) => {
             )
         }
     });
-
 }
-
 
 export const E_WayBill_ActionsButtonFunc = (props) => {
     const {
         dispatch,
-        Uploaded_EwayBillBtnFunc = () => { },
     } = props;
 
     function Uploaded_EwayBillHander(e, RowData) {
         try {
-            Uploaded_EwayBillBtnFunc(RowData.id)
+            dispatch(Uploaded_EwayBillAction(RowData.id))
+        } catch (error) { }
+    };
+
+    function Cancel_EwayBillHander(e, RowData) {
+        try {
+            dispatch(Cancel_EwayBillAction(RowData.id))
         } catch (error) { }
     };
 
@@ -435,7 +439,7 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
                         className={deltBtnCss}
                         // id={`btn-delete-${rowData.id}`}
                         title={`Cancel E-WayBill`}
-                        // onClick={(e,) => Uploaded_EwayBillHander(e, rowData)}
+                        onClick={(e,) => Cancel_EwayBillHander(e, rowData)}
                     >
                         <i className="mdi mdi-cancel font-size-14"></i>
                     </Button>
@@ -450,14 +454,18 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
 export const E_Invoice_ActionsButtonFunc = (props) => {
     const {
         dispatch,
-        Uploaded_EInvoiceBtnFunc = () => { },
     } = props;
 
     function Uploaded_EInvoiceHandler(e, RowData) {
         try {
-            Uploaded_EInvoiceBtnFunc(RowData.id)
+            dispatch(Uploaded_EInvoiceAction(RowData.id))
         } catch (error) { }
+    };
 
+    function Cancel_EInvoiceHandler(e, RowData) {
+        try {
+            dispatch(Cancel_EInvoiceAction(RowData.id))
+        } catch (error) { }
     };
 
     return ({
@@ -466,14 +474,9 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
 
             return (
                 <div id="ActionBtn" className="center gap-3" >
-                    {/* <Button type="button" color="btn btn-outline-success border-1 font-size-10 text-center"
-                        onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}>
-                        E-Invoice
-                    </Button> */}
                     <Button
                         type="button"
                         className={editBtnCss}
-                        // id={`btn-delete-${rowData.id}`}
                         title={`E-Invoice Upload`}
                         onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}
                     >
@@ -483,9 +486,8 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
                     <Button
                         type="button"
                         className={deltBtnCss}
-                        // id={`btn-delete-${rowData.id}`}
                         title={`Cancel E-Invoice`}
-                        // onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}
+                        onClick={(e,) => Cancel_EInvoiceHandler(e, rowData)}
                     >
                         <i className="mdi mdi-cancel font-size-14"></i>
                     </Button>

@@ -270,14 +270,6 @@ const InvoiceList = () => {
         )
     }
 
-    const Uploaded_EInvoiceBtnFunc = (RowId) => {
-        dispatch(Uploaded_EInvoiceAction(RowId))
-    };
-
-    const Uploaded_EwayBillBtnFunc = (RowId) => {
-        dispatch(Uploaded_EwayBillAction(RowId))
-    };
-
     return (
         <React.Fragment>
             <div className="page-content">
@@ -300,8 +292,6 @@ const InvoiceList = () => {
                             makeBtnName={"Make GRN"}
                             filters={hederFilters}
                             forceNewBtnView={false}
-                            Uploaded_EInvoiceBtnFunc={Uploaded_EInvoiceBtnFunc}
-                            Uploaded_EwayBillBtnFunc={Uploaded_EwayBillBtnFunc}
                         />
                         : null
                 }
