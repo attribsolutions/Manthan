@@ -20,7 +20,7 @@ const ItemsList = () => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      listLoading: state.ItemMastersReducer.listLoading,
+      listBtnLoading: state.ItemMastersReducer.listBtnLoading,
       tableList: state.ItemMastersReducer.ItemList,
       editData: state.ItemMastersReducer.editData,
       updateMsg: state.ItemMastersReducer.updateMsg,
@@ -52,7 +52,7 @@ const ItemsList = () => {
   return (
     <React.Fragment>
       {
-        reducers.listLoading ?
+        reducers.listBtnLoading ?
           <Listloader />
           :
           (pageField) ?

@@ -70,9 +70,9 @@ const CreditLimitMaster = (props) => {
         RoutesList,
         Data,
         saveBtnloading,
-        listLoading,
+        listBtnLoading,
     } = useSelector((state) => ({
-        listLoading: state.CreditLimitReducer.listLoading,
+        listBtnLoading: state.CreditLimitReducer.listBtnLoading,
         saveBtnloading: state.CreditLimitReducer.saveBtnloading,
         postMsg: state.CreditLimitReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -315,7 +315,7 @@ const CreditLimitMaster = (props) => {
 
                                                             <Col sm={1}>
                                                                 <div className="col col-1 mt-2">
-                                                                    < Go_Button onClick={(e) => goButtonHandler()} loading={listLoading} />
+                                                                    < Go_Button onClick={(e) => goButtonHandler()} loading={listBtnLoading} />
 
                                                                 </div>
                                                             </Col>

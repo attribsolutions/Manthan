@@ -17,7 +17,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   deleteMessage: { Status: false },
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
 }
 const DriverReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
@@ -40,14 +40,14 @@ const DriverReducer = (state = INIT_STATE, action) => {
     case GET_DRIVER_LIST:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
       }
 
     case GET_DRIVER_LIST_SUCCESS:
       return {
         ...state,
         DriverList: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
       }
 
     case DELETE_DRIVER_TYPE_ID_SUCCESS:
@@ -80,7 +80,7 @@ const DriverReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
     default:

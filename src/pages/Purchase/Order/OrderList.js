@@ -66,7 +66,7 @@ const OrderList = () => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
-
+            listBtnLoading: state.OrderReducer.listBtnLoading,
         })
     );
 

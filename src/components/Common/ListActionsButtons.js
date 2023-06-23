@@ -1,4 +1,4 @@
-import { Button } from "reactstrap";
+import { Button, Spinner } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { btnIsDissablefunc, loginUserID } from "./CommonFunction"
@@ -43,7 +43,7 @@ export const listPageActionsButtonFunc = (props) => {
         oderAprovalBtnFunc,
     } = props;
 
-    const { editBtnLoading, deleteBtnLoading } = props.reducers;
+    const { listBtnLoading, deleteBtnLoading } = props.reducers;
 
     const userCreated = loginUserID();
     const subPageMode = history.location.pathname;
@@ -135,7 +135,7 @@ export const listPageActionsButtonFunc = (props) => {
 
     return ({
         text: "Action",
-        formatExtraData: { editBtnLoading, deleteBtnLoading },
+        formatExtraData: { listBtnLoading: listBtnLoading, deleteBtnLoading: listBtnLoading },
         hidden:
             (
                 !(userAccState.RoleAccess_IsEdit)
@@ -149,9 +149,9 @@ export const listPageActionsButtonFunc = (props) => {
                     && !(oderAprovalBtnFunc) ? true : false
             ),
 
-        formatter: (__cell, rowData, __key, formatExtra = '') => {
-            let { editBtnLoading, deleteBtnLoading } = formatExtra;
-
+        formatter: (__cell, rowData, __key, formatExtra) => {
+            let { listBtnLoading } = formatExtra;
+            debugger
             let forceEditHide = rowData.forceEditHide;
             let forceDeleteHide = rowData.forceDeleteHide;
             let forceHideOrderAprovalBtn = rowData.forceHideOrderAprovalBtn;
@@ -164,21 +164,25 @@ export const listPageActionsButtonFunc = (props) => {
 
                     {
                         //** if condition start
-
                         (userAccState.RoleAccess_IsEdit && !forceEditHide) //condtion:1
                             ?
-                            (<Button
+                            <Button
                                 type="button"
                                 id={`btn-edit-${rowData.id}`}
                                 className={editBtnCss}
                                 title={`Edit ${ButtonMsgLable}`}
+                                disabled={listBtnLoading}
                                 onClick={() => {
                                     const btnId = `btn-edit-${rowData.id}`
                                     editHandler(rowData, mode.edit, btnId)
                                 }}
                             >
-                                <i className="mdi mdi-pencil font-size-16" ></i>
-                            </Button>)
+
+                                {(listBtnLoading === `btn-edit-${rowData.id}`) ?
+                                    <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                    : <i className="mdi mdi-pencil font-size-16" ></i>
+                                }
+                            </Button>
 
                             : // **Else-If Condition start 
 
@@ -188,13 +192,18 @@ export const listPageActionsButtonFunc = (props) => {
                                     type="button"
                                     id={`btn-edit-${rowData.id}`}
                                     className={editSelfBtnCss}
+                                    disabled={listBtnLoading}
                                     title={`EditSelf ${ButtonMsgLable}`}
                                     onClick={() => {
                                         const btnId = `btn-edit-${rowData.id}`
                                         editHandler(rowData, mode.edit, btnId)
                                     }}
                                 >
-                                    <i className="mdi mdi-pencil font-size-16" ></i>
+                                    {(listBtnLoading === `btn-edit-${rowData.id}`) ?
+                                        <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                        : <i className="mdi mdi-pencil font-size-16" ></i>
+                                    }
+
                                 </Button>
 
                                 : // **second else-if condition
@@ -203,6 +212,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     ?
                                     <Button
                                         type="button"
+                                        disabled={listBtnLoading}
                                         className={editSelfBtnCss}
                                         id={`btn-edit-${rowData.id}`}
                                         title={`View ${ButtonMsgLable}`}
@@ -211,7 +221,11 @@ export const listPageActionsButtonFunc = (props) => {
                                             editHandler(rowData, mode.view, btnId)
                                         }}
                                     >
-                                        <i className="bx bxs-show font-size-16 "></i>
+                                        {(listBtnLoading === `btn-view-${rowData.id}`) ?
+                                            <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                            : <i className="bx bxs-show font-size-16 "></i>
+                                        }
+
                                     </Button>
 
                                     :// btn dissable only show body
@@ -235,13 +249,19 @@ export const listPageActionsButtonFunc = (props) => {
                                 id={`btn-makeBtn-${rowData.id}`}
                                 className={makeBtnCss}
                                 title={makeBtnName}
+                                disabled={listBtnLoading}
                                 onClick={() => {
                                     const btnId = `btn-makeBtn-${rowData.id}`
                                     makeBtnHandler(rowData, btnId)
                                 }}
                             >
-                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                    className=" fas fa-file-invoice" ></span>
+                                {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
+                                    <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                    : <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                        className=" fas fa-file-invoice" ></span>
+                                }
+
+
                             </Button>
                             :  // btn dissable only show body           #####//else if  
                             ((pageMode === mode.modeSTPList) && (makeBtnShow))
@@ -255,6 +275,7 @@ export const listPageActionsButtonFunc = (props) => {
                                 >
                                     <span style={{ marginLeft: "6px", marginRight: "6px" }}
                                         className=" fas fa-file-invoice" ></span>
+
                                 </Button>
                                 : null // **else null
                     }
@@ -266,13 +287,18 @@ export const listPageActionsButtonFunc = (props) => {
                             type="button"
                             id={`btn-dounload-${rowData.id}`}
                             className={downBtnCss}
+                            disabled={listBtnLoading}
                             title={`Print ${ButtonMsgLable}`}
                             onClick={() => {
                                 const btnId = `btn-dounload-${rowData.id}`
                                 downHandler(rowData, btnId)
                             }}
                         >
-                            <i className="bx bx-printer font-size-16"></i>
+                            {(listBtnLoading === `Print ${ButtonMsgLable}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <i className="bx bx-printer font-size-16"></i>
+                            }
+
                         </Button>
                     }
 
@@ -282,17 +308,20 @@ export const listPageActionsButtonFunc = (props) => {
                             type="button"
                             id={`btn-MultiInvoice-${rowData.id}`}
                             className={printBtnCss}
+                            disabled={listBtnLoading}
                             title={`MultipleInvoices`}
                             onClick={() => {
                                 const btnId = `btn-MultiInvoice-${rowData.id}`
                                 const downbtnType = "IsMultipleInvoicePrint"
-                                downHandler(rowData, downbtnType)
-
-
+                                downHandler(rowData, downbtnType, btnId)
                             }}
                         >
-                            <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                className=" fas fa-file-download" ></span> </Button>
+                            {(listBtnLoading === `btn-MultiInvoice-${rowData.id}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                    className=" fas fa-file-download" ></span>
+                            }
+                        </Button>
                     }
 
                     {
@@ -301,13 +330,18 @@ export const listPageActionsButtonFunc = (props) => {
                             type="button"
                             id={`btn-delete-${rowData.id}`}
                             className={makeBtnCss}
+                            disabled={listBtnLoading}
                             title={`Update ${ButtonMsgLable}`}
                             onClick={() => {
                                 const btnId = `btn-delete-${rowData.id}`
                                 updateBtnFunc(rowData, mode.copy, btnId)
                             }}
                         >
-                            <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
+                            {(listBtnLoading === `btn-delete-${rowData.id}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
+                            }
+
                         </Button>
                     }
 
@@ -319,12 +353,17 @@ export const listPageActionsButtonFunc = (props) => {
                                 className={deltBtnCss}
                                 id={`btn-delete-${rowData.id}`}
                                 title={`Delete ${ButtonMsgLable}`}
+                                disabled={listBtnLoading}
                                 onClick={() => {
                                     const btnId = `btn-delete-${rowData.id}`
                                     deleteHandler(rowData, btnId)
                                 }}
                             >
-                                <i className="mdi mdi-delete font-size-16"></i>
+                                {(deleteBtnLoading === `btn-delete-${rowData.id}`) ?
+                                    <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                    : <i className="mdi mdi-delete font-size-16"></i>
+                                }
+
                             </Button>
                             /*chnage delete-self functionality  autho by- Rohit date: 22-08-022 
                             line no 88 to 108
@@ -336,13 +375,18 @@ export const listPageActionsButtonFunc = (props) => {
                                     type="button"
                                     className={deltBtnCss}
                                     id={`btn-delete-${rowData.id}`}
+                                    disabled={listBtnLoading}
                                     title={`Delete ${ButtonMsgLable}`}
                                     onClick={() => {
                                         const btnId = `btn-delete-${rowData.id}`
                                         deleteHandler(rowData, btnId)
                                     }}
                                 >
-                                    <i className="mdi mdi-delete font-size-16"></i>
+                                    {(listBtnLoading === `btn-delete-${rowData.id}`) ?
+                                        <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                        : <i className="mdi mdi-delete font-size-16"></i>
+                                    }
+
                                 </Button>
                                 :// btn dissable only show body
                                 <Button
@@ -362,12 +406,18 @@ export const listPageActionsButtonFunc = (props) => {
                                 id={`btn-delete-${rowData.id}`}
                                 className={editSelfBtnCss}
                                 title={`Copy ${ButtonMsgLable}`}
+                                disabled={listBtnLoading}
                                 onClick={() => {
                                     const btnId = `btn-delete-${rowData.id}`
                                     copyHandler(rowData, mode.copy, btnId)
                                 }}
                             >
-                                <i className="bx bxs-copy font-size-18 "></i>
+                                {(listBtnLoading === `Copy ${ButtonMsgLable}`) ?
+                                        <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                        : <i className="bx bxs-copy font-size-18 "></i>
+                                    }
+
+                                
                             </Button>
                             : null
                     }
@@ -378,6 +428,7 @@ export const listPageActionsButtonFunc = (props) => {
                                 type="button"
                                 id={`btn-orderApproval-${rowData.id}`}
                                 className={makeBtnCss}
+                                disabled={listBtnLoading}
                                 title={`Order Approval `}
                                 onClick={() => {
                                     const btnId = `btn-orderApproval-${rowData.id}`;
@@ -395,7 +446,10 @@ export const listPageActionsButtonFunc = (props) => {
                                     disabled={true}
                                     style={dissableStyle}
                                 >
-                                    <i className="bx bx-check-shield font-size-20"></i>
+                                    {(listBtnLoading === `btn-orderApproval-${rowData.id}`) ?
+                                        <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                        : <i className="bx bx-check-shield font-size-20"></i>
+                                    }
                                 </Button>  // **else null
                                 : null
                     }

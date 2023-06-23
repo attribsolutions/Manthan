@@ -72,9 +72,9 @@ const MarginMaster = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
-        listLoading,
+        listBtnLoading,
     } = useSelector((state) => ({
-        listLoading: state.MarginMasterReducer.listLoading,
+        listBtnLoading: state.MarginMasterReducer.listBtnLoading,
         saveBtnloading: state.MarginMasterReducer.saveBtnloading,
         tableData: state.MarginMasterReducer.MarginGoButton,
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
@@ -523,7 +523,7 @@ const MarginMaster = (props) => {
                                             </FormGroup>
                                         </Col>
                                         <Col sm={1}>
-                                            <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
+                                            <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
                                         </Col>
                                     </Row>
                                 </CardHeader>

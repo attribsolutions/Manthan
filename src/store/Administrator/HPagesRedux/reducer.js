@@ -33,7 +33,7 @@ const INIT_STATE = {
   ControlTypes: [],
   FieldValidations: [],
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
 
 }
 
@@ -99,14 +99,14 @@ const H_Pages = (state = INIT_STATE, action) => {
     case GET_PAGELIST:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
       };
 
     case GET_PAGELIST_SUCCESS:
       return {
         ...state,
         PageList: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
     // PageType Dropdown api
@@ -139,7 +139,7 @@ const H_Pages = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
 
 
       };

@@ -20,7 +20,7 @@ export default function PageList() {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      listLoading: state.H_Pages.listLoading,
+      listBtnLoading: state.H_Pages.listBtnLoading,
       tableList: state.H_Pages.HPagesListData,
       editData: state.H_Pages.editData,
       updateMsg: state.H_Pages.updateMessage,
@@ -53,7 +53,7 @@ export default function PageList() {
   return (
     <React.Fragment>
       {
-        reducers.listLoading ?
+        reducers.listBtnLoading ?
           <Listloader />
           :
           (pageField) ?

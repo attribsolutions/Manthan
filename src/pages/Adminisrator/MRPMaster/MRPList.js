@@ -26,7 +26,7 @@ const MRPList = () => {
 
   const reducers = useSelector(
     (state) => ({
-      listLoading: state.MRPMasterReducer.listLoading,
+      listBtnLoading: state.MRPMasterReducer.listBtnLoading,
       tableList: state.MRPMasterReducer.MRPList,
       MRPGoButton: state.MRPMasterReducer.MRPGoButton,
       deleteMsg: state.MRPMasterReducer.deleteMsg,
@@ -126,7 +126,7 @@ const MRPList = () => {
 
         <div className="mt-n1">
           {
-            reducers.listLoading ?
+            reducers.listBtnLoading ?
               <Listloader />
               :
               (pageField) ?
