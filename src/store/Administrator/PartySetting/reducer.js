@@ -1,8 +1,9 @@
 import { GET_PARTY_SETTING_API, GET_PARTY_SETTING_API_ERROR_ACTION, GET_PARTY_SETTING_API_SUCCESS, SAVE_PARTY_SETTING_MASTER, SAVE_PARTY_SETTING_MASTER_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
-    PartySettingdata: []
-
+    postMsg: { Status: false },
+    PartySettingdata: [],
+    saveBtnloading: false,
 }
 
 const PartySettingReducer = (state = INIT_STATE, action) => {

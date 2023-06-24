@@ -617,7 +617,7 @@ export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODU
 export const OderSummary_GoBtn_API = ({ jsonBody, btnId }) => post(url.ORDER_SUMMARY, jsonBody, btnId)//post api
 
 export const PartySettingApi = (id) => get(`${url.PARTY_SETTING}/${id}`)// Party Setting api
-export const save_PartySetting_API = (jsonBody) => post(url.PARTY_SETTING, jsonBody)//  postapi
+export const save_PartySetting_API = ({ jsonBody, btnId }) => post(url.PARTY_SETTING, jsonBody, btnId)//  postapi
 
 
 

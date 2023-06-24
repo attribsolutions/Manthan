@@ -35,13 +35,15 @@ import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/a
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     btnIsDissablefunc,
+    loginCompanyID,
     loginUserDetails,
+    loginUserID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { saveMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
-import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
+import { getpartysetting_API, savePartySetting, savePartySettingMaster_Success } from "../../../store/Administrator/PartySetting/action";
 
 const InvoiceConfiguration = (props) => {
 
@@ -49,7 +51,7 @@ const InvoiceConfiguration = (props) => {
     const dispatch = useDispatch();
 
     const fileds = {
-        PaymentQR: "",
+        // PaymentQR: "",
         HSNCodeDigit: "",
         TCSAmountRound: "",
         InvoiceAmountRound: "",
@@ -62,7 +64,7 @@ const InvoiceConfiguration = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [hsnDropOption] = useState([{ value: 1, label: "4 Digits" }, { value: 2, label: "6 Digits" }, { value: 3, label: "8 Digits" }])
+    const [hsnDropOption] = useState([{ value: "1", label: "4 Digits" }, { value: "2", label: "6 Digits" }, { value: "3", label: "8 Digits" }])
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
 
@@ -71,19 +73,21 @@ const InvoiceConfiguration = (props) => {
         PartySettingdata,
         updateMsg,
         pageField,
+        postMsg,
         saveBtnloading,
         userAccess } = useSelector((state) => ({
             saveBtnloading: state.GroupReducer.saveBtnloading,
+            postMsg: state.PartySettingReducer.postMsg,
             PartySettingdata: state.PartySettingReducer.PartySettingdata,
             updateMsg: state.GroupReducer.updateMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-
+    debugger
     const { values } = state
     const { isError } = state;
     const { fieldLabel } = state;
-    debugger
+
     const { Data = [] } = PartySettingdata;
 
 
@@ -146,13 +150,18 @@ const InvoiceConfiguration = (props) => {
 
 
 
-    // useEffect(() => saveMsgUseEffect({
-    //     postMsg, pageMode,
-    //     history, dispatch,
-    //     postSuccss: saveGroupMaster_Success,
-    //     resetFunc: { fileds, state, setState },
-    //     listPath: url.GROUP_lIST
-    // }), [postMsg])
+    useEffect(() => saveMsgUseEffect({
+        postMsg, pageMode,
+        history, dispatch,
+        postSuccss: savePartySettingMaster_Success,
+        resetFunc: { fileds, state, setState },
+        listPath: url.INVOICE_CONFIGURATION,
+    }), [postMsg])
+
+    useEffect(() => {
+        dispatch(getpartysetting_API(loginUserDetails().Party_id))
+    }, [postMsg])
+
 
 
     useEffect(() => {
@@ -193,16 +202,17 @@ const InvoiceConfiguration = (props) => {
         if (Object.keys(singleObject).length > 1) {
 
             if (singleObject.HSNCodeDigit.Value === "1") {
-                singleObject.HSNCodeDigit.Value = { value: 1, label: "4 Digits" }
+                singleObject.HSNCodeDigit.Value = { value: "1", label: "4 Digits" }
             }
             if (singleObject.HSNCodeDigit.Value === "2") {
-                singleObject.HSNCodeDigit.Value = { value: 1, label: "6 Digits" }
+                singleObject.HSNCodeDigit.Value = { value: "2", label: "6 Digits" }
             }
             if (singleObject.HSNCodeDigit.Value === "4") {
-                singleObject.HSNCodeDigit.Value = { value: 1, label: "8 Digits" }
+                singleObject.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
             }
 
             setState((i) => {
+                debugger
                 const a = { ...i }
                 a.values.Invoicea4 = singleObject.A4Print;
                 a.values.AddressInInvoice = singleObject.AddressOnInvoice;
@@ -217,10 +227,20 @@ const InvoiceConfiguration = (props) => {
     }, [Data])
 
 
+    const onChangeSelecthandler = (e) => {
+        debugger
+        setState((i) => {
+            const a = { ...i }
+            a.values.HSNCodeDigit.Value = e;
+            return a
+        })
+
+    }
+
+
     const onchangeHandler = async (event, key, type) => {
 
         const file = event.target.files[0]
-
         const convertBase64 = (file) => {
             return new Promise((resolve, reject) => {
                 const fileReader = new FileReader()
@@ -244,16 +264,36 @@ const InvoiceConfiguration = (props) => {
 
     const SaveHandler = async (event) => {
         debugger
+        const BulkData = []
         event.preventDefault();
         const btnId = event.target.id
+
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
+
+                Object.values(values).forEach(i => {
+                    debugger
+                    if (i.SystemSetting === "HSN Code Digit") {
+                        i.Value = i.Value.value
+                    }
+
+                    const arr = {
+                        Setting: i.id,
+                        Party: loginUserDetails().Party_id,
+                        Company: loginCompanyID(),
+                        CreatedBy: loginUserID(),
+                        Value: i.Value
+                    }
+                    BulkData.push(arr)
+
+                })
+                debugger
                 const jsonBody = JSON.stringify({
-
+                    BulkData: BulkData
                 });
-
-                // dispatch(saveGroupMaster({ jsonBody, btnId }));
+                debugger
+                dispatch(savePartySetting({ jsonBody, btnId }));
 
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
@@ -284,7 +324,7 @@ const InvoiceConfiguration = (props) => {
                                         <CardBody className="c_card_body">
                                             <Row>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label htmlFor="validationCustom01">{fieldLabel.PaymentQR}</Label>
+                                                    <Label htmlFor="validationCustom01">Payment QR</Label>
                                                     <Input type="file" className="form-control "
                                                         name="image"
                                                         id="file"
@@ -303,7 +343,7 @@ const InvoiceConfiguration = (props) => {
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
                                                                 options={hsnDropOption}
-                                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                                onChange={(evn) => onChangeSelecthandler(evn)}
 
                                                             />
 
@@ -329,7 +369,7 @@ const InvoiceConfiguration = (props) => {
                                                                     onChange={(e) => {
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.TCSAmountRound = e.target.checked === false ? "0" : "1";
+                                                                            a.values.TCSAmountRound.Value = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
                                                                     }}
@@ -358,7 +398,7 @@ const InvoiceConfiguration = (props) => {
                                                                     onChange={(e) => {
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.InvoiceAmountRound = e.target.checked === false ? "0" : "1";
+                                                                            a.values.InvoiceAmountRound.Value = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
                                                                     }}
@@ -389,10 +429,10 @@ const InvoiceConfiguration = (props) => {
                                                                     name="Sunday"
                                                                     checked={values.Invoicea4.Value === "0" ? false : true}
                                                                     onChange={(e) => {
-                                                                        debugger
+
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.Invoicea4 = e.target.checked === false ? "0" : "1";
+                                                                            a.values.Invoicea4.Value = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
                                                                     }}
@@ -421,7 +461,7 @@ const InvoiceConfiguration = (props) => {
                                                                     onChange={(e) => {
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.ShowBatch = e.target.checked === false ? "0" : "1";
+                                                                            a.values.ShowBatch.Value = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
                                                                     }}
@@ -451,11 +491,11 @@ const InvoiceConfiguration = (props) => {
                                                                     name="Sunday"
                                                                     checked={values.AddressInInvoice.Value === "0" ? false : true}
                                                                     onChange={(e) => {
-                                                                        debugger
+
                                                                         setState((i) => {
                                                                             const a = { ...i }
                                                                             a.values.AddressInInvoice.Value = e.target.checked === false ? "0" : "1";
-                                                                            debugger
+
                                                                             return a
                                                                         })
                                                                     }}
