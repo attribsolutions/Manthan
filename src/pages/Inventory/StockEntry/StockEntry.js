@@ -31,7 +31,6 @@ import { SalesReturn_add_button_api_For_Item } from "../../../helpers/backend_he
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../Sale/Invoice/SalesReturn/salesReturn.scss";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
-import Flatpickr from "react-flatpickr";
 
 const StockEntry = (props) => {
 
@@ -41,7 +40,6 @@ const StockEntry = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
         Date: currentDate_ymd,
@@ -49,7 +47,6 @@ const StockEntry = (props) => {
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
-
     const [TableArr, setTableArr] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -109,7 +106,6 @@ const StockEntry = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveStockEntrySuccess({ Status: false }))
             setTableArr([])
-            setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
@@ -295,20 +291,6 @@ const StockEntry = (props) => {
                             row.BatchDate = _cfunc.date_ymd_func(date)
                         }}
                     />
-                    {/* <Flatpickr
-                        style={{ userselect: "all" }}
-                        defaultValue={""}
-                        className="form-control d-block p-2 bg-white text-dark"
-                        // placeholder={props.placeholder}
-                        options={{
-                            altInput: true,
-                            altFormat: "d-m-Y",
-                            dateFormat: "Y-m-d",
-                        }}
-                        onChange={(e, date) => {
-                            row.BatchDate = _cfunc.date_ymd_func(date)
-                        }}
-                    /> */}
                 </span>)
             }
         },
@@ -425,7 +407,7 @@ const StockEntry = (props) => {
         const invalidMsg1 = []
 
         ReturnItems.forEach((i) => {
-            debugger
+
             if ((i.Unit === undefined) || (i.Unit === null)) {
                 invalidMsg1.push(`${i.ItemName} : Unit Is Required`)
             }
@@ -510,7 +492,6 @@ const StockEntry = (props) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                 }}
                                             />
-
                                         </Col>
 
                                         <Col sm="1" className="mx-6 mt-1">
@@ -546,7 +527,6 @@ const StockEntry = (props) => {
                                             loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
                                         />
 
                                     </Col>

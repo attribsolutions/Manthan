@@ -460,8 +460,6 @@ export const listPageActionsButtonFunc = (props) => {
     });
 }
 
-
-
 export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
 
     const { listBtnLoading, } = reducers;
@@ -557,7 +555,17 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
                         </Button>
                     }
 
-                    {((rowData.InvoiceUploads.length === 0) || !(rowData.InvoiceUploads[0].EwayBillUrl === null)) ?
+                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EwayBillUrl === null)) ?
+                        <Button
+                            type="button"
+                            title={'Access Not Allow'}
+                            className={dissableBtnCss}
+                            disabled={true}
+                            style={dissableStyle}
+                        >
+                            <i className="bx bx-printer font-size-14"></i>
+                        </Button> :
+                        !(rowData.InvoiceUploads[0].EwayBillUrl === null) &&
                         <Button
                             type="button"
                             id={`btn-Print-E-WayBill-${rowData.id}`}
@@ -571,19 +579,8 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
                                 : <i className="bx bx-printer font-size-14"></i>
                             }
 
-                        </Button> :
-                        (rowData.InvoiceUploads[0].EwayBillUrl === null) &&
-                        <Button
-                            type="button"
-                            title={'Access Not Allow'}
-                            className={dissableBtnCss}
-                            disabled={true}
-                            style={dissableStyle}
-                        >
-                            <i className="bx bx-printer font-size-14"></i>
                         </Button>
                     }
-
 
                 </div >
             )
@@ -683,7 +680,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
                         </Button>
                     }
 
-                    {((rowData.InvoiceUploads.length === 0) || !(rowData.InvoiceUploads[0].EInvoicePdf === null)) ?
+                    {/* {((rowData.InvoiceUploads.length === 0) || !(rowData.InvoiceUploads[0].EInvoicePdf === null)) ?
                         <Button
                             type="button"
                             id={`btn-Print-E-Invoice-${rowData.id}`}
@@ -707,6 +704,33 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
                             style={dissableStyle}
                         >
                             <i className="bx bx-printer font-size-14"></i>
+                        </Button>
+                    } */}
+
+                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EInvoicePdf === null)) ?
+                        <Button
+                            type="button"
+                            title={'Access Not Allow'}
+                            className={dissableBtnCss}
+                            disabled={true}
+                            style={dissableStyle}
+                        >
+                            <i className="bx bx-printer font-size-14"></i>
+                        </Button> :
+                        !(rowData.InvoiceUploads[0].EInvoicePdf === null) &&
+                        <Button
+                            type="button"
+                            id={`btn-Print-E-Invoice-${rowData.id}`}
+                            className={printInvoiceBtnCss}
+                            disabled={listBtnLoading}
+                            title={`Print E-Invoice`}
+                            onClick={() => Print_InvoiceHander(rowData)}
+                        >
+                            {(listBtnLoading === `btn-Print-E-Invoice-${rowData.id}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <i className="bx bx-printer font-size-14"></i>
+                            }
+
                         </Button>
                     }
 

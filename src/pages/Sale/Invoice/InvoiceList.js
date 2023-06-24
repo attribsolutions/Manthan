@@ -123,17 +123,15 @@ const InvoiceList = () => {
         goButtonHandler("event", IBType)
     }, [dispatch]);
 
-    useEffect(async () => {
+    useEffect(() => {
 
         if (Uploaded_EInvoice.Status === true && Uploaded_EInvoice.StatusCode === 200) {
             dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
-            const a = await customAlert({
+            goButtonHandler("event")
+            customAlert({
                 Type: 1,
                 Message: JSON.stringify(Uploaded_EInvoice.Message),
             })
-            if (a) {
-                window.location.reload()
-            }
         }
 
         else if (Uploaded_EInvoice.Status === true) {
@@ -145,17 +143,15 @@ const InvoiceList = () => {
         }
     }, [Uploaded_EInvoice]);
 
-    useEffect(async () => {
+    useEffect(() => {
 
         if (Uploaded_EwayBill.Status === true && Uploaded_EwayBill.StatusCode === 200) {
             dispatch(Uploaded_EwayBillSuccess({ Status: false }))
-            const a = await customAlert({
+            goButtonHandler("event")
+            customAlert({
                 Type: 1,
                 Message: JSON.stringify(Uploaded_EwayBill.Message),
             })
-            if (a) {
-                window.location.reload()
-            }
         }
 
         else if (Uploaded_EwayBill.Status === true) {
@@ -236,7 +232,7 @@ const InvoiceList = () => {
     });
 
     function downBtnFunc(row) {
-        
+
         console.log(Partysettingdata)
         var ReportType = Partysettingdata.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, Partysettingdata))
