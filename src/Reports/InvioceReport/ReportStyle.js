@@ -178,10 +178,14 @@ export const reportHeder3 = (doc, data) => {
     if (data.ReportType === invoice) {
         doc.setFont('Tahoma')
         doc.setFontSize(10)
-        doc.line(570, 40, 408, 40) //horizontal line 1 billby upper
+        doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
+        doc.line(570, 49, 408, 49) //horizontal line 1 billby upper
+
         doc.setFont(undefined, 'bold')
-        doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 30) //Invoice Id
-        doc.text(`Invoice Date: ${date}`, 415, 54) //Invoice date
+        doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 27) //Invoice Id
+        doc.text(`Invoice Date: ${date}`, 415, 43) //Invoice date
+        doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 60) //Invoice date
+
     } else {
         doc.setFont('Tahoma')
         doc.setFontSize(10)
@@ -316,6 +320,10 @@ export const tableBody = (doc, data) => {
 
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
+            }
+            if (data1.row.cells[1].raw === "Batch") {
+                data1.row.cells[0].colSpan = 12
+
             }
         },
         margin: {

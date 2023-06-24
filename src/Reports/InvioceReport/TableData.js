@@ -154,10 +154,20 @@ export const Rows = (data) => {
     }, {});
 
     Object.values(groupedItems).forEach((element, key) => {
-        debugger
+        let HSNcodes = ""
+        if (data.SettingData.HSNCodeDigit.Value === "1") {
+            HSNcodes = element.HSNCode.slice(0, 4);
+        }
+        if (data.SettingData.HSNCodeDigit.Value === "2") {
+            HSNcodes = element.HSNCode.slice(0, 6);
+        }
+        if (data.SettingData.HSNCodeDigit.Value === "3") {
+            HSNcodes = element.HSNCode.slice(0, 8);
+        }
+
         const tableitemRow = [
             SrNO++,
-            `${element.HSNCode} ${element.ItemName}`,
+            `${HSNcodes} ${element.ItemName}`,
             `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
             element.MRPValue,
             element.Rate,
@@ -204,21 +214,21 @@ export const Rows = (data) => {
                 `${parseFloat(totalAmount).toFixed(2)}`,
             ];
         };
-        // const BatchRow =[
-        //     `Batch:  ${element.quantityString} `,
-        //     `Batch`,
-        //     " ",
-        //     ``,
-        //     "",
-        //     "",
-        //     "",
-        //     "",
-        //     ``,
-        //     "",
-        //     ``,
-        //     "",
-        //     ``,
-        // ]
+        const BatchRow = [
+            `Batch:  ${element.quantityString} `,
+            `Batch`,
+            " ",
+            ``,
+            "",
+            "",
+            "",
+            "",
+            ``,
+            "",
+            ``,
+            "",
+            ``,
+        ]
 
         if (Gst === 0) { Gst = element.GSTPercentage };
         let aa = { TotalCGst: 0, totalSGst: 0 }
@@ -226,7 +236,10 @@ export const Rows = (data) => {
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow);
-            // returnArr.push((BatchRow))
+            if (data.SettingData.ShowBatchNoOnInvoicePrint.Value === "1") {
+                returnArr.push((BatchRow))
+            }
+
         }
         else {
             returnArr.push(totalrow());
