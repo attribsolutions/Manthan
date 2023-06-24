@@ -38,6 +38,7 @@ import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions"
 import { ORDER_4 } from "../../../routes/route_url";
 import { getItemList } from "../../../store/actions";
 import CustomTable from "../../../CustomTable2/Custom";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 
 let editVal = {}
@@ -74,6 +75,7 @@ const Order = (props) => {
     const history = useHistory();
     const RoleID = _cfunc.loginRoleID();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const userAdminRole = _cfunc.loginUserAdminRole();
     const ref1 = useRef('')
 
     const fileds = {
@@ -1018,7 +1020,7 @@ const Order = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
-                    {RoleID === 2 ?
+                    {/* {userAdminRole === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
                             <div className=" mt-1 mb-2 row ">
                                 <Col sm="6">
@@ -1042,7 +1044,12 @@ const Order = (props) => {
 
                             </div>
                         </div>
-                        : null}
+                        : null} */}
+                    {userAdminRole &&
+                        <PartyDropdown_Common
+                            partySelect={partySelect}
+                            setPartyFunc={partyOnchange} />
+                    }
 
                     <div>
                         <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}

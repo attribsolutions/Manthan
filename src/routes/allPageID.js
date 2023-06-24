@@ -179,6 +179,8 @@ export const PRODUCTION_REISSUE_STP = 142
 export const INVOICE_1 = 121
 export const INVOICE_LIST_1 = 122
 
+export const STOCK_ENTRY = 206
+
 //******************************* Inter Branch ************************************//
 
 export const INWARD = 128
