@@ -62,11 +62,13 @@ const OrderList = () => {
             approvalDetail: state.OrderReducer.approvalDetail,
             customerType: state.PriceListReducer.priceListByCompany,
             orderConfirmMsg: state.OrderReducer.orderConfirmMsg,
-            orderConfirmLoading: state.OrderReducer.orderConfirmLoading,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
-            listBtnLoading: (state.OrderReducer.listBtnLoading || state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.listBtnLoading),
+            listBtnLoading: ( state.OrderReducer.listBtnLoading
+                || state.InvoiceReducer.listBtnLoading
+                || state.PdfReportReducers.listBtnLoading
+                || state.OrderReducer.orderConfirmLoading),
         })
     );
 
@@ -350,7 +352,7 @@ const OrderList = () => {
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
-    function downBtnFunc(row, printType,btnId) {
+    function downBtnFunc(row, printType, btnId) {
         debugger
         var ReportType = report.order1;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, btnId))
@@ -580,8 +582,6 @@ const OrderList = () => {
                             MasterModal={Order}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
                             selectAllRow={(subPageMode === url.ORDER_LIST_4) && selectAllRowFunc}
-                            orderConfirmLoading={reducers.orderConfirmLoading}
-
                         />
                         : null
                 }

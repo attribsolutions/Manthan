@@ -76,33 +76,27 @@ const CommonPurchaseList = (props) => {
     postMsg = { Status: false },
     pageField = { id: "" },
     tableList = [],
+    listBtnLoading = false,
   } = props.reducers;
 
   const { getList, editId, deleteId, postSucc, updateSucc, deleteSucc } =
     props.action;
 
   const {
-
-    editBodyfunc,
-    deleteBodyfunc,
-    copyBodyfunc,
     MasterModal,
     masterPath,
     ButtonMsgLable,
-    deleteName,
     goButnFunc = () => { },
     makeBtnFunc = () => { },
     makeBtnShow,
-    updateBtnFunc,
     makeBtnName,
-    downBtnFunc = () => { },
     pageMode,
     newBtnPath,
     forceNewBtnView,
     HeaderContent = () => {
       return null;
     },
-    oderAprovalBtnFunc,
+
     selectAllRow = ''
   } = props;
 
@@ -364,7 +358,7 @@ const CommonPurchaseList = (props) => {
 
             <div className="row save1 " style={{ paddingBottom: 'center' }}>
               <button
-                disabled={props.orderConfirmLoading}
+                disabled={listBtnLoading }
                 style={{ marginTop: "-10px" }}
                 type="button"
                 className="btn btn-primary w-md  "
