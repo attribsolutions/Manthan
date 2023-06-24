@@ -318,18 +318,18 @@ export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Func
 
 export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Button Dissable and Sppiner Function +++++++++++++++++++++++++++++++
 
-  if (btnId) {
-    try {
-      let btn = document.getElementById(btnId);
-      btn.disabled = state
+  // if (btnId) {
+  //   try {
+  //     let btn = document.getElementById(btnId);
+  //     btn.disabled = state
 
-      document.getElementById("preloader").style.display = state
-        ? "block"
-        : "none";
-    } catch (error) {
-      CommonConsole(`btnIsDissablefunc Error ==> ${btnId}`);
-    }
-  }
+  //     document.getElementById("preloader").style.display = state
+  //       ? "block"
+  //       : "none";
+  //   } catch (error) {
+  //     CommonConsole(`btnIsDissablefunc Error ==> ${btnId}`);
+  //   }
+  // }
 }
 
 export async function CheckAPIResponse({
@@ -344,7 +344,7 @@ export async function CheckAPIResponse({
   if (btnId) {
 
     // await new Promise(r => setTimeout(r, 0));
-    btnIsDissablefunc({ btnId, state: false });
+    // btnIsDissablefunc({ btnId, state: false });
   }
 
   const { data = "", code } = response;
@@ -355,7 +355,7 @@ export async function CheckAPIResponse({
   const con5 = data.StatusCode === 406; //reject
   const con6 = method === "post" || method === "put" || method === "postForget" //for console body
   const con7 = data.StatusCode === 100;
-  // const con8 = data.StatusCode === 500;  //Internal server Error
+  const con8 = data.StatusCode === 500;  //Internal server Error
 
 
   if (!(error === undefined)) {
@@ -417,12 +417,13 @@ export async function CheckAPIResponse({
       Message: `${url}:This API ${method} Method Exception Error`,
     });
     return Promise.reject(response.data);
-  } else if (con5) {
+  } else if (con5||con8) {
 
     console.log(`${url}***${method} apiCall response:=>`, response.data);
     await customAlert({ Type: 3, Message: JSON.stringify(response.data.Message) });
     return Promise.reject(response.data);
   }
+  
 
   return Promise.reject(response);
 }
