@@ -732,10 +732,15 @@ const Order = (props) => {
     };
 
     const item_AddButtonHandler = () => {
+        
         setGoBtnDissable(true)
+        
         let isfound = orderItemTable.find(i => i.value === itemSelect.value);
 
-        if (isfound === undefined) {
+        if (!itemSelect) {
+            customAlert({ Type: 4, Message: `Select Item Name` })
+        }
+        else if (isfound === undefined) {
             setorderItemTable([itemSelect].concat(orderItemTable))
         }
         else {

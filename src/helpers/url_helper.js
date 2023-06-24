@@ -371,4 +371,6 @@ export const ORDER_SUMMARY = '/OrderSummaryReport'
 // partySetting
 export const PARTY_SETTING = '/PartySettings'
 
+// StockEntry
+export const STOCK_ENTRY = '/PartyStockEntry'
 

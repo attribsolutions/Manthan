@@ -62,7 +62,6 @@ import ImportExcelPartyMap_Reducer from "./Administrator/ImportExcelPartyMapRedu
 import CityReducer from "./Administrator/CityRedux/reducer"
 import PartySettingReducer from "./Administrator/PartySetting/reducer"
 
-
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
 
@@ -76,6 +75,7 @@ import ProductionReIssueReducer from "./Production/ProductionReissueRedux/reduce
 //  *********************** Inventory ***********************
 import GRNReducer from "./Inventory/GRNRedux/reducer"
 import ChallanReducer from "./Inventory/ChallanRedux/reducer"
+import StockEntryReducer from "./Inventory/StockEntryRedux/reducer"
 
 //  *********************** Sale ***********************
 import InvoiceReducer from "./Sales/Invoice/reducer"
@@ -169,6 +169,6 @@ const rootReducer = combineReducers({
   CityReducer,
   OrderSummaryReducer,
   PartySettingReducer,
-
+  StockEntryReducer,
 })
 export default rootReducer

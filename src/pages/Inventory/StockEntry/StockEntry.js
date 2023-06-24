@@ -23,7 +23,6 @@ import Select from "react-select";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { saveSalesReturnMaster, saveSalesReturnMaster_Success } from "../../../store/Sales/SalesReturnRedux/action";
 import CustomTable2 from "../../../CustomTable2/Table";
 import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
@@ -31,7 +30,7 @@ import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/a
 import { SalesReturn_add_button_api_For_Item } from "../../../helpers/backend_helper";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../Sale/Invoice/SalesReturn/salesReturn.scss";
-import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
+import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 const StockEntry = (props) => {
 
@@ -60,8 +59,8 @@ const StockEntry = (props) => {
         userAccess,
         saveBtnloading,
     } = useSelector((state) => ({
-        saveBtnloading: state.SalesReturnReducer.saveBtnloading,
-        postMsg: state.SalesReturnReducer.postMsg,
+        saveBtnloading: state.StockEntryReducer.saveBtnloading,
+        postMsg: state.StockEntryReducer.postMsg,
         ItemList: state.PartyItemsReducer.partyItem,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -107,7 +106,7 @@ const StockEntry = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(saveSalesReturnMaster_Success({ Status: false }))
+            dispatch(saveStockEntrySuccess({ Status: false }))
             setTableArr([])
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
@@ -124,12 +123,12 @@ const StockEntry = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.SALES_RETURN_LIST,
+                    RedirectPath: url.STOCK_ENTRY,
                 }))
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(saveSalesReturnMaster_Success({ Status: false }))
+            dispatch(saveStockEntrySuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -164,23 +163,6 @@ const StockEntry = (props) => {
         setTableArr(newArr)
     }
 
-    // function quantityHandler(event, row) {
-
-    //     row["Qty"] = event.target.value
-
-    //     let input = event.target.value
-
-    //     // if (returnMode === 1) {
-    //     let v1 = Number(row.Quantity);
-    //     let v2 = Number(input)
-    //     if (!(v1 >= v2)) {
-    //         event.target.value = v1;
-    //     }
-    //     // }
-    //     row.Qty = event.target.value
-
-    // }
-
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -202,12 +184,10 @@ const StockEntry = (props) => {
                     <CInput
                         id={`Qty${key}`}
                         key={`Qty${row.id}`}
-                        // defaultValue={row.Qty}
                         autoComplete="off"
                         type="text"
                         cpattern={decimalRegx}
                         className="col col-sm text-end"
-                        // onChange={(event) => quantityHandler(event, row)}
                         onChange={(e) => { row.Qty = e.target.value }}
                     />
                 </span>)
@@ -223,7 +203,6 @@ const StockEntry = (props) => {
                     <Select
                         id={`Unit${key}`}
                         name="Unit"
-                        // defaultValue={returnMode === 1 && { value: row.RowData.Unit, label: row.RowData.UnitName }}
                         isSearchable={true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
@@ -250,9 +229,7 @@ const StockEntry = (props) => {
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
-                                // defaultValue={returnMode === 1 && { value: row.RowData.MRP, label: row.RowData.MRPValue }}
                                 isSearchable={true}
-                                // isDisabled={returnMode === 1 && true}
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
                                 options={row.ItemMRPDetails}
@@ -274,9 +251,7 @@ const StockEntry = (props) => {
                     <Select
                         id={`GST${key}`}
                         name="GST"
-                        // defaultValue={returnMode === 1 && { value: row.RowData.GST, label: row.RowData.GSTPercentage }}
                         isSearchable={true}
-                        // isDisabled={returnMode === 1 && true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
                         options={row.ItemGSTHSNDetails}
@@ -288,26 +263,7 @@ const StockEntry = (props) => {
                 </span>)
             }
         },
-        {
-            text: "Rate",
-            dataField: "",
-            classes: () => "sales-return-row",
-            formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <CInput
-                        id=""
-                        key={row.id}
-                        defaultValue={row.Rate}
-                        // disabled={returnMode === 1 && true}
-                        type="text"
-                        cpattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
-                        className="col col-sm text-end"
-                        onChange={(event) => { row.Rate = event.target.value }}
-                    />
-                </span>)
-            }
-        },
         {
             text: "BatchCode",
             dataField: "",
@@ -319,7 +275,6 @@ const StockEntry = (props) => {
                         id=""
                         key={row.id}
                         defaultValue={row.RowData.BatchCode}
-                        // disabled={returnMode === 1 && true}
                         type="text"
                         className="col col-sm text-center"
                         onChange={(event) => { row.BatchCode = event.target.value }}
@@ -336,8 +291,6 @@ const StockEntry = (props) => {
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <C_DatePicker
                         name='Date'
-                        // defaultValue={returnMode === 1 ? _cfunc.date_ymd_func(row.RowData.BatchDate) : currentDate_ymd}
-                        // disabled={returnMode === 1 ? true : false}
                         onChange={(e, date) => {
                             row.BatchDate = _cfunc.date_ymd_func(date)
                         }}
@@ -349,7 +302,6 @@ const StockEntry = (props) => {
         {
             text: "Action ",
             dataField: "",
-            // hidden: (returnMode === 1) && true,
             formatter: (cellContent, row, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
@@ -374,26 +326,10 @@ const StockEntry = (props) => {
 
     async function AddPartyHandler(e, type) {
 
-        const find = TableArr.find((element) => {
-            return element.ItemId === values.ItemName.value
-        });
-
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
                 Message: `Select Item Name`
-            })
-            return
-        }
-
-        else if (find === undefined) {
-            setTableArr([...TableArr]);
-        }
-
-        else {
-            customAlert({
-                Type: 3,
-                Message: "Item Name Already Exist",
             })
             return
         }
@@ -425,8 +361,6 @@ const StockEntry = (props) => {
                     ItemName: i.ItemName,
                     ItemId: i.ItemId,
                     Quantity: i.Quantity,
-                    Rate: i.Rate,
-                    gstPercentage: i.RowData.GSTPercentage,
                     RowData: i.RowData,
                     BatchDate: currentDate_ymd
                 })
@@ -449,44 +383,26 @@ const StockEntry = (props) => {
 
         const btnId = event.target.id
 
-        let grand_total = 0;
-        const ReturnItems = TableArr.map((i) => {
-
-            var gstPercentage = i.GST
-            const calculate = salesReturnCalculate({ Rate: i.Rate, Qty: i.Qty, gstPercentage: gstPercentage })
-
-            grand_total = grand_total + Number(calculate.tAmount)
-
+        const ReturnItems = TableArr.map((index) => {
             return ({
-                "Item": i.ItemId,
-                "ItemName": i.ItemName,
-                "Quantity": i.Qty,
-                "Unit": i.Unit,
-                "BaseUnitQuantity": i.BaseUnitQuantity,
-                "BatchCode": i.BatchCode,
-                "BatchDate": i.BatchDate,
-                "Amount": calculate.tAmount,
-                "MRP": i.MRP,
-                "MRPValue": i.MRPValue,
-                "Rate": i.Rate,
-                "BasicAmount": calculate.baseAmt,
-                "GSTAmount": calculate.gstAmt.toFixed(2),
-                "GST": i.GST_ID,
-                "GSTPercentage": gstPercentage,
-                "CGST": calculate.CGST,
-                "SGST": calculate.SGST,
-                "IGST": 0,
-                "CGSTPercentage": (gstPercentage / 2),
-                "SGSTPercentage": (gstPercentage / 2),
-                "IGSTPercentage": 0,
-                "TaxType": "GST",
-                "ReturnItemImages": []
+                "Item": index.ItemId,
+                "ItemName": index.ItemName,
+                "Quantity": index.Qty,
+                "MRP": index.MRP,
+                "Unit": index.Unit,
+                "GST": index.GST_ID,
+                "BatchDate": index.BatchDate,
+                "BatchCode": index.BatchCode
             })
         })
 
-        const filterData = ReturnItems.filter((i) => {
-            return i.Quantity > 0
-        })
+        // const filterData = ReturnItems.filter((i) => {
+        //     return i.Quantity > 0
+        // })
+
+        const filterData = ReturnItems.map(({ ItemName, ...rest }) => rest).filter((i) => {
+            return i.Quantity > 0;
+        });
 
         if (filterData.length === 0) {
             customAlert({
@@ -497,9 +413,9 @@ const StockEntry = (props) => {
         }
 
         const invalidMsg1 = []
-        debugger
-        ReturnItems.forEach((i) => {
 
+        ReturnItems.forEach((i) => {
+            debugger
             if ((i.Unit === undefined) || (i.Unit === null)) {
                 invalidMsg1.push(`${i.ItemName} : Unit Is Required`)
             }
@@ -509,10 +425,7 @@ const StockEntry = (props) => {
             else if ((i.GST === undefined) || (i.GST === null)) {
                 invalidMsg1.push(`${i.ItemName} : GST Is Required`)
             }
-            else if ((i.Rate === undefined) || (i.Rate === null)) {
-                invalidMsg1.push(`${i.ItemName} : Rate Is Required`)
-            }
-            else if ((i.BatchCode === undefined) || (i.BatchCode === null)) {
+            else if ((i.BatchCode === "") || (i.BatchCode === undefined)) {
                 invalidMsg1.push(`${i.ItemName} : BatchCode Is Required`)
             };
         })
@@ -530,18 +443,13 @@ const StockEntry = (props) => {
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
-                    Date: values.Date,
-                    ReturnReason: values.ReturnReason.value,
-                    Customer: values.Customer.value,
-                    Comment: values.Comment,
-                    GrandTotal: grand_total,
-                    Party: _cfunc.loginPartyID(),
-                    RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-                    CreatedBy: _cfunc.loginUserID(),
-                    UpdatedBy: _cfunc.loginUserID(),
-                    ReturnItems: filterData,
-                });
-                // dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
+                    "PartyID": _cfunc.loginPartyID(),
+                    "CreatedBy": _cfunc.loginUserID(),
+                    "Date": values.Date,
+                    "StockItems": filterData
+                }
+                );
+                dispatch(saveStockEntryAction({ jsonBody, btnId }));
             }
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
@@ -606,8 +514,6 @@ const StockEntry = (props) => {
                                     </FormGroup>
                                 </Col >
                             </Row>
-
-
                         </div>
 
                         <CustomTable2
