@@ -21,11 +21,12 @@ function pageFooter(doc, data) {
 }
 
 const InvioceReport = (data) => {
-    
+
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
+
     doc.setProperties({
         title: "Report"
     });

@@ -21,9 +21,8 @@ export const Receipt = "Receipt"
 export const Credit = "Credit"
 
 
-
-
 const generateReport = (resp) => {
+    debugger
     switch (resp.ReportType) {
         case order1:
             ordeRreport(resp.Data)

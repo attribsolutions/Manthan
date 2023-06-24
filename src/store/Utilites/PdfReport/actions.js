@@ -6,10 +6,10 @@ import {
 } from "./actionType";
 
 
-export const getpdfReportdata = (urlpath, ReportType, Id, btnId) => ({
-  type: GET_PDF_REPORT_DATA,
-  urlpath, ReportType, Id, btnId
+export const getpdfReportdata = (urlpath, ReportType, Id, Partysettingdata) => ({
 
+  type: GET_PDF_REPORT_DATA,
+  urlpath, ReportType, Id, Partysettingdata,
 });
 
 export const getpdfReportdataSuccess = (data) => ({
