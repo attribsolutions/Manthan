@@ -160,6 +160,7 @@ import CityMaster from "../pages/Adminisrator/CityPages/CityMaster";
 import CityList from "../pages/Adminisrator/CityPages/CityList";
 import OrderSummary from "../Reports/OrderSummaryReport/OrderSummary";
 import InvoiceConfiguration from "../pages/Adminisrator/InvoiceConfiguration/InvoiceConfiguration";
+import StockEntry from "../pages/Inventory/StockEntry/StockEntry";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -310,6 +311,7 @@ const userRoutes = [
   { path: path.GRN_ADD_3, component: GRNAdd3 },
   { path: path.GRN_STP_3, component: OrderList },
 
+  { path: path.STOCK_ENTRY, component: StockEntry },
   // { path: path.GRN_ADD_PAGE_3, component: GRNAdd_3 },
 
 

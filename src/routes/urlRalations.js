@@ -172,7 +172,7 @@ export const GRNList_3 = url.GRN_STP_3
 export const GRN_ADD_3 = url.GRN_LIST_3
 export const GRN_STP_3 = url.GRN_LIST_3
 
-
+export const StockEntry =url.STOCK_ENTRY
 
 export const ChallanList = url.CHALLAN
 export const Challan = url.CHALLAN_LIST
