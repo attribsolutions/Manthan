@@ -60,6 +60,7 @@ const InvoiceList = () => {
             Uploaded_EwayBill: state.InvoiceReducer.Uploaded_EwayBill,
             Cancel_EInvoice: state.InvoiceReducer.Cancel_EInvoice,
             Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
+            listBtnLoading: state.InvoiceReducer.listBtnLoading
 
         })
     );

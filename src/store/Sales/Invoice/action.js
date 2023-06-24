@@ -103,9 +103,9 @@ export const InvoiceApiErrorAction = () => ({
 
 //**************************** E-Invoice (upload ,cancel) ***************************************/
 
-export const Uploaded_EInvoiceAction = (RowId) => ({
+export const Uploaded_EInvoiceAction = (config) => ({
     type: UPLOADED_E_INVOICE_ACTION,
-    RowId
+    config
 });
 
 export const Uploaded_EInvoiceSuccess = (data) => ({
@@ -113,9 +113,9 @@ export const Uploaded_EInvoiceSuccess = (data) => ({
     payload: data,
 });
 
-export const Cancel_EInvoiceAction = (RowId) => ({
+export const Cancel_EInvoiceAction = (config) => ({
     type: CANCLE_E_INVOICE_ACTION,
-    RowId
+    config
 });
 
 export const Cancel_EInvoiceSuccess = (data) => ({
@@ -125,9 +125,9 @@ export const Cancel_EInvoiceSuccess = (data) => ({
 
 //**************************** E-WayBill (upload ,cancel) actions ***************************************/
 
-export const Uploaded_EwayBillAction = (RowId) => ({
+export const Uploaded_EwayBillAction = (config) => ({
     type: UPLOADED_E_WAY_BILL_ACTION,
-    RowId
+    config
 });
 
 export const Uploaded_EwayBillSuccess = (data) => ({
@@ -135,9 +135,9 @@ export const Uploaded_EwayBillSuccess = (data) => ({
     payload: data,
 });
 
-export const Cancel_EwayBillAction = (RowId) => ({
+export const Cancel_EwayBillAction = (config) => ({
     type: CANCLE_E_WAY_BILL_ACTION,
-    RowId
+    config
 });
 
 export const Cancel_EwayBillSuccess = (data) => ({

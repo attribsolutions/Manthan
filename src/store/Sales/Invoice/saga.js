@@ -51,7 +51,7 @@ import *as url from "../../../routes/route_url"
 import { discountCalculate } from "../../../pages/Sale/Invoice/invoiceCaculations";
 import { orderApprovalActionSuccess } from "../../actions";
 
-let UserID = loginUserID()
+
 
 //post api for Invoice Master
 function* save_Invoice_Genfun({ config }) {
@@ -267,18 +267,20 @@ function* makeIB_InvoiceGenFunc({ body }) {
 }
 //**************************** E-Invoice (upload ,cancel,) ***************************************/
 
-function* Uploade_EInvoiceGenFunc({ RowId }) {
+function* Uploade_EInvoiceGenFunc({ config }) {
+  config["UserID"] = loginUserID();
   try {
-    const response = yield call(EInvoice_Uploade_Get_API, { RowId, UserID })
+    const response = yield call(EInvoice_Uploade_Get_API, config)
     yield put(Uploaded_EInvoiceSuccess(response));
   } catch (error) {
     yield put(InvoiceApiErrorAction())
   }
 }
 
-function* Cancle_EInvoiceGenFunc({ RowId }) {
+function* Cancle_EInvoiceGenFunc({ config }) {
+  config["UserID"] = loginUserID();
   try {
-    const response = yield call(EInvoice_Cancel_Get_API, { RowId, UserID })
+    const response = yield call(EInvoice_Cancel_Get_API, config)
     yield put(Cancel_EInvoiceSuccess(response));
   } catch (error) {
     yield put(InvoiceApiErrorAction())
@@ -287,18 +289,20 @@ function* Cancle_EInvoiceGenFunc({ RowId }) {
 
 //**************************** E-WayBill (upload ,cancel) actions ***************************************/
 
-function* Uploade_EwayBillGenFunc({ RowId }) {
+function* Uploade_EwayBillGenFunc({ config }) {
+  config["UserID"] = loginUserID()
   try {
-    const response = yield call(EwayBill_Uploade_Get_API, { RowId, UserID })
+    const response = yield call(EwayBill_Uploade_Get_API, config)
     yield put(Uploaded_EwayBillSuccess(response));
   } catch (error) {
     yield put(InvoiceApiErrorAction())
   }
 }
 
-function* Cancle_EwayBillGenFunc({ RowId }) {
+function* Cancle_EwayBillGenFunc({ config }) {
+  config["UserID"] = loginUserID()
   try {
-    const response = yield call(EwayBill_Cancel_Get_API, { RowId, UserID })
+    const response = yield call(EwayBill_Cancel_Get_API, config)
     yield put(Cancel_EwayBillSuccess(response));
   } catch (error) {
     yield put(InvoiceApiErrorAction())

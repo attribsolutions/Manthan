@@ -1,7 +1,7 @@
 import { Button, Spinner } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { btnIsDissablefunc, loginUserID } from "./CommonFunction"
+import { btnIsDissablefunc, date_dmy_func, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 import * as url from "../../routes/route_url";
 import { Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
@@ -43,7 +43,7 @@ export const listPageActionsButtonFunc = (props) => {
         oderAprovalBtnFunc,
     } = props;
 
-    const { listBtnLoading, deleteBtnLoading } = props.reducers;
+    const { listBtnLoading, } = props.reducers;
 
     const userCreated = loginUserID();
     const subPageMode = history.location.pathname;
@@ -52,7 +52,7 @@ export const listPageActionsButtonFunc = (props) => {
     function editHandler(rowData, btnmode, btnId) {
         try {
             let config = { editId: rowData.id, btnmode, subPageMode, btnId }
-            btnIsDissablefunc({ btnId, state: true })
+            // btnIsDissablefunc({ btnId, state: true })
 
             if (editBodyfunc) {
                 editBodyfunc({ rowData, btnmode, subPageMode, btnId })
@@ -70,7 +70,7 @@ export const listPageActionsButtonFunc = (props) => {
     function copyHandler(rowData, btnmode, btnId) {
         try {
             let config = { editId: rowData.id, btnmode, subPageMode, btnId }
-            btnIsDissablefunc({ btnId, state: true })
+            // btnIsDissablefunc({ btnId, state: true })
 
             if (copyBodyfunc) {
                 copyBodyfunc({ rowData, btnmode, subPageMode, btnId })
@@ -111,7 +111,7 @@ export const listPageActionsButtonFunc = (props) => {
                     Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
                 })
                 if (alertRepsponse) {
-                    btnIsDissablefunc({ btnId, state: true })
+                    // btnIsDissablefunc({ btnId, state: true })
                     let config = { deleteId: rowData.id, subPageMode, btnId }
                     dispatch(deleteActionFun({ ...config }))
                 }
@@ -135,7 +135,7 @@ export const listPageActionsButtonFunc = (props) => {
 
     return ({
         text: "Action",
-        formatExtraData: { listBtnLoading: listBtnLoading, deleteBtnLoading: listBtnLoading },
+        formatExtraData: { listBtnLoading: listBtnLoading, },
         hidden:
             (
                 !(userAccState.RoleAccess_IsEdit)
@@ -151,7 +151,6 @@ export const listPageActionsButtonFunc = (props) => {
 
         formatter: (__cell, rowData, __key, formatExtra) => {
             let { listBtnLoading } = formatExtra;
-            debugger
             let forceEditHide = rowData.forceEditHide;
             let forceDeleteHide = rowData.forceDeleteHide;
             let forceHideOrderAprovalBtn = rowData.forceHideOrderAprovalBtn;
@@ -359,7 +358,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     deleteHandler(rowData, btnId)
                                 }}
                             >
-                                {(deleteBtnLoading === `btn-delete-${rowData.id}`) ?
+                                {(listBtnLoading === `btn-delete-${rowData.id}`) ?
                                     <Spinner style={{ height: "16px", width: "16px" }} color="white" />
                                     : <i className="mdi mdi-delete font-size-16"></i>
                                 }
@@ -463,35 +462,37 @@ export const listPageActionsButtonFunc = (props) => {
 
 
 
-export const E_WayBill_ActionsButtonFunc = (props) => {
-    const {
-        dispatch,
-    } = props;
+export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
 
-    function Uploaded_EwayBillHander(e, RowData) {
+    const { listBtnLoading, } = reducers;
+
+    function Uploaded_EwayBillHandler(btnId, rowData) {
         try {
-            dispatch(Uploaded_EwayBillAction(RowData.id))
+            let config = { btnId, RowId: rowData.id, UserID: loginUserID() }
+            dispatch(Uploaded_EwayBillAction(config))
         } catch (error) { }
     };
 
-    function Cancel_EwayBillHander(e, RowData) {
+    function Cancel_EwayBillHandler(btnId, rowData) {
         try {
-            dispatch(Cancel_EwayBillAction(RowData.id))
+            dispatch(Cancel_EwayBillAction({ btnId, RowId: rowData.id, UserID: loginUserID() }))
         } catch (error) { }
     };
 
-    function Print_EwayBillHander(e, RowData) {
-        const { InvoiceUploads } = RowData;
+    function Print_EwayBillHander(rowData) {
+        const { InvoiceUploads } = rowData;
         if (!(InvoiceUploads === undefined) && (InvoiceUploads.length > 0)) {
             const pdfUrl = `https://${InvoiceUploads[0].EwayBillUrl}`;
-            window.open(pdfUrl, '_blank');
+            let filename = `EwayBill/${rowData.Customer}/${date_dmy_func(rowData.InvoiceDate)}`
+            window.open(pdfUrl, filename);
         }
     };
 
     return ({
         text: "E-Way Bill",
-        formatter: (__cell, rowData) => {
-
+        formatExtraData: { listBtnLoading: listBtnLoading, },
+        formatter: (__cell, rowData, __key, formatExtra) => {
+            let { listBtnLoading } = formatExtra;
             return (
                 <div id="ActionBtn" className="center gap-3 p-0" >
 
@@ -499,10 +500,19 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
                         <Button
                             type="button"
                             className={editBtnCss}
+                            id={`btn-E-WayBill-Upload-${rowData.id}`}
                             title={`E-WayBill Upload`}
-                            onClick={(e,) => Uploaded_EwayBillHander(e, rowData)}
+                            disabled={listBtnLoading}
+                            onClick={() => {
+                                let btnId = `btn-E-WayBill-Upload-${rowData.id}`
+                                Uploaded_EwayBillHandler(btnId, rowData)
+                            }}
                         >
-                            <i className="bx bx-upload font-size-14"></i>
+                            {(listBtnLoading === `btn-E-WayBill-Upload-${rowData.id}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <i className="bx bx-upload font-size-14"></i>
+                            }
+
                         </Button> :
                         !(rowData.InvoiceUploads[0].EwayBillNo === null) &&
                         <Button
@@ -519,12 +529,21 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
                     {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EwayBillIsCancel === false)) ?
                         < Button
                             type="button"
+                            id={`btn-Cancel-E-WayBill-${rowData.id}`}
                             className={deltBtnCss}
+                            disabled={listBtnLoading}
                             title={`Cancel E-WayBill`
                             }
-                            onClick={(e,) => Cancel_EwayBillHander(e, rowData)}
+                            onClick={() => {
+                                let btnId = `btn-Cancel-E-WayBill-${rowData.id}`
+                                Cancel_EwayBillHandler(btnId, rowData)
+                            }}
                         >
-                            <i className="mdi mdi-cancel font-size-14"></i>
+                            {(listBtnLoading === `btn-Cancel-E-WayBill-${rowData.id}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <i className="mdi mdi-cancel font-size-14"></i>
+                            }
+
                         </Button > :
                         (rowData.InvoiceUploads[0].EwayBillIsCancel === true) &&
                         <Button
@@ -541,11 +560,17 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
                     {((rowData.InvoiceUploads.length === 0) || !(rowData.InvoiceUploads[0].EwayBillUrl === null)) ?
                         <Button
                             type="button"
+                            id={`btn-Print-E-WayBill-${rowData.id}`}
                             className={printInvoiceBtnCss}
+                            disabled={listBtnLoading}
                             title={`Print E-WayBill`}
-                            onClick={(e,) => Print_EwayBillHander(e, rowData)}
+                            onClick={() => Print_EwayBillHander(rowData)}
                         >
-                            <i className="bx bx-printer font-size-14"></i>
+                            {(listBtnLoading === `btn-Print-E-WayBill-${rowData.id}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <i className="bx bx-printer font-size-14"></i>
+                            }
+
                         </Button> :
                         (rowData.InvoiceUploads[0].EwayBillUrl === null) &&
                         <Button
@@ -566,25 +591,23 @@ export const E_WayBill_ActionsButtonFunc = (props) => {
     });
 }
 
-export const E_Invoice_ActionsButtonFunc = (props) => {
-    const {
-        dispatch,
-    } = props;
+export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
+    const { listBtnLoading, } = reducers;
 
-    function Uploaded_EInvoiceHandler(e, RowData) {
+    function Uploaded_EInvoiceHandler(btnId, rowData) {
         try {
-            dispatch(Uploaded_EInvoiceAction(RowData.id))
+            dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }))
         } catch (error) { }
     };
 
-    function Cancel_EInvoiceHandler(e, RowData) {
+    function Cancel_EInvoiceHandler(btnId, rowData) {
         try {
-            dispatch(Cancel_EInvoiceAction(RowData.id))
+            dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }))
         } catch (error) { }
     };
 
-    function Print_InvoiceHander(e, RowData) {
-        const { InvoiceUploads } = RowData;
+    function Print_InvoiceHander(rowData) {
+        const { InvoiceUploads } = rowData;
         if (!(InvoiceUploads === undefined) && (InvoiceUploads.length > 0)) {
             const pdfUrl = InvoiceUploads[0].EInvoicePdf;
             window.open(pdfUrl, '_blank');
@@ -594,8 +617,9 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
 
     return ({
         text: "E-Invoice",
-        formatter: (__cell, rowData) => {
-
+        formatExtraData: { listBtnLoading: listBtnLoading, },
+        formatter: (__cell, rowData, __key, formatExtra) => {
+            let { listBtnLoading } = formatExtra;
             return (
                 <div id="ActionBtn" className="center gap-3 p-0" >
 
@@ -603,10 +627,19 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
                         <Button
                             type="button"
                             className={editBtnCss}
+                            id={`btn-E-Invoice-Upload-${rowData.id}`}
                             title={`E-Invoice Upload`}
-                            onClick={(e,) => Uploaded_EInvoiceHandler(e, rowData)}
+                            disabled={listBtnLoading}
+                            onClick={() => {
+                                let btnId = `btn-E-Invoice-Upload-${rowData.id}`
+                                Uploaded_EInvoiceHandler(btnId, rowData)
+                            }}
                         >
-                            <i className="bx bx-upload font-size-14"></i>
+                            {(listBtnLoading === `btn-E-Invoice-Upload-${rowData.id}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <i className="bx bx-upload font-size-14"></i>
+                            }
+
                         </Button> :
                         !(rowData.InvoiceUploads[0].Irn === null) &&
                         <Button
@@ -623,11 +656,20 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
                     {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EInvoiceIsCancel === false)) ?
                         <Button
                             type="button"
+                            id={`btn-Cancel-E-Invoice-${rowData.id}`}
                             className={deltBtnCss}
                             title={`Cancel E-Invoice`}
-                            onClick={(e,) => Cancel_EInvoiceHandler(e, rowData)}
+                            disabled={listBtnLoading}
+                            onClick={() => {
+                                let btnId = `btn-Cancel-E-Invoice-${rowData.id}`
+                                Cancel_EInvoiceHandler(btnId, rowData)
+                            }}
                         >
-                            <i className="mdi mdi-cancel font-size-14"></i>
+                            {(listBtnLoading === `btn-Cancel-E-Invoice-${rowData.id}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <i className="mdi mdi-cancel font-size-14"></i>
+                            }
+
                         </Button> :
                         (rowData.InvoiceUploads[0].EInvoiceIsCancel === true) &&
                         <Button
@@ -644,11 +686,17 @@ export const E_Invoice_ActionsButtonFunc = (props) => {
                     {((rowData.InvoiceUploads.length === 0) || !(rowData.InvoiceUploads[0].EInvoicePdf === null)) ?
                         <Button
                             type="button"
+                            id={`btn-Print-E-Invoice-${rowData.id}`}
                             className={printInvoiceBtnCss}
+                            disabled={listBtnLoading}
                             title={`Print E-Invoice`}
-                            onClick={(e,) => Print_InvoiceHander(e, rowData)}
+                            onClick={() => Print_InvoiceHander(rowData)}
                         >
-                            <i className="bx bx-printer font-size-14"></i>
+                            {(listBtnLoading === `btn-Print-E-Invoice-${rowData.id}`) ?
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                : <i className="bx bx-printer font-size-14"></i>
+                            }
+
                         </Button> :
                         (rowData.InvoiceUploads[0].EInvoicePdf === null) &&
                         <Button

@@ -48,7 +48,7 @@ const CategoryList = (props) => {
     dispatch(getCategorylist());
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField, } = reducers
 
   return (
     <React.Fragment>

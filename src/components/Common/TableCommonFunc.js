@@ -53,7 +53,7 @@ const DynamicColumnHook = ({ reducers = "",
     thirdLastColumn,
     makeBtnColumn,
     userAccState }) => {
-    debugger
+
     const { listBtnLoading } = reducers
     const [tableColumns, setTableColumns] = useState([{
         text: "ID",
