@@ -60,6 +60,8 @@ import ImportExportFieldMap_Reducer from "./Administrator/ImportExportFieldMapRe
 import ImportFieldAdd_Reducer from "./Administrator/ImportFieldAddRedux/reducer"
 import ImportExcelPartyMap_Reducer from "./Administrator/ImportExcelPartyMapRedux/reducer"
 import CityReducer from "./Administrator/CityRedux/reducer"
+import PartySettingReducer from "./Administrator/PartySetting/reducer"
+
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -166,6 +168,7 @@ const rootReducer = combineReducers({
   SapLedgerReducer,
   CityReducer,
   OrderSummaryReducer,
+  PartySettingReducer,
 
 })
 export default rootReducer

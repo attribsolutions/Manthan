@@ -86,6 +86,7 @@ import DashboardSaga from "./Dashboard/Dashboard_1_Redux/saga"
 import { sessionAlive_saga } from "./auth/sessionAlive/saga"
 import SapLedgerSaga from "./Report/SapLedger Redux/saga"
 import OrderSummarySaga from "./Report/OrderSummaryRedux/saga"
+import PartySettingSaga from "./Administrator/PartySetting/saga"
 
 
 export default function* rootSaga() {
@@ -160,6 +161,8 @@ export default function* rootSaga() {
     fork(SapLedgerSaga),
     fork(CitySaga),
     fork(OrderSummarySaga),
+    fork(PartySettingSaga),
+    
 
   ])
 }

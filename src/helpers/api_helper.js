@@ -33,8 +33,8 @@ axiosApi.interceptors.response.use(
 )
 
 export function get(url, btnId) {
-
-  CommonConsole("get api call",url);
+  
+  CommonConsole("get api call", url);
   AuthonticationFunction();
   return axiosApi.get(url)
     .then(response => {
@@ -47,7 +47,7 @@ export function get(url, btnId) {
 
 export function post(url, body, btnId) {
 
-  CommonConsole("Post api call",url,body);
+  CommonConsole("Post api call", url, body);
   AuthonticationFunction();
 
   return axiosApi.post(url, body, {
@@ -98,24 +98,24 @@ export function postWithoutToken(url, body,) {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization":null
+        "Authorization": null
       }
     })
     .then(response => {
-      console.log(`${url} Body :`,body )
-      console.log(`${url} response :`,response )
+      console.log(`${url} Body :`, body)
+      console.log(`${url} response :`, response)
       return response.data
     })
     .catch(error => {
-      console.log(`${url} Body :`,body )
-      console.log(`${url} error :`, error )
+      console.log(`${url} Body :`, body)
+      console.log(`${url} error :`, error)
       return Promise.reject(error)
 
     });
 
 }
 
-export async function postRefreshToken(url,body) {
+export async function postRefreshToken(url, body) {
   AuthonticationFunction();
   return axiosApi.post(url, body, {
     headers: {
@@ -130,17 +130,17 @@ export async function postRefreshToken(url,body) {
 
 export function getWithotMsg(url, btnId) {
 
-  CommonConsole( `${url} :get api call `);
+  CommonConsole(`${url} :get api call `);
   AuthonticationFunction();
   return axiosApi.get(url)
-  .then(response => {
-    console.log(`${url} response :`,response )
-    return response.data
-  })
-  .catch(error => {
-    console.log(`${url} error :`, error )
-    return Promise.reject(error)
-  })
+    .then(response => {
+      console.log(`${url} response :`, response)
+      return response.data
+    })
+    .catch(error => {
+      console.log(`${url} error :`, error)
+      return Promise.reject(error)
+    })
 }
 
 

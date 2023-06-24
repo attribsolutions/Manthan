@@ -35,11 +35,13 @@ import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/a
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     btnIsDissablefunc,
+    loginUserDetails,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { saveMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
 
 const InvoiceConfiguration = (props) => {
 
@@ -49,30 +51,30 @@ const InvoiceConfiguration = (props) => {
     const fileds = {
         PaymentQR: "",
         HSNCodeDigit: "",
-        TCSAmountRound: false,
-        InvoiceAmountRound: false,
-        Invoicea4: false,
-        ShowBatch: false,
-        AddressInInvoice: false,
+        TCSAmountRound: "",
+        InvoiceAmountRound: "",
+        Invoicea4: "",
+        ShowBatch: "",
+        AddressInInvoice: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [hsnDropOption] = useState([{ value: 1, label: "4 Digits" }, { value: 2, label: "6 Digits" }, { value: 2, label: "8 Digits" }])
+    const [hsnDropOption] = useState([{ value: 1, label: "4 Digits" }, { value: 2, label: "6 Digits" }, { value: 3, label: "8 Digits" }])
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
-        postMsg,
+        PartySettingdata,
         updateMsg,
         pageField,
         saveBtnloading,
         userAccess } = useSelector((state) => ({
             saveBtnloading: state.GroupReducer.saveBtnloading,
-            postMsg: state.GroupReducer.postMsg,
+            PartySettingdata: state.PartySettingReducer.PartySettingdata,
             updateMsg: state.GroupReducer.updateMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -81,6 +83,9 @@ const InvoiceConfiguration = (props) => {
     const { values } = state
     const { isError } = state;
     const { fieldLabel } = state;
+    debugger
+    const { Data = [] } = PartySettingdata;
+
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
@@ -90,7 +95,8 @@ const InvoiceConfiguration = (props) => {
         const page_Id = pageId.INVOICE_CONFIGURATION
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getGroupTypeslist())
+        dispatch(getpartysetting_API(loginUserDetails().Party_id))
+
 
     }, []);
 
@@ -140,13 +146,13 @@ const InvoiceConfiguration = (props) => {
 
 
 
-    useEffect(() => saveMsgUseEffect({
-        postMsg, pageMode,
-        history, dispatch,
-        postSuccss: saveGroupMaster_Success,
-        resetFunc: { fileds, state, setState },
-        listPath: url.GROUP_lIST
-    }), [postMsg])
+    // useEffect(() => saveMsgUseEffect({
+    //     postMsg, pageMode,
+    //     history, dispatch,
+    //     postSuccss: saveGroupMaster_Success,
+    //     resetFunc: { fileds, state, setState },
+    //     listPath: url.GROUP_lIST
+    // }), [postMsg])
 
 
     useEffect(() => {
@@ -173,9 +179,46 @@ const InvoiceConfiguration = (props) => {
     }, [pageField])
 
 
+    useEffect(() => {
+
+        const singleObject = {};
+        for (const item of Data) {
+            singleObject[item.SystemSetting.replace(/\s/g, '')] = {
+                SystemSetting: item.SystemSetting,
+                Value: item.Value,
+                id: item.id
+            };
+        }
+        console.log(singleObject)
+        if (Object.keys(singleObject).length > 1) {
+
+            if (singleObject.HSNCodeDigit.Value === "1") {
+                singleObject.HSNCodeDigit.Value = { value: 1, label: "4 Digits" }
+            }
+            if (singleObject.HSNCodeDigit.Value === "2") {
+                singleObject.HSNCodeDigit.Value = { value: 1, label: "6 Digits" }
+            }
+            if (singleObject.HSNCodeDigit.Value === "4") {
+                singleObject.HSNCodeDigit.Value = { value: 1, label: "8 Digits" }
+            }
+
+            setState((i) => {
+                const a = { ...i }
+                a.values.Invoicea4 = singleObject.A4Print;
+                a.values.AddressInInvoice = singleObject.AddressOnInvoice;
+                a.values.HSNCodeDigit = singleObject.HSNCodeDigit;
+                a.values.InvoiceAmountRound = singleObject.InvoiceAmountRoundConfiguration;
+                a.values.ShowBatch = singleObject.ShowBatchNoOnInvoicePrint;
+                a.values.TCSAmountRound = singleObject.TCSAmountRoundConfiguration;
+                return a
+            })
+        }
+
+    }, [Data])
+
 
     const onchangeHandler = async (event, key, type) => {
-        debugger
+
         const file = event.target.files[0]
 
         const convertBase64 = (file) => {
@@ -207,7 +250,6 @@ const InvoiceConfiguration = (props) => {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
                 const jsonBody = JSON.stringify({
-                    Name: values.Name,
 
                 });
 
@@ -257,7 +299,7 @@ const InvoiceConfiguration = (props) => {
                                                         <Col sm={12} >
                                                             <Select
                                                                 name="HSNCodeDigit"
-                                                                value={values.HSNCodeDigit}
+                                                                value={values.HSNCodeDigit.Value}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
                                                                 options={hsnDropOption}
@@ -283,11 +325,11 @@ const InvoiceConfiguration = (props) => {
                                                                     type="checkbox"
                                                                     className="p-2"
                                                                     name="Sunday"
-                                                                    checked={values.TCSAmountRound}
+                                                                    checked={values.TCSAmountRound.Value === "0" ? false : true}
                                                                     onChange={(e) => {
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.TCSAmountRound = e.target.checked;
+                                                                            a.values.TCSAmountRound = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
                                                                     }}
@@ -312,11 +354,11 @@ const InvoiceConfiguration = (props) => {
                                                                     type="checkbox"
                                                                     className="p-2"
                                                                     name="Sunday"
-                                                                    checked={values.InvoiceAmountRound}
+                                                                    checked={values.InvoiceAmountRound.Value === "0" ? false : true}
                                                                     onChange={(e) => {
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.InvoiceAmountRound = e.target.checked;
+                                                                            a.values.InvoiceAmountRound = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
                                                                     }}
@@ -345,11 +387,12 @@ const InvoiceConfiguration = (props) => {
                                                                     type="checkbox"
                                                                     className="p-2"
                                                                     name="Sunday"
-                                                                    checked={values.Invoicea4}
+                                                                    checked={values.Invoicea4.Value === "0" ? false : true}
                                                                     onChange={(e) => {
+                                                                        debugger
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.Invoicea4 = e.target.checked;
+                                                                            a.values.Invoicea4 = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
                                                                     }}
@@ -374,11 +417,11 @@ const InvoiceConfiguration = (props) => {
                                                                     type="checkbox"
                                                                     className="p-2"
                                                                     name="Sunday"
-                                                                    checked={values.ShowBatch}
+                                                                    checked={values.ShowBatch.Value === "0" ? false : true}
                                                                     onChange={(e) => {
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.ShowBatch = e.target.checked;
+                                                                            a.values.ShowBatch = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
                                                                     }}
@@ -406,11 +449,13 @@ const InvoiceConfiguration = (props) => {
                                                                     type="checkbox"
                                                                     className="p-2"
                                                                     name="Sunday"
-                                                                    checked={values.AddressInInvoice}
+                                                                    checked={values.AddressInInvoice.Value === "0" ? false : true}
                                                                     onChange={(e) => {
+                                                                        debugger
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.AddressInInvoice = e.target.checked;
+                                                                            a.values.AddressInInvoice.Value = e.target.checked === false ? "0" : "1";
+                                                                            debugger
                                                                             return a
                                                                         })
                                                                     }}
