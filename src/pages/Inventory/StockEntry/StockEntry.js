@@ -31,6 +31,7 @@ import { SalesReturn_add_button_api_For_Item } from "../../../helpers/backend_he
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../Sale/Invoice/SalesReturn/salesReturn.scss";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import Flatpickr from "react-flatpickr";
 
 const StockEntry = (props) => {
 
@@ -241,7 +242,6 @@ const StockEntry = (props) => {
                         </span></>)
             }
         },
-
         {
             text: "GST",
             dataField: "",
@@ -263,7 +263,6 @@ const StockEntry = (props) => {
                 </span>)
             }
         },
-
         {
             text: "BatchCode",
             dataField: "",
@@ -287,14 +286,29 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
-
+                debugger
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <C_DatePicker
                         name='Date'
+                        defaultValue={""}
                         onChange={(e, date) => {
                             row.BatchDate = _cfunc.date_ymd_func(date)
                         }}
                     />
+                    {/* <Flatpickr
+                        style={{ userselect: "all" }}
+                        defaultValue={""}
+                        className="form-control d-block p-2 bg-white text-dark"
+                        // placeholder={props.placeholder}
+                        options={{
+                            altInput: true,
+                            altFormat: "d-m-Y",
+                            dateFormat: "Y-m-d",
+                        }}
+                        onChange={(e, date) => {
+                            row.BatchDate = _cfunc.date_ymd_func(date)
+                        }}
+                    /> */}
                 </span>)
             }
         },
@@ -324,7 +338,7 @@ const StockEntry = (props) => {
         },
     ];
 
-    async function AddPartyHandler(e, type) {
+    async function AddPartyHandler() {
 
         if (values.ItemName === '') {
             customAlert({
@@ -347,7 +361,7 @@ const StockEntry = (props) => {
                 Quantity: i.Quantity,
                 Rate: i.Rate,
                 RowData: i,
-                BatchDate: currentDate_ymd
+                BatchDate: i.BatchDate
             }))
 
             const itemArr = [...TableArr]
@@ -362,7 +376,7 @@ const StockEntry = (props) => {
                     ItemId: i.ItemId,
                     Quantity: i.Quantity,
                     RowData: i.RowData,
-                    BatchDate: currentDate_ymd
+                    BatchDate: i.BatchDate
                 })
             })
 
@@ -391,14 +405,10 @@ const StockEntry = (props) => {
                 "MRP": index.MRP,
                 "Unit": index.Unit,
                 "GST": index.GST_ID,
-                "BatchDate": index.BatchDate,
+                "BatchDate": index.BatchDate === undefined ? "" : index.BatchDate,
                 "BatchCode": index.BatchCode
             })
         })
-
-        // const filterData = ReturnItems.filter((i) => {
-        //     return i.Quantity > 0
-        // })
 
         const filterData = ReturnItems.map(({ ItemName, ...rest }) => rest).filter((i) => {
             return i.Quantity > 0;
