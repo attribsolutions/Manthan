@@ -164,22 +164,22 @@ const StockEntry = (props) => {
         setTableArr(newArr)
     }
 
-    function quantityHandler(event, row) {
+    // function quantityHandler(event, row) {
 
-        row["Qty"] = event.target.value
+    //     row["Qty"] = event.target.value
 
-        let input = event.target.value
+    //     let input = event.target.value
 
-        // if (returnMode === 1) {
-        let v1 = Number(row.Quantity);
-        let v2 = Number(input)
-        if (!(v1 >= v2)) {
-            event.target.value = v1;
-        }
-        // }
-        row.Qty = event.target.value
+    //     // if (returnMode === 1) {
+    //     let v1 = Number(row.Quantity);
+    //     let v2 = Number(input)
+    //     if (!(v1 >= v2)) {
+    //         event.target.value = v1;
+    //     }
+    //     // }
+    //     row.Qty = event.target.value
 
-    }
+    // }
 
     const pagesListColumns = [
         {
@@ -202,12 +202,13 @@ const StockEntry = (props) => {
                     <CInput
                         id={`Qty${key}`}
                         key={`Qty${row.id}`}
-                        defaultValue={row.Qty}
+                        // defaultValue={row.Qty}
                         autoComplete="off"
                         type="text"
                         cpattern={decimalRegx}
                         className="col col-sm text-end"
-                        onChange={(event) => quantityHandler(event, row)}
+                        // onChange={(event) => quantityHandler(event, row)}
+                        onChange={(e) => { row.Qty = e.target.value }}
                     />
                 </span>)
             }
@@ -396,7 +397,7 @@ const StockEntry = (props) => {
             })
             return
         }
-        
+
         let resp;
         try {
             resp = await SalesReturn_add_button_api_For_Item(values.ItemName.value)
@@ -457,8 +458,8 @@ const StockEntry = (props) => {
             grand_total = grand_total + Number(calculate.tAmount)
 
             return ({
-                "Item": i.ItemName.value,
-                "ItemName": i.ItemName.label,
+                "Item": i.ItemId,
+                "ItemName": i.ItemName,
                 "Quantity": i.Qty,
                 "Unit": i.Unit,
                 "BaseUnitQuantity": i.BaseUnitQuantity,
@@ -496,7 +497,7 @@ const StockEntry = (props) => {
         }
 
         const invalidMsg1 = []
-
+        debugger
         ReturnItems.forEach((i) => {
 
             if ((i.Unit === undefined) || (i.Unit === null)) {
@@ -540,7 +541,7 @@ const StockEntry = (props) => {
                     UpdatedBy: _cfunc.loginUserID(),
                     ReturnItems: filterData,
                 });
-                dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
+                // dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
             }
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
