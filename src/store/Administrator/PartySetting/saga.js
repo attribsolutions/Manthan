@@ -5,8 +5,10 @@ import { PartySettingApi, save_PartySetting_API } from "../../../helpers/backend
 
 
 
-function* Save_Method_ForPartySetting_GenFun({ config }) {              // Save API
+function* Save_Method_ForPartySetting_GenFun({ config }) {
+    debugger          
     try {
+        debugger
         const response = yield call(save_PartySetting_API, config);
         yield put(savePartySettingMaster_Success(response));
     } catch (error) { yield put(getpartysettingApiErrorAction()) }
