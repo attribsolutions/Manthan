@@ -283,7 +283,7 @@ const CommonPurchaseList = (props) => {
 
   const [tableColumns, defaultSorted, pageOptions,] = DynamicColumnHook({
     pageField,
-    props,
+    reducers: props.reducers,
     secondLastColumn,
     thirdLastColumn,
     lastColumn,

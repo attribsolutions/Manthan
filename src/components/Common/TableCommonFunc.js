@@ -46,8 +46,15 @@ export const selectAllCheck = (selected, nonSelectable, position, headLabel) => 
 
 })
 
-const DynamicColumnHook = ({props, tableList = [], pageField = '', lastColumn, secondLastColumn, thirdLastColumn, makeBtnColumn, userAccState }) => {
-    const { listBtnLoading }=props.reducers
+const DynamicColumnHook = ({ reducers = "",
+    pageField = '',
+    lastColumn,
+    secondLastColumn,
+    thirdLastColumn,
+    makeBtnColumn,
+    userAccState }) => {
+    debugger
+    const { listBtnLoading } = reducers
     const [tableColumns, setTableColumns] = useState([{
         text: "ID",
         dataField: "id",
@@ -99,7 +106,7 @@ const DynamicColumnHook = ({props, tableList = [], pageField = '', lastColumn, s
                         if (cell === "Invoice Created") {
                             return (
                                 <span class="label label-" style={{
-                                    backgroundColor: '#b6efdcf7', color: "#0e0d0d",fontSize: "12px",
+                                    backgroundColor: '#b6efdcf7', color: "#0e0d0d", fontSize: "12px",
                                     padding: "2px 4px 2px 4px", borderRadius: "5px"
                                 }}>{cell}</span>
                             )
@@ -107,7 +114,7 @@ const DynamicColumnHook = ({props, tableList = [], pageField = '', lastColumn, s
                         if (cell === "Order Confirm") {
                             return (
                                 <span class="label label" style={{
-                                    backgroundColor: '#f7dfb6', color: "#0e0d0d",fontSize: "12px",
+                                    backgroundColor: '#f7dfb6', color: "#0e0d0d", fontSize: "12px",
                                     padding: "2px 4px 2px 4px", borderRadius: "5px"
                                 }} >{cell}</span>
                             )
@@ -175,7 +182,7 @@ const DynamicColumnHook = ({props, tableList = [], pageField = '', lastColumn, s
             // totalSize: tableList.length
         })
 
-    }, [pageField, userAccState,listBtnLoading])
+    }, [pageField, userAccState, listBtnLoading])
 
     return [tableColumns, defaultSorted, pageOptions]
 }
