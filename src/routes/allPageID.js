@@ -129,7 +129,7 @@ export const CITY = 200
 export const CITY_LIST = 202
 
 
-export const INVOICE_CONFIGURATION = 205
+export const INVOICE_CONFIGURATION = 206
 
 
 export const BANK_ASSIGN = 182
