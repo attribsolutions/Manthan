@@ -279,6 +279,9 @@ const CreditList = () => {
                                     value={values.Customer}
                                     options={customerOptions}
                                     onChange={CustomerOnChange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                 />
                             </Col>
                         </FormGroup>
@@ -295,6 +298,9 @@ const CreditList = () => {
                                     value={values.NoteType}
                                     options={NoteType}
                                     onChange={NoteTypeOnChange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                 />
                             </Col>
                         </FormGroup>

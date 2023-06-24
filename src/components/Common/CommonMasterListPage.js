@@ -225,7 +225,7 @@ const CommonListPage = (props) => {
       deleteActionFun: deleteId,
     })
   }
-  const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({ pageField, lastColumn, userAccState, btnLoding })
+  const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({ pageField, lastColumn, userAccState,  reducers: props.reducers, })
 
   if (!(userAccState === '')) {
     return (
