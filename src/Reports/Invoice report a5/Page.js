@@ -23,7 +23,7 @@ function pageFooter(doc, data, islast, array) {
 }
 
 const InvioceReporta5 = (data) => {
-    debugger
+    
 
     var doc = new jsPDF('l', 'pt', 'a5');
 
@@ -37,6 +37,7 @@ const InvioceReporta5 = (data) => {
             }
         })
     } else {
+        
         const Data = []
         Data.push(data)
         Data.forEach((data, islast, array) => {
@@ -54,8 +55,8 @@ const InvioceReporta5 = (data) => {
         title: " Invoice Report"
     });
 
-    const options = { filename: "Invoice Report" }
-    doc.output('dataurlnewwindow', options);
+    // const options = { filename: "Invoice Report" }
+    doc.output('dataurlnewwindow', { filename: "Invoice Report" });
     return (<></>);
 }
 export default InvioceReporta5;

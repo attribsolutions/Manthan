@@ -1,5 +1,5 @@
 
-import { LOADING_SHEET_UPDATE_API } from "./actionType"
+import { LOADING_SHEET_API_ERROR_ACTION, LOADING_SHEET_UPDATE_API, SALES_RUTURN_API_ERROR_ACTION } from "./actionType"
 import { LOADING_SHEET_LIST_ACTION, SAVE_LOADING_SHEET_MASTER } from "./actionType"
 import {
     LOADING_SHEET_LIST_ACTION_SUCCESS,
@@ -74,6 +74,16 @@ const LoadingSheetReducer = (state = INIT_STATE, action) => {
                 ...state,
                 deleteMsg: action.payload,
             };
+
+        case LOADING_SHEET_API_ERROR_ACTION:
+            return {
+                ...state,
+                saveBtnloading: false,
+                loading: false,
+            };
+
+
+
 
         default:
             return state
