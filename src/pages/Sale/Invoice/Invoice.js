@@ -44,6 +44,8 @@ import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
+
 
 const Invoice = (props) => {
 
@@ -85,7 +87,8 @@ const Invoice = (props) => {
         vendorSupplierCustomer,
         makeIBInvoice,
         goBtnloading,
-        saveBtnloading
+        saveBtnloading,
+        PartySettingdata
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -97,6 +100,8 @@ const Invoice = (props) => {
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         goBtnloading: state.InvoiceReducer.goBtnloading,
+        PartySettingdata: state.PartySettingReducer.PartySettingdata,
+
     }));
 
 
@@ -107,6 +112,8 @@ const Invoice = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+    const { Data = {} } = PartySettingdata;
+
 
     useEffect(() => {
 
@@ -114,6 +121,8 @@ const Invoice = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
+        dispatch(getpartysetting_API(_cfunc.loginPartyID()))
+
 
     }, []);
 
@@ -569,6 +578,7 @@ const Invoice = (props) => {
 
     const SaveHandler = async (event) => {
 
+        console.log(Data)
         event.preventDefault();
 
         const btnId = event.target.id
@@ -596,7 +606,6 @@ const Invoice = (props) => {
                         const calculate = discountCalculate(ele, index)
 
                         grand_total = grand_total + Number(calculate.tAmount)
-
                         invoiceItems.push({
                             Item: index.Item,
                             Unit: index.default_UnitDropvalue.value,
@@ -657,10 +666,11 @@ const Invoice = (props) => {
                 IBChallanItems: invoiceItems,
                 IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
             });
-
+            const isRound = Data.InvoiceAmountRoundConfiguration.Value
+            debugger
             const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 CustomerGSTTin: '41',
-                GrandTotal: Math.round(grand_total),
+                GrandTotal: isRound === "1" ? Math.round(grand_total) : Number(grand_total),
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 Customer: values.Customer.value,
                 Party: _cfunc.loginPartyID(),

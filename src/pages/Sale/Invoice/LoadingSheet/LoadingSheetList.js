@@ -49,7 +49,7 @@ const LoadingSheetList = () => {
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
     const { userAccess, pageField, PartySettingdata } = reducers;
-    const { Data = [] } = PartySettingdata;
+    const { Data = {} } = PartySettingdata;
 
 
     const action = {
@@ -91,23 +91,11 @@ const LoadingSheetList = () => {
     }
 
 
-    useEffect(() => {
-        const singleObject = {};
-        for (const item of Data) {
-            singleObject[item.SystemSetting.replace(/\s/g, '')] = {
-                SystemSetting: item.SystemSetting,
-                Value: item.Value,
-                id: item.id
-            };
-            setPartysettingdata(singleObject)
-        }
-    }, [Data])
-
     function downBtnFunc(row, downbtnType) {
         console.log(downbtnType)
         if (downbtnType === "IsMultipleInvoicePrint") {
             let ReportType = report.invoiceA5
-            dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id, Partysettingdata))
+            dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id, Data))
         } else {
             let ReportType = report.VanLoadingPartyWiseInvoice
             dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
