@@ -271,97 +271,95 @@ const GeneralMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form noValidate>
-                                    <Row className="">
-                                        <Col md={12}>
-                                            <Card>
-                                                <CardBody className="c_card_body">
-                                                    <Row>
-                                                        <Row>
-                                                            <Col md="4" >
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.TypeName} </Label>
-                                                                    <Col sm={12} >
-                                                                        <Select
-                                                                            name="TypeName"
-                                                                            value={values.TypeName}
-                                                                            autoFocus={true}
-                                                                            isSearchable={true}
-                                                                            isDisabled={(pageMode === "edit") ? true : false}
-                                                                            className="react-dropdown"
-                                                                            classNamePrefix="dropdown"
-                                                                            options={TypeDropdownOptions}
-                                                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                                        />
-                                                                        {isError.TypeName.length > 0 && (
-                                                                            <span className="text-danger f-8"><small>{isError.TypeName}</small></span>
-                                                                        )}
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
-
-                                                        <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
-                                                            <Input
-                                                                name="Name"
-                                                                id="txtName"
-                                                                value={values.Name}
-                                                                type="text"
-                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                placeholder="Please Enter Name"
-                                                                autoComplete='off'
-                                                                onChange={(event) => {
-                                                                    onChangeText({ event, state, setState })
-                                                                    dispatch(Breadcrumb_inputName(event.target.value))
-                                                                }}
+                                    
+                                    <Card>
+                                        <CardBody className="c_card_body">
+                                           
+                                            <Row>
+                                                <Col md="4" >
+                                                    <FormGroup className="mb-3">
+                                                        <Label htmlFor="validationCustom01"> {fieldLabel.TypeName} </Label>
+                                                        <Col sm={12} >
+                                                            <Select
+                                                                name="TypeName"
+                                                                value={values.TypeName}
+                                                                autoFocus={true}
+                                                                isSearchable={true}
+                                                                isDisabled={(pageMode === "edit") ? true : false}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
+                                                                options={TypeDropdownOptions}
+                                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                             />
-                                                            {isError.Name.length > 0 && (
-                                                                <span className="invalid-feedback">{isError.Name}</span>
+                                                            {isError.TypeName.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.TypeName}</small></span>
                                                             )}
-                                                        </FormGroup>
+                                                        </Col>
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <FormGroup className="mb-2 col col-sm-4 ">
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                                                    <Input
+                                                        name="Name"
+                                                        id="txtName"
+                                                        value={values.Name}
+                                                        type="text"
+                                                        className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                        placeholder="Please Enter Name"
+                                                        autoComplete='off'
+                                                        onChange={(event) => {
+                                                            onChangeText({ event, state, setState })
+                                                            dispatch(Breadcrumb_inputName(event.target.value))
+                                                        }}
+                                                    />
+                                                    {isError.Name.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.Name}</span>
+                                                    )}
+                                                </FormGroup>
+                                            </Row>
 
-                                                        <Row>
-                                                            <FormGroup className="mb-2 col col-sm-5">
-                                                                <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">{fieldLabel.IsActive}</Label>
-                                                                    <Col md={2} style={{ marginTop: '9px' }} >
-                                                                        <div className="form-check form-switch form-switch-md mb-3">
-                                                                            <Input type="checkbox" className="form-check-input"
-                                                                                checked={values.IsActive}
-                                                                                name="IsActive"
-                                                                                onChange={(e) => {
-                                                                                    setState((i) => {
-                                                                                        const a = { ...i }
-                                                                                        a.values.IsActive = e.target.checked;
-                                                                                        return a
-                                                                                    })
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </FormGroup>
-                                                        </Row>
-
-                                                        <FormGroup className="mt-1">
-                                                            <Row>
-                                                                <Col sm={2}>
-                                                                    <SaveButton
-                                                                        loading={saveBtnloading}
-                                                                        pageMode={pageMode}
-                                                                        onClick={SaveHandler}
-                                                                        userAcc={userPageAccessState}
-                                                                        editCreatedBy={editCreatedBy}
-                                                                        module={"GeneralMaster"}
-                                                                    />
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup>
+                                            <Row>
+                                                <FormGroup className="mb-2 col col-sm-5">
+                                                    <Row className="justify-content-md-left">
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">{fieldLabel.IsActive}</Label>
+                                                        <Col md={2} style={{ marginTop: '9px' }} >
+                                                            <div className="form-check form-switch form-switch-md mb-3">
+                                                                <Input type="checkbox" className="form-check-input"
+                                                                    checked={values.IsActive}
+                                                                    name="IsActive"
+                                                                    onChange={(e) => {
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            a.values.IsActive = e.target.checked;
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </Col>
                                                     </Row>
-                                                </CardBody>
-                                            </Card>
-                                        </Col>
-                                    </Row>
+                                                </FormGroup>
+                                            </Row>
+                                            
+                                            <FormGroup className="mt-1">
+                                                <Row>
+                                                    <Col sm={2}>
+                                                        <SaveButton
+                                                            loading={saveBtnloading}
+                                                            pageMode={pageMode}
+                                                            onClick={SaveHandler}
+                                                            userAcc={userPageAccessState}
+                                                            editCreatedBy={editCreatedBy}
+                                                            module={"GeneralMaster"}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </FormGroup>
+                                        </CardBody>
+                                    </Card>
+                                  
                                 </form>
                             </CardBody>
                         </Card>

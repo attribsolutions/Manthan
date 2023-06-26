@@ -3,10 +3,13 @@ import { CheckAPIResponse, CommonConsole } from "../components/Common/CommonFunc
 
 
 
-const API_URL = "http://192.168.1.114:8000"
+// const API_URL = "http://192.168.1.114:8000"
 
 // const API_URL = "http://117.248.109.234:8000"
 // const API_URL = "http://10.4.5.64:8000"
+
+const API_URL = "http://cbmfooderp.com:8000"
+
 
 const axiosApi = axios.create({
   baseURL: API_URL,
@@ -30,8 +33,8 @@ axiosApi.interceptors.response.use(
 )
 
 export function get(url, btnId) {
-
-  CommonConsole("get api call",url);
+  
+  CommonConsole("get api call", url);
   AuthonticationFunction();
   return axiosApi.get(url)
     .then(response => {
@@ -44,7 +47,7 @@ export function get(url, btnId) {
 
 export function post(url, body, btnId) {
 
-  CommonConsole("Post api call",url,body);
+  CommonConsole("Post api call", url, body);
   AuthonticationFunction();
 
   return axiosApi.post(url, body, {
@@ -53,8 +56,10 @@ export function post(url, body, btnId) {
       "Content-Type": "application/json",
     }
   }).then(response => {
+    debugger
     return CheckAPIResponse({ method: "post", url, response, body, btnId });
   }).catch(error => {
+    debugger
     return CheckAPIResponse({ method: "post", url, error, body, btnId });
   });
 };
@@ -95,24 +100,24 @@ export function postWithoutToken(url, body,) {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization":null
+        "Authorization": null
       }
     })
     .then(response => {
-      console.log(`${url} Body :`,body )
-      console.log(`${url} response :`,response )
+      console.log(`${url} Body :`, body)
+      console.log(`${url} response :`, response)
       return response.data
     })
     .catch(error => {
-      console.log(`${url} Body :`,body )
-      console.log(`${url} error :`, error )
+      console.log(`${url} Body :`, body)
+      console.log(`${url} error :`, error)
       return Promise.reject(error)
 
     });
 
 }
 
-export async function postRefreshToken(url,body) {
+export async function postRefreshToken(url, body) {
   AuthonticationFunction();
   return axiosApi.post(url, body, {
     headers: {
@@ -127,17 +132,17 @@ export async function postRefreshToken(url,body) {
 
 export function getWithotMsg(url, btnId) {
 
-  CommonConsole( `${url} :get api call `);
+  CommonConsole(`${url} :get api call `);
   AuthonticationFunction();
   return axiosApi.get(url)
-  .then(response => {
-    console.log(`${url} response :`,response )
-    return response.data
-  })
-  .catch(error => {
-    console.log(`${url} error :`, error )
-    return Promise.reject(error)
-  })
+    .then(response => {
+      console.log(`${url} response :`, response)
+      return response.data
+    })
+    .catch(error => {
+      console.log(`${url} error :`, error)
+      return Promise.reject(error)
+    })
 }
 
 

@@ -21,6 +21,7 @@ import {
   GET_FIELD_VALIDATIONS_SUCCESS,
   GET_PAGETYPE,
   GET_PAGETYPE_SUCCESS,
+  PAGEMASTER_API_ERROR_ACTION,
 } from "./actionType";
 
 export const getH_Modules = () => ({
@@ -145,3 +146,7 @@ export const getFieldValidationsSuccess = (data) => ({
   type: GET_FIELD_VALIDATIONS_SUCCESS,
   payload: data,
 });
+
+export const PageMasterApiErrorAction = () => ({
+  type: PAGEMASTER_API_ERROR_ACTION,
+})

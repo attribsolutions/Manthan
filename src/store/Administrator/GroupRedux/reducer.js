@@ -17,7 +17,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
 
 }
 
@@ -37,7 +37,6 @@ const GroupReducer = (state = INIT_STATE, action) => {
         ...state,
         postMsg: action.payload,
         saveBtnloading: false,
-
       }
 
     // get 
@@ -45,14 +44,14 @@ const GroupReducer = (state = INIT_STATE, action) => {
     case GET_GROUP_LIST:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
       }
 
     case GET_GROUP_LIST_SUCCESS:
       return {
         ...state,
         groupList: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
       }
 
     //  del
@@ -84,14 +83,12 @@ const GroupReducer = (state = INIT_STATE, action) => {
 
       };
 
-
     case GROUP_API_ERROR_ACTION:
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
-
 
     default:
       return state

@@ -1,43 +1,43 @@
 import { groupBy } from "../../../components/Common/CommonFunction"
 
+
 export const discountCalculate = (row, index1) => {
-    
-    let rate = 0
-    let qty = 0
-    let gstPercentage = 0
-    let disCountAmt = 0
-    if (index1.Discount === undefined || null) { index1.Discount = 0 }
-    if (index1.DiscountType === undefined || null) { index1.DiscountType = 2 }
+    // Extract values from the input parameters
+    const rate = Number(row.Rate) || 0;
+    const qty = Number(row.Qty) || 0;
+    const gstPercentage = Number(row.GST) || 0;
+    const discount = Number(index1.Discount) || 0;
+    const discountType = index1.DiscountType || 2;
 
+    // Calculate the base amount
+    const baseAmt = rate * qty;
 
-    if (!(row.Rate == '')) { rate = row.Rate; };
-    if (!(row.Qty == '')) { qty = row.Qty; };
+    // Calculate the discount amount based on the discount type
+    const disCountAmt = discountType === 2 ? baseAmt - (baseAmt / ((100 + discount) / 100)) : qty * discount;
 
-    let baseAmt = Number(rate) * Number(qty)
-    if (!baseAmt) { baseAmt = 0 }
+    // Calculate the discounted base amount
+    const discountBaseAmt = baseAmt - disCountAmt;
 
-    if (index1.DiscountType === 2) {// DiscountType 2 = discount in percentage
-        disCountAmt = (Number(baseAmt) * (Number(index1.Discount) / 100));
-    } else {
-        disCountAmt = (Number(qty) * Number(index1.Discount))
-    }
+    // Calculate the GST amount
+    const gstAmt1 = discountBaseAmt * (gstPercentage / 100);
+    const CGST = Number((gstAmt1 / 2).toFixed(2));
+    const SGST = CGST;
+    const gstAmt = CGST + SGST;
 
-    if (!(row.GST == '')) {
-        gstPercentage = row.GST;
+    // Calculate the total amount after discount and GST
+    const total = gstAmt + discountBaseAmt;
+
+    // Return the calculated values as an object
+    return {
+        discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
+        disCountAmt: Number(disCountAmt.toFixed(2)),
+        gstAmt: Number(gstAmt.toFixed(2)),
+        tAmount: Number(total.toFixed(2)),
+        CGST,
+        SGST
     };
+};
 
-    let discountBaseAmt = (baseAmt - disCountAmt)
-    const gstAmt1 = ((discountBaseAmt * Number(gstPercentage) / 100))
-    const total = gstAmt1 + parseFloat(discountBaseAmt)
-    const CGST = (gstAmt1 / 2).toFixed(2);
-    const SGST = (gstAmt1 / 2).toFixed(2);
-    let gstAmt = gstAmt1.toFixed(2);
-    disCountAmt.toFixed(2);
-    discountBaseAmt.toFixed(2);
-    const tAmount = total.toFixed(2);
-
-    return { discountBaseAmt, disCountAmt, gstAmt, tAmount, CGST, SGST }
-}
 
 export function bulkSearch(text, data, columns) {
 
@@ -237,48 +237,3 @@ export const innerStockCaculation = (index1) => {
 
 }
 
-
-export function showAllStockOnclick(OrderItemDetails = [], isplus = false,) {
-    try {
-        if (isplus) {
-            document.getElementById("allplus-circle").style.display = "none";
-            document.getElementById("allminus-circle").style.display = "block";
-        } else {
-            document.getElementById("allplus-circle").style.display = "block";
-            document.getElementById("allminus-circle").style.display = "none";
-        }
-    } catch (w) { }
-
-    OrderItemDetails.forEach(index1 => {
-        if (!index1.ItemTotalStock > 0) {
-            return
-        }
-        try {
-            if (isplus) {
-                document.getElementById(`view${index1.id}`).style.display = "block";
-                document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-                document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-            } else {
-                document.getElementById(`view${index1.id}`).style.display = "none";
-                document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-                document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-            }
-        } catch (w) { }
-    })
-
-
-}
-
-export function showStockOnclick(index1, isplus = false) {
-    try {
-        if (isplus) {
-            document.getElementById(`view${index1.id}`).style.display = "block";
-            document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-            document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-        } else {
-            document.getElementById(`view${index1.id}`).style.display = "none";
-            document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-            document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-        }
-    } catch (w) { }
-}

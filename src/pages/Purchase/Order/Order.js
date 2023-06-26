@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags"
 import { useHistory } from "react-router-dom";
 import {
+    Button,
     Col,
     FormGroup,
     Input,
@@ -14,7 +15,7 @@ import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { basicAmount, GstAmount, Amount } from "./OrderPageCalulation";
-import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
+import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
@@ -33,6 +34,11 @@ import { editPartyItemID } from "../../../store/Administrator/PartyItemsRedux/ac
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { pageFieldUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
+import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
+import { ORDER_4 } from "../../../routes/route_url";
+import { getItemList } from "../../../store/actions";
+import CustomTable from "../../../CustomTable2/Custom";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 
 let editVal = {}
@@ -69,14 +75,18 @@ const Order = (props) => {
     const history = useHistory();
     const RoleID = _cfunc.loginRoleID();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const userAdminRole = _cfunc.loginUserAdminRole();
     const ref1 = useRef('')
 
     const fileds = {
         id: "",
         Supplier: "",
+        Route: "",
+        Item: ''
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const [editCreatedBy, seteditCreatedBy] = useState("");
     const [page_id] = useState(() => initialState(history).page_Id)
     const [listPath] = useState(() => initialState(history).listPath)
     const [subPageMode] = useState(history.location.pathname)
@@ -94,7 +104,12 @@ const Order = (props) => {
     const [orderdate, setorderdate] = useState(currentDate_ymd);
 
     const [supplierSelect, setsupplierSelect] = useState('');
+    const [routeSelect, setRouteSelect] = useState('');
     const [partySelect, setPartySelect] = useState('');
+    const [itemSelect, setItemSelect] = useState({ value: '', label: "All" });
+    const [itemSelectDropOptions, setitemSelectOptions] = useState([]);
+    const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
+    const [goBtnDissable, setGoBtnDissable] = useState(false)
 
     const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
@@ -102,6 +117,7 @@ const Order = (props) => {
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
+
 
     const {
         goBtnOrderdata,
@@ -112,12 +128,15 @@ const Order = (props) => {
         updateMsg,
         supplierAddress,
         pageField,
-        PartyList,
+        partyList_redux,
         assingItemData = '',
         approvalDetail,
         orderApprovalMsg,
+        gobutton_Add_invoice,
         goBtnloading,
         saveBtnloading,
+        gotoInvoiceBtnLoading,
+        RoutesList
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -130,9 +149,12 @@ const Order = (props) => {
         orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
         approvalDetail: state.OrderReducer.approvalDetail,
         assingItemData: state.PartyItemsReducer.editData,
-        PartyList: state.PartyMasterReducer.partyList,
+        partyList_redux: state.PartyMasterReducer.partyList,
+        gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
+        RoutesList: state.RoutesReducer.RoutesList,
         goBtnloading: state.OrderReducer.loading,
         saveBtnloading: state.OrderReducer.saveBtnloading,
+        gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
 
     }));;
 
@@ -146,15 +168,15 @@ const Order = (props) => {
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.GoButton_For_Order_AddSuccess(null))
         dispatch(_act.commonPageField(page_id))
-        dispatch(_act.GetVenderSupplierCustomer(subPageMode, RoleID))
         dispatch(_act.getTermAndCondition())
         dispatch(_act.getOrderType())
+        dispatch(GetRoutesList());
         dispatch(getPartyListAPI())
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         if (!(subPageMode === url.ORDER_4)) {
             dispatch(_act.getSupplierAddress(_cfunc.loginPartyID()))
         }
     }, []);
-
 
     useEffect(() => userAccessUseEffect({ // userAccess useEffect 
         props,
@@ -169,7 +191,6 @@ const Order = (props) => {
             setFindPartyItemAccess(true)
         }
     };
-
 
     useEffect(() => { // hasEditVal useEffect
 
@@ -227,6 +248,7 @@ const Order = (props) => {
                 setTermsAndConTable(termsAndCondition)
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
+            seteditCreatedBy(hasEditVal.CreatedBy)
         } else {
             dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
         }
@@ -237,10 +259,11 @@ const Order = (props) => {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
 
             setTermsAndConTable([])
-            const liveMode = true
-            const aprovalSapCallMode = (postMsg.IsSAPCustomer > 0)
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
+            const liveMode = false  // temporary not working code thats why false use line no. 253 to 289
+            const aprovalSapCallMode = (postMsg.IsSAPCustomer > 0)
+
             if ((subPageMode === url.ORDER_2) && liveMode && aprovalSapCallMode) { //        SAP OEDER-APROVUAL CODE
                 let config = { orderId: postMsg.OrderID }
 
@@ -248,20 +271,38 @@ const Order = (props) => {
 
             } else {// ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
 
-                const a = await customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
+
                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
-                if (a) {
-                    history.push({
-                        pathname: listPath,
+                if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
+
+                    const customer = supplierSelect
+                    const jsonBody = JSON.stringify({
+                        OrderIDs: postMsg.OrderID.toString(),
+                        FromDate: orderdate,
+                        Customer: supplierSelect.value,
+                        Party: _cfunc.loginPartyID(),
                     });
+                    dispatch(_act.GoButtonForinvoiceAdd({
+                        jsonBody, subPageMode: url.INVOICE_1, path: url.INVOICE_1, pageMode: mode.defaultsave, customer,
+                        errorMsg: "Order Save Successfully But Can't Make Invoice"
+                    }));
                 }
+                else {
+                    const a = await customAlert({
+                        Type: 1,
+                        Message: postMsg.Message,
+                    })
+                    if (a) {
+                        history.push({
+                            pathname: listPath,
+                        });
+                    }
+                }
+
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
-            debugger
+
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             customAlert({
                 Type: 4,
@@ -273,7 +314,7 @@ const Order = (props) => {
     useEffect(() => updateMsgUseEffect({
         updateMsg, modalCss,
         history, dispatch,
-        updateSuccss: _act.saveOrderActionSuccess,
+        updateSuccss: _act.updateOrderIdSuccess,
         listPath: listPath
     }), [updateMsg])
 
@@ -294,7 +335,8 @@ const Order = (props) => {
     useEffect(() => {
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
-            setorderItemTable(OrderItems)
+            if (!selecedItemWiseOrder) { setorderItemTable(OrderItems) }
+            setitemSelectOptions(OrderItems.map(i => ({ ...i, value: i.Item_id, label: i.ItemName })))
 
             setTermsAndConTable(TermsAndConditions)
             dispatch(_act.GoButton_For_Order_AddSuccess(''))
@@ -321,6 +363,7 @@ const Order = (props) => {
         orderApprovalFunc({ dispatch, approvalDetail })
     }, [approvalDetail]);
 
+
     useEffect(() => {
         orderApprovalMessage({ dispatch, orderApprovalMsg, listPath, history })
     }, [orderApprovalMsg]);
@@ -331,38 +374,60 @@ const Order = (props) => {
         } catch (e) { }
     }, [goBtnloading, supplierSelect, findPartyItemAccess]);
 
+
+    useEffect(() => {
+        if (gobutton_Add_invoice.Status === true && gobutton_Add_invoice.StatusCode === 200) {
+            history.push({
+                pathname: gobutton_Add_invoice.path,
+            })
+        }
+    }, [gobutton_Add_invoice]);
+
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
     }))
-
-
 
     const orderTypeOptions = orderType.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
 
-    const Party_DropdownOptions = PartyList.map((data) => ({
+    const Party_DropdownOptions = partyList_redux.map((data) => ({
         value: data.id,
         label: data.Name
     }));
 
+    const RoutesListOptions = RoutesList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+        IsActive: index.IsActive
+    }));
+
+    const RouteOptions = RoutesListOptions.filter((index) => {
+        return index.IsActive === true
+    });
+
+    RouteOptions.unshift({
+        value: "",
+        label: "All"
+    });
 
     const pagesListColumns = [
         {
             dataField: "GroupName",
-            text: "Group Name",
+            text: "Group",
             sort: true,
         },
         {
             dataField: "SubGroupName",
-            text: "SubGroup Name",
+            text: "SubGroup",
             sort: true,
         },
 
         {//------------- ItemName column ----------------------------------
             dataField: "ItemName",
+            text: "Item Name",
             sort: true,
             sortValue: (cell, row) => row["ItemName"],
             headerFormatter: (value, row, k, f) => {
@@ -379,25 +444,6 @@ const Order = (props) => {
 
                     </div>
                 )
-            },
-        },
-
-        {//------------- Stock Quantity column ----------------------------------
-            text: "Stock Qty",
-            sort: true,
-            // hidden: !(pageMode === mode.defaultsave) && true,
-            hidden: true,
-            dataField: "StockQuantity",
-            formatter: (value, row, k) => {
-
-                return (
-                    <div key={row.id} className="text-end">
-                        <span>{row.StockQuantity}</span>
-                    </div>
-                )
-            },
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
             },
         },
 
@@ -600,6 +646,7 @@ const Order = (props) => {
             }
         },
     ];
+
     const defaultSorted = [
         {
             dataField: "ItemName", // if dataField is not match to any column you defined, it will be ignored.
@@ -607,80 +654,27 @@ const Order = (props) => {
         },
     ];
 
-
-
-    function itemWise_CalculationFunc(row) {
-
-        row["Amount"] = Amount(row)
-
-        let sum = 0
-        orderItemTable.forEach(ind => {
-            if (ind.Amount === null) {
-                ind.Amount = 0
-            }
-            var amt = parseFloat(ind.Amount)
-            sum = sum + amt
-        });
-        setOrderAmount(sum.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
-    };
-
-    const goButtonHandler = async () => {
-
-
-        if (!supplierSelect > 0) {
-            await customAlert({
-                Type: 4,
-                Message: `Please select ${fieldLabel.Supplier}`
-            })
-            return;
-        }
-        let btnId = `go-btn${subPageMode}`
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
-
-        dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
-
-
-        let PO_Body = {
-            Party: supplierSelect.value,
-            Customer: _cfunc.loginPartyID(),
-            RateParty: _cfunc.loginPartyID(),
-            EffectiveDate: orderdate,
-            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
-        }
-        let SO_body = {
-            Party: _cfunc.loginPartyID(), //swap  party and customer for sale oerder
-            Customer: supplierSelect.value,//swap  party and customer for sale oerder
-            RateParty: supplierSelect.value,
-            EffectiveDate: orderdate,
-            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
-        }
-
-
-        let jsonBody;   //json body decleration 
-        if (subPageMode === url.ORDER_4) {
-            jsonBody = JSON.stringify({ ...SO_body, });
-        }
-        else {
-            jsonBody = JSON.stringify({ ...PO_Body, });
-        }
-        let config = { subPageMode, jsonBody, btnId }
-        dispatch(_act.GoButton_For_Order_Add(config))
-    };
-
     function orderdateOnchange(e, date) {
         setorderdate(date)
     };
 
     function supplierOnchange(e) {
+
         setsupplierSelect(e);
         if (subPageMode === url.ORDER_4) {
             dispatch(_act.getSupplierAddress(e.value))
         }
+        setorderItemTable([])
+        setItemSelect('')
+        goButtonHandler(e.value)
     };
 
     function partyOnchange(e) {
         setPartySelect(e)
+    };
+
+    function itemSelectOnchange(e) {
+        setItemSelect(e)
     };
 
     function Open_Assign_func() {
@@ -689,6 +683,12 @@ const Order = (props) => {
         _cfunc.breadcrumbReturnFunc({ dispatch, userAcc: userPageAccessState })
         goButtonHandler()
     };
+
+    function RouteOnChange(event) {
+        setsupplierSelect('')
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: event.value }))
+        setRouteSelect(event)
+    }
 
     async function assignItem_onClick(event) {
         event.stopPropagation();
@@ -715,15 +715,88 @@ const Order = (props) => {
         };
     };
 
+    function itemWise_CalculationFunc(row) {
+
+        row["Amount"] = Amount(row)
+
+        let sum = 0
+        orderItemTable.forEach(ind => {
+            if (ind.Amount === null) {
+                ind.Amount = 0
+            }
+            var amt = parseFloat(ind.Amount)
+            sum = sum + amt
+        });
+        setOrderAmount(sum.toFixed(2))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+    };
+
+    const item_AddButtonHandler = () => {
+        
+        setGoBtnDissable(true)
+        
+        let isfound = orderItemTable.find(i => i.value === itemSelect.value);
+
+        if (!itemSelect) {
+            customAlert({ Type: 4, Message: `Select Item Name` })
+        }
+        else if (isfound === undefined) {
+            setorderItemTable([itemSelect].concat(orderItemTable))
+        }
+        else {
+            customAlert({ Type: 3, Message: "This Item Already Exist" })
+        }
+        setItemSelect('')
+    }
+
+    const goButtonHandler = async (selectSupplier) => {
+
+        if (!supplierSelect > 0 && !selectSupplier) {
+            await customAlert({
+                Type: 4,
+                Message: `Please Select ${fieldLabel.Supplier}`
+            })
+            return;
+        }
+        let btnId = `go-btn${subPageMode}`
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
+
+        dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
+
+
+        let PO_Body = {
+            Party: selectSupplier ? selectSupplier : supplierSelect.value,
+            Customer: _cfunc.loginPartyID(),
+            RateParty: _cfunc.loginPartyID(),
+            EffectiveDate: orderdate,
+            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+        }
+        let SO_body = {
+            Party: _cfunc.loginPartyID(), //swap  party and customer for sale oerder
+            Customer: selectSupplier ? selectSupplier : supplierSelect.value,//swap  party and customer for sale oerder
+            RateParty: selectSupplier ? selectSupplier : supplierSelect.value,
+            EffectiveDate: orderdate,
+            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+        }
+
+
+        let jsonBody;   //json body decleration 
+        if (subPageMode === url.ORDER_4) {
+            jsonBody = JSON.stringify({ ...SO_body, });
+        }
+        else {
+            jsonBody = JSON.stringify({ ...PO_Body, });
+        }
+        let config = { subPageMode, jsonBody, btnId }
+        dispatch(_act.GoButton_For_Order_Add(config))
+    };
+
     const saveHandeller = async (event) => {
         event.preventDefault();
 
         const btnId = event.target.id
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
+        const gotoInvoiceMode = btnId.substring(0, 14) === "gotoInvoiceBtn";
 
-        function returnFunc() {
-            _cfunc.btnIsDissablefunc({ btnId, state: false })
-        }
         try {
             const division = _cfunc.loginPartyID();
             const supplier = supplierSelect.value;
@@ -731,20 +804,6 @@ const Order = (props) => {
             const validMsg = []
             const itemArr = []
             const isVDC_POvalidMsg = []
-
-            // if (pageMode === mode.edit) {
-            //     orderItemTable.filter(f => (f.editrowId)).forEach(i => {
-
-            //     })
-            // }
-            // if (pageMode === mode.defaultsave) {
-            //     orderItemTable.filter(f => (f.Quantity > 0)).forEach(i => {
-            //         if (!(i.Rate > 0)) {
-            //             validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
-            //         }
-            //     })
-            // }
-
 
             await orderItemTable.forEach(i => {
 
@@ -859,7 +918,7 @@ const Order = (props) => {
                     Type: 4,
                     Message: isVDC_POvalidMsg,
                 })
-                return returnFunc();
+                return
             };
             if (validMsg.length > 0) {
                 customAlert({
@@ -867,7 +926,7 @@ const Order = (props) => {
                     Message: validMsg,
                 })
 
-                return returnFunc();
+                return
             }
             if (itemArr.length === 0) {
                 customAlert({
@@ -875,14 +934,14 @@ const Order = (props) => {
                     Message: "Please Enter One Item Quantity",
                 })
 
-                return returnFunc();
+                return
             }
             if (orderTypeSelect.length === 0) {
                 customAlert({
                     Type: 4,
                     Message: "Please Select PO Type",
                 })
-                return returnFunc();
+                return
             }
             if ((termsAndCondition.length === 0) && !(subPageMode === url.ORDER_2)
                 && !(subPageMode === url.ORDER_4) && !(subPageMode === url.IB_ORDER)
@@ -891,7 +950,7 @@ const Order = (props) => {
                     Type: 4,
                     Message: "Please Enter One Terms And Condition",
                 })
-                return returnFunc();
+                return
             }
 
             const po_JsonBody = {
@@ -948,25 +1007,25 @@ const Order = (props) => {
                 jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
             }
             // +*********************************
-            console.log(jsonBody)
+
             if (pageMode === mode.edit) {
-                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
+                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
 
             } else {
-                dispatch(_act.saveOrderAction({ jsonBody, subPageMode, btnId }))
+                debugger
+                dispatch(_act.saveOrderAction({ jsonBody, subPageMode, gotoInvoiceMode }))
             }
 
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.CommonConsole("order_save_", e) }
     }
-
 
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-                <div className="page-content">
+                <div className="page-content" style={{ marginBottom: "5cm" }}>
 
-                    {RoleID === 2 ?
+                    {/* {userAdminRole === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
                             <div className=" mt-1 mb-2 row ">
                                 <Col sm="6">
@@ -990,83 +1049,191 @@ const Order = (props) => {
 
                             </div>
                         </div>
-                        : null}
-
+                        : null} */}
+                    {userAdminRole &&
+                        <PartyDropdown_Common
+                            partySelect={partySelect}
+                            setPartyFunc={partyOnchange} />
+                    }
 
                     <div>
-                        <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
-                            <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name,Go_Button*/}
-                                <Col sm="6">                                              {/* Order Date*/}
-                                    <FormGroup className=" row mt-3 " >
-                                        <Label className="col-sm-5 p-2"
-                                            style={{ width: "115px" }}>Order Date</Label>
-                                        <Col sm="6">
+                        <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
 
-                                            <C_DatePicker
-                                                name="orderdate"
-                                                value={orderdate}
-                                                disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                onChange={orderdateOnchange}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-
-
-                                <Col sm="6">                                              {/*Supplier Name And Go_Button*/}                                <FormGroup className="mb-1 row mt-3 " >
-                                    <Label className="col-sm-1 p-2"
-                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Supplier}</Label>
-                                    <Col sm="6">
-                                        <Select
-                                            value={supplierSelect}
-                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                            options={supplierOptions}
-                                            onChange={supplierOnchange}
-                                            styles={{
-                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                            }}
-                                        />
+                            <div>
+                                <Row >
+                                    <Col sm="4" >
+                                        <FormGroup className=" row mt-2" >
+                                            <Label className="col-sm-5 p-2"
+                                                style={{ width: "115px" }}>Delivery Date</Label>
+                                            <Col sm="7">
+                                                <C_DatePicker
+                                                    name="orderdate"
+                                                    value={orderdate}
+                                                    disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                                    onChange={orderdateOnchange}
+                                                />
+                                            </Col>
+                                        </FormGroup>
                                     </Col>
-                                    <Col sm="1" className="mx-4 ">                      {/*Go_Button  */}
+
+                                    {(subPageMode === ORDER_4) ?
+                                        <Col sm="3">
+                                            <FormGroup className=" row mt-2 " >
+                                                <Label className="col-sm-5 p-2"
+                                                    style={{ width: "65px" }}>{fieldLabel.Route}</Label>
+                                                <Col sm="7">
+
+                                                    <Select
+                                                        classNamePrefix="react-select"
+                                                        value={routeSelect}
+                                                        options={RouteOptions}
+                                                        isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
+                                                        // onChange={(e) => { setRouteSelect(e) }}
+                                                        onChange={(e) => { RouteOnChange(e) }}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
+                                                    />
+                                                </Col>
+                                            </FormGroup>
+                                        </Col >
+                                        : <Col sm='3' />
+                                    }
+
+                                    <Col sm="4" className="">
+                                        <FormGroup className="row mt-2" >
+                                            <Label className="col-sm-5 p-2"
+                                                style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
+                                            <Col sm="7">
+                                                <Select
+                                                    value={supplierSelect}
+                                                    isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
+                                                    options={supplierOptions}
+                                                    onChange={supplierOnchange}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                />
+                                            </Col>
+
+                                        </FormGroup>
+                                    </Col>
+                                    <Col sm="1">                      {/*Go_Button  */}
+
+                                        <div className="row mt-2  pr-1">
+                                            {pageMode === mode.defaultsave ?
+                                                // (!selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
+                                                (!goBtnDissable) ?
+
+                                                    < Go_Button
+                                                        loading={goBtnloading}
+                                                        id={`go-btn${subPageMode}`}
+                                                        onClick={(e) => {
+                                                            if (itemSelectDropOptions.length > 0) {
+                                                                goButtonHandler()
+                                                            }
+                                                            setSelecedItemWiseOrder(false)
+                                                            setorderItemTable(itemSelectDropOptions)
+                                                            setItemSelect('')
+                                                            setGoBtnDissable(true)
+                                                        }} />
+                                                    : (!selecedItemWiseOrder) &&
+                                                    <Change_Button
+                                                        id={`change-btn${subPageMode}`}
+                                                        onClick={(e) => {
+                                                            setGoBtnDissable(false)
+                                                            setSelecedItemWiseOrder(true)
+                                                            setorderItemTable([])
+                                                            setItemSelect('')
+                                                            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                                                        }}
+                                                    />
+                                                : null
+                                            }
+                                        </div>
+                                    </Col>
+
+                                </Row>
+                                <Row>
+                                    <Col sm="4">                               {/*  Description field */}
+                                        <FormGroup className="row mt-1" >
+                                            <Label className="col-sm-5 p-2"
+                                                style={{ width: "115px" }}>Description</Label>
+                                            <div className="col-7">
+                                                <Input type="text"
+                                                    value={description}
+                                                    placeholder='Enter Order Description'
+                                                    onChange={e => setDescription(e.target.value)}
+                                                />
+
+                                            </div>
+
+                                        </FormGroup>
+                                    </Col >
+                                    <Col sm="3" />
+                                    <Col sm="4">
+                                        <FormGroup className="row mt-1" >
+                                            <Label className="col-sm-5 p-2"
+                                                style={{ width: "115px" }}>{fieldLabel.Item}</Label>
+
+                                            <Col sm="7">
+                                                <Select
+                                                    value={itemSelect}
+                                                    isDisabled={(pageMode === "edit" || goBtnloading) ? true : false}
+                                                    options={itemSelectDropOptions}
+                                                    onChange={itemSelectOnchange}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                />
+                                            </Col>
+
+                                        </FormGroup>
+                                    </Col>
+                                    <Col sm="1"  >
+
                                         {pageMode === mode.defaultsave ?
-                                            (orderItemTable.length === 0) ?
-                                                < Go_Button
-                                                    loading={goBtnloading}
-                                                    id={`go-btn${subPageMode}`}
-                                                    onClick={(e) => goButtonHandler()} />
-                                                :
-                                                <Change_Button
-                                                    id={`change-btn${subPageMode}`}
-                                                    onClick={(e) => dispatch(_act.GoButton_For_Order_AddSuccess([]))} />
-                                            : null
+                                            <div className="row mt-2 pr-1"  >
+                                                {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
+                                                    <Button
+
+                                                        className
+                                                        color="btn btn-outline-info border-1 font-size-12 "
+                                                        disabled={goBtnloading}
+                                                        onClick={() => item_AddButtonHandler()} >
+                                                        Add Item
+                                                    </Button>
+                                                    :
+                                                    ((itemSelectDropOptions.length > 0)) &&
+                                                    <Button
+                                                        color="btn btn-secondary border-1 font-size-12"
+                                                        className='text-blac1k'
+                                                        disabled={goBtnloading}
+                                                        onClick={() => {
+                                                            setorderItemTable([])
+                                                            setSelecedItemWiseOrder(true)
+                                                        }} >
+                                                        Item Wise
+                                                    </Button>
+
+                                                }
+
+                                            </div> : null
                                         }
                                     </Col>
-                                </FormGroup>
-                                </Col >
 
+                                </Row>
                             </div>
+
                         </div>
 
                         <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
                             <div className="row">                                         {/*  Description and Delivery Date  field */}
-                                <div className="col col-6">                               {/*  Description field */}
-                                    <FormGroup className=" row  mt-3" >
-                                        <Label className="   p-2"
-                                            style={{ width: "115px" }}>Description</Label>
-                                        <div className="col-6">
-                                            <Input type="text"
-                                                value={description}
-                                                placeholder='Enter Order Description'
-                                                onChange={e => setDescription(e.target.value)}
-                                            />
 
-                                        </div>
 
-                                    </FormGroup>
-                                </div >
-
-                                {!(subPageMode === url.IB_ORDER) ?
-                                    <div className="col col-6" >                            {/*  Delivery Date field */}
+                                {/*  Delivery Date field */}
+                                {/* {!(subPageMode === url.IB_ORDER) ?
+                                    <div className="col col-6" >
                                         <FormGroup className=" row mt-3 " >
                                             <Label className=" p-2"
                                                 style={{ width: "130px" }}>Delivery Date</Label>
@@ -1081,7 +1248,7 @@ const Order = (props) => {
                                             </div>
 
                                         </FormGroup>
-                                    </div > : null}
+                                    </div > : null} */}
 
                             </div>
 
@@ -1182,10 +1349,12 @@ const Order = (props) => {
                                 : null}
 
                         </div>
+
                     </div>
 
+                    <div className="table-responsive table mt-n3" >
 
-
+                    </div>
                     <ToolkitProvider
                         keyField={"Item_id"}
                         data={orderItemTable}
@@ -1208,6 +1377,9 @@ const Order = (props) => {
                                                         Items Not available
                                                     </div>
                                                 }
+                                                onDataSizeChange={(e) => {
+                                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                }}
                                                 {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
@@ -1219,18 +1391,31 @@ const Order = (props) => {
                         )}
                     </ToolkitProvider>
 
-
                     <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
-
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <SaveButton
-                                loading={saveBtnloading}
-                                pageMode={pageMode}
-                                userAcc={userPageAccessState}
-                                onClick={saveHandeller}
-                            />
+                            <Col>
+                                <SaveButton
+                                    loading={saveBtnloading}
+                                    editCreatedBy={editCreatedBy}
+                                    pageMode={pageMode}
+                                    userAcc={userPageAccessState}
+                                    onClick={saveHandeller}
+                                    forceDisabled={gotoInvoiceBtnLoading}
+                                />
+                            </Col>
+                            {
+                                (subPageMode === url.ORDER_4) && (pageMode === mode.defaultsave) ?
+                                    <Col>
+                                        <GotoInvoiceBtn
+                                            forceDisabled={gotoInvoiceBtnLoading}
+                                            loading={gotoInvoiceBtnLoading}
+                                            pageMode={pageMode}
+                                            userAcc={userPageAccessState}
+                                            onClick={saveHandeller}
+                                        />
+                                    </Col> : null}
                         </div>
                             : <div className="row save1"></div>
                     }
@@ -1262,6 +1447,5 @@ const Order = (props) => {
     }
 
 }
-
 
 export default Order

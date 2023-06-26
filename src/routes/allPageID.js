@@ -53,6 +53,8 @@ export const PARTY_lIST = 18
 export const RETAILER_MASTER = 195
 export const RETAILER_LIST = 196
 
+export const PARTY_SELF_EDIT = 204
+
 export const PARTYTYPE = 31
 export const PARTYTYPE_lIST = 32
 
@@ -127,6 +129,8 @@ export const CITY = 200
 export const CITY_LIST = 202
 
 
+export const INVOICE_CONFIGURATION = 206
+
 
 export const BANK_ASSIGN = 182
 
@@ -174,6 +178,8 @@ export const PRODUCTION_REISSUE_STP = 142
 
 export const INVOICE_1 = 121
 export const INVOICE_LIST_1 = 122
+
+export const STOCK_ENTRY = 205
 
 //******************************* Inter Branch ************************************//
 

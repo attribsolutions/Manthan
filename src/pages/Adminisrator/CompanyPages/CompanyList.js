@@ -20,7 +20,7 @@ const CompanyList = () => {
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
-            listLoading: state.Company.listLoading,
+            listBtnLoading: state.Company.listBtnLoading,
             tableList: state.Company.companyList,
             postMsg: state.Company.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -53,7 +53,7 @@ const CompanyList = () => {
     return (
         <React.Fragment>
             {
-                reducers.listLoading ?
+                reducers.listBtnLoading ?
                     <Listloader />
                     :
                     (pageField) ?

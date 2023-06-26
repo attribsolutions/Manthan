@@ -101,7 +101,7 @@ const GRNReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
 

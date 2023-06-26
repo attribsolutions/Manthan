@@ -40,6 +40,10 @@ const AddressTabForm = forwardRef((props, ref) => {
         getCurrentState: () => {
             return addressTable
         },
+        IsAddressEnter: () => {
+            return state
+        }
+
     }));
 
     const {
@@ -61,7 +65,7 @@ const AddressTabForm = forwardRef((props, ref) => {
         try {
             const isvalid = formValid(state, setState)
             if (isvalid) {
-              
+
                 const val = {
                     Address: values.PartyAddress,
                     FSSAINo: values.FSSAINo,
@@ -76,7 +80,7 @@ const AddressTabForm = forwardRef((props, ref) => {
                     });
                 }
                 const tableleth = addressTable.length;
-                val.RowId= tableleth + 1;
+                val.RowId = tableleth + 1;
                 const updatedTableData = [...addressTable];
                 updatedTableData.push(val);
                 setAddressTable(updatedTableData)

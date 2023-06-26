@@ -20,7 +20,7 @@ const CategoryList = (props) => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      listLoading: state.CategoryReducer.listLoading,
+      listBtnLoading: state.CategoryReducer.listBtnLoading,
       tableList: state.CategoryReducer.CategoryListData,
       editData: state.CategoryReducer.editData,
       updateMsg: state.CategoryReducer.updateMessage,
@@ -48,12 +48,12 @@ const CategoryList = (props) => {
     dispatch(getCategorylist());
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField, } = reducers
 
   return (
     <React.Fragment>
       {
-        reducers.listLoading ?
+        reducers.listBtnLoading ?
           <Listloader />
           :
           (pageField) ?

@@ -47,11 +47,14 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
     }
 }
 
-export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPath, history }) => {
+export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPath, history,goButtonHandler }) => {
+   
     try {
+ 
         if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
             dispatch(orderApprovalActionSuccess({ Status: false }))
-
+  
+            goButtonHandler("event",)
             dispatch(GoButton_For_Order_AddSuccess([]))
 
             const a = await customAlert({
@@ -62,6 +65,7 @@ export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPat
                 history.push({
                     pathname: listPath,
                 });
+                window.location.reload()
             }
 
         } else if (orderApprovalMsg.Status === true) {

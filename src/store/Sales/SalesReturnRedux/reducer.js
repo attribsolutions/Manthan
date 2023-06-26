@@ -4,7 +4,8 @@ import {
     SALES_RETURN_LIST_API_SUCCESS,
     DELETE_SALES_RETURN_ID_SUCCESS,
     SALES_RETURN_LIST_API,
-    SAVE_SALES_RETURN_MASTER
+    SAVE_SALES_RETURN_MASTER,
+    SALES_RUTURN_API_ERROR_ACTION
 } from "./actionType"
 
 const INIT_STATE = {
@@ -55,6 +56,13 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 ...state,
                 deleteMsg: action.payload,
             }
+
+        case SALES_RUTURN_API_ERROR_ACTION:
+            return {
+                ...state,
+                saveBtnloading: false,
+                loading: false,
+            };
         default:
             return state
     }

@@ -19,7 +19,7 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   VehicleTypes: [],
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
 }
 const VehicleReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
@@ -28,7 +28,7 @@ const VehicleReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         VehicleList: action.payload,
-        listLoading: true,
+        listBtnLoading: true,
 
       }
 
@@ -36,7 +36,7 @@ const VehicleReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         VehicleList: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
 
       }
 
@@ -91,7 +91,7 @@ const VehicleReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
 

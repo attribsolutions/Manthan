@@ -26,7 +26,7 @@ const MarginList = () => {
 
   const reducers = useSelector(
     (state) => ({
-      listLoading:state.MarginMasterReducer.listLoading,
+      listBtnLoading:state.MarginMasterReducer.listBtnLoading,
       tableList: state.MarginMasterReducer.MarginList,
       MarginGoButton: state.MarginMasterReducer.MarginGoButton,
       deleteMsg: state.MarginMasterReducer.deleteMsg,
@@ -125,7 +125,7 @@ const MarginList = () => {
       <div className="page-content">
         <div className="mt-n1">
           {
-            reducers.listLoading ?
+            reducers.listBtnLoading ?
               <Listloader />
               :
               (pageField) ?

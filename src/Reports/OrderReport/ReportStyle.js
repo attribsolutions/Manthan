@@ -184,6 +184,8 @@ export const reportHeder3 = (doc, data) => {
     doc.text(`Order Date: ${date}`, 415, 40) //Invoice date
     var date = date_dmy_func(data.DeliveryDate)
     doc.text(`DeliveryDate: ${date}`, 415, 55) //Invoice date
+    doc.line(570, 63, 30, 63) //horizontal line 2 billby upper
+
 
 }
 
@@ -336,7 +338,7 @@ export const tableBody = (doc, data) => {
 
     const optionsTable4 = {
         margin: {
-            left: 30, right: 30, bottom: 140
+            left: 30, right: 30, bottom: 50
         },
     };
 
@@ -451,7 +453,6 @@ export const pageFooter = (doc, data) => {
     doc.setFont('helvetica', 'Normal')
     // doc.setFontSize(8)
     for (var i = 1; i <= pageCount; i++) {
-
         doc.setPage(i)
         pageHeder(doc, data)
         pageBorder(doc)

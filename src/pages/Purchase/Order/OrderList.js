@@ -16,7 +16,7 @@ import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
-import { getOrderApprovalDetailAction, orderApprovalAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
+import { getOrderApprovalDetailAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 
@@ -62,10 +62,13 @@ const OrderList = () => {
             approvalDetail: state.OrderReducer.approvalDetail,
             customerType: state.PriceListReducer.priceListByCompany,
             orderConfirmMsg: state.OrderReducer.orderConfirmMsg,
-            orderConfirmLoading: state.OrderReducer.orderConfirmLoading,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-
+            gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
+            listBtnLoading: ( state.OrderReducer.listBtnLoading
+                || state.InvoiceReducer.listBtnLoading
+                || state.PdfReportReducers.listBtnLoading
+                || state.OrderReducer.orderConfirmLoading),
         })
     );
 
@@ -79,6 +82,7 @@ const OrderList = () => {
         approvalDetail,
         customerType,
         orderConfirmMsg,
+        gobutton_Add_invoice,
     } = reducers;
 
     const values = { ...state.values }
@@ -135,6 +139,8 @@ const OrderList = () => {
             newBtnPath = url.ORDER_4;
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
+            showAprovalBtn = true                      //Showing  AprovalBtn  in sales order list
+
         }
         else if (subPageMode === url.IB_INVOICE_STP) {
             page_Id = pageId.IB_INVOICE_STP
@@ -177,22 +183,6 @@ const OrderList = () => {
         }
     }, [pageField])
 
-
-    const supplierOptions = supplier.map((i) => ({
-        value: i.id,
-        label: i.Name,
-    }));
-
-    supplierOptions.unshift({
-        value: "",
-        label: " All"
-    });
-
-    const customerTypeOptions = customerType.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
-
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
@@ -211,6 +201,15 @@ const OrderList = () => {
             })
         }
     }, [makeIBInvoice]);
+
+    useEffect(() => {
+        if (gobutton_Add_invoice.Status === true && gobutton_Add_invoice.StatusCode === 200) {
+            history.push({
+                pathname: gobutton_Add_invoice.path,
+            })
+        }
+    }, [gobutton_Add_invoice]);
+
 
     useEffect(() => {
 
@@ -233,48 +232,64 @@ const OrderList = () => {
     }, [orderConfirmMsg]);
 
     useEffect(() => {
-        orderApprovalMessage({ dispatch, orderApprovalMsg })
+
+        orderApprovalMessage({ dispatch, orderApprovalMsg, goButtonHandler })
+
     }, [orderApprovalMsg]);
 
     useEffect(() => {
         orderApprovalFunc({ dispatch, approvalDetail })
     }, [approvalDetail]);
 
+
+    const supplierOptions = supplier.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
+
+    supplierOptions.unshift({
+        value: "",
+        label: " All"
+    });
+
+    const customerTypeOptions = customerType.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
+
     function oderAprovalBtnFunc(rowData, ismode, btnId) {
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
+        _cfunc.btnIsDissablefunc({ btnId, state: false })
         let config = {}
         config.btnId = btnId;
         config.orderId = rowData.id;
         dispatch(getOrderApprovalDetailAction(config))
     }
 
-    const makeBtnFunc = (list = []) => {
-
+    const makeBtnFunc = (list = [], btnId) => {
         const obj = list[0]
+
+        const customer = {
+            value: obj.CustomerID,
+            label: obj.Customer
+        }
+        const jsonBody = JSON.stringify({
+            FromDate: obj.preOrderDate,
+            Customer: obj.CustomerID,
+            Party: _cfunc.loginPartyID(),
+            OrderIDs: obj.id.toString(),
+        });
+
         if (subPageMode === url.IB_INVOICE_STP) {
-            const jsonBody = JSON.stringify({
-                FromDate: obj.preOrderDate,
-                Customer: obj.CustomerID,
-                Party: _cfunc.loginPartyID(),
-                OrderIDs: `${obj.id}`
-            });
-            const customer = {
-                value: obj.CustomerID,
-                label: obj.Customer
-            }
-            dispatch(_act.makeIB_InvoiceAction({ jsonBody, path: url.IB_INVOICE, pageMode: mode.defaultsave, customer }));
+            dispatch(_act.makeIB_InvoiceAction({
+                jsonBody, path: url.IB_INVOICE,
+                pageMode: mode.defaultsave, customer, btnId
+            }));
         }
         else if (subPageMode === url.ORDER_LIST_4) {
-            const { CustomerID, id, preOrderDate } = obj
-            history.push(url.INVOICE_1, obj);
-
-            const jsonBody = JSON.stringify({
-                OrderIDs: id.toString(),
-                FromDate: preOrderDate,
-                Customer: CustomerID,
-                Party: _cfunc.loginPartyID(),
-            });
-            dispatch(_act.GoButtonForinvoiceAdd({ subPageMode: url.INVOICE_1, jsonBody, btnId: gobtnId }));
+            dispatch(_act.GoButtonForinvoiceAdd({
+                jsonBody, subPageMode: url.INVOICE_1, path: url.INVOICE_1, pageMode: mode.defaultsave, customer,
+                btnId
+            }));
         }
         else {
             var isGRNSelect = ''
@@ -313,7 +328,7 @@ const OrderList = () => {
                         Mode: isMode
                     })
 
-                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, pageMode, path: path, grnRef, challanNo }))
+                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, pageMode, path: path, grnRef, challanNo, btnId }))
 
                 } else {
                     alert("Please Select Order1")
@@ -337,9 +352,10 @@ const OrderList = () => {
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
-    function downBtnFunc(row) {
+    function downBtnFunc(row, printType, btnId) {
+        debugger
         var ReportType = report.order1;
-        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
+        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, btnId))
     }
 
     function goButtonHandler(event, IBType) {
@@ -348,7 +364,7 @@ const OrderList = () => {
         try {
             let filtersBody = {}
             const isCustomerType = values.CustomerType.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
-          
+
             const PO_filters = {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
@@ -386,7 +402,7 @@ const OrderList = () => {
                 filtersBody = JSON.stringify(PO_filters);
             }
             dispatch(_act.getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
-            
+
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: false }) }
     }
 
@@ -566,8 +582,6 @@ const OrderList = () => {
                             MasterModal={Order}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
                             selectAllRow={(subPageMode === url.ORDER_LIST_4) && selectAllRowFunc}
-                            orderConfirmLoading={reducers.orderConfirmLoading}
-
                         />
                         : null
                 }

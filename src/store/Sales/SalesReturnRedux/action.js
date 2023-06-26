@@ -6,7 +6,8 @@ import {
   SALES_RETURN_LIST_API,
   SALES_RETURN_LIST_API_SUCCESS,
   DELETE_SALES_RETURN_ID,
-  DELETE_SALES_RETURN_ID_SUCCESS
+  DELETE_SALES_RETURN_ID_SUCCESS,
+  SALES_RUTURN_API_ERROR_ACTION
 } from "./actionType";
 
 // Invoice number dropdown API
@@ -43,7 +44,7 @@ export const salesReturnListAPISuccess = (resp) => ({
 });
 
 // Delete Sales Return api
-export const delete_SalesReturn_Id = (config = {}) => ({  
+export const delete_SalesReturn_Id = (config = {}) => ({
   type: DELETE_SALES_RETURN_ID,
   config,
 });
@@ -52,3 +53,8 @@ export const delete_SalesReturn_Id_Succcess = (resp) => ({
   type: DELETE_SALES_RETURN_ID_SUCCESS,
   payload: resp,
 });
+
+
+export const SalesReturnApiErrorAction = () => ({
+  type: SALES_RUTURN_API_ERROR_ACTION,
+})

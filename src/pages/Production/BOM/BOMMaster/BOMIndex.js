@@ -74,7 +74,7 @@ const BOMMaster = (props) => {
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        Items: state.ItemMastersReducer.pages,
+        Items: state.ItemMastersReducer.ItemList,
     }));
 
     useEffect(() => {

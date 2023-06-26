@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
+    CityApiErrorAction,
     getCitylistSuccess,
     saveCityMaster_Success,
 } from "./action";
@@ -20,7 +21,7 @@ function* Save_Method_ForCityMaster_GenFun({ config }) {             // Save API
         const response = yield call(Post_City_Master_API, config);
 
         yield put(saveCityMaster_Success(response));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(CityApiErrorAction()) }
 }
 
 
@@ -28,7 +29,8 @@ function* Get_City_List_GenratorFunction() {                        // getList A
     try {
         const response = yield call(get_City_List_Api);
         yield put(getCitylistSuccess(response.Data));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(CityApiErrorAction()) }
+
 }
 
 

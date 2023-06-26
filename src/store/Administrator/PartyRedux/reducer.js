@@ -25,7 +25,7 @@ const INIT_STATE = {
     DistrictOnState: [],
     AddressTypes: [],
     saveBtnloading: false,
-    listLoading: false,
+    listBtnLoading: false,
     PartyAddressDelete: { Status: false },
 };
 
@@ -35,7 +35,7 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
         case GET_PARTY_LIST_API:
             return {
                 ...state,
-                listLoading: true,
+                listBtnLoading: true,
 
             }
 
@@ -43,7 +43,7 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 partyList: action.payload,
-                listLoading: false
+                listBtnLoading: false
             }
 
         // post api
@@ -122,7 +122,7 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 saveBtnloading: false,
-                listLoading: false
+                listBtnLoading: false
             };
 
             case PARTY_ADDRESS_DELETE_ID_SUCCESS:

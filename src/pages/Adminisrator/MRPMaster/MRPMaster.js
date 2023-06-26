@@ -65,9 +65,9 @@ const MRPMaster = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
-        listLoading,
+        listBtnLoading,
     } = useSelector((state) => ({
-        listLoading: state.MRPMasterReducer.listLoading,
+        listBtnLoading: state.MRPMasterReducer.listBtnLoading,
         saveBtnloading: state.MRPMasterReducer.saveBtnloading,
         tableData: state.MRPMasterReducer.MRPGoButton,
         deleteMessage: state.MRPMasterReducer.deleteIdForMRPMaster,
@@ -210,18 +210,19 @@ const MRPMaster = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id
+        if (values.EffectiveDate === '') {
+            customAlert({
+                Type: 4,
+                Message: "Please select EffectiveDate",
+            })
+            return
+        }
         try {
             if (formValid(state, setState)) {
 
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-                if (values.EffectiveDate === '') {
-                    customAlert({
-                        Type: 4,
-                        Message: "Please select EffectiveDate",
-                    })
-                    return
-                }
+                
 
                 const jsonBody = JSON.stringify({
                     Division: values.DivisionName.value ? values.DivisionName.value : 0,
@@ -520,7 +521,7 @@ const MRPMaster = (props) => {
                                                 </FormGroup>
                                             </Col>
                                             <Col sm={1}>
-                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
+                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
                                             </Col>
                                         </Row>
                                     </CardHeader>

@@ -84,8 +84,9 @@ function* Delete_Party_GenFun({ config }) {
 }
 
 function* Edit_Party_GenFun({ config }) {
-
+  
   try {
+   
     const response = yield call(Party_Master_Edit_API, config);
     let newData = response.Data.Data //remove chield data array
     newData["PartySubParty"] = response.Data.PartySubParty //remove chield data array 

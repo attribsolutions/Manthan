@@ -1,4 +1,5 @@
 import {
+  CITY_API_ERROR_ACTION,
   GET_CITY_LIST,
   GET_CITY_LIST_SUCCESS,
   SAVE_CITY_MASTER,
@@ -24,6 +25,11 @@ export const getCitylistSuccess = (resp) => ({// Save  success
   type: GET_CITY_LIST_SUCCESS,
   payload: resp,
 });
+
+export const CityApiErrorAction = () => ({
+  type: CITY_API_ERROR_ACTION,
+})
+
 
 
 

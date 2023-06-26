@@ -35,7 +35,7 @@ import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components
 import * as url from "../../../routes/route_url";
 
 function* supplierAddressGenFunc({ editId }) {
-  const config = { editId: editId  }
+  const config = { editId: editId }
   try {
     const response = yield call(Party_Master_Edit_API, config);
     let first = [], secd = [], newArr = []
@@ -71,7 +71,7 @@ function* OrderType_GenFunc() {
 function* getVendorGenFunc() {
 
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
     yield put(GetVenderSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
@@ -79,19 +79,21 @@ function* getVendorGenFunc() {
 function* getSupplierGenFunc() {
 
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": loginPartyID(), "Company": loginCompanyID() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": loginPartyID(), "Company": loginCompanyID() , Route: ""});
     yield put(getSupplierSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 function* getCustomerGenFunc() {
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID() , Route: ""});
     yield put(GetCustomerSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-function* vendorSupplierCustomer_genFunc({ subPageMode, RoleID }) {
+function* vendorSupplierCustomer_genFunc({ data }) {
+
+  const { subPageMode, RouteID } = data
 
   let response;
 
@@ -121,16 +123,16 @@ function* vendorSupplierCustomer_genFunc({ subPageMode, RoleID }) {
 
   try {
     if (isVender) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 1 });//vendor mode 1
+      response = yield call(VendorSupplierCustomer, { ...json, Type: 1, Route: "" });//vendor mode 1
     }
     else if (isSuppiler) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 2 });//supplier mode 2
+      response = yield call(VendorSupplierCustomer, { ...json, Type: 2, Route: "" });//supplier mode 2
     }
     else if (isCustomer) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 3 });//Customer mode 3
+      response = yield call(VendorSupplierCustomer, { ...json, Type: 3, Route: RouteID });//Customer mode 3
     }
     else if (isDivisions) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 4 });//divisions mode 4
+      response = yield call(VendorSupplierCustomer, { ...json, Type: 4, Route: "" });//divisions mode 4
     }
     else {
       response = { Data: [] }

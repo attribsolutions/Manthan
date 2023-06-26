@@ -72,9 +72,9 @@ const MarginMaster = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
-        listLoading,
+        listBtnLoading,
     } = useSelector((state) => ({
-        listLoading: state.MarginMasterReducer.listLoading,
+        listBtnLoading: state.MarginMasterReducer.listBtnLoading,
         saveBtnloading: state.MarginMasterReducer.saveBtnloading,
         tableData: state.MarginMasterReducer.MarginGoButton,
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
@@ -216,21 +216,20 @@ const MarginMaster = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id
+        if (values.EffectiveDate === '') {
+            customAlert({
+                Type: 4,
+                Message: "Please select EffectiveDate",
+            })
+            return
+        }
         try {
             if (formValid(state, setState)) {
 
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-                if (values.EffectiveDate === '') {
-                    customAlert({
-                        Type: 4,
-                        Message: "Please select EffectiveDate",
-                    })
-                    return
-                }
-
                 const jsonBody = JSON.stringify({
-                    PriceList: values.PriceListName.value ? values.PriceListName.value : " ",
+                    PriceList: values.PriceListName.value,
                     Party: values.PartyName.value ? values.PartyName.value : 0,
                     EffectiveDate: values.EffectiveDate
                 });
@@ -458,7 +457,7 @@ const MarginMaster = (props) => {
                                     <Row className="mt-3">
                                         <Col sm={3}>
                                             <FormGroup className="mb-3 row">
-                                                <Label htmlFor="validationCustom01" className="col-sm-4 p-2 ml-n2 ">{fieldLabel.PriceListName}</Label>
+                                                <Label htmlFor="validationCustom01" className="col-sm-4 p-1 ml-n1 ">{fieldLabel.PriceListName}</Label>
                                                 <Col sm={8}>
                                                     <Select
                                                         name="PriceListName"
@@ -524,7 +523,7 @@ const MarginMaster = (props) => {
                                             </FormGroup>
                                         </Col>
                                         <Col sm={1}>
-                                            <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listLoading} />
+                                            <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
                                         </Col>
                                     </Row>
                                 </CardHeader>

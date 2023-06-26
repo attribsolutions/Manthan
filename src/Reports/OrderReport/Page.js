@@ -5,11 +5,11 @@ import { Data } from "./demo";
 
 
 var pageHeder = function (doc, data) {
-    style.pageBorder(doc,data);
+    style.pageBorder(doc, data);
     style.pageHeder(doc, data);
     style.reportHeder1(doc, data);
     style.reportHeder2(doc, data);
-    style.reportHeder3(doc,data); 
+    style.reportHeder3(doc, data);
 };
 
 function reportBody(doc, data) {
@@ -18,7 +18,7 @@ function reportBody(doc, data) {
 
 function pageFooter(doc, data) {
     style.pageFooter(doc, data);
-    style.reportFooter(doc,data);
+    style.reportFooter(doc, data);
 }
 
 const ordeRreport = (data) => {

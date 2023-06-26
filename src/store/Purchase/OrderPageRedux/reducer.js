@@ -16,6 +16,8 @@ import {
   ORDER_API_ERROR_ACTION,
   POST_ORDER_CONFIRM_API_SUCCESS,
   POST_ORDER_CONFIRM_API,
+  EDIT_ORDER_FOR_ORDER_PAGE,
+  DELETE_ORDER_FOR_ORDER_PAGE,
 } from "./actionType"
 
 
@@ -32,6 +34,8 @@ const INIT_STATE = {
   approvalDetail: { Status: false },
   orderConfirmMsg: { Status: false },
   orderConfirmLoading: false,
+  gotoInvoiceBtnLoading: false,
+  listBtnLoading: false,
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
@@ -52,21 +56,32 @@ const OrderReducer = (state = INIT_STATE, action) => {
       }
 
     case SAVE_ORDER_FROM_ORDER_PAGE:
+
+      let { gotoInvoiceMode = false } = action.config
       return {
         ...state,
-        saveBtnloading: true,
+        saveBtnloading: !gotoInvoiceMode,
+        gotoInvoiceBtnLoading: gotoInvoiceMode,
       }
 
     case SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS:
+
       return {
         ...state,
         saveBtnloading: false,
+        gotoInvoiceBtnLoading: false,
         postMsg: action.payload,
       }
 
+    case EDIT_ORDER_FOR_ORDER_PAGE:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
     case EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       }
 
@@ -83,10 +98,25 @@ const OrderReducer = (state = INIT_STATE, action) => {
         updateMsg: action.payload,
       }
 
+    case DELETE_ORDER_FOR_ORDER_PAGE:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+        deleteMsg: action.payload,
+      }
     case DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMsg: action.payload,
+      }
+
+      
+    case GET_ORDER_LIST_PAGE:
+      return {
+        ...state,
+        loading: true,
+        orderList: [],
       }
 
     // Order List Page 
@@ -97,16 +127,10 @@ const OrderReducer = (state = INIT_STATE, action) => {
         loading: false
       }
 
-    case GET_ORDER_LIST_PAGE:
-      return {
-        ...state,
-        loading: true,
-        orderList: [],
-      }
-
     case GET_ORDER_APPROVAL_DETAIL:
       return {
         ...state,
+        listBtnLoading: action.config.btnId,
         saveBtnloading: true,
       }
 
@@ -114,6 +138,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         approvalDetail: action.payload,
+        listBtnLoading: false,
         saveBtnloading: false,
       }
 
@@ -121,10 +146,12 @@ const OrderReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: true,
+        listBtnLoading: action.config.btnId,
       }
     case ORDER_APPROVAL_ACTION_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         saveBtnloading: false,
         orderApprovalMsg: action.payload,
       }
@@ -133,12 +160,14 @@ const OrderReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         orderConfirmLoading: true,
+        listBtnLoading: action.config.btnId,
       }
 
     case POST_ORDER_CONFIRM_API_SUCCESS:
       return {
         ...state,
         orderConfirmLoading: false,
+        listBtnLoading: false,
         orderConfirmMsg: action.payload,
       }
 
@@ -147,7 +176,9 @@ const OrderReducer = (state = INIT_STATE, action) => {
         ...state,
         loading: false,
         saveBtnloading: false,
+        listBtnLoading: false,
         orderConfirmLoading: false,
+        gotoInvoiceBtnLoading: false
       }
 
 

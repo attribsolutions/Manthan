@@ -11,6 +11,7 @@ import {
   getPageTypeSuccess,
   saveHPagesSuccess,
   updateHPagesSuccess,
+  PageMasterApiErrorAction,
 } from "./actions";
 import {
   ControlTypes_DropDown_Api,
@@ -44,44 +45,45 @@ function* fetchHPagesList_GneratorFunction() {
   try {
     const response = yield call(Fetch_HPagesListApi);
     yield put(GetHpageListDataSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PageMasterApiErrorAction()) }
 }
+
 
 function* GetH_Modules() {
   try {
     const response = yield call(get_Module_HPages);
     yield put(getH_ModulesSuccess(response.Data))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PageMasterApiErrorAction()) }
 }
 
 function* saveHPageSaga_GneratorFunction({ Data }) {
   try {
     const response = yield call(saveHPagesAPI, Data);
     yield put(saveHPagesSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PageMasterApiErrorAction()) }
 }
 
 function* editHpages_ID({ id, pageMode }) {
-  
+
   try {
     let response = yield call(edit_HPageID, id);
     response.pageMode = id.btnmode
     yield put(editHPagesIDSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PageMasterApiErrorAction()) }
 }
 
 function* update_HPagesUsingID_GenratorFunction({ data, id }) {
   try {
     const response = yield call(updateHPages, data, id);
     yield put(updateHPagesSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PageMasterApiErrorAction()) }
 }
 
 function* deleteHpagesUsingID_GenratorFunction({ id }) {
   try {
     const response = yield call(deletHPagesUsingID_API, id);
     yield put(deleteModuleIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PageMasterApiErrorAction()) }
 }
 
 //  PageType dropdown list
@@ -89,7 +91,7 @@ function* PageList_DropDown_GenratorFunction() {
   try {
     const response = yield call(showPagesListOnPageType_DropDown_List);
     yield put(getPageListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PageMasterApiErrorAction()) }
 }
 
 //  PageType dropdown list
@@ -97,7 +99,7 @@ function* PageType_DropDown_GenratorFunction() {
   try {
     const response = yield call(get_PageType_HPages);
     yield put(getPageTypeSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PageMasterApiErrorAction()) }
 }
 
 //  PageAccess dropdown list
@@ -105,7 +107,7 @@ function* PageAccess_DropDown_GenratorFunction() {
   try {
     const response = yield call(showPagesListOnPageAccess_DropDown_List);
     yield put(getPageAccess_DropDown_API_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PageMasterApiErrorAction()) }
 }
 
 //  Control Types dropdown list
@@ -113,7 +115,7 @@ function* ControlTypes_DropDown_GenratorFunction() {
   try {
     const response = yield call(ControlTypes_DropDown_Api);
     yield put(getControlTypesSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PageMasterApiErrorAction()) }
 }
 
 //  Field Validations dropdown list

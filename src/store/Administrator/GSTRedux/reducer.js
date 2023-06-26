@@ -17,7 +17,7 @@ const INIT_STATE = {
   GSTList: [],
   deleteMsgForMaster: { Status: false },
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
 
 }
 
@@ -44,7 +44,7 @@ const GSTReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         GSTGoButton: [],
-        listLoading: true
+        listBtnLoading: true
 
       };
 
@@ -53,7 +53,7 @@ const GSTReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         GSTGoButton: action.payload,
-        listLoading: false
+        listBtnLoading: false
 
       };
 
@@ -61,7 +61,7 @@ const GSTReducer = (state = INIT_STATE, action) => {
     case GET_GST_LIST:
       return {
         ...state,
-        listLoading: true
+        listBtnLoading: true
       };
 
 
@@ -69,7 +69,7 @@ const GSTReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         GSTList: action.payload,
-        listLoading: false
+        listBtnLoading: false
 
       };
 
@@ -90,7 +90,7 @@ const GSTReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
     default:

@@ -124,7 +124,7 @@ const EmployeeTypesMaster = (props) => {
 
 
     useEffect(() => {
-
+        if (!(props.pageMode === mode.dropdownAdd)) {
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -158,6 +158,7 @@ const EmployeeTypesMaster = (props) => {
             }
             dispatch(editEmployeeTypeSuccess({ Status: false }))
         }
+    }
     }, [])
 
     useEffect(async () => {

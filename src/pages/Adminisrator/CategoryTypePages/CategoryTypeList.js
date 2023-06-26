@@ -20,7 +20,7 @@ const CategoryTypeList = () => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      listLoading: state.categoryTypeReducer.listLoading,
+      listBtnLoading: state.categoryTypeReducer.listBtnLoading,
       tableList: state.categoryTypeReducer.categoryTypeListData,
       postMsg: state.categoryTypeReducer.PostData,
       editData: state.categoryTypeReducer.editData,
@@ -53,7 +53,7 @@ const CategoryTypeList = () => {
   return (
     <React.Fragment>
       {
-        reducers.listLoading ?
+        reducers.listBtnLoading ?
           <Listloader />
           :
           (pageField) ?
