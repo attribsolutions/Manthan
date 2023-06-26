@@ -120,6 +120,24 @@ export function concatDateAndTime(date, time) {//+++++++++++time and date concat
   return `${d} ${t}`;
 }
 
+export function CurrentTime() {
+
+  function addLeadingZero(number) {
+    return number < 10 ? '0' + number : number;
+  }
+  var currentTimeInMillis = Date.now();
+  var currentTime = new Date(currentTimeInMillis);
+  var hours = currentTime.getHours();
+  var amPm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12; // Convert 0 to 12
+  var minutes = currentTime.getMinutes();
+  var seconds = currentTime.getSeconds();
+  var formattedTime = addLeadingZero(hours) + ':' + addLeadingZero(minutes) + ':' + addLeadingZero(seconds) + ' ' + amPm;
+
+  return formattedTime
+
+}
+
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
@@ -248,6 +266,12 @@ export const loginJsonBody = () => ({
 });
 
 
+export const compareGSTINState = (gstin1, gstin2) => {
+  const stateCode1 = gstin1.substring(0, 2);
+  const stateCode2 = gstin2.substring(0, 2);
+  return stateCode1 === stateCode2;
+}
+
 export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true }) {
   const isnewBtnView = userAcc.PageType === 2 && userAcc.RoleAccess_IsSave;
   const isCountLabel = userAcc.CountLabel;
@@ -269,6 +293,7 @@ export function isEditMode_CssFun(pageMode) {
   }
   return ""
 }
+
 export function metaTagLabel(userPageAccess = '') {
   return <title>{userPageAccess.PageHeading}| FoodERP-2.0</title>
 
@@ -293,18 +318,18 @@ export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Func
 
 export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Button Dissable and Sppiner Function +++++++++++++++++++++++++++++++
 
-  if (btnId) {
-    try {
-      let btn = document.getElementById(btnId);
-      btn.disabled = state
+  // if (btnId) {
+  //   try {
+  //     let btn = document.getElementById(btnId);
+  //     btn.disabled = state
 
-      document.getElementById("preloader").style.display = state
-        ? "block"
-        : "none";
-    } catch (error) {
-      CommonConsole(`btnIsDissablefunc Error ==> ${btnId}`);
-    }
-  }
+  //     document.getElementById("preloader").style.display = state
+  //       ? "block"
+  //       : "none";
+  //   } catch (error) {
+  //     CommonConsole(`btnIsDissablefunc Error ==> ${btnId}`);
+  //   }
+  // }
 }
 
 export async function CheckAPIResponse({
@@ -319,7 +344,7 @@ export async function CheckAPIResponse({
   if (btnId) {
 
     // await new Promise(r => setTimeout(r, 0));
-    btnIsDissablefunc({ btnId, state: false });
+    // btnIsDissablefunc({ btnId, state: false });
   }
 
   const { data = "", code } = response;
@@ -330,6 +355,8 @@ export async function CheckAPIResponse({
   const con5 = data.StatusCode === 406; //reject
   const con6 = method === "post" || method === "put" || method === "postForget" //for console body
   const con7 = data.StatusCode === 100;
+  const con8 = data.StatusCode === 500;  //Internal server Error
+
 
   if (!(error === undefined)) {
     const { data = "", response } = error;
@@ -390,12 +417,13 @@ export async function CheckAPIResponse({
       Message: `${url}:This API ${method} Method Exception Error`,
     });
     return Promise.reject(response.data);
-  } else if (con5) {
+  } else if (con5||con8) {
 
     console.log(`${url}***${method} apiCall response:=>`, response.data);
     await customAlert({ Type: 3, Message: JSON.stringify(response.data.Message) });
     return Promise.reject(response.data);
   }
+  
 
   return Promise.reject(response);
 }
@@ -509,6 +537,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
 
           if (tdPreInput) {
             tdPreInput.focus()
+            tdPreInput.select();
             return
           }
           var tr = td.closest('tr');
@@ -546,7 +575,9 @@ export const tableInputArrowUpDounFunc = (tableId) => {
           });
 
           if (tdNextInput) {
-            tdNextInput.focus()
+            tdNextInput.focus();
+            tdNextInput.select()
+
             return
           }
           var tr = td.closest('tr');

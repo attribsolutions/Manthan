@@ -18,10 +18,11 @@ import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
+import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
 import { SaveButton } from "./CommonButton";
+import CustomTable from "../../CustomTable2/Custom";
 
 let sortType = "asc";
 let searchCount = 0;
@@ -75,33 +76,27 @@ const CommonPurchaseList = (props) => {
     postMsg = { Status: false },
     pageField = { id: "" },
     tableList = [],
+    listBtnLoading = false,
   } = props.reducers;
 
   const { getList, editId, deleteId, postSucc, updateSucc, deleteSucc } =
     props.action;
 
   const {
-
-    editBodyfunc,
-    deleteBodyfunc,
-    copyBodyfunc,
     MasterModal,
     masterPath,
     ButtonMsgLable,
-    deleteName,
     goButnFunc = () => { },
     makeBtnFunc = () => { },
     makeBtnShow,
-    updateBtnFunc,
     makeBtnName,
-    downBtnFunc = () => { },
     pageMode,
     newBtnPath,
     forceNewBtnView,
     HeaderContent = () => {
       return null;
     },
-    oderAprovalBtnFunc,
+
     selectAllRow = ''
   } = props;
 
@@ -222,7 +217,7 @@ const CommonPurchaseList = (props) => {
   }
 
   const makeBtnColumn = () => {// ======================== for makeBtnColumn Page Action Button ================================
-  
+
     if (
       makeBtnShow &&
       pageMode === mode.modeSTPsave
@@ -258,35 +253,33 @@ const CommonPurchaseList = (props) => {
       }
     }
   }
- 
   const lastColumn = () => {  // ======================== for List Page Action Button ================================
-
     if (!(pageMode === mode.modeSTPsave)) {
-
       return listPageActionsButtonFunc({
-        dispatchHook: dispatch,
-        subPageMode: history.location.pathname,
-        ButtonMsgLable: ButtonMsgLable,
-        deleteName: deleteName,
-        userAccState: userAccState,
+        ...props, dispatch, history, userAccState,
         editActionFun: editId,
         deleteActionFun: deleteId,
-        downBtnFunc: downBtnFunc,
-        updateBtnFunc: updateBtnFunc,
-        makeBtnShow: makeBtnShow,
-        makeBtnName: makeBtnName,
-        editBodyfunc: editBodyfunc,
-        deleteBodyfunc: deleteBodyfunc,
-        copyBodyfunc: copyBodyfunc,
-        makeBtnFunc: makeBtnFunc,
-        pageMode: pageMode,
-        oderAprovalBtnFunc: oderAprovalBtnFunc
       })
     }
   }
 
-  const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({
+  const secondLastColumn = () => {  // ======================== for List Page Action Button ================================
+    if ((history.location.pathname === url.INVOICE_LIST_1)) {// INVOICE_LIST_1 E_Invoice buttons
+      return E_Invoice_ActionsButtonFunc({ ...props, dispatch, userAccState, })
+    }
+  }
+
+  const thirdLastColumn = () => {  // ======================== for List Page Action Button ================================
+    if ((history.location.pathname === url.INVOICE_LIST_1)) {// INVOICE_LIST_1 E_WayBill buttons
+      return E_WayBill_ActionsButtonFunc({ ...props, dispatch, userAccState, })
+    }
+  }
+
+  const [tableColumns, defaultSorted, pageOptions,] = DynamicColumnHook({
     pageField,
+    reducers: props.reducers,
+    secondLastColumn,
+    thirdLastColumn,
     lastColumn,
     makeBtnColumn,
     userAccState: userAccState
@@ -295,10 +288,9 @@ const CommonPurchaseList = (props) => {
   function rowSelected() {
     return tableList.map((index) => { return (index.selectCheck) })
   }
+
   const nonSelectedRow = () => {
-
-    return tableList.filter(row => row.forceSelectDissabled).map(row => row.id)
-
+    return tableList.filter(row => row.forceSelectDissabled || row.forceHideOrderAprovalBtn === false).map(row => row.id)       //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
   }
 
   if (!(userAccState === "")) {
@@ -319,6 +311,7 @@ const CommonPurchaseList = (props) => {
                 {(toolkitProps, a) => (
                   <React.Fragment>
                     <Row>
+
                       <Col xl="12">
                         <div className="table-responsive mt-1" >
                           <BootstrapTable
@@ -365,7 +358,7 @@ const CommonPurchaseList = (props) => {
 
             <div className="row save1 " style={{ paddingBottom: 'center' }}>
               <button
-                disabled={props.orderConfirmLoading}
+                disabled={listBtnLoading }
                 style={{ marginTop: "-10px" }}
                 type="button"
                 className="btn btn-primary w-md  "

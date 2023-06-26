@@ -1,36 +1,27 @@
-import { date_dmy_func } from "../../components/Common/CommonFunction";
 import { invoice } from "../ReportIndex";
 
-export const columns = [
+export const columns =[
+    "SR",
     "HSN Item Name",
+    "Quantity (UOM)" ,
     "MRP",
-    "Quantity",
     "Rate",
-    "Basic Amt",
-    "CGST %",
-    "CGST Amt",
-    "SGST %",
-    "SGST Amt",
-    "Total Amt"
-];
-
-export const columns1 = [
-    "HSN Item Name",
-    "Quantity",
-    "Rate",
-    "Basic Amount",
-    "CGST %",
+    "Discount",
+    "Discount Amount ",
+    "Taxable Amount",
+    "          CGST           %        Amount",
     "CGST Amount",
-    "SGST %",
+    "          SGST           %        Amount",
     "SGST Amount",
-    "Debit note",
-    "Credit note",
-    "Total Amt"
+   "Amount" ,
 ];
+export const Footercolumn = [
+    "",
+]
 
 
 export const BilledBy = [
-    "Billed by",
+    "Billed by",  
 ]
 export const BilledTo = [
     "Billed by",
@@ -49,46 +40,107 @@ export const Rows = (data) => {
     let totalSGst = 0
     let totalAmount = 0
     let totalQuantity = 0
+    let SrNO = 1
+    let TotalGst = 0
+    let GSTPercentage=0
 
-    InvoiceItems.forEach((element, key) => {
+    const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
+        
+        const {HSNCode, ItemName, MRP, Rate, Discount, CGST,SGST,Amount,DiscountAmount,BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage,SGSTPercentage,GSTPercentage,BatchCode,BatchDate,DiscountType} = currentItem;
+        const key = ItemName + '_' + MRP;
+        if (accumulator[key]) {
+            accumulator[key].DiscountAmount += Number(DiscountAmount);
+            accumulator[key].Quantity += parseInt(Quantity);
+            accumulator[key].BasicAmount += Number(BasicAmount);
+            accumulator[key].CGST += Number(CGST);
+            accumulator[key].SGST += Number(SGST);
+            accumulator[key].Amount += parseInt(Amount);
+            accumulator[key].BatchCode += BatchCode ;
+            accumulator[key].BatchDate += BatchDate ;
+            accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
+
+        } else {
+            accumulator[key] = { ItemName,HSNCode,
+                 MRPValue, DiscountType, Rate, Discount, CGST:Number(CGST),SGST: Number(SGST),Amount:Number(Amount),DiscountAmount:Number(DiscountAmount),BasicAmount:Number(BasicAmount), Quantity:parseInt(Quantity), UnitName ,CGSTPercentage,SGSTPercentage,GSTPercentage,BatchDate,BatchCode:BatchCode,BatchDate:BatchDate,quantityString:`  ${BatchCode}  ${BatchDate}`};
+        }
+        return accumulator;
+    }, {});
+
+    Object.values(groupedItems).forEach((element, key) => {
+        let  HSNcodes =""
+if (data.SettingData.HSNCodeDigit.Value=== "1") {
+     HSNcodes = element.HSNCode.slice(0, 4);
+}
+if (data.SettingData.HSNCodeDigit.Value=== "2") {
+     HSNcodes = element.HSNCode.slice(0, 6);
+}
+if (data.SettingData.HSNCodeDigit.Value=== "3") {
+     HSNcodes = element.HSNCode.slice(0, 8);
+}
+   
         const tableitemRow = [
-            element.ItemName,
-            element.MRP,
-            `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
+            SrNO++,
+            `${HSNcodes} ${element.ItemName}` ,
+            `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
+            element.MRPValue,
             element.Rate,
+            `${element.Discount} ${element.DiscountType=== "1"? "Rs":"%" }`,
+            `${Number(element.DiscountAmount).toFixed(2)}`,
             element.BasicAmount,
-            ` ${element.CGSTPercentage}%`,
+            `${Number(element.CGSTPercentage).toFixed(1)}%`,
             element.CGST,
-            ` ${element.SGSTPercentage}%`,
+            `${Number(element.SGSTPercentage).toFixed(1)}%`,
             element.SGST,
             element.Amount,
-
         ];
 
         function totalLots() {
             totalQuantity = Number(totalQuantity) + Number(element.Quantity)
             totalCGst = Number(totalCGst) + Number(element.CGST)
             totalSGst = Number(totalSGst) + Number(element.SGST)
-            totalAmount = Number(totalAmount) + Number(element.Amount)
+            totalAmount = Number(totalAmount) + Number( element.Amount)
             totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
+            TotalGst =totalCGst +totalSGst;
+            GSTPercentage = Number(element.CGSTPercentage) + Number(element.SGSTPercentage)
             let cgst = data["tableTot"].TotalCGst
-            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst) })
+            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
+          
         };
 
+         
         function totalrow() {
+        
             return [
-                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)} ${element.UnitName}`,
-                `BasicAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                "",
+                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(parseFloat(TotalGst).toFixed(2))} `,
+                " ",
                 ``,
                 "",
-                `isaddition`,
-                `CGSTAmt:${parseFloat(totalCGst).toFixed(2)}`,
-                ``,
-                `SGSTAmt:${parseFloat(totalSGst).toFixed(2)}`,
                 "",
-                `Amt:${parseFloat(totalAmount).toFixed(2)}`,
+                ``,
+                `${parseFloat(totalBasicAmount).toFixed(2)}`,
+                `${parseFloat(totalCGst).toFixed(2)}`,
+                "isaddition",
+                `${parseFloat(totalSGst).toFixed(2)}`,
+                "",
+                `${parseFloat(totalAmount).toFixed(2)}`,
             ];
         };
+        const BatchRow =[
+            `Batch:  ${element.quantityString} `,
+            `Batch`,
+            " ",
+            ``,
+            "",
+            "",
+            "",
+            "",
+            ``,
+            "",
+            ``,
+            "",
+            ``,
+        ]
 
         if (Gst === 0) { Gst = element.GSTPercentage };
         let aa = { TotalCGst: 0, totalSGst: 0 }
@@ -96,6 +148,10 @@ export const Rows = (data) => {
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow);
+            if (data.SettingData.ShowBatchNoOnInvoicePrint.Value=== "1") {
+                returnArr.push((BatchRow))
+            }
+          
         }
         else {
             returnArr.push(totalrow());
@@ -109,53 +165,83 @@ export const Rows = (data) => {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
-        if (key === InvoiceItems.length - 1) {
+        
+        if (key === Object.keys(groupedItems).length - 1) {
+          
             returnArr.push(totalrow());
         }
     })
     return returnArr;
 }
 
+
 export const BilledByRow = (data) => {
-    let DefaultAddress = data.PartyAddress.filter( IsDefaultAddress => IsDefaultAddress['IsDefault'] === true )
-    var date = date_dmy_func(DefaultAddress[0].FSSAIExipry)
+    
+    let PartyAddress =""
+    if (Array.isArray(data.PartyAddress)) {
+    const filteredArray = data.PartyAddress.filter(obj => obj.IsDefault === true); 
+    PartyAddress = filteredArray[0]=== undefined?"":filteredArray[0].Address
+    }else{
+        PartyAddress=data.PartyAddress
+    }
+
     var BilledByArray = [
-        [`${data.PartyName}`],
+        [`${data.PartyName}`], 
+        [`${PartyAddress}`]  ,
         [`${data.PartyState}`],
-        [`${DefaultAddress[0].Address}`],
         [`GSTIN:${data.PartyGSTIN}`],
-        [`FSSAI NO${DefaultAddress[0].FSSAINo} (Exp:${date})`],
+        [`FSSAINo:${data.PartyFSSAINo}`],
     ]
     return BilledByArray;
-}
+} 
 export const BilledToRow = (data) => {
-    let DefaultAddress = data.CustomerAddress.filter(IsDefaultAddress => IsDefaultAddress['IsDefault'] === true )
-    var date = date_dmy_func(DefaultAddress[0].FSSAIExipry)
+    debugger
+    let CustomerAddress =""
+    if (Array.isArray(data.CustomerAddress)) {
+    const filteredArray = data.CustomerAddress.filter(obj => obj.IsDefault === true); 
+    CustomerAddress = filteredArray[0]=== undefined?"":filteredArray[0].Address
+    }else{
+        CustomerAddress=data.CustomerAddress
+    }
     var BilledToArray = [
         [`${data.CustomerName}`],
+        [`${CustomerAddress}`]  ,
         [`${data.CustomerState}`],
-        [`${DefaultAddress[0].Address}`],
         [`GSTIN:${data.CustomerGSTIN}`,],
-        [`FSSAI NO:${DefaultAddress[0].FSSAINo} (Exp:${date})`],
+        [`FSSAINo:${data.CustomerFSSAINo}`],
     ]
-
+  
     return BilledToArray;
 }
 export const DetailsOfTransportRow = (data) => {
 
-    var DetailsOfTransportArray = [
-        ['Driver Name : Sameer'],
-        [`vehical No :MH34566`],
-        [`State:Maharashtra `],
-        [`E-way Bill :24654364633`],
-        [`INR NO :${data.FullInvoiceNumber}`]
-    ]
 
+let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
+debugger
+    const PONumber =result.toString()
+    var DetailsOfTransportArray = [
+        [data.ReportType===invoice?` PO Number:${PONumber}`:data.DriverName ===null?"Driver Name:": `Driver Name :${data.DriverName}`],
+        [`vehical No :${data.VehicleNo === null ?"":data.VehicleNo}`],
+        [`E-way Bill :`],
+        [`IRN NO :`]
+    ]
+  
     return DetailsOfTransportArray;
 }
 
 
 
+// export const ReportHederRows = (data) => {
+   
+//     var reportArray = [
+//         [, ,data.ReportType===invoice?`Purches Order No: 1`:'Driver Name : Sameer'],
+//         [`${data.PartyName}`, `${data.CustomerName}`,data.ReportType===invoice?`Driver Name : Sameer`:`vehical No :MH34566` ,],
+//         [`maharashtra`, `karnatak`,data.ReportType===invoice?`vehical No :MH34566`:`E-way Bill :24654364633` ],
+//         [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, data.ReportType===invoice?`E-way Bill :24654364633`:`INR NO :${data.FullInvoiceNumber}`, ],
+//         [,,  data.ReportType===invoice?`INR NO :${data.FullInvoiceNumber}`:null]
+//     ]
+//     return reportArray;
+// }
 
 
 

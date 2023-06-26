@@ -17,7 +17,7 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
 };
 
 const RoleMaster_Reducer = (state = INIT_STATE, action) => {
@@ -28,7 +28,7 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         roleList: action.payload,
-        listLoading: true,
+        listBtnLoading: true,
       }
 
 
@@ -36,7 +36,7 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         roleList: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
       }
 
     case POST_ROLE_MASTER:
@@ -86,7 +86,7 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
 

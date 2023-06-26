@@ -8,7 +8,7 @@ import {
     Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -31,7 +31,6 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import {
-    editInvoiceListSuccess,
     GoButtonForinvoiceAdd,
     GoButtonForinvoiceAddSuccess,
     invoiceSaveAction,
@@ -40,10 +39,13 @@ import {
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit_SelectOnchange, showAllStockOnclick, showStockOnclick, stockDistributeFunc, stockQtyOnChange } from "./invoiceCaculations";
+import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit_SelectOnchange, stockDistributeFunc, stockQtyOnChange } from "./invoiceCaculations";
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
+
 
 const Invoice = (props) => {
 
@@ -61,44 +63,57 @@ const Invoice = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const [orderItemDetails, setOrderItemDetails] = useState([])
+    const [orderIDs, setOrderIDs] = useState([])
 
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    // for invoicer page heder dicount functionality useSate ************************************
+    const [discountValueAll, setDiscountValueAll] = useState("");
+    const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
+    const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
+    const [changeAllDiscount, setChangeAllDiscount] = useState(false)
+    const [forceReload, setForceReload] = useState(false)
+    // ****************************************************************************
+
+    const [modalCss] = useState(false);
+    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
-
     const {
         postMsg,
         updateMsg,
         pageField,
         userAccess,
-        GoButton = '',
+        gobutton_Add = { Status: false },
         vendorSupplierCustomer,
         makeIBInvoice,
         goBtnloading,
-        saveBtnloading
+        saveBtnloading,
+        PartySettingdata
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.CommonAPI_Reducer.customer,
-        GoButton: state.InvoiceReducer.gobutton_Add,
+        gobutton_Add: state.InvoiceReducer.gobutton_Add,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         goBtnloading: state.InvoiceReducer.goBtnloading,
+        PartySettingdata: state.PartySettingReducer.PartySettingdata,
+
     }));
 
-    const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
+
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+    const { Data = {} } = PartySettingdata;
+
 
     useEffect(() => {
 
@@ -106,6 +121,8 @@ const Invoice = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
+        dispatch(getpartysetting_API(_cfunc.loginPartyID()))
+
 
     }, []);
 
@@ -127,54 +144,6 @@ const Invoice = (props) => {
         };
     }, [userAccess])
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
-
-        if ((hasShowloction || hasShowModal || (location.state))) {
-
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
-            else if (location) {
-
-                setPageMode(mode.defaultsave)
-
-                let Customer = location.state.CustomerID
-                let CustomerName = location.state.Customer
-
-                hasEditVal = { Customer, CustomerName }
-
-            }
-
-            if (hasEditVal) {
-
-                const { Customer, CustomerName, } = hasEditVal
-                const { values, hasValid, } = { ...state }
-                hasValid.Customer.valid = true;
-
-                values.Customer = { label: CustomerName, value: Customer };
-
-                //++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
-                const jsonBody = JSON.stringify({
-                    FromDate: hasEditVal.InvoiceDate,
-                    Customer: hasEditVal.Customer,
-                    Party: _cfunc.loginPartyID(),
-                    OrderIDs: ""
-                });
-                dispatch(GoButtonForinvoiceAdd({ jsonBody, }));
-                dispatch(editInvoiceListSuccess({ Status: false }))
-
-            }
-        }
-    }, []);
 
     useEffect(async () => {
 
@@ -239,11 +208,6 @@ const Invoice = (props) => {
 
 
     useEffect(() => {
-        showAllStockOnclick(OrderItemDetails, showAllStockState)
-    }, [showAllStockState]);
-
-
-    useEffect(() => {
 
         if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
             setState((i) => {
@@ -252,22 +216,44 @@ const Invoice = (props) => {
                 obj.hasValid.Customer.valid = true;
                 return obj
             })
-            goButtonHandler(makeIBInvoice);
+
             dispatch(makeIB_InvoiceActionSuccess({ Status: false }))
         }
     }, [makeIBInvoice]);
 
+    useEffect(() => {
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [OrderItemDetails]);
+        if (gobutton_Add.Status === true && gobutton_Add.StatusCode === 200) {
+            setState((i) => {
+                const obj = { ...i }
+                obj.values.Customer = gobutton_Add.customer;
+                obj.hasValid.Customer.valid = true;
+                return obj
+            })
 
+            setOrderItemDetails(gobutton_Add.Data.OrderItemDetails);
+
+            // **********************************************************
+            totalAmountCalcuationFunc(gobutton_Add.Data.OrderItemDetails)// show breadcrump tolat amount function//passs table array 
+            //*********************************************************** */
+
+            setOrderIDs(gobutton_Add.Data.OrderIDs)
+            dispatch(GoButtonForinvoiceAddSuccess({ Status: false }))
+        }
+    }, [gobutton_Add]);
+
+
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [orderItemDetails]);
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
         value: index.id,
         label: index.Name,
-
     }));
 
-
+    const totalAmountCalcuationFunc = (tableList = []) => {
+        const sum = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["tAmount"]), 0);
+        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${sum.toFixed(2)}`))
+    }
     const pagesListColumns = [
         {//***************ItemName********************************************************************* */
             text: "Item Name",
@@ -286,17 +272,17 @@ const Invoice = (props) => {
                     </>
                 )
             },
-
-
         },
         {//***************Quantity********************************************************************* */
             text: "Quantity/Unit",
             dataField: "",
+            formatExtraData: { tableList: orderItemDetails },
             // classes: () => ('invoice-quantity-row1'),
-            formatter: (cellContent, index1) => (
+            formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <>
                     <div className="div-1 mb-2" style={{ minWidth: "200px" }}>
-                        <Input type="text"
+                        <Input
+                            type="text"
                             disabled={pageMode === 'edit' ? true : false}
                             id={`OrderQty-${index1.id}`}
                             className="input"
@@ -304,218 +290,215 @@ const Invoice = (props) => {
                             key={index1.id}
                             autoComplete="off"
                             defaultValue={index1.Quantity}
-                            onChange={(event) => orderQtyOnChange(event, index1)}
+                            onChange={(event) => {
+                                orderQtyOnChange(event, index1);
+                                totalAmountCalcuationFunc(tableList);
+                            }}
                         />
                     </div>
                     <div className="div-1 ">
-                        {/* <label className="label">Unit</label> */}
                         <div id="select">
                             <Select
                                 classNamePrefix="select2-selection"
                                 id={"ddlUnit"}
                                 isDisabled={pageMode === 'edit' ? true : false}
                                 defaultValue={index1.default_UnitDropvalue}
-
-                                options={
-                                    index1.UnitDetails.map(i => ({
-                                        "label": i.UnitName,
-                                        "value": i.UnitID,
-                                        "ConversionUnit": i.ConversionUnit,
-                                        "Unitlabel": i.Unitlabel,
-                                        "BaseUnitQuantity": i.BaseUnitQuantity,
-                                        "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
-                                    }))
-                                }
-                                onChange={(event) => orderQtyUnit_SelectOnchange(event, index1)}
-                            >
-                            </Select >
+                                options={index1.UnitDetails.map(i => ({
+                                    "label": i.UnitName,
+                                    "value": i.UnitID,
+                                    "ConversionUnit": i.ConversionUnit,
+                                    "Unitlabel": i.Unitlabel,
+                                    "BaseUnitQuantity": i.BaseUnitQuantity,
+                                    "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
+                                }))}
+                                onChange={(event) => {
+                                    orderQtyUnit_SelectOnchange(event, index1);
+                                    totalAmountCalcuationFunc(tableList);
+                                }}
+                            ></Select>
                         </div>
-
                     </div>
                     <div className="bottom-div">
                         <span>Order-Qty :</span>
-                        <samp >{index1.OrderQty}</samp>
-                        <samp >{index1.UnitName}</samp></div>
+                        <samp>{index1.OrderQty}</samp>
+                        <samp>{index1.UnitName}</samp>
+                    </div>
                 </>
-
-            )
+            ),
         },
-
-
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
-            headerFormatter: (cell, index1 = [], k) => {
-
-                return (
-                    <div className="d-flex flex-content-start">
-                        {OrderItemDetails.length > 0 ? <div>
-                            <samp id="allplus-circle">
-                                <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
-                                    style={{
-                                        position: "",
-                                        display: showAllStockState ? "none" : "block"
-                                    }}
-                                    onClick={(e) => {
-                                        setShowAllStockState(!showAllStockState)
-                                    }}
-                                >
-                                </i>
-                            </samp>
-                            <samp id="allminus-circle"  >
-                                <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                    style={{
-                                        position: "",
-                                        display: showAllStockState ? "block" : "none"
-                                    }}
-                                    onClick={(e) => {
-                                        setShowAllStockState(!showAllStockState)
-                                    }}
-                                ></i>
-                            </samp>
-                        </div>
-                            : null
-                        }
-
-                        <div style={{ paddingLeft: "1px", paddingTop: "1px" }}>
-                            <samp > Stock Details</samp>
-                        </div>
-
-                    </div>
-                )
-            },
-
-            formatter: (cellContent, index1) => (
+            formatExtraData: { tableList: orderItemDetails },
+            formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <div>
-                    <div key={`plus-circle-icon${index1.id}`}>
-                        <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock'}</samp>
-
-                        <samp key={`minus-circle${index1.id}`} id={`minus-circle${index1.id}`}
-                            style={{ display: showAllStockState ? "block" : "none" }}
-                        >
-                            <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                style={{ position: "absolute", }}
-                                onClick={(e) => { showStockOnclick(index1, false) }}
-                            ></i>
-                        </samp>
-
-                    </div >
-
-                    <div id={`view${index1.id}`}
-                        style={{
-                            backgroundColor: "#b9be511a",
-                            display: showAllStockState ? "bolck" : "none"
-                        }}
-
-                    >
-                        <Table className="table table-bordered table-responsive mb-1" >
-
-                            <Thead  >
-
-                                <tr style={{ zIndex: -3 }}>
-                                    <th >Batch Code </th>
-                                    <th  >Supplier BatchCode</th>
-                                    <th  >Batch Date</th>
-                                    <th >
-                                        <div>
-                                            <samp >Stock Quantity</samp>
+                    <Table className="table table-bordered table-responsive mb-1">
+                        <Thead >
+                            <tr >
+                                <th style={{ zIndex: -1 }}>BatchCode</th>
+                                <th style={{ zIndex: -1 }}>
+                                    <div>
+                                        <samp>Stock Quantity</samp>
+                                    </div>
+                                </th >
+                                <th style={{ zIndex: -1 }}>
+                                    <div>
+                                        <samp>Quantity</samp>
+                                    </div>
+                                </th>
+                                <th style={{ zIndex: -1 }}>Rate</th>
+                                <th style={{ zIndex: -1 }}>MRP</th>
+                            </tr>
+                        </Thead>
+                        <Tbody>
+                            {cellContent.map((index2) => (
+                                <tr key={index1.id}>
+                                    <td>
+                                        <div style={{ width: "120px" }}>{index2.BatchCode}</div>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "120px", textAlign: "right" }}>
+                                            <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
                                         </div>
-                                    </th>
-                                    <th className="" >
-                                        <div>
-                                            <samp >Quantity</samp>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "150px" }}>
+                                            <Input
+                                                type="text"
+                                                disabled={pageMode === 'edit' ? true : false}
+                                                style={{ textAlign: "right" }}
+                                                key={`batchQty${index1.id}-${index2.id}`}
+                                                id={`batchQty${index1.id}-${index2.id}`}
+                                                defaultValue={index2.Qty}
+                                                onChange={(event) => {
+                                                    stockQtyOnChange(event, index1, index2);
+                                                    totalAmountCalcuationFunc(tableList);
+                                                }}
+                                            ></Input>
                                         </div>
-                                    </th>
-                                    <th  >Rate</th>
-                                    <th  >MRP</th>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "50px" }}>
+                                            <span id={`stockItemRate-${index1.id}-${index2.id}`}>{index2.Rate}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "50px" }}>{index1.MRPValue}</div>
+                                    </td>
                                 </tr>
-                            </Thead>
-                            <Tbody  >
-                                {cellContent.map((index2) => {
-
-                                    return (
-                                        < tr key={index1.id} >
-                                            <td>
-                                                <div style={{ width: "120px" }}>
-                                                    {index2.SystemBatchCode}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "120px" }}>
-                                                    {index2.BatchCode}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "90px" }}>
-                                                    {_cfunc.date_dmy_func(index2.BatchDate)}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "120px", textAlign: "right" }}>
-                                                    <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "150px" }}>
-                                                    <Input type="text"
-                                                        disabled={pageMode === 'edit' ? true : false}
-                                                        style={{ textAlign: "right" }}
-                                                        key={`batchQty${index1.id}-${index2.id}`}
-                                                        id={`batchQty${index1.id}-${index2.id}`}
-                                                        defaultValue={index2.Qty}
-                                                        onChange={(event) => stockQtyOnChange(event, index1, index2)}
-                                                    ></Input>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "50px" }}>
-                                                    <span id={`stockItemRate-${index1.id}-${index2.id}`}> {index2.Rate}</span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "50px" }}>
-                                                    {index1.MRPValue}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                            </Tbody>
-                        </Table></div>
-                </div >
+                            ))}
+                        </Tbody>
+                    </Table>
+                </div>
             ),
-
         },
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
             dataField: "",
-            classes: () => ('invoice-discount-row'),
-            formatter: (Rate, index1, key) => {
-                if (!index1.DiscountType) index1.DiscountType = 2
-                if (!index1.Discount) index1.Discount = 0
+            formatExtraData: {
+                discountValueAll: discountValueAll,
+                discountTypeAll: discountTypeAll,
+                changeAllDiscount: changeAllDiscount,
+                forceReload: forceReload,
+                tableList: orderItemDetails
+            },
+            headerFormatter: () => {
+                return (
+                    <div className="">
+                        {orderItemDetails.length <= 0 ?
+                            <div className="col col-3 mt-2">
+                                <Label>Discount/unit</Label>
+                            </div>
+                            :
+                            <div className="row">
+                                <div className=" mt-n2 mb-n2">
+                                    <Label>Discount/unit</Label>
+                                </div>
+                                <div className="col col-6" style={{ width: "100px" }}>
+                                    <Select
+                                        type="text"
+                                        defaultValue={discountTypeAll}
+                                        classNamePrefix="select2-selection"
+                                        options={discountDropOption}
+                                        style={{ textAlign: "right" }}
+                                        onChange={(e) => {
+                                            setChangeAllDiscount(true);
+                                            setDiscountTypeAll(e);
+                                            setDiscountValueAll('');
+                                        }}
+                                    />
+                                </div>
+                                <div className="col col-6" style={{ width: "100px" }}>
+                                    <CInput
+                                        type="text"
+                                        className="input"
+                                        style={{ textAlign: "right" }}
+                                        cpattern={decimalRegx}
+                                        value={discountValueAll}
+                                        onChange={(e) => {
+                                            let e_val = Number(e.target.value);
+
+                                            // Check if discount type is "percentage"
+                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
+                                            }
+
+                                            setChangeAllDiscount(true);
+                                            setDiscountValueAll(e.target.value);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                );
+            },
+            classes: () => "invoice-discount-row",
+            formatter: (cellContent, index1, key, formatExtraData) => {
+                let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+
+                if (formatExtraData.changeAllDiscount) {
+                    index1.Discount = discountValueAll;
+                    index1.DiscountType = discountTypeAll.value;
+                    innerStockCaculation(index1);
+                    totalAmountCalcuationFunc(tableList);
+                }
+
+                const defaultDiscountTypelabel =
+                    index1.DiscountType === 2 ? discountDropOption[1] : discountDropOption[0];
+
                 return (
                     <>
                         <div className="mb-2">
                             <div className="parent">
                                 <div className="child">
-                                    <label className="label" >Type&nbsp;&nbsp;&nbsp;</label>
+                                    <label className="label">Type&nbsp;&nbsp;&nbsp;</label>
                                 </div>
-
                                 <div className="child">
                                     <Select
+                                        id={`DicountType_${key}`}
                                         classNamePrefix="select2-selection"
-                                        defaultValue={{ value: 2, label: " % " }}
-                                        options={[{ value: 1, label: "Rs" },
-                                        { value: 2, label: "%" }]}
+                                        key={`DicountType_${key}-${index1.id}`}
+                                        value={defaultDiscountTypelabel}
+                                        options={discountDropOption}
                                         onChange={(e) => {
-                                            index1.DiscountType = e.value
-                                            innerStockCaculation(index1)
+                                            setChangeAllDiscount(false);
+                                            setForceReload(!forceReload);
+                                            index1.DiscountType = e.value;
+                                            index1.Discount = '';
+                                            innerStockCaculation(index1);
+                                            totalAmountCalcuationFunc(tableList);
                                         }}
                                     />
                                 </div>
                             </div>
                         </div>
-                        <div >
+                        <div>
                             <div className="parent">
                                 <div className="child">
                                     <label className="label">Value&nbsp;</label>
@@ -523,29 +506,31 @@ const Invoice = (props) => {
                                 <div className="child">
                                     <CInput
                                         className="input"
+                                        id={`Dicount_${key}-${index1.id}`}
                                         style={{ textAlign: "right" }}
-                                        type="text" defaultValue={index1.Discount}
+                                        type="text"
+                                        value={index1.Discount}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
-                                            let e_val = e.target.value;
 
-                                            if (e_val === '') {
-                                                e.target.value = 0
-                                            }
-                                            //******************  if discount type=2 == "percentage"  then only 100% iput enter*/
-                                            if ((index1.DiscountType === 2)) {//discount type=2 === "percentage"
-                                                if ((e_val > 100)) {
-                                                    e.target.value = 100
-                                                } else if (e_val < 0) {
-                                                    e.target.value = 0
+                                            let e_val = Number(e.target.value);
+                                            // Check if discount type is "percentage"
+                                            if (index1.DiscountType === 2) { // Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ''; // Clear the input value if it is less than 0
                                                 }
                                             }
-                                          
                                             index1.Discount = e.target.value;
-                                            innerStockCaculation(index1)
+                                            setChangeAllDiscount(false);
+                                            setForceReload(!forceReload);
+                                            innerStockCaculation(index1);
+                                            totalAmountCalcuationFunc(tableList);
                                         }}
-                                    />
 
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -553,16 +538,11 @@ const Invoice = (props) => {
                             <span>Amount:</span>
                             <samp id={`tAmount-${index1.id}`}>{index1.tAmount}</samp>
                         </div>
-
                     </>
-                )
+                );
             },
         },
-
     ];
-
-
-
 
 
     function InvoiceDateOnchange(y, v, e) {
@@ -598,6 +578,7 @@ const Invoice = (props) => {
 
     const SaveHandler = async (event) => {
 
+        console.log(Data)
         event.preventDefault();
 
         const btnId = event.target.id
@@ -612,7 +593,7 @@ const Invoice = (props) => {
             const invoiceItems = []
             let grand_total = 0;
 
-            OrderItemDetails.forEach((index) => {
+            orderItemDetails.forEach((index) => {
                 if (index.StockInValid) {
                     validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
                     return returnFunc()
@@ -625,7 +606,6 @@ const Invoice = (props) => {
                         const calculate = discountCalculate(ele, index)
 
                         grand_total = grand_total + Number(calculate.tAmount)
-
                         invoiceItems.push({
                             Item: index.Item,
                             Unit: index.default_UnitDropvalue.value,
@@ -652,7 +632,7 @@ const Invoice = (props) => {
                             Amount: Number(calculate.tAmount).toFixed(2),
                             TaxType: 'GST',
                             DiscountType: index.DiscountType,
-                            Discount: Number(index.Discount).toFixed(2),
+                            Discount: Number(index.Discount) || 0,
                             DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
                         })
                     }
@@ -678,18 +658,19 @@ const Invoice = (props) => {
             const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
-                InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
+                InvoicesReferences: orderIDs.map(i => ({ Order: i }))
             });
 
             const forIB_Invoice_json = async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 IBChallanDate: values.InvoiceDate,
                 IBChallanItems: invoiceItems,
-                IBChallansReferences: await OrderIDs.map(i => ({ Demand: i }))
+                IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
             });
-
+            const isRound = Data.InvoiceAmountRoundConfiguration.Value
+            debugger
             const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 CustomerGSTTin: '41',
-                GrandTotal: Math.round(grand_total),
+                GrandTotal: isRound === "1" ? Math.round(grand_total) : Number(grand_total),
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 Customer: values.Customer.value,
                 Party: _cfunc.loginPartyID(),
@@ -736,7 +717,7 @@ const Invoice = (props) => {
                                                 name="InvoiceDate"
                                                 value={values.InvoiceDate}
                                                 id="myInput11"
-                                                disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
+                                                disabled={(orderItemDetails.length > 0 || pageMode === "edit") ? true : false}
                                                 onChange={InvoiceDateOnchange}
                                             />
                                             {isError.InvoiceDate.length > 0 && (
@@ -755,7 +736,7 @@ const Invoice = (props) => {
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
-                                                isDisabled={OrderItemDetails.length > 0 ? true : false}
+                                                isDisabled={orderItemDetails.length > 0 ? true : false}
                                                 id={'customerselect'}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -775,7 +756,7 @@ const Invoice = (props) => {
 
                             <Col sm={1} className="mt-3">
                                 {pageMode === mode.defaultsave ?
-                                    (OrderItemDetails.length === 0) ?
+                                    (orderItemDetails.length === 0) ?
                                         < Go_Button onClick={(e) => goButtonHandler()}
                                             loading={goBtnloading} />
                                         :
@@ -792,9 +773,8 @@ const Invoice = (props) => {
                     <div className="table-responsive mb-4">
                         <ToolkitProvider
                             keyField={"id"}
-                            data={OrderItemDetails}
+                            data={orderItemDetails}
                             columns={pagesListColumns}
-
                             search
                         >
                             {(toolkitProps) => (
@@ -814,8 +794,12 @@ const Invoice = (props) => {
                                                     </div>
                                                 }
                                                 {...toolkitProps.baseProps}
+                                                onDataSizeChange={(e) => {
+                                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                }}
                                             />
                                         </Col>
+                                        {mySearchProps(toolkitProps.searchProps,)}
                                     </Row>
 
                                 </React.Fragment>
@@ -823,7 +807,7 @@ const Invoice = (props) => {
                         </ToolkitProvider>
                     </div>
 
-                    {OrderItemDetails.length > 0 ? <FormGroup>
+                    {orderItemDetails.length > 0 ? <FormGroup>
                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                             <SaveButton
                                 pageMode={pageMode}

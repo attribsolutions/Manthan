@@ -12,7 +12,7 @@ import {
 
 const INIT_STATE = {
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
   CompanyGroupList: [],
   postMsg: { Status: false },
   editData: { Status: false },
@@ -39,7 +39,7 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
     case GET_COMPANY_GROUP_LIST:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
 
       }
 
@@ -47,7 +47,7 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         CompanyGroupList: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
       }
 
     case EDIT_COMPANY_GROUP_ID_SUCCESS:
@@ -82,7 +82,7 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
 
 

@@ -312,6 +312,10 @@ export const MAKE_INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward  addpage G
 export const INVOICE_1_lIST_FILTER = '/InvoicesFilter'//invoice_1_List filter Api
 export const INVOICE_1_SAVE = '/Invoice'// invoice_1  addpage save Api
 export const INVOICE_1_ADD_PAGE_GO_BTN = '/GetOrderDetails'// invoice_1 addpage GoButton Api 
+export const UPLOADED_E_INVOICE = '/Uploaded_EInvoicea' // Uploaded_EInvoicea
+export const UPLOADED_E_WAY_BILL = '/Uploaded_EwayBill' // Uploaded_E-wayBill
+export const CANCEL_E_INVOICE = '/Cancel_EInvoicea' // Uploaded_E-Invoice
+export const CANCEL_E_WAY_BILL = '/Cancel_EwayBill' // Uploaded_E-wayBill
 
 //BulkInvoices
 export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 
@@ -363,3 +367,10 @@ export const DASHBOARD = '/getdashboard'
 
 //Report
 export const ORDER_SUMMARY = '/OrderSummaryReport'
+
+// partySetting
+export const PARTY_SETTING = '/PartySettings'
+
+// StockEntry
+export const STOCK_ENTRY = '/PartyStockEntry'
+

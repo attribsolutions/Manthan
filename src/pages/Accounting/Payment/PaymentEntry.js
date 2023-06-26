@@ -336,7 +336,7 @@ const PaymentEntry = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
@@ -365,7 +365,7 @@ const PaymentEntry = (props) => {
                                 </Col >
 
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.OpeningBalanceAmt}</Label>
                                         <Col sm="7">
@@ -383,7 +383,7 @@ const PaymentEntry = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptModeName} </Label>
                                         <Col sm="7">
@@ -414,7 +414,7 @@ const PaymentEntry = (props) => {
 
                                 < Row >
                                     <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
+                                        <FormGroup className=" row mt-1 " >
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.BankName} </Label>
                                             <Col sm="7">
@@ -447,7 +447,7 @@ const PaymentEntry = (props) => {
                                 <Row>
 
                                     <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
+                                        <FormGroup className=" row mt-1 " >
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.DocumentNo}</Label>
                                             <Col sm="7">
@@ -472,7 +472,7 @@ const PaymentEntry = (props) => {
                                     </Col >
 
                                     <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
+                                        <FormGroup className=" row mt-1 " >
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeDate}</Label>
                                             <Col sm="7">
@@ -489,7 +489,7 @@ const PaymentEntry = (props) => {
 
                             <Row>
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.AmountPaid}</Label>
                                         <Col sm="7">
@@ -514,7 +514,7 @@ const PaymentEntry = (props) => {
                                 </Col >
 
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
+                                    <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.Description}</Label>
                                         <Col sm="7">

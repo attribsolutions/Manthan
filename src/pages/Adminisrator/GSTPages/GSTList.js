@@ -26,7 +26,7 @@ const GSTList = () => {
 
   const reducers = useSelector(
     (state) => ({
-      listLoading: state.GSTReducer.listLoading,
+      listBtnLoading: state.GSTReducer.listBtnLoading,
       tableList: state.GSTReducer.GSTList,
       GSTGoButton: state.GSTReducer.GSTGoButton,
       deleteMsg: state.GSTReducer.deleteMsg,
@@ -124,7 +124,7 @@ const GSTList = () => {
 
         {/* <div className="mt-n1"> */}
         {
-          reducers.listLoading ?
+          reducers.listBtnLoading ?
             <Listloader />
             :
             (pageField) ?

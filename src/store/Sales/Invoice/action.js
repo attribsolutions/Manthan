@@ -11,7 +11,19 @@ import {
     INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS,
     MAKE_IB_INVOICE_ACTION,
     MAKE_IB_INVOICE_ACTION_SUCCESS,
-    INVOICE_API_ERROR_ACTION
+    INVOICE_API_ERROR_ACTION,
+    UPLOADED_E_INVOICE_ACTION,
+    UPLOADED_E_INVOICE_ACTION_SUCCESS,
+    UPLOADED_E_WAY_BILL_ACTION,
+    UPLOADED_E_WAY_BILL_ACTION_SUCCESS,
+    CANCLE_E_INVOICE_ACTION,
+    CANCLE_E_INVOICE_ACTION_SUCCESS,
+    CANCLE_E_WAY_BILL_ACTION,
+    CANCLE_E_WAY_BILL_ACTION_SUCCESS,
+    PRINT_E_WAY_BILL_ACTION,
+    PRINT_E_WAY_BILL_SUCCESS,
+    PRINT_E_INVOICE_ACTION,
+    PRINT_E_INVOICE_SUCCESS
 } from "./actionType";
 
 
@@ -42,7 +54,7 @@ export const editInvoiceListSuccess = (editData) => ({
 // listpage api
 export const deleteInvoiceId = (config = {}) => ({
     type: DELETE_INVOICE_LIST_PAGE,
-    config ,
+    config,
 });
 
 export const deleteInvoiceIdSuccess = (resp) => ({
@@ -85,6 +97,51 @@ export const makeIB_InvoiceActionSuccess = (data) => ({
     payload: data,
 });
 
-export const InvoiceApiErrorAction= () => ({
+export const InvoiceApiErrorAction = () => ({
     type: INVOICE_API_ERROR_ACTION,
 })
+
+//**************************** E-Invoice (upload ,cancel) ***************************************/
+
+export const Uploaded_EInvoiceAction = (config) => ({
+    type: UPLOADED_E_INVOICE_ACTION,
+    config
+});
+
+export const Uploaded_EInvoiceSuccess = (data) => ({
+    type: UPLOADED_E_INVOICE_ACTION_SUCCESS,
+    payload: data,
+});
+
+export const Cancel_EInvoiceAction = (config) => ({
+    type: CANCLE_E_INVOICE_ACTION,
+    config
+});
+
+export const Cancel_EInvoiceSuccess = (data) => ({
+    type: CANCLE_E_INVOICE_ACTION_SUCCESS,
+    payload: data,
+});
+
+//**************************** E-WayBill (upload ,cancel) actions ***************************************/
+
+export const Uploaded_EwayBillAction = (config) => ({
+    type: UPLOADED_E_WAY_BILL_ACTION,
+    config
+});
+
+export const Uploaded_EwayBillSuccess = (data) => ({
+    type: UPLOADED_E_WAY_BILL_ACTION_SUCCESS,
+    payload: data,
+});
+
+export const Cancel_EwayBillAction = (config) => ({
+    type: CANCLE_E_WAY_BILL_ACTION,
+    config
+});
+
+export const Cancel_EwayBillSuccess = (data) => ({
+    type: CANCLE_E_WAY_BILL_ACTION_SUCCESS,
+    payload: data,
+});
+

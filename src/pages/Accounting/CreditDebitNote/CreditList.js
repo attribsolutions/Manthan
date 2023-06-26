@@ -58,7 +58,7 @@ const CreditList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            listLoading: state.CredietDebitReducer.listLoading,
+            listBtnLoading: state.CredietDebitReducer.listBtnLoading,
             tableList: state.CredietDebitReducer.CreditList,
             deleteMsg: state.CredietDebitReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
@@ -279,6 +279,9 @@ const CreditList = () => {
                                     value={values.Customer}
                                     options={customerOptions}
                                     onChange={CustomerOnChange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                 />
                             </Col>
                         </FormGroup>
@@ -295,13 +298,16 @@ const CreditList = () => {
                                     value={values.NoteType}
                                     options={NoteType}
                                     onChange={NoteTypeOnChange}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                 />
                             </Col>
                         </FormGroup>
                     </Col >
 
                     <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
-                        <Go_Button onClick={goButtonHandler} loading={reducers.listLoading} />
+                        <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
                     </Col>
                 </div>
             </div>

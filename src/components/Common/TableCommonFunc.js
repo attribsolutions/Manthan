@@ -46,15 +46,27 @@ export const selectAllCheck = (selected, nonSelectable, position, headLabel) => 
 
 })
 
-const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeBtnColumn, userAccState }) => {
+const DynamicColumnHook = ({ reducers = "",
+    pageField = '',
+    lastColumn,
+    secondLastColumn,
+    thirdLastColumn,
+    makeBtnColumn,
+    userAccState }) => {
 
+    const { listBtnLoading } = reducers
     const [tableColumns, setTableColumns] = useState([{
         text: "ID",
         dataField: "id",
     }])
 
     const [defaultSorted, setDefaultSorted] = useState('')
-    const [pageOptions, setPageOptions] = useState('')
+    const [pageOptions, setPageOptions] = useState({
+        custom: true,
+        sizePerPage: 15,
+        // totalSize: tableList.length
+    })
+
     const { PageFieldMaster = [] } = { ...pageField };
 
     useEffect(() => {
@@ -90,22 +102,37 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
                         if (i.Alignment) return i.Alignment;
                     },
 
-                    // formatter: (cell, row) => {
-                    //     if (cell === "Invoice Created") {
-                    //         return (
-                    //             <span class="label label-primary" style={{ color: '#2ab57d' }}>{cell}</span>
-                    //         )
-                    //     }
-                    //     if (cell === "Order Confirm") {
-                    //         return (
-                    //             <span class="label label-primary" style={{ color: '#4ba6ef' }} >{cell}</span>
-                    //         )
-                    //     }
-                    //     return (
-                    //         <span>{cell}</span>
+                    formatter: (cell, row) => {
+                        if (cell === "Invoice Created") {
+                            return (
+                                <span class="label label-" style={{
+                                    backgroundColor: '#b6efdcf7', color: "#0e0d0d", fontSize: "12px",
+                                    padding: "2px 4px 2px 4px", borderRadius: "5px"
+                                }}>{cell}</span>
+                            )
+                        }
+                        if (cell === "Order Confirm") {
+                            return (
+                                <span class="label label" style={{
+                                    backgroundColor: '#f7dfb6', color: "#0e0d0d", fontSize: "12px",
+                                    padding: "2px 4px 2px 4px", borderRadius: "5px"
+                                }} >{cell}</span>
+                            )
+                        }
+                        if (cell === "Open") {
+                            return (
+                                <span class="label label" style={{
+                                    backgroundColor: '#c3bfc7a6', color: "#0e0d0d", fontSize: "12px",
+                                    padding: "2px 4px 2px 4px", borderRadius: "5px"
+                                }} >{cell}</span>
+                            )
+                        }
 
-                    //     );
-                    // }
+                        return (
+                            <span>{typeof cell === 'boolean' ? String(cell) : cell}</span>
+
+                        );
+                    }
                 })
 
                 if (i.DefaultSort === 1) {
@@ -117,22 +144,26 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
                 }
             }
 
-            if ((PageFieldMaster.length - 2 === k) && secondLastColumn) {
-                let isCol = secondLastColumn();
-                if (isCol) { columns.push(isCol) }
-            }
 
             if ((PageFieldMaster.length - 1 === k) && makeBtnColumn) {
                 let isCol = makeBtnColumn();
                 if (isCol) { columns.push(isCol) }
             }
+            if ((PageFieldMaster.length - 1 === k) && thirdLastColumn) {
+                let isCol = thirdLastColumn();
+                if (isCol) { columns.push(isCol) }
+            }
+            if ((PageFieldMaster.length - 1 === k) && secondLastColumn) {
+                let isCol = secondLastColumn();
+                if (isCol) { columns.push(isCol) }
+            }
+
 
             if ((PageFieldMaster.length - 1 === k) && lastColumn) {
                 let islastCol = lastColumn()
                 if (islastCol) {
                     columns.push(lastColumn())
                 }
-
             }
         })
         if (columns.length > 0) {
@@ -146,11 +177,12 @@ const DynamicColumnHook = ({ pageField = '', lastColumn, secondLastColumn, makeB
         ])
 
         setPageOptions({
-            sizePerPage: 15,
             custom: true,
+            sizePerPage: 15,
+            // totalSize: tableList.length
         })
 
-    }, [pageField, userAccState])
+    }, [pageField, userAccState, listBtnLoading])
 
     return [tableColumns, defaultSorted, pageOptions]
 }

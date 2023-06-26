@@ -30,7 +30,7 @@ import {
   getCityOnDistrictSuccess,
   EmployeeApiErrorAction,
 } from "./action";
-import { CommonConsole, loginJsonBody, } from "../../../components/Common/CommonFunction";
+import { loginJsonBody, } from "../../../components/Common/CommonFunction";
 
 function* DesignationID_saga() { // DesignationID dropdown list
   try {
@@ -82,7 +82,6 @@ function* Edit_EmployeeID_GenFunc({ config }) {
     const response = yield call(edit_EmployeeAPI, config);
     response.pageMode = btnmode
     yield put(editEmployeeSuccess(response));
-    console.log("response in saga", response)
 
   } catch (error) { yield put(EmployeeApiErrorAction()) }
 }

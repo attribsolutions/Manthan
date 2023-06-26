@@ -255,7 +255,7 @@ const SubGroupMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.SUBGROUP} /> */}
+                     
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -268,64 +268,65 @@ const SubGroupMaster = (props) => {
                                         <Col md={12} style={{ height: "9cm" }}>
                                             <Card>
                                                 <CardBody className="c_card_body">
+
                                                     <Row>
-                                                        <Col sm="4">
+                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                                                            <Input
+                                                                name="Name"
+                                                                id="txtName"
+                                                                value={values.Name}
+                                                                type="text"
+                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                placeholder="Please Enter Name"
+                                                                autoComplete='off'
+                                                                autoFocus={true}
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
+                                                                }}
+                                                            />
+                                                            {isError.Name.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Name}</span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Row>
+
+                                                    <Row>
+                                                        <Col md="4" >
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
-                                                                <Col>
-                                                                    <Input
-                                                                        name="Name"
-                                                                        id="txtName"
-                                                                        value={values.Name}
-                                                                        type="text"
-                                                                        className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                        placeholder="Please Enter Name"
-                                                                        autoComplete='off'
-                                                                        autoFocus={true}
-                                                                        onChange={(event) => {
-                                                                            onChangeText({ event, state, setState })
-                                                                            dispatch(Breadcrumb_inputName(event.target.value))
-                                                                        }}
+                                                                <Label htmlFor="validationCustom01"> {fieldLabel.GroupName} </Label>
+                                                                <Col sm={12} >
+                                                                    <Select
+                                                                        name="GroupName"
+                                                                        value={values.GroupName}
+                                                                        isSearchable={true}
+                                                                        className="react-dropdown"
+                                                                        options={GroupValues}
+                                                                        onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                                        classNamePrefix="dropdown"
                                                                     />
-                                                                    {isError.Name.length > 0 && (
-                                                                        <span className="invalid-feedback">{isError.Name}</span>
+                                                                    {isError.GroupName.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.GroupName}</small></span>
                                                                     )}
                                                                 </Col>
                                                             </FormGroup>
                                                         </Col>
-
-                                                        <Row>
-                                                            <FormGroup className="mb-3 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01"> {fieldLabel.GroupName} </Label>
-                                                                <Select
-                                                                    name="GroupName"
-                                                                    value={values.GroupName}
-                                                                    isSearchable={true}
-                                                                    className="react-dropdown"
-                                                                    options={GroupValues}
-                                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                                    classNamePrefix="dropdown"
-                                                                />
-                                                                {isError.GroupName.length > 0 && (
-                                                                    <span className="text-danger f-8"><small>{isError.GroupName}</small></span>
-                                                                )}
-                                                            </FormGroup>
-                                                        </Row>
-
-                                                        <FormGroup>
-                                                            <Row>
-                                                                <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode}
-                                                                        onClick={SaveHandler}
-                                                                        loading={saveBtnloading}
-                                                                        userAcc={userPageAccessState}
-                                                                        editCreatedBy={editCreatedBy}
-                                                                        module={"GroupMaster"}
-                                                                    />
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup >
                                                     </Row>
+
+                                                    <FormGroup className="mt-1">
+                                                        <Row>
+                                                            <Col sm={2}>
+                                                                <SaveButton pageMode={pageMode}
+                                                                    onClick={SaveHandler}
+                                                                    loading={saveBtnloading}
+                                                                    userAcc={userPageAccessState}
+                                                                    editCreatedBy={editCreatedBy}
+                                                                    module={"GroupMaster"}
+                                                                />
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
                                                 </CardBody>
                                             </Card>
                                         </Col>

@@ -58,6 +58,7 @@ import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRe
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { SaveButton } from "../../../../components/Common/CommonButton";
 import { priceListByCompay_Action } from "../../../../store/Administrator/PriceList/action";
+import WeightageTab from "./Weightage_Tab";
 
 export const unitConversionInitial = {
     id: 1,
@@ -125,6 +126,14 @@ const ItemsMaster = (props) => {
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
+
+    const [weightageTabMaster, setWeightageTabMaster] = useState({
+        Breadth: '',
+        Grammage: '',
+        Height: '',
+        Length: '',
+        StoringCondition: '',
+    });
 
     const [shelfLife, setShelfLife] = useState('');
 
@@ -296,7 +305,16 @@ const ItemsMaster = (props) => {
                 };
 
                 setBaseUnitTableData(UnitDetails)
-                // ====================== Unit Conversion tab  end ======================
+              
+                // ====================== Weightage tab =================================
+              
+                setWeightageTabMaster({
+                    Breadth: hasEditVal.Breadth,
+                    Grammage: hasEditVal.Grammage,
+                    Height: hasEditVal.Height,
+                    Length: hasEditVal.Length,
+                    StoringCondition: hasEditVal.StoringCondition,
+                })
 
                 setFormValue(initialFormValue);
                 // setImageTabTable(ItemImagesDetails)
@@ -656,7 +674,7 @@ const ItemsMaster = (props) => {
                     })
                     return btnIsDissablefunc({ btnId, state: false });
                 }
-
+                
                 const jsonBody = JSON.stringify({
                     Name: formValue.Name,
                     ShortName: formValue.ShortName,
@@ -670,6 +688,11 @@ const ItemsMaster = (props) => {
                     Tag: formValue.Tag,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
+                    Breadth: weightageTabMaster.Breadth,
+                    Grammage: weightageTabMaster.Grammage,
+                    Height: weightageTabMaster.Height,
+                    Length: weightageTabMaster.Length,
+                    StoringCondition: weightageTabMaster.StoringCondition,
                     ItemCategoryDetails: ItemCategoryDetails,
                     ItemUnitDetails: itemUnitDetails,
 
@@ -959,6 +982,23 @@ const ItemsMaster = (props) => {
                                                     </NavLink>
                                                 </NavItem>
 
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-8"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "8",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("8")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">Weightage</span>
+                                                    </NavLink>
+                                                </NavItem>
                                             </Nav>
 
                                             <TabContent activeTab={activeTab1} className="p-3 text-muted">
@@ -1276,6 +1316,18 @@ const ItemsMaster = (props) => {
                                                             <Row className="mt-3">
                                                                 <Col className=" col col-12 ">
                                                                     <GSTTab tableData={GStDetailsMaster} func={setGStDetailsMaster} />
+                                                                </Col>
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </TabPane>
+
+                                                <TabPane tabId="8">{/* +++++++++++++ TabPane Gst ++++++++++++++++++++++++++++++++++++++++++ */}
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Row className="mt-3">
+                                                                <Col className=" col col-12 ">
+                                                                    <WeightageTab weightageTabMaster={weightageTabMaster} setWeightageTabMaster={setWeightageTabMaster} />
                                                                 </Col>
                                                             </Row>
                                                         </Col>

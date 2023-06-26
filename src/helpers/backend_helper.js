@@ -412,7 +412,7 @@ export const SalesMan_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url
 export const SalesMan_Delete_API = ({ deleteId, btnId }) => del(`${url.SALESMAN_FOR_MASTER}/${deleteId}`, btnId) // delete api
 
 //Bank Api
-export const get_Bank_List_Api = (companyId) => get(`${url.BANK_LIST_FILTER}/${companyId}`)
+export const get_Bank_List_Api = () => get(url.BANK_LIST_FILTER)
 export const Post_Bank_Master_API = ({ jsonBody, btnId }) => post(url.BANK, jsonBody, btnId)// post api
 export const edit_Bank_List_Api = ({ editId, btnId }) => get(`${url.BANK}/${editId}`, btnId) // edit api
 export const update_Bank_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.BANK}/${updateId}`, jsonBody, btnId)// update
@@ -462,7 +462,7 @@ export const orderApproval_Save_API = ({ jsonBody, btnId }) => post(url.ORDER_AP
 // OrderType Dropdown API
 export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
 
-export const OrderConfirm_post_API = ({ jsonBody, btnId }) =>post(url.ORDER_CONFIRM_API, jsonBody, btnId)// update api
+export const OrderConfirm_post_API = ({ jsonBody, btnId }) => post(url.ORDER_CONFIRM_API, jsonBody, btnId)// update api
 
 //GRN PAGE grn 
 export const GRN_STP_for_orderList_goBtn = ({ filtersBody, btnId }) => post(url.GRN_STP_FOR_ORDER_lIST_goBtn, filtersBody, btnId)// Get subModule For H_pages
@@ -530,6 +530,15 @@ export const Invoice_1_Get_Filter_API = ({ filtersBody, btnId }) => post(url.INV
 export const Invoice_1_Delete_API = ({ deleteId, btnId }) => del(`${url.INVOICE_1_SAVE}/${deleteId}`, btnId)// delete api
 export const Invoice_1_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.INVOICE_1_SAVE}/${editId}`, btnId)// delete api
 
+//**************************** E-Invoice (upload ,cancel,print) ***************************************/
+
+export const EInvoice_Uploade_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_E_INVOICE}/${RowId}/${UserID}`)// Uploade_EInvoice
+export const EInvoice_Cancel_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_E_INVOICE}/${RowId}/${UserID}`)// Cancel_EInvoice
+
+//**************************** E-WayBill (upload ,cancel,print) actions ***************************************/
+
+export const EwayBill_Uploade_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_E_WAY_BILL}/${RowId}/${UserID}`)// Uploade_EwayBill
+export const EwayBill_Cancel_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_E_WAY_BILL}/${RowId}/${UserID}`)// Cancel_EwayBill
 
 //IB Invoice 2 
 export const IB_Invoice_GoButton_API = ({ jsonBody, btnId }) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, jsonBody, btnId)// go button postapi
@@ -537,6 +546,10 @@ export const IB_Invoice_Save_API = ({ jsonBody, btnId }) => post(url.IB_INVOICE_
 export const IB_Invoice_Get_Filter_API = ({ filtersBody, btnId }) => post(url.IB_INVOICE_lIST_FILTER, filtersBody, btnId)//  postapi
 export const IB_Invoice_Delete_API = ({ deleteId, btnId }) => del(`${url.IB_INVOICE_SAVE}/${deleteId}`, btnId)// delete api
 export const IB_Invoice_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.IB_INVOICE_SAVE}/${editId}`, btnId)// delete api
+
+
+
+
 //************************************Inter Branch ************************************/
 
 // IBOrder
@@ -595,23 +608,20 @@ export const Edit_Credit_List_API = ({ editId, btnId }) => get(`${url.CREDIT_DEB
 export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// Invoice Return api
 export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, jsonBody)//  postapi
 
-
 export const PartyLedger_API = (FromDate, ToDate, SAPCode) => post(url.PARTY_LEDGER_API, FromDate, ToDate, SAPCode)//  postapi
 export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODUCT_MARGIN_REPORT_API}/${IsSCM_ID}/${PartyID}`)
 
-
 // Order Summary
 export const OderSummary_GoBtn_API = ({ jsonBody, btnId }) => post(url.ORDER_SUMMARY, jsonBody, btnId)//post api
-
+export const PartySettingApi = (id) => get(`${url.PARTY_SETTING}/${id}`)// Party Setting api
+export const save_PartySetting_API = ({ jsonBody, btnId }) => post(url.PARTY_SETTING, jsonBody, btnId)//  postapi
 
 // export const PartyLedger_API = (FromDate,ToDate,SAPCode) => get(`http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
-
-
-
-
-
 // Dashboard 
 export const Dashboard_Get_API = (id) => get(`${url.DASHBOARD}/${id}`)// Dashboard grt api
+
+//StockEntry
+export const StockEntry_Post_API = ({ jsonBody, btnId }) => post(url.STOCK_ENTRY, jsonBody, btnId)//post api
 
 export {
   getLoggedInUser,

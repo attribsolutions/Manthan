@@ -19,12 +19,20 @@ import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
+    Cancel_EInvoiceSuccess,
+    Cancel_EwayBillSuccess,
+    Uploaded_EInvoiceAction,
+    Uploaded_EInvoiceSuccess,
+    Uploaded_EwayBillAction,
+    Uploaded_EwayBillSuccess,
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
     invoiceListGoBtnfilter
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
 
 const InvoiceList = () => {
 
@@ -37,6 +45,9 @@ const InvoiceList = () => {
     const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
 
+    const [Partysettingdata, setPartysettingdata] = useState({})
+
+
     const reducers = useSelector(
         (state) => ({
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -46,16 +57,23 @@ const InvoiceList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.InvoiceReducer.editData,
+            PartySettingdata: state.PartySettingReducer.PartySettingdata,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             goBtnloading: state.InvoiceReducer.goBtnloading,
+            Uploaded_EInvoice: state.InvoiceReducer.Uploaded_EInvoice,
+            Uploaded_EwayBill: state.InvoiceReducer.Uploaded_EwayBill,
+            Cancel_EInvoice: state.InvoiceReducer.Cancel_EInvoice,
+            Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
+            listBtnLoading: state.InvoiceReducer.listBtnLoading
+
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, supplier } = reducers;
+    const { pageField, supplier, Uploaded_EInvoice, Uploaded_EwayBill, Cancel_EInvoice, Cancel_EwayBill, PartySettingdata } = reducers;
     const { fromdate, todate, supplierSelect } = hederFilters;
-
+    const { Data = {} } = PartySettingdata;
     const action = {
         getList: invoiceListGoBtnfilter,
         deleteId: deleteInvoiceId,
@@ -105,20 +123,105 @@ const InvoiceList = () => {
         goButtonHandler("event", IBType)
     }, [dispatch]);
 
+    useEffect(() => {
+
+        if (Uploaded_EInvoice.Status === true && Uploaded_EInvoice.StatusCode === 200) {
+            dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
+            goButtonHandler("event")
+            customAlert({
+                Type: 1,
+                Message: JSON.stringify(Uploaded_EInvoice.Message),
+            })
+        }
+
+        else if (Uploaded_EInvoice.Status === true) {
+            dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Uploaded_EInvoice.Message),
+            })
+        }
+    }, [Uploaded_EInvoice]);
+
+    useEffect(() => {
+
+        if (Uploaded_EwayBill.Status === true && Uploaded_EwayBill.StatusCode === 200) {
+            dispatch(Uploaded_EwayBillSuccess({ Status: false }))
+            goButtonHandler("event")
+            customAlert({
+                Type: 1,
+                Message: JSON.stringify(Uploaded_EwayBill.Message),
+            })
+        }
+
+        else if (Uploaded_EwayBill.Status === true) {
+            dispatch(Uploaded_EwayBillSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Uploaded_EwayBill.Message),
+            })
+            return
+        }
+    }, [Uploaded_EwayBill]);
+
+    useEffect(async () => {
+
+        if (Cancel_EInvoice.Status === true && Cancel_EInvoice.StatusCode === 200) {
+            dispatch(Cancel_EInvoiceSuccess({ Status: false }))
+            customAlert({
+                Type: 1,
+                Message: Cancel_EInvoice.Message,
+            })
+            return
+        }
+
+        else if (Cancel_EInvoice.Status === true) {
+            dispatch(Cancel_EInvoiceSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Cancel_EInvoice.Message),
+            })
+            return
+        }
+    }, [Cancel_EInvoice]);
+
+    useEffect(async () => {
+
+        if (Cancel_EwayBill.Status === true && Cancel_EwayBill.StatusCode === 200) {
+            dispatch(Cancel_EwayBillSuccess({ Status: false }))
+            customAlert({
+                Type: 1,
+                Message: Cancel_EwayBill.Message,
+            })
+            return
+        }
+        else if (Cancel_EwayBill.Status === true) {
+            dispatch(Cancel_EwayBillSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Cancel_EwayBill.Message),
+            })
+            return
+        }
+    }, [Cancel_EwayBill]);
+    useEffect(() => {
+        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id))
+    }, [])
+
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
+
     supplierOptions.unshift({
         value: "",
         label: " All"
     });
 
     function downBtnFunc(row) {
-
-
-        var ReportType = report.invoice;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }))
+        debugger
+        var ReportType = Data.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, Data))
     }
 
     function goButtonHandler(event, IBType) {
@@ -165,6 +268,7 @@ const InvoiceList = () => {
             pathname: url.INWARD,
         })
     };
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -225,6 +329,7 @@ const InvoiceList = () => {
             </div>
         )
     }
+
     return (
         <React.Fragment>
             <div className="page-content">

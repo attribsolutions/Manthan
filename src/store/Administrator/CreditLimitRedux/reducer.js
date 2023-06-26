@@ -10,7 +10,7 @@ const INIT_STATE = {
     goButtonCreditLimit: [],
     postMsg: { Status: false },
     saveBtnloading: false,
-    listLoading: false,
+    listBtnLoading: false,
 }
 
 const CreditLimitReducer = (state = INIT_STATE, action) => {
@@ -33,14 +33,14 @@ const CreditLimitReducer = (state = INIT_STATE, action) => {
         case GO_BUTTON_FOR_CREDITLIMIT_PAGE:
             return {
                 ...state,
-                listLoading: true,
+                listBtnLoading: true,
             };
 
         case GO_BUTTON_FOR_CREDITLIMIT_PAGE_SUCCESS:
             return {
                 ...state,
                 goButtonCreditLimit: action.payload,
-                listLoading: false,
+                listBtnLoading: false,
             };
 
         default:

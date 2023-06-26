@@ -56,6 +56,8 @@ export const PARTY_lIST = "/PartyList"
 export const RETAILER_MASTER = "/RetailerMaster"
 export const RETAILER_LIST = "/RetailerList"
 
+export const PARTY_SELF_EDIT = "/PartySelfEdit"
+
 export const PARTYTYPE = "/PartyType"
 export const PARTYTYPE_lIST = "/PartyTypeList"
 
@@ -153,6 +155,7 @@ export const GRN_ADD_3 = "/GRN_ADD_3"
 export const CHALLAN_LIST = "/ChallanList"
 export const CHALLAN = "/Challan"
 
+export const STOCK_ENTRY ="/Stock_Entry"
 //*******************************All report page ************************************//
 export const REPORT = "/Report"
 
@@ -220,6 +223,7 @@ export const BANK_ASSIGN = "/BankAssign"
 export const CREDIT_LIST = "/Credit_List"
 export const CREDIT = "/Credit"
 
+export const INVOICE_CONFIGURATION = "/InvoiceConfiguration"
 
 export const DEBIT_LIST = "/Debit_List"
 export const DEBIT = "/Debit"

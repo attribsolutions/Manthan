@@ -64,11 +64,11 @@ const ImportExcelPartyMap = (props) => {
         userAccess,
         goButtonArr,
         partyList,
-        listLoading,
+        listBtnLoading,
         saveBtnloading,
     } = useSelector((state) => ({
         saveBtnloading: state.GroupReducer.saveBtnloading,
-        listLoading: state.ImportExcelPartyMap_Reducer.listLoading,
+        listBtnLoading: state.ImportExcelPartyMap_Reducer.listBtnLoading,
         postMsg: state.ImportExcelPartyMap_Reducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -330,7 +330,7 @@ const ImportExcelPartyMap = (props) => {
 
                                     <Col sm="2" className="mt-3 ">
                                         {(goButtonArr.length === 0) ?
-                                            <Go_Button onClick={goButtonHandler} loading={listLoading} />
+                                            <Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
                                             :
                                             <Change_Button onClick={change_ButtonHandler} />
                                         }

@@ -11,7 +11,7 @@ import {
 
 const INIT_STATE = {
   saveBtnloading: false,
-  listLoading: false,
+  listBtnLoading: false,
   postMsg: { Status: false },
   addGoButton: [],
   groupList: [],
@@ -29,14 +29,14 @@ const ImportExcelPartyMap_Reducer = (state = INIT_STATE, action) => {
     case GO_BUTTON_IMPORT_EXCEL_PARTY_MAP:
       return {
         ...state,
-        listLoading: true,
+        listBtnLoading: true,
       }
 
     case GO_BUTTON_IMPORT_EXCEL_PARTY_MAP_SUCCESS:
       return {
         ...state,
         addGoButton: action.payload,
-        listLoading: false,
+        listBtnLoading: false,
       }
 
     case SAVE_IMPORT_EXCEL_PARTY_MAP:
@@ -68,7 +68,7 @@ const ImportExcelPartyMap_Reducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        listLoading: false,
+        listBtnLoading: false,
       };
     default:
       return state

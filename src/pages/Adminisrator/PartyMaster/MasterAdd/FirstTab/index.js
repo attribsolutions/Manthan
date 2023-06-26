@@ -32,6 +32,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         District: "",
         GSTIN: "",
         CityName: "",
+        Distance: "",
         MkUpMkDn: false,
         isActive: true,
 
@@ -236,6 +237,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         id="txtName"
                                         value={values.Name}
                                         type="text"
+                                        disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                         className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                         placeholder="Please Enter Name"
                                         autoComplete='off'
@@ -314,13 +316,14 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             </Col>
 
                             <Col md="1"></Col>
-                            {(subPageMode === url.PARTY) && // SAPPartyCode   show only (Party Master) mode
+                            {!(subPageMode === url.RETAILER_MASTER) && // SAPPartyCode   show only (Party Master) mode
                                 <Col md="3">
                                     <FormGroup className="mb-3">
                                         <Label htmlFor="validationCustom01">{fieldLabel.SAPPartyCode} </Label>
                                         <Input
                                             name="SAPPartyCode"
                                             value={values.SAPPartyCode}
+                                            disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                             type="text"
                                             className={isError.SAPPartyCode.length > 0 ? "is-invalid form-control" : "form-control"}
                                             placeholder="Please Enter SAP Code"
@@ -336,6 +339,30 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                 </Col>
                             }
 
+                            <Col md="1"></Col>
+                            {!(subPageMode === url.RETAILER_MASTER) &&  // Distance   show only (Party Master) mode
+                                <Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom01">{fieldLabel.Distance} </Label>
+                                        <Input
+                                            name="Distance"
+                                            value={values.Distance}
+                                            type="text"
+                                            disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
+                                            className={isError.Distance.length > 0 ? "is-invalid form-control" : "form-control"}
+                                            placeholder="Please Enter Distance"
+                                            autoComplete='off'
+                                            onChange={(event) => {
+                                                onChangeText({ event, state, setState })
+                                            }}
+                                        />
+                                        {isError.Distance.length > 0 && (
+                                            <span className="invalid-feedback">{isError.Distance}</span>
+                                        )}
+                                    </FormGroup>
+                                </Col>
+                            }
+
                         </Row>
                     </CardBody>
                 </Card>
@@ -344,7 +371,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 <Card className=" text-black mt-n2" style={{ backgroundColor: "whitesmoke" }} >
                     <CardBody >
                         <Row className="mt-3 ">
-                            {(subPageMode === url.PARTY) &&
+                            {!(subPageMode === url.RETAILER_MASTER) ?
                                 <Col md="3">
                                     <FormGroup className="mb-3">
                                         <Label > {fieldLabel.PartyType}</Label>
@@ -353,6 +380,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                                 name="PartyType"
                                                 value={values.PartyType}
                                                 isSearchable={true}
+                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={PartyTypeDropdown_Options}
@@ -364,10 +392,13 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
                                         </Col>
                                     </FormGroup>
+
                                 </Col>
+                                : null
                             }
+                            {/* <Col md="1"> </Col> */}
                             {
-                                (subPageMode === url.PARTY) ?
+                                !(subPageMode === url.RETAILER_MASTER) ?
                                     (partyType_AddMasterAccess) ?
                                         <Col md="1" className=" mt-3">
                                             <AddMaster
@@ -385,6 +416,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     <Input
                                         value={priceListSelect.label}
                                         autoComplete={"off"}
+                                        disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                         placeholder="Select..."
                                         onClick={priceListOnClick}
                                     >
@@ -399,7 +431,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             </Col>
                             <Col md="1">  </Col>
 
-                            {(subPageMode === url.PARTY) && // SUPLIER dropdown  show only (Party Master) mode
+                            {!(subPageMode === url.RETAILER_MASTER) &&// SUPLIER dropdown  show only (Party Master) mode
                                 < Col md="3">
                                     <FormGroup className="mb-3">
                                         <Label> {fieldLabel.Supplier} </Label>
@@ -407,6 +439,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                             <Select
                                                 name="Supplier"
                                                 value={values.Supplier}
+                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={SupplierOptions}
@@ -449,9 +482,9 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                 <FormGroup className="mb-3">
                                     <Label> {fieldLabel.GSTIN} </Label>
                                     <Input
+                                        type="text"
                                         name="GSTIN"
                                         value={values.GSTIN}
-                                        type="text"
                                         className={isError.GSTIN.length > 0 ? "is-invalid form-control" : "form-control"}
                                         placeholder="Please Enter GSTIN"
                                         autoComplete='off'
@@ -478,6 +511,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                                 <Input
                                                     name="MkUpMkDn"
                                                     type="checkbox"
+                                                    disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                                     className="form-check-input"
                                                     checked={values.MkUpMkDn}
                                                     onChange={(event) => onChangeCheckbox({ event, state, setState })}
@@ -497,6 +531,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         <Select
                                             name="State"
                                             value={values.State}
+                                            isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                             isSearchable={true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
@@ -518,6 +553,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         <Select
                                             name="District"
                                             value={values.District}
+                                            isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                             isSearchable={true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
@@ -542,6 +578,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         name="CityName"
                                         id="CityName"
                                         value={values.CityName}
+                                        isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                         isSearchable={true}
                                         classNamePrefix="dropdown"
                                         options={City_DropdownOptions}
@@ -577,8 +614,11 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         </Label>
                                         <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
                                             <div className="form-check form-switch form-switch-md mb-3">
-                                                <Input type="checkbox" className="form-check-input"
+                                                <Input
+                                                    type="checkbox"
+                                                    className="form-check-input"
                                                     checked={values.isActive}
+                                                    disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                                     name="isActive"
                                                     onChange={(event) => onChangeCheckbox({ event, state, setState })}
                                                 />

@@ -1,6 +1,6 @@
 import { CommonConsole, sap_date_dmy_func } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { getOrderApprovalDetailActionSucc, orderApprovalAction, orderApprovalActionSuccess } from "../../../store/actions";
+import { getOrderApprovalDetailActionSucc, GoButton_For_Order_AddSuccess, orderApprovalAction, orderApprovalActionSuccess } from "../../../store/actions";
 
 export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
     if ((approvalDetail.Status === true)) {
@@ -47,10 +47,15 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
     }
 }
 
-export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPath, history }) => {
+export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPath, history,goButtonHandler }) => {
+   
     try {
+ 
         if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
             dispatch(orderApprovalActionSuccess({ Status: false }))
+  
+            goButtonHandler("event",)
+            dispatch(GoButton_For_Order_AddSuccess([]))
 
             const a = await customAlert({
                 Type: 1,
@@ -60,12 +65,13 @@ export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPat
                 history.push({
                     pathname: listPath,
                 });
+                window.location.reload()
             }
 
         } else if (orderApprovalMsg.Status === true) {
             dispatch(orderApprovalActionSuccess({ Status: false }))
             customAlert({
-                Type: 2,
+                Type: 3,
                 Message: JSON.stringify(orderApprovalMsg.Message),
             })
         }

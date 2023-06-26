@@ -21,7 +21,7 @@ const UserList = () => {
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
-            listLoading: state.User_Registration_Reducer.listLoading,
+            listBtnLoading: state.User_Registration_Reducer.listBtnLoading,
             tableList: state.User_Registration_Reducer.pages,
             editData: state.User_Registration_Reducer.editData,
             updateMsg: state.User_Registration_Reducer.updateMessage,
@@ -55,7 +55,7 @@ const UserList = () => {
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             {
-                reducers.listLoading ?
+                reducers.listBtnLoading ?
                     <Listloader />
                     :
                     (pageField) ?

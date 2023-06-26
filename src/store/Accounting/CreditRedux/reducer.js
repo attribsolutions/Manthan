@@ -20,7 +20,7 @@ const INIT_STATE = {
   InvoiceReturn: [],
   ReceiptNumber: [],
   saveBtnloading: false,
-  listLoading: false
+  listBtnLoading: false
 }
 
 const CredietDebitReducer = (state = INIT_STATE, action) => {
@@ -45,14 +45,14 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
     case GET_CREDIT_LIST:
       return {
         ...state,
-        listLoading: true
+        listBtnLoading: true
       }
 
     case GET_CREDIT_LIST_SUCCESS:
       return {
         ...state,
         CreditList: action.payload,
-        listLoading: false
+        listBtnLoading: false
       }
     //  del
     case DELETE_CREDIT_LIST_ID_SUCCESS:

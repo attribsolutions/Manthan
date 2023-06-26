@@ -2,7 +2,7 @@ import { ORDER_SUMMARY_API_ERROR_ACTION, POST_ORDER_SUMMARY_API, POST_ORDER_SUMM
 
 const INIT_STATE = {
     orderSummaryGobtn: [],
-    listLoading: false
+    listBtnLoading: false
 }
 
 const OrderSummaryReducer = (state = INIT_STATE, action) => {
@@ -11,20 +11,20 @@ const OrderSummaryReducer = (state = INIT_STATE, action) => {
         case POST_ORDER_SUMMARY_API:
             return {
                 ...state,
-                listLoading: true
+                listBtnLoading: true
             }
 
         case POST_ORDER_SUMMARY_API_SUCCESS:
             return {
                 ...state,
                 orderSummaryGobtn: action.payload,
-                listLoading: false
+                listBtnLoading: false
             }
 
         case ORDER_SUMMARY_API_ERROR_ACTION:
             return {
                 ...state,
-                listLoading: false,
+                listBtnLoading: false,
             };
 
 

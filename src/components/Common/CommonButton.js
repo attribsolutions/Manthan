@@ -21,7 +21,7 @@ export function SaveButton(props) {
   }
   return null
 }
-const SaveBtn = ({ onClick, userAcc, loading }) => {
+const SaveBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
   const { Name } = userAcc;
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
@@ -42,6 +42,7 @@ const SaveBtn = ({ onClick, userAcc, loading }) => {
         <button
           type="submit"
           id={btnId}
+          disabled={forceDisabled}
           autoFocus={false}
           title={`Save ${Name}`}
           className="btn btn-primary w-md"
@@ -110,6 +111,41 @@ export function Change_Button(props) {
     onClick={onClick}>Change</Button>
 }
 
+
+
+export const GotoInvoiceBtn = ({ onClick, userAcc, loading ,forceDisabled}) => {
+  const { Name } = userAcc;
+  const btnId = `gotoInvoiceBtn-${Name.replace(/ /g, "")}`;
+  return (
+    <div>
+      {loading ?
+        <button
+          id={btnId}
+      
+          className="btn btn-info w-md"
+          autoFocus={false}
+        >  Saving.. &nbsp;
+          <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+        </button>
+
+        :
+        <button
+          type="submit"
+          id={btnId}
+          disabled={forceDisabled}
+          autoFocus={false}
+          title={` save & goto Invoice ${Name}`}
+          className="btn btn-info w-md"
+          onClick={onClick}
+        >  Go to Invoice
+        </button>}
+    </div>
+  )
+
+}
+
+
+
 export function Loader() {
 
   return <div className="dot-pulse"> <span> </span>     &nbsp;
@@ -121,10 +157,6 @@ export function Loader() {
 }
 
 export function Listloader() {
-
-
-
-
   return <div id="api_spinner" >
     <div className="api_spinner_body " >
       <span className="spinner" style={{ left: "-5cm" }}></span>

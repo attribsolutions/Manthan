@@ -27,11 +27,12 @@ const DriverList = () => {
 
   const reducers = useSelector(
     (state) => ({
-      listLoading: state.DriverReducer.listLoading,
+      listBtnLoading: state.DriverReducer.listBtnLoading,
+      loading: state.DriverReducer.loading,
       tableList: state.DriverReducer.DriverList,
       editData: state.DriverReducer.editData,
       updateMsg: state.DriverReducer.updateMessage,
-      deleteMsg: state.DriverReducer.deleteMessage,
+      deleteMsg: state.DriverReducer.deleteMsg,
       postMsg: state.DriverReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList
@@ -82,7 +83,7 @@ const DriverList = () => {
           </div>
         }
         {
-          reducers.listLoading ?
+          reducers.loading ?
             <Listloader />
             :
             (pageField) ?

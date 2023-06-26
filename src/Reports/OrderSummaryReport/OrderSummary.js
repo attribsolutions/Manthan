@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Card, CardBody, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, onChangeSelect } from "../../components/Common/validationFunction";
 import { Go_Button } from "../../components/Common/CommonButton";
@@ -11,10 +11,8 @@ import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
 import * as XLSX from 'xlsx';
-import { AlertState, SSDD_List_under_Company } from "../../store/actions";
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+import { SSDD_List_under_Company } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-
 const OrderSummary = (props) => {
 
     const dispatch = useDispatch();
@@ -31,12 +29,13 @@ const OrderSummary = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [Party, setParty] = useState('');
+    const [groupByDate, setGroupByDate] = useState(false);
+    const [groupByParty, setGroupByParty] = useState(false);
 
 
     const reducers = useSelector(
         (state) => ({
-            listLoading: state.OrderSummaryReducer.listLoading,
+            listBtnLoading: state.OrderSummaryReducer.listBtnLoading,
             orderSummaryGobtn: state.OrderSummaryReducer.orderSummaryGobtn,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
@@ -84,13 +83,57 @@ const OrderSummary = (props) => {
 
     useEffect(() => {
         if (Data.length > 0) {
-            const worksheet = XLSX.utils.json_to_sheet(Data);
+            var arr = []
+            if (groupByDate) {
+                arr.push('OrderDate')
+            }
+            if (groupByParty) {
+                arr.push('CustomerName')
+            }
+
+            const groupData = groupByColumnsWithSumFunc(Data, [...arr, ...['Group', 'SubGroup', 'MaterialName']]);
+            _cfunc.CommonConsole(JSON.stringify("groupData", Data))
+            const worksheet = XLSX.utils.json_to_sheet(groupData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
-            XLSX.writeFile(workbook, "Order Summary Report.XLSX");
+            XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
             dispatch(postOrderSummary_API_Success([]));
         }
     }, [Data]);
+
+    const groupByColumnsWithSumFunc = (jsonData, columnNames) => {
+        const columnSumsByGroup = jsonData.reduce((result, item) => {
+            const groupKey = columnNames.map(columnName => item[columnName]).join('|');
+            if (!result[groupKey]) {
+                result[groupKey] = {
+                    sums: {},
+                    data: []
+                };
+
+                columnNames.forEach((key) => {
+                    result[groupKey].sums[key] = item[key];
+                })
+            }
+
+            const group = result[groupKey];
+            group.data.push(item);
+
+            Object.entries(item).forEach(([key, value]) => {
+                if (typeof value === 'number') {
+                    group.sums[key] = (group.sums[key] || 0) + value;
+                }
+            });
+
+            return result;
+        }, {});
+        let arr = []
+        Object.keys(columnSumsByGroup).forEach(i => {
+            delete columnSumsByGroup[i].sums.Orderid
+            arr.push(columnSumsByGroup[i].sums)
+        })
+
+        return arr
+    };
 
     const Party_Option = SSDD_List.map(i => ({
         value: i.id,
@@ -113,7 +156,7 @@ const OrderSummary = (props) => {
 
 
     function goButtonHandler() {
-        debugger
+
         const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
@@ -202,12 +245,41 @@ const OrderSummary = (props) => {
                         }
 
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.listLoading} />
+                            <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
                         </Col>
                     </div>
                 </div>
+
+                <Card className="mt-1">
+                    <CardBody className="c_card_body text-black">
+                        <Row>
+                            <Col sm={4} >
+                                <FormGroup className="row">
+                                    <Label className="col-4 p-2" >By Date Group</Label>
+                                    <Col sm="4">
+                                        <Input type="checkbox"
+                                            checked={groupByDate}
+                                            onChange={(e) => setGroupByDate(e.target.checked)} />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+
+                            <Col sm={4} >
+                                <FormGroup className="row">
+                                    <Label className="col-4 p-2" >By Party Name</Label>
+                                    <Col sm="4" style={{ marginTop: '9px', }}>
+                                        <Input type="checkbox"
+                                            checked={groupByParty}
+                                            onChange={(e) => setGroupByParty(e.target.checked)}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                    </CardBody>
+                </Card>
             </div>
-        </React.Fragment>
+        </React.Fragment >
     )
 }
 

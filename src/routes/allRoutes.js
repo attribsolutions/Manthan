@@ -159,6 +159,8 @@ import ProductMarginReport from "../Reports/ProductMarginReport/ProductMarginRep
 import CityMaster from "../pages/Adminisrator/CityPages/CityMaster";
 import CityList from "../pages/Adminisrator/CityPages/CityList";
 import OrderSummary from "../Reports/OrderSummaryReport/OrderSummary";
+import InvoiceConfiguration from "../pages/Adminisrator/InvoiceConfiguration/InvoiceConfiguration";
+import StockEntry from "../pages/Inventory/StockEntry/StockEntry";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -201,6 +203,7 @@ const userRoutes = [
   { path: path.RETAILER_LIST, component: PartyList },
   { path: path.RETAILER_MASTER, component: PartyMaster },
 
+  { path: path.PARTY_SELF_EDIT, component: PartyMaster },
 
   { path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
   { path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },
@@ -291,6 +294,11 @@ const userRoutes = [
 
   { path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
 
+  { path: path.INVOICE_CONFIGURATION, component: InvoiceConfiguration },
+
+
+
+
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
   { path: path.CHALLAN, component: Challan },
@@ -303,6 +311,7 @@ const userRoutes = [
   { path: path.GRN_ADD_3, component: GRNAdd3 },
   { path: path.GRN_STP_3, component: OrderList },
 
+  { path: path.STOCK_ENTRY, component: StockEntry },
   // { path: path.GRN_ADD_PAGE_3, component: GRNAdd_3 },
 
 
@@ -386,20 +395,20 @@ const userRoutes = [
   { path: path.SAP_LEDGER, component: SapLedger },
 
 
-//**************************** Reports ***********************************//
+  //**************************** Reports ***********************************//
 
-{ path: path.ORDER_SUMMARY_REPORT, component:OrderSummary },
+  { path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
 
-// ************************************ Utility **************************************//
-{ path: path.SEARCH_BOX2, component: SearchBoxSecond },
-{ path: path.SEARCH_BOX3, component: SerachBox3 },
+  // ************************************ Utility **************************************//
+  { path: path.SEARCH_BOX2, component: SearchBoxSecond },
+  { path: path.SEARCH_BOX3, component: SerachBox3 },
 
-{ path: "/dashboard", component: Dashboard },
+  { path: "/dashboard", component: Dashboard },
 
-{ path: "/", exact: true, component: () => <Redirect to="/login" /> },
-// { component:() => <Redirect to="/login" /> },
-{ path: "/auth-404", component: Error404 },
-{ path: "/auth-500", component: Error500 },
+  { path: "/", exact: true, component: () => <Redirect to="/login" /> },
+  // { component:() => <Redirect to="/login" /> },
+  { path: "/auth-404", component: Error404 },
+  { path: "/auth-500", component: Error500 },
 
 
 ]

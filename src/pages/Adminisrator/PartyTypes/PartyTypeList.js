@@ -21,7 +21,7 @@ const PartyTypeList = (props) => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      listLoading: state.PartyTypeReducer.listLoading,
+      listBtnLoading: state.PartyTypeReducer.listBtnLoading,
       tableList: state.PartyTypeReducer.ListData,
       editData: state.PartyTypeReducer.editData,
       updateMsg: state.PartyTypeReducer.updateMessage,
@@ -50,12 +50,13 @@ const PartyTypeList = (props) => {
   }, []);
 
   const { pageField, userAccess = [] } = reducers
-
+  debugger
   return (
     <React.Fragment>
 
       {
-        reducers.listLoading ?
+
+        reducers.listBtnLoading ?
           <Listloader />
           :
           (pageField) ?

@@ -27,6 +27,7 @@ const GRNList = () => {
     const reducers = useSelector(
         (state) => ({
             loading: state.GRNReducer.loading,
+            listBtnLoading:state.GRNReducer.listBtnLoading,
             customer: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,

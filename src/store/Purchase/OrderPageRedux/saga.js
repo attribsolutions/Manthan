@@ -40,6 +40,7 @@ import {
 } from "./actionType";
 import { concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
@@ -76,7 +77,7 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
 
 function* saveOrder_GenFunc({ config }) {
 
-  const { subPageMode, btnId, jsonBody } = config;
+  const { subPageMode, btnId, jsonBody, gotoInvoiceMode } = config;
 
   let newConfig = config;
   // **************************************** for aorde Sap aproval********************************
@@ -91,7 +92,8 @@ function* saveOrder_GenFunc({ config }) {
       response = yield call(IBOrderPage_Save_API, newConfig);
     } else {
       response = yield call(OrderPage_Save_API_ForPO, config);
-      response.btnId = btnId
+      response["btnId"] = btnId
+      response["gotoInvoiceMode"] = gotoInvoiceMode
     }
     yield put(saveOrderActionSuccess(response));
   } catch (error) {
@@ -133,6 +135,7 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
 }
 
 function* orderList_GoBtn_GenFunc({ config }) {
+
   //  Order List Filter by subPageMode
   try {
     const { subPageMode } = config
@@ -150,7 +153,11 @@ function* orderList_GoBtn_GenFunc({ config }) {
     // else if ((subPageMode === url.ORDER_LIST_4)) {
     //   response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     // }
+    
     newList = yield response.Data.map((i) => {
+
+      const numericValue = parseFloat(i.OrderAmount);
+      i.OrderAmount = numericValue.toLocaleString(); //  Order Amount show with commas
 
       i["preOrderDate"] = i.OrderDate
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
@@ -164,6 +171,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceHideOrderAprovalBtn = true;
       i.Status = "Open";
       i.Inward = "Open";
+
 
 
       if (i.Inward > 0) {
@@ -185,9 +193,14 @@ function* orderList_GoBtn_GenFunc({ config }) {
       }
 
       //**********************************order Aproval button Show Condition ********************************************************** */
+
+
+
       if (!i.SAPResponse && i.CustomerSAPCode) {//order Aproval button Show Condition 
         i.forceHideOrderAprovalBtn = false;
       }
+
+
 
       //++++++++++++++++++++++++++++++++++++++ make invoice Button dessiable/vissbble ++++++++++++++++++++++++++++++++++++++
       if (i.InvoiceCreated === true) {
@@ -195,14 +208,14 @@ function* orderList_GoBtn_GenFunc({ config }) {
       }
 
       //**********************************order Aproval button Show Condition ********************************************************** */
-            if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
+      if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
         i.forceSelectDissabled = true;//select row check box dessible 
       }
 
       //**********sap_code order page********************************************************************************************
-           if (i.SAPResponse) {  //If sapcode true the edit and delete btn  dissbale
+      if (i.SAPResponse) {  //If sapcode true the edit and delete btn  dissbale
 
         var numb = i.SAPResponse.match(/\d/g);
         i.SAPResponse = numb.join("");
@@ -213,6 +226,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
       return i
     })
+
     yield put(getOrderListPageSuccess(newList))
 
   } catch (error) {
@@ -227,15 +241,23 @@ function* orderApproval_GenFunc({ config }) {
   } catch (error) {
     yield put(orderApiErrorAction())
   }
-
 }
 
 function* getOrderApproval_Detail_GenFunc({ config }) {
+
   try {
+
     const response = yield call(OrderPage_Edit_Get_API, config)
     response.btnId = config.btnId
+
     yield put(getOrderApprovalDetailActionSucc(response));
+
   } catch (error) {
+    yield put(getOrderApprovalDetailActionSucc({ Status: false }))
+    yield put(orderApprovalActionSuccess({
+      Status: true,
+      Message: "Order Save Successfully But Can't Send in 'SAP'"
+    }))
     yield put(orderApiErrorAction())
   }
 }

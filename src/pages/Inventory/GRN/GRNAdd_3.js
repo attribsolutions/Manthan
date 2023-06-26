@@ -237,7 +237,7 @@ const GRNAdd3 = (props) => {
 
         {  //-------------MRP column ----------------------------------
             text: "MRP",
-            dataField: "MRP",
+            dataField: "MRPValue",
             align: () => ('right')
         },
         {  //-------------Rate column ----------------------------------
