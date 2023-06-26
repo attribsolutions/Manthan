@@ -5,7 +5,8 @@ import {
     DELETE_SALES_RETURN_ID_SUCCESS,
     SALES_RETURN_LIST_API,
     SAVE_SALES_RETURN_MASTER,
-    SALES_RUTURN_API_ERROR_ACTION
+    SALES_RUTURN_API_ERROR_ACTION,
+    DELETE_SALES_RETURN_ID
 } from "./actionType"
 
 const INIT_STATE = {
@@ -15,6 +16,7 @@ const INIT_STATE = {
     salesReturnList: [],
     deleteMsg: { Status: false },
     saveBtnloading: false,
+    listBtnLoading: false,
 }
 
 const SalesReturnReducer = (state = INIT_STATE, action) => {
@@ -25,6 +27,7 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 ...state,
                 InvoiceNo: action.payload,
             }
+
         case SAVE_SALES_RETURN_MASTER:
             return {
                 ...state,
@@ -38,6 +41,7 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 saveBtnloading: false,
 
             }
+
         case SALES_RETURN_LIST_API:
             return {
                 ...state,
@@ -49,11 +53,19 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 ...state,
                 salesReturnList: action.payload,
                 loading: false
-
             }
+
+        case DELETE_SALES_RETURN_ID:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+                deleteMsg: action.payload,
+            }
+
         case DELETE_SALES_RETURN_ID_SUCCESS:
             return {
                 ...state,
+                listBtnLoading: false,
                 deleteMsg: action.payload,
             }
 
@@ -62,6 +74,7 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 ...state,
                 saveBtnloading: false,
                 loading: false,
+                listBtnLoading: false,
             };
         default:
             return state
