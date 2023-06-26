@@ -23,11 +23,14 @@ function pageFooter(doc, data, islast, array) {
 }
 
 const InvioceReporta5 = (data) => {
-    
 
     var doc = new jsPDF('l', 'pt', 'a5');
 
     if (Array.isArray(data)) {
+        for (let i = 0; i < data.length; i++) {
+            data[i].SettingData = data.SettingData;
+        }
+
         data.forEach((data, islast, array) => {
             pageHeder(doc, data);
             reportBody(doc, data);                                   // condition for Mulitinvoice invoice
@@ -37,7 +40,7 @@ const InvioceReporta5 = (data) => {
             }
         })
     } else {
-        
+
         const Data = []
         Data.push(data)
         Data.forEach((data, islast, array) => {
