@@ -10,7 +10,7 @@ function* Invoice_No_List_GenFunc({ jsonBody }) {
     try {
         const response = yield call(apiCall.Invoice_No_list_API, jsonBody);
         yield put(action.InvoiceNumberSuccess(response.Data));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
 
 // add button api for sales return
@@ -19,7 +19,7 @@ function* save_SalesReturn_GenFunc({ config }) {
     try {
         const response = yield call(apiCall.SalesReturn_post_API, config);
         yield put(action.saveSalesReturnMaster_Success(response));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
 
 // GoButton Post API for Sales Return List
@@ -33,7 +33,7 @@ function* SalesReturn_List_GenFun({ filters }) {
         })
 
         yield put(action.salesReturnListAPISuccess(newList));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
 
 // delete API
@@ -42,7 +42,7 @@ function* delete_SalesReturn_ID_GenFunc({ config }) {
     try {
         const response = yield call(apiCall.SalesReturn_Delete_API, config);
         yield put(action.delete_SalesReturn_Id_Succcess(response))
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
 
 function* SalesReturnSaga() {

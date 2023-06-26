@@ -232,8 +232,6 @@ const InvoiceList = () => {
     });
 
     function downBtnFunc(row) {
-
-        console.log(Partysettingdata)
         var ReportType = Partysettingdata.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, Partysettingdata))
     }

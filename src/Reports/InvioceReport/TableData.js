@@ -1,4 +1,4 @@
-import { invoice } from "../ReportIndex";
+import { invoice, invoiceA5 } from "../ReportIndex";
 export const columns = [
     "SR",
     "HSN Item Name",
@@ -113,9 +113,8 @@ export const DetailsOfTransport = [
 
 
 
-
-
 export const Rows = (data) => {
+    
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -152,9 +151,10 @@ export const Rows = (data) => {
         }
         return accumulator;
     }, {});
-
+    
     Object.values(groupedItems).forEach((element, key) => {
         let HSNcodes = ""
+        
         if (data.SettingData.HSNCodeDigit.Value === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
         }
@@ -164,7 +164,7 @@ export const Rows = (data) => {
         if (data.SettingData.HSNCodeDigit.Value === "3") {
             HSNcodes = element.HSNCode.slice(0, 8);
         }
-
+        
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
@@ -296,7 +296,7 @@ export const DetailsOfTransportRow = (data) => {
     let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
     const PONumber = result.toString()
     var DetailsOfTransportArray = [
-        [data.ReportType === invoice ? ` PO Number:${PONumber}` : data.DriverName === null ? "Driver Name:" : `Driver Name :${data.DriverName}`],
+        [data.ReportType === invoiceA5 ? ` PO Number:${PONumber}` : data.DriverName === null ? "Driver Name:" : `Driver Name :${data.DriverName}`],
         [`vehical No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
         [`E-way Bill :`],
         [`IRN NO :`]

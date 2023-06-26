@@ -22,6 +22,7 @@ import { C_DatePicker } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../../routes/index"
 import { Go_Button } from "../../../../components/Common/CommonButton";
+import { getpartysetting_API } from "../../../../store/Administrator/PartySetting/action";
 
 const LoadingSheetList = () => {
     const history = useHistory();
@@ -29,6 +30,8 @@ const LoadingSheetList = () => {
     const currentDate_ymd = _cfunc.date_ymd_func()
 
     const [headerFilters, setHeaderFilters] = useState('');
+    const [Partysettingdata, setPartysettingdata] = useState({})
+
 
     const [pageMode, setPageMode] = useState(mode.defaultList);
 
@@ -38,12 +41,16 @@ const LoadingSheetList = () => {
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
             deleteMsg: state.LoadingSheetReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageFieldList,
+            PartySettingdata: state.PartySettingReducer.PartySettingdata,
+
         })
     );
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
-    const { userAccess, pageField } = reducers;
+    const { userAccess, pageField, PartySettingdata } = reducers;
+    const { Data = [] } = PartySettingdata;
+
 
     const action = {
         getList: LoadingSheetListAction,
@@ -58,6 +65,8 @@ const LoadingSheetList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
         goButtonHandler()
+        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id))
+
     }, []);
 
     function goButtonHandler() {
@@ -81,11 +90,24 @@ const LoadingSheetList = () => {
         setHeaderFilters(newObj)
     }
 
+
+    useEffect(() => {
+        const singleObject = {};
+        for (const item of Data) {
+            singleObject[item.SystemSetting.replace(/\s/g, '')] = {
+                SystemSetting: item.SystemSetting,
+                Value: item.Value,
+                id: item.id
+            };
+            setPartysettingdata(singleObject)
+        }
+    }, [Data])
+
     function downBtnFunc(row, downbtnType) {
         console.log(downbtnType)
         if (downbtnType === "IsMultipleInvoicePrint") {
             let ReportType = report.invoiceA5
-            dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id))
+            dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id, Partysettingdata))
         } else {
             let ReportType = report.VanLoadingPartyWiseInvoice
             dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
