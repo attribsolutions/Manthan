@@ -3,12 +3,12 @@ import { CheckAPIResponse, CommonConsole } from "../components/Common/CommonFunc
 
 
 
-// const API_URL = "http://192.168.1.114:8000"
+const API_URL = "http://192.168.1.114:8000"
 
 // const API_URL = "http://117.248.109.234:8000"
 // const API_URL = "http://10.4.5.64:8000"
 
-const API_URL = "http://cbmfooderp.com:8000"
+// const API_URL = "http://cbmfooderp.com:8000"
 
 
 const axiosApi = axios.create({
@@ -33,7 +33,7 @@ axiosApi.interceptors.response.use(
 )
 
 export function get(url, btnId) {
-  
+
   CommonConsole("get api call", url);
   AuthonticationFunction();
   return axiosApi.get(url)
@@ -56,10 +56,10 @@ export function post(url, body, btnId) {
       "Content-Type": "application/json",
     }
   }).then(response => {
-    
+
     return CheckAPIResponse({ method: "post", url, response, body, btnId });
   }).catch(error => {
-    
+
     return CheckAPIResponse({ method: "post", url, error, body, btnId });
   });
 };
