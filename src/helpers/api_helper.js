@@ -56,10 +56,10 @@ export function post(url, body, btnId) {
       "Content-Type": "application/json",
     }
   }).then(response => {
-    debugger
+    
     return CheckAPIResponse({ method: "post", url, response, body, btnId });
   }).catch(error => {
-    debugger
+    
     return CheckAPIResponse({ method: "post", url, error, body, btnId });
   });
 };

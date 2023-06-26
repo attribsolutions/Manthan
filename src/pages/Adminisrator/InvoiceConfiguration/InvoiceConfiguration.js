@@ -58,6 +58,8 @@ const InvoiceConfiguration = (props) => {
         Invoicea4: "",
         ShowBatch: "",
         AddressInInvoice: "",
+        autoEInvoice: "",
+        EInvoiceApplicable: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -88,7 +90,7 @@ const InvoiceConfiguration = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-    const { Data = [] } = PartySettingdata;
+    const { Data = {} } = PartySettingdata;
 
 
     const location = { ...history.location }
@@ -190,36 +192,29 @@ const InvoiceConfiguration = (props) => {
 
     useEffect(() => {
 
-        const singleObject = {};
-        for (const item of Data) {
-            singleObject[item.SystemSetting.replace(/\s/g, '')] = {
-                SystemSetting: item.SystemSetting,
-                Value: item.Value,
-                id: item.id
-            };
-        }
-        console.log(singleObject)
-        if (Object.keys(singleObject).length > 1) {
-
-            if (singleObject.HSNCodeDigit.Value === "1") {
-                singleObject.HSNCodeDigit.Value = { value: "1", label: "4 Digits" }
+        if (Object.keys(Data).length > 1) {
+            debugger
+            if (Data.HSNCodeDigit.Value === "1") {
+                Data.HSNCodeDigit.Value = { value: "1", label: "4 Digits" }
             }
-            if (singleObject.HSNCodeDigit.Value === "2") {
-                singleObject.HSNCodeDigit.Value = { value: "2", label: "6 Digits" }
+            if (Data.HSNCodeDigit.Value === "2") {
+                Data.HSNCodeDigit.Value = { value: "2", label: "6 Digits" }
             }
-            if (singleObject.HSNCodeDigit.Value === "4") {
-                singleObject.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
+            if (Data.HSNCodeDigit.Value === "4") {
+                Data.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
             }
 
             setState((i) => {
                 debugger
                 const a = { ...i }
-                a.values.Invoicea4 = singleObject.A4Print;
-                a.values.AddressInInvoice = singleObject.AddressOnInvoice;
-                a.values.HSNCodeDigit = singleObject.HSNCodeDigit;
-                a.values.InvoiceAmountRound = singleObject.InvoiceAmountRoundConfiguration;
-                a.values.ShowBatch = singleObject.ShowBatchNoOnInvoicePrint;
-                a.values.TCSAmountRound = singleObject.TCSAmountRoundConfiguration;
+                a.values.Invoicea4 = Data.A4Print;
+                a.values.AddressInInvoice = Data.AddressOnInvoice;
+                a.values.HSNCodeDigit = Data.HSNCodeDigit;
+                a.values.InvoiceAmountRound = Data.InvoiceAmountRoundConfiguration;
+                a.values.ShowBatch = Data.ShowBatchNoOnInvoicePrint;
+                a.values.TCSAmountRound = Data.TCSAmountRoundConfiguration;
+                a.values.EInvoiceApplicable = Data.EInvoiceApplicable;
+                a.values.autoEInvoice = Data.AutoEInvoice;
                 return a
             })
         }
@@ -443,7 +438,7 @@ const InvoiceConfiguration = (props) => {
                                                         </Row>
                                                     </FormGroup>
                                                 </Col>
-                                                {/* </Row> */}
+
 
                                                 <Col sm={8}>
                                                     <FormGroup className="mb-3">
@@ -495,6 +490,66 @@ const InvoiceConfiguration = (props) => {
                                                                         setState((i) => {
                                                                             const a = { ...i }
                                                                             a.values.AddressInInvoice.Value = e.target.checked === false ? "0" : "1";
+
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
+
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col sm={8}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={3} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.EInvoiceApplicable} </Label>
+                                                            </Col>
+                                                            <Col sm={9} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    name="Sunday"
+                                                                    checked={values.EInvoiceApplicable.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            a.values.EInvoiceApplicable.Value = e.target.checked === false ? "0" : "1";
+
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
+
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col sm={4}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={5} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.autoEInvoice} </Label>
+                                                            </Col>
+                                                            <Col sm={7} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    name="Sunday"
+                                                                    checked={values.autoEInvoice.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            a.values.autoEInvoice.Value = e.target.checked === false ? "0" : "1";
 
                                                                             return a
                                                                         })

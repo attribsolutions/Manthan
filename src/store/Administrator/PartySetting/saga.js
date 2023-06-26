@@ -6,20 +6,31 @@ import { PartySettingApi, save_PartySetting_API } from "../../../helpers/backend
 
 
 function* Save_Method_ForPartySetting_GenFun({ config }) {
-    debugger          
+
     try {
-        debugger
+
         const response = yield call(save_PartySetting_API, config);
         yield put(savePartySettingMaster_Success(response));
     } catch (error) { yield put(getpartysettingApiErrorAction()) }
 }
-
+debugger
 function* PartySetting_GenFunc({ config }) {
-
+    debugger
     try {
-
+        debugger
         const response = yield call(PartySettingApi, config);
+        const singleObject = {};
+        for (const item of response.Data) {
+            singleObject[item.SystemSetting.replace(/\s/g, '')] = {
+                SystemSetting: item.SystemSetting,
+                Value: item.Value,
+                id: item.id
+            };
+
+        }
+        response["Data"] = singleObject
         yield put(getpartysetting_API_Success(response))
+        debugger
     } catch (error) { yield put(getpartysettingApiErrorAction()) }
 }
 
