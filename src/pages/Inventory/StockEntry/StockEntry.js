@@ -222,7 +222,6 @@ const StockEntry = (props) => {
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
 
-                debugger
                 return (
                     <>
                         <span style={{ justifyContent: 'center', width: "100px" }}>
@@ -244,10 +243,6 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
-
-                const highest_GST = row.ItemGSTHSNDetails.filter((obj, index, arr) => {
-                    return obj.value === Math.max(...arr.map(item => item.value));
-                });
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
@@ -273,7 +268,7 @@ const StockEntry = (props) => {
                     <Input
                         id=""
                         key={row.id}
-                        defaultValue={row.RowData.BatchCode}
+                        defaultValue={row.BatchCode}
                         type="text"
                         className="col col-sm text-center"
                         onChange={(event) => { row.BatchCode = event.target.value }}
@@ -298,7 +293,6 @@ const StockEntry = (props) => {
                 </span>)
             }
         },
-
         {
             text: "Action ",
             dataField: "",
@@ -362,6 +356,7 @@ const StockEntry = (props) => {
 
                 itemArr.push({
                     id: itemArr.length + 1,
+                    BatchCode: `${currentDate_ymd}_${i.ItemId}_${_cfunc.loginPartyID()}_${itemArr.length}`,
                     ItemUnitDetails: i.unitOps,
                     ItemMRPDetails: i.MRPOps,
                     ItemGSTHSNDetails: i.GSTOps,
