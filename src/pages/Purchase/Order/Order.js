@@ -73,7 +73,6 @@ const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const RoleID = _cfunc.loginRoleID();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const userAdminRole = _cfunc.loginUserAdminRole();
     const ref1 = useRef('')
@@ -117,7 +116,7 @@ const Order = (props) => {
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
-
+    const [FSSAI_Date_Is_Expired, setFSSAI_Date_Is_Expired] = useState("")
 
     const {
         goBtnOrderdata,
@@ -386,6 +385,7 @@ const Order = (props) => {
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
+        FSSAIExipry: i.FSSAIExipry
     }))
 
     const orderTypeOptions = orderType.map((i) => ({
@@ -663,6 +663,15 @@ const Order = (props) => {
         setsupplierSelect(e);
         if (subPageMode === url.ORDER_4) {
             dispatch(_act.getSupplierAddress(e.value))
+            let Date = currentDate_ymd
+            if ((e.FSSAIExipry === "") || (e.FSSAIExipry === null)) {
+                setFSSAI_Date_Is_Expired("There is No FSSAI Expiry Date Please Insert FSSAI Date!")
+            }
+            else if (e.FSSAIExipry < Date) {
+                setFSSAI_Date_Is_Expired("FSSAI Expired")
+            } else {
+                setFSSAI_Date_Is_Expired("")
+            }
         }
         setorderItemTable([])
         setItemSelect('')
@@ -732,9 +741,9 @@ const Order = (props) => {
     };
 
     const item_AddButtonHandler = () => {
-        
+
         setGoBtnDissable(true)
-        
+
         let isfound = orderItemTable.find(i => i.value === itemSelect.value);
 
         if (!itemSelect) {
@@ -1050,6 +1059,7 @@ const Order = (props) => {
                             </div>
                         </div>
                         : null} */}
+
                     {userAdminRole &&
                         <PartyDropdown_Common
                             partySelect={partySelect}
@@ -1094,6 +1104,7 @@ const Order = (props) => {
                                                             menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
                                                     />
+
                                                 </Col>
                                             </FormGroup>
                                         </Col >
@@ -1114,10 +1125,16 @@ const Order = (props) => {
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
                                                 />
+                                                {(FSSAI_Date_Is_Expired) &&
+                                                    <span className="text-danger f-8">
+                                                        <small>{FSSAI_Date_Is_Expired} </small>
+                                                    </span>
+                                                }
                                             </Col>
 
                                         </FormGroup>
                                     </Col>
+
                                     <Col sm="1">                      {/*Go_Button  */}
 
                                         <div className="row mt-2  pr-1">
