@@ -472,7 +472,7 @@ const InvoiceConfiguration = (props) => {
 
                                             </Row>
                                             <Row>
-                                                <Col sm={4}>
+                                                {/* <Col sm={4}>
                                                     <FormGroup className="mb-3">
                                                         <Row>
                                                             <Col sm={5} >
@@ -500,7 +500,40 @@ const InvoiceConfiguration = (props) => {
                                                             </Col>
                                                         </Row>
                                                     </FormGroup>
+                                                </Col> */}
+
+                                                <Col sm={4}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={5} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.autoEInvoice} </Label>
+                                                            </Col>
+                                                            <Col sm={7} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    name="Sunday"
+                                                                    checked={values.autoEInvoice.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            a.values.autoEInvoice.Value = e.target.checked === false ? "0" : "1";
+
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
+
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
                                                 </Col>
+
+
+
                                                 <Col sm={8}>
                                                     <FormGroup className="mb-3">
                                                         <Row>
@@ -531,37 +564,7 @@ const InvoiceConfiguration = (props) => {
                                                     </FormGroup>
                                                 </Col>
                                             </Row>
-                                            <Row>
-                                                <Col sm={4}>
-                                                    <FormGroup className="mb-3">
-                                                        <Row>
-                                                            <Col sm={5} >
-                                                                <Label htmlFor="validationCustom01">  {fieldLabel.autoEInvoice} </Label>
-                                                            </Col>
-                                                            <Col sm={7} >
-                                                                <Input
-                                                                    style={{ marginLeft: "53px" }}
-                                                                    type="checkbox"
-                                                                    className="p-2"
-                                                                    name="Sunday"
-                                                                    checked={values.autoEInvoice.Value === "0" ? false : true}
-                                                                    onChange={(e) => {
 
-                                                                        setState((i) => {
-                                                                            const a = { ...i }
-                                                                            a.values.autoEInvoice.Value = e.target.checked === false ? "0" : "1";
-
-                                                                            return a
-                                                                        })
-                                                                    }}
-                                                                >
-                                                                </Input>
-
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
 
 
                                             <FormGroup className="mt-1">

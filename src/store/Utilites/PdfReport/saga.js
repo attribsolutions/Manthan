@@ -11,7 +11,7 @@ import { dataGenrator } from "../../../Reports/Invoice report a5/DemoData";
 function* getpdfData_GenFunc({ urlpath, ReportType, Id, Partysettingdata }) {
 
   try {
-    
+    debugger
     const response = yield call(urlpath, Id);
     response["ReportType"] = ReportType
     response.Data["ReportType"] = ReportType
