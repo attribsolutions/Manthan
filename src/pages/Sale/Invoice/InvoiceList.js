@@ -73,7 +73,7 @@ const InvoiceList = () => {
     const gobtnId = `gobtn-${subPageMode}`
     const { pageField, supplier, Uploaded_EInvoice, Uploaded_EwayBill, Cancel_EInvoice, Cancel_EwayBill, PartySettingdata } = reducers;
     const { fromdate, todate, supplierSelect } = hederFilters;
-    const { Data = [] } = PartySettingdata;
+    const { Data = {} } = PartySettingdata;
     const action = {
         getList: invoiceListGoBtnfilter,
         deleteId: deleteInvoiceId,
@@ -208,19 +208,6 @@ const InvoiceList = () => {
         dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id))
     }, [])
 
-    useEffect(() => {
-        const singleObject = {};
-        for (const item of Data) {
-            singleObject[item.SystemSetting.replace(/\s/g, '')] = {
-                SystemSetting: item.SystemSetting,
-                Value: item.Value,
-                id: item.id
-            };
-            setPartysettingdata(singleObject)
-        }
-    }, [Data])
-
-
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -232,8 +219,9 @@ const InvoiceList = () => {
     });
 
     function downBtnFunc(row) {
-        var ReportType = Partysettingdata.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, Partysettingdata))
+        debugger
+        var ReportType = Data.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, Data))
     }
 
     function goButtonHandler(event, IBType) {
