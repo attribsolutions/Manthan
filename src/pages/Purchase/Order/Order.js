@@ -282,6 +282,7 @@ const Order = (props) => {
                         Party: _cfunc.loginPartyID(),
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
+                        btnId: "",
                         jsonBody, subPageMode: url.INVOICE_1, path: url.INVOICE_1, pageMode: mode.defaultsave, customer,
                         errorMsg: "Order Save Successfully But Can't Make Invoice"
                     }));

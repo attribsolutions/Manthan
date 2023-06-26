@@ -41,6 +41,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 goBtnloading: true,
+                listBtnLoading: action.config.btnId,
             }
 
         // GO Button 
@@ -48,6 +49,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 goBtnloading: false,
+                listBtnLoading:false,
                 gobutton_Add: action.payload,
             }
         /**************************************** */

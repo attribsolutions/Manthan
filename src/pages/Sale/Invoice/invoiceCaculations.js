@@ -1,7 +1,10 @@
-import { groupBy } from "../../../components/Common/CommonFunction"
+import { groupBy,  loginSystemSetting } from "../../../components/Common/CommonFunction"
 
 
-export const discountCalculate = (row, index1) => {
+export const discountCalculate = (row, index1,) => {
+    debugger
+    let systemSetting = loginSystemSetting()
+    debugger
     // Extract values from the input parameters
     const rate = Number(row.Rate) || 0;
     const qty = Number(row.Qty) || 0;

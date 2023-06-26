@@ -236,7 +236,7 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     yield put(GoButtonForinvoiceAddSuccess(response));
 
   } catch (error) {
-    debugger
+  
     yield put(InvoiceApiErrorAction())
 
     if (errorMsg) {//if ErrorMsg True means the SO-Order GOTo-Invoice Button hit After GoBtnAdd Api Hitt and get error

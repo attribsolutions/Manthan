@@ -90,8 +90,8 @@ const Login = props => {
 
       localStorage.setItem("roleId", JSON.stringify(value))
       localStorage.setItem("roleId2", JSON.stringify(value))
-      dispatch(getpartysetting_API(loginPartyID()))
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
+      dispatch(getpartysetting_API(value.Party_id))//login party id pass to getpartysetting_API
     }
 
   }, [divisionDropdown_redux])

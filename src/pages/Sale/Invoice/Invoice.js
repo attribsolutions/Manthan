@@ -77,7 +77,7 @@ const Invoice = (props) => {
     const [modalCss] = useState(false);
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [showAllStockState, setShowAllStockState] = useState(true);
+
     const {
         postMsg,
         updateMsg,
@@ -88,7 +88,6 @@ const Invoice = (props) => {
         makeIBInvoice,
         goBtnloading,
         saveBtnloading,
-        PartySettingdata
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -100,8 +99,6 @@ const Invoice = (props) => {
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         goBtnloading: state.InvoiceReducer.goBtnloading,
-        PartySettingdata: state.PartySettingReducer.PartySettingdata,
-
     }));
 
 
@@ -112,7 +109,6 @@ const Invoice = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    const { Data = {} } = PartySettingdata;
 
 
     useEffect(() => {
@@ -121,7 +117,7 @@ const Invoice = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
-        dispatch(getpartysetting_API(_cfunc.loginPartyID()))
+        // dispatch(getpartysetting_API(_cfunc.loginPartyID()))
 
 
     }, []);
@@ -578,7 +574,7 @@ const Invoice = (props) => {
 
     const SaveHandler = async (event) => {
 
-        console.log(Data)
+
         event.preventDefault();
 
         const btnId = event.target.id
@@ -666,8 +662,8 @@ const Invoice = (props) => {
                 IBChallanItems: invoiceItems,
                 IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
             });
-            const isRound = Data.InvoiceAmountRoundConfiguration.Value
-            debugger
+            const isRound = _cfunc.loginSystemSetting().InvoiceAmountRoundConfiguration;
+
             const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 CustomerGSTTin: '41',
                 GrandTotal: isRound === "1" ? Math.round(grand_total) : Number(grand_total),

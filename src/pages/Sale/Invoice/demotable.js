@@ -159,7 +159,7 @@ const Invoice = (props) => {
           Party: loginPartyID(),
           OrderIDs: "",
         });
-        dispatch(GoButtonForinvoiceAdd({ jsonBody }));
+        dispatch(GoButtonForinvoiceAdd({ jsonBody ,btnId:''}));
         dispatch(editInvoiceListSuccess({ Status: false }));
       }
     }

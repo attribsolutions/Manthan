@@ -65,10 +65,11 @@ const OrderList = () => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
-            listBtnLoading: ( state.OrderReducer.listBtnLoading
+            listBtnLoading: (state.OrderReducer.listBtnLoading
                 || state.InvoiceReducer.listBtnLoading
                 || state.PdfReportReducers.listBtnLoading
-                || state.OrderReducer.orderConfirmLoading),
+                || state.OrderReducer.orderConfirmLoading
+                || state.InvoiceReducer.listBtnLoading),
         })
     );
 

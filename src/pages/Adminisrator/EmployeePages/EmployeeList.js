@@ -13,7 +13,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { Listloader1 } from "../../../components/Common/CommonButton";
 
 const Employee_List = () => {
 
@@ -48,25 +48,21 @@ const Employee_List = () => {
     dispatch(getEmployeelist());
   }, []);
 
-
-  const { pageField, userAccess = [] } = reducers
+  const { pageField} = reducers
 
   return (
     <React.Fragment>
+      <Listloader1 show={reducers.listBtnLoading} />
       {
-        reducers.listBtnLoading ?
-          <Listloader />
-          :
-          (pageField) ?
-            <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={AddEmployee}
-              masterPath={url.EMPLOYEE}
-              ButtonMsgLable={"Employee"}
-              deleteName={"Name"}
-            />
-            : <><Listloader /></>
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={AddEmployee}
+          masterPath={url.EMPLOYEE}
+          ButtonMsgLable={"Employee"}
+          deleteName={"Name"}
+        />
       }
 
     </React.Fragment>
