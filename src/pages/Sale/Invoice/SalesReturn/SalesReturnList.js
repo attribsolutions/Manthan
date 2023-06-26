@@ -39,6 +39,7 @@ const SalesReturnList = () => {
     const reducers = useSelector(
         (state) => ({
             loading: state.SalesReturnReducer.loading,
+            listBtnLoading: state.SalesReturnReducer.listBtnLoading,
             tableList: state.SalesReturnReducer.salesReturnList,
             deleteMsg: state.SalesReturnReducer.deleteMsg,
             postMsg: state.OrderReducer.postMsg,
