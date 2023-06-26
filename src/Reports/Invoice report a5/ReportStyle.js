@@ -213,7 +213,7 @@ export const reportFooter = (doc, data) => {
     doc.line(360, 362, 30, 362); //horizontal line Sginature upper line
     doc.line(570, 365, 435, 365); //horizontal line Sginature upper line 
 
-    debugger
+    
     const a = data.InvoiceItems.map((data) => ({
 
         CGST: Number(data.CGST),
@@ -297,7 +297,7 @@ export const tableBody = (doc, data) => {
     var options = {
 
         didParseCell: (data1) => {
-            debugger
+            
             if (data1.row.cells[9].raw === "isaddition") {
                 data1.row.cells[1].colSpan = 5
                 // data1.row.cells[3].colSpan = 5
