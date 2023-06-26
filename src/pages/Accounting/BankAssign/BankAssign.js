@@ -383,7 +383,7 @@ const BankAssign = (props) => {
                                                                                 {...toolkitProps.baseProps}
                                                                                 {...paginationTableProps}
                                                                             />
-                                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "Bank Assign")}
                                                                             {mySearchProps(toolkitProps.searchProps)}
                                                                         </div>
 
