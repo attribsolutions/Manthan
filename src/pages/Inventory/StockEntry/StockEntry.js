@@ -48,6 +48,7 @@ const StockEntry = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [TableArr, setTableArr] = useState([]);
+    const [defaultMRP, setdefaultMRP] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -220,20 +221,20 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
+
+                debugger
                 return (
                     <>
                         <span style={{ justifyContent: 'center', width: "100px" }}>
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
+                                defaultValue={row.defaultMRP}
                                 isSearchable={true}
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
                                 options={row.ItemMRPDetails}
-                                onChange={(event) => {
-                                    row.MRP = event.value
-                                    row.MRPValue = event.label
-                                }}
+                                onChange={(event) => { row.defaultMRP = event }}
                             />
                         </span></>)
             }
@@ -243,18 +244,21 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
+
+                const highest_GST = row.ItemGSTHSNDetails.filter((obj, index, arr) => {
+                    return obj.value === Math.max(...arr.map(item => item.value));
+                });
+
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
                         id={`GST${key}`}
                         name="GST"
+                        defaultValue={row.defaultGST}
                         isSearchable={true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
                         options={row.ItemGSTHSNDetails}
-                        onChange={(event) => {
-                            row.GST_ID = event.value
-                            row.GST = event.label
-                        }}
+                        onChange={(event) => { row.defaultGST = event }}
                     />
                 </span>)
             }
@@ -282,7 +286,7 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
-                debugger
+
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <C_DatePicker
                         name='Date'
@@ -337,7 +341,13 @@ const StockEntry = (props) => {
             const data = resp.Data.InvoiceItems.map((i) => ({
                 unitOps: i.ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.Unit, BaseUnitQuantity: i.BaseUnitQuantity })),
                 MRPOps: i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP })),
+                highest_MRP: i.ItemMRPDetails.filter((obj, index, arr) => {
+                    return obj.MRP === Math.max(...arr.map(item => item.MRP));
+                }),
                 GSTOps: i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST })),
+                highest_GST: i.ItemGSTDetails.filter((obj, index, arr) => {
+                    return obj.GST === Math.max(...arr.map(item => item.GST));
+                }),
                 ItemName: i.ItemName,
                 ItemId: i.Item,
                 Quantity: i.Quantity,
@@ -349,6 +359,7 @@ const StockEntry = (props) => {
             const itemArr = [...TableArr]
 
             data.forEach((i) => {
+
                 itemArr.push({
                     id: itemArr.length + 1,
                     ItemUnitDetails: i.unitOps,
@@ -358,7 +369,9 @@ const StockEntry = (props) => {
                     ItemId: i.ItemId,
                     Quantity: i.Quantity,
                     RowData: i.RowData,
-                    BatchDate: i.BatchDate
+                    BatchDate: i.BatchDate,
+                    defaultMRP: { value: i.highest_MRP[0].MRP, label: i.highest_MRP[0].MRPValue },
+                    defaultGST: { value: i.highest_GST[0].GST, label: i.highest_GST[0].GSTPercentage },
                 })
             })
 
@@ -380,13 +393,14 @@ const StockEntry = (props) => {
         const btnId = event.target.id
 
         const ReturnItems = TableArr.map((index) => {
+
             return ({
                 "Item": index.ItemId,
                 "ItemName": index.ItemName,
                 "Quantity": index.Qty,
-                "MRP": index.MRP,
+                "MRP": index.defaultMRP.value,
                 "Unit": index.Unit,
-                "GST": index.GST_ID,
+                "GST": index.defaultGST.value,
                 "BatchDate": index.BatchDate === undefined ? "" : index.BatchDate,
                 "BatchCode": index.BatchCode
             })
