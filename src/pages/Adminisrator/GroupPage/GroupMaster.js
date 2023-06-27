@@ -56,7 +56,8 @@ const GroupMaster = (props) => {
     const fileds = {
         id: "",
         Name: "",
-        GroupTypeName: ""
+        GroupTypeName: "",
+        Sequence: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -131,17 +132,19 @@ const GroupMaster = (props) => {
             }
 
             if (hasEditVal) {
-              
 
-                const { id, Name, GroupType, GroupTypeName } = hasEditVal
+
+                const { id, Name, GroupType, GroupTypeName, Sequence } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 values.Name = Name;
                 values.id = id
                 values.GroupTypeName = { label: GroupTypeName, value: GroupType };
+                values.Sequence = Sequence
 
                 hasValid.Name.valid = true;
                 hasValid.GroupTypeName.valid = true;
+                hasValid.Sequence.valid = true;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -232,6 +235,7 @@ const GroupMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     GroupType: values.GroupTypeName.value,
+                    Sequence: values.Sequence,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
                 });
@@ -322,6 +326,27 @@ const GroupMaster = (props) => {
                                                             masterPath={url.GROUPTYPE}
                                                         />
                                                     </Col>}
+                                            </Row>
+
+                                            <Row>
+                                                <FormGroup className="mb-2 col col-sm-4 ">
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.Sequence} </Label>
+                                                    <Input
+                                                        name="Sequence"
+                                                        id="txtSequence"
+                                                        value={values.Sequence}
+                                                        type="text"
+                                                        className={isError.Sequence.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                        placeholder="Please Enter Sequence"
+                                                        autoComplete='off'
+                                                        onChange={(event) => {
+                                                            onChangeText({ event, state, setState })
+                                                        }}
+                                                    />
+                                                    {isError.Sequence.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.Sequence}</span>
+                                                    )}
+                                                </FormGroup>
                                             </Row>
 
                                             <FormGroup className="mt-1">

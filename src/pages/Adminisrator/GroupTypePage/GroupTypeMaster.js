@@ -51,7 +51,8 @@ const GroupTypeMaster = (props) => {
     const fileds = {
         id: "",
         Name: "",
-        IsReserved: false
+        IsReserved: false,
+        Sequence: ''
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -137,15 +138,18 @@ const GroupTypeMaster = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                const { id, Name, IsReserved } = hasEditVal
+                const { id, Name, IsReserved,Sequence } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
                 hasValid.IsReserved.valid = true;
+                hasValid.Sequence.valid=true;
 
                 values.id = id
                 values.Name = Name;
                 values.IsReserved = IsReserved;
+                values.Sequence=Sequence;
+                
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editGroupTypeIDSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -232,6 +236,7 @@ const GroupTypeMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     IsReserved: values.IsReserved,
+                    Sequence:values.Sequence,
                     CreatedBy: loginUserID(),
                     CreatedOn: "0002-10-03T12:48:14.910491",
                     UpdatedBy: loginUserID(),
@@ -266,77 +271,92 @@ const GroupTypeMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black"  >
+                                <form noValidate>
+                                    <Card>
+                                        <CardBody className="c_card_body">
+                                            <Row>
+                                                <FormGroup className="mb-2 col col-sm-4 ">
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                                                    <Input
+                                                        id="txtName"
+                                                        name="Name"
+                                                        type="text"
+                                                        value={values.Name}
+                                                        className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                        placeholder="Please Enter Name"
+                                                        autoFocus={true}
+                                                        autoComplete='off'
+                                                        onChange={(event) => {
+                                                            onChangeText({ event, state, setState })
+                                                            dispatch(Breadcrumb_inputName(event.target.value))
+                                                        }}
+                                                    />
+                                                    {isError.Name.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.Name}</span>
+                                                    )}
+                                                </FormGroup>
+                                            </Row>
 
-                                {/* <form noValidate> */}
+                                            <Row>
+                                                <FormGroup className="mb-2 col col-sm-4 ">
+                                                    <Label htmlFor="validationCustom01">{fieldLabel.Sequence} </Label>
+                                                    <Input
+                                                        name="Sequence"
+                                                        id="txtSequence"
+                                                        value={values.Sequence}
+                                                        type="text"
+                                                        className={isError.Sequence.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                        placeholder="Please Enter Sequence"
+                                                        autoComplete='off'
+                                                        onChange={(event) => {
+                                                            onChangeText({ event, state, setState })
+                                                        }}
+                                                    />
+                                                    {isError.Sequence.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.Sequence}</span>
+                                                    )}
+                                                </FormGroup>
+                                            </Row>
 
-                                <Row className="">
-                                    <Col md={12}>
-                                        <Card>
-                                            <CardBody className="c_card_body">
-                                                <Row>
-                                                    <FormGroup className="mb-2 col col-sm-4 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
-                                                        <Input
-                                                            id="txtName"
-                                                            name="Name"
-                                                            type="text"
-                                                            value={values.Name}
-                                                            className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Name"
-                                                            autoFocus={true}
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-                                                                dispatch(Breadcrumb_inputName(event.target.value))
-                                                            }}
-                                                        />
-                                                        {isError.Name.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.Name}</span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Row>
-                                                        <FormGroup className="mb-2 col col-sm-3">
-                                                            <Row className="justify-content-md-left">
-                                                                <Label className="col-sm-6 col-form-label" >{fieldLabel.IsReserved}</Label>
-                                                                <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3" >
-                                                                        <Input type="checkbox" className="form-check-input"
-                                                                            checked={values.IsReserved}
-                                                                            name="IsReserved"
-                                                                            onChange={(e) => {
-                                                                                setState((i) => {
-                                                                                    const a = { ...i }
-                                                                                    a.values.IsReserved = e.target.checked;
-                                                                                    return a
-                                                                                })
-                                                                            }}
-                                                                        />
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup>
-                                                    </Row>
-
-                                                    <FormGroup>
-                                                        <Row>
-                                                            <Col sm={2}>
-                                                                <SaveButton pageMode={pageMode}
-                                                                    loading={saveBtnloading}
-                                                                    onClick={SaveHandler}
-                                                                    userAcc={userPageAccessState}
-                                                                    editCreatedBy={editCreatedBy}
-                                                                    module={"GroupTypeMaster"}
+                                            <Row>
+                                                <FormGroup className="mb-2 col col-sm-3">
+                                                    <Row className="justify-content-md-left">
+                                                        <Label className="col-sm-6 col-form-label" >{fieldLabel.IsReserved}</Label>
+                                                        <Col md={2} style={{ marginTop: '9px' }} >
+                                                            <div className="form-check form-switch form-switch-md mb-3" >
+                                                                <Input type="checkbox" className="form-check-input"
+                                                                    checked={values.IsReserved}
+                                                                    name="IsReserved"
+                                                                    onChange={(e) => {
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            a.values.IsReserved = e.target.checked;
+                                                                            return a
+                                                                        })
+                                                                    }}
                                                                 />
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup >
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                </FormGroup>
+                                            </Row>
+                                            <FormGroup>
+                                                <Row>
+                                                    <Col sm={2}>
+                                                        <SaveButton pageMode={pageMode}
+                                                            loading={saveBtnloading}
+                                                            onClick={SaveHandler}
+                                                            userAcc={userPageAccessState}
+                                                            editCreatedBy={editCreatedBy}
+                                                            module={"GroupTypeMaster"}
+                                                        />
+                                                    </Col>
                                                 </Row>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                                {/* </form> */}
+                                            </FormGroup >
+
+                                        </CardBody>
+                                    </Card>
+                                </form>
                             </CardBody>
                         </Card>
                     </Container>
