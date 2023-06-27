@@ -319,20 +319,19 @@ const StockEntry = (props) => {
     ];
 
     async function AddPartyHandler() {
-
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
                 Message: `Select Item Name`
-            })
-            return
+            });
+            return;
         }
 
         let resp;
         try {
-            resp = await SalesReturn_add_button_api_For_Item(values.ItemName.value)
+            resp = await SalesReturn_add_button_api_For_Item(values.ItemName.value);
 
-            const data = resp.Data.InvoiceItems.map((i) => ({
+            const responseData = resp.Data.InvoiceItems.map((i) => ({
                 unitOps: i.ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.Unit, BaseUnitQuantity: i.BaseUnitQuantity })),
                 MRPOps: i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP })),
                 highest_MRP: i.ItemMRPDetails.filter((obj, index, arr) => {
@@ -345,16 +344,22 @@ const StockEntry = (props) => {
                 ItemName: i.ItemName,
                 ItemId: i.Item,
                 Quantity: i.Quantity,
-            }))
+            }));
 
-            const itemArr = [...TableArr]
-
+            const initialTableData = [...TableArr];
             const dateString = currentDate_ymd.replace(/-/g, "");
 
-            data.forEach((i) => {
+            responseData.forEach((i) => {
+                let batchCode = 0;
 
-                itemArr.push({
-                    id: itemArr.length + 1,
+                initialTableData.forEach((index) => {
+                    if (index.ItemId === i.ItemId) {
+                        batchCode++;
+                    }
+                });
+
+                initialTableData.push({
+                    id: initialTableData.length + 1,
                     ItemUnitDetails: i.unitOps,
                     ItemMRPDetails: i.MRPOps,
                     ItemGSTHSNDetails: i.GSTOps,
@@ -362,22 +367,22 @@ const StockEntry = (props) => {
                     ItemId: i.ItemId,
                     Quantity: i.Quantity,
                     BatchDate: currentDate_ymd,
-                    BatchCode: `${dateString}_${i.ItemId}_${_cfunc.loginPartyID()}_${itemArr.length}`,
+                    BatchCode: `${dateString}_${i.ItemId}_${_cfunc.loginPartyID()}_${batchCode}`,
                     defaultMRP: { value: i.highest_MRP[0].MRP, label: i.highest_MRP[0].MRPValue },
                     defaultGST: { value: i.highest_GST[0].GST, label: i.highest_GST[0].GSTPercentage },
-                })
-            })
+                });
+            });
 
-            setTableArr(itemArr)
+            setTableArr(initialTableData);
+
             setState((i) => {
-                let a = { ...i }
-                a.values.ItemName = ""
+                let a = { ...i };
+                a.values.ItemName = "";
                 a.hasValid.ItemName.valid = true;
-                return a
-            })
+                return a;
+            });
         } catch (w) { }
     }
-
     const SaveHandler = async (event) => {
 
         event.preventDefault();
