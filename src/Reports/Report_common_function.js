@@ -3,7 +3,7 @@
 // var b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
 
 // export function toWords(num) {
-//   debugger
+//   
 //   if ((num = num.toString()).length > 9) return 'overflow';
 //   const n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
 

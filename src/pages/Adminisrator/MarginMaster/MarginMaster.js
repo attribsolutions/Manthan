@@ -415,7 +415,7 @@ const MarginMaster = (props) => {
             const Find = ItemData.filter((index) => {   // condition for margin save without 0
                 return (Number(index.Margin) > 0)
             })
-            debugger
+            
             const jsonBody = JSON.stringify(Find)
 
             if (!(Find.length > 0)) {

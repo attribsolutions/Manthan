@@ -167,7 +167,7 @@ export const reportHeder2 = (doc, data) => {
 
 
 export const reportHeder3 = (doc, data) => {
-    debugger
+    
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setDrawColor(0, 0, 0);
@@ -357,7 +357,7 @@ export const tableBody = (doc, data) => {
 }
 
 export const pageFooter = (doc, data) => {
-    debugger
+    
     const GrandTotal = Number(data.OrderAmount)
     const Total = numberWithCommas((GrandTotal).toFixed(2))
     let stringNumber = toWords(Number(GrandTotal))

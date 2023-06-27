@@ -118,7 +118,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             }
         /**************************************** */
         case UPLOADED_E_WAY_BILL_ACTION:
-            debugger
+            
             return {
                 ...state,
                 listBtnLoading: action.config.btnId,

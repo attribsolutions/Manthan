@@ -116,7 +116,7 @@ const SubGroupMaster = (props) => {
 
 
     useEffect(() => {
-        debugger
+        
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null

@@ -44,7 +44,9 @@ import {
     innerStockCaculation,
     orderQtyOnChange,
     orderQtyUnit_SelectOnchange,
-    stockQtyOnChange
+    stockQtyOnChange,
+    settingbaseRoundOffAmountFunc,
+    settingBaseRoundOffAmountFunc
 } from "./invoiceCaculations";
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -70,8 +72,6 @@ const Invoice = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [orderItemDetails, setOrderItemDetails] = useState([])
     const [orderIDs, setOrderIDs] = useState([])
-    const [isTCSParty, setIsTCSParty] = useState(false)
-    const [isCustomerPAN, setIsCustomerPAN] = useState(false)
 
     // for invoicer page heder dicount functionality useSate ************************************
     const [discountValueAll, setDiscountValueAll] = useState("");
@@ -152,7 +152,6 @@ const Invoice = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(invoiceSaveActionSuccess({ Status: false }))
-            dispatch(GoButtonForinvoiceAddSuccess([]))
 
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -161,18 +160,18 @@ const Invoice = (props) => {
                 })
             }
             else {
-                const promise = await customAlert({
+                await customAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                     RedirectPath: url.INVOICE_LIST_1,
                 })
-                if (promise) {
-                    if (subPageMode === url.INVOICE_1) {
-                        history.push({ pathname: url.INVOICE_LIST_1 })
-                    }
-                    else if (subPageMode === url.IB_INVOICE) {
-                        history.push({ pathname: url.IB_INVOICE_LIST })
-                    }
+
+                if (subPageMode === url.INVOICE_1) {
+                    history.push({ pathname: url.INVOICE_LIST_1 })
+                }
+                else if (subPageMode === url.IB_INVOICE) {
+                    history.push({ pathname: url.IB_INVOICE_LIST })
+
                 }
             }
         }
@@ -241,8 +240,6 @@ const Invoice = (props) => {
             //*********************************************************** */
 
             setOrderIDs(gobutton_Add.Data.OrderIDs)
-            // setIsTCSParty(gobutton_Add.IsTCSParty)
-            // setIsCustomerPAN(gobutton_Add.ISCustomerPAN)
             dispatch(GoButtonForinvoiceAddSuccess({ Status: false }))
         }
     }, [gobutton_Add]);
@@ -255,10 +252,7 @@ const Invoice = (props) => {
         label: index.Name,
     }));
 
-    const totalAmountCalcuationFunc = (tableList = []) => {
-        const sum = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]), 0);
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${sum.toFixed(2)}`))
-    }
+
     const pagesListColumns = [
         {//***************ItemName********************************************************************* */
             text: "Item Name",
@@ -296,7 +290,7 @@ const Invoice = (props) => {
                             autoComplete="off"
                             defaultValue={index1.Quantity}
                             onChange={(event) => {
-                                orderQtyOnChange(event, index1,isTCSParty);
+                                orderQtyOnChange(event, index1);
                                 totalAmountCalcuationFunc(tableList);
                             }}
                         />
@@ -317,7 +311,7 @@ const Invoice = (props) => {
                                     "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
                                 }))}
                                 onChange={(event) => {
-                                    orderQtyUnit_SelectOnchange(event, index1,isTCSParty);
+                                    orderQtyUnit_SelectOnchange(event, index1);
                                     totalAmountCalcuationFunc(tableList);
                                 }}
                             ></Select>
@@ -376,7 +370,7 @@ const Invoice = (props) => {
                                                 id={`batchQty${index1.id}-${index2.id}`}
                                                 defaultValue={index2.Qty}
                                                 onChange={(event) => {
-                                                    stockQtyOnChange(event, index1, index2,isTCSParty);
+                                                    stockQtyOnChange(event, index1, index2);
                                                     totalAmountCalcuationFunc(tableList);
                                                 }}
                                             ></Input>
@@ -470,7 +464,7 @@ const Invoice = (props) => {
                 if (formatExtraData.changeAllDiscount) {
                     index1.Discount = discountValueAll;
                     index1.DiscountType = discountTypeAll.value;
-                    innerStockCaculation(index1,isTCSParty);
+                    innerStockCaculation(index1);
                     totalAmountCalcuationFunc(tableList);
                 }
 
@@ -496,7 +490,7 @@ const Invoice = (props) => {
                                             setForceReload(!forceReload);
                                             index1.DiscountType = e.value;
                                             index1.Discount = '';
-                                            innerStockCaculation(index1,isTCSParty);
+                                            innerStockCaculation(index1);
                                             totalAmountCalcuationFunc(tableList);
                                         }}
                                     />
@@ -531,7 +525,7 @@ const Invoice = (props) => {
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
                                             setForceReload(!forceReload);
-                                            innerStockCaculation(index1,isTCSParty);
+                                            innerStockCaculation(index1);
                                             totalAmountCalcuationFunc(tableList);
                                         }}
 
@@ -549,6 +543,10 @@ const Invoice = (props) => {
         },
     ];
 
+    const totalAmountCalcuationFunc = (tableList = []) => {
+        const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
+        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${calcalateGrandTotal.sumOfGrandTotal}`))
+    }
 
     function InvoiceDateOnchange(y, v, e) {
         dispatch(GoButtonForinvoiceAddSuccess([]))
@@ -583,34 +581,26 @@ const Invoice = (props) => {
 
     const SaveHandler = async (event) => {
 
-
         event.preventDefault();
-
         const btnId = event.target.id
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-        function returnFunc() {
-            _cfunc.btnIsDissablefunc({ btnId, state: false })
-        }
         try {
 
             const validMsg = []
             const invoiceItems = []
-            let grand_total = 0;
 
             orderItemDetails.forEach((index) => {
                 if (index.StockInValid) {
                     validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
-                    return returnFunc()
+                    return
                 };
 
                 index.StockDetails.forEach((ele) => {
 
                     if (ele.Qty > 0) {
+                        //**calculate Amount ,Discount Amount based on Discound type */
+                        const calculate = invoice_discountCalculate_Func(ele, index)
 
-                        const calculate = invoice_discountCalculate_Func(ele, index,isTCSParty,)
-
-                        grand_total = grand_total + Number(calculate.roundedTotalAmount)
                         invoiceItems.push({
                             Item: index.Item,
                             Unit: index.default_UnitDropvalue.value,
@@ -649,7 +639,7 @@ const Invoice = (props) => {
                     Type: 4,
                     Message: JSON.stringify(validMsg),
                 })
-                return returnFunc()
+                return
             }
 
             if (!(invoiceItems.length > 0)) {
@@ -657,27 +647,28 @@ const Invoice = (props) => {
                     Type: 4,
                     Message: "Please Enter One Item Quantity",
                 })
-                return returnFunc()
+                return
             }
+            //**grand total and Tcs Round Off calculations  */ 
+            const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
 
-            const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
                 InvoicesReferences: orderIDs.map(i => ({ Order: i }))
             });
 
-            const forIB_Invoice_json = async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
                 IBChallanDate: values.InvoiceDate,
                 IBChallanItems: invoiceItems,
                 IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
             });
-            const isRound = _cfunc.loginSystemSetting().InvoiceAmountRoundConfiguration;
 
-            const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 CustomerGSTTin: '41',
-                GrandTotal: isRound === "1" ? Math.round(grand_total) : Number(grand_total),
-                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-                TCSAmount: "0.00",
+                GrandTotal: calcalateGrandTotal.sumOfGrandTotal,
+                RoundOffAmount: calcalateGrandTotal.RoundOffAmount,
+                TCSAmount: calcalateGrandTotal.TCS_Amount,
                 Customer: values.Customer.value,
                 Party: _cfunc.loginPartyID(),
                 CreatedBy: _cfunc.loginUserID(),
@@ -693,14 +684,13 @@ const Invoice = (props) => {
             }
             // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             if (pageMode === mode.edit) {
-                returnFunc()
+                return
             }
-
             else {
                 dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId }));
             }
 
-        } catch (e) { returnFunc() }
+        } catch (e) { _cfunc.CommonConsole("invode save Handler", e) }
 
     }
 

@@ -479,15 +479,15 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     const SaveHandler = (event) => {
-        debugger
+        
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
         try {
-            debugger
+            
             btnIsDissablefunc({ btnId, state: true })
             Data.forEach(i => {
-                debugger
+                
                 if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict || i.Newvalue === false) {
                     const arr = {
                         SubPartyID: i.SubPartyID,

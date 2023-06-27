@@ -38,7 +38,7 @@ function* Delete_PartyType_ID_GneFunc({ config }) { // delete api
 }
 
 function* Edit_PartyType_ID_GneFunc({ config }) { // edit api
-debugger
+
   const { btnmode, editId } = config;
   const body = { ...loginJsonBody(), "id": editId };
   config.jsonBody = body;

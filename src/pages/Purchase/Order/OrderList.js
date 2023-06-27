@@ -289,7 +289,7 @@ const OrderList = () => {
             }));
         }
         else if (subPageMode === url.ORDER_LIST_4) {
-            dispatch(_act.GoButtonForinvoiceAdd({
+           dispatch(_act.GoButtonForinvoiceAdd({
                 jsonBody,
                 subPageMode: url.INVOICE_1,
                 path: url.INVOICE_1,
@@ -362,7 +362,7 @@ const OrderList = () => {
     }
 
     function downBtnFunc(row, printType, btnId) {
-        debugger
+        
         var ReportType = report.order1;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, btnId))
     }

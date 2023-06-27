@@ -407,7 +407,7 @@ const MRPMaster = (props) => {
                 MRP: index.MRP,
                 id: index.id
             }))
-            debugger
+            
             const Find = ItemData.filter((index) => {
                 return (Number(index.MRP) > 0)
             })

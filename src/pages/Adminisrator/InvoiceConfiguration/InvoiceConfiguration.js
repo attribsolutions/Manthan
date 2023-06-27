@@ -87,7 +87,7 @@ const InvoiceConfiguration = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-    debugger
+    
     const { values } = state
     const { isError } = state;
     const { fieldLabel } = state;
@@ -193,7 +193,7 @@ const InvoiceConfiguration = (props) => {
 
 
     useEffect(() => {
-        debugger
+        
         if (Object.keys(Data).length > 1) {
 
             if (Data.HSNCodeDigit.Value === "1") {
@@ -263,7 +263,7 @@ const InvoiceConfiguration = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        debugger
+        
 
         const BulkData = []
         event.preventDefault();
@@ -273,7 +273,7 @@ const InvoiceConfiguration = (props) => {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
                 Object.values(values).forEach(i => {
-                    debugger
+                    
 
                     if (i.SystemSetting === "HSN Code Digit") {
                         i.Value = i.Value.value

@@ -195,7 +195,7 @@ export const BilledByRow = (data) => {
     return BilledByArray;
 } 
 export const BilledToRow = (data) => {
-    debugger
+    
     let CustomerAddress =""
     if (Array.isArray(data.CustomerAddress)) {
     const filteredArray = data.CustomerAddress.filter(obj => obj.IsDefault === true); 
@@ -217,7 +217,7 @@ export const DetailsOfTransportRow = (data) => {
 
 
 let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
-debugger
+
     const PONumber =result.toString()
     var DetailsOfTransportArray = [
         [data.ReportType===invoice?` PO Number:${PONumber}`:data.DriverName ===null?"Driver Name:": `Driver Name :${data.DriverName}`],
