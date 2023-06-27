@@ -60,8 +60,8 @@ const InvoiceConfiguration = (props) => {
         AddressInInvoice: "",
         AutoEInvoice: "",
         EInvoiceApplicable: "",
-        IsTCSPercentageforNonValidatedPANCustomer: "",
-        IsTCSPercentageforValidatedPANCustomer: ""
+        // IsTCSPercentageforNonValidatedPANCustomer: "",
+        // IsTCSPercentageforValidatedPANCustomer: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -273,6 +273,7 @@ const InvoiceConfiguration = (props) => {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
                 Object.values(values).forEach(i => {
+                    debugger
 
                     if (i.SystemSetting === "HSN Code Digit") {
                         i.Value = i.Value.value
