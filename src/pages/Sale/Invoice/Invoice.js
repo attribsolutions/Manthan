@@ -39,12 +39,17 @@ import {
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit_SelectOnchange, stockDistributeFunc, stockQtyOnChange } from "./invoiceCaculations";
+import {
+    invoice_discountCalculate_Func,
+    innerStockCaculation,
+    orderQtyOnChange,
+    orderQtyUnit_SelectOnchange,
+    stockQtyOnChange
+} from "./invoiceCaculations";
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
 
 
 const Invoice = (props) => {
@@ -247,7 +252,7 @@ const Invoice = (props) => {
     }));
 
     const totalAmountCalcuationFunc = (tableList = []) => {
-        const sum = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["tAmount"]), 0);
+        const sum = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]), 0);
         dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${sum.toFixed(2)}`))
     }
     const pagesListColumns = [
@@ -532,7 +537,7 @@ const Invoice = (props) => {
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
-                            <samp id={`tAmount-${index1.id}`}>{index1.tAmount}</samp>
+                            <samp id={`roundedTotalAmount-${index1.id}`}>{index1.roundedTotalAmount}</samp>
                         </div>
                     </>
                 );
@@ -599,9 +604,9 @@ const Invoice = (props) => {
 
                     if (ele.Qty > 0) {
 
-                        const calculate = discountCalculate(ele, index)
+                        const calculate = invoice_discountCalculate_Func(ele, index)
 
-                        grand_total = grand_total + Number(calculate.tAmount)
+                        grand_total = grand_total + Number(calculate.roundedTotalAmount)
                         invoiceItems.push({
                             Item: index.Item,
                             Unit: index.default_UnitDropvalue.value,
@@ -615,17 +620,17 @@ const Invoice = (props) => {
                             MRPValue: ele.MRP,//changes
                             Rate: Number(ele.Rate).toFixed(2),
                             BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
-                            GSTAmount: Number(calculate.gstAmt).toFixed(2),
+                            GSTAmount: Number(calculate.roundedGstAmount).toFixed(2),
                             GST: ele.LiveBatcheGSTID,
                             GSTPercentage: ele.GST,// changes
-                            CGST: Number(calculate.CGST).toFixed(2),
-                            SGST: Number(calculate.SGST).toFixed(2),
+                            CGST: Number(calculate.CGST_Amount).toFixed(2),
+                            SGST: Number(calculate.SGST_Amount).toFixed(2),
                             IGST: 0,
                             GSTPercentage: ele.GST,
                             CGSTPercentage: (ele.GST / 2),
                             SGSTPercentage: (ele.GST / 2),
                             IGSTPercentage: 0,
-                            Amount: Number(calculate.tAmount).toFixed(2),
+                            Amount: Number(calculate.roundedTotalAmount).toFixed(2),
                             TaxType: 'GST',
                             DiscountType: index.DiscountType,
                             Discount: Number(index.Discount) || 0,

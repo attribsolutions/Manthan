@@ -1,7 +1,7 @@
-import { groupBy,  loginSystemSetting } from "../../../components/Common/CommonFunction"
+import { groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
 
 
-export const discountCalculate = (row, index1,) => {
+export const invoice_discountCalculate_Func = (row, index1,) => {
     debugger
     let systemSetting = loginSystemSetting()
     debugger
@@ -13,31 +13,31 @@ export const discountCalculate = (row, index1,) => {
     const discountType = index1.DiscountType || 2;
 
     // Calculate the base amount
-    const baseAmt = rate * qty;
+    const basicAmount = rate * qty;
 
     // Calculate the discount amount based on the discount type
-    const disCountAmt = discountType === 2 ? baseAmt - (baseAmt / ((100 + discount) / 100)) : qty * discount;
+    const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : qty * discount;
 
     // Calculate the discounted base amount
-    const discountBaseAmt = baseAmt - disCountAmt;
+    const discountBaseAmt = basicAmount - disCountAmt;
 
     // Calculate the GST amount
-    const gstAmt1 = discountBaseAmt * (gstPercentage / 100);
-    const CGST = Number((gstAmt1 / 2).toFixed(2));
-    const SGST = CGST;
-    const gstAmt = CGST + SGST;
+    let gstAmt = discountBaseAmt * (gstPercentage / 100);
+    const CGST_Amount = Number((gstAmt / 2).toFixed(2));
+    const SGST_Amount = CGST_Amount;
+    const roundedGstAmount = CGST_Amount + SGST_Amount;
 
     // Calculate the total amount after discount and GST
-    const total = gstAmt + discountBaseAmt;
+    const total = roundedGstAmount + discountBaseAmt;
 
     // Return the calculated values as an object
     return {
         discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
         disCountAmt: Number(disCountAmt.toFixed(2)),
-        gstAmt: Number(gstAmt.toFixed(2)),
-        tAmount: Number(total.toFixed(2)),
-        CGST,
-        SGST
+        roundedGstAmount: Number(roundedGstAmount.toFixed(2)),
+        roundedTotalAmount: Number(total.toFixed(2)),
+        CGST_Amount,
+        SGST_Amount
     };
 };
 
@@ -84,7 +84,7 @@ export function bulkSearch(text, data, columns) {
 
 export function stockDistributeFunc(index1) {
 
-    let tAmount = 0
+    let roundedTotalAmount = 0
     let orderqty = Number(index1.Quantity);
     let _ItemTotalStock = 0
 
@@ -107,8 +107,8 @@ export function stockDistributeFunc(index1) {
 
         if (index2.Qty > 0) {
 
-            const calculate = discountCalculate(index2, index1)
-            tAmount = tAmount + Number(calculate.tAmount)
+            const calculate = invoice_discountCalculate_Func(index2, index1)
+            roundedTotalAmount = roundedTotalAmount + Number(calculate.roundedTotalAmount)
         }
 
         try {
@@ -124,9 +124,9 @@ export function stockDistributeFunc(index1) {
     index1.ItemTotalStock = _ItemTotalStock;
 
     const t2 = index1.ItemTotalStock;
-    const tA4 = tAmount.toFixed(2);
+    const tA4 = roundedTotalAmount.toFixed(2);
 
-    index1.tAmount = tA4
+    index1.roundedTotalAmount = tA4
 
     if (orderqty > t2) {
         try {
@@ -140,7 +140,7 @@ export function stockDistributeFunc(index1) {
     } catch (e) { };
 
     try {
-        document.getElementById(`tAmount-${index1.id}`).innerText = tA4;
+        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = tA4;
 
 
         var aa
@@ -219,15 +219,17 @@ export function stockQtyOnChange(event, index1, index2) {
 export const innerStockCaculation = (index1) => {
 
     let QuantityTatal = 0
-    let tAmount = 0;
+    let roundedTotalAmount = 0;
 
     index1.StockDetails.forEach(index2 => {
-        const calculate = discountCalculate(index2, index1)
-        tAmount = tAmount + Number(calculate.tAmount)
+        //**discount calculation function  */
+        const calculate = invoice_discountCalculate_Func(index2, index1);
+        
+        roundedTotalAmount = roundedTotalAmount + Number(calculate.roundedTotalAmount)
         QuantityTatal = Number(QuantityTatal) + Number(index2.Qty);
     });
 
-    index1.tAmount = tAmount.toFixed(2)
+    index1.roundedTotalAmount = roundedTotalAmount.toFixed(2)
     index1.Quantity = QuantityTatal.toFixed(3);
 
     try {
@@ -235,7 +237,7 @@ export const innerStockCaculation = (index1) => {
     } catch (e) { };
 
     try {
-        document.getElementById(`tAmount-${index1.id}`).innerText = index1.tAmount;
+        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = index1.roundedTotalAmount;
     } catch (e) { };
 
 }

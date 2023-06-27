@@ -48,7 +48,7 @@ import {
 
 } from "./actionType";
 import *as url from "../../../routes/route_url"
-import { discountCalculate } from "../../../pages/Sale/Invoice/invoiceCaculations";
+import { invoice_discountCalculate_Func } from "../../../pages/Sale/Invoice/invoiceCaculations";
 import { orderApprovalActionSuccess } from "../../actions";
 
 
@@ -140,7 +140,7 @@ export function invoice_GoButton_dataConversion_Func(response) {
   // Iterate over OrderItemDetails array and perform data conversion
   response.OrderItemDetails = response.OrderItemDetails.map(index1 => {
     const defaultunit = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
-    let tAmount = 0;
+    let roundedTotalAmount = 0;
 
     // Set properties for data conversion
     index1["OrderQty"] = index1.Quantity;
@@ -184,8 +184,8 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
       // Calculate total amount if quantity is greater than 0
       if (index2.Qty > 0) {
-        const calculate = discountCalculate(index2, index1);
-        tAmount += Number(calculate.tAmount);
+        const calculate = invoice_discountCalculate_Func(index2, index1);
+        roundedTotalAmount += Number(calculate.roundedTotalAmount);
       }
 
       return index2;
@@ -193,9 +193,9 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
     const t1 = Number(index1.ItemTotalStock).toFixed(3);
     const t2 = Number(index1.Quantity);
-    const tA4 = tAmount.toFixed(2);
+    const tA4 = roundedTotalAmount.toFixed(2);
 
-    index1["tAmount"] = tA4;
+    index1["roundedTotalAmount"] = tA4;
 
     // Check for stock availability and set corresponding message
     if (t1 < t2) {
@@ -229,9 +229,9 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     response["path"] = path
     response["page_Mode"] = pageMode
     response["customer"] = customer
-    debugger
+   
     const newData = invoice_GoButton_dataConversion_Func(response.Data)
-    debugger
+
     response.Data = newData
     yield put(GoButtonForinvoiceAddSuccess(response));
 

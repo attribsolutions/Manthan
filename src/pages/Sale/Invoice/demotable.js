@@ -48,7 +48,7 @@ import {
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { bulkSearch, discountCalculate } from "./invoiceCaculations";
+import { bulkSearch, invoice_discountCalculate_Func } from "./invoiceCaculations";
 import "./invoice.scss";
 import demoData from "./demo1.json";
 import { numberWithCommas } from "../../../Reports/Report_common_function";
@@ -603,7 +603,7 @@ const Invoice = (props) => {
             </div>
             <div className="bottom-div">
               <span>Amount:</span>
-              <samp id={`tAmount${row.id}-${row.Party}`}>{row.OrderQty}</samp>
+              <samp id={`roundedTotalAmount${row.id}-${row.Party}`}>{row.OrderQty}</samp>
             </div>
           </>
         );
@@ -733,18 +733,17 @@ const Invoice = (props) => {
   };
 
   function TotalAmtCalcFunc(index1) {
-    let tAmount = 0;
+    let roundedTotalAmount = 0;
     index1.StockDetails.map((i2) => {
       if (i2.Qty > 0) {
-        const calculate = discountCalculate(i2, index1);
-        tAmount = tAmount + Number(calculate.tAmount);
+        const calculate = invoice_discountCalculate_Func(i2, index1);
+        roundedTotalAmount = roundedTotalAmount + Number(calculate.roundedTotalAmount);
       }
     });
-    const tA4 = tAmount.toFixed(2);
-    index1.tAmount = tA4;
+    const tA4 = roundedTotalAmount.toFixed(2);
+    index1.roundedTotalAmount = tA4;
     try {
-      document.getElementById(`tAmount${index1.id}-${index1.Party}`).innerText =
-        tA4;
+      document.getElementById(`roundedTotalAmount${index1.id}-${index1.Party}`).innerText =tA4;
     } catch (e) { }
   }
 
@@ -765,9 +764,7 @@ const Invoice = (props) => {
         i2.Qty = 0;
       }
       try {
-        document.getElementById(
-          `batchQty${index.id}-${i2.id}-${index.Party}`
-        ).value = i2.Qty;
+        document.getElementById( `batchQty${index.id}-${i2.id}-${index.Party}`).value = i2.Qty;
       } catch (e) { }
 
       return i2;
@@ -779,21 +776,16 @@ const Invoice = (props) => {
 
     if (t1 > t3) {
       try {
-        document.getElementById(`OrderQty${index.id}-${index.Party}`).value =
-          t3.toFixed(3);
+        document.getElementById(`OrderQty${index.id}-${index.Party}`).value =t3.toFixed(3);
       } catch (e) { }
     }
     try {
       index.StockInValid = false;
       index.StockInvalidMsg = null;
-      document.getElementById(
-        `StockInvalidMsg${index.id}-${index.Party}`
-      ).style.display = "none";
+      document.getElementById(`StockInvalidMsg${index.id}-${index.Party}`).style.display = "none";
     } catch (e) { }
     try {
-      document.getElementById(
-        `stocktotal${index.id}-${index.Party}`
-      ).innerText = `Total:${t1} ${t2}`;
+      document.getElementById(`stocktotal${index.id}-${index.Party}`).innerText = `Total:${t1} ${t2}`;
     } catch (e) { }
   }
 
@@ -855,7 +847,7 @@ const Invoice = (props) => {
     let invoiceAmt = 0;
     OrderItemDetails.forEach((index2, key2) => {
       TotalAmtCalcFunc(index2);
-      invoiceAmt = invoiceAmt + Number(index2.tAmount);
+      invoiceAmt = invoiceAmt + Number(index2.roundedTotalAmount);
     });
 
     all_tAmt = all_tAmt + Number(invoiceAmt);
@@ -893,8 +885,8 @@ const Invoice = (props) => {
 
         index.StockDetails.forEach((ele) => {
           if (ele.Qty > 0) {
-            const calculate = discountCalculate(ele, index);
-            grand_total = grand_total + Number(calculate.tAmount);
+            const calculate = invoice_discountCalculate_Func(ele, index);
+            grand_total = grand_total + Number(calculate.roundedTotalAmount);
 
             invoiceItems.push({
               Item: index.Item,
@@ -908,16 +900,16 @@ const Invoice = (props) => {
               MRP: ele.LiveBatcheMRPID,
               Rate: ele.Rate,
               BasicAmount: calculate.discountBaseAmt,
-              GSTAmount: calculate.gstAmt,
+              GSTAmount: calculate.roundedGstAmount,
               GST: ele.LiveBatcheGSTID,
-              CGST: calculate.CGST,
-              SGST: calculate.SGST,
+              CGST: calculate.CGST_Amount,
+              SGST: calculate.SGST_Amount,
               IGST: 0,
               GSTPercentage: ele.GST,
               CGSTPercentage: ele.GST / 2,
               SGSTPercentage: ele.GST / 2,
               IGSTPercentage: 0,
-              Amount: calculate.tAmount,
+              Amount: calculate.roundedTotalAmount,
               TaxType: "GST",
               DiscountType: index.DiscountType,
               Discount: index.Discount,

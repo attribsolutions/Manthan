@@ -10,10 +10,9 @@ import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
+import { orderCalculateFunc} from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -112,7 +111,7 @@ const GRNAdd3 = (props) => {
             const grnDetails = { ...items.Data }
             let tableArr = []
             let initial = ''
-            let tAmount = 0
+            let roundedTotalAmount = 0
             let tQty = 0
             let id = 1
             grnDetails.OrderItem.forEach((i, k) => {
@@ -122,42 +121,42 @@ const GRNAdd3 = (props) => {
                     i.id = id
                     tableArr.push(i)
                     initial = i.Item
-                    tAmount = Number(i.Amount)
+                    roundedTotalAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
                 }
                 else if ((initial === i.Item) && (k === grnDetails.OrderItem.length - 1)) {
                     ++id;
                     i.id = id
-                    tAmount = tAmount + Number(i.Amount)
+                    roundedTotalAmount = roundedTotalAmount + Number(i.Amount)
                     tQty = tQty + Number(i.Quantity)
                     initial = i.Item
                     tableArr.push(i)
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                 }
                 else if ((k === grnDetails.OrderItem.length - 1)) {
                     ++id;
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                     ++id;
                     i.id = id
-                    tAmount = Number(i.Amount)
+                    roundedTotalAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
                     tableArr.push(i)
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                 }
                 else if (initial === i.Item) {
                     // i.ItemName=''
                     ++id;
                     i.id = id
                     tableArr.push(i)
-                    tAmount = tAmount + Number(i.Amount)
+                    roundedTotalAmount = roundedTotalAmount + Number(i.Amount)
                     tQty = tQty + Number(i.Quantity)
                     initial = i.Item
                 } else {
                     ++id;
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                     ++id;
                     tableArr.push(i)
-                    tAmount = Number(i.Amount)
+                    roundedTotalAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
                     initial = i.Item
                 }
@@ -297,8 +296,8 @@ const GRNAdd3 = (props) => {
             const itemArr = []
             let sum = 0
             grnItemList.forEach(i => {
-                const basicAmt = parseFloat(basicAmount(i))
-                const cgstAmt = (GstAmount(i))
+          
+                const calculate = orderCalculateFunc(i)
 
                 if (i.ItemName === "Total") { return }
                 const arr = {
@@ -310,12 +309,12 @@ const GRNAdd3 = (props) => {
                     Unit: i.Unit,
                     BaseUnitQuantity: i.BaseUnitQuantity,
                     GST: i.GST,
-                    BasicAmount: basicAmt.toFixed(2),
-                    GSTAmount: cgstAmt.toFixed(2),
-                    Amount: i.Amount,
+                    BasicAmount: calculate.basicAmount,
+                    GSTAmount: calculate.roundedGstAmount,
+                    Amount: calculate.roundedTotalAmount,
 
-                    CGST: (cgstAmt / 2).toFixed(2),
-                    SGST: (cgstAmt / 2).toFixed(2),
+                    CGST: calculate.CGST_Amount,
+                    SGST: calculate.SGST_Amount,
                     IGST: 0,
                     CGSTPercentage: (i.GSTPercentage / 2),
                     SGSTPercentage: (i.GSTPercentage / 2),

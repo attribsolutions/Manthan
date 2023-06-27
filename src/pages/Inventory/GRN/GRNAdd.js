@@ -11,7 +11,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 
-import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Order/OrderPageCalulation";
+import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
@@ -178,10 +178,10 @@ const GRNAdd = (props) => {
         else {
             row["Rate"] = val
         }
-        const amount = Amount(row)
-        row["Amount"] = amount
+        const calculate = orderCalculateFunc(row)// change
+        row["Amount"] = calculate.roundedTotalAmount
         try {
-            document.getElementById(`abc${row.id}`).innerText = amount
+            document.getElementById(`abc${row.id}`).innerText = calculate.roundedTotalAmount
 
         }
         catch { alert("`abc${row.id}`") }
@@ -248,7 +248,6 @@ const GRNAdd = (props) => {
                                     document.getElementById(`Quantity${row.id}`).value = row.Quantity
                                 }
                             }}
-                            onKeyDown={(e) => handleKeyDown(e, grnItemList)}
                         />
                     </span>
                 )
@@ -363,7 +362,6 @@ const GRNAdd = (props) => {
                                     qty.disabled = true
                                 }
                             }}
-                            onKeyDown={(e) => handleKeyDown(e, items)}
                         />
                     </span>
                 )
@@ -549,9 +547,7 @@ const GRNAdd = (props) => {
 
             grnItemList.forEach(i => {
 
-
-                const basicAmt = parseFloat(basicAmount(i))
-                const cgstAmt = (GstAmount(i))
+                const calculate = orderCalculateFunc(i)// amount calculation function 
 
                 const arr = {
                     Item: i.Item,
@@ -562,11 +558,11 @@ const GRNAdd = (props) => {
                     Unit: i.Unit,
                     BaseUnitQuantity: i.BaseUnitQuantity,
                     GST: i.GST,
-                    BasicAmount: basicAmt.toFixed(2),
-                    GSTAmount: cgstAmt.toFixed(2),
-                    Amount: Number(i.Amount).toFixed(2),
-                    CGST: (cgstAmt / 2).toFixed(2),
-                    SGST: (cgstAmt / 2).toFixed(2),
+                    BasicAmount: calculate.basicAmount,
+                    GSTAmount: calculate.roundedGstAmount,
+                    Amount: calculate.roundedTotalAmount,
+                    CGST: calculate.CGST_Amount,
+                    SGST: calculate.SGST_Amount,
                     IGST: 0,
                     CGSTPercentage: (i.GSTPercentage / 2),
                     SGSTPercentage: (i.GSTPercentage / 2),
@@ -632,7 +628,7 @@ const GRNAdd = (props) => {
                 })
                 return returnFunc()
             }
-         
+
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
@@ -653,7 +649,7 @@ const GRNAdd = (props) => {
 
                 dispatch(_act.saveGRNAction({ jsonBody, btnId }))
             }
-  
+
         } catch (error) { returnFunc() }
     }
 
