@@ -75,13 +75,13 @@ export const Rows = (data) => {
                 return [
                     "",
                     "",
-                    `TotalBasic:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                    `${parseFloat(totalBasicAmount).toFixed(2)}`,
                     "",
-                    `Total:${parseFloat(totalCGst).toFixed(2)}`,
+                    `${parseFloat(totalCGst).toFixed(2)}`,
                     "isaddition",
-                    `Total:${parseFloat(totalSGst).toFixed(2)}`,
+                    `${parseFloat(totalSGst).toFixed(2)}`,
                     "",
-                    `Total:${parseFloat(totalAmount).toFixed(2)}`,
+                    `${parseFloat(totalAmount).toFixed(2)}`,
                 ];
             };
             hasHedRow.push(totalrow());
