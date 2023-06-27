@@ -217,8 +217,8 @@ const InvoiceConfiguration = (props) => {
                 a.values.TCSAmountRound = Data.TCSAmountRoundConfiguration;
                 a.values.EInvoiceApplicable = Data.EInvoiceApplicable;
                 a.values.AutoEInvoice = Data.AutoEInvoice;
-                a.values.IsTCSPercentageforValidatedPANCustomer = Data.IsTCSPercentageforValidatedPANCustomer;
-                a.values.IsTCSPercentageforNonValidatedPANCustomer = Data.IsTCSPercentageforNonValidatedPANCustomer;
+                // a.values.IsTCSPercentageforValidatedPANCustomer = Data.IsTCSPercentageforValidatedPANCustomer;
+                // a.values.IsTCSPercentageforNonValidatedPANCustomer = Data.IsTCSPercentageforNonValidatedPANCustomer;
 
                 return a
             })
@@ -358,7 +358,7 @@ const InvoiceConfiguration = (props) => {
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
-                                                <Col sm={4}>
+                                                {/* <Col sm={4}>
                                                     <FormGroup className="mb-3">
                                                         <Label htmlFor="validationCustom01">  {fieldLabel.IsTCSPercentageforValidatedPANCustomer} </Label>
                                                         <Col sm={7} >
@@ -379,7 +379,7 @@ const InvoiceConfiguration = (props) => {
 
                                                         </Col>
                                                     </FormGroup>
-                                                </Col>
+                                                </Col> */}
 
                                             </Row>
 
@@ -567,7 +567,7 @@ const InvoiceConfiguration = (props) => {
 
                                             <Row>
 
-                                                <Col sm={4}>
+                                                {/* <Col sm={4}>
                                                     <FormGroup className="mb-3">
                                                         <Row>
                                                             <Col sm={5} >
@@ -593,7 +593,7 @@ const InvoiceConfiguration = (props) => {
                                                             </Col>
                                                         </Row>
                                                     </FormGroup>
-                                                </Col>
+                                                </Col> */}
                                             </Row>
 
 
