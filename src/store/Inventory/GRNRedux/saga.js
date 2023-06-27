@@ -69,11 +69,13 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
   } catch (error) { yield put(GrnApiErrorAction()) }
 }
 
-function* makeGRN_Mode1_GenFunc({ data }) {         // Make_GRN Items  genrator function
+function* makeGRN_Mode1_GenFunc({ data }) {
+  // Make_GRN Items  genrator function
 
   const { jsonBody, pageMode = '', path = '', grnRef = [], challanNo = '' } = data
   try {
     const response = yield call(GRN_Make_API, jsonBody);
+    response.Data.OrderItem[0].MRPOps = response.Data.OrderItem[0].MRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }))
 
     response.Data.OrderItem.sort(function (a, b) {
       if (a.Item > b.Item) { return 1; }
@@ -81,6 +83,8 @@ function* makeGRN_Mode1_GenFunc({ data }) {         // Make_GRN Items  genrator 
       return 0;
     });
 
+    response.Data.OrderItem[0].defaultMRP = response.Data.OrderItem[0].MRPOps.find((obj) =>
+      obj.value === Math.max(...response.Data.OrderItem[0].MRPOps.map(item => item.value)));
 
     response["pageMode"] = pageMode;
     response["path"] = path; //Pagepath
