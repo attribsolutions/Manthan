@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import {orderCalculateFunc } from "./OrderPageCalulation";
+import { orderCalculateFunc } from "./OrderPageCalulation";
 import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
@@ -727,15 +727,15 @@ const Order = (props) => {
 
     function itemWise_CalculationFunc(row) {
         const calculate = orderCalculateFunc(row) //order calculation function 
-
+        
         row["Amount"] = calculate.roundedTotalAmount
 
         let sum = 0
         orderItemTable.forEach(ind => {
-            if (ind.Amount === null) {
+            if (!Number(ind.Amount)) {
                 ind.Amount = 0
             }
-            var amt = parseFloat(ind.Amount)
+            var amt = Number(ind.Amount)
             sum = sum + amt
         });
         setOrderAmount(sum.toFixed(2))

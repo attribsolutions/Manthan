@@ -70,6 +70,8 @@ const Invoice = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [orderItemDetails, setOrderItemDetails] = useState([])
     const [orderIDs, setOrderIDs] = useState([])
+    const [isTCSParty, setIsTCSParty] = useState(false)
+    const [isCustomerPAN, setIsCustomerPAN] = useState(false)
 
     // for invoicer page heder dicount functionality useSate ************************************
     const [discountValueAll, setDiscountValueAll] = useState("");
@@ -239,6 +241,8 @@ const Invoice = (props) => {
             //*********************************************************** */
 
             setOrderIDs(gobutton_Add.Data.OrderIDs)
+            // setIsTCSParty(gobutton_Add.IsTCSParty)
+            // setIsCustomerPAN(gobutton_Add.ISCustomerPAN)
             dispatch(GoButtonForinvoiceAddSuccess({ Status: false }))
         }
     }, [gobutton_Add]);
@@ -292,7 +296,7 @@ const Invoice = (props) => {
                             autoComplete="off"
                             defaultValue={index1.Quantity}
                             onChange={(event) => {
-                                orderQtyOnChange(event, index1);
+                                orderQtyOnChange(event, index1,isTCSParty);
                                 totalAmountCalcuationFunc(tableList);
                             }}
                         />
@@ -313,7 +317,7 @@ const Invoice = (props) => {
                                     "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
                                 }))}
                                 onChange={(event) => {
-                                    orderQtyUnit_SelectOnchange(event, index1);
+                                    orderQtyUnit_SelectOnchange(event, index1,isTCSParty);
                                     totalAmountCalcuationFunc(tableList);
                                 }}
                             ></Select>
@@ -372,7 +376,7 @@ const Invoice = (props) => {
                                                 id={`batchQty${index1.id}-${index2.id}`}
                                                 defaultValue={index2.Qty}
                                                 onChange={(event) => {
-                                                    stockQtyOnChange(event, index1, index2);
+                                                    stockQtyOnChange(event, index1, index2,isTCSParty);
                                                     totalAmountCalcuationFunc(tableList);
                                                 }}
                                             ></Input>
@@ -466,7 +470,7 @@ const Invoice = (props) => {
                 if (formatExtraData.changeAllDiscount) {
                     index1.Discount = discountValueAll;
                     index1.DiscountType = discountTypeAll.value;
-                    innerStockCaculation(index1);
+                    innerStockCaculation(index1,isTCSParty);
                     totalAmountCalcuationFunc(tableList);
                 }
 
@@ -492,7 +496,7 @@ const Invoice = (props) => {
                                             setForceReload(!forceReload);
                                             index1.DiscountType = e.value;
                                             index1.Discount = '';
-                                            innerStockCaculation(index1);
+                                            innerStockCaculation(index1,isTCSParty);
                                             totalAmountCalcuationFunc(tableList);
                                         }}
                                     />
@@ -527,7 +531,7 @@ const Invoice = (props) => {
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
                                             setForceReload(!forceReload);
-                                            innerStockCaculation(index1);
+                                            innerStockCaculation(index1,isTCSParty);
                                             totalAmountCalcuationFunc(tableList);
                                         }}
 
@@ -604,7 +608,7 @@ const Invoice = (props) => {
 
                     if (ele.Qty > 0) {
 
-                        const calculate = invoice_discountCalculate_Func(ele, index)
+                        const calculate = invoice_discountCalculate_Func(ele, index,isTCSParty,)
 
                         grand_total = grand_total + Number(calculate.roundedTotalAmount)
                         invoiceItems.push({

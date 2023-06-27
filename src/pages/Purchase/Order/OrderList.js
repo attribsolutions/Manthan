@@ -283,13 +283,21 @@ const OrderList = () => {
         if (subPageMode === url.IB_INVOICE_STP) {
             dispatch(_act.makeIB_InvoiceAction({
                 jsonBody, path: url.IB_INVOICE,
-                pageMode: mode.defaultsave, customer, btnId
+                pageMode: mode.defaultsave,
+                customer,
+                btnId
             }));
         }
         else if (subPageMode === url.ORDER_LIST_4) {
             dispatch(_act.GoButtonForinvoiceAdd({
-                jsonBody, subPageMode: url.INVOICE_1, path: url.INVOICE_1, pageMode: mode.defaultsave, customer,
-                btnId
+                jsonBody,
+                subPageMode: url.INVOICE_1,
+                path: url.INVOICE_1,
+                pageMode: mode.defaultsave,
+                customer,
+                btnId,
+                IsTCSParty: obj.IsTCSParty,
+                ISCustomerPAN: obj.CustomerPAN 
             }));
         }
         else {

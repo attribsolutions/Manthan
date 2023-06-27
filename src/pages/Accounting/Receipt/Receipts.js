@@ -33,7 +33,6 @@ import { postSelect_Field_for_dropdown } from "../../../store/Administrator/Part
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
-import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const Receipts = (props) => {

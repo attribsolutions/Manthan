@@ -340,7 +340,6 @@ const MaterialIssueMaster = (props) => {
                                         <td>
                                             <div style={{ width: "120px", textAlign: "right" }}>
                                                 <Label
-                                                // onKeyDown={(e) => handleKeyDown(e, GoButton)}
                                                 >
                                                     {index.BaseUnitQuantity}
                                                 </Label>

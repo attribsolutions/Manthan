@@ -1,7 +1,7 @@
-import { groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
+import { CommonConsole, groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
 
 
-export const invoice_discountCalculate_Func = (row, index1,) => {
+export const invoice_discountCalculate_Func = (row, index1, isTCSParty) => {
     debugger
     let systemSetting = loginSystemSetting()
     debugger
@@ -28,8 +28,18 @@ export const invoice_discountCalculate_Func = (row, index1,) => {
     const roundedGstAmount = CGST_Amount + SGST_Amount;
 
     // Calculate the total amount after discount and GST
-    const total = roundedGstAmount + discountBaseAmt;
+    let total = roundedGstAmount + discountBaseAmt;
+    let TCS_Amount = 0
 
+    if (isTCSParty) {  // if isTCSParty flaf given from order list ,its true then only calculate TCS- tax
+        if (systemSetting.InvoiceAmountRoundConfiguration) {
+            TCS_Amount = total * Number(systemSetting.IsTCSPercentageforValidatedPANCustomer);
+            total = total + TCS_Amount
+        } else {
+            TCS_Amount = total * Number(systemSetting.IsTCSPercentageforNonValidatedPANCustomer);
+            total = total + TCS_Amount
+        }
+    }
     // Return the calculated values as an object
     return {
         discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
@@ -37,7 +47,8 @@ export const invoice_discountCalculate_Func = (row, index1,) => {
         roundedGstAmount: Number(roundedGstAmount.toFixed(2)),
         roundedTotalAmount: Number(total.toFixed(2)),
         CGST_Amount,
-        SGST_Amount
+        SGST_Amount,
+        TCS_Amount
     };
 };
 
@@ -82,7 +93,7 @@ export function bulkSearch(text, data, columns) {
 }
 
 
-export function stockDistributeFunc(index1) {
+export function stockDistributeFunc(index1, isTCSParty) {
 
     let roundedTotalAmount = 0
     let orderqty = Number(index1.Quantity);
@@ -107,14 +118,14 @@ export function stockDistributeFunc(index1) {
 
         if (index2.Qty > 0) {
 
-            const calculate = invoice_discountCalculate_Func(index2, index1)
+            const calculate = invoice_discountCalculate_Func(index2, index1, isTCSParty)
             roundedTotalAmount = roundedTotalAmount + Number(calculate.roundedTotalAmount)
         }
 
         try {
             document.getElementById(`batchQty${index1.id}-${index2.id}`).value = index2.Qty
 
-        } catch (e) { }
+        } catch (e) {CommonConsole('stockDistributeFunc', e) }
 
 
 
@@ -131,25 +142,22 @@ export function stockDistributeFunc(index1) {
     if (orderqty > t2) {
         try {
             document.getElementById(`OrderQty${index1.id}`).value = t2.toFixed(3)
-        } catch (e) { }
+        } catch (e) { CommonConsole('stockDistributeFunc', e) }
     };
     try {
         index1.StockInValid = false
         index1.StockInvalidMsg = null
         document.getElementById(`StockInvalidMsg-${index1.id}`).style.display = "none";
-    } catch (e) { };
+    } catch (e) { CommonConsole('stockDistributeFunc ', e) };
 
     try {
         document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = tA4;
-
-
-        var aa
-    } catch (e) { };
+    } catch (e) { CommonConsole('stockDistributeFunc', e) };
 
 };
 
 
-export function orderQtyOnChange(event, index) {
+export function orderQtyOnChange(event, index, isTCSParty) {
 
     let input = Number(event.target.value)
     let ItemTotalStock = Number(index.ItemTotalStock)
@@ -169,11 +177,11 @@ export function orderQtyOnChange(event, index) {
     event.target.value = input;
     index.Quantity = input
 
-    stockDistributeFunc(index)
+    stockDistributeFunc(index, isTCSParty)
 };
 
 
-export function orderQtyUnit_SelectOnchange(event, index1) {
+export function orderQtyUnit_SelectOnchange(event, index1, isTCSParty) {
 
     index1.default_UnitDropvalue = event;
     index1.ConversionUnit = event.ConversionUnit;
@@ -187,11 +195,11 @@ export function orderQtyUnit_SelectOnchange(event, index1) {
 
     })
 
-    stockDistributeFunc(index1)
+    stockDistributeFunc(index1, isTCSParty)
 };
 
 
-export function stockQtyOnChange(event, index1, index2) {
+export function stockQtyOnChange(event, index1, index2, isTCSParty) {
 
     let input = Number(event.target.value)
     let result = /^\d*(\.\d{0,3})?$/.test(input);
@@ -211,20 +219,20 @@ export function stockQtyOnChange(event, index1, index2) {
     event.target.value = input;
     index2.Qty = input
 
-    innerStockCaculation(index1)
+    innerStockCaculation(index1, isTCSParty)
 
 };
 
 
-export const innerStockCaculation = (index1) => {
+export const innerStockCaculation = (index1, isTCSParty) => {
 
     let QuantityTatal = 0
     let roundedTotalAmount = 0;
 
     index1.StockDetails.forEach(index2 => {
         //**discount calculation function  */
-        const calculate = invoice_discountCalculate_Func(index2, index1);
-        
+        const calculate = invoice_discountCalculate_Func(index2, index1, isTCSParty);
+
         roundedTotalAmount = roundedTotalAmount + Number(calculate.roundedTotalAmount)
         QuantityTatal = Number(QuantityTatal) + Number(index2.Qty);
     });
@@ -234,11 +242,11 @@ export const innerStockCaculation = (index1) => {
 
     try {
         document.getElementById(`OrderQty-${index1.id}`).value = index1.Quantity
-    } catch (e) { };
+    } catch (e) { CommonConsole('innerStockCaculation', e) };
 
     try {
         document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = index1.roundedTotalAmount;
-    } catch (e) { };
+    } catch (e) { CommonConsole('innerStockCaculation', e) };
 
 }
 

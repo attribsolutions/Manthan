@@ -297,7 +297,7 @@ const GRNAdd3 = (props) => {
             let sum = 0
             grnItemList.forEach(i => {
           
-                const calculate = orderCalculateFunc(i)
+                const calculate = orderCalculateFunc(i)// amount calculation function 
 
                 if (i.ItemName === "Total") { return }
                 const arr = {
