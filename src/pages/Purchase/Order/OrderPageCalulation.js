@@ -60,7 +60,7 @@
 
 
 export const orderCalculateFunc = (row) => {
-
+debugger
   // Retrieve values from input object
   const rate = Number(row.Rate) || 0;
   const quantity = Number(row.Quantity) || 0;

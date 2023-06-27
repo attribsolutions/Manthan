@@ -75,16 +75,21 @@ function* makeGRN_Mode1_GenFunc({ data }) {
   const { jsonBody, pageMode = '', path = '', grnRef = [], challanNo = '' } = data
   try {
     const response = yield call(GRN_Make_API, jsonBody);
-    response.Data.OrderItem[0].MRPOps = response.Data.OrderItem[0].MRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }))
+   
+    response.Data.OrderItem.forEach(index => {
+      index["MRPOps"] = index.MRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
+
+      index["defaultMRP"] = index["MRPOps"].reduce((maxObj, obj) => {
+        return obj.value > maxObj.value ? obj : maxObj;
+      }, { value: -Infinity });
+
+    })
 
     response.Data.OrderItem.sort(function (a, b) {
       if (a.Item > b.Item) { return 1; }
       else if (a.Item < b.Item) { return -1; }
       return 0;
     });
-
-    response.Data.OrderItem[0].defaultMRP = response.Data.OrderItem[0].MRPOps.find((obj) =>
-      obj.value === Math.max(...response.Data.OrderItem[0].MRPOps.map(item => item.value)));
 
     response["pageMode"] = pageMode;
     response["path"] = path; //Pagepath
