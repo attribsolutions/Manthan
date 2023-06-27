@@ -12,7 +12,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { orderCalculateFunc} from "../../Purchase/Order/OrderPageCalulation";
+import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -234,6 +234,11 @@ const GRNAdd3 = (props) => {
             dataField: "UnitName",
         },
 
+        {  //-------------  column ----------------------------------
+            text: "QtyInBox",
+            dataField: "QtyInBox",
+        },
+
         {  //-------------MRP column ----------------------------------
             text: "MRP",
             dataField: "MRPValue",
@@ -296,7 +301,7 @@ const GRNAdd3 = (props) => {
             const itemArr = []
             let sum = 0
             grnItemList.forEach(i => {
-          
+
                 const calculate = orderCalculateFunc(i)// amount calculation function 
 
                 if (i.ItemName === "Total") { return }
