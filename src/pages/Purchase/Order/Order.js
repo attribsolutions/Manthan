@@ -445,7 +445,7 @@ const Order = (props) => {
 
                     </div>
                 )
-            },
+            }, 
         },
         {
             dataField: "StockQuantity",
