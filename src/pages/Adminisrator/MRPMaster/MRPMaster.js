@@ -222,7 +222,7 @@ const MRPMaster = (props) => {
 
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-                
+
 
                 const jsonBody = JSON.stringify({
                     Division: values.DivisionName.value ? values.DivisionName.value : 0,
@@ -407,9 +407,9 @@ const MRPMaster = (props) => {
                 MRP: index.MRP,
                 id: index.id
             }))
-
+            debugger
             const Find = ItemData.filter((index) => {
-                return (!(index.MRP === ''))
+                return (Number(index.MRP) > 0)
             })
             const jsonBody = JSON.stringify(Find)
 
@@ -460,6 +460,9 @@ const MRPMaster = (props) => {
                                                                 options={Division_DropdownOptions}
                                                                 isDisabled={pageMode === mode.edit ? true : false}
                                                                 isSearchable={true}
+                                                                styles={{
+                                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                                }}
                                                                 autoFocus={true}
                                                                 placeholder="select"
                                                                 onChange={(hasSelect, evn) => {
@@ -488,6 +491,9 @@ const MRPMaster = (props) => {
                                                                 options={PartyTypeDropdown_Options}
                                                                 isDisabled={pageMode === mode.edit ? true : false}
                                                                 isSearchable={true}
+                                                                styles={{
+                                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                                }}
                                                                 placeholder="select"
                                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                                 classNamePrefix="dropdown"
