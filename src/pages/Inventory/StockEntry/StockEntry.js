@@ -285,7 +285,7 @@ const StockEntry = (props) => {
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <C_DatePicker
                         name='Date'
-                        defaultValue={""}
+                        value={row.BatchDate}
                         onChange={(e, date) => {
                             row.BatchDate = _cfunc.date_ymd_func(date)
                         }}
@@ -345,33 +345,30 @@ const StockEntry = (props) => {
                 ItemName: i.ItemName,
                 ItemId: i.Item,
                 Quantity: i.Quantity,
-                Rate: i.Rate,
-                RowData: i,
-                BatchDate: i.BatchDate
             }))
 
             const itemArr = [...TableArr]
+
+            const dateString = currentDate_ymd.replace(/-/g, "");
 
             data.forEach((i) => {
 
                 itemArr.push({
                     id: itemArr.length + 1,
-                    BatchCode: `${currentDate_ymd}_${i.ItemId}_${_cfunc.loginPartyID()}_${itemArr.length}`,
                     ItemUnitDetails: i.unitOps,
                     ItemMRPDetails: i.MRPOps,
                     ItemGSTHSNDetails: i.GSTOps,
                     ItemName: i.ItemName,
                     ItemId: i.ItemId,
                     Quantity: i.Quantity,
-                    RowData: i.RowData,
-                    BatchDate: i.BatchDate,
+                    BatchDate: currentDate_ymd,
+                    BatchCode: `${dateString}_${i.ItemId}_${_cfunc.loginPartyID()}_${itemArr.length}`,
                     defaultMRP: { value: i.highest_MRP[0].MRP, label: i.highest_MRP[0].MRPValue },
                     defaultGST: { value: i.highest_GST[0].GST, label: i.highest_GST[0].GSTPercentage },
                 })
             })
 
             setTableArr(itemArr)
-
             setState((i) => {
                 let a = { ...i }
                 a.values.ItemName = ""
@@ -396,7 +393,7 @@ const StockEntry = (props) => {
                 "MRP": index.defaultMRP.value,
                 "Unit": index.Unit,
                 "GST": index.defaultGST.value,
-                "BatchDate": index.BatchDate === undefined ? "" : index.BatchDate,
+                "BatchDate": index.BatchDate,
                 "BatchCode": index.BatchCode
             })
         })
