@@ -427,7 +427,7 @@ const MarginMaster = (props) => {
                 return _cfunc.btnIsDissablefunc({ btnId, state: false })
             }
             else {
-                // dispatch(saveMarginMaster({ jsonBody, btnId }));
+                dispatch(saveMarginMaster({ jsonBody, btnId }));
             }
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
