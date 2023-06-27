@@ -412,11 +412,10 @@ const MarginMaster = (props) => {
                 id: index.id
             }))
 
-            const Find = ItemData.filter((index) => {
-
-                return (!(index.Margin === '0.00'))
+            const Find = ItemData.filter((index) => {   // condition for margin save without 0
+                return (Number(index.Margin) > 0)
             })
-
+            debugger
             const jsonBody = JSON.stringify(Find)
 
             if (!(Find.length > 0)) {
@@ -428,7 +427,7 @@ const MarginMaster = (props) => {
                 return _cfunc.btnIsDissablefunc({ btnId, state: false })
             }
             else {
-                dispatch(saveMarginMaster({ jsonBody, btnId }));
+                // dispatch(saveMarginMaster({ jsonBody, btnId }));
             }
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
@@ -467,6 +466,9 @@ const MarginMaster = (props) => {
                                                         isDisabled={pageMode === mode.edit ? true : false}
                                                         isSearchable={true}
                                                         autoFocus={true}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
                                                         placeholder="select"
                                                         onChange={(hasSelect, evn) => {
                                                             onChangeSelect({ hasSelect, evn, state, setState, })
@@ -492,6 +494,9 @@ const MarginMaster = (props) => {
                                                         options={PartyTypeDropdown_Options}
                                                         isDisabled={pageMode === mode.edit ? true : false}
                                                         isSearchable={true}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
                                                         placeholder="select"
                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                         classNamePrefix="dropdown"
