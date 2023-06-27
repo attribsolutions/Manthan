@@ -673,6 +673,7 @@ const Invoice = (props) => {
                 CustomerGSTTin: '41',
                 GrandTotal: isRound === "1" ? Math.round(grand_total) : Number(grand_total),
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+                TCSAmount: "0.00",
                 Customer: values.Customer.value,
                 Party: _cfunc.loginPartyID(),
                 CreatedBy: _cfunc.loginUserID(),
