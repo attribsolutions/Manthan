@@ -16,11 +16,11 @@ import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-
+import Select from "react-select";
 import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, floatRegx } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { useLayoutEffect } from "react";
@@ -241,9 +241,28 @@ const GRNAdd3 = (props) => {
 
         {  //-------------MRP column ----------------------------------
             text: "MRP",
-            dataField: "MRPValue",
-            align: () => ('right')
+            dataField: "MRPDetails",
+            align: () => ('right'),
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Select
+                        id={`MRP${key}`}
+                        name="MRP"
+                        defaultValue={row.defaultMRP}
+                        isSearchable={true}
+                        className="react-dropdown"
+                        classNamePrefix="dropdown"
+                        options={row.MRPOps}
+                        onChange={(event) => { row.defaultMRP = event }}
+                    />
+                </span>)
+            },
+            headerStyle: () => {
+                return { width: '160px' };
+            }
         },
+
         {  //-------------Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
@@ -265,7 +284,6 @@ const GRNAdd3 = (props) => {
             text: "Batch Date",
             dataField: "BatchDate_conv",
         },
-
     ];
 
     const rowStyle2 = (row, rowIndex) => {
@@ -285,8 +303,6 @@ const GRNAdd3 = (props) => {
         },
     ];
 
-
-
     const saveHandeller = (event) => {
 
         event.preventDefault();
@@ -301,14 +317,13 @@ const GRNAdd3 = (props) => {
             const itemArr = []
             let sum = 0
             grnItemList.forEach(i => {
-
+                debugger
                 const calculate = orderCalculateFunc(i)// amount calculation function 
-
-                if (i.ItemName === "Total") { return }
+                // if (i.ItemName === "Total") { return }
                 const arr = {
                     Item: i.Item,
                     Quantity: i.Quantity,
-                    MRP: i.MRP,
+                    MRP: i.defaultMRP.value,
                     ReferenceRate: i.Rate,
                     Rate: i.Rate,
                     Unit: i.Unit,
