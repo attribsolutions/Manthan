@@ -50,7 +50,7 @@ import { postSelect_Field_for_dropdown } from "../../../store/Administrator/Part
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
-import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
+import { calculateSalesReturnFunc, salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const Credit = (props) => {
@@ -380,15 +380,14 @@ const Credit = (props) => {
             row["Rate"] = val
         }
         row.gstPercentage = row.GSTPercentage
-        let calculate = salesReturnCalculate(row)
-
-        Setcalculation(calculate)
-        let AmountTotal = calculate.tAmount
-        row["AmountTotal"] = Number(AmountTotal)
-        row["BasicAmount"] = Number(calculate.baseAmt)
-        row["CGSTAmount"] = Number(calculate.CGST)
-        row["SGSTAmount"] = Number(calculate.SGST)
-        row["GSTAmount"] = Number(calculate.gstAmt)
+        const calculate = calculateSalesReturnFunc(row)
+        
+        row["AmountTotal"] = Number(calculate.roundedTotalAmount);
+        row["BasicAmount"] = Number(calculate.basicAmount);
+        row["GSTAmount"] = Number(calculate.roundedGstAmount);
+        row["CGSTAmount"] = Number(calculate.CGST_Amount);
+        row["SGSTAmount"] = Number(calculate.SGST_Amount);
+        
         let sum = 0
         InvoiceItems.forEach(ind => {
             if (ind.AmountTotal === undefined) {

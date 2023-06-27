@@ -40,7 +40,7 @@ import {
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { discountCalculate, stockDistributeFunc } from "./invoiceCaculations";
+import { invoice_discountCalculate_Func, stockDistributeFunc } from "./invoiceCaculations";
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -571,7 +571,7 @@ const Invoice = (props) => {
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
-                            <samp id={`tAmount${row.id}`}>{row.tAmount}</samp>
+                            <samp id={`roundedTotalAmount${row.id}`}>{row.roundedTotalAmount}</samp>
                         </div>
 
                     </>
@@ -757,9 +757,9 @@ const Invoice = (props) => {
 
                     if (ele.Qty > 0) {
 
-                        const calculate = discountCalculate(ele, index)
+                        const calculate = invoice_discountCalculate_Func(ele, index)
 
-                        grand_total = grand_total + Number(calculate.tAmount)
+                        grand_total = grand_total + Number(calculate.roundedTotalAmount)
 
                         invoiceItems.push({
                             Item: index.Item,
@@ -774,7 +774,7 @@ const Invoice = (props) => {
                             MRPValue: ele.MRP,//changes
                             Rate: ele.Rate,
                             BasicAmount: (calculate.discountBaseAmt).toFixed(2),
-                            GSTAmount: calculate.gstAmt,
+                            GSTAmount: calculate.roundedGstAmount,
                             GST: ele.LiveBatcheGSTID,
                             GSTPercentage: ele.GST,// changes
                             CGST: calculate.CGST,
@@ -784,7 +784,7 @@ const Invoice = (props) => {
                             CGSTPercentage: (ele.GST / 2),
                             SGSTPercentage: (ele.GST / 2),
                             IGSTPercentage: 0,
-                            Amount: calculate.tAmount,
+                            Amount: calculate.roundedTotalAmount,
                             TaxType: 'GST',
                             DiscountType: index.DiscountType,
                             Discount: index.Discount,

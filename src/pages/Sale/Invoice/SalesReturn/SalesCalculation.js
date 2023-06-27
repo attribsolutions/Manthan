@@ -1,26 +1,37 @@
-export const salesReturnCalculate = (row) => {
+export const calculateSalesReturnFunc = (row) => {
+    let rate = 0;
+    let quantity = 0;
+    let gstPercentage = 0;
 
-    let rate = 0
-    let qty = 0
-    let gstPercentage = 0
+    if (row.rate !== '') {
+        rate = parseFloat(row.rate);
+    }
 
-    if (!(row.Rate == '')) { rate = row.Rate; };
-    if (!(row.Qty == '')) { qty = row.Qty; };
+    if (row.quantity !== '') {
+        quantity = parseFloat(row.quantity);
+    }
 
-    let baseAmt = parseFloat(rate) * parseFloat(qty)
-    if (!baseAmt) { baseAmt = 0 }
+    let basicAmount = rate * quantity;
+    if (isNaN(basicAmount)) {
+        basicAmount = 0;
+    }
 
+    if (row.gstPercentage !== '') {
+        gstPercentage = parseFloat(row.gstPercentage);
+    }
 
-    if (!(row.gstPercentage == '')) {
-        gstPercentage = row.gstPercentage;
+    let gstAmount = (basicAmount * gstPercentage) / 100;
+    const totalAmount = gstAmount + basicAmount;
+    const CGST_Amount = (gstAmount / 2).toFixed(2);
+    const SGST_Amount = CGST_Amount;
+    const roundedGstAmount = gstAmount.toFixed(2);
+    const roundedTotalAmount = totalAmount.toFixed(2);
+
+    return {
+        basicAmount,
+        roundedGstAmount,
+        roundedTotalAmount,
+        CGST_Amount,
+        SGST_Amount,
     };
-
-    const gstAmt = ((baseAmt * parseFloat(gstPercentage) / 100))
-    const total = gstAmt + parseFloat(baseAmt)
-    const CGST = (gstAmt / 2).toFixed(2);
-    const SGST = (gstAmt / 2).toFixed(2);
-    gstAmt.toFixed(2)
-    const tAmount = total.toFixed(2)
-
-    return { baseAmt, gstAmt, tAmount, CGST, SGST }
-}
+};
