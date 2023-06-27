@@ -447,6 +447,12 @@ const Order = (props) => {
                 )
             },
         },
+        {
+            dataField: "StockQuantity",
+            text: "Stock Quantity",
+            sort: true,
+
+        },
 
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
@@ -727,7 +733,7 @@ const Order = (props) => {
 
     function itemWise_CalculationFunc(row) {
         const calculate = orderCalculateFunc(row) //order calculation function 
-        
+
         row["Amount"] = calculate.roundedTotalAmount
 
         let sum = 0
