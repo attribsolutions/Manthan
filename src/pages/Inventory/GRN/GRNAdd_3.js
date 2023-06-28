@@ -234,9 +234,10 @@ const GRNAdd3 = (props) => {
             dataField: "UnitName",
         },
 
-        {  //-------------  column ----------------------------------
+        {  //------------- QtyInBox column ----------------------------------
             text: "QtyInBox",
             dataField: "QtyInBox",
+            align: 'right'
         },
 
         {  //-------------MRP column ----------------------------------
