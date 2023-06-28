@@ -486,25 +486,27 @@ const GRNAdd3 = (props) => {
                         columns={tableColumns}>
                         {(toolkitProps,) => (
                             <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive table">
+                                            <BootstrapTable
+                                                responsive
+                                                bordered={false}
+                                                striped={false}
+                                                rowStyle={rowStyle2}
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Items Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
 
-                                <div className="table table-Rresponsive">
-                                    <BootstrapTable
-                                        responsive
-                                        bordered={false}
-                                        striped={false}
-                                        rowStyle={rowStyle2}
-                                        classes={"table  table-bordered table-hover"}
-                                        noDataIndication={
-                                            <div className="text-danger text-center ">
-                                                Items Not available
-                                            </div>
-                                        }
-                                        {...toolkitProps.baseProps}
-                                    />
-                                    {mySearchProps(toolkitProps.searchProps)}
-                                </div>
-
-
+                                    </Col>
+                                </Row>
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
