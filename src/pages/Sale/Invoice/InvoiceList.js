@@ -205,7 +205,7 @@ const InvoiceList = () => {
         }
     }, [Cancel_EwayBill]);
     useEffect(() => {
-        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id))
+        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id,_cfunc.loginCompanyID()))
     }, [])
 
     const supplierOptions = supplier.map((i) => ({
