@@ -445,7 +445,7 @@ const Order = (props) => {
 
                     </div>
                 )
-            }, 
+            },
         },
         {
             dataField: "StockQuantity",
@@ -1030,14 +1030,15 @@ const Order = (props) => {
                 dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
 
             } else {
-                
+
                 dispatch(_act.saveOrderAction({ jsonBody, subPageMode, gotoInvoiceMode }))
             }
 
         } catch (e) { _cfunc.CommonConsole("order_save_", e) }
     }
 
-    if (!(userPageAccessState === "")) {
+    if (false) {
+        // if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
