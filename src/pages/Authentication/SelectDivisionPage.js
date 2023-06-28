@@ -78,7 +78,7 @@ const SelectDivisionPage = props => {
 
       localStorage.setItem("roleId", JSON.stringify(value))
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
-      dispatch(getpartysetting_API(party))//login party id pass to getpartysetting_API
+      dispatch(getpartysetting_API(party, loginCompanyID()))//login party id pass to getpartysetting_API
     }
 
 

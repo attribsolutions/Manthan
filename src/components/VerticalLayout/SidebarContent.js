@@ -48,7 +48,7 @@ const SidebarContent = (props) => {
   }, [roleAccesssForSidbarError])
 
   useEffect(() => {
-
+    debugger
     if (RoleAccessUpdateData.length <= 0) {
       let role = loginUserDetails()
       if (role) {
@@ -56,7 +56,7 @@ const SidebarContent = (props) => {
         let employee = loginEmployeeID();
         let company = loginCompanyID();
         dispatch(roleAceessAction(party, employee, company))
-        dispatch(getpartysetting_API(party))//login party id pass to getpartysetting_API
+        dispatch(getpartysetting_API(party, company))//login party id pass to getpartysetting_API
       };
     }
   }, [])

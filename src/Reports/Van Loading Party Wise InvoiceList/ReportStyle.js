@@ -193,24 +193,24 @@ export const tableBody = (doc, data) => {
                 columnWidth: 20,
             },
             1: {
-                columnWidth: 140,
+                columnWidth: 160,
                 // halign: 'right',
 
             },
             2: {
-                columnWidth: 70,
+                columnWidth: 50,
                 halign: 'right',
             },
             3: {
-                columnWidth: 70,
+                columnWidth: 50,
                 halign: 'right',
             },
             4: {
-                columnWidth: 70,
+                columnWidth: 50,
                 halign: 'right',
             },
             5: {
-                columnWidth: 60,
+                columnWidth: 50,
                 halign: 'right',
             },
             6: {
@@ -218,7 +218,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             7: {
-                columnWidth: 60,
+                columnWidth: 50,
                 halign: 'right',
             },
             8: {

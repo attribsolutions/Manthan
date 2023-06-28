@@ -87,7 +87,7 @@ const Dashboard_1 = (props) => {
     }
 
     function InvoiceFoRGRN_onClick() {
-        history.push(url.GRN_STP_1)
+        history.push(url.GRN_STP_3)
     }
 
     function salesReturn_onClick() {

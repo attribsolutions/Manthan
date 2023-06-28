@@ -117,6 +117,7 @@ const GRNAdd3 = (props) => {
             grnDetails.OrderItem.forEach((i, k) => {
 
                 i.BatchDate_conv = _cfunc.date_dmy_func(i.BatchDate)
+
                 if (k === 0) {
                     i.id = id
                     tableArr.push(i)
@@ -234,9 +235,10 @@ const GRNAdd3 = (props) => {
             dataField: "UnitName",
         },
 
-        {  //-------------  column ----------------------------------
+        {  //------------- QtyInBox column ----------------------------------
             text: "QtyInBox",
             dataField: "QtyInBox",
+            align: 'right'
         },
 
         {  //-------------MRP column ----------------------------------
@@ -324,11 +326,13 @@ const GRNAdd3 = (props) => {
                     Item: i.Item,
                     Quantity: i.Quantity,
                     MRP: i.defaultMRP.value,
+                    MRPValue: i.defaultMRP.label,
                     ReferenceRate: i.Rate,
                     Rate: i.Rate,
                     Unit: i.Unit,
                     BaseUnitQuantity: i.BaseUnitQuantity,
                     GST: i.GST,
+                    GSTPercentage: i.GSTPercentage,
                     BasicAmount: calculate.basicAmount,
                     GSTAmount: calculate.roundedGstAmount,
                     Amount: calculate.roundedTotalAmount,
@@ -485,25 +489,27 @@ const GRNAdd3 = (props) => {
                         columns={tableColumns}>
                         {(toolkitProps,) => (
                             <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive table">
+                                            <BootstrapTable
+                                                responsive
+                                                bordered={false}
+                                                striped={false}
+                                                rowStyle={rowStyle2}
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Items Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
 
-                                <div className="table table-Rresponsive">
-                                    <BootstrapTable
-                                        responsive
-                                        bordered={false}
-                                        striped={false}
-                                        rowStyle={rowStyle2}
-                                        classes={"table  table-bordered table-hover"}
-                                        noDataIndication={
-                                            <div className="text-danger text-center ">
-                                                Items Not available
-                                            </div>
-                                        }
-                                        {...toolkitProps.baseProps}
-                                    />
-                                    {mySearchProps(toolkitProps.searchProps)}
-                                </div>
-
-
+                                    </Col>
+                                </Row>
                             </React.Fragment>
                         )}
                     </ToolkitProvider>

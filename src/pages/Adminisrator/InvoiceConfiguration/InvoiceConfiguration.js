@@ -52,7 +52,7 @@ const InvoiceConfiguration = (props) => {
 
     const fileds = {
         // PaymentQR: "",
-        HSNCodeDigit: { value: "3", label: "8 Digits" },
+        HSNCodeDigit: "",
         TCSAmountRound: "",
         InvoiceAmountRound: "",
         Invoicea4: "",
@@ -103,7 +103,7 @@ const InvoiceConfiguration = (props) => {
         const page_Id = pageId.INVOICE_CONFIGURATION
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartysetting_API(loginUserDetails().Party_id))
+        dispatch(getpartysetting_API(loginUserDetails().Party_id, loginCompanyID()))
 
 
     }, []);
@@ -163,7 +163,7 @@ const InvoiceConfiguration = (props) => {
     }), [postMsg])
 
     useEffect(() => {
-        dispatch(getpartysetting_API(loginUserDetails().Party_id))
+        dispatch(getpartysetting_API(loginUserDetails().Party_id, loginCompanyID()))
     }, [postMsg])
 
 
@@ -203,6 +203,8 @@ const InvoiceConfiguration = (props) => {
                 Data.HSNCodeDigit.Value = { value: "2", label: "6 Digits" }
             }
             if (Data.HSNCodeDigit.Value === "3") {
+                Data.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
+            } else {
                 Data.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
             }
 

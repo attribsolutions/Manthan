@@ -7,7 +7,7 @@ export const columns = [
     "MRP",
     "Box",
     "Outer ",
-    // "Pcs",
+    "Pcs",
     "Quantity",
     "Unit",
 ];
@@ -43,16 +43,19 @@ export const Rows = (data) => {
     let TotalQuantity = 0
     let SrNO = 1
 
-
+    debugger
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
-        const { ItemName, MRP, BatchCode, Box, Outer, Quantity, UnitName, MRPValue } = currentItem;
+        debugger
+        const { ItemName, MRP, BatchCode, Box, Outer, Quantity, UnitName, MRPValue, PiecesQuantity, BoxQuantity } = currentItem;
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
-            accumulator[key].MRPValue += parseInt(MRPValue);
-            accumulator[key].Quantity += parseInt(Quantity);
+            accumulator[key].PiecesQuantity += Number(PiecesQuantity);
+            accumulator[key].Quantity += Number(Quantity);
+            accumulator[key].BoxQuantity += Number(BoxQuantity);
+
 
         } else {
-            accumulator[key] = { ItemName, MRPValue: parseInt(MRPValue), BatchCode, Box, Outer, Quantity: parseInt(Quantity), UnitName };
+            accumulator[key] = { ItemName, MRPValue, BatchCode, Box, Outer, Quantity: Number(Quantity), UnitName, PiecesQuantity: Number(PiecesQuantity), BoxQuantity: Number(BoxQuantity) };
         }
         return accumulator;
     }, {});
@@ -66,9 +69,9 @@ export const Rows = (data) => {
             element.ItemName,
             element.BatchCode,
             element.MRPValue,
-            element.Box,
+            Number(element.BoxQuantity).toFixed(2),
             element.Outer,
-            // element.Pcs,
+            Number(element.PiecesQuantity).toFixed(2),
             element.Quantity,
             element.UnitName,
         ];

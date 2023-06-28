@@ -255,7 +255,7 @@ export const reportFooter = (doc, data) => {
     doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 560, 788, 'right')
 
     doc.text(`Total TCS:`, 440, 798,)
-    doc.text(`0.00 `, 560, 798, 'right')
+    doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 560, 798, 'right')
 
 
 
