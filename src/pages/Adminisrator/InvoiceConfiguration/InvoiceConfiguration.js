@@ -52,7 +52,7 @@ const InvoiceConfiguration = (props) => {
 
     const fileds = {
         // PaymentQR: "",
-        HSNCodeDigit: { value: "3", label: "8 Digits" },
+        HSNCodeDigit: "",
         TCSAmountRound: "",
         InvoiceAmountRound: "",
         Invoicea4: "",
@@ -203,6 +203,8 @@ const InvoiceConfiguration = (props) => {
                 Data.HSNCodeDigit.Value = { value: "2", label: "6 Digits" }
             }
             if (Data.HSNCodeDigit.Value === "3") {
+                Data.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
+            } else {
                 Data.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
             }
 
