@@ -79,33 +79,37 @@ export const invoice_discountCalculate_Func = (row, index1) => {
     };
 };
 
+
 export const settingBaseRoundOffAmountFunc = (tableList = []) => {
-    
+    // Get the system settings
     const systemSetting = loginSystemSetting();
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
     const isTCS_AmtRound = systemSetting.TCSAmountRoundConfiguration === '1';
 
-    // Total Amount Addition 
-    let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]), 0);
-    let TCS_Amount = 0; // Initial  TCS  Amount 
+    // Calculate the sum of the roundedTotalAmount in the tableList
+    let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+    let TCS_Amount = 0; // Initial TCS Amount
 
-    if (tableList[0].IsTCSParty) {  // if isTCSParty flag given from order list ,its true then only calculate TCS- tax
-
-        if (tableList[0].IsCustomerPAN) {//if custome PAN is Present
+    if (tableList[0].IsTCSParty) {
+        // Calculate TCS tax only if IsTCSParty flag is true
+        if (tableList[0].IsCustomerPAN) {
+            // Calculate TCS for validated PAN customer (IsCustomerPAN has value true)
             TCS_Amount = sumOfGrandTotal * (Number(systemSetting.IsTCSPercentageforValidatedPANCustomer) / 100);
-            sumOfGrandTotal = sumOfGrandTotal + TCS_Amount
+            sumOfGrandTotal += TCS_Amount;
         } else {
+            // Calculate TCS for non-validated PAN customer
             TCS_Amount = sumOfGrandTotal * (Number(systemSetting.IsTCSPercentageforNonValidatedPANCustomer) / 100);
-            sumOfGrandTotal = sumOfGrandTotal + TCS_Amount
+            sumOfGrandTotal += TCS_Amount;
         }
     }
-    
+
     return {
-        sumOfGrandTotal: isGrandAmtRound ? Math.round(sumOfGrandTotal) : Number(sumOfGrandTotal).toFixed(2),
-        RoundOffAmount: (sumOfGrandTotal - Math.trunc(sumOfGrandTotal)).toFixed(2),
-        TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2)
-    }
-}
+        sumOfGrandTotal: isGrandAmtRound ? Math.round(sumOfGrandTotal) : Number(sumOfGrandTotal).toFixed(2), // Round off or format the sumOfGrandTotal
+        RoundOffAmount: (sumOfGrandTotal - Math.trunc(sumOfGrandTotal)).toFixed(2), // Calculate the round-off amount
+        TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2) // Round off or format the TCS Amount
+    };
+};
+
 
 export function stockDistributeFunc(index1) {
 
