@@ -93,7 +93,7 @@ const Login = props => {
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
       dispatch(getpartysetting_API(value.Party_id, loginCompanyID()))//login party id pass to getpartysetting_API
     }
-
+ 
   }, [divisionDropdown_redux])
 
 
