@@ -52,7 +52,7 @@ const InvoiceConfiguration = (props) => {
 
     const fileds = {
         // PaymentQR: "",
-        HSNCodeDigit: "",
+        HSNCodeDigit: { value: "3", label: "8 Digits" },
         TCSAmountRound: "",
         InvoiceAmountRound: "",
         Invoicea4: "",
@@ -87,7 +87,7 @@ const InvoiceConfiguration = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-    
+
     const { values } = state
     const { isError } = state;
     const { fieldLabel } = state;
@@ -193,7 +193,7 @@ const InvoiceConfiguration = (props) => {
 
 
     useEffect(() => {
-        
+
         if (Object.keys(Data).length > 1) {
 
             if (Data.HSNCodeDigit.Value === "1") {
@@ -263,8 +263,8 @@ const InvoiceConfiguration = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        
 
+        debugger
         const BulkData = []
         event.preventDefault();
         const btnId = event.target.id
@@ -273,7 +273,7 @@ const InvoiceConfiguration = (props) => {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
                 Object.values(values).forEach(i => {
-                    
+
 
                     if (i.SystemSetting === "HSN Code Digit") {
                         i.Value = i.Value.value
