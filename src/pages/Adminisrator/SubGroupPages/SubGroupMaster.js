@@ -51,7 +51,8 @@ const SubGroupMaster = (props) => {
         id: "",
         Name: "",
         Group: "",
-        GroupName: ""
+        GroupName: "",
+        Sequence: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -115,7 +116,7 @@ const SubGroupMaster = (props) => {
 
 
     useEffect(() => {
-
+        
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -132,18 +133,20 @@ const SubGroupMaster = (props) => {
             if (hasEditVal) {
                 setEditData(hasEditVal)
 
-                const { id, Name, Group, GroupName } = hasEditVal
+                const { id, Name, Group, GroupName, Sequence } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 values.Name = Name;
                 values.id = id
                 values.Group = Group
                 values.GroupName = { label: GroupName, value: Group };
+                values.Sequence = Sequence
 
                 hasValid.id.valid = true;
                 hasValid.Name.valid = true;
                 hasValid.GroupName.valid = true;
                 hasValid.Group.valid = true;
+                hasValid.Sequence.valid = true
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -229,6 +232,7 @@ const SubGroupMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     Group: values.GroupName.value,
+                    Sequence: values.Sequence,
                     CreatedBy: loginUserID(),
                     CreatedOn: "2022-11-19T00:00:00",
                     UpdatedBy: loginUserID(),
@@ -255,7 +259,7 @@ const SubGroupMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-                     
+
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -314,6 +318,26 @@ const SubGroupMaster = (props) => {
                                                         </Col>
                                                     </Row>
 
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Sequence} </Label>
+                                                            <Input
+                                                                name="Sequence"
+                                                                id="txtSequence"
+                                                                value={values.Sequence}
+                                                                type="text"
+                                                                className={isError.Sequence.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                placeholder="Please Enter Sequence"
+                                                                autoComplete='off'
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                }}
+                                                            />
+                                                            {isError.Sequence.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Sequence}</span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Row>
                                                     <FormGroup className="mt-1">
                                                         <Row>
                                                             <Col sm={2}>

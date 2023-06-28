@@ -183,6 +183,7 @@ const PartyMasterBulkUpdate = (props) => {
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
             dispatch(AlertState({
                 Type: 1,
@@ -255,6 +256,7 @@ const PartyMasterBulkUpdate = (props) => {
             FilterPartyID: values.Party.value === "" ? 0 : values.Party.value
 
         });
+
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
 
@@ -280,6 +282,13 @@ const PartyMasterBulkUpdate = (props) => {
         user.Newvalue = event.target.checked
 
     }
+
+    function TCSPartyhandler(event, user) {
+
+        user.Newvalue = event.target.checked
+    }
+
+
 
     function partyOnchange(e) {
         setState((i) => {
@@ -350,8 +359,10 @@ const PartyMasterBulkUpdate = (props) => {
         dataField: "Newvalue",
 
         formatter: (cellContent, user, key) => (
+
             <>
                 {SelectFieldName.label === "State" ?
+
                     <div style={{ width: "180px" }}>
                         <Col>
                             <FormGroup >
@@ -364,34 +375,47 @@ const PartyMasterBulkUpdate = (props) => {
                             </FormGroup>
                         </Col>
                     </div> :
-                    SelectFieldName.label === "IsDivision" ?
+                    SelectFieldName.label === "IsTCSParty" ?
+                        < Col md={2} style={{ marginTop: '9px' }} >
 
-                        <Col md={2} style={{ marginTop: '9px' }} >
-                            <div className="form-check form-switch form-switch-md mb-3">
-                                <Input type="checkbox" className="form-check-input"
-                                    id={key}
-                                    defaultChecked={user.IsDivision}
-                                    onChange={(event) => divisionhandler(event, user)}
-                                    name="IsActive"
+                            <Input
+                                type="checkbox"
+                                id={key}
+                                className="p-2"
+                                defaultChecked={user.IsTCSParty}
+                                onChange={(event) => TCSPartyhandler(event, user)}
+                            />
 
-                                />
-                            </div>
                         </Col> :
 
-                        <div style={{ width: "180px" }}>
-                            <Col>
-                                <FormGroup >
-                                    <Input
+                        SelectFieldName.label === "IsDivision" ?
+
+                            < Col md={2} style={{ marginTop: '9px' }} >
+                                <div className="form-check form-switch form-switch-md mb-3">
+                                    <Input type="checkbox" className="form-check-input"
                                         id={key}
-                                        type="text"
-                                        placeholder="Enter New Value"
-                                        defaultValue={user.Newvalue}
-                                        className="col col-sm "
-                                        onChange={(event) => tableSelectHandler(event, user)}
+                                        defaultChecked={user.IsDivision}
+                                        onChange={(event) => divisionhandler(event, user)}
+                                        name="IsActive"
+
                                     />
-                                </FormGroup>
-                            </Col>
-                        </div>
+                                </div>
+                            </Col> :
+
+                            <div style={{ width: "180px" }}>
+                                <Col>
+                                    <FormGroup >
+                                        <Input
+                                            id={key}
+                                            type="text"
+                                            placeholder="Enter New Value"
+                                            defaultValue={user.Newvalue}
+                                            className="col col-sm "
+                                            onChange={(event) => tableSelectHandler(event, user)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </div>
                 }
             </>
         ),
@@ -455,14 +479,16 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     const SaveHandler = (event) => {
-
+        
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
         try {
+            
             btnIsDissablefunc({ btnId, state: true })
             Data.forEach(i => {
-                if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict) {
+                
+                if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict || i.Newvalue === false) {
                     const arr = {
                         SubPartyID: i.SubPartyID,
                         Value1: i.Newvalue,

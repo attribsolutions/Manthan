@@ -16,9 +16,10 @@ import { apiErrorSuccess, divisionDropdownSelectSuccess, getUserDetailsAction, l
 import logo from "../../assets/images/cbm_logo.png"
 
 import CarouselPage from "./CarouselPage"
-import { loginCompanyID } from "../../components/Common/CommonFunction"
+import { loginCompanyID, loginPartyID, loginUserDetails } from "../../components/Common/CommonFunction"
 import { useLayoutEffect } from "react"
 import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
+import { getpartysetting_API } from "../../store/Administrator/PartySetting/action"
 
 const Login = props => {
 
@@ -29,15 +30,18 @@ const Login = props => {
   const [Password, setPassword] = useState("");
 
 
-  const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess, loading } = useSelector(state => ({
+  const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess, loading, PartySettingdata } = useSelector(state => ({
     loading: state.Login.loading,
     loginError: state.Login.loginError,
     loginSuccess: state.Login.loginSuccess,
     divisionDropdown_redux: state.Login.divisionDropdown,
     userAccess: state.Login.RoleAccessUpdateData,
+    PartySettingdata: state.PartySettingReducer.PartySettingdata,
 
 
   }))
+  const { Data = [] } = PartySettingdata;
+
 
   useLayoutEffect(() => {
     dispatch(resetRoleAccessAction())
@@ -56,7 +60,6 @@ const Login = props => {
 
   useEffect(() => {
 
-
     try {
       if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
 
@@ -69,6 +72,8 @@ const Login = props => {
       }
     } catch (e) { }
   }, [loginSuccess])
+
+
 
 
   useEffect(() => {
@@ -85,8 +90,8 @@ const Login = props => {
 
       localStorage.setItem("roleId", JSON.stringify(value))
       localStorage.setItem("roleId2", JSON.stringify(value))
-
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
+      dispatch(getpartysetting_API(value.Party_id))//login party id pass to getpartysetting_API
     }
 
   }, [divisionDropdown_redux])
@@ -123,7 +128,7 @@ const Login = props => {
   const currentUserOnchange = (e) => {
     setcurrentUserName(e.target.value)
     dispatch(loginError_Action(null))
-   
+
   }
 
   const PasswordOnchange = (e) => {

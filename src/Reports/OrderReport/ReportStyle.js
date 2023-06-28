@@ -167,6 +167,7 @@ export const reportHeder2 = (doc, data) => {
 
 
 export const reportHeder3 = (doc, data) => {
+    
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setDrawColor(0, 0, 0);
@@ -176,14 +177,14 @@ export const reportHeder3 = (doc, data) => {
 
     doc.line(408, 65, 408, 16);//vertical right 1
 
-
-
     doc.setFont(undefined, 'bold')
     doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
-    var date = date_dmy_func(data.OrderDate)
-    doc.text(`Order Date: ${date}`, 415, 40) //Invoice date
-    var date = date_dmy_func(data.DeliveryDate)
-    doc.text(`DeliveryDate: ${date}`, 415, 55) //Invoice date
+
+    const dateOnly = data.CreatedOn.substring(0, 10);
+    var Orderdate = date_dmy_func(dateOnly)
+    doc.text(`Order Date: ${Orderdate}`, 415, 40) //Invoice date
+    var DeliveryDate = date_dmy_func(data.OrderDate)                          ///   Delivery Date
+    doc.text(`Delivery Date: ${DeliveryDate}`, 415, 55) //Invoice date
     doc.line(570, 63, 30, 63) //horizontal line 2 billby upper
 
 
@@ -356,7 +357,7 @@ export const tableBody = (doc, data) => {
 }
 
 export const pageFooter = (doc, data) => {
-    debugger
+    
     const GrandTotal = Number(data.OrderAmount)
     const Total = numberWithCommas((GrandTotal).toFixed(2))
     let stringNumber = toWords(Number(GrandTotal))

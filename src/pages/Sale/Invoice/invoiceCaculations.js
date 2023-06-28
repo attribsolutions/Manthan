@@ -1,42 +1,4 @@
-import { groupBy } from "../../../components/Common/CommonFunction"
-
-
-export const discountCalculate = (row, index1) => {
-    // Extract values from the input parameters
-    const rate = Number(row.Rate) || 0;
-    const qty = Number(row.Qty) || 0;
-    const gstPercentage = Number(row.GST) || 0;
-    const discount = Number(index1.Discount) || 0;
-    const discountType = index1.DiscountType || 2;
-
-    // Calculate the base amount
-    const baseAmt = rate * qty;
-
-    // Calculate the discount amount based on the discount type
-    const disCountAmt = discountType === 2 ? baseAmt - (baseAmt / ((100 + discount) / 100)) : qty * discount;
-
-    // Calculate the discounted base amount
-    const discountBaseAmt = baseAmt - disCountAmt;
-
-    // Calculate the GST amount
-    const gstAmt1 = discountBaseAmt * (gstPercentage / 100);
-    const CGST = Number((gstAmt1 / 2).toFixed(2));
-    const SGST = CGST;
-    const gstAmt = CGST + SGST;
-
-    // Calculate the total amount after discount and GST
-    const total = gstAmt + discountBaseAmt;
-
-    // Return the calculated values as an object
-    return {
-        discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
-        disCountAmt: Number(disCountAmt.toFixed(2)),
-        gstAmt: Number(gstAmt.toFixed(2)),
-        tAmount: Number(total.toFixed(2)),
-        CGST,
-        SGST
-    };
-};
+import { CommonConsole, groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
 
 
 export function bulkSearch(text, data, columns) {
@@ -79,9 +41,75 @@ export function bulkSearch(text, data, columns) {
 }
 
 
+export const invoice_discountCalculate_Func = (row, index1) => {
+
+    // Extract values from the input parameters
+    const rate = Number(row.Rate) || 0;
+    const qty = Number(row.Qty) || 0;
+    const gstPercentage = Number(row.GST) || 0;
+    const discount = Number(index1.Discount) || 0;
+    const discountType = index1.DiscountType || 2;
+
+    // Calculate the base amount
+    const basicAmount = rate * qty;
+
+    // Calculate the discount amount based on the discount type
+    const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : qty * discount;
+
+    // Calculate the discounted base amount
+    const discountBaseAmt = basicAmount - disCountAmt;
+
+    // Calculate the GST amount
+    let gstAmt = discountBaseAmt * (gstPercentage / 100);
+    const CGST_Amount = Number((gstAmt / 2).toFixed(2));
+    const SGST_Amount = CGST_Amount;
+    const roundedGstAmount = CGST_Amount + SGST_Amount;
+
+    // Calculate the total amount after discount and GST
+    let total = roundedGstAmount + discountBaseAmt;
+
+    // Return the calculated values as an object
+    return {
+        discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
+        disCountAmt: Number(disCountAmt.toFixed(2)),
+        roundedGstAmount: Number(roundedGstAmount.toFixed(2)),
+        roundedTotalAmount: Number(total.toFixed(2)),
+        CGST_Amount,
+        SGST_Amount,
+    };
+};
+
+export const settingBaseRoundOffAmountFunc = (tableList = []) => {
+    
+    const systemSetting = loginSystemSetting();
+    const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
+    const isTCS_AmtRound = systemSetting.TCSAmountRoundConfiguration === '1';
+
+    // Total Amount Addition 
+    let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]), 0);
+    let TCS_Amount = 0; // Initial  TCS  Amount 
+
+    if (tableList[0].IsTCSParty) {  // if isTCSParty flag given from order list ,its true then only calculate TCS- tax
+
+        if (tableList[0].IsCustomerPAN) {//if custome PAN is Present
+            TCS_Amount = sumOfGrandTotal * (Number(systemSetting.IsTCSPercentageforValidatedPANCustomer) / 100);
+            sumOfGrandTotal = sumOfGrandTotal + TCS_Amount
+        } else {
+            TCS_Amount = sumOfGrandTotal * (Number(systemSetting.IsTCSPercentageforNonValidatedPANCustomer) / 100);
+            sumOfGrandTotal = sumOfGrandTotal + TCS_Amount
+        }
+    }
+    
+    return {
+        sumOfGrandTotal: isGrandAmtRound ? Math.round(sumOfGrandTotal) : Number(sumOfGrandTotal).toFixed(2),
+        RoundOffAmount: (sumOfGrandTotal - Math.trunc(sumOfGrandTotal)).toFixed(2),
+        TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2)
+    }
+}
+
 export function stockDistributeFunc(index1) {
 
-    let tAmount = 0
+    let roundedTotalAmount = 0
     let orderqty = Number(index1.Quantity);
     let _ItemTotalStock = 0
 
@@ -104,14 +132,14 @@ export function stockDistributeFunc(index1) {
 
         if (index2.Qty > 0) {
 
-            const calculate = discountCalculate(index2, index1)
-            tAmount = tAmount + Number(calculate.tAmount)
+            const calculate = invoice_discountCalculate_Func(index2, index1)
+            roundedTotalAmount = roundedTotalAmount + Number(calculate.roundedTotalAmount)
         }
 
         try {
             document.getElementById(`batchQty${index1.id}-${index2.id}`).value = index2.Qty
 
-        } catch (e) { }
+        } catch (e) { CommonConsole('stockDistributeFunc', e) }
 
 
 
@@ -121,27 +149,24 @@ export function stockDistributeFunc(index1) {
     index1.ItemTotalStock = _ItemTotalStock;
 
     const t2 = index1.ItemTotalStock;
-    const tA4 = tAmount.toFixed(2);
+    const tA4 = roundedTotalAmount.toFixed(2);
 
-    index1.tAmount = tA4
+    index1.roundedTotalAmount = tA4
 
     if (orderqty > t2) {
         try {
             document.getElementById(`OrderQty${index1.id}`).value = t2.toFixed(3)
-        } catch (e) { }
+        } catch (e) { CommonConsole('stockDistributeFunc', e) }
     };
     try {
         index1.StockInValid = false
         index1.StockInvalidMsg = null
         document.getElementById(`StockInvalidMsg-${index1.id}`).style.display = "none";
-    } catch (e) { };
+    } catch (e) { CommonConsole('stockDistributeFunc ', e) };
 
     try {
-        document.getElementById(`tAmount-${index1.id}`).innerText = tA4;
-
-
-        var aa
-    } catch (e) { };
+        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = tA4;
+    } catch (e) { CommonConsole('stockDistributeFunc', e) };
 
 };
 
@@ -216,24 +241,26 @@ export function stockQtyOnChange(event, index1, index2) {
 export const innerStockCaculation = (index1) => {
 
     let QuantityTatal = 0
-    let tAmount = 0;
+    let roundedTotalAmount = 0;
 
     index1.StockDetails.forEach(index2 => {
-        const calculate = discountCalculate(index2, index1)
-        tAmount = tAmount + Number(calculate.tAmount)
+        //**discount calculation function  */
+        const calculate = invoice_discountCalculate_Func(index2, index1);
+
+        roundedTotalAmount = roundedTotalAmount + Number(calculate.roundedTotalAmount)
         QuantityTatal = Number(QuantityTatal) + Number(index2.Qty);
     });
 
-    index1.tAmount = tAmount.toFixed(2)
+    index1.roundedTotalAmount = roundedTotalAmount.toFixed(2)
     index1.Quantity = QuantityTatal.toFixed(3);
 
     try {
         document.getElementById(`OrderQty-${index1.id}`).value = index1.Quantity
-    } catch (e) { };
+    } catch (e) { CommonConsole('innerStockCaculation', e) };
 
     try {
-        document.getElementById(`tAmount-${index1.id}`).innerText = index1.tAmount;
-    } catch (e) { };
+        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = index1.roundedTotalAmount;
+    } catch (e) { CommonConsole('innerStockCaculation', e) };
 
 }
 

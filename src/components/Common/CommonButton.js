@@ -113,7 +113,7 @@ export function Change_Button(props) {
 
 
 
-export const GotoInvoiceBtn = ({ onClick, userAcc, loading ,forceDisabled}) => {
+export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
   const { Name } = userAcc;
   const btnId = `gotoInvoiceBtn-${Name.replace(/ /g, "")}`;
   return (
@@ -121,7 +121,7 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading ,forceDisabled}) => {
       {loading ?
         <button
           id={btnId}
-      
+
           className="btn btn-info w-md"
           autoFocus={false}
         >  Saving.. &nbsp;
@@ -166,6 +166,16 @@ export function Listloader() {
 }
 
 
+export function Listloader1({ show = false }) {
+  if (!show) { return null }
+  else {
+    return <div id="api_spinner" >
+      <div className="api_spinner_body " >
+        <span className="spinner" style={{ left: "-5cm" }}></span>
+      </div>
+    </div>
+  }
+}
 
 
 

@@ -40,7 +40,6 @@ import {
 } from "./actionType";
 import { concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
-import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  

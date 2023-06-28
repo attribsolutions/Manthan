@@ -39,11 +39,20 @@ import {
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit_SelectOnchange, stockDistributeFunc, stockQtyOnChange } from "./invoiceCaculations";
+import {
+    invoice_discountCalculate_Func,
+    innerStockCaculation,
+    orderQtyOnChange,
+    orderQtyUnit_SelectOnchange,
+    stockQtyOnChange,
+    settingbaseRoundOffAmountFunc,
+    settingBaseRoundOffAmountFunc
+} from "./invoiceCaculations";
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+
 
 const Invoice = (props) => {
 
@@ -75,7 +84,7 @@ const Invoice = (props) => {
     const [modalCss] = useState(false);
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [showAllStockState, setShowAllStockState] = useState(true);
+
     const {
         postMsg,
         updateMsg,
@@ -85,7 +94,7 @@ const Invoice = (props) => {
         vendorSupplierCustomer,
         makeIBInvoice,
         goBtnloading,
-        saveBtnloading
+        saveBtnloading,
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -108,12 +117,15 @@ const Invoice = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
+
     useEffect(() => {
 
         dispatch(GetVenderSupplierCustomer(subPageMode))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
+        // dispatch(getpartysetting_API(_cfunc.loginPartyID()))
+
 
     }, []);
 
@@ -140,7 +152,6 @@ const Invoice = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(invoiceSaveActionSuccess({ Status: false }))
-            dispatch(GoButtonForinvoiceAddSuccess([]))
 
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -149,18 +160,18 @@ const Invoice = (props) => {
                 })
             }
             else {
-                const promise = await customAlert({
+                await customAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                     RedirectPath: url.INVOICE_LIST_1,
                 })
-                if (promise) {
-                    if (subPageMode === url.INVOICE_1) {
-                        history.push({ pathname: url.INVOICE_LIST_1 })
-                    }
-                    else if (subPageMode === url.IB_INVOICE) {
-                        history.push({ pathname: url.IB_INVOICE_LIST })
-                    }
+
+                if (subPageMode === url.INVOICE_1) {
+                    history.push({ pathname: url.INVOICE_LIST_1 })
+                }
+                else if (subPageMode === url.IB_INVOICE) {
+                    history.push({ pathname: url.IB_INVOICE_LIST })
+
                 }
             }
         }
@@ -241,10 +252,7 @@ const Invoice = (props) => {
         label: index.Name,
     }));
 
-    const totalAmountCalcuationFunc = (tableList = []) => {
-        const sum = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["tAmount"]), 0);
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${sum.toFixed(2)}`))
-    }
+
     const pagesListColumns = [
         {//***************ItemName********************************************************************* */
             text: "Item Name",
@@ -527,7 +535,7 @@ const Invoice = (props) => {
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
-                            <samp id={`tAmount-${index1.id}`}>{index1.tAmount}</samp>
+                            <samp id={`roundedTotalAmount-${index1.id}`}>{index1.roundedTotalAmount}</samp>
                         </div>
                     </>
                 );
@@ -535,6 +543,10 @@ const Invoice = (props) => {
         },
     ];
 
+    const totalAmountCalcuationFunc = (tableList = []) => {
+        const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
+        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${calcalateGrandTotal.sumOfGrandTotal}`))
+    }
 
     function InvoiceDateOnchange(y, v, e) {
         dispatch(GoButtonForinvoiceAddSuccess([]))
@@ -570,32 +582,24 @@ const Invoice = (props) => {
     const SaveHandler = async (event) => {
 
         event.preventDefault();
-
         const btnId = event.target.id
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-        function returnFunc() {
-            _cfunc.btnIsDissablefunc({ btnId, state: false })
-        }
         try {
 
             const validMsg = []
             const invoiceItems = []
-            let grand_total = 0;
 
             orderItemDetails.forEach((index) => {
                 if (index.StockInValid) {
                     validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
-                    return returnFunc()
+                    return
                 };
 
                 index.StockDetails.forEach((ele) => {
 
                     if (ele.Qty > 0) {
-
-                        const calculate = discountCalculate(ele, index)
-
-                        grand_total = grand_total + Number(calculate.tAmount)
+                        //**calculate Amount ,Discount Amount based on Discound type */
+                        const calculate = invoice_discountCalculate_Func(ele, index)
 
                         invoiceItems.push({
                             Item: index.Item,
@@ -610,17 +614,17 @@ const Invoice = (props) => {
                             MRPValue: ele.MRP,//changes
                             Rate: Number(ele.Rate).toFixed(2),
                             BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
-                            GSTAmount: Number(calculate.gstAmt).toFixed(2),
+                            GSTAmount: Number(calculate.roundedGstAmount).toFixed(2),
                             GST: ele.LiveBatcheGSTID,
                             GSTPercentage: ele.GST,// changes
-                            CGST: Number(calculate.CGST).toFixed(2),
-                            SGST: Number(calculate.SGST).toFixed(2),
+                            CGST: Number(calculate.CGST_Amount).toFixed(2),
+                            SGST: Number(calculate.SGST_Amount).toFixed(2),
                             IGST: 0,
                             GSTPercentage: ele.GST,
                             CGSTPercentage: (ele.GST / 2),
                             SGSTPercentage: (ele.GST / 2),
                             IGSTPercentage: 0,
-                            Amount: Number(calculate.tAmount).toFixed(2),
+                            Amount: Number(calculate.roundedTotalAmount).toFixed(2),
                             TaxType: 'GST',
                             DiscountType: index.DiscountType,
                             Discount: Number(index.Discount) || 0,
@@ -635,7 +639,7 @@ const Invoice = (props) => {
                     Type: 4,
                     Message: JSON.stringify(validMsg),
                 })
-                return returnFunc()
+                return
             }
 
             if (!(invoiceItems.length > 0)) {
@@ -643,25 +647,28 @@ const Invoice = (props) => {
                     Type: 4,
                     Message: "Please Enter One Item Quantity",
                 })
-                return returnFunc()
+                return
             }
+            //**grand total and Tcs Round Off calculations  */ 
+            const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
 
-            const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
                 InvoicesReferences: orderIDs.map(i => ({ Order: i }))
             });
 
-            const forIB_Invoice_json = async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
                 IBChallanDate: values.InvoiceDate,
                 IBChallanItems: invoiceItems,
                 IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
             });
 
-            const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 CustomerGSTTin: '41',
-                GrandTotal: Math.round(grand_total),
-                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+                GrandTotal: calcalateGrandTotal.sumOfGrandTotal,
+                RoundOffAmount: calcalateGrandTotal.RoundOffAmount,
+                TCSAmount: calcalateGrandTotal.TCS_Amount,
                 Customer: values.Customer.value,
                 Party: _cfunc.loginPartyID(),
                 CreatedBy: _cfunc.loginUserID(),
@@ -677,14 +684,13 @@ const Invoice = (props) => {
             }
             // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             if (pageMode === mode.edit) {
-                returnFunc()
+                return
             }
-
             else {
                 dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId }));
             }
 
-        } catch (e) { returnFunc() }
+        } catch (e) { _cfunc.CommonConsole("invode save Handler", e) }
 
     }
 

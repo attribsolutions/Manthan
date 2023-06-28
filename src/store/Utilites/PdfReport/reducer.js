@@ -1,4 +1,4 @@
-import {  GET_PDF_REPORT_DATA, GET_PDF_REPORT_DATA_ERROR, GET_PDF_REPORT_DATA_SUCCESS } from "./actionType"
+import { GET_PDF_REPORT_DATA, GET_PDF_REPORT_DATA_ERROR, GET_PDF_REPORT_DATA_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
   pdfdata: { Status: false },
@@ -8,7 +8,6 @@ const INIT_STATE = {
 const PdfReportReducers = (state = INIT_STATE, action) => {
   switch (action.type) {
     case GET_PDF_REPORT_DATA:
-      debugger
       return {
         ...state,
         listBtnLoading: action.btnId,
@@ -21,7 +20,7 @@ const PdfReportReducers = (state = INIT_STATE, action) => {
         pdfdata: action.payload,
       }
 
-      case GET_PDF_REPORT_DATA_ERROR:
+    case GET_PDF_REPORT_DATA_ERROR:
       return {
         ...state,
         listBtnLoading: false,

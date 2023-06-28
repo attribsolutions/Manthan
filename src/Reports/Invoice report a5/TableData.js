@@ -177,11 +177,17 @@ if (data.SettingData.HSNCodeDigit.Value=== "3") {
 
 export const BilledByRow = (data) => {
     
-    
+    let PartyAddress =""
+    if (Array.isArray(data.PartyAddress)) {
+    const filteredArray = data.PartyAddress.filter(obj => obj.IsDefault === true); 
+    PartyAddress = filteredArray[0]=== undefined?"":filteredArray[0].Address
+    }else{
+        PartyAddress=data.PartyAddress
+    }
+
     var BilledByArray = [
-       
         [`${data.PartyName}`], 
-        [`${data.PartyAddress}`]  ,
+        [`${PartyAddress}`]  ,
         [`${data.PartyState}`],
         [`GSTIN:${data.PartyGSTIN}`],
         [`FSSAINo:${data.PartyFSSAINo}`],
@@ -190,10 +196,16 @@ export const BilledByRow = (data) => {
 } 
 export const BilledToRow = (data) => {
     
-    
+    let CustomerAddress =""
+    if (Array.isArray(data.CustomerAddress)) {
+    const filteredArray = data.CustomerAddress.filter(obj => obj.IsDefault === true); 
+    CustomerAddress = filteredArray[0]=== undefined?"":filteredArray[0].Address
+    }else{
+        CustomerAddress=data.CustomerAddress
+    }
     var BilledToArray = [
         [`${data.CustomerName}`],
-        [`${data.CustomerAddress}`]  ,
+        [`${CustomerAddress}`]  ,
         [`${data.CustomerState}`],
         [`GSTIN:${data.CustomerGSTIN}`,],
         [`FSSAINo:${data.CustomerFSSAINo}`],
@@ -205,6 +217,7 @@ export const DetailsOfTransportRow = (data) => {
 
 
 let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
+
     const PONumber =result.toString()
     var DetailsOfTransportArray = [
         [data.ReportType===invoice?` PO Number:${PONumber}`:data.DriverName ===null?"Driver Name:": `Driver Name :${data.DriverName}`],

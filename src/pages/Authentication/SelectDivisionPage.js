@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux"
 
 import { Link, useHistory } from "react-router-dom"
 
-import {  roleAceessAction } from "../../store/actions"
+import { roleAceessAction } from "../../store/actions"
 import logo from "../../assets/images/cbm_logo.png"
 
 //Import config
@@ -14,6 +14,7 @@ import CarouselPage from "./CarouselPage"
 import Select from "react-select";
 import { loginCompanyID } from "../../components/Common/CommonFunction"
 import { useLayoutEffect } from "react"
+import { getpartysetting_API } from "../../store/Administrator/PartySetting/action"
 
 const SelectDivisionPage = props => {
   const dispatch = useDispatch()
@@ -21,16 +22,16 @@ const SelectDivisionPage = props => {
 
   const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
 
-  const { divisionDropdown_redux,userAccess } = useSelector(state => ({
+  const { divisionDropdown_redux, userAccess } = useSelector(state => ({
     divisionDropdown_redux: state.Login.divisionDropdown,
     userAccess: state.Login.RoleAccessUpdateData,
 
   }));
 
- 
+
 
   useLayoutEffect(() => {
-   
+
     let dashboardFound = userAccess.find((i) => {
       return i.ModuleName === "Dashboard"
     })
@@ -77,6 +78,7 @@ const SelectDivisionPage = props => {
 
       localStorage.setItem("roleId", JSON.stringify(value))
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
+      dispatch(getpartysetting_API(party))//login party id pass to getpartysetting_API
     }
 
 

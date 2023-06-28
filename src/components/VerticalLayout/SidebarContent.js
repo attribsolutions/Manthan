@@ -14,6 +14,7 @@ import * as urlRel from "../../routes/urlRalations";
 import { useDispatch, useSelector } from "react-redux";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { getExcel_Button_API } from "../../store/Report/SapLedger Redux/action";
+import { getpartysetting_API } from "../../store/Administrator/PartySetting/action";
 
 const SidebarContent = (props) => {
   const dispatch = useDispatch();
@@ -55,6 +56,7 @@ const SidebarContent = (props) => {
         let employee = loginEmployeeID();
         let company = loginCompanyID();
         dispatch(roleAceessAction(party, employee, company))
+        dispatch(getpartysetting_API(party))//login party id pass to getpartysetting_API
       };
     }
   }, [])

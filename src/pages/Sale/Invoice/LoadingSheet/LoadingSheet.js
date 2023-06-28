@@ -47,11 +47,9 @@ const LoadingSheet = (props) => {
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
 
-
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [array, setArray] = useState([]);
 
     const fileds = {
         id: "",
@@ -163,8 +161,6 @@ const LoadingSheet = (props) => {
         }
     }, [pageField])
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
-
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -174,7 +170,6 @@ const LoadingSheet = (props) => {
     const RouteName_Options = RoutesListOptions.filter((index) => {
         return index.IsActive === true
     });
-    
 
     const VehicleNumber_Options = VehicleNumber.map((index) => ({
         value: index.id,
@@ -197,19 +192,6 @@ const LoadingSheet = (props) => {
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
     }
 
-    // function SelectAll(event, row, key) {
-
-    //     const arr = []
-    //     Data.forEach(ele => {
-    //         if (ele.id === row.id) {
-    //             ele.Check = event
-    //         }
-    //         arr.push(ele)
-    //     })
-    //     setArray(arr)
-
-    // }
-
     const pagesListColumns = [
         {
             text: "Invoice Date",
@@ -227,23 +209,6 @@ const LoadingSheet = (props) => {
             text: "GrandTotal",
             dataField: "GrandTotal",
         },
-        // {
-        //     text: "Select All",
-        //     dataField: "Check",
-        //     formatter: (cellContent, row, key) => {
-
-        //         return (<span style={{ justifyContent: 'center' }}>
-        //             <Input
-        //                 id=""
-        //                 key={row.id}
-        //                 defaultChecked={row.Check}
-        //                 type="checkbox"
-        //                 className="col col-sm text-center"
-        //                 onChange={e => { SelectAll(e.target.checked, row, key) }}
-        //             />
-        //         </span>)
-        //     }
-        // }
     ];
 
     const pageOptions = {
@@ -279,6 +244,7 @@ const LoadingSheet = (props) => {
         }))
 
         try {
+
             if (formValid(state, setState)) {
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
                 if (LoadingSheetDetails.length === 0) {
@@ -305,12 +271,8 @@ const LoadingSheet = (props) => {
                     LoadingSheetDetails: LoadingSheetDetails
                 });
 
-                if (pageMode === mode.edit) {
-                    // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
-                }
-                else {
-                    dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
-                }
+                dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
+
             }
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -367,7 +329,7 @@ const LoadingSheet = (props) => {
                                     </FormGroup>
                                 </Col >
 
-                                <Col sm="6">{/*Supplier Name */}
+                                <Col sm="6">
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.DriverName}</Label>
@@ -387,9 +349,9 @@ const LoadingSheet = (props) => {
                                                 }
                                                 }
                                             />
-                                            {/* {isError.RouteName.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.RouteName}</small></span>
-                                                )} */}
+                                            {isError.DriverName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.DriverName}</small></span>
+                                            )}
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -411,7 +373,7 @@ const LoadingSheet = (props) => {
                                     </FormGroup>
                                 </Col >
 
-                                <Col sm="6">{/*Supplier Name */}
+                                <Col sm="6">
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.ToDate}</Label>
@@ -448,12 +410,15 @@ const LoadingSheet = (props) => {
                                                 }
                                                 }
                                             />
+                                            {isError.RouteName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.RouteName}</small></span>
+                                            )}
                                         </Col>
 
                                     </FormGroup>
                                 </Col >
 
-                                <Col sm="6">{/*Supplier Name */}
+                                <Col sm="6">
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.VehicleNumber}</Label>
@@ -473,8 +438,11 @@ const LoadingSheet = (props) => {
                                                 }
                                                 }
                                             />
+                                            {isError.VehicleNumber.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.VehicleNumber}</small></span>
+                                            )}
                                         </Col>
-                                        <Col sm="1" className="mx-4 ">{/*Go_Button  */}
+                                        <Col sm="1" className="mx-4 ">
                                             < Go_Button onClick={(e) => goButtonHandler()} />
                                         </Col>
                                     </FormGroup>
@@ -498,18 +466,16 @@ const LoadingSheet = (props) => {
                                             <div className="table">
                                                 <BootstrapTable
                                                     keyField={"id"}
-                                                    id="table_Arrow"
                                                     bordered={true}
                                                     striped={false}
                                                     selectRow={selectAllCheck()}
                                                     noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                                     classes={"table align-middle table-nowrap table-hover"}
                                                     headerWrapperClasses={"thead-light"}
-
                                                     {...toolkitProps.baseProps}
                                                     {...paginationTableProps}
                                                 />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "Loading Sheet")}
                                                 {mySearchProps(toolkitProps.searchProps)}
                                             </div>
 

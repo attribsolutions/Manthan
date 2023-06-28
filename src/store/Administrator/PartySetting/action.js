@@ -12,7 +12,6 @@ export const savePartySettingMaster_Success = (resp) => ({// Save  success
 });
 
 
-
 export const getpartysetting_API = (config = {}) => ({ // save Action
     type: GET_PARTY_SETTING_API,
     config,

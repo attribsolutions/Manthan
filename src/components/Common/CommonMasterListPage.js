@@ -225,15 +225,20 @@ const CommonListPage = (props) => {
       deleteActionFun: deleteId,
     })
   }
-  const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({ pageField, lastColumn, userAccState,  reducers: props.reducers, })
+  const [tableColumns, defaultSorted, pageOptions] = DynamicColumnHook({
+    pageField,
+    lastColumn,
+    userAccState,
+    reducers: props.reducers,
+  })
 
   if (!(userAccState === '')) {
     return (
       <React.Fragment>
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <div className="page-content">
-          
-           <PaginationProvider pagination={paginationFactory(pageOptions)}>
+
+          <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
                 keyField="id"
@@ -272,7 +277,7 @@ const CommonListPage = (props) => {
                 )}
               </ToolkitProvider>
             )}
-          </PaginationProvider> 
+          </PaginationProvider>
 
 
           <Modal isOpen={modal_edit} toggle={() => { tog_center() }} size="xl">

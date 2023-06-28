@@ -10,18 +10,17 @@ import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
+import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-
+import Select from "react-select";
 import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, floatRegx } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { useLayoutEffect } from "react";
@@ -112,7 +111,7 @@ const GRNAdd3 = (props) => {
             const grnDetails = { ...items.Data }
             let tableArr = []
             let initial = ''
-            let tAmount = 0
+            let roundedTotalAmount = 0
             let tQty = 0
             let id = 1
             grnDetails.OrderItem.forEach((i, k) => {
@@ -122,42 +121,42 @@ const GRNAdd3 = (props) => {
                     i.id = id
                     tableArr.push(i)
                     initial = i.Item
-                    tAmount = Number(i.Amount)
+                    roundedTotalAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
                 }
                 else if ((initial === i.Item) && (k === grnDetails.OrderItem.length - 1)) {
                     ++id;
                     i.id = id
-                    tAmount = tAmount + Number(i.Amount)
+                    roundedTotalAmount = roundedTotalAmount + Number(i.Amount)
                     tQty = tQty + Number(i.Quantity)
                     initial = i.Item
                     tableArr.push(i)
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                 }
                 else if ((k === grnDetails.OrderItem.length - 1)) {
                     ++id;
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                     ++id;
                     i.id = id
-                    tAmount = Number(i.Amount)
+                    roundedTotalAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
                     tableArr.push(i)
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                 }
                 else if (initial === i.Item) {
                     // i.ItemName=''
                     ++id;
                     i.id = id
                     tableArr.push(i)
-                    tAmount = tAmount + Number(i.Amount)
+                    roundedTotalAmount = roundedTotalAmount + Number(i.Amount)
                     tQty = tQty + Number(i.Quantity)
                     initial = i.Item
                 } else {
                     ++id;
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                     ++id;
                     tableArr.push(i)
-                    tAmount = Number(i.Amount)
+                    roundedTotalAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
                     initial = i.Item
                 }
@@ -235,11 +234,35 @@ const GRNAdd3 = (props) => {
             dataField: "UnitName",
         },
 
+        {  //-------------  column ----------------------------------
+            text: "QtyInBox",
+            dataField: "QtyInBox",
+        },
+
         {  //-------------MRP column ----------------------------------
             text: "MRP",
-            dataField: "MRP",
-            align: () => ('right')
+            dataField: "MRPDetails",
+            align: () => ('right'),
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Select
+                        id={`MRP${key}`}
+                        name="MRP"
+                        defaultValue={row.defaultMRP}
+                        isSearchable={true}
+                        className="react-dropdown"
+                        classNamePrefix="dropdown"
+                        options={row.MRPOps}
+                        onChange={(event) => { row.defaultMRP = event }}
+                    />
+                </span>)
+            },
+            headerStyle: () => {
+                return { width: '160px' };
+            }
         },
+
         {  //-------------Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
@@ -261,7 +284,6 @@ const GRNAdd3 = (props) => {
             text: "Batch Date",
             dataField: "BatchDate_conv",
         },
-
     ];
 
     const rowStyle2 = (row, rowIndex) => {
@@ -281,8 +303,6 @@ const GRNAdd3 = (props) => {
         },
     ];
 
-
-
     const saveHandeller = (event) => {
 
         event.preventDefault();
@@ -297,25 +317,24 @@ const GRNAdd3 = (props) => {
             const itemArr = []
             let sum = 0
             grnItemList.forEach(i => {
-                const basicAmt = parseFloat(basicAmount(i))
-                const cgstAmt = (GstAmount(i))
 
-                if (i.ItemName === "Total") { return }
+                const calculate = orderCalculateFunc(i)// amount calculation function 
+                // if (i.ItemName === "Total") { return }
                 const arr = {
                     Item: i.Item,
                     Quantity: i.Quantity,
-                    MRP: i.MRP,
+                    MRP: i.defaultMRP.value,
                     ReferenceRate: i.Rate,
                     Rate: i.Rate,
                     Unit: i.Unit,
                     BaseUnitQuantity: i.BaseUnitQuantity,
                     GST: i.GST,
-                    BasicAmount: basicAmt.toFixed(2),
-                    GSTAmount: cgstAmt.toFixed(2),
-                    Amount: i.Amount,
+                    BasicAmount: calculate.basicAmount,
+                    GSTAmount: calculate.roundedGstAmount,
+                    Amount: calculate.roundedTotalAmount,
 
-                    CGST: (cgstAmt / 2).toFixed(2),
-                    SGST: (cgstAmt / 2).toFixed(2),
+                    CGST: calculate.CGST_Amount,
+                    SGST: calculate.SGST_Amount,
                     IGST: 0,
                     CGSTPercentage: (i.GSTPercentage / 2),
                     SGSTPercentage: (i.GSTPercentage / 2),

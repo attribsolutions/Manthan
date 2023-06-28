@@ -255,6 +255,16 @@ export const loginIsSCMParty = () => { //+++++++++++++++++++++ Session Company I
   return false;
 };
 
+export const loginSystemSetting = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+  try {
+    const hassetting = JSON.parse(sessionStorage.getItem("SystemSetting"));
+    return hassetting;
+  } catch (e) {
+    CommonConsole("Common loginSystemSetting func  Error");
+  }
+  return false;
+};
+
 
 export const loginJsonBody = () => ({
   UserID: loginUserID(),
@@ -417,13 +427,13 @@ export async function CheckAPIResponse({
       Message: `${url}:This API ${method} Method Exception Error`,
     });
     return Promise.reject(response.data);
-  } else if (con5||con8) {
+  } else if (con5 || con8) {
 
     console.log(`${url}***${method} apiCall response:=>`, response.data);
     await customAlert({ Type: 3, Message: JSON.stringify(response.data.Message) });
     return Promise.reject(response.data);
   }
-  
+
 
   return Promise.reject(response);
 }

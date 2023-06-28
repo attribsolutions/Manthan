@@ -9,10 +9,12 @@ import {
   SAVE_GRN_FROM_GRN_PAGE_ACTION,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
   GRN_API_ERROR_ACTION,
+  DELETE_GRN_FOR_GRN_PAGE,
+  EDIT_GRN_FOR_GRN_PAGE,
 } from "./actionType"
 
-
 const INIT_STATE = {
+
   loading: false,
   postMsg: { Status: false },
   editData: { Status: false },
@@ -21,26 +23,25 @@ const INIT_STATE = {
   GRNList: [],
   grnItemList: [],
   GRNitem: { Status: false, Data: [], },
-  saveBtnloading: false
-
+  saveBtnloading: false,
+  listBtnLoading: false,
 }
 
 const GRNReducer = (state = INIT_STATE, action) => {
+  
   switch (action.type) {
-
 
     case MAKE_GRN_MODE_1_ACTION_SUCCESS:
       return {
         ...state,
         GRNitem: action.payload,
       }
+
     case "GET_GRN_ITEM_MODE_3":
       return {
         ...state,
         grnItemList: action.payload,
       }
-
-
 
     case GET_GRN_LIST_PAGE:
       return {
@@ -71,10 +72,16 @@ const GRNReducer = (state = INIT_STATE, action) => {
 
       }
 
+    case EDIT_GRN_FOR_GRN_PAGE:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
 
     case EDIT_GRN_FOR_GRN_PAGE_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       }
 
@@ -91,9 +98,17 @@ const GRNReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false
       }
 
+    case DELETE_GRN_FOR_GRN_PAGE:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+        deleteMsg: action.payload,
+      }
+
     case DELETE_GRN_FOR_GRN_PAGE_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMsg: action.payload,
       }
 

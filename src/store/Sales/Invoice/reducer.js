@@ -41,6 +41,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 goBtnloading: true,
+                listBtnLoading: action.config.btnId,
             }
 
         // GO Button 
@@ -48,6 +49,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 goBtnloading: false,
+                listBtnLoading:false,
                 gobutton_Add: action.payload,
             }
         /**************************************** */
@@ -116,7 +118,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             }
         /**************************************** */
         case UPLOADED_E_WAY_BILL_ACTION:
-            debugger
+            
             return {
                 ...state,
                 listBtnLoading: action.config.btnId,

@@ -48,6 +48,7 @@ const StockEntry = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [TableArr, setTableArr] = useState([]);
+    const [defaultMRP, setdefaultMRP] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -220,20 +221,19 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
+
                 return (
                     <>
                         <span style={{ justifyContent: 'center', width: "100px" }}>
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
+                                defaultValue={row.defaultMRP}
                                 isSearchable={true}
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
                                 options={row.ItemMRPDetails}
-                                onChange={(event) => {
-                                    row.MRP = event.value
-                                    row.MRPValue = event.label
-                                }}
+                                onChange={(event) => { row.defaultMRP = event }}
                             />
                         </span></>)
             }
@@ -243,18 +243,17 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
+
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
                         id={`GST${key}`}
                         name="GST"
+                        defaultValue={row.defaultGST}
                         isSearchable={true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
                         options={row.ItemGSTHSNDetails}
-                        onChange={(event) => {
-                            row.GST_ID = event.value
-                            row.GST = event.label
-                        }}
+                        onChange={(event) => { row.defaultGST = event }}
                     />
                 </span>)
             }
@@ -269,7 +268,7 @@ const StockEntry = (props) => {
                     <Input
                         id=""
                         key={row.id}
-                        defaultValue={row.RowData.BatchCode}
+                        defaultValue={row.BatchCode}
                         type="text"
                         className="col col-sm text-center"
                         onChange={(event) => { row.BatchCode = event.target.value }}
@@ -282,11 +281,11 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
-                debugger
+
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <C_DatePicker
                         name='Date'
-                        defaultValue={""}
+                        value={row.BatchDate}
                         onChange={(e, date) => {
                             row.BatchDate = _cfunc.date_ymd_func(date)
                         }}
@@ -294,7 +293,6 @@ const StockEntry = (props) => {
                 </span>)
             }
         },
-
         {
             text: "Action ",
             dataField: "",
@@ -321,58 +319,70 @@ const StockEntry = (props) => {
     ];
 
     async function AddPartyHandler() {
-
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
                 Message: `Select Item Name`
-            })
-            return
+            });
+            return;
         }
 
         let resp;
         try {
-            resp = await SalesReturn_add_button_api_For_Item(values.ItemName.value)
+            resp = await SalesReturn_add_button_api_For_Item(values.ItemName.value);
 
-            const data = resp.Data.InvoiceItems.map((i) => ({
+            const responseData = resp.Data.InvoiceItems.map((i) => ({
                 unitOps: i.ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.Unit, BaseUnitQuantity: i.BaseUnitQuantity })),
                 MRPOps: i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP })),
+                highest_MRP: i.ItemMRPDetails.filter((obj, index, arr) => {
+                    return obj.MRP === Math.max(...arr.map(item => item.MRP));
+                }),
                 GSTOps: i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST })),
+                highest_GST: i.ItemGSTDetails.filter((obj, index, arr) => {
+                    return obj.GST === Math.max(...arr.map(item => item.GST));
+                }),
                 ItemName: i.ItemName,
                 ItemId: i.Item,
                 Quantity: i.Quantity,
-                Rate: i.Rate,
-                RowData: i,
-                BatchDate: i.BatchDate
-            }))
+            }));
 
-            const itemArr = [...TableArr]
+            const initialTableData = [...TableArr];
+            const dateString = currentDate_ymd.replace(/-/g, "");
 
-            data.forEach((i) => {
-                itemArr.push({
-                    id: itemArr.length + 1,
+            responseData.forEach((i) => {
+                let batchCode = 0;
+
+                initialTableData.forEach((index) => {
+                    if (index.ItemId === i.ItemId) {
+                        batchCode++;
+                    }
+                });
+
+                initialTableData.push({
+                    id: initialTableData.length + 1,
                     ItemUnitDetails: i.unitOps,
                     ItemMRPDetails: i.MRPOps,
                     ItemGSTHSNDetails: i.GSTOps,
                     ItemName: i.ItemName,
                     ItemId: i.ItemId,
                     Quantity: i.Quantity,
-                    RowData: i.RowData,
-                    BatchDate: i.BatchDate
-                })
-            })
+                    BatchDate: currentDate_ymd,
+                    BatchCode: `${dateString}_${i.ItemId}_${_cfunc.loginPartyID()}_${batchCode}`,
+                    defaultMRP: { value: i.highest_MRP[0].MRP, label: i.highest_MRP[0].MRPValue },
+                    defaultGST: { value: i.highest_GST[0].GST, label: i.highest_GST[0].GSTPercentage },
+                });
+            });
 
-            setTableArr(itemArr)
+            setTableArr(initialTableData);
 
             setState((i) => {
-                let a = { ...i }
-                a.values.ItemName = ""
+                let a = { ...i };
+                a.values.ItemName = "";
                 a.hasValid.ItemName.valid = true;
-                return a
-            })
+                return a;
+            });
         } catch (w) { }
     }
-
     const SaveHandler = async (event) => {
 
         event.preventDefault();
@@ -380,14 +390,15 @@ const StockEntry = (props) => {
         const btnId = event.target.id
 
         const ReturnItems = TableArr.map((index) => {
+
             return ({
                 "Item": index.ItemId,
                 "ItemName": index.ItemName,
                 "Quantity": index.Qty,
-                "MRP": index.MRP,
+                "MRP": index.defaultMRP.value,
                 "Unit": index.Unit,
-                "GST": index.GST_ID,
-                "BatchDate": index.BatchDate === undefined ? "" : index.BatchDate,
+                "GST": index.defaultGST.value,
+                "BatchDate": index.BatchDate,
                 "BatchCode": index.BatchCode
             })
         })
