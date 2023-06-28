@@ -35,6 +35,7 @@ const PartyList = () => {
     const reducers = useSelector(
 
         (state) => ({
+            loading: state.PartyMasterReducer.loading,
             listBtnLoading: state.PartyMasterReducer.listBtnLoading,
             tableList: state.PartyMasterReducer.partyList,
             editData: state.PartyMasterReducer.editData,
@@ -45,7 +46,7 @@ const PartyList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-
+    debugger
     const action = {
         getList: getPartyListAPI,
         editId: editPartyID,
@@ -89,7 +90,7 @@ const PartyList = () => {
     return (
         <React.Fragment>
             {
-                reducers.listBtnLoading ?
+                reducers.loading ?
                     <Listloader />
                     :
                     (pageField) ?
