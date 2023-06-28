@@ -103,7 +103,7 @@ const InvoiceConfiguration = (props) => {
         const page_Id = pageId.INVOICE_CONFIGURATION
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartysetting_API(loginUserDetails().Party_id))
+        dispatch(getpartysetting_API(loginUserDetails().Party_id, loginCompanyID()))
 
 
     }, []);
@@ -163,7 +163,7 @@ const InvoiceConfiguration = (props) => {
     }), [postMsg])
 
     useEffect(() => {
-        dispatch(getpartysetting_API(loginUserDetails().Party_id))
+        dispatch(getpartysetting_API(loginUserDetails().Party_id, loginCompanyID()))
     }, [postMsg])
 
 
