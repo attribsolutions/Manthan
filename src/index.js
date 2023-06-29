@@ -9,7 +9,7 @@ import store from "./store"
 
 import ConfirmDialog from "./CustomAlert/ConfirmDialog"
 import { ConfirmContextProvider } from "./CustomAlert/ConfirmContextProvider"
-import * as serviceWorker from './serviceWorker';
+
 
 const app = (
   <Provider store={store}>
@@ -23,4 +23,3 @@ const app = (
 )
 
 ReactDOM.render(app, document.getElementById("root"))
-serviceWorker.register();
