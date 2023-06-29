@@ -331,7 +331,7 @@ const Invoice = (props) => {
             formatExtraData: { tableList: orderItemDetails },
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <div>
-                    <Table className="table table-bordered table-responsive mb-1">
+                    <Table className="table .table-responsive_onlyMaxhight mb-1">
                         <Thead >
                             <tr >
                                 <th style={{ zIndex: -1 }}>BatchCode</th>
@@ -766,7 +766,7 @@ const Invoice = (props) => {
                     </Col>
 
 
-                    <div className="table-responsive mb-4">
+                    <div>
                         <ToolkitProvider
                             keyField={"id"}
                             data={orderItemDetails}
@@ -777,23 +777,22 @@ const Invoice = (props) => {
                                 <React.Fragment>
                                     <Row>
                                         <Col xl="12">
-                                            <BootstrapTable
-                                                id="table_Arrow"
-                                                keyField={"id"}
-                                                responsive
-                                                bordered={false}
-                                                striped={false}
-                                                classes={"table  table-bordered"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Items Not available
-                                                    </div>
-                                                }
-                                                {...toolkitProps.baseProps}
-                                                onDataSizeChange={(e) => {
-                                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                }}
-                                            />
+                                            <div className="table-responsive table">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    id="table_Arrow"
+                                                    classes={"table  table-bordered "}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Items Not available
+                                                        </div>
+                                                    }
+                                                    {...toolkitProps.baseProps}
+                                                    onDataSizeChange={(e) => {
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    }}
+                                                />
+                                            </div>
                                         </Col>
                                         {mySearchProps(toolkitProps.searchProps,)}
                                     </Row>

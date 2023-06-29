@@ -250,7 +250,7 @@ const CommonListPage = (props) => {
                   <React.Fragment>
                     <Row>
                       <Col xl="12">
-                        <div className="table-responsive table " >
+                        <div className="table-responsive_onlyMaxhight" >
                           <BootstrapTable
                             keyField={"id"}
                             responsive

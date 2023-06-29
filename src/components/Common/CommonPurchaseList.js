@@ -308,7 +308,7 @@ const CommonPurchaseList = (props) => {
                     <Row>
 
                       <Col xl="12">
-                        <div className="table-responsive mt-1" >
+                        <div className="table-responsive_onlyMaxhight mt-1" >
                           <BootstrapTable
                             keyField={"id"}
                             responsive
