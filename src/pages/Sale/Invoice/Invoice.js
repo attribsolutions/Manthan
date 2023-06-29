@@ -14,6 +14,7 @@ import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
+    formValid,
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
@@ -32,6 +33,7 @@ import * as url from "../../../routes/route_url"
 import {
     GoButtonForinvoiceAdd,
     GoButtonForinvoiceAddSuccess,
+    Uploaded_EInvoiceAction,
     invoiceSaveAction,
     invoiceSaveActionSuccess,
     makeIB_InvoiceActionSuccess
@@ -60,6 +62,7 @@ const Invoice = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const subPageMode = history.location.pathname
+    const systemSetting = _cfunc.loginSystemSetting();
 
     const goBtnId = `ADDGoBtn${subPageMode}`
     const saveBtnid = `saveBtn${subPageMode}`
@@ -147,10 +150,53 @@ const Invoice = (props) => {
         };
     }, [userAccess])
 
+    // useEffect(async () => {
+
+    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+    //         dispatch(invoiceSaveActionSuccess({ Status: false }))
+
+    //         if (pageMode === mode.dropdownAdd) {
+    //             customAlert({
+    //                 Type: 1,
+    //                 Message: JSON.stringify(postMsg.Message),
+    //             })
+    //         }
+    //         else {
+    //             await customAlert({
+    //                 Type: 1,
+    //                 Message: JSON.stringify(postMsg.Message),
+    //                 RedirectPath: url.INVOICE_LIST_1,
+    //             })
+
+    //             if (subPageMode === url.INVOICE_1) {
+    //                 history.push({ pathname: url.INVOICE_LIST_1 })
+    //             }
+    //             else if (subPageMode === url.IB_INVOICE) {
+    //                 history.push({ pathname: url.IB_INVOICE_LIST })
+
+    //             }
+    //         }
+    //     }
+    //     else if (postMsg.Status === true) {
+    //         customAlert({
+    //             Type: 4,
+    //             Message: JSON.stringify(postMsg.Message),
+    //         })
+    //     }
+    // }, [postMsg])
+
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            debugger
+            let btnId = `btn-E-Invoice-Upload-${postMsg.InvoiceID}`
             dispatch(invoiceSaveActionSuccess({ Status: false }))
+
+            if ((systemSetting.AutoEInvoice === "1") && (systemSetting.EInvoiceApplicable === "1")) {
+                try {
+                    dispatch(Uploaded_EInvoiceAction({ btnId, RowId: postMsg.InvoiceID, UserID: _cfunc.loginUserID() }))
+                } catch (error) { }
+            }
 
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -181,7 +227,6 @@ const Invoice = (props) => {
             })
         }
     }, [postMsg])
-
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
@@ -585,120 +630,123 @@ const Invoice = (props) => {
         event.preventDefault();
         const btnId = event.target.id
 
+
+        const validMsg = []
+        const invoiceItems = []
+
+        orderItemDetails.forEach((index) => {
+            if (index.StockInValid) {
+                validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
+                return
+            };
+
+            index.StockDetails.forEach((ele) => {
+
+                if (ele.Qty > 0) {
+                    //**calculate Amount ,Discount Amount based on Discound type */
+                    const calculate = invoice_discountCalculate_Func(ele, index)
+
+                    invoiceItems.push({
+                        Item: index.Item,
+                        Unit: index.default_UnitDropvalue.value,
+                        BatchCode: ele.BatchCode,
+                        Quantity: Number(ele.Qty).toFixed(3),
+                        BatchDate: ele.BatchDate,
+                        BatchID: ele.id,
+                        BaseUnitQuantity: Number(ele.BaseUnitQuantity).toFixed(3),
+                        LiveBatch: ele.LiveBatche,
+                        MRP: ele.LiveBatcheMRPID,
+                        MRPValue: ele.MRP,//changes
+                        Rate: Number(ele.Rate).toFixed(2),
+                        BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
+                        GSTAmount: Number(calculate.roundedGstAmount).toFixed(2),
+                        GST: ele.LiveBatcheGSTID,
+                        GSTPercentage: ele.GST,// changes
+                        CGST: Number(calculate.CGST_Amount).toFixed(2),
+                        SGST: Number(calculate.SGST_Amount).toFixed(2),
+                        IGST: 0,
+                        GSTPercentage: ele.GST,
+                        CGSTPercentage: (ele.GST / 2),
+                        SGSTPercentage: (ele.GST / 2),
+                        IGSTPercentage: 0,
+                        Amount: Number(calculate.roundedTotalAmount).toFixed(2),
+                        TaxType: 'GST',
+                        DiscountType: index.DiscountType,
+                        Discount: Number(index.Discount) || 0,
+                        DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
+                    })
+                }
+            })
+        })
+
+        if (validMsg.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(validMsg),
+            })
+            return
+        }
+
+        if (!(invoiceItems.length > 0)) {
+            customAlert({
+                Type: 4,
+                Message: "Please Enter One Item Quantity",
+            })
+            return
+        }
+
+        if (values.VehicleNo === "") {
+            customAlert({
+                Type: 4,
+                Message: "Vehicle Number is Required",
+            })
+            return
+        }
+        //**grand total and Tcs Round Off calculations  */ 
+        const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
+
+        const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+            InvoiceDate: values.InvoiceDate,
+            InvoiceItems: invoiceItems,
+            InvoicesReferences: orderIDs.map(i => ({ Order: i }))
+        });
+
+        const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+            IBChallanDate: values.InvoiceDate,
+            IBChallanItems: invoiceItems,
+            IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
+        });
+
+        const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            CustomerGSTTin: '41',
+            GrandTotal: calcalateGrandTotal.sumOfGrandTotal,
+            RoundOffAmount: calcalateGrandTotal.RoundOffAmount,
+            TCSAmount: calcalateGrandTotal.TCS_Amount,
+            Customer: values.Customer.value,
+            Vehicle: values.VehicleNo.value ? values.VehicleNo.value : "",
+            Party: _cfunc.loginPartyID(),
+            CreatedBy: _cfunc.loginUserID(),
+            UpdatedBy: _cfunc.loginUserID(),
+        });
+
         try {
 
-            const validMsg = []
-            const invoiceItems = []
-
-            orderItemDetails.forEach((index) => {
-                if (index.StockInValid) {
-                    validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
+            if (formValid(state, setState)) {
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
+                let jsonBody;  //json body decleration 
+                if (subPageMode === url.INVOICE_1) {
+                    jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
+                } else if (subPageMode === url.IB_INVOICE) {
+                    jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
+                }
+                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                if (pageMode === mode.edit) {
                     return
-                };
-
-                index.StockDetails.forEach((ele) => {
-
-                    if (ele.Qty > 0) {
-                        //**calculate Amount ,Discount Amount based on Discound type */
-                        const calculate = invoice_discountCalculate_Func(ele, index)
-
-                        invoiceItems.push({
-                            Item: index.Item,
-                            Unit: index.default_UnitDropvalue.value,
-                            BatchCode: ele.BatchCode,
-                            Quantity: Number(ele.Qty).toFixed(3),
-                            BatchDate: ele.BatchDate,
-                            BatchID: ele.id,
-                            BaseUnitQuantity: Number(ele.BaseUnitQuantity).toFixed(3),
-                            LiveBatch: ele.LiveBatche,
-                            MRP: ele.LiveBatcheMRPID,
-                            MRPValue: ele.MRP,//changes
-                            Rate: Number(ele.Rate).toFixed(2),
-                            BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
-                            GSTAmount: Number(calculate.roundedGstAmount).toFixed(2),
-                            GST: ele.LiveBatcheGSTID,
-                            GSTPercentage: ele.GST,// changes
-                            CGST: Number(calculate.CGST_Amount).toFixed(2),
-                            SGST: Number(calculate.SGST_Amount).toFixed(2),
-                            IGST: 0,
-                            GSTPercentage: ele.GST,
-                            CGSTPercentage: (ele.GST / 2),
-                            SGSTPercentage: (ele.GST / 2),
-                            IGSTPercentage: 0,
-                            Amount: Number(calculate.roundedTotalAmount).toFixed(2),
-                            TaxType: 'GST',
-                            DiscountType: index.DiscountType,
-                            Discount: Number(index.Discount) || 0,
-                            DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
-                        })
-                    }
-                })
-            })
-
-            if (validMsg.length > 0) {
-                customAlert({
-                    Type: 4,
-                    Message: JSON.stringify(validMsg),
-                })
-                return
+                }
+                else {
+                    dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId }));
+                }
             }
-
-            if (!(invoiceItems.length > 0)) {
-                customAlert({
-                    Type: 4,
-                    Message: "Please Enter One Item Quantity",
-                })
-                return
-            }
-
-            if (values.VehicleNo === "") {
-                customAlert({
-                    Type: 4,
-                    Message: "Vehicle Number is Required",
-                })
-                return
-            }
-            //**grand total and Tcs Round Off calculations  */ 
-            const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
-
-            const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-                InvoiceDate: values.InvoiceDate,
-                InvoiceItems: invoiceItems,
-                InvoicesReferences: orderIDs.map(i => ({ Order: i }))
-            });
-
-            const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-                IBChallanDate: values.InvoiceDate,
-                IBChallanItems: invoiceItems,
-                IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
-            });
-
-            const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                CustomerGSTTin: '41',
-                GrandTotal: calcalateGrandTotal.sumOfGrandTotal,
-                RoundOffAmount: calcalateGrandTotal.RoundOffAmount,
-                TCSAmount: calcalateGrandTotal.TCS_Amount,
-                Customer: values.Customer.value,
-                Vehicle: values.VehicleNo.value ? values.VehicleNo.value : "",
-                Party: _cfunc.loginPartyID(),
-                CreatedBy: _cfunc.loginUserID(),
-                UpdatedBy: _cfunc.loginUserID(),
-            });
-
-            let jsonBody;  //json body decleration 
-            if (subPageMode === url.INVOICE_1) {
-                jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
-            } else if (subPageMode === url.IB_INVOICE) {
-                jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
-            }
-            // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            if (pageMode === mode.edit) {
-                return
-            }
-            else {
-                dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId }));
-            }
-
         } catch (e) { _cfunc.CommonConsole("invode save Handler", e) }
 
     }
@@ -710,130 +758,130 @@ const Invoice = (props) => {
 
                 <div className="page-content" >
 
-                    {/* <form noValidate> */}
-                    <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
+                    <form noValidate>
+                        <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
 
-                        <div className="row" >
-                            <Col sm="4" className="">
-                                <FormGroup className="mb- row mt-3 " >
-                                    <Label className="col-sm-8 p-2" style={{ width: "83px" }}>{fieldLabel.InvoiceDate}</Label>
-                                    <Col sm="7">
-                                        <C_DatePicker
-                                            name="InvoiceDate"
-                                            value={values.InvoiceDate}
-                                            id="myInput11"
-                                            disabled={(orderItemDetails.length > 0 || pageMode === "edit") ? true : false}
-                                            onChange={InvoiceDateOnchange}
-                                        />
-                                        {isError.InvoiceDate.length > 0 && (
-                                            <span className="invalid-feedback">{isError.InvoiceDate}</span>
-                                        )}
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-
-                            <Col sm="4" className="">
-                                <FormGroup className="mb- row mt-3 " >
-                                    <Label className="col-sm-6 p-2"
-                                        style={{ width: "65px" }}>{fieldLabel.Customer}</Label>
-                                    <Col sm="7">
-                                        <Select
-
-                                            name="Customer"
-                                            value={values.Customer}
-                                            isSearchable={true}
-                                            isDisabled={orderItemDetails.length > 0 ? true : false}
-                                            id={'customerselect'}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            options={CustomerDropdown_Options}
-                                            onChange={CustomerOnchange}
-                                            styles={{
-                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                            }}
-                                        />
-                                        {isError.Customer.length > 0 && (
-                                            <span className="text-danger f-8"><small>{isError.Customer}</small></span>
-                                        )}
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-
-                            <Col sm="4" className="">
-                                <FormGroup className="mb- row mt-3 " >
-                                    <Label className="col-sm-5 p-2"
-                                        style={{ width: "65px" }}>{fieldLabel.VehicleNo}</Label>
-                                    <Col sm="7">
-                                        <Select
-                                            name="VehicleNo"
-                                            value={values.VehicleNo}
-                                            isSearchable={true}
-                                            id={'VehicleNoselect'}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            options={VehicleNumber_Options}
-                                            onChange={(hasSelect, evn) => {
-                                                onChangeSelect({ hasSelect, evn, state, setState })
-                                            }}
-                                            styles={{ menu: provided => ({ ...provided, zIndex: 2 }) }}
-                                        />
-                                        {isError.VehicleNo.length > 0 && (
-                                            <span className="text-danger f-8"><small>{isError.VehicleNo}</small></span>
-                                        )}
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                        </div>
-                    </Col>
-
-                    <div>
-                        <ToolkitProvider
-                            keyField={"id"}
-                            data={orderItemDetails}
-                            columns={pagesListColumns}
-                            search
-                        >
-                            {(toolkitProps) => (
-                                <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive table">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    id="table_Arrow"
-                                                    classes={"table  table-bordered "}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-                                                    {...toolkitProps.baseProps}
-                                                    onDataSizeChange={(e) => {
-                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                    }}
-                                                />
-                                            </div>
+                            <div className="row" >
+                                <Col sm="4" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-8 p-2" style={{ width: "83px" }}>{fieldLabel.InvoiceDate}</Label>
+                                        <Col sm="7">
+                                            <C_DatePicker
+                                                name="InvoiceDate"
+                                                value={values.InvoiceDate}
+                                                id="myInput11"
+                                                disabled={(orderItemDetails.length > 0 || pageMode === "edit") ? true : false}
+                                                onChange={InvoiceDateOnchange}
+                                            />
+                                            {isError.InvoiceDate.length > 0 && (
+                                                <span className="invalid-feedback">{isError.InvoiceDate}</span>
+                                            )}
                                         </Col>
-                                        {mySearchProps(toolkitProps.searchProps,)}
-                                    </Row>
+                                    </FormGroup>
+                                </Col>
 
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    </div>
+                                <Col sm="4" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-6 p-2"
+                                            style={{ width: "65px" }}>{fieldLabel.Customer}</Label>
+                                        <Col sm="7">
+                                            <Select
 
-                    {orderItemDetails.length > 0 ? <FormGroup>
-                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                            <SaveButton
-                                pageMode={pageMode}
-                                onClick={SaveHandler}
-                                id={saveBtnid}
-                                loading={saveBtnloading}
-                                userAcc={userPageAccessState}
-                            />
+                                                name="Customer"
+                                                value={values.Customer}
+                                                isSearchable={true}
+                                                isDisabled={orderItemDetails.length > 0 ? true : false}
+                                                id={'customerselect'}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={CustomerDropdown_Options}
+                                                onChange={CustomerOnchange}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                            />
+                                            {isError.Customer.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm="4" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "65px" }}>{fieldLabel.VehicleNo}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                name="VehicleNo"
+                                                value={values.VehicleNo}
+                                                isSearchable={true}
+                                                id={'VehicleNoselect'}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={VehicleNumber_Options}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState })
+                                                }}
+                                                styles={{ menu: provided => ({ ...provided, zIndex: 2 }) }}
+                                            />
+                                            {isError.VehicleNo.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.VehicleNo}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                            </div>
                         </Col>
-                    </FormGroup > : null}
-                    {/* </form> */}
+
+                        <div>
+                            <ToolkitProvider
+                                keyField={"id"}
+                                data={orderItemDetails}
+                                columns={pagesListColumns}
+                                search
+                            >
+                                {(toolkitProps) => (
+                                    <React.Fragment>
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive table">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        id="table_Arrow"
+                                                        classes={"table  table-bordered "}
+                                                        noDataIndication={
+                                                            <div className="text-danger text-center ">
+                                                                Items Not available
+                                                            </div>
+                                                        }
+                                                        {...toolkitProps.baseProps}
+                                                        onDataSizeChange={(e) => {
+                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                        }}
+                                                    />
+                                                </div>
+                                            </Col>
+                                            {mySearchProps(toolkitProps.searchProps,)}
+                                        </Row>
+
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        </div>
+
+                        {orderItemDetails.length > 0 ? <FormGroup>
+                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    onClick={SaveHandler}
+                                    id={saveBtnid}
+                                    loading={saveBtnloading}
+                                    userAcc={userPageAccessState}
+                                />
+                            </Col>
+                        </FormGroup > : null}
+                    </form>
                 </div>
             </React.Fragment >
         );
