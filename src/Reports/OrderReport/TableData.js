@@ -51,7 +51,7 @@ export const Rows = (data) => {
                 const tableitemRow = [
                     `(${element.HSNCode}) ${element.ItemName}     
                      ${element.Comment === null ? "" : element.Comment}`,
-                    `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
+                    `${Number(element.Quantity).toFixed(2)}    ${element.UnitName}`,
                     element.Rate,
                     element.BasicAmount,
                     `${element.CGSTPercentage}%`,
