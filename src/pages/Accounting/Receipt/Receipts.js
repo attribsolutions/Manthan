@@ -491,11 +491,12 @@ const Receipts = (props) => {
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
-
+        debugger
         if ((values.AmountPaid === '')
             || (values.AmountPaid === "NaN")
             || (values.AmountPaid === undefined)
-            || (values.AmountPaid === 0)) {
+            || (values.AmountPaid === 0)
+            || (values.AmountPaid === "0")) {
             customAlert({
                 Type: 4,
                 Message: `Amount Paid value can not be 0`,
