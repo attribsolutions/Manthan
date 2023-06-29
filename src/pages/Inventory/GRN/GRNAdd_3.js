@@ -20,7 +20,7 @@ import Select from "react-select";
 import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx, floatRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, floatRegx, onlyNumberRegx } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { useLayoutEffect } from "react";
@@ -239,25 +239,29 @@ const GRNAdd3 = (props) => {
         {//------------- Quntity  column ----------------------------------
             text: "Quntity",
             dataField: "",
-            formatter: (cellContent, index1, keys_,) => (
-                <>
-                    <div className="div-1 mb-3" style={{ minWidth: "150px" }}>
-                        <Input
-                            type="text"
-                            className="input"
-                            style={{ textAlign: "right" }}
-                            autoComplete="off"
-                            defaultValue={index1.actualQuantity || index1.Quantity}
-                            onChange={event => index1.actualQuantity = event.target.value}
-                        />
-                    </div>
+            formatter: (cellContent, index1, keys_,) => {
+                if (!Number(index1.invoiceQuantity)) index1.invoiceQuantity = index1.Quantity
+                return (
+                    <>
+                        <div className="div-1 mb-3" style={{ minWidth: "150px" }}>
+                            <CInput
+                                cpattern={onlyNumberRegx}
+                                placeholder="Enter Actual Received Quantity"
+                                autoComplete="off"
+                                className=" text-end"
+                                defaultValue={index1.Quantity}
+                                onChange={event => index1.Quantity = event.target.value}
+                            />
 
-                    <div className="bottom-div">
-                        <span>Invoice-Qty :</span>
-                        <samp>{index1.Quantity}</samp>
-                    </div>
-                </>
-            ),
+                        </div>
+
+                        <div className="bottom-div">
+                            <span>Invoice-Qty :</span>
+                            <samp>{index1.Quantity}</samp>
+                        </div>
+                    </>
+                )
+            }
         },
 
         {  //------------- Unit column ----------------------------------
@@ -318,7 +322,7 @@ const GRNAdd3 = (props) => {
                     </div>
 
                     <div className="bottom-div">
-                        <samp>{index1.BatchDate}</samp>
+                        <samp>{_cfunc.date_dmy_func(index1.BatchDate)}</samp>
 
                     </div>
                 </>
@@ -330,7 +334,7 @@ const GRNAdd3 = (props) => {
             text: "Discrepancy",
             dataField: "",
             formatExtraData: { discrepancyOptions },
-            formatter: (cellContent, index1, keys_,) => {
+            formatter: (cellContent, index1) => {
                 if (!index1.defaultDiscrepancy) {
                     index1.defaultDiscrepancy = { value: null, label: '' }
                 }
@@ -352,6 +356,7 @@ const GRNAdd3 = (props) => {
                                 type="text"
                                 className="input"
                                 autoComplete="off"
+                                placeholder="Enter Item Related Quary"
                                 defaultValue={index1.comment}
                                 onChange={event => index1.comment = event.target.value}
                             />
@@ -363,7 +368,7 @@ const GRNAdd3 = (props) => {
 
     ];
 
-    const rowStyle2 = (row, rowIndex) => {
+    const rowStyle2 = (row) => {
         const style = {};
         if (row.ItemName === "Total") {
             style.backgroundColor = '#E6ECF4';
@@ -390,16 +395,19 @@ const GRNAdd3 = (props) => {
         try {
             const itemArr = []
             let sum = 0
+            let inValidMsg = []
             grnItemTableList.forEach(i => {
 
-                const actualQuantity = i.actualQuantity || i.Quantity// if actual Quantity  not enter user then set invoice quantity   
 
-                const calculate = orderCalculateFunc({ ...i, Quantity: actualQuantity })// amount calculation function 
+                if (!(i.Quantity > 0)) {
+                    inValidMsg.push({ [i.ItemName]: "This Item Quantity Is Require..." });
+                }
+                const calculate = orderCalculateFunc(i)// amount calculation function 
 
                 const arr = {
                     Item: i.Item,
-                    Quantity: i.Quantity, //invoice quantity
-                    ActualQuantity: actualQuantity,//GRN actual  quantity
+                    Quantity: i.invoiceQuantity, //invoice quantity
+                    ActualQuantity: i.Quantity,//GRN actual Quantity === GRN Quantity
                     Comment: i.comment,
                     Reason: i.defaultDiscrepancy.value,//default Discrepancy value
                     MRP: i.defaultMRP.value,
@@ -433,6 +441,11 @@ const GRNAdd3 = (props) => {
                     itemArr.push(arr)
                 }
             })
+
+            if (inValidMsg.length > 0) {
+                customAlert({ Type: 4, Message: inValidMsg, })
+                return
+            }
 
             itemArr.forEach(element => {
                 sum = sum + Number(element.Amount)
