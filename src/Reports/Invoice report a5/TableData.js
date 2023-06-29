@@ -50,23 +50,24 @@ export const Rows = (data) => {
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
             accumulator[key].DiscountAmount += Number(DiscountAmount);
-            accumulator[key].Quantity += parseInt(Quantity);
+            accumulator[key].Quantity += Number(Quantity);
             accumulator[key].BasicAmount += Number(BasicAmount);
             accumulator[key].CGST += Number(CGST);
             accumulator[key].SGST += Number(SGST);
-            accumulator[key].Amount += parseInt(Amount);
+            accumulator[key].Amount += Number(Amount);
             accumulator[key].BatchCode += BatchCode ;
             accumulator[key].BatchDate += BatchDate ;
             accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
 
         } else {
             accumulator[key] = { ItemName,HSNCode,
-                 MRPValue, DiscountType, Rate, Discount, CGST:Number(CGST),SGST: Number(SGST),Amount:Number(Amount),DiscountAmount:Number(DiscountAmount),BasicAmount:Number(BasicAmount), Quantity:parseInt(Quantity), UnitName ,CGSTPercentage,SGSTPercentage,GSTPercentage,BatchDate,BatchCode:BatchCode,BatchDate:BatchDate,quantityString:`  ${BatchCode}  ${BatchDate}`};
+                 MRPValue, DiscountType, Rate, Discount, CGST:Number(CGST),SGST: Number(SGST),Amount:Number(Amount),DiscountAmount:Number(DiscountAmount),BasicAmount:Number(BasicAmount), Quantity:Number(Quantity), UnitName ,CGSTPercentage,SGSTPercentage,GSTPercentage,BatchDate,BatchCode:BatchCode,BatchDate:BatchDate,quantityString:`  ${BatchCode}  ${BatchDate}`};
         }
         return accumulator;
     }, {});
 
     Object.values(groupedItems).forEach((element, key) => {
+        debugger
         let  HSNcodes =""
 if (data.SettingData.HSNCodeDigit.Value=== "1") {
      HSNcodes = element.HSNCode.slice(0, 4);
@@ -82,16 +83,16 @@ if (data.SettingData.HSNCodeDigit.Value=== "3") {
             SrNO++,
             `${HSNcodes} ${element.ItemName}` ,
             `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
-            element.MRPValue,
-            element.Rate,
+            `${Number(element.MRPValue).toFixed(2)}`,
+            `${Number( element.Rate).toFixed(2)}`,
             `${element.Discount} ${element.DiscountType=== "1"? "Rs":"%" }`,
             `${Number(element.DiscountAmount).toFixed(2)}`,
-            element.BasicAmount,
+            `${Number( element.BasicAmount).toFixed(2)}`,
             `${Number(element.CGSTPercentage).toFixed(1)}%`,
-            element.CGST,
+            `${Number(element.CGST).toFixed(2)}`,
             `${Number(element.SGSTPercentage).toFixed(1)}%`,
-            element.SGST,
-            element.Amount,
+            `${Number( element.SGST).toFixed(2)}`,
+            `${Number(element.Amount).toFixed(2)}`,
         ];
 
         function totalLots() {
@@ -103,7 +104,7 @@ if (data.SettingData.HSNCodeDigit.Value=== "3") {
             TotalGst =totalCGst +totalSGst;
             GSTPercentage = Number(element.CGSTPercentage) + Number(element.SGSTPercentage)
             let cgst = data["tableTot"].TotalCGst
-            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
+            return ({ TotalCGst: Number(totalCGst) + Number(cgst)})
           
         };
 
@@ -112,18 +113,18 @@ if (data.SettingData.HSNCodeDigit.Value=== "3") {
         
             return [
                 "",
-                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(parseFloat(TotalGst).toFixed(2))} `,
+                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(TotalGst).toFixed(2))} `,
                 " ",
                 ``,
                 "",
                 "",
                 ``,
-                `${parseFloat(totalBasicAmount).toFixed(2)}`,
-                `${parseFloat(totalCGst).toFixed(2)}`,
+                `${Number(totalBasicAmount).toFixed(2)}`,
+                `${Number(totalCGst).toFixed(2)}`,
                 "isaddition",
-                `${parseFloat(totalSGst).toFixed(2)}`,
+                `${Number(totalSGst).toFixed(2)}`,
                 "",
-                `${parseFloat(totalAmount).toFixed(2)}`,
+                `${Number(totalAmount).toFixed(2)}`,
             ];
         };
         const BatchRow =[

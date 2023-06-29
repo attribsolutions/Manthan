@@ -6,10 +6,10 @@ export const columns = [
     "BatchCode",
     "MRP",
     "Box",
-    "Outer ",
+    // "Outer ",
     "Pcs",
     "Quantity",
-    "Unit",
+    // "Unit",
 ];
 export const columns1 = [
     "SR No.",
@@ -61,25 +61,25 @@ export const Rows = (data) => {
     }, {});
 
 
-    Object.values(groupedItems).forEach((element, key) => {
-        // InvoiceItems.forEach((element, key) => {
-
+    // Object.values(groupedItems).forEach((element, key) => {
+    InvoiceItems.forEach((element, key) => {
+        debugger
         const tableitemRow = [
             SrNO++,
             element.ItemName,
             element.BatchCode,
             element.MRPValue,
-            Number(element.BoxQuantity).toFixed(2),
-            element.Outer,
-            Number(element.PiecesQuantity).toFixed(2),
+            Number(element.BoxQty).toFixed(2),
+            // element.Outer,
+            Number(element.PiecesQty).toFixed(2),
             element.Quantity,
-            element.UnitName,
+            // element.UnitName,
         ];
 
         function totalLots() {
             TotalMRP = Number(TotalMRP) + Number(element.MRPValue)
-            TotalBox = Number(TotalBox) + Number(element.Box)
-            TotalPcs = Number(TotalPcs) + Number(element.Pcs)
+            TotalBox = Number(TotalBox) + Number(element.BoxQty)
+            TotalPcs = Number(TotalPcs) + Number(element.PiecesQty)
             TotalQuantity = Number(TotalQuantity) + Number(element.Quantity)
         };
 
@@ -88,11 +88,11 @@ export const Rows = (data) => {
                 " ",
                 "Total",
                 "",
-                `${parseFloat(TotalMRP).toFixed(2)}`,
                 ``,
-                "",
-                `${parseFloat(TotalQuantity).toFixed(2)}`,
-                ``,
+                ` ${Number(TotalBox).toFixed(2)}`,
+                `${Number(TotalPcs).toFixed(2)}`,
+                `${Number(TotalQuantity).toFixed(2)}`,
+
 
             ];
         };
@@ -140,7 +140,7 @@ export const Rows1 = (data) => {
                 "Total",
                 "",
                 ``,
-                `${parseFloat(TotalAmount).toFixed(2)}`,
+                `${Number(TotalAmount).toFixed(2)}`,
                 "",
                 ``,
                 ``,
