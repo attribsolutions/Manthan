@@ -650,6 +650,14 @@ const Invoice = (props) => {
                 })
                 return
             }
+
+            if (values.VehicleNo === "") {
+                customAlert({
+                    Type: 4,
+                    Message: "Vehicle Number is Required",
+                })
+                return
+            }
             //**grand total and Tcs Round Off calculations  */ 
             const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
 
