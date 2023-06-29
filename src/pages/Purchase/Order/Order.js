@@ -787,6 +787,7 @@ const Order = (props) => {
             RateParty: _cfunc.loginPartyID(),
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+            // OrderType: order_Type.PurchaseOrder,
         }
         let SO_body = {
             Party: _cfunc.loginPartyID(), //swap  party and customer for sale oerder
@@ -794,6 +795,7 @@ const Order = (props) => {
             RateParty: selectSupplier ? selectSupplier : supplierSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+            // OrderType: order_Type.SaleOrder,
         }
 
 
@@ -1037,8 +1039,7 @@ const Order = (props) => {
         } catch (e) { _cfunc.CommonConsole("order_save_", e) }
     }
 
-    if (false) {
-        // if (!(userPageAccessState === "")) {
+    if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
