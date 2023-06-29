@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { basicAmount, GstAmount, Amount } from "./OrderPageCalulation";
+import { orderCalculateFunc } from "./OrderPageCalulation";
 import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
@@ -282,6 +282,7 @@ const Order = (props) => {
                         Party: _cfunc.loginPartyID(),
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
+                        btnId: "",
                         jsonBody, subPageMode: url.INVOICE_1, path: url.INVOICE_1, pageMode: mode.defaultsave, customer,
                         errorMsg: "Order Save Successfully But Can't Make Invoice"
                     }));
@@ -445,6 +446,12 @@ const Order = (props) => {
                     </div>
                 )
             },
+        },
+        {
+            dataField: "StockQuantity",
+            text: "Stock Quantity",
+            sort: true,
+
         },
 
         { //------------- Quantity column ----------------------------------
@@ -725,15 +732,16 @@ const Order = (props) => {
     };
 
     function itemWise_CalculationFunc(row) {
+        const calculate = orderCalculateFunc(row) //order calculation function 
 
-        row["Amount"] = Amount(row)
+        row["Amount"] = calculate.roundedTotalAmount
 
         let sum = 0
         orderItemTable.forEach(ind => {
-            if (ind.Amount === null) {
+            if (!Number(ind.Amount)) {
                 ind.Amount = 0
             }
-            var amt = parseFloat(ind.Amount)
+            var amt = Number(ind.Amount)
             sum = sum + amt
         });
         setOrderAmount(sum.toFixed(2))
@@ -779,6 +787,7 @@ const Order = (props) => {
             RateParty: _cfunc.loginPartyID(),
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+            OrderType: order_Type.PurchaseOrder,
         }
         let SO_body = {
             Party: _cfunc.loginPartyID(), //swap  party and customer for sale oerder
@@ -786,6 +795,7 @@ const Order = (props) => {
             RateParty: selectSupplier ? selectSupplier : supplierSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+            OrderType: order_Type.SaleOrder,
         }
 
 
@@ -887,8 +897,9 @@ const Order = (props) => {
 
             function isRowValueChanged({ i, isedit, isdel }) {
 
-                const basicAmt = parseFloat(basicAmount(i))
-                const cgstAmt = (GstAmount(i))
+
+                const calculate = orderCalculateFunc(i)
+
 
                 const arr = {
                     // id: i.editrowId,
@@ -900,17 +911,17 @@ const Order = (props) => {
                     Unit: i.Unit_id,
                     BaseUnitQuantity: (Number(i.BaseUnitQuantity) * Number(i.Quantity)).toFixed(2),
                     Margin: "",
-                    BasicAmount: basicAmt.toFixed(2),
-                    GSTAmount: cgstAmt.toFixed(2),
+                    BasicAmount: calculate.basicAmount,
+                    GSTAmount: calculate.roundedGstAmount,
                     GST: i.GST_id,
                     GSTPercentage: i.GSTPercentage,
-                    CGST: (cgstAmt / 2).toFixed(2),
-                    SGST: (cgstAmt / 2).toFixed(2),
+                    CGST: calculate.CGST_Amount,
+                    SGST: calculate.SGST_Amount,
                     IGST: 0,
                     CGSTPercentage: (i.GSTPercentage / 2),
                     SGSTPercentage: (i.GSTPercentage / 2),
                     IGSTPercentage: 0,
-                    Amount: i.Amount,
+                    Amount: calculate.roundedTotalAmount,
                     IsDeleted: isedit,
                     Comment: i.Comment
                 }
@@ -1021,7 +1032,7 @@ const Order = (props) => {
                 dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
 
             } else {
-                debugger
+
                 dispatch(_act.saveOrderAction({ jsonBody, subPageMode, gotoInvoiceMode }))
             }
 

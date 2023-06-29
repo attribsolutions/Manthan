@@ -205,7 +205,7 @@ const InvoiceList = () => {
         }
     }, [Cancel_EwayBill]);
     useEffect(() => {
-        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id))
+        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id,_cfunc.loginCompanyID()))
     }, [])
 
     const supplierOptions = supplier.map((i) => ({
@@ -219,7 +219,7 @@ const InvoiceList = () => {
     });
 
     function downBtnFunc(row) {
-        debugger
+        
         var ReportType = Data.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, Data))
     }

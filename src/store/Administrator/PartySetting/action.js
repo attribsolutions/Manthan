@@ -12,11 +12,9 @@ export const savePartySettingMaster_Success = (resp) => ({// Save  success
 });
 
 
-debugger
-export const getpartysetting_API = (config = {}) => ({ // save Action
-
+export const getpartysetting_API = (Party_id, Comapny_id) => ({ // save Action
     type: GET_PARTY_SETTING_API,
-    config,
+    Party_id, Comapny_id
 });
 
 export const getpartysetting_API_Success = (resp) => ({ // Save  success

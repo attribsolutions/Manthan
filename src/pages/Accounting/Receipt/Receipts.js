@@ -33,7 +33,6 @@ import { postSelect_Field_for_dropdown } from "../../../store/Administrator/Part
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
-import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const Receipts = (props) => {
@@ -492,11 +491,12 @@ const Receipts = (props) => {
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
-
+        debugger
         if ((values.AmountPaid === '')
             || (values.AmountPaid === "NaN")
             || (values.AmountPaid === undefined)
-            || (values.AmountPaid === 0)) {
+            || (values.AmountPaid === 0)
+            || (values.AmountPaid === "0")) {
             customAlert({
                 Type: 4,
                 Message: `Amount Paid value can not be 0`,

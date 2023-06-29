@@ -10,18 +10,17 @@ import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, postSelect_Field_for_dropdown } from "../../../store/actions";
+import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-
+import Select from "react-select";
 import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, floatRegx, onlyNumberRegx } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { useLayoutEffect } from "react";
@@ -38,7 +37,7 @@ const GRNAdd3 = (props) => {
 
     const [grnDate, setgrnDate] = useState(currentDate_ymd);
     const [grnDetail, setGrnDetail] = useState({});
-    const [grnItemList, setgrnItemList] = useState([]);
+    const [grnItemTableList, setGrnItemTableList] = useState([]);
     const [openPOdata, setopenPOdata] = useState([]);
     const [invoiceNo, setInvoiceNo] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -57,6 +56,7 @@ const GRNAdd3 = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
+        genralMaster_type69
     } = useSelector((state) => ({
         // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         saveBtnloading: state.GRNReducer.saveBtnloading,
@@ -65,6 +65,7 @@ const GRNAdd3 = (props) => {
         updateMsg: state.GRNReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+        genralMaster_type69: state.PartyMasterBulkUpdateReducer.SelectField,
     }));
 
 
@@ -79,6 +80,12 @@ const GRNAdd3 = (props) => {
         let page_Id = pageId.GRN_ADD_3;
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+
+        const jsonBody = JSON.stringify({
+            Company: _cfunc.loginCompanyID(),
+            TypeID: 69
+        });
+        dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, [])
 
     useEffect(() => userAccessUseEffect({ // userAccess common useEffect 
@@ -101,7 +108,7 @@ const GRNAdd3 = (props) => {
         pageField
     }), [pageField])
 
-    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [grnItemList]);
+    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [grnItemTableList]);
 
     useEffect(() => {
 
@@ -112,52 +119,53 @@ const GRNAdd3 = (props) => {
             const grnDetails = { ...items.Data }
             let tableArr = []
             let initial = ''
-            let tAmount = 0
+            let roundedTotalAmount = 0
             let tQty = 0
             let id = 1
             grnDetails.OrderItem.forEach((i, k) => {
 
                 i.BatchDate_conv = _cfunc.date_dmy_func(i.BatchDate)
+
                 if (k === 0) {
                     i.id = id
                     tableArr.push(i)
                     initial = i.Item
-                    tAmount = Number(i.Amount)
+                    roundedTotalAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
                 }
                 else if ((initial === i.Item) && (k === grnDetails.OrderItem.length - 1)) {
                     ++id;
                     i.id = id
-                    tAmount = tAmount + Number(i.Amount)
+                    roundedTotalAmount = roundedTotalAmount + Number(i.Amount)
                     tQty = tQty + Number(i.Quantity)
                     initial = i.Item
                     tableArr.push(i)
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                 }
                 else if ((k === grnDetails.OrderItem.length - 1)) {
                     ++id;
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                     ++id;
                     i.id = id
-                    tAmount = Number(i.Amount)
+                    roundedTotalAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
                     tableArr.push(i)
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                 }
                 else if (initial === i.Item) {
                     // i.ItemName=''
                     ++id;
                     i.id = id
                     tableArr.push(i)
-                    tAmount = tAmount + Number(i.Amount)
+                    roundedTotalAmount = roundedTotalAmount + Number(i.Amount)
                     tQty = tQty + Number(i.Quantity)
                     initial = i.Item
                 } else {
                     ++id;
-                    tableArr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
+                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                     ++id;
                     tableArr.push(i)
-                    tAmount = Number(i.Amount)
+                    roundedTotalAmount = Number(i.Amount)
                     tQty = Number(i.Quantity)
                     initial = i.Item
                 }
@@ -167,7 +175,7 @@ const GRNAdd3 = (props) => {
 
             //Unused code **End** $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-            setgrnItemList(grnDetails.OrderItem)
+            setGrnItemTableList(grnDetails.OrderItem)
 
             setInvoiceNo(grnDetails.InvoiceNumber)
             setGrnDetail(grnDetails)
@@ -209,14 +217,18 @@ const GRNAdd3 = (props) => {
 
                 setInvoiceNo(InvoiceNumber)
                 setGrnDetail(ChallanNo1);
-                setgrnItemList(GRNItems)
+                setGrnItemTableList(GRNItems)
                 dispatch(editGRNIdSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
-    }, [])
+    }, []);
 
+    const discrepancyOptions = genralMaster_type69.map(index => ({
+        value: index.id,
+        label: index.Name,
+    }));
 
     const tableColumns = [
         {//------------- ItemName column ----------------------------------
@@ -225,9 +237,31 @@ const GRNAdd3 = (props) => {
         },
 
         {//------------- Quntity  column ----------------------------------
-            text: "Invoice-Qty",
-            dataField: "Quantity",
-            align: () => ('right')
+            text: "Quntity",
+            dataField: "",
+            formatter: (cellContent, index1, keys_,) => {
+                if (!Number(index1.invoiceQuantity)) index1.invoiceQuantity = index1.Quantity
+                return (
+                    <>
+                        <div className="div-1 mb-3" style={{ minWidth: "150px" }}>
+                            <CInput
+                                cpattern={onlyNumberRegx}
+                                placeholder="Enter Actual Received Quantity"
+                                autoComplete="off"
+                                className=" text-end"
+                                defaultValue={index1.Quantity}
+                                onChange={event => index1.Quantity = event.target.value}
+                            />
+
+                        </div>
+
+                        <div className="bottom-div">
+                            <span>Invoice-Qty :</span>
+                            <samp>{index1.Quantity}</samp>
+                        </div>
+                    </>
+                )
+            }
         },
 
         {  //------------- Unit column ----------------------------------
@@ -235,11 +269,36 @@ const GRNAdd3 = (props) => {
             dataField: "UnitName",
         },
 
+        {  //------------- QtyInBox column ----------------------------------
+            text: "QtyInBox",
+            dataField: "QtyInBox",
+            align: 'right'
+        },
+
         {  //-------------MRP column ----------------------------------
             text: "MRP",
-            dataField: "MRPValue",
-            align: () => ('right')
+            dataField: "MRPDetails",
+            align: () => ('right'),
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Select
+                        id={`MRP${key}`}
+                        name="MRP"
+                        defaultValue={row.defaultMRP}
+                        isSearchable={true}
+                        className="react-dropdown"
+                        classNamePrefix="dropdown"
+                        options={row.MRPOps}
+                        onChange={(event) => { row.defaultMRP = event }}
+                    />
+                </span>)
+            },
+            headerStyle: () => {
+                return { width: '160px' };
+            }
         },
+
         {  //-------------Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
@@ -253,18 +312,63 @@ const GRNAdd3 = (props) => {
         },
 
         {//------------- Batch Code column ----------------------------------
-            text: "BatchCode",
-            dataField: "BatchCode",
+            text: "Batch",
+            dataField: "",
+            formatter: (cellContent, index1, keys_,) => (
+                <>
+                    <div className="bottom-div mb-3" style={{ minWidth: "150px" }}>
+                        <samp>{index1.BatchCode}</samp>
+
+                    </div>
+
+                    <div className="bottom-div">
+                        <samp>{_cfunc.date_dmy_func(index1.BatchDate)}</samp>
+
+                    </div>
+                </>
+            ),
+
         },
 
         {//------------- Batch Date column ----------------------------------
-            text: "Batch Date",
-            dataField: "BatchDate_conv",
+            text: "Discrepancy",
+            dataField: "",
+            formatExtraData: { discrepancyOptions },
+            formatter: (cellContent, index1) => {
+                if (!index1.defaultDiscrepancy) {
+                    index1.defaultDiscrepancy = { value: null, label: '' }
+                }
+                return (
+                    <>
+                        <div className="div-1 mb-1" style={{ minWidth: "150px" }}>
+                            <div>
+                                <Select
+                                    classNamePrefix="select2-selection"
+                                    defaultValue={index1.defaultDiscrepancy}
+                                    options={discrepancyOptions}
+                                    onChange={event => index1.defaultDiscrepancy = event}
+
+                                ></Select>
+                            </div>
+                        </div>
+                        <div className="div-1" style={{ minWidth: "150px" }}>
+                            <Input
+                                type="text"
+                                className="input"
+                                autoComplete="off"
+                                placeholder="Enter Item Related Quary"
+                                defaultValue={index1.comment}
+                                onChange={event => index1.comment = event.target.value}
+                            />
+                        </div>
+                    </>
+                )
+            }
         },
 
     ];
 
-    const rowStyle2 = (row, rowIndex) => {
+    const rowStyle2 = (row) => {
         const style = {};
         if (row.ItemName === "Total") {
             style.backgroundColor = '#E6ECF4';
@@ -281,41 +385,45 @@ const GRNAdd3 = (props) => {
         },
     ];
 
-
-
     const saveHandeller = (event) => {
 
         event.preventDefault();
 
         const btnId = event.target.id
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-        function returnFunc() {
-            _cfunc.btnIsDissablefunc({ btnId, state: false })
-        }
+
         try {
             const itemArr = []
             let sum = 0
-            grnItemList.forEach(i => {
-                const basicAmt = parseFloat(basicAmount(i))
-                const cgstAmt = (GstAmount(i))
+            let inValidMsg = []
+            grnItemTableList.forEach(i => {
 
-                if (i.ItemName === "Total") { return }
+
+                if (!(i.Quantity > 0)) {
+                    inValidMsg.push({ [i.ItemName]: "This Item Quantity Is Require..." });
+                }
+                const calculate = orderCalculateFunc(i)// amount calculation function 
+
                 const arr = {
                     Item: i.Item,
-                    Quantity: i.Quantity,
-                    MRP: i.MRP,
+                    Quantity: i.invoiceQuantity, //invoice quantity
+                    ActualQuantity: i.Quantity,//GRN actual Quantity === GRN Quantity
+                    Comment: i.comment,
+                    Reason: i.defaultDiscrepancy.value,//default Discrepancy value
+                    MRP: i.defaultMRP.value,
+                    MRPValue: i.defaultMRP.label,
                     ReferenceRate: i.Rate,
                     Rate: i.Rate,
                     Unit: i.Unit,
                     BaseUnitQuantity: i.BaseUnitQuantity,
                     GST: i.GST,
-                    BasicAmount: basicAmt.toFixed(2),
-                    GSTAmount: cgstAmt.toFixed(2),
-                    Amount: i.Amount,
+                    GSTPercentage: i.GSTPercentage,
+                    BasicAmount: calculate.basicAmount,
+                    GSTAmount: calculate.roundedGstAmount,
+                    Amount: calculate.roundedTotalAmount,
 
-                    CGST: (cgstAmt / 2).toFixed(2),
-                    SGST: (cgstAmt / 2).toFixed(2),
+                    CGST: calculate.CGST_Amount,
+                    SGST: calculate.SGST_Amount,
                     IGST: 0,
                     CGSTPercentage: (i.GSTPercentage / 2),
                     SGSTPercentage: (i.GSTPercentage / 2),
@@ -326,12 +434,18 @@ const GRNAdd3 = (props) => {
                     Discount: "0.00",
                     DiscountAmount: "0.00",
                     TaxType: "GST",
+
                 }
 
                 if ((i.Quantity > 0)) {
                     itemArr.push(arr)
                 }
             })
+
+            if (inValidMsg.length > 0) {
+                customAlert({ Type: 4, Message: inValidMsg, })
+                return
+            }
 
             itemArr.forEach(element => {
                 sum = sum + Number(element.Amount)
@@ -342,7 +456,7 @@ const GRNAdd3 = (props) => {
                     Type: 3,
                     Message: "Please Enter Invoice Number",
                 })
-                return returnFunc()
+                return
             }
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
@@ -358,11 +472,11 @@ const GRNAdd3 = (props) => {
             });
 
             if (pageMode === mode.edit) {
-                returnFunc()
+
             } else {
                 dispatch(saveGRNAction({ jsonBody, btnId }))
             }
-        } catch (error) { returnFunc() }
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     if (!(userPageAccessState === "")) {
@@ -393,11 +507,12 @@ const GRNAdd3 = (props) => {
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Supplier Name</Label>
                                     <Col md="7">
-                                        < Input
-                                            style={{ backgroundColor: "white" }}
+                                        <Input
                                             type="text"
                                             value={pageMode === mode.view ? EditData.CustomerName : grnDetail.SupplierName}
-                                            disabled={pageMode === mode.view ? true : false} />
+                                            // disabled={pageMode === mode.view ? true : false} 
+                                            disabled={(pageMode === mode.view) && true}
+                                        />
                                     </Col>
                                 </FormGroup>
 
@@ -406,7 +521,6 @@ const GRNAdd3 = (props) => {
                                         style={{ width: "130px" }}>PO Number</Label>
                                     <Col sm="7">
                                         <Input type="text"
-                                            style={{ backgroundColor: "white" }}
                                             disabled={true}
                                             value={pageMode === mode.view ? grnDetail : grnDetail.challanNo}
                                             placeholder="Enter Challan No" />
@@ -429,7 +543,6 @@ const GRNAdd3 = (props) => {
                                     <Col md="7">
                                         <Input
                                             type="text"
-                                            style={{ backgroundColor: "white" }}
                                             disabled={true}
                                             value={invoiceNo}
                                             placeholder="Enter Invoice No"
@@ -462,35 +575,37 @@ const GRNAdd3 = (props) => {
                         keyField="id"
                         id="table_Arrow"
                         defaultSorted={defaultSorted}
-                        data={grnItemList}
+                        data={grnItemTableList}
                         columns={tableColumns}>
                         {(toolkitProps,) => (
                             <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive_ table">
+                                            <BootstrapTable
+                                                responsive
+                                                bordered={false}
+                                                striped={false}
+                                                rowStyle={rowStyle2}
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Items Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
 
-                                <div className="table table-Rresponsive">
-                                    <BootstrapTable
-                                        responsive
-                                        bordered={false}
-                                        striped={false}
-                                        rowStyle={rowStyle2}
-                                        classes={"table  table-bordered table-hover"}
-                                        noDataIndication={
-                                            <div className="text-danger text-center ">
-                                                Items Not available
-                                            </div>
-                                        }
-                                        {...toolkitProps.baseProps}
-                                    />
-                                    {mySearchProps(toolkitProps.searchProps)}
-                                </div>
-
-
+                                    </Col>
+                                </Row>
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
 
                     {
-                        (grnItemList.length > 0) ?
+                        (grnItemTableList.length > 0) ?
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
                                     loading={saveBtnloading}

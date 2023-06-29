@@ -22,7 +22,7 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { url, mode} from "../../../routes/index"
+import { url, mode } from "../../../routes/index"
 import { GetVender, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
     challanItemForDropdown,
@@ -31,7 +31,7 @@ import {
     saveChallan_ChallanAdd
 } from "../../../store/Inventory/ChallanRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
+import { Amount, basicAmount, orderCalculateFunc, roundedGstAmount } from "../../Purchase/Order/OrderPageCalulation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
@@ -465,11 +465,9 @@ const Challan = (props) => {
         GoButton[0].StockDetails.forEach(i => {
             i["Quantity"] = values.Quantity
 
-            const basicAmt = parseFloat(basicAmount(i))
-            const cgstAmt = (GstAmount(i))
-            const amount = Amount(i)
+            const calculate = orderCalculateFunc(i)// amount calculation function 
 
-            grand_total = grand_total + Number(amount)
+            grand_total = grand_total + Number(calculate.roundedTotalAmount)
             const arr = {
                 Item: values.Item.value,
                 Quantity: values.Quantity,
@@ -478,18 +476,18 @@ const Challan = (props) => {
                 MRP: i.MRP,
                 ReferenceRate: "100.00",
                 Rate: i.Rate,
-                BasicAmount: basicAmt.toFixed(2),
+                BasicAmount: calculate.basicAmount,
                 TaxType: "GST",
                 GST: i.GST,
                 GSTPercentage: i.GSTPercentage,
                 HSNCode: i.HSNCode,
-                GSTAmount: cgstAmt.toFixed(2),
-                Amount: amount,
+                GSTAmount: calculate.roundedGstAmount,
+                Amount: calculate.roundedTotalAmount,
                 DiscountType: "0",
                 Discount: "0.00",
                 DiscountAmount: "0.00",
-                CGST: (cgstAmt / 2).toFixed(2),
-                SGST: (cgstAmt / 2).toFixed(2),
+                CGST: calculate.CGST_Amount,
+                SGST: calculate.SGST_Amount,
                 IGST: 0,
                 CGSTPercentage: (i.GSTPercentage / 2),
                 SGSTPercentage: (i.GSTPercentage / 2),

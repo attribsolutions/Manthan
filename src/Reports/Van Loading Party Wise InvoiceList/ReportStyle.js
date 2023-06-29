@@ -151,16 +151,15 @@ export const tableBody = (doc, data) => {
 
             if (data1.row.cells[1].raw === "Total") {
                 data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[3].styles.fontStyle = "bold"
+
                 data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
-                data1.row.cells[7].styles.fontStyle = "bold"
 
                 data1.row.cells[1].styles.fontSize = 9
-                data1.row.cells[3].styles.fontSize = 9
                 data1.row.cells[4].styles.fontSize = 9
+                data1.row.cells[5].styles.fontSize = 9
                 data1.row.cells[6].styles.fontSize = 9
-                data1.row.cells[7].styles.fontSize = 9
             }
         },
 
@@ -193,7 +192,7 @@ export const tableBody = (doc, data) => {
                 columnWidth: 20,
             },
             1: {
-                columnWidth: 140,
+                columnWidth: 170,
                 // halign: 'right',
 
             },
@@ -209,22 +208,16 @@ export const tableBody = (doc, data) => {
                 columnWidth: 70,
                 halign: 'right',
             },
+
             5: {
-                columnWidth: 60,
+                columnWidth: 70,
                 halign: 'right',
             },
             6: {
-                columnWidth: 50,
+                columnWidth: 70,
                 halign: 'right',
             },
-            7: {
-                columnWidth: 60,
-                halign: 'right',
-            },
-            8: {
-                columnWidth: 60,
-                halign: 'right',
-            },
+
         },
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
@@ -292,10 +285,10 @@ export const tableBody = (doc, data) => {
                 columnWidth: 50,
                 halign: 'right',
             },
-            5: {
-                columnWidth: 50,
-                halign: 'right',
-            },
+            // 5: {
+            //     columnWidth: 50,
+            //     halign: 'right',
+            // },
             6: {
                 columnWidth: 40,
                 halign: 'right',
@@ -304,10 +297,10 @@ export const tableBody = (doc, data) => {
                 columnWidth: 60,
                 halign: 'right',
             },
-            8: {
-                columnWidth: 50,
-                halign: 'right',
-            },
+            // 8: {
+            //     columnWidth: 50,
+            //     halign: 'right',
+            // },
         },
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,

@@ -320,7 +320,7 @@ const PartyMaster = (props) => {
     }
 
     const SaveHandler = (event) => {
-        debugger
+        
         event.preventDefault();
         const btnId = event.target.id;
 

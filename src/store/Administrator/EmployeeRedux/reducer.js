@@ -11,7 +11,9 @@ import {
   SAVE_EMPLOYEE_MASTER,
   UPDATE_EMPLOYEE_ID,
   GET_EMPLOYEE_LIST,
-  EMPLOYEE_API_ERROR_ACTION
+  EMPLOYEE_API_ERROR_ACTION,
+  DELETE_EMPLOYEE_ID,
+  EDIT_EMPLOYEE_ID
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -81,16 +83,29 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
         listBtnLoading: false,
       }
 
+    case DELETE_EMPLOYEE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
 
     case DELETE_EMPLOYEE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMessage: action.payload,
+      };
+
+    case EDIT_EMPLOYEE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
       };
 
     case EDIT_EMPLOYEE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 

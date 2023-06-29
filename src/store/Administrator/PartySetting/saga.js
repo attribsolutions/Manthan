@@ -13,14 +13,16 @@ function* Save_Method_ForPartySetting_GenFun({ config }) {
         yield put(savePartySettingMaster_Success(response));
     } catch (error) { yield put(getpartysettingApiErrorAction()) }
 }
-debugger
-function* PartySetting_GenFunc({ config }) {
-    debugger
+
+function* PartySetting_GenFunc(config) {
+
     try {
         debugger
-        const response = yield call(PartySettingApi, config);
+        const response = yield call(PartySettingApi, config.Party_id, config.Comapny_id);
         const singleObject = {};
+        const SystemSetting = {};
         for (const item of response.Data) {
+            SystemSetting[item.SystemSetting.replace(/\s/g, '')] = item.Value
             singleObject[item.SystemSetting.replace(/\s/g, '')] = {
                 SystemSetting: item.SystemSetting,
                 Value: item.Value,
@@ -29,8 +31,11 @@ function* PartySetting_GenFunc({ config }) {
 
         }
         response["Data"] = singleObject
+        sessionStorage.setItem("SystemSetting", JSON.stringify(SystemSetting))
+
+        response['SystemSetting'] = SystemSetting
         yield put(getpartysetting_API_Success(response))
-        debugger
+
     } catch (error) { yield put(getpartysettingApiErrorAction()) }
 }
 

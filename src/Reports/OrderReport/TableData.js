@@ -51,7 +51,7 @@ export const Rows = (data) => {
                 const tableitemRow = [
                     `(${element.HSNCode}) ${element.ItemName}     
                      ${element.Comment === null ? "" : element.Comment}`,
-                    `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
+                    `${Number(element.Quantity).toFixed(2)}    ${element.UnitName}`,
                     element.Rate,
                     element.BasicAmount,
                     `${element.CGSTPercentage}%`,
@@ -75,13 +75,13 @@ export const Rows = (data) => {
                 return [
                     "",
                     "",
-                    `TotalBasic:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                    `${parseFloat(totalBasicAmount).toFixed(2)}`,
                     "",
-                    `Total:${parseFloat(totalCGst).toFixed(2)}`,
+                    `${parseFloat(totalCGst).toFixed(2)}`,
                     "isaddition",
-                    `Total:${parseFloat(totalSGst).toFixed(2)}`,
+                    `${parseFloat(totalSGst).toFixed(2)}`,
                     "",
-                    `Total:${parseFloat(totalAmount).toFixed(2)}`,
+                    `${parseFloat(totalAmount).toFixed(2)}`,
                 ];
             };
             hasHedRow.push(totalrow());

@@ -58,8 +58,10 @@ const InvoiceConfiguration = (props) => {
         Invoicea4: "",
         ShowBatch: "",
         AddressInInvoice: "",
-        autoEInvoice: "",
-        EInvoiceApplicable: ""
+        AutoEInvoice: "",
+        EInvoiceApplicable: "",
+        // IsTCSPercentageforNonValidatedPANCustomer: "",
+        // IsTCSPercentageforValidatedPANCustomer: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -85,7 +87,7 @@ const InvoiceConfiguration = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-    debugger
+
     const { values } = state
     const { isError } = state;
     const { fieldLabel } = state;
@@ -101,7 +103,7 @@ const InvoiceConfiguration = (props) => {
         const page_Id = pageId.INVOICE_CONFIGURATION
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartysetting_API(loginUserDetails().Party_id))
+        dispatch(getpartysetting_API(loginUserDetails().Party_id, loginCompanyID()))
 
 
     }, []);
@@ -161,7 +163,7 @@ const InvoiceConfiguration = (props) => {
     }), [postMsg])
 
     useEffect(() => {
-        dispatch(getpartysetting_API(loginUserDetails().Party_id))
+        dispatch(getpartysetting_API(loginUserDetails().Party_id, loginCompanyID()))
     }, [postMsg])
 
 
@@ -193,19 +195,21 @@ const InvoiceConfiguration = (props) => {
     useEffect(() => {
 
         if (Object.keys(Data).length > 1) {
-            debugger
+
             if (Data.HSNCodeDigit.Value === "1") {
                 Data.HSNCodeDigit.Value = { value: "1", label: "4 Digits" }
             }
             if (Data.HSNCodeDigit.Value === "2") {
                 Data.HSNCodeDigit.Value = { value: "2", label: "6 Digits" }
             }
-            if (Data.HSNCodeDigit.Value === "4") {
+            if (Data.HSNCodeDigit.Value === "3") {
+                Data.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
+            } else {
                 Data.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
             }
 
             setState((i) => {
-                debugger
+
                 const a = { ...i }
                 a.values.Invoicea4 = Data.A4Print;
                 a.values.AddressInInvoice = Data.AddressOnInvoice;
@@ -214,7 +218,10 @@ const InvoiceConfiguration = (props) => {
                 a.values.ShowBatch = Data.ShowBatchNoOnInvoicePrint;
                 a.values.TCSAmountRound = Data.TCSAmountRoundConfiguration;
                 a.values.EInvoiceApplicable = Data.EInvoiceApplicable;
-                a.values.autoEInvoice = Data.AutoEInvoice;
+                a.values.AutoEInvoice = Data.AutoEInvoice;
+                // a.values.IsTCSPercentageforValidatedPANCustomer = Data.IsTCSPercentageforValidatedPANCustomer;
+                // a.values.IsTCSPercentageforNonValidatedPANCustomer = Data.IsTCSPercentageforNonValidatedPANCustomer;
+
                 return a
             })
         }
@@ -223,7 +230,7 @@ const InvoiceConfiguration = (props) => {
 
 
     const onChangeSelecthandler = (e) => {
-        debugger
+
         setState((i) => {
             const a = { ...i }
             a.values.HSNCodeDigit.Value = e;
@@ -258,6 +265,7 @@ const InvoiceConfiguration = (props) => {
     }
 
     const SaveHandler = async (event) => {
+
         debugger
         const BulkData = []
         event.preventDefault();
@@ -266,9 +274,9 @@ const InvoiceConfiguration = (props) => {
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-
                 Object.values(values).forEach(i => {
-                    debugger
+
+
                     if (i.SystemSetting === "HSN Code Digit") {
                         i.Value = i.Value.value
                     }
@@ -283,11 +291,11 @@ const InvoiceConfiguration = (props) => {
                     BulkData.push(arr)
 
                 })
-                debugger
+
                 const jsonBody = JSON.stringify({
                     BulkData: BulkData
                 });
-                debugger
+
                 dispatch(savePartySetting({ jsonBody, btnId }));
 
             }
@@ -318,20 +326,28 @@ const InvoiceConfiguration = (props) => {
                                     <Card>
                                         <CardBody className="c_card_body">
                                             <Row>
-                                                <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label htmlFor="validationCustom01">Payment QR</Label>
-                                                    <Input type="file" className="form-control "
-                                                        name="image"
-                                                        id="file"
-                                                        accept=".jpg, .jpeg, .png"
-                                                        onChange={(event) => { onchangeHandler(event, "ImageUpload") }}
-                                                    />
+                                                <Col md={4} >
+                                                    <FormGroup className="mb-3 ">
+                                                        <Label htmlFor="validationCustom01">Payment QR</Label>
+                                                        <Col sm={7} >
 
-                                                </FormGroup>
-                                                <Col md="4" >
+                                                            <Input type="file" className="form-control "
+                                                                name="image"
+                                                                id="file"
+                                                                accept=".jpg, .jpeg, .png"
+                                                                onChange={(event) => { onchangeHandler(event, "ImageUpload") }}
+                                                            />
+                                                        </Col>
+
+
+                                                    </FormGroup>
+                                                </Col>
+
+                                                <Col md={4} >
                                                     <FormGroup className="mb-3">
                                                         <Label htmlFor="validationCustom01"> {fieldLabel.HSNCodeDigit} </Label>
-                                                        <Col sm={12} >
+                                                        <Col sm={7} >
+
                                                             <Select
                                                                 name="HSNCodeDigit"
                                                                 value={values.HSNCodeDigit.Value}
@@ -345,6 +361,29 @@ const InvoiceConfiguration = (props) => {
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
+                                                {/* <Col sm={4}>
+                                                    <FormGroup className="mb-3">
+                                                        <Label htmlFor="validationCustom01">  {fieldLabel.IsTCSPercentageforValidatedPANCustomer} </Label>
+                                                        <Col sm={7} >
+                                                            <Input
+                                                                // style={{ marginLeft: "53px" }}
+                                                                type="text"
+                                                                className="p-2"
+                                                                defaultValue={values.IsTCSPercentageforValidatedPANCustomer.Value}
+                                                                onChange={(e) => {
+                                                                    setState((i) => {
+                                                                        const a = { ...i }
+                                                                        a.values.IsTCSPercentageforValidatedPANCustomer.Value = e.target.value;
+                                                                        return a
+                                                                    })
+                                                                }}
+                                                            >
+                                                            </Input>
+
+                                                        </Col>
+                                                    </FormGroup>
+                                                </Col> */}
+
                                             </Row>
 
                                             <Row>
@@ -359,7 +398,6 @@ const InvoiceConfiguration = (props) => {
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
                                                                     className="p-2"
-                                                                    name="Sunday"
                                                                     checked={values.TCSAmountRound.Value === "0" ? false : true}
                                                                     onChange={(e) => {
                                                                         setState((i) => {
@@ -388,7 +426,6 @@ const InvoiceConfiguration = (props) => {
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
                                                                     className="p-2"
-                                                                    name="Sunday"
                                                                     checked={values.InvoiceAmountRound.Value === "0" ? false : true}
                                                                     onChange={(e) => {
                                                                         setState((i) => {
@@ -421,7 +458,6 @@ const InvoiceConfiguration = (props) => {
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
                                                                     className="p-2"
-                                                                    name="Sunday"
                                                                     checked={values.Invoicea4.Value === "0" ? false : true}
                                                                     onChange={(e) => {
 
@@ -451,7 +487,6 @@ const InvoiceConfiguration = (props) => {
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
                                                                     className="p-2"
-                                                                    name="Sunday"
                                                                     checked={values.ShowBatch.Value === "0" ? false : true}
                                                                     onChange={(e) => {
                                                                         setState((i) => {
@@ -472,54 +507,23 @@ const InvoiceConfiguration = (props) => {
 
                                             </Row>
                                             <Row>
-                                                {/* <Col sm={4}>
-                                                    <FormGroup className="mb-3">
-                                                        <Row>
-                                                            <Col sm={5} >
-                                                                <Label htmlFor="validationCustom01">  {fieldLabel.AddressInInvoice} </Label>
-                                                            </Col>
-                                                            <Col sm={7} >
-                                                                <Input
-                                                                    style={{ marginLeft: "53px" }}
-                                                                    type="checkbox"
-                                                                    className="p-2"
-                                                                    name="Sunday"
-                                                                    checked={values.AddressInInvoice.Value === "0" ? false : true}
-                                                                    onChange={(e) => {
-
-                                                                        setState((i) => {
-                                                                            const a = { ...i }
-                                                                            a.values.AddressInInvoice.Value = e.target.checked === false ? "0" : "1";
-
-                                                                            return a
-                                                                        })
-                                                                    }}
-                                                                >
-                                                                </Input>
-
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
-                                                </Col> */}
-
                                                 <Col sm={4}>
                                                     <FormGroup className="mb-3">
                                                         <Row>
                                                             <Col sm={5} >
-                                                                <Label htmlFor="validationCustom01">  {fieldLabel.autoEInvoice} </Label>
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.AutoEInvoice} </Label>
                                                             </Col>
                                                             <Col sm={7} >
                                                                 <Input
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
                                                                     className="p-2"
-                                                                    name="Sunday"
-                                                                    checked={values.autoEInvoice.Value === "0" ? false : true}
+                                                                    checked={values.AutoEInvoice.Value === "0" ? false : true}
                                                                     onChange={(e) => {
 
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.autoEInvoice.Value = e.target.checked === false ? "0" : "1";
+                                                                            a.values.AutoEInvoice.Value = e.target.checked === false ? "0" : "1";
 
                                                                             return a
                                                                         })
@@ -545,7 +549,6 @@ const InvoiceConfiguration = (props) => {
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
                                                                     className="p-2"
-                                                                    name="Sunday"
                                                                     checked={values.EInvoiceApplicable.Value === "0" ? false : true}
                                                                     onChange={(e) => {
 
@@ -563,6 +566,37 @@ const InvoiceConfiguration = (props) => {
                                                         </Row>
                                                     </FormGroup>
                                                 </Col>
+                                            </Row>
+
+                                            <Row>
+
+                                                {/* <Col sm={4}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={5} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.IsTCSPercentageforNonValidatedPANCustomer} </Label>
+                                                            </Col>
+                                                            <Col sm={7} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    checked={values.IsTCSPercentageforNonValidatedPANCustomer.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            a.values.IsTCSPercentageforNonValidatedPANCustomer.Value = e.target.checked === false ? "0" : "1";
+
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
+
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Col> */}
                                             </Row>
 
 

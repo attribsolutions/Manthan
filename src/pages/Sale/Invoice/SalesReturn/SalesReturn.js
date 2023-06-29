@@ -33,7 +33,7 @@ import { CInput, C_DatePicker } from "../../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../../store/Administrator/PartyItemsRedux/action";
 import { SalesReturn_add_button_api_For_Invoice, SalesReturn_add_button_api_For_Item } from "../../../../helpers/backend_helper";
-import { salesReturnCalculate } from "./SalesCalculation";
+import { salesReturnCalculate, calculateSalesReturnFunc } from "./SalesCalculation";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 
 const SalesReturn = (props) => {
@@ -623,9 +623,10 @@ const SalesReturn = (props) => {
         const ReturnItems = TableArr.map((i) => {
 
             var gstPercentage = returnMode === 1 ? i.gstPercentage : i.GST
-            const calculate = salesReturnCalculate({ Rate: i.Rate, Qty: i.Qty, gstPercentage: gstPercentage })
+            //** calcualte amount function
+            const calculate = calculateSalesReturnFunc({ Rate: i.Rate, Qty: i.Qty, gstPercentage: gstPercentage })
 
-            grand_total = grand_total + Number(calculate.tAmount)
+            grand_total = grand_total + Number(calculate.roundedTotalAmount)
 
             return ({
                 "Item": i.ItemName.value,
@@ -635,16 +636,16 @@ const SalesReturn = (props) => {
                 "BaseUnitQuantity": returnMode === 1 ? i.RowData.BaseUnitQuantity : i.BaseUnitQuantity,
                 "BatchCode": returnMode === 1 ? i.RowData.BatchCode : i.BatchCode,
                 "BatchDate": returnMode === 1 ? i.RowData.BatchDate : i.BatchDate,
-                "Amount": calculate.tAmount,
+                "Amount": calculate.roundedTotalAmount,
                 "MRP": returnMode === 1 ? i.RowData.MRP : i.MRP,
                 "MRPValue": returnMode === 1 ? i.RowData.MRPValue : i.MRPValue,
                 "Rate": i.Rate,
-                "BasicAmount": calculate.baseAmt,
-                "GSTAmount": calculate.gstAmt.toFixed(2),
+                "BasicAmount": calculate.basicAmount,
+                "GSTAmount": calculate.roundedGstAmount,
                 "GST": returnMode === 1 ? i.RowData.GST : i.GST_ID,
                 "GSTPercentage": gstPercentage,
-                "CGST": calculate.CGST,
-                "SGST": calculate.SGST,
+                "CGST": calculate.CGST_Amount,
+                "SGST": calculate.SGST_Amount,
                 "IGST": 0,
                 "CGSTPercentage": (gstPercentage / 2),
                 "SGSTPercentage": (gstPercentage / 2),

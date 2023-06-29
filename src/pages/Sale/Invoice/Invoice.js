@@ -14,16 +14,16 @@ import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
+    formValid,
     initialFiledFunc,
     onChangeDate,
+    onChangeSelect,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
@@ -33,18 +33,27 @@ import * as url from "../../../routes/route_url"
 import {
     GoButtonForinvoiceAdd,
     GoButtonForinvoiceAddSuccess,
+    Uploaded_EInvoiceAction,
     invoiceSaveAction,
     invoiceSaveActionSuccess,
     makeIB_InvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { discountCalculate, innerStockCaculation, orderQtyOnChange, orderQtyUnit_SelectOnchange, stockDistributeFunc, stockQtyOnChange } from "./invoiceCaculations";
+import {
+    invoice_discountCalculate_Func,
+    innerStockCaculation,
+    orderQtyOnChange,
+    orderQtyUnit_SelectOnchange,
+    stockQtyOnChange,
+    settingbaseRoundOffAmountFunc,
+    settingBaseRoundOffAmountFunc
+} from "./invoiceCaculations";
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
+import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
 
 
 const Invoice = (props) => {
@@ -53,6 +62,7 @@ const Invoice = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const subPageMode = history.location.pathname
+    const systemSetting = _cfunc.loginSystemSetting();
 
     const goBtnId = `ADDGoBtn${subPageMode}`
     const saveBtnid = `saveBtn${subPageMode}`
@@ -60,6 +70,7 @@ const Invoice = (props) => {
     const fileds = {
         InvoiceDate: currentDate_ymd,
         Customer: "",
+        VehicleNo: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -77,7 +88,7 @@ const Invoice = (props) => {
     const [modalCss] = useState(false);
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [showAllStockState, setShowAllStockState] = useState(true);
+
     const {
         postMsg,
         updateMsg,
@@ -86,9 +97,9 @@ const Invoice = (props) => {
         gobutton_Add = { Status: false },
         vendorSupplierCustomer,
         makeIBInvoice,
+        VehicleNumber,
         goBtnloading,
         saveBtnloading,
-        PartySettingdata
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -97,14 +108,11 @@ const Invoice = (props) => {
         customer: state.CommonAPI_Reducer.customer,
         gobutton_Add: state.InvoiceReducer.gobutton_Add,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        VehicleNumber: state.VehicleReducer.VehicleList,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         goBtnloading: state.InvoiceReducer.goBtnloading,
-        PartySettingdata: state.PartySettingReducer.PartySettingdata,
-
     }));
-
-
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -112,8 +120,6 @@ const Invoice = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    const { Data = {} } = PartySettingdata;
-
 
     useEffect(() => {
 
@@ -121,8 +127,8 @@ const Invoice = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
-        dispatch(getpartysetting_API(_cfunc.loginPartyID()))
-
+        // dispatch(getpartysetting_API(_cfunc.loginPartyID()))
+        dispatch(getVehicleList())
 
     }, []);
 
@@ -144,12 +150,18 @@ const Invoice = (props) => {
         };
     }, [userAccess])
 
-
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+
+            let btnId = `btn-E-Invoice-Upload-${postMsg.InvoiceID}`
             dispatch(invoiceSaveActionSuccess({ Status: false }))
-            dispatch(GoButtonForinvoiceAddSuccess([]))
+
+            if ((systemSetting.AutoEInvoice === "1") && (systemSetting.EInvoiceApplicable === "1")) {
+                try {
+                    dispatch(Uploaded_EInvoiceAction({ btnId, RowId: postMsg.InvoiceID, UserID: _cfunc.loginUserID() }))
+                } catch (error) { }
+            }
 
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -158,18 +170,18 @@ const Invoice = (props) => {
                 })
             }
             else {
-                const promise = await customAlert({
+                await customAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                     RedirectPath: url.INVOICE_LIST_1,
                 })
-                if (promise) {
-                    if (subPageMode === url.INVOICE_1) {
-                        history.push({ pathname: url.INVOICE_LIST_1 })
-                    }
-                    else if (subPageMode === url.IB_INVOICE) {
-                        history.push({ pathname: url.IB_INVOICE_LIST })
-                    }
+
+                if (subPageMode === url.INVOICE_1) {
+                    history.push({ pathname: url.INVOICE_LIST_1 })
+                }
+                else if (subPageMode === url.IB_INVOICE) {
+                    history.push({ pathname: url.IB_INVOICE_LIST })
+
                 }
             }
         }
@@ -180,7 +192,6 @@ const Invoice = (props) => {
             })
         }
     }, [postMsg])
-
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
@@ -205,7 +216,6 @@ const Invoice = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
 
     useEffect(() => {
 
@@ -242,7 +252,6 @@ const Invoice = (props) => {
         }
     }, [gobutton_Add]);
 
-
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [orderItemDetails]);
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
@@ -250,10 +259,11 @@ const Invoice = (props) => {
         label: index.Name,
     }));
 
-    const totalAmountCalcuationFunc = (tableList = []) => {
-        const sum = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["tAmount"]), 0);
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${sum.toFixed(2)}`))
-    }
+    const VehicleNumber_Options = VehicleNumber.map((index) => ({
+        value: index.id,
+        label: index.VehicleNumber,
+    }));
+
     const pagesListColumns = [
         {//***************ItemName********************************************************************* */
             text: "Item Name",
@@ -332,7 +342,7 @@ const Invoice = (props) => {
             formatExtraData: { tableList: orderItemDetails },
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <div>
-                    <Table className="table table-bordered table-responsive mb-1">
+                    <Table className="table table-responsive mb-1">
                         <Thead >
                             <tr >
                                 <th style={{ zIndex: -1 }}>BatchCode</th>
@@ -458,6 +468,7 @@ const Invoice = (props) => {
                     </div>
                 );
             },
+            
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
@@ -536,7 +547,7 @@ const Invoice = (props) => {
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
-                            <samp id={`tAmount-${index1.id}`}>{index1.tAmount}</samp>
+                            <samp id={`roundedTotalAmount-${index1.id}`}>{index1.roundedTotalAmount}</samp>
                         </div>
                     </>
                 );
@@ -544,6 +555,10 @@ const Invoice = (props) => {
         },
     ];
 
+    const totalAmountCalcuationFunc = (tableList = []) => {
+        const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
+        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${calcalateGrandTotal.sumOfGrandTotal}`))
+    }
 
     function InvoiceDateOnchange(y, v, e) {
         dispatch(GoButtonForinvoiceAddSuccess([]))
@@ -578,123 +593,120 @@ const Invoice = (props) => {
 
     const SaveHandler = async (event) => {
 
-        console.log(Data)
         event.preventDefault();
-
         const btnId = event.target.id
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-        function returnFunc() {
-            _cfunc.btnIsDissablefunc({ btnId, state: false })
+
+        const validMsg = []
+        const invoiceItems = []
+
+        orderItemDetails.forEach((index) => {
+            if (index.StockInValid) {
+                validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
+                return
+            };
+
+            index.StockDetails.forEach((ele) => {
+
+                if (ele.Qty > 0) {
+                    //**calculate Amount ,Discount Amount based on Discound type */
+                    const calculate = invoice_discountCalculate_Func(ele, index)
+
+                    invoiceItems.push({
+                        Item: index.Item,
+                        Unit: index.default_UnitDropvalue.value,
+                        BatchCode: ele.BatchCode,
+                        Quantity: Number(ele.Qty).toFixed(3),
+                        BatchDate: ele.BatchDate,
+                        BatchID: ele.id,
+                        BaseUnitQuantity: Number(ele.BaseUnitQuantity).toFixed(3),
+                        LiveBatch: ele.LiveBatche,
+                        MRP: ele.LiveBatcheMRPID,
+                        MRPValue: ele.MRP,//changes
+                        Rate: Number(ele.Rate).toFixed(2),
+                        BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
+                        GSTAmount: Number(calculate.roundedGstAmount).toFixed(2),
+                        GST: ele.LiveBatcheGSTID,
+                        GSTPercentage: ele.GST,// changes
+                        CGST: Number(calculate.CGST_Amount).toFixed(2),
+                        SGST: Number(calculate.SGST_Amount).toFixed(2),
+                        IGST: 0,
+                        GSTPercentage: ele.GST,
+                        CGSTPercentage: (ele.GST / 2),
+                        SGSTPercentage: (ele.GST / 2),
+                        IGSTPercentage: 0,
+                        Amount: Number(calculate.roundedTotalAmount).toFixed(2),
+                        TaxType: 'GST',
+                        DiscountType: index.DiscountType,
+                        Discount: Number(index.Discount) || 0,
+                        DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
+                    })
+                }
+            })
+        })
+
+        if (validMsg.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(validMsg),
+            })
+            return
         }
+
+        if (!(invoiceItems.length > 0)) {
+            customAlert({
+                Type: 4,
+                Message: "Please Enter One Item Quantity",
+            })
+            return
+        }
+
+        //**grand total and Tcs Round Off calculations  */ 
+        const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
+
+        const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+            InvoiceDate: values.InvoiceDate,
+            InvoiceItems: invoiceItems,
+            InvoicesReferences: orderIDs.map(i => ({ Order: i }))
+        });
+
+        const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+            IBChallanDate: values.InvoiceDate,
+            IBChallanItems: invoiceItems,
+            IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
+        });
+
+        const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            CustomerGSTTin: '41',
+            GrandTotal: calcalateGrandTotal.sumOfGrandTotal,
+            RoundOffAmount: calcalateGrandTotal.RoundOffAmount,
+            TCSAmount: calcalateGrandTotal.TCS_Amount,
+            Customer: values.Customer.value,
+            Vehicle: values.VehicleNo.value ? values.VehicleNo.value : "",
+            Party: _cfunc.loginPartyID(),
+            CreatedBy: _cfunc.loginUserID(),
+            UpdatedBy: _cfunc.loginUserID(),
+        });
+
         try {
 
-            const validMsg = []
-            const invoiceItems = []
-            let grand_total = 0;
-
-            orderItemDetails.forEach((index) => {
-                if (index.StockInValid) {
-                    validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
-                    return returnFunc()
-                };
-
-                index.StockDetails.forEach((ele) => {
-
-                    if (ele.Qty > 0) {
-
-                        const calculate = discountCalculate(ele, index)
-
-                        grand_total = grand_total + Number(calculate.tAmount)
-                        invoiceItems.push({
-                            Item: index.Item,
-                            Unit: index.default_UnitDropvalue.value,
-                            BatchCode: ele.BatchCode,
-                            Quantity: Number(ele.Qty).toFixed(3),
-                            BatchDate: ele.BatchDate,
-                            BatchID: ele.id,
-                            BaseUnitQuantity: Number(ele.BaseUnitQuantity).toFixed(3),
-                            LiveBatch: ele.LiveBatche,
-                            MRP: ele.LiveBatcheMRPID,
-                            MRPValue: ele.MRP,//changes
-                            Rate: Number(ele.Rate).toFixed(2),
-                            BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
-                            GSTAmount: Number(calculate.gstAmt).toFixed(2),
-                            GST: ele.LiveBatcheGSTID,
-                            GSTPercentage: ele.GST,// changes
-                            CGST: Number(calculate.CGST).toFixed(2),
-                            SGST: Number(calculate.SGST).toFixed(2),
-                            IGST: 0,
-                            GSTPercentage: ele.GST,
-                            CGSTPercentage: (ele.GST / 2),
-                            SGSTPercentage: (ele.GST / 2),
-                            IGSTPercentage: 0,
-                            Amount: Number(calculate.tAmount).toFixed(2),
-                            TaxType: 'GST',
-                            DiscountType: index.DiscountType,
-                            Discount: Number(index.Discount) || 0,
-                            DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
-                        })
-                    }
-                })
-            })
-
-            if (validMsg.length > 0) {
-                customAlert({
-                    Type: 4,
-                    Message: JSON.stringify(validMsg),
-                })
-                return returnFunc()
+            if (formValid(state, setState)) {
+                _cfunc.btnIsDissablefunc({ btnId, state: true })
+                let jsonBody;  //json body decleration 
+                if (subPageMode === url.INVOICE_1) {
+                    jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
+                } else if (subPageMode === url.IB_INVOICE) {
+                    jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
+                }
+                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                if (pageMode === mode.edit) {
+                    return
+                }
+                else {
+                    dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId }));
+                }
             }
-
-            if (!(invoiceItems.length > 0)) {
-                customAlert({
-                    Type: 4,
-                    Message: "Please Enter One Item Quantity",
-                })
-                return returnFunc()
-            }
-
-            const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                InvoiceDate: values.InvoiceDate,
-                InvoiceItems: invoiceItems,
-                InvoicesReferences: orderIDs.map(i => ({ Order: i }))
-            });
-
-            const forIB_Invoice_json = async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                IBChallanDate: values.InvoiceDate,
-                IBChallanItems: invoiceItems,
-                IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
-            });
-            const isRound = Data.InvoiceAmountRoundConfiguration.Value
-            debugger
-            const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                CustomerGSTTin: '41',
-                GrandTotal: isRound === "1" ? Math.round(grand_total) : Number(grand_total),
-                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-                Customer: values.Customer.value,
-                Party: _cfunc.loginPartyID(),
-                CreatedBy: _cfunc.loginUserID(),
-                UpdatedBy: _cfunc.loginUserID(),
-            });
-
-
-            let jsonBody;  //json body decleration 
-            if (subPageMode === url.INVOICE_1) {
-                jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
-            } else if (subPageMode === url.IB_INVOICE) {
-                jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
-            }
-            // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            if (pageMode === mode.edit) {
-                returnFunc()
-            }
-
-            else {
-                dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId }));
-            }
-
-        } catch (e) { returnFunc() }
+        } catch (e) { _cfunc.CommonConsole("invode save Handler", e) }
 
     }
 
@@ -705,13 +717,13 @@ const Invoice = (props) => {
 
                 <div className="page-content" >
 
-                    {/* <form noValidate> */}
-                    <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
-                        <Row>
-                            <Col className=" mt-1 row  " sm={11} >
-                                <Col sm="6">
-                                    <FormGroup className="row mt-2 mb-3  ">
-                                        <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
+                    <form noValidate>
+                        <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
+
+                            <div className="row" >
+                                <Col sm="4" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-8 p-2" style={{ width: "83px" }}>{fieldLabel.InvoiceDate}</Label>
                                         <Col sm="7">
                                             <C_DatePicker
                                                 name="InvoiceDate"
@@ -727,10 +739,11 @@ const Invoice = (props) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col sm="6">
-                                    <FormGroup className="row mt-2 mb-3 ">
-                                        <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Customer} </Label>
-                                        <Col sm={7}>
+                                <Col sm="4" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-6 p-2"
+                                            style={{ width: "65px" }}>{fieldLabel.Customer}</Label>
+                                        <Col sm="7">
                                             <Select
 
                                                 name="Customer"
@@ -751,76 +764,85 @@ const Invoice = (props) => {
                                             )}
                                         </Col>
                                     </FormGroup>
-                                </Col >
-                            </Col>
+                                </Col>
 
-                            <Col sm={1} className="mt-3">
-                                {pageMode === mode.defaultsave ?
-                                    (orderItemDetails.length === 0) ?
-                                        < Go_Button onClick={(e) => goButtonHandler()}
-                                            loading={goBtnloading} />
-                                        :
-                                        <Change_Button onClick={(e) => dispatch(GoButtonForinvoiceAddSuccess([]))} />
-                                    : null
-                                }
-                            </Col>
-                            <Col>
-                            </Col>
-                        </Row>
-                    </Col>
-
-
-                    <div className="table-responsive mb-4">
-                        <ToolkitProvider
-                            keyField={"id"}
-                            data={orderItemDetails}
-                            columns={pagesListColumns}
-                            search
-                        >
-                            {(toolkitProps) => (
-                                <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <BootstrapTable
-                                                id="table_Arrow"
-                                                keyField={"id"}
-                                                responsive
-                                                bordered={false}
-                                                striped={false}
-                                                classes={"table  table-bordered"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Items Not available
-                                                    </div>
-                                                }
-                                                {...toolkitProps.baseProps}
-                                                onDataSizeChange={(e) => {
-                                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                <Col sm="4" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "65px" }}>{fieldLabel.VehicleNo}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                name="VehicleNo"
+                                                value={values.VehicleNo}
+                                                isSearchable={true}
+                                                id={'VehicleNoselect'}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={VehicleNumber_Options}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState })
                                                 }}
+                                                styles={{ menu: provided => ({ ...provided, zIndex: 2 }) }}
                                             />
+                                            {isError.VehicleNo.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.VehicleNo}</small></span>
+                                            )}
                                         </Col>
-                                        {mySearchProps(toolkitProps.searchProps,)}
-                                    </Row>
-
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    </div>
-
-                    {orderItemDetails.length > 0 ? <FormGroup>
-                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                            <SaveButton
-                                pageMode={pageMode}
-                                onClick={SaveHandler}
-                                id={saveBtnid}
-                                loading={saveBtnloading}
-                                userAcc={userPageAccessState}
-                            />
+                                    </FormGroup>
+                                </Col>
+                            </div>
                         </Col>
-                    </FormGroup > : null}
-                    {/* </form> */}
+
+                        <div>
+                            <ToolkitProvider
+                                keyField={"id"}
+                                data={orderItemDetails}
+                                columns={pagesListColumns}
+                                search
+                            >
+                                {(toolkitProps) => (
+                                    <React.Fragment>
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive table">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        id="table_Arrow"
+                                                        classes={"table  table-bordered "}
+                                                        noDataIndication={
+                                                            <div className="text-danger text-center ">
+                                                                Items Not available
+                                                            </div>
+                                                        }
+                                                        {...toolkitProps.baseProps}
+                                                        onDataSizeChange={(e) => {
+                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                        }}
+                                                    />
+                                                </div>
+                                            </Col>
+                                            {mySearchProps(toolkitProps.searchProps,)}
+                                        </Row>
+
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        </div>
+
+                        {orderItemDetails.length > 0 ? <FormGroup>
+                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    onClick={SaveHandler}
+                                    id={saveBtnid}
+                                    loading={saveBtnloading}
+                                    userAcc={userPageAccessState}
+                                />
+                            </Col>
+                        </FormGroup > : null}
+                    </form>
                 </div>
-            </React.Fragment>
+            </React.Fragment >
         );
     }
     else {

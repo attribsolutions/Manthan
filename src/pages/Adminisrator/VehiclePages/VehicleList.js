@@ -28,6 +28,7 @@ const VehicleList = () => {
 
   const reducers = useSelector(
     (state) => ({
+      loading: state.VehicleReducer.loading,
       listBtnLoading: state.VehicleReducer.listBtnLoading,
       tableList: state.VehicleReducer.VehicleList,
       postMsg: state.VehicleReducer.postMsg,
@@ -85,7 +86,7 @@ const VehicleList = () => {
         }
 
         {
-          reducers.listBtnLoading ?
+          reducers.loading ?
             <Listloader />
             :
             (pageField) ?

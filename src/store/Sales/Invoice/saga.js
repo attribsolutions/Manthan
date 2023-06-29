@@ -48,7 +48,7 @@ import {
 
 } from "./actionType";
 import *as url from "../../../routes/route_url"
-import { discountCalculate } from "../../../pages/Sale/Invoice/invoiceCaculations";
+import { invoice_discountCalculate_Func } from "../../../pages/Sale/Invoice/invoiceCaculations";
 import { orderApprovalActionSuccess } from "../../actions";
 
 
@@ -135,12 +135,14 @@ function* DeleteInvoiceGenFunc({ config }) {
 }
 
 // GO-Botton SO-invoice Add Page API
-export function invoice_GoButton_dataConversion_Func(response) {
+export function invoice_GoButton_dataConversion_Func(response, IsTCSParty, ISCustomerPAN) {
+
+  
 
   // Iterate over OrderItemDetails array and perform data conversion
-  response.OrderItemDetails = response.OrderItemDetails.map(index1 => {
+  response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
     const defaultunit = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
-    let tAmount = 0;
+    let roundedTotalAmount = 0;
 
     // Set properties for data conversion
     index1["OrderQty"] = index1.Quantity;
@@ -158,10 +160,14 @@ export function invoice_GoButton_dataConversion_Func(response) {
     index1["StockInValid"] = false;
     index1["StockInvalidMsg"] = '';
 
+    index1["IsTCSParty"] = IsTCSParty//is tcsParty flag for  
+    index1["IsCustomerPAN"] = ISCustomerPAN//
+
     let orderQty = Number(index1.Quantity);
 
     // Iterate over StockDetails array and perform data conversion
     index1.StockDetails = index1.StockDetails.map(index2 => {
+
       index2["initialRate"] = index2.Rate;
       index2["Rate"] = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
       index2["ActualQuantity"] = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity).toFixed(2);
@@ -184,8 +190,8 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
       // Calculate total amount if quantity is greater than 0
       if (index2.Qty > 0) {
-        const calculate = discountCalculate(index2, index1);
-        tAmount += Number(calculate.tAmount);
+        const calculate = invoice_discountCalculate_Func(index2, index1);
+        roundedTotalAmount += Number(calculate.roundedTotalAmount);
       }
 
       return index2;
@@ -193,9 +199,9 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
     const t1 = Number(index1.ItemTotalStock).toFixed(3);
     const t2 = Number(index1.Quantity);
-    const tA4 = tAmount.toFixed(2);
+    const tA4 = roundedTotalAmount.toFixed(2);
 
-    index1["tAmount"] = tA4;
+    index1["roundedTotalAmount"] = tA4;
 
     // Check for stock availability and set corresponding message
     if (t1 < t2) {
@@ -213,7 +219,7 @@ export function invoice_GoButton_dataConversion_Func(response) {
 }
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
-  const { subPageMode, path, pageMode, customer, errorMsg } = config;
+  const { subPageMode, path, pageMode, customer, errorMsg, IsTCSParty, ISCustomerPAN = false } = config;
 
   try {
 
@@ -229,14 +235,13 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     response["path"] = path
     response["page_Mode"] = pageMode
     response["customer"] = customer
-    debugger
-    const newData = invoice_GoButton_dataConversion_Func(response.Data)
-    debugger
-    response.Data = newData
-    yield put(GoButtonForinvoiceAddSuccess(response));
+
+    const updatedResp = invoice_GoButton_dataConversion_Func(response, IsTCSParty, ISCustomerPAN)
+
+    yield put(GoButtonForinvoiceAddSuccess(updatedResp));
 
   } catch (error) {
-    debugger
+
     yield put(InvoiceApiErrorAction())
 
     if (errorMsg) {//if ErrorMsg True means the SO-Order GOTo-Invoice Button hit After GoBtnAdd Api Hitt and get error

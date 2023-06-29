@@ -65,10 +65,11 @@ const OrderList = () => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
-            listBtnLoading: ( state.OrderReducer.listBtnLoading
+            listBtnLoading: (state.OrderReducer.listBtnLoading
                 || state.InvoiceReducer.listBtnLoading
                 || state.PdfReportReducers.listBtnLoading
-                || state.OrderReducer.orderConfirmLoading),
+                || state.OrderReducer.orderConfirmLoading
+                || state.InvoiceReducer.listBtnLoading),
         })
     );
 
@@ -282,13 +283,21 @@ const OrderList = () => {
         if (subPageMode === url.IB_INVOICE_STP) {
             dispatch(_act.makeIB_InvoiceAction({
                 jsonBody, path: url.IB_INVOICE,
-                pageMode: mode.defaultsave, customer, btnId
+                pageMode: mode.defaultsave,
+                customer,
+                btnId
             }));
         }
         else if (subPageMode === url.ORDER_LIST_4) {
             dispatch(_act.GoButtonForinvoiceAdd({
-                jsonBody, subPageMode: url.INVOICE_1, path: url.INVOICE_1, pageMode: mode.defaultsave, customer,
-                btnId
+                jsonBody,
+                subPageMode: url.INVOICE_1,
+                path: url.INVOICE_1,
+                pageMode: mode.defaultsave,
+                customer,
+                btnId,
+                IsTCSParty: obj.IsTCSParty,
+                ISCustomerPAN: obj.CustomerPAN
             }));
         }
         else {
@@ -346,14 +355,15 @@ const OrderList = () => {
                 Customer: rowData.CustomerID,
                 EffectiveDate: rowData.preOrderDate,
                 OrderID: rowData.id,
-                RateParty: rowData.CustomerID
+                RateParty: rowData.CustomerID,
+                OrderType: subPageMode === url.ORDER_4 ? order_Type.SaleOrder : order_Type.PurchaseOrder
             })
             dispatch(_act.editOrderId({ jsonBody, ...config }));
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
     function downBtnFunc(row, printType, btnId) {
-        debugger
+
         var ReportType = report.order1;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, btnId))
     }

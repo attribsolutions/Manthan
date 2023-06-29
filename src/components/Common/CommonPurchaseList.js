@@ -21,13 +21,8 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
-import { SaveButton } from "./CommonButton";
-import CustomTable from "../../CustomTable2/Custom";
 
-let sortType = "asc";
 let searchCount = 0;
-let downList = [];
-let listObj = {};
 
 let searchProps = {
   onClear: function onClear() { },
@@ -324,7 +319,6 @@ const CommonPurchaseList = (props) => {
                             classes={"table  table-bordered table-hover"}
                             noDataIndication={
                               <div className="text-danger text-center ">
-                                {" "}
                                 No record(s) Not Found.
                               </div>
                             }

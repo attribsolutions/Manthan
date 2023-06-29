@@ -213,7 +213,7 @@ export const reportFooter = (doc, data) => {
     doc.line(360, 362, 30, 362); //horizontal line Sginature upper line
     doc.line(570, 365, 435, 365); //horizontal line Sginature upper line 
 
-    
+
     const a = data.InvoiceItems.map((data) => ({
 
         CGST: Number(data.CGST),
@@ -253,7 +253,7 @@ export const reportFooter = (doc, data) => {
     doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 560, 352, 'right')
 
     doc.text(`Total TCS:`, 440, 362,)
-    doc.text(`0.00`, 560, 362, 'right')
+    doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 560, 362, 'right')
 
 
 
@@ -297,7 +297,7 @@ export const tableBody = (doc, data) => {
     var options = {
 
         didParseCell: (data1) => {
-            
+
             if (data1.row.cells[9].raw === "isaddition") {
                 data1.row.cells[1].colSpan = 5
                 // data1.row.cells[3].colSpan = 5
