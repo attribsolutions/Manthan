@@ -243,20 +243,21 @@ const LoadingSheet = (props) => {
             Invoice: index.id
         }))
 
+        if (LoadingSheetDetails.length === 0) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Minimum one Invoice is Select",
+                })
+            );
+            return _cfunc.btnIsDissablefunc({ btnId, state: false })
+        }
         try {
 
             if (formValid(state, setState)) {
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
-                if (LoadingSheetDetails.length === 0) {
-                    dispatch(
-                        AlertState({
-                            Type: 4,
-                            Status: true,
-                            Message: "Minimum one Invoice is Select",
-                        })
-                    );
-                    return _cfunc.btnIsDissablefunc({ btnId, state: false })
-                }
+
 
                 const jsonBody = JSON.stringify({
                     Date: values.Date,
