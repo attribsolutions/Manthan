@@ -11,7 +11,7 @@ import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory } from "react-router-dom";
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, postSelect_Field_for_dropdown } from "../../../store/actions";
 import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
@@ -37,7 +37,7 @@ const GRNAdd3 = (props) => {
 
     const [grnDate, setgrnDate] = useState(currentDate_ymd);
     const [grnDetail, setGrnDetail] = useState({});
-    const [grnItemList, setgrnItemList] = useState([]);
+    const [grnItemTableList, setGrnItemTableList] = useState([]);
     const [openPOdata, setopenPOdata] = useState([]);
     const [invoiceNo, setInvoiceNo] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -56,6 +56,7 @@ const GRNAdd3 = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
+        genralMaster_type69
     } = useSelector((state) => ({
         // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         saveBtnloading: state.GRNReducer.saveBtnloading,
@@ -64,6 +65,7 @@ const GRNAdd3 = (props) => {
         updateMsg: state.GRNReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+        genralMaster_type69: state.PartyMasterBulkUpdateReducer.SelectField,
     }));
 
 
@@ -78,6 +80,12 @@ const GRNAdd3 = (props) => {
         let page_Id = pageId.GRN_ADD_3;
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+
+        const jsonBody = JSON.stringify({
+            Company: _cfunc.loginCompanyID(),
+            TypeID: 69
+        });
+        dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, [])
 
     useEffect(() => userAccessUseEffect({ // userAccess common useEffect 
@@ -100,7 +108,7 @@ const GRNAdd3 = (props) => {
         pageField
     }), [pageField])
 
-    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [grnItemList]);
+    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [grnItemTableList]);
 
     useEffect(() => {
 
@@ -167,7 +175,7 @@ const GRNAdd3 = (props) => {
 
             //Unused code **End** $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-            setgrnItemList(grnDetails.OrderItem)
+            setGrnItemTableList(grnDetails.OrderItem)
 
             setInvoiceNo(grnDetails.InvoiceNumber)
             setGrnDetail(grnDetails)
@@ -209,14 +217,18 @@ const GRNAdd3 = (props) => {
 
                 setInvoiceNo(InvoiceNumber)
                 setGrnDetail(ChallanNo1);
-                setgrnItemList(GRNItems)
+                setGrnItemTableList(GRNItems)
                 dispatch(editGRNIdSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
-    }, [])
+    }, []);
 
+    const discrepancyOptions = genralMaster_type69.map(index => ({
+        value: index.id,
+        label: index.Name,
+    }));
 
     const tableColumns = [
         {//------------- ItemName column ----------------------------------
@@ -225,9 +237,27 @@ const GRNAdd3 = (props) => {
         },
 
         {//------------- Quntity  column ----------------------------------
-            text: "Invoice-Qty",
-            dataField: "Quantity",
-            align: () => ('right')
+            text: "Quntity",
+            dataField: "",
+            formatter: (cellContent, index1, keys_,) => (
+                <>
+                    <div className="div-1 mb-3" style={{ minWidth: "150px" }}>
+                        <Input
+                            type="text"
+                            className="input"
+                            style={{ textAlign: "right" }}
+                            autoComplete="off"
+                            defaultValue={index1.actualQuantity || index1.Quantity}
+                            onChange={event => index1.actualQuantity = event.target.value}
+                        />
+                    </div>
+
+                    <div className="bottom-div">
+                        <span>Invoice-Qty :</span>
+                        <samp>{index1.Quantity}</samp>
+                    </div>
+                </>
+            ),
         },
 
         {  //------------- Unit column ----------------------------------
@@ -278,14 +308,59 @@ const GRNAdd3 = (props) => {
         },
 
         {//------------- Batch Code column ----------------------------------
-            text: "BatchCode",
-            dataField: "BatchCode",
+            text: "Batch",
+            dataField: "",
+            formatter: (cellContent, index1, keys_,) => (
+                <>
+                    <div className="bottom-div mb-3" style={{ minWidth: "150px" }}>
+                        <samp>{index1.BatchCode}</samp>
+
+                    </div>
+
+                    <div className="bottom-div">
+                        <samp>{index1.BatchDate}</samp>
+
+                    </div>
+                </>
+            ),
+
         },
 
         {//------------- Batch Date column ----------------------------------
-            text: "Batch Date",
-            dataField: "BatchDate_conv",
+            text: "Discrepancy",
+            dataField: "",
+            formatExtraData: { discrepancyOptions },
+            formatter: (cellContent, index1, keys_,) => {
+                if (!index1.defaultDiscrepancy) {
+                    index1.defaultDiscrepancy = { value: null, label: '' }
+                }
+                return (
+                    <>
+                        <div className="div-1 mb-1" style={{ minWidth: "150px" }}>
+                            <div>
+                                <Select
+                                    classNamePrefix="select2-selection"
+                                    defaultValue={index1.defaultDiscrepancy}
+                                    options={discrepancyOptions}
+                                    onChange={event => index1.defaultDiscrepancy = event}
+
+                                ></Select>
+                            </div>
+                        </div>
+                        <div className="div-1" style={{ minWidth: "150px" }}>
+                            <Input
+                                type="text"
+                                className="input"
+                                autoComplete="off"
+                                defaultValue={index1.comment}
+                                onChange={event => index1.comment = event.target.value}
+                            />
+                        </div>
+                    </>
+                )
+            }
         },
+
     ];
 
     const rowStyle2 = (row, rowIndex) => {
@@ -310,29 +385,31 @@ const GRNAdd3 = (props) => {
         event.preventDefault();
 
         const btnId = event.target.id
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-        function returnFunc() {
-            _cfunc.btnIsDissablefunc({ btnId, state: false })
-        }
+
         try {
             const itemArr = []
             let sum = 0
-            grnItemList.forEach(i => {
+            grnItemTableList.forEach(i => {
 
-                const calculate = orderCalculateFunc(i)// amount calculation function 
-                // if (i.ItemName === "Total") { return }
+                const actualQuantity = i.actualQuantity || i.Quantity// if actual Quantity  not enter user then set invoice quantity   
+
+                const calculate = orderCalculateFunc({ ...i, Quantity: actualQuantity })// amount calculation function 
+
                 const arr = {
                     Item: i.Item,
-                    Quantity: i.Quantity,
+                    Quantity: i.Quantity, //invoice quantity
+                    ActualQuantity: actualQuantity,//GRN actual  quantity
+                    Comment: i.comment,
+                    Reason: i.defaultDiscrepancy.value,//default Discrepancy value
                     MRP: i.defaultMRP.value,
-                    // MRPValue: i.defaultMRP.label,
+                    MRPValue: i.defaultMRP.label,
                     ReferenceRate: i.Rate,
                     Rate: i.Rate,
                     Unit: i.Unit,
                     BaseUnitQuantity: i.BaseUnitQuantity,
                     GST: i.GST,
-                    // GSTPercentage: i.GSTPercentage,
+                    GSTPercentage: i.GSTPercentage,
                     BasicAmount: calculate.basicAmount,
                     GSTAmount: calculate.roundedGstAmount,
                     Amount: calculate.roundedTotalAmount,
@@ -349,6 +426,7 @@ const GRNAdd3 = (props) => {
                     Discount: "0.00",
                     DiscountAmount: "0.00",
                     TaxType: "GST",
+
                 }
 
                 if ((i.Quantity > 0)) {
@@ -365,7 +443,7 @@ const GRNAdd3 = (props) => {
                     Type: 3,
                     Message: "Please Enter Invoice Number",
                 })
-                return returnFunc()
+                return
             }
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
@@ -381,11 +459,11 @@ const GRNAdd3 = (props) => {
             });
 
             if (pageMode === mode.edit) {
-                returnFunc()
+
             } else {
                 dispatch(saveGRNAction({ jsonBody, btnId }))
             }
-        } catch (error) { returnFunc() }
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     if (!(userPageAccessState === "")) {
@@ -416,11 +494,12 @@ const GRNAdd3 = (props) => {
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Supplier Name</Label>
                                     <Col md="7">
-                                        < Input
-                                            style={{ backgroundColor: "white" }}
+                                        <Input
                                             type="text"
                                             value={pageMode === mode.view ? EditData.CustomerName : grnDetail.SupplierName}
-                                            disabled={pageMode === mode.view ? true : false} />
+                                            // disabled={pageMode === mode.view ? true : false} 
+                                            disabled={(pageMode === mode.view) && true}
+                                        />
                                     </Col>
                                 </FormGroup>
 
@@ -429,7 +508,6 @@ const GRNAdd3 = (props) => {
                                         style={{ width: "130px" }}>PO Number</Label>
                                     <Col sm="7">
                                         <Input type="text"
-                                            style={{ backgroundColor: "white" }}
                                             disabled={true}
                                             value={pageMode === mode.view ? grnDetail : grnDetail.challanNo}
                                             placeholder="Enter Challan No" />
@@ -452,7 +530,6 @@ const GRNAdd3 = (props) => {
                                     <Col md="7">
                                         <Input
                                             type="text"
-                                            style={{ backgroundColor: "white" }}
                                             disabled={true}
                                             value={invoiceNo}
                                             placeholder="Enter Invoice No"
@@ -485,13 +562,13 @@ const GRNAdd3 = (props) => {
                         keyField="id"
                         id="table_Arrow"
                         defaultSorted={defaultSorted}
-                        data={grnItemList}
+                        data={grnItemTableList}
                         columns={tableColumns}>
                         {(toolkitProps,) => (
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table">
+                                        <div className="table-responsive_ table">
                                             <BootstrapTable
                                                 responsive
                                                 bordered={false}
@@ -515,7 +592,7 @@ const GRNAdd3 = (props) => {
                     </ToolkitProvider>
 
                     {
-                        (grnItemList.length > 0) ?
+                        (grnItemTableList.length > 0) ?
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
                                     loading={saveBtnloading}

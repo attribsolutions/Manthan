@@ -457,6 +457,7 @@ const Invoice = (props) => {
                     </div>
                 );
             },
+            
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;

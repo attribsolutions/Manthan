@@ -81,6 +81,7 @@ export const invoice_discountCalculate_Func = (row, index1) => {
 
 
 export const settingBaseRoundOffAmountFunc = (tableList = []) => {
+  
     // Get the system settings
     const systemSetting = loginSystemSetting();
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
