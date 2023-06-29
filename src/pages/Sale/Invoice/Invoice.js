@@ -150,45 +150,10 @@ const Invoice = (props) => {
         };
     }, [userAccess])
 
-    // useEffect(async () => {
-
-    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-    //         dispatch(invoiceSaveActionSuccess({ Status: false }))
-
-    //         if (pageMode === mode.dropdownAdd) {
-    //             customAlert({
-    //                 Type: 1,
-    //                 Message: JSON.stringify(postMsg.Message),
-    //             })
-    //         }
-    //         else {
-    //             await customAlert({
-    //                 Type: 1,
-    //                 Message: JSON.stringify(postMsg.Message),
-    //                 RedirectPath: url.INVOICE_LIST_1,
-    //             })
-
-    //             if (subPageMode === url.INVOICE_1) {
-    //                 history.push({ pathname: url.INVOICE_LIST_1 })
-    //             }
-    //             else if (subPageMode === url.IB_INVOICE) {
-    //                 history.push({ pathname: url.IB_INVOICE_LIST })
-
-    //             }
-    //         }
-    //     }
-    //     else if (postMsg.Status === true) {
-    //         customAlert({
-    //             Type: 4,
-    //             Message: JSON.stringify(postMsg.Message),
-    //         })
-    //     }
-    // }, [postMsg])
-
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            debugger
+
             let btnId = `btn-E-Invoice-Upload-${postMsg.InvoiceID}`
             dispatch(invoiceSaveActionSuccess({ Status: false }))
 
@@ -696,13 +661,6 @@ const Invoice = (props) => {
             return
         }
 
-        if (values.VehicleNo === "") {
-            customAlert({
-                Type: 4,
-                Message: "Vehicle Number is Required",
-            })
-            return
-        }
         //**grand total and Tcs Round Off calculations  */ 
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
 
