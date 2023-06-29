@@ -289,7 +289,7 @@ const OrderList = () => {
             }));
         }
         else if (subPageMode === url.ORDER_LIST_4) {
-           dispatch(_act.GoButtonForinvoiceAdd({
+            dispatch(_act.GoButtonForinvoiceAdd({
                 jsonBody,
                 subPageMode: url.INVOICE_1,
                 path: url.INVOICE_1,
@@ -297,7 +297,7 @@ const OrderList = () => {
                 customer,
                 btnId,
                 IsTCSParty: obj.IsTCSParty,
-                ISCustomerPAN: obj.CustomerPAN 
+                ISCustomerPAN: obj.CustomerPAN
             }));
         }
         else {
@@ -355,14 +355,15 @@ const OrderList = () => {
                 Customer: rowData.CustomerID,
                 EffectiveDate: rowData.preOrderDate,
                 OrderID: rowData.id,
-                RateParty: rowData.CustomerID
+                RateParty: rowData.CustomerID,
+                OrderType: subPageMode === url.ORDER_4 ? order_Type.SaleOrder : order_Type.PurchaseOrder
             })
             dispatch(_act.editOrderId({ jsonBody, ...config }));
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
     function downBtnFunc(row, printType, btnId) {
-        
+
         var ReportType = report.order1;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, btnId))
     }
