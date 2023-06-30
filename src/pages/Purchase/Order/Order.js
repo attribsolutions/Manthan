@@ -75,7 +75,7 @@ const Order = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const userAdminRole = _cfunc.loginUserAdminRole();
-    const ref1 = useRef('')
+   
 
     const fileds = {
         id: "",
@@ -1380,9 +1380,7 @@ const Order = (props) => {
 
                     </div>
 
-                    <div className="table-responsive table mt-n3" >
-
-                    </div>
+                   
                     <ToolkitProvider
                         keyField={"Item_id"}
                         data={orderItemTable}
@@ -1397,7 +1395,6 @@ const Order = (props) => {
                                             <BootstrapTable
                                                 keyField={"Item_id"}
                                                 id="table_Arrow"
-                                                ref={ref1}
                                                 defaultSorted={defaultSorted}
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
