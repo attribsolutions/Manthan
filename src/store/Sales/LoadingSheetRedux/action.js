@@ -54,9 +54,9 @@ export const LoadingSheetListActionSuccess = (resp) => ({
     payload: resp,
 });
 
-export const UpdateLoadingSheet = (id) => ({
+export const UpdateLoadingSheet = (data) => ({
     type: LOADING_SHEET_UPDATE_API,
-    id,
+    data,
 });
 
 export const UpdateLoadingSheetSucccess = (data) => ({

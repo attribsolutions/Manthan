@@ -1,4 +1,4 @@
-import { call, delay, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc, amountCommaSeparate, amountCommaSeparateFunc, } from "../../../components/Common/CommonFunction";
 import { Loading_Sheet_Del_API, Loading_Sheet_get_API, Loading_Sheet_Go_Button_API, Loading_Sheet_Post_API, Loading_Sheet_Update_API, LoadingSheet_API } from "../../../helpers/backend_helper";
 import { DeleteLoadingSheetSucccess, LoadingSheetApiErrorAction, LoadingSheetListActionSuccess, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMasterSucccess, UpdateLoadingSheetSucccess } from "./action";
@@ -28,21 +28,21 @@ function* save_LoadingSheet_GenFun({ config }) {
 }
 
 // loading sheet update button api
-function* Update_LoadingSheet_GenFun({ id }) {
+function* Update_LoadingSheet_GenFun({ data }) {
+    
+    const { RowId, path } = data
     try {
-        const response = yield call(Loading_Sheet_Update_API, id);
-        response.Data.InvoiceParent = response.Data.InvoiceParent.map((index) => {
-            index.GrandTotal = amountCommaSeparateFunc(index.GrandTotal);
+        const response = yield call(Loading_Sheet_Update_API, RowId);
+        response.path = path
+        response.Data.InvoiceParent.map((index) => {
+            index.GrandTotal = amountCommaSeparateFunc(index.GrandTotal)
             index.AmountPaid = index.GrandTotal
             index["selectCheck"] = false
             index.InvoiceDate = date_dmy_func(index.InvoiceDate);
             return index
         });
-        yield put(UpdateLoadingSheetSucccess(response.Data));
-    } catch (error) {
-        CommonConsole(error)
-        yield put(LoadingSheetApiErrorAction())
-    }
+        yield put(UpdateLoadingSheetSucccess(response));
+    } catch (error) { yield put(LoadingSheetApiErrorAction()) }
 }
 
 function* Delete_LoadingSheet_ID_GenratorFunction({ config }) {        // delete API
