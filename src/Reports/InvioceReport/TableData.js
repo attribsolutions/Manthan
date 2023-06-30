@@ -129,10 +129,11 @@ export const Rows = (data) => {
     let GSTPercentage = 0
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
-        debugger
+
         const { HSNCode, ItemName, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName } = currentItem;
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
+
             accumulator[key].DiscountAmount += Number(DiscountAmount);
             accumulator[key].Quantity += Number(Quantity);
             accumulator[key].BasicAmount += Number(BasicAmount);
@@ -235,10 +236,6 @@ export const Rows = (data) => {
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow);
-            if (data.SettingData.ShowBatchNoOnInvoicePrint.Value === "1") {
-                returnArr.push((BatchRow))
-            }
-
         }
         else {
             returnArr.push(totalrow());
@@ -251,6 +248,9 @@ export const Rows = (data) => {
 
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
+        }
+        if (data.SettingData.ShowBatchNoOnInvoicePrint.Value === "1") {
+            returnArr.push((BatchRow))
         }
 
         if (key === Object.keys(groupedItems).length - 1) {
