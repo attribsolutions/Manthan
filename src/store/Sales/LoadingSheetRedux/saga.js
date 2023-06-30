@@ -30,10 +30,9 @@ function* save_LoadingSheet_GenFun({ config }) {
 // loading sheet update button api
 function* Update_LoadingSheet_GenFun({ id }) {
     try {
-        debugger
         const response = yield call(Loading_Sheet_Update_API, id);
         response.Data.InvoiceParent = response.Data.InvoiceParent.map((index) => {
-            index.GrandTotal = amountCommaSeparateFunc(index.GrandTotal)
+            index.GrandTotal = amountCommaSeparateFunc(index.GrandTotal);
             index.AmountPaid = index.GrandTotal
             index["selectCheck"] = false
             index.InvoiceDate = date_dmy_func(index.InvoiceDate);
@@ -41,7 +40,6 @@ function* Update_LoadingSheet_GenFun({ id }) {
         });
         yield put(UpdateLoadingSheetSucccess(response.Data));
     } catch (error) {
-        debugger
         CommonConsole(error)
         yield put(LoadingSheetApiErrorAction())
     }
