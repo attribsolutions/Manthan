@@ -28,10 +28,12 @@ function* save_LoadingSheet_GenFun({ config }) {
 }
 
 // loading sheet update button api
-function* Update_LoadingSheet_GenFun({ id }) {
-
+function* Update_LoadingSheet_GenFun({ data }) {
+    
+    const { RowId, path } = data
     try {
-        const response = yield call(Loading_Sheet_Update_API, id);
+        const response = yield call(Loading_Sheet_Update_API, RowId);
+        response.path = path
         response.Data.InvoiceParent.map((index) => {
             index.GrandTotal = amountCommaSeparateFunc(index.GrandTotal)
             index.AmountPaid = index.GrandTotal
@@ -39,7 +41,7 @@ function* Update_LoadingSheet_GenFun({ id }) {
             index.InvoiceDate = date_dmy_func(index.InvoiceDate);
             return index
         });
-        yield put(UpdateLoadingSheetSucccess(response.Data));
+        yield put(UpdateLoadingSheetSucccess(response));
     } catch (error) { yield put(LoadingSheetApiErrorAction()) }
 }
 
