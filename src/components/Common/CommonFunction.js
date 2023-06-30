@@ -138,15 +138,12 @@ export function CurrentTime() {
 
 }
 
-
 export const amountCommaSeparateFunc = (amount) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   return Number(amount).toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 };
-
-
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';

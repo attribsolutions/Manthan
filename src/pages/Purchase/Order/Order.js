@@ -75,7 +75,7 @@ const Order = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const userAdminRole = _cfunc.loginUserAdminRole();
-   
+
 
     const fileds = {
         id: "",
@@ -565,7 +565,7 @@ const Order = (props) => {
 
                                 row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
                                 itemWise_CalculationFunc(row)
-                                document.getElementById(`Rate-${key}`).innerText = row.Rate
+                                document.getElementById(`Rate-${key}`).innerText = _cfunc.amountCommaSeparateFunc(row.Rate)
                             }}
                         >
                         </Select >
@@ -601,7 +601,7 @@ const Order = (props) => {
                     return (
                         <div key={row.id} className="text-end">
 
-                            <span id={`Rate-${k}`}>{row.Rate}</span>
+                            <span id={`Rate-${k}`}>{_cfunc.amountCommaSeparateFunc(row.Rate)}</span>
                         </div>
                     )
                 }
@@ -733,20 +733,13 @@ const Order = (props) => {
 
     function itemWise_CalculationFunc(row) {
         const calculate = orderCalculateFunc(row) //order calculation function 
-
         row["Amount"] = calculate.roundedTotalAmount
 
-        let sum = 0
-        orderItemTable.forEach(ind => {
-            if (!Number(ind.Amount)) {
-                ind.Amount = 0
-            }
-            var amt = Number(ind.Amount)
-            sum = sum + amt
-        });
-        setOrderAmount(sum.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+        let sumOfAmount = orderItemTable.reduce((accumulator, currentObject) => accumulator + Number(currentObject["Amount"]) || 0, 0);
+        setOrderAmount(sumOfAmount.toFixed(2))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(sumOfAmount)}`))
     };
+
 
     const item_AddButtonHandler = () => {
 
@@ -1157,9 +1150,6 @@ const Order = (props) => {
                                                         loading={goBtnloading}
                                                         id={`go-btn${subPageMode}`}
                                                         onClick={(e) => {
-                                                            if (itemSelectDropOptions.length > 0) {
-                                                                goButtonHandler()
-                                                            }
                                                             setSelecedItemWiseOrder(false)
                                                             setorderItemTable(itemSelectDropOptions)
                                                             setItemSelect('')
@@ -1380,7 +1370,7 @@ const Order = (props) => {
 
                     </div>
 
-                   
+
                     <ToolkitProvider
                         keyField={"Item_id"}
                         data={orderItemTable}

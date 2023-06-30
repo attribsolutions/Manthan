@@ -177,32 +177,9 @@ const GRNAdd3 = (props) => {
             dataField: "ItemName",
         },
 
-        {//------------- Quntity  column ----------------------------------
-            text: "Quntity",
-            dataField: "",
-            formatter: (cellContent, index1, keys_,) => {
-                if (!Number(index1.invoiceQuantity)) index1.invoiceQuantity = index1.Quantity
-                return (
-                    <>
-                        <div className="div-1 mb-3" style={{ minWidth: "150px" }}>
-                            <CInput
-                                cpattern={onlyNumberRegx}
-                                placeholder="Enter Actual Received Quantity"
-                                autoComplete="off"
-                                className=" text-end"
-                                defaultValue={index1.Quantity}
-                                onChange={event => index1.Quantity = event.target.value}
-                            />
-
-                        </div>
-
-                        <div className="bottom-div">
-                            <span>Invoice-Qty :</span>
-                            <samp>{index1.Quantity}</samp>
-                        </div>
-                    </>
-                )
-            }
+        {//------------- Quantity  column ----------------------------------
+            text: "Quantity",
+            dataField: "Quantity",
         },
 
         {  //------------- Unit column ----------------------------------
@@ -276,15 +253,14 @@ const GRNAdd3 = (props) => {
             dataField: "",
             formatExtraData: { discrepancyOptions },
             formatter: (cellContent, index1) => {
-                if (!index1.defaultDiscrepancy) {
-                    index1.defaultDiscrepancy = { value: null, label: '' }
-                }
+              
                 return (
                     <>
                         <div className="div-1 mb-1" style={{ minWidth: "150px" }}>
                             <div>
                                 <Select
                                     classNamePrefix="select2-selection"
+                                    placeholder="Select..."
                                     defaultValue={index1.defaultDiscrepancy}
                                     options={discrepancyOptions}
                                     onChange={event => index1.defaultDiscrepancy = event}
@@ -308,16 +284,6 @@ const GRNAdd3 = (props) => {
         },
 
     ];
-
-    const rowStyle2 = (row) => {
-        const style = {};
-        if (row.ItemName === "Total") {
-            style.backgroundColor = '#E6ECF4';
-            style.fontWeight = 'bold';
-            style.hover = 'red';
-        }
-        return style;
-    };
 
     const defaultSorted = [
         {
@@ -350,7 +316,7 @@ const GRNAdd3 = (props) => {
                     Quantity: i.Quantity,// GRN Quantity
                     ActualQuantity: i.invoiceQuantity, //invoice actual quantity 
                     Comment: i.comment,
-                    Reason: i.defaultDiscrepancy.value,//default Discrepancy value
+                    Reason: i.defaultDiscrepancy ? i.defaultDiscrepancy.value : "",//default Discrepancy value
                     MRP: i.defaultMRP.value,
                     MRPValue: i.defaultMRP.label,
                     ReferenceRate: i.Rate,
