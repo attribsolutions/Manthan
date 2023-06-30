@@ -311,12 +311,6 @@ export const reportFooter = (doc, data) => {
 
 
 
-
-
-
-
-
-
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
  of the nature and quantity which it/these purports to be `, 34, 348,)
@@ -355,8 +349,14 @@ export const tableBody = (doc, data) => {
             }
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
+                let TotalBox = 0;
+                data.InvoiceItems.forEach((element, key) => {
+                    if (element.PrimaryUnitName === "Box") {
+                        TotalBox = Number(TotalBox) + Number(element.Quantity)
+                    }
+                })
 
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length})`
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length})  (${TotalBox} Box)`
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
             }

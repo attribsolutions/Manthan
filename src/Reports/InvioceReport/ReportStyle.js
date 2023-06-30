@@ -344,7 +344,13 @@ export const tableBody = (doc, data) => {
 
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length})`
+                let Box = 0;
+                for (let i = 0; i < data.InvoiceItems.length; i++) {
+                    if (data.InvoiceItems[i].PrimaryUnitName === "Box") {
+                        Box++;
+                    }
+                }
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length}) (${Box} Box)`
 
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
