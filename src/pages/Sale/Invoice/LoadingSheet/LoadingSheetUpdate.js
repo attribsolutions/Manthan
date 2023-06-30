@@ -31,9 +31,9 @@ const LoadingSheetUpdate = (props) => {
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
-    const [tableListData, setTableListData] = useState({});
-    const { InvoiceParent = [], PartyDetails = {} } = tableListData
-    
+    const [tableListData, setTableListData] = useState([]);
+    const [partyDetails, setPartyDetails] = useState({});
+
     const {
         userAccess,
         LoadingSheetUpdateList,
@@ -69,7 +69,6 @@ const LoadingSheetUpdate = (props) => {
         }
     })
 
-    const [tableColumns] = DynamicColumnHook({ pageField, lastColumn })
 
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
@@ -79,19 +78,19 @@ const LoadingSheetUpdate = (props) => {
     }, []);
 
     useEffect(() => {
+
         if ((LoadingSheetUpdateList.Status === true) && (LoadingSheetUpdateList.StatusCode === 200)) {
             dispatch(UpdateLoadingSheetSucccess({ Status: false }))
-            setTableListData(LoadingSheetUpdateList.Data)
+            setTableListData(LoadingSheetUpdateList.Data.InvoiceParent)
+            setPartyDetails(LoadingSheetUpdateList.Data.PartyDetails)
         }
-        // else if (LoadingSheetUpdateList.Status === true) {
-        //     dispatch(UpdateLoadingSheetSucccess({ Status: false }))
-        // }
 
     }, [LoadingSheetUpdateList])
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    const [tableColumns] = DynamicColumnHook({ pageField, lastColumn, })
 
     // userAccess useEffect
     useEffect(() => {
@@ -146,7 +145,7 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function rowSelected() {
-        return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
+        return tableListData.map((index) => { return (index.selectCheck) && index.id })
     }
 
     function DateOnchange(e, date) {
@@ -154,7 +153,7 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function MakeReceiptForAll() {
-        const result = InvoiceParent.map((index) => {
+        const result = tableListData.map((index) => {
             if (index.selectCheck === true) {
                 return index.id
             }
@@ -182,6 +181,8 @@ const LoadingSheetUpdate = (props) => {
         }
     }
 
+
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -199,7 +200,7 @@ const LoadingSheetUpdate = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px" }}>Loading NO :</Label>
                                         <Col sm="7">
-                                            <Label className=" mt-2">{PartyDetails.LoadingSheetNo}</Label>
+                                            <Label className=" mt-2">{partyDetails.LoadingSheetNo}</Label>
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -223,7 +224,7 @@ const LoadingSheetUpdate = (props) => {
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"
-                                data={InvoiceParent}
+                                data={tableListData}
                                 columns={tableColumns}
                                 search
                             >
@@ -253,7 +254,7 @@ const LoadingSheetUpdate = (props) => {
 
 
                         {
-                            InvoiceParent.length > 0 ?
+                            tableListData.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} className={"row save1"}>
                                         <button type="button" style={{ width: "120px" }} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>

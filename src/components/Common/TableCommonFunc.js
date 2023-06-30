@@ -86,7 +86,7 @@ const DynamicColumnHook = ({ reducers = "",
         // *******
 
         if (!(PageFieldMaster.length > 0)) {
-            columns.push({ text: "Page Field Is Blank..." });
+            columns.push({ text: "Page Field Is Blank...", dataField: "id", });
         }
 
 
