@@ -10,7 +10,7 @@ import {
 
 const INIT_STATE = {
   postMsg: { Status: false },
-  Data: [],
+  bankTableList: [],
   editMsg: { Status: false },
   updateMessage: { Status: false },
   saveBtnloading: false,
@@ -38,7 +38,7 @@ const BankAssignReducer = (state = INIT_STATE, action) => {
     case PARTY_BANK_FILTER_SUCCESS:
       return {
         ...state,
-        Data: action.payload,
+        bankTableList: action.payload,
       }
 
     case EDIT_BANK_ASSIGN_ID_SUCCESS:
