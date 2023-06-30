@@ -468,7 +468,7 @@ const Invoice = (props) => {
                     </div>
                 );
             },
-            
+
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
@@ -479,9 +479,10 @@ const Invoice = (props) => {
                     innerStockCaculation(index1);
                     totalAmountCalcuationFunc(tableList);
                 }
+                if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
-                    index1.DiscountType === 2 ? discountDropOption[1] : discountDropOption[0];
+                    index1.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
 
                 return (
                     <>
