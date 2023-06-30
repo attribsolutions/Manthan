@@ -266,7 +266,7 @@ const InvoiceConfiguration = (props) => {
 
     const SaveHandler = async (event) => {
 
-        debugger
+        
         const BulkData = []
         event.preventDefault();
         const btnId = event.target.id

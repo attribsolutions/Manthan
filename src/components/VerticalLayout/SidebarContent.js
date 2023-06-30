@@ -48,7 +48,7 @@ const SidebarContent = (props) => {
   }, [roleAccesssForSidbarError])
 
   useEffect(() => {
-    debugger
+ 
     if (RoleAccessUpdateData.length <= 0) {
       let role = loginUserDetails()
       if (role) {

@@ -43,9 +43,9 @@ export const Rows = (data) => {
     let TotalQuantity = 0
     let SrNO = 1
 
-    debugger
+    
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
-        debugger
+        
         const { ItemName, MRP, BatchCode, Box, Outer, Quantity, UnitName, MRPValue, PiecesQuantity, BoxQuantity } = currentItem;
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
@@ -63,7 +63,7 @@ export const Rows = (data) => {
 
     // Object.values(groupedItems).forEach((element, key) => {
     InvoiceItems.forEach((element, key) => {
-        debugger
+        
         const tableitemRow = [
             SrNO++,
             element.ItemName,

@@ -389,7 +389,7 @@ const Invoice = (props) => {
                                     </td>
                                     <td>
                                         <div style={{ width: "50px" }}>
-                                            <span id={`stockItemRate-${index1.id}-${index2.id}`}>{index2.Rate}</span>
+                                            <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
                                         </div>
                                     </td>
                                     <td>
@@ -558,7 +558,9 @@ const Invoice = (props) => {
 
     const totalAmountCalcuationFunc = (tableList = []) => {
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${calcalateGrandTotal.sumOfGrandTotal}`))
+        //toLocaleString is convert comma saprate Amount
+        let count_label = `${"Total Amount"} :${Number(calcalateGrandTotal.sumOfGrandTotal).toLocaleString()}`
+        dispatch(BreadcrumbShowCountlabel(count_label))
     }
 
     function InvoiceDateOnchange(y, v, e) {

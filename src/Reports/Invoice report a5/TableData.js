@@ -67,7 +67,7 @@ export const Rows = (data) => {
     }, {});
 
     Object.values(groupedItems).forEach((element, key) => {
-        debugger
+        
         let  HSNcodes =""
 if (data.SettingData.HSNCodeDigit.Value=== "1") {
      HSNcodes = element.HSNCode.slice(0, 4);
