@@ -114,66 +114,7 @@ const GRNAdd3 = (props) => {
 
         if ((items.Status === true)) {
 
-            //Unused code  **start** $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
             const grnDetails = { ...items.Data }
-            let tableArr = []
-            let initial = ''
-            let roundedTotalAmount = 0
-            let tQty = 0
-            let id = 1
-            grnDetails.OrderItem.forEach((i, k) => {
-
-                i.BatchDate_conv = _cfunc.date_dmy_func(i.BatchDate)
-
-                if (k === 0) {
-                    i.id = id
-                    tableArr.push(i)
-                    initial = i.Item
-                    roundedTotalAmount = Number(i.Amount)
-                    tQty = Number(i.Quantity)
-                }
-                else if ((initial === i.Item) && (k === grnDetails.OrderItem.length - 1)) {
-                    ++id;
-                    i.id = id
-                    roundedTotalAmount = roundedTotalAmount + Number(i.Amount)
-                    tQty = tQty + Number(i.Quantity)
-                    initial = i.Item
-                    tableArr.push(i)
-                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
-                }
-                else if ((k === grnDetails.OrderItem.length - 1)) {
-                    ++id;
-                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
-                    ++id;
-                    i.id = id
-                    roundedTotalAmount = Number(i.Amount)
-                    tQty = Number(i.Quantity)
-                    tableArr.push(i)
-                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
-                }
-                else if (initial === i.Item) {
-                    // i.ItemName=''
-                    ++id;
-                    i.id = id
-                    tableArr.push(i)
-                    roundedTotalAmount = roundedTotalAmount + Number(i.Amount)
-                    tQty = tQty + Number(i.Quantity)
-                    initial = i.Item
-                } else {
-                    ++id;
-                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
-                    ++id;
-                    tableArr.push(i)
-                    roundedTotalAmount = Number(i.Amount)
-                    tQty = Number(i.Quantity)
-                    initial = i.Item
-                }
-
-            })
-            // grnDetails.OrderItem = tableArr
-
-            //Unused code **End** $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
             setGrnItemTableList(grnDetails.OrderItem)
 
@@ -406,8 +347,8 @@ const GRNAdd3 = (props) => {
 
                 const arr = {
                     Item: i.Item,
-                    Quantity: i.invoiceQuantity, //invoice quantity
-                    ActualQuantity: i.Quantity,//GRN actual Quantity === GRN Quantity
+                    Quantity: i.Quantity,// GRN Quantity
+                    ActualQuantity: i.invoiceQuantity, //invoice actual quantity 
                     Comment: i.comment,
                     Reason: i.defaultDiscrepancy.value,//default Discrepancy value
                     MRP: i.defaultMRP.value,
@@ -606,7 +547,7 @@ const GRNAdd3 = (props) => {
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
-                  
+
 
                     {
                         (grnItemTableList.length > 0) ?

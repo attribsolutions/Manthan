@@ -129,7 +129,7 @@ export const Rows = (data) => {
     let GSTPercentage = 0
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
-        debugger
+        
         const { HSNCode, ItemName, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType } = currentItem;
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
