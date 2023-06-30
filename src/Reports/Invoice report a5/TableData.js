@@ -146,14 +146,14 @@ if (data.SettingData.HSNCodeDigit.Value=== "3") {
         if (Gst === 0) { Gst = element.GSTPercentage };
         let aa = { TotalCGst: 0, totalSGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
+      
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
-            returnArr.push(tableitemRow);
-            if (data.SettingData.ShowBatchNoOnInvoicePrint.Value=== "1") {
-                returnArr.push((BatchRow))
-            }
-          
+            returnArr.push(tableitemRow) 
+           
         }
+
+       
         else {
             returnArr.push(totalrow());
             returnArr.push(tableitemRow);
@@ -166,6 +166,9 @@ if (data.SettingData.HSNCodeDigit.Value=== "3") {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
+        if (data.SettingData.ShowBatchNoOnInvoicePrint.Value=== "1") {
+            returnArr.push((BatchRow))
+        }
         
         if (key === Object.keys(groupedItems).length - 1) {
           
@@ -174,7 +177,7 @@ if (data.SettingData.HSNCodeDigit.Value=== "3") {
     })
     return returnArr;
 }
-
+  
 
 export const BilledByRow = (data) => {
     
