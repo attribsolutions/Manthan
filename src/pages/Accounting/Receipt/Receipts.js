@@ -393,8 +393,9 @@ const Receipts = (props) => {
     }
 
     function AmountPaidDistribution(val1) {
-       
-        let value = Number(val1)
+        
+        const withoutCommaSeparator = val1.replace(/,/g, "");
+        let value = Number(withoutCommaSeparator)
 
         let Amount = value
 
