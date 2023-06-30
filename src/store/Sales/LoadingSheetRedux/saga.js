@@ -34,6 +34,7 @@ function* Update_LoadingSheet_GenFun({ id }) {
         const response = yield call(Loading_Sheet_Update_API, id);
         response.Data.InvoiceParent.map((index) => {
             index.GrandTotal = amountCommaSeparateFunc(index.GrandTotal)
+            index.AmountPaid = index.GrandTotal
             index["selectCheck"] = false
             index.InvoiceDate = date_dmy_func(index.InvoiceDate);
             return index
@@ -54,7 +55,7 @@ function* get_LoadingSheet_List_GenFun({ filters }) {
     try {
         const response = yield call(Loading_Sheet_get_API, filters);
         const newList = yield response.Data.map((i) => {
-           
+
             i.TotalAmount = amountCommaSeparateFunc(i.TotalAmount)
             var date = date_dmy_func(i.Date)
             var time = convertTimefunc(i.CreatedOn)
