@@ -571,38 +571,42 @@ const GRNAdd3 = (props) => {
                             </Col>
                         </Row>
                     </div>
+
                     <ToolkitProvider
-                        keyField="id"
-                        id="table_Arrow"
+                        keyField={"Item_id"}
                         defaultSorted={defaultSorted}
                         data={grnItemTableList}
-                        columns={tableColumns}>
+                        columns={tableColumns}
+                        search
+                    >
                         {(toolkitProps,) => (
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive_ table">
+                                        <div className="table-responsive table">
                                             <BootstrapTable
-                                                responsive
-                                                bordered={false}
-                                                striped={false}
-                                                rowStyle={rowStyle2}
+                                                keyField={"Item_id"}
+                                                id="table_Arrow"
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
                                                         Items Not available
                                                     </div>
                                                 }
+                                                onDataSizeChange={(e) => {
+                                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                }}
                                                 {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
                                         </div>
-
                                     </Col>
                                 </Row>
+
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
+                  
 
                     {
                         (grnItemTableList.length > 0) ?
