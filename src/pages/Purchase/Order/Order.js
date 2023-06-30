@@ -944,7 +944,7 @@ const Order = (props) => {
             if (itemArr.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter One Item Quantity",
+                    Message: "Please Select 1 Item Quantity",
                 })
 
                 return
