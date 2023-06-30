@@ -503,48 +503,15 @@ const InvoiceConfiguration = (props) => {
                                                     </FormGroup>
                                                 </Col>
 
-
-
                                             </Row>
                                             <Row>
                                                 <Col sm={4}>
                                                     <FormGroup className="mb-3">
                                                         <Row>
                                                             <Col sm={5} >
-                                                                <Label htmlFor="validationCustom01">  {fieldLabel.AutoEInvoice} </Label>
-                                                            </Col>
-                                                            <Col sm={7} >
-                                                                <Input
-                                                                    style={{ marginLeft: "53px" }}
-                                                                    type="checkbox"
-                                                                    className="p-2"
-                                                                    checked={values.AutoEInvoice.Value === "0" ? false : true}
-                                                                    onChange={(e) => {
-
-                                                                        setState((i) => {
-                                                                            const a = { ...i }
-                                                                            a.values.AutoEInvoice.Value = e.target.checked === false ? "0" : "1";
-
-                                                                            return a
-                                                                        })
-                                                                    }}
-                                                                >
-                                                                </Input>
-
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
-                                                </Col>
-
-
-
-                                                <Col sm={8}>
-                                                    <FormGroup className="mb-3">
-                                                        <Row>
-                                                            <Col sm={3} >
                                                                 <Label htmlFor="validationCustom01">  {fieldLabel.EInvoiceApplicable} </Label>
                                                             </Col>
-                                                            <Col sm={9} >
+                                                            <Col sm={7} >
                                                                 <Input
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
@@ -566,6 +533,41 @@ const InvoiceConfiguration = (props) => {
                                                         </Row>
                                                     </FormGroup>
                                                 </Col>
+
+
+                                                <Col sm={8}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={3} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.AutoEInvoice} </Label>
+                                                            </Col>
+                                                            <Col sm={9} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    disabled={values.EInvoiceApplicable.Value === "1" ? false : true}
+                                                                    checked={values.AutoEInvoice.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            a.values.AutoEInvoice.Value = e.target.checked === false ? "0" : "1";
+
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
+
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Col>
+
+
+
+
                                             </Row>
 
                                             <Row>
