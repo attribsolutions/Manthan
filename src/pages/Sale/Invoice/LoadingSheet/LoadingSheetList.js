@@ -92,7 +92,7 @@ const LoadingSheetList = () => {
 
 
     function downBtnFunc(row, downbtnType) {
-        console.log(downbtnType)
+      
         if (downbtnType === "IsMultipleInvoicePrint") {
             let ReportType = report.invoiceA5
             dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id, Data))
@@ -103,9 +103,9 @@ const LoadingSheetList = () => {
     }
 
     const updateBtnFunc = (list) => {
-
+        debugger
         dispatch(UpdateLoadingSheet(list.id));
-        history.push(url.LOADING_SHEET_LIST_UPDATE, list);
+        history.push(url.LOADING_SHEET_LIST_UPDATE, list);//
 
     };
 
