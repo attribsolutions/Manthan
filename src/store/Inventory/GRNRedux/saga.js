@@ -23,6 +23,7 @@ import {
   UPDATE_GRN_ID_FROM_GRN_PAGE,
 } from "./actionType";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 
 function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
   try {
@@ -60,6 +61,9 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
   try {
     const response = yield call(GRN_get_API, config);
     const newList = yield response.Data.map((i) => {
+      // i.BatchDate = _cfunc.date_ymd_func(i.BatchDate)
+      i.GrandTotal = _cfunc.amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
+
       var date = date_dmy_func(i.GRNDate)
       var time = convertTimefunc(i.CreatedOn)
       i.GRNDate = (`${date} ${time}`)
@@ -75,10 +79,9 @@ function* makeGRN_Mode1_GenFunc({ data }) {
   const { jsonBody, pageMode = '', path = '', grnRef = [], challanNo = '' } = data
   try {
     const response = yield call(GRN_Make_API, jsonBody);
-   
+
     response.Data.OrderItem.forEach(index => {
       index["MRPOps"] = index.MRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
-
       index["defaultMRP"] = index["MRPOps"].reduce((maxObj, obj) => {
         return obj.value > maxObj.value ? obj : maxObj;
       }, { value: -Infinity });

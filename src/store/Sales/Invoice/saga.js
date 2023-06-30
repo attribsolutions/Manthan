@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   CommonConsole,
+  amountCommaSeparateFunc,
   concatDateAndTime,
   loginUserID,
 } from "../../../components/Common/CommonFunction";
@@ -83,6 +84,7 @@ function* InvoiceListGenFunc({ config }) {
     }
 
     const newList = yield response.Data.map((i) => {
+      i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
       if (i.LoadingSheetCreated === true) {
         i["LoadingSheetCreated"] = "LoadingSheet Created"
       } else {
@@ -137,7 +139,7 @@ function* DeleteInvoiceGenFunc({ config }) {
 // GO-Botton SO-invoice Add Page API
 export function invoice_GoButton_dataConversion_Func(response, IsTCSParty, ISCustomerPAN) {
 
-  
+
 
   // Iterate over OrderItemDetails array and perform data conversion
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {

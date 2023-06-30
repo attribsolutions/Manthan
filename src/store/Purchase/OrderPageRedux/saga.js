@@ -9,7 +9,6 @@ import {
   orderApprovalActionSuccess,
   getOrderApprovalDetailActionSucc,
   orderApiErrorAction,
-  getDivisionOrdersSuccess,
   postOrderConfirms_API_Success,
 } from "./actions";
 import {
@@ -38,9 +37,8 @@ import {
   GET_ORDER_APPROVAL_DETAIL,
   POST_ORDER_CONFIRM_API
 } from "./actionType";
-import { concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
-
 
 function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
 
@@ -155,8 +153,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
     
     newList = yield response.Data.map((i) => {
 
-      const numericValue = Number(i.OrderAmount);
-      i.OrderAmount = numericValue.toLocaleString(); //  Order Amount show with commas
+      i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
 
       i["preOrderDate"] = i.OrderDate
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
