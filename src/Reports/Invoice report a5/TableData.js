@@ -177,7 +177,7 @@ if (data.SettingData.HSNCodeDigit.Value=== "3") {
     })
     return returnArr;
 }
-
+  
 
 export const BilledByRow = (data) => {
     
