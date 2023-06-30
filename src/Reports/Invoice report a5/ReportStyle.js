@@ -235,34 +235,32 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(8)
 
     doc.text(`Total Basic:`, 440, 302,)
-    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 302, 'right')
+    doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 302, 'right')
 
     doc.text(`Total Disc:`, 440, 312,)
-    doc.text(` ${TotalDiscount.toFixed(2)}`, 560, 312, 'right')
+    doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 312, 'right')
 
     doc.text(`Total CGST:`, 440, 322)
-    doc.text(`${totalCGST.toFixed(2)}`, 560, 322, 'right')
+    doc.text(`${totalCGST.toFixed(2)}`, 567, 322, 'right')
 
     doc.text(`Total SGST:`, 440, 332,)
-    doc.text(`${totalSGST.toFixed(2)}`, 560, 332, 'right')
+    doc.text(`${totalSGST.toFixed(2)}`, 567, 332, 'right')
 
     doc.text(`Total GST:`, 440, 342,)
-    doc.text(` ${TotalGST.toFixed(2)}`, 560, 342, 'right')
+    doc.text(` ${TotalGST.toFixed(2)}`, 567, 342, 'right')
 
     doc.text(`Round Off:`, 440, 352,)
-    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 560, 352, 'right')
+    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 352, 'right')
 
-    doc.text(`Total TCS:`, 440, 362,)
-    doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 560, 362, 'right')
-
-
+    doc.text(`TCS Amount:`, 440, 362,)
+    doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 567, 362, 'right')
 
     doc.setFont(undefined, 'Normal')
-    doc.setFontSize(11)
+    doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`Amount :`, 439, 375,)
+    doc.text(`Total Amount :`, 439, 375,)
     const Total = numberWithCommas(Number(data.GrandTotal).toFixed(2))
-    doc.text(`${Total}`, 560, 376, 'right')
+    doc.text(`${Total}`, 567, 376, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -276,16 +274,54 @@ export const reportFooter = (doc, data) => {
     doc.text(`${data.CustomerName} `, 140, 811,)
     doc.setFontSize(9)
 
+    if (data.BankData.length > 0) {
+        let BankData = data.BankData[0]
+        doc.setFont(undefined, 'bold')
+
+        doc.text(`A/C No:`, 34, 318,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${BankData.AccountNo}`, 70, 318,)
+
+        doc.setFont(undefined, 'bold')
+
+        doc.text(`IFSC Code:`, 150, 318,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${BankData.IFSC}`, 195, 318,)
+
+        doc.setFont(undefined, 'bold')
+        doc.text(`Branch:`, 270, 318,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${BankData.BranchName}`, 305, 318,)
+
+        doc.setFont(undefined, 'bold')
+        doc.text(`Bank Name:`, 34, 331,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${BankData.BankName}`, 90, 331,)
+
+    } else {
+        doc.setFont(undefined, 'bold')
+        doc.text(`Bank Details Not Avaliable`, 34, 328,)
+        doc.setFont(undefined, 'Normal')
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-     of the nature and quantity which it/these purports to be `, 34, 348,)
-    doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
-    doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
-
+ of the nature and quantity which it/these purports to be `, 34, 348,)
     doc.text(`Signature `, 280, 372,)
     doc.text(`Prepared by :${data.PartyName} `, 35, 372,)
-
-    doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
 
     doc.setFont(undefined, 'bold')
     doc.text(`Rupees:`, 33, 305,)

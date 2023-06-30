@@ -237,36 +237,36 @@ export const reportFooter = (doc, data) => {
 
 
     doc.text(`Total Basic:`, 440, 738,)
-    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 738, 'right')
+    doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 738, 'right')
 
     doc.text(`Total Disc:`, 440, 748,)
-    doc.text(` ${TotalDiscount.toFixed(2)}`, 560, 748, 'right')
+    doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 748, 'right')
 
     doc.text(`Total CGST:`, 440, 758)
-    doc.text(`${totalCGST.toFixed(2)}`, 560, 758, 'right')
+    doc.text(`${totalCGST.toFixed(2)}`, 567, 758, 'right')
 
     doc.text(`Total SGST:`, 440, 768,)
-    doc.text(`${totalSGST.toFixed(2)}`, 560, 768, 'right')
+    doc.text(`${totalSGST.toFixed(2)}`, 567, 768, 'right')
 
     doc.text(`Total GST:`, 440, 778,)
-    doc.text(` ${TotalGST.toFixed(2)}`, 560, 778, 'right')
+    doc.text(` ${TotalGST.toFixed(2)}`, 567, 778, 'right')
 
     doc.text(`Round Off:`, 440, 788,)
-    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 560, 788, 'right')
+    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 788, 'right')
 
-    doc.text(`Total TCS:`, 440, 798,)
-    doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 560, 798, 'right')
+    doc.text(`TCS Amount:`, 440, 798,)
+    doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 567, 798, 'right')
 
 
 
     doc.setFont(undefined, 'Normal')
-    doc.setFontSize(12)
+    doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`Amount :`, 440, 812,)
+    doc.text(`Total Amount :`, 440, 812,)
     const GrandTotal = Number(data.GrandTotal)
 
     const Total = numberWithCommas((GrandTotal).toFixed(2))
-    doc.text(`${Total}`, 560, 812, 'right')
+    doc.text(`${Total}`, 567, 812, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -280,8 +280,36 @@ export const reportFooter = (doc, data) => {
     doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
     doc.setFontSize(8)
 
-    doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 755,)
-    doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 765,)
+    debugger
+    if (data.BankData.length > 0) {
+        let BankData = data.BankData[0]
+        doc.setFont(undefined, 'bold')
+
+        doc.text(`A/C No:`, 34, 755,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${BankData.AccountNo}`, 70, 755,)
+
+        doc.setFont(undefined, 'bold')
+
+        doc.text(`IFSC Code:`, 130, 755,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${BankData.IFSC}`, 175, 755,)
+
+        doc.setFont(undefined, 'bold')
+        doc.text(`Branch:`, 260, 755,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${BankData.BranchName}`, 290, 755,)
+
+        doc.setFont(undefined, 'bold')
+        doc.text(`Bank Name:`, 34, 768,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${BankData.BankName}`, 90, 768,)
+
+    } else {
+        doc.setFont(undefined, 'bold')
+        doc.text(`Bank Details Not Avaliable`, 34, 761,)
+        doc.setFont(undefined, 'Normal')
+    }
     doc.setFont(undefined, 'bold')
     doc.text(`Rupees:`, 33, 740,)
     doc.addFont("Arial", 'Normal')
