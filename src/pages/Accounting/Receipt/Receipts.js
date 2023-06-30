@@ -194,7 +194,7 @@ const Receipts = (props) => {
                     i.values.BankName = { value: Bank, label: BankName }
                     i.values.Description = Description
                     i.values.DocumentNo = DocumentNo
-                    i.values.AmountPaid = AmountPaid
+                    i.values.AmountPaid = AmountPaid.replace(/,/g, "");
 
                     i.hasValid.Customer.valid = true;
                     i.hasValid.AmountPaid.valid = true;
@@ -393,7 +393,7 @@ const Receipts = (props) => {
     }
 
     function AmountPaidDistribution(val1) {
-
+       
         let value = Number(val1)
 
         let Amount = value
