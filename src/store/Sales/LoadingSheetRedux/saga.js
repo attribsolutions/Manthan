@@ -32,7 +32,7 @@ function* Update_LoadingSheet_GenFun({ id }) {
     try {
         debugger
         const response = yield call(Loading_Sheet_Update_API, id);
-        response.Data.InvoiceParent.map((index) => {
+        response.Data.InvoiceParent = response.Data.InvoiceParent.map((index) => {
             index.GrandTotal = amountCommaSeparateFunc(index.GrandTotal)
             index.AmountPaid = index.GrandTotal
             index["selectCheck"] = false
