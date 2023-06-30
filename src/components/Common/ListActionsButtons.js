@@ -1,7 +1,7 @@
 import { Button, Spinner } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { btnIsDissablefunc, date_dmy_func, loginUserID } from "./CommonFunction"
+import { btnIsDissablefunc, date_dmy_func, loginSystemSetting, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 import * as url from "../../routes/route_url";
 import { Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
@@ -21,6 +21,8 @@ const dissableStyle = {
     cursor: 'not-allowed',
     backgroundColor: "#adb5bd",
 };
+
+const systemSetting = loginSystemSetting();
 
 export const listPageActionsButtonFunc = (props) => {
     const {
@@ -589,6 +591,11 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
 }
 
 export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
+
+    if (systemSetting.EInvoiceApplicable === "0") {
+        return null; // Return null if the column should be hidden
+    }
+
     const { listBtnLoading, } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
@@ -611,10 +618,9 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
         }
     };
 
-
     return ({
         text: "E-Invoice",
-        formatExtraData: { listBtnLoading: listBtnLoading, },
+        formatExtraData: { listBtnLoading: listBtnLoading },
         formatter: (__cell, rowData, __key, formatExtra) => {
             let { listBtnLoading } = formatExtra;
             return (
@@ -679,33 +685,6 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
                             <i className="mdi mdi-cancel font-size-14"></i>
                         </Button>
                     }
-
-                    {/* {((rowData.InvoiceUploads.length === 0) || !(rowData.InvoiceUploads[0].EInvoicePdf === null)) ?
-                        <Button
-                            type="button"
-                            id={`btn-Print-E-Invoice-${rowData.id}`}
-                            className={printInvoiceBtnCss}
-                            disabled={listBtnLoading}
-                            title={`Print E-Invoice`}
-                            onClick={() => Print_InvoiceHander(rowData)}
-                        >
-                            {(listBtnLoading === `btn-Print-E-Invoice-${rowData.id}`) ?
-                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                : <i className="bx bx-printer font-size-14"></i>
-                            }
-
-                        </Button> :
-                        (rowData.InvoiceUploads[0].EInvoicePdf === null) &&
-                        <Button
-                            type="button"
-                            title={'Access Not Allow'}
-                            className={dissableBtnCss}
-                            disabled={true}
-                            style={dissableStyle}
-                        >
-                            <i className="bx bx-printer font-size-14"></i>
-                        </Button>
-                    } */}
 
                     {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EInvoicePdf === null)) ?
                         <Button

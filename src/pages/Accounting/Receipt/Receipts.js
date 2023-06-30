@@ -181,7 +181,7 @@ const Receipts = (props) => {
             }
 
             if (hasEditVal) {
-
+                
                 const { id, CustomerID, Customer,
                     Description, ReceiptMode, ReceiptModeName,
                     Bank, BankName, AmountPaid, DocumentNo, } = hasEditVal
@@ -492,7 +492,7 @@ const Receipts = (props) => {
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
-        debugger
+        
         if ((values.AmountPaid === '')
             || (values.AmountPaid === "NaN")
             || (values.AmountPaid === undefined)
