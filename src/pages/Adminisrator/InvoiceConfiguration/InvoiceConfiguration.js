@@ -516,6 +516,7 @@ const InvoiceConfiguration = (props) => {
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
                                                                     className="p-2"
+                                                                    disabled={values.AutoEInvoice.Value === "1" ? true : false}
                                                                     checked={values.EInvoiceApplicable.Value === "0" ? false : true}
                                                                     onChange={(e) => {
 
