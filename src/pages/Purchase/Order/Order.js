@@ -450,6 +450,7 @@ const Order = (props) => {
         {
             dataField: "StockQuantity",
             text: "Stock Quantity",
+            align: () => "right",
             sort: true,
 
         },

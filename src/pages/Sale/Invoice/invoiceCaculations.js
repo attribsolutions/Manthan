@@ -170,7 +170,7 @@ export function stockDistributeFunc(index1) {
     } catch (e) { CommonConsole('stockDistributeFunc ', e) };
 
     try {
-        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = tA4;
+        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(tA4);
     } catch (e) { CommonConsole('stockDistributeFunc', e) };
 
 };
@@ -264,7 +264,7 @@ export const innerStockCaculation = (index1) => {
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
     try {
-        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = index1.roundedTotalAmount;
+        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(index1.roundedTotalAmount);
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
 }

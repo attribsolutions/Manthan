@@ -548,7 +548,9 @@ const Invoice = (props) => {
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
-                            <samp id={`roundedTotalAmount-${index1.id}`}>{index1.roundedTotalAmount}</samp>
+                            <samp id={`roundedTotalAmount-${index1.id}`}>
+                                {_cfunc.amountCommaSeparateFunc(index1.roundedTotalAmount)}
+                            </samp>
                         </div>
                     </>
                 );
