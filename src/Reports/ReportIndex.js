@@ -6,6 +6,7 @@ import VanLoadingSheet from "./Van Loading Party Wise InvoiceList/Page";
 import InvioceReporta5 from "./Invoice report a5/Page";
 import Receipts from "./Receipts/Page";
 import CreditNote from "./CRDRNote Report/Page";
+import PartyLedgerReport from "./PratyLedger/Page";
 
 
 
@@ -19,10 +20,13 @@ export const VanLoadingPartyWiseInvoice = "VanLoadingPartyWiseInvoice"
 export const invoiceA5 = "invoiceA5"
 export const Receipt = "Receipt"
 export const Credit = "Credit"
+export const PartyLedger = "PartyLedger"
+
+
 
 
 const generateReport = (resp) => {
-    
+
     switch (resp.ReportType) {
         case order1:
             ordeRreport(resp.Data)
@@ -51,6 +55,10 @@ const generateReport = (resp) => {
         case Credit:
             CreditNote(resp.Data)
             break;
+        case PartyLedger:
+            PartyLedgerReport(resp.Data)
+            break;
+
 
 
         default:
