@@ -19,17 +19,16 @@ function pageFooter(doc, data) {
     style.reportFooter(doc, data);
 }
 
-const StockReport = () => {
+const PartyLedgerReport = () => {
     const data = Data
-    var doc = new jsPDF('l', 'pt', 'a4');
+    var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
     doc.setProperties({
-        title: "Report"
+        title: "PartyLedgerReport Report"
     });
-    const options = { filename: "Receipt Report", }
-    doc.output('dataurlnewwindow', options);
+    doc.output('dataurlnewwindow');
     return (<></>);
 }
-export default StockReport;
+export default PartyLedgerReport;
