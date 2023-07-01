@@ -290,7 +290,8 @@ export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
   gstin2 = String(gstin2) || ""
   let stateCode1 = gstin1.substring(0, 2);
   let stateCode2 = gstin2.substring(0, 2);
-  return(!stateCode1 === stateCode2 && !gstin1 === "" && !gstin2 === "");
+  debugger
+  return (!(stateCode1 === stateCode2) && !(gstin1 === "") && !(gstin2 === ""));
 }
 
 export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true }) {
