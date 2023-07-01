@@ -163,12 +163,13 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
+        debugger
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
-        dispatch(_act.GetVenderSupplierCustomer(subPageMode))
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         goButtonHandler("event", IBType)
         dispatch(priceListByCompay_Action());
         return () => {
