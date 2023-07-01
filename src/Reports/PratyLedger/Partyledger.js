@@ -40,6 +40,7 @@ const PartyLedger = (props) => {
 
     const reducers = useSelector(
         (state) => ({
+            pdfdata: state.PdfReportReducers.pdfdata,
             listBtnLoading: state.OrderSummaryReducer.listBtnLoading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -47,7 +48,7 @@ const PartyLedger = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, orderSummaryGobtn, SSDD_List, supplier } = reducers;
+    const { userAccess, orderSummaryGobtn, SSDD_List, supplier, pdfdata } = reducers;
     // const { Data = [] } = orderSummaryGobtn;
     const values = { ...state.values }
 
@@ -76,16 +77,16 @@ const PartyLedger = (props) => {
 
     }, [])
 
-    // useEffect(() => {
-    //     if ((orderSummaryGobtn.Status === true) && (orderSummaryGobtn.StatusCode === 204)) {
-    //         dispatch(postOrderSummary_API_Success([]))
-    //         customAlert({
-    //             Type: 3,
-    //             Message: orderSummaryGobtn.Message,
-    //         })
-    //         return
-    //     }
-    // }, [orderSummaryGobtn])
+    useEffect(() => {
+        debugger
+        if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
+            customAlert({
+                Type: 3,
+                Message: pdfdata.Message,
+            })
+            return
+        }
+    }, [pdfdata])
 
 
     const CustomerOptions = supplier.map((i) => ({
