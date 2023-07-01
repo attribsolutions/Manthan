@@ -180,6 +180,7 @@ const GRNAdd3 = (props) => {
         {//------------- Quantity  column ----------------------------------
             text: "Quantity",
             dataField: "Quantity",
+            align: () => 'right',
         },
 
         {  //------------- Unit column ----------------------------------
@@ -226,7 +227,8 @@ const GRNAdd3 = (props) => {
         {//------------- ItemName column ----------------------------------
             text: "Amount",
             dataField: "Amount",
-            align: () => ('right')
+            align: () => 'right',
+            formatter: (cellContent) => <>{_cfunc.amountCommaSeparateFunc(cellContent)}</>,
         },
 
         {//------------- Batch Code column ----------------------------------
@@ -253,7 +255,7 @@ const GRNAdd3 = (props) => {
             dataField: "",
             formatExtraData: { discrepancyOptions },
             formatter: (cellContent, index1) => {
-              
+
                 return (
                     <>
                         <div className="div-1 mb-1" style={{ minWidth: "150px" }}>
