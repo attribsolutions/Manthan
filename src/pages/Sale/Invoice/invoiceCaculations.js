@@ -68,7 +68,7 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
     // Calculate the total amount after discount and GST
     const roundedGstAmount = CGST_Amount + SGST_Amount;
     let total = roundedGstAmount + discountBaseAmt;
-
+debugger
     if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
         let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)
         if (isSameSate) {// iF isSameSate = true ===not same GSTIn
