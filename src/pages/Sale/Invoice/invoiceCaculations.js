@@ -1,4 +1,4 @@
-import { amountCommaSeparateFunc, CommonConsole, groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
+import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
 
 
 export function bulkSearch(text, data, columns) {
@@ -41,7 +41,7 @@ export function bulkSearch(text, data, columns) {
 }
 
 
-export const invoice_discountCalculate_Func = (row, index1) => {
+export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 
     // Extract values from the input parameters
     const rate = Number(row.Rate) || 0;
@@ -61,13 +61,22 @@ export const invoice_discountCalculate_Func = (row, index1) => {
 
     // Calculate the GST amount
     let gstAmt = discountBaseAmt * (gstPercentage / 100);
-    const CGST_Amount = Number((gstAmt / 2).toFixed(2));
-    const SGST_Amount = CGST_Amount;
-    const roundedGstAmount = CGST_Amount + SGST_Amount;
+    let CGST_Amount = Number((gstAmt / 2).toFixed(2));
+    let SGST_Amount = CGST_Amount;
+    let IGST_Amount = 0 //initial GST Amount 
 
     // Calculate the total amount after discount and GST
+    const roundedGstAmount = CGST_Amount + SGST_Amount;
     let total = roundedGstAmount + discountBaseAmt;
 
+    if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
+        let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)
+        if (isSameSate) {// iF isSameSate = true ===not same GSTIn
+            CGST_Amount = 0;
+            SGST_Amount = 0;
+            IGST_Amount = Number(roundedGstAmount.toFixed(2))
+        }
+    }
     // Return the calculated values as an object
     return {
         discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
@@ -76,6 +85,7 @@ export const invoice_discountCalculate_Func = (row, index1) => {
         roundedTotalAmount: Number(total.toFixed(2)),
         CGST_Amount,
         SGST_Amount,
+        IGST_Amount
     };
 };
 
@@ -110,6 +120,8 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
         TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2) // Round off or format the TCS Amount
     };
 };
+
+
 
 
 export function stockDistributeFunc(index1) {

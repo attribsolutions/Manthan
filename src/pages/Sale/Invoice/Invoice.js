@@ -605,6 +605,9 @@ const Invoice = (props) => {
         const validMsg = []
         const invoiceItems = []
 
+        // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
+        let IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
+
         orderItemDetails.forEach((index) => {
             if (index.StockInValid) {
                 validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
@@ -615,7 +618,8 @@ const Invoice = (props) => {
 
                 if (ele.Qty > 0) {
                     //**calculate Amount ,Discount Amount based on Discound type */
-                    const calculate = invoice_discountCalculate_Func(ele, index)
+
+                    const calculate = invoice_discountCalculate_Func(ele, index, IsComparGstIn)
 
                     invoiceItems.push({
                         Item: index.Item,
@@ -635,11 +639,11 @@ const Invoice = (props) => {
                         GSTPercentage: ele.GST,// changes
                         CGST: Number(calculate.CGST_Amount).toFixed(2),
                         SGST: Number(calculate.SGST_Amount).toFixed(2),
-                        IGST: 0,
+                        IGST: Number(calculate.IGST_Amount).toFixed(2),
                         GSTPercentage: ele.GST,
                         CGSTPercentage: (ele.GST / 2),
                         SGSTPercentage: (ele.GST / 2),
-                        IGSTPercentage: 0,
+                        IGSTPercentage: ele.GST,
                         Amount: Number(calculate.roundedTotalAmount).toFixed(2),
                         TaxType: 'GST',
                         DiscountType: index.DiscountType,
@@ -682,7 +686,7 @@ const Invoice = (props) => {
         });
 
         const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            CustomerGSTTin: '41',
+            CustomerGSTTin: values.Customer.GSTIN,
             GrandTotal: calcalateGrandTotal.sumOfGrandTotal,
             RoundOffAmount: calcalateGrandTotal.RoundOffAmount,
             TCSAmount: calcalateGrandTotal.TCS_Amount,
