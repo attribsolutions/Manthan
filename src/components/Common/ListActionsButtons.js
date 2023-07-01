@@ -22,8 +22,6 @@ const dissableStyle = {
     backgroundColor: "#adb5bd",
 };
 
-const systemSetting = loginSystemSetting();
-
 export const listPageActionsButtonFunc = (props) => {
     const {
         dispatch,
@@ -592,7 +590,9 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
 
 export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
 
-    if (systemSetting.EInvoiceApplicable === "0") {
+    const systemSetting = loginSystemSetting();
+    
+    if (!(systemSetting.EInvoiceApplicable === "1")) {
         return null; // Return null if the column should be hidden
     }
 

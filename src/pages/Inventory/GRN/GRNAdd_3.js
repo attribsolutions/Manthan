@@ -114,66 +114,7 @@ const GRNAdd3 = (props) => {
 
         if ((items.Status === true)) {
 
-            //Unused code  **start** $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
             const grnDetails = { ...items.Data }
-            let tableArr = []
-            let initial = ''
-            let roundedTotalAmount = 0
-            let tQty = 0
-            let id = 1
-            grnDetails.OrderItem.forEach((i, k) => {
-
-                i.BatchDate_conv = _cfunc.date_dmy_func(i.BatchDate)
-
-                if (k === 0) {
-                    i.id = id
-                    tableArr.push(i)
-                    initial = i.Item
-                    roundedTotalAmount = Number(i.Amount)
-                    tQty = Number(i.Quantity)
-                }
-                else if ((initial === i.Item) && (k === grnDetails.OrderItem.length - 1)) {
-                    ++id;
-                    i.id = id
-                    roundedTotalAmount = roundedTotalAmount + Number(i.Amount)
-                    tQty = tQty + Number(i.Quantity)
-                    initial = i.Item
-                    tableArr.push(i)
-                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
-                }
-                else if ((k === grnDetails.OrderItem.length - 1)) {
-                    ++id;
-                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
-                    ++id;
-                    i.id = id
-                    roundedTotalAmount = Number(i.Amount)
-                    tQty = Number(i.Quantity)
-                    tableArr.push(i)
-                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
-                }
-                else if (initial === i.Item) {
-                    // i.ItemName=''
-                    ++id;
-                    i.id = id
-                    tableArr.push(i)
-                    roundedTotalAmount = roundedTotalAmount + Number(i.Amount)
-                    tQty = tQty + Number(i.Quantity)
-                    initial = i.Item
-                } else {
-                    ++id;
-                    tableArr.push({ id, ItemName: "Total", Amount: roundedTotalAmount.toFixed(3), Quantity: tQty.toFixed(3) })
-                    ++id;
-                    tableArr.push(i)
-                    roundedTotalAmount = Number(i.Amount)
-                    tQty = Number(i.Quantity)
-                    initial = i.Item
-                }
-
-            })
-            // grnDetails.OrderItem = tableArr
-
-            //Unused code **End** $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
             setGrnItemTableList(grnDetails.OrderItem)
 
@@ -236,32 +177,10 @@ const GRNAdd3 = (props) => {
             dataField: "ItemName",
         },
 
-        {//------------- Quntity  column ----------------------------------
-            text: "Quntity",
-            dataField: "",
-            formatter: (cellContent, index1, keys_,) => {
-                if (!Number(index1.invoiceQuantity)) index1.invoiceQuantity = index1.Quantity
-                return (
-                    <>
-                        <div className="div-1 mb-3" style={{ minWidth: "150px" }}>
-                            <CInput
-                                cpattern={onlyNumberRegx}
-                                placeholder="Enter Actual Received Quantity"
-                                autoComplete="off"
-                                className=" text-end"
-                                defaultValue={index1.Quantity}
-                                onChange={event => index1.Quantity = event.target.value}
-                            />
-
-                        </div>
-
-                        <div className="bottom-div">
-                            <span>Invoice-Qty :</span>
-                            <samp>{index1.Quantity}</samp>
-                        </div>
-                    </>
-                )
-            }
+        {//------------- Quantity  column ----------------------------------
+            text: "Quantity",
+            dataField: "Quantity",
+            align: () => 'right',
         },
 
         {  //------------- Unit column ----------------------------------
@@ -308,7 +227,8 @@ const GRNAdd3 = (props) => {
         {//------------- ItemName column ----------------------------------
             text: "Amount",
             dataField: "Amount",
-            align: () => ('right')
+            align: () => 'right',
+            formatter: (cellContent) => <>{_cfunc.amountCommaSeparateFunc(cellContent)}</>,
         },
 
         {//------------- Batch Code column ----------------------------------
@@ -335,15 +255,14 @@ const GRNAdd3 = (props) => {
             dataField: "",
             formatExtraData: { discrepancyOptions },
             formatter: (cellContent, index1) => {
-                if (!index1.defaultDiscrepancy) {
-                    index1.defaultDiscrepancy = { value: null, label: '' }
-                }
+
                 return (
                     <>
                         <div className="div-1 mb-1" style={{ minWidth: "150px" }}>
                             <div>
                                 <Select
                                     classNamePrefix="select2-selection"
+                                    placeholder="Select..."
                                     defaultValue={index1.defaultDiscrepancy}
                                     options={discrepancyOptions}
                                     onChange={event => index1.defaultDiscrepancy = event}
@@ -367,16 +286,6 @@ const GRNAdd3 = (props) => {
         },
 
     ];
-
-    const rowStyle2 = (row) => {
-        const style = {};
-        if (row.ItemName === "Total") {
-            style.backgroundColor = '#E6ECF4';
-            style.fontWeight = 'bold';
-            style.hover = 'red';
-        }
-        return style;
-    };
 
     const defaultSorted = [
         {
@@ -406,10 +315,10 @@ const GRNAdd3 = (props) => {
 
                 const arr = {
                     Item: i.Item,
-                    Quantity: i.invoiceQuantity, //invoice quantity
-                    ActualQuantity: i.Quantity,//GRN actual Quantity === GRN Quantity
+                    Quantity: i.Quantity,// GRN Quantity
+                    ActualQuantity: i.invoiceQuantity, //invoice actual quantity 
                     Comment: i.comment,
-                    Reason: i.defaultDiscrepancy.value,//default Discrepancy value
+                    Reason: i.defaultDiscrepancy ? i.defaultDiscrepancy.value : "",//default Discrepancy value
                     MRP: i.defaultMRP.value,
                     MRPValue: i.defaultMRP.label,
                     ReferenceRate: i.Rate,
@@ -606,7 +515,7 @@ const GRNAdd3 = (props) => {
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
-                  
+
 
                     {
                         (grnItemTableList.length > 0) ?

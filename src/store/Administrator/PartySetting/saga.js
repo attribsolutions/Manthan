@@ -17,7 +17,7 @@ function* Save_Method_ForPartySetting_GenFun({ config }) {
 function* PartySetting_GenFunc(config) {
 
     try {
-        debugger
+        
         const response = yield call(PartySettingApi, config.Party_id, config.Comapny_id);
         const singleObject = {};
         const SystemSetting = {};

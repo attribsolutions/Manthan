@@ -1,4 +1,4 @@
-import { CommonConsole, groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
+import { amountCommaSeparateFunc, CommonConsole, groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
 
 
 export function bulkSearch(text, data, columns) {
@@ -81,7 +81,7 @@ export const invoice_discountCalculate_Func = (row, index1) => {
 
 
 export const settingBaseRoundOffAmountFunc = (tableList = []) => {
-  
+
     // Get the system settings
     const systemSetting = loginSystemSetting();
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
@@ -170,7 +170,7 @@ export function stockDistributeFunc(index1) {
     } catch (e) { CommonConsole('stockDistributeFunc ', e) };
 
     try {
-        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = tA4;
+        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(tA4);
     } catch (e) { CommonConsole('stockDistributeFunc', e) };
 
 };
@@ -209,7 +209,7 @@ export function orderQtyUnit_SelectOnchange(event, index1) {
         index2.Rate = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
         index2.ActualQuantity = (index2.BaseUnitQuantity / event.BaseUnitQuantity).toFixed(3);
 
-        document.getElementById(`stockItemRate-${index1.id}-${index2.id}`).innerText = index2.Rate;
+        document.getElementById(`stockItemRate-${index1.id}-${index2.id}`).innerText = amountCommaSeparateFunc(index2.Rate);
         document.getElementById(`ActualQuantity-${index1.id}-${index2.id}`).innerText = index2.ActualQuantity;
 
     })
@@ -264,7 +264,7 @@ export const innerStockCaculation = (index1) => {
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
     try {
-        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = index1.roundedTotalAmount;
+        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(index1.roundedTotalAmount);
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
 }
