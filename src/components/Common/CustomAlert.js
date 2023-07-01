@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Modal, UncontrolledAlert, } from "reactstrap";
@@ -23,6 +23,13 @@ const CustomAlert = () => {
     permissionValueReturn
   } = AlertData;
 
+  const buttonRef = useRef(null);
+
+  useEffect(() => {
+    if (buttonRef.current) {
+      buttonRef.current.focus();
+    }
+  }, []);
   //  Alert Modal Show and Hide Controller
   function tog_standard() {
     dispatch(AlertShow({ Status: false }));
@@ -85,6 +92,8 @@ const CustomAlert = () => {
     PermissionFunction(false)
     tog_standard();
   }
+
+
   return (
     <React.Fragment>
       <Modal
@@ -99,6 +108,7 @@ const CustomAlert = () => {
             <button
               type="button"
               className="btn btn-primary "
+             ref={buttonRef}
               onClick={() => {
                 Success_Ok_Button_Handeler()
               }}
@@ -115,6 +125,7 @@ const CustomAlert = () => {
             <button
               type="button"
               className="btn btn-primary "
+              ref={buttonRef}
               onClick={() => {
                 Ok_handeler()
               }}
@@ -130,6 +141,7 @@ const CustomAlert = () => {
             <button
               type="button"
               className="btn btn-primary "
+              ref={buttonRef}
               onClick={() => {
                 Ok_handeler()
               }}
@@ -145,6 +157,7 @@ const CustomAlert = () => {
             <button
               type="button"
               className="btn btn-primary "
+              ref={buttonRef}
               onClick={() => {
                 Ok_handeler()
               }}
@@ -170,7 +183,7 @@ const CustomAlert = () => {
               </button>
               <button
                 type="button"
-
+                ref={buttonRef}
                 className="btn btn-success w-xm waves-effect waves-light"
                 onClick={() => {
                   cancel_handeler()
@@ -198,6 +211,7 @@ const CustomAlert = () => {
               </button>
               <button
                 type="button"
+                ref={buttonRef}
                 className="btn btn-danger w-xm waves-effect waves-light"
                 onClick={() => {
                   cancel_handeler()
@@ -225,7 +239,7 @@ const CustomAlert = () => {
               </button>
               <button
                 type="button"
-
+                ref={buttonRef}
                 className="btn btn-success w-xm waves-effect waves-light"
                 onClick={() => {
                   cancel_handeler7()
