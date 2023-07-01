@@ -354,101 +354,51 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
   // }
 }
 
-export async function CheckAPIResponse({
+export async function CheckAPIResponse({ method, url, response = {}, body,  error }) {
 
-  method,
-  url,
-  response = {},
-  body,
-  btnId,
-  error,
-}) {
-  if (btnId) {
+  const { data = {} } = response;
+  const statusCode = data.StatusCode;
 
-    // await new Promise(r => setTimeout(r, 0));
-    // btnIsDissablefunc({ btnId, state: false });
-  }
+  const successCodes = [200, 204, 100];
+  const rejectionCodes = [226, 400, 406, 500];
 
-  const { data = "", code } = response;
-  const con1 = data.StatusCode === 200;
-  const con2 = data.StatusCode === 204; //data nao avalable
-  const con3 = data.StatusCode === 226; //reject used an another transaction
-  const con4 = data.StatusCode === 400; //reject  exception error
-  const con5 = data.StatusCode === 406; //reject
-  const con6 = method === "post" || method === "put" || method === "postForget" //for console body
-  const con7 = data.StatusCode === 100;
-  const con8 = data.StatusCode === 500;  //Internal server Error
+  if (error !== undefined) {
+    const tokenXp = error.response?.data.code === "token_not_valid";
 
-
-  if (!(error === undefined)) {
-    const { data = "", response } = error;
-    const tokenXp = response.data.code === "token_not_valid";
-
-
-
-    // **********************************************************************************
-    if (con6) {                             // print post and Put method body
-      console.log(`${url}***=> ${method} Body =>`, body);
+    if (method === "post" || method === "put" || method === "postForget") {
+      CommonConsole(`${url}***=> ${method} Body =>`, body);
     }
 
     if (tokenXp) {
-
-      //  await customAlert({
-      //     Type: 3,
-      //     Message: "Token Exprire"
-      //   })
-
-      history.push({ pathname: "/logout" })
-      window.location.reload(true)
-
-      return
+      history.push({ pathname: "/logout" });
+      window.location.reload(true);
+      return;
     }
-    console.log(`${url}***${method} apiCall response:=>`, error);
-    customAlert({
-      Type: 2,
-      Message: `${url}:This API ${method} Method Execution Error`,
-    });
+
+    CommonConsole(`${url}***${method} apiCall response:=>`, error);
+    customAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` });
 
     return Promise.reject(error);
-    // }
   }
 
-  if (con6) {// print post and Put method body
-    console.log(`${url}***=> ${method} Body =>`, body);
+  if (method === "post" || method === "put" || method === "postForget") {
+    CommonConsole(`${url}***=> ${method} Body =>`, body);
   }
-  // **********************************************************************************
 
-  if (con1 || con7) {
-    console.log(`${url}***${method} apiCall response:=>`, response.data);
-    return response.data;
-  } else if (con2) {
-    console.log(`${url}***${method} apiCall response:=>`, response.data);
+  if (successCodes.includes(statusCode)) {
+    CommonConsole(`${url}***${method} apiCall response:=>`, response.data);
     return response.data;
   }
-  if (con3) {
-    console.log(`${url}***${method} apiCall response:=>`, response.data);
-    await customAlert({
-      Type: 3,
-      Message: JSON.stringify(response.data.Message),
-    });
-    return Promise.reject(response.data);
-  } else if (con4) {
-    console.log(`${url}***${method} apiCall response:=>`, response.data);
-    await customAlert({
-      Type: 2,
-      Message: `${url}:This API ${method} Method Exception Error`,
-    });
-    return Promise.reject(response.data);
-  } else if (con5 || con8) {
 
-    console.log(`${url}***${method} apiCall response:=>`, response.data);
+  if (rejectionCodes.includes(statusCode)) {
+    CommonConsole(`${url}***${method} apiCall response:=>`, response.data);
     await customAlert({ Type: 3, Message: JSON.stringify(response.data.Message) });
     return Promise.reject(response.data);
   }
 
-
   return Promise.reject(response);
 }
+
 
 export const tableInputArrowUpDounFunc = (tableId) => {
 

@@ -52,6 +52,7 @@ const Login = props => {
     try {
       if ((localStorage.getItem("token")) && (localStorage.getItem("roleId"))) {
         history.push({ pathname: "/Dashboard" })
+        return
       }
       document.getElementById("UserName").focus();
     } catch (e) { }
@@ -77,7 +78,7 @@ const Login = props => {
 
 
   useEffect(() => {
-  
+
     if (divisionDropdown_redux.length === 1) {
 
       let value = divisionDropdown_redux[0]
@@ -93,7 +94,7 @@ const Login = props => {
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
       dispatch(getpartysetting_API(value.Party_id, loginCompanyID()))//login party id pass to getpartysetting_API
     }
- 
+
   }, [divisionDropdown_redux])
 
 
