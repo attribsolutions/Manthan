@@ -23,8 +23,6 @@ export const Credit = "Credit"
 export const PartyLedger = "PartyLedger"
 
 
-
-
 const generateReport = (resp) => {
 
     switch (resp.ReportType) {
@@ -58,8 +56,6 @@ const generateReport = (resp) => {
         case PartyLedger:
             PartyLedgerReport(resp.Data)
             break;
-
-
 
         default:
             break;

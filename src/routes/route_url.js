@@ -230,6 +230,11 @@ export const DEBIT = "/Debit"
 
 export const SAP_LEDGER = "/SapLedger"
 
+export const PARTY_LEDGER = "/PartyLedger"
+
+
+
+
 
 //**************************** Reports ***********************************//
 

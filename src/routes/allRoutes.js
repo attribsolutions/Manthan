@@ -161,6 +161,7 @@ import CityList from "../pages/Adminisrator/CityPages/CityList";
 import OrderSummary from "../Reports/OrderSummaryReport/OrderSummary";
 import InvoiceConfiguration from "../pages/Adminisrator/InvoiceConfiguration/InvoiceConfiguration";
 import StockEntry from "../pages/Inventory/StockEntry/StockEntry";
+import PartyLedger from "../Reports/PratyLedger/Partyledger";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -393,6 +394,11 @@ const userRoutes = [
   { path: path.DEBIT, component: Debit },
 
   { path: path.SAP_LEDGER, component: SapLedger },
+
+  { path: path.PARTY_LEDGER, component: PartyLedger },
+
+
+  
 
 
   //**************************** Reports ***********************************//
