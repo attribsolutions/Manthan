@@ -191,63 +191,57 @@ export const loginUserID = () => {//++++++++++++++++++++++ Session User Id++++++
 };
 
 export const loginCompanyID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-  let user_Company_id = 0;
   try {
-    user_Company_id = JSON.parse(localStorage.getItem("Company"));
+    return JSON.parse(localStorage.getItem("Company"));
   } catch (e) {
     CommonConsole("Common login CompanyID  Error");
   }
-  return user_Company_id;
+  return 0;
 };
 
 export const loginCompanyName = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-  let user_Company_name = "";
   try {
-    user_Company_name = localStorage.getItem("CompanyName");
+    return localStorage.getItem("CompanyName");
   } catch (e) {
     CommonConsole("Common login CompanyID  Error");
   }
-  return user_Company_name;
+  return '';
 };
 
 export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
-  let user_Party_id = 0;
   try {
-    user_Party_id = JSON.parse(localStorage.getItem("roleId")).Party_id;
+    return JSON.parse(localStorage.getItem("roleId")).Party_id;
   } catch (e) {
     CommonConsole("Common login PartyID Func  Error");
   }
-  return user_Party_id;
+  return 0;
 };
 
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
-  let user_EmployeeID = 0;
   try {
-    user_EmployeeID = JSON.parse(localStorage.getItem("roleId")).Employee_id;
+    return JSON.parse(localStorage.getItem("roleId")).Employee_id;
   } catch (e) {
     alert("Common login EmployeeID Func  Error");
   }
-  return user_EmployeeID;
+  return 0;
 };
 
 export const loginIsSCMCompany = () => { //+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
-  let IsSCMCompany = 0;
   try {
-    IsSCMCompany = JSON.parse(localStorage.getItem("IsSCMCompany"));
+    return JSON.parse(localStorage.getItem("IsSCMCompany"));
   } catch (e) {
     CommonConsole("Common login IsSCMCompany Func  Error");
   }
-  return IsSCMCompany;
+  return 0;
 };
 
 export const loginCompanyGroup = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
-  let CompanyGroup = 0;
   try {
-    CompanyGroup = JSON.parse(localStorage.getItem("CompanyGroup"));
+    return JSON.parse(localStorage.getItem("CompanyGroup"));
   } catch (e) {
     CommonConsole("Common login CompanyGroup Func  Error");
   }
-  return CompanyGroup;
+  return 0;
 };
 
 
@@ -270,6 +264,15 @@ export const loginSystemSetting = () => { //+++++++++++++++++++++ Session Compan
   }
   return "";
 };
+export const loginUserGSTIN = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+  try {
+    return JSON.parse(localStorage.getItem("roleId")).GSTIN;
+  } catch (e) {
+    CommonConsole("Common loginUserGSTIN func  Error");
+  }
+  return '';
+};
+
 
 
 export const loginJsonBody = () => ({
@@ -282,10 +285,12 @@ export const loginJsonBody = () => ({
 });
 
 
-export const compareGSTINState = (gstin1, gstin2) => {
-  const stateCode1 = gstin1.substring(0, 2);
-  const stateCode2 = gstin2.substring(0, 2);
-  return stateCode1 === stateCode2;
+export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
+  gstin1 = String(gstin1) || ""
+  gstin2 = String(gstin2) || ""
+  let stateCode1 = gstin1.substring(0, 2);
+  let stateCode2 = gstin2.substring(0, 2);
+  return(!stateCode1 === stateCode2 && !gstin1 === "" && !gstin2 === "");
 }
 
 export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true }) {

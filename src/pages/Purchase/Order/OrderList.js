@@ -272,7 +272,10 @@ const OrderList = () => {
 
         const customer = {
             value: obj.CustomerID,
-            label: obj.Customer
+            label: obj.Customer,
+            GSTIN: obj.CustomerGSTIN,
+            IsTCSParty: obj.IsTCSParty,
+            ISCustomerPAN: obj.CustomerPAN
         }
         const jsonBody = JSON.stringify({
             FromDate: obj.preOrderDate,
@@ -292,13 +295,12 @@ const OrderList = () => {
         else if (subPageMode === url.ORDER_LIST_4) {
             dispatch(_act.GoButtonForinvoiceAdd({
                 jsonBody,
+                btnId,
+                customer,
                 subPageMode: url.INVOICE_1,
                 path: url.INVOICE_1,
                 pageMode: mode.defaultsave,
-                customer,
-                btnId,
-                IsTCSParty: obj.IsTCSParty,
-                ISCustomerPAN: obj.CustomerPAN
+
             }));
         }
         else {

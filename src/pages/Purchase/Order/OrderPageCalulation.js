@@ -1,5 +1,6 @@
+import { compareGSTINState } from "../../../components/Common/CommonFunction";
 
-export const orderCalculateFunc = (row) => {
+export const orderCalculateFunc = (row, IsComparGstIn) => {
 
   // Retrieve values from input object
   const rate = Number(row.Rate) || 0;
@@ -13,8 +14,9 @@ export const orderCalculateFunc = (row) => {
   const gstAmount = (basicAmount * gstPercentage) / 100;
 
   // Calculate CGST and SGST amounts
-  const CGST_Amount = Number((gstAmount / 2).toFixed(2));
-  const SGST_Amount = CGST_Amount;
+  let CGST_Amount = Number((gstAmount / 2).toFixed(2));
+  let SGST_Amount = CGST_Amount;
+  let IGST_Amount = 0 //initial GST Amount 
 
   // Calculate rounded GST amount
   const roundedGstAmount = CGST_Amount + SGST_Amount;
@@ -22,11 +24,21 @@ export const orderCalculateFunc = (row) => {
   // Calculate total amount
   const totalAmount = gstAmount + basicAmount;
 
+  if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
+    debugger
+    let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)
+    if (isSameSate) {// iF isSameSate = true ===not same GSTIn
+      CGST_Amount = 0;
+      SGST_Amount = 0;
+      IGST_Amount = roundedGstAmount.toFixed(2)
+    }
+  }
   return {
     basicAmount: basicAmount.toFixed(2),
     roundedTotalAmount: totalAmount.toFixed(2),
+    roundedGstAmount: roundedGstAmount.toFixed(2),
     CGST_Amount: CGST_Amount.toFixed(2),
     SGST_Amount: SGST_Amount.toFixed(2),
-    roundedGstAmount: roundedGstAmount.toFixed(2),
+    IGST_Amount
   };
 };

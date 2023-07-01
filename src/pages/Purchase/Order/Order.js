@@ -256,8 +256,14 @@ const Order = (props) => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
-
-            setTermsAndConTable([])
+            setSelecedItemWiseOrder(true)
+            setGoBtnDissable(false)
+            setOrderAmount(0);
+            setTermsAndConTable([]);
+            setorderTypeSelect('');
+            setisOpen_assignLink(false)
+            setorderItemTable([])
+            setsupplierSelect('');
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
             const liveMode = false  // temporary not working code thats why false use line no. 253 to 289
@@ -282,8 +288,10 @@ const Order = (props) => {
                         Party: _cfunc.loginPartyID(),
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
-                        btnId: "",
-                        jsonBody, subPageMode: url.INVOICE_1, path: url.INVOICE_1, pageMode: mode.defaultsave, customer,
+                        jsonBody, subPageMode: url.INVOICE_1,
+                        path: url.INVOICE_1,
+                        pageMode: mode.defaultsave,
+                        customer,
                         errorMsg: "Order Save Successfully But Can't Make Invoice"
                     }));
                 }
@@ -386,7 +394,12 @@ const Order = (props) => {
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
-        FSSAIExipry: i.FSSAIExipry
+        FSSAIExipry: i.FSSAIExipry,
+        GSTIN: i.GSTIN,
+        FSSAINo: i.FSSAINo,
+        IsTCSParty: i.IsTCSParty,
+        ISCustomerPAN: i.PAN,
+
     }))
 
     const orderTypeOptions = orderType.map((i) => ({
@@ -818,6 +831,8 @@ const Order = (props) => {
             const itemArr = []
             const isVDC_POvalidMsg = []
 
+            let IsComparGstIn = { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
+
             await orderItemTable.forEach(i => {
 
                 if ((i.Quantity > 0) && !(i.Rate > 0)) {
@@ -888,11 +903,13 @@ const Order = (props) => {
                     }
                 };
             }
+            // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
+
 
             function isRowValueChanged({ i, isedit, isdel }) {
 
 
-                const calculate = orderCalculateFunc(i)
+                const calculate = orderCalculateFunc(i, IsComparGstIn)
 
 
                 const arr = {
@@ -911,10 +928,10 @@ const Order = (props) => {
                     GSTPercentage: i.GSTPercentage,
                     CGST: calculate.CGST_Amount,
                     SGST: calculate.SGST_Amount,
-                    IGST: 0,
+                    IGST: calculate.IGST_Amount,
                     CGSTPercentage: (i.GSTPercentage / 2),
                     SGSTPercentage: (i.GSTPercentage / 2),
-                    IGSTPercentage: 0,
+                    IGSTPercentage: i.GSTPercentage,
                     Amount: calculate.roundedTotalAmount,
                     IsDeleted: isedit,
                     Comment: i.Comment

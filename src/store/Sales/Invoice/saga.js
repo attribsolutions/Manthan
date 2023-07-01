@@ -137,9 +137,8 @@ function* DeleteInvoiceGenFunc({ config }) {
 }
 
 // GO-Botton SO-invoice Add Page API
-export function invoice_GoButton_dataConversion_Func(response, IsTCSParty, ISCustomerPAN) {
-
-
+export function invoice_GoButton_dataConversion_Func(response, customer = '') {
+  const { IsTCSParty, ISCustomerPAN } = customer;
 
   // Iterate over OrderItemDetails array and perform data conversion
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
@@ -221,7 +220,7 @@ export function invoice_GoButton_dataConversion_Func(response, IsTCSParty, ISCus
 }
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
-  const { subPageMode, path, pageMode, customer, errorMsg, IsTCSParty, ISCustomerPAN = false } = config;
+  const { subPageMode, path, pageMode, customer, errorMsg, } = config;
 
   try {
 
@@ -238,7 +237,7 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     response["page_Mode"] = pageMode
     response["customer"] = customer
 
-    const updatedResp = invoice_GoButton_dataConversion_Func(response, IsTCSParty, ISCustomerPAN)
+    const updatedResp = invoice_GoButton_dataConversion_Func(response, customer)
 
     yield put(GoButtonForinvoiceAddSuccess(updatedResp));
 
