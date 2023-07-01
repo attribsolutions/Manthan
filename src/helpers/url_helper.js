@@ -367,6 +367,10 @@ export const DASHBOARD = '/getdashboard'
 
 //Report
 export const ORDER_SUMMARY = '/OrderSummaryReport'
+export const PARTY_LEDGER = '/PartyLedgerReport'
+
+
+
 
 // partySetting
 export const PARTY_SETTING = '/PartySettings'
