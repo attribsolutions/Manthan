@@ -15,6 +15,7 @@ import { GetVenderSupplierCustomer, SSDD_List_under_Company, getpdfReportdata } 
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { PartyLedgerReport_API } from "../../helpers/backend_helper";
+import C_Report from "../../components/Common/C_Report";
 
 const PartyLedger = (props) => {
 
@@ -204,6 +205,7 @@ const PartyLedger = (props) => {
                     </div>
                 </div>
             </div>
+            <C_Report />
         </React.Fragment >
     )
 }

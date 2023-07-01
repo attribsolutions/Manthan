@@ -19,8 +19,9 @@ function pageFooter(doc, data) {
     style.reportFooter(doc, data);
 }
 
-const PartyLedgerReport = () => {
-    const data = Data
+const PartyLedgerReport = (data1) => {
+    debugger
+    const data = data1[0]
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);

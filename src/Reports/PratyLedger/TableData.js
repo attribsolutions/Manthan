@@ -34,7 +34,7 @@ export const Rows = (data) => {
             element.Amount,
             element.RecieptAmount,
             element.Cash,
-            element.Balance,
+            Number(element.Balance).toFixed(2),
 
         ];
 
@@ -86,8 +86,8 @@ export const ReportFotterColumns = [
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [`${data.Distributor}`, `Opening Balance${data.Open}`],
-        [`${data.CustomerName}`, `Closing Balance${data.Close}`],
+        [`${data.Distributor}`, `Opening Balance:   ${data.Open}`],
+        [`${data.CustomerName}`, `Closing Balance:  ${data.Close}`],
         // [],
         // [,,`INR NO :${data.FullInvoiceNumber}`]
     ]
