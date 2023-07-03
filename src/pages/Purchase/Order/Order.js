@@ -922,17 +922,21 @@ const Order = (props) => {
                     Unit: i.Unit_id,
                     BaseUnitQuantity: (Number(i.BaseUnitQuantity) * Number(i.Quantity)).toFixed(2),
                     Margin: "",
-                    BasicAmount: calculate.basicAmount,
-                    GSTAmount: calculate.roundedGstAmount,
+
                     GST: i.GST_id,
-                    GSTPercentage: i.GSTPercentage,
                     CGST: calculate.CGST_Amount,
                     SGST: calculate.SGST_Amount,
                     IGST: calculate.IGST_Amount,
-                    CGSTPercentage: (i.GSTPercentage / 2),
-                    SGSTPercentage: (i.GSTPercentage / 2),
-                    IGSTPercentage: i.GSTPercentage,
+
+                    GSTPercentage: calculate.GST_Percentage,
+                    CGSTPercentage: calculate.CGST_Percentage,
+                    SGSTPercentage: calculate.SGST_Percentage,
+                    IGSTPercentage: calculate.IGST_Percentage,
+
+                    BasicAmount: calculate.basicAmount,
+                    GSTAmount: calculate.roundedGstAmount,
                     Amount: calculate.roundedTotalAmount,
+
                     IsDeleted: isedit,
                     Comment: i.Comment
                 }
