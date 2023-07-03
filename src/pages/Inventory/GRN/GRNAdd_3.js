@@ -346,7 +346,7 @@ const GRNAdd3 = (props) => {
             let sum = 0
             let inValidMsg = []
             grnItemTableList.forEach(i => {
-
+                debugger
 
                 if (!(i.Quantity > 0)) {
                     inValidMsg.push({ [i.ItemName]: "This Item Quantity Is Require..." });
@@ -361,16 +361,16 @@ const GRNAdd3 = (props) => {
                     Reason: i.defaultDiscrepancy ? i.defaultDiscrepancy.value : "",//default Discrepancy value
                     MRP: i.defaultMRP.value,
                     MRPValue: i.defaultMRP.label,
+
                     ReferenceRate: i.Rate,
                     Rate: i.Rate,
                     Unit: i.Unit,
                     BaseUnitQuantity: i.BaseUnitQuantity,
-                    GST: i.GST,
-                    GSTPercentage: i.GSTPercentage,
+                    GST: i.DefaultGST.value,
+                    GSTPercentage: i.DefaultGST.label,
                     BasicAmount: calculate.basicAmount,
                     GSTAmount: calculate.roundedGstAmount,
                     Amount: calculate.roundedTotalAmount,
-
                     CGST: calculate.CGST_Amount,
                     SGST: calculate.SGST_Amount,
                     IGST: 0,
