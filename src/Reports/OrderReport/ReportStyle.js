@@ -2,7 +2,7 @@
 import cbm_logo from "../../assets/images/cbm_logo.png"
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
-import { date_dmy_func } from "../../components/Common/CommonFunction";
+import { compareGSTINState, date_dmy_func } from "../../components/Common/CommonFunction";
 let initial_y = 0
 
 
@@ -167,7 +167,7 @@ export const reportHeder2 = (doc, data) => {
 
 
 export const reportHeder3 = (doc, data) => {
-    
+
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setDrawColor(0, 0, 0);
@@ -283,7 +283,7 @@ export const tableBody = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 2,
+            cellPadding: 5,
             fontSize: 7,
             // fontStyle: 'bold',
             lineColor: [6, 3, 1]
@@ -356,8 +356,125 @@ export const tableBody = (doc, data) => {
     })
 }
 
+export const tableBodyWithIGST = (doc, data) => {
+    const tableRow = table.Rows(data);
+    console.log(tableRow)
+    const { OrderItem = [] } = data
+    //Body table  Css
+    var options = {
+        didParseCell: (data1) => {
+            if (data1.row.cells[5].raw === "isaddition") {
+                // data1.row.cells[0].colSpan = 2
+                data1.row.cells[1].colSpan = 3
+                data1.row.cells[4].colSpan = 2
+
+                // data1.row.cells[7].colSpan = 2
+                data1.row.cells[1].styles.halign = "right"
+
+                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[1].styles.fontSize = 8
+
+
+                data1.row.cells[0].styles.fontSize = 8
+                data1.row.cells[2].styles.fontSize = 8
+                data1.row.cells[4].styles.fontSize = 8
+                data1.row.cells[6].styles.fontSize = 8
+                // data1.row.cells[8].styles.fontSize = 8
+
+                data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                // data1.row.cells[8].styles.fontStyle = "bold"
+            }
+        },
+        margin: {
+            left: 30, right: 25, top: 65
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 4,
+            lineWidth: 1,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',
+            fillColor: "white",
+            textColor: [0, 0, 0],
+            fontSize: 8,
+            rowHeight: 10,
+            lineColor: [0, 0, 0]
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 7,
+            // fontStyle: 'bold',
+            lineColor: [6, 3, 1]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 190,
+            },
+            1: {
+                columnWidth: 60,
+                halign: 'left',
+
+            },
+            2: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            3: {
+                columnWidth: 65,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            5: {
+                columnWidth: 55,
+                halign: 'right',
+            },
+            6: {
+                columnWidth: 90,
+                halign: 'right',
+            },
+
+
+
+        },
+
+        tableLineColor: "black",
+        startY: initial_y,// 45,
+
+    };
+
+    doc.autoTable(table.columnsWithIGST, table.RowsWithIGST(data), options);
+
+    const optionsTable4 = {
+        margin: {
+            left: 30, right: 30, bottom: 50
+        },
+    };
+
+    doc.autoTable(optionsTable4);
+
+    doc.autoTable({
+        html: '#table',
+        didParseCell(data) {
+            if (data.cell.row.index === 0) {
+                data.cell.styles.textColor = [255, 255, 255];
+                data.cell.styles.fillColor = '#FF5783';
+            }
+        }
+    })
+}
+
 export const pageFooter = (doc, data) => {
-    
+
     const GrandTotal = Number(data.OrderAmount)
     const Total = numberWithCommas((GrandTotal).toFixed(2))
     let stringNumber = toWords(Number(GrandTotal))
@@ -375,40 +492,63 @@ export const pageFooter = (doc, data) => {
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
         BasicAmount: Number(data.BasicAmount),
+        IGST: Number(data.IGST),
+
     }));
     var totalCGST = 0;
     var totalSGST = 0;
     var TotalBasicAmount = 0;
+    var totalIGST = 0;
     a.forEach(arg => {
         totalCGST += arg.CGST;
         totalSGST += arg.SGST;
-        TotalBasicAmount += arg.BasicAmount
+        TotalBasicAmount += arg.BasicAmount;
+        totalIGST += arg.IGST;
+
 
     });
 
     const TotalGST = totalCGST + totalSGST;
     // console.log(arr)
-    doc.setFontSize(8)
 
-    doc.text(`CGST:`, 434, 760,)
-    doc.text(`${(totalCGST).toFixed(2)}`, 560, 760, 'right')
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
+    if (isIGST) {
+        doc.setFontSize(8)
 
-    doc.text(`SGST:`, 434, 772,)
-    doc.text(`${(totalSGST).toFixed(2)}`, 560, 772, 'right')
+        doc.text(`IGST:`, 434, 772,)
+        doc.text(`${(totalIGST).toFixed(2)}`, 568, 772, 'right')
 
-    doc.text(`TotalGST:`, 434, 784,)
-    doc.text(` ${(TotalGST).toFixed(2)}`, 560, 784, 'right')
+        doc.text(`TotalGST:`, 434, 784,)
+        doc.text(` ${(totalIGST).toFixed(2)}`, 568, 784, 'right')
 
-    doc.text(`BasicAmount:`, 434, 795,)
-    doc.text(`${(TotalBasicAmount).toFixed(2)}`, 560, 795, 'right')
+        doc.text(`BasicAmount:`, 434, 795,)
+        doc.text(`${(TotalBasicAmount).toFixed(2)}`, 568, 795, 'right')
+
+    } else {
+
+        doc.setFontSize(8)
+
+        doc.text(`CGST:`, 434, 760,)
+        doc.text(`${(totalCGST).toFixed(2)}`, 568, 760, 'right')
+
+        doc.text(`SGST:`, 434, 772,)
+        doc.text(`${(totalSGST).toFixed(2)}`, 568, 772, 'right')
+
+        doc.text(`TotalGST:`, 434, 784,)
+        doc.text(` ${(TotalGST).toFixed(2)}`, 568, 784, 'right')
+
+        doc.text(`BasicAmount:`, 434, 795,)
+        doc.text(`${(TotalBasicAmount).toFixed(2)}`, 568, 795, 'right')
+    }
+
 
     doc.setFont(undefined, 'Normal')
-    doc.setFontSize(11)
+    doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`Order Amt:`, 433, 810,)
+    doc.text(`Order Amount:`, 433, 810,)
     // const GrandTotal = Math.round(data.OrderAmount)
     //  const GrandTotal = numberWithCommas((56784936).toFixed(2))
-    doc.text(`${Total}`, 560, 810, 'right')
+    doc.text(`${Total}`, 568, 810, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
