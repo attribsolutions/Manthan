@@ -86,8 +86,8 @@ export const ReportFotterColumns = [
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [`${data.Distributor}`, `Opening Balance:   ${data.Open}`],
-        [`${data.CustomerName}`, `Closing Balance:  ${data.Close}`],
+        [`Distributor         : ${data.Distributor}`, `Opening Balance:   ${data.Open}`],
+        [`CustomerName : ${data.CustomerName}`, `Closing Balance:  ${data.Close}`],
         // [],
         // [,,`INR NO :${data.FullInvoiceNumber}`]
     ]
