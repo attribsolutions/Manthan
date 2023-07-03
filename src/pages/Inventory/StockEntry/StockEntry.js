@@ -444,7 +444,7 @@ const StockEntry = (props) => {
         const btnId = event.target.id
 
         const ReturnItems = TableArr.map((index) => {
-
+            debugger
             return ({
                 "Item": index.ItemId,
                 "ItemName": index.ItemName,
@@ -452,6 +452,8 @@ const StockEntry = (props) => {
                 "MRP": index.defaultMRP.value,
                 "Unit": index.defaultUnit.value,
                 "GST": index.defaultGST.value,
+                "MRPValue": index.defaultMRP.label,
+                "GSTPercentage": index.defaultGST.label,
                 "BatchDate": index.BatchDate,
                 "BatchCode": index.BatchCode
             })
