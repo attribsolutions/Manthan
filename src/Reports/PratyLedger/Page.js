@@ -27,9 +27,10 @@ const PartyLedgerReport = (data1) => {
     reportBody(doc, data);
     pageFooter(doc, data);
     doc.setProperties({
-        title: "PartyLedgerReport Report"
+        title: "Party Ledger Report "
     });
-    doc.output('dataurlnewwindow');
+    const options = { filename: "Party Ledger Report" }
+    doc.output('dataurlnewwindow', options);
     return (<></>);
 }
 export default PartyLedgerReport;

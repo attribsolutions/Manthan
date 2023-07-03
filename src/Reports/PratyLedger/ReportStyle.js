@@ -180,6 +180,7 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
+                halign: 'center',
                 columnWidth: 100,
             },
             1: {

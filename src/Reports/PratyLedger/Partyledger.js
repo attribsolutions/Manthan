@@ -28,7 +28,7 @@ const PartyLedger = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        PartyName: { value: "", label: "All" },
+        PartyName: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -94,10 +94,10 @@ const PartyLedger = (props) => {
         label: i.Name,
     }))
 
-    CustomerOptions.unshift({
-        value: "",
-        label: " All"
-    });
+    // CustomerOptions.unshift({
+    //     value: "",
+    //     label: " All"
+    // });
 
     const onselecthandel = (e) => {
 
@@ -111,7 +111,7 @@ const PartyLedger = (props) => {
 
 
     function goButtonHandler() {
-        debugger
+
         const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
@@ -120,8 +120,16 @@ const PartyLedger = (props) => {
             "Party": _cfunc.loginPartyID()
         });
         var ReportType = report.PartyLedger
-
-        dispatch(getpdfReportdata(PartyLedgerReport_API, ReportType, jsonBody))
+        debugger
+        if (values.PartyName === "") {
+            customAlert({
+                Type: 3,
+                Message: "Please Select Customer",
+            })
+            return
+        } else {
+            dispatch(getpdfReportdata(PartyLedgerReport_API, ReportType, jsonBody))
+        }
     }
 
     function fromdateOnchange(e, date) {
