@@ -615,6 +615,8 @@ export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODU
 export const OderSummary_GoBtn_API = ({ jsonBody, btnId }) => post(url.ORDER_SUMMARY, jsonBody, btnId)//post api
 export const PartySettingApi = (Party_id, Comapny_id) => get(`${url.PARTY_SETTING}/${Party_id}/${Comapny_id}`)// Party Setting api
 export const save_PartySetting_API = ({ jsonBody, btnId }) => post(url.PARTY_SETTING, jsonBody, btnId)//  postapi
+export const PartyLedgerReport_API = (jsonBody) => post(url.PARTY_LEDGER, jsonBody)//  postapi
+
 
 // export const PartyLedger_API = (FromDate,ToDate,SAPCode) => get(`http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
 // Dashboard 

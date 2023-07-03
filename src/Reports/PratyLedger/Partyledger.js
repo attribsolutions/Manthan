@@ -11,8 +11,12 @@ import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
 import * as XLSX from 'xlsx';
-import { SSDD_List_under_Company } from "../../store/actions";
+import { GetVenderSupplierCustomer, SSDD_List_under_Company, getpdfReportdata } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import * as report from '../ReportIndex'
+import { PartyLedgerReport_API } from "../../helpers/backend_helper";
+import C_Report from "../../components/Common/C_Report";
+
 const PartyLedger = (props) => {
 
     const dispatch = useDispatch();
@@ -24,10 +28,11 @@ const PartyLedger = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        PartyName: { value: "", label: "All" },
+        PartyName: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
     const [groupByDate, setGroupByDate] = useState(false);
     const [groupByParty, setGroupByParty] = useState(false);
@@ -35,15 +40,16 @@ const PartyLedger = (props) => {
 
     const reducers = useSelector(
         (state) => ({
+            pdfdata: state.PdfReportReducers.pdfdata,
             listBtnLoading: state.OrderSummaryReducer.listBtnLoading,
-            orderSummaryGobtn: state.OrderSummaryReducer.orderSummaryGobtn,
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, orderSummaryGobtn, SSDD_List } = reducers;
-    const { Data = [] } = orderSummaryGobtn;
+    const { userAccess, orderSummaryGobtn, SSDD_List, supplier, pdfdata } = reducers;
+    // const { Data = [] } = orderSummaryGobtn;
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -67,82 +73,31 @@ const PartyLedger = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(SSDD_List_under_Company());
+        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
+
     }, [])
 
     useEffect(() => {
-        if ((orderSummaryGobtn.Status === true) && (orderSummaryGobtn.StatusCode === 204)) {
-            dispatch(postOrderSummary_API_Success([]))
+        debugger
+        if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
             customAlert({
                 Type: 3,
-                Message: orderSummaryGobtn.Message,
+                Message: pdfdata.Message,
             })
             return
         }
-    }, [orderSummaryGobtn])
+    }, [pdfdata])
 
-    useEffect(() => {
-        if (Data.length > 0) {
-            var arr = []
-            if (groupByDate) {
-                arr.push('OrderDate')
-            }
-            if (groupByParty) {
-                arr.push('CustomerName')
-            }
 
-            const groupData = groupByColumnsWithSumFunc(Data, [...arr, ...['Group', 'SubGroup', 'MaterialName']]);
-            _cfunc.CommonConsole(JSON.stringify("groupData", Data))
-            const worksheet = XLSX.utils.json_to_sheet(groupData);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
-            XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
-            dispatch(postOrderSummary_API_Success([]));
-        }
-    }, [Data]);
-
-    const groupByColumnsWithSumFunc = (jsonData, columnNames) => {
-        const columnSumsByGroup = jsonData.reduce((result, item) => {
-            const groupKey = columnNames.map(columnName => item[columnName]).join('|');
-            if (!result[groupKey]) {
-                result[groupKey] = {
-                    sums: {},
-                    data: []
-                };
-
-                columnNames.forEach((key) => {
-                    result[groupKey].sums[key] = item[key];
-                })
-            }
-
-            const group = result[groupKey];
-            group.data.push(item);
-
-            Object.entries(item).forEach(([key, value]) => {
-                if (typeof value === 'number') {
-                    group.sums[key] = (group.sums[key] || 0) + value;
-                }
-            });
-
-            return result;
-        }, {});
-        let arr = []
-        Object.keys(columnSumsByGroup).forEach(i => {
-            delete columnSumsByGroup[i].sums.Orderid
-            arr.push(columnSumsByGroup[i].sums)
-        })
-
-        return arr
-    };
-
-    const Party_Option = SSDD_List.map(i => ({
+    const CustomerOptions = supplier.map((i) => ({
         value: i.id,
-        label: i.Name
-    }));
-    Party_Option.unshift({
-        value: "",
-        label: " All"
-    });
+        label: i.Name,
+    }))
+
+    // CustomerOptions.unshift({
+    //     value: "",
+    //     label: " All"
+    // });
 
     const onselecthandel = (e) => {
 
@@ -161,11 +116,20 @@ const PartyLedger = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "CompanyID": _cfunc.loginCompanyID(),
-            "PartyID": isSCMParty ? values.PartyName.value : _cfunc.loginPartyID()
-
+            "Customer": values.PartyName.value,
+            "Party": _cfunc.loginPartyID()
         });
-        dispatch(postOrderSummary_API({ jsonBody, btnId }));
+        var ReportType = report.PartyLedger
+        debugger
+        if (values.PartyName === "") {
+            customAlert({
+                Type: 3,
+                Message: "Please Select Customer",
+            })
+            return
+        } else {
+            dispatch(getpdfReportdata(PartyLedgerReport_API, ReportType, jsonBody))
+        }
     }
 
     function fromdateOnchange(e, date) {
@@ -220,29 +184,29 @@ const PartyLedger = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
-                                    <Label className="col-sm-4 p-2"
-                                        style={{ width: "65px" }}>Party</Label>
-                                    <Col sm="7">
-                                        <Select
-                                            name="DistrictName"
-                                            value={values.PartyName}
-                                            isSearchable={true}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            styles={{
-                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                            }}
-                                            options={Party_Option}
-                                            onChange={(e) => { onselecthandel(e) }}
 
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                        }
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt-3" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "80px" }}>Customer</Label>
+                                <Col sm="7">
+                                    <Select
+                                        name="DistrictName"
+                                        value={values.PartyName}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={CustomerOptions}
+                                        onChange={(e) => { onselecthandel(e) }}
+
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
 
                         <Col sm="1" className="mt-3 ">
                             <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
@@ -250,6 +214,7 @@ const PartyLedger = (props) => {
                     </div>
                 </div>
             </div>
+            <C_Report />
         </React.Fragment >
     )
 }

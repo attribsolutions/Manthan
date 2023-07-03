@@ -46,17 +46,17 @@ export const reportHeder1 = (doc, data) => {
 
 
     var options3 = {
-        didParseCell: (data1) => {
-            debugger
-            if (data1.row.cells[5].raw === data.CustomerName) {
-                data1.row.cells[0].colSpan = 2
+        // didParseCell: (data1) => {
+        //     debugger
+        //     if (data1.row.cells[5].raw === data.CustomerName) {
+        //         data1.row.cells[0].colSpan = 2
 
-                data1.row.cells[0].styles.fontSize = 8
+        //         data1.row.cells[0].styles.fontSize = 8
 
-                data1.row.cells[0].styles.fontStyle = "bold"
+        //         data1.row.cells[0].styles.fontStyle = "bold"
 
-            }
-        },
+        //     }
+        // },
 
         margin: {
             left: 30// bottom:100 /
@@ -73,7 +73,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 3,
             fontSize: 9,
-            // fontStyle: 'bold',
+            fontStyle: 'bold',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -162,7 +162,7 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'center',    //'center' or 'right'
             fillColor: "white",
             textColor: [0, 0, 0], //Black     
             fontSize: 8,
@@ -172,6 +172,7 @@ export const tableBody = (doc, data) => {
         bodyStyles: {
             textColor: [30, 30, 30],
             cellPadding: 3,
+            halign: 'center',    //'center' or 'right'
             fontSize: 7,
             columnWidth: 'wrap',
             lineColor: [0, 0, 0],
@@ -179,6 +180,7 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
+                halign: 'center',
                 columnWidth: 100,
             },
             1: {
