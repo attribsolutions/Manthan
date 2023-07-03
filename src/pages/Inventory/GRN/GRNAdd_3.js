@@ -218,6 +218,46 @@ const GRNAdd3 = (props) => {
             }
         },
 
+        {  //-------------MRP column ----------------------------------
+            text: "GST",
+            dataField: "GSTDropdown",
+            align: () => ('right'),
+            formatter: (cellContent, row, key) => {
+                debugger
+                if (row.GST === null) {
+                    const deFaultValue = row.GSTDropdown.filter(i => i.GSTPercentage === row.GSTPercentage);
+                    const value = { label: deFaultValue[0].GSTPercentage, value: deFaultValue[0].GST }
+                    row.DefaultGST = value
+                } else {
+                    const deFaultValue = row.GSTDropdown.filter(i => i.GST === row.GST);
+                    const value = { label: deFaultValue[0].GSTPercentage, value: deFaultValue[0].GST }
+                    row.DefaultGST = value
+                }
+                const GSToption = row.GSTDropdown.map(index => ({
+                    value: index.GST,
+                    label: index.GSTPercentage,
+                }));
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Select
+                        id={`MRP${key}`}
+                        name="MRP"
+                        defaultValue={row.DefaultGST}
+                        isSearchable={true}
+                        className="react-dropdown"
+                        classNamePrefix="dropdown"
+                        options={GSToption}
+                        onChange={(event) => { row.DefaultGST = event }}
+                    />
+                </span>)
+
+            },
+            headerStyle: () => {
+                return { width: '160px' };
+            }
+        },
+
+
+
         {  //-------------Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
