@@ -36,26 +36,28 @@ import { SalesReturn_add_button_api_For_Invoice, SalesReturn_add_button_api_For_
 import { salesReturnCalculate, calculateSalesReturnFunc } from "./SalesCalculation";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 
+
+
 const SalesReturn = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
 
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
         ReturnDate: currentDate_ymd,
         Customer: "",
         ItemName: "",
         InvoiceNumber: "",
-        ReturnReason: "",
+        BatchCode: "",
         Comment: ""
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
+    const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
 
     const [TableArr, setTableArr] = useState([]);
 
@@ -220,22 +222,22 @@ const SalesReturn = (props) => {
         setTableArr(newArr)
     }
 
-    function quantityHandler(event, row) {
+    // function quantityHandler(event, row) {
 
-        row["Qty"] = event.target.value
+    //     row["Qty"] = event.target.value
 
-        let input = event.target.value
+    //     let input = event.target.value
 
-        if (returnMode === 1) {
-            let v1 = Number(row.Quantity);
-            let v2 = Number(input)
-            if (!(v1 >= v2)) {
-                event.target.value = v1;
-            }
-        }
-        row.Qty = event.target.value
+    //     if (returnMode === 1) {
+    //         let v1 = Number(row.Quantity);
+    //         let v2 = Number(input)
+    //         if (!(v1 >= v2)) {
+    //             event.target.value = v1;
+    //         }
+    //     }
+    //     row.Qty = event.target.value
 
-    }
+    // }
 
     const pagesListColumns = [
         {
@@ -243,7 +245,7 @@ const SalesReturn = (props) => {
             dataField: "",
             formatter: (cellContent, row, key) => {
                 return (
-                    <Label>{row.ItemName.label}</Label>
+                    <Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>
                 )
             }
         }, ,
@@ -260,50 +262,32 @@ const SalesReturn = (props) => {
         {
             text: "Quantity",
             dataField: "",
-            classes: () => "sales-return-row",
+            classes: () => "sales-discount-row",
             formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <CInput
-                        id={`Qty${key}`}
-                        key={`Qty${row.id}`}
-                        defaultValue={row.Qty}
-                        autoComplete="off"
-                        type="text"
-                        cpattern={decimalRegx}
-                        className="col col-sm text-end"
-                        onChange={(event) => quantityHandler(event, row)}
-                    />
-                </span>)
-            }
-        },
-        {
-            text: "Unit",
-            dataField: "",
-            classes: () => "sales-return-row",
-            formatter: (cellContent, row, key, a, b) => {
+                return (
+                    <div className="parent" >
+                        <div className="child" style={{ minWidth: "100px" }}>
+                            <CInput
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Select
-                        id={`Unit${key}`}
-                        name="Unit"
-                        defaultValue={returnMode === 1 && { value: row.RowData.Unit, label: row.RowData.UnitName }}
-                        isSearchable={true}
-                        isDisabled={returnMode === 1 && true}
-                        className="react-dropdown"
-                        classNamePrefix="dropdown"
-                        options={row.ItemUnitDetails}
-                        styles={{
-                            menu: provided => ({ ...provided, zIndex: 2 })
-                        }}
-                        onChange={(event) => {
-                            row.Unit = event.value
-                            row.BaseUnitQuantity = event.BaseUnitQuantity
-                        }}
-                    />
-                </span>)
+                                defaultValue={row.Quantity}
+                                autoComplete="off"
+                                type="text"
+                                cpattern={decimalRegx}
+                                placeholder="Enter Quantity"
+                                className="col col-sm text-end"
+                                onChange={(event) => row["Qty"] = event.target.value}
+                            />
+                        </div>
+                        <div className="child mt-2 pl-1">
+                            <label className="label">&nbsp;No</label>
+                        </div>
+
+                    </div>
+                )
             }
         },
+
         {
             text: "MRP",
             dataField: "",
@@ -311,7 +295,7 @@ const SalesReturn = (props) => {
             formatter: (cellContent, row, key) => {
                 return (
                     <>
-                        <span style={{ justifyContent: 'center', width: "100px" }}>
+                        <span style={{ justifyContent: 'center', width: "80px" }}>
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
@@ -320,7 +304,7 @@ const SalesReturn = (props) => {
                                 isDisabled={returnMode === 1 && true}
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
-                                options={row.ItemMRPDetails}
+                                options={row.MRPOptions}
                                 onChange={(event) => {
                                     row.MRP = event.value
                                     row.MRPValue = event.label
@@ -335,7 +319,7 @@ const SalesReturn = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span style={{ justifyContent: 'center', width: "80px" }}>
                     <Select
                         id={`GST${key}`}
                         name="GST"
@@ -344,7 +328,7 @@ const SalesReturn = (props) => {
                         isDisabled={returnMode === 1 && true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
-                        options={row.ItemGSTHSNDetails}
+                        options={row.GSTOptions}
                         onChange={(event) => {
                             row.GST_ID = event.value
                             row.GST = event.label
@@ -356,78 +340,137 @@ const SalesReturn = (props) => {
         {
             text: "Rate",
             dataField: "",
-            classes: () => "sales-return-row",
-            formatter: (cellContent, row, key) => {
+            classes: () => "sales-rate-row",
+            formatter: (cellContent, index1, key, formatExtraData) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <CInput
-                        id=""
-                        key={row.id}
-                        defaultValue={row.Rate}
-                        disabled={returnMode === 1 && true}
-                        type="text"
-                        cpattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
-                        className="col col-sm text-end"
-                        onChange={(event) => { row.Rate = event.target.value }}
-                    />
-                </span>)
-            }
+                return (
+                    <>
+                        <div className="">
+                            <div className="parent  mb-1">
+                                <div className="child">
+                                    <Select
+                                        id={`DicountType_${key}`}
+                                        classNamePrefix="select2-selection"
+                                        value={discountDropOption[1]}
+                                        options={discountDropOption}
+                                        onChange={(e) => {
+                                            index1.DiscountType = e.value;
+                                            index1.Discount = '';
+                                        }}
+                                    />
+                                </div>
+                                <div className="child">
+                                    <CInput
+                                        className="input"
+                                        placeholder="Dist."
+                                        style={{ textAlign: "right" }}
+                                        type="text"
+                                        cpattern={decimalRegx}
+                                        onChange={(event) => { index1.Discount = event.target.value }}
+
+                                    />
+                                </div>
+                            </div>
+                            <div className="parent">
+                                <CInput
+                                    defaultValue={index1.Rate}
+                                    placeholder="Enter Rate"
+                                    type="text"
+                                    cpattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
+                                    className="text-end"
+                                    onChange={(event) => { index1.Rate = event.target.value }}
+                                />
+                            </div>
+
+                        </div>
+
+                    </>
+                );
+            },
         },
         {
-            text: "BatchCode",
+            text: "Batch",
+            dataField: "",
+            classes: () => "sales-rate-row",
+            formatter: (cellContent, row,) => {
+
+                return (
+                    <>
+                        <div className="">
+                            <div className="parent mb-1">
+                                <Input
+                                    defaultValue={row.BatchCode}
+                                    placeholder="Enter BatchCode"
+                                    type="text"
+                                    className="col col-sm text-center"
+                                    onChange={(event) => { row.BatchCode = event.target.value }}
+                                />
+                            </div>
+                            <div className="parent">
+                                <C_DatePicker
+                                    placeholder="Enter BatchDate"
+                                    onChange={(e, date) => {
+                                        row.BatchDate = _cfunc.date_ymd_func(date)
+                                    }}
+                                />
+                            </div>
+
+                        </div>
+
+                    </>
+                );
+            },
+
+        },
+
+
+
+        {
+            text: "Return Reason",
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Input
-                        id=""
-                        key={row.id}
-                        defaultValue={row.RowData.BatchCode}
-                        disabled={returnMode === 1 && true}
-                        type="text"
-                        className="col col-sm text-center"
-                        onChange={(event) => { row.BatchCode = event.target.value }}
-                    />
-                </span>)
-            }
-        },
-        {
-            text: "BatchDate",
-            dataField: "",
-            classes: () => "sales-return-row",
-            formatter: (cellContent, row, key) => {
+                return (<>
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <C_DatePicker
-                        name='ReturnDate'
-                        defaultValue={returnMode === 1 ? _cfunc.date_ymd_func(row.RowData.BatchDate) : currentDate_ymd}
-                        disabled={returnMode === 1 ? true : false}
-                        onChange={(e, date) => {
-                            row.BatchDate = _cfunc.date_ymd_func(date)
-                        }}
-                    />
-                </span>)
-            }
-        },
-        {
-            text: "Item Comment",
-            dataField: "",
-            classes: () => "sales-return-row",
-            formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Input
-                        id=""
-                        key={row.id}
-                        defaultChecked={row.ItemComment}
-                        type="text"
-                        className="col col-sm text-center"
-                        onChange={(event) => { row.ItemComment = event.target.value }}
-                    />
-                </span>)
+                    <div className="parent mb-1">
+                        <div className="child">
+                            <Select
+                                id="ReturnReason "
+                                name="ReturnReason"
+                                value={values.ReturnReason}
+                                isSearchable={true}
+                                className="react-dropdown"
+                                classNamePrefix="dropdown"
+                                styles={{
+                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                }}
+                                options={ReturnReasonOptions}
+                                onChange={(hasSelect, evn) => {
+                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="parent">
+                        <div className="child">
+                            <Input
+                                id=""
+                                key={row.id}
+                                placeholder="Enter Comment"
+                                defaultChecked={row.ItemComment}
+                                type="text"
+                                className="col col-sm text-center"
+                                onChange={(event) => { row.ItemComment = event.target.value }}
+                            />
+                        </div>
+                    </div>
+                </>
+                )
             }
         },
+
         {
             text: "Image",
             dataField: "",
@@ -444,11 +487,11 @@ const SalesReturn = (props) => {
                                 name="image"
                                 id="file"
                                 accept=".jpg, .jpeg, .png ,.pdf"
-                                onChange={(event) => { onchangeHandler(event, row) }}
+                                onChange={(event) => { imageSelectHandler(event, row) }}
                             />
                             <button name="image"
                                 accept=".jpg, .jpeg, .png ,.pdf"
-                                onClick={() => { myFunction(row) }}
+                                onClick={() => { imageShowHandler(row) }}
                                 id="ImageId" type="button" className="btn btn-primary ">Show</button>
                         </div>
                     </div>
@@ -514,35 +557,37 @@ const SalesReturn = (props) => {
                 resp = await SalesReturn_add_button_api_For_Invoice(values.InvoiceNumber.value)
             }
 
-            const data = resp.Data.InvoiceItems.map((i) => ({
-                unitOps: (returnMode === 1) ? { label: i.UnitName, value: i.Unit, BaseUnitQuantity: i.BaseUnitQuantity } : i.ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.Unit, BaseUnitQuantity: i.BaseUnitQuantity })),
-                MRPOps: i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP })),
-                GSTOps: i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST })),
-                ItemName: { label: i.ItemName, value: i.Item },
-                Quantity: i.Quantity,
-                Rate: i.Rate,
-                RowData: i,
-                BatchDate: currentDate_ymd
-            }))
+            const itemArr = [...TableArr];
 
-            const itemArr = [...TableArr]
+            resp.Data.InvoiceItems.forEach((i) => {
+                debugger
+                const unitOptions = {
+                    label: i.UnitName,
+                    value: i.Unit,
+                    BaseUnitQuantity: i.BaseUnitQuantity
+                }
+                const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
+                const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
 
-            data.forEach((i) => {
                 itemArr.push({
                     id: itemArr.length + 1,
-                    ItemUnitDetails: i.unitOps,
-                    ItemMRPDetails: i.MRPOps,
-                    ItemGSTHSNDetails: i.GSTOps,
+                    unitOptions: unitOptions,
+                    MRPOptions: MRPOptions,
+                    GSTOptions: GSTOptions,
                     ItemName: i.ItemName,
+                    ItemId: i.Item,
                     Quantity: i.Quantity,
                     Rate: i.Rate,
-                    gstPercentage: i.RowData.GSTPercentage,
+                    gstPercentage: i.GSTPercentage,
                     RowData: i.RowData,
-                    BatchDate: currentDate_ymd
-                })
-            })
+                    BatchCode: i.BatchCode,
+                    BatchDate: i.BatchDate,
+                    Discount: i.Discount,
+                    DiscountType: i.DiscountType
+                });
+            });
 
-            setTableArr(itemArr)
+            setTableArr(itemArr);
 
             setState((i) => {
                 let a = { ...i }
@@ -550,7 +595,7 @@ const SalesReturn = (props) => {
                 a.hasValid.ItemName.valid = true;
                 return a
             })
-        } catch (w) { }
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     function RetailerHandler(event) {
@@ -574,7 +619,7 @@ const SalesReturn = (props) => {
     }
 
     // image onchange handler
-    const onchangeHandler = async (event, row) => {
+    const imageSelectHandler = async (event, row) => {
 
         const file = event.target.files[0]
         const base64 = await convertBase64(file);
@@ -598,7 +643,7 @@ const SalesReturn = (props) => {
         })
     }
 
-    function myFunction(row) {
+    function imageShowHandler(row) {
 
         var x = document.getElementById("add-img");
         if (x.style.display === "none") {
@@ -629,8 +674,8 @@ const SalesReturn = (props) => {
             grand_total = grand_total + Number(calculate.roundedTotalAmount)
 
             return ({
-                "Item": i.ItemName.value,
-                "ItemName": i.ItemName.label,
+                "Item": i.ItemId,
+                "ItemName": i.ItemName,
                 "Quantity": i.Qty,
                 "Unit": returnMode === 1 ? i.RowData.Unit : i.Unit,
                 "BaseUnitQuantity": returnMode === 1 ? i.RowData.BaseUnitQuantity : i.BaseUnitQuantity,
@@ -778,60 +823,6 @@ const SalesReturn = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReturnReason} </Label>
-                                        <Col sm="7">
-                                            <Select
-                                                id="ReturnReason "
-                                                name="ReturnReason"
-                                                value={values.ReturnReason}
-                                                isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={ReturnReasonOptions}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
-                                                }}
-                                            />
-                                            {isError.ReturnReason.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.ReturnReason}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment} </Label>
-                                        <Col sm="7">
-                                            <Input
-                                                name="Comment"
-                                                id="Comment"
-                                                value={values.Comment}
-                                                type="text"
-                                                className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Comment"
-                                                autoComplete='off'
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.Comment.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Comment}</span>
-                                            )}
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col >
-                            </Row>
-
-                            <Row>
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
                                         <Col sm="7">
                                             <Select
@@ -851,6 +842,55 @@ const SalesReturn = (props) => {
                                                     setrRturnMode(2)
                                                 }}
                                             />
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
+
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-1 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment} </Label>
+                                        <Col sm="7">
+                                            <Input
+                                                name="Comment"
+                                                id="Comment"
+                                                value={values.Comment}
+                                                type="text"
+                                                className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Enter Comment"
+                                                autoComplete='off'
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.Comment.length > 0 && (
+                                                <span className="invalid-feedback">{isError.Comment}</span>
+                                            )}
+                                        </Col>
+
+                                    </FormGroup>
+                                </Col >
+                            </Row>
+
+                            <Row>
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-1 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.BatchCode}</Label>
+                                        <Col sm="7">
+                                            <Input
+                                                name="BatchCode"
+                                                value={values.BatchCode}
+                                                placeholder="Enter BatchCode"
+                                                type='text'
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.BatchCode.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.BatchCode}</small></span>
+                                            )}
+
 
                                         </Col>
 
@@ -934,7 +974,6 @@ const SalesReturn = (props) => {
                                             loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
                                             module={"SalesReturn"}
                                         />
 
