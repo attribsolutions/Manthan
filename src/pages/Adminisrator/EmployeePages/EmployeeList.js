@@ -13,7 +13,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { Listloader1 } from "../../../components/Common/CommonButton";
+import { Listloader, } from "../../../components/Common/CommonButton";
 
 const Employee_List = () => {
 
@@ -52,9 +52,12 @@ const Employee_List = () => {
 
   return (
     <React.Fragment>
-      <Listloader1 show={reducers.listBtnLoading} />
+      <>
       {
-        (pageField) &&
+        reducers.loading ?
+        <Listloader/>
+        :
+        (pageField) ?
         <CommonListPage
           action={action}
           reducers={reducers}
@@ -63,7 +66,9 @@ const Employee_List = () => {
           ButtonMsgLable={"Employee"}
           deleteName={"Name"}
         />
-      }
+        :<Listloader/>
+      }</>
+      
 
     </React.Fragment>
   )
