@@ -81,10 +81,21 @@ function* makeGRN_Mode1_GenFunc({ data }) {
     const response = yield call(GRN_Make_API, jsonBody);
 
     response.Data.OrderItem.forEach(index => {
+      index["GSToption"] = index.GSTDropdown.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
       index["MRPOps"] = index.MRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
       index["defaultMRP"] = index["MRPOps"].reduce((maxObj, obj) => {
         return obj.value > maxObj.value ? obj : maxObj;
       }, { value: -Infinity });
+
+      if (index.GST === null) {
+        const deFaultValue = index.GSTDropdown.filter(i => i.GSTPercentage === index.GSTPercentage);
+        const value = { label: deFaultValue[0].GSTPercentage, value: deFaultValue[0].GST }
+        index["DefaultGST"] = value
+      } else {
+        const deFaultValue = index.GSTDropdown.filter(i => i.GST === index.GST);
+        const value = { label: deFaultValue[0].GSTPercentage, value: deFaultValue[0].GST }
+        index["DefaultGST"] = value
+      }
 
     })
 
