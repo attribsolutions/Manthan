@@ -155,7 +155,7 @@ export const GRN_ADD_3 = "/GRN_ADD_3"
 export const CHALLAN_LIST = "/ChallanList"
 export const CHALLAN = "/Challan"
 
-export const STOCK_ENTRY ="/Stock_Entry"
+export const STOCK_ENTRY = "/Stock_Entry"
 //*******************************All report page ************************************//
 export const REPORT = "/Report"
 
@@ -231,6 +231,13 @@ export const DEBIT = "/Debit"
 export const SAP_LEDGER = "/SapLedger"
 
 export const PARTY_LEDGER = "/PartyLedger"
+
+export const STOCK_REPORT = "/StockReport"
+
+
+
+
+
 
 
 

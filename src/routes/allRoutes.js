@@ -162,6 +162,7 @@ import OrderSummary from "../Reports/OrderSummaryReport/OrderSummary";
 import InvoiceConfiguration from "../pages/Adminisrator/InvoiceConfiguration/InvoiceConfiguration";
 import StockEntry from "../pages/Inventory/StockEntry/StockEntry";
 import PartyLedger from "../Reports/PratyLedger/Partyledger";
+import StockReportMaster from "../Reports/StockReport/StockReport";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -397,8 +398,13 @@ const userRoutes = [
 
   { path: path.PARTY_LEDGER, component: PartyLedger },
 
+  { path: path.STOCK_REPORT, component: StockReportMaster },
 
-  
+
+
+
+
+
 
 
   //**************************** Reports ***********************************//
