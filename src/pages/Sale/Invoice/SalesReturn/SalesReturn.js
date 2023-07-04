@@ -33,8 +33,11 @@ import { CInput, C_DatePicker } from "../../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../../store/Administrator/PartyItemsRedux/action";
 import { SalesReturn_add_button_api_For_Invoice, SalesReturn_add_button_api_For_Item } from "../../../../helpers/backend_helper";
-import { salesReturnCalculate, calculateSalesReturnFunc } from "./SalesCalculation";
+import { salesReturnCalculate, calculateSalesReturnFunc, return_discountCalculate_Func } from "./SalesCalculation";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
+import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 
 
 
@@ -183,14 +186,6 @@ const SalesReturn = (props) => {
         }
     }, [postMsg])
 
-    function ReturnDate_Onchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.ReturnDate = date;
-            a.hasValid.ReturnDate.valid = true
-            return a
-        })
-    }
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -217,42 +212,23 @@ const SalesReturn = (props) => {
         label: index.FullInvoiceNumber,
     }));
 
-    function deleteButtonAction(row) {
-        const newArr = TableArr.filter((index) => !(index.id === row.id))
-        setTableArr(newArr)
-    }
 
-    // function quantityHandler(event, row) {
 
-    //     row["Qty"] = event.target.value
-
-    //     let input = event.target.value
-
-    //     if (returnMode === 1) {
-    //         let v1 = Number(row.Quantity);
-    //         let v2 = Number(input)
-    //         if (!(v1 >= v2)) {
-    //             event.target.value = v1;
-    //         }
-    //     }
-    //     row.Qty = event.target.value
-
-    // }
 
     const pagesListColumns = [
         {
             text: "Item Name",
-            dataField: "",
+            dataField: "ItemName",
+            hidden: false,
             formatter: (cellContent, row, key) => {
                 return (
                     <Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>
                 )
             }
-        }, ,
+        },
         {
             text: "Invoice Qty",
-            dataField: "",
-            hidden: returnMode === 2 && true,
+            hidden: (returnMode === 1) ? false : true,
             formatter: (cellContent, row, key) => {
                 return (
                     <Label>{row.Quantity}</Label>
@@ -261,8 +237,9 @@ const SalesReturn = (props) => {
         },
         {
             text: "Quantity",
-            dataField: "",
+            dataField: "Quantity",
             classes: () => "sales-discount-row",
+            hidden: false,
             formatter: (cellContent, row, key) => {
 
                 return (
@@ -280,7 +257,7 @@ const SalesReturn = (props) => {
                             />
                         </div>
                         <div className="child mt-2 pl-1">
-                            <label className="label">&nbsp;No</label>
+                            <label className="label">&nbsp;{row.UnitName}</label>
                         </div>
 
                     </div>
@@ -290,58 +267,62 @@ const SalesReturn = (props) => {
 
         {
             text: "MRP",
-            dataField: "",
-            classes: () => "sales-return-row",
+            dataField: "MRP",
+            hidden: false,
             formatter: (cellContent, row, key) => {
                 return (
                     <>
-                        <span style={{ justifyContent: 'center', width: "80px" }}>
+                        <div style={{ minWidth: "90px" }}>
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
-                                defaultValue={returnMode === 1 && { value: row.RowData.MRP, label: row.RowData.MRPValue }}
+                                defaultValue={{ value: row.MRP, label: row.MRPValue }}
                                 isSearchable={true}
                                 isDisabled={returnMode === 1 && true}
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
                                 options={row.MRPOptions}
                                 onChange={(event) => {
-                                    row.MRP = event.value
-                                    row.MRPValue = event.label
+                                    row.MRP = event.value;
+                                    row.MRPValue = event.label;
                                 }}
+
                             />
-                        </span></>)
+                        </div>
+                    </>
+                )
             }
         },
 
         {
             text: "GST",
             dataField: "",
-            classes: () => "sales-return-row",
+            hidden: false,
             formatter: (cellContent, row, key) => {
-                return (<span style={{ justifyContent: 'center', width: "80px" }}>
+                return (<div style={{ minWidth: "90px" }}>
                     <Select
                         id={`GST${key}`}
                         name="GST"
-                        defaultValue={returnMode === 1 && { value: row.RowData.GST, label: row.RowData.GSTPercentage }}
+                        defaultValue={{ value: row.GST, label: row.GSTPercentage }}
                         isSearchable={true}
                         isDisabled={returnMode === 1 && true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
                         options={row.GSTOptions}
                         onChange={(event) => {
-                            row.GST_ID = event.value
-                            row.GST = event.label
+                            row.GST = event.value;
+                            row.GSTPercentage = event.label;
                         }}
                     />
-                </span>)
+                </div>)
             }
         },
         {
             text: "Rate",
             dataField: "",
+            hidden: false,
             classes: () => "sales-rate-row",
-            formatter: (cellContent, index1, key, formatExtraData) => {
+            formatter: (cellContent, index1, key,) => {
 
                 return (
                     <>
@@ -422,14 +403,11 @@ const SalesReturn = (props) => {
             },
 
         },
-
-
-
         {
             text: "Return Reason",
             dataField: "",
             classes: () => "sales-return-row",
-            formatter: (cellContent, row, key) => {
+            formatter: (cellContent, row) => {
 
                 return (<>
 
@@ -437,18 +415,17 @@ const SalesReturn = (props) => {
                     <div className="parent mb-1">
                         <div className="child">
                             <Select
-                                id="ReturnReason "
-                                name="ReturnReason"
-                                value={values.ReturnReason}
                                 isSearchable={true}
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
+                                defaultValue={row.defaultReason}
                                 styles={{
                                     menu: provided => ({ ...provided, zIndex: 2 })
                                 }}
                                 options={ReturnReasonOptions}
-                                onChange={(hasSelect, evn) => {
-                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                onChange={event => {
+                                    debugger
+                                    row["defaultReason"] = event
                                 }}
                             />
                         </div>
@@ -456,12 +433,9 @@ const SalesReturn = (props) => {
                     <div className="parent">
                         <div className="child">
                             <Input
-                                id=""
-                                key={row.id}
                                 placeholder="Enter Comment"
                                 defaultChecked={row.ItemComment}
                                 type="text"
-                                className="col col-sm text-center"
                                 onChange={(event) => { row.ItemComment = event.target.value }}
                             />
                         </div>
@@ -483,7 +457,6 @@ const SalesReturn = (props) => {
                             <Input
                                 type="file"
                                 className="form-control "
-                                // value={FileName}
                                 name="image"
                                 id="file"
                                 accept=".jpg, .jpeg, .png ,.pdf"
@@ -503,7 +476,7 @@ const SalesReturn = (props) => {
         {
             text: "Action ",
             dataField: "",
-            hidden: (returnMode === 1) && true,
+            hidden: returnMode === 1 ? true : false,
             formatter: (cellContent, row, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
@@ -514,8 +487,7 @@ const SalesReturn = (props) => {
                                     type="button"
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                    onClick={(e) => { deleteButtonAction(row) }}
-                                >
+                                    onClick={(e) => { deleteButtonAction(row) }}>
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
                             </FormGroup>
@@ -526,7 +498,21 @@ const SalesReturn = (props) => {
         },
     ];
 
-    async function AddPartyHandler(e, type) {
+    const deleteButtonAction = (row) => {
+        const newArr = TableArr.filter((index) => !(index.id === row.id))
+        setTableArr(newArr)
+    }
+
+    const ReturnDate_Onchange = (e, date) => {
+        setState((i) => {
+            const a = { ...i }
+            a.values.ReturnDate = date;
+            a.hasValid.ReturnDate.valid = true
+            return a
+        })
+    }
+
+    const AddPartyHandler = async (e, type) => {
 
         const invalidMsg1 = []
         if ((values.ItemName === '') && (type === 'add')) {
@@ -547,43 +533,44 @@ const SalesReturn = (props) => {
             return
         }
 
-        let resp;
+        let apiResponse;
         try {
 
             if (returnMode === 2) {
-                resp = await SalesReturn_add_button_api_For_Item(values.ItemName.value)
+
+                apiResponse = await SalesReturn_add_button_api_For_Item({//Post API Method
+                    "ItemID": values.ItemName.value,
+                    "BatchCode": values.BatchCode
+                })
+
             }
             else {
-                resp = await SalesReturn_add_button_api_For_Invoice(values.InvoiceNumber.value)
+                apiResponse = await SalesReturn_add_button_api_For_Invoice(values.InvoiceNumber.value)
+                apiResponse.Data = apiResponse.Data.InvoiceItems
             }
-
+            if (apiResponse.StatusCode == 204) {
+                customAlert({
+                    Type: 3,
+                    Message: JSON.stringify(apiResponse.Message)
+                })
+                return
+            }
             const itemArr = [...TableArr];
 
-            resp.Data.InvoiceItems.forEach((i) => {
-                debugger
-                const unitOptions = {
-                    label: i.UnitName,
-                    value: i.Unit,
-                    BaseUnitQuantity: i.BaseUnitQuantity
-                }
+            apiResponse.Data.forEach((i) => {
                 const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
                 const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
+                const defaultGST = { value: i.GST, label: i.GSTPercentage }
+                const defaultMRP = { value: i.MRP, label: i.MRPValue }
 
                 itemArr.push({
+                    ...i,
                     id: itemArr.length + 1,
-                    unitOptions: unitOptions,
                     MRPOptions: MRPOptions,
                     GSTOptions: GSTOptions,
-                    ItemName: i.ItemName,
-                    ItemId: i.Item,
-                    Quantity: i.Quantity,
-                    Rate: i.Rate,
+                    defaultGST: defaultGST,
+                    defaultMRP: defaultMRP,
                     gstPercentage: i.GSTPercentage,
-                    RowData: i.RowData,
-                    BatchCode: i.BatchCode,
-                    BatchDate: i.BatchDate,
-                    Discount: i.Discount,
-                    DiscountType: i.DiscountType
                 });
             });
 
@@ -598,7 +585,7 @@ const SalesReturn = (props) => {
         } catch (error) { _cfunc.CommonConsole(error) }
     }
 
-    function RetailerHandler(event) {
+    const RetailerHandler = (event) => {
 
         setState((i) => {
             let a = { ...i }
@@ -643,7 +630,7 @@ const SalesReturn = (props) => {
         })
     }
 
-    function imageShowHandler(row) {
+    const imageShowHandler = (row) => {
 
         var x = document.getElementById("add-img");
         if (x.style.display === "none") {
@@ -667,36 +654,46 @@ const SalesReturn = (props) => {
         let grand_total = 0;
         const ReturnItems = TableArr.map((i) => {
 
-            var gstPercentage = returnMode === 1 ? i.gstPercentage : i.GST
             //** calcualte amount function
-            const calculate = calculateSalesReturnFunc({ Rate: i.Rate, Qty: i.Qty, gstPercentage: gstPercentage })
+
+            const calculate = return_discountCalculate_Func(i)
 
             grand_total = grand_total + Number(calculate.roundedTotalAmount)
 
             return ({
-                "Item": i.ItemId,
+                "Item": i.Item,
                 "ItemName": i.ItemName,
-                "Quantity": i.Qty,
-                "Unit": returnMode === 1 ? i.RowData.Unit : i.Unit,
-                "BaseUnitQuantity": returnMode === 1 ? i.RowData.BaseUnitQuantity : i.BaseUnitQuantity,
-                "BatchCode": returnMode === 1 ? i.RowData.BatchCode : i.BatchCode,
-                "BatchDate": returnMode === 1 ? i.RowData.BatchDate : i.BatchDate,
-                "Amount": calculate.roundedTotalAmount,
-                "MRP": returnMode === 1 ? i.RowData.MRP : i.MRP,
-                "MRPValue": returnMode === 1 ? i.RowData.MRPValue : i.MRPValue,
+                "Quantity": i.Quantity,
+                "Unit": i.Unit,
+                "BaseUnitQuantity": i.BaseUnitQuantity,
+                "BatchCode": i.BatchCode,
+                "BatchDate": i.BatchDate,
+                "MRP": i.MRP,
+                "MRPValue": i.MRPValue,
                 "Rate": i.Rate,
-                "BasicAmount": calculate.basicAmount,
-                "GSTAmount": calculate.roundedGstAmount,
-                "GST": returnMode === 1 ? i.RowData.GST : i.GST_ID,
-                "GSTPercentage": gstPercentage,
-                "CGST": calculate.CGST_Amount,
-                "SGST": calculate.SGST_Amount,
-                "IGST": 0,
-                "CGSTPercentage": (gstPercentage / 2),
-                "SGSTPercentage": (gstPercentage / 2),
-                "IGSTPercentage": 0,
-                "TaxType": "GST",
-                "ReturnItemImages": []
+                "GST": i.GST,
+                "ItemReason": i.defaultReason ? i.defaultReason.value : '',
+                "Comment": i.ItemComment,
+
+                "CGST": Number(calculate.CGST_Amount).toFixed(2),
+                "SGST": Number(calculate.SGST_Amount).toFixed(2),
+                "IGST": Number(calculate.IGST_Amount).toFixed(2),
+
+                "GSTPercentage": calculate.GST_Percentage,
+                "CGSTPercentage": calculate.CGST_Percentage,
+                "SGSTPercentage": calculate.SGST_Percentage,
+                "IGSTPercentage": calculate.IGST_Percentage,
+
+                "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
+                "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
+                "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
+
+                "TaxType": 'GST',
+                "DiscountType": calculate.discountType,
+                "Discount": calculate.discount,
+                "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+
+                "ReturnItemImages": [],
             })
         })
 
@@ -747,7 +744,8 @@ const SalesReturn = (props) => {
 
                 const jsonBody = JSON.stringify({
                     ReturnDate: values.ReturnDate,
-                    ReturnReason: values.ReturnReason.value,
+                    ReturnReason: '',
+                    BatchCode: values.BatchCode,
                     Customer: values.Customer.value,
                     Comment: values.Comment,
                     GrandTotal: grand_total,
@@ -954,17 +952,42 @@ const SalesReturn = (props) => {
                             </Row>
                         </div>
 
-                        <CustomTable2
-                            data={TableArr}
-                            columns={pagesListColumns}
-                            classes={" table table-responsive table-bordered table-hover"}
-                            noDataIndication={
-                                <div className="text-danger text-center ">
-                                    Record Not available
-                                </div>
-                            }
-                        >
-                        </CustomTable2>
+                        <div>
+                            <ToolkitProvider
+                                keyField={"id"}
+                                data={TableArr}
+                                columns={pagesListColumns}
+                                search
+                            >
+                                {(toolkitProps) => (
+                                    <React.Fragment>
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive table" style={{ minHeight: "60vh" }}>
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        key={`table-key-${returnMode}`}
+                                                        id="table_Arrow"
+                                                        classes={"table  table-bordered "}
+                                                        noDataIndication={
+                                                            <div className="text-danger text-center ">
+                                                                Items Not available
+                                                            </div>
+                                                        }
+                                                        {...toolkitProps.baseProps}
+                                                        onDataSizeChange={(e) => {
+                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                        }}
+                                                    />
+                                                </div>
+                                            </Col>
+                                            {mySearchProps(toolkitProps.searchProps,)}
+                                        </Row>
+
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        </div>
 
                         {
                             TableArr.length > 0 ?
