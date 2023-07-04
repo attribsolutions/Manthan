@@ -28,6 +28,7 @@ const RoutesList = (props) => {
 
   const reducers = useSelector(
     (state) => ({
+      loading: state.RoutesReducer.loading,
       listBtnLoading: state.RoutesReducer.listBtnLoading,
       tableList: state.RoutesReducer.RoutesList,
       postMsg: state.RoutesReducer.PostData,
@@ -86,7 +87,7 @@ const RoutesList = (props) => {
           </div>
         }
         {
-          reducers.listBtnLoading ?
+          reducers.loading ?
             <Listloader />
             :
             (pageField) ?
