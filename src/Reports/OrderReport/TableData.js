@@ -4,6 +4,7 @@ import { groupBy } from "../../components/Common/CommonFunction";
 export const columns = [
     "HSN Item Name",
     "Quantity",
+    "MRP",
     "Rate",
     "Basic   Amount ",
     "CGST%",
@@ -15,6 +16,7 @@ export const columns = [
 export const columnsWithIGST = [
     "HSN Item Name",
     "Quantity",
+    "MRP",
     "Rate",
     "Basic   Amount ",
     "IGST%",
@@ -55,6 +57,9 @@ export const Rows = (data) => {
             let totalSGst = 0
             let totalAmount = 0
             let totalQuantity = 0
+            let TotalGst = 0
+            let GSTPercentage = 0
+
 
             i.forEach(element => {
                 debugger
@@ -62,6 +67,7 @@ export const Rows = (data) => {
                     `(${element.HSNCode}) ${element.ItemName}     
                      ${element.Comment === null ? "" : element.Comment}`,
                     `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}  ${element.UnitName}`,
+                    `${element.MRPValue}`,
                     element.Rate,
                     element.BasicAmount,
                     `${element.CGSTPercentage}%`,
@@ -75,7 +81,9 @@ export const Rows = (data) => {
                 totalQuantity = Number(totalQuantity) + Number(element.Quantity)
                 totalCGst = Number(totalCGst) + Number(element.CGST)
                 totalSGst = Number(totalSGst) + Number(element.SGST)
+                TotalGst = totalCGst + totalSGst;
                 totalAmount = Number(totalAmount) + Number(element.Amount)
+                GSTPercentage = Number(element.CGSTPercentage) + Number(element.SGSTPercentage)
                 totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
 
                 hasHedRow.push(tableitemRow);
@@ -83,9 +91,10 @@ export const Rows = (data) => {
 
             function totalrow() {
                 return [
-                    "",
+                    ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(TotalGst).toFixed(2))}`,
                     "",
                     `${Number(totalBasicAmount).toFixed(2)}`,
+                    "",
                     "",
                     `${Number(totalCGst).toFixed(2)}`,
                     "isaddition",
@@ -114,6 +123,8 @@ export const RowsWithIGST = (data) => {
             let totalIGst = 0
             let totalAmount = 0
             let totalQuantity = 0
+            let GSTPercentage = 0
+
 
             i.forEach(element => {
                 debugger
@@ -121,6 +132,7 @@ export const RowsWithIGST = (data) => {
                     `(${element.HSNCode}) ${element.ItemName}     
                      ${element.Comment === null ? "" : element.Comment}`,
                     `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}                  ${element.UnitName}`,
+                    `${element.MRPValue}`,
                     element.Rate,
                     element.BasicAmount,
                     `${element.IGSTPercentage}%`,
@@ -133,14 +145,17 @@ export const RowsWithIGST = (data) => {
                 totalIGst = Number(totalIGst) + Number(element.IGST)
                 totalAmount = Number(totalAmount) + Number(element.Amount)
                 totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
+                GSTPercentage = Number(element.IGSTPercentage)
+
 
                 hasHedRow.push(tableitemRow);
             })
 
             function totalrow() {
                 return [
-                    "",
+                    `GST ${(Number(GSTPercentage))}%  Total:${(Number(totalIGst).toFixed(2))} `,
                     `${Number(totalBasicAmount).toFixed(2)}`,
+                    "",
                     "",
                     "",
                     `${Number(totalIGst).toFixed(2)}`,
