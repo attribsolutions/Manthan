@@ -12,9 +12,12 @@ import {
   PAYMENT_ENTRY_LIST_FILTERS,
   RECEIPT_LIST_API,
   SAVE_RECEIPT_MASTER,
+  DELETE_RECEIPT_LIST,
+  RECEIPT_AND_PAYMENT_API_ERROR_ACTION,
 } from "./actionType"
 
 const INIT_STATE = {
+  listBtnLoading: false,
   saveBtnloading: false,
   loading: false,
   ReceiptGoButton: [],
@@ -86,10 +89,17 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         ReceiptType: action.payload,
       }
 
+      case DELETE_RECEIPT_LIST:
+        return {
+          ...state,
+          listBtnLoading:action.config.btnId,
+        }
+  
     case DELETE_RECEIPT_LIST_SUCCESS:
       return {
         ...state,
         deleteMsg: action.payload,
+        listBtnLoading:false
       }
 
     case BANK_LIST_API_SUCCESS:
@@ -97,6 +107,16 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         ...state,
         bankList: action.payload,
       }
+
+    case RECEIPT_AND_PAYMENT_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listBtnLoading: false,
+        loading: false
+      }
+
+
     default:
       return state
   }

@@ -14,7 +14,8 @@ import {
   BANK_LIST_API,
   BANK_LIST_API_SUCCESS,
   RECEIPT_LIST_FILTERS,
-  PAYMENT_ENTRY_LIST_FILTERS
+  PAYMENT_ENTRY_LIST_FILTERS,
+  RECEIPT_AND_PAYMENT_API_ERROR_ACTION
 } from "./actionType";
 
 export const Receiptlistfilters = filter => ({                            //Material issue  Filter Action
@@ -101,3 +102,7 @@ export const BankListAPISuccess = (resp) => ({
   type: BANK_LIST_API_SUCCESS,
   payload: resp,
 });
+
+export const ReceiptAndPaymentApiErrorAction = () => ({
+  type: RECEIPT_AND_PAYMENT_API_ERROR_ACTION,
+})

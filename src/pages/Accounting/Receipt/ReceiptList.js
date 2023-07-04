@@ -48,6 +48,7 @@ const ReceiptList = () => {
 
     const reducers = useSelector(
         (state) => ({
+            listBtnLoading:state.ReceiptReducer.listBtnLoading,
             loading: state.ReceiptReducer.loading,
             tableList: state.ReceiptReducer.ReceiptList,
             deleteMsg: state.ReceiptReducer.deleteMsg,
