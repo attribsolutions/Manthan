@@ -56,10 +56,7 @@ const PartyTypeList = (props) => {
 
       {
 
-        reducers.listBtnLoading ?
-          <Listloader />
-          :
-          (pageField) ?
+          (pageField) &&
             <CommonListPage
               action={action}
               reducers={reducers}
@@ -68,7 +65,7 @@ const PartyTypeList = (props) => {
               ButtonMsgLable={"Party Type"}
               deleteName={"Name"}
             />
-            : <><Listloader /></>
+            
       }
     </React.Fragment>
   )
