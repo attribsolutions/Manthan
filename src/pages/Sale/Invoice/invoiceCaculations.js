@@ -68,13 +68,21 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
     // Calculate the total amount after discount and GST
     const roundedGstAmount = CGST_Amount + SGST_Amount;
     let total = roundedGstAmount + discountBaseAmt;
-debugger
+
+    let GST_Percentage = Number(index1.GSTPercentage) || 0;
+    let IGST_Percentage = 0;
+    let SGST_Percentage = (GST_Percentage / 2);
+    let CGST_Percentage = (GST_Percentage / 2);
+
     if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
         let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)
         if (isSameSate) {// iF isSameSate = true ===not same GSTIn
             CGST_Amount = 0;
             SGST_Amount = 0;
             IGST_Amount = Number(roundedGstAmount.toFixed(2))
+            IGST_Percentage = GST_Percentage;
+            SGST_Percentage = 0;
+            CGST_Percentage = 0;
         }
     }
     // Return the calculated values as an object
@@ -85,7 +93,11 @@ debugger
         roundedTotalAmount: Number(total.toFixed(2)),
         CGST_Amount,
         SGST_Amount,
-        IGST_Amount
+        IGST_Amount,
+        GST_Percentage: GST_Percentage.toFixed(2),
+        CGST_Percentage: CGST_Percentage.toFixed(2),
+        SGST_Percentage: SGST_Percentage.toFixed(2),
+        IGST_Percentage: IGST_Percentage.toFixed(2),
     };
 };
 
