@@ -1,6 +1,8 @@
 import { Fade } from "reactstrap";
 import {
+  DELETE_ROUTES_ID,
   DELETE_ROUTES_ID_SUCCESS,
+  EDIT_ROUTES_ID,
   EDIT_ROUTES_ID_SUCCESS,
   GET_ROUTES_LIST,
   GET_ROUTES_LIST_SUCCESS,
@@ -19,6 +21,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
+  loading:false
 }
 
 const RoutesReducer = (state = INIT_STATE, action) => {
@@ -43,7 +46,7 @@ const RoutesReducer = (state = INIT_STATE, action) => {
     case GET_ROUTES_LIST:
       return {
         ...state,
-        listBtnLoading: true,
+      loading: true,
       }
 
 
@@ -51,20 +54,34 @@ const RoutesReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         RoutesList: action.payload,
-        listBtnLoading: false,
+        loading: false,
 
       }
+
+      case DELETE_ROUTES_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
 
     case DELETE_ROUTES_ID_SUCCESS:
       return {
         ...state,
         deleteMessage: action.payload,
+        listBtnLoading:false
+      };
+
+      case EDIT_ROUTES_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
       };
 
     case EDIT_ROUTES_ID_SUCCESS:
       return {
         ...state,
         editData: action.payload,
+        listBtnLoading:false
       };
 
     // update api
@@ -86,6 +103,7 @@ const RoutesReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
 
 

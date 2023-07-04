@@ -36,6 +36,7 @@ const LoadingSheetList = () => {
     const reducers = useSelector(
         (state) => ({
             loading: state.LoadingSheetReducer.loading,
+            listBtnLoading:state.LoadingSheetReducer.listBtnLoading,
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
             deleteMsg: state.LoadingSheetReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
