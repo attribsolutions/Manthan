@@ -25,7 +25,7 @@ function* ReceiptGoButtonGenFunc({ Data }) {
     });
 
     yield put(action.ReceiptGoButtonMaster_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ReceiptAndPaymentApiErrorAction()) }
 }
 
 // OpeningBalance value
@@ -34,7 +34,7 @@ function* OpeningBalanceGenFunc({ jsonBody }) {
   try {
     const response = yield call(apiCall.Opening_balance_API, jsonBody);
     yield put(action.GetOpeningBalance_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ReceiptAndPaymentApiErrorAction()) }
 }
 
 // Receipt List API
@@ -58,7 +58,7 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
     })
 
     yield put(action.ReceiptListAPISuccess(newList));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ReceiptAndPaymentApiErrorAction()) }
 }
 
 // Post API 
@@ -67,7 +67,7 @@ function* save_Receipt_GenFunc({ config }) {
     const response = yield call(apiCall.Receipt_Post_API, config);
     yield put(action.saveReceiptMaster_Success(response));
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ReceiptAndPaymentApiErrorAction()) }
 }
 
 // Receipt Type API
@@ -76,7 +76,7 @@ function* Receipt_Type_GenFunc({ jsonBody }) {
   try {
     const response = yield call(apiCall.Receipt_Type_API, jsonBody);
     yield put(action.ReceiptTypeAPISuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ReceiptAndPaymentApiErrorAction()) }
 }
 
 // delete API
@@ -85,7 +85,7 @@ function* Delete_Receipt_ID_GenFunc({ config }) {
   try {
     const response = yield call(apiCall.Receipt_Delete_API, config);
     yield put(action.deleteReceiptList_Success(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ReceiptAndPaymentApiErrorAction()) }
 }
 
 // Bank list Dropdown API
@@ -94,7 +94,7 @@ function* Bank_List_GenFunc() {
   try {
     const response = yield call(apiCall.Bank_List_API, jsonBody);
     yield put(action.BankListAPISuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ReceiptAndPaymentApiErrorAction()) }
 }
 
 function* ReceiptSaga() {
