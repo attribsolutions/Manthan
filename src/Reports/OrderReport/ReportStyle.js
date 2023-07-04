@@ -2,7 +2,7 @@
 import cbm_logo from "../../assets/images/cbm_logo.png"
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
-import { compareGSTINState, date_dmy_func } from "../../components/Common/CommonFunction";
+import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
 let initial_y = 0
 
 
@@ -621,9 +621,9 @@ export const pageFooter = (doc, data) => {
         pageBorder(doc)
         reportHeder3(doc, data)
         doc.setFont('helvetica', 'Normal')
-        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 828, {
-            align: 'center'
-        })
-        console.log("aaa", doc.internal.pageSize.height)
+
+        doc.text('Print Date :' + String(currentDate_dmy) + 'Time' + String(CurrentTime()), 30, 828,)
+        doc.text('Page' + String(i) + ' of ' + String(pageCount), 500, 828,)
+
     }
 }
