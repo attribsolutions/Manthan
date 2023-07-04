@@ -633,18 +633,21 @@ const Invoice = (props) => {
                         MRP: ele.LiveBatcheMRPID,
                         MRPValue: ele.MRP,//changes
                         Rate: Number(ele.Rate).toFixed(2),
-                        BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
-                        GSTAmount: Number(calculate.roundedGstAmount).toFixed(2),
+                        
                         GST: ele.LiveBatcheGSTID,
-                        GSTPercentage: ele.GST,// changes
                         CGST: Number(calculate.CGST_Amount).toFixed(2),
                         SGST: Number(calculate.SGST_Amount).toFixed(2),
                         IGST: Number(calculate.IGST_Amount).toFixed(2),
-                        GSTPercentage: ele.GST,
-                        CGSTPercentage: (ele.GST / 2),
-                        SGSTPercentage: (ele.GST / 2),
-                        IGSTPercentage: ele.GST,
+                     
+                        GSTPercentage: calculate.GST_Percentage,
+                        CGSTPercentage: calculate.CGST_Percentage,
+                        SGSTPercentage: calculate.SGST_Percentage,
+                        IGSTPercentage: calculate.IGST_Percentage,
+
+                        BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
+                        GSTAmount: Number(calculate.roundedGstAmount).toFixed(2),
                         Amount: Number(calculate.roundedTotalAmount).toFixed(2),
+
                         TaxType: 'GST',
                         DiscountType: index.DiscountType,
                         Discount: Number(index.Discount) || 0,

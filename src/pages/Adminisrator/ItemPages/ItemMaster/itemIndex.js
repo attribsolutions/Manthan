@@ -31,7 +31,6 @@ import {
     get_Division_ForDropDown,
     get_ImageType_ForDropDown,
     get_Party_ForDropDown,
-    get_PriceList_ForDropDown,
     saveItemMasterAction,
     SaveItemMasterActionSuccess,
     updateItemMasterAction,
@@ -57,8 +56,8 @@ import * as mode from "../../../../routes/PageMode";
 import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { SaveButton } from "../../../../components/Common/CommonButton";
-import { priceListByCompay_Action } from "../../../../store/Administrator/PriceList/action";
 import WeightageTab from "./Weightage_Tab";
+
 
 export const unitConversionInitial = {
     id: 1,
@@ -66,7 +65,9 @@ export const unitConversionInitial = {
     Unit: '',
     POUnit: false,
     SOUnit: false,
-    IsBase: false
+    IsBase: false,
+    hasEdit: false,
+    hasDelete: false
 };
 const ItemsMaster = (props) => {
 
@@ -80,14 +81,13 @@ const ItemsMaster = (props) => {
     const [activeTab1, setactiveTab1] = useState("1")
 
     const [searchResults, setSearchResults] = React.useState([]);
-    const [searchResults1, setSearchResults1] = React.useState([]);
 
     let initial = {
         Name: "",
         SAPItemCode: "",
         ShortName: "",
         BarCode: '',
-        BaseUnit: [],
+        BaseUnit: "",
         Category: [],
         CategoryType: [],
         Division: [],
@@ -122,6 +122,7 @@ const ItemsMaster = (props) => {
     }]);
 
     const [baseUnitTableData, setBaseUnitTableData] = useState([unitConversionInitial]);
+    const [previousBaseUnitTableData, setPreviousBaseUnitTableData] = useState([]);
 
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
@@ -209,9 +210,7 @@ const ItemsMaster = (props) => {
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
-
             if (hasEditVal) {
-
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -295,19 +294,22 @@ const ItemsMaster = (props) => {
                         Conversion: index.BaseUnitQuantity,
                         IsBase: index.IsBase,
                         POUnit: index.PODefaultUnit,
-                        SOUnit: index.SODefaultUnit
+                        SOUnit: index.SODefaultUnit,
                     })
                     // }
                 })
 
+
                 if ((UnitDetails.length === 0)) {
+
                     UnitDetails.push(unitConversionInitial)
                 };
 
-                setBaseUnitTableData(UnitDetails)
-              
+
+                setPreviousBaseUnitTableData(JSON.parse(JSON.stringify(UnitDetails)));// Assign the deep copy to previousBaseUnitTableData
+                setBaseUnitTableData(UnitDetails);
                 // ====================== Weightage tab =================================
-              
+
                 setWeightageTabMaster({
                     Breadth: hasEditVal.Breadth,
                     Grammage: hasEditVal.Grammage,
@@ -518,7 +520,7 @@ const ItemsMaster = (props) => {
                 inValidMsg.push("ShortName: Is Requried")
             }
 
-            if (formValue.BaseUnit.length < 1) {
+            if (formValue.BaseUnit === '') {
                 setInValidDrop(i => {
                     const a = { ...i }
                     a.BaseUnit = true
@@ -556,15 +558,7 @@ const ItemsMaster = (props) => {
                 isvalid = false
                 inValidMsg.push("Division:Is Requried")
             }
-            // if (formValue.BrandName.length < 1) {
-            //     setInValidDrop(i => {
-            //         const a = { ...i }
-            //         a.BrandName = true
-            //         return a
-            //     })
-            //     isvalid = false
-            //     inValidMsg.push("Brand Name:Is Requried")
-            // }
+
             if (!Group_Tab_TableData.length > 0) {
                 isvalid = false
                 inValidMsg.push(" GroupType Primary:Is Requried")
@@ -578,46 +572,80 @@ const ItemsMaster = (props) => {
                     inValidMsg.push(" GroupType Primary:Is Requried")
                 }
             }
-            if (isvalid) {                                               // ************* is valid if start 
+            if (isvalid) {  // ************* is valid if start 
+
                 //**************** Brand Name **************** */
                 const ItemBrandName = formValue.BrandName.map((index) => {
                     return index.value
                 })
                 // ====================== Unit conversion *****start ======================
 
-                const itemUnitDetails = []
-                // 
-                baseUnitTableData.forEach((index, key) => {
-                    let val1 = index.Conversion
+                const specificID = formValue.BaseUnit.value;
+                const isEditMode = pageMode === mode.edit; // Set the value based on your page mode
+                let isChangeBaseUnitTable = false; // Flag to track if there are any changes in the data
+
+                // Check if the page is in edit mode and compare the current and previous baseUnitTableData arrays
+                if (isEditMode) {
+                    // Check if the lengths of the arrays are different, indicating a change
+                    if (baseUnitTableData.length !== previousBaseUnitTableData.length) {
+                        isChangeBaseUnitTable = true;
+                    } else {
+                        // Compare each element of the arrays if their properties are different
+                        for (let i = 0; i < baseUnitTableData.length; i++) {
+                            const currentData = baseUnitTableData[i];
+                            const previousData = previousBaseUnitTableData[i];
+
+                            // If any property is different, set the isChange flag to true and break out of the loop
+                            if (
+                                currentData.Unit.value !== previousData.Unit.value ||
+                                Number(currentData.Conversion) !== Number(previousData.Conversion) ||
+                                currentData.IsBase !== previousData.IsBase ||
+                                currentData.SOUnit !== previousData.SOUnit ||
+                                currentData.POUnit !== previousData.POUnit
+                            ) {
+                                isChangeBaseUnitTable = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Initialize the itemUnitDetails array and perform filtering and transformations using reduce
+                let itemUnitDetails = baseUnitTableData.reduce((result, index, key) => {
+                    const val1 = index.Conversion !== '' ? parseFloat(index.Conversion).toFixed(3) : '';
                     const unit1 = index.Unit.value;
 
-                    if (!(val1 === '')) {
-                        val1 = parseFloat(val1).toFixed(3)
-                    }
-
-                    const found = baseUnitTableData.find((i, k) => {
-                        let inner = i.Conversion;
-                        if (!(inner === '')) { inner = parseFloat(inner).toFixed(3) }
-                        return ((val1 === inner) && (unit1 === i.Unit.value) && !(key === k))
+                    // Check if there are any duplicates in the baseUnitTableData array
+                    const isDuplicate = baseUnitTableData.some((i, k) => {
+                        const inner = i.Conversion !== '' ? parseFloat(i.Conversion).toFixed(3) : '';
+                        return val1 === inner && unit1 === i.Unit.value && key !== k;
                     });
 
-                    const found2 = itemUnitDetails.find((i, k) => {
-                        return ((val1 === i.BaseUnitQuantity) && (unit1 === i.UnitID) && !(key === k))
+                    // Check if the combination of BaseUnitQuantity and UnitID already exists in the result array
+                    const isExisting = result.some((i, k) => {
+                        return val1 === i.BaseUnitQuantity && unit1 === i.UnitID && key !== k;
                     });
 
-                    // if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === ''))
-
-                    if (((found === undefined) || (found2 === undefined)) && !(val1 === '') && !(unit1 === '')) {
-                        itemUnitDetails.push({
+                    // Add the item to the result array if it's not a duplicate, not existing already, and not empty
+                    // Also, if in edit mode, exclude the item if its UnitID matches the specificID
+                    if (!isDuplicate && !isExisting && val1 !== '' && unit1 !== '' && !(isEditMode && unit1 === specificID)) {
+                        result.push({
                             BaseUnitQuantity: index.Conversion,
-                            UnitID: index.Unit.value,
+                            UnitID: unit1,
                             IsBase: index.IsBase,
                             SODefaultUnit: index.SOUnit,
                             PODefaultUnit: index.POUnit
-                        })
+                        });
                     }
 
-                });
+                    return result;
+                }, []);
+
+                //If isChangeBaseUnitTable flase and edit mode true then  itemUnitDetails blanck array
+                if (!isChangeBaseUnitTable && isEditMode) {
+                    itemUnitDetails = []
+                }
+
 
                 //  ======================   ItemCategoryDetails *****start   ====================== 
 
@@ -674,8 +702,8 @@ const ItemsMaster = (props) => {
                     })
                     return btnIsDissablefunc({ btnId, state: false });
                 }
-                
-                const jsonBody = JSON.stringify({
+
+                const jsonBody = {
                     Name: formValue.Name,
                     ShortName: formValue.ShortName,
                     SAPItemCode: formValue.SAPItemCode,
@@ -713,8 +741,8 @@ const ItemsMaster = (props) => {
                             IsAdd: true
                         }
                     ]
-                });
-
+                };
+               
                 if (pageMode === mode.edit) {
                     dispatch(updateItemMasterAction({ jsonBody, updateId: EditData.id, btnId }));
                 }
@@ -788,38 +816,6 @@ const ItemsMaster = (props) => {
 
     };
 
-    const handlerChange = event => {
-        CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "BrandName")
-        var searchtext = event.target.value
-
-        const results = data1.filter(person =>
-            person.toLowerCase().includes(searchtext)
-        );
-        setSearchResults1(results);
-        var x = document.getElementById("brandtag");
-        document.addEventListener('click', function handleClickOutsideBox(event) {
-            if (!x.contains(event.target)) {
-                x.style.display = 'none';
-            }
-        });
-        x.style.display = "block";
-        var di = "100Px"
-
-        if (event.target.value == "") {
-            di = `${x.style.display = "none"}`
-        }
-        else if (results.length == 0) {
-            di = `${x.style.display = "none"}`
-        }
-        else if (results.length < 2) {
-            di = "50Px"
-        } else if (results.length > 5) {
-            di = "300Px"
-        } else if (results.length < 2) {
-            di = "50Px"
-        }
-        x.style.height = di
-    };
 
     const onclickselect = function () {
         const hasNone = document.getElementById("itemtag").style;
@@ -830,14 +826,7 @@ const ItemsMaster = (props) => {
             hasNone.display = "none";
         }
     };
-    const onclickselects = function () {
-        const hasNone = document.getElementById("brandtag").style;
-        if (hasNone.display === "none") {
-            hasNone.display = "block";
-        } else {
-            hasNone.display = "none";
-        }
-    };
+
 
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
