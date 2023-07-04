@@ -271,7 +271,7 @@ if (data.SettingData.HSNCodeDigit.Value=== "3") {
         
             return [
                 "",
-                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(TotalGst).toFixed(2))} `,
+                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(totalIGst).toFixed(2))} `,
                 " ",
                 ``,
                 "",

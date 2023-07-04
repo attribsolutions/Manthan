@@ -2,7 +2,7 @@
 import cbm_logo from "../../assets/images/cbm_logo.png"
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
-import { compareGSTINState, date_dmy_func } from "../../components/Common/CommonFunction";
+import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
 let initial_y = 0
 
 
@@ -241,27 +241,39 @@ export const tableBody = (doc, data) => {
     const tableRow = table.Rows(data);
     console.log(tableRow)
     const { OrderItem = [] } = data
-    //Body table  Css
     var options = {
         didParseCell: (data1) => {
-            if (data1.row.cells[5].raw === "isaddition") {
+            if (data1.row.cells[6].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 2
-                data1.row.cells[2].colSpan = 2
-                data1.row.cells[4].colSpan = 2
-                data1.row.cells[6].colSpan = 2
+                data1.row.cells[2].colSpan = 3
+                data1.row.cells[5].colSpan = 2
                 data1.row.cells[7].colSpan = 2
+                data1.row.cells[0].styles.halign = "right"
+
 
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[2].styles.fontSize = 8
-                data1.row.cells[4].styles.fontSize = 8
-                data1.row.cells[6].styles.fontSize = 8
-                data1.row.cells[8].styles.fontSize = 8
+                data1.row.cells[5].styles.fontSize = 8
+                data1.row.cells[7].styles.fontSize = 8
+
 
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[2].styles.fontStyle = "bold"
-                data1.row.cells[4].styles.fontStyle = "bold"
-                data1.row.cells[6].styles.fontStyle = "bold"
-                data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
+
+                // if (data1.row.cells[0].raw === "HSN Item Name") {
+                //     debugger
+                //     let TotalBox = 0;
+                //     OrderItem.forEach((element, key) => {
+                //         if (element.PrimaryUnitName === "Box") {
+                //             TotalBox = Number(TotalBox) + Number(element.Quantity)
+                //         }
+                //     })
+
+                //     data1.row.cells[1].text[0] = ` HSN Item Name (${OrderItem.length})  (${TotalBox} Box)`
+                // }
+
             }
         },
         margin: {
@@ -301,29 +313,35 @@ export const tableBody = (doc, data) => {
             2: {
                 columnWidth: 40,
                 halign: 'right',
+
             },
+
             3: {
-                columnWidth: 53,
+                columnWidth: 40,
                 halign: 'right',
             },
             4: {
-                columnWidth: 40,
+                columnWidth: 48,
                 halign: 'right',
             },
             5: {
-                columnWidth: 55,
-                halign: 'right',
-            },
-            6: {
                 columnWidth: 40,
                 halign: 'right',
             },
+            6: {
+                columnWidth: 43,
+                halign: 'right',
+            },
             7: {
-                columnWidth: 53,
+                columnWidth: 40,
                 halign: 'right',
             },
             8: {
-                columnWidth: 69,
+                columnWidth: 43,
+                halign: 'right',
+            },
+            9: {
+                columnWidth: 56,
                 fontStyle: 'bold',
                 halign: 'right',
             },
@@ -363,29 +381,29 @@ export const tableBodyWithIGST = (doc, data) => {
     //Body table  Css
     var options = {
         didParseCell: (data1) => {
-            if (data1.row.cells[5].raw === "isaddition") {
-                // data1.row.cells[0].colSpan = 2
-                data1.row.cells[1].colSpan = 3
-                data1.row.cells[4].colSpan = 2
+            if (data1.row.cells[6].raw === "isaddition") {
 
-                // data1.row.cells[7].colSpan = 2
+                data1.row.cells[1].colSpan = 4
+                data1.row.cells[5].colSpan = 2
+
+
+                data1.row.cells[0].styles.halign = "right"
                 data1.row.cells[1].styles.halign = "right"
+
 
                 data1.row.cells[1].styles.fontStyle = "bold"
                 data1.row.cells[1].styles.fontSize = 8
 
 
                 data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[2].styles.fontSize = 8
-                data1.row.cells[4].styles.fontSize = 8
-                data1.row.cells[6].styles.fontSize = 8
-                // data1.row.cells[8].styles.fontSize = 8
+                data1.row.cells[5].styles.fontSize = 8
+
 
                 data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[2].styles.fontStyle = "bold"
-                data1.row.cells[4].styles.fontStyle = "bold"
-                data1.row.cells[6].styles.fontStyle = "bold"
-                // data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontStyle = "bold"
+
+
             }
         },
         margin: {
@@ -427,19 +445,23 @@ export const tableBodyWithIGST = (doc, data) => {
                 halign: 'right',
             },
             3: {
-                columnWidth: 65,
-                halign: 'right',
-            },
-            4: {
                 columnWidth: 40,
                 halign: 'right',
             },
+            4: {
+                columnWidth: 50,
+                halign: 'right',
+            },
             5: {
-                columnWidth: 55,
+                columnWidth: 40,
                 halign: 'right',
             },
             6: {
-                columnWidth: 90,
+                columnWidth: 55,
+                halign: 'right',
+            },
+            7: {
+                columnWidth: 65,
                 halign: 'right',
             },
 
@@ -599,9 +621,9 @@ export const pageFooter = (doc, data) => {
         pageBorder(doc)
         reportHeder3(doc, data)
         doc.setFont('helvetica', 'Normal')
-        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 828, {
-            align: 'center'
-        })
-        console.log("aaa", doc.internal.pageSize.height)
+
+        doc.text('Print Date :' + String(currentDate_dmy) + 'Time' + String(CurrentTime()), 30, 828,)
+        doc.text('Page' + String(i) + ' of ' + String(pageCount), 500, 828,)
+
     }
 }
