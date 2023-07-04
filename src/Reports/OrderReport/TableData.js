@@ -5,12 +5,21 @@ export const columns = [
     "HSN Item Name",
     "Quantity",
     "Rate",
-    "BasicAmt ",
+    "Basic   Amount ",
     "CGST%",
-    "CGSTAmt ",
+    "CGST   Amount ",
     "SGST%",
-    "SGSTAmt",
-    "Total Amt"];
+    "SGST   Amount",
+    "Total Amount"];
+
+export const columnsWithIGST = [
+    "HSN Item Name",
+    "Quantity",
+    "Rate",
+    "Basic   Amount ",
+    "IGST%",
+    "IGST   Amount ",
+    "Total Amount"];
 
 export const PageHedercolumns = [
     "Billed by",
@@ -91,6 +100,61 @@ export const Rows = (data) => {
     return hasHedRow
 }
 
+export const RowsWithIGST = (data) => {
+
+    const { OrderItem = [] } = data
+    let hasHedRow = []
+    const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
+    console.log(grouped)
+    grouped.forEach(i => {
+
+        if (i.length > 0) {
+
+            let totalBasicAmount = 0
+            let totalIGst = 0
+            let totalAmount = 0
+            let totalQuantity = 0
+
+            i.forEach(element => {
+                debugger
+                const tableitemRow = [
+                    `(${element.HSNCode}) ${element.ItemName}     
+                     ${element.Comment === null ? "" : element.Comment}`,
+                    `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}                  ${element.UnitName}`,
+                    element.Rate,
+                    element.BasicAmount,
+                    `${element.IGSTPercentage}%`,
+                    element.IGST,
+                    element.Amount,
+                    "row"
+                ];
+
+                totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+                totalIGst = Number(totalIGst) + Number(element.IGST)
+                totalAmount = Number(totalAmount) + Number(element.Amount)
+                totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
+
+                hasHedRow.push(tableitemRow);
+            })
+
+            function totalrow() {
+                return [
+                    "",
+                    `${Number(totalBasicAmount).toFixed(2)}`,
+                    "",
+                    "",
+                    `${Number(totalIGst).toFixed(2)}`,
+                    "isaddition",
+                    `${Number(totalAmount).toFixed(2)}`,
+
+                ];
+            };
+            hasHedRow.push(totalrow());
+        }
+    })
+    return hasHedRow
+}
+
 export const ReportFotterColumns = [
     "SGST",
     "CGST", "Quantity",
@@ -120,6 +184,8 @@ export const BilledByRow = (data) => {
         [`${data.SupplierName}`],
         [`${data.SupplierAddress}`],
         [`FSSAI:${data.SupplierFssai}`],
+        [`GSTIN:${data.SupplierGSTIN}`],
+
     ]
     return BilledByArray;
 }
@@ -130,6 +196,8 @@ export const BilledToRow = (data) => {
         [`${data.CustomerName}`],
         [`${data.BillingAddress}`],
         [`FSSAI:${data.BillingFssai}`],
+        [`GSTIN:${data.CustomerGSTIN}`],
+
     ]
 
     return BilledToArray;

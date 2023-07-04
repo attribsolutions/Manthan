@@ -27,8 +27,8 @@ export default function InvoiceForGRN() {
         let subPageMode = url.GRN_STP_3
         const gobtnId = `gobtn-${subPageMode}`
         const filtersBody = JSON.stringify({
-            FromDate: currentDate_ymd,
-            ToDate: currentDate_ymd,
+            FromDate: "",
+            ToDate: "",
             Supplier: "",
             Customer: loginPartyID(),
             OrderType: order_Type.InvoiceToGRN,
@@ -99,7 +99,7 @@ export default function InvoiceForGRN() {
         {
             text: "InvoiceAmount",
             dataField: "OrderAmount",
-            align:"right"
+            align: "right"
         },
         {
             text: "Action",
@@ -132,7 +132,7 @@ export default function InvoiceForGRN() {
         >
             {toolkitProps => (
                 <React.Fragment>
-                     <div className="table-container">
+                    <div className="table-container">
                         <BootstrapTable
                             keyField={"Invoice"}
                             bordered={true}
