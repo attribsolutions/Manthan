@@ -1,7 +1,7 @@
 .sales-return-row {
     position: relative;
     table-layout: fixed;
-    width: 200px;
+    min-width: 200px;
     position: relative;
 }
 
@@ -57,7 +57,7 @@
 
     .child:first-child {
         flex-basis: 50%;
-        margin-right: 5px;
+        padding-right: 4px;
     }
 
     .child:last-child {
