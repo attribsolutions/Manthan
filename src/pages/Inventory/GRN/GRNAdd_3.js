@@ -218,6 +218,46 @@ const GRNAdd3 = (props) => {
             }
         },
 
+        {  //-------------MRP column ----------------------------------
+            text: "GST",
+            dataField: "GSTDropdown",
+            align: () => ('right'),
+            formatter: (cellContent, row, key) => {
+                debugger
+                if (row.GST === null) {
+                    const deFaultValue = row.GSTDropdown.filter(i => i.GSTPercentage === row.GSTPercentage);
+                    const value = { label: deFaultValue[0].GSTPercentage, value: deFaultValue[0].GST }
+                    row.DefaultGST = value
+                } else {
+                    const deFaultValue = row.GSTDropdown.filter(i => i.GST === row.GST);
+                    const value = { label: deFaultValue[0].GSTPercentage, value: deFaultValue[0].GST }
+                    row.DefaultGST = value
+                }
+                const GSToption = row.GSTDropdown.map(index => ({
+                    value: index.GST,
+                    label: index.GSTPercentage,
+                }));
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Select
+                        id={`MRP${key}`}
+                        name="MRP"
+                        defaultValue={row.DefaultGST}
+                        isSearchable={true}
+                        className="react-dropdown"
+                        classNamePrefix="dropdown"
+                        options={GSToption}
+                        onChange={(event) => { row.DefaultGST = event }}
+                    />
+                </span>)
+
+            },
+            headerStyle: () => {
+                return { width: '160px' };
+            }
+        },
+
+
+
         {  //-------------Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
@@ -306,7 +346,7 @@ const GRNAdd3 = (props) => {
             let sum = 0
             let inValidMsg = []
             grnItemTableList.forEach(i => {
-
+                debugger
 
                 if (!(i.Quantity > 0)) {
                     inValidMsg.push({ [i.ItemName]: "This Item Quantity Is Require..." });
@@ -321,16 +361,16 @@ const GRNAdd3 = (props) => {
                     Reason: i.defaultDiscrepancy ? i.defaultDiscrepancy.value : "",//default Discrepancy value
                     MRP: i.defaultMRP.value,
                     MRPValue: i.defaultMRP.label,
+
                     ReferenceRate: i.Rate,
                     Rate: i.Rate,
                     Unit: i.Unit,
                     BaseUnitQuantity: i.BaseUnitQuantity,
-                    GST: i.GST,
-                    GSTPercentage: i.GSTPercentage,
+                    GST: i.DefaultGST.value,
+                    GSTPercentage: i.DefaultGST.label,
                     BasicAmount: calculate.basicAmount,
                     GSTAmount: calculate.roundedGstAmount,
                     Amount: calculate.roundedTotalAmount,
-
                     CGST: calculate.CGST_Amount,
                     SGST: calculate.SGST_Amount,
                     IGST: 0,
