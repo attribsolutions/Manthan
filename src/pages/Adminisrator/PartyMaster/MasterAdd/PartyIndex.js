@@ -43,6 +43,7 @@ import BaseTabForm from "./FirstTab/index";
 import PrefixTab from "./PrefixTab/PrefixTab";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
+import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
 
 function initialState(history) {
 
@@ -251,6 +252,7 @@ const PartyMaster = (props) => {
         dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
         dispatch(commonPageField(page_id))
         dispatch(getState());
+        dispatch(GetRoutesList())
         dispatch(getPartyTypelist());
         dispatch(getcompanyList());
         dispatch(SSDD_List_under_Company())
@@ -418,6 +420,7 @@ const PartyMaster = (props) => {
                 "State": baseValue.State.value,
                 "District": baseValue.District.value,
                 "City": (baseValue.CityName === "") ? "" : baseValue.CityName.value,
+                "Route": (baseValue.Route === "") ? "" : baseValue.Route.value,
                 "SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
                 "Taluka": 0,
                 // "City": 0,
