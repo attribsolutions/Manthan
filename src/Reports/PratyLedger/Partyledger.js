@@ -49,7 +49,7 @@ const PartyLedger = (props) => {
         })
     );
     const { userAccess, orderSummaryGobtn, SSDD_List, supplier, pdfdata } = reducers;
-    // const { Data = [] } = orderSummaryGobtn;
+
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -78,7 +78,7 @@ const PartyLedger = (props) => {
     }, [])
 
     useEffect(() => {
-        debugger
+
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
             customAlert({
                 Type: 3,
@@ -94,13 +94,8 @@ const PartyLedger = (props) => {
         label: i.Name,
     }))
 
-    // CustomerOptions.unshift({
-    //     value: "",
-    //     label: " All"
-    // });
 
     const onselecthandel = (e) => {
-
         setState((i) => {
             const a = { ...i }
             a.values.PartyName = e;
@@ -120,7 +115,7 @@ const PartyLedger = (props) => {
             "Party": _cfunc.loginPartyID()
         });
         var ReportType = report.PartyLedger
-        debugger
+
         if (values.PartyName === "") {
             customAlert({
                 Type: 3,
