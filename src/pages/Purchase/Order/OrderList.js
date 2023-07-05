@@ -163,7 +163,7 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
-        debugger
+        
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))

@@ -198,51 +198,39 @@ const GRNAdd3 = (props) => {
             text: "MRP",
             dataField: "MRPDetails",
             align: () => ('right'),
-            formatter: (cellContent, row, key) => {
-
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Select
-                        id={`MRP${key}`}
-                        name="MRP"
-                        defaultValue={row.defaultMRP}
-                        isSearchable={true}
-                        className="react-dropdown"
-                        classNamePrefix="dropdown"
-                        options={row.MRPOps}
-                        onChange={(event) => { row.defaultMRP = event }}
-                    />
-                </span>)
-            },
-            headerStyle: () => {
-                return { width: '160px' };
-            }
+            style: () => ({ minWidth: "100px" }),
+            formatter: (cellContent, row, key) => (
+                <Select
+                    id={`MRP${key}`}
+                    name="MRP"
+                    defaultValue={row.defaultMRP}
+                    isSearchable={true}
+                    className="react-dropdown"
+                    classNamePrefix="dropdown"
+                    options={row.MRPOps}
+                    onChange={(event) => { row.defaultMRP = event }}
+                />
+            ),
         },
 
         {  //-------------MRP column ----------------------------------
             text: "GST",
             dataField: "GSTDropdown",
             align: () => ('right'),
-            formatter: (cellContent, row, key) => {
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Select
-                        id={`MRP${key}`}
-                        name="MRP"
-                        defaultValue={row.DefaultGST}
-                        isSearchable={true}
-                        className="react-dropdown"
-                        classNamePrefix="dropdown"
-                        options={row.GSToption}
-                        onChange={(event) => { row.DefaultGST = event }}
-                    />
-                </span>)
-
-            },
-            headerStyle: () => {
-                return { width: '160px' };
-            }
+            style: () => ({ minWidth: "100px" }),
+            formatter: (cellContent, row, key) => (
+                <Select
+                    id={`MRP${key}`}
+                    name="MRP"
+                    defaultValue={row.DefaultGST}
+                    isSearchable={true}
+                    className="react-dropdown"
+                    classNamePrefix="dropdown"
+                    options={row.GSToption}
+                    onChange={(event) => { row.DefaultGST = event }}
+                />
+            ),
         },
-
-
 
         {  //-------------Rate column ----------------------------------
             text: "Rate",
@@ -419,7 +407,7 @@ const GRNAdd3 = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" >
+                <div className="page-content">
 
                     <div className="px-2 mb-1  c_card_header " >
                         <Row>
@@ -518,7 +506,7 @@ const GRNAdd3 = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table">
+                                        <div className="table-responsive table" style={{ minHeight: "45vh" }}>
                                             <BootstrapTable
                                                 keyField={"Item_id"}
                                                 id="table_Arrow"

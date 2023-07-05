@@ -15,7 +15,7 @@ const ConfirmDialog = () => {
     const buttonRef = useRef(null);
 
     useEffect(() => {
-        debugger
+        
         if (buttonRef.current) {
             buttonRef.current.focus();
         }

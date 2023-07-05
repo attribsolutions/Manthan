@@ -27,7 +27,7 @@ import CustomTable2 from "../../../CustomTable2/Table";
 import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
-import { SalesReturn_add_button_api_For_Item } from "../../../helpers/backend_helper";
+import { StockEntry_GO_button_api_For_Item } from "../../../helpers/backend_helper";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../Sale/Invoice/SalesReturn/salesReturn.scss";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
@@ -330,7 +330,7 @@ const StockEntry = (props) => {
 
         try {
             // Fetch data from the API
-            const apiResponse = await SalesReturn_add_button_api_For_Item(values.ItemName.value);
+            const apiResponse = await StockEntry_GO_button_api_For_Item(values.ItemName.value);
 
             // Convert API response to desired format
             const convert_ApiResponse = apiResponse.Data.InvoiceItems.map((i) => {
@@ -444,7 +444,7 @@ const StockEntry = (props) => {
         const btnId = event.target.id
 
         const ReturnItems = TableArr.map((index) => {
-            debugger
+            
             return ({
                 "Item": index.ItemId,
                 "ItemName": index.ItemName,

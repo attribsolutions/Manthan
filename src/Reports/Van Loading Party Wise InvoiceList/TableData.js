@@ -8,7 +8,7 @@ export const columns = [
     "Box",
     // "Outer ",
     "Pcs",
-    "Quantity",
+    // "Quantity",
     // "Unit",
 ];
 export const columns1 = [
@@ -72,7 +72,7 @@ export const Rows = (data) => {
             Number(element.BoxQty).toFixed(2),
             // element.Outer,
             Number(element.PiecesQty).toFixed(2),
-            element.Quantity,
+            // element.Quantity,
             // element.UnitName,
         ];
 
@@ -91,7 +91,7 @@ export const Rows = (data) => {
                 ``,
                 ` ${Number(TotalBox).toFixed(2)}`,
                 `${Number(TotalPcs).toFixed(2)}`,
-                `${Number(TotalQuantity).toFixed(2)}`,
+                // `${Number(TotalQuantity).toFixed(2)}`,
 
 
             ];
