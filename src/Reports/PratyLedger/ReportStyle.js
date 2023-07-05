@@ -42,17 +42,17 @@ export const reportHeder1 = (doc, data) => {
 
         didParseCell: (data1) => {
 
-        // didParseCell: (data1) => {
-        //     
-        //     if (data1.row.cells[5].raw === data.CustomerName) {
-        //         data1.row.cells[0].colSpan = 2
+            // didParseCell: (data1) => {
+            //     
+            //     if (data1.row.cells[5].raw === data.CustomerName) {
+            //         data1.row.cells[0].colSpan = 2
 
-        //         data1.row.cells[0].styles.fontSize = 8
+            //         data1.row.cells[0].styles.fontSize = 8
 
-        //         data1.row.cells[0].styles.fontStyle = "bold"
+            //         data1.row.cells[0].styles.fontStyle = "bold"
 
-        //     }
-        // },
+            //     }
+            // },
 
 
             if (data1.row.cells[0].raw.includes("books")) {
@@ -192,17 +192,17 @@ export const tableBody = (doc, data) => {
             }
             if (data1.row.cells[2].raw === "Total Credit Note") {
                 data1.row.cells[2].styles.fontSize = 9
-                data1.row.cells[3].styles.fontSize = 9
-
-                data1.row.cells[2].styles.fontStyle = "bold"
-                data1.row.cells[3].styles.fontStyle = "bold"
-            }
-            if (data1.row.cells[2].raw === "Total Debit Note") {
-                data1.row.cells[2].styles.fontSize = 9
                 data1.row.cells[4].styles.fontSize = 9
 
                 data1.row.cells[2].styles.fontStyle = "bold"
                 data1.row.cells[4].styles.fontStyle = "bold"
+            }
+            if (data1.row.cells[2].raw === "Total Debit Note") {
+                data1.row.cells[2].styles.fontSize = 9
+                data1.row.cells[3].styles.fontSize = 9
+
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
             }
             if (data1.row.cells[2].raw === "Total TCS") {
                 data1.row.cells[2].styles.fontSize = 9

@@ -419,7 +419,7 @@ const GRNAdd3 = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" >
+                <div className="page-content">
 
                     <div className="px-2 mb-1  c_card_header " >
                         <Row>
@@ -518,7 +518,7 @@ const GRNAdd3 = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table">
+                                        <div className="table-responsive table" style={{ minHeight: "45vh" }}>
                                             <BootstrapTable
                                                 keyField={"Item_id"}
                                                 id="table_Arrow"
