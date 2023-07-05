@@ -216,6 +216,837 @@ export const Data = {
       Balance: "47646756.89",
 
     },
+    {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    }, {
+
+      Date: "2023-01-21",
+      DocumentNO: "23-24/TI01381",
+      Particular: "cash transactions",
+      Amount: "123444.56",
+      RecieptAmount: "100.00",
+      Cash: "45.90",
+      Balance: "47646756.89",
+
+    },
 
 
 

@@ -1,5 +1,7 @@
 import {
+  DELETE_SUBGROUP_LIST_ID,
   DELETE_SUBGROUP_LIST_ID_SUCCESS,
+  EDIT_SUBGROUPMASTER_ID,
   EDIT_SUBGROUPMASTER_ID_SUCCESS,
   GET_SUBGROUP_LIST,
   GET_SUBGROUP_LIST_SUCCESS,
@@ -51,15 +53,34 @@ const SubGroupReducer = (state = INIT_STATE, action) => {
 
       }
     //  del
+
+    case DELETE_SUBGROUP_LIST_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+        deleteMsg: action.payload,
+      };
+
+
     case DELETE_SUBGROUP_LIST_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMsg: action.payload,
       };
+
+
     // edit
+    case EDIT_SUBGROUPMASTER_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
     case EDIT_SUBGROUPMASTER_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 
