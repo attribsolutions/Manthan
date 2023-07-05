@@ -20,6 +20,7 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
+  loading:false
 
 }
 
@@ -45,14 +46,14 @@ const GroupReducer = (state = INIT_STATE, action) => {
     case GET_GROUP_LIST:
       return {
         ...state,
-        listBtnLoading: true,
+        loading: true,
       }
 
     case GET_GROUP_LIST_SUCCESS:
       return {
         ...state,
         groupList: action.payload,
-        listBtnLoading: false,
+        loading: false,
       }
 
       
@@ -61,7 +62,6 @@ const GroupReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         listBtnLoading: action.config.btnId,
-        deleteMsg: action.payload,
       };
 
 
@@ -108,6 +108,7 @@ const GroupReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
 
     default:

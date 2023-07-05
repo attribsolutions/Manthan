@@ -21,6 +21,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
+  loading:false
 }
 
 const CategoryReducer = (state = INIT_STATE, action) => {
@@ -44,21 +45,20 @@ const CategoryReducer = (state = INIT_STATE, action) => {
     case GET_CATEGORY_LIST:
       return {
         ...state,
-        listBtnLoading: true,
+        loading: true,
       }
 
     case GET_CATEGORY_LIST_SUCCESS:
       return {
         ...state,
         CategoryListData: action.payload,
-        listBtnLoading: false,
+        loading: false,
       }
 
       case DELETE_CATEGORY_ID:
         return {
           ...state,
           listBtnLoading: action.config.btnId,
-          deleteMessage: action.payload,
         };
 
 

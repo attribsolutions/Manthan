@@ -22,6 +22,7 @@ const UserList = () => {
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.User_Registration_Reducer.listBtnLoading,
+            loading:state.User_Registration_Reducer.loading,
             tableList: state.User_Registration_Reducer.pages,
             editData: state.User_Registration_Reducer.editData,
             updateMsg: state.User_Registration_Reducer.updateMessage,

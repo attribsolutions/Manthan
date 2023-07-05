@@ -18,6 +18,9 @@ const INIT_STATE = {
   editMsg: { Status: false },
   updateMessage: { Status: false },
   saveBtnloading: false,
+  listBtnLoading: false,
+  loading:false
+
 }
 
 const BankReducer = (state = INIT_STATE, action) => {
@@ -42,14 +45,14 @@ const BankReducer = (state = INIT_STATE, action) => {
     case GET_BANK_LIST:
       return {
         ...state,
-        listBtnLoading: true,
+        loading: true,
       }
 
     case GET_BANK_LIST_SUCCESS:
       return {
         ...state,
         BankList: action.payload,
-        listBtnLoading: false,
+        loading: false,
       }
 
 
@@ -57,7 +60,6 @@ const BankReducer = (state = INIT_STATE, action) => {
         return {
           ...state,
           listBtnLoading: action.config.btnId,
-          deleteMessage: action.payload,
         };
 
     case DELETE_BANK_ID_SUCCESS:
