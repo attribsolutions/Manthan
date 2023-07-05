@@ -224,8 +224,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     };
     const GSTINverifyhandler = () => {
-        
-        window.open("https://services.gst.gov.in/services/login");
+
+        window.open("https://services.gst.gov.in/services/searchtp");
     }
 
     const FirstTab = (
