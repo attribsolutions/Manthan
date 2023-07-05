@@ -1,5 +1,7 @@
 import {
+  DELETE_GROUP_LIST_ID,
   DELETE_GROUP_LIST_ID_SUCCESS,
+  EDIT_GROUPMASTER_ID,
   EDIT_GROUPMASTER_ID_SUCCESS,
   GET_GROUP_LIST,
   GET_GROUP_LIST_SUCCESS,
@@ -23,13 +25,12 @@ const INIT_STATE = {
 
 const GroupReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
-    // post
 
+    // post
     case SAVE_GROUP_MASTER:
       return {
         ...state,
         saveBtnloading: true,
-
       }
 
     case SAVE_GROUP_MASTER_SUCCESS:
@@ -39,8 +40,8 @@ const GroupReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false,
       }
 
-    // get 
 
+    // get 
     case GET_GROUP_LIST:
       return {
         ...state,
@@ -54,16 +55,35 @@ const GroupReducer = (state = INIT_STATE, action) => {
         listBtnLoading: false,
       }
 
+      
     //  del
+    case DELETE_GROUP_LIST_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+        deleteMsg: action.payload,
+      };
+
+
     case DELETE_GROUP_LIST_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMsg: action.payload,
       };
+
+
     // edit
+    case EDIT_GROUPMASTER_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
     case EDIT_GROUPMASTER_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 
