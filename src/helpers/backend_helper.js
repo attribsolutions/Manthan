@@ -620,9 +620,13 @@ export const PartyLedgerReport_API = (jsonBody) => post(url.PARTY_LEDGER, jsonBo
 
 // export const PartyLedger_API = (FromDate,ToDate,SAPCode) => get(`http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
 // Dashboard 
+
 export const Dashboard_Get_API = (id) => get(`${url.DASHBOARD}/${id}`)// Dashboard grt api
 
 //StockEntry
+
+export const StockEntry_GO_button_api_For_Item = (ItemId) => get(`${url.STOCK_ENTRY_GO_BUTTON}/${ItemId}`)//add button get api for item
+
 export const StockEntry_Post_API = ({ jsonBody, btnId }) => post(url.STOCK_ENTRY, jsonBody, btnId)//post api
 
 export {

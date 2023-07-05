@@ -186,12 +186,12 @@ const PartyMaster = (props) => {
                                 value: hasEditVal.District.id,
                             },
                             CityName: {
-                                label: hasEditVal.City.Name,
-                                value: hasEditVal.City.id,
+                                label: hasEditVal.City === null ? "Select..." : hasEditVal.City.Name,
+                                value: hasEditVal.City === null ? "" : hasEditVal.City.id,
                             },
                             GSTIN: hasEditVal.GSTIN,
-                            MkUpMkDn: hasEditVal.MkUpMkDn,
                             isActive: hasEditVal.isActive,
+
 
                         };
 
@@ -320,7 +320,7 @@ const PartyMaster = (props) => {
     }
 
     const SaveHandler = (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -330,13 +330,13 @@ const PartyMaster = (props) => {
         let addressTabDetail = addressTabRef.current.getCurrentState()
         let prefixValue = prefixTabRef.current.getCurrentState().values
         let addressTabIsAddressEnter = addressTabRef.current.IsAddressEnter()
-
+        
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
 
         let isError = addressTabIsAddressEnter.isError
         let values = addressTabIsAddressEnter.values
 
-        if ((priceListSelect.label === "") && (subPageMode === url.RETAILER_MASTER)) {
+        if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
             customAlert({
                 Type: 4,
                 Message: "Please Select PriceList ",
@@ -351,7 +351,7 @@ const PartyMaster = (props) => {
             })
             return;
         }
-        
+
         if (!validBasetab) {
             setactiveTab1("1")
             return
@@ -417,12 +417,11 @@ const PartyMaster = (props) => {
                 "AlternateContactNo": baseValue.AlternateContactNo,
                 "State": baseValue.State.value,
                 "District": baseValue.District.value,
-                "City": baseValue.CityName.value,
+                "City": (baseValue.CityName === "") ? "" : baseValue.CityName.value,
                 "SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
                 "Taluka": 0,
                 // "City": 0,
                 "GSTIN": baseValue.GSTIN,
-                "MkUpMkDn": baseValue.MkUpMkDn,
                 "isActive": baseValue.IsActive,
                 "CreatedBy": loginUserID(),
                 "UpdatedBy": loginUserID(),
