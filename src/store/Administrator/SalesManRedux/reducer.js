@@ -1,5 +1,7 @@
 import {
+  DELETE_SALESMAN_ID,
   DELETE_SALESMAN_ID_SUCCESS,
+  EDIT_SALESMAN_ID,
   EDIT_SALESMAN_ID_SUCCESS,
   GET_SALESMAN_LIST,
   GET_SALESMAN_LIST_SUCCESS,
@@ -11,6 +13,7 @@ import {
 } from "./actionTypes";
 
 const INIT_STATE = {
+  loading:false,
   PostData: { Status: false },
   SalesManList: [],
   deleteMessage: { Status: false },
@@ -39,27 +42,41 @@ const SalesManReducer = (state = INIT_STATE, action) => {
     case GET_SALESMAN_LIST:
       return {
         ...state,
-        listBtnLoading: true
+        loading: true
       }
 
     case GET_SALESMAN_LIST_SUCCESS:
       return {
         ...state,
         SalesManList: action.payload,
-        listBtnLoading: false
+        loading: false
 
       }
+
+      case DELETE_SALESMAN_ID:
+        return {
+          ...state,
+          listBtnLoading: action.config.btnId,
+        };
 
     case DELETE_SALESMAN_ID_SUCCESS:
       return {
         ...state,
         deleteMessage: action.payload,
+        listBtnLoading:false
       };
+
+      case EDIT_SALESMAN_ID:
+        return {
+          ...state,
+          listBtnLoading: action.config.btnId,
+        };
 
     case EDIT_SALESMAN_ID_SUCCESS:
       return {
         ...state,
         editData: action.payload,
+        listBtnLoading:false
       };
 
     case UPDATE_SALESMAN_ID:
@@ -80,6 +97,7 @@ const SalesManReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
 
     default:

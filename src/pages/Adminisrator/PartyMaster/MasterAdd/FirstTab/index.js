@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
 import Select from "react-select"
 import { useDispatch, useSelector } from 'react-redux'
-import { Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
 import { comAddPageFieldFunc, initialFiledFunc, onChangeCheckbox, onChangeSelect, onChangeText } from '../../../../../components/Common/validationFunction'
 import { Breadcrumb_inputName } from '../../../../../store/actions'
 import { getDistrictOnState } from '../../../../../store/Administrator/PartyRedux/action'
@@ -14,6 +14,7 @@ import * as pageId from "../../../../../routes/allPageID"
 import { loginPartyID } from '../../../../../components/Common/CommonFunction'
 import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../store/Administrator/EmployeeRedux/action'
 import CityMaster from '../../../CityPages/CityMaster'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
@@ -222,6 +223,10 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         }
 
     };
+    const GSTINverifyhandler = () => {
+        debugger
+        window.open("https://services.gst.gov.in/services/login");
+    }
 
     const FirstTab = (
         <div id={"base-tabe-area"}>
@@ -496,6 +501,15 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         <span className="invalid-feedback">{isError.GSTIN}</span>
                                     )}
                                 </FormGroup>
+                            </Col>
+                            <Col md="1" className=" mt-3">
+                                <Button
+                                    className=" p-1 mt-3 "
+                                    color="btn btn-outline-primary border-2 font-size-12 "
+                                    type="button"
+                                    onClick={GSTINverifyhandler}
+                                > Verify GSTIN
+                                </Button>
                             </Col>
 
                             <Col md="1">  </Col>

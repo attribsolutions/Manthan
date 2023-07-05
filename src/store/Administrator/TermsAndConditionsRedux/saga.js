@@ -5,7 +5,8 @@ import {
   getTermAndCondition_Success,
   DeleteTermsAndCondtions_Success,
   EditTermsAndCondtions_Success,
-  UpdateTermsAndCondtions_Success
+  UpdateTermsAndCondtions_Success,
+  TermsAndConditionsApiErrorAction
 } from "./actions";
 
 import {
@@ -32,17 +33,16 @@ function* Save_Method_ForTermsAndCondtionsMaster_GenFun({ config }) {
   try {
     const response = yield call(Post_TermsAndCondtions_Master_API, config);
     yield put(saveTermAndConditionSuccess(response));
-  } catch (error) {
-    CommonConsole(error)}
+  } catch (error) { yield put(TermsAndConditionsApiErrorAction()) }
 }
+
 
 // Get List Page API
 function* Get_TermsAndCondtions_GenratorFunction() {
   try {
     const response = yield call(get_TermsAndCondtionsList_API);
     yield put(getTermAndCondition_Success(response.Data));
-   
-  } catch (error) { CommonConsole(error)}
+  } catch (error) { yield put(TermsAndConditionsApiErrorAction()) }
 }
 
 // delete api 
@@ -50,8 +50,9 @@ function* Delete_TermsAndCondtions_GenratorFunction({config }) {
   try {
     const response = yield call(del_TermsAndCondtions_Master_API, config);
     yield put(DeleteTermsAndCondtions_Success(response))
-  } catch (error) {CommonConsole(error) }
+  } catch (error) { yield put(TermsAndConditionsApiErrorAction()) }
 }
+
 
 // edit api
 function* Edit_TermsAndCondtions_GenratorFunction({ config }) {
@@ -60,8 +61,7 @@ function* Edit_TermsAndCondtions_GenratorFunction({ config }) {
     const response = yield call(edit_TermsAndCondtions_Master_API, config);
     response.pageMode = btnmode;
     yield put(EditTermsAndCondtions_Success(response));
-    
-  } catch (error) {CommonConsole(error) }
+  } catch (error) { yield put(TermsAndConditionsApiErrorAction()) }
 }
 
 // update api
@@ -70,8 +70,7 @@ function* update_TermsAndCondtions_GenratorFunction({ config }) {
   try {
     const response = yield call(update_TermsAndCondtions_Master_API, config);
     yield put(UpdateTermsAndCondtions_Success(response))
-  }
-  catch (error) {CommonConsole(error) }
+  } catch (error) { yield put(TermsAndConditionsApiErrorAction()) }
 }
 
 

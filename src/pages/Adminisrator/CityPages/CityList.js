@@ -13,12 +13,12 @@ import { useHistory } from "react-router-dom";
 import {
     deleteReceiptList,
     deleteReceiptList_Success,
-    ReceiptListAPI, 
+    ReceiptListAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, Listloader } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { url,pageId } from "../../../routes/index"
+import { url, pageId } from "../../../routes/index"
 import CityMaster from "./CityMaster";
 import { getCityOnDistrict, getCityOnDistrictSuccess, getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
@@ -40,20 +40,17 @@ const CityList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            loading: state.ReceiptReducer.loading,
+            listBtnLoading: state.CityReducer.listBtnLoading,
             tableList: state.EmployeesReducer.City,
             deleteMsg: state.ReceiptReducer.deleteMsg,
-            updateMsg: state.BOMReducer.updateMsg,
-            postMsg: state.OrderReducer.postMsg,
             district: state.PartyMasterReducer.DistrictOnState,
             State: state.EmployeesReducer.State,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-
         })
     );
 
-    const { userAccess, pageField, State, district } = reducers;
+    const { userAccess, pageField, State, district,listBtnLoading } = reducers;
 
     const values = { ...state.values }
 
@@ -63,9 +60,6 @@ const CityList = () => {
         postSucc: postMessage,
         deleteSucc: deleteReceiptList_Success
     }
-
-
-
 
     useEffect(() => {
         const page_Id = pageId.CITY_LIST
@@ -189,23 +183,26 @@ const CityList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-                {
-                    (pageField) ?
-                        <CommonPurchaseList
-                            action={action}
-                            reducers={reducers}
-                            showBreadcrumb={false}
-                            newBtnPath={url.CITY}
-                            masterPath={url.CITY}
-                            HeaderContent={HeaderContent}
-                            goButnFunc={goButtonHandler}
-                            ButtonMsgLable={"CityMaster"}
-                            deleteName={"FullReceiptNumber"}
-                            MasterModal={CityMaster}
 
-                        />
-                        : null
+                {
+                   
+                        (pageField) &&
+                            <CommonPurchaseList
+                                action={action}
+                                reducers={reducers}
+                                showBreadcrumb={false}
+                                newBtnPath={url.CITY}
+                                masterPath={url.CITY}
+                                HeaderContent={HeaderContent}
+                                goButnFunc={goButtonHandler}
+                                ButtonMsgLable={"CityMaster"}
+                                deleteName={"DistrictName"}
+                                MasterModal={CityMaster}
+
+                            />
+
                 }
+                
             </div>
         </React.Fragment>
     )

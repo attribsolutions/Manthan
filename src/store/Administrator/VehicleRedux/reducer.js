@@ -8,10 +8,13 @@ import {
   SAVE_VEHICLE_MASTER,
   UPDATE_VEHICLE_ID,
   GET_VEHICLE_LIST,
-  VEHICLE_API_ERROR_ACTION
+  VEHICLE_API_ERROR_ACTION,
+  DELETE_VEHICLE_ID,
+  EDIT_VEHICLE_ID
 } from "./actionType";
 
 const INIT_STATE = {
+  loading: false,
   VehicleList: [],
   postMsg: { Status: false },
   deleteMsg: { Status: false },
@@ -27,16 +30,15 @@ const VehicleReducer = (state = INIT_STATE, action) => {
     case GET_VEHICLE_LIST:
       return {
         ...state,
-        VehicleList: action.payload,
-        listBtnLoading: true,
+        loading: true,
 
       }
 
     case GET_VEHICLE_LIST_SUCCESS:
       return {
         ...state,
+        loading: false,
         VehicleList: action.payload,
-        listBtnLoading: false,
 
       }
 
@@ -54,15 +56,29 @@ const VehicleReducer = (state = INIT_STATE, action) => {
 
       }
 
+    case DELETE_VEHICLE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
     case DELETE_VEHICLE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMsg: action.payload,
+      };
+
+    case EDIT_VEHICLE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
       };
 
     case EDIT_VEHICLE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 
@@ -92,6 +108,7 @@ const VehicleReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading: false,
       };
 
 

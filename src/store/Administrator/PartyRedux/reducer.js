@@ -12,11 +12,13 @@ import {
     UPDATE_PARTY_ID,
     GET_PARTY_LIST_API,
     PARTY_API_ERROR_ACTION,
-    PARTY_RESET_REDUX_ACTION,
-    PARTY_ADDRESS_DELETE_ID_SUCCESS
+    PARTY_ADDRESS_DELETE_ID_SUCCESS,
+    DELETE_PARTY_ID,
+    EDIT_PARTY_ID
 } from "./actionTypes";
 
 const INIT_STATE = {
+    loading: false,
     partyList: [],
     postMsg: { Status: false },
     deleteMsg: { Status: false },
@@ -35,15 +37,14 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
         case GET_PARTY_LIST_API:
             return {
                 ...state,
-                listBtnLoading: true,
-
+                loading: true,
             }
 
         case GET_PARTY_LIST_API_SUCCESS:
             return {
                 ...state,
                 partyList: action.payload,
-                listBtnLoading: false
+                loading: false
             }
 
         // post api
@@ -61,17 +62,31 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
 
             };
 
+        case DELETE_PARTY_ID:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            }
+
         // delete api
         case DELETE_PARTY_ID_SUCCESS:
             return {
                 ...state,
+                listBtnLoading: false,
                 deleteMsg: action.payload,
             };
+
+        case EDIT_PARTY_ID:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            }
 
         // edit api
         case EDIT_PARTY_ID_SUCCESS:
             return {
                 ...state,
+                listBtnLoading: false,
                 editData: action.payload,
             };
 
@@ -118,17 +133,18 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
                 CompanyName: action.payload,
             };
 
+        case PARTY_ADDRESS_DELETE_ID_SUCCESS:
+            return {
+                ...state,
+                PartyAddressDelete: action.payload,
+            };
+
         case PARTY_API_ERROR_ACTION:
             return {
                 ...state,
                 saveBtnloading: false,
-                listBtnLoading: false
-            };
-
-            case PARTY_ADDRESS_DELETE_ID_SUCCESS:
-            return {
-                ...state,
-                PartyAddressDelete: action.payload,
+                listBtnLoading: false,
+                loading: false
             };
 
         default:

@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { CommonConsole, concatDateAndTime } from "../../../components/Common/CommonFunction";
+import { CommonConsole, amountCommaSeparateFunc, concatDateAndTime } from "../../../components/Common/CommonFunction";
 
 // Bank list Dropdown API
 function* Invoice_No_List_GenFunc({ jsonBody }) {
@@ -28,6 +28,7 @@ function* SalesReturn_List_GenFun({ filters }) {
     try {
         const response = yield call(apiCall.SalesReturn_list_API, filters);
         const newList = yield response.Data.map((i) => {
+            i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal)
             i.ReturnDate = concatDateAndTime(i.ReturnDate, i.CreatedOn)
             return i
         })

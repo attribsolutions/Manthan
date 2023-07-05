@@ -163,12 +163,13 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
+        debugger
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
-        dispatch(_act.GetVenderSupplierCustomer(subPageMode))
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         goButtonHandler("event", IBType)
         dispatch(priceListByCompay_Action());
         return () => {
@@ -271,7 +272,10 @@ const OrderList = () => {
 
         const customer = {
             value: obj.CustomerID,
-            label: obj.Customer
+            label: obj.Customer,
+            GSTIN: obj.CustomerGSTIN,
+            IsTCSParty: obj.IsTCSParty,
+            ISCustomerPAN: obj.CustomerPAN
         }
         const jsonBody = JSON.stringify({
             FromDate: obj.preOrderDate,
@@ -289,15 +293,14 @@ const OrderList = () => {
             }));
         }
         else if (subPageMode === url.ORDER_LIST_4) {
-           dispatch(_act.GoButtonForinvoiceAdd({
+            dispatch(_act.GoButtonForinvoiceAdd({
                 jsonBody,
+                btnId,
+                customer,
                 subPageMode: url.INVOICE_1,
                 path: url.INVOICE_1,
                 pageMode: mode.defaultsave,
-                customer,
-                btnId,
-                IsTCSParty: obj.IsTCSParty,
-                ISCustomerPAN: obj.CustomerPAN 
+
             }));
         }
         else {
@@ -355,14 +358,15 @@ const OrderList = () => {
                 Customer: rowData.CustomerID,
                 EffectiveDate: rowData.preOrderDate,
                 OrderID: rowData.id,
-                RateParty: rowData.CustomerID
+                RateParty: rowData.CustomerID,
+                OrderType: subPageMode === url.ORDER_4 ? order_Type.SaleOrder : order_Type.PurchaseOrder
             })
             dispatch(_act.editOrderId({ jsonBody, ...config }));
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
     function downBtnFunc(row, printType, btnId) {
-        
+
         var ReportType = report.order1;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, btnId))
     }

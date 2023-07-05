@@ -26,6 +26,7 @@ const SalesManList = (props) => {
 
     const reducers = useSelector(
         (state) => ({
+            loading: state.SalesManReducer.loading,
             listBtnLoading: state.SalesManReducer.listBtnLoading,
             tableList: state.SalesManReducer.SalesManList,
             postMsg: state.SalesManReducer.PostData,
@@ -84,7 +85,7 @@ const SalesManList = (props) => {
                     </div>
                 }
                 {
-                    reducers.listBtnLoading ?
+                    reducers.loading ?
                         <Listloader />
                         :
                         (pageField) &&

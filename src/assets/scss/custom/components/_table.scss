@@ -15,7 +15,7 @@
     z-index: 1;
     position: sticky;
     color: #000;
-    background-color:#e9e9ef;
+    background-color: #e9e9ef;
     top: 0;
     /* Don't forget this, required for the stickiness */
     box-shadow: 0 1px 1px -1px rgb(0 0 0 / 68%);
@@ -32,8 +32,8 @@
 .table-responsive {
   border: none !important;
   max-height: 74vh;
+  }
 
-}
 
 .table-bordered {
   border: $table-border-width solid $table-border-color;

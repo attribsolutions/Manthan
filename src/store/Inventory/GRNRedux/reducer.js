@@ -102,7 +102,6 @@ const GRNReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         listBtnLoading: action.config.btnId,
-        deleteMsg: action.payload,
       }
 
     case DELETE_GRN_FOR_GRN_PAGE_SUCCESS:
@@ -117,6 +116,7 @@ const GRNReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
 
 

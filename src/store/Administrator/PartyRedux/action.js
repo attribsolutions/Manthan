@@ -42,9 +42,9 @@ export const deletePartyID = (config = {}) => ({
   config,
 
 });
-export const deletePartyIDSuccess = (deleteMessage) => ({
+export const deletePartyIDSuccess = (resp) => ({
   type: DELETE_PARTY_ID_SUCCESS,
-  payload: deleteMessage
+  payload: resp
 });
 
 // edit api

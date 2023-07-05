@@ -78,6 +78,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
         ...state,
         listBtnLoading: action.config.btnId,
       }
+
     case EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
@@ -102,7 +103,6 @@ const OrderReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         listBtnLoading: action.config.btnId,
-        deleteMsg: action.payload,
       }
     case DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {

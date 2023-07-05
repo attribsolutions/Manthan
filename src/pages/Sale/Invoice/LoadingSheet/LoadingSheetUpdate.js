@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { url, mode, pageId } from "../../../../routes/index"
-import { LoadingSheet_GoBtn_API_Succcess } from "../../../../store/Sales/LoadingSheetRedux/action";
+import { LoadingSheet_GoBtn_API_Succcess, UpdateLoadingSheetSucccess } from "../../../../store/Sales/LoadingSheetRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
@@ -21,6 +21,7 @@ import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
+import { Data } from "../../../../Reports/InvioceReport/DemoData";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -30,21 +31,23 @@ const LoadingSheetUpdate = (props) => {
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
+    const [tableListData, setTableListData] = useState([]);
+    const [partyDetails, setPartyDetails] = useState({});
 
     const {
         userAccess,
-        List,
+        LoadingSheetUpdateList,
         makeReceipt,
         OpeningBalance,
         pageField,
     } = useSelector((state) => ({
-        List: state.LoadingSheetReducer.LoadingSheetUpdate,
+        LoadingSheetUpdateList: state.LoadingSheetReducer.LoadingSheetUpdate,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         makeReceipt: state.ReceiptReducer.ReceiptGoButton,
         OpeningBalance: state.ReceiptReducer.OpeningBalance,
     }));
-    const { InvoiceParent = [], PartyDetails = {} } = List
+
 
     const lastColumn = () => ({
         text: "Action",
@@ -65,7 +68,7 @@ const LoadingSheetUpdate = (props) => {
                         className=" fas fa-file-invoice" ></span> </Button></span>)
         }
     })
-    const [tableColumns] = DynamicColumnHook({ pageField, lastColumn })
+
 
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
@@ -74,9 +77,20 @@ const LoadingSheetUpdate = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
+    useEffect(() => {
+
+        if ((LoadingSheetUpdateList.Status === true) && (LoadingSheetUpdateList.StatusCode === 200)) {
+            dispatch(UpdateLoadingSheetSucccess({ Status: false }))
+            setTableListData(LoadingSheetUpdateList.Data.InvoiceParent)
+            setPartyDetails(LoadingSheetUpdateList.Data.PartyDetails)
+        }
+
+    }, [LoadingSheetUpdateList])
+
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    const [tableColumns] = DynamicColumnHook({ pageField, lastColumn, })
 
     // userAccess useEffect
     useEffect(() => {
@@ -92,6 +106,7 @@ const LoadingSheetUpdate = (props) => {
             setUserAccState(userAcc)
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
+
     }, [userAccess])
 
     useEffect(() => {
@@ -130,7 +145,7 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function rowSelected() {
-        return InvoiceParent.map((index) => { return (index.selectCheck) && index.id })
+        return tableListData.map((index) => { return (index.selectCheck) && index.id })
     }
 
     function DateOnchange(e, date) {
@@ -138,7 +153,7 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function MakeReceiptForAll() {
-        const result = InvoiceParent.map((index) => {
+        const result = tableListData.map((index) => {
             if (index.selectCheck === true) {
                 return index.id
             }
@@ -166,6 +181,8 @@ const LoadingSheetUpdate = (props) => {
         }
     }
 
+
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -183,7 +200,7 @@ const LoadingSheetUpdate = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px" }}>Loading NO :</Label>
                                         <Col sm="7">
-                                            <Label className=" mt-2">{PartyDetails.LoadingSheetNo}</Label>
+                                            <Label className=" mt-2">{partyDetails.LoadingSheetNo}</Label>
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -203,10 +220,11 @@ const LoadingSheetUpdate = (props) => {
                                 </Col >
                             </div>
                         </div>
+
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"
-                                data={InvoiceParent}
+                                data={tableListData}
                                 columns={tableColumns}
                                 search
                             >
@@ -236,7 +254,7 @@ const LoadingSheetUpdate = (props) => {
 
 
                         {
-                            InvoiceParent.length > 0 ?
+                            tableListData.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} className={"row save1"}>
                                         <button type="button" style={{ width: "120px" }} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>

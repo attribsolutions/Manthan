@@ -31,6 +31,9 @@ import { SalesReturn_add_button_api_For_Item } from "../../../helpers/backend_he
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../Sale/Invoice/SalesReturn/salesReturn.scss";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 
 const StockEntry = (props) => {
 
@@ -38,7 +41,7 @@ const StockEntry = (props) => {
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
 
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const fileds = {
@@ -48,7 +51,7 @@ const StockEntry = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [TableArr, setTableArr] = useState([]);
-    const [defaultMRP, setdefaultMRP] = useState([]);
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -73,11 +76,9 @@ const StockEntry = (props) => {
     }, []);
 
     const location = { ...history.location }
-    // const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
-    const { isError } = state;
     const { fieldLabel } = state;
 
     // userAccess useEffect
@@ -156,15 +157,12 @@ const StockEntry = (props) => {
         return index.itemCheck === true
     });
 
-    function deleteButtonAction(row) {
-        const newArr = TableArr.filter((index) => !(index.id === row.id))
-        setTableArr(newArr)
-    }
+
 
     const pagesListColumns = [
         {
             text: "Item Name",
-            dataField: "",
+            dataField: "id",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
                 return (
@@ -195,22 +193,22 @@ const StockEntry = (props) => {
             text: "Unit",
             dataField: "",
             classes: () => "sales-return-row",
-            formatter: (cellContent, row, key, a, b) => {
+            formatter: (cellContent, row, key,) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
                         id={`Unit${key}`}
                         name="Unit"
                         isSearchable={true}
+                        defaultValue={row.defaultUnit}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
-                        options={row.ItemUnitDetails}
+                        options={row.Unit_DropdownOptions}
                         styles={{
                             menu: provided => ({ ...provided, zIndex: 2 })
                         }}
                         onChange={(event) => {
-                            row.Unit = event.value
-                            row.BaseUnitQuantity = event.BaseUnitQuantity
+                            row.defaultUnit = event
                         }}
                     />
                 </span>)
@@ -232,7 +230,7 @@ const StockEntry = (props) => {
                                 isSearchable={true}
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
-                                options={row.ItemMRPDetails}
+                                options={row.MRP_DropdownOptions}
                                 onChange={(event) => { row.defaultMRP = event }}
                             />
                         </span></>)
@@ -243,7 +241,6 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
-
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
                         id={`GST${key}`}
@@ -296,7 +293,8 @@ const StockEntry = (props) => {
         {
             text: "Action ",
             dataField: "",
-            formatter: (cellContent, row, key) => (
+            formatExtraData: { TableArr: TableArr, setTableArr: setTableArr },
+            formatter: (cellContent, row, _key, formatExtraData) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -306,7 +304,7 @@ const StockEntry = (props) => {
                                     type="button"
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                    onClick={(e) => { deleteButtonAction(row) }}
+                                    onClick={(e) => { deleteButtonAction(row, formatExtraData) }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
@@ -318,7 +316,10 @@ const StockEntry = (props) => {
         },
     ];
 
-    async function AddPartyHandler() {
+
+    const AddPartyHandler = async () => {
+
+        // Display alert if Item Name is empty
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
@@ -327,62 +328,115 @@ const StockEntry = (props) => {
             return;
         }
 
-        let resp;
         try {
-            resp = await SalesReturn_add_button_api_For_Item(values.ItemName.value);
+            // Fetch data from the API
+            const apiResponse = await SalesReturn_add_button_api_For_Item(values.ItemName.value);
 
-            const responseData = resp.Data.InvoiceItems.map((i) => ({
-                unitOps: i.ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.Unit, BaseUnitQuantity: i.BaseUnitQuantity })),
-                MRPOps: i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP })),
-                highest_MRP: i.ItemMRPDetails.filter((obj, index, arr) => {
-                    return obj.MRP === Math.max(...arr.map(item => item.MRP));
-                }),
-                GSTOps: i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST })),
-                highest_GST: i.ItemGSTDetails.filter((obj, index, arr) => {
-                    return obj.GST === Math.max(...arr.map(item => item.GST));
-                }),
-                ItemName: i.ItemName,
-                ItemId: i.Item,
-                Quantity: i.Quantity,
-            }));
+            // Convert API response to desired format
+            const convert_ApiResponse = apiResponse.Data.InvoiceItems.map((i) => {
+
+                const UnitDroupDownOptions = i.ItemUnitDetails.map((unit) => ({
+                    label: unit.UnitName,
+                    value: unit.Unit,
+                    IsBase: unit.IsBase,
+                    BaseUnitQuantity: unit.BaseUnitQuantity,
+                }));
+
+                const Default_Unit = UnitDroupDownOptions.find(unit => unit.IsBase);
+
+                const MRP_DropdownOptions = i.ItemMRPDetails.map((mrp) => ({
+                    label: mrp.MRPValue,
+                    value: mrp.MRP,
+                }));
+
+                const Highest_MRP = MRP_DropdownOptions.reduce((prev, current) => {
+                    return prev.MRP > current.MRP ? prev : current;
+                });
+
+                const GST_DropdownOptions = i.ItemGSTDetails.map((gst) => ({
+                    label: gst.GSTPercentage,
+                    value: gst.GST,
+                }));
+
+                const Highest_GST = GST_DropdownOptions.reduce((prev, current) => {
+                    return prev.GST > current.GST ? prev : current;
+                });
+
+                return {
+                    UnitDroupDownOptions,
+                    MRP_DropdownOptions,
+                    GST_DropdownOptions,
+                    Default_Unit,
+                    Highest_MRP,
+                    Highest_GST,
+                    ItemName: i.ItemName,
+                    ItemId: i.Item,
+                    Quantity: i.Quantity,
+                };
+            });
 
             const initialTableData = [...TableArr];
-            const dateString = currentDate_ymd.replace(/-/g, "");
+            const dateString = currentDate_ymd.replace(/-/g, "");//Convert date To DateString 
 
-            responseData.forEach((i) => {
-                let batchCode = 0;
+            const existingBatchCodes = {};//existing Batch Codes form compare in table 
 
-                initialTableData.forEach((index) => {
-                    if (index.ItemId === i.ItemId) {
-                        batchCode++;
+            convert_ApiResponse.forEach((index) => {
+                const itemId = index.ItemId;
+
+                let batchCodeCounter = 0;
+
+                initialTableData.forEach((tableItem) => {
+                    if (tableItem.ItemId === itemId) {
+                        const existingBatchCode = tableItem.BatchCode.split('_').pop(); // Extract the batchCode from existing BatchCode
+                        batchCodeCounter = Math.max(batchCodeCounter, parseInt(existingBatchCode, 10) + 1);
                     }
                 });
 
+                let newBatchCode = `${dateString}_${itemId}_${_cfunc.loginPartyID()}_${batchCodeCounter}`;
+
+                while (existingBatchCodes[newBatchCode]) {
+                    batchCodeCounter++;
+                    newBatchCode = `${dateString}_${itemId}_${_cfunc.loginPartyID()}_${batchCodeCounter}`;
+                }
+
+                existingBatchCodes[newBatchCode] = true;// Record the new batch code as existing
+
                 initialTableData.push({
-                    id: initialTableData.length + 1,
-                    ItemUnitDetails: i.unitOps,
-                    ItemMRPDetails: i.MRPOps,
-                    ItemGSTHSNDetails: i.GSTOps,
-                    ItemName: i.ItemName,
-                    ItemId: i.ItemId,
-                    Quantity: i.Quantity,
+                    id: newBatchCode, // Use newBatchCode as the ID
+                    Unit_DropdownOptions: index.UnitDroupDownOptions,
+                    MRP_DropdownOptions: index.MRP_DropdownOptions,
+                    ItemGSTHSNDetails: index.GST_DropdownOptions,
+                    ItemName: index.ItemName,
+                    ItemId: itemId,
+                    Quantity: index.Quantity,
                     BatchDate: currentDate_ymd,
-                    BatchCode: `${dateString}_${i.ItemId}_${_cfunc.loginPartyID()}_${batchCode}`,
-                    defaultMRP: { value: i.highest_MRP[0].MRP, label: i.highest_MRP[0].MRPValue },
-                    defaultGST: { value: i.highest_GST[0].GST, label: i.highest_GST[0].GSTPercentage },
+                    BatchCode: newBatchCode,
+                    defaultUnit: index.Default_Unit,
+                    defaultMRP: index.Highest_MRP,
+                    defaultGST: index.Highest_GST,
                 });
+
+
+            });
+
+            setState((prevState) => {
+                const newState = { ...prevState };
+                newState.values.ItemName = "";
+                newState.hasValid.ItemName.valid = true;
+                return newState;
             });
 
             setTableArr(initialTableData);
 
-            setState((i) => {
-                let a = { ...i };
-                a.values.ItemName = "";
-                a.hasValid.ItemName.valid = true;
-                return a;
-            });
+
         } catch (w) { }
     }
+    function deleteButtonAction(row, { TableArr = [], setTableArr }) {
+
+        const newArr = TableArr.filter((index) => !(index.id === row.id))
+        setTableArr(newArr)
+    }
+
     const SaveHandler = async (event) => {
 
         event.preventDefault();
@@ -390,14 +444,16 @@ const StockEntry = (props) => {
         const btnId = event.target.id
 
         const ReturnItems = TableArr.map((index) => {
-
+            debugger
             return ({
                 "Item": index.ItemId,
                 "ItemName": index.ItemName,
                 "Quantity": index.Qty,
                 "MRP": index.defaultMRP.value,
-                "Unit": index.Unit,
+                "Unit": index.defaultUnit.value,
                 "GST": index.defaultGST.value,
+                "MRPValue": index.defaultMRP.label,
+                "GSTPercentage": index.defaultGST.label,
                 "BatchDate": index.BatchDate,
                 "BatchCode": index.BatchCode
             })
@@ -463,7 +519,7 @@ const StockEntry = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
+                <div className="page-content">
 
                     <form noValidate>
                         <div className="px-3 c_card_filter header text-black mb-1" >
@@ -518,17 +574,42 @@ const StockEntry = (props) => {
                             </Row>
                         </div>
 
-                        <CustomTable2
+                        <ToolkitProvider
+                            keyField={"id"}
                             data={TableArr}
                             columns={pagesListColumns}
-                            classes={" table table-responsive table-bordered table-hover"}
-                            noDataIndication={
-                                <div className="text-danger text-center ">
-                                    Record Not available
-                                </div>
-                            }
+                            search
                         >
-                        </CustomTable2>
+                            {(toolkitProps,) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive table">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    id="table_Arrow"
+
+
+                                                    classes={"table  table-bordered table-hover"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Items Not available
+                                                        </div>
+                                                    }
+                                                    onDataSizeChange={(e) => {
+                                                        // _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    }}
+                                                    {...toolkitProps.baseProps}
+                                                />
+                                                {mySearchProps(toolkitProps.searchProps)}
+                                            </div>
+                                        </Col>
+                                    </Row>
+
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+
 
                         {
                             TableArr.length > 0 ?

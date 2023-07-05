@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -12,24 +12,32 @@ const ConfirmDialog = () => {
     const { confirmState, confirm } = useConfirm();
     customAlert = confirm;
     let component = null;
+    const buttonRef = useRef(null);
+
+    useEffect(() => {
+        debugger
+        if (buttonRef.current) {
+            buttonRef.current.focus();
+        }
+    }, [confirmState]);
 
     if (confirmState.Status) {
         switch (confirmState.Type) {
-            case 1: component = <AlertSucc />
+            case 1: component = <AlertSucc btnRef={buttonRef} />
                 break;
-            case 2: component = <AlertDanger />
+            case 2: component = <AlertDanger btnRef={buttonRef} />
                 break;
-            case 3: component = <AlertInfo />
+            case 3: component = <AlertInfo btnRef={buttonRef} />
                 break;
-            case 4: component = <AlertWarning />
+            case 4: component = <AlertWarning btnRef={buttonRef} />
                 break;
-            case 5: component = <AlertPermission1 />
+            case 5: component = <AlertPermission1 btnRef={buttonRef} />
                 break;
-            case 6: component = <AlertPermission2 />
+            case 6: component = <AlertPermission2 btnRef={buttonRef} />
                 break;
-            case 7: component = <AlertPermission3 />
+            case 7: component = <AlertPermission3 btnRef={buttonRef} />
                 break;
-            case 8: component = <AlertPermission4 />
+            case 8: component = <AlertPermission4 btnRef={buttonRef} />
                 break;
             default: return null;
         }
@@ -41,7 +49,7 @@ const ConfirmDialog = () => {
 export default ConfirmDialog;
 
 
-const AlertSucc = () => {
+const AlertSucc = ({ btnRef }) => {
 
     const { onConfirm, onCancel, confirmState } = useConfirm();
     const dispatch = useDispatch();
@@ -87,7 +95,7 @@ const AlertSucc = () => {
                         className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
                             className="mdi mdi-check-all d-block display-6 mt-2 mb-3  text-success"></i>
                         <MessageFun msg={Message} />
-                        <button type="button" autoFocus className="btn btn-primary" onClick={innerYes}>OK</button>
+                        <button type="button" ref={btnRef} className="btn btn-primary" onClick={innerYes}>OK</button>
                     </div>
                 </div>
             </div>
@@ -95,7 +103,7 @@ const AlertSucc = () => {
     )
 };
 
-const AlertWarning = () => {
+const AlertWarning = ({ btnRef }) => {
 
     const { onCancel, confirmState } = useConfirm();
     const { Status = false, Message = " Warning Error", } = confirmState;
@@ -125,7 +133,7 @@ const AlertWarning = () => {
                                 className="mdi mdi-alert-outline  d-block display-4 mt-2 mb-3 text-warning"></i>
 
                             <MessageFun msg={Message} />
-                            <button type="button" autoFocus className="btn btn-primary " onClick={innerOk}>OK</button>
+                            <button type="button" ref={btnRef} className="btn btn-primary " onClick={innerOk}>OK</button>
                         </div>
                     </div>
                 </div>
@@ -134,7 +142,7 @@ const AlertWarning = () => {
     )
 };
 
-const AlertInfo = () => {
+const AlertInfo = ({ btnRef }) => {
     const { onCancel, confirmState } = useConfirm();
     const { Status = false, Message = "400 Error", } = confirmState;
 
@@ -162,7 +170,7 @@ const AlertInfo = () => {
                             className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
                                 className="mdi mdi-alert-circle-outline d-block display-4 mt-2 mb-3 text-info"></i>
                             <MessageFun msg={Message} />
-                            <button type="button" autoFocus className="btn btn-primary " onClick={innerOk}>OK</button>
+                            <button type="button" ref={btnRef} className="btn btn-primary " onClick={innerOk}>OK</button>
                         </div>
                     </div>
                 </div>
@@ -174,7 +182,7 @@ const AlertInfo = () => {
     )
 };
 
-const AlertDanger = () => {
+const AlertDanger = ({ btnRef }) => {
     const { onCancel, confirmState } = useConfirm();
 
     const { Status = false, Message = "400 Error", } = confirmState;
@@ -202,7 +210,7 @@ const AlertDanger = () => {
                             aria-hidden="true">×</span></button><i
                                 className="mdi mdi-block-helper d-block display-4 mt-2 mb-3  text-danger"></i>
                         <MessageFun msg={Message} />
-                        <button type="button" autoFocus className="btn btn-primary" onClick={innerOk}>OK</button>
+                        <button type="button" ref={btnRef} className="btn btn-primary" onClick={innerOk}>OK</button>
                     </div>
                 </div>
             </div>
@@ -210,7 +218,7 @@ const AlertDanger = () => {
     )
 };
 
-const AlertPermission1 = () => {
+const AlertPermission1 = ({ btnRef }) => {
     const dispatch = useDispatch();
 
     const { onCancel, confirmState } = useConfirm();
@@ -249,8 +257,11 @@ const AlertPermission1 = () => {
                         <MessageFun msg={Message} />
 
                         <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}><button type="button"
-                            className="btn btn-danger " onClick={innerOk}>Yes</button><button type="button"
-                                className="btn btn-success w-xm waves-effect waves-light" onClick={outerNo}>No</button></div>
+                            className="btn btn-danger " onClick={innerOk}>Yes</button>
+                            <button type="button"
+                                ref={btnRef}
+                                className="btn btn-success w-xm waves-effect waves-light"
+                                onClick={outerNo}>No</button></div>
                     </div>
                 </div>
             </div >
@@ -258,7 +269,7 @@ const AlertPermission1 = () => {
     )
 };
 
-const AlertPermission2 = () => {
+const AlertPermission2 = ({ btnRef }) => {
 
     const { onCancel, confirmState } = useConfirm();
 
@@ -296,8 +307,11 @@ const AlertPermission2 = () => {
                             <h5>{Message}</h5>
                         </p>
                         <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}><button type="button"
-                            className="btn btn-success " onClick={innerOk}>Yes</button><button type="button"
-                                className="btn btn-danger w-xm waves-effect waves-light" onClick={outerNo}>No</button></div>
+                            className="btn btn-success " onClick={innerOk}>Yes</button>
+                            <button type="button"
+                                ref={btnRef}
+                                className="btn btn-danger w-xm waves-effect waves-light"
+                                onClick={outerNo}>No</button></div>
                     </div>
                 </div>
             </div>
@@ -305,7 +319,7 @@ const AlertPermission2 = () => {
     )
 };
 
-const AlertPermission3 = () => {
+const AlertPermission3 = ({ btnRef }) => {
 
     const { onConfirm, onCancel, confirmState } = useConfirm();
     const {
@@ -344,6 +358,7 @@ const AlertPermission3 = () => {
                             <button type="button"
                                 className="btn btn-danger " onClick={innerYes}>Yes</button>
                             <button type="button"
+                                ref={btnRef}
                                 className="btn btn-success w-xm waves-effect waves-light" onClick={outerNo}>No</button>
                         </div>
                     </div>
@@ -354,7 +369,7 @@ const AlertPermission3 = () => {
     )
 };
 
-const AlertPermission4 = () => {
+const AlertPermission4 = ({ btnRef }) => {
 
     const { onConfirm, onCancel, confirmState } = useConfirm();
     const {
@@ -388,7 +403,9 @@ const AlertPermission4 = () => {
                         <MessageFun msg={Message} />
 
                         <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}><button type="button"
-                            className="btn btn-danger " onClick={innerYes}>Yes</button><button type="button"
+                            className="btn btn-danger " onClick={innerYes}>Yes</button>
+                            <button type="button"
+                                ref={btnRef}
                                 className="btn btn-success w-xm waves-effect waves-light" onClick={outerNo}>No</button></div>
                     </div>
                 </div>

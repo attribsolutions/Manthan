@@ -10,6 +10,7 @@ import store from "./store"
 import ConfirmDialog from "./CustomAlert/ConfirmDialog"
 import { ConfirmContextProvider } from "./CustomAlert/ConfirmContextProvider"
 
+
 const app = (
   <Provider store={store}>
     <BrowserRouter>

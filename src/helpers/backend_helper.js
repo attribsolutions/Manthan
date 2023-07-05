@@ -593,7 +593,7 @@ export const Make_Receipt_to_Payment_API = (jsonBody) => post(url.MAKE_RECEIPT_T
 
 // Sales Return
 export const Invoice_No_list_API = (jsonBody) => post(url.INVOICE_NUMBER_LIST, jsonBody)//Invoice No. dropdown api postapi
-export const SalesReturn_add_button_api_For_Item = (ItemID) => get(`${url.ADD_BUTTON_API_FOR_ITEM}/${ItemID}`)//add button get api for item
+export const SalesReturn_add_button_api_For_Item = (jsonBody) => post(url.ADD_BUTTON_API_FOR_ITEM, jsonBody)//add button get api for item
 export const SalesReturn_add_button_api_For_Invoice = (InvoiceID) => get(`${url.ADD_BUTTON_API_FOR_INVOICE}/${InvoiceID}`)//add button get api for invoice
 export const SalesReturn_post_API = ({ jsonBody, btnId }) => post(url.SALES_RETURN, jsonBody, btnId)//  postapi
 export const SalesReturn_list_API = (filters) => post(url.SALES_RETURN_LIST_API, filters)//Sales Return list api using post method
@@ -615,6 +615,8 @@ export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODU
 export const OderSummary_GoBtn_API = ({ jsonBody, btnId }) => post(url.ORDER_SUMMARY, jsonBody, btnId)//post api
 export const PartySettingApi = (Party_id, Comapny_id) => get(`${url.PARTY_SETTING}/${Party_id}/${Comapny_id}`)// Party Setting api
 export const save_PartySetting_API = ({ jsonBody, btnId }) => post(url.PARTY_SETTING, jsonBody, btnId)//  postapi
+export const PartyLedgerReport_API = (jsonBody) => post(url.PARTY_LEDGER, jsonBody)//  postapi
+
 
 // export const PartyLedger_API = (FromDate,ToDate,SAPCode) => get(`http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
 // Dashboard 

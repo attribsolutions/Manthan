@@ -181,7 +181,7 @@ const Receipts = (props) => {
             }
 
             if (hasEditVal) {
-
+                
                 const { id, CustomerID, Customer,
                     Description, ReceiptMode, ReceiptModeName,
                     Bank, BankName, AmountPaid, DocumentNo, } = hasEditVal
@@ -194,7 +194,7 @@ const Receipts = (props) => {
                     i.values.BankName = { value: Bank, label: BankName }
                     i.values.Description = Description
                     i.values.DocumentNo = DocumentNo
-                    i.values.AmountPaid = AmountPaid
+                    i.values.AmountPaid = AmountPaid.replace(/,/g, "");
 
                     i.hasValid.Customer.valid = true;
                     i.hasValid.AmountPaid.valid = true;
@@ -393,8 +393,9 @@ const Receipts = (props) => {
     }
 
     function AmountPaidDistribution(val1) {
-
-        let value = Number(val1)
+        
+        const withoutCommaSeparator = val1.replace(/,/g, "");
+        let value = Number(withoutCommaSeparator)
 
         let Amount = value
 
@@ -491,11 +492,12 @@ const Receipts = (props) => {
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
-
+        
         if ((values.AmountPaid === '')
             || (values.AmountPaid === "NaN")
             || (values.AmountPaid === undefined)
-            || (values.AmountPaid === 0)) {
+            || (values.AmountPaid === 0)
+            || (values.AmountPaid === "0")) {
             customAlert({
                 Type: 4,
                 Message: `Amount Paid value can not be 0`,

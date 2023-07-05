@@ -15,7 +15,8 @@ function* getpdfData_GenFunc({ urlpath, ReportType, Id, Partysettingdata }) {
     const response = yield call(urlpath, Id);
     response["ReportType"] = ReportType
     response.Data["ReportType"] = ReportType
-    response.Data["SettingData"] = Partysettingdata
+    response.Data["SettingData"] = Partysettingdata;
+
     yield put(getpdfReportdataSuccess(response));
 
   } catch (error) {

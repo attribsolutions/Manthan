@@ -10,7 +10,8 @@ import {
     DeleteLoadingSheet,
     DeleteLoadingSheetSucccess,
     LoadingSheetListAction,
-    UpdateLoadingSheet
+    UpdateLoadingSheet,
+    UpdateLoadingSheetSucccess
 } from "../../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../../helpers/backend_helper";
 import * as report from '../../../../Reports/ReportIndex'
@@ -30,27 +31,24 @@ const LoadingSheetList = () => {
     const currentDate_ymd = _cfunc.date_ymd_func()
 
     const [headerFilters, setHeaderFilters] = useState('');
-    const [Partysettingdata, setPartysettingdata] = useState({})
-
-
-    const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [pageMode] = useState(mode.defaultList);
 
     const reducers = useSelector(
         (state) => ({
             loading: state.LoadingSheetReducer.loading,
+            listBtnLoading:state.LoadingSheetReducer.listBtnLoading,
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
             deleteMsg: state.LoadingSheetReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             PartySettingdata: state.PartySettingReducer.PartySettingdata,
-
+            LoadingSheetUpdateList: state.LoadingSheetReducer.LoadingSheetUpdate,
         })
     );
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
-    const { userAccess, pageField, PartySettingdata } = reducers;
+    const { userAccess, pageField, PartySettingdata, LoadingSheetUpdateList } = reducers;
     const { Data = {} } = PartySettingdata;
-
 
     const action = {
         getList: LoadingSheetListAction,
@@ -65,9 +63,17 @@ const LoadingSheetList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
         goButtonHandler()
-        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id,_cfunc.loginCompanyID()))
+        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id, _cfunc.loginCompanyID()))
 
     }, []);
+
+    useEffect(() => {
+        if ((LoadingSheetUpdateList.Status === true) && (LoadingSheetUpdateList.StatusCode === 200)) {
+            history.push({
+                pathname: LoadingSheetUpdateList.path,
+            })
+        }
+    }, [LoadingSheetUpdateList])
 
     function goButtonHandler() {
         const jsonBody = JSON.stringify({
@@ -90,7 +96,6 @@ const LoadingSheetList = () => {
         setHeaderFilters(newObj)
     }
 
-
     function downBtnFunc(row, downbtnType) {
         console.log(downbtnType)
         if (downbtnType === "IsMultipleInvoicePrint") {
@@ -103,10 +108,7 @@ const LoadingSheetList = () => {
     }
 
     const updateBtnFunc = (list) => {
-
-        dispatch(UpdateLoadingSheet(list.id));
-        history.push(url.LOADING_SHEET_LIST_UPDATE, list);
-
+        dispatch(UpdateLoadingSheet({ RowId: list.id, path: url.LOADING_SHEET_LIST_UPDATE }));
     };
 
     return (
