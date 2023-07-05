@@ -290,7 +290,7 @@ export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
   gstin2 = String(gstin2) || ""
   let stateCode1 = gstin1.substring(0, 2);
   let stateCode2 = gstin2.substring(0, 2);
-  debugger
+
   return (!(stateCode1 === stateCode2) && !(gstin1 === "") && !(gstin2 === ""));
 }
 
@@ -354,15 +354,18 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
   // }
 }
 
-export async function CheckAPIResponse({ method, url, response = {}, body,  error }) {
-debugger
+export async function CheckAPIResponse({ method, url, response = {}, body, error = '' }) {
+  debugger
   const { data = {} } = response;
   const statusCode = data.StatusCode;
+  const MessgeAlreadyShow = error.MessgeAlreadyShow || false
 
   const successCodes = [200, 204, 100];
   const rejectionCodes = [226, 400, 406, 500];
 
-  if (error !== undefined) {
+  {/***********error massage********************************************* */ }
+
+  if (error !== undefined && error !== '') {
     const tokenXp = error.response?.data.code === "token_not_valid";
 
     if (method === "post" || method === "put" || method === "postForget") {
@@ -374,12 +377,13 @@ debugger
       window.location.reload(true);
       return;
     }
-
-    CommonConsole(`${url}***${method} apiCall response:=>`, error);
-    customAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` });
-
+    if (!MessgeAlreadyShow) {
+      CommonConsole(`${url}***${method} apiCall response:=>`, error);
+      customAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` });
+    }
     return Promise.reject(error);
   }
+  {/******************************************************** */ }
 
   if (method === "post" || method === "put" || method === "postForget") {
     CommonConsole(`${url}***=> ${method} Body =>`, body);
@@ -393,6 +397,7 @@ debugger
   if (rejectionCodes.includes(statusCode)) {
     CommonConsole(`${url}***${method} apiCall response:=>`, response.data);
     await customAlert({ Type: 3, Message: JSON.stringify(response.data.Message) });
+    response.data["MessgeAlreadyShow"] = true
     return Promise.reject(response.data);
   }
 

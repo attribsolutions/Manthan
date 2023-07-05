@@ -313,7 +313,7 @@ export const reportFooter = (doc, data) => {
     doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
     doc.setFontSize(8)
 
-    debugger
+    
     if (data.BankData.length > 0) {
         let BankData = data.BankData[0]
         doc.setFont(undefined, 'bold')

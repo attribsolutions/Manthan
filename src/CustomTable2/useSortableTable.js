@@ -53,12 +53,12 @@ export const useSortableTable = ({ data, columns, customSearch }) => {
   };
 
   const serach = (searchText) => {
-    debugger
+    
      let filter =data.filter((row) =>
      columns.some((column) => {
               const columnValue = row[column.dataField];
               const isHidden = column.hidden;
-debugger
+
               if (columnValue === null || isHidden || columnValue === undefined) {
                   return false;
               }

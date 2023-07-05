@@ -444,7 +444,7 @@ const StockEntry = (props) => {
         const btnId = event.target.id
 
         const ReturnItems = TableArr.map((index) => {
-            debugger
+            
             return ({
                 "Item": index.ItemId,
                 "ItemName": index.ItemName,

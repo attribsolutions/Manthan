@@ -47,7 +47,7 @@ export const reportHeder1 = (doc, data) => {
 
     var options3 = {
         // didParseCell: (data1) => {
-        //     debugger
+        //     
         //     if (data1.row.cells[5].raw === data.CustomerName) {
         //         data1.row.cells[0].colSpan = 2
 

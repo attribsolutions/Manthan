@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { CommonConsole, amountCommaSeparateFunc, concatDateAndTime } from "../../../components/Common/CommonFunction";
+import {  amountCommaSeparateFunc, concatDateAndTime } from "../../../components/Common/CommonFunction";
 
 // Bank list Dropdown API
 function* Invoice_No_List_GenFunc({ jsonBody }) {
