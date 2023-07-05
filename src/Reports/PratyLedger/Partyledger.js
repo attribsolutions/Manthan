@@ -79,6 +79,8 @@ const PartyLedger = (props) => {
 
     useEffect(() => {
 
+
+        
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
             customAlert({
                 Type: 3,
@@ -115,6 +117,8 @@ const PartyLedger = (props) => {
             "Party": _cfunc.loginPartyID()
         });
         var ReportType = report.PartyLedger
+
+
 
         if (values.PartyName === "") {
             customAlert({

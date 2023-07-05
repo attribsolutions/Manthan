@@ -48,12 +48,12 @@ const CategoryList = (props) => {
     dispatch(getCategorylist());
   }, []);
 
-  const { pageField, } = reducers
+  const { pageField } = reducers
 
   return (
     <React.Fragment>
       {
-        reducers.listBtnLoading ?
+        reducers.loading ?
           <Listloader />
           :
           (pageField) ?

@@ -39,7 +39,21 @@ export const reportHeder1 = (doc, data) => {
 
 
     var options3 = {
+
         didParseCell: (data1) => {
+
+        // didParseCell: (data1) => {
+        //     
+        //     if (data1.row.cells[5].raw === data.CustomerName) {
+        //         data1.row.cells[0].colSpan = 2
+
+        //         data1.row.cells[0].styles.fontSize = 8
+
+        //         data1.row.cells[0].styles.fontStyle = "bold"
+
+        //     }
+        // },
+
 
             if (data1.row.cells[0].raw.includes("books")) {
                 data1.row.cells[0].colSpan = 2

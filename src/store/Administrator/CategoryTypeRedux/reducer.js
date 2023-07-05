@@ -1,6 +1,8 @@
 import {
   CATEGORY_TYPE_API_ERROR_ACTION,
+  DELETE_CATEGORY_TYPE_ID,
   DELETE_CATEGORY_TYPE_ID_SUCCESS,
+  EDIT_CATEGORY_TYPE_ID,
   EDIT_CATEGORY_TYPE_ID_SUCCESS,
   GET_CATEGORY_TYPE_LIST,
   GET_CATEGORY_TYPE_LIST_SUCCESS,
@@ -51,15 +53,32 @@ const categoryTypeReducer = (state = INIT_STATE, action) => {
         listBtnLoading: false,
       }
 
+      case DELETE_CATEGORY_TYPE_ID:
+        return {
+          ...state,
+          listBtnLoading: action.config.btnId,
+          deleteMessage: action.payload,
+        };
+
+
     case DELETE_CATEGORY_TYPE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMessage: action.payload,
       };
+
+      case EDIT_CATEGORY_TYPE_ID:
+        return {
+          ...state,
+          listBtnLoading: action.config.btnId,
+        };
+  
 
     case EDIT_CATEGORY_TYPE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 

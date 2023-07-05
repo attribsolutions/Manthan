@@ -37,8 +37,8 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
         case SAVE_SALES_RETURN_MASTER_SUCCESS:
             return {
                 ...state,
-                postMsg: action.payload,
                 saveBtnloading: false,
+                postMsg: action.payload,
 
             }
 
@@ -59,7 +59,6 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 listBtnLoading: action.config.btnId,
-                deleteMsg: action.payload,
             }
 
         case DELETE_SALES_RETURN_ID_SUCCESS:
