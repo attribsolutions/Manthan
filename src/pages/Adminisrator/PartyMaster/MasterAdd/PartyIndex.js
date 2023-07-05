@@ -338,13 +338,7 @@ const PartyMaster = (props) => {
         let isError = addressTabIsAddressEnter.isError
         let values = addressTabIsAddressEnter.values
 
-        if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
-            customAlert({
-                Type: 4,
-                Message: "Please Select PriceList ",
-            })
-            return;
-        }
+        
 
         if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "")) {
             customAlert({
@@ -408,6 +402,13 @@ const PartyMaster = (props) => {
                 }
             })
 
+            if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Select PriceList ",
+                })
+                return;
+            }
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,
                 "PriceList": priceListSelect.value,

@@ -14,7 +14,6 @@ import * as pageId from "../../../../../routes/allPageID"
 import { loginPartyID } from '../../../../../components/Common/CommonFunction'
 import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../store/Administrator/EmployeeRedux/action'
 import CityMaster from '../../../CityPages/CityMaster'
-import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
@@ -232,8 +231,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     };
     const GSTINverifyhandler = () => {
-
-        window.open("https://services.gst.gov.in/services/login");
+        window.open("https://services.gst.gov.in/services/searchtp");
     }
 
     const FirstTab = (
