@@ -47,8 +47,8 @@ export const reportHeder1 = (doc, data) => {
     // doc.line(409, 95, 30, 95)//horizontal line 4
     doc.line(30, 789, 30, 16);//vertical left 1
     doc.line(570, 789, 570, 16);//vertical left 2
-    doc.line(408, 160, 408, 16);//vertical right 1
-    doc.line(220, 160, 220, 63);//vertical right 2
+    doc.line(408, 170, 408, 16);//vertical right 1
+    doc.line(220, 170, 220, 63);//vertical right 2
 
 
 
@@ -179,12 +179,12 @@ export const reportHeder3 = (doc, data) => {
         doc.setFont('Tahoma')
         doc.setFontSize(10)
         doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
-        doc.line(570, 49, 408, 49) //horizontal line 1 billby upper
+        // doc.line(570, 49, 408, 49) //horizontal line 1 billby upper
 
         doc.setFont(undefined, 'bold')
         doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 27) //Invoice Id
         doc.text(`Invoice Date: ${date}`, 415, 43) //Invoice date
-        doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 60) //Invoice date
+        // doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 60) //Invoice date
 
     } else {
         doc.setFont('Tahoma')
@@ -313,7 +313,7 @@ export const reportFooter = (doc, data) => {
     doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
     doc.setFontSize(8)
 
-    
+
     if (data.BankData.length > 0) {
         let BankData = data.BankData[0]
         doc.setFont(undefined, 'bold')
