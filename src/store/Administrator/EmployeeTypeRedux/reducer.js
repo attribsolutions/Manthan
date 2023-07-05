@@ -1,5 +1,7 @@
 import {
+  DELETE_EMPLOYEE_TYPE_ID,
   DELETE_EMPLOYEE_TYPE_ID_SUCCESS,
+  EDIT_EMPLOYEE_TYPE_ID,
   EDIT_EMPLOYEE_TYPE_ID_SUCCESS,
   EMPLOYEE_TYPE_API_ERROR_ACTION,
   GET_EMPLOYEE_TYPE_LIST,
@@ -18,6 +20,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
+  loading: false
 }
 
 const EmployeeTypeReducer = (state = INIT_STATE, action) => {
@@ -42,25 +45,41 @@ const EmployeeTypeReducer = (state = INIT_STATE, action) => {
     case GET_EMPLOYEE_TYPE_LIST:
       return {
         ...state,
-        listBtnLoading: true,
+        loading: true,
       }
 
     case GET_EMPLOYEE_TYPE_LIST_SUCCESS:
       return {
         ...state,
         EmployeeTypeList: action.payload,
-        listBtnLoading: false,
+        loading: false,
       }
+
+    case DELETE_EMPLOYEE_TYPE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+        deleteMessage: action.payload,
+      };
 
     case DELETE_EMPLOYEE_TYPE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMessage: action.payload,
       };
+
+    case EDIT_EMPLOYEE_TYPE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
 
     case EDIT_EMPLOYEE_TYPE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 
@@ -85,6 +104,7 @@ const EmployeeTypeReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading: false
       };
 
 

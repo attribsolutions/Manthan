@@ -48,12 +48,12 @@ const EmployeeTypeList = (props) => {
     dispatch(getEmployeeTypelist());
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField } = reducers
 
   return (
     <React.Fragment>
       {
-        reducers.listBtnLoading ?
+        reducers.loading ?
           <Listloader />
           :
           (pageField) ?
