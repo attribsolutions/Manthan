@@ -7,17 +7,14 @@ var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
     style.pageHeder(doc, data);     //Title
     style.reportHeder1(doc, data);
-    style.reportHeder2(doc, data);
-    style.reportHeder3(doc, data);    //Invoice ID , Date  
-
 };
 function reportBody(doc, data) {
     style.tableBody(doc, data);
 }
 function pageFooter(doc, data) {
     style.pageFooter(doc, data);
-    style.reportFooter(doc, data);
 }
+
 
 const PartyLedgerReport = (data1) => {
     
@@ -26,11 +23,16 @@ const PartyLedgerReport = (data1) => {
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
+
     doc.setProperties({
-        title: "Party Ledger Report "
+        title: 'Party Ledger Report',
     });
-    const options = { filename: "Party Ledger Report" }
-    doc.output('dataurlnewwindow', options);
-    return (<></>);
-}
+
+    doc.setProperties({
+        title: `Party Ledger Report`
+    });
+    const options = { filename: "PartyLedgerReport.pdf" }
+    return (doc.output('dataurlnewwindow', options))
+};
+
 export default PartyLedgerReport;
