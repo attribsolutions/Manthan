@@ -157,8 +157,8 @@ export const Rows = (data) => {
                 " ",
                 " ",
                 "Total Credit Note",
-                `${numberWithCommas(Number(data.TotalCreditNote).toFixed(2))}`,
                 "",
+                `${numberWithCommas(Number(data.TotalCreditNote).toFixed(2))}`,
                 ``,
             ];
         };
@@ -167,8 +167,8 @@ export const Rows = (data) => {
                 " ",
                 " ",
                 "Total Debit Note",
-                ``,
                 `${numberWithCommas(Number(data.TotalDebitNote).toFixed(2))}`,
+                ``,
                 ``,
             ];
         };
