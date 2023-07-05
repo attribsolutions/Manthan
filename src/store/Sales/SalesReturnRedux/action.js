@@ -7,8 +7,21 @@ import {
   SALES_RETURN_LIST_API_SUCCESS,
   DELETE_SALES_RETURN_ID,
   DELETE_SALES_RETURN_ID_SUCCESS,
-  SALES_RUTURN_API_ERROR_ACTION
+  SALES_RUTURN_API_ERROR_ACTION,
+  SALES_RETURN_ADD_BUTTON_ACTION,
+  SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS
 } from "./actionType";
+
+
+export const SalesReturnAddBtn_Action = config => ({
+  type: SALES_RETURN_ADD_BUTTON_ACTION,
+  config
+})
+
+export const SalesReturnAddBtn_Action_Succcess = (items) => ({
+  type: SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS,
+  items,
+});
 
 // Invoice number dropdown API
 export const InvoiceNumber = (jsonBody) => ({
