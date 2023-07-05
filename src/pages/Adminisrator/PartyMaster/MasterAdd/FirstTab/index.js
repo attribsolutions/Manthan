@@ -14,7 +14,6 @@ import * as pageId from "../../../../../routes/allPageID"
 import { loginPartyID } from '../../../../../components/Common/CommonFunction'
 import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../store/Administrator/EmployeeRedux/action'
 import CityMaster from '../../../CityPages/CityMaster'
-import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
@@ -33,8 +32,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         District: "",
         GSTIN: "",
         CityName: "",
+        Route: "",
         Distance: "",
-        MkUpMkDn: false,
         isActive: true,
 
     }
@@ -71,6 +70,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         SupplierRedux,
         pageField,
         CityOnDistrict,
+        RoutesList,
         userAccess
     } = useSelector((state) => ({
         stateRedux: state.EmployeesReducer.State,
@@ -79,6 +79,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         PartyTypes: state.PartyTypeReducer.ListData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         SupplierRedux: state.CommonAPI_Reducer.SSDD_List,
+        RoutesList: state.RoutesReducer.RoutesList,
         pageField: state.CommonPageFieldReducer.pageField,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
@@ -119,8 +120,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         }
     }, [PartyTypes])
 
-
-
     useEffect(() => {
         let retailerParty = PartyTypes.find(i => (i.IsRetailer))
 
@@ -155,7 +154,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         IsRetailer: index.IsRetailer
     }));
 
-
     const StateValues = stateRedux.map((index) => ({
         value: index.id,
         label: index.Name
@@ -176,6 +174,15 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         label: index.Name
     }));
 
+    const RoutesListOptions = RoutesList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+        IsActive: index.IsActive
+    }));
+
+    const RouteName_Options = RoutesListOptions.filter((index) => {
+        return index.IsActive === true
+    });
     function partyTypeOnChange(hasSelect, evn) {
 
         onChangeSelect({ hasSelect, evn, state, setState })
@@ -224,8 +231,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     };
     const GSTINverifyhandler = () => {
-        
-        window.open("https://services.gst.gov.in/services/login");
+        window.open("https://services.gst.gov.in/services/searchtp");
     }
 
     const FirstTab = (
@@ -512,30 +518,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                 </Button>
                             </Col>
 
-                            <Col md="1">  </Col>
-                            <Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Row style={{ marginTop: '25px' }}>
-                                        <Label
-                                            className="col-sm-4 col-form-label">
-                                            {fieldLabel.MkUpMkDn}
-                                        </Label>
-                                        <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                                            <div className="form-check form-switch form-switch-md mb-3">
-                                                <Input
-                                                    name="MkUpMkDn"
-                                                    type="checkbox"
-                                                    disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
-                                                    className="form-check-input"
-                                                    checked={values.MkUpMkDn}
-                                                    onChange={(event) => onChangeCheckbox({ event, state, setState })}
-                                                />
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </FormGroup>
-                            </Col>
-
                         </Row>
                         <Row>
                             <Col md="3">
@@ -618,6 +600,30 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             }
                         </Row>
                         <Row>
+                            {subPageMode === url.RETAILER_MASTER &&
+                                
+                                <Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom01">{fieldLabel.Route} </Label>
+                                        <Select
+                                            name="Route"
+                                            id="Route"
+                                            value={values.Route}
+                                            isSearchable={true}
+                                            classNamePrefix="dropdown"
+                                            options={RouteName_Options}
+                                            onChange={(hasSelect, evn) => {
+                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                            }}
+                                        />
+                                        {isError.Route.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.Route}</small></span>
+                                        )}
+                                    </FormGroup>
+                                </Col>
+                            }
+                             {subPageMode === url.RETAILER_MASTER &&
+                            <Col md="1"> </Col>}
 
                             <Col md="3">
                                 <FormGroup className="mb-3">
