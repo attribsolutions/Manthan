@@ -377,4 +377,6 @@ export const PARTY_SETTING = '/PartySettings'
 
 // StockEntry
 export const STOCK_ENTRY = '/PartyStockEntry'
+export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"
+
 
