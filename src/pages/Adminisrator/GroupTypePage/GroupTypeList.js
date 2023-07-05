@@ -49,12 +49,12 @@ const GroupTypeList = (props) => {
     dispatch(getGroupTypeslist())
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField} = reducers
 
   return (
     <React.Fragment>
       {
-        reducers.listBtnLoading ?
+        reducers.loading ?
           <Listloader />
           :
           (pageField) ?
