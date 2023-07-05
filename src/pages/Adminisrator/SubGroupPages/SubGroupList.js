@@ -56,7 +56,7 @@ const SubGroupList = () => {
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {
-        reducers.listBtnLoading ?
+        reducers.loading ?
           <Listloader />
           :
           (pageField) ?

@@ -49,12 +49,12 @@ const RoleList = (props) => {
     dispatch(getRole());
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField } = reducers
 
   return (
     <React.Fragment>
       {
-        reducers.listBtnLoading ?
+        reducers.loading ?
           <Listloader />
           :
           (pageField) ?

@@ -1,5 +1,7 @@
 import {
+  DELETE_ROLE_LIST_ID,
   DELETE_ROLE_LIST_ID_SUCCESS,
+  EDIT_ROLE_LIST_ID,
   EDIT_ROLE_LIST_ID_SUCCESS,
   GET_ROLE_LIST_API,
   GET_ROLE_LIST_API_SUCCESS,
@@ -53,17 +55,37 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
 
       };
 
-    // // delete api
+    // delete api
+
+
+    case DELETE_ROLE_LIST_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+        deleteMsg: action.payload,
+      };
+
+
     case DELETE_ROLE_LIST_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMsg: action.payload,
       };
 
     // edit api
+
+    case EDIT_ROLE_LIST_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
+
     case EDIT_ROLE_LIST_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 

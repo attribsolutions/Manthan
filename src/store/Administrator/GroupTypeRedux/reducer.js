@@ -1,5 +1,7 @@
 import {
+  DELETE_GROUP_TYPE_ID,
   DELETE_GROUP_TYPE_ID_SUCCESS,
+  EDIT_GROUP_TYPE_ID,
   EDIT_GROUP_TYPE_ID_SUCCESS,
   GET_GROUP_TYPES_LIST,
   GET_GROUP_TYPES_LIST_SUCCESS,
@@ -53,9 +55,17 @@ const GroupTypeReducer = (state = INIT_STATE, action) => {
 
       }
 
+
+    case EDIT_GROUP_TYPE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
+
     case EDIT_GROUP_TYPE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       }
 
@@ -74,9 +84,17 @@ const GroupTypeReducer = (state = INIT_STATE, action) => {
 
       }
 
+    case DELETE_GROUP_TYPE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+        deleteMessage: action.payload,
+      }
+
     case DELETE_GROUP_TYPE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMessage: action.payload,
       }
 
