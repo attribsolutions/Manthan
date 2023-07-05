@@ -8,7 +8,7 @@ import {
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -94,16 +94,15 @@ const SalesReturn = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getpartyItemList(_cfunc.loginJsonBody()))
-    }, []);
-
-    useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
             PartyID: _cfunc.loginPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
+        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
     }, []);
+
 
     useEffect(() => {
         if (TableArr.length === 0) {
@@ -159,30 +158,27 @@ const SalesReturn = (props) => {
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let alterRepont = customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.SALES_RETURN_LIST,
-                }))
+                })
+                if (alterRepont) {
+                    history.push({ pathname: url.SALES_RETURN_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveSalesReturnMaster_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -237,10 +233,11 @@ const SalesReturn = (props) => {
         },
         {
             text: "Quantity",
-            dataField: "Quantity",
+            dataField: "",
             classes: () => "sales-discount-row",
             hidden: false,
-            formatter: (cellContent, row, key) => {
+            formatExtraData: { TableArr },
+            formatter: (cellContent, row, key, { TableArr }) => {
 
                 return (
                     <div className="parent" >
@@ -253,7 +250,10 @@ const SalesReturn = (props) => {
                                 cpattern={decimalRegx}
                                 placeholder="Enter Quantity"
                                 className="col col-sm text-end"
-                                onChange={(event) => row["Qty"] = event.target.value}
+                                onChange={(event) => {
+                                    row["Quantity"] = event.target.value;
+                                    totalAmountCalcuationFunc(row, TableArr)
+                                }}
                             />
                         </div>
                         <div className="child mt-2 pl-1">
@@ -298,7 +298,8 @@ const SalesReturn = (props) => {
             text: "GST",
             dataField: "",
             hidden: false,
-            formatter: (cellContent, row, key) => {
+            formatExtraData: { TableArr },
+            formatter: (cellContent, row, key, { TableArr }) => {
                 return (<div style={{ minWidth: "90px" }}>
                     <Select
                         id={`GST${key}`}
@@ -312,6 +313,7 @@ const SalesReturn = (props) => {
                         onChange={(event) => {
                             row.GST = event.value;
                             row.GSTPercentage = event.label;
+                            totalAmountCalcuationFunc(row, TableArr)
                         }}
                     />
                 </div>)
@@ -322,7 +324,8 @@ const SalesReturn = (props) => {
             dataField: "",
             hidden: false,
             classes: () => "sales-rate-row",
-            formatter: (cellContent, index1, key,) => {
+            formatExtraData: { TableArr },
+            formatter: (cellContent, row, key, { TableArr }) => {
 
                 return (
                     <>
@@ -335,8 +338,9 @@ const SalesReturn = (props) => {
                                         value={discountDropOption[1]}
                                         options={discountDropOption}
                                         onChange={(e) => {
-                                            index1.DiscountType = e.value;
-                                            index1.Discount = '';
+                                            row.DiscountType = e.value;
+                                            row.Discount = ''
+                                            totalAmountCalcuationFunc(row, TableArr);
                                         }}
                                     />
                                 </div>
@@ -347,19 +351,25 @@ const SalesReturn = (props) => {
                                         style={{ textAlign: "right" }}
                                         type="text"
                                         cpattern={decimalRegx}
-                                        onChange={(event) => { index1.Discount = event.target.value }}
+                                        onChange={(event) => {
+                                            row.Discount = event.target.value;
+                                            totalAmountCalcuationFunc(row, TableArr)
+                                        }}
 
                                     />
                                 </div>
                             </div>
                             <div className="parent">
                                 <CInput
-                                    defaultValue={index1.Rate}
+                                    defaultValue={row.Rate}
                                     placeholder="Enter Rate"
                                     type="text"
                                     cpattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
                                     className="text-end"
-                                    onChange={(event) => { index1.Rate = event.target.value }}
+                                    onChange={(event) => {
+                                        row.Rate = event.target.value
+                                        totalAmountCalcuationFunc(row, TableArr)
+                                    }}
                                 />
                             </div>
 
@@ -424,7 +434,7 @@ const SalesReturn = (props) => {
                                 }}
                                 options={ReturnReasonOptions}
                                 onChange={event => {
-                                    debugger
+
                                     row["defaultReason"] = event
                                 }}
                             />
@@ -477,7 +487,8 @@ const SalesReturn = (props) => {
             text: "Action ",
             dataField: "",
             hidden: returnMode === 1 ? true : false,
-            formatter: (cellContent, row, key) => (
+            formatExtraData: { TableArr },
+            formatter: (cellContent, row, key, { TableArr }) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -487,7 +498,7 @@ const SalesReturn = (props) => {
                                     type="button"
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                    onClick={(e) => { deleteButtonAction(row) }}>
+                                    onClick={(e) => { deleteButtonAction(row, TableArr) }}>
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
                             </FormGroup>
@@ -498,8 +509,21 @@ const SalesReturn = (props) => {
         },
     ];
 
-    const deleteButtonAction = (row) => {
-        const newArr = TableArr.filter((index) => !(index.id === row.id))
+    const totalAmountCalcuationFunc = (row, TablelistArray = []) => {
+        debugger
+        const caculate = return_discountCalculate_Func(row)
+        row.roundedTotalAmount = caculate.roundedTotalAmount;
+
+        let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+        dispatch(BreadcrumbShowCountlabel(count_label))
+    }
+
+    const deleteButtonAction = (row, TablelistArray = []) => {
+        const newArr = TablelistArray.filter((index) => !(index.id === row.id))
+        let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+        dispatch(BreadcrumbShowCountlabel(count_label));
         setTableArr(newArr)
     }
 
@@ -555,27 +579,38 @@ const SalesReturn = (props) => {
                 })
                 return
             }
-            const itemArr = [...TableArr];
+            const updateItemArr = [...TableArr];
+            let existingIds = updateItemArr.map(item => item.id);
+            let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
 
-            apiResponse.Data.forEach((i) => {
+
+            apiResponse.Data.forEach((i, keyIndex) => {
                 const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
                 const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
                 const defaultGST = { value: i.GST, label: i.GSTPercentage }
                 const defaultMRP = { value: i.MRP, label: i.MRPValue }
 
-                itemArr.push({
+                const newItemRow = {
                     ...i,
-                    id: itemArr.length + 1,
+                    Quantity: '',
+                    id: nextId,
                     MRPOptions: MRPOptions,
                     GSTOptions: GSTOptions,
                     defaultGST: defaultGST,
                     defaultMRP: defaultMRP,
                     gstPercentage: i.GSTPercentage,
-                });
+                }
+                const caculate = return_discountCalculate_Func(newItemRow)
+                newItemRow["roundedTotalAmount"] = caculate.roundedTotalAmount;
+                updateItemArr.push(newItemRow);
+                nextId++;
             });
 
-            setTableArr(itemArr);
+            let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+            let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+            dispatch(BreadcrumbShowCountlabel(count_label));
 
+            setTableArr(updateItemArr);
             setState((i) => {
                 let a = { ...i }
                 a.values.ItemName = ""
@@ -586,13 +621,16 @@ const SalesReturn = (props) => {
     }
 
     const RetailerHandler = (event) => {
-
         setState((i) => {
             let a = { ...i }
             a.values.ItemName = ""
             a.values.InvoiceNumber = ""
+            a.values.Customer = event
+
+            a.hasValid.Customer.valid = true;
             a.hasValid.ItemName.valid = true;
             a.hasValid.InvoiceNumber.valid = true;
+
             return a
         })
         setTableArr([])
@@ -605,6 +643,14 @@ const SalesReturn = (props) => {
         dispatch(InvoiceNumber(jsonBody));
     }
 
+    const itemNameOnChangeHandler = (hasSelect, evn) => {
+        if (values.Customer === "") {
+            customAlert({ Type: 3, Message: "Please select Retailer" })
+            return
+        }
+        onChangeSelect({ hasSelect, evn, state, setState, })
+        setrRturnMode(2)
+    }
     // image onchange handler
     const imageSelectHandler = async (event, row) => {
 
@@ -648,19 +694,19 @@ const SalesReturn = (props) => {
     const SaveHandler = async (event) => {
 
         event.preventDefault();
-
-        const btnId = event.target.id
-
+        const btnId = event.target.id;
         let grand_total = 0;
+        const invalidMessages = [];
+
         const ReturnItems = TableArr.map((i) => {
+            if (!i.defaultReason) {
+                invalidMessages.push({ [i.ItemName]: 'Select Return Reason' });
+            }
 
-            //** calcualte amount function
+            const calculate = return_discountCalculate_Func(i);
+            grand_total += Number(calculate.roundedTotalAmount);
 
-            const calculate = return_discountCalculate_Func(i)
-
-            grand_total = grand_total + Number(calculate.roundedTotalAmount)
-
-            return ({
+            return {
                 "Item": i.Item,
                 "ItemName": i.ItemName,
                 "Quantity": i.Quantity,
@@ -672,93 +718,62 @@ const SalesReturn = (props) => {
                 "MRPValue": i.MRPValue,
                 "Rate": i.Rate,
                 "GST": i.GST,
-                "ItemReason": i.defaultReason ? i.defaultReason.value : '',
+                "ItemReason": i.defaultReason ? i.defaultReason.value : "",
                 "Comment": i.ItemComment,
-
                 "CGST": Number(calculate.CGST_Amount).toFixed(2),
                 "SGST": Number(calculate.SGST_Amount).toFixed(2),
                 "IGST": Number(calculate.IGST_Amount).toFixed(2),
-
                 "GSTPercentage": calculate.GST_Percentage,
                 "CGSTPercentage": calculate.CGST_Percentage,
                 "SGSTPercentage": calculate.SGST_Percentage,
                 "IGSTPercentage": calculate.IGST_Percentage,
-
                 "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
                 "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
                 "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
-
                 "TaxType": 'GST',
                 "DiscountType": calculate.discountType,
                 "Discount": calculate.discount,
                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
-
                 "ReturnItemImages": [],
-            })
-        })
+            };
+        });
 
-        const filterData = ReturnItems.filter((i) => {
-            return i.Quantity > 0
-        })
+        const filterData = ReturnItems.filter((i) => i.Quantity > 0);
+
+        if (invalidMessages.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: invalidMessages,
+            });
+            return;
+        }
 
         if (filterData.length === 0) {
             customAlert({
                 Type: 4,
-                Message: " Please Enter One Item Quantity"
-            })
-            return _cfunc.btnIsDissablefunc({ btnId, state: false })
-        }
-
-        const invalidMsg1 = []
-
-        ReturnItems.forEach((i) => {
-
-            if ((i.Unit === undefined) || (i.Unit === null)) {
-                invalidMsg1.push(`${i.ItemName} : Unit Is Required`)
-            }
-            else if ((i.MRP === undefined) || (i.MRP === null)) {
-                invalidMsg1.push(`${i.ItemName} : MRP Is Required`)
-            }
-            else if ((i.GST === undefined) || (i.GST === null)) {
-                invalidMsg1.push(`${i.ItemName} : GST Is Required`)
-            }
-            else if ((i.Rate === undefined) || (i.Rate === null)) {
-                invalidMsg1.push(`${i.ItemName} : Rate Is Required`)
-            }
-            else if ((i.BatchCode === undefined) || (i.BatchCode === null)) {
-                invalidMsg1.push(`${i.ItemName} : BatchCode Is Required`)
-            };
-        })
-
-        if (invalidMsg1.length > 0) {
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(invalidMsg1)
-            })
-            return _cfunc.btnIsDissablefunc({ btnId, state: false })
+                Message: "Please Enter One Item Quantity",
+            });
+            return;
         }
 
         try {
-            if (formValid(state, setState)) {
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
+            const jsonBody = JSON.stringify({
+                ReturnDate: values.ReturnDate,
+                ReturnReason: '',
+                BatchCode: values.BatchCode,
+                Customer: values.Customer.value,
+                Comment: values.Comment,
+                GrandTotal: grand_total,
+                Party: _cfunc.loginPartyID(),
+                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
+                ReturnItems: filterData,
+            });
 
-                const jsonBody = JSON.stringify({
-                    ReturnDate: values.ReturnDate,
-                    ReturnReason: '',
-                    BatchCode: values.BatchCode,
-                    Customer: values.Customer.value,
-                    Comment: values.Comment,
-                    GrandTotal: grand_total,
-                    Party: _cfunc.loginPartyID(),
-                    RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-                    CreatedBy: _cfunc.loginUserID(),
-                    UpdatedBy: _cfunc.loginUserID(),
-                    ReturnItems: filterData,
-                });
-                dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
-            }
+            dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
 
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.CommonConsole(e) }
     };
 
     if (!(userPageAccessState === '')) {
@@ -803,10 +818,7 @@ const SalesReturn = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
-                                                    RetailerHandler(hasSelect)
-                                                }}
+                                                onChange={RetailerHandler}
                                             />
                                             {isError.Customer.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.Customer}</small></span>
@@ -835,10 +847,7 @@ const SalesReturn = (props) => {
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 options={ItemList_Options}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
-                                                    setrRturnMode(2)
-                                                }}
+                                                onChange={itemNameOnChangeHandler}
                                             />
                                         </Col>
                                     </FormGroup>

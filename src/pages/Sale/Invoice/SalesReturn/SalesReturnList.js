@@ -34,7 +34,6 @@ const SalesReturnList = () => {
     const hasPagePath = history.location.pathname
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
-    const [userAccState, setUserAccState] = useState('');
 
     const reducers = useSelector(
         (state) => ({
@@ -50,7 +49,7 @@ const SalesReturnList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList, } = reducers;
+    const { pageField, RetailerList, } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -79,16 +78,7 @@ const SalesReturnList = () => {
         dispatch(Retailer_List(jsonBody));
     }, []);
 
-    useEffect(() => {
-        const page_Id = pageId.SALES_RETURN_LIST
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
-
+   
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,

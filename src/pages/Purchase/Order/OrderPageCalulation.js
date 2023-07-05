@@ -31,7 +31,7 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
 
 
   if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
-    debugger
+    
     let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)
     if (isSameSate) {// iF isSameSate = true ===not same GSTIn
       CGST_Amount = 0;

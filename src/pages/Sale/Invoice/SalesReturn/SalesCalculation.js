@@ -39,10 +39,9 @@ export const calculateSalesReturnFunc = (row) => {
 };
 
 export const return_discountCalculate_Func = (row,) => {
-    debugger
     // Extract values from the input parameters
     const rate = Number(row.Rate) || 0;
-    const qty = Number(row.Qty) || 0;
+    const qty = Number(row.Quantity) || 0;
     const gstPercentage = Number(row.GSTPercentage) || 0;
     const discount = Number(row.Discount) || 0;
     const discountType = Number(row.DiscountType) && Number(row.DiscountType) > 0 ? Number(row.DiscountType) : 2;
