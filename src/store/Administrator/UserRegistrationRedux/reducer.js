@@ -10,6 +10,8 @@ import {
   UPDATE_USER_ACTION,
   GET_USER_LIST_FOR_USER,
   USER_API_ERROR_ACTION,
+  DELETE_USER_ACTION,
+  EDIT_USER_ACTION,
 } from './actionType'
 
 const INIT_STATE = {
@@ -63,16 +65,33 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
       }
 
     //// delete api
+
+    case DELETE_USER_ACTION:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+        deleteSuccessRole: action.payload,
+      };
+
     case DELETE_USER_ACTION_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteSuccessRole: action.payload,
       };
 
     //// edit api
+
+    case EDIT_USER_ACTION:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
     case EDIT_USER_ACTION_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 
