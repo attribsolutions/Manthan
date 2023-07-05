@@ -594,6 +594,8 @@ export const BilledByRow = (data) => {
         [`${data.PartyState}`],
         [`GSTIN:${data.PartyGSTIN}`],
         [`FSSAINo:${data.PartyFSSAINo}`],
+        [`MobileNo:${data.PartyMobileNo}`],
+
     ]
     return BilledByArray;
 } 
@@ -612,21 +614,35 @@ export const BilledToRow = (data) => {
         [`${data.CustomerState}`],
         [`GSTIN:${data.CustomerGSTIN}`,],
         [`FSSAINo:${data.CustomerFSSAINo}`],
+        [`MobileNo:${data.CustomerMobileNo}`],
+
     ]
   
     return BilledToArray;
 }
 export const DetailsOfTransportRow = (data) => {
 
+    const PoNumber = data.InvoicesReferences.map(index => ({
+        SystemGenerate: index.FullOrderNumber,
+        Description: index.Description,
+    }));
+    let OrderNumber =" "
+    if (PoNumber[0].Description===null) {
+        OrderNumber = PoNumber[0].SystemGenerate
+    }else{
+        OrderNumber = PoNumber[0].Description
+    }
 
-let result = data.InvoicesReferences.map(a => a.FullOrderNumber);
-
-    const PONumber =result.toString()
+let EwayData= ""
+if (data.InvoiceUploads.length>0) {
+     EwayData = data.InvoiceUploads[0]
+}
     var DetailsOfTransportArray = [
-        [data.ReportType===invoice?` PO Number:${PONumber}`:data.DriverName ===null?"Driver Name:": `Driver Name :${data.DriverName}`],
+        [` PO Number:${OrderNumber}`],
+        [data.DriverName ===null?"Driver Name:": `Driver Name :${data.DriverName}`],
         [`vehical No :${data.VehicleNo === null ?"":data.VehicleNo}`],
-        [`E-way Bill :`],
-        [`IRN NO :`]
+        [`E-way Bill : ${EwayData.EwayBillNo === undefined ?"":EwayData.EwayBillNo}`],
+        [`IRN NO :${EwayData.AckNo===undefined ?"":EwayData.AckNo}`]
     ]
   
     return DetailsOfTransportArray;

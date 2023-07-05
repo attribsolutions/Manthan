@@ -152,12 +152,12 @@ export const tableBody = (doc, data) => {
             if (data1.row.cells[1].raw === "Total") {
                 data1.row.cells[1].styles.fontStyle = "bold"
 
-                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
                 data1.row.cells[5].styles.fontStyle = "bold"
                 // data1.row.cells[6].styles.fontStyle = "bold"
 
                 data1.row.cells[1].styles.fontSize = 9
-                data1.row.cells[4].styles.fontSize = 9
+                data1.row.cells[3].styles.fontSize = 9
                 data1.row.cells[5].styles.fontSize = 9
                 // data1.row.cells[6].styles.fontSize = 9
             }
@@ -196,10 +196,10 @@ export const tableBody = (doc, data) => {
                 // halign: 'right',
 
             },
-            2: {
-                columnWidth: 80,
-                halign: 'right',
-            },
+            // 2: {
+            //     columnWidth: 80,
+            //     halign: 'right',
+            // },
             3: {
                 columnWidth: 80,
                 halign: 'right',

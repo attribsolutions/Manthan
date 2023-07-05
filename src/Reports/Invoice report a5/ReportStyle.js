@@ -177,7 +177,7 @@ export const reportHeder3 = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
     doc.line(408, 57, 408, 16);//vertical Line header
-    doc.line(570, 44, 408, 44) //horizontal line 1 billby upper
+    // doc.line(570, 44, 408, 44) //horizontal line 1 billby upper
 
     doc.setFont(undefined, 'bold')
     doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 25) //Invoice Id
@@ -185,7 +185,6 @@ export const reportHeder3 = (doc, data) => {
     var time = convertOnlyTimefunc(data.CreatedOn)
 
     doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date
-    doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 53) //Invoice date
 
 
 }
