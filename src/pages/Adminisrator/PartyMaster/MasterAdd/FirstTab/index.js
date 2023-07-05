@@ -34,7 +34,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         GSTIN: "",
         CityName: "",
         Distance: "",
-        MkUpMkDn: false,
         isActive: true,
 
     }
@@ -510,30 +509,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     onClick={GSTINverifyhandler}
                                 > Verify GSTIN
                                 </Button>
-                            </Col>
-
-                            <Col md="1">  </Col>
-                            <Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Row style={{ marginTop: '25px' }}>
-                                        <Label
-                                            className="col-sm-4 col-form-label">
-                                            {fieldLabel.MkUpMkDn}
-                                        </Label>
-                                        <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                                            <div className="form-check form-switch form-switch-md mb-3">
-                                                <Input
-                                                    name="MkUpMkDn"
-                                                    type="checkbox"
-                                                    disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
-                                                    className="form-check-input"
-                                                    checked={values.MkUpMkDn}
-                                                    onChange={(event) => onChangeCheckbox({ event, state, setState })}
-                                                />
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </FormGroup>
                             </Col>
 
                         </Row>
