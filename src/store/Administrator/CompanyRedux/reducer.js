@@ -22,6 +22,7 @@ const INIT_STATE = {
   CompanyGroup: [],
   saveBtnloading: false,
   listBtnLoading: false,
+  loading:false,
 }
 
 const Company = (state = INIT_STATE, action) => {
@@ -30,14 +31,14 @@ const Company = (state = INIT_STATE, action) => {
     case FETCH_COMPANY_LIST:
       return {
         ...state,
-        listBtnLoading: true,
+        loading: true,
       }
 
     case FETCH_COMPANY_LIST_SUCCESS:
       return {
         ...state,
         companyList: action.payload,
-        listBtnLoading: false,
+        loading: false,
       }
 
 
@@ -59,7 +60,6 @@ const Company = (state = INIT_STATE, action) => {
       return {
         ...state,
         listBtnLoading: action.config.btnId,
-        deleteCompanyID: action.payload,
       }
 
     case DELETE_COMPANY_ID_SUCCESS:
@@ -112,6 +112,7 @@ const Company = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
 
 

@@ -19,7 +19,8 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   saveBtnloading: false,
-  listBtnLoading: false
+  listBtnLoading: false,
+  loading:false
 }
 
 const SubGroupReducer = (state = INIT_STATE, action) => {
@@ -42,14 +43,14 @@ const SubGroupReducer = (state = INIT_STATE, action) => {
     case GET_SUBGROUP_LIST:
       return {
         ...state,
-        listBtnLoading: true
+        loading: true
       }
 
     case GET_SUBGROUP_LIST_SUCCESS:
       return {
         ...state,
         SubgroupList: action.payload,
-        listBtnLoading: false
+        loading: false
 
       }
     //  del
@@ -58,7 +59,6 @@ const SubGroupReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         listBtnLoading: action.config.btnId,
-        deleteMsg: action.payload,
       };
 
 
@@ -105,6 +105,7 @@ const SubGroupReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
 
     default:

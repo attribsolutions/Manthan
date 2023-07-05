@@ -1,0 +1,42 @@
+{
+  "files": {
+    "main.css": "/static/css/main.eb383a7c.chunk.css",
+    "main.js": "/static/js/main.891626d2.chunk.js",
+    "main.js.map": "/static/js/main.891626d2.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.e2b8c933.js",
+    "runtime-main.js.map": "/static/js/runtime-main.e2b8c933.js.map",
+    "static/css/2.10fde6f2.chunk.css": "/static/css/2.10fde6f2.chunk.css",
+    "static/js/2.b1f26f26.chunk.js": "/static/js/2.b1f26f26.chunk.js",
+    "static/js/2.b1f26f26.chunk.js.map": "/static/js/2.b1f26f26.chunk.js.map",
+    "static/js/3.2470bc9a.chunk.js": "/static/js/3.2470bc9a.chunk.js",
+    "static/js/3.2470bc9a.chunk.js.map": "/static/js/3.2470bc9a.chunk.js.map",
+    "static/js/4.631946ad.chunk.js": "/static/js/4.631946ad.chunk.js",
+    "static/js/4.631946ad.chunk.js.map": "/static/js/4.631946ad.chunk.js.map",
+    "static/js/5.7f76a74c.chunk.js": "/static/js/5.7f76a74c.chunk.js",
+    "static/js/5.7f76a74c.chunk.js.map": "/static/js/5.7f76a74c.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.10fde6f2.chunk.css.map": "/static/css/2.10fde6f2.chunk.css.map",
+    "static/css/main.eb383a7c.chunk.css.map": "/static/css/main.eb383a7c.chunk.css.map",
+    "static/js/2.b1f26f26.chunk.js.LICENSE.txt": "/static/js/2.b1f26f26.chunk.js.LICENSE.txt",
+    "static/js/3.2470bc9a.chunk.js.LICENSE.txt": "/static/js/3.2470bc9a.chunk.js.LICENSE.txt",
+    "static/js/4.631946ad.chunk.js.LICENSE.txt": "/static/js/4.631946ad.chunk.js.LICENSE.txt",
+    "static/js/5.7f76a74c.chunk.js.LICENSE.txt": "/static/js/5.7f76a74c.chunk.js.LICENSE.txt",
+    "static/media/Enterpass.2732ee11.png": "/static/media/Enterpass.2732ee11.png",
+    "static/media/theme.scss": "/static/media/materialdesignicons-webfont.e9db4005.woff2",
+    "static/media/avatar-1.0fdabd61.jpg": "/static/media/avatar-1.0fdabd61.jpg",
+    "static/media/avatar-3.bd68c38c.jpg": "/static/media/avatar-3.bd68c38c.jpg",
+    "static/media/cbm_logo.abef454e.png": "/static/media/cbm_logo.abef454e.png",
+    "static/media/error-img.5206e328.png": "/static/media/error-img.5206e328.png",
+    "static/media/foodERP_logo.af2ace89.png": "/static/media/foodERP_logo.af2ace89.png",
+    "static/media/otp.a294b038.jfif": "/static/media/otp.a294b038.jfif",
+    "static/media/resetpassword.40817561.png": "/static/media/resetpassword.40817561.png",
+    "static/media/us.627c5a48.jpg": "/static/media/us.627c5a48.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e2b8c933.js",
+    "static/css/2.10fde6f2.chunk.css",
+    "static/js/2.b1f26f26.chunk.js",
+    "static/css/main.eb383a7c.chunk.css",
+    "static/js/main.891626d2.chunk.js"
+  ]
+}

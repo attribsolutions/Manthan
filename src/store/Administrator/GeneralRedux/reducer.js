@@ -7,11 +7,16 @@ import {
     POST_TYPE_SUCCESS,
     GENERAL_MASTER_SUB_TYPE_SUCCESS,
     POST_METHOD_FOR_GENERAL_API,
-    UPDATE_GENERAL_ID
+    UPDATE_GENERAL_ID,
+    POST_GENERAL_LIST,
+    DELETE_GENERAL_ID,
+    EDIT_GENERAL_ID
 } from "./actionType";
 
 const INIT_STATE = {
     saveBtnloading: false,
+    listBtnLoading:false,
+    loading:false,
     postMsg: { Status: false },
     GeneralList: [],
     Type: [],
@@ -38,21 +43,45 @@ const GeneralReducer = (state = INIT_STATE, action) => {
             }
 
         // get api
+
+        case POST_GENERAL_LIST:
+            return {
+                ...state,
+                loading: true,
+            }
+
         case POST_GENERAL_LIST_SUCCESS:
             return {
                 ...state,
                 GeneralList: action.payload,
+                loading: false,
             }
+
+
+        case DELETE_GENERAL_ID:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            };
 
         case DELETE_GENERAL_ID_SUCCESS:
             return {
                 ...state,
+                listBtnLoading: false,
                 deleteMessage: action.payload,
+            };
+
+
+        case EDIT_GENERAL_ID:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
             };
 
         case EDIT_GENERAL_ID_SUCCESS:
             return {
                 ...state,
+                listBtnLoading: false,
                 editData: action.payload,
             };
 

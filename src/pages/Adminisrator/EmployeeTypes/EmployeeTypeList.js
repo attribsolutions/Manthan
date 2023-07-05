@@ -20,6 +20,7 @@ const EmployeeTypeList = (props) => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      loading:state.EmployeeTypeReducer.loading,
       listBtnLoading: state.EmployeeTypeReducer.listBtnLoading,
       tableList: state.EmployeeTypeReducer.EmployeeTypeList,
       editData: state.EmployeeTypeReducer.editData,

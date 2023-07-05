@@ -40,6 +40,7 @@ import { getDriverList } from "../../../../store/Administrator/DriverRedux/actio
 import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../../CustomValidateForm";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 const LoadingSheet = (props) => {
 
@@ -56,7 +57,7 @@ const LoadingSheet = (props) => {
         Date: currentDate_ymd,
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        RouteName: "",
+        RouteName: [],
         VehicleNumber: "",
         DriverName: ""
     }
@@ -182,11 +183,12 @@ const LoadingSheet = (props) => {
     }));
 
     function goButtonHandler() {
+        const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(','); //commas separate
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             Party: _cfunc.loginPartyID(),
-            Route: values.RouteName === "" ? "" : values.RouteName.value,
+            Route: isRoute,
             LoadingSheetID: ""
         });
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
@@ -218,51 +220,47 @@ const LoadingSheet = (props) => {
     };
 
     const saveHandeller = async (event) => {
+        try {
+            event.preventDefault();
+            const btnId = event.target.id
 
-        event.preventDefault();
-        const btnId = event.target.id
+            const CheckArray = Data.filter((index) => {
+                return (index.selectCheck === true)
+            })
 
-        const CheckArray = Data.filter((index) => {
-            return (index.selectCheck === true)
-        })
+            const trueValues = Data.map((index) => {
+                return (index.selectCheck === true)
+            })
 
-        const trueValues = Data.map((index) => {
-            return (index.selectCheck === true)
-        })
+            const totalInvoices = trueValues.reduce((count, value) => {
+                if (value === true) {
+                    count++
+                }
+                return count
+            }, 0)
 
-        const totalInvoices = trueValues.reduce((count, value) => {
-            if (value === true) {
-                count++
-            }
-            return count
-        }, 0)
+            const GrandTotal = CheckArray.reduce((a, v) => a = a + parseFloat(v.GrandTotal), 0)
 
-        const GrandTotal = CheckArray.reduce((a, v) => a = a + parseFloat(v.GrandTotal), 0)
+            const LoadingSheetDetails = CheckArray.map((index) => ({
+                Invoice: index.id
+            }))
 
-        const LoadingSheetDetails = CheckArray.map((index) => ({
-            Invoice: index.id
-        }))
-
-        if (LoadingSheetDetails.length === 0) {
-            dispatch(
-                AlertState({
+            if (LoadingSheetDetails.length === 0) {
+                customAlert({
                     Type: 4,
                     Status: true,
                     Message: "Minimum one Invoice is Select",
                 })
-            );
-            return _cfunc.btnIsDissablefunc({ btnId, state: false })
-        }
-        try {
+                return
+            }
 
             if (formValid(state, setState)) {
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-
+                const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
                 const jsonBody = JSON.stringify({
                     Date: values.Date,
                     Party: _cfunc.loginPartyID(),
-                    Route: values.RouteName.value,
+                    Route: isRoute,
                     Vehicle: values.VehicleNumber.value,
                     Driver: values.DriverName.value,
                     TotalAmount: GrandTotal.toFixed(2),
@@ -275,8 +273,56 @@ const LoadingSheet = (props) => {
                 dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
 
             }
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { _cfunc.CommonConsole(e) }
     };
+
+    const saveHandler = async (event) => {
+        try {
+            event.preventDefault();
+            const btnId = event.target.id;
+
+            const { totalInvoices, GrandTotal, LoadingSheetDetails } = Data.reduce(
+                (acc, index) => {
+                    if (index.selectCheck === true) {
+                        acc.totalInvoices++;
+                        acc.GrandTotal += parseFloat(index.GrandTotal);
+                        acc.LoadingSheetDetails.push({ Invoice: index.id });
+                    }
+                    return acc;
+                },
+                { totalInvoices: 0, GrandTotal: 0, LoadingSheetDetails: [] }
+            );
+            if (LoadingSheetDetails.length === 0) {
+                customAlert({
+                    Type: 4,
+                    Status: true,
+                    Message: "Minimum one Invoice is Select",
+                });
+                return;
+            }
+
+            if (formValid(state, setState)) {
+                const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+                const jsonBody = JSON.stringify({
+                    Date: values.Date,
+                    Party: _cfunc.loginPartyID(),
+                    Route: isRoute,
+                    Vehicle: values.VehicleNumber.value,
+                    Driver: values.DriverName.value,
+                    TotalAmount: GrandTotal.toFixed(2),
+                    InvoiceCount: totalInvoices,
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
+                    LoadingSheetDetails: LoadingSheetDetails
+                });
+
+                dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
+            }
+        } catch (e) {
+            _cfunc.CommonConsole(e);
+        }
+    };
+
 
     function DateOnchange(e, date) {
         setState((i) => {
@@ -400,6 +446,7 @@ const LoadingSheet = (props) => {
                                                 name="RouteName"
                                                 value={values.RouteName}
                                                 isSearchable={true}
+                                                isMulti={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
@@ -501,7 +548,7 @@ const LoadingSheet = (props) => {
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
                                             loading={saveBtnloading}
-                                            onClick={saveHandeller}
+                                            onClick={saveHandler}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
                                             module={"LoadingSheet"}

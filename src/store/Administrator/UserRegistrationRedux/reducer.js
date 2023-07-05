@@ -24,6 +24,7 @@ const INIT_STATE = {
   userPartiesForUserMaster: [],
   saveBtnloading: false,
   listBtnLoading: false,
+  loading:false
 };
 
 const User_Registration_Reducer = (state = INIT_STATE, action) => {
@@ -54,14 +55,14 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
     case GET_USER_LIST_FOR_USER:
       return {
         ...state,
-        listBtnLoading: true,
+        loading: true,
       }
 
     case GET_USER_LIST_FOR_USER_SUCCESS:
       return {
         ...state,
         pages: action.payload,
-        listBtnLoading: false,
+        loading: false,
       }
 
     //// delete api
@@ -70,7 +71,6 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         listBtnLoading: action.config.btnId,
-        deleteSuccessRole: action.payload,
       };
 
     case DELETE_USER_ACTION_SUCCESS:
@@ -122,6 +122,7 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
     default:
       return state;
