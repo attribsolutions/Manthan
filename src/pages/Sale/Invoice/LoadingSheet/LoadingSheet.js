@@ -128,7 +128,7 @@ const LoadingSheet = (props) => {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
-
+            dispatch(LoadingSheet_GoBtn_API_Succcess([]))
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
