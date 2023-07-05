@@ -227,7 +227,7 @@ const SalesReturn = (props) => {
             hidden: (returnMode === 1) ? false : true,
             formatter: (cellContent, row, key) => {
                 return (
-                    <Label>{row.Quantity}</Label>
+                    <Label>{row.InvoiceQuantity}</Label>
                 )
             }
         },
@@ -420,8 +420,6 @@ const SalesReturn = (props) => {
             formatter: (cellContent, row) => {
 
                 return (<>
-
-
                     <div className="parent mb-1">
                         <div className="child">
                             <Select
@@ -589,10 +587,12 @@ const SalesReturn = (props) => {
                 const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
                 const defaultGST = { value: i.GST, label: i.GSTPercentage }
                 const defaultMRP = { value: i.MRP, label: i.MRPValue }
+                const InvoiceQuantity = i.Quantity
 
                 const newItemRow = {
                     ...i,
                     Quantity: '',
+                    InvoiceQuantity,
                     id: nextId,
                     MRPOptions: MRPOptions,
                     GSTOptions: GSTOptions,
