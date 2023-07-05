@@ -1,6 +1,8 @@
 import {
   COMPANY_API_ERROR_ACTION,
+  DELETE_COMPANY_ID,
   DELETE_COMPANY_ID_SUCCESS,
+  EDIT_COMPANY_ID,
   EDIT_COMPANY_ID_SUCCESS,
   FETCH_COMPANY_LIST,
   FETCH_COMPANY_LIST_SUCCESS,
@@ -53,19 +55,30 @@ const Company = (state = INIT_STATE, action) => {
 
       }
 
+    case DELETE_COMPANY_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+        deleteCompanyID: action.payload,
+      }
+
     case DELETE_COMPANY_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteCompanyID: action.payload,
       }
-    //     case DELETE_MODULE_ID_ERROR:
-    //       return {
-    //         ...state,
-    //         deleteModuleIDError: action.payload,
-    //       }
+
+    case EDIT_COMPANY_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
+
     case EDIT_COMPANY_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       }
 

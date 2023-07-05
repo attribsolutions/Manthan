@@ -216,7 +216,7 @@ const SalesReturn = (props) => {
             text: "Item Name",
             dataField: "ItemName",
             hidden: false,
-            formatter: (cellContent, row, key) => {
+            formatter: (cell, row) => {
                 return (
                     <Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>
                 )
@@ -225,11 +225,9 @@ const SalesReturn = (props) => {
         {
             text: "Invoice Qty",
             hidden: (returnMode === 1) ? false : true,
-            formatter: (cellContent, row, key) => {
-                return (
-                    <Label>{row.Quantity}</Label>
-                )
-            }
+            align: () => "right",
+            formatter: (cell, row) => <Label>{row.InvoiceQuantity}</Label>,
+
         },
         {
             text: "Quantity",
@@ -237,8 +235,7 @@ const SalesReturn = (props) => {
             classes: () => "sales-discount-row",
             hidden: false,
             formatExtraData: { TableArr },
-            formatter: (cellContent, row, key, { TableArr }) => {
-
+            formatter: (cell, row, key, { TableArr }) => {
                 return (
                     <div className="parent" >
                         <div className="child" style={{ minWidth: "100px" }}>
@@ -269,7 +266,7 @@ const SalesReturn = (props) => {
             text: "MRP",
             dataField: "MRP",
             hidden: false,
-            formatter: (cellContent, row, key) => {
+            formatter: (cell, row, key) => {
                 return (
                     <>
                         <div style={{ minWidth: "90px" }}>
@@ -299,7 +296,7 @@ const SalesReturn = (props) => {
             dataField: "",
             hidden: false,
             formatExtraData: { TableArr },
-            formatter: (cellContent, row, key, { TableArr }) => {
+            formatter: (cell, row, key, { TableArr }) => {
                 return (<div style={{ minWidth: "90px" }}>
                     <Select
                         id={`GST${key}`}
@@ -326,7 +323,6 @@ const SalesReturn = (props) => {
             classes: () => "sales-rate-row",
             formatExtraData: { TableArr },
             formatter: (cellContent, row, key, { TableArr }) => {
-
                 return (
                     <>
                         <div className="">
@@ -383,8 +379,7 @@ const SalesReturn = (props) => {
             text: "Batch",
             dataField: "",
             classes: () => "sales-rate-row",
-            formatter: (cellContent, row,) => {
-
+            formatter: (cell, row,) => {
                 return (
                     <>
                         <div className="">
@@ -418,10 +413,7 @@ const SalesReturn = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row) => {
-
                 return (<>
-
-
                     <div className="parent mb-1">
                         <div className="child">
                             <Select
@@ -460,7 +452,6 @@ const SalesReturn = (props) => {
             dataField: "",
             classes: () => "sales-return-Image-row",
             formatter: (cellContent, row, key) => {
-
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <div>
                         <div className="btn-group btn-group-example mb-3" role="group">
@@ -589,10 +580,12 @@ const SalesReturn = (props) => {
                 const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
                 const defaultGST = { value: i.GST, label: i.GSTPercentage }
                 const defaultMRP = { value: i.MRP, label: i.MRPValue }
+                const InvoiceQuantity = i.Quantity
 
                 const newItemRow = {
                     ...i,
                     Quantity: '',
+                    InvoiceQuantity,
                     id: nextId,
                     MRPOptions: MRPOptions,
                     GSTOptions: GSTOptions,
