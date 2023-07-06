@@ -197,10 +197,11 @@ const RouteUpdate = (props) => {
     };
 
     const SaveHandler = async (event) => {
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         try {
-            if (formValid(state, setState)) {
+            // if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
                 const data = Data.map((index) => ({
@@ -215,7 +216,7 @@ const RouteUpdate = (props) => {
 
                 dispatch(Post_RouteUpdate({ jsonBody, btnId }));
 
-            }
+            // }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
