@@ -284,6 +284,62 @@ export const reportFooter = (doc, data) => {
         doc.text(`TCS Amount:`, 440, 798,)
         doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 567, 798, 'right')
 
+        var DetailsOfBankStyle = {
+            didParseCell: (data1) => {
+                if (data.BankData.length > 0) {
+                    let BankData = data.BankData[0]
+                    if (data1.row.cells[0].raw === `Bank Name :${BankData.BankName}`) {
+                        data1.row.cells[0].colSpan = 3
+                    }
+                }
+            },
+
+
+            margin: {
+                top: 0, left: 30, right: 35,
+            },
+            showHead: 'always',
+            theme: 'plain',
+            headerStyles: { cellPadding: 1, },
+            styles: {
+                overflow: 'linebreak',
+                fontSize: 8,
+                height: 0,
+            },
+            bodyStyles: {
+                columnWidth: 'wrap',
+                textColor: [30, 30, 30],
+                cellPadding: 1,
+                fontSize: 8,
+                fontStyle: 'bold',
+                lineColor: [0, 0, 0]
+            },
+            columnStyles: {
+                0: {
+                    valign: "top",
+                    columnWidth: 100,
+                    halign: 'lfet',
+                },
+                1: {
+                    valign: "top",
+                    columnWidth: 100,
+                    halign: 'lfet',
+                },
+                2: {
+                    valign: "top",
+                    columnWidth: 130,
+                    halign: 'lfet',
+                },
+
+            },
+            tableLineColor: "black",
+
+            startY: 745,
+
+        };
+
+        doc.autoTable(table.Bankcolumn, table.BankRow(data), DetailsOfBankStyle,);
+
     }
 
 
@@ -314,35 +370,35 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(8)
 
 
-    if (data.BankData.length > 0) {
-        let BankData = data.BankData[0]
-        doc.setFont(undefined, 'bold')
+    // if (data.BankData.length > 0) {
+    //     let BankData = data.BankData[0]
+    //     doc.setFont(undefined, 'bold')
 
-        doc.text(`A/C No:`, 34, 755,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${BankData.AccountNo}`, 70, 755,)
+    //     doc.text(`A/C No:`, 34, 755,)
+    //     doc.setFont(undefined, 'Normal')
+    //     doc.text(`${BankData.AccountNo}`, 70, 755,)
 
-        doc.setFont(undefined, 'bold')
+    //     doc.setFont(undefined, 'bold')
 
-        doc.text(`IFSC Code:`, 130, 755,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${BankData.IFSC}`, 175, 755,)
+    //     doc.text(`IFSC Code:`, 130, 755,)
+    //     doc.setFont(undefined, 'Normal')
+    //     doc.text(`${BankData.IFSC}`, 175, 755,)
 
-        doc.setFont(undefined, 'bold')
-        doc.text(`Branch:`, 260, 755,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${BankData.BranchName}`, 290, 755,)
+    //     doc.setFont(undefined, 'bold')
+    //     doc.text(`Branch:`, 260, 755,)
+    //     doc.setFont(undefined, 'Normal')
+    //     doc.text(`${BankData.BranchName}`, 290, 755,)
 
-        doc.setFont(undefined, 'bold')
-        doc.text(`Bank Name:`, 34, 768,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${BankData.BankName}`, 90, 768,)
+    //     doc.setFont(undefined, 'bold')
+    //     doc.text(`Bank Name:`, 34, 768,)
+    //     doc.setFont(undefined, 'Normal')
+    //     doc.text(`${BankData.BankName}`, 90, 768,)
 
-    } else {
-        doc.setFont(undefined, 'bold')
-        doc.text(`Bank Details Not Avaliable`, 34, 761,)
-        doc.setFont(undefined, 'Normal')
-    }
+    // } else {
+    //     doc.setFont(undefined, 'bold')
+    //     doc.text(`Bank Details Not Avaliable`, 34, 761,)
+    //     doc.setFont(undefined, 'Normal')
+    // }
     doc.setFont(undefined, 'bold')
     doc.text(`Rupees:`, 33, 740,)
     doc.addFont("Arial", 'Normal')
