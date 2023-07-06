@@ -604,8 +604,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             }
                         </Row>
                         <Row>
-                            {/* {subPageMode === url.RETAILER_MASTER &&
-                                
+                            {subPageMode === url.RETAILER_MASTER &&
+
                                 <Col md="3">
                                     <FormGroup className="mb-3">
                                         <Label htmlFor="validationCustom01">{fieldLabel.Route} </Label>
@@ -626,55 +626,55 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     </FormGroup>
                                 </Col>
                             }
-                             {subPageMode === url.RETAILER_MASTER &&
-                            <Col md="1"> </Col>} */}
-                            {/* {!(subPageMode === url.RETAILER_MASTER) &&
-                                <Col md="3">
-                                    <FormGroup className="mb-3">
-                                        <Label>{fieldLabel.Latitude} </Label>
-                                        <Input
-                                            name="Latitude"
-                                            value={values.Latitude}
-                                            type="text"
-                                            className={isError.Latitude.length > 0 ? "is-invalid form-control" : "form-control"}
-                                            placeholder="Please Enter Latitude"
-                                            autoComplete='off'
-                                            onChange={(event) => {
-                                                onChangeText({ event, state, setState })
-                                            }}
-                                        />
-                                        {isError.Latitude.length > 0 && (
-                                            <span className="invalid-feedback">{isError.Latitude}</span>
-                                        )}
-                                    </FormGroup>
-                                </Col>
-                            } */}
-                            {/* {!(subPageMode === url.RETAILER_MASTER) &&
-                                <Col md="1"> </Col>} */}
+                            {subPageMode === url.RETAILER_MASTER &&
+                                <Col md="1"> </Col>}
 
-                            {/* {!(subPageMode === url.RETAILER_MASTER) &&
-                                <Col md="3">
-                                    <FormGroup className="mb-3">
-                                        <Label>{fieldLabel.Longitude} </Label>
-                                        <Input
-                                            name="Longitude"
-                                            value={values.Longitude}
-                                            type="text"
-                                            className={isError.Longitude.length > 0 ? "is-invalid form-control" : "form-control"}
-                                            placeholder="Please Enter Longitude"
-                                            autoComplete='off'
-                                            onChange={(event) => {
-                                                onChangeText({ event, state, setState })
-                                            }}
-                                        />
-                                        {isError.Longitude.length > 0 && (
-                                            <span className="invalid-feedback">{isError.Longitude}</span>
-                                        )}
-                                    </FormGroup>
-                                </Col>
-                            }
-                            {!(subPageMode === url.RETAILER_MASTER) &&
-                                <Col md="1"> </Col>} */}
+                            <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Label>{fieldLabel.Latitude} </Label>
+                                    <Input
+                                        name="Latitude"
+                                        value={values.Latitude}
+                                        type="text"
+                                        className={isError.Latitude.length > 0 ? "is-invalid form-control" : "form-control"}
+                                        placeholder="Please Enter Latitude"
+                                        autoComplete='off'
+                                        onChange={(event) => {
+                                            onChangeText({ event, state, setState })
+                                        }}
+                                    />
+                                    {isError.Latitude.length > 0 && (
+                                        <span className="invalid-feedback">{isError.Latitude}</span>
+                                    )}
+                                </FormGroup>
+                            </Col>
+
+
+                            <Col md="1"> </Col>
+
+
+                            <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Label>{fieldLabel.Longitude} </Label>
+                                    <Input
+                                        name="Longitude"
+                                        value={values.Longitude}
+                                        type="text"
+                                        className={isError.Longitude.length > 0 ? "is-invalid form-control" : "form-control"}
+                                        placeholder="Please Enter Longitude"
+                                        autoComplete='off'
+                                        onChange={(event) => {
+                                            onChangeText({ event, state, setState })
+                                        }}
+                                    />
+                                    {isError.Longitude.length > 0 && (
+                                        <span className="invalid-feedback">{isError.Longitude}</span>
+                                    )}
+                                </FormGroup>
+                            </Col>
+
+
+                            <Col md="1"> </Col>
 
                             <Col md="3">
                                 <FormGroup className="mb-3">
