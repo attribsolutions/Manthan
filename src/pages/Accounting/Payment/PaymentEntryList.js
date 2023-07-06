@@ -48,7 +48,7 @@ const PaymentEntryList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            listBtnLoading:state.ReceiptReducer.listBtnLoading,
+            listBtnLoading: state.ReceiptReducer.listBtnLoading,
             loading: state.ReceiptReducer.loading,
             tableList: state.ReceiptReducer.ReceiptList,
             deleteMsg: state.ReceiptReducer.deleteMsg,
@@ -228,9 +228,9 @@ const PaymentEntryList = () => {
         dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
     }
 
-    const makeBtnFunc = (list = []) => {
-
-        var { CustomerID, ReceiptDate } = list[0]
+    const makeBtnFunc = (list = [], btnId) => {
+        
+        var { CustomerID, ReceiptDate, id } = list[0]
 
         try {
             const jsonBody = JSON.stringify({
@@ -245,7 +245,7 @@ const PaymentEntryList = () => {
                 ReceiptDate: currentDate_ymd
             });
 
-            const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: list[0] }
+            const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: list[0], btnId: `btn-makeBtn-${id}` }
             dispatch(ReceiptGoButtonMaster(body));
             dispatch(GetOpeningBalance(jsonBody1));
 
