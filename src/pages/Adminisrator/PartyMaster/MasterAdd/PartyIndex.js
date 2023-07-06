@@ -160,6 +160,8 @@ const PartyMaster = (props) => {
                         let baseValue = {
                             Name: hasEditVal.Name,
                             MobileNo: hasEditVal.MobileNo,
+                            // Latitude: hasEditVal.Latitude,
+                            // Longitude: hasEditVal.Longitude,
                             PartyType: {
                                 label: hasEditVal.PartyType.Name,
                                 value: hasEditVal.PartyType.id,
@@ -332,13 +334,11 @@ const PartyMaster = (props) => {
         let addressTabDetail = addressTabRef.current.getCurrentState()
         let prefixValue = prefixTabRef.current.getCurrentState().values
         let addressTabIsAddressEnter = addressTabRef.current.IsAddressEnter()
-        
+
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
 
         let isError = addressTabIsAddressEnter.isError
         let values = addressTabIsAddressEnter.values
-
-        
 
         if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "")) {
             customAlert({
@@ -421,10 +421,12 @@ const PartyMaster = (props) => {
                 "State": baseValue.State.value,
                 "District": baseValue.District.value,
                 "City": (baseValue.CityName === "") ? "" : baseValue.CityName.value,
-                "Route": (baseValue.Route === "") ? "" : baseValue.Route.value,
+                // "Route": (baseValue.Route === "") ? "" : baseValue.Route.value,
                 "SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
                 "Taluka": 0,
                 // "City": 0,
+                // "Latitude": baseValue.Latitude,
+                // "Longitude": baseValue.Longitude,
                 "GSTIN": baseValue.GSTIN,
                 "isActive": baseValue.IsActive,
                 "CreatedBy": loginUserID(),
