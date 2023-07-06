@@ -167,8 +167,7 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
 
 
 
-export function Loader() {
-
+export function Loader() {// linner component
   return <div className="dot-pulse"> <span> </span>     &nbsp;
     <div className="bounce1" style={{ background: "white" }}></div>
     <div className="bounce2" style={{ background: "white" }}></div>
@@ -176,8 +175,16 @@ export function Loader() {
   </div>
 
 }
+export function SelectBoxLoader() {// linner component
+  return <div className="dot-pulse">    
+    <div className="bounce1" style={{ background: "secondary", width: "8px", height: "8px" }}></div>
+    <div className="bounce2" style={{ background: "secondary", width: "8px", height: "8px" }}></div>
+    <div className="bounce3" style={{ background: "secondary", width: "8px", height: "8px" }}></div>
+  </div>
 
-export function Listloader() {
+}
+
+export function Listloader() {// common Listcomponent
   return <div id="api_spinner" >
     <div className="api_spinner_body " >
       <span className="spinner" style={{ left: "-5cm" }}></span>
@@ -187,7 +194,7 @@ export function Listloader() {
 }
 
 
-export function Listloader1({ show = false }) {
+export function Listloader1({ show = false }) {// common Listcomponent
   if (!show) { return null }
   else {
     return <div id="api_spinner" >

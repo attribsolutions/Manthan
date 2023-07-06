@@ -5,7 +5,8 @@ import {
     Label,
     Input,
     Row,
-    Button
+    Button,
+    Spinner
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
@@ -21,7 +22,7 @@ import {
     resetFunction,
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, C_Button, SaveButton } from "../../../../components/Common/CommonButton";
+import { Change_Button, C_Button, Loader, SaveButton, SelectBoxLoader } from "../../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../../routes/index"
 import { Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
@@ -36,6 +37,7 @@ import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import { components } from "react-select/dist/react-select.cjs.prod";
 
 
 
@@ -913,7 +915,7 @@ const SalesReturn = (props) => {
                                                     type="button"
                                                     loading={addBtnLoading}
                                                     color="btn btn-outline-primary border-1 font-size-12 text-center"
-                                                    onClick={() => AddPartyHandler("InvoiceWise")}>
+                                                    onClick={() => AddPartyHandler("ItemWise")}>
                                                     Add
                                                 </C_Button>
                                             }
@@ -1042,3 +1044,339 @@ const SalesReturn = (props) => {
 };
 
 export default SalesReturn
+
+
+
+
+
+
+// import React, { useState } from "react";
+// import Select from "react-select";
+// import { Spinner, Button } from "reactstrap";
+
+const customStyles = {
+    control: (provided) => ({
+        ...provided,
+        minHeight: 30,
+        border: "1px solid #ccc",
+        borderRadius: 4,
+        display: "flex",
+        alignItems: "center",
+    }),
+    dropdownIndicator: (provided) => ({
+        ...provided,
+        padding: 4,
+    }),
+};
+
+const options = [
+    { value: "option1", label: "Option 11111111111111111111111111111111111133333332" },
+    { value: "option2", label: "Option 2" },
+    { value: "option3", label: "Option 3" },
+];
+
+const CustomSelect1 = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const handleSelectChange = (selectedOption) => {
+        setSelectedOption(selectedOption);
+    };
+
+    const handleButtonClick = (e) => {
+        e.preventDefault()
+        setIsLoading(true);
+
+        // Simulating an API call
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
+    };
+    const { DropdownIndicator } = components;
+    return (
+        <div>
+            <Select
+                // styles={customStyles}
+                options={options}
+                value={selectedOption}
+                onChange={handleSelectChange}
+                isDisabled={isLoading}
+                components={{
+                    DropdownIndicator: (props) => (
+                        <div style={{ position: "relative" }}>
+                            {isLoading ? (
+                                <div style={{ display: "inline-block", marginRight: "5px" }}>
+                                    <SelectBoxLoader />
+                                </div>
+                            ) : null}
+                            <DropdownIndicator {...props} />
+                        </div>
+
+                    ),
+                }}
+            />
+
+            <Button onClick={handleButtonClick} disabled={isLoading}>
+                {isLoading ? "Loading..." : "Submit"}
+            </Button>
+        </div>
+    );
+};
+
+
+
+
+
+const CustomSelect = () => {
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSelectChange = (selectedOption) => {
+        setSelectedOption(selectedOption);
+    };
+
+    const handleClearClick = () => {
+        debugger
+        setSelectedOption(null);
+    };
+    const handleButtonClick = (e) => {
+        e.preventDefault()
+        setIsLoading(true);
+
+        // Simulating an API call
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
+    };
+    const { DropdownIndicator } = components;
+
+    const ClearIndicator = (props) => {
+        return (
+            <div style={{ position: "relative" }}>
+                {isLoading ? (
+                    <div style={{ display: "inline-block", marginRight: "5px" }}>
+                        <SelectBoxLoader />
+                    </div>
+                ) : <div className="d-flex">
+
+                    <div>
+                        {(selectedOption && !props.isMulti) && (
+                            <button
+                                className="clear-button"
+                                onClick={handleClearClick}
+                                style={{
+                                    position: "relative",
+                                    top: "50%",
+                                    marginLeft: "2px",
+                                    marginRight: "-7px",
+                                    transform: "translateY(-50%)",
+                                    border: "none",
+                                    background: "none",
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: "20px",
+                                    height: "20px",
+                                    borderRadius: "50%",
+                                    fontSize: "12px",
+                                    fontWeight: "bold",
+                                    color: "#333",
+                                    boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
+
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.target.style.backgroundColor = "#eee";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.backgroundColor = "";
+                                }}
+                            >
+                                X
+                            </button>
+                        )}
+                    </div>
+                    <div>
+                        <DropdownIndicator {...props} />
+                    </div>
+                </div>}
+
+            </div>
+        );
+    };;
+
+    return (
+        <div>
+            <Select
+                options={options}
+                value={selectedOption}
+                isMulti={false}
+                onChange={handleSelectChange}
+                components={{ DropdownIndicator: ClearIndicator }}
+            />
+            <Button onClick={handleButtonClick} disabled={isLoading}>
+                {isLoading ? "Loading..." : "Submit"}
+            </Button>
+        </div>
+    );
+};
+
+const CustomSelect3 = () => {
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const handleSelectChange = (selectedOption) => {
+        setSelectedOption(selectedOption);
+    };
+
+    const handleClearClick = () => {
+        setSelectedOption(null);
+    };
+
+    const { DropdownIndicator, ClearIndicator, IndicatorSeparator } = components;
+    debugger
+    // const ClearIndicator1 = (props) => {
+    //     return (
+    //         <div style={{ position: "relative" }}>
+    //             <div className="d-flex">
+    //                 <div>
+    //                     {selectedOption && (
+    //                         <button
+    //                             className="clear-button"
+    //                             onClick={handleClearClick}
+    //                             style={{
+    //                                 position: "relative",
+    //                                 top: "50%",
+    //                                 marginLeft: "2px",
+    //                                 marginRight: "-7px",
+    //                                 transform: "translateY(-50%)",
+    //                                 border: "none",
+    //                                 background: "none",
+    //                                 cursor: "pointer",
+    //                                 display: "flex",
+    //                                 alignItems: "center",
+    //                                 justifyContent: "center",
+    //                                 width: "20px",
+    //                                 height: "20px",
+    //                                 borderRadius: "50%",
+    //                                 fontSize: "12px",
+    //                                 fontWeight: "bold",
+    //                                 color: "#333",
+    //                                 boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
+
+    //                             }}
+    //                             onMouseEnter={(e) => {
+    //                                 e.target.style.backgroundColor = "#eee";
+    //                             }}
+    //                             onMouseLeave={(e) => {
+    //                                 e.target.style.backgroundColor = "";
+    //                             }}
+    //                         >
+    //                             X
+    //                         </button>
+    //                     )}
+    //                 </div>
+    //                 <div>
+    //                     <DropdownIndicator {...props} />
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     );
+    // };;
+
+    return (
+        <div>
+            <Select
+                options={options}
+                value={selectedOption}
+                onChange={handleSelectChange}
+                components={{
+
+                    DropdownIndicator: (props) => <div>
+                        <DropdownIndicator {...props} />
+                    </div>,
+                    ClearIndicator: (props) => <ClearIndicator {...props} />,
+                    IndicatorSeparator: (props) => <IndicatorSeparator {...props} />
+
+                }}
+            />
+            <Button onClick={handleClearClick} disabled={!selectedOption}>
+                Clear Selection
+            </Button>
+        </div>
+    );
+};
+
+
+const CustomSelect5 = () => {
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const handleSelectChange = (selectedOption) => {
+        setSelectedOption(selectedOption);
+    };
+
+    const handleClearClick = () => {
+        setSelectedOption(null);
+    };
+
+    const { DropdownIndicator, ClearIndicator, IndicatorSeparator } = components;
+
+    return (
+        <div>
+            <Select
+                options={options}
+                value={selectedOption}
+                onChange={handleSelectChange}
+                components={{
+                    DropdownIndicator,
+                    LoadingIndicator: true,
+                    ClearIndicator: (props) => (
+                        <button
+                            className="clear-button"
+                            onClick={handleClearClick}
+                            style={{
+                                position: "absolute",
+                                top: "50%",
+                                right: "30px",
+                                transform: "translateY(-50%)",
+                                border: "none",
+                                background: "none",
+                                cursor: "pointer",
+                                padding: "0",
+                                margin: "0",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                width: "20px",
+                                height: "20px",
+                                borderRadius: "50%",
+                                fontSize: "12px",
+                                fontWeight: "bold",
+                                color: "#333",
+                                boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
+                                zIndex: "1",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = "#eee";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = "transparent";
+                            }}
+                        >
+                            X
+                        </button>
+                    ),
+                    IndicatorSeparator,
+                }}
+                styles={{
+                    control: (provided) => ({
+                        ...provided,
+                        zIndex: "2",
+                    }),
+                }}
+            />
+            <Button onClick={handleClearClick} disabled={!selectedOption}>
+                Clear Selection
+            </Button>
+        </div>
+    );
+};
