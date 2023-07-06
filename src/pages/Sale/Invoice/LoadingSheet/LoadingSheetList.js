@@ -97,7 +97,6 @@ const LoadingSheetList = () => {
     }
 
     function downBtnFunc(row, downbtnType) {
-        console.log(downbtnType)
         if (downbtnType === "IsMultipleInvoicePrint") {
             let ReportType = report.invoiceA5
             dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id, Data))
@@ -107,7 +106,7 @@ const LoadingSheetList = () => {
         }
     }
 
-    const updateBtnFunc = (list) => {
+    const otherBtn_1Func = (list) => {
         dispatch(UpdateLoadingSheet({ RowId: list.id, path: url.LOADING_SHEET_LIST_UPDATE }));
     };
 
@@ -163,7 +162,7 @@ const LoadingSheetList = () => {
                             newBtnPath={url.LOADING_SHEET}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
-                            updateBtnFunc={updateBtnFunc}
+                            otherBtn_1Func={otherBtn_1Func}
                             ButtonMsgLable={"LoadingSheet"}
                             deleteName={"LoadingSheetNo"}
                             MasterModal={LoadingSheet}
