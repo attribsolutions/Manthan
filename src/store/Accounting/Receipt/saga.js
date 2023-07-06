@@ -6,12 +6,12 @@ import { CommonConsole, amountCommaSeparateFunc, concatDateAndTime, date_dmy_fun
 import * as url from "../../../routes/route_url";
 
 // customer dropdown click then table values display
-function* ReceiptGoButtonGenFunc({ Data }) {
+function* ReceiptGoButtonGenFunc({ config }) {
 
-  const { ListData, jsonBody, path, pageMode } = Data
+  const { ListData, jsonBody, path, pageMode } = config
   try {
-
-    const response = yield call(apiCall.Receipt_Go_Button_API, jsonBody);
+    
+    const response = yield call(apiCall.Receipt_Go_Button_API, config);
     response["pageMode"] = pageMode;
     response["ListData"] = ListData;
     response["path"] = path;

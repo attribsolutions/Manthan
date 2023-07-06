@@ -69,7 +69,8 @@ const OrderList = () => {
                 || state.InvoiceReducer.listBtnLoading
                 || state.PdfReportReducers.listBtnLoading
                 || state.OrderReducer.orderConfirmLoading
-                || state.InvoiceReducer.listBtnLoading),
+                || state.InvoiceReducer.listBtnLoading
+                || state.GRNReducer.listBtnLoading),
         })
     );
 
@@ -163,7 +164,7 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
-        
+
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
@@ -268,6 +269,7 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
+        debugger
         const obj = list[0]
 
         const customer = {
@@ -340,7 +342,7 @@ const OrderList = () => {
                         Mode: isMode
                     })
 
-                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, pageMode, path: path, grnRef, challanNo, btnId }))
+                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, pageMode, path: path, grnRef, challanNo, btnId: `btn-makeBtn-${obj.id}` }))
 
                 } else {
                     alert("Please Select Order1")

@@ -471,7 +471,7 @@ export const GRN_Edit_API = ({ editId, btnId }) => get(`${url.GRN}/${editId}`, b
 export const GRN_Post_API = ({ jsonBody, btnId }) => post(url.GRN, jsonBody, btnId)//get api
 export const GRN_update_API = ({ jsonBody, updateId, btnId }) => put(`${url.GRN}/${updateId}`, jsonBody, btnId)// update api
 export const GRN_delete_API = ({ deleteId, btnId }) => del(`${url.GRN}/${deleteId}`, btnId)//Delete Order
-export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
+export const GRN_Make_API = ({ jsonBody, btnId }) => post(url.GRN_MAKE_API, jsonBody, btnId)
 
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
@@ -581,7 +581,7 @@ export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOW
 //*********************************Accounting Module ************************************ */
 // Receipt and Payment Entry
 export const Receipt_Print = (id) => get(`${url.RECEIPT_POST_API}/${id}`)//dropdown api
-export const Receipt_Go_Button_API = (jsonBody) => post(url.RECEIPT_GO_BUTTON_API, jsonBody)//  postapi
+export const Receipt_Go_Button_API = ({jsonBody,btnId}) => post(url.RECEIPT_GO_BUTTON_API, jsonBody,btnId)//  postapi
 export const Opening_balance_API = (jsonBody) => post(url.OPENING_BALANCE, jsonBody)//  postapi
 export const Depositor_Bank_Filter_API = (jsonBody) => post(url.DEPOSITOR_BANK_FILTER, jsonBody)//  postapi
 export const Receipt_Post_API = ({ jsonBody, btnId }) => post(url.RECEIPT_POST_API, jsonBody, btnId)//  postapi
