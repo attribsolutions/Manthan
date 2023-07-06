@@ -471,7 +471,7 @@ export const GRN_Edit_API = ({ editId, btnId }) => get(`${url.GRN}/${editId}`, b
 export const GRN_Post_API = ({ jsonBody, btnId }) => post(url.GRN, jsonBody, btnId)//get api
 export const GRN_update_API = ({ jsonBody, updateId, btnId }) => put(`${url.GRN}/${updateId}`, jsonBody, btnId)// update api
 export const GRN_delete_API = ({ deleteId, btnId }) => del(`${url.GRN}/${deleteId}`, btnId)//Delete Order
-export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
+export const GRN_Make_API = ({ jsonBody, btnId }) => post(url.GRN_MAKE_API, jsonBody, btnId)
 
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)

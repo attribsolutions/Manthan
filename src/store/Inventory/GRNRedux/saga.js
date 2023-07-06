@@ -73,12 +73,12 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
   } catch (error) { yield put(GrnApiErrorAction()) }
 }
 
-function* makeGRN_Mode1_GenFunc({ data }) {
+function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
-
-  const { jsonBody, pageMode = '', path = '', grnRef = [], challanNo = '' } = data
+  debugger
+  const { jsonBody, pageMode = '', path = '', grnRef = [], challanNo = '' } = config
   try {
-    const response = yield call(GRN_Make_API, jsonBody);
+    const response = yield call(GRN_Make_API, config);
 
     response.Data.OrderItem.forEach(index => {
       index["GSToption"] = index.GSTDropdown.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
