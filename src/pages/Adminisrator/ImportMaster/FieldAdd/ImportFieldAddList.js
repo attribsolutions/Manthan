@@ -17,12 +17,14 @@ import {
   update_ImportFiledAdd_Success
 } from "../../../../store/Administrator/ImportFieldAddRedux/action";
 import { loginCompanyID } from "../../../../components/Common/CommonFunction";
+import { Listloader } from "../../../../components/Common/CommonButton";
 
 const ImportFieldAddList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      listBtnLoading: state.ImportFieldAdd_Reducer.listBtnLoading,
       tableList: state.ImportFieldAdd_Reducer.getList,
       editData: state.ImportFieldAdd_Reducer.editData,
       updateMsg: state.ImportFieldAdd_Reducer.updateMsg,
@@ -56,10 +58,13 @@ const ImportFieldAddList = () => {
   }
  
 
-  const { pageField,  } = reducers
+  const { pageField  } = reducers
   return (
     <React.Fragment>
       {
+        reducers.loading ?
+        <Listloader />
+        :
         (pageField) ?
           <CommonListPage
             action={action}
@@ -70,7 +75,7 @@ const ImportFieldAddList = () => {
             ButtonMsgLable={"ImportField"}
             deleteName={"FieldName"}
           />
-          : null
+          : <Listloader />
       }
     </React.Fragment>
   )
