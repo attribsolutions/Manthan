@@ -156,7 +156,7 @@ const PartyMaster = (props) => {
                         setEditData(hasEditVal);
                         dispatch(Breadcrumb_inputName(hasEditVal.Name))
                         seteditCreatedBy(hasEditVal.CreatedBy);
-
+                       
                         let baseValue = {
                             Name: hasEditVal.Name,
                             MobileNo: hasEditVal.MobileNo,
@@ -191,6 +191,10 @@ const PartyMaster = (props) => {
                             CityName: {
                                 label: hasEditVal.City === null ? "Select..." : hasEditVal.City.Name,
                                 value: hasEditVal.City === null ? "" : hasEditVal.City.id,
+                            },
+                            Route: {
+                                label: hasEditVal.PartySubParty[0].RouteName === null ? "Select..." : hasEditVal.PartySubParty[0].RouteName,
+                                value: hasEditVal.PartySubParty[0].Route === null ? "" : hasEditVal.PartySubParty[0].Route,
                             },
                             GSTIN: hasEditVal.GSTIN,
                             isActive: hasEditVal.isActive,
