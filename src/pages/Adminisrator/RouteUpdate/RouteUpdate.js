@@ -172,11 +172,11 @@ const RouteUpdate = (props) => {
             dataField: "Route Name",
 
             formatter: (value, row, key) => {
-
+                
                 return (
                     <Select
                         classNamePrefix="select2-selection"
-                        defaultValue={!(row.Route > 0) ? { value: "", label: " select... " } : {
+                        defaultValue={!(row.Route > 0) ? "" : {
                             value: row.Route, label: row.RouteName
                         }}
                         options={RouteName_Options}
