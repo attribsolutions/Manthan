@@ -62,7 +62,7 @@ export const Rows = (data) => {
 
 
             i.forEach(element => {
-                debugger
+                
                 const tableitemRow = [
                     `(${element.HSNCode}) ${element.ItemName}     
                      ${element.Comment === null ? "" : element.Comment}`,
@@ -127,7 +127,7 @@ export const RowsWithIGST = (data) => {
 
 
             i.forEach(element => {
-                debugger
+                
                 const tableitemRow = [
                     `(${element.HSNCode}) ${element.ItemName}     
                      ${element.Comment === null ? "" : element.Comment}`,
