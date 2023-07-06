@@ -154,9 +154,13 @@ const RouteUpdate = (props) => {
         IsActive: index.IsActive
     }));
 
-    const RouteName_Options = RoutesListOptions.filter((index) => {
-        return index.IsActive === true
-    });
+    const RouteName_Options = [
+        {
+            value: null,
+            label: "select..."
+        },
+        ...RoutesListOptions.filter((index) => index.IsActive === true)
+    ];
 
     const pagesListColumns = [
         {
@@ -197,24 +201,24 @@ const RouteUpdate = (props) => {
     };
 
     const SaveHandler = async (event) => {
-        debugger
+
         event.preventDefault();
         const btnId = event.target.id
         try {
             // if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+            btnIsDissablefunc({ btnId, state: true })
 
-                const data = Data.map((index) => ({
-                    id: index.id,
-                    Party: index.Party,
-                    SubParty: index.SubParty,
-                    Route: index.Route,
-                }))
-                const jsonBody = JSON.stringify({
-                    Data: data
-                })
+            const data = Data.map((index) => ({
+                id: index.id,
+                Party: index.Party,
+                SubParty: index.SubParty,
+                Route: index.Route,
+            }))
+            const jsonBody = JSON.stringify({
+                Data: data
+            })
 
-                dispatch(Post_RouteUpdate({ jsonBody, btnId }));
+            dispatch(Post_RouteUpdate({ jsonBody, btnId }));
 
             // }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
