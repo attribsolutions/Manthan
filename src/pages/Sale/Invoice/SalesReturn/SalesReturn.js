@@ -570,16 +570,16 @@ const SalesReturn = (props) => {
         })
     }
 
-    const AddPartyHandler = async (e, type) => {
+    const AddPartyHandler = async (byType) => {
 
         const invalidMsg1 = []
-        if ((values.ItemName === '') && (type === 'add')) {
+        if ((values.ItemName === '') && (byType === 'ItemWise')) {
             invalidMsg1.push(`Select Item Name`)
         }
-        if ((values.InvoiceNumber === '') && (values.Customer === '') && (type === 'Select')) {
+        if ((values.InvoiceNumber === '') && (values.Customer === '') && (byType === 'InvoiceWise')) {
             invalidMsg1.push(`Select Retailer.`)
         }
-        else if ((values.InvoiceNumber === '') && (type === 'Select')) {
+        else if ((values.InvoiceNumber === '') && (byType === 'InvoiceWise')) {
             invalidMsg1.push(`Select Invoice No.`)
         }
 
@@ -598,7 +598,7 @@ const SalesReturn = (props) => {
         }
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
-        const nrwReturnMode = (type === 'add') ? 2 : 1
+        const nrwReturnMode = (byType === 'ItemWise') ? 2 : 1
         dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
         setReturnMode(nrwReturnMode)
     }
@@ -913,7 +913,7 @@ const SalesReturn = (props) => {
                                                     type="button"
                                                     loading={addBtnLoading}
                                                     color="btn btn-outline-primary border-1 font-size-12 text-center"
-                                                    onClick={(e) => AddPartyHandler(e, "add")}>
+                                                    onClick={() => AddPartyHandler("InvoiceWise")}>
                                                     Add
                                                 </C_Button>
                                             }
@@ -962,7 +962,7 @@ const SalesReturn = (props) => {
                                                     type="button"
                                                     loading={addBtnLoading}
                                                     color="btn btn-outline-primary border-1 font-size-12 text-center"
-                                                    onClick={(e,) => AddPartyHandler(e, "Select")}>
+                                                    onClick={() => AddPartyHandler("InvoiceWise")}>
                                                     Select
                                                 </C_Button>
 
