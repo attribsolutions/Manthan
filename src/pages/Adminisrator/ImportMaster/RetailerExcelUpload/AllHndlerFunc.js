@@ -52,11 +52,9 @@ export const readExcelFile = async ({ file, compareParameter }) => {
         if (comparefilter.length === 0) {
             invalidMsg.push(`Import filed Not Map`)
         }
-        
+    
         jsonResult.forEach((r1, k) => {
-            // 
             comparefilter.forEach((c1) => {
-                
                 if (c1.ControlTypeName === "Date") { r1[c1.Value] = date_ymd_func(r1[c1.Value]) }
                 const regExp = RegExp(c1.RegularExpression)
 
