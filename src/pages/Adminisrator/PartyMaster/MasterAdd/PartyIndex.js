@@ -160,6 +160,8 @@ const PartyMaster = (props) => {
                         let baseValue = {
                             Name: hasEditVal.Name,
                             MobileNo: hasEditVal.MobileNo,
+                            Latitude: hasEditVal.Latitude,
+                            Longitude: hasEditVal.Longitude,
                             PartyType: {
                                 label: hasEditVal.PartyType.Name,
                                 value: hasEditVal.PartyType.id,
@@ -332,19 +334,11 @@ const PartyMaster = (props) => {
         let addressTabDetail = addressTabRef.current.getCurrentState()
         let prefixValue = prefixTabRef.current.getCurrentState().values
         let addressTabIsAddressEnter = addressTabRef.current.IsAddressEnter()
-        
+
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
 
         let isError = addressTabIsAddressEnter.isError
         let values = addressTabIsAddressEnter.values
-
-        if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
-            customAlert({
-                Type: 4,
-                Message: "Please Select PriceList ",
-            })
-            return;
-        }
 
         if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "")) {
             customAlert({
@@ -408,6 +402,13 @@ const PartyMaster = (props) => {
                 }
             })
 
+            if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Select PriceList ",
+                })
+                return;
+            }
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,
                 "PriceList": priceListSelect.value,
@@ -424,6 +425,8 @@ const PartyMaster = (props) => {
                 "SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
                 "Taluka": 0,
                 // "City": 0,
+                "Latitude": baseValue.Latitude,
+                "Longitude": baseValue.Longitude,
                 "GSTIN": baseValue.GSTIN,
                 "isActive": baseValue.IsActive,
                 "CreatedBy": loginUserID(),

@@ -393,7 +393,7 @@ const Invoice = (props) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <div style={{ width: "50px" }}>{index1.MRPValue}</div>
+                                        <div style={{ width: "50px" }}>{index2.MRP}</div>
                                     </td>
                                 </tr>
                             ))}

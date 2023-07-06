@@ -18,7 +18,7 @@ import {
     resetFunction,
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -73,9 +73,11 @@ const LoadingSheet = (props) => {
         GoButton,
         Driver,
         saveBtnloading,
+        goBtnloadingSpinner,
     } = useSelector((state) => ({
         saveBtnloading: state.LoadingSheetReducer.saveBtnloading,
         postMsg: state.LoadingSheetReducer.postMsg,
+        goBtnloadingSpinner: state.LoadingSheetReducer.goBtnloadingSpinner,
         GoButton: state.LoadingSheetReducer.goBtnLoadingSheet,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -126,7 +128,7 @@ const LoadingSheet = (props) => {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
-
+            dispatch(LoadingSheet_GoBtn_API_Succcess([]))
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
@@ -182,6 +184,9 @@ const LoadingSheet = (props) => {
         label: index.Name,
     }));
 
+    const onChangeBtnHandler = () => {
+        dispatch(LoadingSheet_GoBtn_API_Succcess([]))
+    }
     function goButtonHandler() {
         const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(','); //commas separate
         const jsonBody = JSON.stringify({
@@ -219,62 +224,6 @@ const LoadingSheet = (props) => {
         custom: true,
     };
 
-    const saveHandeller = async (event) => {
-        try {
-            event.preventDefault();
-            const btnId = event.target.id
-
-            const CheckArray = Data.filter((index) => {
-                return (index.selectCheck === true)
-            })
-
-            const trueValues = Data.map((index) => {
-                return (index.selectCheck === true)
-            })
-
-            const totalInvoices = trueValues.reduce((count, value) => {
-                if (value === true) {
-                    count++
-                }
-                return count
-            }, 0)
-
-            const GrandTotal = CheckArray.reduce((a, v) => a = a + parseFloat(v.GrandTotal), 0)
-
-            const LoadingSheetDetails = CheckArray.map((index) => ({
-                Invoice: index.id
-            }))
-
-            if (LoadingSheetDetails.length === 0) {
-                customAlert({
-                    Type: 4,
-                    Status: true,
-                    Message: "Minimum one Invoice is Select",
-                })
-                return
-            }
-
-            if (formValid(state, setState)) {
-
-                const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
-                const jsonBody = JSON.stringify({
-                    Date: values.Date,
-                    Party: _cfunc.loginPartyID(),
-                    Route: isRoute,
-                    Vehicle: values.VehicleNumber.value,
-                    Driver: values.DriverName.value,
-                    TotalAmount: GrandTotal.toFixed(2),
-                    InvoiceCount: totalInvoices,
-                    CreatedBy: _cfunc.loginUserID(),
-                    UpdatedBy: _cfunc.loginUserID(),
-                    LoadingSheetDetails: LoadingSheetDetails
-                });
-
-                dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
-
-            }
-        } catch (e) { _cfunc.CommonConsole(e) }
-    };
 
     const saveHandler = async (event) => {
         try {
@@ -491,7 +440,14 @@ const LoadingSheet = (props) => {
                                             )}
                                         </Col>
                                         <Col sm="1" className="mx-4 ">
-                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            {!Data.length > 0 ?
+                                                < Go_Button loading={goBtnloadingSpinner} onClick={(e) => goButtonHandler()} />
+                                                : <Change_Button
+                                                    onClick={(e) => onChangeBtnHandler()}
+                                                />
+                                            }
+
+
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -548,6 +504,7 @@ const LoadingSheet = (props) => {
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
                                             loading={saveBtnloading}
+                                            forceDisabled={goBtnloadingSpinner}
                                             onClick={saveHandler}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
