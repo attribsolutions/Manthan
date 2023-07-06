@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Modal, Row } from "reactstrap";
+import { Button, Col, Modal, Row, Spinner } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -194,6 +194,7 @@ const CommonPurchaseList = (props) => {
 
 
   function makeBtnHandler(rowData) {
+
     rowData["hasSelect"] = true;
     let arr = [];
     arr.push(rowData);
@@ -231,15 +232,19 @@ const CommonPurchaseList = (props) => {
                 className={makeBtnCss}
                 data-mdb-toggle="tooltip"
                 data-mdb-placement="top"
+                disabled={listBtnLoading}
                 title={makeBtnName}
                 onClick={() => {
                   makeBtnHandler(rowData);
                 }}
               >
-                <span
-                  style={{ marginLeft: "6px", marginRight: "6px" }}
-                  className=" fas fa-file-invoice"
-                ></span>
+                {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
+                  <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                  : <span
+                    style={{ marginLeft: "6px", marginRight: "6px" }}
+                    className=" fas fa-file-invoice"
+                  ></span>
+                }
               </Button>
             </div>
           );
@@ -352,7 +357,7 @@ const CommonPurchaseList = (props) => {
 
             <div className="row save1 " style={{ paddingBottom: 'center' }}>
               <button
-                disabled={listBtnLoading }
+                disabled={listBtnLoading}
                 style={{ marginTop: "-10px" }}
                 type="button"
                 className="btn btn-primary w-md  "

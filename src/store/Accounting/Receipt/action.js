@@ -28,9 +28,9 @@ export const PaymentEntrylistfilters = filter => ({                            /
   payload: filter,
 })
 
-export const ReceiptGoButtonMaster = (Data) => ({// save Action
+export const ReceiptGoButtonMaster = (config={}) => ({// save Action
   type: RECEIPT_GO_BUTTON_MASTER,
-  Data
+  config
 });
 
 export const ReceiptGoButtonMaster_Success = (resp) => ({// Save  success
