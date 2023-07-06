@@ -156,7 +156,7 @@ const PartyMaster = (props) => {
                         setEditData(hasEditVal);
                         dispatch(Breadcrumb_inputName(hasEditVal.Name))
                         seteditCreatedBy(hasEditVal.CreatedBy);
-                       
+
                         let baseValue = {
                             Name: hasEditVal.Name,
                             MobileNo: hasEditVal.MobileNo,
@@ -338,7 +338,7 @@ const PartyMaster = (props) => {
         let addressTabDetail = addressTabRef.current.getCurrentState()
         let prefixValue = prefixTabRef.current.getCurrentState().values
         let addressTabIsAddressEnter = addressTabRef.current.IsAddressEnter()
-
+        
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
 
         let isError = addressTabIsAddressEnter.isError
@@ -413,6 +413,7 @@ const PartyMaster = (props) => {
                 })
                 return;
             }
+            
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,
                 "PriceList": priceListSelect.value,
@@ -425,14 +426,12 @@ const PartyMaster = (props) => {
                 "State": baseValue.State.value,
                 "District": baseValue.District.value,
                 "City": (baseValue.CityName === "") ? "" : baseValue.CityName.value,
-                // "Route": (baseValue.Route === "") ? "" : baseValue.Route.value,
                 "SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
                 "Taluka": 0,
-                // "City": 0,
                 "Latitude": baseValue.Latitude,
                 "Longitude": baseValue.Longitude,
                 "GSTIN": baseValue.GSTIN,
-                "isActive": baseValue.IsActive,
+                "isActive": baseValue.isActive,
                 "CreatedBy": loginUserID(),
                 "UpdatedBy": loginUserID(),
                 "PartySubParty": supplierArr,
