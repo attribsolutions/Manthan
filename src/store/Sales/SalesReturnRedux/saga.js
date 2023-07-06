@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import {  amountCommaSeparateFunc, concatDateAndTime } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, concatDateAndTime } from "../../../components/Common/CommonFunction";
 
 // Bank list Dropdown API
 function* Invoice_No_List_GenFunc({ jsonBody }) {
@@ -45,11 +45,31 @@ function* delete_SalesReturn_ID_GenFunc({ config }) {
         yield put(action.delete_SalesReturn_Id_Succcess(response))
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
+function* addButton_saleReturn_GenFunc({ config }) {
+    try {
+        const { jsonBody, InvoiceId, returnMode } = config;
+        
+        if (returnMode === 2) {//returnMode 1 = "itemWise"
+            const response = yield call(apiCall.SalesReturn_add_button_api_For_Item, jsonBody);
+            
+            yield put(action.SalesReturnAddBtn_Action_Succcess(response));
+        }
+        else {//returnMode 2 = "invoiceWise"
+            let response = yield call(apiCall.SalesReturn_add_button_api_For_Invoice, InvoiceId);
+            response.Data = response.Data.InvoiceItems
+            yield put(action.SalesReturnAddBtn_Action_Succcess(response))
+        }
+
+    } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
+}
+
+
 
 function* SalesReturnSaga() {
     yield takeEvery(actionType.INVOICE_NUMBER, Invoice_No_List_GenFunc)
     yield takeEvery(actionType.SAVE_SALES_RETURN_MASTER, save_SalesReturn_GenFunc)
     yield takeEvery(actionType.SALES_RETURN_LIST_API, SalesReturn_List_GenFun)
     yield takeEvery(actionType.DELETE_SALES_RETURN_ID, delete_SalesReturn_ID_GenFunc)
+    yield takeEvery(actionType.SALES_RETURN_ADD_BUTTON_ACTION, addButton_saleReturn_GenFunc)
 }
 export default SalesReturnSaga;  

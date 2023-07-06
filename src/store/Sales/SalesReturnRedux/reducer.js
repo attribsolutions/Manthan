@@ -6,12 +6,16 @@ import {
     SALES_RETURN_LIST_API,
     SAVE_SALES_RETURN_MASTER,
     SALES_RUTURN_API_ERROR_ACTION,
-    DELETE_SALES_RETURN_ID
+    DELETE_SALES_RETURN_ID,
+    SALES_RETURN_ADD_BUTTON_ACTION,
+    SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
     loading: false,
     InvoiceNo: [],
+    addButtonData: { Status: false },
+    addBtnLoading: false,
     postMsg: { Status: false },
     salesReturnList: [],
     deleteMsg: { Status: false },
@@ -21,6 +25,19 @@ const INIT_STATE = {
 
 const SalesReturnReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
+
+        case SALES_RETURN_ADD_BUTTON_ACTION:
+            return {
+                ...state,
+                addBtnLoading: true,
+            }
+
+        case SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS:
+            return {
+                ...state,
+                addBtnLoading: false,
+                addButtonData: action.payload,
+            }
 
         case INVOICE_NUMBER_SUCCESS:
             return {
@@ -71,6 +88,7 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
         case SALES_RUTURN_API_ERROR_ACTION:
             return {
                 ...state,
+                addBtnLoading: false,
                 saveBtnloading: false,
                 loading: false,
                 listBtnLoading: false,

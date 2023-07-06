@@ -160,6 +160,8 @@ const PartyMaster = (props) => {
                         let baseValue = {
                             Name: hasEditVal.Name,
                             MobileNo: hasEditVal.MobileNo,
+                            Latitude: hasEditVal.Latitude,
+                            Longitude: hasEditVal.Longitude,
                             PartyType: {
                                 label: hasEditVal.PartyType.Name,
                                 value: hasEditVal.PartyType.id,
@@ -189,6 +191,10 @@ const PartyMaster = (props) => {
                             CityName: {
                                 label: hasEditVal.City === null ? "Select..." : hasEditVal.City.Name,
                                 value: hasEditVal.City === null ? "" : hasEditVal.City.id,
+                            },
+                            Route: {
+                                label: hasEditVal.PartySubParty[0].RouteName === null ? "Select..." : hasEditVal.PartySubParty[0].RouteName,
+                                value: hasEditVal.PartySubParty[0].Route === null ? "" : hasEditVal.PartySubParty[0].Route,
                             },
                             GSTIN: hasEditVal.GSTIN,
                             isActive: hasEditVal.isActive,
@@ -338,14 +344,6 @@ const PartyMaster = (props) => {
         let isError = addressTabIsAddressEnter.isError
         let values = addressTabIsAddressEnter.values
 
-        if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
-            customAlert({
-                Type: 4,
-                Message: "Please Select PriceList ",
-            })
-            return;
-        }
-
         if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "")) {
             customAlert({
                 Type: 4,
@@ -399,7 +397,7 @@ const PartyMaster = (props) => {
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
                 Creditlimit: pageMode === mode.edit ? i.Creditlimit : "",
-                Route: pageMode === mode.edit ? i.Route : "",
+                Route: (baseValue.Route === "") ? "" : baseValue.Route.value,
             }))
 
             addressTabDetail.map((i) => {
@@ -408,6 +406,14 @@ const PartyMaster = (props) => {
                 }
             })
 
+            if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Select PriceList ",
+                })
+                return;
+            }
+            
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,
                 "PriceList": priceListSelect.value,
@@ -420,12 +426,12 @@ const PartyMaster = (props) => {
                 "State": baseValue.State.value,
                 "District": baseValue.District.value,
                 "City": (baseValue.CityName === "") ? "" : baseValue.CityName.value,
-                "Route": (baseValue.Route === "") ? "" : baseValue.Route.value,
                 "SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
                 "Taluka": 0,
-                // "City": 0,
+                "Latitude": baseValue.Latitude,
+                "Longitude": baseValue.Longitude,
                 "GSTIN": baseValue.GSTIN,
-                "isActive": baseValue.IsActive,
+                "isActive": baseValue.isActive,
                 "CreatedBy": loginUserID(),
                 "UpdatedBy": loginUserID(),
                 "PartySubParty": supplierArr,

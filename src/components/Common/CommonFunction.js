@@ -355,7 +355,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
 }
 
 export async function CheckAPIResponse({ method, url, response = {}, body, error = '' }) {
-  debugger
+  
   const { data = {} } = response;
   const statusCode = data.StatusCode;
   const MessgeAlreadyShow = error.MessgeAlreadyShow || false

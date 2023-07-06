@@ -177,7 +177,7 @@ export const reportHeder3 = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
     doc.line(408, 57, 408, 16);//vertical Line header
-    doc.line(570, 44, 408, 44) //horizontal line 1 billby upper
+    // doc.line(570, 44, 408, 44) //horizontal line 1 billby upper
 
     doc.setFont(undefined, 'bold')
     doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 25) //Invoice Id
@@ -185,7 +185,6 @@ export const reportHeder3 = (doc, data) => {
     var time = convertOnlyTimefunc(data.CreatedOn)
 
     doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date
-    doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 53) //Invoice date
 
 
 }
@@ -300,41 +299,35 @@ export const reportFooter = (doc, data) => {
     doc.text(`${data.CustomerName} `, 140, 811,)
     doc.setFontSize(9)
 
-    if (data.BankData.length > 0) {
-        let BankData = data.BankData[0]
-        doc.setFont(undefined, 'bold')
+    // if (data.BankData.length > 0) {
+    //     let BankData = data.BankData[0]
+    //     doc.setFont(undefined, 'bold')
 
-        doc.text(`A/C No:`, 34, 318,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${BankData.AccountNo}`, 70, 318,)
+    //     doc.text(`A/C No:`, 34, 318,)
+    //     doc.setFont(undefined, 'Normal')
+    //     doc.text(`${BankData.AccountNo}`, 70, 318,)
 
-        doc.setFont(undefined, 'bold')
+    //     doc.setFont(undefined, 'bold')
 
-        doc.text(`IFSC Code:`, 150, 318,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${BankData.IFSC}`, 195, 318,)
+    //     doc.text(`IFSC Code:`, 150, 318,)
+    //     doc.setFont(undefined, 'Normal')
+    //     doc.text(`${BankData.IFSC}`, 195, 318,)
 
-        doc.setFont(undefined, 'bold')
-        doc.text(`Branch:`, 270, 318,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${BankData.BranchName}`, 305, 318,)
+    //     doc.setFont(undefined, 'bold')
+    //     doc.text(`Branch:`, 270, 318,)
+    //     doc.setFont(undefined, 'Normal')
+    //     doc.text(`${BankData.BranchName}`, 305, 318,)
 
-        doc.setFont(undefined, 'bold')
-        doc.text(`Bank Name:`, 34, 331,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${BankData.BankName}`, 90, 331,)
+    //     doc.setFont(undefined, 'bold')
+    //     doc.text(`Bank Name:`, 34, 331,)
+    //     doc.setFont(undefined, 'Normal')
+    //     doc.text(`${BankData.BankName}`, 90, 331,)
 
-    } else {
-        doc.setFont(undefined, 'bold')
-        doc.text(`Bank Details Not Avaliable`, 34, 328,)
-        doc.setFont(undefined, 'Normal')
-    }
-
-
-
-
-
-
+    // } else {
+    //     doc.setFont(undefined, 'bold')
+    //     doc.text(`Bank Details Not Avaliable`, 34, 328,)
+    //     doc.setFont(undefined, 'Normal')
+    // }
 
 
     doc.setFont("Arimo");
@@ -347,6 +340,61 @@ export const reportFooter = (doc, data) => {
     doc.text(`Rupees:`, 33, 305,)
     doc.addFont("Arial", 'Normal')
     doc.text(`${stringNumber}`, 65, 305,)
+    var DetailsOfBankStyle = {
+        didParseCell: (data1) => {
+            if (data.BankData.length > 0) {
+                let BankData = data.BankData[0]
+                if (data1.row.cells[0].raw === `Bank Name :${BankData.BankName}`) {
+                    data1.row.cells[0].colSpan = 3
+                }
+            }
+        },
+
+
+        margin: {
+            top: 0, left: 30, right: 35,
+        },
+        showHead: 'always',
+        theme: 'plain',
+        headerStyles: { cellPadding: 1, },
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 1,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 100,
+                halign: 'lfet',
+            },
+            1: {
+                valign: "top",
+                columnWidth: 100,
+                halign: 'lfet',
+            },
+            2: {
+                valign: "top",
+                columnWidth: 130,
+                halign: 'lfet',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: 308,
+
+    };
+
+    doc.autoTable(table.Bankcolumn, table.BankRow(data), DetailsOfBankStyle,);
 }
 
 export const tableBody = (doc, data) => {

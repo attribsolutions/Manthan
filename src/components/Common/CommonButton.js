@@ -1,6 +1,7 @@
 import { Button, Spinner } from "reactstrap"
 import { loginUserID } from "./CommonFunction";
 import * as mode from "../../routes/PageMode"
+import { Children } from "react";
 
 export function SaveButton(props) {
   const { pageMode = '', userAcc = {}, editCreatedBy } = props
@@ -110,6 +111,26 @@ export function Change_Button(props) {
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>
 }
+export function C_Button(props) {
+  const {
+    loading,
+    color,
+    Children
+  } = props
+
+  return loading ?
+    <Button
+      color={color}
+      disabled
+      title={`Add Button Loging...`}
+    >
+      <Spinner style={{ height: "12px", width: "12px" }} color="primary" />
+    </Button>
+    : <Button
+      {...props}
+    />
+}
+
 
 
 
