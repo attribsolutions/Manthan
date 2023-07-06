@@ -393,7 +393,7 @@ const PartyMaster = (props) => {
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
                 Creditlimit: pageMode === mode.edit ? i.Creditlimit : "",
-                Route: pageMode === mode.edit ? i.Route : "",
+                Route: (baseValue.Route === "") ? "" : baseValue.Route.value,
             }))
 
             addressTabDetail.map((i) => {
@@ -421,7 +421,7 @@ const PartyMaster = (props) => {
                 "State": baseValue.State.value,
                 "District": baseValue.District.value,
                 "City": (baseValue.CityName === "") ? "" : baseValue.CityName.value,
-                "Route": (baseValue.Route === "") ? "" : baseValue.Route.value,
+                // "Route": (baseValue.Route === "") ? "" : baseValue.Route.value,
                 "SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
                 "Taluka": 0,
                 // "City": 0,
