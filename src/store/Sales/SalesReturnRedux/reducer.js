@@ -39,6 +39,12 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 addButtonData: action.payload,
             }
 
+        case INVOICE_NUMBER_SUCCESS:
+            return {
+                ...state,
+                InvoiceNo: action.payload,
+            }
+
         case SAVE_SALES_RETURN_MASTER:
             return {
                 ...state,
