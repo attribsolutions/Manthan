@@ -629,6 +629,10 @@ export const StockEntry_GO_button_api_For_Item = (ItemId) => get(`${url.STOCK_EN
 
 export const StockEntry_Post_API = ({ jsonBody, btnId }) => post(url.STOCK_ENTRY, jsonBody, btnId)//post api
 
+//Stock Report
+export const StockReport_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REPORT, jsonBody, btnId)//Go button api
+
+
 export {
   getLoggedInUser,
   isUserAuthenticated,
