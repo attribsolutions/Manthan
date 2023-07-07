@@ -15,7 +15,7 @@ const StockReportReducer = (state = INIT_STATE, action) => {
         case STOCK_REPORT_GO_BUTTON_API:
             return {
                 ...state,
-                listBtnLoading: true
+                listBtnLoading: action.config.btnId
             }
 
         case STOCK_REPORT_GO_BUTTON_API_SUCCESS:
@@ -30,7 +30,6 @@ const StockReportReducer = (state = INIT_STATE, action) => {
                 ...state,
                 listBtnLoading: false,
             };
-
 
         default:
             return state
