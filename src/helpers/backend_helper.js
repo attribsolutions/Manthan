@@ -438,7 +438,7 @@ export const Loading_Sheet_Go_Button_API = (data) => post(url.LOADING_SHEET_GO_B
 export const Loading_Sheet_Post_API = ({ jsonBody, btnId }) => post(url.LOADING_SHEET, jsonBody, btnId)// Loading Sheet Post API For Master Page
 export const Loading_Sheet_get_API = (filters) => post(url.LOADING_SHEET_LIST, filters)// Post API For Loading Sheet List
 export const Loading_Sheet_Del_API = ({ deleteId, btnId }) => del(`${url.LOADING_SHEET}/${deleteId}`, btnId)// Loading Sheet Post API For Master Page
-export const Loading_Sheet_Update_API = (updateId) => get(`${url.LOADING_SHEET}/${updateId}`)// Loading Sheet Post API For Master Page
+export const Loading_Sheet_Update_API = ({ RowId, btnId }) => get(`${url.LOADING_SHEET}/${RowId}`, btnId)// Loading Sheet Post API For Master Page
 
 // PartyMasterBulkUpdate
 export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_BULK_UPDATE, jsonBody, btnId)// post api
@@ -581,7 +581,7 @@ export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOW
 //*********************************Accounting Module ************************************ */
 // Receipt and Payment Entry
 export const Receipt_Print = (id) => get(`${url.RECEIPT_POST_API}/${id}`)//dropdown api
-export const Receipt_Go_Button_API = ({jsonBody,btnId}) => post(url.RECEIPT_GO_BUTTON_API, jsonBody,btnId)//  postapi
+export const Receipt_Go_Button_API = ({ jsonBody, btnId }) => post(url.RECEIPT_GO_BUTTON_API, jsonBody, btnId)//  postapi
 export const Opening_balance_API = (jsonBody) => post(url.OPENING_BALANCE, jsonBody)//  postapi
 export const Depositor_Bank_Filter_API = (jsonBody) => post(url.DEPOSITOR_BANK_FILTER, jsonBody)//  postapi
 export const Receipt_Post_API = ({ jsonBody, btnId }) => post(url.RECEIPT_POST_API, jsonBody, btnId)//  postapi

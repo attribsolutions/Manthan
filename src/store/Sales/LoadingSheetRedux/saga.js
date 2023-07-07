@@ -28,11 +28,11 @@ function* save_LoadingSheet_GenFun({ config }) {
 }
 
 // loading sheet update button api
-function* Update_LoadingSheet_GenFun({ data }) {
-    
-    const { RowId, path } = data
+function* Update_LoadingSheet_GenFun({ config }) {
+
+    const { RowId, path } = config
     try {
-        const response = yield call(Loading_Sheet_Update_API, RowId);
+        const response = yield call(Loading_Sheet_Update_API, config);
         response.path = path
         response.Data.InvoiceParent.map((index) => {
             index.GrandTotal = amountCommaSeparateFunc(index.GrandTotal)

@@ -53,6 +53,7 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         ...state,
         listBtnLoading: action.config.btnId,
       }
+      
     case RECEIPT_GO_BUTTON_MASTER_SUCCESS:
       return {
         ...state,

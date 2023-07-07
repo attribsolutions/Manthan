@@ -68,6 +68,7 @@ const LoadingSheetReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 saveBtnloading: true,
+                listBtnLoading: action.config.btnId,
             }
 
         case LOADING_SHEET_UPDATE_API_ACTION_SUCCESS:
@@ -75,6 +76,7 @@ const LoadingSheetReducer = (state = INIT_STATE, action) => {
                 ...state,
                 LoadingSheetUpdate: action.payload,
                 saveBtnloading: false,
+                listBtnLoading: false,
             }
 
         case DELETE_LOADING_SHEET:
