@@ -14,6 +14,7 @@ import { stockReport_GoButton_API } from "../../store/Report/StockReport/action"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const StockReport = (props) => {
 
@@ -39,8 +40,8 @@ const StockReport = (props) => {
         })
     );
     const { tableData } = reducers
-    
-    const { userAccess, pdfdata, BaseUnit, SSDD_List } = reducers;
+
+    const { userAccess, BaseUnit, SSDD_List } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -79,13 +80,19 @@ const StockReport = (props) => {
     }));
 
     function goButtonHandler() {
-
         const btnId = `gobtn-${url.STOCK_REPORT}`
 
+        if (unitDropdown === "") {
+            customAlert({
+                Type: 4,
+                Message: "Please Select Unit"
+            })
+            return
+        }
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Unit": unitDropdown === "" ? "" : unitDropdown.value,
+            "Unit": unitDropdown.value,
             "PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
         });
         dispatch(stockReport_GoButton_API({ jsonBody, btnId }))
