@@ -234,15 +234,6 @@ export const PARTY_LEDGER = "/PartyLedger"
 
 export const STOCK_REPORT = "/StockReport"
 
-
-
-
-
-
-
-
-
-
 //**************************** Reports ***********************************//
 
 export const ORDER_SUMMARY_REPORT = "/OrderSummaryReport"
