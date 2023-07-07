@@ -23,6 +23,7 @@ const dissableStyle = {
 };
 
 export const listPageActionsButtonFunc = (props) => {
+
     const {
         dispatch,
         history,
@@ -35,6 +36,7 @@ export const listPageActionsButtonFunc = (props) => {
         editBodyfunc,
         deleteBodyfunc,
         copyBodyfunc,
+        viewBtnFunc,
         otherBtn_1Func,
         makeBtnFunc = () => { },
         pageMode,
@@ -50,6 +52,7 @@ export const listPageActionsButtonFunc = (props) => {
 
 
     function editHandler(rowData, btnmode, btnId) {
+
         try {
             let config = { editId: rowData.id, btnmode, subPageMode, btnId }
             if (editBodyfunc) {
@@ -83,8 +86,27 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     function downHandler(rowData, downbtnType, btnId) {
+
         try {
             downBtnFunc(rowData, downbtnType, btnId);
+        } catch (error) {
+            customAlert({
+                Type: 3,
+                Message: "Action Not define",
+            })
+        }
+
+    };
+
+    function viewHandler(rowData, downbtnType, btnId) {
+
+        try {
+
+            let config = { viewId: rowData.id, subPageMode, btnId }
+            if (viewBtnFunc) {
+                viewBtnFunc({ ...config })
+            }
+
         } catch (error) {
             customAlert({
                 Type: 3,
@@ -144,6 +166,7 @@ export const listPageActionsButtonFunc = (props) => {
             ),
 
         formatter: (__cell, rowData, __key, formatExtra) => {
+
             let { listBtnLoading } = formatExtra;
             let forceEditHide = rowData.forceEditHide;
             let forceDeleteHide = rowData.forceDeleteHide;
@@ -203,23 +226,52 @@ export const listPageActionsButtonFunc = (props) => {
 
                                 (userAccState.RoleAccess_IsView)  // ** condition :3
                                     ?
-                                    <Button
-                                        type="button"
-                                        disabled={listBtnLoading}
-                                        className={editSelfBtnCss}
-                                        id={`btn-edit-${rowData.id}`}
-                                        title={`View ${ButtonMsgLable}`}
-                                        onClick={() => {
-                                            const btnId = `btn-view-${rowData.id}`
-                                            editHandler(rowData, mode.view, btnId)
-                                        }}
-                                    >
-                                        {(listBtnLoading === `btn-view-${rowData.id}`) ?
-                                            <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                            : <i className="bx bxs-show font-size-16 "></i>
-                                        }
 
-                                    </Button>
+                                    (viewBtnFunc) ?
+                                        <Button
+                                            type="button"
+                                            disabled={listBtnLoading}
+                                            className={editSelfBtnCss}
+                                            id={`btn-view-${rowData.id}`}
+                                            title={`View ${ButtonMsgLable}`}
+                                            onClick={() => {
+                                                const btnId = `btn-view-${rowData.id}`
+                                                viewHandler(rowData, mode.view, btnId)
+
+                                            }}
+                                        >
+                                            {(listBtnLoading === `btn-view-${rowData.id}`) ?
+                                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                                : <i className="bx bxs-show font-size-16 "></i>
+                                            }
+
+                                        </Button>
+                                        :
+                                        <Button
+                                            type="button"
+                                            disabled={listBtnLoading}
+                                            className={editSelfBtnCss}
+                                            id={`btn-edit-${rowData.id}`}
+                                            title={`View ${ButtonMsgLable}`}
+                                            onClick={() => {
+                                                const btnId = `btn-view-${rowData.id}`
+                                                editHandler(rowData, mode.view, btnId)
+                                            }}
+                                        >
+                                            {(listBtnLoading === `btn-view-${rowData.id}`) ?
+                                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                                : <i className="bx bxs-show font-size-16 "></i>
+                                            }
+
+                                        </Button>
+
+
+
+
+
+
+
+
 
                                     :// btn dissable only show body
                                     <Button
