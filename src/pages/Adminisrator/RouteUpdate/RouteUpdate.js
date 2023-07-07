@@ -114,7 +114,7 @@ const RouteUpdate = (props) => {
                 })
             }
             else {
-                dispatch(RouteUpdateListAPI())
+                // dispatch(RouteUpdateListAPI())
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
