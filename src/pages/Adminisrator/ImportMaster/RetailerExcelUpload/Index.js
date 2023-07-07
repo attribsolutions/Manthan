@@ -80,7 +80,7 @@ const RetailerExcelUpload = (props) => {
         dispatch(getPartyTypelist());
         goButtonHandler()
         if (!userAdminRole) {
-            SetPartySelect({ value: _cfunc.loginPartyID })
+            SetPartySelect({ value: _cfunc.loginPartyID() })
         }
         return () => {
             dispatch(GoButton_ImportFiledMap_AddSuccess([]));
