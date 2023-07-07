@@ -325,7 +325,7 @@ export const listPageActionsButtonFunc = (props) => {
                             id={`btn-otherBtn_1-${rowData.id}`}
                             className={makeBtnCss}
                             disabled={listBtnLoading}
-                            title={`otherBtn_1 ${ButtonMsgLable}`}
+                            title={`Update ${ButtonMsgLable}`}
                             onClick={() => {
                                 const btnId = `btn-otherBtn_1-${rowData.id}`
                                 otherBtn_1Func(rowData, mode.copy, btnId)
