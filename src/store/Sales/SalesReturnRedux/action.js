@@ -20,7 +20,7 @@ export const SalesReturnAddBtn_Action = config => ({
 
 export const SalesReturnAddBtn_Action_Succcess = (items) => ({
   type: SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS,
-  items,
+  payload: items,
 });
 
 // Invoice number dropdown API

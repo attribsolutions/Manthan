@@ -1,5 +1,7 @@
 import {
+    DELETE_ITEM_ID,
     DELETE_ITEM_ID_SUCCESS,
+    EDIT_ITEM_ID,
     EDIT_ITEM_ID_SUCCESS,
     GET_BASEUNIT_FOR_DROPDOWN_SUCCESS,
     GET_BRANDTAG_API_SUCCESS,
@@ -45,6 +47,7 @@ const INIT_STATE = {
     BrandTagList: [],
     saveBtnloading: false,
     listBtnLoading: false,
+    loading: false
 
 };
 
@@ -55,14 +58,14 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
         case GET_ITEM_LIST_API:
             return {
                 ...state,
-                listBtnLoading: true,
+                loading: true,
             }
 
         case GET_ITEM_LIST_API_SUCCESS:
             return {
                 ...state,
                 ItemList: action.payload,
-                listBtnLoading: false,
+                loading: false,
 
             }
 
@@ -107,17 +110,33 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
             };
 
         // delete api
+
+        case DELETE_ITEM_ID:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            };
+
         case DELETE_ITEM_ID_SUCCESS:
             return {
                 ...state,
                 deleteMsg: action.payload,
+                listBtnLoading: false
             };
 
+
         // edit api
+        case EDIT_ITEM_ID:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            };
+
         case EDIT_ITEM_ID_SUCCESS:
             return {
                 ...state,
                 editData: action.payload,
+                listBtnLoading:false
             };
 
         // update api
@@ -194,6 +213,7 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 saveBtnloading: false,
                 listBtnLoading: false,
+                loading:false
             };
 
         case "RESET_ALL":

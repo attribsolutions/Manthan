@@ -23,7 +23,7 @@ const GroupList = () => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      listBtnLoading: state.PartyTypeReducer.listBtnLoading,
+      listBtnLoading: state.GroupReducer.listBtnLoading,
       tableList: state.GroupReducer.groupList,
       editData: state.GroupReducer.editData,
       updateMsg: state.GroupReducer.updateMsg,
@@ -54,7 +54,7 @@ const GroupList = () => {
   return (
     <React.Fragment>
       {
-        reducers.listBtnLoading ?
+        reducers.loading ?
           <Listloader />
           :
           (pageField) ?

@@ -13,12 +13,14 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const ModulesList = () => {
 
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
+            listBtnLoading: state.Modules.listBtnLoading,
             tableList: state.Modules.modulesList,
             updateMsg: state.Modules.updateMessage,
             editData: state.Modules.editData,
@@ -46,21 +48,24 @@ const ModulesList = () => {
         dispatch(getModuleList());
     }, []);
 
-    const { pageField ,userAccess=[]} = reducers
+    const { pageField } = reducers
 
     return (
         <React.Fragment>
             {
-                (pageField) ?
-                    <CommonListPage
-                        action={action}
-                        reducers={reducers}
-                        MasterModal={Modules}
-                        masterPath={url.MODULE}
-                        ButtonMsgLable={"Module"}
-                        deleteName={"Name"}
-                    />
-                    : null
+                reducers.loading ?
+                    <Listloader />
+                    :
+                    (pageField) ?
+                        <CommonListPage
+                            action={action}
+                            reducers={reducers}
+                            MasterModal={Modules}
+                            masterPath={url.MODULE}
+                            ButtonMsgLable={"Module"}
+                            deleteName={"Name"}
+                        />
+                        : <Listloader />
             }
         </React.Fragment>
     )

@@ -14,6 +14,7 @@ import {
     saveBankMaster_Success,
     updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 
 const BankList = () => {
@@ -22,6 +23,7 @@ const BankList = () => {
 
     const reducers = useSelector(
         (state) => ({
+            listBtnLoading: state.BankReducer.listBtnLoading,
             tableList: state.BankReducer.BankList,
             postMsg: state.BankReducer.postMsg,
             editData: state.BankReducer.editMsg,
@@ -49,11 +51,14 @@ const BankList = () => {
         dispatch(getBanklist());
     }, []);
 
-    const { pageField, userAccess = [] } = reducers;
+    const { pageField} = reducers;
 
     return (
         <React.Fragment>
             {
+                 reducers.loading ?
+                 <Listloader />
+                 :
                 (pageField) ?
                     <CommonListPage
                         action={action}
@@ -63,7 +68,7 @@ const BankList = () => {
                         ButtonMsgLable={"Bank"}
                         deleteName={"Name"}
                     />
-                    : null
+                    : <><Listloader /></>
             }
         </React.Fragment>
     )

@@ -320,7 +320,7 @@ const GRNAdd3 = (props) => {
             let sum = 0
             let inValidMsg = []
             grnItemTableList.forEach(i => {
-                debugger
+                
 
                 if (!(i.Quantity > 0)) {
                     inValidMsg.push({ [i.ItemName]: "This Item Quantity Is Require..." });

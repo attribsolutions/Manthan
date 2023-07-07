@@ -25,6 +25,7 @@ const SubGroupList = () => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.SubGroupReducer.listBtnLoading,
+      loading: state.SubGroupReducer.loading,
       tableList: state.SubGroupReducer.SubgroupList,
       editData: state.SubGroupReducer.editData,
       updateMsg: state.SubGroupReducer.updateMsg,

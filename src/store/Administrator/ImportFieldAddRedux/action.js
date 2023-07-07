@@ -10,7 +10,8 @@ import {
   SAVE_IMPORT_FIELD_ADD,
   SAVE_IMPORT_FIELD_ADD_SUCCESS,
   UPDATE_IMPORT_FIELD_ADD,
-  UPDATE_IMPORT_FIELD_ADD_SUCCESS
+  UPDATE_IMPORT_FIELD_ADD_SUCCESS,
+  IMPORT_FIELD_ADD_API_ERROR_ACTION
 } from "./actionType";
 
 
@@ -74,6 +75,9 @@ export const get_ImportExcelType_Success = (resp) => ({
   payload: resp
 });
 
+export const ImportFieldAddApiErrorAction = () => ({
+  type: IMPORT_FIELD_ADD_API_ERROR_ACTION,
+})
 
 
 

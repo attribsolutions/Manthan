@@ -85,7 +85,6 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
         return {
           ...state,
           listBtnLoading: action.config.btnId,
-          deleteMessage: action.payload
         };
 
 

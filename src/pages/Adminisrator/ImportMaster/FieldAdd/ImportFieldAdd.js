@@ -58,7 +58,7 @@ const ImportFieldAdd = (props) => {
 
     const fileds = {
         id: "",
-        ImportExcelType: '',
+        ImportExcelTypeName: "",
         FieldName: "",
         ControlTypeName: "",
         FieldValidationName: "",
@@ -144,18 +144,20 @@ const ImportFieldAdd = (props) => {
 
             if (hasEditVal) {
 
-                const { id, FieldName, ControlTypeName, ControlTypeID, IsCompulsory, FieldValidationName, FieldValidationID } = hasEditVal
+                const { id, FieldName, ControlTypeName, ControlTypeID, IsCompulsory, FieldValidationName, FieldValidationID, ImportExcelTypeName,ImportExcelTypeID } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.FieldName.valid = true;
                 hasValid.ControlTypeName.valid = true;
                 hasValid.IsCompulsory.valid = true;
                 hasValid.FieldValidationName.valid = true;
+                hasValid.ImportExcelTypeName.valid = true;
 
                 values.FieldName = FieldName;
                 values.ControlTypeName = { label: ControlTypeName, value: ControlTypeID };
                 values.IsCompulsory = IsCompulsory;
                 values.FieldValidationName = { label: FieldValidationName, value: FieldValidationID };
+                values.ImportExcelTypeName = { label: ImportExcelTypeName, value: ImportExcelTypeID };
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.FieldName))
@@ -255,7 +257,7 @@ const ImportFieldAdd = (props) => {
                     FieldName: values.FieldName,
                     IsCompulsory: values.IsCompulsory,
                     ControlType: values.ControlTypeName.value,
-                    ImportExcelType: values.ImportExcelType.value,
+                    ImportExcelType: values.ImportExcelTypeName.value,
                     FieldValidation: values.FieldValidationName.value,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
@@ -296,10 +298,10 @@ const ImportFieldAdd = (props) => {
                                                 <CardBody className="c_card_body">
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label>{fieldLabel.ImportExcelType} </Label>
+                                                            <Label>{fieldLabel.ImportExcelTypeName} </Label>
                                                             <Select
-                                                                name="ImportExcelType"
-                                                                value={values.ImportExcelType}
+                                                                name="ImportExcelTypeName"
+                                                                value={values.ImportExcelTypeName}
                                                                 autoFocus={true}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
@@ -309,8 +311,8 @@ const ImportFieldAdd = (props) => {
                                                                 options={importExcelType_Options}
                                                                 onChange={controlTypeHandler}
                                                             />
-                                                            {isError.ImportExcelType.length > 0 && (
-                                                                <span className="text-danger f-8"><small>{isError.ImportExcelType}</small></span>
+                                                            {isError.ImportExcelTypeName.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.ImportExcelTypeName}</small></span>
                                                             )}
                                                         </FormGroup>
                                                     </Row>
@@ -391,7 +393,7 @@ const ImportFieldAdd = (props) => {
                                                         </Row>
                                                     </FormGroup>
 
-                                                    <FormGroup >
+                                                    <FormGroup>
                                                         <Row >
                                                             <Col sm={2}>
                                                                 <SaveButton pageMode={pageMode}

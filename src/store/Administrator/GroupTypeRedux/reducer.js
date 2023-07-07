@@ -20,6 +20,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
+  loading:false
 }
 
 const GroupTypeReducer = (state = INIT_STATE, action) => {
@@ -28,7 +29,7 @@ const GroupTypeReducer = (state = INIT_STATE, action) => {
     case GET_GROUP_TYPES_LIST:
       return {
         ...state,
-        listBtnLoading: true,
+        loading: true,
 
       }
 
@@ -36,7 +37,7 @@ const GroupTypeReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         GroupType: action.payload,
-        listBtnLoading: false,
+        loading: false,
 
       }
 
@@ -88,7 +89,6 @@ const GroupTypeReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         listBtnLoading: action.config.btnId,
-        deleteMessage: action.payload,
       }
 
     case DELETE_GROUP_TYPE_ID_SUCCESS:
@@ -103,6 +103,7 @@ const GroupTypeReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
 
 

@@ -47,13 +47,14 @@ function* delete_SalesReturn_ID_GenFunc({ config }) {
 }
 function* addButton_saleReturn_GenFunc({ config }) {
     try {
-        const { jsonBody, InvoiceId, byType } = config;
-
-        if (byType === "itemWise") {
+        const { jsonBody, InvoiceId, returnMode } = config;
+        
+        if (returnMode === 2) {//returnMode 1 = "itemWise"
             const response = yield call(apiCall.SalesReturn_add_button_api_For_Item, jsonBody);
+            
             yield put(action.SalesReturnAddBtn_Action_Succcess(response));
         }
-        else if (byType == "invoiceWise") {
+        else {//returnMode 2 = "invoiceWise"
             let response = yield call(apiCall.SalesReturn_add_button_api_For_Invoice, InvoiceId);
             response.Data = response.Data.InvoiceItems
             yield put(action.SalesReturnAddBtn_Action_Succcess(response))

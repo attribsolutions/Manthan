@@ -5,7 +5,8 @@ import {
     Label,
     Input,
     Row,
-    Button
+    Button,
+    Spinner
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
@@ -21,23 +22,22 @@ import {
     resetFunction,
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, SaveButton } from "../../../../components/Common/CommonButton";
+import { Change_Button, C_Button, Loader, SaveButton, SelectBoxLoader } from "../../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../../routes/index"
 import { Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success } from "../../../../store/Sales/SalesReturnRedux/action";
-import CustomTable2 from "../../../../CustomTable2/Table";
+import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess } from "../../../../store/Sales/SalesReturnRedux/action";
 import "./salesReturn.scss";
 import { CInput, C_DatePicker } from "../../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../../store/Administrator/PartyItemsRedux/action";
-import { SalesReturn_add_button_api_For_Invoice, SalesReturn_add_button_api_For_Item } from "../../../../helpers/backend_helper";
-import { salesReturnCalculate, calculateSalesReturnFunc, return_discountCalculate_Func } from "./SalesCalculation";
+import { return_discountCalculate_Func } from "./SalesCalculation";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import { components } from "react-select/dist/react-select.cjs.prod";
 
 
 
@@ -64,7 +64,7 @@ const SalesReturn = (props) => {
 
     const [TableArr, setTableArr] = useState([]);
 
-    const [returnMode, setrRturnMode] = useState(0);
+    const [returnMode, setReturnMode] = useState(0);
     const [imageTable, setImageTable] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -76,9 +76,11 @@ const SalesReturn = (props) => {
         InvoiceNo,
         pageField,
         userAccess,
+        addButtonData,
         saveBtnloading,
+        addBtnLoading,
     } = useSelector((state) => ({
-        saveBtnloading: state.SalesReturnReducer.saveBtnloading,
+        addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.RetailerList,
         ItemList: state.PartyItemsReducer.partyItem,
@@ -86,6 +88,8 @@ const SalesReturn = (props) => {
         InvoiceNo: state.SalesReturnReducer.InvoiceNo,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+        saveBtnloading: state.SalesReturnReducer.saveBtnloading,
+        addBtnLoading: state.SalesReturnReducer.addBtnLoading,
     }));
 
     useEffect(() => {
@@ -106,20 +110,19 @@ const SalesReturn = (props) => {
 
     useEffect(() => {
         if (TableArr.length === 0) {
-            setrRturnMode(0)
+            setReturnMode(0)
         }
     }, [TableArr]);
 
     const location = { ...history.location }
-    // const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
-    // userAccess useEffect
-    useEffect(() => {
+
+    useEffect(() => {// userAccess useEffect
         let userAcc = null;
         let locationPath = location.pathname;
         if (hasShowModal) {
@@ -134,8 +137,8 @@ const SalesReturn = (props) => {
         };
     }, [userAccess])
 
-    // Return Reason dropdown Values
-    useEffect(() => {
+
+    useEffect(() => {// Return Reason dropdown Values
         const jsonBody = JSON.stringify({
             Company: _cfunc.loginCompanyID(),
             TypeID: 8
@@ -182,6 +185,52 @@ const SalesReturn = (props) => {
         }
     }, [postMsg])
 
+    useEffect(() => {
+
+        if (addButtonData.StatusCode === 200 && addButtonData.Status === true) {
+            dispatch(SalesReturnAddBtn_Action_Succcess({ StatusCode: false }))
+            try {
+                const updateItemArr = [...TableArr];
+                let existingIds = updateItemArr.map(item => item.id);
+                let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
+
+
+                addButtonData.Data.forEach((i, keyIndex) => {
+
+                    const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
+                    const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
+                    const InvoiceQuantity = i.Quantity
+
+                    const newItemRow = {
+                        ...i,
+                        Quantity: '',
+                        InvoiceQuantity,
+                        id: nextId,
+                        MRPOptions: MRPOptions,
+                        GSTOptions: GSTOptions,
+                        // gstPercentage: i.GSTPercentage,
+                    }
+                    const caculate = return_discountCalculate_Func(newItemRow)
+                    newItemRow["roundedTotalAmount"] = caculate.roundedTotalAmount;
+                    updateItemArr.push(newItemRow);
+                    nextId++;
+                });
+
+                let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+                let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+                dispatch(BreadcrumbShowCountlabel(count_label));
+
+                setTableArr(updateItemArr);
+                setState((i) => {
+                    let a = { ...i }
+                    a.values.ItemName = ""
+                    a.hasValid.ItemName.valid = true;
+                    return a
+                })
+
+            } catch (error) { _cfunc.CommonConsole(error) }
+        }
+    }, [addButtonData])
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -207,8 +256,6 @@ const SalesReturn = (props) => {
         value: index.Invoice,
         label: index.FullInvoiceNumber,
     }));
-
-
 
 
     const pagesListColumns = [
@@ -273,7 +320,7 @@ const SalesReturn = (props) => {
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
-                                defaultValue={{ value: row.MRP, label: row.MRPValue }}
+                                defaultValue={(row.MRP === "") ? "" : { value: row.MRP, label: row.MRPValue }}
                                 isSearchable={true}
                                 isDisabled={returnMode === 1 && true}
                                 className="react-dropdown"
@@ -301,7 +348,7 @@ const SalesReturn = (props) => {
                     <Select
                         id={`GST${key}`}
                         name="GST"
-                        defaultValue={{ value: row.GST, label: row.GSTPercentage }}
+                        defaultValue={(row.GST === "") ? "" : { value: row.GST, label: row.GSTPercentage }}
                         isSearchable={true}
                         isDisabled={returnMode === 1 && true}
                         className="react-dropdown"
@@ -342,10 +389,9 @@ const SalesReturn = (props) => {
                                 </div>
                                 <div className="child">
                                     <CInput
-                                        className="input"
-                                        placeholder="Dist."
-                                        style={{ textAlign: "right" }}
                                         type="text"
+                                        placeholder="Dist."
+                                        className="text-end"
                                         cpattern={decimalRegx}
                                         onChange={(event) => {
                                             row.Discount = event.target.value;
@@ -360,7 +406,7 @@ const SalesReturn = (props) => {
                                     defaultValue={row.Rate}
                                     placeholder="Enter Rate"
                                     type="text"
-                                    cpattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
+                                    cpattern={decimalRegx}
                                     className="text-end"
                                     onChange={(event) => {
                                         row.Rate = event.target.value
@@ -501,7 +547,6 @@ const SalesReturn = (props) => {
     ];
 
     const totalAmountCalcuationFunc = (row, TablelistArray = []) => {
-        debugger
         const caculate = return_discountCalculate_Func(row)
         row.roundedTotalAmount = caculate.roundedTotalAmount;
 
@@ -527,16 +572,16 @@ const SalesReturn = (props) => {
         })
     }
 
-    const AddPartyHandler = async (e, type) => {
+    const AddPartyHandler = async (byType) => {
 
         const invalidMsg1 = []
-        if ((values.ItemName === '') && (type === 'add')) {
+        if ((values.ItemName === '') && (byType === 'ItemWise')) {
             invalidMsg1.push(`Select Item Name`)
         }
-        if ((values.InvoiceNumber === '') && (values.Customer === '') && (type === 'Select')) {
+        if ((values.InvoiceNumber === '') && (values.Customer === '') && (byType === 'InvoiceWise')) {
             invalidMsg1.push(`Select Retailer.`)
         }
-        else if ((values.InvoiceNumber === '') && (type === 'Select')) {
+        else if ((values.InvoiceNumber === '') && (byType === 'InvoiceWise')) {
             invalidMsg1.push(`Select Invoice No.`)
         }
 
@@ -548,69 +593,16 @@ const SalesReturn = (props) => {
             return
         }
 
-        let apiResponse;
-        try {
+        const jsonBody = {
+            "ItemID": values.ItemName.value,
+            "BatchCode": values.BatchCode,
+            "Customer": values.Customer.value
+        }
 
-            if (returnMode === 2) {
-
-                apiResponse = await SalesReturn_add_button_api_For_Item({//Post API Method
-                    "ItemID": values.ItemName.value,
-                    "BatchCode": values.BatchCode
-                })
-
-            }
-            else {
-                apiResponse = await SalesReturn_add_button_api_For_Invoice(values.InvoiceNumber.value)
-                apiResponse.Data = apiResponse.Data.InvoiceItems
-            }
-            if (apiResponse.StatusCode == 204) {
-                customAlert({
-                    Type: 3,
-                    Message: JSON.stringify(apiResponse.Message)
-                })
-                return
-            }
-            const updateItemArr = [...TableArr];
-            let existingIds = updateItemArr.map(item => item.id);
-            let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
-
-
-            apiResponse.Data.forEach((i, keyIndex) => {
-                const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
-                const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
-                const defaultGST = { value: i.GST, label: i.GSTPercentage }
-                const defaultMRP = { value: i.MRP, label: i.MRPValue }
-                const InvoiceQuantity = i.Quantity
-
-                const newItemRow = {
-                    ...i,
-                    Quantity: '',
-                    InvoiceQuantity,
-                    id: nextId,
-                    MRPOptions: MRPOptions,
-                    GSTOptions: GSTOptions,
-                    defaultGST: defaultGST,
-                    defaultMRP: defaultMRP,
-                    gstPercentage: i.GSTPercentage,
-                }
-                const caculate = return_discountCalculate_Func(newItemRow)
-                newItemRow["roundedTotalAmount"] = caculate.roundedTotalAmount;
-                updateItemArr.push(newItemRow);
-                nextId++;
-            });
-
-            let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-            let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
-            dispatch(BreadcrumbShowCountlabel(count_label));
-
-            setTableArr(updateItemArr);
-            setState((i) => {
-                let a = { ...i }
-                a.values.ItemName = ""
-                a.hasValid.ItemName.valid = true;
-                return a
-            })
-        } catch (error) { _cfunc.CommonConsole(error) }
+        const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
+        const nrwReturnMode = (byType === 'ItemWise') ? 2 : 1
+        dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
+        setReturnMode(nrwReturnMode)
     }
 
     const RetailerHandler = (event) => {
@@ -642,10 +634,10 @@ const SalesReturn = (props) => {
             return
         }
         onChangeSelect({ hasSelect, evn, state, setState, })
-        setrRturnMode(2)
+        setReturnMode(2)
     }
-    // image onchange handler
-    const imageSelectHandler = async (event, row) => {
+
+    const imageSelectHandler = async (event, row) => { // image onchange handler
 
         const file = event.target.files[0]
         const base64 = await convertBase64(file);
@@ -654,8 +646,8 @@ const SalesReturn = (props) => {
         setImageTable(ImageUpload)
     }
 
-    // image convert in string
-    const convertBase64 = (file) => {
+
+    const convertBase64 = (file) => {// image convert in string
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader()
             fileReader.readAsDataURL(file);
@@ -691,7 +683,41 @@ const SalesReturn = (props) => {
         let grand_total = 0;
         const invalidMessages = [];
 
-        const ReturnItems = TableArr.map((i) => {
+        const filterData = TableArr.filter((i) => {
+            if (i.Quantity > 0) {
+                let msgString = ' Select';
+
+                if (i.MRP === '') { msgString = msgString + ', ' + "MRP" };
+                if (i.GST === '') { msgString = msgString + ', ' + "GST" };
+
+                if (!(Number(i.Rate) > 0)) { msgString = msgString + ', ' + "Rate" };
+
+                if (!i.defaultReason) { msgString = msgString + ', ' + "Return Reason" };
+
+                if (((!i.defaultReason) || (i.MRP === '') || (i.GST === '') || !(Number(i.Rate) > 0))) {
+                    invalidMessages.push({ [i.ItemName]: msgString });
+                }
+                return true
+            }
+        });
+
+        if (invalidMessages.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: invalidMessages,
+            });
+            return;
+        }
+
+        if (filterData.length === 0) {
+            customAlert({
+                Type: 4,
+                Message: "Please Enter One Item Quantity",
+            });
+            return;
+        }
+
+        const ReturnItems = filterData.map((i) => {
             if (!i.defaultReason) {
                 invalidMessages.push({ [i.ItemName]: 'Select Return Reason' });
             }
@@ -731,23 +757,9 @@ const SalesReturn = (props) => {
             };
         });
 
-        const filterData = ReturnItems.filter((i) => i.Quantity > 0);
 
-        if (invalidMessages.length > 0) {
-            customAlert({
-                Type: 4,
-                Message: invalidMessages,
-            });
-            return;
-        }
 
-        if (filterData.length === 0) {
-            customAlert({
-                Type: 4,
-                Message: "Please Enter One Item Quantity",
-            });
-            return;
-        }
+
 
         try {
             const jsonBody = JSON.stringify({
@@ -761,7 +773,7 @@ const SalesReturn = (props) => {
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-                ReturnItems: filterData,
+                ReturnItems: ReturnItems,
             });
 
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
@@ -805,6 +817,7 @@ const SalesReturn = (props) => {
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
+                                                isDisabled={((TableArr.length > 0)) ? true : false}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={customerOptions}
@@ -897,9 +910,14 @@ const SalesReturn = (props) => {
                                         <Col sm="1" className="mx-6 mt-1">
                                             {
                                                 (!(returnMode === 1)) &&
-                                                < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
-                                                    onClick={(e,) => AddPartyHandler(e, "add")}
-                                                > Add</Button>
+
+                                                <C_Button
+                                                    type="button"
+                                                    loading={addBtnLoading}
+                                                    color="btn btn-outline-primary border-1 font-size-12 text-center"
+                                                    onClick={() => AddPartyHandler("ItemWise")}>
+                                                    Add
+                                                </C_Button>
                                             }
 
                                         </Col>
@@ -924,7 +942,7 @@ const SalesReturn = (props) => {
                                                 options={InvoiceNo_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
-                                                    setrRturnMode(1)
+                                                    setReturnMode(1)
                                                 }}
                                             />
 
@@ -942,9 +960,13 @@ const SalesReturn = (props) => {
                                                 }} />
                                                 :
                                                 (!(returnMode === 2)) &&
-                                                <Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
-                                                    onClick={(e,) => AddPartyHandler(e, "Select")}
-                                                >        <i > </i>Select</Button>
+                                                <C_Button
+                                                    type="button"
+                                                    loading={addBtnLoading}
+                                                    color="btn btn-outline-primary border-1 font-size-12 text-center"
+                                                    onClick={() => AddPartyHandler("InvoiceWise")}>
+                                                    Select
+                                                </C_Button>
 
                                             }
                                         </Col>
@@ -995,7 +1017,9 @@ const SalesReturn = (props) => {
                             TableArr.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
+                                        <SaveButton
+                                            pageMode={pageMode}
+                                            forceDisabled={addBtnLoading}
                                             loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
@@ -1020,3 +1044,339 @@ const SalesReturn = (props) => {
 };
 
 export default SalesReturn
+
+
+
+
+
+
+// import React, { useState } from "react";
+// import Select from "react-select";
+// import { Spinner, Button } from "reactstrap";
+
+const customStyles = {
+    control: (provided) => ({
+        ...provided,
+        minHeight: 30,
+        border: "1px solid #ccc",
+        borderRadius: 4,
+        display: "flex",
+        alignItems: "center",
+    }),
+    dropdownIndicator: (provided) => ({
+        ...provided,
+        padding: 4,
+    }),
+};
+
+const options = [
+    { value: "option1", label: "Option 11111111111111111111111111111111111133333332" },
+    { value: "option2", label: "Option 2" },
+    { value: "option3", label: "Option 3" },
+];
+
+const CustomSelect1 = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const handleSelectChange = (selectedOption) => {
+        setSelectedOption(selectedOption);
+    };
+
+    const handleButtonClick = (e) => {
+        e.preventDefault()
+        setIsLoading(true);
+
+        // Simulating an API call
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
+    };
+    const { DropdownIndicator } = components;
+    return (
+        <div>
+            <Select
+                // styles={customStyles}
+                options={options}
+                value={selectedOption}
+                onChange={handleSelectChange}
+                isDisabled={isLoading}
+                components={{
+                    DropdownIndicator: (props) => (
+                        <div style={{ position: "relative" }}>
+                            {isLoading ? (
+                                <div style={{ display: "inline-block", marginRight: "5px" }}>
+                                    <SelectBoxLoader />
+                                </div>
+                            ) : null}
+                            <DropdownIndicator {...props} />
+                        </div>
+
+                    ),
+                }}
+            />
+
+            <Button onClick={handleButtonClick} disabled={isLoading}>
+                {isLoading ? "Loading..." : "Submit"}
+            </Button>
+        </div>
+    );
+};
+
+
+
+
+
+const CustomSelect = () => {
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSelectChange = (selectedOption) => {
+        setSelectedOption(selectedOption);
+    };
+
+    const handleClearClick = () => {
+        debugger
+        setSelectedOption(null);
+    };
+    const handleButtonClick = (e) => {
+        e.preventDefault()
+        setIsLoading(true);
+
+        // Simulating an API call
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
+    };
+    const { DropdownIndicator } = components;
+
+    const ClearIndicator = (props) => {
+        return (
+            <div style={{ position: "relative" }}>
+                {isLoading ? (
+                    <div style={{ display: "inline-block", marginRight: "5px" }}>
+                        <SelectBoxLoader />
+                    </div>
+                ) : <div className="d-flex">
+
+                    <div>
+                        {(selectedOption && !props.isMulti) && (
+                            <button
+                                className="clear-button"
+                                onClick={handleClearClick}
+                                style={{
+                                    position: "relative",
+                                    top: "50%",
+                                    marginLeft: "2px",
+                                    marginRight: "-7px",
+                                    transform: "translateY(-50%)",
+                                    border: "none",
+                                    background: "none",
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: "20px",
+                                    height: "20px",
+                                    borderRadius: "50%",
+                                    fontSize: "12px",
+                                    fontWeight: "bold",
+                                    color: "#333",
+                                    boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
+
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.target.style.backgroundColor = "#eee";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.backgroundColor = "";
+                                }}
+                            >
+                                X
+                            </button>
+                        )}
+                    </div>
+                    <div>
+                        <DropdownIndicator {...props} />
+                    </div>
+                </div>}
+
+            </div>
+        );
+    };;
+
+    return (
+        <div>
+            <Select
+                options={options}
+                value={selectedOption}
+                isMulti={false}
+                onChange={handleSelectChange}
+                components={{ DropdownIndicator: ClearIndicator }}
+            />
+            <Button onClick={handleButtonClick} disabled={isLoading}>
+                {isLoading ? "Loading..." : "Submit"}
+            </Button>
+        </div>
+    );
+};
+
+const CustomSelect3 = () => {
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const handleSelectChange = (selectedOption) => {
+        setSelectedOption(selectedOption);
+    };
+
+    const handleClearClick = () => {
+        setSelectedOption(null);
+    };
+
+    const { DropdownIndicator, ClearIndicator, IndicatorSeparator } = components;
+    debugger
+    // const ClearIndicator1 = (props) => {
+    //     return (
+    //         <div style={{ position: "relative" }}>
+    //             <div className="d-flex">
+    //                 <div>
+    //                     {selectedOption && (
+    //                         <button
+    //                             className="clear-button"
+    //                             onClick={handleClearClick}
+    //                             style={{
+    //                                 position: "relative",
+    //                                 top: "50%",
+    //                                 marginLeft: "2px",
+    //                                 marginRight: "-7px",
+    //                                 transform: "translateY(-50%)",
+    //                                 border: "none",
+    //                                 background: "none",
+    //                                 cursor: "pointer",
+    //                                 display: "flex",
+    //                                 alignItems: "center",
+    //                                 justifyContent: "center",
+    //                                 width: "20px",
+    //                                 height: "20px",
+    //                                 borderRadius: "50%",
+    //                                 fontSize: "12px",
+    //                                 fontWeight: "bold",
+    //                                 color: "#333",
+    //                                 boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
+
+    //                             }}
+    //                             onMouseEnter={(e) => {
+    //                                 e.target.style.backgroundColor = "#eee";
+    //                             }}
+    //                             onMouseLeave={(e) => {
+    //                                 e.target.style.backgroundColor = "";
+    //                             }}
+    //                         >
+    //                             X
+    //                         </button>
+    //                     )}
+    //                 </div>
+    //                 <div>
+    //                     <DropdownIndicator {...props} />
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     );
+    // };;
+
+    return (
+        <div>
+            <Select
+                options={options}
+                value={selectedOption}
+                onChange={handleSelectChange}
+                components={{
+
+                    DropdownIndicator: (props) => <div>
+                        <DropdownIndicator {...props} />
+                    </div>,
+                    ClearIndicator: (props) => <ClearIndicator {...props} />,
+                    IndicatorSeparator: (props) => <IndicatorSeparator {...props} />
+
+                }}
+            />
+            <Button onClick={handleClearClick} disabled={!selectedOption}>
+                Clear Selection
+            </Button>
+        </div>
+    );
+};
+
+
+const CustomSelect5 = () => {
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const handleSelectChange = (selectedOption) => {
+        setSelectedOption(selectedOption);
+    };
+
+    const handleClearClick = () => {
+        setSelectedOption(null);
+    };
+
+    const { DropdownIndicator, ClearIndicator, IndicatorSeparator } = components;
+
+    return (
+        <div>
+            <Select
+                options={options}
+                value={selectedOption}
+                onChange={handleSelectChange}
+                components={{
+                    DropdownIndicator,
+                    LoadingIndicator: true,
+                    ClearIndicator: (props) => (
+                        <button
+                            className="clear-button"
+                            onClick={handleClearClick}
+                            style={{
+                                position: "absolute",
+                                top: "50%",
+                                right: "30px",
+                                transform: "translateY(-50%)",
+                                border: "none",
+                                background: "none",
+                                cursor: "pointer",
+                                padding: "0",
+                                margin: "0",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                width: "20px",
+                                height: "20px",
+                                borderRadius: "50%",
+                                fontSize: "12px",
+                                fontWeight: "bold",
+                                color: "#333",
+                                boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
+                                zIndex: "1",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = "#eee";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = "transparent";
+                            }}
+                        >
+                            X
+                        </button>
+                    ),
+                    IndicatorSeparator,
+                }}
+                styles={{
+                    control: (provided) => ({
+                        ...provided,
+                        zIndex: "2",
+                    }),
+                }}
+            />
+            <Button onClick={handleClearClick} disabled={!selectedOption}>
+                Clear Selection
+            </Button>
+        </div>
+    );
+};

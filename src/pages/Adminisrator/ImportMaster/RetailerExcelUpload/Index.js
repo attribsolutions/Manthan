@@ -78,16 +78,16 @@ const RetailerExcelUpload = (props) => {
         dispatch(priceListByPartyActionSuccess([]))
         dispatch(getPartyListAPI());
         dispatch(getPartyTypelist());
-
         goButtonHandler()
-
+        if (!userAdminRole) {
+            SetPartySelect({ value: _cfunc.loginPartyID() })
+        }
         return () => {
             dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         }
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
 
@@ -127,7 +127,7 @@ const RetailerExcelUpload = (props) => {
             setPreViewDivShow(false)
             SetPartySelect('')
 
-           
+
         }
         else if (postMsg.Status === true) {
             dispatch(RetailerExcelUpload_save_action_Success({ Status: false }))
@@ -139,7 +139,7 @@ const RetailerExcelUpload = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-
+        debugger
         if ((partyTypes.length > 0)) {
             let isRetailer = partyTypes.find(i => (i.IsRetailer))
             if (!(isRetailer === undefined)) {
@@ -259,6 +259,7 @@ const RetailerExcelUpload = (props) => {
 
 
     const uploadSaveHandler = (event) => {
+        debugger
         let validMsg = []
         if ((partySelect === "")) {
             validMsg.push({ Msg: "Please Select Party." })
@@ -343,6 +344,30 @@ const RetailerExcelUpload = (props) => {
                                         </div>
                                         :
                                         <div >
+                                            <div className="px-2 c_card_header text-black" >
+                                                <div className="   c_card_filter text-black" style={{ paddingBottom: "5px", paddingTop: "7px" }} >
+
+                                                    <row className='mb-2'>
+                                                        < Col md={6}>
+                                                            <FormGroup className=" row px-1">
+                                                                <Label className="col col-sm-1  mt-2" style={{ width: "83px" }}>PriceList </Label>
+                                                                <Col md={5}>
+                                                                    <Input
+                                                                        value={priceListSelect.label}
+                                                                        autoComplete={"off"}
+                                                                        placeholder="Select..."
+                                                                        onClick={priceListOnClick}
+                                                                    />
+                                                                    <PriceDropOptions
+                                                                        data={priceListByPartyType}
+                                                                        priceList={priceListSelect}
+                                                                        setPriceSelect={setPriceListSelect} />
+                                                                </Col>
+                                                            </FormGroup>
+                                                        </Col>
+                                                    </row>
+                                                </div>
+                                            </div>
                                             <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
                                         </div>}
 

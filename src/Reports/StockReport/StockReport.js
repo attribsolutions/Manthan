@@ -77,7 +77,7 @@ const StockReportMaster = (props) => {
     }, [])
 
     useEffect(() => {
-        debugger
+        
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
             customAlert({
                 Type: 3,
@@ -115,7 +115,7 @@ const StockReportMaster = (props) => {
             "Party": _cfunc.loginPartyID()
         });
         var ReportType = report.Stock
-        debugger
+        
         if (values.unit === "") {
             customAlert({
                 Type: 3,
