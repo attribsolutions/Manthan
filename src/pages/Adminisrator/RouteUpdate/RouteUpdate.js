@@ -33,6 +33,7 @@ import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions"
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 const RouteUpdate = (props) => {
@@ -105,31 +106,27 @@ const RouteUpdate = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(Post_RouteUpdateSuccess({ Status: false }))
             dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                // dispatch(RouteUpdateListAPI())
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.ROUTE_UPDATE,
-                }))
+                })
             }
         }
         else if (postMsg.Status === true) {
             dispatch(Post_RouteUpdateSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
@@ -176,7 +173,7 @@ const RouteUpdate = (props) => {
                 return (
                     <Select
                         classNamePrefix="select2-selection"
-                        defaultValue={!(row.Route > 0) ? { value: "", label: " select... " } : {
+                        defaultValue={!(row.Route > 0) ? "" : {
                             value: row.Route, label: row.RouteName
                         }}
                         options={RouteName_Options}

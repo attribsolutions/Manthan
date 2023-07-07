@@ -6,7 +6,7 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -98,6 +98,7 @@ const LoadingSheet = (props) => {
         dispatch(getVehicleList())
         dispatch(invoiceListGoBtnfilter())
         dispatch(getDriverList())
+        dispatch(BreadcrumbShowCountlabel(`${"Loading Count"} :0`))
     }, []);
 
     const location = { ...history.location }
@@ -454,50 +455,40 @@ const LoadingSheet = (props) => {
                             </div>
                         </div>
 
-                        <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
+                        <ToolkitProvider
+                            keyField={"id"}
+                            data={Data}
+                            columns={pagesListColumns}
+                            search
                         >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-                                    keyField="id"
-                                    data={Data}
-                                    columns={pagesListColumns}
-
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <div className="table">
+                            {(toolkitProps,) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive table">
                                                 <BootstrapTable
                                                     keyField={"id"}
-                                                    bordered={true}
-                                                    striped={false}
+                                                    id="table_Arrow"
                                                     selectRow={selectAllCheck()}
-                                                    noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
+                                                    classes={"table  table-bordered table-hover"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Record Not available
+                                                        </div>
+                                                    }
+                                                    onDataSizeChange={(e) => {
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    }}
                                                     {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
                                                 />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "Loading Sheet")}
                                                 {mySearchProps(toolkitProps.searchProps)}
                                             </div>
+                                        </Col>
+                                    </Row>
 
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
-                            )
-                            }
-
-                        </PaginationProvider>
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
                         {
                             Data.length > 0 ?
                                 <FormGroup>
