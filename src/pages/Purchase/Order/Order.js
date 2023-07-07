@@ -1126,9 +1126,9 @@ const Order = (props) => {
                                                         isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
                                                         // onChange={(e) => { setRouteSelect(e) }}
                                                         onChange={(e) => { RouteOnChange(e) }}
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
+                                                        // styles={{
+                                                        //     menu: provided => ({ ...provided, zIndex: 1 })
+                                                        // }}
                                                     />
 
                                                 </Col>

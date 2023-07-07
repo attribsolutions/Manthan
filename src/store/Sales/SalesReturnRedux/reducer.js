@@ -8,7 +8,8 @@ import {
     SALES_RUTURN_API_ERROR_ACTION,
     DELETE_SALES_RETURN_ID,
     SALES_RETURN_ADD_BUTTON_ACTION,
-    SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS
+    SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS,
+    INVOICE_NUMBER
 } from "./actionType"
 
 const INIT_STATE = {
@@ -21,6 +22,8 @@ const INIT_STATE = {
     deleteMsg: { Status: false },
     saveBtnloading: false,
     listBtnLoading: false,
+    invoiceNoDropDownLoading: false,
+
 }
 
 const SalesReturnReducer = (state = INIT_STATE, action) => {
@@ -39,9 +42,16 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 addButtonData: action.payload,
             }
 
+        case INVOICE_NUMBER:
+            return {
+                ...state,
+                invoiceNoDropDownLoading: true,
+            }
+
         case INVOICE_NUMBER_SUCCESS:
             return {
                 ...state,
+                invoiceNoDropDownLoading: false,
                 InvoiceNo: action.payload,
             }
 
@@ -91,6 +101,7 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 addBtnLoading: false,
                 saveBtnloading: false,
                 loading: false,
+                invoiceNoDropDownLoading: false,
                 listBtnLoading: false,
             };
         default:
