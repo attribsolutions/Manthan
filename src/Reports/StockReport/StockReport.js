@@ -132,6 +132,7 @@ const StockReport = (props) => {
                                     <C_DatePicker
                                         name='fromdate'
                                         value={fromdate}
+                                        disabled={true}
                                         onChange={fromdateOnchange}
                                     />
                                 </Col>
@@ -146,6 +147,7 @@ const StockReport = (props) => {
                                     <C_DatePicker
                                         nane='todate'
                                         value={todate}
+                                        disabled={true}
                                         onChange={todateOnchange}
                                     />
                                 </Col>
