@@ -175,14 +175,7 @@ export function Loader() {// linner component
   </div>
 
 }
-export function SelectBoxLoader() {// linner component
-  return <div className="dot-pulse">    
-    <div className="bounce1" style={{ background: "secondary", width: "8px", height: "8px" }}></div>
-    <div className="bounce2" style={{ background: "secondary", width: "8px", height: "8px" }}></div>
-    <div className="bounce3" style={{ background: "secondary", width: "8px", height: "8px" }}></div>
-  </div>
 
-}
 
 export function Listloader() {// common Listcomponent
   return <div id="api_spinner" >
