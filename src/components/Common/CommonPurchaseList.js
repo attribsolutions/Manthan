@@ -21,6 +21,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
+import OrderView from "../../pages/Purchase/Order/OrderView";
 
 let searchCount = 0;
 
@@ -61,6 +62,7 @@ const CommonPurchaseList = (props) => {
   const history = useHistory();
 
   const [userAccState, setUserAccState] = useState("");
+  const [modal_view, setmodal_view] = useState(false);
   const [modal_edit, setmodal_edit] = useState(false);
   // const [tableList, settableList] = useState([]);
   const {
@@ -74,7 +76,7 @@ const CommonPurchaseList = (props) => {
     listBtnLoading = false,
   } = props.reducers;
 
-  const { getList, editId, deleteId, postSucc, updateSucc, deleteSucc } =
+  const { getList, editId, deleteId, postSucc, updateSucc, deleteSucc, viewId } =
     props.action;
 
   const {
@@ -193,6 +195,10 @@ const CommonPurchaseList = (props) => {
 
 
 
+
+
+
+
   function makeBtnHandler(rowData) {
 
     rowData["hasSelect"] = true;
@@ -211,6 +217,12 @@ const CommonPurchaseList = (props) => {
     }
     setmodal_edit(false);
   }
+
+
+
+
+
+
 
   const makeBtnColumn = () => {// ======================== for makeBtnColumn Page Action Button ================================
 
@@ -381,6 +393,9 @@ const CommonPurchaseList = (props) => {
               pageMode={editData.pageMode}
             />
           </Modal>
+
+
+
         </div>
 
         <C_Report />
