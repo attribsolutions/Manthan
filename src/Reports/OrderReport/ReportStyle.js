@@ -2,7 +2,7 @@
 import cbm_logo from "../../assets/images/cbm_logo.png"
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
-import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
+import { CurrentTime, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
 let initial_y = 0
 
 
@@ -180,9 +180,11 @@ export const reportHeder3 = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
 
+    var time = convertOnlyTimefunc(data.CreatedOn)
+
     const dateOnly = data.CreatedOn.substring(0, 10);
     var Orderdate = date_dmy_func(dateOnly)
-    doc.text(`Order Date: ${Orderdate}`, 415, 40) //Invoice date
+    doc.text(`Order Date: ${Orderdate}  ${time}`, 415, 40) //Invoice date
     var DeliveryDate = date_dmy_func(data.OrderDate)                          ///   Delivery Date
     doc.text(`Delivery Date: ${DeliveryDate}`, 415, 55) //Invoice date
     doc.line(570, 63, 30, 63) //horizontal line 2 billby upper
