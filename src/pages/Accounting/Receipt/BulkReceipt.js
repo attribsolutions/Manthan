@@ -35,8 +35,10 @@ const BulkRecipt = (props) => {
         postMsg,
         ReceiptGoButton,
         pageField,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
+            saveBtnloading: state.ReceiptReducer.saveBtnloading,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -174,9 +176,9 @@ const BulkRecipt = (props) => {
 
     const SaveHandler = (event) => {
 
-        const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
+        const arr1 = []
         try {
             _cfunc.btnIsDissablefunc({ btnId, state: true })
 
@@ -290,6 +292,7 @@ const BulkRecipt = (props) => {
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                     <SaveButton pageMode={pageMode}
                                         onClick={SaveHandler}
+                                        loading={saveBtnloading}
                                         userAcc={userPageAccessState}
                                         editCreatedBy={editCreatedBy}
                                         module={"BulkRecipt"}

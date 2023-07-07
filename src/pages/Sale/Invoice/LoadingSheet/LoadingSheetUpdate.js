@@ -3,7 +3,8 @@ import {
     Col,
     FormGroup,
     Label,
-    Button
+    Button,
+    Spinner
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { commonPageFieldSuccess } from "../../../../store/actions";
@@ -21,7 +22,6 @@ import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
-import { Data } from "../../../../Reports/InvioceReport/DemoData";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -35,12 +35,14 @@ const LoadingSheetUpdate = (props) => {
     const [partyDetails, setPartyDetails] = useState({});
 
     const {
+        listBtnLoading,
         userAccess,
         LoadingSheetUpdateList,
         makeReceipt,
         OpeningBalance,
         pageField,
     } = useSelector((state) => ({
+        listBtnLoading: state.ReceiptReducer.listBtnLoading,
         LoadingSheetUpdateList: state.LoadingSheetReducer.LoadingSheetUpdate,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -48,27 +50,31 @@ const LoadingSheetUpdate = (props) => {
         OpeningBalance: state.ReceiptReducer.OpeningBalance,
     }));
 
-
     const lastColumn = () => ({
         text: "Action",
         dataField: "",
-        formatter: (cellContent, row) => {
+        formatExtraData: { listBtnLoading },
+        formatter: (cellContent, row, key, { listBtnLoading }) => {
 
             return (<span style={{ justifyContent: 'center' }}>
                 <Button
                     type="button"
                     id={`btn-makeBtn-${row.id}`}
                     title={"Make Receipt"}
+                    disabled={listBtnLoading}
                     className={makeBtnCss}
                     onClick={(e) => {
                         makeBtnFunc(e, row)
                     }}
                 >
-                    <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                        className=" fas fa-file-invoice" ></span> </Button></span>)
+                    {(listBtnLoading === `btn-makeBtn-${row.id}`) ?
+                        <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                        : <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                            className=" fas fa-file-invoice" ></span>
+                    }
+                </Button></span>)
         }
     })
-
 
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
@@ -90,7 +96,7 @@ const LoadingSheetUpdate = (props) => {
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    const [tableColumns] = DynamicColumnHook({ pageField, lastColumn, })
+    const [tableColumns] = DynamicColumnHook({ pageField, lastColumn, reducers: { listBtnLoading } })
 
     // userAccess useEffect
     useEffect(() => {
@@ -137,8 +143,8 @@ const LoadingSheetUpdate = (props) => {
                 ReceiptDate: currentDate_ymd
             });
 
-            const body = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row }
-            dispatch(ReceiptGoButtonMaster(body));
+            const config = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row, btnId: `btn-makeBtn-${id}` }
+            dispatch(ReceiptGoButtonMaster(config));
             dispatch(GetOpeningBalance(jsonBody1));
 
         } catch (e) { }
@@ -153,11 +159,8 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function MakeReceiptForAll() {
-        const result = tableListData.map((index) => {
-            if (index.selectCheck === true) {
-                return index.id
-            }
-        })
+
+        const result = tableListData.filter(index => index.selectCheck === true).map(index => index.id);
 
         const LoadingNumber = result.toString()
 
@@ -169,7 +172,7 @@ const LoadingSheetUpdate = (props) => {
 
         const body = { jsonBody }
 
-        if (LoadingNumber === ",") {
+        if (LoadingNumber === "") {
             customAlert({
                 Type: 3,
                 Message: "Select At Least One Invoice",
@@ -180,8 +183,6 @@ const LoadingSheetUpdate = (props) => {
             history.push(url.BULK_RECIPT);
         }
     }
-
-
 
     if (!(userPageAccessState === '')) {
         return (
@@ -251,7 +252,6 @@ const LoadingSheetUpdate = (props) => {
                                 }
                             </ToolkitProvider>
                         </div>
-
 
                         {
                             tableListData.length > 0 ?

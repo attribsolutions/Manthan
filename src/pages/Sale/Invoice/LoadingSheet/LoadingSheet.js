@@ -98,8 +98,12 @@ const LoadingSheet = (props) => {
         dispatch(getVehicleList())
         dispatch(invoiceListGoBtnfilter())
         dispatch(getDriverList())
-        dispatch(BreadcrumbShowCountlabel(`${"Loading Count"} :0`))
     }, []);
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`LoadingSheet Count:${Data.length}`))
+    }, [GoButton]);
+
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -363,6 +367,7 @@ const LoadingSheet = (props) => {
                                             <C_DatePicker
                                                 name='FromDate'
                                                 value={values.FromDate}
+                                                disabled={Data.length > 0 && true}
                                                 onChange={FromDateOnchange}
                                             />
                                         </Col>
@@ -378,6 +383,7 @@ const LoadingSheet = (props) => {
                                             <C_DatePicker
                                                 name='ToDate'
                                                 value={values.ToDate}
+                                                disabled={Data.length > 0 && true}
                                                 onChange={ToDateOnchange}
                                             />
                                         </Col>
@@ -397,6 +403,7 @@ const LoadingSheet = (props) => {
                                                 value={values.RouteName}
                                                 isSearchable={true}
                                                 isMulti={true}
+                                                isDisabled={Data.length > 0 && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
