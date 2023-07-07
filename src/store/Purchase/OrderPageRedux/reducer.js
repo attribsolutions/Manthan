@@ -18,6 +18,8 @@ import {
   POST_ORDER_CONFIRM_API,
   EDIT_ORDER_FOR_ORDER_PAGE,
   DELETE_ORDER_FOR_ORDER_PAGE,
+  ORDER_SINGLE_GET_API_SUCCESS,
+  ORDER_SINGLE_GET_API,
 } from "./actionType"
 
 
@@ -36,9 +38,12 @@ const INIT_STATE = {
   orderConfirmLoading: false,
   gotoInvoiceBtnLoading: false,
   listBtnLoading: false,
+  orderData: { Status: false },
+
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
+  
   switch (action.type) {
 
 
@@ -111,7 +116,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
         deleteMsg: action.payload,
       }
 
-      
+
     case GET_ORDER_LIST_PAGE:
       return {
         ...state,
@@ -169,6 +174,21 @@ const OrderReducer = (state = INIT_STATE, action) => {
         orderConfirmLoading: false,
         listBtnLoading: false,
         orderConfirmMsg: action.payload,
+      }
+
+    case ORDER_SINGLE_GET_API:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+
+      }
+
+
+    case ORDER_SINGLE_GET_API_SUCCESS:
+      return {
+        ...state,
+        orderData: action.payload,
+        listBtnLoading: false,
       }
 
     case ORDER_API_ERROR_ACTION:

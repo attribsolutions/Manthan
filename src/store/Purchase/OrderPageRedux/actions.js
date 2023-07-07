@@ -21,11 +21,13 @@ import {
   ORDER_API_ERROR_ACTION,
   POST_ORDER_CONFIRM_API,
   POST_ORDER_CONFIRM_API_SUCCESS,
+  ORDER_SINGLE_GET_API,
+  ORDER_SINGLE_GET_API_SUCCESS,
 } from './actionType'
 
 export const GoButton_For_Order_Add = (config) => ({
   type: GO_BUTTON_FOR_ORDER_PAGE,
- config
+  config
 });
 
 export const GoButton_For_Order_AddSuccess = list => ({
@@ -63,6 +65,16 @@ export const editOrderIdSuccess = (resp) => ({
   type: EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,
   payload: resp,
 });
+
+export const viewOrderSingleget = (config = {}) => ({
+  type: ORDER_SINGLE_GET_API,
+  config,
+});
+export const orderSinglegetSuccess = (resp) => ({
+  type: ORDER_SINGLE_GET_API_SUCCESS,
+  payload: resp,
+});
+
 
 export const updateOrderIdAction = (config = {}) => ({
   type: UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -114,7 +126,7 @@ export const orderApprovalActionSuccess = resp => ({
   payload: resp,
 })
 
-export const orderApiErrorAction= () => ({
+export const orderApiErrorAction = () => ({
   type: ORDER_API_ERROR_ACTION,
 })
 
