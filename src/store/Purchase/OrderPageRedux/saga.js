@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   deleteOrderIdSuccess,
   saveOrderActionSuccess,
@@ -285,17 +285,17 @@ function* OrderSingleGet_GenFunc({ config }) {
 }
 
 function* OrderPageSaga() {
-  yield takeEvery(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
-  yield takeEvery(SAVE_ORDER_FROM_ORDER_PAGE, saveOrder_GenFunc);
-  yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, editOrderGenFunc);
-  yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenFunc)
-  yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenFunc);
-  yield takeEvery(GET_ORDER_LIST_PAGE, orderList_GoBtn_GenFunc);
-  yield takeEvery(ORDER_APPROVAL_ACTION, orderApproval_GenFunc);
-  yield takeEvery(GET_ORDER_APPROVAL_DETAIL, getOrderApproval_Detail_GenFunc);
-  yield takeEvery(POST_ORDER_CONFIRM_API, OrderConfirm_GenFunc);
+  yield takeLatest(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
+  yield takeLatest(SAVE_ORDER_FROM_ORDER_PAGE, saveOrder_GenFunc);
+  yield takeLatest(EDIT_ORDER_FOR_ORDER_PAGE, editOrderGenFunc);
+  yield takeLatest(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenFunc)
+  yield takeLatest(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenFunc);
+  yield takeLatest(GET_ORDER_LIST_PAGE, orderList_GoBtn_GenFunc);
+  yield takeLatest(ORDER_APPROVAL_ACTION, orderApproval_GenFunc);
+  yield takeLatest(GET_ORDER_APPROVAL_DETAIL, getOrderApproval_Detail_GenFunc);
+  yield takeLatest(POST_ORDER_CONFIRM_API, OrderConfirm_GenFunc);
 
-  yield takeEvery(ORDER_SINGLE_GET_API, OrderSingleGet_GenFunc);
+  yield takeLatest(ORDER_SINGLE_GET_API, OrderSingleGet_GenFunc);
 
 
 

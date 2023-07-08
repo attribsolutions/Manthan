@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { GET_PDF_MULTIPLEINVOICE_DATA, GET_PDF_REPORT_DATA } from "./actionType";
 // import { Data } from "./DemoData";
 
@@ -46,8 +46,8 @@ function* GetMultipleinvoicereport_GenFunc({ API, jsonBody, ReportType, Id }) {
 }
 
 function* pdfReport_Saga() {
-  yield takeEvery(GET_PDF_REPORT_DATA, getpdfData_GenFunc);
-  yield takeEvery(GET_PDF_MULTIPLEINVOICE_DATA, GetMultipleinvoicereport_GenFunc);
+  yield takeLatest(GET_PDF_REPORT_DATA, getpdfData_GenFunc);
+  yield takeLatest(GET_PDF_MULTIPLEINVOICE_DATA, GetMultipleinvoicereport_GenFunc);
 
 }
 export default pdfReport_Saga;

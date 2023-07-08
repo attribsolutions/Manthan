@@ -1,3 +1,0 @@
-export const COMMON_500_ERROR = "COMMON_500_ERROR"
-export const  COMMON_400_ERROR='COMMON_400_ERROR'
-

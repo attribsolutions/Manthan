@@ -170,16 +170,15 @@ const Invoice = (props) => {
                 })
             }
             else {
-                await customAlert({
+                let alertResponse = await customAlert({
                     Type: 1,
-                    Message: JSON.stringify(postMsg.Message),
-                    RedirectPath: url.INVOICE_LIST_1,
+                    Message: postMsg.Message,
                 })
 
-                if (subPageMode === url.INVOICE_1) {
+                if (alertResponse && (subPageMode === url.INVOICE_1)) {
                     history.push({ pathname: url.INVOICE_LIST_1 })
                 }
-                else if (subPageMode === url.IB_INVOICE) {
+                else if (alertResponse && (subPageMode === url.IB_INVOICE)) {
                     history.push({ pathname: url.IB_INVOICE_LIST })
 
                 }
@@ -200,13 +199,11 @@ const Invoice = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
-            dispatch(
-                AlertState({
+            customAlert({
                     Type: 3,
                     Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
-            );
         }
     }, [updateMsg, modalCss]);
 
@@ -633,12 +630,12 @@ const Invoice = (props) => {
                         MRP: ele.LiveBatcheMRPID,
                         MRPValue: ele.MRP,//changes
                         Rate: Number(ele.Rate).toFixed(2),
-                        
+
                         GST: ele.LiveBatcheGSTID,
                         CGST: Number(calculate.CGST_Amount).toFixed(2),
                         SGST: Number(calculate.SGST_Amount).toFixed(2),
                         IGST: Number(calculate.IGST_Amount).toFixed(2),
-                     
+
                         GSTPercentage: calculate.GST_Percentage,
                         CGSTPercentage: calculate.CGST_Percentage,
                         SGSTPercentage: calculate.SGST_Percentage,
