@@ -132,7 +132,7 @@ const StockReport = (props) => {
             <div className="page-content">
                 <div className="px-2 c_card_filter text-black mb-1" >
                     <div className="row" >
-                        <Col sm={2} className="">
+                        <Col sm={(isSCMParty) ? 2 : 3} className="">
                             <FormGroup className=" mb-2 row mt-3 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "66px" }}>FromDate</Label>
@@ -147,7 +147,7 @@ const StockReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={2} className="">
+                        <Col sm={(isSCMParty) ? 2 : 3} className="">
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "60px" }}>ToDate</Label>
@@ -162,7 +162,7 @@ const StockReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3}>
+                        <Col sm={(isSCMParty) ? 3 : 4}>
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-2 p-2"
                                     style={{ width: "85px" }}>Unit</Label>
