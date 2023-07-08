@@ -21,7 +21,6 @@ import {
 } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import {
-    AlertState,
     commonPageField,
     commonPageFieldSuccess
 } from "../../../store/actions";

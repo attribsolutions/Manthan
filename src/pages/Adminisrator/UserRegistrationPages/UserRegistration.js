@@ -21,7 +21,6 @@ import {
   userEditActionSuccess
 }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
-import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";

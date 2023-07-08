@@ -15,7 +15,7 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
@@ -177,7 +177,7 @@ const MarginMaster = (props) => {
             dispatch(goButtonForMarginSuccess([]))
             GoButton_Handler()
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
@@ -187,7 +187,7 @@ const MarginMaster = (props) => {
         } else if (deleteMessage.Status === true) {
             dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
                     Status: true,
                     Message: JSON.stringify(deleteMessage.Message),
@@ -241,7 +241,7 @@ const MarginMaster = (props) => {
     //select id for delete row
     const deleteHandeler = (id, name) => {
         dispatch(
-            AlertState({
+            customAlert({
                 Type: 5,
                 Status: true,
                 Message: `Are you sure you want to delete this Item : "${name}"`,
@@ -252,37 +252,35 @@ const MarginMaster = (props) => {
         );
     };
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(saveMarginMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.MARGIN_lIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.MARGIN_lIST })
+                }
             }
         }
 
         else if (postMsg.Status === true) {
             dispatch(saveMarginMasterSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [postMsg])
 

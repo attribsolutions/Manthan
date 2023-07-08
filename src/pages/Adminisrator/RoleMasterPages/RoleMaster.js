@@ -18,7 +18,6 @@ import {
   PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import {
-  AlertState,
   commonPageField,
   commonPageFieldSuccess,
   userUpdateActionSuccess

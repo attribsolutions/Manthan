@@ -21,14 +21,10 @@ import { connect, useDispatch, useSelector } from "react-redux"
 import { withRouter, Link } from "react-router-dom"
 
 // users
-import user1 from "../../../assets/images/users/avatar-1.jpg"
-import { btnIsDissablefunc } from "../../Common/CommonFunction"
-import { formValid, initialFiledFunc, onChangeText, resetFunction } from "../../Common/validationFunction"
+import {  initialFiledFunc, resetFunction } from "../../Common/validationFunction"
 import { ChangePassword, ChangePassword_Succes } from "../../../store/auth/changepassword/action"
-import { AlertState } from "../../../store/actions"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
-import { CInput, onlyNumberRegx, passwordRgx } from "../../../CustomValidateForm/index";
-
+import {  passwordRgx } from "../../../CustomValidateForm/index";
 
 
 const ProfileMenu = props => {
@@ -56,16 +52,11 @@ const ProfileMenu = props => {
   const [newPwdError, setNewPwdError] = useState("");
 
 
-
-
-
   const { user, postMsg, divisionDropdown_redux = [], loading } = useSelector((state) => ({
-
     loading: state.ChangePasswordReducer.loading,
     user: state.Login.afterLoginUserDetails,
     postMsg: state.ChangePasswordReducer.postMsg,
     divisionDropdown_redux: state.Login.divisionDropdown,
-
 
   }))
 
@@ -77,13 +68,9 @@ const ProfileMenu = props => {
       const obj = localStorage.getItem("UserName")
       setusername(obj)
     }
-
-
   }, [props.success, user])
 
   useEffect(async () => {
-
-
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
       dispatch(ChangePassword_Succes({ Status: false }))

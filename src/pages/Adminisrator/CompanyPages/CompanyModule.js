@@ -21,7 +21,7 @@ import {
   updateCompanyIDSuccess
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import {

@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     getState
 } from "../../../store/Administrator/EmployeeRedux/action";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";

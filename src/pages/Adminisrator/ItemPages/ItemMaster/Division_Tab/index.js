@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     get_Division_ForDropDown,
 } from "../../../../../store/Administrator/ItemsRedux/action";
-import { AlertState } from "../../../../../store/actions";
 import DivisionTable from "./Table";
 
 function DivisionTab(props) {

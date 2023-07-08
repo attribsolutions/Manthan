@@ -13,8 +13,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     get_Category_By_CategoryType_ForDropDownAPI,
 } from "../../../../../store/Administrator/ItemsRedux/action";
-import { AlertState, getCategoryTypelist } from "../../../../../store/actions";
+import {  getCategoryTypelist } from "../../../../../store/actions";
 import CategoryTable from "./Table";
+import { customAlert } from "../../../../../CustomAlert/ConfirmDialog";
 
 function CategoryTab(props) {
     const dispatch = useDispatch();
@@ -61,7 +62,7 @@ function CategoryTab(props) {
         });
 
         if (!(find === undefined)) {
-            dispatch(AlertState({
+            dispatch(customAlert({
                 Type: 4,
                 Status: true,
                 Message: "Category alredy Select",
