@@ -1,9 +1,8 @@
 import { breadcrumbReturnFunc } from "./CommonFunction";
 import { mode } from "../../routes/index";
-import { comAddPageFieldFunc, resetFunction } from "./validationFunction";
+import { comAddPageFieldFunc } from "./validationFunction";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import $ from 'jquery';
-import { Breadcrumb_inputName } from "../../store/actions";
 
 export const userAccessUseEffect = ({ props,
     dispatch,
