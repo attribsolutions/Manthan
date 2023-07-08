@@ -20,7 +20,6 @@ import {
     saveCategoryTypeMaster_Success,
     editCategoryTypeIDSuccess,
     updateCategoryTypeID,
-    getCategoryTypelistSuccess,
     updateCategoryTypeIDSuccess,
     getCategoryTypelist,
 } from "../../../store/Administrator/CategoryTypeRedux/actions";
@@ -82,27 +81,7 @@ const CategoryTypeMaster = (props) => {
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    // userAccess useEffect
-    // useEffect(() => {
-    //     let userAcc = null;
-    //     let locationPath = location.pathname;
-
-    //     if (hasShowModal) {
-    //         locationPath = props.masterPath;
-    //     };
-
-    //     userAcc = userAccess.find((inx) => {
-    //         return (`/${inx.ActualPagePath}` === locationPath)
-    //     })
-
-    //     if (userAcc) {
-    //         setUserAccState(userAcc);
-    //         if (!props.isdropdown) {
-    //           breadcrumbReturnFunc({ dispatch, userAcc });
-    //         }
-    //       };
-    // }, [userAccess])
-
+    
     useEffect(() => {
 
         let userAcc = null;
@@ -213,9 +192,8 @@ const CategoryTypeMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateCategoryTypeIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

@@ -160,41 +160,7 @@ const Modules = (props) => {
         }
     }, [])
 
-    // This UseEffect clear Form Data and when modules Save Successfully.
-    // useEffect(() => {
-
-    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-    //         dispatch(saveModuleMasterSuccess({ Status: false }))
-    //         setState(() => resetFunction(fileds, state)) // Clear form values 
-    //         dispatch(Breadcrumb_inputName(''))
-
-    //         if (pageMode === "dropdownAdd") {
-    //             dispatch(AlertState({
-    //                 Type: 1,
-    //                 Status: true,
-    //                 Message: postMsg.Message,
-    //             }))
-    //         }
-    //         else {
-    //             dispatch(AlertState({
-    //                 Type: 1,
-    //                 Status: true,
-    //                 Message: postMsg.Message,
-    //                 RedirectPath: url.MODULE_lIST,
-    //             }))
-    //         }
-    //     } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-    //         dispatch(saveModuleMasterSuccess({ Status: false }))
-    //         dispatch(AlertState({
-    //             Type: 4,
-    //             Status: true,
-    //             Message: JSON.stringify(postMsg.Message),
-    //             RedirectPath: false,
-    //             AfterResponseAction: false
-    //         }));
-    //     }
-    // }, [postMsg])
-
+   
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -206,9 +172,7 @@ const Modules = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                // history.push({
-                //     Data: postMsg.Data
-                // })
+                
                 dispatch(getModuleList())
 
                 props.isOpenModal(false)
@@ -248,9 +212,8 @@ const Modules = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateModuleIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

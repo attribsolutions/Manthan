@@ -43,6 +43,7 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const CompanyGroupMaster = (props) => {
 
@@ -140,36 +141,34 @@ const CompanyGroupMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             setState(() => resetFunction(fileds, state))// Clear form values 
             dispatch(saveCompanyGroupMasterSuccess({ Status: false }))
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.COMPANYGROUP_lIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.COMPANYGROUP_lIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveCompanyGroupMasterSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [postMsg])
 
@@ -182,9 +181,8 @@ const CompanyGroupMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateCompanyGroupIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

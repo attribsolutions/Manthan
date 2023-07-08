@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-
 import {
   Card,
   CardBody,
@@ -11,10 +10,7 @@ import {
   CardHeader,
   FormGroup,
   Input,
-  Button,
-  Modal
 } from "reactstrap";
-
 import { useDispatch, useSelector } from "react-redux";
 import {
   getState,
@@ -26,7 +22,7 @@ import {
   getCityOnDistrict,
   getCityOnDistrictSuccess
 } from "../../../store/Administrator/EmployeeRedux/action";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import {
   getDistrictOnState,
   getDistrictOnStateSuccess,
@@ -247,7 +243,7 @@ const AddEmployee = (props) => {
     }
   }, [])
 
-  useEffect(() => {
+  useEffect(async () => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(PostEmployeeSuccess({ Status: false }))
@@ -255,27 +251,28 @@ const AddEmployee = (props) => {
       dispatch(Breadcrumb_inputName(''))
 
       if (props.pageMode === mode.dropdownAdd) {
-        dispatch(AlertState({
+        customAlert({
           Type: 1,
-          Status: true,
           Message: postMsg.Message,
-        }))
+      })
       }
       else {
-        dispatch(AlertState({
+        let isPermission = await customAlert({
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-          RedirectPath: url.EMPLOYEE_lIST,
-        }))
+      })
+      if (isPermission) {
+          history.push({ pathname: url.EMPLOYEE_lIST })
+      }
       }
     }
     else if (postMsg.Status === true) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       customAlert({
         Type: 4,
-        Message: JSON.stringify(postMsg.Message),
-      })
+        Message: JSON.stringify(postMessage.Message),
+    })
     }
   }, [postMsg])
 
@@ -363,7 +360,7 @@ const AddEmployee = (props) => {
         btnIsDissablefunc({ btnId, state: true })
         if ((values.EmployeeTypeName.IsPartyConnection === true) && (values.EmployeeParties.length === 0)) {
           dispatch(
-            AlertState({
+            customAlert({
               Type: 4,
               Status: true,
               Message: "Party is Required",

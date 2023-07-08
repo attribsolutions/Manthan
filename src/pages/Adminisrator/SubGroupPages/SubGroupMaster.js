@@ -41,6 +41,7 @@ import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, metaTagLabel } fr
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const SubGroupMaster = (props) => {
 
@@ -156,7 +157,7 @@ const SubGroupMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveSubGroupSuccess({ Status: false }))
@@ -164,30 +165,28 @@ const SubGroupMaster = (props) => {
             dispatch(Breadcrumb_inputName())
 
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.SUBGROUP_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.SUBGROUP_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(getSubGroupListSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
@@ -200,9 +199,8 @@ const SubGroupMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateSubgroupIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

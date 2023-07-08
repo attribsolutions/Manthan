@@ -40,6 +40,7 @@ import {
     saveManagementParties_Success
 } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const ManagementEmpParties = (props) => {
 
@@ -116,37 +117,35 @@ const ManagementEmpParties = (props) => {
     }, [userAccess])
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveManagementParties_Success({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
             dispatch(Breadcrumb_inputName(''))
             dispatch(getPartyTableListSuccess([]))
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.MANAGEMENT_PARTIES,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.MANAGEMENT_PARTIES })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveManagementParties_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [postMsg])
 
