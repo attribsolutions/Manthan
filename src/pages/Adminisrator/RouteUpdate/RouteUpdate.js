@@ -11,12 +11,12 @@ import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/U
 import { useDispatch, useSelector } from "react-redux";
 import {
     comAddPageFieldFunc,
- 
+
     initialFiledFunc,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, btnIsDissablefunc, metaTagLabel, } from "../../../components/Common/CommonFunction";
-import { mode,  pageId } from "../../../routes/index"
+import { mode, pageId } from "../../../routes/index"
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -105,7 +105,6 @@ const RouteUpdate = (props) => {
                 })
             }
             else {
-                // dispatch(RouteUpdateListAPI())
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
@@ -120,7 +119,6 @@ const RouteUpdate = (props) => {
             })
         }
     }, [postMsg])
-
 
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Route Update Count"}:${Data.length}`))
@@ -142,13 +140,7 @@ const RouteUpdate = (props) => {
         IsActive: index.IsActive
     }));
 
-    const RouteName_Options = [
-        {
-            value: null,
-            label: "select..."
-        },
-        ...RoutesListOptions.filter((index) => index.IsActive === true)
-    ];
+    const RouteName_Options = [...RoutesListOptions.filter((index) => index.IsActive === true)];
 
     const pagesListColumns = [
         {
@@ -158,7 +150,7 @@ const RouteUpdate = (props) => {
         {
             text: "RouteName",
             dataField: "Route Name",
-            style: () => ({  width:"30%"}),
+            style: () => ({ width: "30%" }),
             formatExtraData: { forceRefresh },
             formatter: (value, row, key, { forceRefresh }) => {
 
@@ -174,7 +166,7 @@ const RouteUpdate = (props) => {
                             setForceRefresh(!forceRefresh)
                         }}
                         onCancelClick={() => {
-                            row["Route"] = '';
+                            row["Route"] = null;
                             row["RouteName"] = ''
                             setForceRefresh(!forceRefresh)
                         }}
@@ -182,7 +174,6 @@ const RouteUpdate = (props) => {
                     </C_Select >
                 )
             },
-
         }
     ];
 
@@ -197,16 +188,16 @@ const RouteUpdate = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-                const data = Data.map((index) => ({
-                    id: index.id,
-                    Party: index.Party,
-                    SubParty: index.SubParty,
-                    Route: index.Route,
-                }))
-                const jsonBody = JSON.stringify({
-                    Data: data
-                })
-                dispatch(Post_RouteUpdate({ jsonBody, btnId }));
+            const data = Data.map((index) => ({
+                id: index.id,
+                Party: index.Party,
+                SubParty: index.SubParty,
+                Route: index.Route,
+            }))
+            const jsonBody = JSON.stringify({
+                Data: data
+            })
+            dispatch(Post_RouteUpdate({ jsonBody, btnId }));
 
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -263,6 +254,7 @@ const RouteUpdate = (props) => {
                             )}
                         </PaginationProvider>
                     </div>
+                    
                     {Data.length > 0 ?
                         <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode}
