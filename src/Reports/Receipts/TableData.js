@@ -1,3 +1,4 @@
+import { date_dmy_func } from "../../components/Common/CommonFunction"
 import { toWords } from "../Report_common_function"
 
 export const Address = [
@@ -32,7 +33,7 @@ export const AddressDetails = (data) => {
         [`${data.Party}`],
         [`Address:${data.Address === null ? "" : data.Address}`],
         [`Contact:${data.MobileNo}`],
-        [`Date:${data.ReceiptDate}`],
+        [`Date:${date_dmy_func(data.ReceiptDate)}`],
         ""
 
 
