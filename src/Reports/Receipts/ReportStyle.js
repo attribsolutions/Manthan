@@ -31,7 +31,7 @@ export const Receipts = (doc, data) => {
         },
         margin: {
             top: 0,
-            left: 370,
+            left: 420,
             right: 50,
         },
         showHead: 'always',
@@ -94,8 +94,9 @@ export const Receipts = (doc, data) => {
     };
 
     doc.autoTable(table.Details, table.ReceiptDetails(doc, data), DetailsOfReceipt);
-    doc.setFontSize(15);
-    doc.text(`Customer Payment Receipt`, 40, 40,);
+    doc.setFontSize(17);
+    doc.setFont(undefined, 'bold')
+    doc.text(`Payment Receipt`, 40, 40,);
 
     // doc.setFontSize(18);
     // doc.text(`Receipt`, 340, 100, 'right');
@@ -111,7 +112,7 @@ export const Receipts = (doc, data) => {
     doc.setFont(undefined, 'Normal')
 
 
-    doc.text(`RECEIVED With thanks from :`, 40, 180, 'left');
+    doc.text(`Received With thanks from :`, 40, 180, 'left');
 
     doc.setFont(undefined, 'bold')
     doc.text(`${data.Customer}`, 190, 180,);
@@ -125,28 +126,45 @@ export const Receipts = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`${data.ReceiptModeName}`, 110, final_y + 10,);
     doc.setFont(undefined, 'Normal')
+    doc.text(`Description: ${data.Description === null ? "" : data.Description}`, 40, final_y + 25, 'left');
+
+    doc.text(`Amount : `, 40, final_y + 40, 'left');
+    doc.setFont(undefined, 'bold')
+    doc.text(`${numberWithCommas(Number(data.AmountPaid).toFixed(2))}`, 90, final_y + 40,);
+    doc.setFont(undefined, 'Normal')
+
+
+
     if (data.ReceiptModeName === "Cheque") {
-        doc.text(`Bank Name`, 40, final_y + 25, 'left');
+        doc.text(`Bank Name`, 40, final_y + 55, 'left');
         doc.setFont(undefined, 'bold')
-        doc.text(`${data.DocumentNo}/${data.BankName}`, 100, final_y + 25,);
+        doc.text(`${data.DocumentNo}/${data.BankName}`, 100, final_y + 55,);
         debugger
         var bankwidth = doc.getTextWidth(`${data.DocumentNo}/${data.BankName}`);
         doc.setFont(undefined, 'Normal')
-        doc.text(`Depositor BankName`, 40 + bankwidth + 80, final_y + 25, 'left');
+        doc.text(`Depositor BankName`, 40 + bankwidth + 80, final_y + 55, 'left');
         doc.setFont(undefined, 'bold')
 
-        doc.text(`${data.DepositorBankName}`, 40 + bankwidth + 190, final_y + 25, 'left');
+        doc.text(`${data.DepositorBankName}`, 40 + bankwidth + 190, final_y + 55, 'left');
         doc.setFont(undefined, 'bold')
     }
 
+    doc.setFont(undefined, 'Normal')
+    doc.text(`Prepared By :`, 40, 320, 'left');
+    doc.setFont(undefined, 'bold')
 
-    doc.text(`Prepared By`, 40, 320, 'left');
+    doc.text(`${data.Party}`, 110, 320, 'left');
+    doc.setFont(undefined, 'Normal')
+
+
+    doc.text(`Received By `, 230, 320, 'left');
+
     doc.setFont(undefined, 'Normal')
 
     doc.text(`Authorize signatory`, 480, 325, "center");
     doc.setFont(undefined, 'bold')
 
-    doc.text(`For${data.Party}`, 480, 310, "center");
+    doc.text(`For ${data.Party}`, 480, 310, "center");
     doc.setFont(undefined, 'Normal')
 
     doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 40, 375,)
