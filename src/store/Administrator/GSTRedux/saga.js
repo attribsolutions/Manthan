@@ -1,5 +1,5 @@
-import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, concatDateAndTime } from "../../../components/Common/CommonFunction";
+import { call, put, takeLatest } from "redux-saga/effects";
+import {concatDateAndTime } from "../../../components/Common/CommonFunction";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
@@ -55,11 +55,11 @@ function* delete_GSTMaster_ID_GenFunc({ id }) {
 }
 
 function* GSTSaga() {
-  yield takeEvery(actionType.SAVE_GST_MASTER, save_GSTMaster_GenFunc);
-  yield takeEvery(actionType.GET_GST_LIST, get_GSTList_GenFunc);
-  yield takeEvery(actionType.DELETE_GST_LIST_ID, delete_GSTList_ID_GenFunc);
-  yield takeEvery(actionType.GO_BUTTON_FOR_GST_MASTER, goButton_GST_GenFunc);
-  yield takeEvery(actionType.DELETE_GST_ID_FOR_MASTER, delete_GSTMaster_ID_GenFunc);
+  yield takeLatest(actionType.SAVE_GST_MASTER, save_GSTMaster_GenFunc);
+  yield takeLatest(actionType.GET_GST_LIST, get_GSTList_GenFunc);
+  yield takeLatest(actionType.DELETE_GST_LIST_ID, delete_GSTList_ID_GenFunc);
+  yield takeLatest(actionType.GO_BUTTON_FOR_GST_MASTER, goButton_GST_GenFunc);
+  yield takeLatest(actionType.DELETE_GST_ID_FOR_MASTER, delete_GSTMaster_ID_GenFunc);
 
 }
 

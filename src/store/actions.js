@@ -8,7 +8,6 @@ export * from "./auth/forgetpwd/actions"
 export * from "./Utilites/CustomAlertRedux/actions"
 export * from "./Utilites/PageFiled/actions"
 export * from "./Utilites/Breadcrumb/actions"
-export * from "./Utilites/Spinner/actions"
 export * from "./Utilites/Breadcrumb/actions"
 export * from "./Utilites/PdfReport/actions";
 

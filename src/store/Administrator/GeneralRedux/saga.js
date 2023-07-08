@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
     POST_METHOD_FOR_GENERAL_API,
     DELETE_GENERAL_ID,
@@ -88,13 +88,13 @@ function* GeneralMasterSubType_Genfun({ data }) {
 }
 
 function* GeneralSaga() {
-    yield takeEvery(POST_METHOD_FOR_GENERAL_API, Post_Method_ForGeneral_GenFun)
-    yield takeEvery(POST_GENERAL_LIST, Post_General_List_GenratorFunction)
-    yield takeEvery(DELETE_GENERAL_ID, Delete_General_ID_GenratorFunction)
-    yield takeEvery(EDIT_GENERAL_ID, Edit_General_ID_GenratorFunction)
-    yield takeEvery(UPDATE_GENERAL_ID, Update_General_ID_GenratorFunction)
-    yield takeEvery(POST_TYPE, Post_Type_GenFun)
-    yield takeEvery(GENERAL_MASTER_SUB_TYPE, GeneralMasterSubType_Genfun)
+    yield takeLatest(POST_METHOD_FOR_GENERAL_API, Post_Method_ForGeneral_GenFun)
+    yield takeLatest(POST_GENERAL_LIST, Post_General_List_GenratorFunction)
+    yield takeLatest(DELETE_GENERAL_ID, Delete_General_ID_GenratorFunction)
+    yield takeLatest(EDIT_GENERAL_ID, Edit_General_ID_GenratorFunction)
+    yield takeLatest(UPDATE_GENERAL_ID, Update_General_ID_GenratorFunction)
+    yield takeLatest(POST_TYPE, Post_Type_GenFun)
+    yield takeLatest(GENERAL_MASTER_SUB_TYPE, GeneralMasterSubType_Genfun)
 }
 
 export default GeneralSaga;

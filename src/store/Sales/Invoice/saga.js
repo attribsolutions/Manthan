@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   CommonConsole,
   amountCommaSeparateFunc,
@@ -33,8 +33,6 @@ import {
   Uploaded_EwayBillSuccess,
   Cancel_EInvoiceSuccess,
   Cancel_EwayBillSuccess,
-  Print_EInvoiceAction,
-  Print_EwayBillSuccess
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -318,16 +316,16 @@ function* Cancle_EwayBillGenFunc({ config }) {
 // MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
 
-  yield takeEvery(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
-  yield takeEvery(INVOICE_LIST_GO_BUTTON_FILTER, InvoiceListGenFunc)
-  yield takeEvery(EDIT_INVOICE_LIST, editInvoiceListGenFunc)
-  yield takeEvery(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
-  yield takeEvery(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)
-  yield takeEvery(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
-  yield takeEvery(UPLOADED_E_INVOICE_ACTION, Uploade_EInvoiceGenFunc)
-  yield takeEvery(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc)
-  yield takeEvery(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc)
-  yield takeEvery(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc)
+  yield takeLatest(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
+  yield takeLatest(INVOICE_LIST_GO_BUTTON_FILTER, InvoiceListGenFunc)
+  yield takeLatest(EDIT_INVOICE_LIST, editInvoiceListGenFunc)
+  yield takeLatest(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
+  yield takeLatest(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)
+  yield takeLatest(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
+  yield takeLatest(UPLOADED_E_INVOICE_ACTION, Uploade_EInvoiceGenFunc)
+  yield takeLatest(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc)
+  yield takeLatest(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc)
+  yield takeLatest(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc)
 }
 
 export default InvoiceSaga;

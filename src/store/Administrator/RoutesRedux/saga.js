@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
     deleteRoutesID_Success,
     editRoutesIDSuccess,
@@ -62,11 +62,11 @@ function* Delete_Routes_ID_GenratorFunction({ config = {} }) {
 }
 
 function* RoutesSaga() {
-    yield takeEvery(GET_ROUTES_LIST, Routes_List_GenratorFunction)
-    yield takeEvery(SAVE_ROUTES_MASTER, save_Routes_Master_GenFun)
-    yield takeEvery(EDIT_ROUTES_ID, Edit_Routes_ID_GenratorFunction)
-    yield takeEvery(UPDATE_ROUTES_ID, Update_Routes_ID_GenratorFunction)
-    yield takeEvery(DELETE_ROUTES_ID, Delete_Routes_ID_GenratorFunction)
+    yield takeLatest(GET_ROUTES_LIST, Routes_List_GenratorFunction)
+    yield takeLatest(SAVE_ROUTES_MASTER, save_Routes_Master_GenFun)
+    yield takeLatest(EDIT_ROUTES_ID, Edit_Routes_ID_GenratorFunction)
+    yield takeLatest(UPDATE_ROUTES_ID, Update_Routes_ID_GenratorFunction)
+    yield takeLatest(DELETE_ROUTES_ID, Delete_Routes_ID_GenratorFunction)
 }
 
 export default RoutesSaga;

@@ -1,5 +1,5 @@
 
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   SapLedger_Go_Button_API_Success, getExcel_Button_API_Success
 } from "./action";
@@ -84,8 +84,8 @@ function* GetExcelButton_saga({ IsSCM_ID, PartyID }) {
 
 
 function* SapLedgerSaga() {
-  yield takeEvery(GO_BUTTON_API_SAP_LEDGER, goBtn_Get_API_GenFun)
-  yield takeEvery(GET_EXCELBUTTON_API, GetExcelButton_saga)
+  yield takeLatest(GO_BUTTON_API_SAP_LEDGER, goBtn_Get_API_GenFun)
+  yield takeLatest(GET_EXCELBUTTON_API, GetExcelButton_saga)
 }
 
 export default SapLedgerSaga;

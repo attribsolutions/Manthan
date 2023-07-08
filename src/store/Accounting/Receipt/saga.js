@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
@@ -98,13 +98,13 @@ function* Bank_List_GenFunc() {
 }
 
 function* ReceiptSaga() {
-  yield takeEvery(actionType.RECEIPT_GO_BUTTON_MASTER, ReceiptGoButtonGenFunc)
-  yield takeEvery(actionType.GET_OPENING_BALANCE, OpeningBalanceGenFunc)
-  yield takeEvery(actionType.RECEIPT_LIST_API, Receipt_List_GenFun)
-  yield takeEvery(actionType.SAVE_RECEIPT_MASTER, save_Receipt_GenFunc)
-  yield takeEvery(actionType.RECEIPT_TYPE_API, Receipt_Type_GenFunc)
-  yield takeEvery(actionType.DELETE_RECEIPT_LIST, Delete_Receipt_ID_GenFunc)
-  yield takeEvery(actionType.BANK_LIST_API, Bank_List_GenFunc)
+  yield takeLatest(actionType.RECEIPT_GO_BUTTON_MASTER, ReceiptGoButtonGenFunc)
+  yield takeLatest(actionType.GET_OPENING_BALANCE, OpeningBalanceGenFunc)
+  yield takeLatest(actionType.RECEIPT_LIST_API, Receipt_List_GenFun)
+  yield takeLatest(actionType.SAVE_RECEIPT_MASTER, save_Receipt_GenFunc)
+  yield takeLatest(actionType.RECEIPT_TYPE_API, Receipt_Type_GenFunc)
+  yield takeLatest(actionType.DELETE_RECEIPT_LIST, Delete_Receipt_ID_GenFunc)
+  yield takeLatest(actionType.BANK_LIST_API, Bank_List_GenFunc)
 
 }
 export default ReceiptSaga;  

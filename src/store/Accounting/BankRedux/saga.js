@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
     saveBankMaster_Success,
     deleteBankIDSuccess,
@@ -62,11 +62,11 @@ function* Update_Bank_ID_GenratorFunction({ config }) {             // update AP
 }
 
 function* BankSaga() {
-    yield takeEvery(SAVE_BANK_MASTER, Save_Method_ForBankMaster_GenFun)
-    yield takeEvery(GET_BANK_LIST, get_Bank_List_GenratorFunction)
-    yield takeEvery(DELETE_BANK_ID, Delete_Bank_ID_GenratorFunction)
-    yield takeEvery(EDIT_BANK_ID, Edit_Bank_ID_GenratorFunction)
-    yield takeEvery(UPDATE_BANK_ID, Update_Bank_ID_GenratorFunction)
+    yield takeLatest(SAVE_BANK_MASTER, Save_Method_ForBankMaster_GenFun)
+    yield takeLatest(GET_BANK_LIST, get_Bank_List_GenratorFunction)
+    yield takeLatest(DELETE_BANK_ID, Delete_Bank_ID_GenratorFunction)
+    yield takeLatest(EDIT_BANK_ID, Edit_Bank_ID_GenratorFunction)
+    yield takeLatest(UPDATE_BANK_ID, Update_Bank_ID_GenratorFunction)
 }
 
 export default BankSaga;

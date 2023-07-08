@@ -1,9 +1,8 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, loginCompanyID } from "../../../components/Common/CommonFunction";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-
 
 function* save_ManagementParties_GenFunc({ config }) {
   try {
@@ -34,9 +33,9 @@ function* getEmployeeDrodownListGenFunc() {                                   //
 }
 
 function* ManagementPartiesSaga() {
-  yield takeEvery(actionType.SAVE_MANAGEMENT_PARTIES, save_ManagementParties_GenFunc)
-  yield takeEvery(actionType.GET_PARTY_TABLE_LIST, getPartyListGenFunc)
-  yield takeEvery(actionType.GET_EMPLOYEE_DROPDWOPN_LIST, getEmployeeDrodownListGenFunc)
+  yield takeLatest(actionType.SAVE_MANAGEMENT_PARTIES, save_ManagementParties_GenFunc)
+  yield takeLatest(actionType.GET_PARTY_TABLE_LIST, getPartyListGenFunc)
+  yield takeLatest(actionType.GET_EMPLOYEE_DROPDWOPN_LIST, getEmployeeDrodownListGenFunc)
 }
 
 export default ManagementPartiesSaga;  

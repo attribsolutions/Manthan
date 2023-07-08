@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   GetCustomerSuccess,
   getOrderTypeSuccess,
@@ -168,15 +168,15 @@ function* Party_Dropdown_List_GenFunc({ loginEmployeeID }) {
 }
 
 function* SupplierSaga() {
-  yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
-  yield takeEvery(GET_SUPPLIER_ADDRESS, supplierAddressGenFunc);
-  yield takeEvery(GET_ORDER_TYPE, OrderType_GenFunc);
-  yield takeEvery(GET_VENDER, getVendorGenFunc);
-  yield takeEvery(GET_VENDER_SUPPLIER_CUSTOMER, vendorSupplierCustomer_genFunc);
-  yield takeEvery(GET_CUSTOMER, getCustomerGenFunc);
-  yield takeEvery(SSDD_LIST_UNDER_COMPANY, SSDD_List_under_Company_GenFunc);
-  yield takeEvery(RETAILER_LIST, Retailer_List_GenFunc);
-  yield takeEvery(PARTY_DROPDOWN_LIST, Party_Dropdown_List_GenFunc);
+  yield takeLatest(GET_SUPPLIER, getSupplierGenFunc);
+  yield takeLatest(GET_SUPPLIER_ADDRESS, supplierAddressGenFunc);
+  yield takeLatest(GET_ORDER_TYPE, OrderType_GenFunc);
+  yield takeLatest(GET_VENDER, getVendorGenFunc);
+  yield takeLatest(GET_VENDER_SUPPLIER_CUSTOMER, vendorSupplierCustomer_genFunc);
+  yield takeLatest(GET_CUSTOMER, getCustomerGenFunc);
+  yield takeLatest(SSDD_LIST_UNDER_COMPANY, SSDD_List_under_Company_GenFunc);
+  yield takeLatest(RETAILER_LIST, Retailer_List_GenFunc);
+  yield takeLatest(PARTY_DROPDOWN_LIST, Party_Dropdown_List_GenFunc);
 
 
 }

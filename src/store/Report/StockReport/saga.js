@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { stockReportApiErrorAction, stockReport_GoButton_API_Success } from "./action";
 import { STOCK_REPORT_GO_BUTTON_API } from "./actionType";
 import { StockReport_GoBtn_API } from "../../../helpers/backend_helper";
@@ -11,7 +11,7 @@ function* StockReport_GenFunc({ config }) {
 }
 
 function* StockReportSaga() {
-    yield takeEvery(STOCK_REPORT_GO_BUTTON_API, StockReport_GenFunc)
+    yield takeLatest(STOCK_REPORT_GO_BUTTON_API, StockReport_GenFunc)
 }
 
 export default StockReportSaga;

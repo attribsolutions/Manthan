@@ -1,4 +1,4 @@
-import { takeEvery, fork, put, all, call } from "redux-saga/effects"
+import { takeLatest, fork, put, all, call } from "redux-saga/effects"
 
 //Account Redux states
 import { REGISTER_USER } from "./actionTypes"
@@ -37,7 +37,7 @@ function* registerUser({ payload: { user } }) {
 }
 
 export function* watchUserRegister() {
-  yield takeEvery(REGISTER_USER, registerUser)
+  yield takeLatest(REGISTER_USER, registerUser)
 }
 
 function* accountSaga() {

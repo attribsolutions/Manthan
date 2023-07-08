@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   deleteModuleIDSuccess,
   editHPagesIDSuccess,
@@ -127,17 +127,17 @@ function* FieldValidations_DropDown_GenratorFunction({ id }) {
 }
 
 function* HPageSaga() {
-  yield takeEvery(SAVE_HPAGES, saveHPageSaga_GneratorFunction)
-  yield takeEvery(GET_HPAGES_LIST_DATA, fetchHPagesList_GneratorFunction);
-  yield takeEvery(EDIT_H_PAGES_ID, editHpages_ID);
-  yield takeEvery(GET_H_SUB_MODULES, GetH_Modules);
-  yield takeEvery(UPDATE_H_PAGES, update_HPagesUsingID_GenratorFunction);
-  yield takeEvery(DELETE_HPAGES_USING_ID, deleteHpagesUsingID_GenratorFunction)
-  yield takeEvery(GET_PAGELIST, PageList_DropDown_GenratorFunction)
-  yield takeEvery(GET_PAGETYPE, PageType_DropDown_GenratorFunction)
-  yield takeEvery(GET_PAGEACCESS_DROPDOWN_API, PageAccess_DropDown_GenratorFunction)
-  yield takeEvery(GET_CONTROL_TYPES, ControlTypes_DropDown_GenratorFunction)
-  yield takeEvery(GET_FIELD_VALIDATIONS, FieldValidations_DropDown_GenratorFunction)
+  yield takeLatest(SAVE_HPAGES, saveHPageSaga_GneratorFunction)
+  yield takeLatest(GET_HPAGES_LIST_DATA, fetchHPagesList_GneratorFunction);
+  yield takeLatest(EDIT_H_PAGES_ID, editHpages_ID);
+  yield takeLatest(GET_H_SUB_MODULES, GetH_Modules);
+  yield takeLatest(UPDATE_H_PAGES, update_HPagesUsingID_GenratorFunction);
+  yield takeLatest(DELETE_HPAGES_USING_ID, deleteHpagesUsingID_GenratorFunction)
+  yield takeLatest(GET_PAGELIST, PageList_DropDown_GenratorFunction)
+  yield takeLatest(GET_PAGETYPE, PageType_DropDown_GenratorFunction)
+  yield takeLatest(GET_PAGEACCESS_DROPDOWN_API, PageAccess_DropDown_GenratorFunction)
+  yield takeLatest(GET_CONTROL_TYPES, ControlTypes_DropDown_GenratorFunction)
+  yield takeLatest(GET_FIELD_VALIDATIONS, FieldValidations_DropDown_GenratorFunction)
 }
 
 export default HPageSaga;

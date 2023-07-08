@@ -1,5 +1,5 @@
 import { Filter } from "interweave";
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import { Save_Party_Items, get_Party_Item_List, GetPartyList_API, edit_PartyItem_List_Api, } from "../../../helpers/backend_helper";
 import { SavePartyItemsSuccess, getPartyItemListSuccess, getPartyListSuccess, editPartyItemIDSuccess, } from "./action";
@@ -62,10 +62,10 @@ function* editPartyItems_ID_GenratorFunction({ body }) {     // edit API
 
 
 function* PartyItemsSaga() {
-  yield takeEvery(POST_PARTYITEMS, Save_PartyItems_GneratorFunction)
-  yield takeEvery(GET_PARTY_ITEM_LIST, getPartyItemGenFunc)
-  yield takeEvery(GET_PARTY_LIST, getPartyListGenFunc)
-  yield takeEvery(EDIT_PARTY_ITEM_ID, editPartyItems_ID_GenratorFunction)
+  yield takeLatest(POST_PARTYITEMS, Save_PartyItems_GneratorFunction)
+  yield takeLatest(GET_PARTY_ITEM_LIST, getPartyItemGenFunc)
+  yield takeLatest(GET_PARTY_LIST, getPartyListGenFunc)
+  yield takeLatest(EDIT_PARTY_ITEM_ID, editPartyItems_ID_GenratorFunction)
 
 
 }

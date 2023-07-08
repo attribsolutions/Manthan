@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   GroupApiErrorAction,
   deleteGrouplistSuccess,
@@ -60,11 +60,11 @@ function* Update_Grouplist_ID_GenFunc({ config }) {                    // update
 }
 
 function* GroupSaga() {
-  yield takeEvery(SAVE_GROUP_MASTER, Save_Method_ForGroupMaster_GenFun)
-  yield takeEvery(GET_GROUP_LIST, Get_Group_List_GenFunc)
-  yield takeEvery(DELETE_GROUP_LIST_ID, Delete_GroupList_ID_GenFunc)
-  yield takeEvery(EDIT_GROUPMASTER_ID, Edit_Grouplist_ID_GenFunc)
-  yield takeEvery(UPDATE_GROUPMASTER_ID, Update_Grouplist_ID_GenFunc)
+  yield takeLatest(SAVE_GROUP_MASTER, Save_Method_ForGroupMaster_GenFun)
+  yield takeLatest(GET_GROUP_LIST, Get_Group_List_GenFunc)
+  yield takeLatest(DELETE_GROUP_LIST_ID, Delete_GroupList_ID_GenFunc)
+  yield takeLatest(EDIT_GROUPMASTER_ID, Edit_Grouplist_ID_GenFunc)
+  yield takeLatest(UPDATE_GROUPMASTER_ID, Update_Grouplist_ID_GenFunc)
 }
 
 export default GroupSaga;
