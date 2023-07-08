@@ -25,7 +25,6 @@ import {
 import {
     editGroupTypeIDSuccess,
     getGroupTypeslist,
-    getGroupTypeslistSuccess,
     saveGroupTypeMaster,
     saveGroupTypeMasterSuccess,
     updateGroupTypeID,
@@ -210,11 +209,10 @@ const GroupTypeMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateGroupTypeIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
-                })
+                  })
             );
         }
     }, [updateMsg, modalCss]);

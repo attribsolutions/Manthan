@@ -11,7 +11,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,6 +47,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const SalesManMaster = (props) => {
 
@@ -165,37 +166,35 @@ const SalesManMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveSalesManMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) // Clear form values 
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.SALESMAN_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.SALESMAN_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(getSalesManlistSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [postMsg])
 
@@ -208,9 +207,8 @@ const SalesManMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateSalesManIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

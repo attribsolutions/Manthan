@@ -186,9 +186,8 @@ const BankMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBankIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

@@ -22,7 +22,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import {
-    AlertState,
     commonPageField,
     commonPageFieldSuccess
 } from "../../../store/actions";
@@ -172,9 +171,7 @@ const EmployeeTypesMaster = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                // history.push({
-                //     Data: postMsg.Data
-                // })
+                
                 dispatch(getEmployeeTypelist())
 
                 props.isOpenModal(false)
@@ -214,11 +211,10 @@ const EmployeeTypesMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateEmployeeTypeIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
-                })
+                  })
             );
         }
     }, [updateMsg, modalCss]);

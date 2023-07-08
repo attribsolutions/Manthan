@@ -169,7 +169,7 @@ const ImportFieldAdd = (props) => {
     }, [])
 
     // This UseEffect clear Form Data and when modules Save Successfully.
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(save_ImportFiledAdd_Success({ Status: false }))
@@ -177,30 +177,28 @@ const ImportFieldAdd = (props) => {
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.IMPORT_FIELD_ADD_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.IMPORT_FIELD_ADD_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(save_ImportFiledAdd_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 

@@ -38,6 +38,7 @@ import * as mode from "../../../routes/PageMode";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 const DriverMaster = (props) => {
@@ -150,36 +151,34 @@ const DriverMaster = (props) => {
     }, [])
 
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveDriverMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.DRIVER_lIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.DRIVER_lIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(getDriverListSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
@@ -192,9 +191,8 @@ const DriverMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateDriverID_Success({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

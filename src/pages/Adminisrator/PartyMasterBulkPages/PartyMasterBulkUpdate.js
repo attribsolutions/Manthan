@@ -49,7 +49,7 @@ import {
 import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 
 
 const PartyMasterBulkUpdate = (props) => {
@@ -93,8 +93,10 @@ const PartyMasterBulkUpdate = (props) => {
         State,
         saveBtnloading,
         listBtnLoading,
+        districtDropDownLoading,
     } = useSelector((state) => ({
         listBtnLoading: state.PartyMasterBulkUpdateReducer.listBtnLoading,
+        districtDropDownLoading: state.PartyMasterReducer.districtDropDownLoading,
         saveBtnloading: state.PartyMasterBulkUpdateReducer.saveBtnloading,
         postMsg: state.PartyMasterBulkUpdateReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -159,39 +161,36 @@ const PartyMasterBulkUpdate = (props) => {
         dispatch(postPartyName_for_dropdown(jsonBody));
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
-            // dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.PARTY_MASTER_BULK_UPDATE,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.PARTY_MASTER_BULK_UPDATE })
+                }
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
             dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [postMsg.Status])
 
@@ -287,7 +286,6 @@ const PartyMasterBulkUpdate = (props) => {
 
         user.Newvalue = event.target.checked
     }
-
 
 
     function partyOnchange(e) {
@@ -429,9 +427,10 @@ const PartyMasterBulkUpdate = (props) => {
                 <div style={{ width: "180px" }}>
                     <Col>
                         <FormGroup >
-                            <Select
+                            <C_Select
                                 id={`id${key}`}
                                 value={district_dropdown_Select}
+                                isLoading={districtDropDownLoading}
                                 options={DistrictOnStateValues}
                                 onChange={(event) => handllerDistrictOnState(event, user)}
                             />

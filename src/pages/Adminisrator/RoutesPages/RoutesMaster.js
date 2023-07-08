@@ -44,6 +44,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoutesMaster = (props) => {
 
@@ -171,39 +172,37 @@ const RoutesMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveRoutesMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) // Clear form values 
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
 
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.ROUTES_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.ROUTES_LIST })
+                }
             }
         }
 
         else if (postMsg.Status === true) {
             dispatch(GetRoutesListSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [postMsg])
 
@@ -219,9 +218,8 @@ const RoutesMaster = (props) => {
         else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateRoutesIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

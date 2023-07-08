@@ -50,6 +50,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import AddMaster from "../EmployeePages/Drodown";
 import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 const RoleMaster = (props) => {
@@ -182,38 +183,35 @@ const RoleMaster = (props) => {
     }
   }, [])
 
-  useEffect(() => {
+  useEffect(async () => {
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values  
       dispatch(Breadcrumb_inputName(''))
 
       if (pageMode === mode.dropdownAdd) {
-        dispatch(AlertState({
+        customAlert({
           Type: 1,
-          Status: true,
           Message: postMsg.Message,
-        }))
+      })
       }
       else {
-        dispatch(AlertState({
+        let isPermission = await customAlert({
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-          RedirectPath: url.ROLE_lIST,
-
-        }))
+      })
+      if (isPermission) {
+          history.push({ pathname: url.ROLE_lIST })
+      }
       }
     }
     else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
-      dispatch(AlertState({
+      customAlert({
         Type: 4,
-        Status: true,
-        Message: JSON.stringify(postMsg.Message),
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
+        Message: JSON.stringify(postMessage.Message),
+    })
     }
   }, [postMsg.Status])
 
@@ -226,11 +224,10 @@ const RoleMaster = (props) => {
     } else if (updateMsg.Status === true && !modalCss) {
       dispatch(userUpdateActionSuccess({ Status: false }));
       dispatch(
-        AlertState({
+        customAlert({
           Type: 3,
-          Status: true,
           Message: JSON.stringify(updateMsg.Message),
-        })
+      })
       );
     }
   }, [updateMsg, modalCss]);
