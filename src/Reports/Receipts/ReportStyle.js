@@ -1,7 +1,7 @@
 import CheckBox from "jspdf";
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
-import { date_dmy_func } from "../../components/Common/CommonFunction";
+import { CurrentTime, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
 import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
 import * as table from './TableData'
@@ -17,177 +17,55 @@ export const pageBorder = (doc) => {
     doc.line(570, 379, 30, 379);//horizontal line (Bottom)   
 }
 
+let final_y = 0
+
 export const Receipts = (doc, data) => {
-    
-    doc.setLineDash([7, 3, 1, 3], 10)
-    doc.setFont(undefined, 'bold')
-    doc.setFontSize(19)
-    doc.setLineWidth(1);
-    doc.roundedRect(45, 37, 220, 30, 5, 5, 'S')
-    doc.text('PAYMENT RECEIPT ', 60, 60,)
-
-   
-
-
-
-
-
-
-    doc.setFontSize(10)
-    doc.addFont("Arial", 'Normal')
-    doc.text('RECEIPT NO:', 60, 130,)
-    doc.setFont(undefined, 'Normal')
-    doc.text(`${data.FullReceiptNumber}`, 140, 130,)
-    doc.setLineWidth(0);
-    doc.line(170, 132, 130, 132); // RECEIPT NO LINE 
-
-
-    doc.text('Bill NO:', 270, 130,)
-    doc.setLineWidth(0);
-    doc.line(310, 132, 350, 132);
-
-
-    doc.setFont(undefined, 'bold')
-    doc.setFontSize(11)
-    doc.text('Recived with thanks from:', 60, 160,)
-    doc.setFont(undefined, 'Normal')
-    doc.text(`${data.Party}`, 190, 159,)
-    doc.setLineWidth(0);
-    doc.line(550, 162, 183, 162);
-
-    doc.setFontSize(11)
-    doc.setFont(undefined, 'bold')
-    doc.text('Amount in Word :', 60, 190,)
-    doc.setFont(undefined, 'Normal')
-    let stringNumber = toWords(Number(data.AmountPaid))
-    doc.text(`${stringNumber}`, 170, 189,)
-    doc.setLineWidth(0);
-    doc.line(550, 190, 143, 190); // RECEIPT NO LINE (Top)
-
-
-    doc.setFont(undefined, 'bold')
-    doc.text('Receipt Mode :', 60, 220,)
-    doc.setLineWidth(0);
-    doc.setFont(undefined, 'Normal')
-    doc.text(`${data.ReceiptModeName}`, 160, 219,)
-    doc.line(220, 220, 130, 220); // RECEIPT NO LINE (Top)
-
-
-    if (data.ReceiptModeName === "RTGS") {
-
-        doc.setFont(undefined, 'bold')
-        doc.text('Bank :', 60, 250,)
-        doc.setLineWidth(0);
-        doc.setFont(undefined, 'Normal')
-        doc.line(300, 250, 90, 250); // RECEIPT NO LINE (Top)
-
-        doc.setFont(undefined, 'bold')
-        doc.text('Depositor Bank :', 320, 250,)
-        doc.setLineWidth(0);
-        doc.setFont(undefined, 'Normal')
-        doc.line(550, 250, 400, 250); // RECEIPT NO LINE (Top)
-
-        doc.setFont(undefined, 'bold')
-        doc.text('Description :', 60, 280,)
-        doc.setFont(undefined, 'Normal')
-        doc.setLineWidth(0);
-        doc.line(550, 280, 130, 280); // RECEIPT NO LINE (Top)
-
-    }
-
-
-
-    if (data.ReceiptModeName === "Cheque") {
-        doc.setFont(undefined, 'bold')
-        doc.text('Cheque No :', 226, 220,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${data.DocumentNo}`, 300, 219,)
-        doc.setLineWidth(0);
-        doc.line(340, 220, 282, 220); // RECEIPT NO LINE (Top)
-
-
-        doc.setFont(undefined, 'bold')
-        doc.text('Cheque Date :', 360, 220,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${data.ChequeDate}`, 440, 219,)
-        doc.setLineWidth(0);
-        doc.line(425, 220, 550, 220); // RECEIPT NO LINE (Top)
-
-
-        doc.setFont(undefined, 'bold')
-        doc.text('Bank :', 60, 250,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${data.BankName}`, 100, 249,)
-        doc.setLineWidth(0);
-        doc.line(300, 250, 90, 250); // RECEIPT NO LINE (Top)
-
-
-        doc.setFont(undefined, 'bold')
-        doc.text('Depositor Bank :', 320, 250,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${data.DepositorBankName}`, 420, 249,)
-
-        doc.setLineWidth(0);
-        doc.line(550, 250, 400, 250); // RECEIPT NO LINE (Top)
-
-
-        doc.setFont(undefined, 'bold')
-        doc.text('Description :', 60, 280,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${data.Description}`, 125, 279,)
-
-        doc.setLineWidth(0);
-        doc.line(550, 280, 130, 280); // RECEIPT NO LINE (Top)
-
-    }
-
-
-    if (data.ReceiptModeName === "Cash") {
-        doc.setFont(undefined, 'bold')
-        doc.text('Description :', 60, 250,)
-        doc.setFont(undefined, 'Normal')
-        doc.text(`${data.Description}`, 125, 249,)
-
-        doc.setLineWidth(0);
-        doc.line(550, 250, 130, 250); // RECEIPT NO LINE (Top)
-    }
-
-
-
-    doc.setFontSize(12)
-    doc.text('Amount:', 60, 310,)
-    const GrandTotal = Math.round(data.AmountPaid)
-    const Total = numberWithCommas((GrandTotal).toFixed(2))
-    doc.roundedRect(112, 297, 150, 20, 5, 5, 'S')
-    doc.text(`Rs`, 140, 311, 'right')
-
-    doc.text(`${Total}`, 230, 311, 'right')
-
-
-
-
-
-    doc.text('Authorized Signatory ', 430, 360,)
-    // doc.line(550, 348, 400, 348); // RECEIPT NO LINE (Top)
-
-
-
-    // doc.text('Prepared By ', 60, 360,)
-    doc.text(`Prepared By : ${data.Customer}`  , 60, 360,)
-
-   
-    // doc.line(550, 348, 400, 348); // RECEIPT NO LINE (Top)
-
-
-
-
-
-
 
 
     var BilledByStyle = {
+        didParseCell: (data1) => {
+            if (data1.cell.raw === data.Party) {
+                data1.cell.styles.fontStyle = 'bold';
+                data1.cell.styles.fontSize = 13;
+            }
+        },
         margin: {
-            top: 0, left: 350, right: 35,
+            top: 0,
+            left: 370,
+            right: 50,
+        },
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 9,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 1,
+            fontSize: 10,
+            fontStyle: 'Normal',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: 'top',
+                columnWidth: 180, // Reduce the column width to fit within the page
+                halign: 'left',
+            },
+        },
+        tableLineColor: 'black',
+        startY: 20,
+    };
+
+    var DetailsOfReceipt = {
+
+        margin: {
+            top: 0,
+            left: 130,
+            right: 35,
         },
         showHead: 'always',
         theme: 'plain',
@@ -202,34 +80,115 @@ export const Receipts = (doc, data) => {
             cellPadding: 1,
             fontSize: 10,
             fontStyle: 'bold',
-            lineColor: [0, 0, 0]
+            lineColor: [0, 0, 0],
         },
         columnStyles: {
             0: {
-                valign: "top",
-                columnWidth: 220,
-                halign: 'lfet',
-            }
+                valign: 'top',
+                columnWidth: 440, // Reduce the column width to fit within the page
+                halign: 'left',
+            },
         },
-        tableLineColor: "black",
-        startY: 20,
+        tableLineColor: 'black',
+        startY: 190,
     };
 
+    doc.autoTable(table.Details, table.ReceiptDetails(doc, data), DetailsOfReceipt);
+    doc.setFontSize(15);
+    doc.text(`Customer Payment Receipt`, 40, 40,);
+
+    // doc.setFontSize(18);
+    // doc.text(`Receipt`, 340, 100, 'right');
+
+    doc.setFontSize(11);
+    doc.setFont(undefined, 'bold')
+
+    doc.text(`RECIEPT NO : ${data.FullReceiptNumber} `, 40, 145, 'left');
+    doc.setFont(undefined, 'Normal')
+    doc.setFont(undefined, 'bold')
+
+    doc.text(`Bill NO : ${data.BillNumber === null ? "" : data.BillNumber} `, 300, 145, 'left');
+    doc.setFont(undefined, 'Normal')
+
+
+    doc.text(`RECEIVED With thanks from :`, 40, 180, 'left');
+
+    doc.setFont(undefined, 'bold')
+    doc.text(`${data.Customer}`, 190, 180,);
+    doc.setFont(undefined, 'Normal')
+    doc.text(`Amount in Words `, 40, 200, 'left');
+
+    doc.setFont(undefined, 'Normal')
+
+    final_y = doc.previousAutoTable.finalY
+    doc.text(`Receipt Mode :`, 40, final_y + 10, 'left');
+    doc.setFont(undefined, 'bold')
+    doc.text(`${data.ReceiptModeName}`, 110, final_y + 10,);
+    doc.setFont(undefined, 'Normal')
+    if (data.ReceiptModeName === "Cheque") {
+        doc.text(`Bank Name`, 40, final_y + 25, 'left');
+        doc.setFont(undefined, 'bold')
+        doc.text(`${data.DocumentNo}/${data.BankName}`, 100, final_y + 25,);
+        debugger
+        var bankwidth = doc.getTextWidth(`${data.DocumentNo}/${data.BankName}`);
+        doc.setFont(undefined, 'Normal')
+        doc.text(`Depositor BankName`, 40 + bankwidth + 80, final_y + 25, 'left');
+        doc.setFont(undefined, 'bold')
+
+        doc.text(`${data.DepositorBankName}`, 40 + bankwidth + 190, final_y + 25, 'left');
+        doc.setFont(undefined, 'bold')
+    }
+
+
+    doc.text(`Prepared By`, 40, 320, 'left');
+    doc.setFont(undefined, 'Normal')
+
+    doc.text(`Authorize signatory`, 480, 325, "center");
+    doc.setFont(undefined, 'bold')
+
+    doc.text(`For${data.Party}`, 480, 310, "center");
+    doc.setFont(undefined, 'Normal')
+
+    doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 40, 375,)
+
+
+
+
+
+
+
+
+
+
+
+
     doc.autoTable(table.Address, table.AddressDetails(data), BilledByStyle);
-    let finalY = doc.previousAutoTable.finalY;
 
-    doc.line(570, finalY, 30, finalY); // RECEIPT NO LINE 
-    doc.line(570, finalY+4, 30, finalY+4); // RECEIPT NO LINE 
-
-    doc.line(570, 340, 30, 340); // RECEIPT NO LINE 
-
-    
+};
 
 
 
 
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

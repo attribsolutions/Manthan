@@ -29,7 +29,7 @@ function pageFooter(doc,data) {
     
     const options = { filename: "Receipt Report" ,}
     doc.output('dataurlnewwindow', options);
-
+ 
     // return(<></>);
 }
 export default Receipts;
