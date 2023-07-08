@@ -1,6 +1,9 @@
 import {
   CREDITDEBIT_TYPE_SUCCESS,
+  CREDIT_DEBIT_API_ERROR_ACTION,
+  DELETE_CREDIT_LIST_ID,
   DELETE_CREDIT_LIST_ID_SUCCESS,
+  EDIT_CREDIT_LIST_ID,
   EDIT_CREDIT_LIST_ID_SUCCESS,
   GET_CREDIT_LIST,
   GET_CREDIT_LIST_SUCCESS,
@@ -54,12 +57,21 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
         CreditList: action.payload,
         listBtnLoading: false
       }
+
     //  del
+    case DELETE_CREDIT_LIST_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
     case DELETE_CREDIT_LIST_ID_SUCCESS:
       return {
         ...state,
         deleteMsg: action.payload,
+        listBtnLoading: false
       };
+
     //  CredietDebit Type
     case CREDITDEBIT_TYPE_SUCCESS:
       return {
@@ -67,10 +79,18 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
         CreditDebitType: action.payload,
       };
 
+      
+    case EDIT_CREDIT_LIST_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
     case EDIT_CREDIT_LIST_ID_SUCCESS:
       return {
         ...state,
         editData: action.payload,
+        listBtnLoading: false
       };
 
     case INVOICE_RETURN_ID_SUCCESS:
@@ -84,6 +104,13 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
         ...state,
         ReceiptNumber: action.payload,
       };
+
+    case CREDIT_DEBIT_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listBtnLoading: false,
+      }
 
     default:
       return state
