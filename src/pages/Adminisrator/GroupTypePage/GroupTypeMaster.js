@@ -13,7 +13,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import {  commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,

@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +28,6 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -226,7 +225,7 @@ const ManagementEmpParties = (props) => {
 
         if ((totalTrueValues === 0)) {
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 4,
                     Status: true,
                     Message: "At least One Party is Selected",

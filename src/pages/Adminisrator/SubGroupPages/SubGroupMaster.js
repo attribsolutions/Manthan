@@ -26,7 +26,6 @@ import {
     updateSubgroupIDSuccess
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
