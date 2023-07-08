@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 
 import {
   saveTermAndConditionSuccess,
@@ -75,11 +75,11 @@ function* update_TermsAndCondtions_GenratorFunction({ config }) {
 
 
 function* TermsAndConditionsSaga() {
-  yield takeEvery(POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API, Save_Method_ForTermsAndCondtionsMaster_GenFun)
-  yield takeEvery(GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Get_TermsAndCondtions_GenratorFunction)
-  yield takeEvery(DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Delete_TermsAndCondtions_GenratorFunction)
-  yield takeEvery(EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Edit_TermsAndCondtions_GenratorFunction)
-  yield takeEvery(UPDATE_METHOD_FOR_TERMSANDCONDITIONSLIST_API, update_TermsAndCondtions_GenratorFunction)
+  yield takeLatest(POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API, Save_Method_ForTermsAndCondtionsMaster_GenFun)
+  yield takeLatest(GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Get_TermsAndCondtions_GenratorFunction)
+  yield takeLatest(DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Delete_TermsAndCondtions_GenratorFunction)
+  yield takeLatest(EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Edit_TermsAndCondtions_GenratorFunction)
+  yield takeLatest(UPDATE_METHOD_FOR_TERMSANDCONDITIONSLIST_API, update_TermsAndCondtions_GenratorFunction)
 }
 
 export default TermsAndConditionsSaga;

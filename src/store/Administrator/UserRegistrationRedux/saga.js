@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   getEmployee_Dropdown_For_UserRegistration_API,
   User_Component_PostMethod_API,
@@ -109,13 +109,13 @@ function* Get_UserPartiesForUserMaster_GenFunc({ editDetail }) {
 }
 
 function* UserRegistrationSaga() {
-  yield takeEvery(GET_EMPLOYEE_FOR_USER_REGISTRATION, EmployeelistDropdown_GenFunc);
-  yield takeEvery(ADD_USER, user_save_GenFunc);
-  yield takeEvery(UPDATE_USER_ACTION, Update_User_GenFunc);
-  yield takeEvery(GET_USER_LIST_FOR_USER, userList_GenFunc)
-  yield takeEvery(DELETE_USER_ACTION, Delete_UserList_GenFunc)
-  yield takeEvery(EDIT_USER_ACTION, Edit_UserList_GenFunc)
-  yield takeEvery(GET_USER_PARTIES_FOR_USER_MASTER, Get_UserPartiesForUserMaster_GenFunc)
+  yield takeLatest(GET_EMPLOYEE_FOR_USER_REGISTRATION, EmployeelistDropdown_GenFunc);
+  yield takeLatest(ADD_USER, user_save_GenFunc);
+  yield takeLatest(UPDATE_USER_ACTION, Update_User_GenFunc);
+  yield takeLatest(GET_USER_LIST_FOR_USER, userList_GenFunc)
+  yield takeLatest(DELETE_USER_ACTION, Delete_UserList_GenFunc)
+  yield takeLatest(EDIT_USER_ACTION, Edit_UserList_GenFunc)
+  yield takeLatest(GET_USER_PARTIES_FOR_USER_MASTER, Get_UserPartiesForUserMaster_GenFunc)
 
 }
 export default UserRegistrationSaga;

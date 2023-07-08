@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   saveCompanyGroupMasterSuccess,
   getCompanyGroupListSuccess,
@@ -22,7 +22,6 @@ import {
   UPDATE_COMPANY_GROUP_ID
 } from "./actionType";
 
-import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 function* Get_CompanyGroup_GenratorFunction() {//get API
   try {
@@ -62,11 +61,11 @@ function* Delete_CompanyGroupType_ID_GenratorFunction({ config }) { //Delete API
 }
 
 function* CompanyGroupSaga() {
-  yield takeEvery(SAVE_COMPANY_GROUP_MASTER, Post_Method_For_CompanyGroup_GenFun)
-  yield takeEvery(GET_COMPANY_GROUP_LIST, Get_CompanyGroup_GenratorFunction)
-  yield takeEvery(EDIT_COMPANY_GROUP_ID, Edit_CompanyGroupType_ID_GenratorFunction)
-  yield takeEvery(UPDATE_COMPANY_GROUP_ID, Update_CompanyGroupType_ID_GenratorFunction)
-  yield takeEvery(DELETE_COMPANY_GROUP_ID, Delete_CompanyGroupType_ID_GenratorFunction)
+  yield takeLatest(SAVE_COMPANY_GROUP_MASTER, Post_Method_For_CompanyGroup_GenFun)
+  yield takeLatest(GET_COMPANY_GROUP_LIST, Get_CompanyGroup_GenratorFunction)
+  yield takeLatest(EDIT_COMPANY_GROUP_ID, Edit_CompanyGroupType_ID_GenratorFunction)
+  yield takeLatest(UPDATE_COMPANY_GROUP_ID, Update_CompanyGroupType_ID_GenratorFunction)
+  yield takeLatest(DELETE_COMPANY_GROUP_ID, Delete_CompanyGroupType_ID_GenratorFunction)
 }
 
 export default CompanyGroupSaga;

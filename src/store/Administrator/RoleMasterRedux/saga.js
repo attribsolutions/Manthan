@@ -1,5 +1,5 @@
-import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
+import { call, put, takeLatest } from "redux-saga/effects";
+import {loginJsonBody } from "../../../components/Common/CommonFunction";
 import {
   Role_Master_Delete_API,
   Role_Master_Edit_API,
@@ -61,11 +61,11 @@ function* Update_Roles_GenratorFunction({ config }) {                       //Up
 }
 
 function* RoleMaster_Saga() {
-  yield takeEvery(GET_ROLE_LIST_API, Get_Roles_GenratorFunction);
-  yield takeEvery(POST_ROLE_MASTER, Submit_Roles_GenratorFunction);
-  yield takeEvery(EDIT_ROLE_LIST_ID, Edit_Roles_GenratorFunction);
-  yield takeEvery(DELETE_ROLE_LIST_ID, Delete_Roles_GenratorFunction);
-  yield takeEvery(UPDATE_ROLE_LIST_ID, Update_Roles_GenratorFunction);
+  yield takeLatest(GET_ROLE_LIST_API, Get_Roles_GenratorFunction);
+  yield takeLatest(POST_ROLE_MASTER, Submit_Roles_GenratorFunction);
+  yield takeLatest(EDIT_ROLE_LIST_ID, Edit_Roles_GenratorFunction);
+  yield takeLatest(DELETE_ROLE_LIST_ID, Delete_Roles_GenratorFunction);
+  yield takeLatest(UPDATE_ROLE_LIST_ID, Update_Roles_GenratorFunction);
 }
 
 export default RoleMaster_Saga;

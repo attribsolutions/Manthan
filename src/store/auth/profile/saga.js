@@ -1,4 +1,4 @@
-import { takeEvery, fork, put, all, call } from "redux-saga/effects"
+import { takeLatest, fork, put, all, call } from "redux-saga/effects"
 
 // Login Redux States
 import { EDIT_PROFILE } from "./actionTypes"
@@ -43,7 +43,7 @@ function* editProfile({ payload: { user } }) {
 
 
 export function* watchProfile() {
-  yield takeEvery(EDIT_PROFILE, editProfile)
+  yield takeLatest(EDIT_PROFILE, editProfile)
 }
 
 function* ProfileSaga() {

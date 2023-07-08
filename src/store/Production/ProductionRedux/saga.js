@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 
 import {
   delete_ProductionIdSuccess,
@@ -106,12 +106,12 @@ function* UnitIDForProduction_saga({ data }) {
 }
 
 function* ProductionSaga() {
-  yield takeEvery(GET_PRODUCTION_ITEM_MODE_2, getProduction_Mode2_GenFunc);
-  yield takeEvery(EDIT_PRODUCTION_FOR_PRODUCTION_PAGE, editProduction_GenFunc);
-  yield takeEvery(POST_PRODUCTION_FROM_PRODUCTION_PAGE, SaveProductionGenFunc);
-  yield takeEvery(UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE, UpdateProductionGenFunc);
-  yield takeEvery(DELETE_PRODUCTION_ID, DeleteProductionGenFunc);
-  yield takeEvery(GET_PRODUCTION_LIST_PAGE, get_PRODUCTION_GerFunc);
-  yield takeEvery(GET_UNIT_ID_FOR_PRODUNCTION, UnitIDForProduction_saga);
+  yield takeLatest(GET_PRODUCTION_ITEM_MODE_2, getProduction_Mode2_GenFunc);
+  yield takeLatest(EDIT_PRODUCTION_FOR_PRODUCTION_PAGE, editProduction_GenFunc);
+  yield takeLatest(POST_PRODUCTION_FROM_PRODUCTION_PAGE, SaveProductionGenFunc);
+  yield takeLatest(UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE, UpdateProductionGenFunc);
+  yield takeLatest(DELETE_PRODUCTION_ID, DeleteProductionGenFunc);
+  yield takeLatest(GET_PRODUCTION_LIST_PAGE, get_PRODUCTION_GerFunc);
+  yield takeLatest(GET_UNIT_ID_FOR_PRODUNCTION, UnitIDForProduction_saga);
 }
 export default ProductionSaga;

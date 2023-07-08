@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import { Post_Route_Update_API, Route_Update_List_API } from "../../../helpers/backend_helper";
 import { Post_RouteUpdateSuccess, RouteUpdateListSuccess } from "./action";
@@ -22,8 +22,8 @@ function* Post_RouteUpdate_GenratorFunction({ config = {} }) {
 }
 
 function* RouteUpdateSaga() {
-    yield takeEvery(ROUTE_UPDATE_LIST, RouteUpdate_List_GenratorFunction)
-    yield takeEvery(POST_ROUTE_UPDATE, Post_RouteUpdate_GenratorFunction)
+    yield takeLatest(ROUTE_UPDATE_LIST, RouteUpdate_List_GenratorFunction)
+    yield takeLatest(POST_ROUTE_UPDATE, Post_RouteUpdate_GenratorFunction)
 }
 
 export default RouteUpdateSaga;

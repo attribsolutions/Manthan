@@ -1,5 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { GroupTypes_API, GroupTypes_Delete_API, GroupTypes_Edit_API, GroupTypes_Post_API, GroupTypes_Update_API } from "../../../helpers/backend_helper";
 import { GroupTypeApiErrorAction, deleteGroupTypeIDSuccess, editGroupTypeIDSuccess, getGroupTypeslistSuccess, saveGroupTypeMasterSuccess, updateGroupTypeIDSuccess } from "./action";
 import { DELETE_GROUP_TYPE_ID, EDIT_GROUP_TYPE_ID, GET_GROUP_TYPES_LIST, SAVE_GROUP_TYPE_MASTER, UPDATE_GROUP_TYPE_ID } from "./actionType";
@@ -43,11 +42,11 @@ function* Delete_GroupType_ID_GenFun({ config }) {                     // delete
 }
 
 function* GroupTypeSaga() {
-    yield takeEvery(SAVE_GROUP_TYPE_MASTER, save_GroupType_GenFun)
-    yield takeEvery(GET_GROUP_TYPES_LIST, Get_GroupType_List_GenrFun)
-    yield takeEvery(EDIT_GROUP_TYPE_ID, Edit_GroupType_ID_GenFun)
-    yield takeEvery(UPDATE_GROUP_TYPE_ID, Update_GroupType_ID_GenFun)
-    yield takeEvery(DELETE_GROUP_TYPE_ID, Delete_GroupType_ID_GenFun)
+    yield takeLatest(SAVE_GROUP_TYPE_MASTER, save_GroupType_GenFun)
+    yield takeLatest(GET_GROUP_TYPES_LIST, Get_GroupType_List_GenrFun)
+    yield takeLatest(EDIT_GROUP_TYPE_ID, Edit_GroupType_ID_GenFun)
+    yield takeLatest(UPDATE_GROUP_TYPE_ID, Update_GroupType_ID_GenFun)
+    yield takeLatest(DELETE_GROUP_TYPE_ID, Delete_GroupType_ID_GenFun)
 
 }
 

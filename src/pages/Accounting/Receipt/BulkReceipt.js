@@ -34,14 +34,12 @@ const BulkRecipt = (props) => {
     const {
         postMsg,
         ReceiptGoButton,
-        pageField,
         saveBtnloading,
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
             saveBtnloading: state.ReceiptReducer.saveBtnloading,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageField
         }));
 
     const location = { ...history.location }

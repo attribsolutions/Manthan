@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { Material_Issue_Delete_API, Material_Issue_Edit_API, Material_Issue_Get_API, Material_Issue_GoButton_Post_API, Material_Issue_Post_API } from "../../../helpers/backend_helper";
 import { deleteMaterialIssueIdSuccess, editMaterialIssueIdSuccess, getMaterialIssueListPageSuccess, goButtonForMaterialIssue_Master_ActionSuccess, SaveMaterialIssueSuccess } from "./action";
@@ -105,11 +105,11 @@ function* Delete_Metrialissue_listpage_GenFunc({ config }) {                    
 }
 
 function* MaterialIssueSaga() {
-  yield takeEvery(POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER, GoButton_MaterialIssue_masterPage_genfun)
-  yield takeEvery(POST_MATERIAL_ISSUE, save_Material_Issue_Genfun)
-  yield takeEvery(GET_MATERIAL_ISSUE_LIST_PAGE, GoButton_MaterialIssue_listpage_GenFunc)
-  yield takeEvery(DELETE_MATERIAL_ISSUE_LIST_PAGE, Delete_Metrialissue_listpage_GenFunc)
-  yield takeEvery(EDIT_MATERIAL_ISSUE_LIST_PAGE, edit_Metrialissue_listpage_GenFunc)
+  yield takeLatest(POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER, GoButton_MaterialIssue_masterPage_genfun)
+  yield takeLatest(POST_MATERIAL_ISSUE, save_Material_Issue_Genfun)
+  yield takeLatest(GET_MATERIAL_ISSUE_LIST_PAGE, GoButton_MaterialIssue_listpage_GenFunc)
+  yield takeLatest(DELETE_MATERIAL_ISSUE_LIST_PAGE, Delete_Metrialissue_listpage_GenFunc)
+  yield takeLatest(EDIT_MATERIAL_ISSUE_LIST_PAGE, edit_Metrialissue_listpage_GenFunc)
 }
 
 export default MaterialIssueSaga;

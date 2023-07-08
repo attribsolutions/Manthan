@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { Inward_Delete_API, Inward_List_API, Inward_Post_API, Make_Inward_Post_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
@@ -56,10 +56,10 @@ function* Make_Inward_GenratorFunction({ config }) {
 }
 
 function* InwardSaga() {
-  yield takeEvery(POST_INWARD, Post_Inward_GenratorFunction)
-  yield takeEvery(GET_INWARD_LIST_PAGE, get_InwardList_GenFunc)
-  yield takeEvery(DELETE_INWARD_LIST_PAGE, DeleteInward_GenFunc)
-  yield takeEvery(MAKE_INWARD, Make_Inward_GenratorFunction)
+  yield takeLatest(POST_INWARD, Post_Inward_GenratorFunction)
+  yield takeLatest(GET_INWARD_LIST_PAGE, get_InwardList_GenFunc)
+  yield takeLatest(DELETE_INWARD_LIST_PAGE, DeleteInward_GenFunc)
+  yield takeLatest(MAKE_INWARD, Make_Inward_GenratorFunction)
 
 }
 

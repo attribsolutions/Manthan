@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   saveCategoryTypeMaster_Success,
   deleteCategoryTypeIDSuccess,
@@ -21,7 +21,6 @@ import {
   SAVE_CATEGORYTYPE_MASTER,
   UPDATE_CATEGORY_TYPE_ID
 } from "./actionTypes";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
 function* Save_Method_ForCategoryTypeMaster_GenFun({ config }) {             // Save API
@@ -62,11 +61,11 @@ function* Update_CategoryType_ID_GenratorFunction({ config }) {             // u
 }
 
 function* CategoryTypeSaga() {
-  yield takeEvery(SAVE_CATEGORYTYPE_MASTER, Save_Method_ForCategoryTypeMaster_GenFun)
-  yield takeEvery(GET_CATEGORY_TYPE_LIST, Get_CategoryType_List_GenratorFunction)
-  yield takeEvery(DELETE_CATEGORY_TYPE_ID, Delete_CategoryType_ID_GenratorFunction)
-  yield takeEvery(EDIT_CATEGORY_TYPE_ID, Edit_CategoryType_ID_GenratorFunction)
-  yield takeEvery(UPDATE_CATEGORY_TYPE_ID, Update_CategoryType_ID_GenratorFunction)
+  yield takeLatest(SAVE_CATEGORYTYPE_MASTER, Save_Method_ForCategoryTypeMaster_GenFun)
+  yield takeLatest(GET_CATEGORY_TYPE_LIST, Get_CategoryType_List_GenratorFunction)
+  yield takeLatest(DELETE_CATEGORY_TYPE_ID, Delete_CategoryType_ID_GenratorFunction)
+  yield takeLatest(EDIT_CATEGORY_TYPE_ID, Edit_CategoryType_ID_GenratorFunction)
+  yield takeLatest(UPDATE_CATEGORY_TYPE_ID, Update_CategoryType_ID_GenratorFunction)
 }
 
 export default CategoryTypeSaga;

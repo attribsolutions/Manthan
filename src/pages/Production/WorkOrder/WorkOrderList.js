@@ -4,7 +4,7 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { date_ymd_func, excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { date_ymd_func,  loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
     deleteWorkOrderId,
     deleteWorkOrderIdSuccess,

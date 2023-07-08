@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
@@ -132,23 +132,23 @@ function* Category_DropDown_API_GenFunc({ id }) {
 }
 
 function* ItemsMastersSaga() {
-  yield takeEvery(actionType.GET_ITEM_LIST_API, Get_Items_GenFunc);
-  yield takeEvery(actionType.GET_ITEM_GROUP_FOR_DROPDOWN, Items_Group_GenFunc);
-  yield takeEvery(actionType.SAVE_ITEM_MASTER, save_Items_GenFunc);
-  yield takeEvery(actionType.EDIT_ITEM_ID, Edit_Items_GenFunc);
-  yield takeEvery(actionType.DELETE_ITEM_ID, Delete_Items_GenFunc);
-  yield takeEvery(actionType.UPDATE_ITEM_ID, Update_Items_GenFunc);
-  yield takeEvery(actionType.GET_CATEGORYTYPE_FOR_DROPDOWN, CategoryType_DropDown_GenFunc);
+  yield takeLatest(actionType.GET_ITEM_LIST_API, Get_Items_GenFunc);
+  yield takeLatest(actionType.GET_ITEM_GROUP_FOR_DROPDOWN, Items_Group_GenFunc);
+  yield takeLatest(actionType.SAVE_ITEM_MASTER, save_Items_GenFunc);
+  yield takeLatest(actionType.EDIT_ITEM_ID, Edit_Items_GenFunc);
+  yield takeLatest(actionType.DELETE_ITEM_ID, Delete_Items_GenFunc);
+  yield takeLatest(actionType.UPDATE_ITEM_ID, Update_Items_GenFunc);
+  yield takeLatest(actionType.GET_CATEGORYTYPE_FOR_DROPDOWN, CategoryType_DropDown_GenFunc);
 
-  yield takeEvery(actionType.GET_BASEUNIT_FOR_DROPDOWN, BaseUnit_DropDown_GenFunc);
-  yield takeEvery(actionType.GET_IMAGETYPE_FOR_DROPDOWN, ImageType_DropDown_GenFunc);
-  yield takeEvery(actionType.GET_MRPTYPE_FOR_DROPDOWN, MRPType_DropDown_GenFunc);
-  yield takeEvery(actionType.GET_DIVISION_FOR_DROPDOWN, Division_DropDown_GenFunc);
-  yield takeEvery(actionType.GET_PARTY_FOR_DROPDOWN, Party_DropDown_GenFunc);
-  yield takeEvery(actionType.GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN, Group_DropDown_GenFunc);
-  yield takeEvery(actionType.GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, SubGroup_DropDown_GenFunc);
-  yield takeEvery(actionType.GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, Category_DropDown_API_GenFunc);
-  yield takeEvery(actionType.GET_ITEMTAG_API, Item_tagname_GenFunc);
+  yield takeLatest(actionType.GET_BASEUNIT_FOR_DROPDOWN, BaseUnit_DropDown_GenFunc);
+  yield takeLatest(actionType.GET_IMAGETYPE_FOR_DROPDOWN, ImageType_DropDown_GenFunc);
+  yield takeLatest(actionType.GET_MRPTYPE_FOR_DROPDOWN, MRPType_DropDown_GenFunc);
+  yield takeLatest(actionType.GET_DIVISION_FOR_DROPDOWN, Division_DropDown_GenFunc);
+  yield takeLatest(actionType.GET_PARTY_FOR_DROPDOWN, Party_DropDown_GenFunc);
+  yield takeLatest(actionType.GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN, Group_DropDown_GenFunc);
+  yield takeLatest(actionType.GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, SubGroup_DropDown_GenFunc);
+  yield takeLatest(actionType.GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, Category_DropDown_API_GenFunc);
+  yield takeLatest(actionType.GET_ITEMTAG_API, Item_tagname_GenFunc);
 }
 
 export default ItemsMastersSaga;

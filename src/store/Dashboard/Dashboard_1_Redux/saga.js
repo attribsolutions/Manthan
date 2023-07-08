@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
@@ -14,6 +14,6 @@ function* Dashboard_Get_API_GenFunc() {
 }
 
 function* DashboardSaga() {
-    yield takeEvery(actionType.GET_DASHBOARD_DETAILS, Dashboard_Get_API_GenFunc)
+    yield takeLatest(actionType.GET_DASHBOARD_DETAILS, Dashboard_Get_API_GenFunc)
 }
 export default DashboardSaga;  

@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import {
   BOMList_Get_API,
@@ -102,13 +102,13 @@ function* DeleteWorkOrderGenFunc({ config }) {                                  
 }
 
 function* WorkOrderSaga() {
-  yield takeEvery(GET_BOM_LIST, Get_BOMList_GenratorFunction)
-  yield takeEvery(POST_GO_BUTTON_FOR_WORK_ORDER_MASTER, GoButton_WorkOrder_post_genfun)
-  yield takeEvery(POST_WORK_ORDER_MASTER, Post_WorkOrder_GenratorFunction)
-  yield takeEvery(GET_WORK_ORDER_LIST_PAGE, GetWorkOrderGenFunc)
-  yield takeEvery(EDIT_WORK_ORDER_LIST_ID, editWorkOrderGenFunc)
-  yield takeEvery(UPDATE_WORK_ORDER_LIST, UpdateWorkOrderGenFunc)
-  yield takeEvery(DELETE_WORK_ORDER_LIST_PAGE, DeleteWorkOrderGenFunc)
+  yield takeLatest(GET_BOM_LIST, Get_BOMList_GenratorFunction)
+  yield takeLatest(POST_GO_BUTTON_FOR_WORK_ORDER_MASTER, GoButton_WorkOrder_post_genfun)
+  yield takeLatest(POST_WORK_ORDER_MASTER, Post_WorkOrder_GenratorFunction)
+  yield takeLatest(GET_WORK_ORDER_LIST_PAGE, GetWorkOrderGenFunc)
+  yield takeLatest(EDIT_WORK_ORDER_LIST_ID, editWorkOrderGenFunc)
+  yield takeLatest(UPDATE_WORK_ORDER_LIST, UpdateWorkOrderGenFunc)
+  yield takeLatest(DELETE_WORK_ORDER_LIST_PAGE, DeleteWorkOrderGenFunc)
 }
 
 export default WorkOrderSaga;

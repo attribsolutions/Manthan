@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
     CityApiErrorAction,
     getCitylistSuccess,
@@ -11,8 +11,6 @@ import {
     GET_CITY_LIST,
     SAVE_CITY_MASTER,
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
-
 
 function* Save_Method_ForCityMaster_GenFun({ config }) {             // Save API
 
@@ -36,8 +34,8 @@ function* Get_City_List_GenratorFunction() {                        // getList A
 
 
 function* CitySaga() {
-    yield takeEvery(SAVE_CITY_MASTER, Save_Method_ForCityMaster_GenFun)
-    yield takeEvery(GET_CITY_LIST, Get_City_List_GenratorFunction)
+    yield takeLatest(SAVE_CITY_MASTER, Save_Method_ForCityMaster_GenFun)
+    yield takeLatest(GET_CITY_LIST, Get_City_List_GenratorFunction)
 
 
 }

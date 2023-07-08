@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Modal, } from "reactstrap";
-import { hasError500 } from '../../store/Utilites/CommonError/actions'
+// import { Modal, } from "reactstrap";
+// import { hasError500 } from '../../store/Utilites/CommonError/actions'
 
 const Spinner = () => {
     const history = useHistory();
@@ -15,7 +15,7 @@ const Spinner = () => {
 
     useEffect(() => {
         if (error500) {
-            dispatch(hasError500(null))
+            // dispatch(hasError500(null))
             history.push({
                 pathname: "/auth-500",
                 state: error500

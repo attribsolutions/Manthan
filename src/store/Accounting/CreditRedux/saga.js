@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   CredietDebitTypeSuccess,
   EditCreditlistSuccess,
@@ -96,13 +96,13 @@ function* Receipt_Number_GenFunc({ jsonBody }) {                // edit API
 }
 
 function* CreditDebitSaga() {
-  yield takeEvery(SAVE_CREDIT, Save_Method_ForCredit_GenFun)
-  yield takeEvery(GET_CREDIT_LIST, Get_Credit_List_GenFunc)
-  yield takeEvery(DELETE_CREDIT_LIST_ID, Delete_Credit_ID_GenFunc)
-  yield takeEvery(CREDITDEBIT_TYPE, CreditDeitType_ID_GenFunc)
-  yield takeEvery(EDIT_CREDIT_LIST_ID, Edit_Creditlist_ID_GenFunc)
-  yield takeEvery(INVOICE_RETURN_ID, InvoiceReturn_ID_GenFunc)
-  yield takeEvery(RECEIPT_NUMBER_LIST, Receipt_Number_GenFunc)
+  yield takeLatest(SAVE_CREDIT, Save_Method_ForCredit_GenFun)
+  yield takeLatest(GET_CREDIT_LIST, Get_Credit_List_GenFunc)
+  yield takeLatest(DELETE_CREDIT_LIST_ID, Delete_Credit_ID_GenFunc)
+  yield takeLatest(CREDITDEBIT_TYPE, CreditDeitType_ID_GenFunc)
+  yield takeLatest(EDIT_CREDIT_LIST_ID, Edit_Creditlist_ID_GenFunc)
+  yield takeLatest(INVOICE_RETURN_ID, InvoiceReturn_ID_GenFunc)
+  yield takeLatest(RECEIPT_NUMBER_LIST, Receipt_Number_GenFunc)
 }
 
 export default CreditDebitSaga;
