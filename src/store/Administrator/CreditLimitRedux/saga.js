@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   postCreditLimitSuccess,
   GoButton_For_CreditLimit_AddSuccess,
@@ -31,8 +31,8 @@ function* Post_CreditLimit_GenratorFunction({ config }) {
 }
 
 function* CreditLimitSaga() {
-  yield takeEvery(GO_BUTTON_FOR_CREDITLIMIT_PAGE, GoButton_CreditLimit_post_genfun);
-  yield takeEvery(POST_CREDITLIMIT_PAGE, Post_CreditLimit_GenratorFunction);
+  yield takeLatest(GO_BUTTON_FOR_CREDITLIMIT_PAGE, GoButton_CreditLimit_post_genfun);
+  yield takeLatest(POST_CREDITLIMIT_PAGE, Post_CreditLimit_GenratorFunction);
 }
 
 export default CreditLimitSaga;

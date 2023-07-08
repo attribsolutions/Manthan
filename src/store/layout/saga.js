@@ -1,5 +1,5 @@
 // @flow
-import { all, call, fork, takeEvery, put } from "redux-saga/effects";
+import { all, call, fork, takeLatest, put } from "redux-saga/effects";
 
 import {
   CHANGE_LAYOUT,
@@ -168,35 +168,35 @@ function* showRightSidebar() {
  * Watchers
  */
 export function* watchChangeLayoutType() {
-  yield takeEvery(CHANGE_LAYOUT, changeLayout);
+  yield takeLatest(CHANGE_LAYOUT, changeLayout);
 }
 
 export function* watchChangeLayoutWidth() {
-  yield takeEvery(CHANGE_LAYOUT_WIDTH, changeLayoutWidth);
+  yield takeLatest(CHANGE_LAYOUT_WIDTH, changeLayoutWidth);
 }
 
 export function* watchChangeLeftSidebarTheme() {
-  yield takeEvery(CHANGE_SIDEBAR_THEME, changeLeftSidebarTheme);
+  yield takeLatest(CHANGE_SIDEBAR_THEME, changeLeftSidebarTheme);
 }
 
 export function* watchChangeLayoutPosition() {
-  yield takeEvery(CHANGE_LAYOUT_POSITION, changeLayoutPosition);
+  yield takeLatest(CHANGE_LAYOUT_POSITION, changeLayoutPosition);
 }
 
 export function* watchChangeLeftSidebarType() {
-  yield takeEvery(CHANGE_SIDEBAR_TYPE, changeLeftSidebarType);
+  yield takeLatest(CHANGE_SIDEBAR_TYPE, changeLeftSidebarType);
 }
 
 export function* watchChangeTopbarTheme() {
-  yield takeEvery(CHANGE_TOPBAR_THEME, changeTopbarTheme);
+  yield takeLatest(CHANGE_TOPBAR_THEME, changeTopbarTheme);
 }
 
 export function* watchChangelayoutMode() {
-  yield takeEvery(CHANGE_LAYOUT_THEME, changelayoutMode);
+  yield takeLatest(CHANGE_LAYOUT_THEME, changelayoutMode);
 }
 
 export function* watchShowRightSidebar() {
-  yield takeEvery(SHOW_RIGHT_SIDEBAR, showRightSidebar);
+  yield takeLatest(SHOW_RIGHT_SIDEBAR, showRightSidebar);
 }
 
 function* LayoutSaga() {

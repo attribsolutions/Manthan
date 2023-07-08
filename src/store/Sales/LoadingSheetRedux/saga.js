@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put,takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc, amountCommaSeparateFunc, } from "../../../components/Common/CommonFunction";
 import { Loading_Sheet_Del_API, Loading_Sheet_get_API, Loading_Sheet_Go_Button_API, Loading_Sheet_Post_API, Loading_Sheet_Update_API, LoadingSheet_API } from "../../../helpers/backend_helper";
 import { DeleteLoadingSheetSucccess, LoadingSheetApiErrorAction, LoadingSheetListActionSuccess, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMasterSucccess, UpdateLoadingSheetSucccess } from "./action";
@@ -69,11 +69,11 @@ function* get_LoadingSheet_List_GenFun({ filters }) {
 }
 
 function* LoadingSheetSaga() {
-    yield takeEvery(DELETE_LOADING_SHEET, Delete_LoadingSheet_ID_GenratorFunction)
-    yield takeEvery(LOADING_SHEET_UPDATE_API, Update_LoadingSheet_GenFun)
-    yield takeEvery(LOADING_SHEET_GO_BUTTON_API, goBtn_Post_API_GenFun)
-    yield takeEvery(SAVE_LOADING_SHEET_MASTER, save_LoadingSheet_GenFun)
-    yield takeEvery(LOADING_SHEET_LIST_ACTION, get_LoadingSheet_List_GenFun)
+    yield takeLatest(DELETE_LOADING_SHEET, Delete_LoadingSheet_ID_GenratorFunction)
+    yield takeLatest(LOADING_SHEET_UPDATE_API, Update_LoadingSheet_GenFun)
+    yield takeLatest(LOADING_SHEET_GO_BUTTON_API, goBtn_Post_API_GenFun)
+    yield takeLatest(SAVE_LOADING_SHEET_MASTER, save_LoadingSheet_GenFun)
+    yield takeLatest(LOADING_SHEET_LIST_ACTION, get_LoadingSheet_List_GenFun)
 }
 
 export default LoadingSheetSaga;

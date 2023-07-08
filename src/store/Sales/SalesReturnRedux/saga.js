@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
@@ -66,10 +66,10 @@ function* addButton_saleReturn_GenFunc({ config }) {
 
 
 function* SalesReturnSaga() {
-    yield takeEvery(actionType.INVOICE_NUMBER, Invoice_No_List_GenFunc)
-    yield takeEvery(actionType.SAVE_SALES_RETURN_MASTER, save_SalesReturn_GenFunc)
-    yield takeEvery(actionType.SALES_RETURN_LIST_API, SalesReturn_List_GenFun)
-    yield takeEvery(actionType.DELETE_SALES_RETURN_ID, delete_SalesReturn_ID_GenFunc)
-    yield takeEvery(actionType.SALES_RETURN_ADD_BUTTON_ACTION, addButton_saleReturn_GenFunc)
+    yield takeLatest(actionType.INVOICE_NUMBER, Invoice_No_List_GenFunc)
+    yield takeLatest(actionType.SAVE_SALES_RETURN_MASTER, save_SalesReturn_GenFunc)
+    yield takeLatest(actionType.SALES_RETURN_LIST_API, SalesReturn_List_GenFun)
+    yield takeLatest(actionType.DELETE_SALES_RETURN_ID, delete_SalesReturn_ID_GenFunc)
+    yield takeLatest(actionType.SALES_RETURN_ADD_BUTTON_ACTION, addButton_saleReturn_GenFunc)
 }
 export default SalesReturnSaga;  

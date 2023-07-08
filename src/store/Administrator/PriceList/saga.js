@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, loginCompanyID } from "../../../components/Common/CommonFunction";
 import {
   delete_PriceList_API,
@@ -78,11 +78,11 @@ function* Update_PriceList_GenFunc({ config = {} }) {// update api
 }
 
 function* PriceListSaga() {
-  yield takeEvery(POST_PRICE_LIST_DATA, Save_PriceList_GenFunc);
-  yield takeEvery(PRICE_LIST_BY_PARTY_ACTION, PriceList_ByParty_GenFunc);
-  yield takeEvery(DELETE_PRICE_LIST, delete_PriceList_GenFun);
-  yield takeEvery(EDIT_PRICE_LIST, Edit_PriceList__GenFunc);
-  yield takeEvery(UPDATE_PRICE_LIST, Update_PriceList_GenFunc);
-  yield takeEvery(PRICE_LIST_BY_COMPANY, get_PriceListPageByCompany_GenFunc);
+  yield takeLatest(POST_PRICE_LIST_DATA, Save_PriceList_GenFunc);
+  yield takeLatest(PRICE_LIST_BY_PARTY_ACTION, PriceList_ByParty_GenFunc);
+  yield takeLatest(DELETE_PRICE_LIST, delete_PriceList_GenFun);
+  yield takeLatest(EDIT_PRICE_LIST, Edit_PriceList__GenFunc);
+  yield takeLatest(UPDATE_PRICE_LIST, Update_PriceList_GenFunc);
+  yield takeLatest(PRICE_LIST_BY_COMPANY, get_PriceListPageByCompany_GenFunc);
 }
 export default PriceListSaga;

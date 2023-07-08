@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   CommonConsole,
   loginJsonBody
@@ -57,11 +57,11 @@ function* Update_PartyType_ID_GneFunc({ config }) {// update api
 }
 
 function* PartyTypeSaga() {
-  yield takeEvery(actionType.SAVE_PARTY_TYPE_API, save_Party_Type_GneFunc)
-  yield takeEvery(actionType.GET_PARTY_TYPE_LIST, Get_PartyType_List_GneFunc)
-  yield takeEvery(actionType.DELETE_PARTY_TYPE_ID, Delete_PartyType_ID_GneFunc)
-  yield takeEvery(actionType.EDIT_PARTY_TYPE_ID, Edit_PartyType_ID_GneFunc)
-  yield takeEvery(actionType.UPDATE_PARTY_TYPE_ID, Update_PartyType_ID_GneFunc)
+  yield takeLatest(actionType.SAVE_PARTY_TYPE_API, save_Party_Type_GneFunc)
+  yield takeLatest(actionType.GET_PARTY_TYPE_LIST, Get_PartyType_List_GneFunc)
+  yield takeLatest(actionType.DELETE_PARTY_TYPE_ID, Delete_PartyType_ID_GneFunc)
+  yield takeLatest(actionType.EDIT_PARTY_TYPE_ID, Edit_PartyType_ID_GneFunc)
+  yield takeLatest(actionType.UPDATE_PARTY_TYPE_ID, Update_PartyType_ID_GneFunc)
 
 }
 

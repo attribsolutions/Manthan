@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
@@ -13,6 +13,6 @@ function* StockEntry_API_GenFunc({ config }) { // Save GRN  genrator function
 
 function* StockEntrySaga() {
 
-    yield takeEvery(actionType.SAVE_STOCK_ENTRY_ACTION, StockEntry_API_GenFunc)
+    yield takeLatest(actionType.SAVE_STOCK_ENTRY_ACTION, StockEntry_API_GenFunc)
 }
 export default StockEntrySaga;  

@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   detelet_EmployeeID,
   edit_EmployeeAPI,
@@ -102,14 +102,14 @@ function* Get_CompanyName_By_EmployeeTypesID_GenFunc({ id }) {
 }
 
 function* M_EmployeeSaga() {
-  yield takeEvery(GET_DESIGNATIONID, DesignationID_saga);
-  yield takeEvery(GET_STATE, State_saga);
-  yield takeEvery(GET_CITY_ON_DISTRICT, City_saga);
-  yield takeEvery(GET_EMPLOYEE_LIST, Get_EmployeeList_GenFunc)
-  yield takeEvery(SAVE_EMPLOYEE_MASTER, Save_Employee_GenFunc)
-  yield takeEvery(EDIT_EMPLOYEE_ID, Edit_EmployeeID_GenFunc)
-  yield takeEvery(DELETE_EMPLOYEE_ID, Delete_EmployeeID_GenFunc)
-  yield takeEvery(UPDATE_EMPLOYEE_ID, Update_EmployeeID_GenFunc)
-  yield takeEvery(GET_COMPANYNAME_BY_EMPLOYEETYPES_ID, Get_CompanyName_By_EmployeeTypesID_GenFunc)
+  yield takeLatest(GET_DESIGNATIONID, DesignationID_saga);
+  yield takeLatest(GET_STATE, State_saga);
+  yield takeLatest(GET_CITY_ON_DISTRICT, City_saga);
+  yield takeLatest(GET_EMPLOYEE_LIST, Get_EmployeeList_GenFunc)
+  yield takeLatest(SAVE_EMPLOYEE_MASTER, Save_Employee_GenFunc)
+  yield takeLatest(EDIT_EMPLOYEE_ID, Edit_EmployeeID_GenFunc)
+  yield takeLatest(DELETE_EMPLOYEE_ID, Delete_EmployeeID_GenFunc)
+  yield takeLatest(UPDATE_EMPLOYEE_ID, Update_EmployeeID_GenFunc)
+  yield takeLatest(GET_COMPANYNAME_BY_EMPLOYEETYPES_ID, Get_CompanyName_By_EmployeeTypesID_GenFunc)
 }
 export default M_EmployeeSaga;

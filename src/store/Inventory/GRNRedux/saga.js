@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   GrnApiErrorAction,
   deleteGRNIdSuccess,
@@ -116,12 +116,12 @@ function* makeGRN_Mode1_GenFunc({ config }) {
 
 function* GRNSaga() {
 
-  yield takeEvery(MAKE_GRN_MODE_1_ACTION, makeGRN_Mode1_GenFunc);
-  yield takeEvery(SAVE_GRN_FROM_GRN_PAGE_ACTION, saveGRNGenFunc);
-  yield takeEvery(EDIT_GRN_FOR_GRN_PAGE, Edit_GRN_GenratorFunction);
-  yield takeEvery(UPDATE_GRN_ID_FROM_GRN_PAGE, UpdateGRNGenFunc)
-  yield takeEvery(DELETE_GRN_FOR_GRN_PAGE, DeleteGRNGenFunc);
-  yield takeEvery(GET_GRN_LIST_PAGE, GRNListfilterGerFunc);
+  yield takeLatest(MAKE_GRN_MODE_1_ACTION, makeGRN_Mode1_GenFunc);
+  yield takeLatest(SAVE_GRN_FROM_GRN_PAGE_ACTION, saveGRNGenFunc);
+  yield takeLatest(EDIT_GRN_FOR_GRN_PAGE, Edit_GRN_GenratorFunction);
+  yield takeLatest(UPDATE_GRN_ID_FROM_GRN_PAGE, UpdateGRNGenFunc)
+  yield takeLatest(DELETE_GRN_FOR_GRN_PAGE, DeleteGRNGenFunc);
+  yield takeLatest(GET_GRN_LIST_PAGE, GRNListfilterGerFunc);
 }
 
 export default GRNSaga;

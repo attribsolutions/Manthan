@@ -1,5 +1,5 @@
-import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, concatDateAndTime, date_dmy_func } from "../../../components/Common/CommonFunction";
+import { call, put, takeLatest } from "redux-saga/effects";
+import {concatDateAndTime} from "../../../components/Common/CommonFunction";
 import {
   delete_MarginList_API,
   GetMarginList_For_Listpage,
@@ -74,10 +74,10 @@ function* delete_Margin_Master_table_GenFunc({ id }) {
 }
 
 function* MarginMasterSaga() {
-  yield takeEvery(SAVE_MARGIN_MASTER, post_Margin_GenFunc);
-  yield takeEvery(GET_MARGIN_LIST, get_Margin_GenFunc);
-  yield takeEvery(DELETE_MARGIN_LIST_ID, delete_Margin_GenFunc);
-  yield takeEvery(GO_BUTTON_FOR_MARGIN_MASTER, goButton_Margin_GenFunc);
-  yield takeEvery(DELETE_ID_FOR_MARGIN_MASTER, delete_Margin_Master_table_GenFunc);
+  yield takeLatest(SAVE_MARGIN_MASTER, post_Margin_GenFunc);
+  yield takeLatest(GET_MARGIN_LIST, get_Margin_GenFunc);
+  yield takeLatest(DELETE_MARGIN_LIST_ID, delete_Margin_GenFunc);
+  yield takeLatest(GO_BUTTON_FOR_MARGIN_MASTER, goButton_Margin_GenFunc);
+  yield takeLatest(DELETE_ID_FOR_MARGIN_MASTER, delete_Margin_Master_table_GenFunc);
 }
 export default MarginMasterSaga;

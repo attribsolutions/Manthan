@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import {
   GetCompanyByDivisionTypeID_For_Dropdown,
@@ -148,16 +148,16 @@ function* PartyAddressDelete_GenFun({ config }) {
 }
 
 function* PartyMasterSaga() {
-  yield takeEvery(GET_PARTY_LIST_API, Get_Party_GenFun);
-  yield takeEvery(POST_PARTY_DATA, save_Party_Master_GenFun);
-  yield takeEvery(EDIT_PARTY_ID, Edit_Party_GenFun);
-  yield takeEvery(DELETE_PARTY_ID, Delete_Party_GenFun);
-  yield takeEvery(UPDATE_PARTY_ID, Update_Party_GenFun);
-  yield takeEvery(GET_DISTRICT_ON_STATE, GetDistrictOnState_saga);
-  yield takeEvery(GET_ADDRESSTYPES, GetAddressTypes_saga);
-  yield takeEvery(GET_PARTTYPE_BY_DIVISIONTYPES_ID, GetPartyTypeByDivisionTypeID_GenFun);
-  yield takeEvery(GET_COMPANY_BY_DIVISIONTYPES_ID, GetCompanyByDivisionTypeID_GenFun);
-  yield takeEvery(PARTY_ADDRESS_DELETE_ID, PartyAddressDelete_GenFun);
+  yield takeLatest(GET_PARTY_LIST_API, Get_Party_GenFun);
+  yield takeLatest(POST_PARTY_DATA, save_Party_Master_GenFun);
+  yield takeLatest(EDIT_PARTY_ID, Edit_Party_GenFun);
+  yield takeLatest(DELETE_PARTY_ID, Delete_Party_GenFun);
+  yield takeLatest(UPDATE_PARTY_ID, Update_Party_GenFun);
+  yield takeLatest(GET_DISTRICT_ON_STATE, GetDistrictOnState_saga);
+  yield takeLatest(GET_ADDRESSTYPES, GetAddressTypes_saga);
+  yield takeLatest(GET_PARTTYPE_BY_DIVISIONTYPES_ID, GetPartyTypeByDivisionTypeID_GenFun);
+  yield takeLatest(GET_COMPANY_BY_DIVISIONTYPES_ID, GetCompanyByDivisionTypeID_GenFun);
+  yield takeLatest(PARTY_ADDRESS_DELETE_ID, PartyAddressDelete_GenFun);
 
 }
 

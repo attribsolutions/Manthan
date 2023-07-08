@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeLatest } from "redux-saga/effects";
 import {
     
     deletePartySubPartySuccess,
@@ -107,13 +107,13 @@ function* deletePartySubPartyGenFunc({ id }) {
 }
 
 function* PartySubPartysaga() {
-    yield takeEvery(GET_PARTY_SUB_PARTY_LIST, Get_PartySubParty_List_GenFunc)
-    yield takeEvery(SAVE_PARTY_SUB_PARTY, Save_Method_ForPartySubParty_GenFun)
-    yield takeEvery(EDIT_PARTY_SUB_PARTY, Edit_PartySubParty_ID_GenFunc)
-    yield takeEvery(UPDATE_PARTY_SUB_PARTY, Update_PartySubParty_ID_GenFunc)
-    yield takeEvery(DELETE_PARTY_SUB_PARTY, Delete_PartySubParty_ID_GenFunc)
-    yield takeEvery(GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN, getPartySubPartyGenFunc)
-    yield takeEvery(DELETE_ID_FOR_MASTER_PAGE, deletePartySubPartyGenFunc)
+    yield takeLatest(GET_PARTY_SUB_PARTY_LIST, Get_PartySubParty_List_GenFunc)
+    yield takeLatest(SAVE_PARTY_SUB_PARTY, Save_Method_ForPartySubParty_GenFun)
+    yield takeLatest(EDIT_PARTY_SUB_PARTY, Edit_PartySubParty_ID_GenFunc)
+    yield takeLatest(UPDATE_PARTY_SUB_PARTY, Update_PartySubParty_ID_GenFunc)
+    yield takeLatest(DELETE_PARTY_SUB_PARTY, Delete_PartySubParty_ID_GenFunc)
+    yield takeLatest(GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN, getPartySubPartyGenFunc)
+    yield takeLatest(DELETE_ID_FOR_MASTER_PAGE, deletePartySubPartyGenFunc)
 }
 
 export default PartySubPartysaga;

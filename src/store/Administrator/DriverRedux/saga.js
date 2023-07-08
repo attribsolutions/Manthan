@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { saveDriverMasterSuccess, getDriverListSuccess, deleteDriverID_Success, editDriverID_Success, updateDriverID_Success, DriverApiErrorAction } from "./action";
 import {
     get_DriverList_API,
@@ -61,11 +61,11 @@ function* Update_DriverType_ID_GenFun({ config }) { // update api
 }
 
 function* DriverSaga() {
-    yield takeEvery(SAVE_DRIVER_MASTER, save_DriverMaster_GenFun)
-    yield takeEvery(GET_DRIVER_LIST, Get_Driver_GenFun)
-    yield takeEvery(EDIT_DRIVER_TYPE_ID, Edit_Driver_ID_GenFun)
-    yield takeEvery(UPDATE_DRIVER_TYPE_ID, Update_DriverType_ID_GenFun)
-    yield takeEvery(DELETE_DRIVER_TYPE_ID, Delete_Driver_ID_GenFun)
+    yield takeLatest(SAVE_DRIVER_MASTER, save_DriverMaster_GenFun)
+    yield takeLatest(GET_DRIVER_LIST, Get_Driver_GenFun)
+    yield takeLatest(EDIT_DRIVER_TYPE_ID, Edit_Driver_ID_GenFun)
+    yield takeLatest(UPDATE_DRIVER_TYPE_ID, Update_DriverType_ID_GenFun)
+    yield takeLatest(DELETE_DRIVER_TYPE_ID, Delete_Driver_ID_GenFun)
 }
 
 export default DriverSaga;

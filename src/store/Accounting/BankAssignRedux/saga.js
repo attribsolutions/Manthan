@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
     saveBankAssign_Success,
     PartyBankfilterSuccess,
@@ -18,7 +18,7 @@ import {
     EDIT_BANK_ASSIGN_ID,
     UPDATE_BANK_ASSIGN_ID
 } from "./actionType";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
+import { loginJsonBody } from "../../../components/Common/CommonFunction";
 
 function* Save_Method_ForBankAssign_GenFun({ config }) {   // Save API
     try {
@@ -52,10 +52,10 @@ function* Update_Bank_Assign_GenratorFunction({ config }) {             // updat
 }
 
 function* BankSaga() {
-    yield takeEvery(SAVE_BANK_ASSIGN, Save_Method_ForBankAssign_GenFun)
-    yield takeEvery(PARTY_BANK_FILTER, PartyBank_Assign_GenFunc)
-    yield takeEvery(EDIT_BANK_ASSIGN_ID, Edit_Bank_Assign_GenratorFunction)
-    yield takeEvery(UPDATE_BANK_ASSIGN_ID, Update_Bank_Assign_GenratorFunction)
+    yield takeLatest(SAVE_BANK_ASSIGN, Save_Method_ForBankAssign_GenFun)
+    yield takeLatest(PARTY_BANK_FILTER, PartyBank_Assign_GenFunc)
+    yield takeLatest(EDIT_BANK_ASSIGN_ID, Edit_Bank_Assign_GenratorFunction)
+    yield takeLatest(UPDATE_BANK_ASSIGN_ID, Update_Bank_Assign_GenratorFunction)
 }
 
 export default BankSaga;

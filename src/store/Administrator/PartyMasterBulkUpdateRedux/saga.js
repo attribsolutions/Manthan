@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
     postParty_Master_Bulk_Update_Success,
     GoButton_For_Party_Master_Bulk_Update_AddSuccess,
@@ -66,11 +66,11 @@ function* Update_Party_Bulk_GenratorFunction({ updateData, id }) {
 
 
 function* PartyMasterBulkUpdateSaga() {
-    yield takeEvery(GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE, GoButton_PartyMasterBulkUpdate_post_genfun);
-    yield takeEvery(POST_PARTY_MASTER_BULK_UPDATE_PAGE, Post_PartyMasterBulkUpdate_GenratorFunction);
-    yield takeEvery(POST_PARTY_NAME_DROPDOWN, Post_Party_GenratorFunction);
-    yield takeEvery(POST_SELECT_FIELD_DROPDOWN, Post_SelectField_GenratorFunction);
-    yield takeEvery(UPDATE_PARTY_MASTER_BULK, Update_Party_Bulk_GenratorFunction);
+    yield takeLatest(GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE, GoButton_PartyMasterBulkUpdate_post_genfun);
+    yield takeLatest(POST_PARTY_MASTER_BULK_UPDATE_PAGE, Post_PartyMasterBulkUpdate_GenratorFunction);
+    yield takeLatest(POST_PARTY_NAME_DROPDOWN, Post_Party_GenratorFunction);
+    yield takeLatest(POST_SELECT_FIELD_DROPDOWN, Post_SelectField_GenratorFunction);
+    yield takeLatest(UPDATE_PARTY_MASTER_BULK, Update_Party_Bulk_GenratorFunction);
 }
 
 export default PartyMasterBulkUpdateSaga;

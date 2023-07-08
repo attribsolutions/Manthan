@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   SubGroupApiErrorAction,
   deleteSubGrouplistSuccess,
@@ -62,11 +62,11 @@ function* Update_SubGrouplist_ID_GenratorFunction({ config }) {        // update
 }
 
 function* SubGroupSaga() {
-  yield takeEvery(SAVE_SUBGROUPLIST, save_Method_ForSubGroupMaster_GenFun)
-  yield takeEvery(GET_SUBGROUP_LIST, Get_SubGroup_List_genFunc)
-  yield takeEvery(DELETE_SUBGROUP_LIST_ID, Delete_SubGroupList_ID_GenratorFunction)
-  yield takeEvery(EDIT_SUBGROUPMASTER_ID, Edit_SubGrouplist_ID_GenratorFunction)
-  yield takeEvery(UPDATE_SUBGROUPMASTER_ID, Update_SubGrouplist_ID_GenratorFunction)
+  yield takeLatest(SAVE_SUBGROUPLIST, save_Method_ForSubGroupMaster_GenFun)
+  yield takeLatest(GET_SUBGROUP_LIST, Get_SubGroup_List_genFunc)
+  yield takeLatest(DELETE_SUBGROUP_LIST_ID, Delete_SubGroupList_ID_GenratorFunction)
+  yield takeLatest(EDIT_SUBGROUPMASTER_ID, Edit_SubGrouplist_ID_GenratorFunction)
+  yield takeLatest(UPDATE_SUBGROUPMASTER_ID, Update_SubGrouplist_ID_GenratorFunction)
 }
 
 export default SubGroupSaga;

@@ -1,8 +1,8 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionTypes";
 import * as action from "./action";
-import { CommonConsole, concatDateAndTime } from "../../../components/Common/CommonFunction";
+import { concatDateAndTime } from "../../../components/Common/CommonFunction";
 
 function* save_MRPMaster_GenFunc({ config }) {
   try {
@@ -52,10 +52,10 @@ function* delete_MRPMaster_Id_GenFunc({ id }) {
 }
 
 function* MRPMasterSaga() {
-  yield takeEvery(actionType.SAVE_MRP_MASTER, save_MRPMaster_GenFunc);
-  yield takeEvery(actionType.GO_BUTTON_FOR_MRP_MASTER, goButton_MRPMaster_GenFunc);
-  yield takeEvery(actionType.GET_MRP_LIST, get_MRPMaster_GenFunc);
-  yield takeEvery(actionType.DELETE_MRP_LIST, delete_MRPList_Id_GenFunc);
-  yield takeEvery(actionType.DELETE_MRP_MASTER_ID, delete_MRPMaster_Id_GenFunc);
+  yield takeLatest(actionType.SAVE_MRP_MASTER, save_MRPMaster_GenFunc);
+  yield takeLatest(actionType.GO_BUTTON_FOR_MRP_MASTER, goButton_MRPMaster_GenFunc);
+  yield takeLatest(actionType.GET_MRP_LIST, get_MRPMaster_GenFunc);
+  yield takeLatest(actionType.DELETE_MRP_LIST, delete_MRPList_Id_GenFunc);
+  yield takeLatest(actionType.DELETE_MRP_MASTER_ID, delete_MRPMaster_Id_GenFunc);
 }
 export default MRPMasterSaga;

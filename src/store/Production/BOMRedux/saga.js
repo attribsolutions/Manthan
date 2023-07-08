@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, GetItemUnits_For_Dropdown, BOM_Edit_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
@@ -73,12 +73,12 @@ function* GetItemUnits_saga({ data }) {
 }
 
 function* BOMSaga() {
-  yield takeEvery(SAVE_BOM_MASTER, Post_BOM_GenratorFunction)
-  yield takeEvery(GET_ITEM_UNITS_DROPDOWN_API, GetItemUnits_saga)
-  yield takeEvery(GET_BOM_LIST_PAGE, get_BOMList_GenFunc)
-  yield takeEvery(EDIT_BOM_LIST_ID, editBOMListGenFunc)
-  yield takeEvery(UPDATE_BOM_LIST, UpdateBOM_ID_GenFunc)
-  yield takeEvery(DELETE_BOM_LIST_PAGE, DeleteBOM_GenFunc)
+  yield takeLatest(SAVE_BOM_MASTER, Post_BOM_GenratorFunction)
+  yield takeLatest(GET_ITEM_UNITS_DROPDOWN_API, GetItemUnits_saga)
+  yield takeLatest(GET_BOM_LIST_PAGE, get_BOMList_GenFunc)
+  yield takeLatest(EDIT_BOM_LIST_ID, editBOMListGenFunc)
+  yield takeLatest(UPDATE_BOM_LIST, UpdateBOM_ID_GenFunc)
+  yield takeLatest(DELETE_BOM_LIST_PAGE, DeleteBOM_GenFunc)
 }
 
 export default BOMSaga;
