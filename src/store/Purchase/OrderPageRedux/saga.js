@@ -10,6 +10,7 @@ import {
   getOrderApprovalDetailActionSucc,
   orderApiErrorAction,
   postOrderConfirms_API_Success,
+  orderSinglegetSuccess,
 } from "./actions";
 import {
   OrderPage_Update_API,
@@ -25,6 +26,7 @@ import {
   OrderPage_Edit_Get_API,
   OrderPage_Edit_Post_API,
   OrderConfirm_post_API,
+  OrderPage_Edit_ForDownload_API,
 } from "../../../helpers/backend_helper";
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -35,7 +37,8 @@ import {
   GET_ORDER_LIST_PAGE,
   ORDER_APPROVAL_ACTION,
   GET_ORDER_APPROVAL_DETAIL,
-  POST_ORDER_CONFIRM_API
+  POST_ORDER_CONFIRM_API,
+  ORDER_SINGLE_GET_API
 } from "./actionType";
 import { amountCommaSeparateFunc, concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
@@ -150,7 +153,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
     // else if ((subPageMode === url.ORDER_LIST_4)) {
     //   response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     // }
-    debugger
+
     newList = yield response.Data.map((i) => {
 
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
@@ -267,6 +270,20 @@ function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageM
   }
 }
 
+function* OrderSingleGet_GenFunc({ config }) {
+  const { viewId, subPageMode } = config
+
+  try {
+    
+    const response = yield call(OrderPage_Edit_ForDownload_API, viewId);
+    response["subPageMode"] = subPageMode;
+    yield put(orderSinglegetSuccess(response))
+
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
+}
+
 function* OrderPageSaga() {
   yield takeLatest(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
   yield takeLatest(SAVE_ORDER_FROM_ORDER_PAGE, saveOrder_GenFunc);
@@ -277,6 +294,12 @@ function* OrderPageSaga() {
   yield takeLatest(ORDER_APPROVAL_ACTION, orderApproval_GenFunc);
   yield takeLatest(GET_ORDER_APPROVAL_DETAIL, getOrderApproval_Detail_GenFunc);
   yield takeLatest(POST_ORDER_CONFIRM_API, OrderConfirm_GenFunc);
+
+  yield takeLatest(ORDER_SINGLE_GET_API, OrderSingleGet_GenFunc);
+
+
+
+
 
 }
 

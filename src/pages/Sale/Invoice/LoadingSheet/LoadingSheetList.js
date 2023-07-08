@@ -36,7 +36,7 @@ const LoadingSheetList = () => {
     const reducers = useSelector(
         (state) => ({
             loading: state.LoadingSheetReducer.loading,
-            listBtnLoading:state.LoadingSheetReducer.listBtnLoading,
+            listBtnLoading: state.LoadingSheetReducer.listBtnLoading,
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
             deleteMsg: state.LoadingSheetReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -107,7 +107,7 @@ const LoadingSheetList = () => {
     }
 
     const otherBtn_1Func = (list) => {
-        dispatch(UpdateLoadingSheet({ RowId: list.id, path: url.LOADING_SHEET_LIST_UPDATE }));
+        dispatch(UpdateLoadingSheet({ RowId: list.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
 
     return (

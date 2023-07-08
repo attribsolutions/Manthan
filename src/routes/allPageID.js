@@ -180,6 +180,7 @@ export const INVOICE_1 = 121
 export const INVOICE_LIST_1 = 122
 
 export const STOCK_ENTRY = 205
+export const STOCK_REPORT = 208
 
 //******************************* Inter Branch ************************************//
 

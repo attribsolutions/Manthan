@@ -87,6 +87,7 @@ import SapLedgerSaga from "./Report/SapLedger Redux/saga"
 import OrderSummarySaga from "./Report/OrderSummaryRedux/saga"
 import PartySettingSaga from "./Administrator/PartySetting/saga"
 import StockEntrySaga from "./Inventory/StockEntryRedux/saga"
+import StockReportSaga from "./Report/StockReport/saga"
 
 
 export default function* rootSaga() {
@@ -161,7 +162,7 @@ export default function* rootSaga() {
     fork(CitySaga),
     fork(OrderSummarySaga),
     fork(PartySettingSaga),
-    fork(StockEntrySaga)
-
+    fork(StockEntrySaga),
+    fork(StockReportSaga)
   ])
 }

@@ -88,14 +88,12 @@ import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
 import CredietDebitReducer from "./Accounting/CreditRedux/reducer"
 import SapLedgerReducer from "./Report/SapLedger Redux/reducer"
 
-
-
-
 //***************************Accounting ************************** */
 import ReceiptReducer from "./Accounting/Receipt/reducer"
 
 //***************************Reports ************************** */
 import OrderSummaryReducer from "./Report/OrderSummaryRedux/reducer"
+import StockReportReducer from "./Report/StockReport/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -169,5 +167,6 @@ const rootReducer = combineReducers({
   OrderSummaryReducer,
   PartySettingReducer,
   StockEntryReducer,
+  StockReportReducer,
 })
 export default rootReducer
