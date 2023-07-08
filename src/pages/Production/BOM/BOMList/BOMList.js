@@ -76,13 +76,7 @@ const BOMList = () => {
 
     }, []);
 
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return _cfunc.excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
-
-
+ 
     useEffect(() => {
         const pageId = 70
         let userAcc = userAccess.find((inx) => {

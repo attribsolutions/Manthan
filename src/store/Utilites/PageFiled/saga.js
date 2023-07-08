@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { commonPageFiled_API } from "../../../helpers/backend_helper";
 import { COMMON_PAGE_FILED, COMMON_PAGE_FILED_lIST } from "./actionType";
 
@@ -7,7 +7,6 @@ import {
   commonPageFieldListSuccess
 } from "../../actions"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { history } from "../../../components/Common/CommonFunction";
 
 
 function* commonPageFiled_GenFunc({ pageId }) {
@@ -58,7 +57,7 @@ function* commonPageFiledList_GenFunc({ pageId }) {
 }
 
 function* CommonPageField_Saga() {
-  yield takeEvery(COMMON_PAGE_FILED, commonPageFiled_GenFunc);
-  yield takeEvery(COMMON_PAGE_FILED_lIST, commonPageFiledList_GenFunc);
+  yield takeLatest(COMMON_PAGE_FILED, commonPageFiled_GenFunc);
+  yield takeLatest(COMMON_PAGE_FILED_lIST, commonPageFiledList_GenFunc);
 }
 export default CommonPageField_Saga;

@@ -7,47 +7,6 @@ import $ from 'jquery';
 
 export const history = createBrowserHistory();
 
-export const commonListPageDelete_UpdateMsgFunction = (props) => {
-  const dispatch = props.dispatch;
-  const response = props.response;
-  const resetAction = props.resetAction;
-  const afterResponseAction = props.afterResponseAction;
-
-  if (response.Status === true && response.StatusCode === 200) {
-    dispatch(resetAction({ Status: false }));
-    customAlert({
-      Type: 1,
-      Message: response.Message,
-      AfterResponseAction: afterResponseAction,
-    });
-  } else if (response.Status === true) {
-    dispatch(resetAction({ Status: false }));
-    customAlert({
-      Type: 3,
-      Message: response.Message,
-    });
-  }
-};
-
-export const excelDownCommonFunc = (props) => { //++++++++Common Excel Covernt Data Function ++++++++++++++
-  const { tableList = [], PageFieldMaster = [] } = props;
-
-  let downList = [];
-  let listObj = {};
-
-  tableList.forEach((index1) => {
-    PageFieldMaster.forEach((index2) => {
-      if (index2.ShowInDownload) {
-        listObj[`$defSelect${index2.ControlID}`] =
-          index2.ShownloadDefaultSelect;
-        listObj[index2.ControlID] = index1[index2.ControlID];
-      }
-    });
-    downList.push(listObj);
-    listObj = {};
-  });
-  return downList;
-};
 
 function isDateInitial(isdate) {
 

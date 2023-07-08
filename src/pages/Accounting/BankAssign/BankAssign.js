@@ -20,12 +20,10 @@ import {
     commonPageFieldSuccess,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
-    btnIsDissablefunc,
     CommonConsole,
     loginCompanyID,
     loginPartyID,
@@ -76,7 +74,6 @@ const BankAssign = (props) => {
         dispatch(PartyBankfilter())
     }, []);
 
-    const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
@@ -99,36 +96,34 @@ const BankAssign = (props) => {
     }, [userAccess])
 
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveBankAssign_Success({ Status: false }))
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.BANK_ASSIGN,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.BANK_ASSIGN })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveBankAssign_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 

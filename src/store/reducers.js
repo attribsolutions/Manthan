@@ -13,9 +13,8 @@ import ChangePasswordReducer from "./auth/changepassword/reducer"
 
 
 //  *********************** Administrator ***********************
-import AlertReducer from './Utilites/CustomAlertRedux/reducer'
-import CommonError from './Utilites/CommonError/reducer'
-import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
+// import AlertReducer from './Utilites/CustomAlertRedux/reducer'
+// import CommonError from './Utilites/CommonError/reducer'
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 import CommonPageFieldReducer from './Utilites/PageFiled/reducer'
 import PdfReportReducers from './Utilites/PdfReport/reducer'
@@ -104,9 +103,8 @@ const rootReducer = combineReducers({
   ForgetPassword,
   Profile,
   SpinnerReducer,
-  AlertReducer,
-  CommonError,
-  CustomSearchReducer,
+  // AlertReducer,
+  // CommonError,
   BreadcrumbReducer,
   CommonPageFieldReducer,
   PdfReportReducers,
