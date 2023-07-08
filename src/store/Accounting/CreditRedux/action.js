@@ -1,6 +1,7 @@
 import {
   CREDITDEBIT_TYPE,
   CREDITDEBIT_TYPE_SUCCESS,
+  CREDIT_DEBIT_API_ERROR_ACTION,
   DELETE_CREDIT_LIST_ID,
   DELETE_CREDIT_LIST_ID_SUCCESS,
   EDIT_CREDIT_LIST_ID,
@@ -87,4 +88,6 @@ export const Receipt_No_List_Success = (resp) => ({// Delete Success
   payload: resp
 });
 
-
+export const CreditDebitApiErrorAction = () => ({
+  type: CREDIT_DEBIT_API_ERROR_ACTION,
+})
