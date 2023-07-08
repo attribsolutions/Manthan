@@ -41,6 +41,7 @@ import * as mode from "../../../routes/PageMode"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { saveCityMaster, saveCityMaster_Success } from "../../../store/Administrator/CityRedux/action";
 import { getDistrictOnState, getDistrictOnStateSuccess } from "../../../store/Administrator/PartyRedux/action";
+import { C_Select } from "../../../CustomValidateForm";
 
 
 const CityMaster = (props) => {
@@ -69,13 +70,15 @@ const CityMaster = (props) => {
         postMsg,
         userAccess,
         pageField,
-        saveBtnloading
+        saveBtnloading,
+        districtDropDownLoading,
     } = useSelector((state) => ({
         saveBtnloading: state.CityReducer.saveBtnloading,
         State: state.EmployeesReducer.State,
         district: state.PartyMasterReducer.DistrictOnState,
         postMsg: state.CityReducer.PostData,
         userAccess: state.Login.RoleAccessUpdateData,
+        districtDropDownLoading: state.PartyMasterReducer.districtDropDownLoading,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
@@ -307,12 +310,13 @@ const CityMaster = (props) => {
                                                 <FormGroup className="mb-2 col col-sm-3 ">
                                                     <Label htmlFor="validationCustom01"> {fieldLabel.DistrictName} </Label>
                                                     <Col sm={12}>
-                                                        <Select
+                                                        <C_Select
                                                             name="DistrictName"
                                                             value={values.DistrictName}
                                                             isSearchable={true}
                                                             className="react-dropdown"
                                                             classNamePrefix="dropdown"
+                                                            isLoading={districtDropDownLoading}
                                                             options={District_DropdownOptions}
                                                             onChange={(hasSelect, evn) => {
                                                                 onChangeSelect({ hasSelect, evn, state, setState, })

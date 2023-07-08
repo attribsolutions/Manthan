@@ -60,7 +60,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
 import AddMaster from "./Drodown";
 import PartyMaster from "../PartyMaster/MasterAdd/PartyIndex";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { C_DatePicker, C_Select} from "../../../CustomValidateForm";
 import CityMaster from "../CityPages/CityMaster";
 
 const AddEmployee = (props) => {
@@ -106,6 +106,8 @@ const AddEmployee = (props) => {
     userAccess,
     pageField,
     saveBtnloading,
+    districtDropDownLoading,
+    cityDropDownLoading,
     updateMsg } = useSelector((state) => ({
       saveBtnloading: state.EmployeeTypeReducer.saveBtnloading,
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
@@ -116,7 +118,9 @@ const AddEmployee = (props) => {
       postMsg: state.EmployeesReducer.postMessage,
       updateMsg: state.EmployeesReducer.updateMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageField,
+      districtDropDownLoading: state.PartyMasterReducer.districtDropDownLoading,
+      cityDropDownLoading: state.EmployeesReducer.cityDropDownLoading,
     }));
 
   const values = { ...state.values }
@@ -564,7 +568,7 @@ const AddEmployee = (props) => {
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01"> {fieldLabel.StateName} </Label>
                           <Col sm={12}>
-                            <Select
+                          <Select
                               name="StateName"
                               id="state"
                               value={values.StateName}
@@ -586,12 +590,13 @@ const AddEmployee = (props) => {
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01"> {fieldLabel.DistrictName} </Label>
                           <Col sm={12}>
-                            <Select
+                            <C_Select
                               name="DistrictName"
                               value={values.DistrictName}
                               isSearchable={true}
                               className="react-dropdown"
                               classNamePrefix="dropdown"
+                              isLoading={districtDropDownLoading}
                               options={District_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState, })
@@ -607,12 +612,13 @@ const AddEmployee = (props) => {
                       <Row>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.CityName} </Label>
-                          <Select
+                          <C_Select
                             name="CityName"
                             id="CityName"
                             value={values.CityName}
                             isSearchable={true}
                             classNamePrefix="dropdown"
+                            isLoading={cityDropDownLoading}
                             options={City_DropdownOptions}
                             onChange={(hasSelect, evn) => {
                               onChangeSelect({ hasSelect, evn, state, setState, })
@@ -647,10 +653,6 @@ const AddEmployee = (props) => {
                             <span className="invalid-feedback">{isError.PIN}</span>
                           )}
                         </FormGroup>
-
-
-
-
                       </Row>
                     </CardBody>
                   </Card>

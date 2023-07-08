@@ -15,6 +15,7 @@ import { loginPartyID } from '../../../../../components/Common/CommonFunction'
 import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../store/Administrator/EmployeeRedux/action'
 import CityMaster from '../../../CityPages/CityMaster'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
+import { C_Select } from '../../../../../CustomValidateForm'
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
@@ -74,7 +75,9 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         pageField,
         CityOnDistrict,
         RoutesList,
-        userAccess
+        userAccess,
+        districtDropDownLoading,
+        cityDropDownLoading
     } = useSelector((state) => ({
         stateRedux: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
@@ -85,6 +88,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         RoutesList: state.RoutesReducer.RoutesList,
         pageField: state.CommonPageFieldReducer.pageField,
         userAccess: state.Login.RoleAccessUpdateData,
+        districtDropDownLoading:state.PartyMasterReducer.districtDropDownLoading,
+        cityDropDownLoading: state.EmployeesReducer.cityDropDownLoading,
     }));
 
     useEffect(() => {
@@ -550,13 +555,14 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                 <FormGroup className="mb-3">
                                     <Label > {fieldLabel.District} </Label>
                                     <Col sm={12}>
-                                        <Select
+                                        <C_Select
                                             name="District"
                                             value={values.District}
                                             isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                             isSearchable={true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
+                                            isLoading={districtDropDownLoading}
                                             options={DistrictOnStateValues}
                                             onChange={(hasSelect, evn) => {
                                                 onChangeSelect({ hasSelect, evn, state, setState, })
@@ -574,13 +580,14 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             <Col md="3">
                                 <FormGroup className="mb-3">
                                     <Label htmlFor="validationCustom01">{fieldLabel.CityName} </Label>
-                                    <Select
+                                    <C_Select
                                         name="CityName"
                                         id="CityName"
                                         value={values.CityName}
                                         isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                         isSearchable={true}
                                         classNamePrefix="dropdown"
+                                        isLoading={cityDropDownLoading}
                                         options={City_DropdownOptions}
                                         onChange={(hasSelect, evn) => {
                                             onChangeSelect({ hasSelect, evn, state, setState, })
