@@ -44,7 +44,6 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 789, 570, 10);//vertical left 2
     doc.line(408, 60, 408, 10);//vertical right 1
     // doc.line(250, 134, 250, 80);//vertical right 2
-    doc.line(570, 134, 30, 134);//horizontal line table 
 
 
     // doc.line(250, 100, 408, 100) //horizontal line Current date upper
@@ -121,6 +120,9 @@ export const reportHeder1 = (doc, data) => {
         startY: 85
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(doc, data), options3);
+    const YAxis = doc.previousAutoTable.finalY
+    doc.line(570, YAxis, 30, YAxis);//horizontal line table 
+
 }
 
 export const reportHeder2 = (doc, data) => {
