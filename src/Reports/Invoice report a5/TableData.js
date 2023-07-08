@@ -386,7 +386,7 @@ export const BilledToRow = (data) => {
     return BilledToArray;
 }
 export const DetailsOfTransportRow = (data) => {
-    debugger
+    
     const PoNumber = data.InvoicesReferences.map(index => ({
         SystemGenerate: index.FullOrderNumber,
         Description: index.Description,
