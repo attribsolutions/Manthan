@@ -117,7 +117,7 @@ export const Receipts = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`${data.Customer}`, 190, 180,);
     doc.setFont(undefined, 'Normal')
-    doc.text(`Amount in Words `, 40, 200, 'left');
+    doc.text(`Amount in Words :`, 40, 200, 'left');
 
     doc.setFont(undefined, 'Normal')
 
@@ -157,7 +157,7 @@ export const Receipts = (doc, data) => {
     doc.setFont(undefined, 'Normal')
 
 
-    doc.text(`Received By `, 230, 320, 'left');
+    doc.text(`Received By :`, 230, 320, 'left');
 
     doc.setFont(undefined, 'Normal')
 
