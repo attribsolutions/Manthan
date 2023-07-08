@@ -406,7 +406,7 @@ export const tableBody = (doc, data) => {
             }
         },
         margin: {
-            left: 30, right: 25, top: 55
+            left: 30, right: 25, top: 56
         },
         theme: 'grid',
         headerStyles: {
