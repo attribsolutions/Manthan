@@ -1,110 +1,73 @@
-
-import React, { useEffect, useState } from "react";
-import {
-    Card,
-    CardBody,
-    CardHeader,
-    Col,
-    Container,
-    FormGroup,
-    Label,
-    Row,
-
-} from "reactstrap";
+import React, { useEffect, useMemo, useState } from "react";
+import { Card, CardBody, CardHeader, Col, Container, FormGroup, Label, Row } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    Breadcrumb_inputName,
-    commonPageField,
-    commonPageFieldSuccess,
-} from "../../../store/actions";
-import { useHistory, useLocation } from "react-router-dom";
-import {
-    editPartyItemIDSuccess,
-    getpartyItemList,
-    getPartyItemListSuccess,
-    SavePartyItems,
-    SavePartyItemsSuccess
-} from "../../../store/Administrator/PartyItemsRedux/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
-import { MySearch, mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { useHistory } from "react-router-dom";
+import { editPartyItemIDSuccess, getpartyItemList, getPartyItemListSuccess, SavePartyItems, SavePartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, } from "../../../components/Common/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import {
-    breadcrumbReturnFunc,
-    btnIsDissablefunc,
-    loginIsSCMCompany,
-    loginJsonBody,
-    loginPartyID,
-    metaTagLabel,
-} from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginIsSCMCompany, loginJsonBody, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const PartyItems = (props) => {
-
-    const history = useHistory()
+    const history = useHistory();
     const dispatch = useDispatch();
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
-    const [userPageAccessState, setUserAccState] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [userPageAccessState, setUserAccState] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     const fileds = {
         id: "",
-        Name: loginIsSCMCompany() === 1 ? { value: loginPartyID() } : ""
-    }
+        Name: loginIsSCMCompany() === 1 ? { value: loginPartyID() } : "",
+    };
 
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const [state, setState] = useState(() => initialFiledFunc(fileds));
 
-    const values = { ...state.values }
+    const values = { ...state.values };
     const { isError } = state;
     const { fieldLabel } = state;
 
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
+    const location = { ...history.location };
+    const hasShowloction = location.hasOwnProperty(mode.editValue);
+    const hasShowModal = props.hasOwnProperty(mode.editValue);
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         supplier,
         pageField,
         tableList,
         saveBtnloading,
-        userAccess } = useSelector((state) => ({
-            saveBtnloading: state.PartyItemsReducer.saveBtnloading,
-            postMsg: state.PartyItemsReducer.postMsg,
-            tableList: state.PartyItemsReducer.partyItem,
-            supplier: state.PartyMasterReducer.partyList,
-            userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageField
-        }));
-
-
-
+        userAccess,
+    } = useSelector((state) => ({
+        saveBtnloading: state.PartyItemsReducer.saveBtnloading,
+        postMsg: state.PartyItemsReducer.postMsg,
+        tableList: state.PartyItemsReducer.partyItem,
+        supplier: state.PartyMasterReducer.partyList,
+        userAccess: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField,
+    }));
 
     useEffect(() => {
-        const page_Id = pageId.PARTYITEM
-        dispatch(getPartyItemListSuccess([]))
+        const page_Id = pageId.PARTYITEM;
+        dispatch(getPartyItemListSuccess([]));
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
+        dispatch(commonPageField(page_Id));
         if (!(hasShowloction && hasShowModal)) {
-            dispatch(getPartyListAPI())
+            dispatch(getPartyListAPI());
         }
     }, []);
 
-    // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
@@ -114,103 +77,93 @@ const PartyItems = (props) => {
         }
 
         userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
+            return `/${inx.ActualPagePath}` === locationPath;
+        });
 
         if (userAcc) {
             setUserAccState(userAcc);
             if (!props.isAssing) {
                 breadcrumbReturnFunc({ dispatch, userAcc });
             }
-        };
-    }, [userAccess])
+        }
+    }, [userAccess]);
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
-        if ((hasShowloction || hasShowModal)) {
-
-            let hasEditVal = null
+        if (hasShowloction || hasShowModal) {
+            let hasEditVal = null;
             if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
-            else if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
+                hasEditVal = props.editValue;
+                setPageMode(props.pageMode);
+                setModalCss(true);
+            } else if (hasShowloction) {
+                setPageMode(location.pageMode);
+                hasEditVal = location.editValue;
             }
             if (hasEditVal) {
-
-                const { Party, PartyName, PartyItem = [] } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                const { Party, PartyName, PartyItem = [] } = hasEditVal;
+                const { values, fieldLabel, hasValid, required, isError } = { ...state };
 
                 hasValid.Name.valid = true;
                 values.Name = { value: Party, label: PartyName };
 
                 const convArr = PartyItem.map((item) => {
-                    item["selectCheck"] = false
+                    item.selectCheck = false;
                     if (item.Party > 0) {
-                        { item["selectCheck"] = true }
+                        item.selectCheck = true;
                     }
-                    return item
+                    return item;
                 });
-                dispatch(getPartyItemListSuccess(convArr))
+                dispatch(getPartyItemListSuccess(convArr));
 
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(PartyName))
+                setState({ values, fieldLabel, hasValid, required, isError });
+                dispatch(Breadcrumb_inputName(PartyName));
             }
-            dispatch(editPartyItemIDSuccess({ Status: false }))
-        }
-        else if (loginIsSCMCompany() === 1) {
+            dispatch(editPartyItemIDSuccess({ Status: false }));
+        } else if (loginIsSCMCompany() === 1) {
             const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: loginPartyID() } });
-            dispatch(getpartyItemList(jsonBody))
+            dispatch(getpartyItemList(jsonBody));
         }
-    }, [])
+    }, []);
 
-    useEffect(async () => {
-
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(SavePartyItemsSuccess({ Status: false }))
+    useEffect(() => {
+        if (postMsg.Status === true && postMsg.StatusCode === 200) {
+            dispatch(SavePartyItemsSuccess({ Status: false }));
             if (pageMode === mode.assingLink) {
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
-                })
-                props.isOpenModal(false)
-            }
-            else if (pageMode === mode.edit) {
+                });
+                props.isOpenModal(false);
+            } else if (pageMode === mode.edit) {
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
-                })
-                history.push({ pathname: url.PARTYITEM_LIST })
-            }
-            else {
-                dispatch(Breadcrumb_inputName(''))
-                const promise = await customAlert({
+                });
+                history.push({ pathname: url.PARTYITEM_LIST });
+            } else {
+                dispatch(Breadcrumb_inputName(""));
+                const promise = customAlert({
                     Type: 1,
                     Message: postMsg.Message,
-                })
-                if (promise) { history.push({ pathname: url.PARTYITEM }) }
+                });
+                if (promise) {
+                    history.push({ pathname: url.PARTYITEM });
+                }
             }
-
-        } else if
-            (postMsg.Status === true) {
+        } else if (postMsg.Status === true) {
             customAlert({
                 Type: 3,
                 Message: JSON.stringify(postMsg.Message),
-            })
+            });
         }
-    }, [postMsg])
+    }, [postMsg]);
 
     useEffect(() => {
-
         if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
+            const fieldArr = pageField.PageFieldMaster;
+            comAddPageFieldFunc({ state, setState, fieldArr });
         }
-    }, [pageField])
+    }, [pageField]);
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableList]);
 
@@ -219,50 +172,41 @@ const PartyItems = (props) => {
         label: i.Name,
     }));
 
-    function onSearch(text) {
-        setSearchQuery(text)
-    }
+    mySearchProps({
+        onSearch: (text) => {
+            setSearchQuery(text);
+        },
+    });
 
-    useEffect(() => {
-        const string = searchQuery//"Mango"
-
-        function groupItemsByGroup(items) {
-            const groupedItems = {};
-            items.forEach(item => {
-                const group = item.GroupName;
-                if (!groupedItems[group]) {
-                    groupedItems[group] = [];
+    const groupWiseItemArray = useMemo(() => {
+        const groupItemsByGroup = (items) => {
+            const groupedItems = items.reduce((result, item) => {
+                const { GroupName, ...rest } = item;
+                if (!result[GroupName]) {
+                    result[GroupName] = [];
                 }
-                groupedItems[group].push(item);
-            });
-            const result = Object.keys(groupedItems).map(group => ({
-                group: group,
-                items: groupedItems[group]
-            }));
+                result[GroupName].push(rest);
+                return result;
+            }, {});
+            return Object.entries(groupedItems).map(([group, items]) => ({ group, items, })
+            );
+        };
+        return groupItemsByGroup(tableList);
+    }, [tableList]);
 
-            return result;
-        }
-
-        const groupedItems = groupItemsByGroup(tableList);
-
-
-        // if (groupedItems.length > 0) {
-
-        //     mySearchProps({ onSearch })
-
-        //     const filteredRows = groupedItems.filter(row =>
-
-        //         row.items.filter(item =>
-        //             item.ItemName.toLowerCase().includes(string.toLowerCase())
-        //         ).length > 0
-
-        //     );
-
-        setSearchResults(groupedItems);
-        // }
-
-    }, [searchQuery, tableList])
-
+    const filterdItemWise_tableData = useMemo(() => {
+        return groupWiseItemArray
+            .map(({ items, ...rest }) => ({
+                ...rest,
+                items: items.filter((item) => {
+                    return (
+                        item.ItemName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        String(item.Item).toLowerCase().includes(searchQuery.toLowerCase())
+                    );
+                }),
+            }))
+            .filter((row) => row.items.length > 0);
+    }, [searchQuery, groupWiseItemArray]);
 
     const tableColumns = [
         {
@@ -270,7 +214,7 @@ const PartyItems = (props) => {
             dataField: "Item",
             sort: true,
             style: {
-                width: "100px"
+                width: "100px",
             },
         },
         {
@@ -278,686 +222,198 @@ const PartyItems = (props) => {
             dataField: "ItemName",
             sort: true,
             style: {
-                width: "700px"
+                width: "700px",
             },
-
         },
     ];
 
     const GoButton_Handler = async (e) => {
-        let supplier = e.value
+        let supplier = e.value;
         if (!supplier > 0) {
-            alert("Please Select Supplier")
-            return
+            alert("Please Select Supplier");
+            return;
         }
 
         if (tableList.length > 0) {
-            const ispermission = await customAlert({ Type: 7, Message: "Refresh  Item...!" })
+            const ispermission = await customAlert({
+                Type: 7,
+                Message: "Refresh  Item...!",
+            });
             if (ispermission) {
-                dispatch(getPartyItemListSuccess([]))
+                dispatch(getPartyItemListSuccess([]));
             } else {
-                return
+                return;
             }
         }
         const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: supplier } });
-
-        dispatch(getpartyItemList(jsonBody))
+        dispatch(getpartyItemList(jsonBody));
     };
 
-
-    function rowSelected() {
-        return tableList.map((index) => { return (index.selectCheck) && index.Item })
-    }
+    const rowSelected = (tableArray) => {
+        return tableArray.map((index) => (index.selectCheck && index.Item));
+    };
 
     const SaveHandler = async (event) => {
-
         event.preventDefault();
         const Find = tableList.filter((index) => {
-
-            return (index.selectCheck === true)
-        })
-        const btnId = event.target.id
+            return index.selectCheck === true;
+        });
+        const btnId = event.target.id;
 
         if (Find.length === 0) {
             customAlert({
                 Type: 4,
-                Message: "Select Atleast One Item"
-            })
-            return
+                Message: "Select Atleast One Item",
+            });
+            return;
         }
         try {
-            btnIsDissablefunc({ btnId, state: true })
+            btnIsDissablefunc({ btnId, state: true });
             var PartyData = Find.map((index) => ({
                 Item: index.Item,
-                Party: values.Name.value
-            }))
+                Party: values.Name.value,
+            }));
 
-            const jsonBody = JSON.stringify(PartyData)
+            const jsonBody = JSON.stringify(PartyData);
             dispatch(SavePartyItems({ jsonBody, btnId }));
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) {
+            btnIsDissablefunc({ btnId, state: false });
+        }
     };
 
     const PartyDropdown = () => {
         if (loginIsSCMCompany() === 1) {
-            return null
+            return null;
         }
-        return <Card>
-            <CardBody className="c_card_body">
-                <Row>
+        return (
+            <Card>
+                <CardBody className="c_card_body">
                     <Row>
-                        <Col md="3">
-                            <FormGroup className="mb-3">
-                                <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
-                                <Col md="12">
-                                    <Select
-                                        name="Name"
-                                        value={values.Name}
-                                        isDisabled={pageMode === mode.assingLink ? true : false}
-                                        isSearchable={true}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={supplierOptions}
-                                        onChange={(hasSelect, evn) => {
-                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                            GoButton_Handler(hasSelect)
-                                            dispatch(Breadcrumb_inputName(hasSelect.label
-                                            ))
-                                        }}
-                                    />
-                                    {isError.Name.length > 0 && (
-                                        <span className="text-danger f-8"><small>{isError.Name}</small></span>
-                                    )}
-
-                                </Col>
-                            </FormGroup>
-                        </Col>
-                        <Col md="3" className="mt-4">
-                        </Col>
+                        <Row>
+                            <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
+                                    <Col md="12">
+                                        <Select
+                                            name="Name"
+                                            value={values.Name}
+                                            isDisabled={pageMode === mode.assingLink ? true : false}
+                                            isSearchable={true}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: (provided) => ({ ...provided, zIndex: 2 }),
+                                            }}
+                                            options={supplierOptions}
+                                            onChange={(hasSelect, evn) => {
+                                                onChangeSelect({ hasSelect, evn, state, setState });
+                                                GoButton_Handler(hasSelect);
+                                                dispatch(Breadcrumb_inputName(hasSelect.label));
+                                            }}
+                                        />
+                                        {isError.Name.length > 0 && (
+                                            <span className="text-danger f-8">
+                                                <small>{isError.Name}</small>
+                                            </span>
+                                        )}
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                            <Col md="3" className="mt-4"></Col>
+                        </Row>
                     </Row>
-                </Row>
+                </CardBody>
+            </Card>
+        );
+    };
 
-            </CardBody>
-        </Card>
+    let IsEditMode_Css = "";
+    if (modalCss || pageMode === mode.dropdownAdd) {
+        IsEditMode_Css = "-5.5%";
     }
 
-    let IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
-
-    if (!(userPageAccessState === '')) {
-
-        return (
-            <React.Fragment>
+    return (
+        <>
+            {userPageAccessState && (
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black c_card_header" >
-                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                            <CardHeader className="card-header   text-black c_card_header">
+                                <h4 className="card-title text-black">
+                                    {userPageAccessState.PageDescription}
+                                </h4>
+                                <p className="card-title-desc text-black">
+                                    {userPageAccessState.PageDescriptionDetails}
+                                </p>
                             </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                            <CardBody style={{ backgroundColor: "#whitesmoke" }}>
+                                
+                                <PartyDropdown />
 
-                                <PartyDropdown ></PartyDropdown>
-
-
-
-
-                                <React.Fragment>
-                                    <div className="">
-                                        {searchResults.map(i => (
+                                {filterdItemWise_tableData.length > 0 ? (
+                                    <>
+                                        {filterdItemWise_tableData.map((i) => (
                                             <div key={i.group}>
-                                                <Label style={{ background: "#efefef", padding: '5px 10px 0 10px', borderRadius: "3px" }}>
+                                                <Label
+                                                    style={{
+                                                        background: "#efefef",
+                                                        padding: "7px 10px 0px 8px",
+                                                        borderRadius: "3px",
+                                                    }}
+                                                >
                                                     <h6> Group : {i.group ? i.group : `No Group Assign`}</h6>
                                                 </Label>
-                                                <React.Fragment>
-                                                    <div className="table">
-                                                        <BootstrapTable
-                                                            keyField={"Item"}
-                                                            data={i.items}
-                                                            columns={tableColumns}
-                                                            Item="table_Arrow"
-                                                            striped={false}
-                                                            selectRow={selectAllCheck(rowSelected())}
-                                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                            classes={"table align-middle table-nowrap table-hover"}
-                                                            headerWrapperClasses={"thead-light"}
-                                                        />
-                                                    </div>
-                                                </React.Fragment>
+                                                <div className="table">
+                                                    <BootstrapTable
+                                                        keyField={"Item"}
+                                                        data={i.items}
+                                                        columns={tableColumns}
+                                                        Item="table_Arrow"
+                                                        selectRow={selectAllCheck(rowSelected(i.items))}
+                                                        noDataIndication={
+                                                            <div className="text-danger text-center ">
+                                                                Items Not available
+                                                            </div>
+                                                        }
+                                                        classes={"table align-middle table-nowrap table-hover"}
+                                                    />
+                                                </div>
                                             </div>
-
                                         ))}
-                                        {/* {mySearchProps(toolkitProps.searchProps)} */}
-                                    </div>
-                                </React.Fragment>
-
-
-
+                                    </>
+                                ) : (
+                                    <>
+                                        <BootstrapTable
+                                            keyField={"Item"}
+                                            data={[]}
+                                            columns={tableColumns}
+                                            noDataIndication={
+                                                <div className="text-danger text-center ">
+                                                    Items Not available
+                                                </div>
+                                            }
+                                        />
+                                    </>
+                                )}
 
                                 <div className="row save1">
                                     <SaveButton
                                         loading={saveBtnloading}
                                         pageMode={pageMode}
                                         userAcc={userPageAccessState}
-                                        module={"PartyItems"} onClick={SaveHandler}
+                                        module={"PartyItems"}
+                                        onClick={SaveHandler}
                                     />
                                 </div>
-
                             </CardBody>
                         </Card>
-
                     </Container>
                 </div>
-            </React.Fragment >
-        );
-    }
-    else {
-        return (
-            <React.Fragment></React.Fragment>
-        )
-    }
-
+            )}
+        </>
+    );
 };
-export default PartyItems
 
-
-
-
-
-
-
-// import React, { useEffect, useState } from "react";
-// import {
-//     Card,
-//     CardBody,
-//     CardHeader,
-//     Col,
-//     Container,
-//     FormGroup,
-//     Input,
-//     Label,
-//     Row,
-// } from "reactstrap";
-// import Select from "react-select";
-// import { MetaTags } from "react-meta-tags";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//     Breadcrumb_inputName,
-//     commonPageField,
-//     commonPageFieldSuccess,
-// } from "../../../store/actions";
-// import { useHistory, useLocation } from "react-router-dom";
-// import {
-//     editPartyItemIDSuccess,
-//     getpartyItemList,
-//     getPartyItemListSuccess,
-//     SavePartyItems,
-//     SavePartyItemsSuccess
-// } from "../../../store/Administrator/PartyItemsRedux/action";
-// import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-// import ToolkitProvider from "react-bootstrap-table2-toolkit";
-// import { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
-// import { MySearch, mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-// import { SaveButton } from "../../../components/Common/CommonButton";
-// import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, } from "../../../components/Common/validationFunction";
-// import * as url from "../../../routes/route_url";
-// import * as mode from "../../../routes/PageMode";
-// import BootstrapTable from "react-bootstrap-table-next";
-// import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-// import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-// import {
-//     breadcrumbReturnFunc,
-//     btnIsDissablefunc,
-//     loginIsSCMCompany,
-//     loginJsonBody,
-//     loginPartyID,
-//     metaTagLabel,
-// } from "../../../components/Common/CommonFunction";
-// import * as pageId from "../../../routes/allPageID";
-// import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
-// import * as _cfunc from "../../../components/Common/CommonFunction";
-
-// const PartyItems = (props) => {
-
-//     const history = useHistory()
-//     const dispatch = useDispatch();
-//     const [pageMode, setPageMode] = useState(mode.defaultsave);
-//     const [modalCss, setModalCss] = useState(false);
-//     const [userPageAccessState, setUserAccState] = useState('');
-//     const [searchResults, setSearchResults] = useState([]);
-//     const [searchQuery, setSearchQuery] = useState('');
-//     // const [List, setList] = useState(true);
-
-
-
-
-//     const fileds = {
-//         id: "",
-//         Name: loginIsSCMCompany() === 1 ? { value: loginPartyID() } : ""
-//     }
-
-//     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
-//     const values = { ...state.values }
-//     const { isError } = state;
-//     const { fieldLabel } = state;
-
-//     const location = { ...history.location }
-//     const hasShowloction = location.hasOwnProperty(mode.editValue)
-//     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-//     //Access redux store Data /  'save_ModuleSuccess' action data
-//     const {
-//         postMsg,
-//         supplier,
-//         pageField,
-//         tableList,
-//         saveBtnloading,
-//         userAccess } = useSelector((state) => ({
-//             saveBtnloading: state.PartyItemsReducer.saveBtnloading,
-//             postMsg: state.PartyItemsReducer.postMsg,
-//             tableList: state.PartyItemsReducer.partyItem,
-//             supplier: state.PartyMasterReducer.partyList,
-//             userAccess: state.Login.RoleAccessUpdateData,
-//             pageField: state.CommonPageFieldReducer.pageField
-//         }));
-
-
-
-
-//     useEffect(() => {
-//         const page_Id = pageId.PARTYITEM
-//         dispatch(getPartyItemListSuccess([]))
-//         dispatch(commonPageFieldSuccess(null));
-//         dispatch(commonPageField(page_Id))
-//         if (!(hasShowloction && hasShowModal)) {
-//             dispatch(getPartyListAPI())
-//         }
-//     }, []);
-
-//     // userAccess useEffect
-//     useEffect(() => {
-//         let userAcc = null;
-//         let locationPath = location.pathname;
-
-//         if (hasShowModal) {
-//             locationPath = props.masterPath;
-//         }
-
-//         userAcc = userAccess.find((inx) => {
-//             return (`/${inx.ActualPagePath}` === locationPath)
-//         })
-
-//         if (userAcc) {
-//             setUserAccState(userAcc);
-//             if (!props.isAssing) {
-//                 breadcrumbReturnFunc({ dispatch, userAcc });
-//             }
-//         };
-//     }, [userAccess])
-
-//     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-//     useEffect(() => {
-
-//         if ((hasShowloction || hasShowModal)) {
-
-//             let hasEditVal = null
-//             if (hasShowModal) {
-//                 hasEditVal = props.editValue
-//                 setPageMode(props.pageMode)
-//                 setModalCss(true)
-//             }
-//             else if (hasShowloction) {
-//                 setPageMode(location.pageMode)
-//                 hasEditVal = location.editValue
-//             }
-//             if (hasEditVal) {
-
-//                 const { Party, PartyName, PartyItem = [] } = hasEditVal
-//                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
-//                 hasValid.Name.valid = true;
-//                 values.Name = { value: Party, label: PartyName };
-
-//                 const convArr = PartyItem.map((item) => {
-//                     item["selectCheck"] = false
-//                     if (item.Party > 0) {
-//                         { item["selectCheck"] = true }
-//                     }
-//                     return item
-//                 });
-//                 dispatch(getPartyItemListSuccess(convArr))
-
-//                 setState({ values, fieldLabel, hasValid, required, isError })
-//                 dispatch(Breadcrumb_inputName(PartyName))
-//             }
-//             dispatch(editPartyItemIDSuccess({ Status: false }))
-//         }
-//         else if (loginIsSCMCompany() === 1) {
-//             const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: loginPartyID() } });
-//             dispatch(getpartyItemList(jsonBody))
-//         }
-//     }, [])
-
-//     useEffect(async () => {
-
-//         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-//             dispatch(SavePartyItemsSuccess({ Status: false }))
-//             if (pageMode === mode.assingLink) {
-//                 customAlert({
-//                     Type: 1,
-//                     Message: postMsg.Message,
-//                 })
-//                 props.isOpenModal(false)
-//             }
-//             else if (pageMode === mode.edit) {
-//                 customAlert({
-//                     Type: 1,
-//                     Message: postMsg.Message,
-//                 })
-//                 history.push({ pathname: url.PARTYITEM_LIST })
-//             }
-//             else {
-//                 dispatch(Breadcrumb_inputName(''))
-//                 const promise = await customAlert({
-//                     Type: 1,
-//                     Message: postMsg.Message,
-//                 })
-//                 if (promise) { history.push({ pathname: url.PARTYITEM }) }
-//             }
-
-//         } else if
-//             (postMsg.Status === true) {
-//             customAlert({
-//                 Type: 3,
-//                 Message: JSON.stringify(postMsg.Message),
-//             })
-//         }
-//     }, [postMsg])
-
-//     useEffect(() => {
-
-//         if (pageField) {
-//             const fieldArr = pageField.PageFieldMaster
-//             comAddPageFieldFunc({ state, setState, fieldArr })
-//         }
-//     }, [pageField])
-
-//     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableList]);
-
-//     const supplierOptions = supplier.map((i) => ({
-//         value: i.id,
-//         label: i.Name,
-//     }));
-
-
-//     const checkSelect = (e) => {
-//
-//         let checked = e.target.checked
-
-//     }
-
-//     function onSearch(text) {
-//         setSearchQuery(text)
-//     }
-
-//     useEffect(() => {
-//         const string = searchQuery//"Mango"
-//         function groupItemsByGroup(items) {
-//             const groupedItems = {};
-//             items.forEach(item => {
-//                 const group = item.GroupName;
-//                 if (!groupedItems[group]) {
-//                     groupedItems[group] = [];
-//                 }
-//                 groupedItems[group].push(item);
-//             });
-//             const result = Object.keys(groupedItems).map(group => ({
-//                 group: group,
-//                 items: groupedItems[group]
-//             }));
-
-//             return result;
-//         }
-
-
-
-//         const groupedItems = groupItemsByGroup(tableList);
-
-//         setSearchResults(groupedItems);
-
-
-
-//         // if (groupedItems.length > 0) {
-
-//         //     mySearchProps({ onSearch })
-
-//         //     const filteredRows = groupedItems.filter(row =>
-
-//         //         row.items.filter(item =>
-//         //             item.ItemName.toLowerCase().includes(string.toLowerCase())
-//         //         ).length > 0
-
-//         //     );
-
-//         // }
-
-//     }, [searchQuery, tableList])
-
-
-//     const tableColumns = [
-//         {
-//             text: "Item ID",
-//             dataField: "Item",
-//             sort: true,
-//             style: {
-//                 width: "100px"
-//             },
-//         },
-//         {
-//             text: "Item Name",
-//             dataField: "ItemName",
-//             sort: true,
-//             style: {
-//                 width: "700px"
-//             },
-
-//         },
-//     ];
-
-
-
-//     const pageOptions = {
-//         sizePerPage: 15,
-//         custom: true,
-//     };
-
-//     const GoButton_Handler = async (e) => {
-//         let supplier = e.value
-//         if (!supplier > 0) {
-//             alert("Please Select Supplier")
-//             return
-//         }
-
-//         if (tableList.length > 0) {
-//             const ispermission = await customAlert({ Type: 7, Message: "Refresh  Item...!" })
-//             if (ispermission) {
-//                 dispatch(getPartyItemListSuccess([]))
-//             } else {
-//                 return
-//             }
-//         }
-//         const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: supplier } });
-
-//         dispatch(getpartyItemList(jsonBody))
-//     };
-
-//     const SaveHandler = async (event) => {
-
-//         event.preventDefault();
-//         const Find = tableList.filter((index) => {
-
-//             return (index.selectCheck === true)
-//         })
-//         const btnId = event.target.id
-
-//         try {
-//             btnIsDissablefunc({ btnId, state: true })
-//             var PartyData = Find.map((index) => ({
-//                 Item: index.Item,
-//                 Party: values.Name.value
-//             }))
-//             const jsonBody = JSON.stringify(PartyData)
-//             dispatch(SavePartyItems({ jsonBody, btnId }));
-//         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
-//     };
-
-//     function rowSelected() {
-//         return tableList.map((index) => { return (index.selectCheck) && index.Item })
-//     }
-
-//     const PartyDropdown = () => {
-//         if (loginIsSCMCompany() === 1) {
-//             return null
-//         }
-//         return <Card>
-//             <CardBody className="c_card_body">
-//                 <Row>
-//                     <Row>
-//                         <Col md="3">
-//                             <FormGroup className="mb-3">
-//                                 <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
-//                                 <Col md="12">
-//                                     <Select
-//                                         name="Name"
-//                                         value={values.Name}
-//                                         isDisabled={pageMode === mode.assingLink ? true : false}
-//                                         isSearchable={true}
-//                                         className="react-dropdown"
-//                                         classNamePrefix="dropdown"
-//                                         options={supplierOptions}
-//                                         onChange={(hasSelect, evn) => {
-//                                             onChangeSelect({ hasSelect, evn, state, setState, })
-//                                             GoButton_Handler(hasSelect)
-//                                             dispatch(Breadcrumb_inputName(hasSelect.label
-//                                             ))
-//                                         }}
-//                                     />
-//                                     {isError.Name.length > 0 && (
-//                                         <span className="text-danger f-8"><small>{isError.Name}</small></span>
-//                                     )}
-
-//                                 </Col>
-//                             </FormGroup>
-//                         </Col>
-//                         <Col md="3" className="mt-4">
-//                         </Col>
-//                     </Row>
-//                 </Row>
-
-//             </CardBody>
-//         </Card>
-//     }
-
-//     let IsEditMode_Css = ''
-//     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
-
-//     if (!(userPageAccessState === '')) {
-
-//         return (
-//             <React.Fragment>
-//                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-//                     <Container fluid>
-//                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-//                         <Card className="text-black">
-//                             <CardHeader className="card-header   text-black c_card_header" >
-//                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-//                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-//                             </CardHeader>
-
-//                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-
-//                                 <PartyDropdown ></PartyDropdown>
-
-
-
-
-//                                 <React.Fragment>
-//                                     <div className="">
-
-//                                         {/* <FormGroup className="flex-row-reverse  " >
-//                                             <Label htmlFor="validationCustom01" >Select All Items :</Label>
-//                                             <Input
-//                                                 style={{ marginLeft: "10px", cursor: "pointer" }}
-//                                                 type="checkbox"
-//                                                 className="p-2"
-//                                                 onChange={(e) => checkSelect(e)}
-//                                             >
-//                                             </Input>
-//                                         </FormGroup> */}
-
-
-//                                         {searchResults.map(i => (
-//                                             <div key={i.group}>
-//                                                 <Label style={{ background: "#efefef", padding: '5px 10px 0 10px', borderRadius: "3px" }}>
-//                                                     <h6> Group : {i.group ? i.group : `No Group Assign`}</h6>
-//                                                 </Label>
-//                                                 <React.Fragment>
-//                                                     <div className="table">
-//                                                         <BootstrapTable
-//                                                             keyField={"Item"}
-//                                                             data={i.items}
-//                                                             columns={tableColumns}
-//                                                             Item="table_Arrow"
-//                                                             striped={false}
-//                                                             selectRow={selectAllCheck(rowSelected())}
-//                                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-//                                                             classes={"table align-middle table-nowrap table-hover"}
-//                                                             headerWrapperClasses={"thead-light"}
-//                                                         />
-//                                                     </div>
-//                                                 </React.Fragment>
-//                                             </div>
-
-//                                         ))}
-//                                         {/* {mySearchProps(toolkitProps.searchProps)} */}
-//                                     </div>
-//                                 </React.Fragment>
-
-
-
-
-//                                 <div className="row save1">
-//                                     <SaveButton
-//                                         loading={saveBtnloading}
-//                                         pageMode={pageMode}
-//                                         userAcc={userPageAccessState}
-//                                         module={"PartyItems"} onClick={SaveHandler}
-//                                     />
-//                                 </div>
-
-//                             </CardBody>
-//                         </Card>
-
-//                     </Container>
-//                 </div>
-//             </React.Fragment >
-//         );
-//     }
-//     else {
-//         return (
-//             <React.Fragment></React.Fragment>
-//         )
-//     }
-
-// };
-// export default PartyItems
-
-
-
-
-
+export default PartyItems;

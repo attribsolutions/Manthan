@@ -20,10 +20,11 @@ import { getOrderApprovalDetailAction, postOrderConfirms_API, postOrderConfirms_
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 import OrderView from "./OrderView";
+import OrderView_Modal from "./OrderView";
 
 
 const OrderList = () => {
-    
+
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
@@ -38,7 +39,6 @@ const OrderList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [modal_view, setmodal_view] = useState(false);
 
     const [otherState, setOtherState] = useState({
         masterPath: '',
@@ -51,10 +51,8 @@ const OrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
-
             loading: state.OrderReducer.loading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
-            orderData: state.OrderReducer.orderData,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
             makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
@@ -197,19 +195,6 @@ const OrderList = () => {
 
 
 
-    useEffect(() => {
-        
-        if ((orderData.Status === true)) {
-            setmodal_view(true);
-        }
-
-    }, [orderData]);
-
-    function tog_center() {
-        setmodal_view(false);
-        dispatch(_act.orderSinglegetSuccess({ Status: false }))
-
-    }
 
 
     useEffect(() => {
@@ -637,16 +622,7 @@ const OrderList = () => {
                 }
             </div>
 
-            <Modal
-                isOpen={modal_view}
-                toggle={() => {
-                    tog_center();
-                }}
-                size="xl"
-            >
-                <OrderView orderData={reducers.orderData}></OrderView>
-            </Modal>
-
+            <OrderView_Modal />{/** order view component */}
 
         </React.Fragment>
     )
