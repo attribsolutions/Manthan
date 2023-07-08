@@ -36,10 +36,12 @@ const InvioceReporta5 = (data) => {
         }
 
         data.forEach((data, islast, array) => {
+            debugger
             pageHeder(doc, data);
             reportBody(doc, data);                                   // condition for Mulitinvoice invoice
             pageFooter(doc, data, islast, array);
             if (!(array.length - 1 === islast)) {
+                debugger
                 doc.addPage();
             }
         })

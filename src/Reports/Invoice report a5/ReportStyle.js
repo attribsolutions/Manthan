@@ -25,6 +25,9 @@ export const pageHeder = (doc, data) => {
     doc.line(570, 56, 30, 56) //Full horizontal line Bill by Upper line
     doc.setFontSize(7)
     doc.text('Original For Buyer', 500, 11,)
+
+
+
 }
 
 export const reportHeder1 = (doc, data) => {
@@ -188,15 +191,7 @@ export const reportHeder3 = (doc, data) => {
 
 
 }
-export const reportHeder4 = (doc, data) => {
-    doc.setFont('Tahoma')
-    doc.setFontSize(8)
-    doc.setFont(undefined, 'bold')
-    // var time = convertTimefunc(i.CreatedOn)
-    //   i.GRNDate = (`${date} ${time}`)
-    doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 30, 23) //Invoice Id
-    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 35) //Invoice date
-}
+
 
 export const reportFooter = (doc, data) => {
     let stringNumber = toWords(Number(data.GrandTotal))
@@ -298,36 +293,6 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(10)
     doc.text(`${data.CustomerName} `, 140, 811,)
     doc.setFontSize(9)
-
-    // if (data.BankData.length > 0) {
-    //     let BankData = data.BankData[0]
-    //     doc.setFont(undefined, 'bold')
-
-    //     doc.text(`A/C No:`, 34, 318,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.AccountNo}`, 70, 318,)
-
-    //     doc.setFont(undefined, 'bold')
-
-    //     doc.text(`IFSC Code:`, 150, 318,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.IFSC}`, 195, 318,)
-
-    //     doc.setFont(undefined, 'bold')
-    //     doc.text(`Branch:`, 270, 318,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.BranchName}`, 305, 318,)
-
-    //     doc.setFont(undefined, 'bold')
-    //     doc.text(`Bank Name:`, 34, 331,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.BankName}`, 90, 331,)
-
-    // } else {
-    //     doc.setFont(undefined, 'bold')
-    //     doc.text(`Bank Details Not Avaliable`, 34, 328,)
-    //     doc.setFont(undefined, 'Normal')
-    // }
 
 
     doc.setFont("Arimo");
@@ -673,20 +638,21 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
 
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
+
     for (let i = 1; i <= pageCount; i++) {
-        doc.setPage(i)
+
         pageHeder(doc, data)
         pageBorder(doc)
         reportHeder3(doc, data)
-        doc.text('Page' + String(i) + ' of ' + String(pageCount), 500, 390,)
+        // doc.text('Page' + String(pageCount) + ' of ', 500, 390,)
     }
 
     let condition1 = (array.length - 1 === islast)
     if (condition1) {
         for (let j = 1; j <= pageCount; j++) {
             doc.setPage(j)
+            doc.text('Page' + String(pageCount) + ' of ' + String(j), 500, 390,)
             doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
-
         }
     }
 }
