@@ -20,7 +20,6 @@ import {
     saveCopyRoleAccessActionSuccess,
     updateRoleAcessAction,
 } from "../../../store/actions";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
 import CommonPurchaseList, { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
@@ -91,7 +90,7 @@ const RoleAccessListPage1 = () => {
             dispatch(saveCopyRoleAccessActionSuccess({ Status: false }))
             dispatch(getRoleAccessListPage(getListbodyFunc()));
             tog_center()
-            dispatch(AlertState({
+            dispatch(customAlert({
                 Type: 1,
                 Status: true,
                 Message: PostMessage_ForCopyRoleAccess.Message,
@@ -99,7 +98,7 @@ const RoleAccessListPage1 = () => {
         }
         else if (PostMessage_ForCopyRoleAccess.Status === true) {
             dispatch(saveCopyRoleAccessActionSuccess({ Status: false }))
-            dispatch(AlertState({
+            dispatch(customAlert({
                 Type: 4,
                 Status: true,
                 Message: JSON.stringify(PostMessage_ForCopyRoleAccess.Message),

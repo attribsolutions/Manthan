@@ -13,7 +13,8 @@ import {
   GET_EMPLOYEE_LIST,
   EMPLOYEE_API_ERROR_ACTION,
   DELETE_EMPLOYEE_ID,
-  EDIT_EMPLOYEE_ID
+  EDIT_EMPLOYEE_ID,
+  GET_CITY_ON_DISTRICT
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -29,7 +30,8 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMessage: { Status: false },
   CompanyNames: [],
-  PartyTypes: []
+  PartyTypes: [],
+  cityDropDownLoading:false
 };
 
 const EmployeesReducer = (state = INIT_STATE, action) => {
@@ -50,10 +52,18 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       };
 
     // CITY Dropdown api
+
+    case GET_CITY_ON_DISTRICT:
+      return {
+        ...state,
+        cityDropDownLoading:true
+      };
+
     case GET_CITY_ON_DISTRICT_SUCCESS:
       return {
         ...state,
         City: action.payload,
+        cityDropDownLoading:false
       };
 
     case SAVE_EMPLOYEE_MASTER:
@@ -111,7 +121,6 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       };
 
     // update api
-
     case UPDATE_EMPLOYEE_ID:
       return {
         ...state,
@@ -138,7 +147,9 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
+        cityDropDownLoading:false,
         listBtnLoading: false,
+        
       };
 
     default:

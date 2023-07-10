@@ -8,7 +8,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../../store/actions";
+import {  commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -31,11 +31,9 @@ import {
     SaveLoadingSheetMaster,
     SaveLoadingSheetMasterSucccess
 } from "../../../../store/Sales/LoadingSheetRedux/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
-import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
@@ -128,36 +126,34 @@ const LoadingSheet = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
             dispatch(LoadingSheet_GoBtn_API_Succcess([]))
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.LOADING_SHEET_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.LOADING_SHEET_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
-            dispatch(AlertState({
+            dispatch( customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
             }));
         }
     }, [postMsg])

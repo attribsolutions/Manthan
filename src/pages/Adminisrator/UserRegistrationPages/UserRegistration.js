@@ -21,7 +21,6 @@ import {
   userEditActionSuccess
 }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
-import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -218,38 +217,35 @@ const AddUser = (props) => {
     }
   }, [])
 
-  useEffect(() => {
+  useEffect(async () => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
 
       if (pageMode === mode.dropdownAdd) {
-        dispatch(AlertState({
+        customAlert({
           Type: 1,
-          Status: true,
           Message: PostAPIResponse.Message,
-        }))
+      })
       }
       else {
-        dispatch(AlertState({
+        let isPermission = await customAlert({
           Type: 1,
           Status: true,
           Message: PostAPIResponse.Message,
-          RedirectPath: url.USER_lIST,
-          AfterResponseAction: false
-        }))
+      })
+      if (isPermission) {
+          history.push({ pathname: url.USER_lIST })
+      }
       }
     }
 
     else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
-      dispatch(AlertState({
+      customAlert({
         Type: 4,
-        Status: true,
-        Message: JSON.stringify(PostAPIResponse.Message),
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
+        Message: JSON.stringify(postMessage.Message),
+    })
     }
   }, [PostAPIResponse.Status])
 

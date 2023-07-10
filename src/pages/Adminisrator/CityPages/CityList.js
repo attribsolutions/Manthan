@@ -22,6 +22,7 @@ import { url, pageId } from "../../../routes/index"
 import CityMaster from "./CityMaster";
 import { getCityOnDistrict, getCityOnDistrictSuccess, getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
+import { C_Select } from "../../../CustomValidateForm";
 
 const CityList = () => {
 
@@ -46,11 +47,12 @@ const CityList = () => {
             district: state.PartyMasterReducer.DistrictOnState,
             State: state.EmployeesReducer.State,
             userAccess: state.Login.RoleAccessUpdateData,
+            districtDropDownLoading: state.PartyMasterReducer.districtDropDownLoading,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
-    const { userAccess, pageField, State, district,listBtnLoading } = reducers;
+    const { userAccess, pageField, State, district,districtDropDownLoading } = reducers;
 
     const values = { ...state.values }
 
@@ -154,7 +156,7 @@ const CityList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>District</Label>
                             <Col sm="7">
-                                <Select
+                                <C_Select
                                     name="DistrictName"
                                     value={values.DistrictName}
                                     isSearchable={true}
@@ -163,6 +165,7 @@ const CityList = () => {
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
                                     }}
+                                    isLoading={districtDropDownLoading}
                                     options={District_DropdownOptions}
                                     onChange={(hasSelect, evn) => {
                                         onChangeSelect({ hasSelect, evn, state, setState, })
@@ -183,7 +186,7 @@ const CityList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-
+            
                 {
                    
                         (pageField) &&
@@ -200,7 +203,6 @@ const CityList = () => {
                                 MasterModal={CityMaster}
 
                             />
-
                 }
                 
             </div>

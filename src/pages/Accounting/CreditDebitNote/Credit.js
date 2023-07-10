@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState, } from "react";
 import {
     Col,
@@ -16,7 +14,6 @@ import {
     commonPageFieldSuccess,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -48,9 +45,16 @@ import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../s
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
+import {
+    CredietDebitType,
+    EditCreditlistSuccess,
+    Invoice_Return_ID,
+    Invoice_Return_ID_Success,
+    saveCredit,
+    saveCredit_Success
+} from "../../../store/Accounting/CreditRedux/action";
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
-import { calculateSalesReturnFunc, salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
+import { calculateSalesReturnFunc } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const Credit = (props) => {
@@ -184,37 +188,35 @@ const Credit = (props) => {
         }
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveCredit_Success({ Status: false }))
             setState(() => resetFunction(fileds, state)) //Clear form values 
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.CREDIT_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.CREDIT_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveCredit_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
