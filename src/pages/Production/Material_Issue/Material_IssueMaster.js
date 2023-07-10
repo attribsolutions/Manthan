@@ -10,7 +10,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import {  commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -39,6 +39,7 @@ import { mode, pageId, url } from "../../../routes/index";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const MaterialIssueMaster = (props) => {
 
@@ -181,39 +182,36 @@ const MaterialIssueMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
-
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveMaterialIssueSuccess({ Status: false }))
             dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
             dispatch(saveBOMMasterSuccess({ Status: false }))
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.MATERIAL_ISSUE_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.MATERIAL_ISSUE_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
 
             dispatch(SaveMaterialIssueSuccess({ Status: false }))
             dispatch(saveBOMMasterSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [postMsg])
 
@@ -227,9 +225,8 @@ const MaterialIssueMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );
@@ -560,7 +557,7 @@ const MaterialIssueMaster = (props) => {
         try {
             if (formValid(state, setState)) {
                 if (validMsg.length > 0) {
-                    dispatch(AlertState({
+                    dispatch(customAlert({
                         Type: 4,
                         Status: true,
                         Message: JSON.stringify(validMsg),

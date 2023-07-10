@@ -8,9 +8,7 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import "../../../assets/scss/CustomTable2/datatables.scss";
-import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
@@ -22,6 +20,7 @@ import {
   updateMRPListSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import MRPMaster from "./MRPMaster"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 const MRPList = (props) => {
 
   const dispatch = useDispatch();
@@ -63,7 +62,7 @@ const MRPList = (props) => {
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
       dispatch(updateMRPListSuccess({ Status: false }));
       dispatch(
-        AlertState({
+        customAlert({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
@@ -74,7 +73,7 @@ const MRPList = (props) => {
     } else if (updateMessage.Status === true) {
       dispatch(updateMRPListSuccess({ Status: false }));
       dispatch(
-        AlertState({
+        customAlert({
           Type: 3,
           Status: true,
           Message: JSON.stringify(updateMessage.Message),
@@ -87,7 +86,7 @@ const MRPList = (props) => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
       dispatch(deleteMRPList_Id_Success({ Status: false }));
       dispatch(
-        AlertState({
+        customAlert({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
@@ -97,7 +96,7 @@ const MRPList = (props) => {
     } else if (deleteMessage.Status === true) {
       dispatch(deleteMRPList_Id_Success({ Status: false }));
       dispatch(
-        AlertState({
+        customAlert({
           Type: 3,
           Status: true,
           Message: JSON.stringify(deleteMessage.Message),
@@ -112,7 +111,7 @@ const MRPList = (props) => {
       dispatch(saveMRPMasterSuccess({ Status: false }))
       tog_center();
       dispatch(getMRPList());
-      dispatch(AlertState({
+      dispatch(customAlert({
         Type: 1,
         Status: true,
         Message: PostAPIResponse.Message,
@@ -121,7 +120,7 @@ const MRPList = (props) => {
 
     else if ((PostAPIResponse.Status === true)) {
       dispatch(saveMRPMasterSuccess({ Status: false }))
-      dispatch(AlertState({
+      dispatch(customAlert({
         Type: 4,
         Status: true,
         Message: JSON.stringify(PostAPIResponse.Message),
@@ -145,7 +144,7 @@ const MRPList = (props) => {
   //select id for delete row
   const deleteHandeler = (id, name) => {
     dispatch(
-      AlertState({
+      customAlert({
         Type: 5,
         Status: true,
         Message: `Are you sure you want to delete this MRP List : "${name}"`,
