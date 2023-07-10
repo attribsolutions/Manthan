@@ -132,8 +132,6 @@ export function C_Button(props) {
 }
 
 
-
-
 export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
   const { Name } = userAcc;
   const btnId = `gotoInvoiceBtn-${Name.replace(/ /g, "")}`;
@@ -148,7 +146,6 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
-
         :
         <button
           type="submit"
@@ -162,7 +159,6 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
         </button>}
     </div>
   )
-
 }
 
 
@@ -180,7 +176,7 @@ export function Loader() {// linner component
 export function Listloader() {// common Listcomponent
   return <div id="api_spinner" >
     <div className="api_spinner_body " >
-      <span className="spinner" style={{ left: "-5cm" }}></span>
+      <span className="spinner" ></span>
     </div>
   </div>
 
@@ -199,6 +195,17 @@ export function Listloader1({ show = false }) {// common Listcomponent
 }
 
 
+export function CustomSppiner({isLoading}) {// common Listcomponent
+if(!isLoading){
+return null
+}
+  return <div id="api_spinner" >
+    <div className="api_spinner_body " >
+      <span className="spinner" ></span>
+    </div>
+  </div>
+
+}
 
 
 

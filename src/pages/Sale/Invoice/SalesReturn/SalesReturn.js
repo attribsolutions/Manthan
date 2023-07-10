@@ -379,11 +379,12 @@ const SalesReturn = (props) => {
                                     <Select
                                         id={`DicountType_${key}`}
                                         classNamePrefix="select2-selection"
-                                        value={discountDropOption[1]}
+                                        defaultValue={discountDropOption[1]}
                                         options={discountDropOption}
                                         onChange={(e) => {
                                             row.DiscountType = e.value;
                                             row.Discount = ''
+                                            document.getElementById(`Discount-${key}`).value = ''//changr Discount value  by id
                                             totalAmountCalcuationFunc(row, TableArr);
                                         }}
                                     />
@@ -391,6 +392,7 @@ const SalesReturn = (props) => {
                                 <div className="child">
                                     <CInput
                                         type="text"
+                                        id={`Discount-${key}`}//this id use discount type onchange
                                         placeholder="Dist."
                                         className="text-end"
                                         cpattern={decimalRegx}
