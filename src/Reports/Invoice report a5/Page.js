@@ -44,7 +44,6 @@ const InvioceReporta5 = (data) => {
             }
         })
     } else {
-
         const Data = []
         Data.push(data)
         Data.forEach((data, islast, array) => {

@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { Go_Button } from "../../components/Common/CommonButton";
+import { Change_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
-import { getBaseUnit_ForDropDown } from "../../store/actions";
+import { SSDD_List_under_Company, getBaseUnit_ForDropDown } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import { stockReport_GoButton_API } from "../../store/Report/StockReport/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import { stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
 
 const StockReport = (props) => {
 
@@ -65,7 +66,9 @@ const StockReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        dispatch(stockReport_GoButton_API_Success([]))
         dispatch(getBaseUnit_ForDropDown());
+        dispatch(SSDD_List_under_Company());
     }, [])
 
     const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
@@ -131,7 +134,7 @@ const StockReport = (props) => {
             <div className="page-content">
                 <div className="px-2 c_card_filter text-black mb-1" >
                     <div className="row" >
-                        <Col sm={2} className="">
+                        <Col sm={(isSCMParty) ? 2 : 3} className="">
                             <FormGroup className=" mb-2 row mt-3 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "66px" }}>FromDate</Label>
@@ -146,7 +149,7 @@ const StockReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={2} className="">
+                        <Col sm={(isSCMParty) ? 2 : 3} className="">
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "60px" }}>ToDate</Label>
@@ -161,7 +164,7 @@ const StockReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3}>
+                        <Col sm={(isSCMParty) ? 3 : 4}>
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-2 p-2"
                                     style={{ width: "85px" }}>Unit</Label>
@@ -169,6 +172,7 @@ const StockReport = (props) => {
                                     <Select
                                         name="Unit"
                                         value={unitDropdown}
+                                        isDisabled={tableData.length > 0 && true}
                                         isSearchable={true}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
@@ -193,6 +197,7 @@ const StockReport = (props) => {
                                             name="Party"
                                             value={partyDropdown}
                                             isSearchable={true}
+                                            isDisabled={tableData.length > 0 && true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{
@@ -208,7 +213,11 @@ const StockReport = (props) => {
                         }
 
                         <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
-                            <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
+                            {!tableData.length > 0 ?
+                                < Go_Button loading={reducers.listBtnLoading} onClick={(e) => goButtonHandler()} />
+                                : <Change_Button onClick={(e) => dispatch(stockReport_GoButton_API_Success([]))}
+                                />
+                            }
                         </Col>
                     </div>
 

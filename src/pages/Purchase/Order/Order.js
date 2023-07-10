@@ -431,17 +431,20 @@ const Order = (props) => {
         {
             dataField: "GroupName",
             text: "Group",
+            classes: 'table-cursor-pointer',
             sort: true,
         },
         {
             dataField: "SubGroupName",
             text: "SubGroup",
+            classes: 'table-cursor-pointer',
             sort: true,
         },
 
         {//------------- ItemName column ----------------------------------
             dataField: "ItemName",
             text: "Item Name",
+            classes: 'table-cursor-pointer',
             sort: true,
             sortValue: (cell, row) => row["ItemName"],
             headerFormatter: (value, row, k, f) => {
@@ -450,8 +453,8 @@ const Order = (props) => {
                         <div>
                             Item Name
                         </div>
-                        <div className="cursor-pointer" onClick={assignItem_onClick}>
-                            <samp id={"__assignItem_onClick"} style={{ display: "none" }} className="text-primary fst-italic text-decoration-underline"
+                        <div onClick={assignItem_onClick}>
+                            <samp id={"__assignItem_onClick"} style={{ display: "none", cursor: "pointer" }} className="text-primary fst-italic text-decoration-underline"
                             >
                                 Assign-Items</samp>
                         </div>
@@ -463,6 +466,7 @@ const Order = (props) => {
         {
             dataField: "StockQuantity",
             text: "Stock Quantity",
+            classes: 'table-cursor-pointer',
             align: () => "right",
             sort: true,
 
@@ -470,6 +474,7 @@ const Order = (props) => {
 
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
+            classes: 'table-cursor-pointer',
             formatter: (value, row, k) => {
                 return (
                     <>
@@ -496,6 +501,7 @@ const Order = (props) => {
 
         {  //------------- Unit column ----------------------------------
             text: "Unit",
+            classes: 'table-cursor-pointer',
             dataField: "",
 
             headerStyle: () => {
@@ -591,6 +597,7 @@ const Order = (props) => {
 
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
+            classes: 'table-cursor-pointer',
             dataField: "",
             formatter: (value, row, k) => {
                 if (subPageMode === url.ORDER_1) {
@@ -630,6 +637,7 @@ const Order = (props) => {
 
         {//------------- MRP column ----------------------------------
             text: "MRP",
+            classes: 'table-cursor-pointer',
             dataField: "",
             formatter: (value, row, k) => {
 
@@ -646,6 +654,7 @@ const Order = (props) => {
 
         { //------------- Comment column ----------------------------------
             text: "Comment",
+            classes: 'table-cursor-pointer',
             dataField: "",
             formatter: (value, row, k) => {
                 return (
@@ -1403,14 +1412,14 @@ const Order = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table">
+                                        <div className="table-responsive table " style={{ minHeight: "45vh" }} >
                                             <BootstrapTable
                                                 keyField={"Item_id"}
                                                 id="table_Arrow"
                                                 defaultSorted={defaultSorted}
-                                                classes={"table  table-bordered table-hover"}
+                                                classes={"table  table-bordered table-hover "}
                                                 noDataIndication={
-                                                    <div className="text-danger text-center ">
+                                                    <div className="text-danger text-center table-cursor-pointer">
                                                         Items Not available
                                                     </div>
                                                 }

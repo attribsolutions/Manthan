@@ -251,7 +251,7 @@ export const listPageActionsButtonFunc = (props) => {
                                             type="button"
                                             disabled={listBtnLoading}
                                             className={editSelfBtnCss}
-                                            id={`btn-edit-${rowData.id}`}
+                                            id={`btn-view-${rowData.id}`}
                                             title={`View ${ButtonMsgLable}`}
                                             onClick={() => {
                                                 const btnId = `btn-view-${rowData.id}`

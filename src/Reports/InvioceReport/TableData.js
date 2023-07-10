@@ -271,8 +271,8 @@ export const RowsWithIGST = (data) => {
             totalIGst = Number(totalIGst) + Number(element.IGST)
             totalAmount = Number(totalAmount) + Number(element.Amount)
             totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
+            GSTPercentage = Number(element.IGSTPercentage)
 
-            GSTPercentage = Number(element.CGSTPercentage) + Number(element.SGSTPercentage)
 
         };
 
@@ -281,7 +281,7 @@ export const RowsWithIGST = (data) => {
 
             return [
                 "",
-                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(TotalGst).toFixed(2))} `,
+                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(totalIGst).toFixed(2))} `,
                 " ",
                 ``,
                 "",

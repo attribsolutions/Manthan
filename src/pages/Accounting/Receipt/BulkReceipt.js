@@ -226,7 +226,7 @@ const BulkRecipt = (props) => {
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
-                        <div className="px-2 c_card_filter header text-black mb-2" >
+                        <div className="px-2 c_card_filter header text-black mb-1" >
                             <div className=" row ">
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2" >
