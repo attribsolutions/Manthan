@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     getState
 } from "../../../store/Administrator/EmployeeRedux/action";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
@@ -42,7 +42,6 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { saveCityMaster, saveCityMaster_Success } from "../../../store/Administrator/CityRedux/action";
 import { getDistrictOnState, getDistrictOnStateSuccess } from "../../../store/Administrator/PartyRedux/action";
 import { C_Select } from "../../../CustomValidateForm";
-
 
 const CityMaster = (props) => {
 
@@ -96,8 +95,6 @@ const CityMaster = (props) => {
         dispatch(commonPageField(pageId.CITY))
         dispatch(getState());
     }, [dispatch]);
-
-
 
     useEffect(() => {
 
@@ -167,8 +164,6 @@ const CityMaster = (props) => {
         }
     }, [])
 
-
-
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -180,7 +175,6 @@ const CityMaster = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                // dispatch(getPartyTypelist())
                 props.isOpenModal(false)
             }
             else if (pageMode === mode.edit) {
@@ -188,7 +182,6 @@ const CityMaster = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                // history.push({ pathname: url.CITY })  list page not desing
             }
             else {
                 dispatch(Breadcrumb_inputName(''))
@@ -211,8 +204,6 @@ const CityMaster = (props) => {
         }
     }, [postMsg])
 
-
-
     useEffect(() => {
 
         if (pageField) {
@@ -220,7 +211,6 @@ const CityMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
 
     const State_DropdownOptions = State.map((data) => ({
         value: data.id,

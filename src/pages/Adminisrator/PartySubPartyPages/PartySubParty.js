@@ -187,7 +187,7 @@ const PartySubParty = (props) => {
             dispatch(savePartySubPartySuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -199,12 +199,10 @@ const PartySubParty = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updatePartySubPartySuccess({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 
