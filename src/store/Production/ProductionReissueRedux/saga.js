@@ -76,13 +76,11 @@ function* editProduction_ReIssue_GenFunc({ id, pageMode }) {      // Edit Produc
     yield put(edit_Production_ReIssueIdSuccess(response));
 
   } catch (error) {
-    yield put(
-      customAlert({
-        Type: 4,
-        Status: true,
-        Message: "500 Error Edit Production_ReIssue API",
-      })
-    );
+    customAlert({
+      Type: 4,
+      Status: true,
+      Message: "500 Error Edit Production_ReIssue API",
+    })
   };
 };
 
@@ -95,8 +93,8 @@ function* itemsForProduction_ReIssue_GenFunc({ data }) {          //  Items drop
 }
 
 function* makeBtnForProduction_ReIssue_STP_GenFunc({ data }) {
-     //  make btn  production_ReIssue STP  page
-  const { jsonBody} = data;
+  //  make btn  production_ReIssue STP  page
+  const { jsonBody } = data;
   try {
     const response = yield call(Production_ReIssue_AddPageGOBtn_API, jsonBody);
     const resp1 = { ...response, ...data }
