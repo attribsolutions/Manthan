@@ -226,7 +226,7 @@ const PartyMaster = (props) => {
             dispatch(postPartyDataSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [PostAPIResponse.Status])
