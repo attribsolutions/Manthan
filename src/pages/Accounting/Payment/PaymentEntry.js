@@ -253,13 +253,11 @@ const PaymentEntry = (props) => {
                 || (values.DepositorBankName === "")
                 || (values.DocumentNo === "")
             ) {
-                dispatch(
                     customAlert({
                         Type: 4,
                         Status: true,
                         Message: JSON.stringify(invalidMsg1),
                     })
-                );
                 return;
             }
         }
