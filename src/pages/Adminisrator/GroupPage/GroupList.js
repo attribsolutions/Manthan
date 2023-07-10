@@ -11,12 +11,13 @@ import {
   delete_GroupList_ID,
   editGroupID,
   getGroupList,
+  getGroupListSuccess,
   saveGroupMaster_Success,
   updateGroupIDSuccess
 } from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
 
 const GroupList = () => {
 
@@ -24,6 +25,7 @@ const GroupList = () => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.GroupReducer.listBtnLoading,
+      GoBtnlistloading: state.GroupReducer.loading,
       tableList: state.GroupReducer.groupList,
       editData: state.GroupReducer.editData,
       updateMsg: state.GroupReducer.updateMsg,
@@ -48,25 +50,26 @@ const GroupList = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getGroupList());
+    return () => {
+      dispatch(getGroupListSuccess([]));
+    }
   }, []);
 
-  const { pageField } = reducers
+  const { pageField, GoBtnlistloading } = reducers
   return (
     <React.Fragment>
+      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
       {
-        reducers.loading ?
-          <Listloader />
-          :
-          (pageField) ?
-            <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={GroupMaster}
-              masterPath={url.GROUP}
-              ButtonMsgLable={"Group"}
-              deleteName={"Name"}
-            />
-            : <><Listloader /></>
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={GroupMaster}
+          masterPath={url.GROUP}
+          ButtonMsgLable={"Group"}
+          deleteName={"Name"}
+        />
+
       }
     </React.Fragment>
   )

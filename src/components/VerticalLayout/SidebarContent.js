@@ -25,13 +25,10 @@ const SidebarContent = (props) => {
     RoleAccessData,
     RoleAccessUpdateData,
     roleAccesssForSidbarError = false,
-    dounloadProductMargin = false
   } = useSelector((state) => ({
     RoleAccessData: state.Login.roleAccessSidbarData,
     RoleAccessUpdateData: state.Login.RoleAccessUpdateData,
     roleAccesssForSidbarError: state.Login.roleAccesssForSidbarError,
-
-
   }));
 
 
@@ -48,7 +45,7 @@ const SidebarContent = (props) => {
   }, [roleAccesssForSidbarError])
 
   useEffect(() => {
- 
+
     if (RoleAccessUpdateData.length <= 0) {
       let role = loginUserDetails()
       if (role) {
@@ -89,7 +86,6 @@ const SidebarContent = (props) => {
             if (parent5) {
               parent5.classList.add("mm-show"); // li
               parent5.childNodes[0].classList.add("mm-active"); // a tag
-
             }
           }
         }
@@ -147,11 +143,13 @@ const SidebarContent = (props) => {
       }
     }
   }
-  const productMarginReport_Link_Onclick = () => {
 
-    const userDetails = loginUserDetails()
-    dispatch(getExcel_Button_API(userDetails.IsSCMPartyType === null ? 0 : userDetails.IsSCMPartyType, userDetails.Party_id))
-  }
+  // const productMarginReport_Link_Onclick = () => {
+
+  //   const userDetails = loginUserDetails()
+  //   dispatch(getExcel_Button_API(userDetails.IsSCMPartyType === null ? 0 : userDetails.IsSCMPartyType, userDetails.Party_id))
+  // }
+
   return (
     <React.Fragment>
 
@@ -183,18 +181,18 @@ const SidebarContent = (props) => {
                   <ul className="sub-menu">
                     {item.ModuleData.map((index, j) => {
                       if (index.RoleAccess_IsShowOnMenu === true) {
-                        if (index.ActualPagePath === "ProductMarginReport") {
-                          return (
-                            <li>
+                        // if (index.ActualPagePath === "ProductMarginReport") {
+                        //   return (
+                        //     <li>
 
-                              <div id='_sidbar_div_link'
-                                title={`Download ${index.Name}`}
-                                onClick={productMarginReport_Link_Onclick}>
-                                {props.t(index.Name)}
-                              </div>
-                            </li>
-                          )
-                        }
+                        //       <div
+                        //         title={`Download ${index.Name}`}
+                        //         onClick={productMarginReport_Link_Onclick}>
+                        //         {props.t(index.Name)}
+                        //       </div>
+                        //     </li>
+                        //   )
+                        // }
                         return (
                           <li>
                             <Link to={{ pathname: `/${index.ActualPagePath}` }}>

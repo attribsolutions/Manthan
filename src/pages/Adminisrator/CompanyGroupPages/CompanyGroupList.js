@@ -8,12 +8,13 @@ import {
   editCompanyGroupID,
   deleteCompanyGroupID,
   saveCompanyGroupMasterSuccess,
+  getCompanyGroupListSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, } from "../../../components/Common/CommonButton";
 
 const CompanyGroupList = (props) => {
 
@@ -21,6 +22,7 @@ const CompanyGroupList = (props) => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.CompanyGroupReducer.listBtnLoading,
+      GoBtnlistloading: state.CompanyGroupReducer.loading,
       tableList: state.CompanyGroupReducer.CompanyGroupList,
       editData: state.CompanyGroupReducer.editData,
       updateMsg: state.CompanyGroupReducer.updateMessage,
@@ -46,26 +48,27 @@ const CompanyGroupList = (props) => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getCompanyGroupList());
+    return () => {
+      dispatch(getCompanyGroupListSuccess([]));
+    }
+ 
   }, []);
 
-  const { pageField } = reducers
+  const { pageField, GoBtnlistloading } = reducers
 
   return (
     <React.Fragment>
+      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
       {
-        reducers.loading  ?
-          <Listloader />
-          :
-          (pageField) ?
-            <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={CompanyGroupMaster}
-              masterPath={url.COMPANYGROUP}
-              ButtonMsgLable={"Company Group"}
-              deleteName={"Name"}
-            />
-            : <><Listloader /></>
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={CompanyGroupMaster}
+          masterPath={url.COMPANYGROUP}
+          ButtonMsgLable={"Company Group"}
+          deleteName={"Name"}
+        />
       }
 
     </React.Fragment>

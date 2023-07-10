@@ -207,7 +207,7 @@ const WorkOrder = (props) => {
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
             dispatch(customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
             )
         }
@@ -223,12 +223,10 @@ const WorkOrder = (props) => {
                 pathname: url.WORK_ORDER_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+             customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 

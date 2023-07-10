@@ -160,7 +160,7 @@ const TermsAndConditionsMaster = (props) => {
             dispatch(saveTermAndConditionSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -174,12 +174,10 @@ const TermsAndConditionsMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(UpdateTermsAndCondtions_Success({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+             customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 

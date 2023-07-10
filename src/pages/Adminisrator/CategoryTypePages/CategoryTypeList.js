@@ -6,6 +6,7 @@ import {
   delete_CategoryType_ID,
   editCategoryTypeID,
   getCategoryTypelist,
+  getCategoryTypelistSuccess,
   saveCategoryTypeMaster_Success,
   updateCategoryTypeIDSuccess
 } from "../../../store/actions";
@@ -14,13 +15,14 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
 const CategoryTypeList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.categoryTypeReducer.listBtnLoading,
+      GoBtnlistloading: state.categoryTypeReducer.loading,
       tableList: state.categoryTypeReducer.categoryTypeListData,
       postMsg: state.categoryTypeReducer.PostData,
       editData: state.categoryTypeReducer.editData,
@@ -46,26 +48,28 @@ const CategoryTypeList = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getCategoryTypelist());
+
+    return () => {
+      dispatch(getCategoryTypelistSuccess([]));
+    }
   }, []);
 
-  const { pageField } = reducers;
+  const { pageField, GoBtnlistloading } = reducers;
 
   return (
     <React.Fragment>
+      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
       {
-        reducers.loading ?
-          <Listloader />
-          :
-          (pageField) ?
-            <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={CategoryTypeMaster}
-              masterPath={url.CATEGORYTYPE}
-              ButtonMsgLable={"Category Type"}
-              deleteName={"Name"}
-            />
-            : <><Listloader /></>
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={CategoryTypeMaster}
+          masterPath={url.CATEGORYTYPE}
+          ButtonMsgLable={"Category Type"}
+          deleteName={"Name"}
+        />
+
       }
 
     </React.Fragment>

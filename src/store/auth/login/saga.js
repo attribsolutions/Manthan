@@ -23,7 +23,7 @@ import {
   post_SuperAdmin,
   Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List,
 } from "../../../helpers/backend_helper"
-import { AlertState } from "../../actions"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 
 function* loginUser({ payload: { user, history } }) {
   try {
@@ -148,10 +148,10 @@ function* Post_SuperAdmin_API_GenratorFunction() {
     const response = yield call(post_SuperAdmin);
     yield put(postSuperAdminSuccess(response.Data));
   } catch (error) {
-    yield put(AlertState({
+    customAlert({
       Type: 4,
       Status: true, Message: "500 Error Message",
-    }));
+    });
   }
 }
 function* authSaga() {

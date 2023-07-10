@@ -210,12 +210,10 @@ const Modules = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateModuleIDSuccess({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+             customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 

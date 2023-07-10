@@ -184,7 +184,7 @@ const SubGroupMaster = (props) => {
             dispatch(getSubGroupListSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -197,12 +197,10 @@ const SubGroupMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateSubgroupIDSuccess({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+             customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 

@@ -6,6 +6,7 @@ import {
     deleteCompanyIDSuccess,
     saveCompany_Success,
     getcompanyList,
+    getCompanyListSuccess,
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import CompanyModule from "./CompanyModule";
@@ -13,7 +14,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
 
 
 const CompanyList = () => {
@@ -21,6 +22,7 @@ const CompanyList = () => {
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.Company.listBtnLoading,
+            GoBtnlistloading: state.Company.loading,
             tableList: state.Company.companyList,
             postMsg: state.Company.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -46,26 +48,27 @@ const CompanyList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(getcompanyList());
+        return () => {
+            dispatch(getCompanyListSuccess([]));
+          }
     }, []);
 
-    const { pageField } = reducers;
+    const { pageField, GoBtnlistloading } = reducers;
 
     return (
         <React.Fragment>
+            <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
             {
-                reducers.loading ?
-                    <Listloader />
-                    :
-                    (pageField) ?
-                        <CommonListPage
-                            action={action}
-                            reducers={reducers}
-                            MasterModal={CompanyModule}
-                            masterPath={url.COMPANY}
-                            ButtonMsgLable={"Company"}
-                            deleteName={"Name"}
-                        />
-                        : <Listloader />
+                (pageField) &&
+                <CommonListPage
+                    action={action}
+                    reducers={reducers}
+                    MasterModal={CompanyModule}
+                    masterPath={url.COMPANY}
+                    ButtonMsgLable={"Company"}
+                    deleteName={"Name"}
+                />
+
             }
 
         </React.Fragment>

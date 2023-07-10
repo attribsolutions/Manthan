@@ -196,7 +196,7 @@ const ImportFieldAdd = (props) => {
             dispatch(save_ImportFiledAdd_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])

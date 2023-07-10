@@ -73,7 +73,6 @@ function ItemTab(props) {
             || (Quantity === "")
         ) {
 
-            dispatch(
                 customAlert({
                     Type: 4,
                     Status: true,
@@ -81,7 +80,7 @@ function ItemTab(props) {
                     RedirectPath: false,
                     PermissionAction: false,
                 })
-            );
+            
             return;
         }
         const val = {

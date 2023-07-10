@@ -10,7 +10,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {  commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -62,7 +62,7 @@ const MaterialIssueMaster = (props) => {
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
-  
+
     const {
         postMsg,
         updateMsg,
@@ -210,7 +210,7 @@ const MaterialIssueMaster = (props) => {
             dispatch(saveBOMMasterSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -224,12 +224,11 @@ const MaterialIssueMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+
         }
     }, [updateMsg, modalCss]);
 

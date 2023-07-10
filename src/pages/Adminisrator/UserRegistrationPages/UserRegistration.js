@@ -80,7 +80,7 @@ const AddUser = (props) => {
   }
 
   const {
-    PostAPIResponse,
+    postMsg,
     employeelistForDropdown,
     Roles=[],
     employePartyWiseRoleState,
@@ -89,14 +89,13 @@ const AddUser = (props) => {
     saveBtnloading,
   } = useSelector((state) => ({
     saveBtnloading: state.User_Registration_Reducer.saveBtnloading,
-    PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
+    postMsg:state.User_Registration_Reducer.postMsg,
     employePartyWiseRoleState: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
     Roles: state.RoleMaster_Reducer.roleList,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
-
 
   const values = { ...state.values }
   const { isError } = state;
@@ -219,20 +218,20 @@ const AddUser = (props) => {
 
   useEffect(async () => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
 
       if (pageMode === mode.dropdownAdd) {
         customAlert({
           Type: 1,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
       })
       }
       else {
         let isPermission = await customAlert({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
       })
       if (isPermission) {
           history.push({ pathname: url.USER_lIST })
@@ -240,14 +239,14 @@ const AddUser = (props) => {
       }
     }
 
-    else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
+    else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
       customAlert({
         Type: 4,
-        Message: JSON.stringify(postMessage.Message),
+         Message: JSON.stringify(postMsg.Message),
     })
     }
-  }, [PostAPIResponse.Status])
+  }, [postMsg.Status])
 
   const EmployeeOptions = employeelistForDropdown.map((Data) => ({
     value: Data.id,
@@ -258,8 +257,6 @@ const AddUser = (props) => {
     value: Data.id,
     label: Data.Name
   }));
-
-
   
   function handllerEmployeeID(e) {
     dispatch(GetUserPartiesForUserMastePage({ id: e.value }))

@@ -189,7 +189,7 @@ const PartyMasterBulkUpdate = (props) => {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg.Status])

@@ -13,7 +13,7 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
 
 const ModulesList = () => {
 
@@ -21,6 +21,7 @@ const ModulesList = () => {
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.Modules.listBtnLoading,
+            GoBtnlistloading: state.Modules.loading,
             tableList: state.Modules.modulesList,
             updateMsg: state.Modules.updateMessage,
             editData: state.Modules.editData,
@@ -48,24 +49,22 @@ const ModulesList = () => {
         dispatch(getModuleList());
     }, []);
 
-    const { pageField } = reducers
+    const { pageField, GoBtnlistloading } = reducers
 
     return (
         <React.Fragment>
+            <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
             {
-                reducers.loading ?
-                    <Listloader />
-                    :
-                    (pageField) ?
-                        <CommonListPage
-                            action={action}
-                            reducers={reducers}
-                            MasterModal={Modules}
-                            masterPath={url.MODULE}
-                            ButtonMsgLable={"Module"}
-                            deleteName={"Name"}
-                        />
-                        : <Listloader />
+                (pageField) &&
+                <CommonListPage
+                    action={action}
+                    reducers={reducers}
+                    MasterModal={Modules}
+                    masterPath={url.MODULE}
+                    ButtonMsgLable={"Module"}
+                    deleteName={"Name"}
+                />
+
             }
         </React.Fragment>
     )

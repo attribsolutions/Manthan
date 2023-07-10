@@ -192,7 +192,7 @@ const CompanyModule = (props) => {
       dispatch(saveCompany_Success({ Status: false }))
       customAlert({
         Type: 4,
-        Message: JSON.stringify(postMessage.Message),
+        Message: JSON.stringify(postMsg.Message),
     })
     }
   }, [postMsg])
@@ -205,12 +205,10 @@ const CompanyModule = (props) => {
       })
     } else if (updateMsg.Status === true && !modalCss) {
       dispatch(updateCompanyIDSuccess({ Status: false }));
-      dispatch(
-        customAlert({
-          Type: 3,
-          Message: JSON.stringify(updateMsg.Message),
-      })
-      );
+      customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
     }
   }, [updateMsg, modalCss]);
 

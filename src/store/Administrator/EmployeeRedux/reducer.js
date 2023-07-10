@@ -84,7 +84,7 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
     case GET_EMPLOYEE_LIST:
       return {
         ...state,
-        lading: true,
+        loading: true,
       }
 
     case GET_EMPLOYEE_LIST_SUCCESS:

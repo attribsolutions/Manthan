@@ -201,7 +201,7 @@ const RoutesMaster = (props) => {
             dispatch(GetRoutesListSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -217,12 +217,10 @@ const RoutesMaster = (props) => {
 
         else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateRoutesIDSuccess({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+             customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 

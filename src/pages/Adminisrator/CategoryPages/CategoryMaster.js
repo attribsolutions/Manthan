@@ -194,7 +194,7 @@ const CategoryMaster = (props) => {
             dispatch(saveCategoryMaster_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -207,12 +207,10 @@ const CategoryMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateCategoryIDSuccess({ Status: false }));
-            dispatch(
                 customAlert({
                     Type: 3,
                     Message: JSON.stringify(updateMsg.Message),
                 })
-            );
         }
     }, [updateMsg, modalCss]);
 

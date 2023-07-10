@@ -12,7 +12,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -44,6 +44,7 @@ import {
     postCreditLimitSuccess
 } from "../../../store/Administrator/CreditLimitRedux/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 const CreditLimitMaster = (props) => {
@@ -114,7 +115,7 @@ const CreditLimitMaster = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postCreditLimitSuccess({ Status: false }))
             dispatch(GoButton_For_CreditLimit_AddSuccess([]))
@@ -122,31 +123,28 @@ const CreditLimitMaster = (props) => {
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.CREDITLIMIT,
-
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.CREDITLIMIT })
+                }
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
             dispatch(postCreditLimitSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                 Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg.Status])
 
@@ -171,16 +169,11 @@ const CreditLimitMaster = (props) => {
     const goButtonHandler = (event) => {
 
         if (RouteSelect.value === undefined) {
-            {
-                dispatch(
-                    AlertState({
-                        Type: 4,
-                        Status: true,
-                        Message: "Please Select Route",
-                    })
-                );
+                customAlert({
+                    Type: 4,
+                    Message: "Please Select Route",
+                })
                 return;
-            }
         }
         const jsonBody = JSON.stringify({
             Party: loginPartyID(),

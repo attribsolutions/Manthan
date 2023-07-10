@@ -5,6 +5,7 @@ import {
   deleteItemIdSuccess,
   editItemId,
   getItemList,
+  getItemListSuccess,
   SaveItemMasterActionSuccess,
   updateItemMasterActionSuccess,
 } from "../../../store/Administrator/ItemsRedux/action";
@@ -13,7 +14,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { ITEM } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
 
 const ItemsList = () => {
 
@@ -21,6 +22,7 @@ const ItemsList = () => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.ItemMastersReducer.listBtnLoading,
+      GoBtnlistloading: state.ItemMastersReducer.loading,
       tableList: state.ItemMastersReducer.ItemList,
       editData: state.ItemMastersReducer.editData,
       updateMsg: state.ItemMastersReducer.updateMsg,
@@ -45,26 +47,28 @@ const ItemsList = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(pageId.ITEM_lIST))
     dispatch(getItemList());
+    return () => {
+      dispatch(getItemListSuccess([]));
+    }
   }, []);
 
-  const { pageField} = reducers
+
+  const { pageField, GoBtnlistloading } = reducers
 
   return (
     <React.Fragment>
+      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
       {
-        reducers.loading ?
-          <Listloader />
-          :
-          (pageField) ?
-            <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={ItemsMaster}
-              masterPath={ITEM}
-              ButtonMsgLable={"Item"}
-              deleteName={"Name"}
-            />
-            : <Listloader />
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={ItemsMaster}
+          masterPath={ITEM}
+          ButtonMsgLable={"Item"}
+          deleteName={"Name"}
+        />
+
       }
 
     </React.Fragment>

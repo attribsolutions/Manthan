@@ -8,7 +8,7 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
-import { SSDD_List_under_Company, getBaseUnit_ForDropDown } from "../../store/actions";
+import { BreadcrumbShowCountlabel, SSDD_List_under_Company, getBaseUnit_ForDropDown } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import { stockReport_GoButton_API } from "../../store/Report/StockReport/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -40,7 +40,7 @@ const StockReport = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { tableData } = reducers
+    const { tableData = [] } = reducers
 
     const { userAccess, BaseUnit, SSDD_List } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
@@ -70,6 +70,10 @@ const StockReport = (props) => {
         dispatch(getBaseUnit_ForDropDown());
         dispatch(SSDD_List_under_Company());
     }, [])
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Stock Report Count:${tableData.length}`))
+    }, [tableData])
 
     const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
         .map(data => ({
@@ -181,7 +185,6 @@ const StockReport = (props) => {
                                         }}
                                         options={BaseUnit_DropdownOptions}
                                         onChange={(e) => { setUnitDropdown(e) }}
-
                                     />
                                 </Col>
                             </FormGroup>
@@ -205,7 +208,6 @@ const StockReport = (props) => {
                                             }}
                                             options={Party_Option}
                                             onChange={(e) => { setPartyDropdown(e) }}
-
                                         />
                                     </Col>
                                 </FormGroup>
@@ -236,16 +238,12 @@ const StockReport = (props) => {
                                     <div className="table-responsive table">
                                         <BootstrapTable
                                             keyField={"Item"}
-                                            id="table_Arrow"
                                             classes={"table  table-bordered table-hover"}
                                             noDataIndication={
                                                 <div className="text-danger text-center ">
                                                     Record Not available
                                                 </div>
                                             }
-                                            onDataSizeChange={(e) => {
-                                                _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                            }}
                                             {...toolkitProps.baseProps}
                                         />
                                         {mySearchProps(toolkitProps.searchProps)}

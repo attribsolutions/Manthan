@@ -1,6 +1,6 @@
 import {  ALERT_STATE} from "./actionType"
  const INIT_STATE={
-  AlertState:{Status:false},
+  customAlert:{Status:false},
  }
 const AlertReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
@@ -8,7 +8,7 @@ const AlertReducer = (state = INIT_STATE, action) => {
     case ALERT_STATE:
       return {
         ...state,
-        AlertState: action.payload,
+        customAlert: action.payload,
       }
     default:
       return state

@@ -209,7 +209,7 @@ const RoleMaster = (props) => {
       dispatch(PostSuccess({ Status: false }))
       customAlert({
         Type: 4,
-        Message: JSON.stringify(postMessage.Message),
+         Message: JSON.stringify(postMsg.Message),
     })
     }
   }, [postMsg.Status])
@@ -222,12 +222,10 @@ const RoleMaster = (props) => {
       })
     } else if (updateMsg.Status === true && !modalCss) {
       dispatch(userUpdateActionSuccess({ Status: false }));
-      dispatch(
-        customAlert({
-          Type: 3,
-          Message: JSON.stringify(updateMsg.Message),
-      })
-      );
+      customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
     }
   }, [updateMsg, modalCss]);
 
