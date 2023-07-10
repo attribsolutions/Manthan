@@ -6,6 +6,7 @@ import {
   updateEmployeeIDSuccess,
   delete_Employee_ID,
   PostEmployeeSuccess,
+  getEmployeelistSuccess,
 } from "../../../store/Administrator/EmployeeRedux/action";
 import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from "./EmployeeMaster";
@@ -47,6 +48,9 @@ const Employee_List = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getEmployeelist());
+    return () => {
+      dispatch(getEmployeelistSuccess([]));
+    }
   }, []);
 
   const { pageField, GoBtnlistloading } = reducers

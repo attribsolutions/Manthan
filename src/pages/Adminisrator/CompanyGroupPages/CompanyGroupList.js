@@ -8,6 +8,7 @@ import {
   editCompanyGroupID,
   deleteCompanyGroupID,
   saveCompanyGroupMasterSuccess,
+  getCompanyGroupListSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -47,6 +48,10 @@ const CompanyGroupList = (props) => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getCompanyGroupList());
+    return () => {
+      dispatch(getCompanyGroupListSuccess([]));
+    }
+ 
   }, []);
 
   const { pageField, GoBtnlistloading } = reducers

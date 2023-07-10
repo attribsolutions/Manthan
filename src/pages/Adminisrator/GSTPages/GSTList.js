@@ -13,7 +13,7 @@ import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import GSTMaster from "./GSTMaster";
 import { deleteGSTListId, deleteGSTListId_Success, getGSTList, goButtonForGST_Master_Success } from "../../../store/Administrator/GSTRedux/action";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
 
 const GSTList = () => {
 
@@ -27,6 +27,7 @@ const GSTList = () => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.GSTReducer.listBtnLoading,
+      GoBtnlistloading: state.GSTReducer.GoBtnlistloading,
       tableList: state.GSTReducer.GSTList,
       GSTGoButton: state.GSTReducer.GSTGoButton,
       deleteMsg: state.GSTReducer.deleteMsg,
@@ -35,7 +36,7 @@ const GSTList = () => {
     })
   );
 
-  const { userAccess, pageField, GSTGoButton, deleteMsg } = reducers;
+  const { userAccess, pageField, GSTGoButton, deleteMsg, GoBtnlistloading } = reducers;
 
   const action = {
     getList: getGSTList,
@@ -51,6 +52,9 @@ const GSTList = () => {
     dispatch(commonPageFieldList(page_Id))
     dispatch(BreadcrumbShowCountlabel(`${"GST Count"} :0`))
     dispatch(getGSTList())
+    return () => {
+      dispatch(_act.getGSTListSuccess([]));
+    }
 
   }, []);
 
@@ -120,31 +124,26 @@ const GSTList = () => {
 
   return (
     <React.Fragment>
+      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
-
-        {/* <div className="mt-n1"> */}
         {
-          reducers.listBtnLoading ?
-            <Listloader />
-            :
-            (pageField) ?
-              <CommonPurchaseList
-                action={action}
-                reducers={reducers}
-                showBreadcrumb={false}
-                MasterModal={GSTMaster}
-                masterPath={url.GST}
-                newBtnPath={url.GST}
-                ButtonMsgLable={"GST"}
-                deleteName={"EffectiveDate"}
-                pageMode={pageMode}
-                editBodyfunc={editBodyfunc}
-                deleteBodyfunc={deleteBodyfunc}
-              />
-              : <> <Listloader /></>
-        }
-        {/* </div> */}
 
+          (pageField) &&
+          <CommonPurchaseList
+            action={action}
+            reducers={reducers}
+            showBreadcrumb={false}
+            MasterModal={GSTMaster}
+            masterPath={url.GST}
+            newBtnPath={url.GST}
+            ButtonMsgLable={"GST"}
+            deleteName={"EffectiveDate"}
+            pageMode={pageMode}
+            editBodyfunc={editBodyfunc}
+            deleteBodyfunc={deleteBodyfunc}
+          />
+
+        }
       </div>
     </React.Fragment>
   )
