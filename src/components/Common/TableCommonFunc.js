@@ -97,6 +97,7 @@ const DynamicColumnHook = ({ reducers = "",
                     text: i.FieldLabel,
                     dataField: i.ControlID,
                     sort: true,
+                    classes: 'table-cursor-pointer',
 
                     align: () => {
                         if (i.Alignment) return i.Alignment;

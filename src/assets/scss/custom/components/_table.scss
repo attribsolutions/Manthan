@@ -32,7 +32,7 @@
 .table-responsive {
   border: none !important;
   max-height: 74vh;
-  }
+}
 
 
 .table-bordered {
@@ -94,4 +94,11 @@ body[data-layout-mode="dark"] {
       background-color: $gray-dark-300;
     }
   }
+}
+
+
+
+
+.table-cursor-pointer {
+  cursor: default;
 }

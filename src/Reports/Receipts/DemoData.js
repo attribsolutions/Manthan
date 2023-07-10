@@ -1,5 +1,5 @@
 export const Data = {
- AmountPaid: "5550.000",
+AmountPaid: "5550.000",
 BalanceAmount: null,
 Bank:"HDFC",
 ChequeDate: "2023-04-10",
@@ -20,7 +20,5 @@ ReceiptType: "Receipt",
 CustomerAddress:"GQXC+5FQ, Mohan Nagar Co-Op Society, Baner, Pune, Maharashtra 411021",
 Contact:"7620913549",
 Email:"abcd@gmail.com"
-
-
 
 }
