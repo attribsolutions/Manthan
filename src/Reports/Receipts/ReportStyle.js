@@ -160,12 +160,14 @@ export const Receipts = (doc, data) => {
     doc.text(`Received By :`, 230, 320, 'left');
 
     doc.setFont(undefined, 'Normal')
-
-    doc.text(`Authorize signatory`, 480, 325, "center");
     doc.setFont(undefined, 'bold')
 
     doc.text(`For ${data.Party}`, 480, 310, "center");
     doc.setFont(undefined, 'Normal')
+
+    doc.text(`Authorize signatory`, 480, 340, "center");
+
+
 
     doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 40, 375,)
 
