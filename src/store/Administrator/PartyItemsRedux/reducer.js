@@ -2,6 +2,7 @@ import {
   EDIT_PARTY_ITEM_ID_SUCCESS,
   GET_PARTY_ITEM_LIST_SUCCESS,
   GET_PARTY_LIST_SUCCESS,
+  PARTY_ITEM_API_ERROR_ACTION,
   POST_PARTYITEMS,
   POST_PARTYITEMS_SUCCESS,
 } from "./actionType"
@@ -51,6 +52,13 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
         ...state,
         editData: action.payload,
       }
+
+    case PARTY_ITEM_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false
+      }
+
     default:
       return state
   }
