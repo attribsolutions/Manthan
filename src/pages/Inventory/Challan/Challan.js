@@ -151,7 +151,7 @@ const Challan = (props) => {
         else if (postMsg.Status === true) {
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])

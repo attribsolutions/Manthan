@@ -153,7 +153,7 @@ const LoadingSheet = (props) => {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
             dispatch( customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             }));
         }
     }, [postMsg])
