@@ -25,15 +25,8 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 function* get_ModuleList_GenFun() { // get API
   try {
     const response = yield call(Module_Get_API);
-    // if (response.StatusCode === 200) {
+   
     yield put(getModuleListSuccess(response.Data));
-    // }
-    // else {
-    //   yield put(AlertState({
-    //     Type: 4,
-    //     Status: true, Message: response.Message,
-    //   }));
-    // }
   } catch (error) { CommonConsole(error) }
 }
 

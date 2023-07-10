@@ -1,9 +1,9 @@
 import { put, takeLatest } from "redux-saga/effects";
-import { AlertState } from "./actions";
+import { customAlert } from "./actions";
 import { ALERT_SHOW } from "./actionType";
 
 function* AlertControlFunction({ state }) {
-  yield put(AlertState(state));
+  yield put(customAlert(state));
 }
 
 function* Alert_Saga() {
