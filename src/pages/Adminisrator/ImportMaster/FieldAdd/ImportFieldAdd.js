@@ -49,6 +49,7 @@ import {
     update_ImportFiledAdd_Success
 } from "../../../../store/Administrator/ImportFieldAddRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { C_Select } from "../../../../CustomValidateForm";
 
 const ImportFieldAdd = (props) => {
 
@@ -78,6 +79,7 @@ const ImportFieldAdd = (props) => {
         controlType = [],
         importExcelType = [],
         validationType = [],
+        fieldvalidationDropDownLoading,
         userAccess } = useSelector((state) => ({
             postMsg: state.ImportFieldAdd_Reducer.postMsg,
             updateMsg: state.ImportFieldAdd_Reducer.updateMsg,
@@ -85,7 +87,8 @@ const ImportFieldAdd = (props) => {
             controlType: state.H_Pages.ControlTypes,
             importExcelType: state.ImportFieldAdd_Reducer.importExcelType,
             validationType: state.H_Pages.FieldValidations,
-            pageField: state.CommonPageFieldReducer.pageField
+            pageField: state.CommonPageFieldReducer.pageField,
+            fieldvalidationDropDownLoading:state.H_Pages.fieldvalidationDropDownLoading,
         }));
 
     useEffect(() => {
@@ -355,12 +358,13 @@ const ImportFieldAdd = (props) => {
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 " >
                                                             <Label htmlFor="validationCustom01">{fieldLabel.FieldValidationName} </Label>
-                                                            <Select
+                                                            <C_Select
                                                                 name="FieldValidationName"
                                                                 value={values.FieldValidationName}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
                                                                 options={validationType_Options}
+                                                                isLoading={fieldvalidationDropDownLoading}
                                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState })}
                                                             />
                                                             {isError.FieldValidationName.length > 0 && (

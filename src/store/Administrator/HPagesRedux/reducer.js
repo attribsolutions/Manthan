@@ -14,7 +14,8 @@ import {
   SAVE_HPAGES,
   UPDATE_H_PAGES,
   PAGEMASTER_API_ERROR_ACTION,
-  GET_PAGELIST
+  GET_PAGELIST,
+  GET_FIELD_VALIDATIONS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -34,6 +35,7 @@ const INIT_STATE = {
   FieldValidations: [],
   saveBtnloading: false,
   listBtnLoading: false,
+  fieldvalidationDropDownLoading:false
 
 }
 
@@ -129,10 +131,17 @@ const H_Pages = (state = INIT_STATE, action) => {
         ControlTypes: action.payload,
       }
 
-    case GET_FIELD_VALIDATIONS_SUCCESS:
+    case GET_FIELD_VALIDATIONS:
+      return {
+        ...state,
+        fieldvalidationDropDownLoading: true
+      }
+
+      case GET_FIELD_VALIDATIONS_SUCCESS:
       return {
         ...state,
         FieldValidations: action.payload,
+        fieldvalidationDropDownLoading: false
       }
 
     case PAGEMASTER_API_ERROR_ACTION:
@@ -140,6 +149,7 @@ const H_Pages = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        fieldvalidationDropDownLoading: false
 
 
       };
