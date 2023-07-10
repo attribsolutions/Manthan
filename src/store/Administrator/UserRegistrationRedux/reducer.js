@@ -16,7 +16,7 @@ import {
 
 const INIT_STATE = {
   employeelistForDropdown: [],
-  AddUserMessage: { Status: false },
+  postMsg: { Status: false },
   pages: [],
   deleteSuccessRole: { Status: false },
   editData: { Status: false },
@@ -45,7 +45,7 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
     case ADD_USER_SUCCESS:
       return {
         ...state,
-        AddUserMessage: action.payload,
+        postMsg: action.payload,
         saveBtnloading: false,
 
       };
