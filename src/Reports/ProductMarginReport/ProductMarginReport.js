@@ -96,12 +96,16 @@ const ProductMarginReport = (props) => {
     }, [ProductMarginData]);
 
     function excelhandler(event) {
-     
-        event.preventDefault();
-        const userDetails = loginUserDetails()
-        const btnId = "excelbtn-id"
-        const ProductMargin = []
-        dispatch(getExcel_Button_API())
+  
+       
+            const userDetails = loginUserDetails()
+            dispatch(getExcel_Button_API(userDetails.IsSCMPartyType === null ? 0 : userDetails.IsSCMPartyType, userDetails.Party_id))
+       
+        // event.preventDefault();
+        // const userDetails = loginUserDetails()
+        // const btnId = "excelbtn-id"
+        // const ProductMargin = []
+        // dispatch(getExcel_Button_API())
     }
 
     return (

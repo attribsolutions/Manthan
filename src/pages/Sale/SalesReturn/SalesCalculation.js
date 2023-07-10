@@ -1,4 +1,3 @@
-import { compareGSTINState } from "../../../../components/Common/CommonFunction";
 
 export const calculateSalesReturnFunc = (row) => {
     let rate = 0;
