@@ -253,14 +253,12 @@ const PartyItems = (props) => {
         return tableArray.map((index) => (index.selectCheck && index.Item));
     };
 
-    const SaveHandler = async (event) => {
+    const SaveHandler = (event) => {
         event.preventDefault();
-        const Find = tableList.filter((index) => {
-            return index.selectCheck === true;
-        });
+        const selectedItems = groupWiseItemArray.flatMap(group => group.items.filter(item => item.selectCheck));
         const btnId = event.target.id;
 
-        if (Find.length === 0) {
+        if (selectedItems.length === 0) {
             customAlert({
                 Type: 4,
                 Message: "Select Atleast One Item",
@@ -269,7 +267,7 @@ const PartyItems = (props) => {
         }
         try {
             btnIsDissablefunc({ btnId, state: true });
-            var PartyData = Find.map((index) => ({
+            var PartyData = selectedItems.map((index) => ({
                 Item: index.Item,
                 Party: values.Name.value,
             }));
@@ -349,12 +347,12 @@ const PartyItems = (props) => {
                             </CardHeader>
 
                             <CardBody style={{ backgroundColor: "#whitesmoke" }}>
-                                
+
                                 <PartyDropdown />
 
                                 {filterdItemWise_tableData.length > 0 ? (
                                     <>
-                                        {filterdItemWise_tableData.map((i) => (
+                                        {filterdItemWise_tableData.map((i, key) => (
                                             <div key={i.group}>
                                                 <Label
                                                     style={{
@@ -368,6 +366,7 @@ const PartyItems = (props) => {
                                                 <div className="table">
                                                     <BootstrapTable
                                                         keyField={"Item"}
+                                                        key={`table-key-${i.group}-${key}`}
                                                         data={i.items}
                                                         columns={tableColumns}
                                                         Item="table_Arrow"

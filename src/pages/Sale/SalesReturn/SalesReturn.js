@@ -196,7 +196,7 @@ const SalesReturn = (props) => {
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
 
 
-                addButtonData.Data.forEach((i, keyIndex) => {
+                addButtonData.Data.forEach((i) => {
 
                     const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
                     const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
@@ -396,8 +396,19 @@ const SalesReturn = (props) => {
                                         placeholder="Dist."
                                         className="text-end"
                                         cpattern={decimalRegx}
-                                        onChange={(event) => {
-                                            row.Discount = event.target.value;
+                                        onChange={(e) => {
+                                            let e_val = Number(e.target.value);
+                                      
+                                            // Check if discount type is "percentage"
+                                            if (Number(row.DiscountType) === 2) {// Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val >= 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
+                                            }
+                                            row.Discount = e.target.value;
                                             totalAmountCalcuationFunc(row, TableArr)
                                         }}
 
@@ -444,6 +455,7 @@ const SalesReturn = (props) => {
                             <div className="parent">
                                 <C_DatePicker
                                     placeholder="Enter BatchDate"
+                                    defaultValue={row.BatchDate}
                                     onChange={(e, date) => {
                                         row.BatchDate = _cfunc.date_ymd_func(date)
                                     }}
