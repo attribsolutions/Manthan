@@ -4,19 +4,19 @@ import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
-} from "../../../../store/actions";
+} from "../../../store/actions";
 import Select from "react-select";
-import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { initialFiledFunc } from "../../../../components/Common/validationFunction";
-import { Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button } from "../../../../components/Common/CommonButton";
+import { initialFiledFunc } from "../../../components/Common/validationFunction";
+import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Go_Button } from "../../../components/Common/CommonButton";
 import SalesReturn from "./SalesReturn";
-import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI } from "../../../../store/Sales/SalesReturnRedux/action";
-import { C_DatePicker } from "../../../../CustomValidateForm";
-import * as _cfunc from "../../../../components/Common/CommonFunction";
-import { url, mode, pageId } from "../../../../routes/index"
+import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI } from "../../../store/Sales/SalesReturnRedux/action";
+import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { url, mode, pageId } from "../../../routes/index"
 
 const SalesReturnList = () => {
 

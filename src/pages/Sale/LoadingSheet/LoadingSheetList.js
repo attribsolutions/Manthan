@@ -4,26 +4,26 @@ import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
-} from "../../../../store/actions";
+} from "../../../store/actions";
 import LoadingSheet from "./LoadingSheet";
 import {
     DeleteLoadingSheet,
     DeleteLoadingSheetSucccess,
     LoadingSheetListAction,
     UpdateLoadingSheet,
-    UpdateLoadingSheetSucccess
-} from "../../../../store/Sales/LoadingSheetRedux/action";
-import { LoadingSheet_API, MultipleInvoice_API } from "../../../../helpers/backend_helper";
-import * as report from '../../../../Reports/ReportIndex'
-import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
+    
+} from "../../../store/Sales/LoadingSheetRedux/action";
+import { LoadingSheet_API, MultipleInvoice_API } from "../../../helpers/backend_helper";
+import * as report from '../../../Reports/ReportIndex'
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { useHistory } from "react-router-dom";
-import { C_DatePicker } from "../../../../CustomValidateForm";
-import * as _cfunc from "../../../../components/Common/CommonFunction";
-import { url, mode, pageId } from "../../../../routes/index"
-import { Go_Button } from "../../../../components/Common/CommonButton";
-import { getpartysetting_API } from "../../../../store/Administrator/PartySetting/action";
+import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { url, mode, pageId } from "../../../routes/index"
+import { Go_Button } from "../../../components/Common/CommonButton";
+import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
 
 const LoadingSheetList = () => {
     const history = useHistory();
