@@ -124,8 +124,8 @@ import RoutesList from "../pages/Adminisrator/RoutesPages/RoutesList";
 
 import SalesManMaster from "../pages/Adminisrator/SalesManPages/SalesManMaster";
 import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
-import LoadingSheet from "../pages/Sale/Invoice/LoadingSheet/LoadingSheet";
-import LoadingSheetList from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetList";
+import LoadingSheet from "../pages/Sale/LoadingSheet/LoadingSheet";
+import LoadingSheetList from "../pages/Sale/LoadingSheet/LoadingSheetList";
 // import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
 import Report from "../Reports/AllReportPage";
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
@@ -139,8 +139,8 @@ import PaymentEntry from "../pages/Accounting/Payment/PaymentEntry";
 import PaymentEntryList from "../pages/Accounting/Payment/PaymentEntryList";
 import BulkRecipt from "../pages/Accounting/Receipt/BulkReceipt";
 import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
-import LoadingSheetUpdate from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetUpdate";
-import SalesReturn from "../pages/Sale/Invoice/SalesReturn/SalesReturn";
+import LoadingSheetUpdate from "../pages/Sale/LoadingSheet/LoadingSheetUpdate";
+import SalesReturn from "../pages/Sale/SalesReturn/SalesReturn";
 import Credit from "../pages/Accounting/CreditDebitNote/Credit";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 
@@ -150,7 +150,7 @@ import ImportExcelFieldMap from "../pages/Adminisrator/ImportMaster/ImportExcelF
 import InvoiceExcelUpload from "../pages/Adminisrator/ImportMaster/InvoiceExcelUpload/Index";
 import RetailerExcelUpload from "../pages/Adminisrator/ImportMaster/RetailerExcelUpload/Index";
 
-import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
+import SalesReturnList from "../pages/Sale/SalesReturn/SalesReturnList";
 import ImportExcelPartyMap from "../pages/Adminisrator/ImportMaster/ImportExcelPartyMap/Index";
 import Debit from "../pages/Accounting/Debit/Debit";
 import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"

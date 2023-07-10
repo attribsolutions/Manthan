@@ -40,7 +40,7 @@ const StockReport = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { tableData } = reducers
+    const { tableData = [] } = reducers
 
     const { userAccess, BaseUnit, SSDD_List } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
@@ -181,7 +181,6 @@ const StockReport = (props) => {
                                         }}
                                         options={BaseUnit_DropdownOptions}
                                         onChange={(e) => { setUnitDropdown(e) }}
-
                                     />
                                 </Col>
                             </FormGroup>
@@ -205,7 +204,6 @@ const StockReport = (props) => {
                                             }}
                                             options={Party_Option}
                                             onChange={(e) => { setPartyDropdown(e) }}
-
                                         />
                                     </Col>
                                 </FormGroup>
@@ -236,16 +234,12 @@ const StockReport = (props) => {
                                     <div className="table-responsive table">
                                         <BootstrapTable
                                             keyField={"Item"}
-                                            id="table_Arrow"
                                             classes={"table  table-bordered table-hover"}
                                             noDataIndication={
                                                 <div className="text-danger text-center ">
                                                     Record Not available
                                                 </div>
                                             }
-                                            onDataSizeChange={(e) => {
-                                                _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                            }}
                                             {...toolkitProps.baseProps}
                                         />
                                         {mySearchProps(toolkitProps.searchProps)}
