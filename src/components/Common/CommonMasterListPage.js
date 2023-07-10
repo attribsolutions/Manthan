@@ -258,7 +258,7 @@ const CommonListPage = (props) => {
                             defaultSorted={defaultSorted}
                             striped={true}
                             classes={"table table-bordered table-hover"}
-                            noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
+                            noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
                             {...toolkitProps.baseProps}
                             {...paginationTableProps}
                           />

@@ -1,23 +1,44 @@
+import { date_dmy_func } from "../../components/Common/CommonFunction"
+import { toWords } from "../Report_common_function"
+
 export const Address = [
-    "Address" 
+    "Address"
+]
+
+export const Details = [
+    "ReceiptDetail"
 ]
 
 
-export const AddressDetails = (data) => {
-    
-    
-    var AddressDetails = [
-       
-        [`Name:${data.Customer}`], 
-        // [`Address:${data.CustomerAddress}`]  , 1
-        [`Address:${`Mohan Nagar Co-Op Society, Baner, Pune, Maharashtra 41102`}`],
-        // [`Contact:${data.Contact}`],
-        [`Contact:${`7620912345`}`],
 
-        [`Date:${data.ReceiptDate}`],
+
+
+export const ReceiptDetails = (doc, data) => {
+    debugger
+    let stringNumber = toWords(Number(data.AmountPaid))
+    var ReceiptDetails = [
+
+        [` ${stringNumber}`],
+
+    ]
+
+    return ReceiptDetails;
+}
+
+export const AddressDetails = (data) => {
+
+
+    var AddressDetails = [
+
+        [`${data.Party}`],
+        [`Address:${data.Address === null ? "" : data.Address}`],
+        [`Contact:${data.MobileNo}`],
+        [`Date:${date_dmy_func(data.ReceiptDate)}`],
+        ""
+
 
     ]
     return AddressDetails;
-} 
+}
 
 
