@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, GetItemUnits_For_Dropdown, BOM_Edit_API } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { deleteBOMIdSuccess, editBOMListSuccess, getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, saveBOMMasterSuccess, updateBOMListSuccess } from "./action";
 import { DELETE_BOM_LIST_PAGE, EDIT_BOM_LIST_ID, GET_BOM_LIST_PAGE, GET_ITEM_UNITS_DROPDOWN_API, SAVE_BOM_MASTER, UPDATE_BOM_LIST } from "./actionTypes";
 
@@ -34,7 +34,7 @@ function* editBOMListGenFunc({ config }) {
     response.pageMode = btnmode
     response.Data = response.Data[0];
     if (response.StatusCode === 200) yield put(editBOMListSuccess(response))
-    else yield put(AlertState({
+    else yield put(customAlert({
       Type: 4,
       Status: true, Message: JSON.stringify(response.Message),
     }));
@@ -52,7 +52,7 @@ function* DeleteBOM_GenFunc({ config }) {
   try {
     const response = yield call(BOM_Delete_API, config);
     if (response.StatusCode === 200) yield put(deleteBOMIdSuccess(response))
-    else yield put(AlertState({
+    else yield put(customAlert({
       Type: 4,
       Status: true, Message: JSON.stringify(response.Message),
     }));

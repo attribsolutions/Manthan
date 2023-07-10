@@ -11,7 +11,7 @@ const CustomAlert = () => {
 
   //redux Spinner State
   const { AlertData={ Status: false } } = useSelector((state) => ({
-    // AlertData: state.AlertReducer.AlertState,
+   
   }))
   const {
     Message = "-",
