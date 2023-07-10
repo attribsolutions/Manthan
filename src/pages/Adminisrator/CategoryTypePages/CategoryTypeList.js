@@ -6,6 +6,7 @@ import {
   delete_CategoryType_ID,
   editCategoryTypeID,
   getCategoryTypelist,
+  getCategoryTypelistSuccess,
   saveCategoryTypeMaster_Success,
   updateCategoryTypeIDSuccess
 } from "../../../store/actions";
@@ -47,6 +48,10 @@ const CategoryTypeList = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getCategoryTypelist());
+
+    return () => {
+      dispatch(getCategoryTypelistSuccess([]));
+    }
   }, []);
 
   const { pageField, GoBtnlistloading } = reducers;

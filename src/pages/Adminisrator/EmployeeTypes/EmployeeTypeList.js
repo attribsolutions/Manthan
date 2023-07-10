@@ -6,7 +6,8 @@ import {
   editEmployeeTypeId,
   getEmployeeTypelist,
   PostEmployeeTypeSubmitSuccess,
-  updateEmployeeTypeIDSuccess
+  updateEmployeeTypeIDSuccess,
+  getEmployeeTypelistSuccess
 } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import EmployeeTypesMaster from "./EmployeeTypesMaster";
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
@@ -47,6 +48,10 @@ const EmployeeTypeList = (props) => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getEmployeeTypelist());
+
+    return () => {
+      dispatch(getEmployeeTypelistSuccess([]));
+    }
   }, []);
 
   const { pageField, GoBtnlistloading } = reducers

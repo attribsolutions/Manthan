@@ -10,7 +10,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {  commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -20,7 +20,7 @@ import {
     onChangeSelect,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import {  SaveButton } from "../../../components/Common/CommonButton";
+import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
@@ -199,10 +199,10 @@ const Invoice = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
             customAlert({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 
@@ -447,7 +447,7 @@ const Invoice = (props) => {
                                             // Check if discount type is "percentage"
                                             if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
                                                 // Limit the input to the range of 0 to 100
-                                                if (e_val > 100) {
+                                                if (e_val >= 100) {
                                                     e.target.value = 100; // Set the input value to 100 if it exceeds 100
                                                 } else if (!(e_val >= 0 && e_val < 100)) {
                                                     e.target.value = ""; // Clear the input value if it is less than 0
