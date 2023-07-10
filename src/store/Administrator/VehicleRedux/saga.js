@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   saveVehicleMasterSuccess, getVehicleListSuccess,
   getVehicleType_for_dropdown_Success, deleteVehicleID_Success,
@@ -20,7 +20,7 @@ import {
   EDIT_VEHICLE_ID,
   UPDATE_VEHICLE_ID
 } from "./actionType";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
+import {loginJsonBody } from "../../../components/Common/CommonFunction";
 
 // const jsonBody = { "Party": loginPartyID(), "Company": loginCompanyID() }
 // Get List Page API
@@ -78,12 +78,12 @@ function* get_VehicleTypes_DropDown_GenFun() {
 }
 
 function* VehicleSaga() {
-  yield takeEvery(GET_VEHICLE_LIST, Get_Vehicle_GenFun)
-  yield takeEvery(SAVE_VEHICLE_MASTER, Post_Vehicle_Master_GenFun)
-  yield takeEvery(EDIT_VEHICLE_ID, Edit_Vehicle_ID_GenFun)
-  yield takeEvery(UPDATE_VEHICLE_ID, Update_Vehicle_ID_GenFun)
-  yield takeEvery(DELETE_VEHICLE_ID, Delete_Vehicle_ID_GenFun)
-  yield takeEvery(GET_VEHICLE_TYPES_FOR_DROPDOWN, get_VehicleTypes_DropDown_GenFun)
+  yield takeLatest(GET_VEHICLE_LIST, Get_Vehicle_GenFun)
+  yield takeLatest(SAVE_VEHICLE_MASTER, Post_Vehicle_Master_GenFun)
+  yield takeLatest(EDIT_VEHICLE_ID, Edit_Vehicle_ID_GenFun)
+  yield takeLatest(UPDATE_VEHICLE_ID, Update_Vehicle_ID_GenFun)
+  yield takeLatest(DELETE_VEHICLE_ID, Delete_Vehicle_ID_GenFun)
+  yield takeLatest(GET_VEHICLE_TYPES_FOR_DROPDOWN, get_VehicleTypes_DropDown_GenFun)
 }
 
 export default VehicleSaga;

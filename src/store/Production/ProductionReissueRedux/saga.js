@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   delete_Production_ReIssueIdSuccess,
   edit_Production_ReIssueIdSuccess,
@@ -27,7 +27,7 @@ import {
   ITEM_FOR_PRODUNCTION_RE_ISSUE,
 } from "./actionType";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
-import { AlertState } from "../../actions";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 function* saveProduction_ReIssueGenFunc({ data }) {               // Save Production_ReIssue  genrator function
@@ -77,7 +77,7 @@ function* editProduction_ReIssue_GenFunc({ id, pageMode }) {      // Edit Produc
 
   } catch (error) {
     yield put(
-      AlertState({
+      customAlert({
         Type: 4,
         Status: true,
         Message: "500 Error Edit Production_ReIssue API",
@@ -106,12 +106,12 @@ function* makeBtnForProduction_ReIssue_STP_GenFunc({ data }) {
 }
 
 function* Production_ReIssueSaga() {
-  yield takeEvery(EDIT_PRODUCTION_RE_ISSUE, editProduction_ReIssue_GenFunc);
-  yield takeEvery(SAVE_PRODUCTION_RE_ISSUE_ADD_PAGE, saveProduction_ReIssueGenFunc);
-  yield takeEvery(UPDATE_PRODUCTION_RE_ISSUE, UpdateProduction_ReIssueGenFunc);
-  yield takeEvery(DELETE_PRODUCTION_RE_ISSUE_ID, DeleteProduction_ReIssueGenFunc);
-  yield takeEvery(GET_PRODUCTION_RE_ISSUE_LIST_PAGE, ListFilter_Production_ReIssue_GerFunc);
-  yield takeEvery(ITEM_FOR_PRODUNCTION_RE_ISSUE, itemsForProduction_ReIssue_GenFunc);
-  yield takeEvery(MAKE_BTN_FOR_PRODUNCTION_RE_ISSUE_STP_ACTION, makeBtnForProduction_ReIssue_STP_GenFunc);
+  yield takeLatest(EDIT_PRODUCTION_RE_ISSUE, editProduction_ReIssue_GenFunc);
+  yield takeLatest(SAVE_PRODUCTION_RE_ISSUE_ADD_PAGE, saveProduction_ReIssueGenFunc);
+  yield takeLatest(UPDATE_PRODUCTION_RE_ISSUE, UpdateProduction_ReIssueGenFunc);
+  yield takeLatest(DELETE_PRODUCTION_RE_ISSUE_ID, DeleteProduction_ReIssueGenFunc);
+  yield takeLatest(GET_PRODUCTION_RE_ISSUE_LIST_PAGE, ListFilter_Production_ReIssue_GerFunc);
+  yield takeLatest(ITEM_FOR_PRODUNCTION_RE_ISSUE, itemsForProduction_ReIssue_GenFunc);
+  yield takeLatest(MAKE_BTN_FOR_PRODUNCTION_RE_ISSUE_STP_ACTION, makeBtnForProduction_ReIssue_STP_GenFunc);
 }
 export default Production_ReIssueSaga;

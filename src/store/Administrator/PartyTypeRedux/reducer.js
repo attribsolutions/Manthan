@@ -8,6 +8,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
+  loading:false
 }
 
 const PartyTypeReducer = (state = INIT_STATE, action) => {
@@ -28,7 +29,7 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
     case actionType.GET_PARTY_TYPE_LIST:
       return {
         ...state,
-        listBtnLoading: true,
+        loading:true
       }
 
 
@@ -36,23 +37,28 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         ListData: action.payload,
-        listBtnLoading: false,
+        loading:false
 
       }
+
+      case actionType.DELETE_PARTY_TYPE_ID:
+        return {
+          ...state,
+          listBtnLoading: action.config.btnId,
+        };
+  
 
     case actionType.DELETE_PARTY_TYPE_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMessage: action.payload,
       };
-
-
 
     case actionType.EDIT_PARTY_TYPE_ID:
       return {
         ...state,
-        listBtnLoading: true,
-
+        listBtnLoading: action.config.btnId,
       };
 
     case actionType.EDIT_PARTY_TYPE_ID_SUCCESS:

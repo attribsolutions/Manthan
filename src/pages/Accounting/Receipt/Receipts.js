@@ -7,7 +7,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { AlertState, BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
@@ -20,7 +20,15 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate_ymd, loginCompanyID, loginPartyID, loginUserID, metaTagLabel, } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    currentDate_ymd,
+    loginCompanyID,
+    loginPartyID,
+    loginUserID,
+    metaTagLabel,
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -28,7 +36,17 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { BankListAPI, BankListAPISuccess, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import {
+    BankListAPI,
+    BankListAPISuccess,
+    GetOpeningBalance,
+    GetOpeningBalance_Success,
+    ReceiptGoButtonMaster,
+    ReceiptGoButtonMaster_Success,
+    ReceiptTypeAPI,
+    saveReceiptMaster,
+    saveReceiptMaster_Success
+} from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
@@ -101,9 +119,6 @@ const Receipts = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
-    // useEffect(() => {
-    //     dispatch(BreadcrumbShowCountlabel(`Invoice Count :${Data.length}`))
-    // }, [ReceiptGoButton]);
 
     // Customer dropdown Options
     useEffect(() => {
@@ -176,7 +191,6 @@ const Receipts = (props) => {
             else if (hasShowModal) {
                 hasEditVal = props[mode.editValue]
                 insidePageMode = props.pageMode;
-                // setPageMode(props.pageMode)
                 setModalCss(true)
             }
 
@@ -194,7 +208,7 @@ const Receipts = (props) => {
                     i.values.BankName = { value: Bank, label: BankName }
                     i.values.Description = Description
                     i.values.DocumentNo = DocumentNo
-                    i.values.AmountPaid = AmountPaid
+                    i.values.AmountPaid = AmountPaid.replace(/,/g, "");
 
                     i.hasValid.Customer.valid = true;
                     i.hasValid.AmountPaid.valid = true;
@@ -213,7 +227,7 @@ const Receipts = (props) => {
     }, [])
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
@@ -221,30 +235,28 @@ const Receipts = (props) => {
             setState(() => resetFunction(fileds, state))// Clear form values 
 
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.RECEIPTS_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.RECEIPTS_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                 Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -394,7 +406,8 @@ const Receipts = (props) => {
 
     function AmountPaidDistribution(val1) {
 
-        let value = Number(val1)
+        const withoutCommaSeparator = val1.replace(/,/g, "");
+        let value = Number(withoutCommaSeparator)
 
         let Amount = value
 
@@ -491,7 +504,7 @@ const Receipts = (props) => {
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
-        debugger
+
         if ((values.AmountPaid === '')
             || (values.AmountPaid === "NaN")
             || (values.AmountPaid === undefined)

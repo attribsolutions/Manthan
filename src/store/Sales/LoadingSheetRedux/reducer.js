@@ -1,5 +1,5 @@
 
-import { LOADING_SHEET_API_ERROR_ACTION, LOADING_SHEET_UPDATE_API, SALES_RUTURN_API_ERROR_ACTION } from "./actionType"
+import { DELETE_LOADING_SHEET, LOADING_SHEET_API_ERROR_ACTION, LOADING_SHEET_GO_BUTTON_API, LOADING_SHEET_UPDATE_API, SALES_RUTURN_API_ERROR_ACTION } from "./actionType"
 import { LOADING_SHEET_LIST_ACTION, SAVE_LOADING_SHEET_MASTER } from "./actionType"
 import {
     LOADING_SHEET_LIST_ACTION_SUCCESS,
@@ -16,16 +16,24 @@ const INIT_STATE = {
     LoadingSheetlist: [],
     LoadingSheetUpdate: [],
     deleteMsg: { Status: false },
-    saveBtnloading: false
-
+    goBtnloadingSpinner: false,
+    saveBtnloading: false,
+    listBtnLoading: false,
 }
 
 const LoadingSheetReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
+        
+        case LOADING_SHEET_GO_BUTTON_API:
+            return {
+                ...state,
+                goBtnloadingSpinner: true,
+            }
 
         case LOADING_SHEET_GO_BUTTON_API_SUCCESS:
             return {
                 ...state,
+                goBtnloadingSpinner: false,
                 goBtnLoadingSheet: action.payload,
             }
 
@@ -60,6 +68,7 @@ const LoadingSheetReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 saveBtnloading: true,
+                listBtnLoading: action.config.btnId,
             }
 
         case LOADING_SHEET_UPDATE_API_ACTION_SUCCESS:
@@ -67,12 +76,21 @@ const LoadingSheetReducer = (state = INIT_STATE, action) => {
                 ...state,
                 LoadingSheetUpdate: action.payload,
                 saveBtnloading: false,
+                listBtnLoading: false,
             }
+
+        case DELETE_LOADING_SHEET:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            };
+
 
         case DELETE_LOADING_SHEET_SUCCESS:
             return {
                 ...state,
                 deleteMsg: action.payload,
+                listBtnLoading: false
             };
 
         case LOADING_SHEET_API_ERROR_ACTION:
@@ -80,10 +98,8 @@ const LoadingSheetReducer = (state = INIT_STATE, action) => {
                 ...state,
                 saveBtnloading: false,
                 loading: false,
+                listBtnLoading: false
             };
-
-
-
 
         default:
             return state

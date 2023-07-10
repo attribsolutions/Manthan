@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   challanItemForDropdownSuccess,
   deleteChallanIdSuccess,
@@ -82,12 +82,12 @@ function* itemDropDown_Challan_AddPage_genFunc({ data }) {   //  Challan Addpage
 }
 
 function* ChallanSaga() {
-  yield takeEvery(CHALLAN_POST_API, save_Challan_GerFunc);
-  yield takeEvery(CHALLAN_LIST_FOR_LIST_PAGE, Challan_List_filterGerFunc);
-  yield takeEvery(GO_BUTTON_CHALLAN_POST_API, gobutton_challan_genFunc);
-  yield takeEvery(MAKE_CHALLAN_ACTION, Make_Challan_GerFunc);
-  yield takeEvery(DELETE_CHALLAN_FOR_CHALLAN_PAGE, DeleteChallanGenFunc);
-  yield takeEvery(ITEM_DROPDOWN_CHALLAN, itemDropDown_Challan_AddPage_genFunc);
+  yield takeLatest(CHALLAN_POST_API, save_Challan_GerFunc);
+  yield takeLatest(CHALLAN_LIST_FOR_LIST_PAGE, Challan_List_filterGerFunc);
+  yield takeLatest(GO_BUTTON_CHALLAN_POST_API, gobutton_challan_genFunc);
+  yield takeLatest(MAKE_CHALLAN_ACTION, Make_Challan_GerFunc);
+  yield takeLatest(DELETE_CHALLAN_FOR_CHALLAN_PAGE, DeleteChallanGenFunc);
+  yield takeLatest(ITEM_DROPDOWN_CHALLAN, itemDropDown_Challan_AddPage_genFunc);
 }
 
 export default ChallanSaga;

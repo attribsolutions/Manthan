@@ -44,7 +44,6 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 789, 570, 10);//vertical left 2
     doc.line(408, 60, 408, 10);//vertical right 1
     // doc.line(250, 134, 250, 80);//vertical right 2
-    doc.line(570, 134, 30, 134);//horizontal line table 
 
 
     // doc.line(250, 100, 408, 100) //horizontal line Current date upper
@@ -121,6 +120,9 @@ export const reportHeder1 = (doc, data) => {
         startY: 85
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(doc, data), options3);
+    const YAxis = doc.previousAutoTable.finalY
+    doc.line(570, YAxis, 30, YAxis);//horizontal line table 
+
 }
 
 export const reportHeder2 = (doc, data) => {
@@ -152,14 +154,14 @@ export const tableBody = (doc, data) => {
             if (data1.row.cells[1].raw === "Total") {
                 data1.row.cells[1].styles.fontStyle = "bold"
 
-                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
                 data1.row.cells[5].styles.fontStyle = "bold"
-                data1.row.cells[6].styles.fontStyle = "bold"
+                // data1.row.cells[6].styles.fontStyle = "bold"
 
                 data1.row.cells[1].styles.fontSize = 9
-                data1.row.cells[4].styles.fontSize = 9
+                data1.row.cells[3].styles.fontSize = 9
                 data1.row.cells[5].styles.fontSize = 9
-                data1.row.cells[6].styles.fontSize = 9
+                // data1.row.cells[6].styles.fontSize = 9
             }
         },
 
@@ -192,31 +194,31 @@ export const tableBody = (doc, data) => {
                 columnWidth: 20,
             },
             1: {
-                columnWidth: 170,
+                columnWidth: 200,
                 // halign: 'right',
 
             },
-            2: {
-                columnWidth: 70,
-                halign: 'right',
-            },
+            // 2: {
+            //     columnWidth: 80,
+            //     halign: 'right',
+            // },
             3: {
-                columnWidth: 70,
+                columnWidth: 80,
                 halign: 'right',
             },
             4: {
-                columnWidth: 70,
+                columnWidth: 80,
                 halign: 'right',
             },
 
             5: {
-                columnWidth: 70,
+                columnWidth: 80,
                 halign: 'right',
             },
-            6: {
-                columnWidth: 70,
-                halign: 'right',
-            },
+            // 6: {
+            //     columnWidth: 70,
+            //     halign: 'right',
+            // },
 
         },
         tableLineColor: "black",

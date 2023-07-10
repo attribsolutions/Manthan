@@ -17,17 +17,19 @@ import {
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
+import { Listloader } from "../../../components/Common/CommonButton";
 
 const TermsAndConditionsList = (props) => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      tableList: state.TermsAndConditionsReducer.TermsAndConditionsList,
+      listBtnLoading: state.TermsAndConditionsReducer.listBtnLoading,
+      tableList: state.TermsAndConditionsReducer.tableList,
       postMsg: state.TermsAndConditionsReducer.PostData,
-      editData: state.TermsAndConditionsReducer.TermsAndConditionseditData,
-      updateMsg: state.TermsAndConditionsReducer.TermsAndConditionsupdateMessage,
-      deleteMsg: state.TermsAndConditionsReducer.TermsAndConditionsdeleteMessage,
+      editData: state.TermsAndConditionsReducer.editData,
+      updateMsg: state.TermsAndConditionsReducer.updateMessage,
+      deleteMsg: state.TermsAndConditionsReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
@@ -50,21 +52,24 @@ const TermsAndConditionsList = (props) => {
     dispatch(getTermAndCondition())
   }, []);
 
-  const { pageField,userAccess=[] } = reducers
+  const { pageField, userAccess = [] } = reducers
 
   return (
     <React.Fragment>
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={TermsAndConditionsMaster}
-            masterPath={url.TERMS_AND_CONDITION}
-            ButtonMsgLable={"Terms & Conditions"}
-            deleteName={"Name"}
-          />
-          : null
+        reducers.loading ?
+          <Listloader />
+          :
+          (pageField) ?
+            <CommonListPage
+              action={action}
+              reducers={reducers}
+              MasterModal={TermsAndConditionsMaster}
+              masterPath={url.TERMS_AND_CONDITION}
+              ButtonMsgLable={"Terms & Conditions"}
+              deleteName={"Name"}
+            />
+            : <Listloader />
       }
     </React.Fragment>
   )

@@ -21,7 +21,6 @@ import {
   userEditActionSuccess
 }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
-import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -81,7 +80,7 @@ const AddUser = (props) => {
   }
 
   const {
-    PostAPIResponse,
+    postMsg,
     employeelistForDropdown,
     Roles=[],
     employePartyWiseRoleState,
@@ -90,7 +89,7 @@ const AddUser = (props) => {
     saveBtnloading,
   } = useSelector((state) => ({
     saveBtnloading: state.User_Registration_Reducer.saveBtnloading,
-    PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
+    postMsg:state.User_Registration_Reducer.postMsg,
     employePartyWiseRoleState: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
     Roles: state.RoleMaster_Reducer.roleList,
@@ -218,40 +217,37 @@ const AddUser = (props) => {
     }
   }, [])
 
-  useEffect(() => {
+  useEffect(async () => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
 
       if (pageMode === mode.dropdownAdd) {
-        dispatch(AlertState({
+        customAlert({
           Type: 1,
-          Status: true,
-          Message: PostAPIResponse.Message,
-        }))
+          Message: postMsg.Message,
+      })
       }
       else {
-        dispatch(AlertState({
+        let isPermission = await customAlert({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
-          RedirectPath: url.USER_lIST,
-          AfterResponseAction: false
-        }))
+          Message: postMsg.Message,
+      })
+      if (isPermission) {
+          history.push({ pathname: url.USER_lIST })
+      }
       }
     }
 
-    else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
+    else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
-      dispatch(AlertState({
+      customAlert({
         Type: 4,
-        Status: true,
-        Message: JSON.stringify(PostAPIResponse.Message),
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
+         Message: JSON.stringify(postMsg.Message),
+    })
     }
-  }, [PostAPIResponse.Status])
+  }, [postMsg.Status])
 
   const EmployeeOptions = employeelistForDropdown.map((Data) => ({
     value: Data.id,

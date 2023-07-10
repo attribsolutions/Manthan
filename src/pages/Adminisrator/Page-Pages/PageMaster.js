@@ -22,7 +22,6 @@ import Select from "react-select";
 import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
 import {
-  AlertState,
   Breadcrumb_inputName,
   editHPagesIDSuccess,
   getModuleList,
@@ -47,6 +46,7 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import AddMaster from "../EmployeePages/Drodown";
 import Modules from "../ModulesPages/Modules";
 import * as url from "../../../routes/route_url";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PageMaster = (props) => {
   const dispatch = useDispatch();
@@ -272,7 +272,7 @@ const PageMaster = (props) => {
   }, [pageAccessData, PageAccess]);
 
   // This UseEffect clear Form Data and when modules Save Successfully.
-  useEffect(() => {
+  useEffect(async () => {
     if (postMsg.Status === true && postMsg.StatusCode === 200) {
       dispatch(saveHPagesSuccess({ Status: false }));
       setModule_DropdownSelect("");
@@ -281,41 +281,34 @@ const PageMaster = (props) => {
 
       if (pageMode === "true") {
         dispatch(
-          AlertState({
+          customAlert({
             Type: 1,
-            Status: true,
             Message: postMsg.Message,
-          })
+        })
         );
       } else {
-        dispatch(
-          AlertState({
-            Type: 1,
-            Status: true,
-            Message: postMsg.Message,
-            RedirectPath: PAGE_lIST,
-            AfterResponseAction: false,
-          })
-        );
+        let isPermission = await customAlert({
+          Type: 1,
+          Status: true,
+          Message: postMsg.Message,
+      })
+      if (isPermission) {
+          history.push({ pathname: url.PAGE_lIST })
+      }
       }
     } else if (postMsg.Status === true) {
       dispatch(saveHPagesSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 4,
-          Status: true,
-          Message: JSON.stringify(postMsg.Message),
-          RedirectPath: false,
-          AfterResponseAction: false,
-        })
-      );
+      customAlert({
+        Type: 4,
+         Message: JSON.stringify(postMsg.Message),
+    })
     }
   }, [postMsg]);
 
   useEffect(() => {
     if ((modulePostAPIResponse.Status === true) && (modulePostAPIResponse.StatusCode === 200)) {
       dispatch(saveModuleMasterSuccess({ Status: false }))
-      dispatch(AlertState({
+      dispatch(customAlert({
         Type: 1,
         Status: true,
         Message: modulePostAPIResponse.Message,
@@ -323,7 +316,7 @@ const PageMaster = (props) => {
       tog_center()
     } else if (modulePostAPIResponse.Status === true) {
       dispatch(saveModuleMasterSuccess({ Status: false }))
-      dispatch(AlertState({
+      dispatch(customAlert({
         Type: 4,
         Status: true,
         Message: JSON.stringify(modulePostAPIResponse.Message),
@@ -343,11 +336,10 @@ const PageMaster = (props) => {
     } else if (updateMsg.Status === true && !modalCss) {
       dispatch(updateHPagesSuccess({ Status: false }));
       dispatch(
-        AlertState({
+        customAlert({
           Type: 3,
-          Status: true,
           Message: JSON.stringify(updateMsg.Message),
-        })
+      })
       );
     }
   }, [updateMsg, modalCss]);
@@ -403,7 +395,7 @@ const PageMaster = (props) => {
       (pageType_DropdownSelect.value === 2)
     ) {
       dispatch(
-        AlertState({
+        customAlert({
           Type: 4,
           Status: true,
           Message: "At Least One PageAccess is Select",
@@ -416,7 +408,7 @@ const PageMaster = (props) => {
 
     if ((pageType_DropdownSelect.value === 2) && (relatedPage_DropdownSelect === undefined)) {
       dispatch(
-        AlertState({
+        customAlert({
           Type: 4,
           Status: true,
           Message: "Please Select Related Page ID",
@@ -453,7 +445,7 @@ const PageMaster = (props) => {
     if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
       {
         dispatch(
-          AlertState({
+          customAlert({
             Type: 4,
             Status: true,
             Message: "PageFields is Required",

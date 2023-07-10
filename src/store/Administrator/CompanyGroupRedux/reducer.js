@@ -8,9 +8,12 @@ import {
   UPDATE_COMPANY_GROUP_ID,
   GET_COMPANY_GROUP_LIST,
   COMPANY_GROUP_API_ERROR_ACTION,
+  EDIT_COMPANY_GROUP_ID,
+  DELETE_COMPANY_GROUP_ID,
 } from "./actionType";
 
 const INIT_STATE = {
+  loading: false,
   saveBtnloading: false,
   listBtnLoading: false,
   CompanyGroupList: [],
@@ -39,20 +42,27 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
     case GET_COMPANY_GROUP_LIST:
       return {
         ...state,
-        listBtnLoading: true,
-
+        loading: true,
       }
 
     case GET_COMPANY_GROUP_LIST_SUCCESS:
       return {
         ...state,
         CompanyGroupList: action.payload,
-        listBtnLoading: false,
+        loading: false,
       }
+
+      case EDIT_COMPANY_GROUP_ID:
+        return {
+          ...state,
+          listBtnLoading: action.config.btnId,
+        };
+  
 
     case EDIT_COMPANY_GROUP_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 
@@ -61,7 +71,6 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: true
-
       };
 
     case UPDATE_COMPANY_GROUP_ID_SUCCESS:
@@ -72,17 +81,27 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
 
       };
 
+      case DELETE_COMPANY_GROUP_ID:
+        return {
+          ...state,
+          listBtnLoading: action.config.btnId,
+        };
+
+
     case DELETE_COMPANY_GROUP_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMessage: action.payload,
       };
+
 
     case COMPANY_GROUP_API_ERROR_ACTION:
       return {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading: false
       };
 
 

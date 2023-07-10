@@ -438,7 +438,7 @@ export const Loading_Sheet_Go_Button_API = (data) => post(url.LOADING_SHEET_GO_B
 export const Loading_Sheet_Post_API = ({ jsonBody, btnId }) => post(url.LOADING_SHEET, jsonBody, btnId)// Loading Sheet Post API For Master Page
 export const Loading_Sheet_get_API = (filters) => post(url.LOADING_SHEET_LIST, filters)// Post API For Loading Sheet List
 export const Loading_Sheet_Del_API = ({ deleteId, btnId }) => del(`${url.LOADING_SHEET}/${deleteId}`, btnId)// Loading Sheet Post API For Master Page
-export const Loading_Sheet_Update_API = (updateId) => get(`${url.LOADING_SHEET}/${updateId}`)// Loading Sheet Post API For Master Page
+export const Loading_Sheet_Update_API = ({ RowId, btnId }) => get(`${url.LOADING_SHEET}/${RowId}`, btnId)// Loading Sheet Post API For Master Page
 
 // PartyMasterBulkUpdate
 export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_BULK_UPDATE, jsonBody, btnId)// post api
@@ -471,7 +471,7 @@ export const GRN_Edit_API = ({ editId, btnId }) => get(`${url.GRN}/${editId}`, b
 export const GRN_Post_API = ({ jsonBody, btnId }) => post(url.GRN, jsonBody, btnId)//get api
 export const GRN_update_API = ({ jsonBody, updateId, btnId }) => put(`${url.GRN}/${updateId}`, jsonBody, btnId)// update api
 export const GRN_delete_API = ({ deleteId, btnId }) => del(`${url.GRN}/${deleteId}`, btnId)//Delete Order
-export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
+export const GRN_Make_API = ({ jsonBody, btnId }) => post(url.GRN_MAKE_API, jsonBody, btnId)
 
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
@@ -581,7 +581,7 @@ export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOW
 //*********************************Accounting Module ************************************ */
 // Receipt and Payment Entry
 export const Receipt_Print = (id) => get(`${url.RECEIPT_POST_API}/${id}`)//dropdown api
-export const Receipt_Go_Button_API = (jsonBody) => post(url.RECEIPT_GO_BUTTON_API, jsonBody)//  postapi
+export const Receipt_Go_Button_API = ({ jsonBody, btnId }) => post(url.RECEIPT_GO_BUTTON_API, jsonBody, btnId)//  postapi
 export const Opening_balance_API = (jsonBody) => post(url.OPENING_BALANCE, jsonBody)//  postapi
 export const Depositor_Bank_Filter_API = (jsonBody) => post(url.DEPOSITOR_BANK_FILTER, jsonBody)//  postapi
 export const Receipt_Post_API = ({ jsonBody, btnId }) => post(url.RECEIPT_POST_API, jsonBody, btnId)//  postapi
@@ -593,7 +593,7 @@ export const Make_Receipt_to_Payment_API = (jsonBody) => post(url.MAKE_RECEIPT_T
 
 // Sales Return
 export const Invoice_No_list_API = (jsonBody) => post(url.INVOICE_NUMBER_LIST, jsonBody)//Invoice No. dropdown api postapi
-export const SalesReturn_add_button_api_For_Item = (ItemID) => get(`${url.ADD_BUTTON_API_FOR_ITEM}/${ItemID}`)//add button get api for item
+export const SalesReturn_add_button_api_For_Item = (jsonBody) => post(url.ADD_BUTTON_API_FOR_ITEM, jsonBody)//add button get api for item
 export const SalesReturn_add_button_api_For_Invoice = (InvoiceID) => get(`${url.ADD_BUTTON_API_FOR_INVOICE}/${InvoiceID}`)//add button get api for invoice
 export const SalesReturn_post_API = ({ jsonBody, btnId }) => post(url.SALES_RETURN, jsonBody, btnId)//  postapi
 export const SalesReturn_list_API = (filters) => post(url.SALES_RETURN_LIST_API, filters)//Sales Return list api using post method
@@ -615,13 +615,23 @@ export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODU
 export const OderSummary_GoBtn_API = ({ jsonBody, btnId }) => post(url.ORDER_SUMMARY, jsonBody, btnId)//post api
 export const PartySettingApi = (Party_id, Comapny_id) => get(`${url.PARTY_SETTING}/${Party_id}/${Comapny_id}`)// Party Setting api
 export const save_PartySetting_API = ({ jsonBody, btnId }) => post(url.PARTY_SETTING, jsonBody, btnId)//  postapi
+export const PartyLedgerReport_API = (jsonBody) => post(url.PARTY_LEDGER, jsonBody)//  postapi
+
 
 // export const PartyLedger_API = (FromDate,ToDate,SAPCode) => get(`http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
 // Dashboard 
+
 export const Dashboard_Get_API = (id) => get(`${url.DASHBOARD}/${id}`)// Dashboard grt api
 
 //StockEntry
+
+export const StockEntry_GO_button_api_For_Item = (ItemId) => get(`${url.STOCK_ENTRY_GO_BUTTON}/${ItemId}`)//add button get api for item
+
 export const StockEntry_Post_API = ({ jsonBody, btnId }) => post(url.STOCK_ENTRY, jsonBody, btnId)//post api
+
+//Stock Report
+export const StockReport_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REPORT, jsonBody, btnId)//Go button api
+
 
 export {
   getLoggedInUser,

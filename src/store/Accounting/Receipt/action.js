@@ -14,7 +14,8 @@ import {
   BANK_LIST_API,
   BANK_LIST_API_SUCCESS,
   RECEIPT_LIST_FILTERS,
-  PAYMENT_ENTRY_LIST_FILTERS
+  PAYMENT_ENTRY_LIST_FILTERS,
+  RECEIPT_AND_PAYMENT_API_ERROR_ACTION
 } from "./actionType";
 
 export const Receiptlistfilters = filter => ({                            //Material issue  Filter Action
@@ -27,9 +28,9 @@ export const PaymentEntrylistfilters = filter => ({                            /
   payload: filter,
 })
 
-export const ReceiptGoButtonMaster = (Data) => ({// save Action
+export const ReceiptGoButtonMaster = (config={}) => ({// save Action
   type: RECEIPT_GO_BUTTON_MASTER,
-  Data
+  config
 });
 
 export const ReceiptGoButtonMaster_Success = (resp) => ({// Save  success
@@ -101,3 +102,7 @@ export const BankListAPISuccess = (resp) => ({
   type: BANK_LIST_API_SUCCESS,
   payload: resp,
 });
+
+export const ReceiptAndPaymentApiErrorAction = () => ({
+  type: RECEIPT_AND_PAYMENT_API_ERROR_ACTION,
+})

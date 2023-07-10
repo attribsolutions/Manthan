@@ -15,7 +15,6 @@ import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
-    AlertState,
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
@@ -26,12 +25,7 @@ import {
     goButtonForGST_Master_Success,
     saveGSTMaster,
     saveGSTMasterSuccess,
-
 } from "../../../store/actions";
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import {
@@ -160,37 +154,35 @@ const GSTMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(saveGSTMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.GST_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.GST_LIST })
+                }
             }
         }
 
         else if (postMsg.Status === true) {
             dispatch(saveGSTMasterSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                 Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -200,7 +192,7 @@ const GSTMaster = (props) => {
             dispatch(goButtonForGST_Master_Success([]))
             GoButton_Handler()
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
@@ -210,7 +202,7 @@ const GSTMaster = (props) => {
         } else if (deleteMessage.Status === true) {
             dispatch(deleteGSTId_ForMaster_Success({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
                     Status: true,
                     Message: JSON.stringify(deleteMessage.Message),
@@ -242,7 +234,7 @@ const GSTMaster = (props) => {
     //select id for delete row
     const deleteHandeler = (id, name) => {
         dispatch(
-            AlertState({
+            customAlert({
                 Type: 5,
                 Status: true,
                 Message: `Are you sure you want to delete this Item : "${name}"`,
@@ -416,7 +408,7 @@ const GSTMaster = (props) => {
 
             if (!(filterData.length > 0)) {
                 dispatch(
-                    AlertState({
+                    customAlert({
                         Type: 4,
                         Status: true,
                         Message: "Please Enter One GSTPercentage & HSNCode",

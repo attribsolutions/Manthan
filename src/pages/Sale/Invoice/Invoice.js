@@ -10,7 +10,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import {  commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -20,7 +20,7 @@ import {
     onChangeSelect,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import {  SaveButton } from "../../../components/Common/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
@@ -46,7 +46,6 @@ import {
     orderQtyOnChange,
     orderQtyUnit_SelectOnchange,
     stockQtyOnChange,
-    settingbaseRoundOffAmountFunc,
     settingBaseRoundOffAmountFunc
 } from "./invoiceCaculations";
 import "./invoice.scss"
@@ -170,16 +169,15 @@ const Invoice = (props) => {
                 })
             }
             else {
-                await customAlert({
+                let alertResponse = await customAlert({
                     Type: 1,
-                    Message: JSON.stringify(postMsg.Message),
-                    RedirectPath: url.INVOICE_LIST_1,
+                    Message: postMsg.Message,
                 })
 
-                if (subPageMode === url.INVOICE_1) {
+                if (alertResponse && (subPageMode === url.INVOICE_1)) {
                     history.push({ pathname: url.INVOICE_LIST_1 })
                 }
-                else if (subPageMode === url.IB_INVOICE) {
+                else if (alertResponse && (subPageMode === url.IB_INVOICE)) {
                     history.push({ pathname: url.IB_INVOICE_LIST })
 
                 }
@@ -200,13 +198,11 @@ const Invoice = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
-            dispatch(
-                AlertState({
+            customAlert({
                     Type: 3,
                     Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
-            );
         }
     }, [updateMsg, modalCss]);
 
@@ -389,11 +385,11 @@ const Invoice = (props) => {
                                     </td>
                                     <td>
                                         <div style={{ width: "50px" }}>
-                                            <span id={`stockItemRate-${index1.id}-${index2.id}`}>{index2.Rate}</span>
+                                            <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
                                         </div>
                                     </td>
                                     <td>
-                                        <div style={{ width: "50px" }}>{index1.MRPValue}</div>
+                                        <div style={{ width: "50px" }}>{index2.MRP}</div>
                                     </td>
                                 </tr>
                             ))}
@@ -468,7 +464,7 @@ const Invoice = (props) => {
                     </div>
                 );
             },
-            
+
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
@@ -479,9 +475,10 @@ const Invoice = (props) => {
                     innerStockCaculation(index1);
                     totalAmountCalcuationFunc(tableList);
                 }
+                if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
-                    index1.DiscountType === 2 ? discountDropOption[1] : discountDropOption[0];
+                    index1.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
 
                 return (
                     <>
@@ -547,7 +544,9 @@ const Invoice = (props) => {
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
-                            <samp id={`roundedTotalAmount-${index1.id}`}>{index1.roundedTotalAmount}</samp>
+                            <samp id={`roundedTotalAmount-${index1.id}`}>
+                                {_cfunc.amountCommaSeparateFunc(index1.roundedTotalAmount)}
+                            </samp>
                         </div>
                     </>
                 );
@@ -557,7 +556,9 @@ const Invoice = (props) => {
 
     const totalAmountCalcuationFunc = (tableList = []) => {
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${calcalateGrandTotal.sumOfGrandTotal}`))
+        //toLocaleString is convert comma saprate Amount
+        let count_label = `${"Total Amount"} :${Number(calcalateGrandTotal.sumOfGrandTotal).toLocaleString()}`
+        dispatch(BreadcrumbShowCountlabel(count_label))
     }
 
     function InvoiceDateOnchange(y, v, e) {
@@ -600,6 +601,9 @@ const Invoice = (props) => {
         const validMsg = []
         const invoiceItems = []
 
+        // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
+        let IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
+
         orderItemDetails.forEach((index) => {
             if (index.StockInValid) {
                 validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
@@ -610,7 +614,8 @@ const Invoice = (props) => {
 
                 if (ele.Qty > 0) {
                     //**calculate Amount ,Discount Amount based on Discound type */
-                    const calculate = invoice_discountCalculate_Func(ele, index)
+
+                    const calculate = invoice_discountCalculate_Func(ele, index, IsComparGstIn)
 
                     invoiceItems.push({
                         Item: index.Item,
@@ -624,18 +629,21 @@ const Invoice = (props) => {
                         MRP: ele.LiveBatcheMRPID,
                         MRPValue: ele.MRP,//changes
                         Rate: Number(ele.Rate).toFixed(2),
-                        BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
-                        GSTAmount: Number(calculate.roundedGstAmount).toFixed(2),
+
                         GST: ele.LiveBatcheGSTID,
-                        GSTPercentage: ele.GST,// changes
                         CGST: Number(calculate.CGST_Amount).toFixed(2),
                         SGST: Number(calculate.SGST_Amount).toFixed(2),
-                        IGST: 0,
-                        GSTPercentage: ele.GST,
-                        CGSTPercentage: (ele.GST / 2),
-                        SGSTPercentage: (ele.GST / 2),
-                        IGSTPercentage: 0,
+                        IGST: Number(calculate.IGST_Amount).toFixed(2),
+
+                        GSTPercentage: calculate.GST_Percentage,
+                        CGSTPercentage: calculate.CGST_Percentage,
+                        SGSTPercentage: calculate.SGST_Percentage,
+                        IGSTPercentage: calculate.IGST_Percentage,
+
+                        BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
+                        GSTAmount: Number(calculate.roundedGstAmount).toFixed(2),
                         Amount: Number(calculate.roundedTotalAmount).toFixed(2),
+
                         TaxType: 'GST',
                         DiscountType: index.DiscountType,
                         Discount: Number(index.Discount) || 0,
@@ -677,7 +685,7 @@ const Invoice = (props) => {
         });
 
         const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            CustomerGSTTin: '41',
+            CustomerGSTTin: values.Customer.GSTIN,
             GrandTotal: calcalateGrandTotal.sumOfGrandTotal,
             RoundOffAmount: calcalateGrandTotal.RoundOffAmount,
             TCSAmount: calcalateGrandTotal.TCS_Amount,

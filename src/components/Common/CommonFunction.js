@@ -7,47 +7,6 @@ import $ from 'jquery';
 
 export const history = createBrowserHistory();
 
-export const commonListPageDelete_UpdateMsgFunction = (props) => {
-  const dispatch = props.dispatch;
-  const response = props.response;
-  const resetAction = props.resetAction;
-  const afterResponseAction = props.afterResponseAction;
-
-  if (response.Status === true && response.StatusCode === 200) {
-    dispatch(resetAction({ Status: false }));
-    customAlert({
-      Type: 1,
-      Message: response.Message,
-      AfterResponseAction: afterResponseAction,
-    });
-  } else if (response.Status === true) {
-    dispatch(resetAction({ Status: false }));
-    customAlert({
-      Type: 3,
-      Message: response.Message,
-    });
-  }
-};
-
-export const excelDownCommonFunc = (props) => { //++++++++Common Excel Covernt Data Function ++++++++++++++
-  const { tableList = [], PageFieldMaster = [] } = props;
-
-  let downList = [];
-  let listObj = {};
-
-  tableList.forEach((index1) => {
-    PageFieldMaster.forEach((index2) => {
-      if (index2.ShowInDownload) {
-        listObj[`$defSelect${index2.ControlID}`] =
-          index2.ShownloadDefaultSelect;
-        listObj[index2.ControlID] = index1[index2.ControlID];
-      }
-    });
-    downList.push(listObj);
-    listObj = {};
-  });
-  return downList;
-};
 
 function isDateInitial(isdate) {
 
@@ -138,6 +97,12 @@ export function CurrentTime() {
 
 }
 
+export const amountCommaSeparateFunc = (amount) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+  return Number(amount).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
@@ -185,63 +150,57 @@ export const loginUserID = () => {//++++++++++++++++++++++ Session User Id++++++
 };
 
 export const loginCompanyID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-  let user_Company_id = 0;
   try {
-    user_Company_id = JSON.parse(localStorage.getItem("Company"));
+    return JSON.parse(localStorage.getItem("Company"));
   } catch (e) {
     CommonConsole("Common login CompanyID  Error");
   }
-  return user_Company_id;
+  return 0;
 };
 
 export const loginCompanyName = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-  let user_Company_name = "";
   try {
-    user_Company_name = localStorage.getItem("CompanyName");
+    return localStorage.getItem("CompanyName");
   } catch (e) {
     CommonConsole("Common login CompanyID  Error");
   }
-  return user_Company_name;
+  return '';
 };
 
 export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
-  let user_Party_id = 0;
   try {
-    user_Party_id = JSON.parse(localStorage.getItem("roleId")).Party_id;
+    return JSON.parse(localStorage.getItem("roleId")).Party_id;
   } catch (e) {
     CommonConsole("Common login PartyID Func  Error");
   }
-  return user_Party_id;
+  return 0;
 };
 
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
-  let user_EmployeeID = 0;
   try {
-    user_EmployeeID = JSON.parse(localStorage.getItem("roleId")).Employee_id;
+    return JSON.parse(localStorage.getItem("roleId")).Employee_id;
   } catch (e) {
     alert("Common login EmployeeID Func  Error");
   }
-  return user_EmployeeID;
+  return 0;
 };
 
 export const loginIsSCMCompany = () => { //+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
-  let IsSCMCompany = 0;
   try {
-    IsSCMCompany = JSON.parse(localStorage.getItem("IsSCMCompany"));
+    return JSON.parse(localStorage.getItem("IsSCMCompany"));
   } catch (e) {
     CommonConsole("Common login IsSCMCompany Func  Error");
   }
-  return IsSCMCompany;
+  return 0;
 };
 
 export const loginCompanyGroup = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
-  let CompanyGroup = 0;
   try {
-    CompanyGroup = JSON.parse(localStorage.getItem("CompanyGroup"));
+    return JSON.parse(localStorage.getItem("CompanyGroup"));
   } catch (e) {
     CommonConsole("Common login CompanyGroup Func  Error");
   }
-  return CompanyGroup;
+  return 0;
 };
 
 
@@ -258,12 +217,21 @@ export const loginIsSCMParty = () => { //+++++++++++++++++++++ Session Company I
 export const loginSystemSetting = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
     const hassetting = JSON.parse(sessionStorage.getItem("SystemSetting"));
-    return hassetting;
+    return hassetting || "";
   } catch (e) {
     CommonConsole("Common loginSystemSetting func  Error");
   }
-  return false;
+  return "";
 };
+export const loginUserGSTIN = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+  try {
+    return JSON.parse(localStorage.getItem("roleId")).GSTIN;
+  } catch (e) {
+    CommonConsole("Common loginUserGSTIN func  Error");
+  }
+  return '';
+};
+
 
 
 export const loginJsonBody = () => ({
@@ -276,10 +244,13 @@ export const loginJsonBody = () => ({
 });
 
 
-export const compareGSTINState = (gstin1, gstin2) => {
-  const stateCode1 = gstin1.substring(0, 2);
-  const stateCode2 = gstin2.substring(0, 2);
-  return stateCode1 === stateCode2;
+export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
+  gstin1 = String(gstin1) || ""
+  gstin2 = String(gstin2) || ""
+  let stateCode1 = gstin1.substring(0, 2);
+  let stateCode2 = gstin2.substring(0, 2);
+
+  return (!(stateCode1 === stateCode2) && !(gstin1 === "") && !(gstin2 === ""));
 }
 
 export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true }) {
@@ -342,101 +313,56 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
   // }
 }
 
-export async function CheckAPIResponse({
+export async function CheckAPIResponse({ method, url, response = {}, body, error = '' }) {
+  
+  const { data = {} } = response;
+  const statusCode = data.StatusCode;
+  const MessgeAlreadyShow = error.MessgeAlreadyShow || false
 
-  method,
-  url,
-  response = {},
-  body,
-  btnId,
-  error,
-}) {
-  if (btnId) {
+  const successCodes = [200, 204, 100];
+  const rejectionCodes = [226, 400, 406, 500];
 
-    // await new Promise(r => setTimeout(r, 0));
-    // btnIsDissablefunc({ btnId, state: false });
-  }
+  {/***********error massage********************************************* */ }
 
-  const { data = "", code } = response;
-  const con1 = data.StatusCode === 200;
-  const con2 = data.StatusCode === 204; //data nao avalable
-  const con3 = data.StatusCode === 226; //reject used an another transaction
-  const con4 = data.StatusCode === 400; //reject  exception error
-  const con5 = data.StatusCode === 406; //reject
-  const con6 = method === "post" || method === "put" || method === "postForget" //for console body
-  const con7 = data.StatusCode === 100;
-  const con8 = data.StatusCode === 500;  //Internal server Error
+  if (error !== undefined && error !== '') {
+    const tokenXp = error.response?.data.code === "token_not_valid";
 
-
-  if (!(error === undefined)) {
-    const { data = "", response } = error;
-    const tokenXp = response.data.code === "token_not_valid";
-
-
-
-    // **********************************************************************************
-    if (con6) {                             // print post and Put method body
-      console.log(`${url}***=> ${method} Body =>`, body);
+    if (method === "post" || method === "put" || method === "postForget") {
+      CommonConsole(`${url}***=> ${method} Body =>`, body);
     }
 
     if (tokenXp) {
-
-      //  await customAlert({
-      //     Type: 3,
-      //     Message: "Token Exprire"
-      //   })
-
-      history.push({ pathname: "/logout" })
-      window.location.reload(true)
-
-      return
+      history.push({ pathname: "/logout" });
+      window.location.reload(true);
+      return;
     }
-    console.log(`${url}***${method} apiCall response:=>`, error);
-    customAlert({
-      Type: 2,
-      Message: `${url}:This API ${method} Method Execution Error`,
-    });
-
+    if (!MessgeAlreadyShow) {
+      CommonConsole(`${url}***${method} apiCall response:=>`, error);
+      customAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` });
+    }
     return Promise.reject(error);
-    // }
+  }
+  {/******************************************************** */ }
+
+  if (method === "post" || method === "put" || method === "postForget") {
+    CommonConsole(`${url}***=> ${method} Body =>`, body);
   }
 
-  if (con6) {// print post and Put method body
-    console.log(`${url}***=> ${method} Body =>`, body);
-  }
-  // **********************************************************************************
-
-  if (con1 || con7) {
-    console.log(`${url}***${method} apiCall response:=>`, response.data);
-    return response.data;
-  } else if (con2) {
-    console.log(`${url}***${method} apiCall response:=>`, response.data);
+  if (successCodes.includes(statusCode)) {
+    CommonConsole(`${url}***${method} apiCall response:=>`, response.data);
     return response.data;
   }
-  if (con3) {
-    console.log(`${url}***${method} apiCall response:=>`, response.data);
-    await customAlert({
-      Type: 3,
-      Message: JSON.stringify(response.data.Message),
-    });
-    return Promise.reject(response.data);
-  } else if (con4) {
-    console.log(`${url}***${method} apiCall response:=>`, response.data);
-    await customAlert({
-      Type: 2,
-      Message: `${url}:This API ${method} Method Exception Error`,
-    });
-    return Promise.reject(response.data);
-  } else if (con5 || con8) {
 
-    console.log(`${url}***${method} apiCall response:=>`, response.data);
+  if (rejectionCodes.includes(statusCode)) {
+    CommonConsole(`${url}***${method} apiCall response:=>`, response.data);
     await customAlert({ Type: 3, Message: JSON.stringify(response.data.Message) });
+    response.data["MessgeAlreadyShow"] = true
     return Promise.reject(response.data);
   }
-
 
   return Promise.reject(response);
 }
+
 
 export const tableInputArrowUpDounFunc = (tableId) => {
 

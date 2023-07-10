@@ -11,6 +11,7 @@ import {
   GRN_API_ERROR_ACTION,
   DELETE_GRN_FOR_GRN_PAGE,
   EDIT_GRN_FOR_GRN_PAGE,
+  MAKE_GRN_MODE_1_ACTION,
 } from "./actionType"
 
 const INIT_STATE = {
@@ -28,13 +29,20 @@ const INIT_STATE = {
 }
 
 const GRNReducer = (state = INIT_STATE, action) => {
-  
+
   switch (action.type) {
+
+    case MAKE_GRN_MODE_1_ACTION:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
 
     case MAKE_GRN_MODE_1_ACTION_SUCCESS:
       return {
         ...state,
         GRNitem: action.payload,
+        listBtnLoading: false,
       }
 
     case "GET_GRN_ITEM_MODE_3":
@@ -102,7 +110,6 @@ const GRNReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         listBtnLoading: action.config.btnId,
-        deleteMsg: action.payload,
       }
 
     case DELETE_GRN_FOR_GRN_PAGE_SUCCESS:
@@ -117,6 +124,7 @@ const GRNReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading: false
       };
 
 

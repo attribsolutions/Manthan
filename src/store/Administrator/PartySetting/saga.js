@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { getpartysettingApiErrorAction, getpartysetting_API_Success, postOrderSummary_API_Success, savePartySettingMaster_Success } from "./action";
 import { GET_PARTY_SETTING_API, SAVE_PARTY_SETTING_MASTER } from "./actionType";
 import { PartySettingApi, save_PartySetting_API } from "../../../helpers/backend_helper";
@@ -17,7 +17,7 @@ function* Save_Method_ForPartySetting_GenFun({ config }) {
 function* PartySetting_GenFunc(config) {
 
     try {
-        debugger
+        
         const response = yield call(PartySettingApi, config.Party_id, config.Comapny_id);
         const singleObject = {};
         const SystemSetting = {};
@@ -40,8 +40,8 @@ function* PartySetting_GenFunc(config) {
 }
 
 function* PartySettingSaga() {
-    yield takeEvery(SAVE_PARTY_SETTING_MASTER, Save_Method_ForPartySetting_GenFun)
-    yield takeEvery(GET_PARTY_SETTING_API, PartySetting_GenFunc)
+    yield takeLatest(SAVE_PARTY_SETTING_MASTER, Save_Method_ForPartySetting_GenFun)
+    yield takeLatest(GET_PARTY_SETTING_API, PartySetting_GenFunc)
 }
 
 export default PartySettingSaga;

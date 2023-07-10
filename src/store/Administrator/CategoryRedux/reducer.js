@@ -7,7 +7,9 @@ import {
   SAVE_CATEGORY_MASTER,
   UPDATE_CATEGORY_ID,
   GET_CATEGORY_LIST,
-  CATEGORY_API_ERROR_ACTION
+  CATEGORY_API_ERROR_ACTION,
+  DELETE_CATEGORY_ID,
+  EDIT_CATEGORY_ID
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -19,6 +21,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
+  loading:false
 }
 
 const CategoryReducer = (state = INIT_STATE, action) => {
@@ -42,25 +45,41 @@ const CategoryReducer = (state = INIT_STATE, action) => {
     case GET_CATEGORY_LIST:
       return {
         ...state,
-        listBtnLoading: true,
+        loading: true,
       }
 
     case GET_CATEGORY_LIST_SUCCESS:
       return {
         ...state,
         CategoryListData: action.payload,
-        listBtnLoading: false,
+        loading: false,
       }
+
+      case DELETE_CATEGORY_ID:
+        return {
+          ...state,
+          listBtnLoading: action.config.btnId,
+        };
+
 
     case DELETE_CATEGORY_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMessage: action.payload,
       };
+
+      case EDIT_CATEGORY_ID:
+        return {
+          ...state,
+          listBtnLoading: action.config.btnId,
+        };
+
 
     case EDIT_CATEGORY_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 

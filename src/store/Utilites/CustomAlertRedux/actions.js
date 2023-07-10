@@ -1,4 +1,4 @@
-import {ALERT_SHOW, ALERT_STATE,} from "./actionType";
+import { ALERT_SHOW, ALERT_STATE, } from "./actionType";
 
 export const AlertShow = (state) => ({
   type: ALERT_SHOW,

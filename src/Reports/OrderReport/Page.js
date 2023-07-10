@@ -2,6 +2,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { Data } from "./demo";
+import { compareGSTINState } from "../../components/Common/CommonFunction";
 
 
 var pageHeder = function (doc, data) {
@@ -13,7 +14,14 @@ var pageHeder = function (doc, data) {
 };
 
 function reportBody(doc, data) {
-    style.tableBody(doc, data);
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
+    if (isIGST) {
+        style.tableBodyWithIGST(doc, data);
+    } else {
+        style.tableBody(doc, data);
+    }
+
+
 }
 
 function pageFooter(doc, data) {

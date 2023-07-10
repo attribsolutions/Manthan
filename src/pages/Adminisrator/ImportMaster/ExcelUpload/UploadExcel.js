@@ -126,7 +126,7 @@ const UploadExcel = (props) => {
             dispatch(ExcelUpload_save_action_Success({ Status: false }))
             CustomAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])

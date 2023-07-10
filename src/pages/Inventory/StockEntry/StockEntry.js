@@ -17,19 +17,18 @@ import {
     formValid,
     initialFiledFunc,
     onChangeSelect,
-    resetFunction,
+
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import CustomTable2 from "../../../CustomTable2/Table";
 import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
-import { SalesReturn_add_button_api_For_Item } from "../../../helpers/backend_helper";
+import { StockEntry_GO_button_api_For_Item } from "../../../helpers/backend_helper";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import "../../Sale/Invoice/SalesReturn/salesReturn.scss";
+import "../../../pages/Sale/SalesReturn/salesReturn.scss";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -131,7 +130,7 @@ const StockEntry = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -330,7 +329,7 @@ const StockEntry = (props) => {
 
         try {
             // Fetch data from the API
-            const apiResponse = await SalesReturn_add_button_api_For_Item(values.ItemName.value);
+            const apiResponse = await StockEntry_GO_button_api_For_Item(values.ItemName.value);
 
             // Convert API response to desired format
             const convert_ApiResponse = apiResponse.Data.InvoiceItems.map((i) => {
@@ -452,6 +451,8 @@ const StockEntry = (props) => {
                 "MRP": index.defaultMRP.value,
                 "Unit": index.defaultUnit.value,
                 "GST": index.defaultGST.value,
+                "MRPValue": index.defaultMRP.label,
+                "GSTPercentage": index.defaultGST.label,
                 "BatchDate": index.BatchDate,
                 "BatchCode": index.BatchCode
             })

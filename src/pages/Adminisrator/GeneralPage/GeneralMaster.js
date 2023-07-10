@@ -27,7 +27,6 @@ import {
     PostType,
     PostTypeSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -48,6 +47,7 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const GeneralMaster = (props) => {
 
@@ -164,37 +164,35 @@ const GeneralMaster = (props) => {
         dispatch(PostType(jsonBody));
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveMethodForGeneralSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) //Clear form values 
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.GENERAL_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.GENERAL_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(SaveMethodForGeneralSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -207,11 +205,10 @@ const GeneralMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateGeneralIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
-                })
+                  })
             );
         }
     }, [updateMsg, modalCss]);

@@ -1,39 +1,31 @@
 import React, { useEffect, useState, } from "react";
 import {
     Col,
-    Container,
-    FormGroup,
     Row,
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
-import Select from "react-select";
 import {
     comAddPageFieldFunc,
-    formValid,
+
     initialFiledFunc,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, btnIsDissablefunc, metaTagLabel, } from "../../../components/Common/CommonFunction";
-import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode"
+import { mode, pageId } from "../../../routes/index"
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI } from "../../../store/Administrator/RouteUpdateRedux/action";
-import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
-
-import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
-
 import * as _cfunc from "../../../components/Common/CommonFunction";
-
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { C_Select } from "../../../CustomValidateForm";
+import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 
 const RouteUpdate = (props) => {
 
@@ -48,9 +40,10 @@ const RouteUpdate = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserAccState] = useState(123);
+    const [modalCss] = useState(false);
+    const [pageMode] = useState(mode.defaultsave);
+    const [userPageAccessState, setUserAccState] = useState('');
+    const [forceRefresh, setForceRefresh] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -77,7 +70,6 @@ const RouteUpdate = (props) => {
     }, []);
 
     const location = { ...history.location }
-    // const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
@@ -105,34 +97,28 @@ const RouteUpdate = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(Post_RouteUpdateSuccess({ Status: false }))
             dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.ROUTE_UPDATE,
-                }))
+                })
             }
         }
         else if (postMsg.Status === true) {
             dispatch(Post_RouteUpdateSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
-
 
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Route Update Count"}:${Data.length}`))
@@ -154,9 +140,7 @@ const RouteUpdate = (props) => {
         IsActive: index.IsActive
     }));
 
-    const RouteName_Options = RoutesListOptions.filter((index) => {
-        return index.IsActive === true
-    });
+    const RouteName_Options = [...RoutesListOptions.filter((index) => index.IsActive === true)];
 
     const pagesListColumns = [
         {
@@ -166,28 +150,31 @@ const RouteUpdate = (props) => {
         {
             text: "RouteName",
             dataField: "Route Name",
-
-            formatter: (value, row, key) => {
+            style: () => ({ width: "30%" }),
+            formatExtraData: { forceRefresh },
+            formatter: (value, row, key, { forceRefresh }) => {
 
                 return (
-                    <Select
-                        classNamePrefix="select2-selection"
-                        defaultValue={!(row.Route > 0) ? { value: "", label: " select... " } : {
+                    <C_Select
+                        value={!(row.Route > 0) ? "" : {
                             value: row.Route, label: row.RouteName
                         }}
                         options={RouteName_Options}
                         onChange={e => {
                             row["Route"] = e.value;
                             row["RouteName"] = e.label
+                            setForceRefresh(!forceRefresh)
+                        }}
+                        onCancelClick={() => {
+                            row["Route"] = null;
+                            row["RouteName"] = ''
+                            setForceRefresh(!forceRefresh)
                         }}
                     >
-                    </Select >
+                    </C_Select >
                 )
             },
-            headerStyle: (colum, colIndex) => {
-                return { width: '300px', textAlign: 'center' };
-            }
-        },
+        }
     ];
 
     const pageOptions = {
@@ -197,25 +184,21 @@ const RouteUpdate = (props) => {
     };
 
     const SaveHandler = async (event) => {
+
         event.preventDefault();
         const btnId = event.target.id
         try {
-            if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+            const data = Data.map((index) => ({
+                id: index.id,
+                Party: index.Party,
+                SubParty: index.SubParty,
+                Route: index.Route,
+            }))
+            const jsonBody = JSON.stringify({
+                Data: data
+            })
+            dispatch(Post_RouteUpdate({ jsonBody, btnId }));
 
-                const data = Data.map((index) => ({
-                    id: index.id,
-                    Party: index.Party,
-                    SubParty: index.SubParty,
-                    Route: index.Route,
-                }))
-                const jsonBody = JSON.stringify({
-                    Data: data
-                })
-
-                dispatch(Post_RouteUpdate({ jsonBody, btnId }));
-
-            }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
@@ -227,43 +210,37 @@ const RouteUpdate = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
-                    {/* <Container fluid> */}
-
-                    <form noValidate>
-                        <PaginationProvider
-
-                            pagination={paginationFactory(pageOptions)}
-                        >
+                    <div style={{ minHeight: "45vh" }}>
+                        <PaginationProvider pagination={paginationFactory(pageOptions)} >
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
-
                                     keyField="id"
                                     data={Data}
                                     columns={pagesListColumns}
-
                                     search
                                 >
                                     {toolkitProps => (
                                         <React.Fragment>
-                                            <div className="table">
+                                            <div className="table-responsive table">
                                                 <BootstrapTable
-                                                    keyField={"id"}
+                                                    keyField="id"
                                                     id="table_Arrow"
-                                                    bordered={true}
-                                                    striped={false}
-                                                    noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
-
+                                                    classes={"table  table-bordered table-hover"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Party Not available
+                                                        </div>
+                                                    }
+                                                    onDataSizeChange={(e) => {
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    }}
                                                     {...toolkitProps.baseProps}
                                                     {...paginationTableProps}
                                                 />
-                                                {/* {countlabelFunc(toolkitProps, paginationProps, dispatch, "Route Update")} */}
                                                 {mySearchProps(toolkitProps.searchProps)}
                                             </div>
-
                                             <Row className="align-items-md-center mt-30">
                                                 <Col className="pagination pagination-rounded justify-content-end mb-2">
                                                     <PaginationListStandalone
@@ -272,32 +249,24 @@ const RouteUpdate = (props) => {
                                                 </Col>
                                             </Row>
                                         </React.Fragment>
-                                    )
-                                    }
+                                    )}
                                 </ToolkitProvider>
-                            )
-                            }
-
+                            )}
                         </PaginationProvider>
+                    </div>
+                    
+                    {Data.length > 0 ?
+                        <div className="row save1" style={{ paddingBottom: 'center' }}>
+                            <SaveButton pageMode={pageMode}
+                                loading={saveBtnloading}
+                                onClick={SaveHandler}
+                                userAcc={userPageAccessState}
+                                module={"RouteUpdate"}
+                            />
+                        </div>
+                        : null
+                    }
 
-                        {Data.length > 0 ?
-                            <FormGroup style={{ marginTop: "-25px" }}>
-                                <Row >
-                                    <Col sm={2} className="mt-n4">
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            module={"RouteUpdate"}
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormGroup >
-                            : null
-                        }
-
-                    </form>
-                    {/* </Container> */}
                 </div>
             </React.Fragment>
         );

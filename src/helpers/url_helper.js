@@ -347,7 +347,7 @@ export const MAKE_RECEIPT_TO_PAYMENT = '/MakeReceiptofPayment'
 // Sales Return
 
 export const INVOICE_NUMBER_LIST = '/InvoiceNoList'
-export const ADD_BUTTON_API_FOR_ITEM = '/ReturnItemAdd'
+export const ADD_BUTTON_API_FOR_ITEM = '/ReturnItemBatchcode' // privious Api  =>'/ReturnItemAdd'
 export const ADD_BUTTON_API_FOR_INVOICE = '/InvoiceReturnCRDR'
 export const SALES_RETURN = '/PurchaseReturn'
 export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
@@ -367,10 +367,16 @@ export const DASHBOARD = '/getdashboard'
 
 //Report
 export const ORDER_SUMMARY = '/OrderSummaryReport'
+export const PARTY_LEDGER = '/PartyLedgerReport'
+
+// Stock Report
+export const STOCK_REPORT = '/PartyLiveStock'
 
 // partySetting
 export const PARTY_SETTING = '/PartySettings'
 
 // StockEntry
 export const STOCK_ENTRY = '/PartyStockEntry'
+export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"
+
 

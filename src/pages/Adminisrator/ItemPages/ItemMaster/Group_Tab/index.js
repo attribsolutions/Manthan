@@ -17,7 +17,7 @@ import {
     get_Sub_Group_By_Group_ForDropDown,
     get_Sub_Group_By_Group_ForDropDown_Success
 } from "../../../../../store/Administrator/ItemsRedux/action";
-import { AlertState } from "../../../../../store/actions";
+import { customAlert } from "../../../../../CustomAlert/ConfirmDialog";
 
 function GroupTab(props) {
     const dispatch = useDispatch();
@@ -98,7 +98,7 @@ function GroupTab(props) {
         };
         if ((groupTypeDropdownSelect.value === undefined)) {
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 4,
                     Status: true,
                     Message: "Please Select GroupType value...!",
@@ -110,7 +110,7 @@ function GroupTab(props) {
         }
         if ((groupDropdownSelect.value === undefined)) {
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 4,
                     Status: true,
                     Message: "Please Select Group value...!",

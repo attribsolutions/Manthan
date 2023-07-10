@@ -1,5 +1,7 @@
 import {
+  DELETE_ROLE_LIST_ID,
   DELETE_ROLE_LIST_ID_SUCCESS,
+  EDIT_ROLE_LIST_ID,
   EDIT_ROLE_LIST_ID_SUCCESS,
   GET_ROLE_LIST_API,
   GET_ROLE_LIST_API_SUCCESS,
@@ -18,6 +20,7 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
+  loading:false
 };
 
 const RoleMaster_Reducer = (state = INIT_STATE, action) => {
@@ -27,8 +30,7 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
     case GET_ROLE_LIST_API:
       return {
         ...state,
-        roleList: action.payload,
-        listBtnLoading: true,
+        loading: true,
       }
 
 
@@ -36,7 +38,7 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         roleList: action.payload,
-        listBtnLoading: false,
+        loading: false,
       }
 
     case POST_ROLE_MASTER:
@@ -53,17 +55,36 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
 
       };
 
-    // // delete api
+    // delete api
+
+
+    case DELETE_ROLE_LIST_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
+
     case DELETE_ROLE_LIST_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMsg: action.payload,
       };
 
     // edit api
+
+    case EDIT_ROLE_LIST_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
+
     case EDIT_ROLE_LIST_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 
@@ -87,6 +108,7 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
 
 

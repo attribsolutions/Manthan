@@ -52,32 +52,20 @@ export const useSortableTable = ({ data, columns, customSearch }) => {
     }
   };
 
-  const serach = (text) => {
+  const serach = (searchText) => {
+    
+     let filter =data.filter((row) =>
+     columns.some((column) => {
+              const columnValue = row[column.dataField];
+              const isHidden = column.hidden;
 
-    let search = text.toLowerCase()
+              if (columnValue === null || isHidden || columnValue === undefined) {
+                  return false;
+              }
+              return columnValue.toString().toLowerCase().includes(searchText.toLowerCase());
+          })
+      );
 
-    let filter = data.filter((item) => {
-      let found = false
-
-      for (let i = 0; i < columns.length; i++) {
-        let isCell = item[columns[i].dataField]
-
-        if (!(isCell === null)
-          && !(isCell === undefined)
-          && typeof isCell !== 'object'
-          && !Array.isArray(isCell)) {
-          isCell = isCell.toString()
-          isCell = isCell.toLowerCase()
-          let isinclude = isCell.includes(search)
-
-          if (isinclude && !found) {
-            found = isinclude
-          }
-        }
-      }
-      return found
-
-    })
     setTableData(filter)
 
   }

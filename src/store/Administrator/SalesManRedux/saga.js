@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
     deleteSalesManID_Success,
     editSalesManIDSuccess,
@@ -62,11 +62,11 @@ function* Delete_SalesMan_ID_GenratorFunction({ config = {} }) {
 }
 
 function* SalesManSaga() {
-    yield takeEvery(SAVE_SALES_MAN_MASTER, save_SalesMan_Master_GenFun)
-    yield takeEvery(GET_SALESMAN_LIST, Post_SalesMan_List_GenratorFunction)
-    yield takeEvery(DELETE_SALESMAN_ID, Delete_SalesMan_ID_GenratorFunction)
-    yield takeEvery(EDIT_SALESMAN_ID, Edit_SalesMan_ID_GenratorFunction)
-    yield takeEvery(UPDATE_SALESMAN_ID, Update_SalesMan_ID_GenratorFunction)
+    yield takeLatest(SAVE_SALES_MAN_MASTER, save_SalesMan_Master_GenFun)
+    yield takeLatest(GET_SALESMAN_LIST, Post_SalesMan_List_GenratorFunction)
+    yield takeLatest(DELETE_SALESMAN_ID, Delete_SalesMan_ID_GenratorFunction)
+    yield takeLatest(EDIT_SALESMAN_ID, Edit_SalesMan_ID_GenratorFunction)
+    yield takeLatest(UPDATE_SALESMAN_ID, Update_SalesMan_ID_GenratorFunction)
 }
 
 export default SalesManSaga;

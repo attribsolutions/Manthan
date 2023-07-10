@@ -6,25 +6,52 @@ import {
     SALES_RETURN_LIST_API,
     SAVE_SALES_RETURN_MASTER,
     SALES_RUTURN_API_ERROR_ACTION,
-    DELETE_SALES_RETURN_ID
+    DELETE_SALES_RETURN_ID,
+    SALES_RETURN_ADD_BUTTON_ACTION,
+    SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS,
+    INVOICE_NUMBER
 } from "./actionType"
 
 const INIT_STATE = {
     loading: false,
     InvoiceNo: [],
+    addButtonData: { Status: false },
+    addBtnLoading: false,
     postMsg: { Status: false },
     salesReturnList: [],
     deleteMsg: { Status: false },
     saveBtnloading: false,
     listBtnLoading: false,
+    invoiceNoDropDownLoading: false,
+
 }
 
 const SalesReturnReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
+        case SALES_RETURN_ADD_BUTTON_ACTION:
+            return {
+                ...state,
+                addBtnLoading: true,
+            }
+
+        case SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS:
+            return {
+                ...state,
+                addBtnLoading: false,
+                addButtonData: action.payload,
+            }
+
+        case INVOICE_NUMBER:
+            return {
+                ...state,
+                invoiceNoDropDownLoading: true,
+            }
+
         case INVOICE_NUMBER_SUCCESS:
             return {
                 ...state,
+                invoiceNoDropDownLoading: false,
                 InvoiceNo: action.payload,
             }
 
@@ -37,8 +64,8 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
         case SAVE_SALES_RETURN_MASTER_SUCCESS:
             return {
                 ...state,
-                postMsg: action.payload,
                 saveBtnloading: false,
+                postMsg: action.payload,
 
             }
 
@@ -59,7 +86,6 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 listBtnLoading: action.config.btnId,
-                deleteMsg: action.payload,
             }
 
         case DELETE_SALES_RETURN_ID_SUCCESS:
@@ -72,8 +98,10 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
         case SALES_RUTURN_API_ERROR_ACTION:
             return {
                 ...state,
+                addBtnLoading: false,
                 saveBtnloading: false,
                 loading: false,
+                invoiceNoDropDownLoading: false,
                 listBtnLoading: false,
             };
         default:

@@ -3,7 +3,8 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
-import { AlertState, get_ImageType_ForDropDown } from '../../../../../store/actions'
+import { customAlert } from '../../../../../CustomAlert/ConfirmDialog'
+import {  get_ImageType_ForDropDown } from '../../../../../store/actions'
 
 
 export default function Image(props) {
@@ -52,7 +53,7 @@ export default function Image(props) {
             });
             if ((found1) && (type === "ImageType")) {
                 dispatch(
-                    AlertState({
+                    customAlert({
                         Type: 4,
                         Status: true,
                         Message: `${event.label} is alerady selected`,

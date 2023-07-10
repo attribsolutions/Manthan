@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects"
+import { call, put, takeLatest } from "redux-saga/effects"
 
 // Login Redux States
 import {
@@ -23,7 +23,7 @@ import {
   post_SuperAdmin,
   Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List,
 } from "../../../helpers/backend_helper"
-import { AlertState } from "../../actions"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 
 function* loginUser({ payload: { user, history } }) {
   try {
@@ -148,18 +148,18 @@ function* Post_SuperAdmin_API_GenratorFunction() {
     const response = yield call(post_SuperAdmin);
     yield put(postSuperAdminSuccess(response.Data));
   } catch (error) {
-    yield put(AlertState({
+    customAlert({
       Type: 4,
       Status: true, Message: "500 Error Message",
-    }));
+    });
   }
 }
 function* authSaga() {
-  yield takeEvery(LOGIN_USER, loginUser)
-  yield takeEvery(GET_USER_DETAILS_AFTER_LOGIN, afterLoginUserDetails_genFun)
-  yield takeEvery(ROLE_ACCESS_API_CALL, RoleAccessGenratorFunction)
-  yield takeEvery(LOGOUT_USER, logoutUser)
-  yield takeEvery(GET_SUPER_ADMIN_API, Post_SuperAdmin_API_GenratorFunction)
+  yield takeLatest(LOGIN_USER, loginUser)
+  yield takeLatest(GET_USER_DETAILS_AFTER_LOGIN, afterLoginUserDetails_genFun)
+  yield takeLatest(ROLE_ACCESS_API_CALL, RoleAccessGenratorFunction)
+  yield takeLatest(LOGOUT_USER, logoutUser)
+  yield takeLatest(GET_SUPER_ADMIN_API, Post_SuperAdmin_API_GenratorFunction)
 }
 
 export default authSaga

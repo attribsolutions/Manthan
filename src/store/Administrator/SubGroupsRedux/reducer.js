@@ -1,5 +1,7 @@
 import {
+  DELETE_SUBGROUP_LIST_ID,
   DELETE_SUBGROUP_LIST_ID_SUCCESS,
+  EDIT_SUBGROUPMASTER_ID,
   EDIT_SUBGROUPMASTER_ID_SUCCESS,
   GET_SUBGROUP_LIST,
   GET_SUBGROUP_LIST_SUCCESS,
@@ -17,7 +19,8 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   saveBtnloading: false,
-  listBtnLoading: false
+  listBtnLoading: false,
+  loading:false
 }
 
 const SubGroupReducer = (state = INIT_STATE, action) => {
@@ -40,26 +43,44 @@ const SubGroupReducer = (state = INIT_STATE, action) => {
     case GET_SUBGROUP_LIST:
       return {
         ...state,
-        listBtnLoading: true
+        loading: true
       }
 
     case GET_SUBGROUP_LIST_SUCCESS:
       return {
         ...state,
         SubgroupList: action.payload,
-        listBtnLoading: false
+        loading: false
 
       }
     //  del
+
+    case DELETE_SUBGROUP_LIST_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
+
     case DELETE_SUBGROUP_LIST_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteMsg: action.payload,
       };
+
+
     // edit
+    case EDIT_SUBGROUPMASTER_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
     case EDIT_SUBGROUPMASTER_ID_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 
@@ -84,6 +105,7 @@ const SubGroupReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
 
     default:

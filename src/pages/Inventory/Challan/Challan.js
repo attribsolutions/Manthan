@@ -9,7 +9,6 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -128,35 +127,32 @@ const Challan = (props) => {
         }
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.INVOICE_LIST_1,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.IN })
+                }
             }
         }
         else if (postMsg.Status === true) {
-
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                 Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -168,9 +164,8 @@ const Challan = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

@@ -14,7 +14,8 @@ import {
     PARTY_API_ERROR_ACTION,
     PARTY_ADDRESS_DELETE_ID_SUCCESS,
     DELETE_PARTY_ID,
-    EDIT_PARTY_ID
+    EDIT_PARTY_ID,
+    GET_DISTRICT_ON_STATE
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -29,6 +30,7 @@ const INIT_STATE = {
     saveBtnloading: false,
     listBtnLoading: false,
     PartyAddressDelete: { Status: false },
+    districtDropDownLoading: false
 };
 
 const PartyMasterReducer = (state = INIT_STATE, action) => {
@@ -106,10 +108,18 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             };
 
         // GetDistrictOnState API
+        case GET_DISTRICT_ON_STATE:
+            return {
+                ...state,
+                districtDropDownLoading: true
+            };
+
+
         case GET_DISTRICT_ON_STATE_SUCCESS:
             return {
                 ...state,
                 DistrictOnState: action.payload,
+                districtDropDownLoading: false
             };
 
         //get addresstypes
@@ -144,7 +154,8 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
                 ...state,
                 saveBtnloading: false,
                 listBtnLoading: false,
-                loading: false
+                loading: false,
+                districtDropDownLoading: false
             };
 
         default:

@@ -10,9 +10,10 @@ import {
     Row
 } from 'reactstrap';
 import Select from "react-select";
-import { AlertState, getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
+import {  getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import BOMTable from './Table';
+import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 
 function ItemTab(props) {
 
@@ -72,15 +73,14 @@ function ItemTab(props) {
             || (Quantity === "")
         ) {
 
-            dispatch(
-                AlertState({
+                customAlert({
                     Type: 4,
                     Status: true,
                     Message: JSON.stringify(invalidMsg1),
                     RedirectPath: false,
                     PermissionAction: false,
                 })
-            );
+            
             return;
         }
         const val = {

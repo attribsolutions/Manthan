@@ -3,7 +3,7 @@ import { Button, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 import { deleteGSTId_ForMaster, deleteGSTId_ForMaster_Success } from '../../../../../store/Administrator/GSTRedux/action';
 import { useDispatch, useSelector } from 'react-redux';
-import { AlertState } from '../../../../../store/actions';
+import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 
 function GSTTable(props) {
   
@@ -24,7 +24,7 @@ function GSTTable(props) {
     }
     else {
       dispatch(
-        AlertState({
+        customAlert({
           Type: 5,
           Status: true,
           Message: `Are you sure you want to delete this GST"`,
@@ -46,7 +46,7 @@ function GSTTable(props) {
       props.func(fil);
 
       dispatch(
-        AlertState({
+        customAlert({
           Type: 1,
           Status: true,
           Message: deleteMsg.Message,
@@ -55,7 +55,7 @@ function GSTTable(props) {
     } else if (deleteMsg.Status === true) {
       dispatch(deleteGSTId_ForMaster_Success({ Status: false }));
       dispatch(
-        AlertState({
+        customAlert({
           Type: 3,
           Status: true,
           Message: JSON.stringify(deleteMsg.Message),

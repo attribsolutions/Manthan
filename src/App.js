@@ -22,7 +22,7 @@ import "./assets/scss/preloader.scss"
 const App = props => {
   const history = useHistory();
   const userPageAccess = history.location.state
-
+ 
   function getLayout() {
     let layoutCls = VerticalLayout
     switch (props.layout.layoutType) {

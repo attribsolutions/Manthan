@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeLatest } from "redux-saga/effects";
 import {
   RoleAccessAdd_AddPage_Button_Api,
   RoleAccessAdd_Delete_Api,
@@ -156,16 +156,16 @@ function* isCheckRoleAccessMaster_GenFun({ id, cell, check }) {
 
 
 export default function* RoleAccessSaga() {
-  yield takeEvery(DELETE_ROLE_ACCESS_lIST, Delete_RoleAccessList_GenFunc);
-  yield takeEvery(PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST, PageDropdownForRoleAccessList_GenFunc);
-  yield takeEvery(GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE, GetRoleAccessListForRoleAccessList_GenFunc);
-  yield takeEvery(GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, GoButtonHandlerForRoleAccessList_GenFunc);
-  yield takeEvery(ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, AddPageHandlerForRoleAccessList_GenFunc);
-  yield takeEvery(SAVE_ROLE_ACCESS_ADD_ACTION, saveRoleAccessAdd_GenFunc);
-  yield takeEvery(SAVE_COPY_ROLE_ACCESS_ACTION, saveRoleAccessCopy_GenFun);
-  yield takeEvery(GET_ROLEACCESS_LIST_PAGE, getList_RoleAccessList_GenFunc);
-  yield takeEvery(DELETE_ROLE_ACCESS_MASTER, deleteRoleAccessMaster_GenFun);
-  yield takeEvery("IS_CHECK_ROLE_ACCESS_MASTER", isCheckRoleAccessMaster_GenFun);
+  yield takeLatest(DELETE_ROLE_ACCESS_lIST, Delete_RoleAccessList_GenFunc);
+  yield takeLatest(PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST, PageDropdownForRoleAccessList_GenFunc);
+  yield takeLatest(GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE, GetRoleAccessListForRoleAccessList_GenFunc);
+  yield takeLatest(GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, GoButtonHandlerForRoleAccessList_GenFunc);
+  yield takeLatest(ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, AddPageHandlerForRoleAccessList_GenFunc);
+  yield takeLatest(SAVE_ROLE_ACCESS_ADD_ACTION, saveRoleAccessAdd_GenFunc);
+  yield takeLatest(SAVE_COPY_ROLE_ACCESS_ACTION, saveRoleAccessCopy_GenFun);
+  yield takeLatest(GET_ROLEACCESS_LIST_PAGE, getList_RoleAccessList_GenFunc);
+  yield takeLatest(DELETE_ROLE_ACCESS_MASTER, deleteRoleAccessMaster_GenFun);
+  yield takeLatest("IS_CHECK_ROLE_ACCESS_MASTER", isCheckRoleAccessMaster_GenFun);
 
 
 }

@@ -66,9 +66,9 @@ export const deleteGRNIdSuccess = (resp) => ({
 });
 
 
-export const makeGRN_Mode_1Action = (data, pageMode, path) => ({
+export const makeGRN_Mode_1Action = (config = {}) => ({
   type: MAKE_GRN_MODE_1_ACTION,
-  data, pageMode, path
+  config
 });
 
 export const makeGRN_Mode_1ActionSuccess = list => ({

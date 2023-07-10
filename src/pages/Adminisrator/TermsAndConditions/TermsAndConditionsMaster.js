@@ -60,7 +60,7 @@ const TermsAndConditionsMaster = (props) => {
     const { postMsg, updateMsg, pageField, userAccess, saveBtnloading } = useSelector((state) => ({
         saveBtnloading: state.TermsAndConditionsReducer.saveBtnloading,
         postMsg: state.TermsAndConditionsReducer.PostData,
-        updateMsg: state.TermsAndConditionsReducer.TermsAndConditionsupdateMessage,
+        updateMsg: state.TermsAndConditionsReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -160,7 +160,7 @@ const TermsAndConditionsMaster = (props) => {
             dispatch(saveTermAndConditionSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])

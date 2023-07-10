@@ -75,7 +75,7 @@ const Order = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const userAdminRole = _cfunc.loginUserAdminRole();
-    const ref1 = useRef('')
+
 
     const fileds = {
         id: "",
@@ -256,8 +256,14 @@ const Order = (props) => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
-
-            setTermsAndConTable([])
+            setSelecedItemWiseOrder(true)
+            setGoBtnDissable(false)
+            setOrderAmount(0);
+            setTermsAndConTable([]);
+            setorderTypeSelect('');
+            setisOpen_assignLink(false)
+            setorderItemTable([])
+            setsupplierSelect('');
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
             const liveMode = false  // temporary not working code thats why false use line no. 253 to 289
@@ -282,8 +288,10 @@ const Order = (props) => {
                         Party: _cfunc.loginPartyID(),
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
-                        btnId: "",
-                        jsonBody, subPageMode: url.INVOICE_1, path: url.INVOICE_1, pageMode: mode.defaultsave, customer,
+                        jsonBody, subPageMode: url.INVOICE_1,
+                        path: url.INVOICE_1,
+                        pageMode: mode.defaultsave,
+                        customer,
                         errorMsg: "Order Save Successfully But Can't Make Invoice"
                     }));
                 }
@@ -386,7 +394,12 @@ const Order = (props) => {
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
-        FSSAIExipry: i.FSSAIExipry
+        FSSAIExipry: i.FSSAIExipry,
+        GSTIN: i.GSTIN,
+        FSSAINo: i.FSSAINo,
+        IsTCSParty: i.IsTCSParty,
+        ISCustomerPAN: i.PAN,
+
     }))
 
     const orderTypeOptions = orderType.map((i) => ({
@@ -418,17 +431,20 @@ const Order = (props) => {
         {
             dataField: "GroupName",
             text: "Group",
+            classes: 'table-cursor-pointer',
             sort: true,
         },
         {
             dataField: "SubGroupName",
             text: "SubGroup",
+            classes: 'table-cursor-pointer',
             sort: true,
         },
 
         {//------------- ItemName column ----------------------------------
             dataField: "ItemName",
             text: "Item Name",
+            classes: 'table-cursor-pointer',
             sort: true,
             sortValue: (cell, row) => row["ItemName"],
             headerFormatter: (value, row, k, f) => {
@@ -437,8 +453,8 @@ const Order = (props) => {
                         <div>
                             Item Name
                         </div>
-                        <div className="cursor-pointer" onClick={assignItem_onClick}>
-                            <samp id={"__assignItem_onClick"} style={{ display: "none" }} className="text-primary fst-italic text-decoration-underline"
+                        <div onClick={assignItem_onClick}>
+                            <samp id={"__assignItem_onClick"} style={{ display: "none", cursor: "pointer" }} className="text-primary fst-italic text-decoration-underline"
                             >
                                 Assign-Items</samp>
                         </div>
@@ -450,12 +466,15 @@ const Order = (props) => {
         {
             dataField: "StockQuantity",
             text: "Stock Quantity",
+            classes: 'table-cursor-pointer',
+            align: () => "right",
             sort: true,
 
         },
 
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
+            classes: 'table-cursor-pointer',
             formatter: (value, row, k) => {
                 return (
                     <>
@@ -482,6 +501,7 @@ const Order = (props) => {
 
         {  //------------- Unit column ----------------------------------
             text: "Unit",
+            classes: 'table-cursor-pointer',
             dataField: "",
 
             headerStyle: () => {
@@ -565,7 +585,7 @@ const Order = (props) => {
 
                                 row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
                                 itemWise_CalculationFunc(row)
-                                document.getElementById(`Rate-${key}`).innerText = row.Rate
+                                document.getElementById(`Rate-${key}`).innerText = _cfunc.amountCommaSeparateFunc(row.Rate)
                             }}
                         >
                         </Select >
@@ -577,6 +597,7 @@ const Order = (props) => {
 
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
+            classes: 'table-cursor-pointer',
             dataField: "",
             formatter: (value, row, k) => {
                 if (subPageMode === url.ORDER_1) {
@@ -601,7 +622,7 @@ const Order = (props) => {
                     return (
                         <div key={row.id} className="text-end">
 
-                            <span id={`Rate-${k}`}>{row.Rate}</span>
+                            <span id={`Rate-${k}`}>{_cfunc.amountCommaSeparateFunc(row.Rate)}</span>
                         </div>
                     )
                 }
@@ -616,6 +637,7 @@ const Order = (props) => {
 
         {//------------- MRP column ----------------------------------
             text: "MRP",
+            classes: 'table-cursor-pointer',
             dataField: "",
             formatter: (value, row, k) => {
 
@@ -632,6 +654,7 @@ const Order = (props) => {
 
         { //------------- Comment column ----------------------------------
             text: "Comment",
+            classes: 'table-cursor-pointer',
             dataField: "",
             formatter: (value, row, k) => {
                 return (
@@ -733,20 +756,13 @@ const Order = (props) => {
 
     function itemWise_CalculationFunc(row) {
         const calculate = orderCalculateFunc(row) //order calculation function 
-
         row["Amount"] = calculate.roundedTotalAmount
 
-        let sum = 0
-        orderItemTable.forEach(ind => {
-            if (!Number(ind.Amount)) {
-                ind.Amount = 0
-            }
-            var amt = Number(ind.Amount)
-            sum = sum + amt
-        });
-        setOrderAmount(sum.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+        let sumOfAmount = orderItemTable.reduce((accumulator, currentObject) => accumulator + Number(currentObject["Amount"]) || 0, 0);
+        setOrderAmount(sumOfAmount.toFixed(2))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(sumOfAmount)}`))
     };
+
 
     const item_AddButtonHandler = () => {
 
@@ -824,6 +840,8 @@ const Order = (props) => {
             const itemArr = []
             const isVDC_POvalidMsg = []
 
+            let IsComparGstIn = { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
+
             await orderItemTable.forEach(i => {
 
                 if ((i.Quantity > 0) && !(i.Rate > 0)) {
@@ -894,11 +912,13 @@ const Order = (props) => {
                     }
                 };
             }
+            // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
+
 
             function isRowValueChanged({ i, isedit, isdel }) {
 
 
-                const calculate = orderCalculateFunc(i)
+                const calculate = orderCalculateFunc(i, IsComparGstIn)
 
 
                 const arr = {
@@ -911,17 +931,21 @@ const Order = (props) => {
                     Unit: i.Unit_id,
                     BaseUnitQuantity: (Number(i.BaseUnitQuantity) * Number(i.Quantity)).toFixed(2),
                     Margin: "",
-                    BasicAmount: calculate.basicAmount,
-                    GSTAmount: calculate.roundedGstAmount,
+
                     GST: i.GST_id,
-                    GSTPercentage: i.GSTPercentage,
                     CGST: calculate.CGST_Amount,
                     SGST: calculate.SGST_Amount,
-                    IGST: 0,
-                    CGSTPercentage: (i.GSTPercentage / 2),
-                    SGSTPercentage: (i.GSTPercentage / 2),
-                    IGSTPercentage: 0,
+                    IGST: calculate.IGST_Amount,
+
+                    GSTPercentage: calculate.GST_Percentage,
+                    CGSTPercentage: calculate.CGST_Percentage,
+                    SGSTPercentage: calculate.SGST_Percentage,
+                    IGSTPercentage: calculate.IGST_Percentage,
+
+                    BasicAmount: calculate.basicAmount,
+                    GSTAmount: calculate.roundedGstAmount,
                     Amount: calculate.roundedTotalAmount,
+
                     IsDeleted: isedit,
                     Comment: i.Comment
                 }
@@ -951,7 +975,7 @@ const Order = (props) => {
             if (itemArr.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter One Item Quantity",
+                    Message: "Please Select 1 Item Quantity",
                 })
 
                 return
@@ -1157,9 +1181,6 @@ const Order = (props) => {
                                                         loading={goBtnloading}
                                                         id={`go-btn${subPageMode}`}
                                                         onClick={(e) => {
-                                                            if (itemSelectDropOptions.length > 0) {
-                                                                goButtonHandler()
-                                                            }
                                                             setSelecedItemWiseOrder(false)
                                                             setorderItemTable(itemSelectDropOptions)
                                                             setItemSelect('')
@@ -1380,9 +1401,7 @@ const Order = (props) => {
 
                     </div>
 
-                    <div className="table-responsive table mt-n3" >
 
-                    </div>
                     <ToolkitProvider
                         keyField={"Item_id"}
                         data={orderItemTable}
@@ -1393,15 +1412,14 @@ const Order = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table">
+                                        <div className="table-responsive table " style={{ minHeight: "45vh" }} >
                                             <BootstrapTable
                                                 keyField={"Item_id"}
                                                 id="table_Arrow"
-                                                ref={ref1}
                                                 defaultSorted={defaultSorted}
-                                                classes={"table  table-bordered table-hover"}
+                                                classes={"table  table-bordered table-hover "}
                                                 noDataIndication={
-                                                    <div className="text-danger text-center ">
+                                                    <div className="text-danger text-center table-cursor-pointer">
                                                         Items Not available
                                                     </div>
                                                 }

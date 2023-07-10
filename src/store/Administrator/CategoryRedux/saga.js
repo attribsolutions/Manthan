@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   SAVE_CATEGORY_MASTER,
   DELETE_CATEGORY_ID,
@@ -21,8 +21,6 @@ import {
   saveCategoryMaster_Success,
   updateCategoryIDSuccess
 } from "./action";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
-
 
 function* save_Method_ForCategory_GenFun({ config }) {              // Save API
   try {
@@ -63,11 +61,11 @@ function* Update_Category_ID_GenratorFunction({ config }) {         // update AP
 }
 
 function* CategorySaga() {
-  yield takeEvery(SAVE_CATEGORY_MASTER, save_Method_ForCategory_GenFun)
-  yield takeEvery(GET_CATEGORY_LIST, Get_Category_List_GenratorFunction)
-  yield takeEvery(DELETE_CATEGORY_ID, Delete_Category_ID_GenratorFunction)
-  yield takeEvery(EDIT_CATEGORY_ID, Edit_Category_ID_GenratorFunction)
-  yield takeEvery(UPDATE_CATEGORY_ID, Update_Category_ID_GenratorFunction)
+  yield takeLatest(SAVE_CATEGORY_MASTER, save_Method_ForCategory_GenFun)
+  yield takeLatest(GET_CATEGORY_LIST, Get_Category_List_GenratorFunction)
+  yield takeLatest(DELETE_CATEGORY_ID, Delete_Category_ID_GenratorFunction)
+  yield takeLatest(EDIT_CATEGORY_ID, Edit_Category_ID_GenratorFunction)
+  yield takeLatest(UPDATE_CATEGORY_ID, Update_Category_ID_GenratorFunction)
 }
 
 export default CategorySaga;

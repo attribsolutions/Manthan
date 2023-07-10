@@ -13,7 +13,7 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner } from "../../../components/Common/CommonButton";
 
 const CategoryList = (props) => {
 
@@ -21,6 +21,7 @@ const CategoryList = (props) => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.CategoryReducer.listBtnLoading,
+      GoBtnlistloading: state.CategoryReducer.loading,
       tableList: state.CategoryReducer.CategoryListData,
       editData: state.CategoryReducer.editData,
       updateMsg: state.CategoryReducer.updateMessage,
@@ -48,24 +49,21 @@ const CategoryList = (props) => {
     dispatch(getCategorylist());
   }, []);
 
-  const { pageField, } = reducers
+  const { pageField, GoBtnlistloading } = reducers
 
   return (
     <React.Fragment>
+      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
       {
-        reducers.listBtnLoading ?
-          <Listloader />
-          :
-          (pageField) ?
-            <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={CategoryMaster}
-              masterPath={url.CATEGORY}
-              ButtonMsgLable={"Category"}
-              deleteName={"Name"}
-            />
-            : <><Listloader /></>
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={CategoryMaster}
+          masterPath={url.CATEGORY}
+          ButtonMsgLable={"Category"}
+          deleteName={"Name"}
+        />
       }
 
     </React.Fragment>

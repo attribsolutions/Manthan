@@ -3,7 +3,7 @@ import { date_dmy_func } from "../../components/Common/CommonFunction";
 export const columns = [
     "SR No.",
     "ItemName",
-    "BatchCode",
+    // "BatchCode",
     "MRP",
     "Box",
     // "Outer ",
@@ -43,9 +43,9 @@ export const Rows = (data) => {
     let TotalQuantity = 0
     let SrNO = 1
 
-    debugger
+
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
-        debugger
+
         const { ItemName, MRP, BatchCode, Box, Outer, Quantity, UnitName, MRPValue, PiecesQuantity, BoxQuantity } = currentItem;
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
@@ -63,24 +63,22 @@ export const Rows = (data) => {
 
     // Object.values(groupedItems).forEach((element, key) => {
     InvoiceItems.forEach((element, key) => {
-        debugger
+
         const tableitemRow = [
             SrNO++,
             element.ItemName,
-            element.BatchCode,
+            // element.BatchCode,
             element.MRPValue,
             Number(element.BoxQty).toFixed(2),
-            // element.Outer,
             Number(element.PiecesQty).toFixed(2),
-            element.Quantity,
-            // element.UnitName,
+            element.QtyInNo,
         ];
 
         function totalLots() {
             TotalMRP = Number(TotalMRP) + Number(element.MRPValue)
             TotalBox = Number(TotalBox) + Number(element.BoxQty)
             TotalPcs = Number(TotalPcs) + Number(element.PiecesQty)
-            TotalQuantity = Number(TotalQuantity) + Number(element.Quantity)
+            TotalQuantity = Number(TotalQuantity) + Number(element.QtyInNo)
         };
 
         function totalrow() {
@@ -88,10 +86,10 @@ export const Rows = (data) => {
                 " ",
                 "Total",
                 "",
-                ``,
-                ` ${Number(TotalBox).toFixed(2)}`,
-                `${Number(TotalPcs).toFixed(2)}`,
+                `${Number(TotalBox).toFixed(2)}`,
+                ` `,
                 `${Number(TotalQuantity).toFixed(2)}`,
+                // `${Number(TotalQuantity).toFixed(2)}`,
 
 
             ];

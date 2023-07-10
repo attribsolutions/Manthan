@@ -1,6 +1,7 @@
 import { Button, Spinner } from "reactstrap"
 import { loginUserID } from "./CommonFunction";
 import * as mode from "../../routes/PageMode"
+import { Children } from "react";
 
 export function SaveButton(props) {
   const { pageMode = '', userAcc = {}, editCreatedBy } = props
@@ -110,7 +111,25 @@ export function Change_Button(props) {
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>
 }
+export function C_Button(props) {
+  const {
+    loading,
+    color,
+    Children
+  } = props
 
+  return loading ?
+    <Button
+      color={color}
+      disabled
+      title={`Add Button Loging...`}
+    >
+      <Spinner style={{ height: "12px", width: "12px" }} color="primary" />
+    </Button>
+    : <Button
+      {...props}
+    />
+}
 
 
 export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
@@ -127,7 +146,6 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
-
         :
         <button
           type="submit"
@@ -141,13 +159,11 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
         </button>}
     </div>
   )
-
 }
 
 
 
-export function Loader() {
-
+export function Loader() {// linner component
   return <div className="dot-pulse"> <span> </span>     &nbsp;
     <div className="bounce1" style={{ background: "white" }}></div>
     <div className="bounce2" style={{ background: "white" }}></div>
@@ -156,17 +172,18 @@ export function Loader() {
 
 }
 
-export function Listloader() {
+
+export function Listloader() {// common Listcomponent
   return <div id="api_spinner" >
     <div className="api_spinner_body " >
-      <span className="spinner" style={{ left: "-5cm" }}></span>
+      <span className="spinner" ></span>
     </div>
   </div>
 
 }
 
 
-export function Listloader1({ show = false }) {
+export function Listloader1({ show = false }) {// common Listcomponent
   if (!show) { return null }
   else {
     return <div id="api_spinner" >
@@ -178,6 +195,17 @@ export function Listloader1({ show = false }) {
 }
 
 
+export function CustomSppiner({isLoading}) {// common Listcomponent
+if(!isLoading){
+return null
+}
+  return <div id="api_spinner" >
+    <div className="api_spinner_body " >
+      <span className="spinner" ></span>
+    </div>
+  </div>
+
+}
 
 
 

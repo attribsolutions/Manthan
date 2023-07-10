@@ -50,8 +50,8 @@ import { postSelect_Field_for_dropdown } from "../../../store/Administrator/Part
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
-import { calculateSalesReturnFunc, salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import { calculateSalesReturnFunc } from "../../Sale/SalesReturn/SalesCalculation";
 
 const Credit = (props) => {
     const history = useHistory();
@@ -184,37 +184,34 @@ const Credit = (props) => {
         }
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveCredit_Success({ Status: false }))
             setState(() => resetFunction(fileds, state)) //Clear form values 
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let alertResponse = await customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.CREDIT_LIST,
-                }))
+                })
+                if (alertResponse) {
+                    history.push({ pathname: url.CREDIT_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveCredit_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -342,11 +339,11 @@ const Credit = (props) => {
         let v1 = Number(sum);
         let v2 = Number(input)
         if (!(v1 >= v2)) {
-            event.target.value = v1;
+            event.target.value = Number(v1.toFixed(2));
         }
         onChangeText({ event, state, setState })
         AmountPaidDistribution(event.target.value)
-        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(event.target.value).toFixed(2)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${_cfunc.amountCommaSeparateFunc(event.target.value)}`))
     }
 
     function AmountPaidDistribution(val1) {
@@ -381,13 +378,13 @@ const Credit = (props) => {
         }
         row.gstPercentage = row.GSTPercentage
         const calculate = calculateSalesReturnFunc(row)
-        
+
         row["AmountTotal"] = Number(calculate.roundedTotalAmount);
         row["BasicAmount"] = Number(calculate.basicAmount);
         row["GSTAmount"] = Number(calculate.roundedGstAmount);
         row["CGSTAmount"] = Number(calculate.CGST_Amount);
         row["SGSTAmount"] = Number(calculate.SGST_Amount);
-        
+
         let sum = 0
         InvoiceItems.forEach(ind => {
             if (ind.AmountTotal === undefined) {
@@ -544,14 +541,20 @@ const Credit = (props) => {
         {
             text: "Invoice Amount",
             dataField: "GrandTotal",
+            align: () => 'right',
+            formatter: (cellContent) => <>{_cfunc.amountCommaSeparateFunc(cellContent)}</>,
         },
         {
             text: "Paid",
             dataField: "PaidAmount",
+            align: () => 'right',
+            formatter: (cellContent) => <>{_cfunc.amountCommaSeparateFunc(cellContent)}</>,
         },
         {
             text: "Bal Amt",
             dataField: "BalanceAmount",
+            align: () => 'right',
+            formatter: (cellContent) => <>{_cfunc.amountCommaSeparateFunc(cellContent)}</>,
         },
         {
             text: "Calculate",
@@ -563,7 +566,7 @@ const Credit = (props) => {
                     <CInput
                         key={`Quantity${row.FullInvoiceNumber}${key}`}
                         id={`Quantity${row.FullInvoiceNumber}`}
-                        pattern={decimalRegx}
+                        cpattern={decimalRegx}
                         defaultValue={pageMode === mode.view ? row.Amount : row.Calculate}
                         disabled={pageMode === mode.view ? true : false}
                         autoComplete="off"
@@ -789,9 +792,10 @@ const Credit = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.GrandTotal}</Label>
                                         <Col sm="7">
-                                            <Input
+                                            <CInput
                                                 name="GrandTotal"
                                                 id="GrandTotal"
+                                                cpattern={decimalRegx}
                                                 value={values.GrandTotal}
                                                 type="text"
                                                 className={isError.GrandTotal.length > 0 ? "is-invalid form-control" : "form-control"}
@@ -943,19 +947,3 @@ const Credit = (props) => {
     }
 };
 export default Credit;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

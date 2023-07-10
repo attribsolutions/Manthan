@@ -26,7 +26,6 @@ import {
     updateCategoryID,
     updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -48,6 +47,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import AddMaster from "../../Adminisrator/EmployeePages/Drodown";
 import CategoryTypeMaster from "../CategoryTypePages/CategoryTypeMaster";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const CategoryMaster = (props) => {
 
@@ -166,7 +166,7 @@ const CategoryMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveCategoryMaster_Success({ Status: false }))
@@ -174,30 +174,28 @@ const CategoryMaster = (props) => {
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.CATEGORY_lIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.CATEGORY_lIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveCategoryMaster_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -209,13 +207,10 @@ const CategoryMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateCategoryIDSuccess({ Status: false }));
-            dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
-            );
         }
     }, [updateMsg, modalCss]);
 

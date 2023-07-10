@@ -13,9 +13,9 @@ import ChangePasswordReducer from "./auth/changepassword/reducer"
 
 
 //  *********************** Administrator ***********************
-import AlertReducer from './Utilites/CustomAlertRedux/reducer'
-import CommonError from './Utilites/CommonError/reducer'
-import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
+// import AlertReducer from './Utilites/CustomAlertRedux/reducer'
+// import CommonError from './Utilites/CommonError/reducer'
+
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 import CommonPageFieldReducer from './Utilites/PageFiled/reducer'
 import PdfReportReducers from './Utilites/PdfReport/reducer'
@@ -88,14 +88,12 @@ import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
 import CredietDebitReducer from "./Accounting/CreditRedux/reducer"
 import SapLedgerReducer from "./Report/SapLedger Redux/reducer"
 
-
-
-
 //***************************Accounting ************************** */
 import ReceiptReducer from "./Accounting/Receipt/reducer"
 
 //***************************Reports ************************** */
 import OrderSummaryReducer from "./Report/OrderSummaryRedux/reducer"
+import StockReportReducer from "./Report/StockReport/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -104,9 +102,8 @@ const rootReducer = combineReducers({
   ForgetPassword,
   Profile,
   SpinnerReducer,
-  AlertReducer,
-  CommonError,
-  CustomSearchReducer,
+  // AlertReducer,
+  // CommonError,
   BreadcrumbReducer,
   CommonPageFieldReducer,
   PdfReportReducers,
@@ -170,5 +167,6 @@ const rootReducer = combineReducers({
   OrderSummaryReducer,
   PartySettingReducer,
   StockEntryReducer,
+  StockReportReducer,
 })
 export default rootReducer

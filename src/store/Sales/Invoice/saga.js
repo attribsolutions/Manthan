@@ -1,6 +1,7 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   CommonConsole,
+  amountCommaSeparateFunc,
   concatDateAndTime,
   loginUserID,
 } from "../../../components/Common/CommonFunction";
@@ -32,8 +33,6 @@ import {
   Uploaded_EwayBillSuccess,
   Cancel_EInvoiceSuccess,
   Cancel_EwayBillSuccess,
-  Print_EInvoiceAction,
-  Print_EwayBillSuccess
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -83,6 +82,7 @@ function* InvoiceListGenFunc({ config }) {
     }
 
     const newList = yield response.Data.map((i) => {
+      i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
       if (i.LoadingSheetCreated === true) {
         i["LoadingSheetCreated"] = "LoadingSheet Created"
       } else {
@@ -135,9 +135,8 @@ function* DeleteInvoiceGenFunc({ config }) {
 }
 
 // GO-Botton SO-invoice Add Page API
-export function invoice_GoButton_dataConversion_Func(response, IsTCSParty, ISCustomerPAN) {
-
-  
+export function invoice_GoButton_dataConversion_Func(response, customer = '') {
+  const { IsTCSParty, ISCustomerPAN } = customer;
 
   // Iterate over OrderItemDetails array and perform data conversion
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
@@ -219,7 +218,7 @@ export function invoice_GoButton_dataConversion_Func(response, IsTCSParty, ISCus
 }
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
-  const { subPageMode, path, pageMode, customer, errorMsg, IsTCSParty, ISCustomerPAN = false } = config;
+  const { subPageMode, path, pageMode, customer, errorMsg, } = config;
 
   try {
 
@@ -236,7 +235,7 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     response["page_Mode"] = pageMode
     response["customer"] = customer
 
-    const updatedResp = invoice_GoButton_dataConversion_Func(response, IsTCSParty, ISCustomerPAN)
+    const updatedResp = invoice_GoButton_dataConversion_Func(response, customer)
 
     yield put(GoButtonForinvoiceAddSuccess(updatedResp));
 
@@ -317,16 +316,16 @@ function* Cancle_EwayBillGenFunc({ config }) {
 // MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
 
-  yield takeEvery(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
-  yield takeEvery(INVOICE_LIST_GO_BUTTON_FILTER, InvoiceListGenFunc)
-  yield takeEvery(EDIT_INVOICE_LIST, editInvoiceListGenFunc)
-  yield takeEvery(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
-  yield takeEvery(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)
-  yield takeEvery(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
-  yield takeEvery(UPLOADED_E_INVOICE_ACTION, Uploade_EInvoiceGenFunc)
-  yield takeEvery(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc)
-  yield takeEvery(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc)
-  yield takeEvery(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc)
+  yield takeLatest(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
+  yield takeLatest(INVOICE_LIST_GO_BUTTON_FILTER, InvoiceListGenFunc)
+  yield takeLatest(EDIT_INVOICE_LIST, editInvoiceListGenFunc)
+  yield takeLatest(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
+  yield takeLatest(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)
+  yield takeLatest(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
+  yield takeLatest(UPLOADED_E_INVOICE_ACTION, Uploade_EInvoiceGenFunc)
+  yield takeLatest(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc)
+  yield takeLatest(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc)
+  yield takeLatest(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc)
 }
 
 export default InvoiceSaga;

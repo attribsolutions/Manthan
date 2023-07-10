@@ -6,9 +6,9 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../../store/actions";
+import {  commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -18,7 +18,7 @@ import {
     resetFunction,
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -31,15 +31,14 @@ import {
     SaveLoadingSheetMaster,
     SaveLoadingSheetMasterSucccess
 } from "../../../../store/Sales/LoadingSheetRedux/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
-import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../../CustomValidateForm";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 const LoadingSheet = (props) => {
 
@@ -56,7 +55,7 @@ const LoadingSheet = (props) => {
         Date: currentDate_ymd,
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        RouteName: "",
+        RouteName: [],
         VehicleNumber: "",
         DriverName: ""
     }
@@ -72,9 +71,11 @@ const LoadingSheet = (props) => {
         GoButton,
         Driver,
         saveBtnloading,
+        goBtnloadingSpinner,
     } = useSelector((state) => ({
         saveBtnloading: state.LoadingSheetReducer.saveBtnloading,
         postMsg: state.LoadingSheetReducer.postMsg,
+        goBtnloadingSpinner: state.LoadingSheetReducer.goBtnloadingSpinner,
         GoButton: state.LoadingSheetReducer.goBtnLoadingSheet,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -96,6 +97,11 @@ const LoadingSheet = (props) => {
         dispatch(invoiceListGoBtnfilter())
         dispatch(getDriverList())
     }, []);
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`LoadingSheet Count:${Data.length}`))
+    }, [GoButton]);
+
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -120,37 +126,36 @@ const LoadingSheet = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
-
+            dispatch(LoadingSheet_GoBtn_API_Succcess([]))
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.LOADING_SHEET_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.LOADING_SHEET_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
-            dispatch(AlertState({
+             customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+
+                 Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -181,12 +186,16 @@ const LoadingSheet = (props) => {
         label: index.Name,
     }));
 
+    const onChangeBtnHandler = () => {
+        dispatch(LoadingSheet_GoBtn_API_Succcess([]))
+    }
     function goButtonHandler() {
+        const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(','); //commas separate
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             Party: _cfunc.loginPartyID(),
-            Route: values.RouteName === "" ? "" : values.RouteName.value,
+            Route: isRoute,
             LoadingSheetID: ""
         });
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
@@ -217,52 +226,38 @@ const LoadingSheet = (props) => {
         custom: true,
     };
 
-    const saveHandeller = async (event) => {
 
-        event.preventDefault();
-        const btnId = event.target.id
+    const saveHandler = async (event) => {
+        try {
+            event.preventDefault();
+            const btnId = event.target.id;
 
-        const CheckArray = Data.filter((index) => {
-            return (index.selectCheck === true)
-        })
-
-        const trueValues = Data.map((index) => {
-            return (index.selectCheck === true)
-        })
-
-        const totalInvoices = trueValues.reduce((count, value) => {
-            if (value === true) {
-                count++
-            }
-            return count
-        }, 0)
-
-        const GrandTotal = CheckArray.reduce((a, v) => a = a + parseFloat(v.GrandTotal), 0)
-
-        const LoadingSheetDetails = CheckArray.map((index) => ({
-            Invoice: index.id
-        }))
-
-        if (LoadingSheetDetails.length === 0) {
-            dispatch(
-                AlertState({
+            const { totalInvoices, GrandTotal, LoadingSheetDetails } = Data.reduce(
+                (acc, index) => {
+                    if (index.selectCheck === true) {
+                        acc.totalInvoices++;
+                        acc.GrandTotal += parseFloat(index.GrandTotal);
+                        acc.LoadingSheetDetails.push({ Invoice: index.id });
+                    }
+                    return acc;
+                },
+                { totalInvoices: 0, GrandTotal: 0, LoadingSheetDetails: [] }
+            );
+            if (LoadingSheetDetails.length === 0) {
+                customAlert({
                     Type: 4,
                     Status: true,
                     Message: "Minimum one Invoice is Select",
-                })
-            );
-            return _cfunc.btnIsDissablefunc({ btnId, state: false })
-        }
-        try {
+                });
+                return;
+            }
 
             if (formValid(state, setState)) {
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
-
-
+                const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
                 const jsonBody = JSON.stringify({
                     Date: values.Date,
                     Party: _cfunc.loginPartyID(),
-                    Route: values.RouteName.value,
+                    Route: isRoute,
                     Vehicle: values.VehicleNumber.value,
                     Driver: values.DriverName.value,
                     TotalAmount: GrandTotal.toFixed(2),
@@ -273,10 +268,12 @@ const LoadingSheet = (props) => {
                 });
 
                 dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
-
             }
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) {
+            _cfunc.CommonConsole(e);
+        }
     };
+
 
     function DateOnchange(e, date) {
         setState((i) => {
@@ -367,6 +364,7 @@ const LoadingSheet = (props) => {
                                             <C_DatePicker
                                                 name='FromDate'
                                                 value={values.FromDate}
+                                                disabled={Data.length > 0 && true}
                                                 onChange={FromDateOnchange}
                                             />
                                         </Col>
@@ -382,6 +380,7 @@ const LoadingSheet = (props) => {
                                             <C_DatePicker
                                                 name='ToDate'
                                                 value={values.ToDate}
+                                                disabled={Data.length > 0 && true}
                                                 onChange={ToDateOnchange}
                                             />
                                         </Col>
@@ -400,6 +399,8 @@ const LoadingSheet = (props) => {
                                                 name="RouteName"
                                                 value={values.RouteName}
                                                 isSearchable={true}
+                                                isMulti={true}
+                                                isDisabled={Data.length > 0 && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
@@ -444,64 +445,62 @@ const LoadingSheet = (props) => {
                                             )}
                                         </Col>
                                         <Col sm="1" className="mx-4 ">
-                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            {!Data.length > 0 ?
+                                                < Go_Button loading={goBtnloadingSpinner} onClick={(e) => goButtonHandler()} />
+                                                : <Change_Button
+                                                    onClick={(e) => onChangeBtnHandler()}
+                                                />
+                                            }
+
+
                                         </Col>
                                     </FormGroup>
                                 </Col >
                             </div>
                         </div>
 
-                        <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
+                        <ToolkitProvider
+                            keyField={"id"}
+                            data={Data}
+                            columns={pagesListColumns}
+                            search
                         >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-                                    keyField="id"
-                                    data={Data}
-                                    columns={pagesListColumns}
-
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <div className="table">
+                            {(toolkitProps,) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive table">
                                                 <BootstrapTable
                                                     keyField={"id"}
-                                                    bordered={true}
-                                                    striped={false}
+                                                    id="table_Arrow"
                                                     selectRow={selectAllCheck()}
-                                                    noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
+                                                    classes={"table  table-bordered table-hover"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Record Not available
+                                                        </div>
+                                                    }
+                                                    onDataSizeChange={(e) => {
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    }}
                                                     {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
                                                 />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "Loading Sheet")}
                                                 {mySearchProps(toolkitProps.searchProps)}
                                             </div>
+                                        </Col>
+                                    </Row>
 
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
-                            )
-                            }
-
-                        </PaginationProvider>
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
                         {
                             Data.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
                                             loading={saveBtnloading}
-                                            onClick={saveHandeller}
+                                            forceDisabled={goBtnloadingSpinner}
+                                            onClick={saveHandler}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
                                             module={"LoadingSheet"}

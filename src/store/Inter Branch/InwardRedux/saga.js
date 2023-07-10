@@ -1,7 +1,7 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Inward_Delete_API, Inward_List_API, Inward_Post_API, Make_Inward_Post_API } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { deleteInwardIdSuccess, getInwardListPageSuccess, makeInwardSuccess, postInwardSuccess } from "./action";
 import { DELETE_INWARD_LIST_PAGE, GET_INWARD_LIST_PAGE, MAKE_INWARD, POST_INWARD } from "./actionType";
 
@@ -15,7 +15,7 @@ function* Post_Inward_GenratorFunction({ data }) {
 
 // Inward List API
 function* get_InwardList_GenFunc({ filters }) {
-   try {
+  try {
     const response = yield call(Inward_List_API, filters);
     const newList = yield response.Data.map((i) => {
       var date = date_dmy_func(i.IBInwardDate)
@@ -31,35 +31,29 @@ function* DeleteInward_GenFunc({ id }) {
   try {
     const response = yield call(Inward_Delete_API, id);
     if (response.StatusCode === 200) yield put(deleteInwardIdSuccess(response))
-    else yield put(AlertState({
-      Type: 4,
-      Status: true, Message: JSON.stringify(response.Message),
-    }));
+    else {
+      customAlert({
+        Type: 4,
+        Message: JSON.stringify(response.Message),
+      })
+    }
   } catch (error) { CommonConsole(error) }
 }
 
-// //post api
-// function* Make_Inward_GenratorFunction({ data }) {
-//   
-//   try {
-//     const response = yield call(Make_Inward_Post_API, data);
-//     yield put(makeInwardSuccess(response));
-//   } catch (error) { CommonConsole(error) }
-// }
 
 // Make Inward Button API
 function* Make_Inward_GenratorFunction({ config }) {
   try {
-   const response = yield call(Make_Inward_Post_API, config);
-   yield put(makeInwardSuccess(response.Data))
- } catch (error) { CommonConsole(error) }
+    const response = yield call(Make_Inward_Post_API, config);
+    yield put(makeInwardSuccess(response.Data))
+  } catch (error) { CommonConsole(error) }
 }
 
 function* InwardSaga() {
-  yield takeEvery(POST_INWARD, Post_Inward_GenratorFunction)
-  yield takeEvery(GET_INWARD_LIST_PAGE, get_InwardList_GenFunc)
-  yield takeEvery(DELETE_INWARD_LIST_PAGE, DeleteInward_GenFunc)
-  yield takeEvery(MAKE_INWARD, Make_Inward_GenratorFunction)
+  yield takeLatest(POST_INWARD, Post_Inward_GenratorFunction)
+  yield takeLatest(GET_INWARD_LIST_PAGE, get_InwardList_GenFunc)
+  yield takeLatest(DELETE_INWARD_LIST_PAGE, DeleteInward_GenFunc)
+  yield takeLatest(MAKE_INWARD, Make_Inward_GenratorFunction)
 
 }
 

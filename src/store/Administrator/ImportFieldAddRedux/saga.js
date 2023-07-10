@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   delete_ImportFiledAdd_Success,
   edit_ImportFiledAdd_Success,
@@ -75,12 +75,12 @@ function* Get_ImportEXcelType_GenFun({ config }) {
 
 
 function* ImportFieldAdd_Saga() {
-  yield takeEvery(SAVE_IMPORT_FIELD_ADD, Save_ImportFieldAdd_GenFun)
-  yield takeEvery(POST_IMPORT_FIELD_ADD, Post_ImportFieldAdd_GenFun)
-  yield takeEvery(EDIT_IMPORT_FIELD_ADD, Edit_ImportFieldAdd_GenFun)
-  yield takeEvery(UPDATE_IMPORT_FIELD_ADD, Update_ImportFieldAdd_GenFun)
-  yield takeEvery(DELETE_IMPORT_FIELD_ADD, Delete_ImportFieldAdd_GenFun)
-  yield takeEvery(IMPORT_EXCEL_TYPE, Get_ImportEXcelType_GenFun)
+  yield takeLatest(SAVE_IMPORT_FIELD_ADD, Save_ImportFieldAdd_GenFun)
+  yield takeLatest(POST_IMPORT_FIELD_ADD, Post_ImportFieldAdd_GenFun)
+  yield takeLatest(EDIT_IMPORT_FIELD_ADD, Edit_ImportFieldAdd_GenFun)
+  yield takeLatest(UPDATE_IMPORT_FIELD_ADD, Update_ImportFieldAdd_GenFun)
+  yield takeLatest(DELETE_IMPORT_FIELD_ADD, Delete_ImportFieldAdd_GenFun)
+  yield takeLatest(IMPORT_EXCEL_TYPE, Get_ImportEXcelType_GenFun)
 }
 
 export default ImportFieldAdd_Saga;

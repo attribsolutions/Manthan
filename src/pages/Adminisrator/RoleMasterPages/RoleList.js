@@ -22,6 +22,7 @@ const RoleList = (props) => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.RoleMaster_Reducer.listBtnLoading,
+      loading:state.RoleMaster_Reducer.loading,
       tableList: state.RoleMaster_Reducer.roleList,
       editData: state.RoleMaster_Reducer.editData,
       updateMsg: state.RoleMaster_Reducer.updateMsg,
@@ -49,12 +50,12 @@ const RoleList = (props) => {
     dispatch(getRole());
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField } = reducers
 
   return (
     <React.Fragment>
       {
-        reducers.listBtnLoading ?
+        reducers.loading ?
           <Listloader />
           :
           (pageField) ?

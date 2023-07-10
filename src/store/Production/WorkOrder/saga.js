@@ -1,5 +1,6 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
   BOMList_Get_API,
   Post_WorkOrder_Master_API,
@@ -9,7 +10,6 @@ import {
   WorkOrder_GoButton_Post_API,
   WorkOrder_Update_Api
 } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import {
   deleteWorkOrderIdSuccess,
   editWorkOrderListSuccess,
@@ -75,7 +75,7 @@ function* editWorkOrderGenFunc({ config }) {                                    
     let response = yield call(WorkOrder_edit_Api, config);
     response.pageMode = btnmode;
     response.Data = response.Data[0];
-    if (response.StatusCode === 226) yield put(AlertState({
+    if (response.StatusCode === 226) yield put(customAlert({
       Type: 3,
       Status: true, Message: response.Message,
     }));
@@ -102,13 +102,13 @@ function* DeleteWorkOrderGenFunc({ config }) {                                  
 }
 
 function* WorkOrderSaga() {
-  yield takeEvery(GET_BOM_LIST, Get_BOMList_GenratorFunction)
-  yield takeEvery(POST_GO_BUTTON_FOR_WORK_ORDER_MASTER, GoButton_WorkOrder_post_genfun)
-  yield takeEvery(POST_WORK_ORDER_MASTER, Post_WorkOrder_GenratorFunction)
-  yield takeEvery(GET_WORK_ORDER_LIST_PAGE, GetWorkOrderGenFunc)
-  yield takeEvery(EDIT_WORK_ORDER_LIST_ID, editWorkOrderGenFunc)
-  yield takeEvery(UPDATE_WORK_ORDER_LIST, UpdateWorkOrderGenFunc)
-  yield takeEvery(DELETE_WORK_ORDER_LIST_PAGE, DeleteWorkOrderGenFunc)
+  yield takeLatest(GET_BOM_LIST, Get_BOMList_GenratorFunction)
+  yield takeLatest(POST_GO_BUTTON_FOR_WORK_ORDER_MASTER, GoButton_WorkOrder_post_genfun)
+  yield takeLatest(POST_WORK_ORDER_MASTER, Post_WorkOrder_GenratorFunction)
+  yield takeLatest(GET_WORK_ORDER_LIST_PAGE, GetWorkOrderGenFunc)
+  yield takeLatest(EDIT_WORK_ORDER_LIST_ID, editWorkOrderGenFunc)
+  yield takeLatest(UPDATE_WORK_ORDER_LIST, UpdateWorkOrderGenFunc)
+  yield takeLatest(DELETE_WORK_ORDER_LIST_PAGE, DeleteWorkOrderGenFunc)
 }
 
 export default WorkOrderSaga;

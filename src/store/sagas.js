@@ -13,8 +13,7 @@ import ChangePasswordSaga from "./auth/changepassword/saga"
 import Spinner_Saga from "./Utilites/Spinner/saga"
 
 //    *********************** Alert ***********************
-import Alert_Saga from "./Utilites/CustomAlertRedux/saga"
-import CustomSearch_Saga from "./Utilites/CustomSearchRedux/saga"
+// import Alert_Saga from "./Utilites/CustomAlertRedux/saga"
 import CommonPageField_Saga from "./Utilites/PageFiled/saga"
 import pdfReport_Saga from "./Utilites/PdfReport/saga"
 
@@ -88,6 +87,7 @@ import SapLedgerSaga from "./Report/SapLedger Redux/saga"
 import OrderSummarySaga from "./Report/OrderSummaryRedux/saga"
 import PartySettingSaga from "./Administrator/PartySetting/saga"
 import StockEntrySaga from "./Inventory/StockEntryRedux/saga"
+import StockReportSaga from "./Report/StockReport/saga"
 
 
 export default function* rootSaga() {
@@ -103,10 +103,9 @@ export default function* rootSaga() {
     fork(ProfileSaga),
     fork(LayoutSaga),
     fork(Spinner_Saga),
-    fork(CustomSearch_Saga),
     fork(CommonPageField_Saga),
     fork(pdfReport_Saga),
-    fork(Alert_Saga),
+    // fork(Alert_Saga),
     fork(SupplierSaga),
     fork(ModulesSaga),
     fork(CompanySaga),
@@ -163,7 +162,7 @@ export default function* rootSaga() {
     fork(CitySaga),
     fork(OrderSummarySaga),
     fork(PartySettingSaga),
-    fork(StockEntrySaga)
-
+    fork(StockEntrySaga),
+    fork(StockReportSaga)
   ])
 }

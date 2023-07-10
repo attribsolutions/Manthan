@@ -10,11 +10,13 @@ import {
   UPDATE_USER_ACTION,
   GET_USER_LIST_FOR_USER,
   USER_API_ERROR_ACTION,
+  DELETE_USER_ACTION,
+  EDIT_USER_ACTION,
 } from './actionType'
 
 const INIT_STATE = {
   employeelistForDropdown: [],
-  AddUserMessage: { Status: false },
+  postMsg: { Status: false },
   pages: [],
   deleteSuccessRole: { Status: false },
   editData: { Status: false },
@@ -22,6 +24,7 @@ const INIT_STATE = {
   userPartiesForUserMaster: [],
   saveBtnloading: false,
   listBtnLoading: false,
+  loading:false
 };
 
 const User_Registration_Reducer = (state = INIT_STATE, action) => {
@@ -42,7 +45,7 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
     case ADD_USER_SUCCESS:
       return {
         ...state,
-        AddUserMessage: action.payload,
+        postMsg: action.payload,
         saveBtnloading: false,
 
       };
@@ -52,27 +55,43 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
     case GET_USER_LIST_FOR_USER:
       return {
         ...state,
-        listBtnLoading: true,
+        loading: true,
       }
 
     case GET_USER_LIST_FOR_USER_SUCCESS:
       return {
         ...state,
         pages: action.payload,
-        listBtnLoading: false,
+        loading: false,
       }
 
     //// delete api
+
+    case DELETE_USER_ACTION:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
     case DELETE_USER_ACTION_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         deleteSuccessRole: action.payload,
       };
 
     //// edit api
+
+    case EDIT_USER_ACTION:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
     case EDIT_USER_ACTION_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
         editData: action.payload,
       };
 
@@ -103,6 +122,7 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        loading:false
       };
     default:
       return state;

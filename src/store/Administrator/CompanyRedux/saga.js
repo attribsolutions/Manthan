@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
+import {loginJsonBody } from "../../../components/Common/CommonFunction";
 import { delete_CompanyID, edit_CompanyID, fetch_CompanyList, getCompanyGroup, postSubmit_Company, updateCompany_ID } from "../../../helpers/backend_helper";
 import {
   deleteCompanyIDSuccess,

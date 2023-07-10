@@ -34,12 +34,12 @@ const BulkRecipt = (props) => {
     const {
         postMsg,
         ReceiptGoButton,
-        pageField,
+        saveBtnloading,
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
+            saveBtnloading: state.ReceiptReducer.saveBtnloading,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageField
         }));
 
     const location = { ...history.location }
@@ -86,7 +86,7 @@ const BulkRecipt = (props) => {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -174,9 +174,9 @@ const BulkRecipt = (props) => {
 
     const SaveHandler = (event) => {
 
-        const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
+        const arr1 = []
         try {
             _cfunc.btnIsDissablefunc({ btnId, state: true })
 
@@ -226,7 +226,7 @@ const BulkRecipt = (props) => {
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
-                        <div className="px-2 c_card_filter header text-black mb-2" >
+                        <div className="px-2 c_card_filter header text-black mb-1" >
                             <div className=" row ">
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2" >
@@ -290,6 +290,7 @@ const BulkRecipt = (props) => {
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                     <SaveButton pageMode={pageMode}
                                         onClick={SaveHandler}
+                                        loading={saveBtnloading}
                                         userAcc={userPageAccessState}
                                         editCreatedBy={editCreatedBy}
                                         module={"BulkRecipt"}

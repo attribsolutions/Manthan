@@ -25,17 +25,11 @@ import {
     deleteIDForMasterPage,
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import {
-    AlertState,
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     comAddPageFieldFunc,
@@ -55,7 +49,6 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { Retailer_List, SSDD_List_under_Company, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import CustomTable2 from "../../../CustomTable2/Table";
 import { Tbody, Thead } from "react-super-responsive-table";
 
 const PartySubParty = (props) => {
@@ -169,35 +162,33 @@ const PartySubParty = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(savePartySubPartySuccess({ Status: false }))
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.PARTY_SUB_PARTY,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.PARTY_SUB_PARTY_lIST })
+                }
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
             dispatch(savePartySubPartySuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                 Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -209,9 +200,8 @@ const PartySubParty = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updatePartySubPartySuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

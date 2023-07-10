@@ -1,7 +1,7 @@
 import { Button, Spinner } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { btnIsDissablefunc, date_dmy_func, loginUserID } from "./CommonFunction"
+import { btnIsDissablefunc, date_dmy_func, loginSystemSetting, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 import * as url from "../../routes/route_url";
 import { Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
@@ -23,6 +23,7 @@ const dissableStyle = {
 };
 
 export const listPageActionsButtonFunc = (props) => {
+
     const {
         dispatch,
         history,
@@ -35,7 +36,8 @@ export const listPageActionsButtonFunc = (props) => {
         editBodyfunc,
         deleteBodyfunc,
         copyBodyfunc,
-        updateBtnFunc,
+        viewBtnFunc,
+        otherBtn_1Func,
         makeBtnFunc = () => { },
         pageMode,
         makeBtnName,
@@ -50,10 +52,9 @@ export const listPageActionsButtonFunc = (props) => {
 
 
     function editHandler(rowData, btnmode, btnId) {
+
         try {
             let config = { editId: rowData.id, btnmode, subPageMode, btnId }
-            // btnIsDissablefunc({ btnId, state: true })
-
             if (editBodyfunc) {
                 editBodyfunc({ rowData, btnmode, subPageMode, btnId })
             } else {
@@ -70,8 +71,6 @@ export const listPageActionsButtonFunc = (props) => {
     function copyHandler(rowData, btnmode, btnId) {
         try {
             let config = { editId: rowData.id, btnmode, subPageMode, btnId }
-            // btnIsDissablefunc({ btnId, state: true })
-
             if (copyBodyfunc) {
                 copyBodyfunc({ rowData, btnmode, subPageMode, btnId })
             } else {
@@ -87,6 +86,7 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     function downHandler(rowData, downbtnType, btnId) {
+
         try {
             downBtnFunc(rowData, downbtnType, btnId);
         } catch (error) {
@@ -98,8 +98,25 @@ export const listPageActionsButtonFunc = (props) => {
 
     };
 
-    async function deleteHandler(rowData, btnId) {
+    function viewHandler(rowData, downbtnType, btnId) {
 
+        try {
+
+            let config = { viewId: rowData.id, subPageMode, btnId }
+            if (viewBtnFunc) {
+                viewBtnFunc({ ...config })
+            }
+
+        } catch (error) {
+            customAlert({
+                Type: 3,
+                Message: "Action Not define",
+            })
+        }
+
+    };
+
+    async function deleteHandler(rowData, btnId) {
         try {
             if (deleteBodyfunc) {
                 let config = { rowData, subPageMode, btnId }
@@ -111,7 +128,6 @@ export const listPageActionsButtonFunc = (props) => {
                     Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
                 })
                 if (alertRepsponse) {
-                    // btnIsDissablefunc({ btnId, state: true })
                     let config = { deleteId: rowData.id, subPageMode, btnId }
                     dispatch(deleteActionFun({ ...config }))
                 }
@@ -150,6 +166,7 @@ export const listPageActionsButtonFunc = (props) => {
             ),
 
         formatter: (__cell, rowData, __key, formatExtra) => {
+
             let { listBtnLoading } = formatExtra;
             let forceEditHide = rowData.forceEditHide;
             let forceDeleteHide = rowData.forceDeleteHide;
@@ -209,23 +226,52 @@ export const listPageActionsButtonFunc = (props) => {
 
                                 (userAccState.RoleAccess_IsView)  // ** condition :3
                                     ?
-                                    <Button
-                                        type="button"
-                                        disabled={listBtnLoading}
-                                        className={editSelfBtnCss}
-                                        id={`btn-edit-${rowData.id}`}
-                                        title={`View ${ButtonMsgLable}`}
-                                        onClick={() => {
-                                            const btnId = `btn-view-${rowData.id}`
-                                            editHandler(rowData, mode.view, btnId)
-                                        }}
-                                    >
-                                        {(listBtnLoading === `btn-view-${rowData.id}`) ?
-                                            <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                            : <i className="bx bxs-show font-size-16 "></i>
-                                        }
 
-                                    </Button>
+                                    (viewBtnFunc) ?
+                                        <Button
+                                            type="button"
+                                            disabled={listBtnLoading}
+                                            className={editSelfBtnCss}
+                                            id={`btn-view-${rowData.id}`}
+                                            title={`View ${ButtonMsgLable}`}
+                                            onClick={() => {
+                                                const btnId = `btn-view-${rowData.id}`
+                                                viewHandler(rowData, mode.view, btnId)
+
+                                            }}
+                                        >
+                                            {(listBtnLoading === `btn-view-${rowData.id}`) ?
+                                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                                : <i className="bx bxs-show font-size-16 "></i>
+                                            }
+
+                                        </Button>
+                                        :
+                                        <Button
+                                            type="button"
+                                            disabled={listBtnLoading}
+                                            className={editSelfBtnCss}
+                                            id={`btn-view-${rowData.id}`}
+                                            title={`View ${ButtonMsgLable}`}
+                                            onClick={() => {
+                                                const btnId = `btn-view-${rowData.id}`
+                                                editHandler(rowData, mode.view, btnId)
+                                            }}
+                                        >
+                                            {(listBtnLoading === `btn-view-${rowData.id}`) ?
+                                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                                                : <i className="bx bxs-show font-size-16 "></i>
+                                            }
+
+                                        </Button>
+
+
+
+
+
+
+
+
 
                                     :// btn dissable only show body
                                     <Button
@@ -290,7 +336,8 @@ export const listPageActionsButtonFunc = (props) => {
                             title={`Print ${ButtonMsgLable}`}
                             onClick={() => {
                                 const btnId = `btn-dounload-${rowData.id}`
-                                downHandler(rowData, undefined, btnId)
+                                const downbtnType = "singlePrint"
+                                downHandler(rowData, downbtnType, btnId)
                             }}
                         >
                             {(listBtnLoading === `btn-dounload-${rowData.id}`) ?
@@ -324,19 +371,19 @@ export const listPageActionsButtonFunc = (props) => {
                     }
 
                     {
-                        (updateBtnFunc) &&
+                        (otherBtn_1Func) &&
                         <Button style={{ width: "30px" }}
                             type="button"
-                            id={`btn-delete-${rowData.id}`}
+                            id={`btn-otherBtn_1-${rowData.id}`}
                             className={makeBtnCss}
                             disabled={listBtnLoading}
                             title={`Update ${ButtonMsgLable}`}
                             onClick={() => {
-                                const btnId = `btn-delete-${rowData.id}`
-                                updateBtnFunc(rowData, mode.copy, btnId)
+                                const btnId = `btn-otherBtn_1-${rowData.id}`
+                                otherBtn_1Func(rowData, mode.copy, btnId)
                             }}
                         >
-                            {(listBtnLoading === `btn-delete-${rowData.id}`) ?
+                            {(listBtnLoading === `btn-otherBtn_1-${rowData.id}`) ?
                                 <Spinner style={{ height: "16px", width: "16px" }} color="white" />
                                 : <i class="mdi mdi-file-table-box-multiple font-size-16"></i>
                             }
@@ -402,16 +449,16 @@ export const listPageActionsButtonFunc = (props) => {
                         ((userAccState.RoleAccess_IsSave) && (userAccState.RoleAccess_IsCopy)) ?
                             <Button
                                 type="button"
-                                id={`btn-delete-${rowData.id}`}
+                                id={`btn-IsCopy-${rowData.id}`}
                                 className={editSelfBtnCss}
                                 title={`Copy ${ButtonMsgLable}`}
                                 disabled={listBtnLoading}
                                 onClick={() => {
-                                    const btnId = `btn-delete-${rowData.id}`
+                                    const btnId = `btn-IsCopy-${rowData.id}`
                                     copyHandler(rowData, mode.copy, btnId)
                                 }}
                             >
-                                {(listBtnLoading === `Copy ${ButtonMsgLable}`) ?
+                                {(listBtnLoading === `btn-IsCopy-${rowData.id}`) ?
                                     <Spinner style={{ height: "16px", width: "16px" }} color="white" />
                                     : <i className="bx bxs-copy font-size-18 "></i>
                                 }
@@ -589,6 +636,13 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
 }
 
 export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
+
+    const systemSetting = loginSystemSetting();
+
+    if (!(systemSetting.EInvoiceApplicable === "1")) {
+        return null; // Return null if the column should be hidden
+    }
+
     const { listBtnLoading, } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
@@ -611,10 +665,9 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
         }
     };
 
-
     return ({
         text: "E-Invoice",
-        formatExtraData: { listBtnLoading: listBtnLoading, },
+        formatExtraData: { listBtnLoading: listBtnLoading },
         formatter: (__cell, rowData, __key, formatExtra) => {
             let { listBtnLoading } = formatExtra;
             return (
@@ -679,33 +732,6 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
                             <i className="mdi mdi-cancel font-size-14"></i>
                         </Button>
                     }
-
-                    {/* {((rowData.InvoiceUploads.length === 0) || !(rowData.InvoiceUploads[0].EInvoicePdf === null)) ?
-                        <Button
-                            type="button"
-                            id={`btn-Print-E-Invoice-${rowData.id}`}
-                            className={printInvoiceBtnCss}
-                            disabled={listBtnLoading}
-                            title={`Print E-Invoice`}
-                            onClick={() => Print_InvoiceHander(rowData)}
-                        >
-                            {(listBtnLoading === `btn-Print-E-Invoice-${rowData.id}`) ?
-                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                : <i className="bx bx-printer font-size-14"></i>
-                            }
-
-                        </Button> :
-                        (rowData.InvoiceUploads[0].EInvoicePdf === null) &&
-                        <Button
-                            type="button"
-                            title={'Access Not Allow'}
-                            className={dissableBtnCss}
-                            disabled={true}
-                            style={dissableStyle}
-                        >
-                            <i className="bx bx-printer font-size-14"></i>
-                        </Button>
-                    } */}
 
                     {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EInvoicePdf === null)) ?
                         <Button

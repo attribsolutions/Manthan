@@ -1,0 +1,578 @@
+{
+    "id": 134,
+    "Name": "0 No Shev 200 g",
+    "ShortName": "0 No Shev 200 g",
+    "Company": 2,
+    "CompanyName": "Chitale Bandhu Mithaiwale",
+    "BaseUnitID": 1,
+    "BaseUnitName": "No",
+    "BarCode": "846203000061",
+    "SAPItemCode": "1200021",
+    "Sequence": null,
+    "isActive": true,
+    "IsSCM": true,
+    "CanBeSold": false,
+    "CanBePurchase": false,
+    "BrandName": [],
+    "Tag": "",
+    "Length": null,
+    "Breadth": "1",
+    "Height": null,
+    "StoringCondition": "1",
+    "Grammage": "2",
+    "CreatedBy": 4,
+    "CreatedOn": "2023-05-23T10:35:01.459347",
+    "UpdatedBy": 4,
+    "UpdatedOn": "2023-05-23T10:35:01.459368",
+    "ItemCategoryDetails": [
+        {
+            "id": 137,
+            "CategoryType": 1,
+            "CategoryTypeName": "Finished Product",
+            "Category": 1,
+            "CategoryName": "Finish Product"
+        }
+    ],
+    "ItemGroupDetails": [
+        {
+            "id": 137,
+            "GroupType": 1,
+            "GroupTypeName": "Primary",
+            "Group": 2,
+            "GroupName": "Namkeen",
+            "SubGroup": 42,
+            "SubGroupName": "Shev"
+        }
+    ],
+    "ItemUnitDetails": [
+        {
+            "id": 406,
+            "UnitID": 1,
+            "UnitName": "No",
+            "BaseUnitQuantity": "1.000",
+            "IsBase": true,
+            "PODefaultUnit": false,
+            "SODefaultUnit": true
+        },
+        {
+            "id": 407,
+            "UnitID": 2,
+            "UnitName": "Kg",
+            "BaseUnitQuantity": "5.000",
+            "IsBase": false,
+            "PODefaultUnit": false,
+            "SODefaultUnit": false
+        },
+        {
+            "id": 408,
+            "UnitID": 4,
+            "UnitName": "Box",
+            "BaseUnitQuantity": "25.000",
+            "IsBase": false,
+            "PODefaultUnit": true,
+            "SODefaultUnit": false
+        }
+    ],
+    "ItemImagesDetails": [],
+    "ItemDivisionDetails": [
+        {
+            "id": 6343,
+            "Party": 1,
+            "PartyName": "Chitale Bandhu Mithaiwale AdminDivision"
+        },
+        {
+            "id": 11650,
+            "Party": 6,
+            "PartyName": "Shri Parasnath Agencies"
+        },
+        {
+            "id": 11785,
+            "Party": 114,
+            "PartyName": "Aishwarya Food Network"
+        },
+        {
+            "id": 12692,
+            "Party": 75,
+            "PartyName": "Delicacy House"
+        },
+        {
+            "id": 12861,
+            "Party": 10,
+            "PartyName": "Priyanka Enterprises"
+        },
+        {
+            "id": 13159,
+            "Party": 394,
+            "PartyName": "Pratik Enterprises"
+        },
+        {
+            "id": 13310,
+            "Party": 74,
+            "PartyName": "Vidhi Enterprises"
+        },
+        {
+            "id": 14061,
+            "Party": 62,
+            "PartyName": "Global Traders"
+        },
+        {
+            "id": 14210,
+            "Party": 57,
+            "PartyName": "Vyanktesh Marketing"
+        },
+        {
+            "id": 14361,
+            "Party": 118,
+            "PartyName": "Mahesh Agencies"
+        },
+        {
+            "id": 14437,
+            "Party": 116,
+            "PartyName": "Geet Agency"
+        },
+        {
+            "id": 14873,
+            "Party": 24,
+            "PartyName": "Shri Amod Traders"
+        },
+        {
+            "id": 15153,
+            "Party": 21,
+            "PartyName": "Arti Enterprises"
+        },
+        {
+            "id": 15661,
+            "Party": 66,
+            "PartyName": "Bhumkar Traders"
+        },
+        {
+            "id": 16039,
+            "Party": 416,
+            "PartyName": "Shrinivas Sales"
+        },
+        {
+            "id": 16254,
+            "Party": 34,
+            "PartyName": "Yash Enterprises"
+        },
+        {
+            "id": 16374,
+            "Party": 33,
+            "PartyName": "Rahul Enterprises"
+        },
+        {
+            "id": 16522,
+            "Party": 19,
+            "PartyName": "Chaudhary Agencies"
+        },
+        {
+            "id": 17063,
+            "Party": 26,
+            "PartyName": "V. Enterprises"
+        },
+        {
+            "id": 17233,
+            "Party": 61,
+            "PartyName": "Ms Shubhjeet Traders"
+        },
+        {
+            "id": 17493,
+            "Party": 68,
+            "PartyName": "Maa Enterprises"
+        },
+        {
+            "id": 17568,
+            "Party": 23,
+            "PartyName": "Saikrupa Enterprises"
+        },
+        {
+            "id": 17631,
+            "Party": 78,
+            "PartyName": "Mahale Traders"
+        },
+        {
+            "id": 17692,
+            "Party": 80,
+            "PartyName": "Balaji New Enterprises"
+        },
+        {
+            "id": 17878,
+            "Party": 393,
+            "PartyName": "Shree Ganesh Agency (Bhosari)"
+        },
+        {
+            "id": 18253,
+            "Party": 89,
+            "PartyName": "Swadrushi Enterprises"
+        },
+        {
+            "id": 18422,
+            "Party": 86,
+            "PartyName": "Samartha Foods"
+        },
+        {
+            "id": 18544,
+            "Party": 94,
+            "PartyName": "Sweet Xpress"
+        },
+        {
+            "id": 18653,
+            "Party": 95,
+            "PartyName": "SAMSMRTYA VENTURES PVT LTD"
+        },
+        {
+            "id": 18788,
+            "Party": 90,
+            "PartyName": "Shiva Enterprises"
+        },
+        {
+            "id": 18934,
+            "Party": 25,
+            "PartyName": "S. M. Distributors"
+        },
+        {
+            "id": 19081,
+            "Party": 92,
+            "PartyName": "APARNA ENTERPRISES-Mumbai"
+        },
+        {
+            "id": 19231,
+            "Party": 27,
+            "PartyName": "Anand Agencies"
+        },
+        {
+            "id": 19576,
+            "Party": 14,
+            "PartyName": "Everest Agency"
+        },
+        {
+            "id": 19615,
+            "Party": 30,
+            "PartyName": "New Shantisagar Agencies"
+        },
+        {
+            "id": 20055,
+            "Party": 77,
+            "PartyName": "Canara Coffee Llp"
+        },
+        {
+            "id": 20392,
+            "Party": 58,
+            "PartyName": "Shree Someshwar Distributors (Hinjewadi)"
+        },
+        {
+            "id": 20474,
+            "Party": 56,
+            "PartyName": "RAJVEE ENTERPRISES"
+        },
+        {
+            "id": 21242,
+            "Party": 13,
+            "PartyName": "Demo SS"
+        },
+        {
+            "id": 21393,
+            "Party": 9,
+            "PartyName": "GO-IC SPECIALITY FOODS PVT LTD"
+        },
+        {
+            "id": 21545,
+            "Party": 91,
+            "PartyName": "Shree Someshwar Distributors"
+        },
+        {
+            "id": 21914,
+            "Party": 97,
+            "PartyName": "Demo DD"
+        },
+        {
+            "id": 22145,
+            "Party": 31,
+            "PartyName": "HARIHAR OIL TRADERS"
+        },
+        {
+            "id": 22249,
+            "Party": 83,
+            "PartyName": "Rayate Ventures"
+        },
+        {
+            "id": 22375,
+            "Party": 88,
+            "PartyName": "Parth Foods"
+        },
+        {
+            "id": 22820,
+            "Party": 4,
+            "PartyName": "Chitale Bandhu Mithaiwale Panvel Division (IW04)"
+        },
+        {
+            "id": 22968,
+            "Party": 5,
+            "PartyName": "Chitale Bandhu Mithaiwale Katraj Division (IW01)"
+        }
+    ],
+    "ItemMRPDetails": [
+        {
+            "id": 130,
+            "EffectiveDate": "2023-05-01",
+            "Company": 2,
+            "CompanyName": "Chitale Bandhu Mithaiwale",
+            "MRP": "72.00",
+            "Party": null,
+            "PartyName": null,
+            "Division": 1,
+            "DivisionName": "Chitale Bandhu Mithaiwale AdminDivision",
+            "CreatedBy": 4,
+            "UpdatedBy": 4,
+            "IsAdd": false
+        },
+        {
+            "id": 754,
+            "EffectiveDate": "2023-05-01",
+            "Company": 2,
+            "CompanyName": "Chitale Bandhu Mithaiwale",
+            "MRP": "72.00",
+            "Party": null,
+            "PartyName": null,
+            "Division": null,
+            "DivisionName": null,
+            "CreatedBy": 4,
+            "UpdatedBy": 4,
+            "IsAdd": false
+        }
+    ],
+    "ItemMarginDetails": [
+        {
+            "id": 364,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "5.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 1,
+            "PriceListName": "Super Stokiest",
+            "IsAdd": false
+        },
+        {
+            "id": 380,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "7.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 2,
+            "PriceListName": "Distributor",
+            "IsAdd": false
+        },
+        {
+            "id": 396,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "18.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 3,
+            "PriceListName": "General Trade",
+            "IsAdd": false
+        },
+        {
+            "id": 595,
+            "EffectiveDate": "2023-06-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": 6,
+            "PartyName": "Shri Parasnath Agencies",
+            "Margin": "0.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 1,
+            "PriceListName": "Super Stokiest",
+            "IsAdd": false
+        },
+        {
+            "id": 744,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "18.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 8,
+            "PriceListName": "COFO",
+            "IsAdd": false
+        },
+        {
+            "id": 893,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "21.50",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 9,
+            "PriceListName": "FOFO",
+            "IsAdd": false
+        },
+        {
+            "id": 1042,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "25.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 11,
+            "PriceListName": "Airport CX",
+            "IsAdd": false
+        },
+        {
+            "id": 1199,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "0.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 5,
+            "PriceListName": "D Mart",
+            "IsAdd": false
+        },
+        {
+            "id": 1348,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "5.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 1,
+            "PriceListName": "Super Stokiest",
+            "IsAdd": false
+        },
+        {
+            "id": 1497,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "7.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 2,
+            "PriceListName": "Distributor",
+            "IsAdd": false
+        },
+        {
+            "id": 1632,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "18.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 3,
+            "PriceListName": "General Trade",
+            "IsAdd": false
+        },
+        {
+            "id": 1761,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "25.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 11,
+            "PriceListName": "Airport CX",
+            "IsAdd": false
+        },
+        {
+            "id": 3136,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "5.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 15,
+            "PriceListName": "OMH SS",
+            "IsAdd": false
+        },
+        {
+            "id": 3288,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "7.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 14,
+            "PriceListName": "OMH DD",
+            "IsAdd": false
+        },
+        {
+            "id": 3440,
+            "EffectiveDate": "2023-05-01",
+            "Company": 3,
+            "CompanyName": "ChitaleSCM",
+            "Party": null,
+            "PartyName": null,
+            "Margin": "20.00",
+            "CreatedBy": 3,
+            "UpdatedBy": 3,
+            "PriceList": 13,
+            "PriceListName": "OMH RR",
+            "IsAdd": false
+        }
+    ],
+    "ItemGSTHSNDetails": [
+        {
+            "id": 134,
+            "EffectiveDate": "2023-05-01",
+            "GSTPercentage": "12.00",
+            "HSNCode": "21069099",
+            "Company": 2,
+            "CompanyName": "Chitale Bandhu Mithaiwale",
+            "CreatedBy": 4,
+            "UpdatedBy": 4,
+            "IsAdd": false
+        }
+    ],
+    "ItemShelfLife": [
+        {
+            "id": 137,
+            "Days": 90,
+            "CreatedBy": 4,
+            "UpdatedBy": 4,
+            "IsAdd": false
+        }
+    ]
+}

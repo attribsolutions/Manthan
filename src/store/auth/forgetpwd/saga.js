@@ -1,4 +1,4 @@
-import { takeEvery, fork, put, all, call } from "redux-saga/effects"
+import { takeLatest, fork, put, all, call } from "redux-saga/effects"
 
 // Login Redux States
 import { CHANGE_PASSWORD_FOR_FORGET_PASSWORD, SEND_OTP_FOR_FORGET_PASSWORD, } from "./actionTypes"
@@ -44,8 +44,8 @@ function* changePassword_GnerFun({ data }) {
   }
 }
 export function* watchUserPasswordForget() {
-  yield takeEvery(SEND_OTP_FOR_FORGET_PASSWORD, sendOTP_GnerFun)
-  yield takeEvery(CHANGE_PASSWORD_FOR_FORGET_PASSWORD, changePassword_GnerFun)
+  yield takeLatest(SEND_OTP_FOR_FORGET_PASSWORD, sendOTP_GnerFun)
+  yield takeLatest(CHANGE_PASSWORD_FOR_FORGET_PASSWORD, changePassword_GnerFun)
 }
 
 function* forgetPasswordSaga() {

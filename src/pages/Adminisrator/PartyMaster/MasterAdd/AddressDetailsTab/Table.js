@@ -3,7 +3,7 @@ import { Button, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 import { useDispatch, useSelector } from 'react-redux';
 import { PartyAddressDeleteID, PartyAddressDeleteIDSuccess } from '../../../../../store/Administrator/PartyRedux/action';
-import { AlertState } from '../../../../../store/actions';
+import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 
 function AddressDetailsTable({ addressTable = [], setAddressTable }) {
 
@@ -25,7 +25,7 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
                 setAddressTable(fil);
             }
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
@@ -35,7 +35,7 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
         } else if (deleteMessage.Status === true) {
             dispatch(PartyAddressDeleteIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
                     Status: true,
                     Message: JSON.stringify(deleteMessage.Message),

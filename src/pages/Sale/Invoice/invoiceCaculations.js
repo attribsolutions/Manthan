@@ -1,4 +1,4 @@
-import { CommonConsole, groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
+import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
 
 
 export function bulkSearch(text, data, columns) {
@@ -41,7 +41,7 @@ export function bulkSearch(text, data, columns) {
 }
 
 
-export const invoice_discountCalculate_Func = (row, index1) => {
+export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 
     // Extract values from the input parameters
     const rate = Number(row.Rate) || 0;
@@ -61,13 +61,30 @@ export const invoice_discountCalculate_Func = (row, index1) => {
 
     // Calculate the GST amount
     let gstAmt = discountBaseAmt * (gstPercentage / 100);
-    const CGST_Amount = Number((gstAmt / 2).toFixed(2));
-    const SGST_Amount = CGST_Amount;
-    const roundedGstAmount = CGST_Amount + SGST_Amount;
+    let CGST_Amount = Number((gstAmt / 2).toFixed(2));
+    let SGST_Amount = CGST_Amount;
+    let IGST_Amount = 0 //initial GST Amount 
 
     // Calculate the total amount after discount and GST
+    const roundedGstAmount = CGST_Amount + SGST_Amount;
     let total = roundedGstAmount + discountBaseAmt;
 
+    let GST_Percentage = Number(index1.GSTPercentage) || 0;
+    let IGST_Percentage = 0;
+    let SGST_Percentage = (GST_Percentage / 2);
+    let CGST_Percentage = (GST_Percentage / 2);
+
+    if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
+        let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)
+        if (isSameSate) {// iF isSameSate = true ===not same GSTIn
+            CGST_Amount = 0;
+            SGST_Amount = 0;
+            IGST_Amount = Number(roundedGstAmount.toFixed(2))
+            IGST_Percentage = GST_Percentage;
+            SGST_Percentage = 0;
+            CGST_Percentage = 0;
+        }
+    }
     // Return the calculated values as an object
     return {
         discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
@@ -76,12 +93,17 @@ export const invoice_discountCalculate_Func = (row, index1) => {
         roundedTotalAmount: Number(total.toFixed(2)),
         CGST_Amount,
         SGST_Amount,
+        IGST_Amount,
+        GST_Percentage: GST_Percentage.toFixed(2),
+        CGST_Percentage: CGST_Percentage.toFixed(2),
+        SGST_Percentage: SGST_Percentage.toFixed(2),
+        IGST_Percentage: IGST_Percentage.toFixed(2),
     };
 };
 
 
 export const settingBaseRoundOffAmountFunc = (tableList = []) => {
-  
+
     // Get the system settings
     const systemSetting = loginSystemSetting();
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
@@ -110,6 +132,8 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
         TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2) // Round off or format the TCS Amount
     };
 };
+
+
 
 
 export function stockDistributeFunc(index1) {
@@ -170,7 +194,7 @@ export function stockDistributeFunc(index1) {
     } catch (e) { CommonConsole('stockDistributeFunc ', e) };
 
     try {
-        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = tA4;
+        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(tA4);
     } catch (e) { CommonConsole('stockDistributeFunc', e) };
 
 };
@@ -209,7 +233,7 @@ export function orderQtyUnit_SelectOnchange(event, index1) {
         index2.Rate = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
         index2.ActualQuantity = (index2.BaseUnitQuantity / event.BaseUnitQuantity).toFixed(3);
 
-        document.getElementById(`stockItemRate-${index1.id}-${index2.id}`).innerText = index2.Rate;
+        document.getElementById(`stockItemRate-${index1.id}-${index2.id}`).innerText = amountCommaSeparateFunc(index2.Rate);
         document.getElementById(`ActualQuantity-${index1.id}-${index2.id}`).innerText = index2.ActualQuantity;
 
     })
@@ -264,7 +288,7 @@ export const innerStockCaculation = (index1) => {
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
     try {
-        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = index1.roundedTotalAmount;
+        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(index1.roundedTotalAmount);
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
 }

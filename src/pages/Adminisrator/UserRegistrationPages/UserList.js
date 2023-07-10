@@ -22,12 +22,13 @@ const UserList = () => {
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.User_Registration_Reducer.listBtnLoading,
+            loading:state.User_Registration_Reducer.loading,
             tableList: state.User_Registration_Reducer.pages,
             editData: state.User_Registration_Reducer.editData,
             updateMsg: state.User_Registration_Reducer.updateMessage,
             deleteMsg: state.User_Registration_Reducer.deleteSuccessRole,
             userAccess: state.Login.RoleAccessUpdateData,
-            postMsg: state.User_Registration_Reducer.AddUserMessage,
+            postMsg: state.User_Registration_Reducer.postMsg,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
@@ -55,7 +56,7 @@ const UserList = () => {
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             {
-                reducers.listBtnLoading ?
+                reducers.loading ?
                     <Listloader />
                     :
                     (pageField) ?

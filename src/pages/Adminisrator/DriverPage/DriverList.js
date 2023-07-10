@@ -15,7 +15,7 @@ import * as url from "../../../routes/route_url";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
 
 const DriverList = () => {
 
@@ -27,19 +27,19 @@ const DriverList = () => {
 
   const reducers = useSelector(
     (state) => ({
-      listBtnLoading: state.DriverReducer.listBtnLoading,
-      loading: state.DriverReducer.loading,
       tableList: state.DriverReducer.DriverList,
       editData: state.DriverReducer.editData,
       updateMsg: state.DriverReducer.updateMessage,
       deleteMsg: state.DriverReducer.deleteMsg,
       postMsg: state.DriverReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageFieldList
+      pageField: state.CommonPageFieldReducer.pageFieldList,
+      listBtnLoading: state.DriverReducer.listBtnLoading,
+      GoBtnlistloading: state.DriverReducer.loading
     })
   );
-
-  const { pageField, } = reducers
+  const { pageField, GoBtnlistloading } = reducers
+  debugger
 
   const action = {
     getList: getDriverList,
@@ -71,6 +71,7 @@ const DriverList = () => {
   }
   return (
     <React.Fragment>
+      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
 
         {userAdminRole &&
@@ -82,25 +83,23 @@ const DriverList = () => {
             />
           </div>
         }
+
         {
-          reducers.loading ?
-            <Listloader />
-            :
-            (pageField) ?
-              <div className="mt-n1">
-                <CommonPurchaseList
-                  action={action}
-                  reducers={reducers}
-                  showBreadcrumb={false}
-                  MasterModal={DriverMaster}
-                  masterPath={url.DRIVER}
-                  newBtnPath={url.DRIVER}
-                  ButtonMsgLable={"Driver"}
-                  deleteName={"Name"}
-                  goButnFunc={goButtonHandler}
-                />
-              </div>
-              : <><Listloader /></>
+          (pageField) &&
+          <div className="mt-n1">
+            <CommonPurchaseList
+              action={action}
+              reducers={reducers}
+              showBreadcrumb={false}
+              MasterModal={DriverMaster}
+              masterPath={url.DRIVER}
+              newBtnPath={url.DRIVER}
+              ButtonMsgLable={"Driver"}
+              deleteName={"Name"}
+              goButnFunc={goButtonHandler}
+            />
+          </div>
+
         }
       </div>
     </React.Fragment>

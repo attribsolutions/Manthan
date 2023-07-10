@@ -11,7 +11,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +20,6 @@ import {
     saveCategoryTypeMaster_Success,
     editCategoryTypeIDSuccess,
     updateCategoryTypeID,
-    getCategoryTypelistSuccess,
     updateCategoryTypeIDSuccess,
     getCategoryTypelist,
 } from "../../../store/Administrator/CategoryTypeRedux/actions";
@@ -82,27 +81,7 @@ const CategoryTypeMaster = (props) => {
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    // userAccess useEffect
-    // useEffect(() => {
-    //     let userAcc = null;
-    //     let locationPath = location.pathname;
-
-    //     if (hasShowModal) {
-    //         locationPath = props.masterPath;
-    //     };
-
-    //     userAcc = userAccess.find((inx) => {
-    //         return (`/${inx.ActualPagePath}` === locationPath)
-    //     })
-
-    //     if (userAcc) {
-    //         setUserAccState(userAcc);
-    //         if (!props.isdropdown) {
-    //           breadcrumbReturnFunc({ dispatch, userAcc });
-    //         }
-    //       };
-    // }, [userAccess])
-
+    
     useEffect(() => {
 
         let userAcc = null;
@@ -212,13 +191,10 @@ const CategoryTypeMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateCategoryTypeIDSuccess({ Status: false }));
-            dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
-            );
         }
     }, [updateMsg, modalCss]);
 

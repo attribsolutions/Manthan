@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   deleteOrderIdSuccess,
   saveOrderActionSuccess,
@@ -9,8 +9,8 @@ import {
   orderApprovalActionSuccess,
   getOrderApprovalDetailActionSucc,
   orderApiErrorAction,
-  getDivisionOrdersSuccess,
   postOrderConfirms_API_Success,
+  orderSinglegetSuccess,
 } from "./actions";
 import {
   OrderPage_Update_API,
@@ -26,6 +26,7 @@ import {
   OrderPage_Edit_Get_API,
   OrderPage_Edit_Post_API,
   OrderConfirm_post_API,
+  OrderPage_Edit_ForDownload_API,
 } from "../../../helpers/backend_helper";
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -36,11 +37,11 @@ import {
   GET_ORDER_LIST_PAGE,
   ORDER_APPROVAL_ACTION,
   GET_ORDER_APPROVAL_DETAIL,
-  POST_ORDER_CONFIRM_API
+  POST_ORDER_CONFIRM_API,
+  ORDER_SINGLE_GET_API
 } from "./actionType";
-import { concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
-
 
 function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
 
@@ -152,11 +153,10 @@ function* orderList_GoBtn_GenFunc({ config }) {
     // else if ((subPageMode === url.ORDER_LIST_4)) {
     //   response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     // }
-    
+
     newList = yield response.Data.map((i) => {
 
-      const numericValue = parseFloat(i.OrderAmount);
-      i.OrderAmount = numericValue.toLocaleString(); //  Order Amount show with commas
+      i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
 
       i["preOrderDate"] = i.OrderDate
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
@@ -270,16 +270,36 @@ function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageM
   }
 }
 
+function* OrderSingleGet_GenFunc({ config }) {
+  const { viewId, subPageMode } = config
+
+  try {
+    
+    const response = yield call(OrderPage_Edit_ForDownload_API, viewId);
+    response["subPageMode"] = subPageMode;
+    yield put(orderSinglegetSuccess(response))
+
+  } catch (error) {
+    yield put(orderApiErrorAction())
+  }
+}
+
 function* OrderPageSaga() {
-  yield takeEvery(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
-  yield takeEvery(SAVE_ORDER_FROM_ORDER_PAGE, saveOrder_GenFunc);
-  yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, editOrderGenFunc);
-  yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenFunc)
-  yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenFunc);
-  yield takeEvery(GET_ORDER_LIST_PAGE, orderList_GoBtn_GenFunc);
-  yield takeEvery(ORDER_APPROVAL_ACTION, orderApproval_GenFunc);
-  yield takeEvery(GET_ORDER_APPROVAL_DETAIL, getOrderApproval_Detail_GenFunc);
-  yield takeEvery(POST_ORDER_CONFIRM_API, OrderConfirm_GenFunc);
+  yield takeLatest(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
+  yield takeLatest(SAVE_ORDER_FROM_ORDER_PAGE, saveOrder_GenFunc);
+  yield takeLatest(EDIT_ORDER_FOR_ORDER_PAGE, editOrderGenFunc);
+  yield takeLatest(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenFunc)
+  yield takeLatest(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenFunc);
+  yield takeLatest(GET_ORDER_LIST_PAGE, orderList_GoBtn_GenFunc);
+  yield takeLatest(ORDER_APPROVAL_ACTION, orderApproval_GenFunc);
+  yield takeLatest(GET_ORDER_APPROVAL_DETAIL, getOrderApproval_Detail_GenFunc);
+  yield takeLatest(POST_ORDER_CONFIRM_API, OrderConfirm_GenFunc);
+
+  yield takeLatest(ORDER_SINGLE_GET_API, OrderSingleGet_GenFunc);
+
+
+
+
 
 }
 

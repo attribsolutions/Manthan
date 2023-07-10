@@ -86,7 +86,7 @@ const DynamicColumnHook = ({ reducers = "",
         // *******
 
         if (!(PageFieldMaster.length > 0)) {
-            columns.push({ text: "Page Field Is Blank..." });
+            columns.push({ text: "Page Field Is Blank...", dataField: "id", });
         }
 
 
@@ -97,6 +97,7 @@ const DynamicColumnHook = ({ reducers = "",
                     text: i.FieldLabel,
                     dataField: i.ControlID,
                     sort: true,
+                    classes: 'table-cursor-pointer',
 
                     align: () => {
                         if (i.Alignment) return i.Alignment;

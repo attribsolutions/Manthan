@@ -7,7 +7,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
@@ -26,6 +26,7 @@ import { postSelect_Field_for_dropdown } from "../../../store/Administrator/Part
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PaymentEntry = (props) => {
 
@@ -79,14 +80,10 @@ const PaymentEntry = (props) => {
         const page_Id = pageId.PAYMENT_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        // if ((values.ReceiptModeName.label === "Cheque") || (values.ReceiptModeName.label === "RTGS")) {
-        //     dispatch(BankListAPI())
-        // }
         dispatch(getSupplier())
         dispatch(GetOpeningBalance_Success([]))
     }, []);
 
-    // Receipt Mode dropdown Values
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: _cfunc.loginCompanyID(),
@@ -139,38 +136,35 @@ const PaymentEntry = (props) => {
     }, [userAccess])
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(ReceiptGoButtonMaster_Success([]))
             setState(() => resetFunction(fileds, state))// Clear form values 
-            // dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.PAYMENT_ENTRY_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.PAYMENT_ENTRY_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
@@ -259,13 +253,11 @@ const PaymentEntry = (props) => {
                 || (values.DepositorBankName === "")
                 || (values.DocumentNo === "")
             ) {
-                dispatch(
-                    AlertState({
+                    customAlert({
                         Type: 4,
                         Status: true,
                         Message: JSON.stringify(invalidMsg1),
                     })
-                );
                 return;
             }
         }

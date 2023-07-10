@@ -43,6 +43,7 @@ import BaseTabForm from "./FirstTab/index";
 import PrefixTab from "./PrefixTab/PrefixTab";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
+import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
 
 function initialState(history) {
 
@@ -159,6 +160,8 @@ const PartyMaster = (props) => {
                         let baseValue = {
                             Name: hasEditVal.Name,
                             MobileNo: hasEditVal.MobileNo,
+                            Latitude: hasEditVal.Latitude,
+                            Longitude: hasEditVal.Longitude,
                             PartyType: {
                                 label: hasEditVal.PartyType.Name,
                                 value: hasEditVal.PartyType.id,
@@ -186,12 +189,16 @@ const PartyMaster = (props) => {
                                 value: hasEditVal.District.id,
                             },
                             CityName: {
-                                label: hasEditVal.City.Name,
-                                value: hasEditVal.City.id,
+                                label: hasEditVal.City === null ? "Select..." : hasEditVal.City.Name,
+                                value: hasEditVal.City === null ? "" : hasEditVal.City.id,
+                            },
+                            Route: {
+                                label: hasEditVal.PartySubParty[0].RouteName === null ? "Select..." : hasEditVal.PartySubParty[0].RouteName,
+                                value: hasEditVal.PartySubParty[0].Route === null ? "" : hasEditVal.PartySubParty[0].Route,
                             },
                             GSTIN: hasEditVal.GSTIN,
-                            MkUpMkDn: hasEditVal.MkUpMkDn,
                             isActive: hasEditVal.isActive,
+
 
                         };
 
@@ -251,6 +258,7 @@ const PartyMaster = (props) => {
         dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
         dispatch(commonPageField(page_id))
         dispatch(getState());
+        dispatch(GetRoutesList())
         dispatch(getPartyTypelist());
         dispatch(getcompanyList());
         dispatch(SSDD_List_under_Company())
@@ -320,7 +328,7 @@ const PartyMaster = (props) => {
     }
 
     const SaveHandler = (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -330,19 +338,11 @@ const PartyMaster = (props) => {
         let addressTabDetail = addressTabRef.current.getCurrentState()
         let prefixValue = prefixTabRef.current.getCurrentState().values
         let addressTabIsAddressEnter = addressTabRef.current.IsAddressEnter()
-
+        
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
 
         let isError = addressTabIsAddressEnter.isError
         let values = addressTabIsAddressEnter.values
-
-        if ((priceListSelect.label === "") && (subPageMode === url.RETAILER_MASTER)) {
-            customAlert({
-                Type: 4,
-                Message: "Please Select PriceList ",
-            })
-            return;
-        }
 
         if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "")) {
             customAlert({
@@ -351,7 +351,7 @@ const PartyMaster = (props) => {
             })
             return;
         }
-        
+
         if (!validBasetab) {
             setactiveTab1("1")
             return
@@ -397,7 +397,7 @@ const PartyMaster = (props) => {
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
                 Creditlimit: pageMode === mode.edit ? i.Creditlimit : "",
-                Route: pageMode === mode.edit ? i.Route : "",
+                Route: (baseValue.Route === "") ? "" : baseValue.Route.value,
             }))
 
             addressTabDetail.map((i) => {
@@ -406,6 +406,14 @@ const PartyMaster = (props) => {
                 }
             })
 
+            if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Select PriceList ",
+                })
+                return;
+            }
+            
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,
                 "PriceList": priceListSelect.value,
@@ -417,13 +425,13 @@ const PartyMaster = (props) => {
                 "AlternateContactNo": baseValue.AlternateContactNo,
                 "State": baseValue.State.value,
                 "District": baseValue.District.value,
-                "City": baseValue.CityName.value,
+                "City": (baseValue.CityName === "") ? "" : baseValue.CityName.value,
                 "SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
                 "Taluka": 0,
-                // "City": 0,
+                "Latitude": baseValue.Latitude,
+                "Longitude": baseValue.Longitude,
                 "GSTIN": baseValue.GSTIN,
-                "MkUpMkDn": baseValue.MkUpMkDn,
-                "isActive": baseValue.IsActive,
+                "isActive": baseValue.isActive,
                 "CreatedBy": loginUserID(),
                 "UpdatedBy": loginUserID(),
                 "PartySubParty": supplierArr,

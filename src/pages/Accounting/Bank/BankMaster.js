@@ -17,7 +17,6 @@ import {
     commonPageFieldSuccess,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -44,7 +43,7 @@ import {
     updateBankID,
     updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
-
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const BankMaster = (props) => {
 
@@ -144,7 +143,7 @@ const BankMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveBankMaster_Success({ Status: false }))
@@ -152,30 +151,27 @@ const BankMaster = (props) => {
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let alertResponse = await customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.BANK_LIST,
-                }))
+                })
+                if (alertResponse) {
+                    history.push({ pathname: url.BANK_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveBankMaster_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -187,13 +183,11 @@ const BankMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBankIDSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+
         }
     }, [updateMsg, modalCss]);
 

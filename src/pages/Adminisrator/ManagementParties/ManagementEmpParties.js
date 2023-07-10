@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +28,6 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -40,6 +39,7 @@ import {
     saveManagementParties_Success
 } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const ManagementEmpParties = (props) => {
 
@@ -116,37 +116,35 @@ const ManagementEmpParties = (props) => {
     }, [userAccess])
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveManagementParties_Success({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
             dispatch(Breadcrumb_inputName(''))
             dispatch(getPartyTableListSuccess([]))
             if (pageMode === "other") {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.MANAGEMENT_PARTIES,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.MANAGEMENT_PARTIES })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveManagementParties_Success({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                 Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -227,7 +225,7 @@ const ManagementEmpParties = (props) => {
 
         if ((totalTrueValues === 0)) {
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 4,
                     Status: true,
                     Message: "At least One Party is Selected",

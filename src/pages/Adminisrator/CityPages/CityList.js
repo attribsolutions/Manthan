@@ -13,15 +13,16 @@ import { useHistory } from "react-router-dom";
 import {
     deleteReceiptList,
     deleteReceiptList_Success,
-    ReceiptListAPI, 
+    ReceiptListAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, Listloader } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { url,pageId } from "../../../routes/index"
+import { url, pageId } from "../../../routes/index"
 import CityMaster from "./CityMaster";
 import { getCityOnDistrict, getCityOnDistrictSuccess, getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
+import { C_Select } from "../../../CustomValidateForm";
 
 const CityList = () => {
 
@@ -40,20 +41,18 @@ const CityList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            loading: state.ReceiptReducer.loading,
+            listBtnLoading: state.CityReducer.listBtnLoading,
             tableList: state.EmployeesReducer.City,
             deleteMsg: state.ReceiptReducer.deleteMsg,
-            updateMsg: state.BOMReducer.updateMsg,
-            postMsg: state.OrderReducer.postMsg,
             district: state.PartyMasterReducer.DistrictOnState,
             State: state.EmployeesReducer.State,
             userAccess: state.Login.RoleAccessUpdateData,
+            districtDropDownLoading: state.PartyMasterReducer.districtDropDownLoading,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-
         })
     );
 
-    const { userAccess, pageField, State, district } = reducers;
+    const { userAccess, pageField, State, district,districtDropDownLoading } = reducers;
 
     const values = { ...state.values }
 
@@ -63,9 +62,6 @@ const CityList = () => {
         postSucc: postMessage,
         deleteSucc: deleteReceiptList_Success
     }
-
-
-
 
     useEffect(() => {
         const page_Id = pageId.CITY_LIST
@@ -160,7 +156,7 @@ const CityList = () => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>District</Label>
                             <Col sm="7">
-                                <Select
+                                <C_Select
                                     name="DistrictName"
                                     value={values.DistrictName}
                                     isSearchable={true}
@@ -169,6 +165,7 @@ const CityList = () => {
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
                                     }}
+                                    isLoading={districtDropDownLoading}
                                     options={District_DropdownOptions}
                                     onChange={(hasSelect, evn) => {
                                         onChangeSelect({ hasSelect, evn, state, setState, })
@@ -189,23 +186,25 @@ const CityList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
+            
                 {
-                    (pageField) ?
-                        <CommonPurchaseList
-                            action={action}
-                            reducers={reducers}
-                            showBreadcrumb={false}
-                            newBtnPath={url.CITY}
-                            masterPath={url.CITY}
-                            HeaderContent={HeaderContent}
-                            goButnFunc={goButtonHandler}
-                            ButtonMsgLable={"CityMaster"}
-                            deleteName={"FullReceiptNumber"}
-                            MasterModal={CityMaster}
+                   
+                        (pageField) &&
+                            <CommonPurchaseList
+                                action={action}
+                                reducers={reducers}
+                                showBreadcrumb={false}
+                                newBtnPath={url.CITY}
+                                masterPath={url.CITY}
+                                HeaderContent={HeaderContent}
+                                goButnFunc={goButtonHandler}
+                                ButtonMsgLable={"CityMaster"}
+                                deleteName={"DistrictName"}
+                                MasterModal={CityMaster}
 
-                        />
-                        : null
+                            />
                 }
+                
             </div>
         </React.Fragment>
     )

@@ -2,6 +2,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { Data1, dataGenrator } from "./DemoData";
+import { compareGSTINState } from "../../components/Common/CommonFunction";
 
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);                           // Page Border
@@ -12,9 +13,12 @@ var pageHeder = function (doc, data) {
 };
 
 function reportBody(doc, data) {
-    style.tableBody(doc, data);                              //table Body
-    // style.pageBorder(doc, data);                           // Page Border
-    // style.pageFooter(doc, data, islast, array);              //page Footer
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
+    if (isIGST) {
+        style.tableBodyWithIGST(doc, data);                 //table Body
+    } else {
+        style.tableBody(doc, data);
+    }
 
 }
 function pageFooter(doc, data, islast, array) {
@@ -40,7 +44,6 @@ const InvioceReporta5 = (data) => {
             }
         })
     } else {
-
         const Data = []
         Data.push(data)
         Data.forEach((data, islast, array) => {

@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Modal } from "reactstrap";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import Order from "./Order";
@@ -19,6 +19,8 @@ import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Commo
 import { getOrderApprovalDetailAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
+import OrderView from "./OrderView";
+import OrderView_Modal from "./OrderView";
 
 
 const OrderList = () => {
@@ -37,6 +39,7 @@ const OrderList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
+
     const [otherState, setOtherState] = useState({
         masterPath: '',
         makeBtnShow: false,
@@ -48,7 +51,6 @@ const OrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
-
             loading: state.OrderReducer.loading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.OrderReducer.orderList,
@@ -69,12 +71,14 @@ const OrderList = () => {
                 || state.InvoiceReducer.listBtnLoading
                 || state.PdfReportReducers.listBtnLoading
                 || state.OrderReducer.orderConfirmLoading
-                || state.InvoiceReducer.listBtnLoading),
+                || state.InvoiceReducer.listBtnLoading
+                || state.GRNReducer.listBtnLoading),
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
     const {
+        orderData,
         pageField,
         GRNitem,
         supplier,
@@ -163,17 +167,22 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
+
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
-        dispatch(_act.GetVenderSupplierCustomer(subPageMode))
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         goButtonHandler("event", IBType)
         dispatch(priceListByCompay_Action());
+
         return () => {
             dispatch(_act.commonPageFieldListSuccess(null))
-            dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list   
+            dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list  
+            dispatch(_act.orderSinglegetSuccess({ Status: false }))
+
+
         }
     }, []);
 
@@ -183,6 +192,10 @@ const OrderList = () => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+
+
+
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
@@ -267,11 +280,15 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
+
         const obj = list[0]
 
         const customer = {
             value: obj.CustomerID,
-            label: obj.Customer
+            label: obj.Customer,
+            GSTIN: obj.CustomerGSTIN,
+            IsTCSParty: obj.IsTCSParty,
+            ISCustomerPAN: obj.CustomerPAN
         }
         const jsonBody = JSON.stringify({
             FromDate: obj.preOrderDate,
@@ -291,13 +308,12 @@ const OrderList = () => {
         else if (subPageMode === url.ORDER_LIST_4) {
             dispatch(_act.GoButtonForinvoiceAdd({
                 jsonBody,
+                btnId,
+                customer,
                 subPageMode: url.INVOICE_1,
                 path: url.INVOICE_1,
                 pageMode: mode.defaultsave,
-                customer,
-                btnId,
-                IsTCSParty: obj.IsTCSParty,
-                ISCustomerPAN: obj.CustomerPAN
+
             }));
         }
         else {
@@ -337,7 +353,7 @@ const OrderList = () => {
                         Mode: isMode
                     })
 
-                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, pageMode, path: path, grnRef, challanNo, btnId }))
+                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, pageMode, path: path, grnRef, challanNo, btnId: `btn-makeBtn-${obj.id}` }))
 
                 } else {
                     alert("Please Select Order1")
@@ -367,6 +383,14 @@ const OrderList = () => {
         var ReportType = report.order1;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, btnId))
     }
+
+    function viewBtnFunc(row) {
+        const btnId = row.btnId
+        const viewId = row.viewId
+        dispatch(_act.viewOrderSingleget({ viewId, btnId }))
+    }
+
+
 
     function goButtonHandler(event, IBType) {
 
@@ -581,7 +605,7 @@ const OrderList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
-
+                            viewBtnFunc={viewBtnFunc}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
@@ -590,6 +614,7 @@ const OrderList = () => {
                             deleteName={"FullOrderNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}
+                            ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
                             selectAllRow={(subPageMode === url.ORDER_LIST_4) && selectAllRowFunc}
                         />
@@ -597,6 +622,7 @@ const OrderList = () => {
                 }
             </div>
 
+            <OrderView_Modal />{/** order view component */}
 
         </React.Fragment>
     )

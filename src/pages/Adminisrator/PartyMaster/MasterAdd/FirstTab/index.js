@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
 import Select from "react-select"
 import { useDispatch, useSelector } from 'react-redux'
-import { Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
 import { comAddPageFieldFunc, initialFiledFunc, onChangeCheckbox, onChangeSelect, onChangeText } from '../../../../../components/Common/validationFunction'
 import { Breadcrumb_inputName } from '../../../../../store/actions'
 import { getDistrictOnState } from '../../../../../store/Administrator/PartyRedux/action'
@@ -14,6 +14,8 @@ import * as pageId from "../../../../../routes/allPageID"
 import { loginPartyID } from '../../../../../components/Common/CommonFunction'
 import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../store/Administrator/EmployeeRedux/action'
 import CityMaster from '../../../CityPages/CityMaster'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min'
+import { C_Select } from '../../../../../CustomValidateForm'
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
@@ -32,9 +34,11 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         District: "",
         GSTIN: "",
         CityName: "",
+        Route: "",
         Distance: "",
-        MkUpMkDn: false,
         isActive: true,
+        Latitude: "",
+        Longitude: ""
 
     }
 
@@ -70,7 +74,10 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         SupplierRedux,
         pageField,
         CityOnDistrict,
-        userAccess
+        RoutesList,
+        userAccess,
+        districtDropDownLoading,
+        cityDropDownLoading
     } = useSelector((state) => ({
         stateRedux: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
@@ -78,8 +85,11 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         PartyTypes: state.PartyTypeReducer.ListData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         SupplierRedux: state.CommonAPI_Reducer.SSDD_List,
+        RoutesList: state.RoutesReducer.RoutesList,
         pageField: state.CommonPageFieldReducer.pageField,
         userAccess: state.Login.RoleAccessUpdateData,
+        districtDropDownLoading:state.PartyMasterReducer.districtDropDownLoading,
+        cityDropDownLoading: state.EmployeesReducer.cityDropDownLoading,
     }));
 
     useEffect(() => {
@@ -118,8 +128,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         }
     }, [PartyTypes])
 
-
-
     useEffect(() => {
         let retailerParty = PartyTypes.find(i => (i.IsRetailer))
 
@@ -154,7 +162,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         IsRetailer: index.IsRetailer
     }));
 
-
     const StateValues = stateRedux.map((index) => ({
         value: index.id,
         label: index.Name
@@ -175,6 +182,15 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         label: index.Name
     }));
 
+    const RoutesListOptions = RoutesList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+        IsActive: index.IsActive
+    }));
+
+    const RouteName_Options = RoutesListOptions.filter((index) => {
+        return index.IsActive === true
+    });
     function partyTypeOnChange(hasSelect, evn) {
 
         onChangeSelect({ hasSelect, evn, state, setState })
@@ -222,6 +238,10 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         }
 
     };
+    const GSTINverifyhandler = () => {
+
+        window.open("https://services.gst.gov.in/services/login");
+    }
 
     const FirstTab = (
         <div id={"base-tabe-area"}>
@@ -497,29 +517,14 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     )}
                                 </FormGroup>
                             </Col>
-
-                            <Col md="1">  </Col>
-                            <Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Row style={{ marginTop: '25px' }}>
-                                        <Label
-                                            className="col-sm-4 col-form-label">
-                                            {fieldLabel.MkUpMkDn}
-                                        </Label>
-                                        <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                                            <div className="form-check form-switch form-switch-md mb-3">
-                                                <Input
-                                                    name="MkUpMkDn"
-                                                    type="checkbox"
-                                                    disabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
-                                                    className="form-check-input"
-                                                    checked={values.MkUpMkDn}
-                                                    onChange={(event) => onChangeCheckbox({ event, state, setState })}
-                                                />
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </FormGroup>
+                            <Col md="1" className=" mt-3">
+                                <Button
+                                    className=" p-1 mt-3 "
+                                    color="btn btn-outline-primary border-2 font-size-12 "
+                                    type="button"
+                                    onClick={GSTINverifyhandler}
+                                > Verify GSTIN
+                                </Button>
                             </Col>
 
                         </Row>
@@ -550,13 +555,14 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                 <FormGroup className="mb-3">
                                     <Label > {fieldLabel.District} </Label>
                                     <Col sm={12}>
-                                        <Select
+                                        <C_Select
                                             name="District"
                                             value={values.District}
                                             isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                             isSearchable={true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
+                                            isLoading={districtDropDownLoading}
                                             options={DistrictOnStateValues}
                                             onChange={(hasSelect, evn) => {
                                                 onChangeSelect({ hasSelect, evn, state, setState, })
@@ -574,13 +580,14 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             <Col md="3">
                                 <FormGroup className="mb-3">
                                     <Label htmlFor="validationCustom01">{fieldLabel.CityName} </Label>
-                                    <Select
+                                    <C_Select
                                         name="CityName"
                                         id="CityName"
                                         value={values.CityName}
                                         isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
                                         isSearchable={true}
                                         classNamePrefix="dropdown"
+                                        isLoading={cityDropDownLoading}
                                         options={City_DropdownOptions}
                                         onChange={(hasSelect, evn) => {
                                             onChangeSelect({ hasSelect, evn, state, setState, })
@@ -604,6 +611,77 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             }
                         </Row>
                         <Row>
+                            {subPageMode === url.RETAILER_MASTER &&
+
+                                <Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom01">{fieldLabel.Route} </Label>
+                                        <Select
+                                            name="Route"
+                                            id="Route"
+                                            value={values.Route}
+                                            isSearchable={true}
+                                            classNamePrefix="dropdown"
+                                            options={RouteName_Options}
+                                            onChange={(hasSelect, evn) => {
+                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                            }}
+                                        />
+                                        {isError.Route.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.Route}</small></span>
+                                        )}
+                                    </FormGroup>
+                                </Col>
+                            }
+                            {subPageMode === url.RETAILER_MASTER &&
+                                <Col md="1"> </Col>}
+
+                            <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Label>{fieldLabel.Latitude} </Label>
+                                    <Input
+                                        name="Latitude"
+                                        value={values.Latitude}
+                                        type="text"
+                                        className={isError.Latitude.length > 0 ? "is-invalid form-control" : "form-control"}
+                                        placeholder="Please Enter Latitude"
+                                        autoComplete='off'
+                                        onChange={(event) => {
+                                            onChangeText({ event, state, setState })
+                                        }}
+                                    />
+                                    {isError.Latitude.length > 0 && (
+                                        <span className="invalid-feedback">{isError.Latitude}</span>
+                                    )}
+                                </FormGroup>
+                            </Col>
+
+
+                            <Col md="1"> </Col>
+
+
+                            <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Label>{fieldLabel.Longitude} </Label>
+                                    <Input
+                                        name="Longitude"
+                                        value={values.Longitude}
+                                        type="text"
+                                        className={isError.Longitude.length > 0 ? "is-invalid form-control" : "form-control"}
+                                        placeholder="Please Enter Longitude"
+                                        autoComplete='off'
+                                        onChange={(event) => {
+                                            onChangeText({ event, state, setState })
+                                        }}
+                                    />
+                                    {isError.Longitude.length > 0 && (
+                                        <span className="invalid-feedback">{isError.Longitude}</span>
+                                    )}
+                                </FormGroup>
+                            </Col>
+
+
+                            <Col md="1"> </Col>
 
                             <Col md="3">
                                 <FormGroup className="mb-3">

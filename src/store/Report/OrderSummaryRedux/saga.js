@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
     POST_ORDER_SUMMARY_API,
 } from "./actionType";
@@ -13,7 +13,7 @@ function* OrderSummary_GenFunc({ config }) {
 }
 
 function* OrderSummarySaga() {
-    yield takeEvery(POST_ORDER_SUMMARY_API, OrderSummary_GenFunc)
+    yield takeLatest(POST_ORDER_SUMMARY_API, OrderSummary_GenFunc)
 }
 
 export default OrderSummarySaga;
