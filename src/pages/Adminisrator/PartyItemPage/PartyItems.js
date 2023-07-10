@@ -255,6 +255,7 @@ const PartyItems = (props) => {
 
     const SaveHandler = (event) => {
         event.preventDefault();
+
         const selectedItems = groupWiseItemArray.flatMap(group => group.items.filter(item => item.selectCheck));
         const btnId = event.target.id;
 
@@ -266,16 +267,13 @@ const PartyItems = (props) => {
             return;
         }
         try {
-            btnIsDissablefunc({ btnId, state: true });
-            var PartyData = selectedItems.map((index) => ({
+            const jsonBody = JSON.stringify(selectedItems.map((index) => ({
                 Item: index.Item,
                 Party: values.Name.value,
-            }));
-
-            const jsonBody = JSON.stringify(PartyData);
+            })));
             dispatch(SavePartyItems({ jsonBody, btnId }));
         } catch (e) {
-            btnIsDissablefunc({ btnId, state: false });
+            _cfunc.CommonConsole(e)
         }
     };
 
