@@ -8,6 +8,7 @@ import {
   editDriverID,
   deleteDriverID,
   saveDriverMasterSuccess,
+  getDriverListSuccess,
 } from "../../../store/Administrator/DriverRedux/action";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
@@ -54,7 +55,11 @@ const DriverList = () => {
     const page_Id = pageId.DRIVER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
+
     if (!userAdminRole) { goButtonHandler() }
+    return () => {
+      dispatch(getDriverListSuccess([]));
+    }
   }, []);
 
   const goButtonHandler = () => {

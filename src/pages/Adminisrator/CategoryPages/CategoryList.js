@@ -6,6 +6,7 @@ import {
   delete_Category_ID,
   editCategoryID,
   getCategorylist,
+  getCategorylistSuccess,
   saveCategoryMaster_Success,
   updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
@@ -47,6 +48,10 @@ const CategoryList = (props) => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getCategorylist());
+
+    return () => {
+      dispatch(getCategorylistSuccess([]));
+    }
   }, []);
 
   const { pageField, GoBtnlistloading } = reducers

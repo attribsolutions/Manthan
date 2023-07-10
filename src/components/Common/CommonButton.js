@@ -195,13 +195,13 @@ export function Listloader1({ show = false }) {// common Listcomponent
 }
 
 
-export function CustomSppiner({isLoading}) {// common Listcomponent
-if(!isLoading){
-return null
-}
+export function CustomSppiner({ isLoading }) {// common Listcomponent
+  if (!isLoading) {
+    return null
+  }
   return <div id="api_spinner" >
     <div className="api_spinner_body " >
-      <span className="spinner" ></span>
+      <span className="spinner" style={{ marginLeft: "-20vw" }} ></span>
     </div>
   </div>
 
