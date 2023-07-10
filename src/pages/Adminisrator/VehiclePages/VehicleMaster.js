@@ -18,7 +18,6 @@ import {
     commonPageFieldSuccess
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import {
     saveVehicleMaster,
     getVehicleType_for_dropdown,
@@ -38,12 +37,20 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, metaTagLabel, loginUserAdminRole, } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginCompanyID,
+    loginPartyID,
+    loginUserID,
+    btnIsDissablefunc,
+    metaTagLabel,
+    loginUserAdminRole,
+} from "../../../components/Common/CommonFunction";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const VehicleMaster = (props) => {
 
@@ -156,37 +163,35 @@ const VehicleMaster = (props) => {
         }
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveVehicleMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.VEHICLE_lIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.VEHICLE_lIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(getVehicleListSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
@@ -199,9 +204,8 @@ const VehicleMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateVehicleID_Success({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

@@ -21,7 +21,7 @@ import {
   updateCompanyIDSuccess
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import {
@@ -42,6 +42,7 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const CompanyModule = (props) => {
 
@@ -163,7 +164,7 @@ const CompanyModule = (props) => {
 
   }, []);
 
-  useEffect(() => {
+  useEffect(async () => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(saveCompany_Success({ Status: false }))
@@ -171,30 +172,28 @@ const CompanyModule = (props) => {
       dispatch(Breadcrumb_inputName(''))
 
       if (pageMode === "other") {
-        dispatch(AlertState({
+        customAlert({
           Type: 1,
-          Status: true,
           Message: postMsg.Message,
-        }))
+      })
       }
       else {
-        dispatch(AlertState({
+        let isPermission = await customAlert({
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-          RedirectPath: url.COMPANY_lIST,
-        }))
+      })
+      if (isPermission) {
+          history.push({ pathname: url.COMPANY_lIST })
+      }
       }
     }
     else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
       dispatch(saveCompany_Success({ Status: false }))
-      dispatch(AlertState({
+      customAlert({
         Type: 4,
-        Status: true,
         Message: JSON.stringify(postMessage.Message),
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
+    })
     }
   }, [postMsg])
 
@@ -207,11 +206,10 @@ const CompanyModule = (props) => {
     } else if (updateMsg.Status === true && !modalCss) {
       dispatch(updateCompanyIDSuccess({ Status: false }));
       dispatch(
-        AlertState({
+        customAlert({
           Type: 3,
-          Status: true,
           Message: JSON.stringify(updateMsg.Message),
-        })
+      })
       );
     }
   }, [updateMsg, modalCss]);

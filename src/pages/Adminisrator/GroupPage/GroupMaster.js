@@ -17,7 +17,6 @@ import {
     commonPageField,
     commonPageFieldSuccess,
     editGroupIDSuccess,
-    getGroupListSuccess,
     saveGroupMaster,
     saveGroupMaster_Success,
     updateGroupID,
@@ -36,12 +35,10 @@ import {
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
-    breadcrumbReturnFunc,
     btnIsDissablefunc,
     loginUserID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
-
 import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import GroupTypeMaster from "../GroupTypePage/GroupTypeMaster";
@@ -154,39 +151,6 @@ const GroupMaster = (props) => {
         }
     }, [])
 
-    // useEffect(async () => {
-
-    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-    //         dispatch(saveGroupMaster_Success({ Status: false }))
-    //         setState(() => resetFunction(fileds, state))//Clear form values
-    //         dispatch(Breadcrumb_inputName(''))
-
-    //         if (pageMode === "other") {
-    //             customAlert({
-    //                 Type: 1,
-    //                 Message: postMsg.Message,
-    //             })
-    //         }
-    //         else {
-    //             const promise = await customAlert({
-    //                 Type: 1,
-    //                 Message: postMsg.Message,
-    //             })
-    //             if (promise) {
-    //                 history.push({
-    //                     pathname: url.GROUP_lIST,
-    //                 })
-    //             }
-    //         }
-    //     }
-    //     else if (postMsg.Status === true) {
-    //         dispatch(getGroupListSuccess({ Status: false }))
-    //         customAlert({
-    //             Type: 4,
-    //             Message: JSON.stringify(postMessage.Message),
-    //         })
-    //     }
-    // }, [postMsg])
 
     useEffect(() => saveMsgUseEffect({
         postMsg, pageMode,

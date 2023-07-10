@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Button, Table } from "reactstrap";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success } from "../../../../../store/Administrator/MRPMasterRedux/action";
-import { AlertState } from "../../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { loginIsSCMCompany } from "../../../../../components/Common/CommonFunction";
+import { customAlert } from "../../../../../CustomAlert/ConfirmDialog";
 
 function MRPTable(props) {
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ function MRPTable(props) {
     }
     else {
       dispatch(
-        AlertState({
+        customAlert({
           Type: 5,
           Status: true,
           Message: `Are you sure you want to delete this MRP"`,
@@ -47,7 +47,7 @@ function MRPTable(props) {
       props.func(fil);
 
       dispatch(
-        AlertState({
+        customAlert({
           Type: 1,
           Status: true,
           Message: deleteMsg.Message,
@@ -56,7 +56,7 @@ function MRPTable(props) {
     } else if (deleteMsg.Status === true) {
       dispatch(deleteMRPMaster_Id_Success({ Status: false }));
       dispatch(
-        AlertState({
+        customAlert({
           Type: 3,
           Status: true,
           Message: JSON.stringify(deleteMsg.Message),

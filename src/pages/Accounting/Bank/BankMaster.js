@@ -17,7 +17,6 @@ import {
     commonPageFieldSuccess,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -186,9 +185,8 @@ const BankMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBankIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

@@ -9,7 +9,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import {  commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -48,6 +48,7 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const goBtnID1 = "workOrdergoBtnID1"
 const changeBtnID1 = "workOrderchangeBtnID1"
@@ -182,35 +183,33 @@ const WorkOrder = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
-            // setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.WORK_ORDER_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.WORK_ORDER_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
-            dispatch(AlertState({
+            dispatch(customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
+            )
         }
     }, [postMsg])
 
@@ -225,9 +224,8 @@ const WorkOrder = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );
