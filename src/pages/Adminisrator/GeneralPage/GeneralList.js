@@ -14,7 +14,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { loginCompanyID } from "../../../components/Common/CommonFunction";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
 
 
 const GeneralList = (props) => {
@@ -23,6 +23,7 @@ const GeneralList = (props) => {
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.GeneralReducer.listBtnLoading,
+            GoBtnlistloading: state.GeneralReducer.loading,
             tableList: state.GeneralReducer.GeneralList,
             editData: state.GeneralReducer.editData,
             updateMsg: state.GeneralReducer.updateMessage,
@@ -50,7 +51,7 @@ const GeneralList = (props) => {
         dispatch(PostGenerallist(getlistBody()));
     }, []);
 
-    const { pageField } = reducers
+    const { pageField, GoBtnlistloading } = reducers
 
     function getlistBody() {
         return JSON.stringify({
@@ -61,21 +62,19 @@ const GeneralList = (props) => {
 
     return (
         <React.Fragment>
+            <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
             {
-                 reducers.loading ?
-                 <Listloader />
-                 :
-                (pageField) ?
-                    <CommonListPage
-                        action={action}
-                        reducers={reducers}
-                        MasterModal={GeneralMaster}
-                        masterPath={url.GENERAL}
-                        getListbodyFunc={getlistBody}
-                        ButtonMsgLable={"General"}
-                        deleteName={"Name"}
-                    />
-                    : <><Listloader /></>
+                (pageField) &&
+                <CommonListPage
+                    action={action}
+                    reducers={reducers}
+                    MasterModal={GeneralMaster}
+                    masterPath={url.GENERAL}
+                    getListbodyFunc={getlistBody}
+                    ButtonMsgLable={"General"}
+                    deleteName={"Name"}
+                />
+
             }
 
         </React.Fragment>
