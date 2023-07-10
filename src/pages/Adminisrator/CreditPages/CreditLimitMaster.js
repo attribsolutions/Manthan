@@ -12,7 +12,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {  commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -169,16 +169,11 @@ const CreditLimitMaster = (props) => {
     const goButtonHandler = (event) => {
 
         if (RouteSelect.value === undefined) {
-            {
-                dispatch(
-                    customAlert({
-                        Type: 4,
-                        Status: true,
-                        Message: "Please Select Route",
-                    })
-                );
+                customAlert({
+                    Type: 4,
+                    Message: "Please Select Route",
+                })
                 return;
-            }
         }
         const jsonBody = JSON.stringify({
             Party: loginPartyID(),
