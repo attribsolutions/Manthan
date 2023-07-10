@@ -29,32 +29,28 @@ import {
   UPDATE_WORK_ORDER_LIST
 } from "./actionTypes";
 
-
-function* Get_BOMList_GenratorFunction({ filters }) {                                           // get Item dropdown API using post method
+function* Get_BOMList_GenratorFunction({ filters }) {      // get Item dropdown API using post method
   try {
     const response = yield call(BOMList_Get_API, filters);
     yield put(getBOMListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-
-function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {                                  // GO Botton Post API
+function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {     // GO Botton Post API
   try {
     const response = yield call(WorkOrder_GoButton_Post_API, jsonbody);
     yield put(postGoButtonForWorkOrder_MasterSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
- 
-function* Post_WorkOrder_GenratorFunction({ config }) {                               // WOrk Order Post API
+function* Post_WorkOrder_GenratorFunction({ config }) {     // WOrk Order Post API
   try {
     const response = yield call(Post_WorkOrder_Master_API, config);
     yield put(SaveWorkOrderMasterSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-
-function* GetWorkOrderGenFunc({ filters }) {                                                  // get Work Order List API Using post method
+function* GetWorkOrderGenFunc({ filters }) {       // get Work Order List API Using post method
   try {
     const response = yield call(WorkOrder_Get_API, filters);
     const newList = yield response.Data.map((i) => {
@@ -68,33 +64,32 @@ function* GetWorkOrderGenFunc({ filters }) {                                    
   } catch (error) { CommonConsole(error) }
 }
 
-
-function* editWorkOrderGenFunc({ config }) {                                          // Work Order edit List page
+function* editWorkOrderGenFunc({ config }) {     // Work Order edit List page
   const { btnmode } = config;
   try {
     let response = yield call(WorkOrder_edit_Api, config);
     response.pageMode = btnmode;
     response.Data = response.Data[0];
-    if (response.StatusCode === 226) yield put(customAlert({
-      Type: 3,
-      Status: true, Message: response.Message,
-    }));
+    if (response.StatusCode === 226) {
+      customAlert({
+        Type: 3,
+        Status: true, Message: response.Message,
+      })
+    }
     else {
       yield put(editWorkOrderListSuccess(response));
     }
   } catch (error) { CommonConsole(error) }
 }
 
-
-function* UpdateWorkOrderGenFunc({ config }) {                                           // Work Order update List page
+function* UpdateWorkOrderGenFunc({ config }) {     // Work Order update List page
   try {
     const response = yield call(WorkOrder_Update_Api, config);
     yield put(updateWorkOrderListSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-
-function* DeleteWorkOrderGenFunc({ config }) {                                                  // Work Order delete List page
+function* DeleteWorkOrderGenFunc({ config }) {       // Work Order delete List page
   try {
     const response = yield call(WorkOrder_Delete_Api, config);
     yield put(deleteWorkOrderIdSuccess(response));

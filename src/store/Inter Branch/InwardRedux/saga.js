@@ -40,7 +40,6 @@ function* DeleteInward_GenFunc({ id }) {
   } catch (error) { CommonConsole(error) }
 }
 
-
 // Make Inward Button API
 function* Make_Inward_GenratorFunction({ config }) {
   try {
