@@ -13,7 +13,7 @@ import MarginMaster from "./MarginMaster";
 import { delete_MarginList_ID, delete_MarginList_ID_Success, getMarginList, goButtonForMarginSuccess } from "../../../store/Administrator/MarginMasterRedux/action";
 import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
 
 const MarginList = () => {
 
@@ -26,7 +26,8 @@ const MarginList = () => {
 
   const reducers = useSelector(
     (state) => ({
-      listBtnLoading:state.MarginMasterReducer.listBtnLoading,
+      listBtnLoading: state.MarginMasterReducer.listBtnLoading,
+      GoBtnlistloading: state.MarginMasterReducer.loading,
       tableList: state.MarginMasterReducer.MarginList,
       MarginGoButton: state.MarginMasterReducer.MarginGoButton,
       deleteMsg: state.MarginMasterReducer.deleteMsg,
@@ -35,7 +36,7 @@ const MarginList = () => {
     })
   );
 
-  const { userAccess, pageField, MarginGoButton, deleteMsg } = reducers;
+  const { userAccess, pageField, MarginGoButton, deleteMsg, GoBtnlistloading } = reducers;
 
   const action = {
     getList: getMarginList,
@@ -122,27 +123,25 @@ const MarginList = () => {
 
   return (
     <React.Fragment>
+      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
         <div className="mt-n1">
           {
-            reducers.listBtnLoading ?
-              <Listloader />
-              :
-              (pageField) ?
-                <CommonPurchaseList
-                  action={action}
-                  reducers={reducers}
-                  showBreadcrumb={false}
-                  MasterModal={MarginMaster}
-                  masterPath={url.MARGIN}
-                  newBtnPath={url.MARGIN}
-                  ButtonMsgLable={"Margin"}
-                  deleteName={"EffectiveDate"}
-                  pageMode={pageMode}
-                  editBodyfunc={editBodyfunc}
-                  deleteBodyfunc={deleteBodyfunc}
-                />
-                : <> <Listloader /></>
+            (pageField) &&
+            <CommonPurchaseList
+              action={action}
+              reducers={reducers}
+              showBreadcrumb={false}
+              MasterModal={MarginMaster}
+              masterPath={url.MARGIN}
+              newBtnPath={url.MARGIN}
+              ButtonMsgLable={"Margin"}
+              deleteName={"EffectiveDate"}
+              pageMode={pageMode}
+              editBodyfunc={editBodyfunc}
+              deleteBodyfunc={deleteBodyfunc}
+            />
+
           }
         </div>
 

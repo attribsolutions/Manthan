@@ -34,10 +34,11 @@ const DriverList = () => {
       postMsg: state.DriverReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList,
-      listBtnLoading: (state.DriverReducer.listBtnLoading || state.DriverReducer.loading)
+      listBtnLoading: state.DriverReducer.listBtnLoading,
+      GoBtnlistloading: state.DriverReducer.loading
     })
   );
-  const { pageField, listBtnLoading } = reducers
+  const { pageField, GoBtnlistloading } = reducers
   debugger
 
   const action = {
@@ -70,6 +71,7 @@ const DriverList = () => {
   }
   return (
     <React.Fragment>
+      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
 
         {userAdminRole &&
@@ -81,7 +83,7 @@ const DriverList = () => {
             />
           </div>
         }
-        <CustomSppiner isLoading={(listBtnLoading || !pageField)} />
+
         {
           (pageField) &&
           <div className="mt-n1">
