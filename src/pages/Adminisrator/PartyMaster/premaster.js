@@ -32,7 +32,7 @@ import {
     updatePartyID,
     updatePartyIDSuccess
 } from "../../../store/Administrator/PartyRedux/action"
-import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
+import {  Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
 import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID } from "../../../components/Common/CommonFunction"
@@ -44,6 +44,7 @@ import { getcompanyList } from "../../../store/Administrator/CompanyRedux/action
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
 import NewForm from "./NewForm";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -195,7 +196,7 @@ const PartyMaster = (props) => {
         }
     }, [PartyTypes])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(postPartyDataSuccess({ Status: false }))
             setCompanyList_dropdown_Select('')
@@ -205,31 +206,28 @@ const PartyMaster = (props) => {
             setState_DropDown_select('')
 
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
-                    Message: PostAPIResponse.Message,
-                }))
+                    Message: postMsg.Message,
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
-                    RedirectPath: '/PartyList',
-                    AfterResponseAction: false
-                }))
+                    Message: postMsg.Message,
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.PARTY_lIST })
+                }
             }
         }
         else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
             dispatch(postPartyDataSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [PostAPIResponse.Status])
 
@@ -241,9 +239,8 @@ const PartyMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updatePartyIDSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );
@@ -328,7 +325,7 @@ const PartyMaster = (props) => {
 
         if (AddressDetailsMaster.length === 0) {
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 4,
                     Status: true,
                     Message: "Address details is required",
@@ -347,7 +344,7 @@ const PartyMaster = (props) => {
 
         if (count1 === 0) {
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 4,
                     Status: true,
                     Message: "At least one Address Details IsDefault true",

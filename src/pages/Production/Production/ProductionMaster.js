@@ -10,7 +10,7 @@ import Select from "react-select";
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate_ymd, metaTagLabel } from "../../../components/Common/CommonFunction";
 import {
@@ -34,6 +34,7 @@ import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const ProductionMaster = (props) => {
 
@@ -188,11 +189,11 @@ const ProductionMaster = (props) => {
         };
     }, [userAccess]);
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(Save_ProductionSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
-            dispatch(AlertState({
+            dispatch(customAlert({
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
@@ -200,7 +201,7 @@ const ProductionMaster = (props) => {
             }))
         } else if (postMsg.Status === true) {
             dispatch(Save_ProductionSuccess({ Status: false }))
-            dispatch(AlertState({
+            dispatch(customAlert({
                 Type: 4,
                 Status: true,
                 Message: JSON.stringify(postMsg.Message),
@@ -219,9 +220,8 @@ const ProductionMaster = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(update_ProductionIdSuccess({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );

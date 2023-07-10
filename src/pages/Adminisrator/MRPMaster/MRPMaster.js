@@ -15,11 +15,7 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator";
+import {  Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import { get_Division_ForDropDown, get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -171,7 +167,7 @@ const MRPMaster = (props) => {
             dispatch(GoButtonForMRP_MasterSuccess([]))
             GoButton_Handler()
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
@@ -181,7 +177,7 @@ const MRPMaster = (props) => {
         } else if (deleteMessage.Status === true) {
             dispatch(deleteMRPMaster_Id_Success({ Status: false }));
             dispatch(
-                AlertState({
+                customAlert({
                     Type: 3,
                     Status: true,
                     Message: JSON.stringify(deleteMessage.Message),
@@ -237,7 +233,7 @@ const MRPMaster = (props) => {
     //select id for delete row
     const deleteHandeler = (id, name) => {
         dispatch(
-            AlertState({
+            customAlert({
                 Type: 5,
                 Status: true,
                 Message: `Are you sure you want to delete this Item : "${name}"`,
@@ -248,37 +244,35 @@ const MRPMaster = (props) => {
         );
     };
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(saveMRPMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.MRP_lIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.MRP_lIST })
+                }
             }
         }
 
         else if (postMsg.Status === true) {
             dispatch(saveMRPMasterSuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [postMsg])
 

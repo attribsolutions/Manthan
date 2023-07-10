@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success } from '../../../../../store/Administrator/MRPMasterRedux/action';
-import { AlertState } from '../../../../../store/actions';
 import { deleteIdForMarginMaster, deleteIdForMarginMasterSuccess } from '../../../../../store/Administrator/MarginMasterRedux/action';
+import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 
 function MarginTable(props) {
     const dispatch = useDispatch();
@@ -24,7 +23,7 @@ function MarginTable(props) {
       }
       else {
         dispatch(
-          AlertState({
+          customAlert({
             Type: 5,
             Status: true,
             Message: `Are you sure you want to delete this Margin"`,
@@ -46,7 +45,7 @@ function MarginTable(props) {
         props.func(fil);
   
         dispatch(
-          AlertState({
+          customAlert({
             Type: 1,
             Status: true,
             Message: deleteMsg.Message,
@@ -55,7 +54,7 @@ function MarginTable(props) {
       } else if (deleteMsg.Status === true) {
         dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
         dispatch(
-          AlertState({
+          customAlert({
             Type: 3,
             Status: true,
             Message: JSON.stringify(deleteMsg.Message),

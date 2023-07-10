@@ -10,20 +10,18 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import {  commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
     onChangeSelect,
-    resetFunction,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import CustomTable2 from "../../../CustomTable2/Table";
 import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
@@ -104,37 +102,35 @@ const StockEntry = (props) => {
         }
     }, [pageField])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveStockEntrySuccess({ Status: false }))
             setTableArr([])
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.STOCK_ENTRY,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.STOCK_ENTRY })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveStockEntrySuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 

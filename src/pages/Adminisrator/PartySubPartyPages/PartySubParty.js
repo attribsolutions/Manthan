@@ -25,7 +25,6 @@ import {
     deleteIDForMasterPage,
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import {
-    AlertState,
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess

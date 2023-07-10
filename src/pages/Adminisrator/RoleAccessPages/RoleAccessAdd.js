@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-
-    CardBody,
     Col,
     Container,
     Row,
@@ -13,12 +11,10 @@ import {
     Table,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import Select from "react-select";
 import {
     getPartyListAPI,
 } from "../../../store/Administrator/PartyRedux/action";
-import { Tbody } from "react-super-responsive-table";
 import { MetaTags } from "react-meta-tags";
 import {
     AddPageHandlerForRoleAccessListPage,
@@ -44,7 +40,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
-
 
 
 const RoleAccessAdd = () => {

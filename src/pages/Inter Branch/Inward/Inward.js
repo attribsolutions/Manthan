@@ -16,10 +16,10 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { postInward, postInwardSuccess } from "../../../store/Inter Branch/InwardRedux/action";
 import  {mode,url} from "../../../routes/index";
-import { AlertState } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const Inward = (props) => {
 
@@ -64,7 +64,7 @@ const Inward = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postInwardSuccess({ Status: false }))
-            dispatch(AlertState({
+            dispatch(customAlert({
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
@@ -73,7 +73,7 @@ const Inward = (props) => {
 
         } else if (postMsg.Status === true) {
             dispatch(postInwardSuccess({ Status: false }))
-            dispatch(AlertState({
+            dispatch(customAlert({
                 Type: 4,
                 Status: true,
                 Message: JSON.stringify(postMsg.Message),
