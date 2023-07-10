@@ -134,7 +134,7 @@ const ImportExcelPartyMap = (props) => {
             dispatch(save_ImportExcelPartyMap_Sucess({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])

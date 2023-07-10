@@ -118,7 +118,7 @@ const InvoiceExcelUpload = (props) => {
             dispatch(InvoiceExcelUpload_save_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             });
         };
     }, [postMsg])

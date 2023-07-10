@@ -271,7 +271,7 @@ const MRPMaster = (props) => {
             dispatch(saveMRPMasterSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])

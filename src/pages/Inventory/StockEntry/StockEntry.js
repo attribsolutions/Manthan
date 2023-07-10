@@ -17,7 +17,7 @@ import {
     formValid,
     initialFiledFunc,
     onChangeSelect,
-   
+
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -130,7 +130,7 @@ const StockEntry = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(postMessage.Message),
+                 Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -443,7 +443,7 @@ const StockEntry = (props) => {
         const btnId = event.target.id
 
         const ReturnItems = TableArr.map((index) => {
-            
+
             return ({
                 "Item": index.ItemId,
                 "ItemName": index.ItemName,
