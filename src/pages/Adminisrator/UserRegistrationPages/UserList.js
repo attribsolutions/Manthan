@@ -28,7 +28,7 @@ const UserList = () => {
             updateMsg: state.User_Registration_Reducer.updateMessage,
             deleteMsg: state.User_Registration_Reducer.deleteSuccessRole,
             userAccess: state.Login.RoleAccessUpdateData,
-            postMsg: state.User_Registration_Reducer.AddUserMessage,
+            postMsg: state.User_Registration_Reducer.postMsg,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
