@@ -40,9 +40,6 @@ const Layout = props => {
     layoutMode,
     layoutType,
     leftSidebarTypes,
-    userAccess,
-    pageField,
-    dounloadProductMargin = false
   } = useSelector(state => ({
     isPreloader: state.Layout.isPreloader,
     leftSideBarType: state.Layout.leftSideBarType,
@@ -52,9 +49,6 @@ const Layout = props => {
     layoutMode: state.Layout.layoutMode,
     layoutType: state.Layout.layoutType,
     leftSidebarTypes: state.Layout.leftSidebarTypes,
-    userAccess: state.Login.RoleAccessUpdateData,
-    pageField: state.CommonPageFieldReducer.pageFieldList,
-    dounloadProductMargin: state.SapLedgerReducer.dounloadProductMargin,
   }));
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -94,13 +88,6 @@ const Layout = props => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  // useEffect(() => {
-  //   if (Count === 100) {
-  //     document.getElementById("preloader").style.display = "none";
-  //   }
-  // });
-
 
 
   useEffect(() => {
@@ -157,31 +144,14 @@ const Layout = props => {
 
   return (
     <React.Fragment>
-      {dounloadProductMargin &&
-        <div id="api_spinner" >
-          <div className="api_spinner_body">
-            <span className="spinner"></span>
-          </div>
-        </div>}
-
-
       {/* 
       <div className="pace pace-active" id="preloader">
         <div className="pace-progress" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
         </div>
       </div> */}
 
-      <div className="_linkLoading_body">
-        <div className="cv-spinner">
-          <div className="_linkLoading "></div >
-        </div>
-
-      </div>
-
-
       <div id="layout-wrapper">
         <LogoutChecker />
-        <CustomAlert />
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
         <BreadcrumbNew />
         <Sidebar

@@ -25,13 +25,10 @@ const SidebarContent = (props) => {
     RoleAccessData,
     RoleAccessUpdateData,
     roleAccesssForSidbarError = false,
-    dounloadProductMargin = false
   } = useSelector((state) => ({
     RoleAccessData: state.Login.roleAccessSidbarData,
     RoleAccessUpdateData: state.Login.RoleAccessUpdateData,
     roleAccesssForSidbarError: state.Login.roleAccesssForSidbarError,
-
-
   }));
 
 
@@ -89,7 +86,6 @@ const SidebarContent = (props) => {
             if (parent5) {
               parent5.classList.add("mm-show"); // li
               parent5.childNodes[0].classList.add("mm-active"); // a tag
-
             }
           }
         }
