@@ -8,7 +8,7 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
-import { SSDD_List_under_Company, getBaseUnit_ForDropDown } from "../../store/actions";
+import { BreadcrumbShowCountlabel, SSDD_List_under_Company, getBaseUnit_ForDropDown } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import { stockReport_GoButton_API } from "../../store/Report/StockReport/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -70,6 +70,10 @@ const StockReport = (props) => {
         dispatch(getBaseUnit_ForDropDown());
         dispatch(SSDD_List_under_Company());
     }, [])
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Stock Report Count:${tableData.length}`))
+    }, [tableData])
 
     const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
         .map(data => ({

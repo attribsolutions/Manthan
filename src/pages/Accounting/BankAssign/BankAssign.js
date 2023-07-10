@@ -95,7 +95,6 @@ const BankAssign = (props) => {
         };
     }, [userAccess])
 
-
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveBankAssign_Success({ Status: false }))
@@ -122,7 +121,7 @@ const BankAssign = (props) => {
             dispatch(saveBankAssign_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -130,8 +129,6 @@ const BankAssign = (props) => {
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${" Bank Assign Count"} :${bankTableList.length}`))
     }, [bankTableList])
-
-
 
     const pagesListColumns = [
         {

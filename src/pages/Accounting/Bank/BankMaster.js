@@ -45,7 +45,6 @@ import {
 } from "../../../store/Accounting/BankRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
-
 const BankMaster = (props) => {
 
     const history = useHistory()
@@ -184,10 +183,11 @@ const BankMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBankIDSuccess({ Status: false }));
-                customAlert({
-                    Type: 3,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+
         }
     }, [updateMsg, modalCss]);
 

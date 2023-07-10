@@ -9,7 +9,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess, getItemList } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {  commonPageField } from "../../../../store/actions";
+import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -201,21 +201,20 @@ const BOMMaster = (props) => {
             })
         } else if ((updateMsg.Status === true) && (updateMsg.StatusCode === 100) && !(modalCss)) {
             dispatch(updateBOMListSuccess({ Status: false }));
-            dispatch(customAlert({
+            customAlert({
                 Type: 6, Status: true,
                 Message: JSON.stringify(updateMsg.Message),
                 PermissionFunction: PermissionFunction,
 
-            }));
+            })
         }
         else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 
@@ -287,15 +286,14 @@ const BOMMaster = (props) => {
                     ReferenceBom: BOMrefID
                 });
                 if (BOMItems.length === 0) {
-                    dispatch(
-                        customAlert({
-                            Type: 4,
-                            Status: true,
-                            Message: "At Least One Matrial data Add in the table",
-                            RedirectPath: false,
-                            PermissionAction: false,
-                        })
-                    );
+                    customAlert({
+                        Type: 4,
+                        Status: true,
+                        Message: "At Least One Matrial data Add in the table",
+                        RedirectPath: false,
+                        PermissionAction: false,
+                    })
+
                     return;
                 }
                 if (pageMode === mode.edit) {

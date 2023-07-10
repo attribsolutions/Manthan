@@ -15,7 +15,7 @@ function* Post_Inward_GenratorFunction({ data }) {
 
 // Inward List API
 function* get_InwardList_GenFunc({ filters }) {
-   try {
+  try {
     const response = yield call(Inward_List_API, filters);
     const newList = yield response.Data.map((i) => {
       var date = date_dmy_func(i.IBInwardDate)
@@ -31,10 +31,12 @@ function* DeleteInward_GenFunc({ id }) {
   try {
     const response = yield call(Inward_Delete_API, id);
     if (response.StatusCode === 200) yield put(deleteInwardIdSuccess(response))
-    else yield put(customAlert({
-      Type: 4,
-      Status: true, Message: JSON.stringify(response.Message),
-    }));
+    else {
+      customAlert({
+        Type: 4,
+        Message: JSON.stringify(response.Message),
+      })
+    }
   } catch (error) { CommonConsole(error) }
 }
 
@@ -42,9 +44,9 @@ function* DeleteInward_GenFunc({ id }) {
 // Make Inward Button API
 function* Make_Inward_GenratorFunction({ config }) {
   try {
-   const response = yield call(Make_Inward_Post_API, config);
-   yield put(makeInwardSuccess(response.Data))
- } catch (error) { CommonConsole(error) }
+    const response = yield call(Make_Inward_Post_API, config);
+    yield put(makeInwardSuccess(response.Data))
+  } catch (error) { CommonConsole(error) }
 }
 
 function* InwardSaga() {

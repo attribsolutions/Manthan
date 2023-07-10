@@ -148,10 +148,10 @@ function* Post_SuperAdmin_API_GenratorFunction() {
     const response = yield call(post_SuperAdmin);
     yield put(postSuperAdminSuccess(response.Data));
   } catch (error) {
-    yield put(customAlert({
+    customAlert({
       Type: 4,
       Status: true, Message: "500 Error Message",
-    }));
+    });
   }
 }
 function* authSaga() {

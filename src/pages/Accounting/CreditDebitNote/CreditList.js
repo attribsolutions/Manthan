@@ -54,7 +54,6 @@ const CreditList = () => {
         buttonMsgLable: '',
         page_Id: ''
     });
-    const [userAccState, setUserAccState] = useState('');
 
     const reducers = useSelector(
         (state) => ({
@@ -71,7 +70,7 @@ const CreditList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList, CreditDebitType } = reducers;
+    const { pageField, RetailerList, CreditDebitType } = reducers;
     const values = { ...state.values }
 
     const action = {
