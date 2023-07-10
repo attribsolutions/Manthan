@@ -224,12 +224,12 @@ const MaterialIssueMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
-            dispatch(
+            
                 customAlert({
                     Type: 3,
                     Message: JSON.stringify(updateMsg.Message),
                 })
-            );
+        
         }
     }, [updateMsg, modalCss]);
 
