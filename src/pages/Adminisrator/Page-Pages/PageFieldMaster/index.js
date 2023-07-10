@@ -10,6 +10,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { Tbody, Th, Thead, Tr } from "react-super-responsive-table";
+import { C_Select } from '../../../../CustomValidateForm';
 // import './css.css'
 function PageFieldMaster_Tab(props) {
 
@@ -20,9 +21,11 @@ function PageFieldMaster_Tab(props) {
     const {
         ControlTypes,
         FieldValidations,
+        fieldvalidationDropDownLoading,
     } = useSelector((state) => ({
         ControlTypes: state.H_Pages.ControlTypes,
         FieldValidations: state.H_Pages.FieldValidations,
+        fieldvalidationDropDownLoading:state.H_Pages.fieldvalidationDropDownLoading,
     }));
 
     useEffect(() => {
@@ -189,10 +192,11 @@ function PageFieldMaster_Tab(props) {
                                     </td>
                                     <td>
                                         <div style={{ width: "150px" }}>
-                                            <Select
+                                            <C_Select
                                                 id={`FieldValidation-${key}`}
                                                 autoComplete="off"
                                                 value={pageFieldTabTable[key].FieldValidation}
+                                                isLoading={fieldvalidationDropDownLoading}
                                                 options={FieldValidations_DropdownOptions}
                                                 onChange={(e) => { FieldValidation_Dropdown_Handler(e, key); }}
                                             // onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
