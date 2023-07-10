@@ -27,7 +27,7 @@ import {
   ITEM_FOR_PRODUNCTION_RE_ISSUE,
 } from "./actionType";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
-import { AlertState } from "../../actions";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 function* saveProduction_ReIssueGenFunc({ data }) {               // Save Production_ReIssue  genrator function
@@ -77,7 +77,7 @@ function* editProduction_ReIssue_GenFunc({ id, pageMode }) {      // Edit Produc
 
   } catch (error) {
     yield put(
-      AlertState({
+      customAlert({
         Type: 4,
         Status: true,
         Message: "500 Error Edit Production_ReIssue API",

@@ -5,7 +5,7 @@ export const AlertShow = (state) => ({
   state,
 });
 
-export const AlertState = (state) => ({
+export const customAlert = (state) => ({
   type: ALERT_STATE,
   payload: state,
 });

@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Inward_Delete_API, Inward_List_API, Inward_Post_API, Make_Inward_Post_API } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { deleteInwardIdSuccess, getInwardListPageSuccess, makeInwardSuccess, postInwardSuccess } from "./action";
 import { DELETE_INWARD_LIST_PAGE, GET_INWARD_LIST_PAGE, MAKE_INWARD, POST_INWARD } from "./actionType";
 
@@ -31,21 +31,13 @@ function* DeleteInward_GenFunc({ id }) {
   try {
     const response = yield call(Inward_Delete_API, id);
     if (response.StatusCode === 200) yield put(deleteInwardIdSuccess(response))
-    else yield put(AlertState({
+    else yield put(customAlert({
       Type: 4,
       Status: true, Message: JSON.stringify(response.Message),
     }));
   } catch (error) { CommonConsole(error) }
 }
 
-// //post api
-// function* Make_Inward_GenratorFunction({ data }) {
-//   
-//   try {
-//     const response = yield call(Make_Inward_Post_API, data);
-//     yield put(makeInwardSuccess(response));
-//   } catch (error) { CommonConsole(error) }
-// }
 
 // Make Inward Button API
 function* Make_Inward_GenratorFunction({ config }) {

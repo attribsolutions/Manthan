@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
   BOMList_Get_API,
   Post_WorkOrder_Master_API,
@@ -9,7 +10,6 @@ import {
   WorkOrder_GoButton_Post_API,
   WorkOrder_Update_Api
 } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import {
   deleteWorkOrderIdSuccess,
   editWorkOrderListSuccess,
@@ -75,7 +75,7 @@ function* editWorkOrderGenFunc({ config }) {                                    
     let response = yield call(WorkOrder_edit_Api, config);
     response.pageMode = btnmode;
     response.Data = response.Data[0];
-    if (response.StatusCode === 226) yield put(AlertState({
+    if (response.StatusCode === 226) yield put(customAlert({
       Type: 3,
       Status: true, Message: response.Message,
     }));
