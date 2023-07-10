@@ -273,7 +273,7 @@ export const RowsWithIGST = (data) => {
             totalAmount = Number(totalAmount) + Number(element.Amount)
             totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
 
-            GSTPercentage = Number(element.CGSTPercentage) + Number(element.SGSTPercentage)
+            GSTPercentage = Number(element.IGSTPercentage)
 
         };
 
@@ -386,7 +386,7 @@ export const BilledToRow = (data) => {
     return BilledToArray;
 }
 export const DetailsOfTransportRow = (data) => {
-    
+
     const PoNumber = data.InvoicesReferences.map(index => ({
         SystemGenerate: index.FullOrderNumber,
         Description: index.Description,
