@@ -8,9 +8,9 @@ import {
     Button,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { commonPageField } from "../../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -18,21 +18,21 @@ import {
     onChangeSelect,
     onChangeText,
     resetFunction,
-} from "../../../../components/Common/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, C_Button, SaveButton, } from "../../../../components/Common/CommonButton";
-import { url, mode, pageId } from "../../../../routes/index"
-import { Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
-import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
-import { postSelect_Field_for_dropdown } from "../../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess } from "../../../../store/Sales/SalesReturnRedux/action";
+import { Change_Button, C_Button, SaveButton, } from "../../../components/Common/CommonButton";
+import { url, mode, pageId } from "../../../routes/index"
+import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
+import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess } from "../../../store/Sales/SalesReturnRedux/action";
 import "./salesReturn.scss";
-import { CInput, C_DatePicker, C_Select } from "../../../../CustomValidateForm/index";
-import { decimalRegx, } from "../../../../CustomValidateForm/RegexPattern";
-import { getpartyItemList } from "../../../../store/Administrator/PartyItemsRedux/action";
+import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
+import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
+import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
 import { return_discountCalculate_Func } from "./SalesCalculation";
-import * as _cfunc from "../../../../components/Common/CommonFunction";
-import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 

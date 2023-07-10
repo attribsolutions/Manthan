@@ -7,21 +7,21 @@ import {
     Spinner
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageFieldSuccess } from "../../../../store/actions";
+import { commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { commonPageField } from "../../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { url, mode, pageId } from "../../../../routes/index"
-import { LoadingSheet_GoBtn_API_Succcess, UpdateLoadingSheetSucccess } from "../../../../store/Sales/LoadingSheetRedux/action";
+import { url, mode, pageId } from "../../../routes/index"
+import { LoadingSheet_GoBtn_API_Succcess, UpdateLoadingSheetSucccess } from "../../../store/Sales/LoadingSheetRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
-import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
-import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
-import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
-import DynamicColumnHook, { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
-import { C_DatePicker } from "../../../../CustomValidateForm";
-import * as _cfunc from "../../../../components/Common/CommonFunction";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import DynamicColumnHook, { selectAllCheck } from "../../../components/Common/TableCommonFunc";
+import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { makeBtnCss } from "../../../components/Common/ListActionsButtons";
 
 const LoadingSheetUpdate = (props) => {
 
