@@ -76,55 +76,40 @@ const Login = props => {
 
 
 
-
   useEffect(() => {
 
     if (divisionDropdown_redux.length === 1) {
-
-      let value = divisionDropdown_redux[0]
+      let value = divisionDropdown_redux[0];
       let employee = value.Employee_id;
-      let party = value.Party_id
-      if ((party === null)) {
+      let party = value.Party_id;
+      if (party === null) {
         party = 0;
-        value.Party_id = 0
+        value.Party_id = 0;
       }
 
-      localStorage.setItem("roleId", JSON.stringify(value))
-      localStorage.setItem("roleId2", JSON.stringify(value))
-      dispatch(roleAceessAction(party, employee, loginCompanyID()))
-      dispatch(getpartysetting_API(value.Party_id, loginCompanyID()))//login party id pass to getpartysetting_API
+      localStorage.setItem("roleId", JSON.stringify(value));
+      localStorage.setItem("roleId2", JSON.stringify(value));
+      dispatch(roleAceessAction(party, employee, loginCompanyID()));
+      dispatch(getpartysetting_API(value.Party_id, loginCompanyID()));
     }
-
-  }, [divisionDropdown_redux])
-
-
+    else if (divisionDropdown_redux.length > 1) {
+      history.push("/division");
+    }
+  }, [divisionDropdown_redux]);
 
   useEffect(() => {
 
-    let dashboardFound = userAccess.find((i) => {
-      return i.ModuleName === "Dashboard"
-    })
-
-    if ((divisionDropdown_redux.length === 1) && (userAccess.length > 1)) {
-
+    let dashboardFound = userAccess.find((i) => i.ModuleName === "Dashboard");
+    if (divisionDropdown_redux.length === 1 && userAccess.length > 1) {
       if (dashboardFound) {
-        history.push(`/${dashboardFound.ActualPagePath}`)
-      }
-      else {
-        history.push("/Dashboard")
-      }
-    }
-    else if ((divisionDropdown_redux.length > 1) && (userAccess.length > 1)) {
-      if (dashboardFound) {
-        history.push(`/${dashboardFound.ActualPagePath}`)
-      }
-      else {
-        history.push("/division")
-
+        history.push(`/${dashboardFound.ActualPagePath}`);
+      } else {
+        history.push("/Dashboard");
       }
     }
 
-  }, [userAccess])
+  }, [userAccess]);
+
 
   const currentUserOnchange = (e) => {
     setcurrentUserName(e.target.value)
