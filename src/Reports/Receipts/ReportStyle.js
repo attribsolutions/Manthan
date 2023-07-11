@@ -150,22 +150,22 @@ export const Receipts = (doc, data) => {
     }
 
     doc.setFont(undefined, 'Normal')
-    doc.text(`Prepared By :`, 40, 320, 'left');
+    doc.text(`Prepared By :`, 40, 335, 'left');
     doc.setFont(undefined, 'bold')
 
-    doc.text(`${data.Party}`, 110, 320, 'left');
+    doc.text(`${data.Party}`, 110, 335, 'left');
     doc.setFont(undefined, 'Normal')
 
 
-    doc.text(`Received By :`, 230, 320, 'left');
+    doc.text(`Received By :`, 230, 335, 'left');
 
     doc.setFont(undefined, 'Normal')
     doc.setFont(undefined, 'bold')
 
-    doc.text(`For ${data.Party}`, 480, 310, "center");
+    doc.text(`For ${data.Party}`, 480, 335, "center");
     doc.setFont(undefined, 'Normal')
 
-    doc.text(`Authorize signatory`, 480, 340, "center");
+    doc.text(`Authorize signatory`, 480, 375, "center");
 
 
 
