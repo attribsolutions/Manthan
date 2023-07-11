@@ -10,10 +10,10 @@ import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
-import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import SalesReturn from "./SalesReturn";
-import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI } from "../../../store/Sales/SalesReturnRedux/action";
+import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
@@ -23,7 +23,6 @@ const SalesReturnList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
@@ -31,13 +30,16 @@ const SalesReturnList = () => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(mode.defaultList)
+    const [pageMode, setPageMode] = useState(mode.defaultList)
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', });
+    let customerdropdownLabel = subPageMode === url.SALES_RETURN_LIST ? "Customer" : "Supplier"
 
     const reducers = useSelector(
         (state) => ({
             loading: state.SalesReturnReducer.loading,
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             listBtnLoading: state.SalesReturnReducer.listBtnLoading,
             tableList: state.SalesReturnReducer.salesReturnList,
             deleteMsg: state.SalesReturnReducer.deleteMsg,
@@ -49,7 +51,7 @@ const SalesReturnList = () => {
         })
     );
 
-    const { pageField, RetailerList, } = reducers;
+    const { pageField, RetailerList, supplier } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -61,13 +63,33 @@ const SalesReturnList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = pageId.SALES_RETURN_LIST
-        setpageMode(hasPagePath)
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+        let masterPath = '';
+        let newBtnPath = false;
+
+        if (subPageMode === url.PURCHASE_RETURN_LIST) {
+            page_Id = pageId.PURCHASE_RETURN_LIST
+            masterPath = url.PURCHASE_RETURN
+            newBtnPath = url.PURCHASE_RETURN
+        }
+        else if (subPageMode === url.SALES_RETURN_LIST) {
+            page_Id = pageId.SALES_RETURN_LIST;
+            masterPath = url.SALES_RETURN
+            newBtnPath = url.SALES_RETURN
+        }
+        setPageMode(page_Mode)
+        setSubPageMode(subPageMode)
+        setOtherState({ masterPath, newBtnPath })
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Sales Return Count"} :0`))
         goButtonHandler(true)
     }, []);
+
+    useEffect(() => {
+        dispatch(salesReturnListAPISuccess([]))
+    }, [])
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
@@ -76,9 +98,10 @@ const SalesReturnList = () => {
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
+        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
     }, []);
 
-   
+
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -89,13 +112,25 @@ const SalesReturnList = () => {
         label: " All"
     });
 
+    const supplierOptions = supplier.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
+
+    supplierOptions.unshift({
+        value: "",
+        label: " All"
+    });
+
     function goButtonHandler() {
 
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
-            CustomerID: values.Customer.value,
-            PartyID: _cfunc.loginPartyID(),
+            // CustomerID: values.Customer.value,
+            // PartyID: _cfunc.loginPartyID(),
+            CustomerID: (subPageMode === url.SALES_RETURN_LIST) ? values.Customer.value : _cfunc.loginPartyID(),
+            PartyID: (subPageMode === url.SALES_RETURN_LIST) ? _cfunc.loginPartyID() : values.Customer.value,
         });
         dispatch(salesReturnListAPI(jsonBody));
     }
@@ -163,13 +198,14 @@ const SalesReturnList = () => {
                     <Col sm="5">
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
-                                style={{ width: "115px" }}>Customer</Label>
+
+                                style={{ width: "115px" }}>{customerdropdownLabel}</Label>
                             <Col sm="5">
                                 <Select
                                     name="Customer"
                                     classNamePrefix="select2-Customer"
                                     value={values.Customer}
-                                    options={customerOptions}
+                                    options={subPageMode === url.SALES_RETURN_LIST ? customerOptions : supplierOptions}
                                     onChange={CustomerOnChange}
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
@@ -183,7 +219,7 @@ const SalesReturnList = () => {
                         <Go_Button loading={reducers.loading} onClick={goButtonHandler} />
                     </Col>
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -197,8 +233,8 @@ const SalesReturnList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={SalesReturn}
-                            masterPath={url.SALES_RETURN}
-                            newBtnPath={url.SALES_RETURN}
+                            masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}

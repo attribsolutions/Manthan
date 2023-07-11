@@ -142,6 +142,9 @@ export const Order_2 = url.ORDER_LIST_2
 export const OrderList_4 = url.ORDER_4
 export const Order_4 = url.ORDER_LIST_4
 
+export const PurchaseReturnList = url.PURCHASE_RETURN
+export const PurchaseReturn = url.PURCHASE_RETURN_LIST
+
 //******************************* Production ************************************//
 
 export const BOMList = url.BIllOf_MATERIALS
