@@ -45,9 +45,6 @@ const InvoiceList = () => {
     const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
 
-    const [Partysettingdata, setPartysettingdata] = useState({})
-
-
     const reducers = useSelector(
         (state) => ({
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -90,7 +87,6 @@ const InvoiceList = () => {
         let newBtnPath = false;
         let makeBtnShow = false;
 
-
         if (subPageMode === url.INVOICE_LIST_1) {
             page_Id = pageId.INVOICE_LIST_1
             masterPath = url.INVOICE_1
@@ -119,7 +115,7 @@ const InvoiceList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
-        dispatch(GetVenderSupplierCustomer(subPageMode))
+        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         goButtonHandler("event", IBType)
     }, [dispatch]);
 
@@ -168,6 +164,7 @@ const InvoiceList = () => {
 
         if (Cancel_EInvoice.Status === true && Cancel_EInvoice.StatusCode === 200) {
             dispatch(Cancel_EInvoiceSuccess({ Status: false }))
+            goButtonHandler("event")
             customAlert({
                 Type: 1,
                 Message: Cancel_EInvoice.Message,
@@ -189,6 +186,7 @@ const InvoiceList = () => {
 
         if (Cancel_EwayBill.Status === true && Cancel_EwayBill.StatusCode === 200) {
             dispatch(Cancel_EwayBillSuccess({ Status: false }))
+            goButtonHandler("event")
             customAlert({
                 Type: 1,
                 Message: Cancel_EwayBill.Message,
@@ -204,8 +202,9 @@ const InvoiceList = () => {
             return
         }
     }, [Cancel_EwayBill]);
+
     useEffect(() => {
-        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id,_cfunc.loginCompanyID()))
+        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id, _cfunc.loginCompanyID()))
     }, [])
 
     const supplierOptions = supplier.map((i) => ({
@@ -219,7 +218,7 @@ const InvoiceList = () => {
     });
 
     function downBtnFunc(row) {
-        
+
         var ReportType = Data.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, Data))
     }

@@ -126,37 +126,34 @@ const LoadingSheet = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
             dispatch(LoadingSheet_GoBtn_API_Succcess([]))
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.LOADING_SHEET_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.LOADING_SHEET_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -190,8 +187,20 @@ const LoadingSheet = (props) => {
     const onChangeBtnHandler = () => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
     }
+
     function goButtonHandler() {
+
+        if (values.RouteName.length === 0) {
+            customAlert({
+                Type: 4,
+                Status: true,
+                Message: "RouteName Is Required",
+            });
+            return;
+        }
+
         const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(','); //commas separate
+
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
@@ -221,13 +230,6 @@ const LoadingSheet = (props) => {
         },
     ];
 
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: Data.length,
-        custom: true,
-    };
-
-
     const saveHandler = async (event) => {
         try {
             event.preventDefault();
@@ -248,7 +250,7 @@ const LoadingSheet = (props) => {
                 customAlert({
                     Type: 4,
                     Status: true,
-                    Message: "Minimum one Invoice is Select",
+                    Message: "Atleast One Invoice Is Select...!",
                 });
                 return;
             }
@@ -413,9 +415,7 @@ const LoadingSheet = (props) => {
                                                 }
                                                 }
                                             />
-                                            {isError.RouteName.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.RouteName}</small></span>
-                                            )}
+
                                         </Col>
 
                                     </FormGroup>

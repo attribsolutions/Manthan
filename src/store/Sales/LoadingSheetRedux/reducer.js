@@ -98,7 +98,8 @@ const LoadingSheetReducer = (state = INIT_STATE, action) => {
                 ...state,
                 saveBtnloading: false,
                 loading: false,
-                listBtnLoading: false
+                listBtnLoading: false,
+                goBtnloadingSpinner: false,
             };
 
         default:
