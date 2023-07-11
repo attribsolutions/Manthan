@@ -528,7 +528,7 @@ export const Invoice_1_GoButton_API = ({ jsonBody, btnId }) => post(url.INVOICE_
 export const Invoice_1_Save_API = ({ jsonBody, btnId }) => post(url.INVOICE_1_SAVE, jsonBody, btnId)//  postapi
 export const Invoice_1_Get_Filter_API = ({ filtersBody, btnId }) => post(url.INVOICE_1_lIST_FILTER, filtersBody, btnId)//  postapi
 export const Invoice_1_Delete_API = ({ deleteId, btnId }) => del(`${url.INVOICE_1_SAVE}/${deleteId}`, btnId)// delete api
-export const Invoice_1_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.INVOICE_1_SAVE}/${editId}`, btnId)// delete api
+export const Invoice_1_Edit_API_Singel_Get = ({editId}) => get(`${url.INVOICE_1_SAVE}/${editId}`)// delete api
 
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 

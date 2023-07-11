@@ -1,7 +1,6 @@
 import { Button, Spinner } from "reactstrap"
 import { loginUserID } from "./CommonFunction";
 import * as mode from "../../routes/PageMode"
-import { Children } from "react";
 
 export function SaveButton(props) {
   const { pageMode = '', userAcc = {}, editCreatedBy } = props
@@ -184,8 +183,9 @@ export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled })
           title={` save & goto Invoice ${Name}`}
           className="btn btn-info w-md"
           onClick={onClick}
-        >  Save & PDF
+        >  Save & Print
         </button>}
+     
     </div>
   )
 }

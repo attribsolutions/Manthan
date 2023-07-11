@@ -100,6 +100,7 @@ const Invoice = (props) => {
         VehicleNumber,
         goBtnloading,
         saveBtnloading,
+        PartySettingdata
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -108,12 +109,13 @@ const Invoice = (props) => {
         customer: state.CommonAPI_Reducer.customer,
         gobutton_Add: state.InvoiceReducer.gobutton_Add,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        PartySettingdata: state.PartySettingReducer.PartySettingdata,
         VehicleNumber: state.VehicleReducer.VehicleList,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         goBtnloading: state.InvoiceReducer.goBtnloading,
     }));
-
+    const { Data = {} } = PartySettingdata;
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 
@@ -153,10 +155,15 @@ const Invoice = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            debugger
+
+            if (postMsg.SaveAndDownloadPdfMode) {
+
+                var ReportType = Data.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
+                dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: postMsg.InvoiceID }, Data))
+                // history.push({ pathname: url.INVOICE_LIST_1 })
+            }
             let btnId = `btn-E-Invoice-Upload-${postMsg.InvoiceID}`
             dispatch(invoiceSaveActionSuccess({ Status: false }))
-
             if ((systemSetting.AutoEInvoice === "1") && (systemSetting.EInvoiceApplicable === "1")) {
                 try {
                     dispatch(Uploaded_EInvoiceAction({ btnId, RowId: postMsg.InvoiceID, UserID: _cfunc.loginUserID() }))
@@ -171,21 +178,17 @@ const Invoice = (props) => {
             }
 
             else {
-                let alertResponse = await customAlert({
+
+                await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                if (postMsg.SaveAndDownloadPdfMode) {
-                    var ReportType = systemSetting.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
-                    dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: postMsg.InvoiceID }, systemSetting))
-                    history.push({ pathname: url.INVOICE_LIST_1 })
-                }
-                if (alertResponse && (subPageMode === url.INVOICE_1)) {
-                    history.push({ pathname: url.INVOICE_LIST_1 })
-                }
-                else if (alertResponse && (subPageMode === url.IB_INVOICE)) {
-                    history.push({ pathname: url.IB_INVOICE_LIST })
 
+                if (subPageMode === url.INVOICE_1) {
+                    history.push({ pathname: url.INVOICE_LIST_1 })
+                }
+                else if (subPageMode === url.IB_INVOICE) {
+                    history.push({ pathname: url.IB_INVOICE_LIST })
                 }
             }
         }
@@ -196,6 +199,7 @@ const Invoice = (props) => {
             })
         }
     }, [postMsg])
+
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
@@ -882,6 +886,7 @@ const Invoice = (props) => {
                         }
                     </form>
                 </div>
+
             </React.Fragment >
         );
     }
