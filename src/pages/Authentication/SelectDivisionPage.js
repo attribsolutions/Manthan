@@ -1,6 +1,6 @@
 import MetaTags from "react-meta-tags"
-import React, { useEffect, useState } from "react"
-import { Row, Col, Container, Button } from "reactstrap"
+import React, {useState } from "react"
+import { Row, Col, Container} from "reactstrap"
 
 import { useSelector, useDispatch } from "react-redux"
 
@@ -15,6 +15,7 @@ import Select from "react-select";
 import { loginCompanyID } from "../../components/Common/CommonFunction"
 import { useLayoutEffect } from "react"
 import { getpartysetting_API } from "../../store/Administrator/PartySetting/action"
+import { Go_Button } from "../../components/Common/CommonButton"
 
 const SelectDivisionPage = props => {
   const dispatch = useDispatch()
@@ -22,9 +23,10 @@ const SelectDivisionPage = props => {
 
   const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
 
-  const { divisionDropdown_redux, userAccess } = useSelector(state => ({
+  const { divisionDropdown_redux, userAccess, loading } = useSelector(state => ({
     divisionDropdown_redux: state.Login.divisionDropdown,
     userAccess: state.Login.RoleAccessUpdateData,
+    loading: state.Login.loading
 
   }));
 
@@ -35,8 +37,7 @@ const SelectDivisionPage = props => {
     let dashboardFound = userAccess.find((i) => {
       return i.ModuleName === "Dashboard"
     })
-
-    if ((divisionDropdown_redux.length === 1) && (userAccess.length > 1)) {
+    if ((divisionDropdown_redux.length > 1) && (userAccess.length > 1)) {
 
       if (dashboardFound) {
         history.push(`/${dashboardFound.ActualPagePath}`)
@@ -45,26 +46,14 @@ const SelectDivisionPage = props => {
         history.push("/Dashboard")
       }
     }
-    else if ((divisionDropdown_redux.length > 1) && (userAccess.length > 1)) {
-      if (dashboardFound) {
-        history.push(`/${dashboardFound.ActualPagePath}`)
-      }
-      else {
-        history.push("/division")
-
-      }
-    }
-
-
   }, [userAccess])
-
-
 
 
   const divisionDropdown_DropdownOption = divisionDropdown_redux.map((d, key) => ({
     value: key,
     label: d.PartyName,
   }));
+
 
   function goButtonHandller() {
 
@@ -124,9 +113,10 @@ const SelectDivisionPage = props => {
                         />
                       </div>
                       <div className="text-center">
-                        <Button className="btn btn-success bg" onClick={() => {
-                          goButtonHandller()
-                        }}>GO</Button>
+                        <Go_Button
+                          loading={loading}
+                          onClick={() => { goButtonHandller() }}
+                        />
                       </div>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
