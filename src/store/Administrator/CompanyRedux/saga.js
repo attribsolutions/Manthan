@@ -19,7 +19,6 @@ import {
   UPDATE_COMPANY_ID,
 } from "./actionType";
 
-
 function* Save_Method_ForCompany_GenFun({ config }) {         // Save API
   try {
     const response = yield call(postSubmit_Company, config);

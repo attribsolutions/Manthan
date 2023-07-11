@@ -161,6 +161,35 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
   )
 }
 
+export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled }) => {
+  const { Name } = userAcc;
+  const btnId = `SaveAndDownloadPdfBtn-${Name.replace(/ /g, "")}`;
+  return (
+    <div>
+      {loading ?
+        <button
+          id={btnId}
+
+          className="btn btn-info w-md"
+          autoFocus={false}
+        >  Saving.. &nbsp;
+          <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+        </button>
+        :
+        <button
+          type="submit"
+          id={btnId}
+          disabled={forceDisabled}
+          autoFocus={false}
+          title={` save & goto Invoice ${Name}`}
+          className="btn btn-info w-md"
+          onClick={onClick}
+        >  Save & PDF
+        </button>}
+    </div>
+  )
+}
+
 
 
 export function Loader() {// linner component
