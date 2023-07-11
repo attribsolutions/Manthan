@@ -156,7 +156,6 @@ const SalesReturn = (props) => {
         };
     }, [userAccess])
 
-
     useEffect(() => {// Return Reason dropdown Values
         const jsonBody = JSON.stringify({
             Company: _cfunc.loginCompanyID(),
@@ -815,9 +814,9 @@ const SalesReturn = (props) => {
                 ReturnReason: '',
                 BatchCode: values.BatchCode,
                 Customer: (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID(),
+                Party: (subPageMode === url.SALES_RETURN) ? _cfunc.loginPartyID() : values.Customer.value,
                 Comment: values.Comment,
                 GrandTotal: grand_total,
-                Party: (subPageMode === url.SALES_RETURN) ? _cfunc.loginPartyID() : values.Customer.value,
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
