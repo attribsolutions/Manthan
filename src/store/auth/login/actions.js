@@ -16,7 +16,9 @@ import {
   RESET_ROLE_ACCESS_ACTION,
   ROLE_ACCESS_API_CALL_ERROR,
   API_ERROR_SUCCESS,
-  LOGIN_ERROR_ACTION
+  LOGIN_ERROR_ACTION,
+  DIVISION_DROPDOWN_AFTER_LOGIN_ACTION,
+  DIVISION_DROPDOWN_AFTER_LOGIN_ACTION_SCUCESS
 } from "./actionTypes"
 
 export const loginUser = (user, history) => {
@@ -79,13 +81,21 @@ export const getUserDetailsAction = (id) => {
     id,
   }
 }
+export const divisionDropdownSelectAction = (employeeID) => {
+  return {
+    type: DIVISION_DROPDOWN_AFTER_LOGIN_ACTION,
+    employeeID,
+  }
+}
+
 
 export const divisionDropdownSelectSuccess = (data) => {
   return {
-    type: DIVISION_DROPDOWN_SUCCESS_AFTER_LOGIN,
+    type: DIVISION_DROPDOWN_AFTER_LOGIN_ACTION_SCUCESS,
     payload: data,
   }
 }
+
 
 export const getUserDetailsActionSuccess = (data) => {
   return {
