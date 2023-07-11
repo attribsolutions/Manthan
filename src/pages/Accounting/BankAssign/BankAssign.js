@@ -51,7 +51,6 @@ const BankAssign = (props) => {
     const [modalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy,] = useState("");
-    const [depositoryBankInTable, setDepositoryBankInTable] = useState('');
     const [forceRefresh, setForceRefresh] = useState(false);
 
     //Access redux store bankTableList /  'save_ModuleSuccess' action data
@@ -152,12 +151,10 @@ const BankAssign = (props) => {
         {
             text: "Depository Bank",
             dataField: "IsSelfDepositoryBank",
-            formatExtraData: { depositoryBankInTable, setDepositoryBankInTable, forceRefresh, setForceRefresh },
-            formatter: (cellContent, row, key, { depositoryBankInTable = '', setDepositoryBankInTable, forceRefresh, setForceRefresh }) => {
-                const isdissabled = (depositoryBankInTable === '' || row.Bank === depositoryBankInTable) ? false : true
+            formatExtraData: { forceRefresh, setForceRefresh },
+            formatter: (cellContent, row, key, { forceRefresh, setForceRefresh }) => {
                 return (<span >
                     <Input type="checkbox"
-                        disabled={isdissabled}
                         defaultChecked={row.IsSelfDepositoryBank}
                         onChange={(event) => {
                             let check = event.target.checked;
@@ -166,7 +163,6 @@ const BankAssign = (props) => {
                                 row.IsDefault = false
                             }
                             setForceRefresh(!forceRefresh)
-                            setDepositoryBankInTable(check ? row.Bank : "");
                             row.IsSelfDepositoryBank = check
 
                         }}
@@ -179,20 +175,25 @@ const BankAssign = (props) => {
         {
             text: "Show On Invoice",
             dataField: "IsDefault",
-            formatExtraData: { depositoryBankInTable, forceRefresh, setForceRefresh },
-            formatter: (cellContent, row, key, { forceRefresh, setForceRefresh }) => {
-                const idDissabled = ((row.IsSelfDepositoryBank) && (row.Bank === depositoryBankInTable || depositoryBankInTable === '')) ? false : true
-                return (<span >
-                    <Input type="checkbox"
-                        disabled={idDissabled}
-                        checked={row.IsDefault}
-                        onChange={(event) => {
-                            setForceRefresh(!forceRefresh)
-                            row.IsDefault = event.target.checked;
-                        }}
-                    />
-                </span>
-                )
+            formatExtraData: { tableList: bankTableList, forceRefresh, setForceRefresh },
+            formatter: (cellContent, row, key, { tableList, forceRefresh, setForceRefresh }) => {
+
+                if (row.IsSelfDepositoryBank === true) {
+                    return (
+                        <Input type="radio"
+                            name="columnRadio"
+                            checked={row.IsDefault}
+                            onChange={(event) => {
+                                tableList.forEach(element => {
+                                    (row.Bank === element.Bank) ? element.IsDefault = true : element.IsDefault = false
+                                });
+                                row.IsDefault = event.target.checked;
+                                setForceRefresh(!forceRefresh)
+                            }
+                            }
+                        />
+                    )
+                }
             },
         },
 
@@ -200,19 +201,16 @@ const BankAssign = (props) => {
             text: "Account No",
             dataField: "AccountNo",
             formatExtraData: { forceRefresh },
-            formatter: (value, row, key) => {
-                const idDissabled = ((row.IsSelfDepositoryBank) && (row.Bank === depositoryBankInTable || depositoryBankInTable === '')) ? false : true
-                return (
-                    <span >
-                        <Input type="text"
-                            disabled={idDissabled}
-                            defaultValue={row.AccountNo}
-                            autoComplete="off"
-                            onChange={(event) => { row.AccountNo = event.target.value }}
-                        />
-                    </span>
-                )
-            },
+            formatter: (value, row, key) => (
+                <span >
+                    <Input type="text"
+                        disabled={!(row.IsSelfDepositoryBank === true)}
+                        defaultValue={row.AccountNo}
+                        autoComplete="off"
+                        onChange={(event) => { row.AccountNo = event.target.value }}
+                    />
+                </span>
+            ),
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
@@ -222,20 +220,15 @@ const BankAssign = (props) => {
             text: "IFSC",
             dataField: "IFSC",
             formatExtraData: { forceRefresh },
-            formatter: (value, row, key) => {
-                const idDissabled = ((row.IsSelfDepositoryBank) && (row.Bank === depositoryBankInTable || depositoryBankInTable === '')) ? false : true
+            formatter: (value, row, key) => (
+                <Input type="text"
+                    disabled={!(row.IsSelfDepositoryBank === true)}
+                    defaultValue={row.IFSC}
+                    autoComplete="off"
+                    onChange={(event) => { row.IFSC = event.target.value }}
+                />
+            ),
 
-                return (
-                    <span >
-                        <Input type="text"
-                            disabled={idDissabled}
-                            defaultValue={row.IFSC}
-                            autoComplete="off"
-                            onChange={(event) => { row.IFSC = event.target.value }}
-                        />
-                    </span>
-                )
-            },
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
@@ -245,20 +238,15 @@ const BankAssign = (props) => {
             text: "Branch ",
             dataField: "BranchName",
             formatExtraData: { forceRefresh },
-            formatter: (value, row, key) => {
-                const idDissabled = ((row.IsSelfDepositoryBank) && (row.Bank === depositoryBankInTable || depositoryBankInTable === '')) ? false : true
-                return (
-                    <span >
-                        <Input type="text"
-                            disabled={idDissabled}
-                            defaultValue={row.BranchName}
-                            autoComplete="off"
-                            onChange={(e) => { row.BranchName = e.target.value }}
-                        />
-                    </span>
-                )
-            },
+            formatter: (value, row, key) => (
 
+                <Input type="text"
+                    disabled={!(row.IsSelfDepositoryBank === true)}
+                    defaultValue={row.BranchName}
+                    autoComplete="off"
+                    onChange={(e) => { row.BranchName = e.target.value }}
+                />
+            ),
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
@@ -274,54 +262,49 @@ const BankAssign = (props) => {
         event.preventDefault();
         const btnId = event.target.id;
         try {
-            const assignedBanks = bankTableList
-                .filter((bank) => bank.IsSelfDepositoryBank || bank.CustomerBank)
-                .map((bank) => ({
-                    Bank: bank.Bank,
-                    CustomerBank: bank.CustomerBank || false,
-                    Party: loginPartyID(),
-                    IsSelfDepositoryBank: bank.IsSelfDepositoryBank || false,
-                    IsDefault: bank.IsDefault || false,
-                    AccountNo: bank.AccountNo || "",
-                    IFSC: bank.IFSC || "",
-                    BranchName: bank.BranchName || "",
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
-                    Company: loginCompanyID(),
-                }));
+            const { assignedBanks, invalidMessages } = bankTableList.reduce(
+                (accumulator, bank) => {
+                    if (bank.IsSelfDepositoryBank || bank.CustomerBank) {
+                        const requiredFields = ["AccountNo", "IFSC", "BranchName"];
+                        const missingFields = requiredFields.filter((field) => !bank[field]);
 
+                        if (bank.IsSelfDepositoryBank && missingFields.length > 0) {
+                            const msgString = "Required " + missingFields.join(", ");
+                            accumulator.invalidMessages.push({ [bank.BankName]: msgString });
+                        }
 
-            if (assignedBanks.length === 0) {
+                        accumulator.assignedBanks.push({
+                            Bank: bank.Bank,
+                            CustomerBank: bank.CustomerBank || false,
+                            Party: loginPartyID(),
+                            IsSelfDepositoryBank: bank.IsSelfDepositoryBank || false,
+                            IsDefault: bank.IsDefault || false,
+                            AccountNo: bank.AccountNo || "",
+                            IFSC: bank.IFSC || "",
+                            BranchName: bank.BranchName || "",
+                            CreatedBy: loginUserID(),
+                            UpdatedBy: loginUserID(),
+                            Company: loginCompanyID(),
+                        });
+                    }
+                    return accumulator;
+                },
+                { assignedBanks: [], invalidMessages: [] }
+            );
+
+            const isDefaultBanck = assignedBanks.filter((bank) => bank.IsDefault).length === 1;
+            if (assignedBanks.length === 0 || !isDefaultBanck) {
                 customAlert({
                     Type: 3,
-                    Message: "No assigned banks available. Please select at least one bank.",
+                    Message: "No assigned banks available. Please select bank as default.",
                 });
                 return;
             }
 
-
-            const invalidMessages = assignedBanks.reduce((messages, bank) => {
-                if (bank.IsSelfDepositoryBank) {
-                    if (bank.AccountNo === "") {
-                        messages.push("AccountNo is required");
-                    }
-                    if (bank.BranchName === "") {
-                        messages.push("BranchName is required");
-                    }
-                    if (bank.IFSC === "") {
-                        messages.push("IFSC is required");
-                    }
-                    if (!bank.IsDefault) {
-                        messages.push("IsDefault is required");
-                    }
-                }
-                return messages;
-            }, []);
-
             if (invalidMessages.length > 0) {
                 customAlert({
                     Type: 3,
-                    Message: JSON.stringify(invalidMessages),
+                    Message: invalidMessages,
                 });
                 return
             }
