@@ -23,7 +23,6 @@ const SalesReturnList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
@@ -35,7 +34,8 @@ const SalesReturnList = () => {
     const [pageMode, setPageMode] = useState(mode.defaultList)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', });
-    console.log(subPageMode)
+    let customerdropdownLabel = subPageMode === url.SALES_RETURN_LIST ? "Customer" : "Supplier"
+
     const reducers = useSelector(
         (state) => ({
             loading: state.SalesReturnReducer.loading,
@@ -198,7 +198,8 @@ const SalesReturnList = () => {
                     <Col sm="5">
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
-                                style={{ width: "115px" }}>Customer</Label>
+
+                                style={{ width: "115px" }}>{customerdropdownLabel}</Label>
                             <Col sm="5">
                                 <Select
                                     name="Customer"
@@ -218,7 +219,7 @@ const SalesReturnList = () => {
                         <Go_Button loading={reducers.loading} onClick={goButtonHandler} />
                     </Col>
                 </div>
-            </div>
+            </div >
         )
     }
 

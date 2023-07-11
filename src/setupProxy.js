@@ -1,5 +1,5 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
- 
+
 module.exports = function (app) {
   app.use(
     createProxyMiddleware('/chitaleApi', {
@@ -26,4 +26,17 @@ module.exports = function (app) {
       }
     })
   );
+  app.use(
+    createProxyMiddleware('/E_invoiceQRCode', {
+      target: ' https://pro.mastersindia.co', // API endpoint 2
+      changeOrigin: true,
+      pathRewrite: {
+        "^/E_invoiceQRCode": "",
+      },
+      headers: {
+        Connection: "keep-alive"
+      }
+    })
+  );
+
 }
