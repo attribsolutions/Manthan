@@ -1,6 +1,6 @@
 import MetaTags from "react-meta-tags"
-import React, { useEffect, useState } from "react"
-import { Row, Col, Container, Button } from "reactstrap"
+import React, {useState } from "react"
+import { Row, Col, Container} from "reactstrap"
 
 import { useSelector, useDispatch } from "react-redux"
 
@@ -54,7 +54,7 @@ const SelectDivisionPage = props => {
     label: d.PartyName,
   }));
 
-  
+
   function goButtonHandller() {
 
     if (!(divisionDropdowSelect.value === undefined)) {

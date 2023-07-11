@@ -2,7 +2,7 @@ import PropTypes from "prop-types"
 import MetaTags from "react-meta-tags"
 import React, { useEffect, useState } from "react"
 
-import { Row, Col, Alert, Container, Input, Spinner } from "reactstrap"
+import { Row, Col, Alert, Container, Input } from "reactstrap"
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
@@ -11,12 +11,12 @@ import { withRouter, Link, useHistory } from "react-router-dom"
 
 // availity-reactstrap-validation
 
-import { apiErrorSuccess, divisionDropdownSelectSuccess, getUserDetailsAction, loginError_Action, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
+import { divisionDropdownSelectSuccess, getUserDetailsAction, loginError_Action, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
 
 import logo from "../../assets/images/cbm_logo.png"
 
 import CarouselPage from "./CarouselPage"
-import { loginCompanyID, loginPartyID, loginUserDetails } from "../../components/Common/CommonFunction"
+import { loginCompanyID} from "../../components/Common/CommonFunction"
 import { useLayoutEffect } from "react"
 import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 import { getpartysetting_API } from "../../store/Administrator/PartySetting/action"
@@ -30,17 +30,13 @@ const Login = props => {
   const [Password, setPassword] = useState("");
 
 
-  const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess, loading, PartySettingdata } = useSelector(state => ({
+  const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess, loading } = useSelector(state => ({
     loading: state.Login.loading,
     loginError: state.Login.loginError,
     loginSuccess: state.Login.loginSuccess,
     divisionDropdown_redux: state.Login.divisionDropdown,
     userAccess: state.Login.RoleAccessUpdateData,
-    PartySettingdata: state.PartySettingReducer.PartySettingdata,
-
-
   }))
-  const { Data = [] } = PartySettingdata;
 
 
   useLayoutEffect(() => {
