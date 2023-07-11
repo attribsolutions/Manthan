@@ -104,11 +104,11 @@ export const Receipts = (doc, data) => {
     doc.setFontSize(11);
     doc.setFont(undefined, 'bold')
 
-    doc.text(`RECIEPT NO : ${data.FullReceiptNumber} `, 40, 145, 'left');
+    doc.text(`Receipt No : ${data.FullReceiptNumber} `, 40, 145, 'left');
     doc.setFont(undefined, 'Normal')
     doc.setFont(undefined, 'bold')
 
-    doc.text(`Bill NO : ${data.BillNumber === null ? "" : data.BillNumber} `, 300, 145, 'left');
+    doc.text(`Bill No : ${data.BillNumber === null ? "" : data.BillNumber} `, 300, 145, 'left');
     doc.setFont(undefined, 'Normal')
 
 
@@ -136,13 +136,13 @@ export const Receipts = (doc, data) => {
 
 
     if (data.ReceiptModeName === "Cheque") {
-        doc.text(`Bank Name`, 40, final_y + 55, 'left');
+        doc.text(`Bank Name :`, 40, final_y + 55, 'left');
         doc.setFont(undefined, 'bold')
         doc.text(`${data.DocumentNo}/${data.BankName}`, 100, final_y + 55,);
         debugger
         var bankwidth = doc.getTextWidth(`${data.DocumentNo}/${data.BankName}`);
         doc.setFont(undefined, 'Normal')
-        doc.text(`Depositor BankName`, 40 + bankwidth + 80, final_y + 55, 'left');
+        doc.text(`Depository Bank Name :`, 40 + bankwidth + 80, final_y + 55, 'left');
         doc.setFont(undefined, 'bold')
 
         doc.text(`${data.DepositorBankName}`, 40 + bankwidth + 190, final_y + 55, 'left');
@@ -153,19 +153,21 @@ export const Receipts = (doc, data) => {
     doc.text(`Prepared By :`, 40, 335, 'left');
     doc.setFont(undefined, 'bold')
 
-    doc.text(`${data.Party}`, 110, 335, 'left');
+    doc.text(`${data.Party}`, 105, 335, 'left');
+
     doc.setFont(undefined, 'Normal')
 
 
-    doc.text(`Received By :`, 230, 335, 'left');
+    doc.text(`Received By :`, 245, 335, 'left');
 
     doc.setFont(undefined, 'Normal')
     doc.setFont(undefined, 'bold')
 
     doc.text(`For ${data.Party}`, 480, 335, "center");
+
     doc.setFont(undefined, 'Normal')
 
-    doc.text(`Authorize signatory`, 480, 375, "center");
+    doc.text(`Authorized Signatory`, 480, 375, "center");
 
 
 
