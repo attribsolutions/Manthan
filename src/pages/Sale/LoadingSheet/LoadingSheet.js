@@ -126,37 +126,34 @@ const LoadingSheet = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
             dispatch(LoadingSheet_GoBtn_API_Succcess([]))
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                let isPermission = await customAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.LOADING_SHEET_LIST,
-                }))
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.LOADING_SHEET_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -190,6 +187,7 @@ const LoadingSheet = (props) => {
     const onChangeBtnHandler = () => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
     }
+
     function goButtonHandler() {
         const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(','); //commas separate
         const jsonBody = JSON.stringify({
@@ -401,7 +399,7 @@ const LoadingSheet = (props) => {
                                                 value={values.RouteName}
                                                 isSearchable={true}
                                                 isMulti={true}
-                                                isDisabled={Data.length > 0 && true}
+                                                // isDisabled={Data.length > 0 && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
@@ -413,9 +411,9 @@ const LoadingSheet = (props) => {
                                                 }
                                                 }
                                             />
-                                            {isError.RouteName.length > 0 && (
+                                            {/* {isError.RouteName.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.RouteName}</small></span>
-                                            )}
+                                            )} */}
                                         </Col>
 
                                     </FormGroup>
@@ -446,12 +444,12 @@ const LoadingSheet = (props) => {
                                             )}
                                         </Col>
                                         <Col sm="1" className="mx-4 ">
-                                            {!Data.length > 0 ?
-                                                < Go_Button loading={goBtnloadingSpinner} onClick={(e) => goButtonHandler()} />
+                                            < Go_Button loading={goBtnloadingSpinner} onClick={(e) => goButtonHandler()} />
+                                            {/* {!Data.length > 0 ?
                                                 : <Change_Button
                                                     onClick={(e) => onChangeBtnHandler()}
                                                 />
-                                            }
+                                            } */}
 
 
                                         </Col>
