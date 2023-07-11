@@ -123,7 +123,7 @@ const Invoice = (props) => {
 
     useEffect(() => {
 
-        dispatch(GetVenderSupplierCustomer(subPageMode))
+        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))

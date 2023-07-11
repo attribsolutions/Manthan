@@ -20,7 +20,7 @@ const InwardList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const hasPagePath = history.location.pathname
+    const subPageMode = history.location.pathname
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
     const [inwardlistFiltersState, setInwardlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, SupplierSelect: { value: '', label: "All" } });
@@ -57,7 +57,7 @@ const InwardList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Inward Count"} :0`))
-        dispatch(GetVenderSupplierCustomer(hasPagePath))
+        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         goButtonHandler(true)
 
     }, []);
