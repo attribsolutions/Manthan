@@ -406,8 +406,8 @@ export const DetailsOfTransportRow = (data) => {
         [`PO Number:${OrderNumber}`],
         [data.DriverName === null ? "Driver Name:" : `Driver Name :${data.DriverName}`],
         [`vehical No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
-        [`E-way Bill : ${EwayData.EwayBillNo === undefined ? "" : EwayData.EwayBillNo}`],
-        [`IRN NO :${EwayData.AckNo === undefined ? "" : EwayData.AckNo}`]
+        [`E-way Bill : ${EwayData.EwayBillNo === (undefined || null) ? "" : EwayData.EwayBillNo}`],
+        [`IRN NO :${EwayData.AckNo === (undefined || null) ? "" : EwayData.AckNo}`]
     ]
 
     return DetailsOfTransportArray;
