@@ -109,7 +109,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
 
-        startY: data.isQR > 0 ? 120 : 80
+        startY: data.isQR  ? 120 : 80
     };
 
     var BilledToStyle = {
@@ -171,7 +171,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
 
-        startY: data.isQR > 0 ? 120 : 80,
+        startY: data.isQR  ? 120 : 80,
 
     };
 
