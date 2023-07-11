@@ -18,7 +18,7 @@ export const ReceiptDetails = (doc, data) => {
     let stringNumber = toWords(Number(data.AmountPaid))
     var ReceiptDetails = [
 
-        [`Rs ${stringNumber}`],
+        [`Rupees ${stringNumber}`],
 
     ]
 
