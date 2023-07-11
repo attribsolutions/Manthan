@@ -215,7 +215,7 @@ const SalesReturn = (props) => {
 
                 addButtonData.Data.forEach((i) => {
 
-                    const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
+                    const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP, Rate: i.Rate }));
                     const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
                     const InvoiceQuantity = i.Quantity
 
@@ -335,7 +335,8 @@ const SalesReturn = (props) => {
             text: "MRP",
             dataField: "MRP",
             hidden: false,
-            formatter: (cell, row, key) => {
+            formatExtraData: { TableArr },
+            formatter: (cell, row, key, { TableArr }) => {
                 return (
                     <>
                         <div style={{ minWidth: "90px" }}>
@@ -349,8 +350,16 @@ const SalesReturn = (props) => {
                                 classNamePrefix="dropdown"
                                 options={row.MRPOptions}
                                 onChange={(event) => {
-                                    row.MRP = event.value;
-                                    row.MRPValue = event.label;
+                                    try {
+                                        row.MRP = event.value;
+                                        row.MRPValue = event.label;
+                                        row.Rate = event.Rate;
+                                        totalAmountCalcuationFunc(row, TableArr)
+                                        document.getElementById(`Rate-${key}-${row.id}`).value = event.Rate
+                                    } catch (error) {
+                                        _cfunc.CommonConsole(error)
+                                    }
+
                                 }}
 
                             />
@@ -439,6 +448,7 @@ const SalesReturn = (props) => {
                             <div className="parent">
                                 <CInput
                                     defaultValue={row.Rate}
+                                    id={`Rate-${key}-${row.id}`}//this id use discount type onchange
                                     placeholder="Enter Rate"
                                     type="text"
                                     cpattern={decimalRegx}
