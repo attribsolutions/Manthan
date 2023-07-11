@@ -17,6 +17,7 @@ export const pageHeder = (doc, data) => {
     if (data.InvoiceUploads.length > 0) {
         const url = data.InvoiceUploads[0].QRCodeUrl
         let desiredPart = null;
+        debugger
         try {
             const urlObject = new URL(url);
             desiredPart = urlObject.pathname;
@@ -109,7 +110,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
 
-        startY: data.isQR  ? 120 : 80
+        startY: data.isQR ? 120 : 80
     };
 
     var BilledToStyle = {
@@ -171,7 +172,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
 
-        startY: data.isQR  ? 120 : 80,
+        startY: data.isQR ? 120 : 80,
 
     };
 
