@@ -29,15 +29,8 @@ function pageFooter(doc, data, islast, array) {
 
 const InvioceReporta5 = async (data) => {
 
-   
-    debugger
-    const responseImage = await E_invoiceQRCode()
-    data["E_invoiceQRcodeImage"] = responseImage
-
-
-
     var doc = new jsPDF('l', 'pt', 'a5');
-  
+
     if (Array.isArray(data)) {
         for (let i = 0; i < data.length; i++) {
             data[i].SettingData = data.SettingData;
