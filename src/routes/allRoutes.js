@@ -329,6 +329,10 @@ const userRoutes = [
   { path: path.ORDER_4, component: Order },
   { path: path.ORDER_LIST_4, component: OrderList },
 
+
+  { path: path.PURCHASE_RETURN, component: SalesReturn },
+  { path: path.PURCHASE_RETURN_LIST, component: SalesReturnList },
+
   //******************************* All Report ************************************//
   { path: path.REPORT, component: Report },
 

@@ -11,6 +11,7 @@ import {
   delete_GroupList_ID,
   editGroupID,
   getGroupList,
+  getGroupListSuccess,
   saveGroupMaster_Success,
   updateGroupIDSuccess
 } from "../../../store/Administrator/GroupRedux/action";
@@ -49,6 +50,9 @@ const GroupList = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getGroupList());
+    return () => {
+      dispatch(getGroupListSuccess([]));
+    }
   }, []);
 
   const { pageField, GoBtnlistloading } = reducers

@@ -142,6 +142,9 @@ export const ORDER_LIST_2 = "/OrderList_2"
 export const ORDER_4 = '/Order_4'
 export const ORDER_LIST_4 = '/OrderList_4'
 
+export const PURCHASE_RETURN = "/PurchaseReturn"
+export const PURCHASE_RETURN_LIST = "/PurchaseReturnList"
+
 //******************************* Inventory Module ************************************//
 
 export const GRN_STP_1 = "/GRN_STP_1"

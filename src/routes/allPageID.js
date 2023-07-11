@@ -182,6 +182,9 @@ export const INVOICE_LIST_1 = 122
 export const STOCK_ENTRY = 205
 export const STOCK_REPORT = 208
 
+export const PURCHASE_RETURN = 209
+export const PURCHASE_RETURN_LIST = 210
+
 //******************************* Inter Branch ************************************//
 
 export const INWARD = 128

@@ -6,6 +6,7 @@ import {
     deleteCompanyIDSuccess,
     saveCompany_Success,
     getcompanyList,
+    getCompanyListSuccess,
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import CompanyModule from "./CompanyModule";
@@ -47,6 +48,9 @@ const CompanyList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(getcompanyList());
+        return () => {
+            dispatch(getCompanyListSuccess([]));
+          }
     }, []);
 
     const { pageField, GoBtnlistloading } = reducers;

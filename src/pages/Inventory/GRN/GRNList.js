@@ -27,7 +27,7 @@ const GRNList = () => {
     const reducers = useSelector(
         (state) => ({
             loading: state.GRNReducer.loading,
-            listBtnLoading:state.GRNReducer.listBtnLoading,
+            listBtnLoading: state.GRNReducer.listBtnLoading,
             customer: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,
@@ -78,7 +78,7 @@ const GRNList = () => {
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
-        dispatch(_act.GetVenderSupplierCustomer(subPageMode))
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         goButtonHandler()
     }, []);
 

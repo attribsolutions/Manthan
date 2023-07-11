@@ -103,12 +103,15 @@ function* vendorSupplierCustomer_genFunc({ data }) {
   const isSuppiler = (subPageMode === url.ORDER_2 //supplier mode 2
     || subPageMode === url.ORDER_LIST_2
     || subPageMode === url.GRN_STP_3
-    || subPageMode === url.GRN_LIST_3);
+    || subPageMode === url.GRN_LIST_3
+    || subPageMode === url.PURCHASE_RETURN_LIST
+    || subPageMode === url.PURCHASE_RETURN);
 
   const isCustomer = (subPageMode === url.ORDER_4                 //Customer mode 3
     || subPageMode === url.ORDER_LIST_4
     || subPageMode === url.INVOICE_1
     || subPageMode === url.INVOICE_LIST_1
+
     || subPageMode === url.PARTY_LEDGER);
 
 

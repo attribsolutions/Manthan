@@ -8,12 +8,13 @@ import {
   editCompanyGroupID,
   deleteCompanyGroupID,
   saveCompanyGroupMasterSuccess,
+  getCompanyGroupListSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
+import { CustomSppiner, } from "../../../components/Common/CommonButton";
 
 const CompanyGroupList = (props) => {
 
@@ -47,6 +48,10 @@ const CompanyGroupList = (props) => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getCompanyGroupList());
+    return () => {
+      dispatch(getCompanyGroupListSuccess([]));
+    }
+ 
   }, []);
 
   const { pageField, GoBtnlistloading } = reducers

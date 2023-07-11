@@ -9,7 +9,7 @@ function SelectBoxLoader() {// linner component
     </div>
 
 }
-export const C_Select = ({ value, onCancelClick, isLoading, ...rest }) => {
+export const C_Select = ({ value, onCancelClick, isDisabled, isLoading, ...rest }) => {
 
     const { DropdownIndicator } = components;
 
@@ -23,7 +23,7 @@ export const C_Select = ({ value, onCancelClick, isLoading, ...rest }) => {
                 ) : <div className="d-flex">
 
                     <div>
-                        {(value && !props.isMulti && onCancelClick) && (
+                        {(value && !props.isMulti && onCancelClick && !isDisabled) && (
                             <button
                                 className="clear-button"
                                 onClick={(e) => {
@@ -76,6 +76,7 @@ export const C_Select = ({ value, onCancelClick, isLoading, ...rest }) => {
             <Select
                 {...rest}
                 value={value}
+                isDisabled={isDisabled}
                 className="react-dropdown"
                 classNamePrefix="select2-selection"
                 components={{ DropdownIndicator: ClearIndicator }}

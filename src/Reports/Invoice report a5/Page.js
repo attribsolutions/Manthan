@@ -3,6 +3,7 @@ import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { Data1, dataGenrator } from "./DemoData";
 import { compareGSTINState } from "../../components/Common/CommonFunction";
+import { E_invoiceQRCode } from "../../helpers/other_domain_api";
 
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);                           // Page Border
@@ -26,7 +27,7 @@ function pageFooter(doc, data, islast, array) {
     style.pageFooter(doc, data, islast, array);              //page Footer
 }
 
-const InvioceReporta5 = (data) => {
+const InvioceReporta5 = async (data) => {
 
     var doc = new jsPDF('l', 'pt', 'a5');
 
@@ -66,3 +67,25 @@ const InvioceReporta5 = (data) => {
     return (<></>);
 }
 export default InvioceReporta5;
+
+
+
+
+
+// var myHeaders = new Headers();
+// myHeaders.append("Cookie", "AWSALB=pYGleqvgV97xeOq+fhUBr2fR/VmGK219Bup5fSdwkrlayNeJLOKA0rRorYyiOcB0pak0NnhfTI91EGYG90PMP3qrZVQw/GMyKfYH5QGKUkxIUelIcmAiXVl0YePQ; AWSALBCORS=pYGleqvgV97xeOq+fhUBr2fR/VmGK219Bup5fSdwkrlayNeJLOKA0rRorYyiOcB0pak0NnhfTI91EGYG90PMP3qrZVQw/GMyKfYH5QGKUkxIUelIcmAiXVl0YePQ");
+
+// var requestOptions = {
+//     method: 'GET',
+//     headers: myHeaders,
+//     redirect: 'follow'
+// };
+
+// fetch("https://pro.mastersindia.co/Einvoiceapis/printQRCode/64a40ecd34dca9247dfa923e", requestOptions)
+//     .then(response => response.text())
+//     .then(result => {
+//         debugger;
+//     })
+//     .catch(error => {
+//         debugger;
+//     });

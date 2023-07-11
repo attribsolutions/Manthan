@@ -48,15 +48,12 @@ const ReceiptList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            listBtnLoading:state.ReceiptReducer.listBtnLoading,
+            listBtnLoading: state.ReceiptReducer.listBtnLoading,
             loading: state.ReceiptReducer.loading,
             tableList: state.ReceiptReducer.ReceiptList,
             deleteMsg: state.ReceiptReducer.deleteMsg,
-            // updateMsg: state.BOMReducer.updateMsg,
-            // postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
-            // editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
@@ -67,10 +64,7 @@ const ReceiptList = () => {
 
     const action = {
         getList: ReceiptListAPI,
-        // editId: editBOMList,
         deleteId: deleteReceiptList,
-        // postSucc: postMessage,
-        // updateSucc: updateBOMListSuccess,
         deleteSucc: deleteReceiptList_Success
     }
 

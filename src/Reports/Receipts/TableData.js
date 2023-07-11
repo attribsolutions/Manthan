@@ -1,5 +1,5 @@
 import { date_dmy_func } from "../../components/Common/CommonFunction"
-import { toWords } from "../Report_common_function"
+import { toWords, toWordswithoutRS } from "../Report_common_function"
 
 export const Address = [
     "Address"
@@ -15,10 +15,10 @@ export const Details = [
 
 export const ReceiptDetails = (doc, data) => {
     debugger
-    let stringNumber = toWords(Number(data.AmountPaid))
+    let stringNumber = toWordswithoutRS(Number(data.AmountPaid))
     var ReceiptDetails = [
 
-        [`Rs ${stringNumber}`],
+        [`Rupees ${stringNumber}`],
 
     ]
 

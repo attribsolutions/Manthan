@@ -97,7 +97,6 @@ const AddUser = (props) => {
     pageField: state.CommonPageFieldReducer.pageField
   }));
 
-
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -258,8 +257,6 @@ const AddUser = (props) => {
     value: Data.id,
     label: Data.Name
   }));
-
-
   
   function handllerEmployeeID(e) {
     dispatch(GetUserPartiesForUserMastePage({ id: e.value }))
