@@ -13,7 +13,7 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 570, 16);//vertical line (Right)
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
-export const pageHeder = (doc, data) => {
+export const pageHeder = async (doc, data) => {
     if (data.InvoiceUploads.length > 0) {
         const url = data.InvoiceUploads[0].QRCodeUrl
         let desiredPart = null;
@@ -31,24 +31,43 @@ export const pageHeder = (doc, data) => {
             console.log("Unable to extract the desired part from the URL.");
         }
 
-        doc.addImage(`/E_invoiceQRCode${desiredPart}`, 'JPEG', 323, 18, 83, 83)
-    }
+        doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
+        doc.setDrawColor(0, 0, 0);
+        doc.line(408, 63, 408, 16);//vertical right 1
+        doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
+        doc.addFont("Arial", 'Normal')
+        doc.setFont('Arial')
 
+        doc.setFontSize(18)
+        if (data.isQR) {
+            doc.text('TAX INVOICE', 160, 55,)
 
-    doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
-    doc.setDrawColor(0, 0, 0);
-    doc.line(408, 63, 408, 16);//vertical right 1
-    doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
-    doc.addFont("Arial", 'Normal')
-    doc.setFont('Arial')
+        } else {
+            doc.text('TAX INVOICE', 200, 45,)
+        }
 
-    doc.setFontSize(18)
-    if (data.isQR) {
-        doc.text('TAX INVOICE', 160, 55,)
-
+        await doc.addImage(`/E_invoiceQRCode${desiredPart}`, 'JPEG', 323, 18, 83, 83)
     } else {
-        doc.text('TAX INVOICE', 200, 45,)
+        doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
+        doc.setDrawColor(0, 0, 0);
+        doc.line(408, 63, 408, 16);//vertical right 1
+        doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
+        doc.addFont("Arial", 'Normal')
+        doc.setFont('Arial')
+
+        doc.setFontSize(18)
+        if (data.isQR) {
+            doc.text('TAX INVOICE', 160, 55,)
+
+        } else {
+            doc.text('TAX INVOICE', 200, 45,)
+        }
+
+
     }
+
+
+
 
 
 
