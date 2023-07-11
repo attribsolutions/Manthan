@@ -157,7 +157,7 @@ const Invoice = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
             if (postMsg.SaveAndDownloadPdfMode) {
-                
+
                 var ReportType = Data.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
                 dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: postMsg.InvoiceID }, Data))
                 // history.push({ pathname: url.INVOICE_LIST_1 })
@@ -179,15 +179,15 @@ const Invoice = (props) => {
 
             else {
 
-                let alertResponse = await customAlert({
+                await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
 
-                if (alertResponse && (subPageMode === url.INVOICE_1)) {
+                if (subPageMode === url.INVOICE_1) {
                     history.push({ pathname: url.INVOICE_LIST_1 })
                 }
-                else if (alertResponse && (subPageMode === url.IB_INVOICE)) {
+                else if (subPageMode === url.IB_INVOICE) {
                     history.push({ pathname: url.IB_INVOICE_LIST })
                 }
             }
