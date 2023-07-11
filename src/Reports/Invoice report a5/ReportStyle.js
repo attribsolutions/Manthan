@@ -196,22 +196,7 @@ export const reportHeder3 = (doc, data) => {
 
 export const reportFooter = (doc, data) => {
     let stringNumber = toWords(Number(data.GrandTotal))
-    debugger
-    const buffer = new Uint8Array([...data.E_invoiceQRcodeImage].map(char => char.charCodeAt(0))).buffer;
-
-    // Create a Blob from the ArrayBuffer
-    const blob = new Blob([buffer], { type: 'image/jpeg' });
-
-    // Create a URL for the Blob
-    const imageUrl = URL.createObjectURL(blob);
-
-    // Create an <img> element to display the image
-    const imageElement = document.createElement('img');
-    imageElement.src = imageUrl;
-
-    doc.addImage(data.E_invoiceQRcodeImage, 'JPEG', 359, 310, 75, 65)
-
-
+    doc.addImage(upi_qr_code, 'JPEG', 359, 310, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
     // doc.line(570, 340, 30, 340);//horizontal line Footer 3
