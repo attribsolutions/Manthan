@@ -14,7 +14,7 @@ export const PageHedercolumns = [
     "Customer"
 ]
 export const Rows = (data) => {
-
+    debugger
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -27,7 +27,7 @@ export const Rows = (data) => {
 
     InvoiceItems.forEach((element, key) => {
         const tableitemRow = [
-            element.Date,
+            date_dmy_func(element.Date),
             element.DocumentNO,
             element.Particular,
             element.Amount,
