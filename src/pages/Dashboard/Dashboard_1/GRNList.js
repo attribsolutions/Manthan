@@ -17,12 +17,11 @@ export default function InvoiceForGRN() {
     const history = useHistory();
     const currentDate_ymd = date_ymd_func();
 
-    const { tableList, GRNitem, listBtnLoading = false } = useSelector((state) => ({
+    const { tableList, GRNitem, listBtnLoading } = useSelector((state) => ({
         tableList: state.OrderReducer.orderList,
         GRNitem: state.GRNReducer.GRNitem,
         listBtnLoading: state.GRNReducer.listBtnLoading
     }));
-
 
     useEffect(() => {
         dispatch(getOrderListPageSuccess([]))
@@ -107,7 +106,10 @@ export default function InvoiceForGRN() {
         {
             text: "Action",
             dataField: "",
-            formatter: (cellContent, rowData) => {
+            formatExtraData: { listBtnLoading: listBtnLoading, },
+            formatter: (cellContent, rowData, key, formatExtra) => {
+                
+                let { listBtnLoading } = formatExtra;
                 return (<>
                     < Button
                         type="button"
