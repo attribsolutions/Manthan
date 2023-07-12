@@ -28,7 +28,7 @@ module.exports = function (app) {
   );
   app.use(
     createProxyMiddleware('/E_invoiceQRCode', {
-      target: ' https://pro.mastersindia.co', // API endpoint 2
+      target: 'https://pro.mastersindia.co', // API endpoint 2
       changeOrigin: true,
       pathRewrite: {
         "^/E_invoiceQRCode": "",
