@@ -67,6 +67,8 @@ export const pageHeder = async (doc, data) => {
         doc.text('TAX INVOICE', 200, 45,)
     }
 
+}
+
 export const reportHeder1 = (doc, data) => {
     let Y1 = 0
     if (data.isQR) {
