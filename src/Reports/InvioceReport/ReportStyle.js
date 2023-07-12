@@ -6,9 +6,6 @@ import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
 import * as table from './TableData'
 let initial_y = 0
-
-
-
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
@@ -16,10 +13,10 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 570, 16);//vertical line (Right)
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
+export const pageHeder = (doc, data) => {
 
-export const pageHeder = async (doc, data) => {
     if (data.InvoiceUploads.length > 0) {
-        const url = data.InvoiceUploads[0].QRCodeUrl;
+        const url = data.InvoiceUploads[0].QRCodeUrl
         let desiredPart = null;
 
         try {
@@ -35,22 +32,7 @@ export const pageHeder = async (doc, data) => {
             console.log("Unable to extract the desired part from the URL.");
         }
 
-        // Load the image asynchronously
-        const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
-        if (image) {
-            doc.addImage(image, 'JPEG', 323, 18, 83, 83);
-        } else {
-            console.log("Failed to load the image.");
-        }
-    }
-    // Function to load an image asynchronously
-    function loadImage(url) {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => resolve(img);
-            img.onerror = reject;
-            img.src = url;
-        });
+        doc.addImage(`/E_invoiceQRCode${desiredPart}`, 'JPEG', 323, 18, 83, 83)
     }
     doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.setDrawColor(0, 0, 0);
@@ -66,6 +48,7 @@ export const pageHeder = async (doc, data) => {
     } else {
         doc.text('TAX INVOICE', 200, 45,)
     }
+
 }
 
 export const reportHeder1 = (doc, data) => {
@@ -195,6 +178,42 @@ export const reportHeder1 = (doc, data) => {
             initial_y = final_y
         }
 
+    }
+
+    var IRNNumberDetails = {
+        margin: {
+            top: 45, left: 408, right: 35,
+        },
+        showHead: 'always',
+        theme: 'grid',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 162,
+                halign: 'lfet',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: 50,
+
+    };
+    if (data.isQR) {
+        doc.autoTable(table.INR_NO, table.IRNNumberRow(data), IRNNumberDetails);
     }
 
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
@@ -399,7 +418,7 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(8)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-         of the nature and quantity which it/these purports to be `, 34, 782)
+         of the nature and quantity which it/these purports to be `, 34, 782,)
     doc.setFontSize(10)
     doc.text(`Signature `, 280, 810,)
     doc.text(`Prepared by :${data.PartyName} `, 35, 810,)

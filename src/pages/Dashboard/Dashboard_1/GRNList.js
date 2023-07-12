@@ -5,9 +5,9 @@ import { date_ymd_func, loginPartyID } from '../../../components/Common/CommonFu
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { order_Type } from '../../../components/Common/C-Varialbes';
-import { getOrderListPage } from '../../../store/Purchase/OrderPageRedux/actions';
+import { getOrderListPage, getOrderListPageSuccess } from '../../../store/Purchase/OrderPageRedux/actions';
 import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
-import { Button } from 'reactstrap';
+import { Button, Spinner } from 'reactstrap';
 import { makeGRN_Mode_1Action } from '../../../store/Inventory/GRNRedux/actions';
 import { mode, url } from "../../../routes/index";
 
@@ -17,18 +17,20 @@ export default function InvoiceForGRN() {
     const history = useHistory();
     const currentDate_ymd = date_ymd_func();
 
-    const { tableList, GRNitem } = useSelector((state) => ({
+    const { tableList, GRNitem, listBtnLoading = false } = useSelector((state) => ({
         tableList: state.OrderReducer.orderList,
         GRNitem: state.GRNReducer.GRNitem,
+        listBtnLoading: state.GRNReducer.listBtnLoading
     }));
 
-    useEffect(() => {
 
+    useEffect(() => {
+        dispatch(getOrderListPageSuccess([]))
         let subPageMode = url.GRN_STP_3
         const gobtnId = `gobtn-${subPageMode}`
         const filtersBody = JSON.stringify({
-            FromDate: "",
-            ToDate: "",
+            FromDate: currentDate_ymd,
+            ToDate: currentDate_ymd,
             Supplier: "",
             Customer: loginPartyID(),
             OrderType: order_Type.InvoiceToGRN,
@@ -36,6 +38,7 @@ export default function InvoiceForGRN() {
         });
         dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
     }, [])
+
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
@@ -75,7 +78,7 @@ export default function InvoiceForGRN() {
                     Mode: 3
                 })
 
-                dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, path: path, grnRef, challanNo }))
+                dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, path: path, grnRef, challanNo, btnId }))
 
             } else {
                 alert("Please Select Order1")
@@ -111,13 +114,20 @@ export default function InvoiceForGRN() {
                         id={`btn-makeBtn-${rowData.id}`}
                         className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
                         title="Make GRN"
+                        disabled={listBtnLoading}
                         onClick={() => {
                             const btnId = `btn-makeBtn-${rowData.id}`
                             makeBtnHandler(rowData, btnId)
                         }}
                     >
-                        <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                            className=" fas fa-file-invoice" ></span> </Button>
+                        {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
+                            <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                            : <span
+                                style={{ marginLeft: "6px", marginRight: "6px" }}
+                                className=" fas fa-file-invoice"
+                            ></span>
+                        }
+                    </Button>
                 </>)
             }
         },

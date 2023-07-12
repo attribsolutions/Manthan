@@ -185,7 +185,7 @@ export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled })
           onClick={onClick}
         >  Save & Print
         </button>}
-     
+
     </div>
   )
 }
@@ -236,7 +236,14 @@ export function CustomSppiner({ isLoading }) {// common Listcomponent
 
 }
 
+export function DashboardLoader() {// linner component
+  return <div className="dot-pulse mt-2"> &nbsp; &nbsp;&nbsp; 
+    <div className="bounce1" ></div>
+    <div className="bounce2" ></div>
+    <div className="bounce3" ></div>
+  </div>
 
+}
 
 
 
