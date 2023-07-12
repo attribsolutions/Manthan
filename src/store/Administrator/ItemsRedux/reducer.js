@@ -6,8 +6,10 @@ import {
     GET_BASEUNIT_FOR_DROPDOWN_SUCCESS,
     GET_BRANDTAG_API_SUCCESS,
     GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
+    GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API,
     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS,
     GET_DIVISION_FOR_DROPDOWN_SUCCESS,
+    GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN,
     GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS,
     GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
     GET_ITEMTAG_API_SUCCESS,
@@ -17,6 +19,7 @@ import {
     GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
     GET_PARTY_FOR_DROPDOWN_SUCCESS,
     GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS,
+    GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN,
     GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS,
     ITEMS_API_ERROR_ACTION,
     SAVE_ITEM_MASTER,
@@ -47,7 +50,10 @@ const INIT_STATE = {
     BrandTagList: [],
     saveBtnloading: false,
     listBtnLoading: false,
-    loading: false
+    loading: false,
+    categotyDropDownLoading: false,
+    subgroupDropDownLoading: false,
+    groupDropDownLoading: false
 
 };
 
@@ -136,7 +142,7 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 editData: action.payload,
-                listBtnLoading:false
+                listBtnLoading: false
             };
 
         // update api
@@ -191,21 +197,46 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 Party: action.payload,
             }
 
+        case GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN:
+            return {
+                ...state,
+                groupDropDownLoading: true
+            }
+
         case GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,
                 GroupList: action.payload,
+                groupDropDownLoading:false
+
             }
 
-        case GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS:
+
+        case GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN:
             return {
                 ...state,
-                SubGroupList: action.payload,
+                subgroupDropDownLoading:true
             }
+
+            case GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS:
+                return {
+                    ...state,
+                    SubGroupList: action.payload,
+                    subgroupDropDownLoading:false
+                }
+    
+
+        case GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API:
+            return {
+                ...state,
+                categotyDropDownLoading: true
+            }
+
         case GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS:
             return {
                 ...state,
                 Category: action.payload,
+                categotyDropDownLoading: false
             }
 
         case ITEMS_API_ERROR_ACTION:
@@ -213,7 +244,10 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 saveBtnloading: false,
                 listBtnLoading: false,
-                loading:false
+                loading: false,
+                categotyDropDownLoading: false,
+                subgroupDropDownLoading:false,
+                groupDropDownLoading:false
             };
 
         case "RESET_ALL":
