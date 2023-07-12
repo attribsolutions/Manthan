@@ -57,6 +57,7 @@ import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRe
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { SaveButton } from "../../../../components/Common/CommonButton";
 import WeightageTab from "./Weightage_Tab";
+import { C_Select } from "../../../../CustomValidateForm";
 
 
 export const unitConversionInitial = {
@@ -150,7 +151,8 @@ const ItemsMaster = (props) => {
         BrandTagList,
         updateMsg,
         BrandName,
-        saveBtnloading
+        saveBtnloading,
+        categotyDropDownLoading,
     } = useSelector((state) => ({
         saveBtnloading: state.ItemMastersReducer.saveBtnloading,
         companyList: state.Company.companyList,
@@ -164,6 +166,7 @@ const ItemsMaster = (props) => {
         ItemTagList: state.ItemMastersReducer.ItemTagList,
         BrandTagList: state.ItemMastersReducer.BrandTagList,
         BrandName: state.GeneralReducer.GeneralMasterSubType,
+        categotyDropDownLoading: state.ItemMastersReducer.categotyDropDownLoading,
     }));
 
     const location = { ...history.location }
@@ -1123,11 +1126,12 @@ const ItemsMaster = (props) => {
 
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
                                                                         <Label className="form-label font-size-13 ">Category</Label>
-                                                                        <Select
+                                                                        <C_Select
                                                                             value={formValue.Category}
                                                                             isMulti={true}
                                                                             className="basic-multi-select"
                                                                             options={CategoryList_DropdownOptions}
+                                                                            isLoading={categotyDropDownLoading}
                                                                             styles={{
                                                                                 control: base => ({
                                                                                     ...base,
