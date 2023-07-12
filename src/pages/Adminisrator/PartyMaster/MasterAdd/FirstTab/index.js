@@ -705,7 +705,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     </Row>
                                 </FormGroup>
                             </Col>
-
                         </Row>
                     </CardBody>
                 </Card>

@@ -40,6 +40,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
+import { C_Select } from "../../../CustomValidateForm";
 
 
 const RoleAccessAdd = () => {
@@ -138,6 +139,7 @@ const RoleAccessAdd = () => {
         company,
         tableDataRedux = [],
         saveBtnloading,
+        pageDropDownLoading,
     } = useSelector((state) => ({
         saveBtnloading: state.RoleAccessReducer.saveBtnloading,
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
@@ -151,7 +153,7 @@ const RoleAccessAdd = () => {
         tableDataRedux: state.RoleAccessReducer.AddPageTableDataRedux,
         userAccess: state.Login.RoleAccessUpdateData,
         company: state.Company.companyList,
-
+        pageDropDownLoading: state.RoleAccessReducer.pageDropDownLoading,
     }));
 
 
@@ -662,7 +664,7 @@ const RoleAccessAdd = () => {
                                         <FormGroup className="row">
                                             <Label className="col-sm-3 p-2 ml-n5">Module</Label>
                                             <Col sm={8} style={{ zIndex: "3" }}>
-                                                <Select
+                                                <C_Select
                                                     value={module_DropdownSelect}
                                                     placeholder="select.."
                                                     options={Module_DropdownOption}
@@ -677,10 +679,11 @@ const RoleAccessAdd = () => {
                                         <FormGroup className=" row ">
                                             <Label className="col-sm-3 p-2">Page</Label>
                                             <Col sm={8} style={{ zIndex: "3" }}>
-                                                <Select
+                                                <C_Select
                                                     value={page_DropdownSelect}
                                                     placeholder="select.."
                                                     options={Page_DropdownOption}
+                                                    isLoading={pageDropDownLoading}
                                                     onChange={(e) => { Page_DropdownSelectHandller(e) }}
                                                     classNamePrefix="select2-selection"
                                                 />
