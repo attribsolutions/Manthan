@@ -66,7 +66,6 @@ export const pageHeder = async (doc, data) => {
     } else {
         doc.text('TAX INVOICE', 200, 45,)
     }
-}
 
 export const reportHeder1 = (doc, data) => {
     let Y1 = 0
@@ -195,6 +194,42 @@ export const reportHeder1 = (doc, data) => {
             initial_y = final_y
         }
 
+    }
+
+    var IRNNumberDetails = {
+        margin: {
+            top: 45, left: 408, right: 35,
+        },
+        showHead: 'always',
+        theme: 'grid',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 162,
+                halign: 'lfet',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: 50,
+
+    };
+    if (data.isQR) {
+        doc.autoTable(table.INR_NO, table.IRNNumberRow(data), IRNNumberDetails);
     }
 
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
