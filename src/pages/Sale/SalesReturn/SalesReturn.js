@@ -642,7 +642,7 @@ const SalesReturn = (props) => {
         const jsonBody = {
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
-            "Customer": values.Customer.value
+            "Customer": (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID()
         }
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
