@@ -34,7 +34,9 @@ export const columnsWithIGST = [
 export const Footercolumn = [
     "",
 ]
-
+export const INR_NO = [
+    "INR_NO",
+]
 export const BilledBy = [
     "Billed by",
 ]
@@ -79,7 +81,6 @@ export const Rows = (data) => {
             accumulator[key].BatchCode += BatchCode;
             accumulator[key].BatchDate += BatchDate;
             accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
-
         } else {
             accumulator[key] = {
                 ItemName, HSNCode,
@@ -430,6 +431,21 @@ export const BankRow = (data) => {
     return reportArray;
 }
 
+
+export const IRNNumberRow = (data) => {
+    debugger
+    if (data.isQR) {
+        const IRN_No = (data.InvoiceUploads[0].Irn === null ? "" : data.InvoiceUploads[0].Irn)
+
+
+        var IRNNumberArray = [
+            [`IRN No :${IRN_No}`],
+        ]
+
+    }
+
+    return IRNNumberArray;
+}
 
 
 
