@@ -2,28 +2,29 @@ import { GET_PDF_REPORT_DATA, GET_PDF_REPORT_DATA_ERROR, GET_PDF_REPORT_DATA_SUC
 
 const INIT_STATE = {
   pdfdata: { Status: false },
-  listBtnLoading: false,
+  ReportBtnLoading: false,
 }
-
+debugger
 const PdfReportReducers = (state = INIT_STATE, action) => {
+  debugger
   switch (action.type) {
     case GET_PDF_REPORT_DATA:
       return {
         ...state,
-        listBtnLoading: action.btnId,
+        ReportBtnLoading: action.listBtnLoading,
       }
 
     case GET_PDF_REPORT_DATA_SUCCESS:
       return {
         ...state,
-        listBtnLoading: false,
+        ReportBtnLoading: false,
         pdfdata: action.payload,
       }
 
     case GET_PDF_REPORT_DATA_ERROR:
       return {
         ...state,
-        listBtnLoading: false,
+        ReportBtnLoading: false,
       }
     default:
       return state
