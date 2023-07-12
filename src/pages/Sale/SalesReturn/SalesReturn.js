@@ -410,7 +410,7 @@ const SalesReturn = (props) => {
             }
         },
         {
-            text: "Rate",
+            text: "Basic Rate",
             dataField: "",
             hidden: false,
             classes: () => "sales-rate-row",
