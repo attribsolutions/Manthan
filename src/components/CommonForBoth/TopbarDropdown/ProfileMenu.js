@@ -4,33 +4,29 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
   Modal,
   Input,
-  Row,
   FormGroup,
   Label,
-  Col,
-  Spinner,
 } from "reactstrap"
 
 //i18n
 import { withTranslation } from "react-i18next"
 // Redux
 import { connect, useDispatch, useSelector } from "react-redux"
-import { withRouter, Link } from "react-router-dom"
+import { withRouter, Link, useHistory } from "react-router-dom"
 
 // users
-import {  initialFiledFunc, resetFunction } from "../../Common/validationFunction"
+import { initialFiledFunc, resetFunction } from "../../Common/validationFunction"
 import { ChangePassword, ChangePassword_Succes } from "../../../store/auth/changepassword/action"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
-import {  passwordRgx } from "../../../CustomValidateForm/index";
-
+import { passwordRgx } from "../../../CustomValidateForm/index";
 
 const ProfileMenu = props => {
 
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const fileds = {
     LoginName: "",
@@ -116,9 +112,13 @@ const ProfileMenu = props => {
     setNewPwd(e.target.value)
   }
 
+  const onChangeDivisionHandler = () => {
+  
+    history.push({ pathname: "/division" })
+  }
 
   const SaveHandler = async (event) => {
-    
+
 
     event.preventDefault();
 
@@ -218,7 +218,7 @@ const ProfileMenu = props => {
           <button type="button" className="btn btn-light" onClick={() => {
             setmodal_backdrop(false)
           }}>Close</button>
-          {loading ? <button type="button"  className="btn btn-primary  "
+          {loading ? <button type="button" className="btn btn-primary  "
             onClick={SaveHandler}
           >
             <div className="dot-pulse"> <span> Change Password</span>     &nbsp;
@@ -265,11 +265,11 @@ const ProfileMenu = props => {
           </DropdownItem> */}
 
 
-          {divisionDropdown_redux.length > 1 && //If division  then only
-            <Link className="dropdown-item">
+          {localStorage.getItem("isMultipleDivision") && //If division  then only
+            <span onClick={onChangeDivisionHandler} className="dropdown-item">
               <i className="bx bx-user font-size-16 align-middle me-1  text-primary" />
               <span>{props.t("Change Division")}</span>
-            </Link>}
+            </span>}
 
           {/* <div className="dropdown-divider" /> */}
 

@@ -93,7 +93,7 @@ const postJwtRegister = (url, data) => {
 
 export const Python_FoodERP_postJwtLogin = data => postWithoutToken(url.FOOD_ERP_POST_JWT_LOGIN, data)
 export const getUserDetails_afterLogin_ApiCall = data => post(url.FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN, data)
-export const divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall = (id1) => getWithotMsg(`${url.DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE}/${id1}`)
+export const divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall = (employeeID) => getWithotMsg(`${url.DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE}/${employeeID}`)
 export const ChangePassword_API = ({ jsonBody, btnId }) => post(url.CHANGEPASSWORD_API, jsonBody, btnId)// post api
 
 

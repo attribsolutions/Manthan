@@ -30,4 +30,4 @@ export const E_invoiceQRCode = async () => {
     let url = "/Einvoiceapis/printQRCode/64a40ecd34dca9247dfa923e"
 
     return axios.get(`/E_invoiceQRCode${url}`).then(response => response.data)
-};
+}; 

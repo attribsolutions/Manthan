@@ -33,7 +33,7 @@ const SalesReturnList = () => {
 
     const [pageMode, setPageMode] = useState(mode.defaultList)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', });
+    const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', buttonMsgLable: '' });
     let customerdropdownLabel = subPageMode === url.SALES_RETURN_LIST ? "Customer" : "Supplier"
 
     const reducers = useSelector(
@@ -67,29 +67,37 @@ const SalesReturnList = () => {
         let page_Mode = mode.defaultList;
         let masterPath = '';
         let newBtnPath = false;
+        let buttonMsgLable = '';
 
         if (subPageMode === url.PURCHASE_RETURN_LIST) {
             page_Id = pageId.PURCHASE_RETURN_LIST
             masterPath = url.PURCHASE_RETURN
             newBtnPath = url.PURCHASE_RETURN
+            buttonMsgLable = "Purchase Return"
         }
         else if (subPageMode === url.SALES_RETURN_LIST) {
             page_Id = pageId.SALES_RETURN_LIST;
             masterPath = url.SALES_RETURN
             newBtnPath = url.SALES_RETURN
+            buttonMsgLable = "Sales Return"
         }
         setPageMode(page_Mode)
         setSubPageMode(subPageMode)
-        setOtherState({ masterPath, newBtnPath })
+        setOtherState({ masterPath, newBtnPath, buttonMsgLable })
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Sales Return Count"} :0`))
+        // dispatch(BreadcrumbShowCountlabel(`${otherState.buttonMsgLable}Count :0`))
         goButtonHandler(true)
     }, []);
 
     useEffect(() => {
         dispatch(salesReturnListAPISuccess([]))
     }, [])
+
+    // useEffect(() => {
+    //     let countlabel = subPageMode === url.PURCHASE_RETURN_LIST ? "Purchase Return Count" : "Sales Return Count"
+    //     dispatch(BreadcrumbShowCountlabel(`${countlabel} :0`))
+    // }, [subPageMode])
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
@@ -238,7 +246,7 @@ const SalesReturnList = () => {
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
-                            ButtonMsgLable={"SalesReturn"}
+                            ButtonMsgLable={otherState.buttonMsgLable}
                             deleteName={"FullReturnNumber"}
 
                         />

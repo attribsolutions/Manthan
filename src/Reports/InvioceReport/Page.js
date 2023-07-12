@@ -30,9 +30,13 @@ function pageFooter(doc, data) {
 const InvioceReport = (data) => {
 
     if (data.InvoiceUploads.length > 0) {
-        data["isQR"] = true
-    } else {
-        data["isQR"] = false
+        if (data.InvoiceUploads[0].QRCodeUrl !== null) {
+            data["isQR"] = true
+
+        } else {
+            data["isQR"] = false
+
+        }
     }
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);

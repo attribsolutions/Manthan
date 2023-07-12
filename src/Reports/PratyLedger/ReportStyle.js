@@ -212,7 +212,7 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[3].styles.fontStyle = "bold"
             }
 
-            if (data1.row.cells[2].raw === "") {
+            if (data1.row.cells[2].raw.includes("books")) {
                 data1.row.cells[0].colSpan = 6
 
             }
