@@ -1,23 +1,23 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { Data } from "./DemoData";
+// import { Data } from "./DemoData";
 import { compareGSTINState } from "../../components/Common/CommonFunction";
 
 
-var pageHeder = function (doc, data) {
+const pageHeder = (doc, data) => {
     style.pageBorder(doc, data);
     style.pageHeder(doc, data);     //Title
     style.reportHeder1(doc, data);
     style.reportHeder2(doc, data);
     style.reportHeder3(doc, data);    //Invoice ID , Date  
-
+    return true
 };
-function reportBody(doc, data) {
+const reportBody = (doc, data) => {
 
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
     if (isIGST) {
-        style.tableBodyWithIGST(doc, data);                 //table Body
+        style.tableBodyWithIGST(doc, data);//table Body
     } else {
         style.tableBody(doc, data);
     }
@@ -27,18 +27,41 @@ function pageFooter(doc, data) {
     style.reportFooter(doc, data);
 }
 
-const InvioceReport = (data) => {
+const InvioceReport = async (data) => {
 
     if (data.InvoiceUploads.length > 0) {
         if (data.InvoiceUploads[0].QRCodeUrl !== null) {
             data["isQR"] = true
-
         } else {
             data["isQR"] = false
-
         }
     }
     var doc = new jsPDF('p', 'pt', 'a4');
+
+    if (data.InvoiceUploads.length > 0) {
+        const url = data.InvoiceUploads[0].QRCodeUrl;
+        let desiredPart = null;
+
+        try {
+            const urlObject = new URL(url);
+            desiredPart = urlObject.pathname;
+        } catch (w) { }
+
+        const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
+        if (image) {
+            doc.addImage(image, 'JPEG', 323, 18, 83, 83);
+        }
+    }
+    // Function to load an image asynchronously
+    function loadImage(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = url;
+        });
+    }
+
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);

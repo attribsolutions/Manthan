@@ -2,10 +2,11 @@
 import cbm_logo from "../../assets/images/cbm_logo.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
-import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
 import * as table from './TableData'
+
 let initial_y = 0
+
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
@@ -15,25 +16,6 @@ export const pageBorder = (doc) => {
 }
 export const pageHeder = (doc, data) => {
 
-    if (data.InvoiceUploads.length > 0) {
-        const url = data.InvoiceUploads[0].QRCodeUrl
-        let desiredPart = null;
-
-        try {
-            const urlObject = new URL(url);
-            desiredPart = urlObject.pathname;
-        } catch (error) {
-            console.error("Invalid URL:", error);
-        }
-
-        if (desiredPart) {
-            console.log(desiredPart);
-        } else {
-            console.log("Unable to extract the desired part from the URL.");
-        }
-
-        doc.addImage(`/E_invoiceQRCode${desiredPart}`, 'JPEG', 323, 18, 83, 83)
-    }
     doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.setDrawColor(0, 0, 0);
     doc.line(408, 63, 408, 16);//vertical right 1
@@ -171,7 +153,6 @@ export const reportHeder1 = (doc, data) => {
 
     };
 
-    // let initial_y = 0
     const priLength = () => {
         let final_y = doc.previousAutoTable.finalY
         if (final_y > initial_y) {
@@ -180,7 +161,7 @@ export const reportHeder1 = (doc, data) => {
 
     }
 
-    var IRNNumberDetails = {
+    let IRNNumberDetails = {
         margin: {
             top: 45, left: 408, right: 35,
         },
@@ -418,7 +399,7 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(8)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-         of the nature and quantity which it/these purports to be `, 34, 782,)
+         of the nature and quantity which it/these purports to be `, 34, 782)
     doc.setFontSize(10)
     doc.text(`Signature `, 280, 810,)
     doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
