@@ -362,7 +362,7 @@ const Invoice = (props) => {
                                         <samp>Quantity</samp>
                                     </div>
                                 </th>
-                                <th style={{ zIndex: -1 }}>Rate</th>
+                                <th style={{ zIndex: -1 }}>Basic Rate</th>
                                 <th style={{ zIndex: -1 }}>MRP</th>
                             </tr>
                         </Thead>
