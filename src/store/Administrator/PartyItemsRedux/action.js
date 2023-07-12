@@ -7,6 +7,7 @@ import {
   GET_PARTY_LIST_SUCCESS,
   EDIT_PARTY_ITEM_ID,
   EDIT_PARTY_ITEM_ID_SUCCESS,
+  PARTY_ITEM_API_ERROR_ACTION,
 } from "./actionType";
 
 export const GetPartyList = () => ({    // get List Action
@@ -50,3 +51,7 @@ export const editPartyItemIDSuccess = (editData) => ({       // Edit  Success
   type: EDIT_PARTY_ITEM_ID_SUCCESS,
   payload: editData,
 });
+
+export const PartyItemApiErrorAction = () => ({
+  type: PARTY_ITEM_API_ERROR_ACTION,
+})

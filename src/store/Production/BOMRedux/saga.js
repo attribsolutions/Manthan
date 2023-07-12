@@ -34,16 +34,18 @@ function* editBOMListGenFunc({ config }) {
     response.pageMode = btnmode
     response.Data = response.Data[0];
     if (response.StatusCode === 200) yield put(editBOMListSuccess(response))
-    else yield put(customAlert({
-      Type: 4,
-      Status: true, Message: JSON.stringify(response.Message),
-    }));
+    else {
+      customAlert({
+        Type: 4,
+        Status: true, Message: JSON.stringify(response.Message),
+      })
+    }
   } catch (error) { CommonConsole(error) }
 }
 
 function* UpdateBOM_ID_GenFunc({ config }) {
   try {
-    const response = yield call(BOM_Update_API,config);
+    const response = yield call(BOM_Update_API, config);
     yield put(updateBOMListSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
@@ -52,10 +54,13 @@ function* DeleteBOM_GenFunc({ config }) {
   try {
     const response = yield call(BOM_Delete_API, config);
     if (response.StatusCode === 200) yield put(deleteBOMIdSuccess(response))
-    else yield put(customAlert({
-      Type: 4,
-      Status: true, Message: JSON.stringify(response.Message),
-    }));
+    else {
+      customAlert({
+        Type: 4,
+        Message: JSON.stringify(response.Message),
+      })
+    }
+   
   } catch (error) { CommonConsole(error) }
 }
 

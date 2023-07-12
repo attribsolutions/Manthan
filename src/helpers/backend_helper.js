@@ -93,7 +93,7 @@ const postJwtRegister = (url, data) => {
 
 export const Python_FoodERP_postJwtLogin = data => postWithoutToken(url.FOOD_ERP_POST_JWT_LOGIN, data)
 export const getUserDetails_afterLogin_ApiCall = data => post(url.FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN, data)
-export const divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall = (id1) => getWithotMsg(`${url.DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE}/${id1}`)
+export const divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall = (employeeID) => getWithotMsg(`${url.DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE}/${employeeID}`)
 export const ChangePassword_API = ({ jsonBody, btnId }) => post(url.CHANGEPASSWORD_API, jsonBody, btnId)// post api
 
 
@@ -528,7 +528,7 @@ export const Invoice_1_GoButton_API = ({ jsonBody, btnId }) => post(url.INVOICE_
 export const Invoice_1_Save_API = ({ jsonBody, btnId }) => post(url.INVOICE_1_SAVE, jsonBody, btnId)//  postapi
 export const Invoice_1_Get_Filter_API = ({ filtersBody, btnId }) => post(url.INVOICE_1_lIST_FILTER, filtersBody, btnId)//  postapi
 export const Invoice_1_Delete_API = ({ deleteId, btnId }) => del(`${url.INVOICE_1_SAVE}/${deleteId}`, btnId)// delete api
-export const Invoice_1_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.INVOICE_1_SAVE}/${editId}`, btnId)// delete api
+export const Invoice_1_Edit_API_Singel_Get = ({editId}) => get(`${url.INVOICE_1_SAVE}/${editId}`)// delete api
 
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 

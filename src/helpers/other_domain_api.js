@@ -5,13 +5,9 @@ export const chitalebandhu_get = async () => {
     let url = "/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=2023-05-22&ToDate=2023-05-25&SAPCode=500023"
 
     return axios.get(`/chitaleApi${url}`).then(response => response.data)
-    
-
-
 };
 
 export const sapApi_post = async (abc, body) => {
-    
 
     var config = {
         method: 'post',
@@ -28,3 +24,10 @@ export const sapApi_post = async (abc, body) => {
     return axios(config)
         .then(response => response.data)
 };
+
+export const E_invoiceQRCode = async () => {
+    debugger
+    let url = "/Einvoiceapis/printQRCode/64a40ecd34dca9247dfa923e"
+
+    return axios.get(`/E_invoiceQRCode${url}`).then(response => response.data)
+}; 

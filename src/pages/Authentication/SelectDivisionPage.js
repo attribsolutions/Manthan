@@ -1,20 +1,21 @@
 import MetaTags from "react-meta-tags"
-import React, { useEffect, useState } from "react"
-import { Row, Col, Container, Button } from "reactstrap"
+import React, { useState } from "react"
+import { Row, Col, Container } from "reactstrap"
 
 import { useSelector, useDispatch } from "react-redux"
 
 import { Link, useHistory } from "react-router-dom"
 
-import { roleAceessAction } from "../../store/actions"
+import { divisionDropdownSelectAction, divisionDropdownSelectSuccess, getUserDetailsAction, RoleAccessUpdateSuccess, roleAceessAction, roleAceessActionSuccess } from "../../store/actions"
 import logo from "../../assets/images/cbm_logo.png"
 
 //Import config
 import CarouselPage from "./CarouselPage"
-import Select from "react-select";
 import { loginCompanyID } from "../../components/Common/CommonFunction"
 import { useLayoutEffect } from "react"
 import { getpartysetting_API } from "../../store/Administrator/PartySetting/action"
+import { Go_Button } from "../../components/Common/CommonButton"
+import { C_Select } from "../../CustomValidateForm"
 
 const SelectDivisionPage = props => {
   const dispatch = useDispatch()
@@ -22,12 +23,24 @@ const SelectDivisionPage = props => {
 
   const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
 
-  const { divisionDropdown_redux, userAccess } = useSelector(state => ({
+  const { divisionDropdown_redux, userAccess, loading, divisionOptionLoading } = useSelector(state => ({
     divisionDropdown_redux: state.Login.divisionDropdown,
     userAccess: state.Login.RoleAccessUpdateData,
-
+    loading: state.Login.loading,
+    divisionOptionLoading: state.Login.divisionOptionLoading
   }));
 
+  useLayoutEffect(() => {
+    if (divisionDropdown_redux.length === 0) {
+      localStorage.removeItem("roleId");
+      dispatch(roleAceessActionSuccess([]))
+      dispatch(RoleAccessUpdateSuccess([]))
+      dispatch(divisionDropdownSelectAction(localStorage.getItem("EmployeeID")))
+    }
+    return () => {
+      dispatch(divisionDropdownSelectSuccess([]))
+    }
+  }, [])
 
 
   useLayoutEffect(() => {
@@ -35,9 +48,8 @@ const SelectDivisionPage = props => {
     let dashboardFound = userAccess.find((i) => {
       return i.ModuleName === "Dashboard"
     })
-
-    if ((divisionDropdown_redux.length === 1) && (userAccess.length > 1)) {
-
+    if ((divisionDropdown_redux.length > 1) && (userAccess.length > 1)) {
+      localStorage.setItem("isMultipleDivision", true)
       if (dashboardFound) {
         history.push(`/${dashboardFound.ActualPagePath}`)
       }
@@ -45,26 +57,14 @@ const SelectDivisionPage = props => {
         history.push("/Dashboard")
       }
     }
-    else if ((divisionDropdown_redux.length > 1) && (userAccess.length > 1)) {
-      if (dashboardFound) {
-        history.push(`/${dashboardFound.ActualPagePath}`)
-      }
-      else {
-        history.push("/division")
-
-      }
-    }
-
-
   }, [userAccess])
-
-
 
 
   const divisionDropdown_DropdownOption = divisionDropdown_redux.map((d, key) => ({
     value: key,
     label: d.PartyName,
   }));
+
 
   function goButtonHandller() {
 
@@ -114,19 +114,20 @@ const SelectDivisionPage = props => {
 
                       <div className="mb-3">
                         {/* <Label className="form-label font-size-13 "></Label> */}
-                        <Select
+                        <C_Select
                           value={divisionDropdowSelect}
                           options={divisionDropdown_DropdownOption}
-                          autoComplete="off"
+                          isLoading={divisionOptionLoading}
                           onChange={(e) => {
                             setDivisionDropdowSelect(e);
                           }}
                         />
                       </div>
                       <div className="text-center">
-                        <Button className="btn btn-success bg" onClick={() => {
-                          goButtonHandller()
-                        }}>GO</Button>
+                        <Go_Button
+                          loading={loading}
+                          onClick={() => { goButtonHandller() }}
+                        />
                       </div>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">

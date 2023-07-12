@@ -7,7 +7,8 @@ import {
     editGeneralID,
     PostGenerallist,
     SaveMethodForGeneralSuccess,
-    updateGeneralIDSuccess
+    updateGeneralIDSuccess,
+    PostGenerallistSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
@@ -49,6 +50,9 @@ const GeneralList = (props) => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(PostGenerallist(getlistBody()));
+        return () => {
+            dispatch(PostGenerallistSuccess([]));
+          }
     }, []);
 
     const { pageField, GoBtnlistloading } = reducers

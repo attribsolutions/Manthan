@@ -15,7 +15,9 @@ import {
   API_ERROR_SUCCESS,
   GET_USER_DETAILS_AFTER_LOGIN,
   LOGIN_ERROR_ACTION,
-  ROLE_ACCESS_API_CALL
+  ROLE_ACCESS_API_CALL,
+  DIVISION_DROPDOWN_AFTER_LOGIN_ACTION_SCUCESS,
+  DIVISION_DROPDOWN_AFTER_LOGIN_ACTION
 } from "./actionTypes"
 
 const initialState = {
@@ -23,6 +25,7 @@ const initialState = {
   loading: false,
   loginSuccess: { Status: false },
   roleAccesssForSidbarError: false,
+  divisionOptionLoading: false,
   roleAccessSidbarData: [],
   RoleAccessUpdateData: [],
   afterLoginUserDetails: {},
@@ -75,10 +78,18 @@ const Login = (state = initialState, action) => {
         afterLoginUserDetails: action.payload,
       }
 
-    case DIVISION_DROPDOWN_SUCCESS_AFTER_LOGIN:
+
+    case DIVISION_DROPDOWN_AFTER_LOGIN_ACTION:
+      return {
+        ...state,
+        divisionOptionLoading: true,
+      }
+
+    case DIVISION_DROPDOWN_AFTER_LOGIN_ACTION_SCUCESS:
       return {
         ...state,
         loading: false,
+        divisionOptionLoading: false,
         divisionDropdown: action.payload,
       }
 

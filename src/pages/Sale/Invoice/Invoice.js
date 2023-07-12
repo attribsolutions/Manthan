@@ -8,9 +8,9 @@ import {
     Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess, getpdfReportdata } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {  commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -20,7 +20,7 @@ import {
     onChangeSelect,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import {  SaveButton } from "../../../components/Common/CommonButton";
+import { GotoInvoiceBtn, SaveAndDownloadPDF, SaveButton } from "../../../components/Common/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
@@ -53,7 +53,8 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
-
+import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
+import * as report from '../../../Reports/ReportIndex'
 
 const Invoice = (props) => {
 
@@ -99,6 +100,7 @@ const Invoice = (props) => {
         VehicleNumber,
         goBtnloading,
         saveBtnloading,
+        PartySettingdata
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -107,12 +109,13 @@ const Invoice = (props) => {
         customer: state.CommonAPI_Reducer.customer,
         gobutton_Add: state.InvoiceReducer.gobutton_Add,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        PartySettingdata: state.PartySettingReducer.PartySettingdata,
         VehicleNumber: state.VehicleReducer.VehicleList,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         goBtnloading: state.InvoiceReducer.goBtnloading,
     }));
-
+    const { Data = {} } = PartySettingdata;
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 
@@ -122,7 +125,7 @@ const Invoice = (props) => {
 
     useEffect(() => {
 
-        dispatch(GetVenderSupplierCustomer(subPageMode))
+        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
@@ -153,9 +156,14 @@ const Invoice = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
+            if (postMsg.SaveAndDownloadPdfMode) {
+
+                var ReportType = Data.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
+                dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: postMsg.InvoiceID }, Data))
+                // history.push({ pathname: url.INVOICE_LIST_1 })
+            }
             let btnId = `btn-E-Invoice-Upload-${postMsg.InvoiceID}`
             dispatch(invoiceSaveActionSuccess({ Status: false }))
-
             if ((systemSetting.AutoEInvoice === "1") && (systemSetting.EInvoiceApplicable === "1")) {
                 try {
                     dispatch(Uploaded_EInvoiceAction({ btnId, RowId: postMsg.InvoiceID, UserID: _cfunc.loginUserID() }))
@@ -168,18 +176,19 @@ const Invoice = (props) => {
                     Message: JSON.stringify(postMsg.Message),
                 })
             }
+
             else {
-                let alertResponse = await customAlert({
+
+                await customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
 
-                if (alertResponse && (subPageMode === url.INVOICE_1)) {
+                if (subPageMode === url.INVOICE_1) {
                     history.push({ pathname: url.INVOICE_LIST_1 })
                 }
-                else if (alertResponse && (subPageMode === url.IB_INVOICE)) {
+                else if (subPageMode === url.IB_INVOICE) {
                     history.push({ pathname: url.IB_INVOICE_LIST })
-
                 }
             }
         }
@@ -190,6 +199,7 @@ const Invoice = (props) => {
             })
         }
     }, [postMsg])
+
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
@@ -199,10 +209,10 @@ const Invoice = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
             customAlert({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 
@@ -596,7 +606,7 @@ const Invoice = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id
-
+        const SaveAndDownloadPdfMode = btnId.substring(0, 21) === "SaveAndDownloadPdfBtn";
 
         const validMsg = []
         const invoiceItems = []
@@ -711,7 +721,7 @@ const Invoice = (props) => {
                     return
                 }
                 else {
-                    dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId }));
+                    dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, SaveAndDownloadPdfMode }));
                 }
             }
         } catch (e) { _cfunc.CommonConsole("invode save Handler", e) }
@@ -837,7 +847,7 @@ const Invoice = (props) => {
                             </ToolkitProvider>
                         </div>
 
-                        {orderItemDetails.length > 0 ? <FormGroup>
+                        {/* {orderItemDetails.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                 <SaveButton
                                     pageMode={pageMode}
@@ -847,9 +857,36 @@ const Invoice = (props) => {
                                     userAcc={userPageAccessState}
                                 />
                             </Col>
-                        </FormGroup > : null}
+                        </FormGroup > : null} */}
+
+                        {
+                            (orderItemDetails.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                                <Col>
+                                    <SaveButton
+                                        loading={saveBtnloading}
+                                        id={saveBtnid}
+                                        pageMode={pageMode}
+                                        userAcc={userPageAccessState}
+                                        onClick={SaveHandler}
+                                    />
+                                </Col>
+                                {
+                                    (pageMode === mode.defaultsave) ?
+                                        <Col>
+                                            <SaveAndDownloadPDF
+                                                forceDisabled={saveBtnloading}
+                                                loading={saveBtnloading}
+                                                pageMode={pageMode}
+                                                userAcc={userPageAccessState}
+                                                onClick={SaveHandler}
+                                            />
+                                        </Col> : null}
+                            </div>
+                                : <div className="row save1"></div>
+                        }
                     </form>
                 </div>
+
             </React.Fragment >
         );
     }

@@ -13,42 +13,91 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 570, 16);//vertical line (Right)
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
-export const pageHeder = (doc, data) => {
-    doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
-    doc.setDrawColor(0, 0, 0);
-    doc.line(408, 63, 408, 16);//vertical right 1
-    doc.line(570, 63, 30, 63)  //horizontal line 1 billby upper for repeat header
-    doc.addFont("Arial", 'Normal')
-    doc.setFont('Arial')
+export const pageHeder = async (doc, data) => {
+    if (data.InvoiceUploads.length > 0) {
+        const url = data.InvoiceUploads[0].QRCodeUrl
+        let desiredPart = null;
+        debugger
+        try {
+            const urlObject = new URL(url);
+            desiredPart = urlObject.pathname;
+        } catch (error) {
+            console.error("Invalid URL:", error);
+        }
 
-    if (data.ReportType === invoice) {
+        if (desiredPart) {
+            console.log(desiredPart);
+        } else {
+            console.log("Unable to extract the desired part from the URL.");
+        }
+
+        doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
+        doc.setDrawColor(0, 0, 0);
+        doc.line(408, 63, 408, 16);//vertical right 1
+        doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
+        doc.addFont("Arial", 'Normal')
+        doc.setFont('Arial')
+
         doc.setFontSize(18)
-        doc.text('TAX INVOICE', 200, 45,)
+        if (data.isQR) {
+            doc.text('TAX INVOICE', 160, 55,)
+
+        } else {
+            doc.text('TAX INVOICE', 200, 45,)
+        }
+
+        await doc.addImage(`/E_invoiceQRCode${desiredPart}`, 'JPEG', 323, 18, 83, 83)
     } else {
-        doc.setFontSize(15)
-        doc.text('INTER BRANCH INVOICE', 200, 40,)
+        doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
+        doc.setDrawColor(0, 0, 0);
+        doc.line(408, 63, 408, 16);//vertical right 1
+        doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
+        doc.addFont("Arial", 'Normal')
+        doc.setFont('Arial')
+
+        doc.setFontSize(18)
+        if (data.isQR) {
+            doc.text('TAX INVOICE', 160, 55,)
+
+        } else {
+            doc.text('TAX INVOICE', 200, 45,)
+        }
+
+
     }
-    //Tax invoice Header
+
+
+
+
+
+
+
+
 }
 
 export const reportHeder1 = (doc, data) => {
+    let Y1 = 0
+    if (data.isQR) {
+        Y1 = 115;
+    } else {
+        Y1 = 75;
+    }
+
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Billed by", 80, 75)  //bill by 
-    doc.text('Billed to', 280, 75) //billed to
-    doc.text('Details of Transport', 440, 75)
-
+    doc.text("Billed by", 80, Y1)  //bill by 
+    doc.text('Billed to', 280, Y1) //billed to
+    doc.text('Details of Transport', 440, Y1)
 
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 63, 30, 63) //horizontal line 1 billby upper
+    doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
-    doc.line(570, 80, 30, 80);//horizontal line 3
-    // doc.line(409, 95, 30, 95)//horizontal line 4
-    doc.line(30, 789, 30, 16);//vertical left 1
-    doc.line(570, 789, 570, 16);//vertical left 2
-    doc.line(408, 170, 408, 16);//vertical right 1
-    doc.line(220, 170, 220, 63);//vertical right 2
+    doc.line(570, data.isQR ? 120 : 80, 30, data.isQR ? 120 : 80);//horizontal line 3
+    // doc.line(30, 789, 30, 16);//vertical left 1
+
+    doc.line(408, data.isQR ? 210 : 170, 408, 16);//vertical line header section billby 
+    doc.line(220, data.isQR ? 210 : 170, 220, data.isQR ? 103 : 63);//vertical  line header section billto
 
 
 
@@ -79,7 +128,8 @@ export const reportHeder1 = (doc, data) => {
             }
         },
         tableLineColor: "black",
-        startY: 80,
+
+        startY: data.isQR ? 120 : 80
     };
 
     var BilledToStyle = {
@@ -109,7 +159,7 @@ export const reportHeder1 = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        startY: 80,
+        startY: data.isQR ? 120 : 80,
     };
 
     var DetailsOfTransportStyle = {
@@ -141,7 +191,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
 
-        startY: 80,
+        startY: data.isQR ? 120 : 80,
 
     };
 
@@ -175,25 +225,18 @@ export const reportHeder2 = (doc, data) => {
 
 export const reportHeder3 = (doc, data) => {
     var date = date_dmy_func(data.InvoiceDate)
-    if (data.ReportType === invoice) {
-        doc.setFont('Tahoma')
-        doc.setFontSize(10)
-        doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
-        // doc.line(570, 49, 408, 49) //horizontal line 1 billby upper
 
-        doc.setFont(undefined, 'bold')
-        doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 27) //Invoice Id
-        doc.text(`Invoice Date: ${date}`, 415, 43) //Invoice date
-        // doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 60) //Invoice date
+    doc.setFont('Tahoma')
+    doc.setFontSize(10)
+    doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
+    // doc.line(570, 49, 408, 49) //horizontal line 1 billby upper
 
-    } else {
-        doc.setFont('Tahoma')
-        doc.setFontSize(10)
-        doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
-        doc.setFont(undefined, 'bold')
-        doc.text(`IB Invoice No:   ${data.FullInvoiceNumber}`, 415, 30) //Invoice Id
-        doc.text(`IB Invoice Date: ${date}`, 415, 50) //Invoice date
-    }
+    doc.setFont(undefined, 'bold')
+    doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 27) //Invoice Id
+    doc.text(`Invoice Date: ${date}`, 415, 43) //Invoice date
+    // doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 60) //Invoice date
+
+
 
 }
 // original

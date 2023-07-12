@@ -11,45 +11,45 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 function* commonPageFiled_GenFunc({ pageId }) {
   try {
-    
+
     const response = yield call(commonPageFiled_API, pageId);
- 
-   const  {PageFieldMaster}=response.Data  
-   
+
+    const { PageFieldMaster } = response.Data
+
     if ((PageFieldMaster.length > 0)) {
       yield put(commonPageFieldSuccess(response.Data));
     }
     else {
-    customAlert({
+      customAlert({
         Type: 2,
         Message: `PageMaster API Error : Page-Id=${pageId}`
       })
     }
   } catch (error) {
-     customAlert({
+    customAlert({
       Type: 2,
       Message: `PageMaster API Error : Page-Id=${pageId}`
     })
- 
+
   }
 }
 function* commonPageFiledList_GenFunc({ pageId }) {
   try {
-    
+
     const response = yield call(commonPageFiled_API, pageId);
-    const  {PageFieldMaster}=response.Data 
-    if ((PageFieldMaster.length > 0)) { 
+    const { PageFieldMaster } = response.Data
+    if ((PageFieldMaster.length > 0)) {
       yield put(commonPageFieldListSuccess(response.Data));
     }
     else {
-      yield customAlert({
+      customAlert({
         Type: 2,
         Message: `PageMaster API Error : Page-Id=${pageId}`
       })
-     
+
     }
   } catch (error) {
-    yield customAlert({
+    customAlert({
       Type: 2,
       Message: `PageMaster API Error : Page-Id=${pageId}`
     })

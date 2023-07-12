@@ -1,3 +1,4 @@
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
@@ -13,7 +14,7 @@ export const PageHedercolumns = [
     "Customer"
 ]
 export const Rows = (data) => {
-
+    debugger
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -26,7 +27,7 @@ export const Rows = (data) => {
 
     InvoiceItems.forEach((element, key) => {
         const tableitemRow = [
-            element.Date,
+            date_dmy_func(element.Date),
             element.DocumentNO,
             element.Particular,
             element.Amount,
@@ -229,7 +230,7 @@ export const ReportHederRows = (data) => {
         [`Party Name : ${data.CustomerName}`, ` PAN No : ${data.DistributorPAN}`],
         [`PAN No : ${data.CustomerPAN}`, `GSTIN :${data.DistributorGSTIN}`],
         [`GSTIN :${data.CustomerGSTIN}`, `Opening Balance:  ${numberWithCommas(Number(data.Open).toFixed(2))}`],
-        [`Period : ${data.FormDate} to ${data.ToDate}`, `Closing Balance:  ${numberWithCommas(Number(data.Close).toFixed(2))}`]
+        [`Period : ${date_dmy_func(data.FormDate)} to ${date_dmy_func(data.ToDate)}`, `Closing Balance:  ${numberWithCommas(Number(data.Close).toFixed(2))}`]
 
     ]
 

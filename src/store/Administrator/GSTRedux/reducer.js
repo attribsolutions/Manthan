@@ -18,6 +18,7 @@ const INIT_STATE = {
   deleteMsgForMaster: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
+  GoBtnlistloading: false
 
 }
 
@@ -61,7 +62,7 @@ const GSTReducer = (state = INIT_STATE, action) => {
     case GET_GST_LIST:
       return {
         ...state,
-        listBtnLoading: true
+        GoBtnlistloading: true
       };
 
 
@@ -69,7 +70,7 @@ const GSTReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         GSTList: action.payload,
-        listBtnLoading: false
+        GoBtnlistloading: false
 
       };
 

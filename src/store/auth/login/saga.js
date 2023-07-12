@@ -2,6 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects"
 
 // Login Redux States
 import {
+  DIVISION_DROPDOWN_AFTER_LOGIN_ACTION,
   GET_SUPER_ADMIN_API,
   GET_USER_DETAILS_AFTER_LOGIN,
   LOGIN_USER, LOGOUT_USER,
@@ -24,15 +25,16 @@ import {
   Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List,
 } from "../../../helpers/backend_helper"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
+import { CommonConsole } from "../../../components/Common/CommonFunction"
 
 function* loginUser({ payload: { user, history } }) {
   try {
-    
+
     const response = yield call(Python_FoodERP_postJwtLogin, {
       LoginName: user.UserName,
       password: user.Password
     })
-    
+
     if (response.StatusCode === 200) {
       yield put(loginSuccess(response))
     } else {
@@ -60,6 +62,7 @@ function* afterLoginUserDetails_genFun({ id }) {
     localStorage.setItem("Company", response.Data.CompanyID)
     localStorage.setItem("CompanyName", response.Data.CompanyName)
     localStorage.setItem("CompanyGroup", response.Data.CompanyGroup)
+    localStorage.setItem("EmployeeID", response.Data.EmployeeID)
     if (response.Data.IsSCMCompany) {
       localStorage.setItem("IsSCMCompany", 1)
     }
@@ -138,7 +141,6 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
     }
 
   } catch (error) {
-
     yield put(roleAceessActionError(true))
   }
 }
@@ -154,12 +156,29 @@ function* Post_SuperAdmin_API_GenratorFunction() {
     });
   }
 }
+function* DivisionDropDownOption_AfterLogin_genFun({ employeeID }) {
+  try {
+    const response = yield call(divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall, employeeID,)
+    if ((response.StatusCode === 200)) {
+      yield put(divisionDropdownSelectSuccess(response.Data))
+    }
+  }
+  catch (error) {
+    yield put(loginError_Action(error));
+    CommonConsole(error);
+  }
+}
+
+
 function* authSaga() {
   yield takeLatest(LOGIN_USER, loginUser)
   yield takeLatest(GET_USER_DETAILS_AFTER_LOGIN, afterLoginUserDetails_genFun)
   yield takeLatest(ROLE_ACCESS_API_CALL, RoleAccessGenratorFunction)
   yield takeLatest(LOGOUT_USER, logoutUser)
   yield takeLatest(GET_SUPER_ADMIN_API, Post_SuperAdmin_API_GenratorFunction)
+  yield takeLatest(DIVISION_DROPDOWN_AFTER_LOGIN_ACTION, DivisionDropDownOption_AfterLogin_genFun)
+
+
 }
 
 export default authSaga

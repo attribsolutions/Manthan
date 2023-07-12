@@ -5,6 +5,7 @@ import {
   deleteItemIdSuccess,
   editItemId,
   getItemList,
+  getItemListSuccess,
   SaveItemMasterActionSuccess,
   updateItemMasterActionSuccess,
 } from "../../../store/Administrator/ItemsRedux/action";
@@ -46,7 +47,11 @@ const ItemsList = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(pageId.ITEM_lIST))
     dispatch(getItemList());
+    return () => {
+      dispatch(getItemListSuccess([]));
+    }
   }, []);
+
 
   const { pageField, GoBtnlistloading } = reducers
 
