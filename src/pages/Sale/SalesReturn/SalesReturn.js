@@ -78,7 +78,7 @@ const SalesReturn = (props) => {
     const [subPageMode] = useState(history.location.pathname)
     const [TableArr, setTableArr] = useState([]);
 
-    const [returnMode, setReturnMode] = useState(0);
+    const [returnMode, setReturnMode] = useState(0); //(1==ItemWise) OR (2==invoiceWise)
     const [imageTable, setImageTable] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -212,21 +212,36 @@ const SalesReturn = (props) => {
                 let existingIds = updateItemArr.map(item => item.id);
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
 
-
                 addButtonData.Data.forEach((i) => {
-
                     const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP, Rate: i.Rate }));
                     const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
-                    const InvoiceQuantity = i.Quantity
 
+                    const highestMRP = i.ItemMRPDetails.reduce((prev, current) => {// Default highest GST when Return mode "2==ItemWise"
+                        return (prev.MRP > current.MRP) ? prev : current;
+                    }, '');
+
+                    const highestGST = i.ItemGSTDetails.reduce((prev, current) => {// Default  highest GST when Return mode "2==ItemWise"
+                        return (prev.GST > current.GST) ? prev : current;
+                    }, '');
+
+                    if (returnMode === 2) { //(returnMode === 2) ItemWise
+                        i.Rate = highestMRP.Rate || "";
+                        i.MRP = highestMRP.MRP || "";
+                        i.MRPValue = highestMRP.MRPValue || "";
+
+                        i.GST = highestGST.GST || "";
+                        i.GSTPercentage = highestGST.GSTPercentage || "";
+                    }
+
+
+                    const InvoiceQuantity = i.Quantity
                     const newItemRow = {
                         ...i,
                         Quantity: '',
                         InvoiceQuantity,
                         id: nextId,
-                        MRPOptions: MRPOptions,
-                        GSTOptions: GSTOptions,
-                        // gstPercentage: i.GSTPercentage,
+                        MRPOptions,
+                        GSTOptions,
                     }
                     const caculate = return_discountCalculate_Func(newItemRow)
                     newItemRow["roundedTotalAmount"] = caculate.roundedTotalAmount;
@@ -642,11 +657,11 @@ const SalesReturn = (props) => {
         const jsonBody = {
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
-            "Customer": (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID()
+            "Customer": (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID()// Customer Swipe when Po return
         }
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
-        const nrwReturnMode = (byType === 'ItemWise') ? 2 : 1
+        const nrwReturnMode = (byType === 'ItemWise') ? 2 : 1 //(returnMode === 2) ItemWise
         dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
         setReturnMode(nrwReturnMode)
     }
@@ -684,7 +699,6 @@ const SalesReturn = (props) => {
             a.hasValid.Customer.valid = true;
             a.hasValid.ItemName.valid = true;
             a.hasValid.InvoiceNumber.valid = true;
-
             return a
         })
         setTableArr([])
@@ -729,7 +743,6 @@ const SalesReturn = (props) => {
             x.src = imageTable
             if (imageTable != "") {
                 x.style.display = "block";
-
             }
 
         } else {
@@ -750,12 +763,13 @@ const SalesReturn = (props) => {
 
                 if (i.MRP === '') { msgString = msgString + ', ' + "MRP" };
                 if (i.GST === '') { msgString = msgString + ', ' + "GST" };
-
+                if (i.BatchCode === '') { msgString = msgString + ', ' + "BatchCode" };
+                if (i.BatchDate === '') { msgString = msgString + ', ' + "BatchDate" };
                 if (!(Number(i.Rate) > 0)) { msgString = msgString + ', ' + "Rate" };
-
                 if (!i.defaultReason) { msgString = msgString + ', ' + "Return Reason" };
 
-                if (((!i.defaultReason) || (i.MRP === '') || (i.GST === '') || !(Number(i.Rate) > 0))) {
+                if (((!i.defaultReason) || (i.MRP === '') || (i.GST === '')
+                    || (i.BatchCode === '') || (i.BatchDate === '') || !(Number(i.Rate) > 0))) {
                     invalidMessages.push({ [i.ItemName]: msgString });
                 }
                 return true
@@ -823,8 +837,8 @@ const SalesReturn = (props) => {
                 ReturnDate: values.ReturnDate,
                 ReturnReason: '',
                 BatchCode: values.BatchCode,
-                Customer: (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID(),
-                Party: (subPageMode === url.SALES_RETURN) ? _cfunc.loginPartyID() : values.Customer.value,
+                Customer: (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID(),// Customer Swipe when Po return
+                Party: (subPageMode === url.SALES_RETURN) ? _cfunc.loginPartyID() : values.Customer.value,// Party Swipe when Po return
                 Comment: values.Comment,
                 GrandTotal: grand_total,
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
@@ -966,7 +980,7 @@ const SalesReturn = (props) => {
 
                                         <Col sm="1" className="mx-6 mt-1">
                                             {
-                                                (!(returnMode === 1)) &&
+                                                (!(returnMode === 1)) &&///(returnMode === 1) InvoiceWise
 
                                                 <C_Button
                                                     type="button"
@@ -989,6 +1003,7 @@ const SalesReturn = (props) => {
                                                 id="InvoiceNumber "
                                                 name="InvoiceNumber"
                                                 value={values.InvoiceNumber}
+                                                //(returnMode === 2) ItemWise
                                                 isDisabled={((returnMode === 2) || invoiceNoDropDownLoading || (TableArr.length > 0)) ? true : false}
                                                 isSearchable={true}
                                                 isLoading={invoiceNoDropDownLoading}
@@ -1015,7 +1030,7 @@ const SalesReturn = (props) => {
                                                     })
                                                 }} />
                                                 :
-                                                (!(returnMode === 2)) &&
+                                                (!(returnMode === 2)) &&//(returnMode === 2) ItemWise
                                                 <C_Button
                                                     type="button"
                                                     loading={addBtnLoading}
