@@ -17,6 +17,8 @@ import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListA
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
+import SalesReturnView_Modal from "./SalesReturnConfirm";
+
 
 const SalesReturnList = () => {
 
@@ -171,6 +173,13 @@ const SalesReturnList = () => {
         })
     }
 
+    function viewBtnFunc(row) {
+        const btnId = row.btnId
+        const viewId = row.viewId
+        // dispatch(_act.viewOrderSingleget({ viewId, btnId }))
+    }
+
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -244,6 +253,7 @@ const SalesReturnList = () => {
                             masterPath={otherState.masterPath}
                             newBtnPath={otherState.newBtnPath}
                             pageMode={pageMode}
+                            viewBtnFunc={viewBtnFunc}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
                             ButtonMsgLable={otherState.buttonMsgLable}
@@ -253,6 +263,7 @@ const SalesReturnList = () => {
                         : null
                 }
             </div>
+            <SalesReturnView_Modal />
         </React.Fragment>
     )
 }

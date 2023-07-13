@@ -58,6 +58,7 @@ export async function isAlertFunc(type, Msg) {
 }
 
 const CommonPurchaseList = (props) => {
+  
   const dispatch = useDispatch();
   const history = useHistory();
 
