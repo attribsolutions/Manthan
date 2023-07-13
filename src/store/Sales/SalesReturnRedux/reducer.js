@@ -5,13 +5,15 @@ import {
     DELETE_SALES_RETURN_ID_SUCCESS,
     SALES_RETURN_LIST_API,
     SAVE_SALES_RETURN_MASTER,
-    SALES_RUTURN_API_ERROR_ACTION,
+    SALES_RETURN_API_ERROR_ACTION,
     DELETE_SALES_RETURN_ID,
     SALES_RETURN_ADD_BUTTON_ACTION,
     SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS,
     INVOICE_NUMBER,
     SALES_RETURN_CONFIRM_BUTTON_ACTION,
-    SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS
+    SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS,
+    POST_SENT_TO_SUPERSTOCKIEST_ID,
+    POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -25,7 +27,9 @@ const INIT_STATE = {
     saveBtnloading: false,
     listBtnLoading: false,
     invoiceNoDropDownLoading: false,
-    confirmBtnData: []
+    confirmBtnData: [],
+    sendToSSbtnTableData: { Status: false },
+    sendToSSbtnLoading: false,
 
 }
 
@@ -112,7 +116,22 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 deleteMsg: action.payload,
             }
 
-        case SALES_RUTURN_API_ERROR_ACTION:
+        case POST_SENT_TO_SUPERSTOCKIEST_ID:
+            return {
+                ...state,
+                sendToSSbtnLoading: true,
+                listBtnLoading: action.config.btnId,
+            }
+
+        case POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS:
+            return {
+                ...state,
+                sendToSSbtnLoading: false,
+                listBtnLoading: false,
+                sendToSSbtnTableData: action.payload,
+            }
+
+        case SALES_RETURN_API_ERROR_ACTION:
             return {
                 ...state,
                 addBtnLoading: false,
@@ -120,6 +139,7 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 loading: false,
                 invoiceNoDropDownLoading: false,
                 listBtnLoading: false,
+                sendToSSbtnLoading: false,
             };
         default:
             return state

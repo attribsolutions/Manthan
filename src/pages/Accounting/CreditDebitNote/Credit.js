@@ -945,19 +945,19 @@ const Credit = (props) => {
 
                         {
                             // Data.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={saveHandeller}
-                                            userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
-                                            module={"Receipts"}
+                            <FormGroup>
+                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                    <SaveButton pageMode={pageMode}
+                                        loading={saveBtnloading}
+                                        onClick={saveHandeller}
+                                        userAcc={userPageAccessState}
+                                        editCreatedBy={editCreatedBy}
+                                        module={"Receipts"}
 
-                                        />
-                                    </Col>
-                                </FormGroup > 
-                                // : null
+                                    />
+                                </Col>
+                            </FormGroup >
+                            // : null
                         }
 
                     </form >

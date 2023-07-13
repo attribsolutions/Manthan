@@ -616,6 +616,8 @@ const OrderList = () => {
                             MasterModal={Order}
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
+                            selectHeaderLabel={"Confirm"}
+                            selectButtonLabel={"Confirm"}
                             selectAllRow={(subPageMode === url.ORDER_LIST_4) && selectAllRowFunc}
                         />
                         : null
