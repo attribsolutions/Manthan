@@ -9,7 +9,9 @@ import {
     DELETE_SALES_RETURN_ID,
     SALES_RETURN_ADD_BUTTON_ACTION,
     SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS,
-    INVOICE_NUMBER
+    INVOICE_NUMBER,
+    SALES_RETURN_CONFIRM_BUTTON_ACTION,
+    SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -23,6 +25,7 @@ const INIT_STATE = {
     saveBtnloading: false,
     listBtnLoading: false,
     invoiceNoDropDownLoading: false,
+    confirmBtnData: []
 
 }
 
@@ -66,6 +69,20 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 ...state,
                 saveBtnloading: false,
                 postMsg: action.payload,
+
+            }
+
+        case SALES_RETURN_CONFIRM_BUTTON_ACTION:
+            return {
+                ...state,
+                confirmBtnloading: true,
+            }
+
+        case SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS:
+            return {
+                ...state,
+                confirmBtnloading: false,
+                confirmBtnData: action.payload,
 
             }
 
