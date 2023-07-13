@@ -28,8 +28,8 @@ export default function InvoiceForGRN() {
         let subPageMode = url.GRN_STP_3
         const gobtnId = `gobtn-${subPageMode}`
         const filtersBody = JSON.stringify({
-            FromDate: currentDate_ymd,
-            ToDate: currentDate_ymd,
+            FromDate: "",
+            ToDate: "",
             Supplier: "",
             Customer: loginPartyID(),
             OrderType: order_Type.InvoiceToGRN,
