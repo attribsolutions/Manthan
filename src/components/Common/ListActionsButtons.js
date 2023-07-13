@@ -23,7 +23,7 @@ const dissableStyle = {
 };
 
 export const listPageActionsButtonFunc = (props) => {
-
+    debugger
     const {
         dispatch,
         history,
@@ -46,11 +46,11 @@ export const listPageActionsButtonFunc = (props) => {
     } = props;
 
     const { listBtnLoading, } = props.reducers;
-
+    debugger
     const userCreated = loginUserID();
     const subPageMode = history.location.pathname;
 
-
+    debugger
     function editHandler(rowData, btnmode, btnId) {
 
         try {
@@ -116,6 +116,7 @@ export const listPageActionsButtonFunc = (props) => {
 
     };
 
+
     async function deleteHandler(rowData, btnId) {
         try {
             if (deleteBodyfunc) {
@@ -173,13 +174,17 @@ export const listPageActionsButtonFunc = (props) => {
             let forceHideOrderAprovalBtn = rowData.forceHideOrderAprovalBtn;
             let forceMakeBtn = rowData.forceMakeBtn;
             rowData["hasSelect"] = false
-
+            debugger
             return (
+
                 // <div className="d-flex gap-3" style={{ display:'', justifyContent: 'right'}} >
                 <div id="ActionBtn" className="center gap-3" >
 
                     {
                         //** if condition start
+
+
+
                         (userAccState.RoleAccess_IsEdit && !forceEditHide) //condtion:1
                             ?
                             <Button
@@ -200,7 +205,7 @@ export const listPageActionsButtonFunc = (props) => {
                                 }
                             </Button>
 
-                            : // **Else-If Condition start 
+                            : // **Else-If Condition start
 
                             ((userAccState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated) && !forceEditHide) //**condition :2
                                 ?
@@ -264,14 +269,6 @@ export const listPageActionsButtonFunc = (props) => {
                                             }
 
                                         </Button>
-
-
-
-
-
-
-
-
 
                                     :// btn dissable only show body
                                     <Button
