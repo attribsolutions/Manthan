@@ -598,8 +598,8 @@ export const SalesReturn_add_button_api_For_Invoice = (InvoiceID) => get(`${url.
 export const SalesReturn_post_API = ({ jsonBody, btnId }) => post(url.SALES_RETURN, jsonBody, btnId)//  postapi
 export const SalesReturn_list_API = (filters) => post(url.SALES_RETURN_LIST_API, filters)//Sales Return list api using post method
 export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_RETURN}/${deleteId}`, btnId)// Sales Return Delete API
-export const SalesReturn_SngleGet_API = ({ btnId, confirmId }) => get(`${url.SALES_RETURN_ITEM}/${confirmId}`, btnId)// Sales Return Delete API
-
+export const SalesReturn_SingleGet_API = ({ btnId, confirmId }) => get(`${url.SALES_RETURN_ITEM}/${confirmId}`, btnId)// Sales Return Delete API
+export const Send_To_Superstockiest_button_post_API = ({ jsonBody, btnId }) => post(url.SEND_TO_SUPERSTOCKIEST_POST_API, jsonBody, btnId)// update api
 
 // Credit Debit 
 export const Credit_Debit_Type = (jsonBody) => post(url.GENERAL_MASTER_SUB_TYPE, jsonBody)//  postapi

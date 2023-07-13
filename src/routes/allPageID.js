@@ -210,6 +210,8 @@ export const LOADING_SHEET_LIST_UPDATE = 179
 export const SALES_RETURN = 186
 export const SALES_RETURN_LIST = 187
 
+export const PURCHASE_RETURN_MODE_3 = 211
+
 //**************************** Accounting ***********************************//
 export const CREDIT_LIST = 191
 export const CREDIT = 190

@@ -7,11 +7,13 @@ import {
   SALES_RETURN_LIST_API_SUCCESS,
   DELETE_SALES_RETURN_ID,
   DELETE_SALES_RETURN_ID_SUCCESS,
-  SALES_RUTURN_API_ERROR_ACTION,
+  SALES_RETURN_API_ERROR_ACTION,
   SALES_RETURN_ADD_BUTTON_ACTION,
   SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS,
   SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS,
-  SALES_RETURN_CONFIRM_BUTTON_ACTION
+  SALES_RETURN_CONFIRM_BUTTON_ACTION,
+  POST_SENT_TO_SUPERSTOCKIEST_ID,
+  POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS
 } from "./actionType";
 
 
@@ -80,7 +82,16 @@ export const confirm_SalesReturn_Id_Succcess = (resp) => ({
   payload: resp,
 });
 
+export const post_Send_to_superStockiest_Id = (config = {}) => ({
+  type: POST_SENT_TO_SUPERSTOCKIEST_ID,
+  config,
+});
+
+export const post_Send_to_superStockiest_Id_Succcess = (resp) => ({
+  type: POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS,
+  payload: resp,
+});
 
 export const SalesReturnApiErrorAction = () => ({
-  type: SALES_RUTURN_API_ERROR_ACTION,
+  type: SALES_RETURN_API_ERROR_ACTION,
 })
