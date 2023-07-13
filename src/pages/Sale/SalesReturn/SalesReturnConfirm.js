@@ -10,19 +10,19 @@ import { useState } from "react";
 
 
 const ViewDetails_Modal = () => {
-
+    debugger
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
 
-    const { viewData_redux } = useSelector((state) => ({
-        viewData_redux: state.OrderReducer.orderData // modify Redux State
+    const { viewData_redux = [] } = useSelector((state) => ({
+        viewData_redux: state.SalesReturnReducer.confirmBtnData // modify Redux State
     }))
 
     useEffect(() => {
         try {
             if ((viewData_redux.Status === true)) {
-                setTableArray(viewData_redux.Data.OrderItem)// modify Custom Table Data
+                setTableArray(viewData_redux.Data[0].ReturnItems)// modify Custom Table Data
                 setModal_view(true);
             }
         } catch (error) { CommonConsole(error) }
@@ -45,6 +45,18 @@ const ViewDetails_Modal = () => {
             formatter: (cellContent, index) => (
                 <span>{`${index.Quantity} ${index.PrimaryUnitName} ${index.UnitName}`}</span>
             )
+        },
+        {
+            text: "Basic Rate",
+            dataField: "Rate",
+        },
+        {
+            text: "Item Name",
+            dataField: "ItemName",
+        },
+        {
+            text: "Item Name",
+            dataField: "ItemName",
         },
     ];
 
