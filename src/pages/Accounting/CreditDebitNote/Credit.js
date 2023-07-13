@@ -51,6 +51,7 @@ import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Ret
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { calculateSalesReturnFunc } from "../../Sale/SalesReturn/SalesCalculation";
+import { C_Select } from "../../../CustomValidateForm";
 
 const Credit = (props) => {
     const history = useHistory();
@@ -91,8 +92,10 @@ const Credit = (props) => {
         ReceiptModeList,
         InvoiceReturn,
         saveBtnloading,
+        invoiceNoDropDownLoading,
         userAccess } = useSelector((state) => ({
             saveBtnloading: state.CredietDebitReducer.saveBtnloading,
+            invoiceNoDropDownLoading: state.SalesReturnReducer.invoiceNoDropDownLoading,
             postMsg: state.CredietDebitReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             CreditDebitType: state.CredietDebitReducer.CreditDebitType,
@@ -342,24 +345,31 @@ const Credit = (props) => {
     };
 
     function AmountPaid_onChange(event) {
-        let input = event.target.value
-        let sum = 0
-        Data.forEach(element => {
-            sum = sum + Number(element.BalanceAmount)
-        });
 
-        let v1 = Number(sum);
-        let v2 = Number(input)
-        if (!(v1 >= v2)) {
-            event.target.value = Number(v1.toFixed(2));
+        if (IsSystemSetting) {
+            onChangeText({ event, state, setState })
         }
-        onChangeText({ event, state, setState })
+        else {
+            let input = event.target.value
+            let sum = 0
+            Data.forEach(element => {
+                sum = sum + Number(element.BalanceAmount)
+            });
 
-        AmountPaidDistribution(event.target.value)
-        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${_cfunc.amountCommaSeparateFunc(event.target.value)}`))
+            let v1 = Number(sum);
+            let v2 = Number(input)
+            if (!(v1 >= v2)) {
+                event.target.value = Number(v1.toFixed(2));
+            }
+            onChangeText({ event, state, setState })
+
+            AmountPaidDistribution(event.target.value)
+            dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${_cfunc.amountCommaSeparateFunc(event.target.value)}`))
+        }
     }
 
     function AmountPaidDistribution(val1) {
+
         let value = Number(val1)
         let Amount = value
         Data.map((index) => {
@@ -831,13 +841,14 @@ const Credit = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.InvoiceNO}</Label>
                                         <Col sm="7">
-                                            <Select
+                                            <C_Select
                                                 id="InvoiceNO "
                                                 name="InvoiceNO"
                                                 value={values.InvoiceNO}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={InvoiceNo_Options}
+                                                isLoading={invoiceNoDropDownLoading}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                     InvoiceNoOnChange(hasSelect)
@@ -933,7 +944,7 @@ const Credit = (props) => {
 
 
                         {
-                            Data.length > 0 ?
+                            // Data.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
@@ -945,7 +956,8 @@ const Credit = (props) => {
 
                                         />
                                     </Col>
-                                </FormGroup > : null
+                                </FormGroup > 
+                                // : null
                         }
 
                     </form >

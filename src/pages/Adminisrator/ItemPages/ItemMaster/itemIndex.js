@@ -97,6 +97,7 @@ const ItemsMaster = (props) => {
         HSN: '',
         isActive: true,
         Tag: '',
+        Sequence: '',
         BrandName: [],
         ShelfLife: '',
         IsSCM: false
@@ -245,6 +246,7 @@ const ItemsMaster = (props) => {
                     SAPItemCode: hasEditVal.SAPItemCode,
                     ShortName: hasEditVal.ShortName,
                     BarCode: hasEditVal.BarCode,
+                    Sequence: hasEditVal.Sequence,
                     Company: { label: hasEditVal.CompanyName, value: hasEditVal.Company },
                     CategoryType: editCategoryType,
                     Category: editCategory,
@@ -717,6 +719,7 @@ const ItemsMaster = (props) => {
                     BaseUnitID: formValue.BaseUnit.value,
                     BrandName: ItemBrandName.toString(),
                     Tag: formValue.Tag,
+                    Sequence: formValue.Sequence,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
                     Breadth: weightageTabMaster.Breadth,
@@ -745,12 +748,14 @@ const ItemsMaster = (props) => {
                         }
                     ]
                 };
-               
+
                 if (pageMode === mode.edit) {
                     dispatch(updateItemMasterAction({ jsonBody, updateId: EditData.id, btnId }));
+                    console.log(jsonBody)
                 }
                 else {
                     dispatch(saveItemMasterAction({ jsonBody, btnId }));
+                    console.log(jsonBody)
                 }
             }                                                            // ************* is valid if start 
             else {                                                       // ************* is valid esle start 
@@ -1050,7 +1055,7 @@ const ItemsMaster = (props) => {
                                                                         />
                                                                     </FormGroup> */}
                                                                     <FormGroup className=" col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">Shelf Life<samp className="text-secondary">/Day</samp></Label>
+                                                                        <Label >Shelf Life<samp className="text-secondary">/Day</samp></Label>
                                                                         <Input
                                                                             type="text"
                                                                             rows="1"
@@ -1083,7 +1088,7 @@ const ItemsMaster = (props) => {
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">BarCode</Label>
+                                                                        <Label >BarCode</Label>
                                                                         <Input
                                                                             id='txtBarCode0'
                                                                             placeholder=" Please Enter BarCode "
@@ -1094,7 +1099,7 @@ const ItemsMaster = (props) => {
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">SAP Code</Label>
+                                                                        <Label >SAP Code</Label>
                                                                         <Input
                                                                             id='txtSAPItemCode0'
                                                                             defaultValue={EditData.SAPItemCode}
@@ -1125,7 +1130,7 @@ const ItemsMaster = (props) => {
 
 
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
-                                                                        <Label className="form-label font-size-13 ">Category</Label>
+                                                                        <Label >Category</Label>
                                                                         <C_Select
                                                                             value={formValue.Category}
                                                                             isMulti={true}
@@ -1146,7 +1151,7 @@ const ItemsMaster = (props) => {
 
 
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
-                                                                        <Label className="form-label font-size-13 ">Brand Name</Label>
+                                                                        <Label >Brand Name</Label>
                                                                         <Select
                                                                             defaultValue={formValue.BrandName}
                                                                             isMulti={true}
@@ -1168,7 +1173,7 @@ const ItemsMaster = (props) => {
                                                                 <Row>
                                                                     <FormGroup className=" col col-sm-4 ">
                                                                         <div className="mb-3">
-                                                                            <Label className="form-label font-size-13 ">Division</Label>
+                                                                            <Label >Division</Label>
                                                                             <Select
                                                                                 defaultValue={formValue.Division}
                                                                                 isMulti={true}
@@ -1188,7 +1193,7 @@ const ItemsMaster = (props) => {
                                                                     </FormGroup>
 
                                                                     <FormGroup className=" col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">Item Tag</Label>
+                                                                        <Label >Item Tag</Label>
                                                                         <Input
                                                                             type="textarea"
                                                                             rows="1"
@@ -1200,6 +1205,18 @@ const ItemsMaster = (props) => {
                                                                         />
                                                                     </FormGroup>
 
+                                                                    <FormGroup className=" col col-sm-4 " >
+                                                                        <Label >Sequence</Label>
+                                                                        <Input
+                                                                            type="text"
+                                                                            rows="1"
+                                                                            id='txtSequence0'
+                                                                            defaultValue={EditData.Sequence}
+                                                                            placeholder=" Please Enter Sequence "
+                                                                            autoComplete="off"
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Sequence") }}
+                                                                        />
+                                                                    </FormGroup>
 
                                                                 </Row>
                                                                 <Row >
