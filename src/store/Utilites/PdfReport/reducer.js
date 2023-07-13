@@ -4,9 +4,9 @@ const INIT_STATE = {
   pdfdata: { Status: false },
   ReportBtnLoading: false,
 }
-debugger
+
 const PdfReportReducers = (state = INIT_STATE, action) => {
-  debugger
+  
   switch (action.type) {
     case GET_PDF_REPORT_DATA:
       return {

@@ -394,8 +394,8 @@ const Receipts = (props) => {
     };
 
     function AmountPaid_onChange(event) {
-
-        if (!(IsSystemSetting)) {
+        
+        if (IsSystemSetting) {
             onChangeText({ event, state, setState })
         }
         else {
@@ -490,22 +490,24 @@ const Receipts = (props) => {
             calSum = calSum + Number(element.Calculate)
         });
 
-        let diffrence = Math.abs(calSum - values.AmountPaid);
-        if (Number(values.AmountPaid) < calSum) {
-            customAlert({
-                Type: 4,
-                Message: `Amount Paid value is Excess ${diffrence}`,
-            })
-            return btnIsDissablefunc({ btnId, state: false })
+        if (!(IsSystemSetting)) {
+            let diffrence = Math.abs(calSum - values.AmountPaid);
+            if (Number(values.AmountPaid) < calSum) {
+                customAlert({
+                    Type: 4,
+                    Message: `Amount Paid value is Excess ${diffrence}`,
+                })
+                return btnIsDissablefunc({ btnId, state: false })
 
-        }
-        else if (Number(values.AmountPaid) > calSum) {
-            customAlert({
-                Type: 4,
-                Message: `Amount Paid value is Short ${diffrence}`,
-            })
-            return btnIsDissablefunc({ btnId, state: false })
+            }
+            else if (Number(values.AmountPaid) > calSum) {
+                customAlert({
+                    Type: 4,
+                    Message: `Amount Paid value is Short ${diffrence}`,
+                })
+                return btnIsDissablefunc({ btnId, state: false })
 
+            }
         }
 
         if ((values.ReceiptModeName.value === undefined) || values.ReceiptModeName.value === "") {

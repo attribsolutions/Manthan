@@ -14,7 +14,7 @@ export const PageHedercolumns = [
     "Customer"
 ]
 export const Rows = (data) => {
-    debugger
+    
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
