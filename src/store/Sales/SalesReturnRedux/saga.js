@@ -45,13 +45,26 @@ function* delete_SalesReturn_ID_GenFunc({ config }) {
         yield put(action.delete_SalesReturn_Id_Succcess(response))
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
+
+debugger
+function* SalesReturn_confirmID_GenFunc({ config }) {
+    debugger
+    try {
+        const response = yield call(apiCall.SalesReturn_SngleGet_API, config);
+        yield put(action.confirm_SalesReturn_Id_Succcess(response))
+    } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
+}
+
+
+
+
 function* addButton_saleReturn_GenFunc({ config }) {
     try {
         const { jsonBody, InvoiceId, returnMode } = config;
-        
+
         if (returnMode === 2) {//returnMode 1 = "itemWise"
             const response = yield call(apiCall.SalesReturn_add_button_api_For_Item, jsonBody);
-            
+
             yield put(action.SalesReturnAddBtn_Action_Succcess(response));
         }
         else {//returnMode 2 = "invoiceWise"
@@ -71,5 +84,8 @@ function* SalesReturnSaga() {
     yield takeLatest(actionType.SALES_RETURN_LIST_API, SalesReturn_List_GenFun)
     yield takeLatest(actionType.DELETE_SALES_RETURN_ID, delete_SalesReturn_ID_GenFunc)
     yield takeLatest(actionType.SALES_RETURN_ADD_BUTTON_ACTION, addButton_saleReturn_GenFunc)
+    yield takeLatest(actionType.SALES_RETURN_CONFIRM_BUTTON_ACTION, SalesReturn_confirmID_GenFunc)
+
+
 }
 export default SalesReturnSaga;  

@@ -9,7 +9,9 @@ import {
   DELETE_SALES_RETURN_ID_SUCCESS,
   SALES_RUTURN_API_ERROR_ACTION,
   SALES_RETURN_ADD_BUTTON_ACTION,
-  SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS
+  SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS,
+  SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS,
+  SALES_RETURN_CONFIRM_BUTTON_ACTION
 } from "./actionType";
 
 
@@ -64,6 +66,17 @@ export const delete_SalesReturn_Id = (config = {}) => ({
 
 export const delete_SalesReturn_Id_Succcess = (resp) => ({
   type: DELETE_SALES_RETURN_ID_SUCCESS,
+  payload: resp,
+});
+
+
+export const confirm_SalesReturn_Id = (config = {}) => ({
+  type: SALES_RETURN_CONFIRM_BUTTON_ACTION,
+  config,
+});
+
+export const confirm_SalesReturn_Id_Succcess = (resp) => ({
+  type: SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS,
   payload: resp,
 });
 

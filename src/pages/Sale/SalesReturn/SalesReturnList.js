@@ -13,7 +13,7 @@ import { initialFiledFunc } from "../../../components/Common/validationFunction"
 import { GetVenderSupplierCustomer, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import SalesReturn from "./SalesReturn";
-import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
+import { confirm_SalesReturn_Id, delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
@@ -174,9 +174,10 @@ const SalesReturnList = () => {
     }
 
     function viewBtnFunc(row) {
+        debugger
         const btnId = row.btnId
-        const viewId = row.viewId
-        // dispatch(_act.viewOrderSingleget({ viewId, btnId }))
+        const confirmId = row.viewId
+        dispatch(confirm_SalesReturn_Id({ confirmId, btnId }))
     }
 
 
