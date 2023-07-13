@@ -13,7 +13,9 @@ import {
     SALES_RETURN_CONFIRM_BUTTON_ACTION,
     SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS,
     POST_SENT_TO_SUPERSTOCKIEST_ID,
-    POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS
+    POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS,
+    RETURN_APPROVE_ACTION,
+    RETURN_APPROVE_ACTION_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -30,6 +32,7 @@ const INIT_STATE = {
     confirmBtnData: [],
     sendToSSbtnTableData: { Status: false },
     sendToSSbtnLoading: false,
+    updateMsg: { Status: false }
 
 }
 
@@ -73,6 +76,21 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
                 ...state,
                 saveBtnloading: false,
                 postMsg: action.payload,
+
+            }
+
+
+        case RETURN_APPROVE_ACTION:
+            return {
+                ...state,
+                saveBtnloading: true,
+            }
+
+        case RETURN_APPROVE_ACTION_SUCCESS:
+            return {
+                ...state,
+                saveBtnloading: false,
+                updateMsg: action.payload,
 
             }
 

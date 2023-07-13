@@ -13,7 +13,9 @@ import {
   SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS,
   SALES_RETURN_CONFIRM_BUTTON_ACTION,
   POST_SENT_TO_SUPERSTOCKIEST_ID,
-  POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS
+  POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS,
+  RETURN_APPROVE_ACTION_SUCCESS,
+  RETURN_APPROVE_ACTION
 } from "./actionType";
 
 
@@ -46,6 +48,18 @@ export const saveSalesReturnMaster = (config = {}) => ({
 
 export const saveSalesReturnMaster_Success = resp => ({
   type: SAVE_SALES_RETURN_MASTER_SUCCESS,
+  payload: resp,
+})
+
+
+
+export const returnApprove = (config = {}) => ({
+  type: RETURN_APPROVE_ACTION,
+  config,
+});
+
+export const returnApprove_Success = resp => ({
+  type: RETURN_APPROVE_ACTION_SUCCESS,
   payload: resp,
 })
 

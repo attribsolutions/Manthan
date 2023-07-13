@@ -88,7 +88,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         RoutesList: state.RoutesReducer.RoutesList,
         pageField: state.CommonPageFieldReducer.pageField,
         userAccess: state.Login.RoleAccessUpdateData,
-        districtDropDownLoading:state.PartyMasterReducer.districtDropDownLoading,
+        districtDropDownLoading: state.PartyMasterReducer.districtDropDownLoading,
         cityDropDownLoading: state.EmployeesReducer.cityDropDownLoading,
     }));
 
@@ -240,7 +240,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     };
     const GSTINverifyhandler = () => {
 
-        window.open("https://services.gst.gov.in/services/login");
+        window.open("https://services.gst.gov.in/services/searchtp");
     }
 
     const FirstTab = (

@@ -25,7 +25,7 @@ const Dashboard_1 = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
     const [userPageAccessState, setUserAccState] = useState('');
-    
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         getDashboard,
@@ -159,10 +159,11 @@ const Dashboard_1 = (props) => {
                                     <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
                                         onClick={paymentEntry_onClick}
                                         disabled={PaymentEntryListloading}
+                                        style={{ cursor: "pointer" }}
                                     >
                                         Todays Payment Entry</Label>&nbsp;&nbsp;&nbsp;
                                     {(PaymentEntryListloading) &&
-                                          <DashboardLoader />
+                                        <DashboardLoader />
                                     }
 
                                 </CardHeader>
@@ -180,6 +181,8 @@ const Dashboard_1 = (props) => {
                                         className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
                                         disabled={GRNListLoading}
                                         onClick={InvoiceFoRGRN_onClick}
+                                        style={{ cursor: "pointer" }}
+
                                     >
                                         Invoices For GRN</Label>
                                     {(GRNListLoading) &&
@@ -200,10 +203,12 @@ const Dashboard_1 = (props) => {
                                     <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
                                         onClick={salesReturn_onClick}
                                         disabled={SalesReturnListloading}
+                                        style={{ cursor: "pointer" }}
+
                                     >
                                         Sales Return List</Label>
                                     {(SalesReturnListloading) &&
-                                          <DashboardLoader />
+                                        <DashboardLoader />
                                     }
                                 </CardHeader>
                                 <SalesReturnListForDashboard />
