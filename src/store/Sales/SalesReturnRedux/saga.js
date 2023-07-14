@@ -50,7 +50,7 @@ function* SalesReturn_confirmID_GenFunc({ config }) {
 
     try {
         const response = yield call(apiCall.SalesReturn_SingleGet_API, config);
-        
+
         response.Data[0]["ReturnID"] = config.confirmId
         response.Data[0].ReturnItems.map((index) => {
             index["selectCheck"] = false
@@ -67,8 +67,6 @@ function* Return_Approve_GenFunc({ config }) {
         yield put(action.confirm_SalesReturn_Id_Succcess(response))
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
-
-
 
 function* addButton_saleReturn_GenFunc({ config }) {
     try {
@@ -103,11 +101,7 @@ function* SalesReturnSaga() {
     yield takeLatest(actionType.SALES_RETURN_ADD_BUTTON_ACTION, addButton_saleReturn_GenFunc)
     yield takeLatest(actionType.SALES_RETURN_CONFIRM_BUTTON_ACTION, SalesReturn_confirmID_GenFunc)
     yield takeLatest(actionType.POST_SENT_TO_SUPERSTOCKIEST_ID, sendToSSButton_GenFunc)
-    yield takeLatest(actionType.POST_SENT_TO_SUPERSTOCKIEST_ID, sendToSSButton_GenFunc)
     yield takeLatest(actionType.RETURN_APPROVE_ACTION, Return_Approve_GenFunc)
-
-
-
 
 }
 export default SalesReturnSaga;  

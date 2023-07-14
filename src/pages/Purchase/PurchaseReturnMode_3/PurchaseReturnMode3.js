@@ -49,6 +49,7 @@ const PurchaseReturnMode3 = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname)
+    const [tableData, setTableData] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -67,11 +68,18 @@ const PurchaseReturnMode3 = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
     }));
 
-    const { Data = [] } = sendToSSbtnTableData
+    useEffect(() => {
+        if (sendToSSbtnTableData.Status === true) {
+            
+            const { Data = [] } = sendToSSbtnTableData
 
-    const tableData = Data.map((item, index) => {
-        return { ...item, id: index + 1 };
-    })
+            const UpdatedTableData = Data.map((item, index) => {
+                return { ...item, id: index + 1 };
+            })
+            setTableData(UpdatedTableData)
+            dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
+        }
+    }, []);
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -111,7 +119,7 @@ const PurchaseReturnMode3 = (props) => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveSalesReturnMaster_Success({ Status: false }))
-            dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
+
             setState(() => resetFunction(fileds, state))// Clear form values  
             await customAlert({
                 Type: 1,
@@ -141,7 +149,7 @@ const PurchaseReturnMode3 = (props) => {
 
         {
             text: "Quantity",
-            dataField: "Quantity",
+            dataField: "",
             formatter: (value, row, k) => {
 
                 return (
@@ -149,7 +157,7 @@ const PurchaseReturnMode3 = (props) => {
                         <CInput type="text"
                             id={`Quantity${k}`}
                             key={`Quantity${row.id}`}
-                            disabled={true}
+                            // disabled={true}
                             cpattern={decimalRegx}
                             className="text-end"
                             defaultValue={row.Quantity}
@@ -195,7 +203,7 @@ const PurchaseReturnMode3 = (props) => {
 
         {
             text: "Basic Rate",
-            dataField: "Rate",
+            dataField: "",
             formatter: (value, row, k) => {
 
                 return (
@@ -205,7 +213,7 @@ const PurchaseReturnMode3 = (props) => {
                             className="text-end"
                             key={`Rate${row.id}`}
                             cpattern={decimalRegx}
-                            disabled={true}
+                            // disabled={true}
                             defaultValue={row.Rate}
                             autoComplete="off"
                             onChange={(e) => { row.Rate = e.target.value }}

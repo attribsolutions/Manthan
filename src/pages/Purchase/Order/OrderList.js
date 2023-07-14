@@ -481,7 +481,7 @@ const OrderList = () => {
             return a
         })
     }
-    const selectAllRowFunc = (row = []) => {
+    const selectSaveBtnHandler = (row = []) => {
 
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
@@ -616,9 +616,12 @@ const OrderList = () => {
                             MasterModal={Order}
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
-                            selectHeaderLabel={"Confirm"}
-                            selectButtonLabel={"Confirm"}
-                            selectAllRow={(subPageMode === url.ORDER_LIST_4) && selectAllRowFunc}
+                            selectCheckParams={{
+                                isShow: subPageMode === url.ORDER_LIST_4,
+                                selectSaveBtnHandler: selectSaveBtnHandler,
+                                selectSaveBtnLabel: "Confirm",
+                                selectHeaderLabel: "Confirm"
+                            }}
                         />
                         : null
                 }
