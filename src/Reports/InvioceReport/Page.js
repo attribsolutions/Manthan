@@ -61,14 +61,6 @@ const InvioceReport = async (data) => {
             img.src = url;
         });
     }
-
-    pageHeder(doc, data);
-    reportBody(doc, data);
-    pageFooter(doc, data);
-
-
-
-
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
