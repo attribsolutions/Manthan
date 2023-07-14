@@ -38,6 +38,9 @@ const PartyDropdown_Common = (props) => {
                             <Col sm="6">
                                 <Select
                                     value={partySelect}
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
                                     isSearchable={true}
                                     className="react-dropdown"
                                     classNamePrefix="dropdown"
