@@ -13,7 +13,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 const ViewDetails_Modal = () => {
-    
+
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
@@ -45,7 +45,7 @@ const ViewDetails_Modal = () => {
             let inValideUnits = []
 
             tableArray.forEach(index => {
-                
+
                 if (Number(index.Quantity) === (0)) {
                     inValideUnits.push({ [`${index.ItemName}`]: "This Item Quantity Is Required." })
                 }
@@ -98,8 +98,8 @@ const ViewDetails_Modal = () => {
             dataField: "ItemName",
             formatter: (cellContent, index) => (
                 <>
-                    <div>{`${index.BatchCode}`}</div>
-                    <div>{`${date_dmy_func(index.BatchDate)}`}</div>
+                    <div style={{ width: "120px" }}>{`${index.BatchCode}`}</div>
+                    <div style={{ width: "120px" }}>{`${date_dmy_func(index.BatchDate)}`}</div>
                 </>
             )
         },
@@ -172,7 +172,7 @@ const ViewDetails_Modal = () => {
                                             <BootstrapTable
                                                 keyField={"id"}
                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                classes={"table align-middle table-nowrap table-hover"}
+                                                classes={"table align-middle table-hover"}
                                                 headerWrapperClasses={"thead-light"}
 
                                                 {...toolkitProps.baseProps}
