@@ -29,7 +29,7 @@ const INIT_STATE = {
     saveBtnloading: false,
     listBtnLoading: false,
     invoiceNoDropDownLoading: false,
-    confirmBtnData: [],
+    confirmBtnData: { Status: false },
     sendToSSbtnTableData: { Status: false },
     sendToSSbtnLoading: false,
     updateMsg: { Status: false }

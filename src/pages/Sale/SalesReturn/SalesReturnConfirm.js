@@ -5,7 +5,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole, date_dmy_func, loginUserID } from "../../../components/Common/CommonFunction";
-import { orderSinglegetSuccess, returnApprove } from "../../../store/actions";
+import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove } from "../../../store/actions";
 import { useState } from "react";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -33,10 +33,9 @@ const ViewDetails_Modal = () => {
 
     function modalToggleFunc() {
         setModal_view(false);
-        dispatch(orderSinglegetSuccess({ Status: false }))// modify Custom Api Action call
+        dispatch(confirm_SalesReturn_Id_Succcess({ Status: false }))// modify Custom Api Action call
 
     }
-
 
     const SaveHandler = async (event) => {
         event.preventDefault();
