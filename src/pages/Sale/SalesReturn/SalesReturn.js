@@ -844,6 +844,7 @@ const SalesReturn = (props) => {
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
+                Mode: (url.SALES_RETURN) ? 1 : 2,
                 ReturnItems: ReturnItems,
             });
 

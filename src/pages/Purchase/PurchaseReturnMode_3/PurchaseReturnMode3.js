@@ -5,10 +5,10 @@ import {
     Label,
     Input,
     Row,
-    Button,
+
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess, post_Send_to_superStockiest_Id_Succcess } from "../../../store/actions";
+import { commonPageFieldSuccess, post_Send_to_superStockiest_Id_Succcess, saveSalesReturnMaster, saveSalesReturnMaster_Success } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -18,16 +18,19 @@ import {
     onChangeSelect,
     onChangeText,
     resetFunction,
+
 } from "../../../components/Common/validationFunction";
-import { url, mode, pageId } from "../../../routes/index"
-import { GetVenderSupplierCustomer, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { mode, pageId } from "../../../routes/index"
+import { GetVenderSupplierCustomer, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import "../../Sale/SalesReturn/salesReturn.scss";
-import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { SaveButton } from "../../../components/Common/CommonButton";
+import { return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PurchaseReturnMode3 = (props) => {
 
@@ -50,20 +53,37 @@ const PurchaseReturnMode3 = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
+        sendToSSbtnTableData,
+        saveBtnloading,
+        postMsg,
         supplier,
         pageField,
         userAccess,
     } = useSelector((state) => ({
+        saveBtnloading: state.SalesReturnReducer.saveBtnloading,
+        sendToSSbtnTableData: state.SalesReturnReducer.sendToSSbtnTableData,
         supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        postMsg: state.SalesReturnReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
+
+    const { Data = [] } = sendToSSbtnTableData
+
+    const tableData = Data.map((item, index) => {
+        return { ...item, tableId: index + 1 };
+    });
+
+    // const tableData = [
+    //     { Item: "abc", tableId: 1 },
+    //     { Item: "xyz", tableId: 2 }
+    // ]
+    console.log(tableData)
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN_MODE_3))
         dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-        dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
     }, []);
 
     const location = { ...history.location }
@@ -96,6 +116,25 @@ const PurchaseReturnMode3 = (props) => {
         }
     }, [pageField])
 
+    useEffect(() => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(saveSalesReturnMaster_Success({ Status: false }))
+            dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            customAlert({
+                Type: 1,
+                Message: postMsg.Message,
+            })
+        }
+        else if (postMsg.Status === true) {
+            dispatch(saveSalesReturnMaster_Success({ Status: false }))
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(postMsg.Message),
+            })
+        }
+    }, [postMsg])
+
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -105,61 +144,104 @@ const PurchaseReturnMode3 = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
-            hidden: false,
-            formatter: (cell, row) => {
-                return (
-                    <Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>
-                )
-            }
         },
-        {
-            text: "Invoice Qty",
-            align: () => "right",
-            formatter: (cell, row) => <Label>{row.InvoiceQuantity}</Label>,
 
-        },
         {
             text: "Quantity",
-            dataField: "",
-            classes: () => "sales-discount-row",
+            dataField: "Quantity",
+           
+            formatter: (value, row, k) => {
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`Quantity${k}`}
+                            key={`Quantity${row.id}`}
+                            disabled={true}
+                            className="text-end"
+                            defaultValue={row.Quantity}
+                            autoComplete="off"
+                            onChange={(e) => { row["Quantity"] = e.target.value }}
+                        />
+                    </span>
+                )
+            },
 
+            headerStyle: () => {
+                return { width: '140px', textAlign: 'center' };
+            }
+        },
+
+        {
+            text: "UnitName",
+            dataField: "UnitName",
         },
 
         {
             text: "MRP",
-            dataField: "MRP",
-            hidden: false,
-            formatExtraData: { TableArr },
+            dataField: "MRPValue",
+      
+            formatter: (value, row, k) => {
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`MRPValue${k}`}
+                            key={`MRPValue${row.id}`}
+                            disabled={true}
+                            className="text-end"
+                            defaultValue={row.MRPValue}
+                            autoComplete="off"
+                            onChange={(e) => { row["MRPValue"] = e.target.value }}
+                        />
+                    </span>
+                )
+            },
 
-        },
-
-        {
-            text: "GST",
-            dataField: "",
-            hidden: false,
-            formatExtraData: { TableArr },
-
+            headerStyle: () => {
+                return { width: '140px', textAlign: 'center' };
+            }
         },
         {
             text: "Basic Rate",
-            dataField: "",
-            hidden: false,
-            classes: () => "sales-rate-row",
-            formatExtraData: { TableArr },
+            dataField: "Rate",
+           
+            formatter: (value, row, k) => {
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`Rate${k}`}
+                            className="text-end"
+                            key={`Rate${row.id}`}
+                            disabled={true}
+                            defaultValue={row.Rate}
+                            autoComplete="off"
+                            onChange={(e) => { row["Rate"] = e.target.value }}
+                        />
+                    </span>
+                )
+            },
 
+            headerStyle: () => {
+                return { width: '140px', textAlign: 'center' };
+            }
+        },
+
+        {
+            text: "BatchDate",
+            dataField: "BatchDate",
         },
         {
-            text: "Batch",
-            dataField: "",
-            classes: () => "sales-rate-row",
-
-
+            text: "BatchCode",
+            dataField: "BatchCode",
         },
-        {
-            text: "Return Reason",
-            dataField: "",
-            classes: () => "sales-return-row",
 
+        {
+            text: "Reason",
+            dataField: "ItemReasonName",
+        },
+
+        {
+            text: "Comment",
+            dataField: "ItemComment",
         },
 
     ];
@@ -172,6 +254,77 @@ const PurchaseReturnMode3 = (props) => {
             return a
         })
     }
+
+    const SaveHandler = async (event) => {
+
+        event.preventDefault();
+        const btnId = event.target.id;
+        let grand_total = 0;
+
+        if (values.Customer === "") {
+            customAlert({
+                Type: 4,
+                Message: "Please Select Supplier",
+            });
+            return;
+        }
+
+        const ReturnItems = tableData.map((i) => {
+
+            const calculate = return_discountCalculate_Func(i);
+            grand_total += Number(calculate.roundedTotalAmount);
+
+            return {
+                "Item": i.Item,
+                "Quantity": i.Quantity,
+                "Unit": i.Unit,
+                "BaseUnitQuantity": i.BaseUnitQuantity,
+                "BatchCode": i.BatchCode,
+                "BatchDate": i.BatchDate,
+                "MRP": i.MRP,
+                "MRPValue": i.MRPValue,
+                "Rate": i.Rate,
+                "GST": i.GST,
+                "ItemReason": i.ItemReason,
+                "Comment": i.ItemComment,
+                "CGST": i.CGST,
+                "SGST": i.SGST,
+                "IGST": i.IGST,
+                "GSTPercentage": i.GSTPercentage,
+                "CGSTPercentage": i.CGSTPercentage,
+                "SGSTPercentage": i.SGSTPercentage,
+                "IGSTPercentage": i.IGSTPercentage,
+                "BasicAmount": i.BasicAmount,
+                "GSTAmount": i.GSTAmount,
+                "Amount": i.Amount,
+                "TaxType": 'GST',
+                "DiscountType": calculate.discountType,
+                "Discount": calculate.discount,
+                "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+                "ReturnItemImages": [],
+            };
+        });
+
+        try {
+            const jsonBody = JSON.stringify({
+                ReturnDate: values.ReturnDate,
+                ReturnReason: '',
+                BatchCode: values.BatchCode,
+                Customer: _cfunc.loginPartyID(),// Customer Swipe when Po return
+                Party: values.Customer.value,// Party Swipe when Po return
+                Comment: values.Comment,
+                GrandTotal: grand_total,
+                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
+                Mode: 3,
+                ReturnItems: ReturnItems,
+            });
+
+            dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
+
+        } catch (e) { _cfunc.CommonConsole(e) }
+    };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -259,8 +412,8 @@ const PurchaseReturnMode3 = (props) => {
 
                         <div>
                             <ToolkitProvider
-                                keyField={"id"}
-                                data={TableArr}
+                                keyField={"tableId"}
+                                data={tableData}
                                 columns={pagesListColumns}
                                 search
                             >
@@ -270,18 +423,14 @@ const PurchaseReturnMode3 = (props) => {
                                             <Col xl="12">
                                                 <div className="table-responsive table" style={{ minHeight: "60vh" }}>
                                                     <BootstrapTable
-                                                        keyField={"id"}
-                                                        id="table_Arrow"
+                                                        keyField={"tableId"}
                                                         classes={"table  table-bordered "}
                                                         noDataIndication={
                                                             <div className="text-danger text-center ">
-                                                                Items Not available
+                                                                Record Not available
                                                             </div>
                                                         }
                                                         {...toolkitProps.baseProps}
-                                                        onDataSizeChange={(e) => {
-                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                        }}
                                                     />
                                                 </div>
                                             </Col>
@@ -297,14 +446,14 @@ const PurchaseReturnMode3 = (props) => {
 
 
                     </form >
-                    <div style={{ marginLeft: '-10px' }}>
+                    <div style={{ marginLeft: '-35px' }}>
                         <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"} >
                                 <SaveButton
                                     pageMode={mode.edit}
                                     // forceDisabled={addBtnLoading}
-                                    // loading={saveBtnloading}
-                                    // onClick={SaveHandler}
+                                    loading={saveBtnloading}
+                                    onClick={SaveHandler}
                                     userAcc={userPageAccessState}
                                     module={"SalesReturn"}
                                 />

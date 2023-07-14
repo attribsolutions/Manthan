@@ -45,7 +45,7 @@ const SalesReturnList = () => {
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             listBtnLoading: state.SalesReturnReducer.listBtnLoading,
             tableList: state.SalesReturnReducer.salesReturnList,
-            sendToSSbtnTableData:state.SalesReturnReducer.sendToSSbtnTableData,
+            sendToSSbtnTableData: state.SalesReturnReducer.sendToSSbtnTableData,
             deleteMsg: state.SalesReturnReducer.deleteMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
@@ -97,6 +97,7 @@ const SalesReturnList = () => {
     }, [])
 
     useEffect(() => {
+        
         if ((sendToSSbtnTableData.Status === true) && (sendToSSbtnTableData.StatusCode === 200)) {
             history.push({
                 pathname: url.PURCHASE_RETURN_MODE_3
@@ -255,7 +256,7 @@ const SalesReturnList = () => {
             return
         }
         let idString = ischeck.map(obj => obj.id).join(',')
-        let jsonBody = { OrderIDs: idString }
+        let jsonBody = { ReturnItemID: idString }
         dispatch(post_Send_to_superStockiest_Id({ jsonBody }))
     }
 
