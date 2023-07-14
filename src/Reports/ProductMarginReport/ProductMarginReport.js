@@ -8,7 +8,7 @@ import {
     CardBody,
     CardHeader,
     Col,
-    Container, Label, Row,
+    Container, Label, Row, Spinner,
 } from "reactstrap";
 import { breadcrumbReturnFunc, loginUserDetails } from '../../components/Common/CommonFunction';
 import * as url from "../../routes/route_url";
@@ -31,10 +31,12 @@ const ProductMarginReport = (props) => {
     const {
         userAccess,
         ProductMarginData,
+        dounloadProductMargin,
     } = useSelector((state) => ({
         userAccess: state.Login.RoleAccessUpdateData,
         ProductMarginData: state.SapLedgerReducer.ProductMargin,
         pageField: state.CommonPageFieldReducer.pageField,
+        dounloadProductMargin: state.SapLedgerReducer.dounloadProductMargin,
 
     }));
 
@@ -96,11 +98,10 @@ const ProductMarginReport = (props) => {
     }, [ProductMarginData]);
 
     function excelhandler(event) {
-  
-       
-            const userDetails = loginUserDetails()
-            dispatch(getExcel_Button_API(userDetails.IsSCMPartyType === null ? 0 : userDetails.IsSCMPartyType, userDetails.Party_id))
-       
+
+        const userDetails = loginUserDetails()
+        dispatch(getExcel_Button_API(userDetails.IsSCMPartyType === null ? 0 : userDetails.IsSCMPartyType, userDetails.Party_id))
+
         // event.preventDefault();
         // const userDetails = loginUserDetails()
         // const btnId = "excelbtn-id"
@@ -120,11 +121,21 @@ const ProductMarginReport = (props) => {
                             <CardBody>
                                 <Row>
                                     <Col lg={6}>
-                                        <Button type='button'
-                                            className='btn btn-success'
-                                            id="excelbtn-id"
-                                            onClick={excelhandler}>ProductMarginReport
-                                        </Button>
+                                        {dounloadProductMargin ?
+                                            <Button type='button'
+                                                className='btn btn-success'
+                                                id="excelbtn-id"
+                                            > Downloading..    &nbsp;
+                                                <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+                                            </Button> :
+
+                                            <Button type='button'
+                                                className='btn btn-success'
+                                                id="excelbtn-id"
+                                                onClick={excelhandler}>ProductMarginReport
+                                            </Button>
+                                        }
+
                                     </Col>
                                 </Row>
                             </CardBody>
