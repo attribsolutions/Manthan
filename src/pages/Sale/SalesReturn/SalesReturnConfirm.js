@@ -13,7 +13,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 const ViewDetails_Modal = () => {
-    debugger
+    
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
@@ -45,7 +45,7 @@ const ViewDetails_Modal = () => {
             let inValideUnits = []
 
             tableArray.forEach(index => {
-                debugger
+                
                 if (Number(index.Quantity) === (0)) {
                     inValideUnits.push({ [`${index.ItemName}`]: "This Item Quantity Is Required." })
                 }

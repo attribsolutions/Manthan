@@ -20,10 +20,10 @@ import {
     resetFunction,
 
 } from "../../../components/Common/validationFunction";
-import { mode, pageId } from "../../../routes/index"
+import { mode, pageId, url } from "../../../routes/index"
 import { GetVenderSupplierCustomer, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import "../../Sale/SalesReturn/salesReturn.scss";
-import { C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm/index";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -49,7 +49,6 @@ const PurchaseReturnMode3 = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname)
-    const [TableArr, setTableArr] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -71,14 +70,8 @@ const PurchaseReturnMode3 = (props) => {
     const { Data = [] } = sendToSSbtnTableData
 
     const tableData = Data.map((item, index) => {
-        return { ...item, tableId: index + 1 };
-    });
-
-    // const tableData = [
-    //     { Item: "abc", tableId: 1 },
-    //     { Item: "xyz", tableId: 2 }
-    // ]
-    console.log(tableData)
+        return { ...item, id: index + 1 };
+    })
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -92,7 +85,6 @@ const PurchaseReturnMode3 = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
 
     useEffect(() => {// userAccess useEffect
         let userAcc = null;
@@ -116,15 +108,16 @@ const PurchaseReturnMode3 = (props) => {
         }
     }, [pageField])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveSalesReturnMaster_Success({ Status: false }))
             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
-            customAlert({
+            await customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
+            history.push({ pathname: url.PURCHASE_RETURN_LIST })
         }
         else if (postMsg.Status === true) {
             dispatch(saveSalesReturnMaster_Success({ Status: false }))
@@ -149,23 +142,23 @@ const PurchaseReturnMode3 = (props) => {
         {
             text: "Quantity",
             dataField: "Quantity",
-           
             formatter: (value, row, k) => {
+
                 return (
                     <span >
-                        <Input type="text"
+                        <CInput type="text"
                             id={`Quantity${k}`}
                             key={`Quantity${row.id}`}
                             disabled={true}
+                            cpattern={decimalRegx}
                             className="text-end"
                             defaultValue={row.Quantity}
                             autoComplete="off"
-                            onChange={(e) => { row["Quantity"] = e.target.value }}
+                            onChange={(e) => { row.Quantity = e.target.value }}
                         />
                     </span>
                 )
             },
-
             headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
             }
@@ -179,7 +172,6 @@ const PurchaseReturnMode3 = (props) => {
         {
             text: "MRP",
             dataField: "MRPValue",
-      
             formatter: (value, row, k) => {
                 return (
                     <span >
@@ -200,21 +192,23 @@ const PurchaseReturnMode3 = (props) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
+
         {
             text: "Basic Rate",
             dataField: "Rate",
-           
             formatter: (value, row, k) => {
+
                 return (
                     <span >
-                        <Input type="text"
+                        <CInput type="text"
                             id={`Rate${k}`}
                             className="text-end"
                             key={`Rate${row.id}`}
+                            cpattern={decimalRegx}
                             disabled={true}
                             defaultValue={row.Rate}
                             autoComplete="off"
-                            onChange={(e) => { row["Rate"] = e.target.value }}
+                            onChange={(e) => { row.Rate = e.target.value }}
                         />
                     </span>
                 )
@@ -243,7 +237,6 @@ const PurchaseReturnMode3 = (props) => {
             text: "Comment",
             dataField: "ItemComment",
         },
-
     ];
 
     const ReturnDate_Onchange = (e, date) => {
@@ -270,7 +263,7 @@ const PurchaseReturnMode3 = (props) => {
         }
 
         const ReturnItems = tableData.map((i) => {
-
+            
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
 
@@ -313,14 +306,13 @@ const PurchaseReturnMode3 = (props) => {
                 Customer: _cfunc.loginPartyID(),// Customer Swipe when Po return
                 Party: values.Customer.value,// Party Swipe when Po return
                 Comment: values.Comment,
-                GrandTotal: grand_total,
+                GrandTotal: grand_total.toFixed(2),
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 Mode: 3,
                 ReturnItems: ReturnItems,
             });
-
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
@@ -363,7 +355,6 @@ const PurchaseReturnMode3 = (props) => {
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
-                                                isDisabled={((TableArr.length > 0)) ? true : false}
                                                 options={supplierOptions}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
@@ -412,7 +403,7 @@ const PurchaseReturnMode3 = (props) => {
 
                         <div>
                             <ToolkitProvider
-                                keyField={"tableId"}
+                                keyField={"id"}
                                 data={tableData}
                                 columns={pagesListColumns}
                                 search
@@ -423,7 +414,7 @@ const PurchaseReturnMode3 = (props) => {
                                             <Col xl="12">
                                                 <div className="table-responsive table" style={{ minHeight: "60vh" }}>
                                                     <BootstrapTable
-                                                        keyField={"tableId"}
+                                                        keyField={"id"}
                                                         classes={"table  table-bordered "}
                                                         noDataIndication={
                                                             <div className="text-danger text-center ">
@@ -442,25 +433,26 @@ const PurchaseReturnMode3 = (props) => {
                             </ToolkitProvider>
                         </div>
 
-
-
-
                     </form >
-                    <div style={{ marginLeft: '-35px' }}>
-                        <FormGroup>
-                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"} >
-                                <SaveButton
-                                    pageMode={mode.edit}
-                                    // forceDisabled={addBtnLoading}
-                                    loading={saveBtnloading}
-                                    onClick={SaveHandler}
-                                    userAcc={userPageAccessState}
-                                    module={"SalesReturn"}
-                                />
 
-                            </Col>
-                        </FormGroup >
-                    </div>
+                    {
+                        tableData.length > 0 ?
+                            <div style={{ marginLeft: '-35px' }}>
+                                <FormGroup>
+                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"} >
+                                        <SaveButton
+                                            pageMode={mode.edit}
+                                            loading={saveBtnloading}
+                                            onClick={SaveHandler}
+                                            userAcc={userPageAccessState}
+                                            module={"SalesReturn"}
+                                        />
+
+                                    </Col>
+                                </FormGroup >
+                            </div>
+                            : null
+                    }
 
                 </div >
             </React.Fragment >
