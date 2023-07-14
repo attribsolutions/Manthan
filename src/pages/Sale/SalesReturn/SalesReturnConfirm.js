@@ -7,9 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole, date_dmy_func, loginUserID } from "../../../components/Common/CommonFunction";
 import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove } from "../../../store/actions";
 import { useState } from "react";
-import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
-import { SaveButton } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
 
 
 const ViewDetails_Modal = () => {
@@ -46,13 +45,13 @@ const ViewDetails_Modal = () => {
 
             tableArray.forEach(index => {
 
-                if (Number(index.Quantity) === (0)) {
-                    inValideUnits.push({ [`${index.ItemName}`]: "This Item Quantity Is Required." })
+                if (Number(index.ApproveQuantity) === (0)) {
+                    inValideUnits.push({ [`${index.ItemName}`]: ` Quantity Must be greater than 0 ` })
                 }
                 const ReturnItems = {
                     Item: index.Item,
                     Unit: index.Unit,
-                    ApprovedQuantity: index.Quantity,
+                    ApprovedQuantity: index.ApproveQuantity,
                     Approvedby: loginUserID()
                 }
                 tableItemArray.push(ReturnItems)
@@ -107,45 +106,57 @@ const ViewDetails_Modal = () => {
             text: "NOC",
             dataField: "ItemReason",
         },
+
+        {
+            text: "Approve Quantity",
+            dataField: "Quantity",
+            formatter: (value, row, k) => {
+                return (
+
+                    <div>
+                        <CInput
+                            key={`Quantity-${k}`}
+                            id={`Quantity-${k}`}
+                            cpattern={onlyNumberRegx}
+                            defaultValue={row.Quantity}
+                            autoComplete="off"
+                            className=" text-end"
+                            onChange={(e) => {
+                                if (Number(e.target.value) > Number(value)) {
+                                    e.target.value = value
+                                    row["ApproveQuantity"] = e.target.value
+                                } else {
+                                    row["ApproveQuantity"] = e.target.value
+                                }
+                            }}
+                        />
+                    </div>
+                )
+            },
+        },
+
         {
             text: "Comment",
             dataField: "ItemComment",
         },
-        {
-            text: "Approve Qty",
-            dataField: "Quantity",
-            formatter: (value, row, k) => {
-                return (
-                    <span >
-                        <Input type="text"
-                            id={`Quantity${k}`}
-                            key={`Quantity${row.id}`}
-                            defaultValue={row.Quantity}
-                            autoComplete="off"
-                            onChange={(e) => { row["Quantity"] = e.target.value }}
-                        />
-                    </span>
-                )
-            },
-        },
-        {
-            text: "Select Approve Items",
-            dataField: "",
-            formatter: (value, row, k) => {
-                return (
-                    <span >
-                        <Input
-                            type="checkbox"
-                            className="p-1"
-                            name="SelectApproveItems"
-                            defaultChecked={row.selectCheck}
-                            onChange={(e) => { e.target.value = row.selectCheck }}
-                        >
-                        </Input>
-                    </span>
-                )
-            },
-        },
+        // {
+        //     text: "Select Approve Items",
+        //     dataField: "",
+        //     formatter: (value, row, k) => {
+        //         return (
+        //             <span >
+        //                 <Input
+        //                     type="checkbox"
+        //                     className="p-1"
+        //                     name="SelectApproveItems"
+        //                     defaultChecked={row.selectCheck}
+        //                     onChange={(e) => { e.target.value = row.selectCheck }}
+        //                 >
+        //                 </Input>
+        //             </span>
+        //         )
+        //     },
+        // },
 
     ];
 
@@ -161,7 +172,7 @@ const ViewDetails_Modal = () => {
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"
-                                key="JHJHJHJHJHJH"
+                                key="RetrunItem"
                                 data={tableArray}
                                 columns={pagesListColumns}
                                 search
