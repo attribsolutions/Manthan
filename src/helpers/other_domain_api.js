@@ -32,7 +32,7 @@ export const E_invoiceQRCode = async () => {
     var a = await axios.get(`/E_invoiceQRCode${url}`).then(response => response.data).catch((w) => w)
  
     debugger
-    console.log("HJKKFDGHJKLFGHJK   E_invoiceQRCode****", a)
+    // console.log("HJKKFDGHJKLFGHJK   E_invoiceQRCode****", a)
     return a
 };
 
