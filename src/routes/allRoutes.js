@@ -163,6 +163,7 @@ import InvoiceConfiguration from "../pages/Adminisrator/InvoiceConfiguration/Inv
 import StockEntry from "../pages/Inventory/StockEntry/StockEntry";
 import PartyLedger from "../Reports/PratyLedger/Partyledger";
 import StockReport from "../Reports/StockReport/StockReport";
+import PurchaseReturnMode3 from "../pages/Purchase/PurchaseReturnMode_3/PurchaseReturnMode3";
 
 
 const userRoutes = [
@@ -332,6 +333,8 @@ const userRoutes = [
 
   { path: path.PURCHASE_RETURN, component: SalesReturn },
   { path: path.PURCHASE_RETURN_LIST, component: SalesReturnList },
+
+  { path: path.PURCHASE_RETURN_MODE_3, component: PurchaseReturnMode3 },
 
   //******************************* All Report ************************************//
   { path: path.REPORT, component: Report },

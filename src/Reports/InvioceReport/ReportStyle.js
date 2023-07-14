@@ -16,8 +16,8 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
-    
-    doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
+
+    // doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.setDrawColor(0, 0, 0);
     doc.line(408, 63, 408, 16);//vertical right 1
     doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header

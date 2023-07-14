@@ -351,6 +351,10 @@ export const ADD_BUTTON_API_FOR_ITEM = '/ReturnItemBatchcode' // privious Api  =
 export const ADD_BUTTON_API_FOR_INVOICE = '/InvoiceReturnCRDR'
 export const SALES_RETURN = '/PurchaseReturn'
 export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
+export const SALES_RETURN_ITEM = '/PurchaseReturn'
+export const SEND_TO_SUPERSTOCKIEST_POST_API="/SalesReturnconsolidateItem"
+export const RETURN_ITEM_APPROVE_AIP = '/ReturnItemApprove'
+
 
 // Credit and Debit API
 export const CREDIT_DEBIT = '/CreditDebitNote'

@@ -257,7 +257,10 @@ const LoadingSheetUpdate = (props) => {
                             tableListData.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} className={"row save1"}>
-                                        <button type="button" style={{ width: "120px" }} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>
+                                        <button type="button" style={{ width: "120px" }}
+                                            onClick={MakeReceiptForAll}
+                                            className="btn btn-primary  waves-effect waves-light">
+                                            Make Receipt</button>
                                     </Col>
                                 </FormGroup >
                                 : null

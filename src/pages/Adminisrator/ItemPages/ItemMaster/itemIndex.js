@@ -59,7 +59,6 @@ import { SaveButton } from "../../../../components/Common/CommonButton";
 import WeightageTab from "./Weightage_Tab";
 import { C_Select } from "../../../../CustomValidateForm";
 
-
 export const unitConversionInitial = {
     id: 1,
     Conversion: '',
@@ -1127,7 +1126,6 @@ const ItemsMaster = (props) => {
                                                                             onChange={(e) => { CategoryType_Handler(e) }}
                                                                         />
                                                                     </FormGroup>
-
 
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
                                                                         <Label >Category</Label>
