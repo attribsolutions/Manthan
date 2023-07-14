@@ -204,7 +204,7 @@ export const LoadingSheetUpdate = url.LOADING_SHEET_LIST
 export const SalesReturn = url.SALES_RETURN_LIST
 export const SalesReturnList = url.SALES_RETURN
 
-export const Purchase_Return_Mode_3 = url.PURCHASE_RETURN_MODE_3
+export const Purchase_Return_Mode_3 = url.SALES_RETURN_LIST
 
 //********************************Accounting ***********************************//
 export const Receipts = url.RECEIPTS_LIST

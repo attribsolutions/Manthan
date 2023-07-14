@@ -90,14 +90,14 @@ const SalesReturnList = () => {
         dispatch(commonPageFieldList(page_Id))
         // dispatch(BreadcrumbShowCountlabel(`${otherState.buttonMsgLable}Count :0`))
         goButtonHandler(true)
+        return () => {
+            dispatch(salesReturnListAPISuccess([]))
+        }
     }, []);
 
-    useEffect(() => {
-        dispatch(salesReturnListAPISuccess([]))
-    }, [])
 
     useEffect(() => {
-        
+
         if ((sendToSSbtnTableData.Status === true) && (sendToSSbtnTableData.StatusCode === 200)) {
             history.push({
                 pathname: url.PURCHASE_RETURN_MODE_3
@@ -245,8 +245,8 @@ const SalesReturnList = () => {
         )
     }
 
-    const selectAllRowFunc = (row = []) => {
-
+    const selectSaveBtnHandler = (row = []) => {
+        
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
             customAlert({
@@ -277,10 +277,14 @@ const SalesReturnList = () => {
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
                             ButtonMsgLable={otherState.buttonMsgLable}
-                            selectHeaderLabel={"Select"}
                             deleteName={"FullReturnNumber"}
-                            selectButtonLabel={"Send To Superstockiest"}
-                            selectAllRow={(subPageMode === url.SALES_RETURN_LIST) && selectAllRowFunc}
+
+                            selectCheckParams={{
+                                isShow: (subPageMode === url.SALES_RETURN_LIST),
+                                selectSaveBtnHandler: selectSaveBtnHandler,
+                                selectSaveBtnLabel: "Send To Superstockiest",
+                                selectHeaderLabel: "Select",
+                            }}
 
                         />
                         : null

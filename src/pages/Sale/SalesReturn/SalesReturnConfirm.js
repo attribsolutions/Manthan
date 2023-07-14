@@ -5,7 +5,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole, date_dmy_func, loginUserID } from "../../../components/Common/CommonFunction";
-import { orderSinglegetSuccess, returnApprove } from "../../../store/actions";
+import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove } from "../../../store/actions";
 import { useState } from "react";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -13,7 +13,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 const ViewDetails_Modal = () => {
-    debugger
+
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
@@ -33,10 +33,9 @@ const ViewDetails_Modal = () => {
 
     function modalToggleFunc() {
         setModal_view(false);
-        dispatch(orderSinglegetSuccess({ Status: false }))// modify Custom Api Action call
+        dispatch(confirm_SalesReturn_Id_Succcess({ Status: false }))// modify Custom Api Action call
 
     }
-
 
     const SaveHandler = async (event) => {
         event.preventDefault();
@@ -46,7 +45,7 @@ const ViewDetails_Modal = () => {
             let inValideUnits = []
 
             tableArray.forEach(index => {
-                debugger
+
                 if (Number(index.Quantity) === (0)) {
                     inValideUnits.push({ [`${index.ItemName}`]: "This Item Quantity Is Required." })
                 }
@@ -99,8 +98,8 @@ const ViewDetails_Modal = () => {
             dataField: "ItemName",
             formatter: (cellContent, index) => (
                 <>
-                    <div>{`${index.BatchCode}`}</div>
-                    <div>{`${date_dmy_func(index.BatchDate)}`}</div>
+                    <div style={{ width: "120px" }}>{`${index.BatchCode}`}</div>
+                    <div style={{ width: "120px" }}>{`${date_dmy_func(index.BatchDate)}`}</div>
                 </>
             )
         },
@@ -173,7 +172,7 @@ const ViewDetails_Modal = () => {
                                             <BootstrapTable
                                                 keyField={"id"}
                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                classes={"table align-middle table-nowrap table-hover"}
+                                                classes={"table align-middle table-hover"}
                                                 headerWrapperClasses={"thead-light"}
 
                                                 {...toolkitProps.baseProps}

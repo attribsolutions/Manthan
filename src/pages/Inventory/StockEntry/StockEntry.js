@@ -130,7 +130,7 @@ const StockEntry = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -162,7 +162,7 @@ const StockEntry = (props) => {
         {
             text: "Item Name",
             dataField: "id",
-            classes: () => "sales-return-row",
+            classes: () => "",
             formatter: (cellContent, row, key) => {
                 return (
                     <Label>{row.ItemName}</Label>
@@ -172,17 +172,17 @@ const StockEntry = (props) => {
         {
             text: "Quantity",
             dataField: "",
-            classes: () => "sales-return-row",
+            classes: () => "",
             formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span style={{ justifyContent: 'center' }}>
                     <CInput
                         id={`Qty${key}`}
                         key={`Qty${row.id}`}
                         autoComplete="off"
                         type="text"
                         cpattern={decimalRegx}
-                        className="col col-sm text-end"
+                        className="text-end"
                         onChange={(e) => { row.Qty = e.target.value }}
                     />
                 </span>)
@@ -191,10 +191,11 @@ const StockEntry = (props) => {
         {
             text: "Unit",
             dataField: "",
-            classes: () => "sales-return-row",
+            classes: () => "",
+            style: { minWidth: "10vw" },
             formatter: (cellContent, row, key,) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span style={{ justifyContent: 'center' }}>
                     <Select
                         id={`Unit${key}`}
                         name="Unit"
@@ -216,18 +217,19 @@ const StockEntry = (props) => {
         {
             text: "MRP",
             dataField: "",
-            classes: () => "sales-return-row",
+            style: { minWidth: "10vw" },
+            classes: () => "",
             formatter: (cellContent, row, key) => {
 
                 return (
                     <>
-                        <span style={{ justifyContent: 'center', width: "100px" }}>
+                        <span >
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
                                 defaultValue={row.defaultMRP}
                                 isSearchable={true}
-                                className="react-dropdown"
+                                className="react-dropdown "
                                 classNamePrefix="dropdown"
                                 options={row.MRP_DropdownOptions}
                                 onChange={(event) => { row.defaultMRP = event }}
@@ -238,9 +240,10 @@ const StockEntry = (props) => {
         {
             text: "GST",
             dataField: "",
-            classes: () => "sales-return-row",
+            style: { minWidth: "10vw" },
+            classes: () => "",
             formatter: (cellContent, row, key) => {
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span >
                     <Select
                         id={`GST${key}`}
                         name="GST"
@@ -257,16 +260,16 @@ const StockEntry = (props) => {
         {
             text: "BatchCode",
             dataField: "",
-            classes: () => "sales-return-row",
+            classes: () => "",
             formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span >
                     <Input
                         id=""
                         key={row.id}
                         defaultValue={row.BatchCode}
                         type="text"
-                        className="col col-sm text-center"
+                        className=" text-center"
                         onChange={(event) => { row.BatchCode = event.target.value }}
                     />
                 </span>)
@@ -275,10 +278,10 @@ const StockEntry = (props) => {
         {
             text: "BatchDate",
             dataField: "",
-            classes: () => "sales-return-row",
+            classes: () => "",
             formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span style={{ justifyContent: 'center' }}>
                     <C_DatePicker
                         name='Date'
                         value={row.BatchDate}
@@ -583,20 +586,18 @@ const StockEntry = (props) => {
                                 <React.Fragment>
                                     <Row>
                                         <Col xl="12">
-                                            <div className="table-responsive table">
+                                            <div className="table-responsive table" style={{ minHeight: "45vh" }}>
                                                 <BootstrapTable
                                                     keyField={"id"}
                                                     id="table_Arrow"
-
-
-                                                    classes={"table  table-bordered table-hover"}
+                                                    classes={"table  table-bordered table-hover "}
                                                     noDataIndication={
                                                         <div className="text-danger text-center ">
                                                             Items Not available
                                                         </div>
                                                     }
                                                     onDataSizeChange={(e) => {
-                                                        // _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
                                                     }}
                                                     {...toolkitProps.baseProps}
                                                 />

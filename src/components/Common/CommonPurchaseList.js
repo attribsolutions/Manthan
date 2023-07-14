@@ -21,7 +21,6 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
-import OrderView from "../../pages/Purchase/Order/OrderView";
 
 let searchCount = 0;
 
@@ -94,11 +93,9 @@ const CommonPurchaseList = (props) => {
     HeaderContent = () => {
       return null;
     },
-    selectButtonLabel="",
-    selectHeaderLabel = "",
-    selectAllRow = ''
+    selectCheckParams = { isShow: false }
   } = props;
-
+  
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
@@ -332,7 +329,9 @@ const CommonPurchaseList = (props) => {
                             keyField={"id"}
                             responsive
                             bordered={false}
-                            selectRow={selectAllRow ? selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectHeaderLabel) : undefined}
+                            selectRow={selectCheckParams.isShow ?
+                              selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
+                              : undefined}
                             defaultSorted={defaultSorted}
                             striped={true}
                             classes={"table  table-bordered table-hover"}
@@ -367,19 +366,20 @@ const CommonPurchaseList = (props) => {
           </PaginationProvider>
           {
 
-            ((tableList.length > 0) && (typeof selectAllRow === 'function')) &&
+            ((tableList.length > 0) && (selectCheckParams.isShow)) ?
 
-            <div className="row save1 " style={{ paddingBottom: 'center' }}>
-              <button
-                disabled={listBtnLoading}
-                style={{ marginTop: "-10px" }}
-                type="button"
-                className="btn btn-primary w-md  "
-                onClick={() => { selectAllRow(tableList) }}
-              >
-                <i class="fas fa-edit me-2"></i>{selectButtonLabel}
-              </button>
-            </div>
+              <div className="row save1 " style={{ paddingBottom: 'center' }}>
+                <button
+                  disabled={listBtnLoading}
+                  style={{ marginTop: "-10px" }}
+                  type="button"
+                  className="btn btn-primary w-md  "
+                  onClick={() => { selectCheckParams.selectSaveBtnHandler(tableList) }}
+                >
+                  <i class="fas fa-edit me-2"></i>{selectCheckParams.selectSaveBtnLabel}
+                </button>
+              </div>
+              : null
           }
 
           <Modal
