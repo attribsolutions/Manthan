@@ -2,57 +2,22 @@
 import cbm_logo from "../../assets/images/cbm_logo.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
-import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
 import * as table from './TableData'
+
 let initial_y = 0
 
-
-
 export const pageBorder = (doc) => {
+
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
     doc.line(30, 815, 30, 16);//vertical line (left)
     doc.line(570, 815, 570, 16);//vertical line (Right)
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
+export const pageHeder = (doc, data) => {
 
-export const pageHeder = async (doc, data) => {
-    if (data.InvoiceUploads.length > 0) {
-        const url = data.InvoiceUploads[0].QRCodeUrl;
-        let desiredPart = null;
-
-        try {
-            const urlObject = new URL(url);
-            desiredPart = urlObject.pathname;
-        } catch (error) {
-            console.error("Invalid URL:", error);
-        }
-
-        if (desiredPart) {
-            console.log(desiredPart);
-        } else {
-            console.log("Unable to extract the desired part from the URL.");
-        }
-
-        // Load the image asynchronously
-        const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
-        if (image) {
-            doc.addImage(image, 'JPEG', 323, 18, 83, 83);
-        } else {
-            console.log("Failed to load the image.");
-        }
-    }
-    // Function to load an image asynchronously
-    function loadImage(url) {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => resolve(img);
-            img.onerror = reject;
-            img.src = url;
-        });
-    }
-    doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
+    // doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.setDrawColor(0, 0, 0);
     doc.line(408, 63, 408, 16);//vertical right 1
     doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
@@ -189,7 +154,6 @@ export const reportHeder1 = (doc, data) => {
 
     };
 
-    // let initial_y = 0
     const priLength = () => {
         let final_y = doc.previousAutoTable.finalY
         if (final_y > initial_y) {
@@ -198,7 +162,7 @@ export const reportHeder1 = (doc, data) => {
 
     }
 
-    var IRNNumberDetails = {
+    let IRNNumberDetails = {
         margin: {
             top: 45, left: 408, right: 35,
         },

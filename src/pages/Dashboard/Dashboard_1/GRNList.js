@@ -17,20 +17,19 @@ export default function InvoiceForGRN() {
     const history = useHistory();
     const currentDate_ymd = date_ymd_func();
 
-    const { tableList, GRNitem, listBtnLoading = false } = useSelector((state) => ({
+    const { tableList, GRNitem, listBtnLoading } = useSelector((state) => ({
         tableList: state.OrderReducer.orderList,
         GRNitem: state.GRNReducer.GRNitem,
         listBtnLoading: state.GRNReducer.listBtnLoading
     }));
-
 
     useEffect(() => {
         dispatch(getOrderListPageSuccess([]))
         let subPageMode = url.GRN_STP_3
         const gobtnId = `gobtn-${subPageMode}`
         const filtersBody = JSON.stringify({
-            FromDate: currentDate_ymd,
-            ToDate: currentDate_ymd,
+            FromDate: "",
+            ToDate: "",
             Supplier: "",
             Customer: loginPartyID(),
             OrderType: order_Type.InvoiceToGRN,
@@ -107,7 +106,10 @@ export default function InvoiceForGRN() {
         {
             text: "Action",
             dataField: "",
-            formatter: (cellContent, rowData) => {
+            formatExtraData: { listBtnLoading: listBtnLoading, },
+            formatter: (cellContent, rowData, key, formatExtra) => {
+                
+                let { listBtnLoading } = formatExtra;
                 return (<>
                     < Button
                         type="button"

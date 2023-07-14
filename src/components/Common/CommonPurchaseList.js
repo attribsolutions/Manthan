@@ -58,6 +58,7 @@ export async function isAlertFunc(type, Msg) {
 }
 
 const CommonPurchaseList = (props) => {
+
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -93,7 +94,8 @@ const CommonPurchaseList = (props) => {
     HeaderContent = () => {
       return null;
     },
-
+    selectButtonLabel="",
+    selectHeaderLabel = "",
     selectAllRow = ''
   } = props;
 
@@ -330,7 +332,7 @@ const CommonPurchaseList = (props) => {
                             keyField={"id"}
                             responsive
                             bordered={false}
-                            selectRow={selectAllRow ? selectAllCheck(rowSelected(), nonSelectedRow(), "left", "Confirm") : undefined}
+                            selectRow={selectAllRow ? selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectHeaderLabel) : undefined}
                             defaultSorted={defaultSorted}
                             striped={true}
                             classes={"table  table-bordered table-hover"}
@@ -375,7 +377,7 @@ const CommonPurchaseList = (props) => {
                 className="btn btn-primary w-md  "
                 onClick={() => { selectAllRow(tableList) }}
               >
-                <i class="fas fa-edit me-2"></i>{"Confirm"}
+                <i class="fas fa-edit me-2"></i>{selectButtonLabel}
               </button>
             </div>
           }

@@ -62,7 +62,7 @@ const InvoiceList = () => {
             Uploaded_EwayBill: state.InvoiceReducer.Uploaded_EwayBill,
             Cancel_EInvoice: state.InvoiceReducer.Cancel_EInvoice,
             Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
-            listBtnLoading: state.InvoiceReducer.listBtnLoading
+            listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading)
 
         })
     );
@@ -217,10 +217,11 @@ const InvoiceList = () => {
         label: " All"
     });
 
-    function downBtnFunc(row) {
+    function downBtnFunc(row, Type, ReportBtnLoading) {
+
 
         var ReportType = Data.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, Data))
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, Data, ReportBtnLoading))
     }
 
     function goButtonHandler(event, IBType) {

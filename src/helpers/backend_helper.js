@@ -528,7 +528,7 @@ export const Invoice_1_GoButton_API = ({ jsonBody, btnId }) => post(url.INVOICE_
 export const Invoice_1_Save_API = ({ jsonBody, btnId }) => post(url.INVOICE_1_SAVE, jsonBody, btnId)//  postapi
 export const Invoice_1_Get_Filter_API = ({ filtersBody, btnId }) => post(url.INVOICE_1_lIST_FILTER, filtersBody, btnId)//  postapi
 export const Invoice_1_Delete_API = ({ deleteId, btnId }) => del(`${url.INVOICE_1_SAVE}/${deleteId}`, btnId)// delete api
-export const Invoice_1_Edit_API_Singel_Get = ({editId}) => get(`${url.INVOICE_1_SAVE}/${editId}`)// delete api
+export const Invoice_1_Edit_API_Singel_Get = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}`)// delete api
 
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 
@@ -598,6 +598,10 @@ export const SalesReturn_add_button_api_For_Invoice = (InvoiceID) => get(`${url.
 export const SalesReturn_post_API = ({ jsonBody, btnId }) => post(url.SALES_RETURN, jsonBody, btnId)//  postapi
 export const SalesReturn_list_API = (filters) => post(url.SALES_RETURN_LIST_API, filters)//Sales Return list api using post method
 export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_RETURN}/${deleteId}`, btnId)// Sales Return Delete API
+export const SalesReturn_SingleGet_API = ({ btnId, confirmId }) => get(`${url.SALES_RETURN_ITEM}/${confirmId}`, btnId)// Sales Return Delete API
+export const Send_To_Superstockiest_button_post_API = ({ jsonBody, btnId }) => post(url.SEND_TO_SUPERSTOCKIEST_POST_API, jsonBody, btnId)// update api
+export const Return_Approve_API = ({ jsonBody, btnId }) => post(url.RETURN_ITEM_APPROVE_AIP, jsonBody, btnId)// update api
+
 
 // Credit Debit 
 export const Credit_Debit_Type = (jsonBody) => post(url.GENERAL_MASTER_SUB_TYPE, jsonBody)//  postapi

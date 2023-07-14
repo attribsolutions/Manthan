@@ -1,42 +1,36 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
-module.exports = function (app) {
+module.exports = function(app) {
   app.use(
-    createProxyMiddleware('/chitaleApi', {
-      target: "http://web.chitalebandhu.in:8080", // API endpoint 1
+    '/chitaleApi',
+    createProxyMiddleware({
+      target: 'http://web.chitalebandhu.in:8080',
       changeOrigin: true,
       pathRewrite: {
-        "^/chitaleApi": "",
+        '^/chitaleApi': '',
       },
-      headers: {
-        Connection: "keep-alive"
-      }
     })
   );
 
   app.use(
-    createProxyMiddleware('/sapApi', {
-      target: 'http://cbms4prdapp.chitalebandhu.net.in:8000', // API endpoint 2
+    '/sapApi',
+    createProxyMiddleware({
+      target: 'http://cbms4prdapp.chitalebandhu.net.in:8000',
       changeOrigin: true,
       pathRewrite: {
-        "^/sapApi": "",
+        '^/sapApi': '',
       },
-      headers: {
-        Connection: "keep-alive"
-      }
-    })
-  );
-  app.use(
-    createProxyMiddleware('/E_invoiceQRCode', {
-      target: 'https://pro.mastersindia.co', // API endpoint 2
-      changeOrigin: true,
-      pathRewrite: {
-        "^/E_invoiceQRCode": "",
-      },
-      headers: {
-        Connection: "keep-alive"
-      }
     })
   );
 
-}
+  app.use(
+    '/E_invoiceQRCode',
+    createProxyMiddleware({
+      target: 'https://pro.mastersindia.co',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/E_invoiceQRCode': '',
+      },
+    })
+  );
+};

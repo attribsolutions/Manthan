@@ -596,7 +596,7 @@ const Order = (props) => {
         },
 
         {//------------- Rate column ----------------------------------
-            text: "Rate/Unit",
+            text: "Basic Rate",
             classes: 'table-cursor-pointer',
             dataField: "",
             formatter: (value, row, k) => {

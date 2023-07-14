@@ -233,7 +233,7 @@ const GRNAdd3 = (props) => {
         },
 
         {  //-------------Rate column ----------------------------------
-            text: "Rate",
+            text: "Basic Rate",
             dataField: "Rate",
             align: () => ('right')
         },

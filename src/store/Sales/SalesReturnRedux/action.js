@@ -7,9 +7,15 @@ import {
   SALES_RETURN_LIST_API_SUCCESS,
   DELETE_SALES_RETURN_ID,
   DELETE_SALES_RETURN_ID_SUCCESS,
-  SALES_RUTURN_API_ERROR_ACTION,
+  SALES_RETURN_API_ERROR_ACTION,
   SALES_RETURN_ADD_BUTTON_ACTION,
-  SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS
+  SALES_RETURN_ADD_BUTTON_ACTION_SUCCESS,
+  SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS,
+  SALES_RETURN_CONFIRM_BUTTON_ACTION,
+  POST_SENT_TO_SUPERSTOCKIEST_ID,
+  POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS,
+  RETURN_APPROVE_ACTION_SUCCESS,
+  RETURN_APPROVE_ACTION
 } from "./actionType";
 
 
@@ -45,6 +51,18 @@ export const saveSalesReturnMaster_Success = resp => ({
   payload: resp,
 })
 
+
+
+export const returnApprove = (config = {}) => ({
+  type: RETURN_APPROVE_ACTION,
+  config,
+});
+
+export const returnApprove_Success = resp => ({
+  type: RETURN_APPROVE_ACTION_SUCCESS,
+  payload: resp,
+})
+
 // Sales Return List api
 export const salesReturnListAPI = (filters) => ({
   type: SALES_RETURN_LIST_API,
@@ -68,6 +86,26 @@ export const delete_SalesReturn_Id_Succcess = (resp) => ({
 });
 
 
+export const confirm_SalesReturn_Id = (config = {}) => ({
+  type: SALES_RETURN_CONFIRM_BUTTON_ACTION,
+  config,
+});
+
+export const confirm_SalesReturn_Id_Succcess = (resp) => ({
+  type: SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS,
+  payload: resp,
+});
+
+export const post_Send_to_superStockiest_Id = (config = {}) => ({
+  type: POST_SENT_TO_SUPERSTOCKIEST_ID,
+  config,
+});
+
+export const post_Send_to_superStockiest_Id_Succcess = (resp) => ({
+  type: POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS,
+  payload: resp,
+});
+
 export const SalesReturnApiErrorAction = () => ({
-  type: SALES_RUTURN_API_ERROR_ACTION,
+  type: SALES_RETURN_API_ERROR_ACTION,
 })

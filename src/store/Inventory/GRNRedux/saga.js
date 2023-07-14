@@ -75,7 +75,7 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
 
 function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
-  debugger
+  
   const { jsonBody, pageMode = '', path = '', grnRef = [], challanNo = '' } = config
   try {
     const response = yield call(GRN_Make_API, config);

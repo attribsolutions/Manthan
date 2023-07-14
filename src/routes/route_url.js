@@ -194,6 +194,8 @@ export const LOADING_SHEET_LIST_UPDATE = "/Loading_Sheet_List_Update"
 export const SALES_RETURN = "/SalesReturn"
 export const SALES_RETURN_LIST = "/SalesReturnList"
 
+export const PURCHASE_RETURN_MODE_3 = "/Purchase_Return_Mode_3"
+
 //******************************* InterBranch Module ************************************//
 
 export const IB_ORDER = "/IB_Order" // IB Order

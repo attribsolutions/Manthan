@@ -3,14 +3,14 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 const onSelectAll = (event, allarray,) => {
-    debugger
+    
     allarray.forEach(ele => {
         ele.selectCheck = event
     })
 }
 
 const selectRow = (row, event) => {
-    debugger
+    
     row.selectCheck = event
 }
 export const selectAllCheck = (selected, nonSelectable, position, headLabel) => ({

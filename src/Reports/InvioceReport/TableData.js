@@ -212,7 +212,6 @@ export const RowsWithIGST = (data) => {
     let totalAmount = 0
     let totalQuantity = 0
     let SrNO = 1
-    let TotalGst = 0
     let GSTPercentage = 0
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
@@ -403,14 +402,11 @@ export const DetailsOfTransportRow = (data) => {
         EwayData = data.InvoiceUploads[0]
     }
 
-
-
-    debugger
     var DetailsOfTransportArray = [
 
         [` PO Number:${OrderNumber}`],
         [data.DriverName === null ? "Driver Name:" : `Driver Name :${data.DriverName}`],
-        [`vehical No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
+        [`vehicle No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
         [`E-way Bill : ${EwayData.EwayBillNo === (undefined || null) ? "" : EwayData.EwayBillNo}`],
         [`IRN NO :${EwayData.AckNo === (undefined || null) ? "" : EwayData.AckNo}`]
     ]
@@ -433,7 +429,7 @@ export const BankRow = (data) => {
 
 
 export const IRNNumberRow = (data) => {
-    debugger
+    
     if (data.isQR) {
         const IRN_No = (data.InvoiceUploads[0].Irn === null ? "" : data.InvoiceUploads[0].Irn)
 

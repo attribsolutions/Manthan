@@ -7,7 +7,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
@@ -57,6 +57,7 @@ const Receipts = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+    const loginSystemSetting = _cfunc.loginSystemSetting()
 
     const fileds = {
         ReceiptDate: currentDate_ymd,
@@ -77,6 +78,7 @@ const Receipts = (props) => {
 
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [IsSystemSetting, setIsSystemSetting] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -118,7 +120,6 @@ const Receipts = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
-
 
     // Customer dropdown Options
     useEffect(() => {
@@ -175,6 +176,13 @@ const Receipts = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
+    useEffect(() => {
+
+        if (loginSystemSetting.IsAmountadjustedinInvoice === "0") {
+            setIsSystemSetting(true)
+        }
+    }, []);
 
     // loction useEffect
     useEffect(() => {
@@ -255,7 +263,7 @@ const Receipts = (props) => {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -383,25 +391,28 @@ const Receipts = (props) => {
                 return a
             })
         }
-
     };
 
     function AmountPaid_onChange(event) {
-
-        let input = event.target.value
-        let sum = 0
-        Data.forEach(element => {
-            sum = sum + Number(element.BalanceAmount)
-        });
-
-        let v1 = Number(sum);
-        let v2 = Number(input)
-        if (!(v1 >= v2)) {
-            event.target.value = v1;
+        
+        if (IsSystemSetting) {
+            onChangeText({ event, state, setState })
         }
-        onChangeText({ event, state, setState })
-        AmountPaidDistribution(event.target.value)
+        else {
+            let input = event.target.value
+            let sum = 0
+            Data.forEach(element => {
+                sum = sum + Number(element.BalanceAmount)
+            });
 
+            let v1 = Number(sum);
+            let v2 = Number(input)
+            if (!(v1 >= v2)) {
+                event.target.value = v1;
+            }
+            onChangeText({ event, state, setState })
+            AmountPaidDistribution(event.target.value)
+        }
     }
 
     function AmountPaidDistribution(val1) {
@@ -479,22 +490,24 @@ const Receipts = (props) => {
             calSum = calSum + Number(element.Calculate)
         });
 
-        let diffrence = Math.abs(calSum - values.AmountPaid);
-        if (Number(values.AmountPaid) < calSum) {
-            customAlert({
-                Type: 4,
-                Message: `Amount Paid value is Excess ${diffrence}`,
-            })
-            return btnIsDissablefunc({ btnId, state: false })
+        if (!(IsSystemSetting)) {
+            let diffrence = Math.abs(calSum - values.AmountPaid);
+            if (Number(values.AmountPaid) < calSum) {
+                customAlert({
+                    Type: 4,
+                    Message: `Amount Paid value is Excess ${diffrence}`,
+                })
+                return btnIsDissablefunc({ btnId, state: false })
 
-        }
-        else if (Number(values.AmountPaid) > calSum) {
-            customAlert({
-                Type: 4,
-                Message: `Amount Paid value is Short ${diffrence}`,
-            })
-            return btnIsDissablefunc({ btnId, state: false })
+            }
+            else if (Number(values.AmountPaid) > calSum) {
+                customAlert({
+                    Type: 4,
+                    Message: `Amount Paid value is Short ${diffrence}`,
+                })
+                return btnIsDissablefunc({ btnId, state: false })
 
+            }
         }
 
         if ((values.ReceiptModeName.value === undefined) || values.ReceiptModeName.value === "") {
@@ -576,7 +589,7 @@ const Receipts = (props) => {
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
-                    "ReceiptInvoices": FilterReceiptInvoices,
+                    "ReceiptInvoices": !(IsSystemSetting) ? FilterReceiptInvoices : [],
                     "PaymentReceipt": page_Mode === mode.modeSTPsave ? PaymentReceipt : []
                 }]
 
@@ -864,8 +877,7 @@ const Receipts = (props) => {
                             </Row>
                         </div>
 
-
-                        <ToolkitProvider
+                        {!(IsSystemSetting) && <ToolkitProvider
                             keyField="id"
                             data={Data}
                             columns={pagesListColumns}
@@ -890,10 +902,22 @@ const Receipts = (props) => {
                             )
                             }
                         </ToolkitProvider>
+                        }
 
-                        {Data.length > 0 ?
-                            <FormGroup>
-                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                        {!(IsSystemSetting) ?
+                            Data.length > 0 ?
+                                <FormGroup>
+                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            onClick={saveHandeller}
+                                            userAcc={userPageAccessState}
+                                            editCreatedBy={editCreatedBy}
+                                        />
+                                    </Col>
+                                </FormGroup > : null
+                            : <FormGroup >
+                                <Col style={{ marginTop: "8px" }}>
                                     <SaveButton pageMode={pageMode}
                                         loading={saveBtnloading}
                                         onClick={saveHandeller}
@@ -902,7 +926,6 @@ const Receipts = (props) => {
                                     />
                                 </Col>
                             </FormGroup >
-                            : null
                         }
 
                     </form>

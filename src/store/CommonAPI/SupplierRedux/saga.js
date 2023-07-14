@@ -105,7 +105,8 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.GRN_STP_3
     || subPageMode === url.GRN_LIST_3
     || subPageMode === url.PURCHASE_RETURN_LIST
-    || subPageMode === url.PURCHASE_RETURN);
+    || subPageMode === url.PURCHASE_RETURN
+    || subPageMode === url.PURCHASE_RETURN_MODE_3);
 
   const isCustomer = (subPageMode === url.ORDER_4                 //Customer mode 3
     || subPageMode === url.ORDER_LIST_4
