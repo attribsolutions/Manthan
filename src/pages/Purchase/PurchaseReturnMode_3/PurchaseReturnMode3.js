@@ -80,7 +80,7 @@ const PurchaseReturnMode3 = (props) => {
                 item["roundedTotalAmount"] = calculate.roundedTotalAmount
                 grand_total += Number(calculate.roundedTotalAmount);
 
-                return { ...item, id: index + 1 };
+                return { ...item, id: index + 1, tableBatchDate: _cfunc.date_dmy_func(item.BatchDate) };
             })
             setTableData(UpdatedTableData);
             dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${grand_total}`))
@@ -269,7 +269,7 @@ const PurchaseReturnMode3 = (props) => {
 
         {
             text: "BatchDate",
-            dataField: "BatchDate",
+            dataField: "tableBatchDate",
         },
         {
             text: "BatchCode",
