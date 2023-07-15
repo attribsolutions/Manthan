@@ -72,7 +72,8 @@ const OrderList = () => {
                 || state.PdfReportReducers.listBtnLoading
                 || state.OrderReducer.orderConfirmLoading
                 || state.InvoiceReducer.listBtnLoading
-                || state.GRNReducer.listBtnLoading),
+                || state.GRNReducer.listBtnLoading
+                || state.PdfReportReducers.ReportBtnLoading),
         })
     );
 
@@ -378,10 +379,10 @@ const OrderList = () => {
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
-    function downBtnFunc(row, printType, btnId) {
+    function downBtnFunc(row, printType, ReportBtnLoading) {
 
         var ReportType = report.order1;
-        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, btnId))
+        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, printType, ReportBtnLoading))
     }
 
     function viewBtnFunc(row) {

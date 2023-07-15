@@ -11,7 +11,7 @@ import {
     DeleteLoadingSheetSucccess,
     LoadingSheetListAction,
     UpdateLoadingSheet,
-    
+
 } from "../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
@@ -36,7 +36,7 @@ const LoadingSheetList = () => {
     const reducers = useSelector(
         (state) => ({
             loading: state.LoadingSheetReducer.loading,
-            listBtnLoading: state.LoadingSheetReducer.listBtnLoading,
+            listBtnLoading: (state.LoadingSheetReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
             deleteMsg: state.LoadingSheetReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -96,13 +96,13 @@ const LoadingSheetList = () => {
         setHeaderFilters(newObj)
     }
 
-    function downBtnFunc(row, downbtnType) {
+    function downBtnFunc(row, downbtnType, ReportBtnLoading) {
         if (downbtnType === "IsMultipleInvoicePrint") {
             let ReportType = report.invoiceA5
-            dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id, Data))
+            dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id, Data, ReportBtnLoading))
         } else {
             let ReportType = report.VanLoadingPartyWiseInvoice
-            dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
+            dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id, undefined, ReportBtnLoading))
         }
     }
 

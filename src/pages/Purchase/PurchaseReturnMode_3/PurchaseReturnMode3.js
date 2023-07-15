@@ -8,7 +8,7 @@ import {
 
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageFieldSuccess, post_Send_to_superStockiest_Id_Succcess, saveSalesReturnMaster, saveSalesReturnMaster_Success } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess, post_Send_to_superStockiest_Id_Succcess, saveSalesReturnMaster, saveSalesReturnMaster_Success } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -70,15 +70,23 @@ const PurchaseReturnMode3 = (props) => {
 
     useEffect(() => {
         if (sendToSSbtnTableData.Status === true) {
-            
-            const { Data = [] } = sendToSSbtnTableData
 
+            const { Data = [] } = sendToSSbtnTableData;
+
+            let grand_total = 0;
             const UpdatedTableData = Data.map((item, index) => {
+                const calculate = return_discountCalculate_Func(item);
+
+                item["roundedTotalAmount"] = calculate.roundedTotalAmount
+                grand_total += Number(calculate.roundedTotalAmount);
+
                 return { ...item, id: index + 1 };
             })
-            setTableData(UpdatedTableData)
+            setTableData(UpdatedTableData);
+            dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${grand_total}`))
             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
         }
+
     }, []);
 
     useEffect(() => {
@@ -147,28 +155,57 @@ const PurchaseReturnMode3 = (props) => {
             dataField: "ItemName",
         },
 
+        // {
+        //     text: "Quantity",
+        //     dataField: "",
+        //     formatter: (value, row, k) => {
+
+        //         return (
+        //             <span >
+        //                 <CInput type="text"
+        //                     id={`Quantity${k}`}
+        //                     key={`Quantity${row.id}`}
+        //                     // disabled={true}
+        //                     cpattern={decimalRegx}
+        //                     className="text-end"
+        //                     defaultValue={row.Quantity}
+        //                     autoComplete="off"
+        //                     onChange={(e) => { row.Quantity = e.target.value }}
+        //                 />
+        //             </span>
+        //         )
+        //     },
+        //     headerStyle: () => {
+        //         return { width: '140px', textAlign: 'center' };
+        //     }
+        // },
+
         {
             text: "Quantity",
             dataField: "",
-            formatter: (value, row, k) => {
-
+            classes: () => "sales-discount-row",
+            hidden: false,
+            formatExtraData: { tableData },
+            formatter: (cell, row, key, { tableData }) => {
                 return (
-                    <span >
-                        <CInput type="text"
-                            id={`Quantity${k}`}
-                            key={`Quantity${row.id}`}
-                            // disabled={true}
-                            cpattern={decimalRegx}
-                            className="text-end"
-                            defaultValue={row.Quantity}
-                            autoComplete="off"
-                            onChange={(e) => { row.Quantity = e.target.value }}
-                        />
-                    </span>
+                    <div className="parent" >
+                        <div className="child" style={{ minWidth: "100px" }}>
+                            <CInput
+                                defaultValue={row.Quantity}
+                                autoComplete="off"
+                                type="text"
+                                cpattern={decimalRegx}
+                                // placeholder="Enter Quantity"
+                                className="col col-sm text-end"
+                                onChange={(event) => {
+                                    row.Quantity = event.target.value;
+                                    totalAmountCalcuationFunc(row, tableData)
+                                }}
+                            />
+                        </div>
+
+                    </div>
                 )
-            },
-            headerStyle: () => {
-                return { width: '140px', textAlign: 'center' };
             }
         },
 
@@ -204,19 +241,22 @@ const PurchaseReturnMode3 = (props) => {
         {
             text: "Basic Rate",
             dataField: "",
-            formatter: (value, row, k) => {
+            formatExtraData: { tableData },
+            formatter: (cellContent, row, key, { tableData }) => {
 
                 return (
                     <span >
-                        <CInput type="text"
-                            id={`Rate${k}`}
-                            className="text-end"
-                            key={`Rate${row.id}`}
-                            cpattern={decimalRegx}
-                            // disabled={true}
+                        <CInput
                             defaultValue={row.Rate}
-                            autoComplete="off"
-                            onChange={(e) => { row.Rate = e.target.value }}
+                            id={`Rate-${key}-${row.id}`}//this id use discount type onchange
+                            // placeholder="Enter Rate"
+                            type="text"
+                            cpattern={decimalRegx}
+                            className="text-end"
+                            onChange={(event) => {
+                                row.Rate = event.target.value
+                                totalAmountCalcuationFunc(row, tableData)
+                            }}
                         />
                     </span>
                 )
@@ -247,6 +287,16 @@ const PurchaseReturnMode3 = (props) => {
         },
     ];
 
+    const totalAmountCalcuationFunc = (row, TablelistArray = []) => {
+
+        const caculate = return_discountCalculate_Func(row)
+        row.roundedTotalAmount = caculate.roundedTotalAmount;
+
+        let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+        dispatch(BreadcrumbShowCountlabel(count_label))
+    }
+
     const ReturnDate_Onchange = (e, date) => {
         setState((i) => {
             const a = { ...i }
@@ -271,7 +321,7 @@ const PurchaseReturnMode3 = (props) => {
         }
 
         const ReturnItems = tableData.map((i) => {
-            
+
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
 
@@ -423,12 +473,16 @@ const PurchaseReturnMode3 = (props) => {
                                                 <div className="table-responsive table" style={{ minHeight: "60vh" }}>
                                                     <BootstrapTable
                                                         keyField={"id"}
+                                                        id="table_Arrow"
                                                         classes={"table  table-bordered "}
                                                         noDataIndication={
                                                             <div className="text-danger text-center ">
                                                                 Record Not available
                                                             </div>
                                                         }
+                                                        onDataSizeChange={(e) => {
+                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                        }}
                                                         {...toolkitProps.baseProps}
                                                     />
                                                 </div>
