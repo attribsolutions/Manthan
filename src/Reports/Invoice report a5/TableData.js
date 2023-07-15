@@ -93,13 +93,13 @@ export const Rows = (data) => {
     Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
-        if (data.SettingData.HSNCodeDigit.Value === "1") {
+        if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "2") {
+        if (data.SettingData.HSNCodeDigit === "2") {
             HSNcodes = element.HSNCode.slice(0, 6);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "3") {
+        if (data.SettingData.HSNCodeDigit === "3") {
             HSNcodes = element.HSNCode.slice(0, 8);
         }
 
@@ -190,7 +190,7 @@ export const Rows = (data) => {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
-        if (data.SettingData.ShowBatchNoOnInvoicePrint.Value === "1") {
+        if (data.SettingData.ShowBatchNoOnInvoicePrint === "1") {
             returnArr.push((BatchRow))
         }
 
@@ -243,13 +243,13 @@ export const RowsWithIGST = (data) => {
     Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
-        if (data.SettingData.HSNCodeDigit.Value === "1") {
+        if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "2") {
+        if (data.SettingData.HSNCodeDigit === "2") {
             HSNcodes = element.HSNCode.slice(0, 6);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "3") {
+        if (data.SettingData.HSNCodeDigit === "3") {
             HSNcodes = element.HSNCode.slice(0, 8);
         }
 
@@ -330,7 +330,7 @@ export const RowsWithIGST = (data) => {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
-        if (data.SettingData.ShowBatchNoOnInvoicePrint.Value === "1") {
+        if (data.SettingData.ShowBatchNoOnInvoicePrint === "1") {
             returnArr.push((BatchRow))
         }
 
