@@ -142,9 +142,9 @@ const ReceiptList = () => {
         dispatch(ReceiptListAPI(jsonBody, hasPagePath));
     }
 
-    function downBtnFunc(row, printType, ReportBtnLoading) {
-        var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id, undefined, ReportBtnLoading))
+    function downBtnFunc(config) {
+        config["ReportType"] = report.Receipt;
+        dispatch(getpdfReportdata(Receipt_Print, config))
     }
 
     function fromdateOnchange(e, date) {

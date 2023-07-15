@@ -194,9 +194,9 @@ const CreditList = () => {
         dispatch(GetCreditList(jsonBody, hasPagePath));
     }
 
-    function downBtnFunc(row, printType, ReportBtnLoading) {
-        var ReportType = report.Credit;
-        dispatch(getpdfReportdata(Edit_Credit_List_API, ReportType, { editId: row.id }, undefined, ReportBtnLoading))
+    function downBtnFunc(config) {
+        config["ReportType"] = report.Credit;
+        dispatch(getpdfReportdata(Edit_Credit_List_API, config))
 
     }
 

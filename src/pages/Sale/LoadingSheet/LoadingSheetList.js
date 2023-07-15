@@ -29,6 +29,8 @@ const LoadingSheetList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func()
+    const systemSetting = _cfunc.loginSystemSetting();
+
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [pageMode] = useState(mode.defaultList);
@@ -96,13 +98,15 @@ const LoadingSheetList = () => {
         setHeaderFilters(newObj)
     }
 
-    function downBtnFunc(row, downbtnType, ReportBtnLoading) {
-        if (downbtnType === "IsMultipleInvoicePrint") {
-            let ReportType = report.invoiceA5
-            dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id, Data, ReportBtnLoading))
+    function downBtnFunc(config) {
+
+        if (config.downbtnType === "IsMultipleInvoicePrint") {
+            config["ReportType"] = report.invoiceA5
+            config["systemSetting"] = systemSetting
+            dispatch(getpdfReportdata(MultipleInvoice_API, config))
         } else {
-            let ReportType = report.VanLoadingPartyWiseInvoice
-            dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id, undefined, ReportBtnLoading))
+            config["ReportType"] = report.VanLoadingPartyWiseInvoice
+            dispatch(getpdfReportdata(LoadingSheet_API, config))
         }
     }
 
