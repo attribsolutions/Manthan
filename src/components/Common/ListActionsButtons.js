@@ -1,27 +1,40 @@
 import { Button, Spinner } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { btnIsDissablefunc, date_dmy_func, loginSystemSetting, loginUserID } from "./CommonFunction"
+import { date_dmy_func, loginSystemSetting, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
-import * as url from "../../routes/route_url";
 import { Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+const vieBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 export const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
 const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 export const printBtnCss = "badge badge-soft-primary font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
-const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 const dissableBtnCss = "badge badge-soft- font-size-12  waves-effect waves-light w-xxs border border-light"
 const printInvoiceBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
 
+
+const editIconClass = "mdi mdi-pencil font-size-16";
+const viewIconClass = "bx bxs-show font-size-16";
+const makeBtnIconClass = "fas fa-file-invoice font-size-16";
+const printIconClass = "bx bx-printer font-size-16";
+const multiInvoiceIconClass = "fas fa-file-download";
+const updateIconClass = "mdi mdi-file-table-box-multiple font-size-16";
+const deleteIconClass = "mdi mdi-delete font-size-16";
+const copyIconClass = "bx bxs-copy font-size-18";
+const orderApprovalIconClass = "bx bx-check-shield font-size-20";
+
 const dissableStyle = {
-    opacity: 0.5,
+    opacity: 0.3,
+    hover: "none",
     cursor: 'not-allowed',
-    backgroundColor: "#adb5bd",
+    // backgroundColor: "#adb5bd",
 };
-export const listPageActionsButtonFunc = (props) => {
+
+export const listPageActionsButtonFunc1 = (props) => {
     const {
         dispatch,
         history,
@@ -48,32 +61,6 @@ export const listPageActionsButtonFunc = (props) => {
     const userCreated = loginUserID();
     const subPageMode = history.location.pathname;
 
-    const createButton = (
-        id,
-        className,
-        title,
-        disabled,
-        loadingKey,
-        onClick,
-        children
-    ) => {
-        return (
-            <Button
-                type="button"
-                id={id}
-                className={className}
-                title={title}
-                disabled={disabled}
-                onClick={onClick}
-            >
-                {listBtnLoading === loadingKey ? (
-                    <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                ) : (
-                    children
-                )}
-            </Button>
-        );
-    };
 
     const renderEditButton = (rowData, btnmode, btnId) => {
         try {
@@ -179,7 +166,7 @@ export const listPageActionsButtonFunc = (props) => {
         let forceHideOrderAprovalBtn = rowData.forceHideOrderAprovalBtn;
         let forceMakeBtn = rowData.forceMakeBtn;
         rowData["hasSelect"] = false;
-        debugger
+
         const canEdit = userAccState.RoleAccess_IsEdit && !forceEditHide;
 
         const canEditSelf = !canEdit && userAccState.RoleAccess_IsEditSelf &&
@@ -464,6 +451,274 @@ export const listPageActionsButtonFunc = (props) => {
     };
 };
 
+export const listPageActionsButtonFunc = (props) => {
+    const {
+        dispatch,
+        history,
+        userAccState,
+        editActionFun,
+        deleteActionFun,
+        ButtonMsgLable,
+        deleteName,
+        downBtnFunc,
+        editBodyfunc,
+        deleteBodyfunc,
+        copyBodyfunc,
+        viewBtnFunc,
+        otherBtn_1Func,
+        makeBtnFunc = () => { },
+        pageMode,
+        makeBtnName,
+        makeBtnShow = false,
+        oderAprovalBtnFunc,
+    } = props;
+
+    const { listBtnLoading } = props.reducers;
+
+    const userCreated = loginUserID();
+    const subPageMode = history.location.pathname;
+
+    const makeButtonHandler = ({ rowData, btnId }) => {
+        rowData["hasSelect"] = true;
+        let arr = [];
+        arr.push(rowData);
+        makeBtnFunc(arr, btnId);
+    };
+
+    const renderButton = async ({ rowData, btnmode, btnId, actionFunc, dispatchAction }) => {
+   
+        try {
+            const config = {
+                editId: rowData.id,
+                viewId: rowData.id,
+                deleteId: rowData.id,
+                rowData,
+                btnmode,
+                subPageMode,
+                btnId
+            };
+            if (actionFunc) {
+                actionFunc({ ...config });
+            } else {
+                await dispatch(dispatchAction({ ...config }));
+            }
+        } catch (error) {
+            customAlert({
+                Type: 3,
+                Message: "Action Not defined",
+            });
+        }
+    };
+
+    const renderButtonWithSpinner = (btnId, spinnerColor, iconClass) => {
+        const style = btnId === "makeBtn" ? { marginLeft: "6px", marginRight: "6px" } : {};
+        return (
+            <>
+                {listBtnLoading === btnId ? (
+                    <Spinner style={{ height: "16px", width: "16px" }} color={spinnerColor} />
+                ) : (
+                    <i className={iconClass} style={style}></i>
+                )}
+            </>
+        );
+    };
+
+    const renderActionButton = (__cell, rowData, __key, formatExtra) => {
+        const { listBtnLoading } = formatExtra;
+        const {
+            forceEditHide,
+            forceDeleteHide,
+            forceHideOrderAprovalBtn,
+            forceMakeBtn,
+        } = rowData;
+
+        rowData.hasSelect = false;
+
+        const hasRole = (role) => userAccState[role];
+
+        const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide;
+        const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && rowData.CreatedBy === userCreated && !forceEditHide;
+        const canView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf;
+        const canPrint = hasRole("RoleAccess_IsPrint");
+        const canMultiInvoicePrint = hasRole("RoleAccess_IsMultipleInvoicePrint");
+        const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide;
+        const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && rowData.CreatedBy === userCreated && !forceDeleteHide;
+        const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy");
+        const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtn;
+        const canOrderApproval = oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
+
+        const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) &&
+            !canEdit &&
+            !canEditSelf &&
+            !canView;
+
+        const dummyDisable_Delete = (userAccState.RoleAccess_IsDelete || userAccState.RoleAccess_IsDeleteSelf) &&
+            !canDelete &&
+            !canDeleteSelf
+
+        const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
+
+
+        const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
+            if (!condition && !isDummyBtn) return null;
+            if (!isDummyBtn) {
+                return (
+                    <Button
+                        type="button"
+                        id={`btn-${btnmode}-${rowData.id}`}
+                        className={buttonClasss}
+                        title={`${title} ${ButtonMsgLable}`}
+                        disabled={listBtnLoading}
+                        onClick={() =>
+                            renderButton({
+                                rowData: rowData,
+                                btnmode: mode[btnmode],
+                                btnId: `btn-${btnmode}-${rowData.id}`,
+                                actionFunc: actionFunc,
+                                dispatchAction: dispatchAction
+                            })
+                        }
+                    >
+                        {renderButtonWithSpinner(`btn-${btnmode}-${rowData.id}`, "white", iconClass)}
+                    </Button>
+                );
+            } else {
+                return (
+                    < Button
+                        type="button"
+                        id={`btn-${btnmode}-${rowData.id}`}
+                        className={buttonClasss}
+                        style={dissableStyle}
+                    >
+                        <i className={iconClass} ></i>
+                    </Button >
+                )
+            }
+        };
+
+
+        return (
+            <div id="ActionBtn" className="center gap-3">
+                {renderButtonIfNeeded({
+                    condition: canEdit,
+                    btnmode: mode.edit,
+                    iconClass: editIconClass,
+                    actionFunc: editBodyfunc,
+                    dispatchAction: editActionFun,
+                    title: "Edit",
+                    buttonClasss: editBtnCss,
+                    isDummyBtn: dummyDisable_Edit
+                })}
+                {renderButtonIfNeeded({
+                    condition: canEditSelf,
+                    btnmode: mode.edit,
+                    iconClass: editIconClass,
+                    actionFunc: editBodyfunc,
+                    dispatchAction: editActionFun,
+                    title: "EditSelf",
+                    buttonClasss: editSelfBtnCss,
+                })}
+                {renderButtonIfNeeded({
+                    condition: canView,
+                    btnmode: mode.view,
+                    iconClass: viewIconClass,
+                    actionFunc: viewBtnFunc,
+                    dispatchAction: editActionFun,
+                    title: "View",
+                    buttonClasss: vieBtnCss,
+                })}
+
+                {renderButtonIfNeeded({
+                    condition: canMakeBtn,
+                    btnmode: mode.makeBtn,
+                    iconClass: makeBtnIconClass,
+                    actionFunc: makeButtonHandler,
+                    title: makeBtnName,
+                    buttonClasss: makeBtnCss,
+                    isDummyBtn: dummyDisable_MakeBtn
+                })}
+
+                {renderButtonIfNeeded({
+                    condition: canPrint,
+                    btnmode: mode.download,
+                    iconClass: printIconClass,
+                    actionFunc: downBtnFunc,
+                    title: "Print",
+                    buttonClasss: printBtnCss,
+                })}
+                {renderButtonIfNeeded({
+                    condition: canMultiInvoicePrint,
+                    btnmode: mode.MultiInvoice,
+                    iconClass: multiInvoiceIconClass,
+                    actionFunc: downBtnFunc,
+                    title: "MultipleInvoices",
+                    buttonClasss: printInvoiceBtnCss,
+                })}
+                {renderButtonIfNeeded({
+                    condition: otherBtn_1Func,
+                    btnmode: mode.otherBtn_1,
+                    iconClass: updateIconClass,
+                    actionFunc: otherBtn_1Func,
+                    title: "Update",
+                    buttonClasss: updateBtnCss,
+                })}
+                {renderButtonIfNeeded({
+                    condition: canDelete,
+                    btnmode: mode.isdelete,
+                    iconClass: deleteIconClass,
+                    actionFunc: deleteBodyfunc,
+                    dispatchAction: deleteActionFun,
+                    title: deleteName,
+                    buttonClasss: deltBtnCss,
+                    isDummyBtn: dummyDisable_Delete
+
+                })}
+                {renderButtonIfNeeded({
+                    condition: canDeleteSelf,
+                    btnmode: mode.isdelete,
+                    iconClass: deleteIconClass,
+                    actionFunc: deleteBodyfunc,
+                    dispatchAction: deleteActionFun,
+                    title: deleteName,
+                    buttonClasss: deltBtnCss,
+                })}
+                {renderButtonIfNeeded({
+                    condition: canCopy,
+                    btnmode: mode.copy,
+                    iconClass: copyIconClass,
+                    actionFunc: copyBodyfunc,
+                    title: "Copy",
+                })}
+                {renderButtonIfNeeded({
+                    condition: canOrderApproval,
+                    btnmode: mode.orderApproval,
+                    iconClass: orderApprovalIconClass,
+                    actionFunc: oderAprovalBtnFunc,
+                    title: "Order Approval",
+                    buttonClasss: makeBtnCss,
+                })}
+            </div>
+        );
+    };
+
+    return {
+        text: "Action",
+        formatExtraData: { listBtnLoading },
+        hidden:
+            !(
+                userAccState.RoleAccess_IsEdit ||
+                userAccState.RoleAccess_IsPrint ||
+                userAccState.RoleAccess_IsMultipleInvoicePrint ||
+                userAccState.RoleAccess_IsView ||
+                userAccState.RoleAccess_IsDelete ||
+                userAccState.RoleAccess_IsDeleteSelf ||
+                userAccState.RoleAccess_IsEditSelf ||
+                makeBtnShow ||
+                oderAprovalBtnFunc
+            ),
+        formatter: renderActionButton,
+    };
+};
 
 
 
@@ -472,286 +727,254 @@ export const listPageActionsButtonFunc = (props) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const uploadIconClass = "bx bx-upload font-size-14";
+const cancelIconClass = "mdi mdi-cancel font-size-14";
 
 
 export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
-
-    const { listBtnLoading, } = reducers;
+    const { listBtnLoading } = reducers;
 
     function Uploaded_EwayBillHandler(btnId, rowData) {
         try {
-            let config = { btnId, RowId: rowData.id, UserID: loginUserID() }
-            dispatch(Uploaded_EwayBillAction(config))
+            let config = { btnId, RowId: rowData.id, UserID: loginUserID() };
+            dispatch(Uploaded_EwayBillAction(config));
         } catch (error) { }
-    };
+    }
 
     function Cancel_EwayBillHandler(btnId, rowData) {
         try {
-            dispatch(Cancel_EwayBillAction({ btnId, RowId: rowData.id, UserID: loginUserID() }))
+            dispatch(Cancel_EwayBillAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
         } catch (error) { }
-    };
+    }
 
     function Print_EwayBillHander(rowData) {
         const { InvoiceUploads } = rowData;
-        if (!(InvoiceUploads === undefined) && (InvoiceUploads.length > 0)) {
+        if (!(InvoiceUploads === undefined) && InvoiceUploads.length > 0) {
             const pdfUrl = `https://${InvoiceUploads[0].EwayBillUrl}`;
-            let filename = `EwayBill/${rowData.Customer}/${date_dmy_func(rowData.InvoiceDate)}`
+            let filename = `EwayBill/${rowData.Customer}/${date_dmy_func(rowData.InvoiceDate)}`;
             window.open(pdfUrl, filename);
+        }
+    }
+
+
+    const getButtonClassName = (btnId) => {
+        if (btnId === "E-WayBill-Upload") {
+            return editBtnCss;
+        } else if (btnId === "Cancel-E-WayBill") {
+            return deltBtnCss;
+        } else if (btnId === "Print-E-WayBill") {
+            return printInvoiceBtnCss;
+        } else {
+            return "";
         }
     };
 
-    return ({
+    const renderButtonIfNeeded = ({ condition, btnId, iconClass, actionFunc, title, rowData }) => {
+        if (!condition) return null;
+
+        return (
+            <Button
+                type="button"
+                id={`btn-${btnId}-${rowData.id}`}
+                className={getButtonClassName(btnId)}
+                disabled={listBtnLoading}
+                title={title}
+                onClick={() => {
+                    let btnId = `btn-${btnId}-${rowData.id}`;
+                    actionFunc(btnId, rowData);
+                }}
+            >
+                {listBtnLoading === `btn-${btnId}-${rowData.id}` ? (
+                    <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                ) : (
+                    <i className={iconClass}></i>
+                )}
+            </Button>
+        );
+    };
+
+    return {
         text: "E-Way Bill",
-        formatExtraData: { listBtnLoading: listBtnLoading, },
+        formatExtraData: { listBtnLoading },
         formatter: (__cell, rowData, __key, formatExtra) => {
             let { listBtnLoading } = formatExtra;
+
+            const canUpload = rowData.InvoiceUploads.length === 0 || rowData.InvoiceUploads[0].EwayBillNo === null;
+            const canCancel = rowData.InvoiceUploads.length === 0 || rowData.InvoiceUploads[0].EwayBillIsCancel === false;
+            const canPrint = rowData.InvoiceUploads.length === 0 || rowData.InvoiceUploads[0].EwayBillUrl === null;
+
             return (
-                <div id="ActionBtn" className="center gap-3 p-0" >
+                <div id="ActionBtn" className="center gap-3 p-0">
+                    {renderButtonIfNeeded({
+                        condition: canUpload,
+                        btnId: "E-WayBill-Upload",
+                        iconClass: uploadIconClass,
+                        actionFunc: Uploaded_EwayBillHandler,
+                        title: "E-WayBill Upload",
+                        rowData: rowData,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: !canUpload && rowData.InvoiceUploads[0].EwayBillNo === null,
+                        btnId: "E-WayBill-Upload",
+                        iconClass: uploadIconClass,
+                        actionFunc: Uploaded_EwayBillHandler,
+                        title: "E-WayBill Upload",
+                        rowData: rowData,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canCancel,
+                        btnId: "Cancel-E-WayBill",
+                        iconClass: cancelIconClass,
+                        actionFunc: Cancel_EwayBillHandler,
+                        title: "Cancel E-WayBill",
+                        rowData: rowData,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: !canCancel && rowData.InvoiceUploads[0].EwayBillIsCancel === true,
+                        btnId: "Cancel-E-WayBill",
+                        iconClass: cancelIconClass,
+                        actionFunc: Cancel_EwayBillHandler,
+                        title: "Cancel E-WayBill",
+                        rowData: rowData,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canPrint,
+                        btnId: "Print-E-WayBill",
+                        iconClass: printIconClass,
+                        actionFunc: Print_EwayBillHander,
+                        title: "Print E-WayBill",
+                        rowData: rowData,
+                    })}
+                </div>
+            );
+        },
+    };
+};
 
-                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EwayBillNo === null)) ?
-                        <Button
-                            type="button"
-                            className={editBtnCss}
-                            id={`btn-E-WayBill-Upload-${rowData.id}`}
-                            title={`E-WayBill Upload`}
-                            disabled={listBtnLoading}
-                            onClick={() => {
-                                let btnId = `btn-E-WayBill-Upload-${rowData.id}`
-                                Uploaded_EwayBillHandler(btnId, rowData)
-                            }}
-                        >
-                            {(listBtnLoading === `btn-E-WayBill-Upload-${rowData.id}`) ?
-                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                : <i className="bx bx-upload font-size-14"></i>
-                            }
-
-                        </Button> :
-                        !(rowData.InvoiceUploads[0].EwayBillNo === null) &&
-                        <Button
-                            type="button"
-                            title={'Access Not Allow'}
-                            className={dissableBtnCss}
-                            disabled={true}
-                            style={dissableStyle}
-                        >
-                            <i className="bx bx-upload font-size-14"></i>
-                        </Button>
-                    }
-
-                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EwayBillIsCancel === false)) ?
-                        < Button
-                            type="button"
-                            id={`btn-Cancel-E-WayBill-${rowData.id}`}
-                            className={deltBtnCss}
-                            disabled={listBtnLoading}
-                            title={`Cancel E-WayBill`
-                            }
-                            onClick={() => {
-                                let btnId = `btn-Cancel-E-WayBill-${rowData.id}`
-                                Cancel_EwayBillHandler(btnId, rowData)
-                            }}
-                        >
-                            {(listBtnLoading === `btn-Cancel-E-WayBill-${rowData.id}`) ?
-                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                : <i className="mdi mdi-cancel font-size-14"></i>
-                            }
-
-                        </Button > :
-                        (rowData.InvoiceUploads[0].EwayBillIsCancel === true) &&
-                        <Button
-                            type="button"
-                            title={'Access Not Allow'}
-                            className={dissableBtnCss}
-                            disabled={true}
-                            style={dissableStyle}
-                        >
-                            <i className="mdi mdi-cancel font-size-14"></i>
-                        </Button>
-                    }
-
-                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EwayBillUrl === null)) ?
-                        <Button
-                            type="button"
-                            title={'Access Not Allow'}
-                            className={dissableBtnCss}
-                            disabled={true}
-                            style={dissableStyle}
-                        >
-                            <i className="bx bx-printer font-size-14"></i>
-                        </Button> :
-                        !(rowData.InvoiceUploads[0].EwayBillUrl === null) &&
-                        <Button
-                            type="button"
-                            id={`btn-Print-E-WayBill-${rowData.id}`}
-                            className={printInvoiceBtnCss}
-                            disabled={listBtnLoading}
-                            title={`Print E-WayBill`}
-                            onClick={() => Print_EwayBillHander(rowData)}
-                        >
-                            {(listBtnLoading === `btn-Print-E-WayBill-${rowData.id}`) ?
-                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                : <i className="bx bx-printer font-size-14"></i>
-                            }
-
-                        </Button>
-                    }
-
-                </div >
-            )
-        }
-    });
-}
 
 export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
-
     const systemSetting = loginSystemSetting();
 
     if (!(systemSetting.EInvoiceApplicable === "1")) {
         return null; // Return null if the column should be hidden
     }
 
-    const { listBtnLoading, } = reducers;
+    const { listBtnLoading } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
         try {
-            dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }))
+            dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
         } catch (error) { }
-    };
+    }
 
     function Cancel_EInvoiceHandler(btnId, rowData) {
         try {
-            dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }))
+            dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
         } catch (error) { }
-    };
+    }
 
     function Print_InvoiceHander(rowData) {
         const { InvoiceUploads } = rowData;
-        if (!(InvoiceUploads === undefined) && (InvoiceUploads.length > 0)) {
+        if (!(InvoiceUploads === undefined) && InvoiceUploads.length > 0) {
             const pdfUrl = InvoiceUploads[0].EInvoicePdf;
-            window.open(pdfUrl, '_blank');
+            window.open(pdfUrl, "_blank");
         }
+    }
+
+    const uploadIconClass = "bx bx-upload font-size-14";
+    const cancelIconClass = "mdi mdi-cancel font-size-14";
+    const printIconClass = "bx bx-printer font-size-14";
+
+    const getButtonClassName = (btnId) => {
+        if (btnId === "E-Invoice-Upload") {
+            return editBtnCss;
+        } else if (btnId === "Cancel-E-Invoice") {
+            return deltBtnCss;
+        } else if (btnId === "Print-E-Invoice") {
+            return printInvoiceBtnCss;
+        }
+        return "";
     };
 
-    return ({
+    const renderButtonIfNeeded = ({ condition, btnId, iconClass, actionFunc, title, rowData }) => {
+        if (!condition) return null;
+
+        return (
+            <Button
+                type="button"
+                id={`btn-${btnId}-${rowData.id}`}
+                className={getButtonClassName(btnId)}
+                disabled={listBtnLoading}
+                title={title}
+                onClick={() => {
+                    let btnId = `btn-${btnId}-${rowData.id}`;
+                    actionFunc(btnId, rowData);
+                }}
+            >
+                {listBtnLoading === `btn-${btnId}-${rowData.id}` ? (
+                    <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                ) : (
+                    <i className={iconClass}></i>
+                )}
+            </Button>
+        );
+    };
+
+    return {
         text: "E-Invoice",
-        formatExtraData: { listBtnLoading: listBtnLoading },
+        formatExtraData: { listBtnLoading },
         formatter: (__cell, rowData, __key, formatExtra) => {
             let { listBtnLoading } = formatExtra;
+
+            const canUpload = rowData.InvoiceUploads.length === 0 || rowData.InvoiceUploads[0].Irn === null;
+            const canCancel = rowData.InvoiceUploads.length === 0 || rowData.InvoiceUploads[0].EInvoiceIsCancel === false;
+            const canPrint = rowData.InvoiceUploads.length === 0 || rowData.InvoiceUploads[0].EInvoicePdf === null;
+
             return (
-                <div id="ActionBtn" className="center gap-3 p-0" >
-
-                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].Irn === null)) ?
-                        <Button
-                            type="button"
-                            className={editBtnCss}
-                            id={`btn-E-Invoice-Upload-${rowData.id}`}
-                            title={`E-Invoice Upload`}
-                            disabled={listBtnLoading}
-                            onClick={() => {
-                                let btnId = `btn-E-Invoice-Upload-${rowData.id}`
-                                Uploaded_EInvoiceHandler(btnId, rowData)
-                            }}
-                        >
-                            {(listBtnLoading === `btn-E-Invoice-Upload-${rowData.id}`) ?
-                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                : <i className="bx bx-upload font-size-14"></i>
-                            }
-
-                        </Button> :
-                        !(rowData.InvoiceUploads[0].Irn === null) &&
-                        <Button
-                            type="button"
-                            title={'Access Not Allow'}
-                            className={dissableBtnCss}
-                            disabled={true}
-                            style={dissableStyle}
-                        >
-                            <i className="bx bx-upload font-size-14"></i>
-                        </Button>
-                    }
-
-                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EInvoiceIsCancel === false)) ?
-                        <Button
-                            type="button"
-                            id={`btn-Cancel-E-Invoice-${rowData.id}`}
-                            className={deltBtnCss}
-                            title={`Cancel E-Invoice`}
-                            disabled={listBtnLoading}
-                            onClick={() => {
-                                let btnId = `btn-Cancel-E-Invoice-${rowData.id}`
-                                Cancel_EInvoiceHandler(btnId, rowData)
-                            }}
-                        >
-                            {(listBtnLoading === `btn-Cancel-E-Invoice-${rowData.id}`) ?
-                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                : <i className="mdi mdi-cancel font-size-14"></i>
-                            }
-
-                        </Button> :
-                        (rowData.InvoiceUploads[0].EInvoiceIsCancel === true) &&
-                        <Button
-                            type="button"
-                            title={'Access Not Allow'}
-                            className={dissableBtnCss}
-                            disabled={true}
-                            style={dissableStyle}
-                        >
-                            <i className="mdi mdi-cancel font-size-14"></i>
-                        </Button>
-                    }
-
-                    {((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0].EInvoicePdf === null)) ?
-                        <Button
-                            type="button"
-                            title={'Access Not Allow'}
-                            className={dissableBtnCss}
-                            disabled={true}
-                            style={dissableStyle}
-                        >
-                            <i className="bx bx-printer font-size-14"></i>
-                        </Button> :
-                        !(rowData.InvoiceUploads[0].EInvoicePdf === null) &&
-                        <Button
-                            type="button"
-                            id={`btn-Print-E-Invoice-${rowData.id}`}
-                            className={printInvoiceBtnCss}
-                            disabled={listBtnLoading}
-                            title={`Print E-Invoice`}
-                            onClick={() => Print_InvoiceHander(rowData)}
-                        >
-                            {(listBtnLoading === `btn-Print-E-Invoice-${rowData.id}`) ?
-                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                                : <i className="bx bx-printer font-size-14"></i>
-                            }
-
-                        </Button>
-                    }
-
-                </div >
-            )
-        }
-    });
-
-}
-
+                <div id="ActionBtn" className="center gap-3 p-0">
+                    {renderButtonIfNeeded({
+                        condition: canUpload,
+                        btnId: "E-Invoice-Upload",
+                        iconClass: uploadIconClass,
+                        actionFunc: Uploaded_EInvoiceHandler,
+                        title: "E-Invoice Upload",
+                        rowData: rowData,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: !canUpload && rowData.InvoiceUploads[0].Irn === null,
+                        btnId: "E-Invoice-Upload",
+                        iconClass: uploadIconClass,
+                        actionFunc: Uploaded_EInvoiceHandler,
+                        title: "E-Invoice Upload",
+                        rowData: rowData,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canCancel,
+                        btnId: "Cancel-E-Invoice",
+                        iconClass: cancelIconClass,
+                        actionFunc: Cancel_EInvoiceHandler,
+                        title: "Cancel E-Invoice",
+                        rowData: rowData,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: !canCancel && rowData.InvoiceUploads[0].EInvoiceIsCancel === true,
+                        btnId: "Cancel-E-Invoice",
+                        iconClass: cancelIconClass,
+                        actionFunc: Cancel_EInvoiceHandler,
+                        title: "Cancel E-Invoice",
+                        rowData: rowData,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canPrint,
+                        btnId: "Print-E-Invoice",
+                        iconClass: printIconClass,
+                        actionFunc: Print_InvoiceHander,
+                        title: "Print E-Invoice",
+                        rowData: rowData,
+                    })}
+                </div>
+            );
+        },
+    };
+};
 
