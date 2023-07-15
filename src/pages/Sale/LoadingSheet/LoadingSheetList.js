@@ -99,8 +99,8 @@ const LoadingSheetList = () => {
     }
 
     function downBtnFunc(config) {
-
-        if (config.downbtnType === "IsMultipleInvoicePrint") {
+        debugger
+        if (config.btnmode === "MultiInvoice") {
             config["ReportType"] = report.invoiceA5
             config["systemSetting"] = systemSetting
             dispatch(getpdfReportdata(MultipleInvoice_API, config))

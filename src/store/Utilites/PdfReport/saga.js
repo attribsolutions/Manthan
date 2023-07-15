@@ -15,6 +15,9 @@ function* getpdfData_GenFunc({ urlpath, config }) {
     const response = yield call(urlpath, config);
     response["ReportType"] = config.ReportType
     response.Data["ReportType"] = config.ReportType
+    if (config.systemSetting) {
+      response.Data["SettingData"] = config.systemSetting
+    }
 
     yield put(getpdfReportdataSuccess(response));
 
