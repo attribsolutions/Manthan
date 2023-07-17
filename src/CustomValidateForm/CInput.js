@@ -2,7 +2,7 @@ import React from 'react'
 import { Input } from 'reactstrap';
 
 export const CInput = (props) => {
-    debugger
+    
     const { onChange = () => { }, cpattern = '' } = props
 
     function on_Change(e) {

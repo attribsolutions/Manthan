@@ -64,16 +64,18 @@ const ViewDetails_Modal = () => {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
                 } else if (Number(Quantity) > 0) {
                     const ReturnItems = {
+                        id: index.id,
                         Item: index.Item,
                         Unit: index.Unit,
                         ApprovedQuantity: Quantity,
+                        ApproveComment: index.Comment,
                         Approvedby: loginUserID()
                     }
                     tableItemArray.push(ReturnItems)
                 }
 
             })
-            debugger
+
             const jsonBody = JSON.stringify({
                 ReturnID: viewData_redux.Data[0].ReturnID,
                 ReturnItem: tableItemArray
