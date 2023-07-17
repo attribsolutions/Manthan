@@ -29,19 +29,36 @@ let searchProps = {
   searchText: ""
 }
 
+// export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
+
+//   let iscall = 0
+//   if (paginationProps.dataSize) {
+//     iscall = paginationProps.dataSize
+//   }
+
+//   if (!(iscall === searchCount)) {
+//     dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${iscall}`))
+//     searchCount = paginationProps.dataSize
+//   }
+//   searchProps = toolkitProps.searchProps
+// }
 export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
-
-  let iscall = 0
+  let iscall = 0;
   if (paginationProps.dataSize) {
-    iscall = paginationProps.dataSize
+    iscall = paginationProps.dataSize;
   }
 
-  if (!(iscall === searchCount)) {
-    dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${iscall}`))
-    searchCount = paginationProps.dataSize
+  // Reset pagination to first page when a search is performed
+  if (searchProps.searchText !== toolkitProps.searchProps.searchText) {
+    paginationProps.onPageChange(1);
   }
-  searchProps = toolkitProps.searchProps
-}
+
+  if (iscall !== searchCount) {
+    dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${iscall}`));
+    searchCount = iscall;
+  }
+  searchProps = toolkitProps.searchProps;
+};
 
 const CommonListPage = (props) => {
 
@@ -74,11 +91,9 @@ const CommonListPage = (props) => {
   } = props.action
 
   const {
-    editBodyfunc,
     getListbodyFunc = () => { },
     MasterModal,
     ButtonMsgLable,
-    deleteName,
     masterPath,
 
   } = props;
@@ -211,12 +226,6 @@ const CommonListPage = (props) => {
     setmodal_edit(false)
   }
 
-  const { btnLoding } = useSelector(
-    (state) => ({
-      btnLoding: state.PartyMasterReducer.btnLoding,
-    })
-  );
-
 
   const lastColumn = () => {
     return listPageActionsButtonFunc({
@@ -244,7 +253,7 @@ const CommonListPage = (props) => {
                 keyField="id"
                 data={tableList}
                 columns={tableColumns}
-                search={defaultSearch(pageField.id)}
+                // search={defaultSearch(pageField.id)}
               >
                 {(toolkitProps, a) => (
                   <React.Fragment>
