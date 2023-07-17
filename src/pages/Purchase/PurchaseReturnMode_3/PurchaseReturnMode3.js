@@ -155,31 +155,6 @@ const PurchaseReturnMode3 = (props) => {
             dataField: "ItemName",
         },
 
-        // {
-        //     text: "Quantity",
-        //     dataField: "",
-        //     formatter: (value, row, k) => {
-
-        //         return (
-        //             <span >
-        //                 <CInput type="text"
-        //                     id={`Quantity${k}`}
-        //                     key={`Quantity${row.id}`}
-        //                     // disabled={true}
-        //                     cpattern={decimalRegx}
-        //                     className="text-end"
-        //                     defaultValue={row.Quantity}
-        //                     autoComplete="off"
-        //                     onChange={(e) => { row.Quantity = e.target.value }}
-        //                 />
-        //             </span>
-        //         )
-        //     },
-        //     headerStyle: () => {
-        //         return { width: '140px', textAlign: 'center' };
-        //     }
-        // },
-
         {
             text: "Quantity",
             dataField: "",

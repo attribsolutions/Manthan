@@ -37,6 +37,7 @@ const SalesReturnList = () => {
     const [pageMode, setPageMode] = useState(mode.defaultList)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', buttonMsgLable: '' });
+    const [PurchaseReturnMode_3_Access, setPurchaseReturnMode_3_Access] = useState(false)
     let customerdropdownLabel = subPageMode === url.SALES_RETURN_LIST ? "Customer" : "Supplier"
 
     const reducers = useSelector(
@@ -54,7 +55,7 @@ const SalesReturnList = () => {
         })
     );
 
-    const { pageField, RetailerList, supplier, sendToSSbtnTableData } = reducers;
+    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -62,6 +63,16 @@ const SalesReturnList = () => {
         deleteId: delete_SalesReturn_Id,
         deleteSucc: delete_SalesReturn_Id_Succcess
     }
+
+    // userAccess useEffect
+    useEffect(() => {
+
+        userAccess.find((index) => {
+            if (index.id === pageId.PURCHASE_RETURN_MODE_3) {
+                return setPurchaseReturnMode_3_Access(true)
+            }
+        });
+    }, [userAccess])
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -246,7 +257,7 @@ const SalesReturnList = () => {
     }
 
     const selectSaveBtnHandler = (row = []) => {
-        
+
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
             customAlert({
@@ -280,6 +291,7 @@ const SalesReturnList = () => {
                             deleteName={"FullReturnNumber"}
 
                             selectCheckParams={{
+                                isRoleAccess: (PurchaseReturnMode_3_Access),
                                 isShow: (subPageMode === url.SALES_RETURN_LIST),
                                 selectSaveBtnHandler: selectSaveBtnHandler,
                                 selectSaveBtnLabel: "Send To Superstockiest",

@@ -615,6 +615,7 @@ const OrderList = () => {
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
                             selectCheckParams={{
+                                isRoleAccess: (true),
                                 isShow: subPageMode === url.ORDER_LIST_4,
                                 selectSaveBtnHandler: selectSaveBtnHandler,
                                 selectSaveBtnLabel: "Confirm",
