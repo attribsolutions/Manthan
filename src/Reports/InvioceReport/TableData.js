@@ -91,7 +91,7 @@ export const Rows = (data) => {
     }, {});
 
     Object.values(groupedItems).forEach((element, key) => {
-        debugger
+        
         let HSNcodes = ""
         if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
@@ -401,7 +401,7 @@ export const DetailsOfTransportRow = (data) => {
     if (data.InvoiceUploads.length > 0) {
         EwayData = data.InvoiceUploads[0]
     }
-    debugger
+    
     var DetailsOfTransportArray = [
 
         [` PO Number:${OrderNumber}`],

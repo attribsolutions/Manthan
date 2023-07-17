@@ -95,7 +95,7 @@ const CommonPurchaseList = (props) => {
     },
     selectCheckParams = { isShow: false }
   } = props;
-  
+ 
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
@@ -301,7 +301,8 @@ const CommonPurchaseList = (props) => {
   }
 
   const nonSelectedRow = () => {
-    return tableList.filter(row => row.forceSelectDissabled || row.forceHideOrderAprovalBtn === false).map(row => row.id)       //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
+    //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
+        return tableList.filter(row => row.forceSelectDissabled || row.forceHideOrderAprovalBtn === false).map(row => row.id)       
   }
 
   if (!(userAccState === "")) {
@@ -364,9 +365,10 @@ const CommonPurchaseList = (props) => {
               </ToolkitProvider>
             )}
           </PaginationProvider>
+
           {
 
-            ((tableList.length > 0) && (selectCheckParams.isShow)) ?
+            ((tableList.length > 0) && (selectCheckParams.isShow)) && (selectCheckParams.isRoleAccess) ?
 
               <div className="row save1 " style={{ paddingBottom: 'center' }}>
                 <button

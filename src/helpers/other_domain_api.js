@@ -28,10 +28,10 @@ export const sapApi_post = async (abc, body) => {
 export const E_invoiceQRCode = async () => {
 
     let url = "/Einvoiceapis/printQRCode/64a40ecd34dca9247dfa923e"
-    debugger
+    
     var a = await axios.get(`/E_invoiceQRCode${url}`).then(response => response.data).catch((w) => w)
  
-    debugger
+    
     // console.log("HJKKFDGHJKLFGHJK   E_invoiceQRCode****", a)
     return a
 };
