@@ -45,16 +45,16 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 
     // Extract values from the input parameters
     const rate = Number(row.Rate) || 0;
-    const qty = Number(row.Qty) || 0;
+    const quantity = Number(row.Qty) || 0;
     const gstPercentage = Number(row.GST) || 0;
     const discount = Number(index1.Discount) || 0;
     const discountType = index1.DiscountType || 2;
 
     // Calculate the base amount
-    const basicAmount = rate * qty;
+    const basicAmount = rate * quantity;
 
     // Calculate the discount amount based on the discount type
-    const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : qty * discount;
+    const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : quantity * discount;
 
     // Calculate the discounted base amount
     const discountBaseAmt = basicAmount - disCountAmt;
@@ -67,7 +67,7 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 
     // Calculate the total amount after discount and GST
     const roundedGstAmount = CGST_Amount + SGST_Amount;
-    let total = roundedGstAmount + discountBaseAmt;
+    let totalAmount = roundedGstAmount + discountBaseAmt;
 
     let GST_Percentage = Number(index1.GSTPercentage) || 0;
     let IGST_Percentage = 0;
@@ -90,7 +90,7 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
         discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
         disCountAmt: Number(disCountAmt.toFixed(2)),
         roundedGstAmount: Number(roundedGstAmount.toFixed(2)),
-        roundedTotalAmount: Number(total.toFixed(2)),
+        roundedTotalAmount: Number(totalAmount.toFixed(2)),
         CGST_Amount,
         SGST_Amount,
         IGST_Amount,
