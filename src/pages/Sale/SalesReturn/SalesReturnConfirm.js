@@ -24,7 +24,7 @@ const ViewDetails_Modal = () => {
 
 
     }))
-
+ 
     useEffect(() => {
         try {
             if ((viewData_redux.Status === true)) {
