@@ -438,12 +438,18 @@ const Order = (props) => {
             text: "Group",
             classes: 'table-cursor-pointer',
             sort: true,
+            headerStyle: () => {
+                return { minWidth: '100px', textAlign: 'center' };
+            },
         },
         {
             dataField: "SubGroupName",
             text: "SubGroup",
             classes: 'table-cursor-pointer',
             sort: true,
+            headerStyle: () => {
+                return { minWidth: '100px', textAlign: 'center' };
+            },
         },
 
         {//------------- ItemName column ----------------------------------
@@ -451,6 +457,9 @@ const Order = (props) => {
             text: "Item Name",
             classes: 'table-cursor-pointer',
             sort: true,
+            headerStyle: () => {
+                return { minWidth: '200px', textAlign: 'center' };
+            },
             sortValue: (cell, row) => row["ItemName"],
             headerFormatter: (value, row, k, f) => {
                 return (
@@ -474,12 +483,17 @@ const Order = (props) => {
             classes: 'table-cursor-pointer',
             align: () => "right",
             sort: true,
-
+            headerStyle: () => {
+                return { minWidth: '100px', textAlign: 'center' };
+            },
         },
 
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             classes: 'table-cursor-pointer',
+            headerStyle: () => {
+                return { minWidth: '100px', textAlign: 'center' };
+            },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
                 return (
@@ -500,18 +514,14 @@ const Order = (props) => {
                 )
             },
 
-            headerStyle: () => {
-                return { width: '140px', textAlign: 'center' };
-            }
         },
 
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             classes: 'table-cursor-pointer',
             dataField: "",
-
             headerStyle: () => {
-                return { width: '150px', textAlign: 'center' };
+                return { minWidth: '140px', textAlign: 'center' };
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
@@ -607,6 +617,9 @@ const Order = (props) => {
             text: "Basic Rate",
             classes: 'table-cursor-pointer',
             dataField: "",
+            headerStyle: () => {
+                return { minWidth: '100px', textAlign: 'center' };
+            },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
                 if (subPageMode === url.ORDER_1) {
@@ -639,9 +652,6 @@ const Order = (props) => {
 
             },
 
-            headerStyle: () => {
-                return { width: '140px', textAlign: 'center' };
-            }
         },
 
 
@@ -649,6 +659,9 @@ const Order = (props) => {
             text: "MRP",
             classes: 'table-cursor-pointer',
             dataField: "",
+            headerStyle: () => {
+                return { minWidth: '100px', textAlign: 'center' };
+            },
             formatter: (value, row, k) => {
 
                 return (
@@ -657,9 +670,7 @@ const Order = (props) => {
                     </div>
                 )
             },
-            headerStyle: () => {
-                return { width: '140px', textAlign: 'center' };
-            },
+           
         },
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
@@ -671,6 +682,9 @@ const Order = (props) => {
                 forceReload: forceReload,
                 tableList: orderItemTable
             },
+            headerStyle: () => {
+                return { minWidth: '140px', textAlign: 'center' };
+            },
             headerFormatter: () => {
                 return (
                     <div className="" >
@@ -679,7 +693,7 @@ const Order = (props) => {
                                 <Label>Discount/unit</Label>
                             </div>
                             :
-                            <div className="row" style={{minWidth:'160px'}}>
+                            <div className="row">
                                 <div className=" mt-n2 mb-n2">
                                     <Label>Discount/unit</Label>
                                 </div>
