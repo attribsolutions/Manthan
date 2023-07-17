@@ -160,8 +160,6 @@ const ProductionReIssueList = () => {
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
-                            // makeBtnFunc={makeBtnFunc}
-
                             ButtonMsgLable={"ProductionReIssue"}
                             deleteName={"ItemName"}
                             MasterModal={ProductionReIssueAdd}

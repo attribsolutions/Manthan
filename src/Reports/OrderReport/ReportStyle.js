@@ -3,6 +3,7 @@ import cbm_logo from "../../assets/images/cbm_logo.png"
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
 import { CurrentTime, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
+import { url } from "../../routes";
 let initial_y = 0
 
 
@@ -15,11 +16,17 @@ export const pageBorder = (doc) => {
 }
 
 export const pageHeder = (doc, data) => {
+    debugger
     doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
-    doc.text('PURCHASE ORDER', 180, 45,)
+    if (data.subPageMode === url.ORDER_LIST_4) {
+        doc.text('SALES  ORDER', 180, 45,)
+    } else {
+        doc.text('PURCHASE ORDER', 180, 45,)
+
+    }
 }
 
 export const reportHeder1 = (doc, data) => {

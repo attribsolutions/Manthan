@@ -2,7 +2,8 @@ import {
   GO_BUTTON_API_SAP_LEDGER,
   GO_BUTTON_API_SAP_LEDGER_SUCCESS,
   GET_EXCELBUTTON_API,
-  GET_EXCELBUTTON_API_SUCCESS
+  GET_EXCELBUTTON_API_SUCCESS,
+  GO_BUTTON_API_SAP_LEDGER_ERROR
 } from "./actionType";
 
 
@@ -25,3 +26,8 @@ export const getExcel_Button_API_Success = (pages) => ({ // Save  success
   type: GET_EXCELBUTTON_API_SUCCESS,
   payload: pages,
 });
+
+export const LedgerApiErrorAction = () => ({
+  type: GO_BUTTON_API_SAP_LEDGER_ERROR,
+})
+
