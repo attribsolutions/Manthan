@@ -18,10 +18,13 @@ const ViewDetails_Modal = () => {
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
 
-    const { viewData_redux = [] } = useSelector((state) => ({
-        viewData_redux: state.SalesReturnReducer.confirmBtnData // modify Redux State
+    const { viewData_redux = [], updateMsg } = useSelector((state) => ({
+        viewData_redux: state.SalesReturnReducer.confirmBtnData, // modify Redux State
+        updateMsg: state.SalesReturnReducer.updateMsg // modify Redux State
+
+
     }))
-    debugger
+
     useEffect(() => {
         try {
             if ((viewData_redux.Status === true)) {
@@ -31,14 +34,23 @@ const ViewDetails_Modal = () => {
         } catch (error) { CommonConsole(error) }
     }, [viewData_redux]);
 
+
+    useEffect(() => {
+        if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200)) {
+            customAlert({
+                Type: 1,
+                Message: updateMsg.Message,
+            })
+        }
+    }, [updateMsg])
+
     function modalToggleFunc() {
         setModal_view(false);
         dispatch(confirm_SalesReturn_Id_Succcess({ Status: false }))// modify Custom Api Action call
-
     }
 
     const SaveHandler = async (event) => {
-        debugger
+
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -46,8 +58,9 @@ const ViewDetails_Modal = () => {
             let inValideUnits = []
 
             tableArray.ReturnItems.forEach(index => {
+                debugger
                 const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
-                if (Quantity === "") {
+                if (index.ApproveQuantity === "") {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
                 } else if (Number(Quantity) > 0) {
                     const ReturnItems = {
@@ -60,7 +73,7 @@ const ViewDetails_Modal = () => {
                 }
 
             })
-
+            debugger
             const jsonBody = JSON.stringify({
                 ReturnID: viewData_redux.Data[0].ReturnID,
                 ReturnItem: tableItemArray
@@ -118,7 +131,6 @@ const ViewDetails_Modal = () => {
                     return <div style={{ width: "120px" }}>{`${row.Quantity}`}</div>
                 } else {
                     return (
-
                         <div>
                             <CInput
                                 key={`Quantity-${k}`}
@@ -128,7 +140,7 @@ const ViewDetails_Modal = () => {
                                 autoComplete="off"
                                 className=" text-end"
                                 onChange={(e) => {
-                                    debugger
+
                                     if (Number(e.target.value) > Number(value)) {
                                         e.target.value = value
                                         row["ApproveQuantity"] = e.target.value
@@ -161,7 +173,6 @@ const ViewDetails_Modal = () => {
                             defaultValue={row.Comment}
                             autoComplete="off"
                             placeholder="Enter Comment"
-                            className=" text-end"
                             onChange={(e) => {
                                 row["Comment"] = e.target.value
                             }}
@@ -185,6 +196,9 @@ const ViewDetails_Modal = () => {
             <Card>
                 <CardBody className="c_card_body">
                     <div className="modal-body">
+                        {tableArray.viewMode === url.PURCHASE_RETURN_LIST ?
+                            <h2 className="text-center">Purchase Return Items</h2> :
+                            <h2 className="text-center">Sales Return Items</h2>}
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"
