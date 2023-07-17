@@ -29,12 +29,6 @@ const orderApprovalIconClass = "bx bx-check-shield font-size-20";
 const uploadIconClass = "bx bx-upload font-size-14";
 const cancelIconClass = "mdi mdi-cancel font-size-14";
 
-const dissableStyle = {
-    opacity: 0.5,
-    cursor: 'not-allowed',
-    // backgroundColor: "#adb5bd",
-};
-
 
 export const listPageActionsButtonFunc = (props) => {
     const {
@@ -70,7 +64,7 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnFunc(arr, btnId);
     };
 
-    const renderButtonOnClick= ({ rowData, btnmode, btnId, actionFunc, dispatchAction }) => {
+    const renderButtonOnClick = ({ rowData, btnmode, btnId, actionFunc, dispatchAction }) => {
 
         try {
             const config = {
@@ -96,7 +90,7 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     const renderButtonWithSpinner = (btnId, spinnerColor, iconClass) => {
-        const style = btnId === "makeBtn" ? { marginLeft: "6px", marginRight: "6px" } : {};
+        const style = btnId === "makeBtn" ? { marginLeft: "5px", marginRight: "6px" } : {};
         return (
             <>
                 {listBtnLoading === btnId ? (
@@ -165,8 +159,7 @@ export const listPageActionsButtonFunc = (props) => {
                     < Button
                         type="button"
                         id={`btn-${btnmode}-${rowData.id}`}
-                        className={buttonClasss}
-                        style={dissableStyle}
+                        className={`${buttonClasss} c_disableBtn`}
                     >
                         <i className={iconClass} ></i>
                     </Button >
@@ -366,8 +359,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
                 < Button
                     type="button"
                     id={`btn-${btnmode}-${rowData.id}`}
-                    className={getButtonClassName(btnmode)}
-                    style={dissableStyle}
+                    className={`${getButtonClassName(btnmode)} c_disableBtn`}
                 >
                     <i className={iconClass} ></i>
                 </Button >
@@ -494,8 +486,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
                 < Button
                     type="button"
                     id={`btn-${btnmode}-${rowData.id}`}
-                    className={getButtonClassName(btnmode)}
-                    style={dissableStyle}
+                    className={`${getButtonClassName(btnmode)} c_disableBtn`}
                 >
                     <i className={iconClass} ></i>
                 </Button >

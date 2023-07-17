@@ -217,38 +217,51 @@ textarea:focus {
   // background-color: rgba(204, 24, 24, 0.5);
   background-color: rgba(92, 91, 91, 0.3);
 }
+
 .alertbody {
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
   z-index: 99999 !important;
   background-size: cover;
   backdrop-filter: blur(8px);
-  box-shadow:5px 5px 5px #adb5bd !important
+  box-shadow: 5px 5px 5px #adb5bd !important
 }
+
+.c_disableBtn {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
 //bostrap class
 
 .pr-1 {
   padding-right: 10px;
 }
-.pr-2{
+
+.pr-2 {
   padding-right: 15px;
 }
-.pr-3{
+
+.pr-3 {
   padding-right: 20px;
 }
-.pr-4{
+
+.pr-4 {
   padding-right: 25px;
 }
 
 .pl-1 {
   padding-left: 10px;
 }
-.pl-2{
+
+.pl-2 {
   padding-left: 15px;
 }
-.pl-3{
+
+.pl-3 {
   padding-left: 20px;
 }
-.pl-4{
+
+.pl-4 {
   padding-left: 25px;
 }
