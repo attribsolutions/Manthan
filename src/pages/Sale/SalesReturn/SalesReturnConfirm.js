@@ -8,7 +8,8 @@ import { CommonConsole, date_dmy_func, loginUserID } from "../../../components/C
 import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
+import { CInput, onlyNumberRegx, onlyTextRegx } from "../../../CustomValidateForm";
+import { url } from "../../../routes";
 
 
 const ViewDetails_Modal = () => {
@@ -20,11 +21,11 @@ const ViewDetails_Modal = () => {
     const { viewData_redux = [] } = useSelector((state) => ({
         viewData_redux: state.SalesReturnReducer.confirmBtnData // modify Redux State
     }))
-
+    debugger
     useEffect(() => {
         try {
             if ((viewData_redux.Status === true)) {
-                setTableArray(viewData_redux.Data[0].ReturnItems)// modify Custom Table Data
+                setTableArray(viewData_redux.Data[0])// modify Custom Table Data
                 setModal_view(true);
             }
         } catch (error) { CommonConsole(error) }
@@ -37,24 +38,26 @@ const ViewDetails_Modal = () => {
     }
 
     const SaveHandler = async (event) => {
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         try {
             const tableItemArray = []
             let inValideUnits = []
 
-            tableArray.forEach(index => {
-
-                if (Number(index.ApproveQuantity) === (0)) {
-                    inValideUnits.push({ [`${index.ItemName}`]: ` Quantity Must be greater than 0 ` })
+            tableArray.ReturnItems.forEach(index => {
+                const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
+                if (Quantity === "") {
+                    inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
+                } else if (Number(Quantity) > 0) {
+                    const ReturnItems = {
+                        Item: index.Item,
+                        Unit: index.Unit,
+                        ApprovedQuantity: Quantity,
+                        Approvedby: loginUserID()
+                    }
+                    tableItemArray.push(ReturnItems)
                 }
-                const ReturnItems = {
-                    Item: index.Item,
-                    Unit: index.Unit,
-                    ApprovedQuantity: index.ApproveQuantity,
-                    Approvedby: loginUserID()
-                }
-                tableItemArray.push(ReturnItems)
 
             })
 
@@ -111,54 +114,67 @@ const ViewDetails_Modal = () => {
             text: "Approve Quantity",
             dataField: "Quantity",
             formatter: (value, row, k) => {
-                return (
+                if (tableArray.viewMode === url.PURCHASE_RETURN_LIST) {
+                    return <div style={{ width: "120px" }}>{`${row.Quantity}`}</div>
+                } else {
+                    return (
 
+                        <div>
+                            <CInput
+                                key={`Quantity-${k}`}
+                                id={`Quantity-${k}`}
+                                cpattern={onlyNumberRegx}
+                                defaultValue={row.Quantity}
+                                autoComplete="off"
+                                className=" text-end"
+                                onChange={(e) => {
+                                    debugger
+                                    if (Number(e.target.value) > Number(value)) {
+                                        e.target.value = value
+                                        row["ApproveQuantity"] = e.target.value
+                                    } else {
+                                        row["ApproveQuantity"] = e.target.value
+                                    }
+                                }}
+                            />
+                        </div>
+                    )
+                }
+            },
+        },
+
+
+    ];
+
+    if (tableArray.viewMode === url.SALES_RETURN_LIST) {
+        const Comment = {
+            text: "Comment",
+            dataField: "",
+            formatter: (value, row, k) => {
+                return (
                     <div>
+
                         <CInput
-                            key={`Quantity-${k}`}
-                            id={`Quantity-${k}`}
-                            cpattern={onlyNumberRegx}
-                            defaultValue={row.Quantity}
+                            key={`Comment-${k}`}
+                            id={`Comment-${k}`}
+                            cpattern={onlyTextRegx}
+                            defaultValue={row.Comment}
                             autoComplete="off"
+                            placeholder="Enter Comment"
                             className=" text-end"
                             onChange={(e) => {
-                                if (Number(e.target.value) > Number(value)) {
-                                    e.target.value = value
-                                    row["ApproveQuantity"] = e.target.value
-                                } else {
-                                    row["ApproveQuantity"] = e.target.value
-                                }
+                                row["Comment"] = e.target.value
                             }}
                         />
                     </div>
                 )
             },
-        },
 
-        {
-            text: "Comment",
-            dataField: "ItemComment",
-        },
-        // {
-        //     text: "Select Approve Items",
-        //     dataField: "",
-        //     formatter: (value, row, k) => {
-        //         return (
-        //             <span >
-        //                 <Input
-        //                     type="checkbox"
-        //                     className="p-1"
-        //                     name="SelectApproveItems"
-        //                     defaultChecked={row.selectCheck}
-        //                     onChange={(e) => { e.target.value = row.selectCheck }}
-        //                 >
-        //                 </Input>
-        //             </span>
-        //         )
-        //     },
-        // },
+        }
+        pagesListColumns.push(Comment)
 
-    ];
+
+    }
 
     return (
         <Modal
@@ -173,7 +189,7 @@ const ViewDetails_Modal = () => {
                             <ToolkitProvider
                                 keyField="id"
                                 key="RetrunItem"
-                                data={tableArray}
+                                data={tableArray.ReturnItems}
                                 columns={pagesListColumns}
                                 search
                             >
@@ -196,11 +212,12 @@ const ViewDetails_Modal = () => {
                                 )
                                 }
                             </ToolkitProvider>
-                            <FormGroup>
-                                {/* <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}> */}
-                                <div>
+                            {tableArray.viewMode === url.PURCHASE_RETURN_LIST ? null :
+                                <FormGroup>
+                                    {/* <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}> */}
+                                    <div>
 
-                                    {/* <button
+                                        {/* <button
 
                                     title={`Save`}
                                     className="btn btn-primary w-md"
@@ -209,17 +226,17 @@ const ViewDetails_Modal = () => {
                                     <Spinner style={{ height: "13px", width: "13px" }} color="white" />
                                 </button>
                                 : */}
-                                    <button
-                                        type="submit"
-                                        autoFocus={false}
-                                        title={`Save `}
-                                        className="btn btn-primary w-md"
-                                        onClick={SaveHandler}
-                                    > <i className="fas fa-save me-2"></i> Save
-                                    </button>
-                                </div>
-                                {/* </Col> */}
-                            </FormGroup >
+                                        <button
+                                            type="submit"
+                                            autoFocus={false}
+                                            title={`Save `}
+                                            className="btn btn-primary w-md"
+                                            onClick={SaveHandler}
+                                        > <i className="fas fa-save me-2"></i> Save
+                                        </button>
+                                    </div>
+                                    {/* </Col> */}
+                                </FormGroup >}
 
                         </div>
 

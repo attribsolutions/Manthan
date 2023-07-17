@@ -1,12 +1,12 @@
 import React from 'react'
 import { Input } from 'reactstrap';
 
-export const  CInput = (props) => {
-    
+export const CInput = (props) => {
+    debugger
     const { onChange = () => { }, cpattern = '' } = props
-    
+
     function on_Change(e) {
-        
+
         let val = e.target.value
         const result = cpattern.test(val);
         if (result) {
