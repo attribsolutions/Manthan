@@ -10,6 +10,7 @@ import { Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_EInvoiceAction, 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 const vieBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+const copyBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 export const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
 export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
@@ -24,7 +25,7 @@ const printIconClass = "bx bx-printer font-size-16";
 const multiInvoiceIconClass = "fas fa-file-download";
 const updateIconClass = "mdi mdi-file-table-box-multiple font-size-16";
 const deleteIconClass = "mdi mdi-delete font-size-16";
-const copyIconClass = "bx bxs-copy font-size-18";
+const copyIconClass = "bx bxs-copy font-size-16";
 const orderApprovalIconClass = "bx bx-check-shield font-size-20";
 const uploadIconClass = "bx bx-upload font-size-14";
 const cancelIconClass = "mdi mdi-cancel font-size-14";
@@ -89,11 +90,12 @@ export const listPageActionsButtonFunc = (props) => {
         }
     };
 
-    const renderButtonWithSpinner = (btnId, spinnerColor, iconClass) => {
-        const style = btnId === "makeBtn" ? { marginLeft: "5px", marginRight: "6px" } : {};
+    const renderButtonWithSpinner = (btnmode, spinnerColor, iconClass) => {
+        const style = (btnmode === mode.makeBtn ) ? { marginLeft: "5px", marginRight: "6px" } : {};
+        
         return (
             <>
-                {listBtnLoading === btnId ? (
+                {listBtnLoading === btnmode ? (
                     <Spinner style={{ height: "16px", width: "16px" }} color={spinnerColor} />
                 ) : (
                     <i className={iconClass} style={style}></i>
@@ -258,6 +260,7 @@ export const listPageActionsButtonFunc = (props) => {
                     iconClass: copyIconClass,
                     actionFunc: copyBodyfunc,
                     title: "Copy",
+                    buttonClasss: copyBtnCss,
                 })}
                 {renderButtonIfNeeded({
                     condition: canOrderApproval,
