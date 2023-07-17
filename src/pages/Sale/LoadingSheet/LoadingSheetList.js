@@ -111,7 +111,8 @@ const LoadingSheetList = () => {
     }
 
     const otherBtn_1Func = (list) => {
-        dispatch(UpdateLoadingSheet({ RowId: list.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
+        debugger
+        dispatch(UpdateLoadingSheet({ RowId: list.rowData.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
 
     return (
