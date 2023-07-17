@@ -24,7 +24,6 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { useRef } from "react";
 import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/index";
 
 import * as _act from "../../../store/actions";
@@ -36,10 +35,8 @@ import { pageFieldUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAcces
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 import { ORDER_4 } from "../../../routes/route_url";
-import { getItemList } from "../../../store/actions";
-import CustomTable from "../../../CustomTable2/Custom";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-
+import "./order.scss"
 
 let editVal = {}
 let initial_BredcrumbMsg = "Order Amount :0.00"
@@ -114,9 +111,17 @@ const Order = (props) => {
     const [termsAndConTable, setTermsAndConTable] = useState([]);
     const [orderTypeSelect, setorderTypeSelect] = useState('');
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
-    const [orderItemTable, setorderItemTable] = useState([])
+    const [orderItemTable, setOrderItemTable] = useState([])
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
     const [FSSAI_Date_Is_Expired, setFSSAI_Date_Is_Expired] = useState("")
+
+    // for Order page heder dicount functionality useSate ************************************
+    const [discountValueAll, setDiscountValueAll] = useState("");
+    const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
+    const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
+    const [changeAllDiscount, setChangeAllDiscount] = useState(false)
+    const [forceReload, setForceReload] = useState(false)
+    // ****************************************************************************
 
     const {
         goBtnOrderdata,
@@ -243,7 +248,7 @@ const Order = (props) => {
                     ele["id"] = k + 1
                     return ele
                 });
-                setorderItemTable(orderItems)
+                setOrderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
@@ -262,7 +267,7 @@ const Order = (props) => {
             setTermsAndConTable([]);
             setorderTypeSelect('');
             setisOpen_assignLink(false)
-            setorderItemTable([])
+            setOrderItemTable([])
             setsupplierSelect('');
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
@@ -343,7 +348,7 @@ const Order = (props) => {
     useEffect(() => {
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
-            if (!selecedItemWiseOrder) { setorderItemTable(OrderItems) }
+            if (!selecedItemWiseOrder) { setOrderItemTable(OrderItems) }
             setitemSelectOptions(OrderItems.map(i => ({ ...i, value: i.Item_id, label: i.ItemName })))
 
             setTermsAndConTable(TermsAndConditions)
@@ -475,7 +480,8 @@ const Order = (props) => {
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             classes: 'table-cursor-pointer',
-            formatter: (value, row, k) => {
+            formatExtraData: { tableList: orderItemTable },
+            formatter: (value, row, k, { tableList }) => {
                 return (
                     <>
                         <CInput
@@ -487,7 +493,7 @@ const Order = (props) => {
                             className=" text-end"
                             onChange={(e) => {
                                 row["Quantity"] = e.target.value
-                                itemWise_CalculationFunc(row)
+                                itemWise_CalculationFunc(row, undefined, tableList)
                             }}
                         />
                     </>
@@ -507,7 +513,8 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '150px', textAlign: 'center' };
             },
-            formatter: (value, row, key) => {
+            formatExtraData: { tableList: orderItemTable },
+            formatter: (value, row, key, { tableList }) => {
 
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
@@ -584,7 +591,8 @@ const Order = (props) => {
                                 row["BaseUnitQuantity"] = e.BaseUnitQuantity;
 
                                 row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
-                                itemWise_CalculationFunc(row)
+                                itemWise_CalculationFunc(row, undefined, tableList)
+
                                 document.getElementById(`Rate-${key}`).innerText = _cfunc.amountCommaSeparateFunc(row.Rate)
                             }}
                         >
@@ -599,7 +607,8 @@ const Order = (props) => {
             text: "Basic Rate",
             classes: 'table-cursor-pointer',
             dataField: "",
-            formatter: (value, row, k) => {
+            formatExtraData: { tableList: orderItemTable },
+            formatter: (value, row, k, { tableList }) => {
                 if (subPageMode === url.ORDER_1) {
                     return (
                         <div key={row.id} className="text-end">
@@ -611,7 +620,8 @@ const Order = (props) => {
                                 className="text-end"
                                 onChange={(event) => {
                                     row.Rate = event.target.value;
-                                    itemWise_CalculationFunc(row);
+                                    itemWise_CalculationFunc(row, undefined, tableList)
+
                                 }}
                             />
 
@@ -649,6 +659,157 @@ const Order = (props) => {
             },
             headerStyle: () => {
                 return { width: '140px', textAlign: 'center' };
+            },
+        },
+        {//***************Discount********************************************************************* */
+            text: "Discount/unit",
+            dataField: "",
+            formatExtraData: {
+                discountValueAll: discountValueAll,
+                discountTypeAll: discountTypeAll,
+                changeAllDiscount: changeAllDiscount,
+                forceReload: forceReload,
+                tableList: orderItemTable
+            },
+            headerFormatter: () => {
+                return (
+                    <div className="">
+                        {orderItemTable.length <= 0 ?
+                            <div className="col col-3 mt-2">
+                                <Label>Discount/unit</Label>
+                            </div>
+                            :
+                            <div className="row">
+                                <div className=" mt-n2 mb-n2">
+                                    <Label>Discount/unit</Label>
+                                </div>
+                                <div className="col col-6" style={{ width: "100px" }}>
+                                    <Select
+                                        type="text"
+                                        defaultValue={discountTypeAll}
+                                        classNamePrefix="select2-selection"
+                                        options={discountDropOption}
+                                        style={{ textAlign: "right" }}
+                                        onChange={(e) => {
+                                            setChangeAllDiscount(true);
+                                            setDiscountTypeAll(e);
+                                            setDiscountValueAll('');
+                                        }}
+                                    />
+                                </div>
+                                <div className="col col-6" style={{ width: "100px" }}>
+                                    <CInput
+                                        type="text"
+                                        className="input"
+                                        style={{ textAlign: "right" }}
+                                        cpattern={decimalRegx}
+                                        value={discountValueAll}
+                                        onChange={(e) => {
+                                            let e_val = Number(e.target.value);
+
+                                            // Check if discount type is "percentage"
+                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
+                                            }
+
+                                            setChangeAllDiscount(true);
+                                            setDiscountValueAll(e.target.value);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                );
+            },
+
+            classes: () => "order-discount-row",
+            formatter: (cellContent, index1, key, formatExtraData) => {
+                let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+
+                if (formatExtraData.changeAllDiscount) {
+                    index1.Discount = discountValueAll;
+                    index1.DiscountType = discountTypeAll.value;
+                    itemWise_CalculationFunc(index1, undefined, tableList)
+                }
+                if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
+
+                const defaultDiscountTypelabel =
+                    index1.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
+
+                return (
+                    <>
+                        <div className="mb-2">
+                            <div className="parent">
+                                <div className="child">
+                                    <label className="label">Type&nbsp;&nbsp;&nbsp;</label>
+                                </div>
+                                <div className="child">
+                                    <Select
+                                        id={`DicountType_${key}`}
+                                        classNamePrefix="select2-selection"
+                                        key={`DicountType_${key}-${index1.id}`}
+                                        value={defaultDiscountTypelabel}
+                                        options={discountDropOption}
+                                        onChange={(e) => {
+                                            setChangeAllDiscount(false);
+                                            setForceReload(!forceReload);
+                                            index1.DiscountType = e.value;
+                                            index1.Discount = '';
+                                            itemWise_CalculationFunc(index1, undefined, tableList)
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="parent">
+                                <div className="child">
+                                    <label className="label">Value&nbsp;</label>
+                                </div>
+                                <div className="child">
+                                    <CInput
+                                        className="input"
+                                        id={`Dicount_${key}-${index1.id}`}
+                                        style={{ textAlign: "right" }}
+                                        type="text"
+                                        value={index1.Discount}
+                                        cpattern={decimalRegx}
+                                        onChange={(e) => {
+
+                                            let e_val = Number(e.target.value);
+                                            // Check if discount type is "percentage"
+                                            if (index1.DiscountType === 2) { // Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ''; // Clear the input value if it is less than 0
+                                                }
+                                            }
+                                            index1.Discount = e.target.value;
+                                            setChangeAllDiscount(false);
+                                            setForceReload(!forceReload);
+                                            itemWise_CalculationFunc(index1, undefined, tableList)
+                                        }}
+
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        {/* <div className="bottom-div">
+                            <span>Amount:</span>
+                            <samp id={`roundedTotalAmount-${index1.id}`}>
+                                {_cfunc.amountCommaSeparateFunc(index1.roundedTotalAmount)}
+                            </samp>
+                        </div> */}
+                    </>
+                );
             },
         },
 
@@ -703,7 +864,7 @@ const Order = (props) => {
                 setFSSAI_Date_Is_Expired("")
             }
         }
-        setorderItemTable([])
+        setOrderItemTable([])
         setItemSelect('')
         goButtonHandler(e.value)
     };
@@ -754,11 +915,11 @@ const Order = (props) => {
         };
     };
 
-    function itemWise_CalculationFunc(row) {
+    function itemWise_CalculationFunc(row, IsComparGstIn, tableList) {
         const calculate = orderCalculateFunc(row) //order calculation function 
-        row["Amount"] = calculate.roundedTotalAmount
+        row["roundedTotalAmount"] = calculate.roundedTotalAmount
 
-        let sumOfAmount = orderItemTable.reduce((accumulator, currentObject) => accumulator + Number(currentObject["Amount"]) || 0, 0);
+        let sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["roundedTotalAmount"]) || 0), 0);
         setOrderAmount(sumOfAmount.toFixed(2))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(sumOfAmount)}`))
     };
@@ -774,7 +935,7 @@ const Order = (props) => {
             customAlert({ Type: 4, Message: `Select Item Name` })
         }
         else if (isfound === undefined) {
-            setorderItemTable([itemSelect].concat(orderItemTable))
+            setOrderItemTable([itemSelect].concat(orderItemTable))
         }
         else {
             customAlert({ Type: 3, Message: "This Item Already Exist" })
@@ -922,7 +1083,6 @@ const Order = (props) => {
 
 
                 const arr = {
-                    // id: i.editrowId,
                     Item: i.Item_id,
                     Quantity: isdel ? 0 : i.Quantity,
                     MRP: i.MRP_id,
@@ -946,8 +1106,14 @@ const Order = (props) => {
                     GSTAmount: calculate.roundedGstAmount,
                     Amount: calculate.roundedTotalAmount,
 
+                    TaxType: 'GST',
+                    DiscountType: i.DiscountType,
+                    Discount: Number(i.Discount) || 0,
+                    DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
+
                     IsDeleted: isedit,
                     Comment: i.Comment
+
                 }
                 itemArr.push(arr)
             };
@@ -1182,7 +1348,7 @@ const Order = (props) => {
                                                         id={`go-btn${subPageMode}`}
                                                         onClick={(e) => {
                                                             setSelecedItemWiseOrder(false)
-                                                            setorderItemTable(itemSelectDropOptions)
+                                                            setOrderItemTable(itemSelectDropOptions)
                                                             setItemSelect('')
                                                             setGoBtnDissable(true)
                                                         }} />
@@ -1192,7 +1358,7 @@ const Order = (props) => {
                                                         onClick={(e) => {
                                                             setGoBtnDissable(false)
                                                             setSelecedItemWiseOrder(true)
-                                                            setorderItemTable([])
+                                                            setOrderItemTable([])
                                                             setItemSelect('')
                                                             dispatch(_act.GoButton_For_Order_AddSuccess([]))
                                                         }}
@@ -1259,7 +1425,7 @@ const Order = (props) => {
                                                         className='text-blac1k'
                                                         disabled={goBtnloading}
                                                         onClick={() => {
-                                                            setorderItemTable([])
+                                                            setOrderItemTable([])
                                                             setSelecedItemWiseOrder(true)
                                                         }} >
                                                         Item Wise

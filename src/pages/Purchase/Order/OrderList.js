@@ -272,11 +272,12 @@ const OrderList = () => {
         label: index.Name,
     }));
 
-    function oderAprovalBtnFunc(rowData, ismode, btnId) {
-        _cfunc.btnIsDissablefunc({ btnId, state: false })
+    function oderAprovalBtnFunc({editId, btnId}) {
+      
+        // _cfunc.btnIsDissablefunc({ btnId, state: false })
         let config = {}
         config.btnId = btnId;
-        config.orderId = rowData.id;
+        config.orderId = editId;
         dispatch(getOrderApprovalDetailAction(config))
     }
 

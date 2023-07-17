@@ -301,8 +301,9 @@ const CommonPurchaseList = (props) => {
   }
 
   const nonSelectedRow = () => {
-    //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
-        return tableList.filter(row => row.forceSelectDissabled || row.forceHideOrderAprovalBtn === false).map(row => row.id)       
+
+    return tableList.filter(row => row.forceSelectDissabled ).map(row => row.id)       //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
+
   }
 
   if (!(userAccState === "")) {

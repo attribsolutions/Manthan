@@ -164,19 +164,19 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.DeliveryDate = (`${DeliveryDate}`)
 
       i.forceEditHide = false;
-      i.forceMakeBtn = true;
+      i.forceMakeBtnHide = true;
       i.forceDeleteHide = false;
       i.forceSelectDissabled = false;
       i.forceHideOrderAprovalBtn = true;
-      i.Status = "Open";
-      i.Inward = "Open";
-
 
 
       if (i.Inward > 0) {
         i.Inward = "Close"
         i.Status = "Close"
         i.forceEditHide = true
+      } else {
+        i.Status = "Open";
+        i.Inward = "Open";
       }
 
       //+++++++++++++++++++++++++  Status colonm show Status    ++++++++++++++++++++++++++++++++++++++
@@ -188,25 +188,22 @@ function* orderList_GoBtn_GenFunc({ config }) {
       }
       else if (i.IsConfirm === true) {
         i.Status = "Order Confirm"
-        i.forceMakeBtn = false
       }
 
       //**********************************order Aproval button Show Condition ********************************************************** */
-
-
 
       if (!i.SAPResponse && i.CustomerSAPCode) {//order Aproval button Show Condition 
         i.forceHideOrderAprovalBtn = false;
+        i.forceSelectDissabled = true;//select row check box dessible 
       }
 
-
-
       //++++++++++++++++++++++++++++++++++++++ make invoice Button dessiable/vissbble ++++++++++++++++++++++++++++++++++++++
-      if (i.InvoiceCreated === true) {
-        i.forceMakeBtn = true
+      if (!(i.InvoiceCreated === true) && (i.IsConfirm === true)) {
+        i.forceMakeBtnHide = false
       }
 
       //**********************************order Aproval button Show Condition ********************************************************** */
+   
       if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;

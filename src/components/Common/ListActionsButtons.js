@@ -91,8 +91,8 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     const renderButtonWithSpinner = (btnmode, spinnerColor, iconClass) => {
-        const style = (btnmode === mode.makeBtn ) ? { marginLeft: "5px", marginRight: "6px" } : {};
-        
+        const style = (btnmode === mode.makeBtn) ? { marginLeft: "5px", marginRight: "6px" } : {};
+
         return (
             <>
                 {listBtnLoading === btnmode ? (
@@ -110,7 +110,7 @@ export const listPageActionsButtonFunc = (props) => {
             forceEditHide,
             forceDeleteHide,
             forceHideOrderAprovalBtn,
-            forceMakeBtn,
+            forceMakeBtnHide,
         } = rowData;
 
         rowData.hasSelect = false;
@@ -125,16 +125,18 @@ export const listPageActionsButtonFunc = (props) => {
         const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide;
         const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && rowData.CreatedBy === userCreated && !forceDeleteHide;
         const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy");
-        const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtn;
+        const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtnHide;
         const canOrderApproval = oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
-        const dummyDisable_OrderApproval = oderAprovalBtnFunc;
+   
+        const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView;
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
 
-
+        debugger
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
             if (!condition && !isDummyBtn) return null;
+    
             if (!isDummyBtn) {
                 return (
                     <Button
