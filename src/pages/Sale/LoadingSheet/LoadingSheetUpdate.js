@@ -50,18 +50,20 @@ const LoadingSheetUpdate = (props) => {
         OpeningBalance: state.ReceiptReducer.OpeningBalance,
     }));
 
+    // const { ReceiptFlag } = LoadingSheetUpdateList
     const lastColumn = () => ({
         text: "Action",
         dataField: "",
         formatExtraData: { listBtnLoading },
         formatter: (cellContent, row, key, { listBtnLoading }) => {
-
+            
+            const { ReceiptFlag } = row
             return (<span style={{ justifyContent: 'center' }}>
                 <Button
                     type="button"
                     id={`btn-makeBtn-${row.id}`}
                     title={"Make Receipt"}
-                    disabled={listBtnLoading}
+                    disabled={listBtnLoading || ReceiptFlag}
                     className={makeBtnCss}
                     onClick={(e) => {
                         makeBtnFunc(e, row)
@@ -154,6 +156,10 @@ const LoadingSheetUpdate = (props) => {
         return tableListData.map((index) => { return (index.selectCheck) && index.id })
     }
 
+    const nonSelectedRow = () => {
+        return tableListData.filter(row => row.ReceiptFlag).map(row => row.id)
+    }
+
     function DateOnchange(e, date) {
         setLoadingDate(date)
     }
@@ -236,7 +242,7 @@ const LoadingSheetUpdate = (props) => {
                                                 keyField={"id"}
                                                 bordered={true}
                                                 striped={false}
-                                                selectRow={selectAllCheck(rowSelected())}
+                                                selectRow={selectAllCheck(rowSelected(), nonSelectedRow())}
                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                                 classes={"table align-middle table-nowrap table-hover"}
                                                 headerWrapperClasses={"thead-light"}
@@ -265,6 +271,26 @@ const LoadingSheetUpdate = (props) => {
                                 </FormGroup >
                                 : null
                         }
+
+                        {/* {loading ?
+                            <button
+                                id={btnId}
+                                title={`Updating.. ${Name} `}
+                                className="btn btn-success w-md"
+                            >  Updating.. &nbsp;
+                                <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+                            </button>
+                            :
+                            <button
+                                type="submit"
+                                id={btnId}
+                                title={`Update ${Name}`}
+                                className="btn btn-success w-md"
+                                onClick={onClick}
+                            >
+                                <i class="fas fa-edit me-2"></i>Update
+                            </button >
+                        } */}
 
                     </form >
                 </div >
