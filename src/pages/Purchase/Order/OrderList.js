@@ -379,16 +379,13 @@ const OrderList = () => {
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
-    function downBtnFunc(row, printType, ReportBtnLoading) {
-
-        var ReportType = report.order1;
-        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, printType, ReportBtnLoading))
+    function downBtnFunc(config) {
+        config["ReportType"] = report.order1;
+        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
     }
 
-    function viewBtnFunc(row) {
-        const btnId = row.btnId
-        const viewId = row.viewId
-        dispatch(_act.viewOrderSingleget({ viewId, btnId }))
+    function viewBtnFunc(config) {
+        dispatch(_act.viewOrderSingleget(config))
     }
 
 

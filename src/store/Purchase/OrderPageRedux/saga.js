@@ -271,12 +271,10 @@ function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageM
 }
 
 function* OrderSingleGet_GenFunc({ config }) {
-  const { viewId, subPageMode } = config
+  debugger
 
   try {
-    
-    const response = yield call(OrderPage_Edit_ForDownload_API, viewId);
-    response["subPageMode"] = subPageMode;
+    const response = yield call(OrderPage_Edit_ForDownload_API, config);
     yield put(orderSinglegetSuccess(response))
 
   } catch (error) {

@@ -41,7 +41,7 @@ const PartyLedger = (props) => {
     const reducers = useSelector(
         (state) => ({
             pdfdata: state.PdfReportReducers.pdfdata,
-            listBtnLoading: state.OrderSummaryReducer.listBtnLoading,
+            goBtnLoading: state.PdfReportReducers.goBtnLoading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
@@ -80,7 +80,7 @@ const PartyLedger = (props) => {
     useEffect(() => {
 
 
-        
+
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
             customAlert({
                 Type: 3,
@@ -116,9 +116,8 @@ const PartyLedger = (props) => {
             "Customer": values.PartyName.value,
             "Party": _cfunc.loginPartyID()
         });
-        var ReportType = report.PartyLedger
 
-
+        let config = { ReportType: report.PartyLedger, jsonBody }
 
         if (values.PartyName === "") {
             customAlert({
@@ -127,7 +126,7 @@ const PartyLedger = (props) => {
             })
             return
         } else {
-            dispatch(getpdfReportdata(PartyLedgerReport_API, ReportType, jsonBody))
+            dispatch(getpdfReportdata(PartyLedgerReport_API, config))
         }
     }
 
@@ -208,7 +207,7 @@ const PartyLedger = (props) => {
 
 
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
+                            <Go_Button onClick={goButtonHandler} loading={reducers.goBtnLoading} />
                         </Col>
                     </div>
                 </div>

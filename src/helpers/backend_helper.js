@@ -453,7 +453,7 @@ export const OrderList_get_Filter_API = ({ filtersBody, btnId }) => post(url.ORD
 export const OrderPage_Save_API_ForPO = ({ jsonBody, btnId }) => post(url.ORDER_PAGE_API, jsonBody, btnId)//get api
 export const OrderPage_Edit_Post_API = ({ jsonBody, btnId }) => post(url.ORDER_Edit_API, jsonBody, btnId)//Edit Order
 export const OrderPage_Edit_Get_API = ({ orderId }) => get(`${url.ORDER_PAGE_API}/${orderId}`)//Order edit single get api
-export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
+export const OrderPage_Edit_ForDownload_API = ({ editId }) => get(`${url.ORDER_PAGE_API}/${editId}`)//Edit Order
 export const OrderPage_Delete_API = ({ deleteId, btnId }) => del(`${url.ORDER_PAGE_API}/${deleteId}`, btnId)//Delete Order
 export const OrderPage_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.ORDER_PAGE_API}/${updateId}`, jsonBody, btnId)// update api
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
@@ -569,8 +569,8 @@ export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)
 export const Make_Inward_Post_API = ({ makeInwardId, btnId }) => get(`${url.MAKE_INWARD_BUTTON_API}/${makeInwardId}`, btnId)// Inward post api
 
 //Report API
-export const MultipleInvoice_API = (id) => get(`${url.MULTIPLEINVOICE_API}/${id}`)//dropdown api
-export const LoadingSheet_API = (id) => get(`${url.LOADINGSHEET_PARTY_WISE_INVOICE}/${id}`)//dropdown api
+export const MultipleInvoice_API = ({ editId }) => get(`${url.MULTIPLEINVOICE_API}/${editId}`)//dropdown api
+export const LoadingSheet_API = ({ editId }) => get(`${url.LOADINGSHEET_PARTY_WISE_INVOICE}/${editId}`)//dropdown api
 
 
 // Management Parties API
@@ -580,7 +580,7 @@ export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOW
 
 //*********************************Accounting Module ************************************ */
 // Receipt and Payment Entry
-export const Receipt_Print = (id) => get(`${url.RECEIPT_POST_API}/${id}`)//dropdown api
+export const Receipt_Print = ({ editId }) => get(`${url.RECEIPT_POST_API}/${editId}`)//dropdown api
 export const Receipt_Go_Button_API = ({ jsonBody, btnId }) => post(url.RECEIPT_GO_BUTTON_API, jsonBody, btnId)//  postapi
 export const Opening_balance_API = (jsonBody) => post(url.OPENING_BALANCE, jsonBody)//  postapi
 export const Depositor_Bank_Filter_API = (jsonBody) => post(url.DEPOSITOR_BANK_FILTER, jsonBody)//  postapi
@@ -619,7 +619,7 @@ export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODU
 export const OderSummary_GoBtn_API = ({ jsonBody, btnId }) => post(url.ORDER_SUMMARY, jsonBody, btnId)//post api
 export const PartySettingApi = (Party_id, Comapny_id) => get(`${url.PARTY_SETTING}/${Party_id}/${Comapny_id}`)// Party Setting api
 export const save_PartySetting_API = ({ jsonBody, btnId }) => post(url.PARTY_SETTING, jsonBody, btnId)//  postapi
-export const PartyLedgerReport_API = (jsonBody) => post(url.PARTY_LEDGER, jsonBody)//  postapi
+export const PartyLedgerReport_API = ({jsonBody}) => post(url.PARTY_LEDGER, jsonBody)//  postapi
 
 
 // export const PartyLedger_API = (FromDate,ToDate,SAPCode) => get(`http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi
