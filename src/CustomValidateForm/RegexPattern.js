@@ -4,6 +4,12 @@ export const decimalRegx = /^\d*(\.\d{0,2})?$/
 export const onlyNumberRegx = /^\d+$/
 export const passwordRgx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/
 
+export const onlyTextRegx = /^[a-zA-Z]+$/
+
+
+
+
+
 
 
 
