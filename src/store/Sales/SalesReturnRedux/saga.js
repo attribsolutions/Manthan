@@ -50,8 +50,8 @@ function* SalesReturn_confirmID_GenFunc({ config }) {
 
     try {
         const response = yield call(apiCall.SalesReturn_SingleGet_API, config);
-
-        response.Data[0]["ReturnID"] = config.confirmId
+        response.Data[0]["viewMode"] = config.viewMode;
+        response.Data[0]["ReturnID"] = config.confirmId;
         response.Data[0].ReturnItems.map((index) => {
             index["selectCheck"] = false
             return index

@@ -193,7 +193,8 @@ const SalesReturnList = () => {
     function viewBtnFunc(row) {
         const btnId = row.btnId
         const confirmId = row.viewId
-        dispatch(confirm_SalesReturn_Id({ confirmId, btnId }))
+        const viewMode = subPageMode
+        dispatch(confirm_SalesReturn_Id({ confirmId, btnId, viewMode }))
     }
 
     const HeaderContent = () => {
