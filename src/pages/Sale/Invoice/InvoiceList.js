@@ -215,9 +215,10 @@ const InvoiceList = () => {
         label: " All"
     });
 
-    function downBtnFunc(row, Type, ReportBtnLoading) {
-        var ReportType = systemSetting.A4Print === "1" ? report.invoice : report.invoiceA5;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, systemSetting, ReportBtnLoading))
+    function downBtnFunc(config) {
+        config["ReportType"] = (systemSetting.A4Print === "1" ? report.invoice : report.invoiceA5);
+        config["systemSetting"] = systemSetting
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config))
     }
 
     function goButtonHandler(event, IBType) {
