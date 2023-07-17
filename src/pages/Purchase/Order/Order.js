@@ -673,17 +673,17 @@ const Order = (props) => {
             },
             headerFormatter: () => {
                 return (
-                    <div className="">
+                    <div className="" >
                         {orderItemTable.length <= 0 ?
                             <div className="col col-3 mt-2">
                                 <Label>Discount/unit</Label>
                             </div>
                             :
-                            <div className="row">
+                            <div className="row" style={{minWidth:'160px'}}>
                                 <div className=" mt-n2 mb-n2">
                                     <Label>Discount/unit</Label>
                                 </div>
-                                <div className="col col-6" style={{ width: "100px" }}>
+                                <div className="col col-6" >
                                     <Select
                                         type="text"
                                         defaultValue={discountTypeAll}
@@ -697,7 +697,7 @@ const Order = (props) => {
                                         }}
                                     />
                                 </div>
-                                <div className="col col-6" style={{ width: "100px" }}>
+                                <div className="col col-6" >
                                     <CInput
                                         type="text"
                                         className="input"
