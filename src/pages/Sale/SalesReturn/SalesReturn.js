@@ -803,6 +803,7 @@ const SalesReturn = (props) => {
             return {
                 "Item": i.Item,
                 "ItemName": i.ItemName,
+                "ApprovedQuantity": i.Quantity,
                 "Quantity": i.Quantity,
                 "Unit": i.Unit,
                 "BaseUnitQuantity": i.BaseUnitQuantity,
@@ -845,6 +846,7 @@ const SalesReturn = (props) => {
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 Mode: (subPageMode === url.SALES_RETURN) ? 1 : 2,
+                IsApproved: (subPageMode === url.SALES_RETURN) && 1,
                 PurchaseReturnReferences: [],
                 ReturnItems: ReturnItems,
             });
