@@ -5,7 +5,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole, date_dmy_func, loginUserID } from "../../../components/Common/CommonFunction";
-import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove } from "../../../store/actions";
+import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove, returnApprove_Success } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, onlyNumberRegx, onlyTextRegx } from "../../../CustomValidateForm";
@@ -26,7 +26,7 @@ const ViewDetails_Modal = () => {
     }))
 
     useEffect(() => {
-
+        debugger
         try {
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
@@ -40,8 +40,11 @@ const ViewDetails_Modal = () => {
 
 
     useEffect(() => {
-        debugger
+
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200)) {
+
+            dispatch(confirm_SalesReturn_Id_Succcess({ Status: false }))
+            dispatch(returnApprove_Success({ Status: false }))
             customAlert({
                 Type: 1,
                 Message: updateMsg.Message,
