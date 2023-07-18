@@ -115,6 +115,9 @@ const ViewDetails_Modal = () => {
         {
             text: "Quantity",
             dataField: "Quantity",
+            formatter: (value, row, k) => {
+                return <div style={{ width: "120px" }}>{`${row.Quantity}${row.UnitName}`}</div>
+            }
 
         },
         {
@@ -144,7 +147,7 @@ const ViewDetails_Modal = () => {
             hidden: tableArray.viewMode === url.PURCHASE_RETURN_LIST ? true : false,
             formatter: (value, row, k) => {
                 if (tableArray.viewMode === url.PURCHASE_RETURN_LIST) {
-                    return <div style={{ width: "120px" }}>{`${row.Quantity}`}</div>
+                    return <div style={{ width: "120px" }}>{`${row.Quantity}${row.UnitName}`}</div>
                 } else {
                     return (
                         <div>
