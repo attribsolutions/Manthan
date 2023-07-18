@@ -216,8 +216,8 @@ const InvoiceList = () => {
     });
 
     function downBtnFunc(config) {
-        config["ReportType"] = (systemSetting.A4Print === "1" ? report.invoice : report.invoiceA5);
-        config["systemSetting"] = systemSetting
+        
+        config["ReportType"] = report.invoice ;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config))
     }
 
