@@ -64,7 +64,7 @@ function* Return_Approve_GenFunc({ config }) {
     try {
         const response = yield call(apiCall.Return_Approve_API, config);
 
-        yield put(action.confirm_SalesReturn_Id_Succcess(response))
+        yield put(action.returnApprove_Success(response))
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
 
