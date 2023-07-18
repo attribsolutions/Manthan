@@ -246,49 +246,48 @@ const CommonListPage = (props) => {
       <React.Fragment>
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <div className="page-content">
+          
+            <PaginationProvider pagination={paginationFactory(pageOptions)}>
+              {({ paginationProps, paginationTableProps }) => (
+                <ToolkitProvider
+                  keyField="id"
+                  data={tableList}
+                  columns={tableColumns}
+                  search={defaultSearch(pageField.id)}
+                >
+                  {(toolkitProps, a) => (
+                    <React.Fragment>
+                      <Row>
+                        <Col xl="12">
+                          <div className="table-responsive" >
+                            <BootstrapTable
+                              keyField={"id"}
+                              responsive
+                              bordered={false}
+                              defaultSorted={defaultSorted}
+                              striped={true}
+                              classes={"table table-bordered table-hover"}
+                              noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
+                              {...toolkitProps.baseProps}
+                              {...paginationTableProps}
+                            />
+                          </div>
+                        </Col>
 
-          <PaginationProvider pagination={paginationFactory(pageOptions)}>
-            {({ paginationProps, paginationTableProps }) => (
-              <ToolkitProvider
-                keyField="id"
-                data={tableList}
-                columns={tableColumns}
-                // search={defaultSearch(pageField.id)}
-              >
-                {(toolkitProps, a) => (
-                  <React.Fragment>
-                    <Row>
-                      <Col xl="12">
-                        <div className="table-responsive" >
-                          <BootstrapTable
-                            keyField={"id"}
-                            responsive
-                            bordered={false}
-                            defaultSorted={defaultSorted}
-                            striped={true}
-                            classes={"table table-bordered table-hover"}
-                            noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
-                            {...toolkitProps.baseProps}
-                            {...paginationTableProps}
-                          />
-                        </div>
-                      </Col>
-
-                      {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
-                      {mySearchProps(toolkitProps.searchProps, pageField.id)}
-                    </Row>
-                    <Row className="align-items-md-center mt-30">
-                      <Col className="pagination pagination-rounded justify-content-end mb-2">
-                        <PaginationListStandalone {...paginationProps} />
-                      </Col>
-                    </Row>
-                  </React.Fragment>
-                )}
-              </ToolkitProvider>
-            )}
-          </PaginationProvider>
-
-
+                        {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
+                        {mySearchProps(toolkitProps.searchProps, pageField.id)}
+                      </Row>
+                      <Row className="align-items-md-center mt-30">
+                        <Col className="pagination pagination-rounded justify-content-end mb-2">
+                          <PaginationListStandalone {...paginationProps} />
+                        </Col>
+                      </Row>
+                    </React.Fragment>
+                  )}
+                </ToolkitProvider>
+              )}
+            </PaginationProvider>
+        
           <Modal isOpen={modal_edit} toggle={() => { tog_center() }} size="xl">
             <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} pageHeading={userAccess.pageHeading} />
           </Modal>
