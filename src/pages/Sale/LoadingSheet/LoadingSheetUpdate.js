@@ -56,7 +56,7 @@ const LoadingSheetUpdate = (props) => {
         dataField: "",
         formatExtraData: { listBtnLoading },
         formatter: (cellContent, row, key, { listBtnLoading }) => {
-            
+
             const { ReceiptFlag } = row
             return (<span style={{ justifyContent: 'center' }}>
                 <Button
@@ -271,27 +271,7 @@ const LoadingSheetUpdate = (props) => {
                                 </FormGroup >
                                 : null
                         }
-
-                        {/* {loading ?
-                            <button
-                                id={btnId}
-                                title={`Updating.. ${Name} `}
-                                className="btn btn-success w-md"
-                            >  Updating.. &nbsp;
-                                <Spinner style={{ height: "13px", width: "13px" }} color="white" />
-                            </button>
-                            :
-                            <button
-                                type="submit"
-                                id={btnId}
-                                title={`Update ${Name}`}
-                                className="btn btn-success w-md"
-                                onClick={onClick}
-                            >
-                                <i class="fas fa-edit me-2"></i>Update
-                            </button >
-                        } */}
-
+                     
                     </form >
                 </div >
             </React.Fragment >
