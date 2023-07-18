@@ -100,7 +100,7 @@ const Invoice = (props) => {
         VehicleNumber,
         goBtnloading,
         saveBtnloading,
-        PartySettingdata
+        saveAndPdfBtnLoading
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -113,6 +113,7 @@ const Invoice = (props) => {
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         goBtnloading: state.InvoiceReducer.goBtnloading,
+        saveAndPdfBtnLoading: state.InvoiceReducer.saveAndPdfBtnLoading,
     }));
 
     const location = { ...history.location }
@@ -151,52 +152,46 @@ const Invoice = (props) => {
     }, [userAccess])
 
     useEffect(async () => {
+        if (postMsg.Status === true && postMsg.StatusCode === 200) {
+            dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-
-            if (postMsg.SaveAndDownloadPdfMode) {
-
-                var ReportType = systemSetting.A4Print === "1" ? report.invoice : report.invoiceA5;
-                dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: postMsg.InvoiceID }, systemSetting))
-                // history.push({ pathname: url.INVOICE_LIST_1 })
+            //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
+            if (postMsg.saveAndDownloadPdfMode) {
+                const config = {
+                    editId: postMsg.InvoiceID,
+                    ReportType: report.invoiceA5,
+                };
+                dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config));
             }
-            let btnId = `btn-E-Invoice-Upload-${postMsg.InvoiceID}`
-            dispatch(invoiceSaveActionSuccess({ Status: false }))
-            if ((systemSetting.AutoEInvoice === "1") && (systemSetting.EInvoiceApplicable === "1")) {
+
+            // ***************** Upload E-Invoice if AutoEInvoice and EInvoiceApplicable are both "1"  *****/
+            if (systemSetting.AutoEInvoice === "1" && systemSetting.EInvoiceApplicable === "1") {
+                let btnId = `btn-E-Invoice-Upload-${postMsg.InvoiceID}`;
                 try {
-                    dispatch(Uploaded_EInvoiceAction({ btnId, RowId: postMsg.InvoiceID, UserID: _cfunc.loginUserID() }))
+                    dispatch(Uploaded_EInvoiceAction({ btnId, RowId: postMsg.InvoiceID, UserID: _cfunc.loginUserID() }));
                 } catch (error) { }
             }
 
-            if (pageMode === mode.dropdownAdd) {
-                customAlert({
-                    Type: 1,
-                    Message: JSON.stringify(postMsg.Message),
-                })
+            customAlert({
+                Type: 1,
+                Message: postMsg.Message,
+            });
+
+            // Redirect to appropriate page based on subPageMode
+            if (subPageMode === url.INVOICE_1) {
+                history.push({ pathname: url.INVOICE_LIST_1 });
+            } else if (subPageMode === url.IB_INVOICE) {
+                history.push({ pathname: url.IB_INVOICE_LIST });
             }
-
-            else {
-
-                await customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
-
-                if (subPageMode === url.INVOICE_1) {
-                    history.push({ pathname: url.INVOICE_LIST_1 })
-                }
-                else if (subPageMode === url.IB_INVOICE) {
-                    history.push({ pathname: url.IB_INVOICE_LIST })
-                }
-            }
-        }
-        else if (postMsg.Status === true) {
+        } else if (postMsg.Status === true) {
+            // Show error alert message with the JSON stringified postMsg.Message
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
-            })
+            });
         }
-    }, [postMsg])
+    }, [postMsg]);
+
 
     useEffect(() => {
 
@@ -604,7 +599,7 @@ const Invoice = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id
-        const SaveAndDownloadPdfMode = btnId.substring(0, 21) === "SaveAndDownloadPdfBtn";
+        const saveAndDownloadPdfMode = btnId.substring(0, 21) === "SaveAndDownloadPdfBtn";
 
         const validMsg = []
         const invoiceItems = []
@@ -719,7 +714,7 @@ const Invoice = (props) => {
                     return
                 }
                 else {
-                    dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, SaveAndDownloadPdfMode }));
+                    dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, saveAndDownloadPdfMode }));
                 }
             }
         } catch (e) { _cfunc.CommonConsole("invode save Handler", e) }
@@ -866,17 +861,19 @@ const Invoice = (props) => {
                                         pageMode={pageMode}
                                         userAcc={userPageAccessState}
                                         onClick={SaveHandler}
+                                        forceDisabled={saveAndPdfBtnLoading}
                                     />
                                 </Col>
                                 {
                                     (pageMode === mode.defaultsave) ?
                                         <Col>
                                             <SaveAndDownloadPDF
-                                                forceDisabled={saveBtnloading}
-                                                loading={saveBtnloading}
+                                                loading={saveAndPdfBtnLoading}
                                                 pageMode={pageMode}
+                                                id={saveBtnid}
                                                 userAcc={userPageAccessState}
                                                 onClick={SaveHandler}
+                                                forceDisabled={saveBtnloading}
                                             />
                                         </Col> : null}
                             </div>

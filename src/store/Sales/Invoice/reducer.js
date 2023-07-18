@@ -32,6 +32,7 @@ const INIT_STATE = {
     Cancel_EInvoice: { Status: false },
     Cancel_EwayBill: { Status: false },
     listBtnLoading: false,
+    saveAndPdfBtnLoading: false
 }
 
 const InvoiceReducer = (state = INIT_STATE, action) => {
@@ -49,19 +50,22 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 goBtnloading: false,
-                listBtnLoading:false,
+                listBtnLoading: false,
                 gobutton_Add: action.payload,
             }
         /**************************************** */
         case INVOICE_SAVE_ADD_PAGE_ACTION:
+            let { saveAndDownloadPdfMode = false } = action.config
             return {
                 ...state,
-                saveBtnloading: true,
+                saveBtnloading: !saveAndDownloadPdfMode,
+                saveAndPdfBtnLoading: saveAndDownloadPdfMode
             }
         case INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS:
             return {
                 ...state,
                 saveBtnloading: false,
+                saveAndPdfBtnLoading: false,
                 postMsg: action.payload,
             }
         /**************************************** */
@@ -118,7 +122,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             }
         /**************************************** */
         case UPLOADED_E_WAY_BILL_ACTION:
-            
+
             return {
                 ...state,
                 listBtnLoading: action.config.btnId,
@@ -160,6 +164,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 listBtnLoading: false,
                 goBtnloading: false,
                 saveBtnloading: false,
+                saveAndPdfBtnLoading: false,
             }
 
         default:
