@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import {useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 // import { Modal, } from "reactstrap";
 // import { hasError500 } from '../../store/Utilites/CommonError/actions'
 
 const Spinner = () => {
     const history = useHistory();
-    const dispatch = useDispatch();
+ 
     //redux Spinner State
     const { SpinnerState, error500 } = useSelector((state) => ({
         SpinnerState: state.SpinnerReducer.SpinnerState,
