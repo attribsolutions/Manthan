@@ -492,10 +492,11 @@ const Order = (props) => {
             text: "Quantity",
             classes: 'table-cursor-pointer',
             headerStyle: () => {
-                return { minWidth: '100px', textAlign: 'center' };
+                return { width: '10%', textAlign: 'center' };
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
+
                 return (
                     <>
                         <CInput
@@ -521,7 +522,7 @@ const Order = (props) => {
             classes: 'table-cursor-pointer',
             dataField: "",
             headerStyle: () => {
-                return { minWidth: '140px', textAlign: 'center' };
+                return { width: '9%', textAlign: 'center' };
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
@@ -577,6 +578,13 @@ const Order = (props) => {
                     if (!row["edit_Unit_id"]) {
                         row["edit_Unit_id"] = row.Unit_id;
                     }
+
+                    if (!row["edit_Discount"]) {
+                        row["edit_Discount"] = row.Discount;
+                    }
+                    if (!row["edit_DiscountType"]) {
+                        row["edit_DiscountType"] = row.DiscountType;
+                    }
                 }
 
                 return (
@@ -618,7 +626,7 @@ const Order = (props) => {
             classes: 'table-cursor-pointer',
             dataField: "",
             headerStyle: () => {
-                return { minWidth: '100px', textAlign: 'center' };
+                return { width: '9%', textAlign: 'center' };
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
@@ -654,13 +662,12 @@ const Order = (props) => {
 
         },
 
-
         {//------------- MRP column ----------------------------------
             text: "MRP",
             classes: 'table-cursor-pointer',
             dataField: "",
             headerStyle: () => {
-                return { minWidth: '100px', textAlign: 'center' };
+                return { width: '8%', textAlign: 'center' };
             },
             formatter: (value, row, k) => {
 
@@ -670,7 +677,7 @@ const Order = (props) => {
                     </div>
                 )
             },
-           
+
         },
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
@@ -683,7 +690,7 @@ const Order = (props) => {
                 tableList: orderItemTable
             },
             headerStyle: () => {
-                return { minWidth: '140px', textAlign: 'center' };
+                return { width: '11%', textAlign: 'center' };
             },
             headerFormatter: () => {
                 return (
@@ -847,7 +854,7 @@ const Order = (props) => {
             },
 
             headerStyle: () => {
-                return { width: '140px', textAlign: 'center' };
+                return { width: '9%', textAlign: 'center' };
             }
         },
     ];
@@ -1001,7 +1008,7 @@ const Order = (props) => {
         dispatch(_act.GoButton_For_Order_Add(config))
     };
 
-    const saveHandeller = async (event) => {
+    const saveHandler1 = async (event) => {
         event.preventDefault();
 
         const btnId = event.target.id
@@ -1242,6 +1249,252 @@ const Order = (props) => {
 
         } catch (e) { _cfunc.CommonConsole("order_save_", e) }
     }
+
+    // Function to handle the form submission
+    const saveHandler = async (event) => {
+        event.preventDefault();
+
+        // Extract the ID from the target element
+        const buttonId = event.target.id;
+        const gotoInvoiceMode = buttonId.substring(0, 14) === "gotoInvoiceBtn";
+
+        try {
+            // Get the division from the loginPartyID function
+            const division = _cfunc.loginPartyID();
+            const supplier = supplierSelect.value;
+
+            const validationMessages = []; // Stores validation messages for items
+            const orderItems = []; // Stores processed order items
+            const vdcPoValidationMessages = []; // Stores VDC-PO validation messages
+            
+            // Loop through the order items
+            await orderItemTable.forEach(item => {
+               
+                // Check for item quantity and rate validity
+                if ((item.Quantity > 0) && !(item.Rate > 0)) {
+                    validationMessages.push({ [item.ItemName]: "This Item Rate Is Required..." });
+                }
+                else if (pageMode === mode.edit) {
+                    // Check if the item quantity or unit has changed in edit mode
+                    const isChange = (
+                        !(Number(item.edit_Qty) === Number(item.Quantity))
+                        || !(item.edit_Unit_id === item.Unit_id)
+                        || !(Number(item.edit_Discount) === Number(item.Discount))
+                        || !(Number(item.edit_DiscountType) === Number(item.DiscountType))
+                    );
+
+                    let isEdit = 0;
+                    if (isChange && !(item.edit_Qty === 0)) {
+                        isEdit = 1;
+                    }
+                    processOrderItem({ item, isEdit });
+                }
+                else {
+                    const isEdit = 0;
+                    processOrderItem({ item, isEdit });
+                }
+            });
+
+            // Function to handle order items
+            function processOrderItem({ item, isEdit }) {
+               
+                // Handle quantity for null or undefined values
+                item.Quantity = !Number(item.Quantity) ? 0 : item.Quantity;
+
+                // Check various conditions for item processing
+                if ((item.Quantity > 0) && (item.Rate > 0) && !(orderTypeSelect.value === 3)) {
+                    // Item is not deleted and has value changes
+                    processValueChanged({ item, isEdit, isDelete: false });
+                }
+                else if (!(item.Quantity < 0) && (item.editrowId) && !(orderTypeSelect.value === 3)) {
+                    // Item is deleted (set quantity to 0) and has value changes
+                    processValueChanged({ item, isEdit, isDelete: true });
+                }
+                else if (!(item.Quantity < 0) && !(item.editrowId) && !(orderTypeSelect.value === 3)) {
+                    // Item is not deleted and has no value changes, skip
+                    return;
+                }
+                else if ((item.Quantity > 0) && (item.Rate > 0)) { // Logic for VDC-PO
+                    if (item.Bom) {
+                        if ((orderItems.length === 0)) {
+                            // First VDC-PO item, not deleted and has value changes
+                            processValueChanged({ item, isEdit, isDelete: false });
+                        } else {
+                            if (vdcPoValidationMessages.length === 0) {
+                                vdcPoValidationMessages.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
+                            }
+                        }
+                    } else {
+                        vdcPoValidationMessages.push({ [item.ItemName]: "This Is Not VDC-PO Item..." });
+                    }
+                }
+                else if ((item.Quantity < 1) && (item.editrowId)) {
+                    if (item.Bom) {
+                        if ((orderItems.length === 0)) {
+                            // First VDC-PO item, deleted and has value changes
+                            processValueChanged({ item, isEdit, isDelete: true });
+                        } else {
+                            if (vdcPoValidationMessages.length === 0) {
+                                vdcPoValidationMessages.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
+                            }
+                        }
+                    } else {
+                        vdcPoValidationMessages.push({ [item.ItemName]: "This Is Not VDC-PO Item..." });
+                    }
+                }
+            }
+
+            // Function to handle value changes in order items
+            function processValueChanged({ item, isEdit, isDelete }) {
+               
+                const calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() });
+
+                // Create an object for the order item
+                const orderItem = {
+                    Item: item.Item_id,
+                    Quantity: isDelete ? 0 : item.Quantity,
+                    MRP: item.MRP_id,
+                    MRPValue: item.MRPValue,
+                    Rate: item.Rate,
+                    Unit: item.Unit_id,
+                    BaseUnitQuantity: (Number(item.BaseUnitQuantity) * Number(item.Quantity)).toFixed(2),
+                    Margin: "",
+                    GST: item.GST_id,
+                    CGST: calculated.CGST_Amount,
+                    SGST: calculated.SGST_Amount,
+                    IGST: calculated.IGST_Amount,
+                    GSTPercentage: calculated.GST_Percentage,
+                    CGSTPercentage: calculated.CGST_Percentage,
+                    SGSTPercentage: calculated.SGST_Percentage,
+                    IGSTPercentage: calculated.IGST_Percentage,
+                    BasicAmount: calculated.basicAmount,
+                    GSTAmount: calculated.roundedGstAmount,
+                    Amount: calculated.roundedTotalAmount,
+                    TaxType: 'GST',
+                    DiscountType: item.DiscountType,
+                    Discount: Number(item.Discount) || 0,
+                    DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
+                    IsDeleted: isEdit, // Set to 1 if item is edited, otherwise 0 for delete
+                    Comment: item.Comment
+                };
+
+                orderItems.push(orderItem);
+            }
+
+            // Get terms and conditions
+            const termsAndConditions = await termsAndConTable.map(item => ({
+                TermsAndCondition: item.value,
+                IsDeleted: item.IsDeleted
+            }));
+
+            // Check for any validation errors
+            if (vdcPoValidationMessages.length > 0) {
+                customAlert({
+                    Type: 4,
+                    Message: vdcPoValidationMessages,
+                });
+                return;
+            }
+            if (validationMessages.length > 0) {
+                customAlert({
+                    Type: 4,
+                    Message: validationMessages,
+                });
+                return;
+            }
+            if (orderItems.length === 0) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Select 1 Item Quantity",
+                });
+                return;
+            }
+            if (orderTypeSelect.length === 0) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Select PO Type",
+                });
+                return;
+            }
+            if ((termsAndConditions.length === 0) && !(subPageMode === url.ORDER_2)
+                && !(subPageMode === url.ORDER_4) && !(subPageMode === url.IB_ORDER)
+            ) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Enter One Terms And Condition",
+                });
+                return;
+            }
+
+            const po_JsonBody = {
+                OrderDate: orderdate,
+                OrderAmount: orderAmount,
+                OrderItem: orderItems,
+                Customer: division,
+                Supplier: supplier,
+                OrderType: order_Type.PurchaseOrder,
+                IsConfirm: false  // PO Order then IsConfirm true
+            }
+            const SO_JsonBody = {
+                OrderDate: orderdate,
+                OrderAmount: orderAmount,
+                OrderItem: orderItems,
+                Customer: supplier,// swipe supllier 
+                Supplier: division,// swipe Customer
+                OrderType: order_Type.SaleOrder,
+                IsConfirm: true   // SO Order then IsConfirm true
+            }
+            const IB_JsonBody = {
+                DemandDate: orderdate,
+                DemandAmount: orderAmount,
+                DemandItem: orderItems,
+                Customer: division,
+                Supplier: supplier,
+                OrderType: order_Type.PurchaseOrder,
+            }
+            const comm_jsonBody = {
+                DeliveryDate: deliverydate,
+                Description: description,
+                BillingAddress: billAddr.value,
+                ShippingAddress: shippAddr.value,
+                OrderNo: 1,
+                FullOrderNumber: "PO0001",
+                Division: division,
+                POType: orderTypeSelect.value,
+                POFromDate: orderTypeSelect.value === 1 ? currentDate_ymd : poFromDate,
+                POToDate: orderTypeSelect.value === 1 ? currentDate_ymd : poToDate,
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
+                OrderTermsAndConditions: termsAndConditions
+            };
+
+
+            let jsonBody;   //json body decleration 
+            if (subPageMode === url.IB_ORDER) {
+                jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
+            }
+            else if (subPageMode === url.ORDER_4) {
+                jsonBody = JSON.stringify({ ...comm_jsonBody, ...SO_JsonBody });
+            }
+            else {
+                jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
+            }
+            // +*********************************
+
+            if (pageMode === mode.edit) {
+                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
+
+            } else {
+
+                dispatch(_act.saveOrderAction({ jsonBody, subPageMode, gotoInvoiceMode }))
+            }
+        } catch (error) {
+            _cfunc.CommonConsole("order_save_", error);
+        }
+    };
+
+
+
 
     if (!(userPageAccessState === "")) {
         return (
@@ -1627,7 +1880,7 @@ const Order = (props) => {
                                     editCreatedBy={editCreatedBy}
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
-                                    onClick={saveHandeller}
+                                    onClick={saveHandler}
                                     forceDisabled={gotoInvoiceBtnLoading}
                                 />
                             </Col>
@@ -1639,7 +1892,7 @@ const Order = (props) => {
                                             loading={gotoInvoiceBtnLoading}
                                             pageMode={pageMode}
                                             userAcc={userPageAccessState}
-                                            onClick={saveHandeller}
+                                            onClick={saveHandler}
                                         />
                                     </Col> : null}
                         </div>
