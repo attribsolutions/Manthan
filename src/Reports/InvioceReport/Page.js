@@ -1,7 +1,8 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle';
-import { compareGSTINState } from "../../components/Common/CommonFunction";
+import { compareGSTINState, loginSystemSetting } from "../../components/Common/CommonFunction";
+import InvioceReporta5 from "../Invoice report a5/Page";
 
 const pageHeder = (doc, data) => {
     style.pageBorder(doc, data);
@@ -26,7 +27,8 @@ function pageFooter(doc, data) {
     style.reportFooter(doc, data);
 }
 
-const InvioceReport = async (data) => {
+const invioceReport_A4 = async (data) => {
+
     if (data.InvoiceUploads.length > 0) {
         if (data.InvoiceUploads[0].QRCodeUrl !== null) {
             data["isQR"] = true;
@@ -70,6 +72,19 @@ const InvioceReport = async (data) => {
     });
     const options = { filename: "Invoice Report" }
     doc.output('dataurlnewwindow', options);
-    return (<></>);
 }
+
+const InvioceReport = (data) => {
+
+    const SettingData = loginSystemSetting();
+    data["SettingData"] = SettingData;
+
+    if (SettingData.A4Print === "1") {
+        invioceReport_A4(data)
+    } else {
+        InvioceReporta5(data)
+    }
+
+}
+
 export default InvioceReport;

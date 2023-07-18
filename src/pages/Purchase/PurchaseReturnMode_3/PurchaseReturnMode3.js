@@ -51,7 +51,7 @@ const PurchaseReturnMode3 = (props) => {
     const [subPageMode] = useState(history.location.pathname)
     const [tableData, setTableData] = useState([]);
     const [returnItemIDs, setReturnItemIDs] = useState("");
-    console.log(returnItemIDs)
+   
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         sendToSSbtnTableData,
