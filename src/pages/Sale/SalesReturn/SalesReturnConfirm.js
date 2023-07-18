@@ -18,9 +18,12 @@ const ViewDetails_Modal = () => {
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
 
-    const { viewData_redux = [], updateMsg } = useSelector((state) => ({
+    const { viewData_redux = [], updateMsg, saveBtnloading } = useSelector((state) => ({
         viewData_redux: state.SalesReturnReducer.confirmBtnData, // modify Redux State
-        updateMsg: state.SalesReturnReducer.updateMsg // modify Redux State
+        updateMsg: state.SalesReturnReducer.updateMsg,// modify Redux State
+        saveBtnloading: state.SalesReturnReducer.saveBtnloading // modify Redux State
+
+
 
 
     }))
@@ -83,7 +86,7 @@ const ViewDetails_Modal = () => {
                 }
 
             })
-
+            debugger
             const jsonBody = JSON.stringify({
                 ReturnID: viewData_redux.Data[0].ReturnID,
                 ReturnItem: tableItemArray
@@ -251,23 +254,22 @@ const ViewDetails_Modal = () => {
                                     {/* <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}> */}
                                     <div>
 
-                                        {/* <button
-
-                                    title={`Save`}
-                                    className="btn btn-primary w-md"
-                                    autoFocus={false}
-                                >  Saving.. &nbsp;
-                                    <Spinner style={{ height: "13px", width: "13px" }} color="white" />
-                                </button>
-                                : */}
-                                        <button
-                                            type="submit"
-                                            autoFocus={false}
-                                            title={`Save `}
+                                        {saveBtnloading ? <button
+                                            title={`Save`}
                                             className="btn btn-primary w-md"
-                                            onClick={SaveHandler}
-                                        > <i className="fas fa-save me-2"></i> Save
+                                            autoFocus={false}
+                                        >  Saving.. &nbsp;
+                                            <Spinner style={{ height: "13px", width: "13px" }} color="white" />
                                         </button>
+                                            :
+                                            <button
+                                                type="submit"
+                                                autoFocus={false}
+                                                title={`Save `}
+                                                className="btn btn-primary w-md"
+                                                onClick={SaveHandler}
+                                            > <i className="fas fa-save me-2"></i> Save
+                                            </button>}
                                     </div>
                                     {/* </Col> */}
                                 </FormGroup >}
