@@ -97,13 +97,14 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
         case SALES_RETURN_CONFIRM_BUTTON_ACTION:
             return {
                 ...state,
-                confirmBtnloading: true,
+                listBtnLoading: action.config.btnId,
+
             }
 
         case SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS:
             return {
                 ...state,
-                confirmBtnloading: false,
+                listBtnLoading: false,
                 confirmBtnData: action.payload,
 
             }
@@ -135,7 +136,7 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
             }
 
         case POST_SENT_TO_SUPERSTOCKIEST_ID:
-            
+
             return {
                 ...state,
                 sendToSSbtnLoading: true,
@@ -143,7 +144,7 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
             }
 
         case POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS:
-            
+
             return {
                 ...state,
                 sendToSSbtnLoading: false,

@@ -52,7 +52,7 @@ const CityList = () => {
         })
     );
 
-    const { userAccess, pageField, State, district,districtDropDownLoading } = reducers;
+    const { userAccess, pageField, State, district, districtDropDownLoading } = reducers;
 
     const values = { ...state.values }
 
@@ -137,7 +137,6 @@ const CityList = () => {
                                     value={values.StateName}
                                     isSearchable={true}
                                     classNamePrefix="dropdown"
-                                    autoFocus={true}
                                     options={State_DropdownOptions}
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
@@ -186,25 +185,24 @@ const CityList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-            
-                {
-                   
-                        (pageField) &&
-                            <CommonPurchaseList
-                                action={action}
-                                reducers={reducers}
-                                showBreadcrumb={false}
-                                newBtnPath={url.CITY}
-                                masterPath={url.CITY}
-                                HeaderContent={HeaderContent}
-                                goButnFunc={goButtonHandler}
-                                ButtonMsgLable={"CityMaster"}
-                                deleteName={"DistrictName"}
-                                MasterModal={CityMaster}
 
-                            />
+                {
+                    (pageField) &&
+                    <CommonPurchaseList
+                        action={action}
+                        reducers={reducers}
+                        showBreadcrumb={false}
+                        newBtnPath={url.CITY}
+                        masterPath={url.CITY}
+                        HeaderContent={HeaderContent}
+                        goButnFunc={goButtonHandler}
+                        ButtonMsgLable={"CityMaster"}
+                        deleteName={"DistrictName"}
+                        MasterModal={CityMaster}
+
+                    />
                 }
-                
+
             </div>
         </React.Fragment>
     )

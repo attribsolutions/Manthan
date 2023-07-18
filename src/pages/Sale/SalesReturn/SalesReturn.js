@@ -845,6 +845,7 @@ const SalesReturn = (props) => {
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 Mode: (subPageMode === url.SALES_RETURN) ? 1 : 2,
+                PurchaseReturnReferences: [],
                 ReturnItems: ReturnItems,
             });
 

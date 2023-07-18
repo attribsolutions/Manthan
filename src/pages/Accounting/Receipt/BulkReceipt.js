@@ -71,15 +71,11 @@ const BulkRecipt = (props) => {
                 })
             }
             else {
-                const promise = await customAlert({
+                customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                if (promise) {
-                    history.push({
-                        pathname: url.BULK_RECIPT,
-                    })
-                }
+                history.push({ pathname: url.RECEIPTS_LIST })
             }
         }
         else if (postMsg.Status === true) {

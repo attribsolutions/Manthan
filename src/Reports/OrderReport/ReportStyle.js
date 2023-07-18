@@ -16,7 +16,7 @@ export const pageBorder = (doc) => {
 }
 
 export const pageHeder = (doc, data) => {
-    debugger
+    
     doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')

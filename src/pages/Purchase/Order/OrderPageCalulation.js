@@ -1,13 +1,13 @@
 import { compareGSTINState } from "../../../components/Common/CommonFunction";
 
 export const orderCalculateFunc = (row, IsComparGstIn) => {
-debugger
+
   // Retrieve values from input object
   const rate = Number(row.Rate) || 0;
   const quantity = Number(row.Quantity) || 0;
   const gstPercentage = Number(row.GSTPercentage) || 0;
   const discount = Number(row.Discount) || 0;
-  const discountType = row.DiscountType || 2;
+  const discountType = row.DiscountType || 2;//discountType ===" % "
 
   // Calculate basic amount
   const basicAmount = rate * quantity;

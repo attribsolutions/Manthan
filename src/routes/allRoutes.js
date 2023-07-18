@@ -164,6 +164,7 @@ import StockEntry from "../pages/Inventory/StockEntry/StockEntry";
 import PartyLedger from "../Reports/PratyLedger/Partyledger";
 import StockReport from "../Reports/StockReport/StockReport";
 import PurchaseReturnMode3 from "../pages/Purchase/PurchaseReturnMode_3/PurchaseReturnMode3";
+import DiscountMaster from "../pages/Adminisrator/Discount/DiscountMaster";
 
 
 const userRoutes = [
@@ -300,7 +301,7 @@ const userRoutes = [
 
   { path: path.INVOICE_CONFIGURATION, component: InvoiceConfiguration },
 
-
+  { path: path.DISCOUNT_MASTER, component: DiscountMaster },
 
 
   //******************************* Inventory Module ************************************//

@@ -5,12 +5,11 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole, date_dmy_func, loginUserID } from "../../../components/Common/CommonFunction";
-import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove } from "../../../store/actions";
+import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove, returnApprove_Success } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, onlyNumberRegx, onlyTextRegx } from "../../../CustomValidateForm";
 import { url } from "../../../routes";
-
 
 const ViewDetails_Modal = () => {
 
@@ -18,15 +17,14 @@ const ViewDetails_Modal = () => {
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
 
-    const { viewData_redux = [], updateMsg } = useSelector((state) => ({
+    const { viewData_redux = [], updateMsg, saveBtnloading } = useSelector((state) => ({
         viewData_redux: state.SalesReturnReducer.confirmBtnData, // modify Redux State
-        updateMsg: state.SalesReturnReducer.updateMsg // modify Redux State
-
-
+        updateMsg: state.SalesReturnReducer.updateMsg,// modify Redux State
+        saveBtnloading: state.SalesReturnReducer.saveBtnloading // modify Redux State
     }))
 
     useEffect(() => {
-
+        
         try {
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
@@ -40,8 +38,11 @@ const ViewDetails_Modal = () => {
 
 
     useEffect(() => {
-        debugger
+
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200)) {
+
+            dispatch(confirm_SalesReturn_Id_Succcess({ Status: false }))
+            dispatch(returnApprove_Success({ Status: false }))
             customAlert({
                 Type: 1,
                 Message: updateMsg.Message,
@@ -63,7 +64,7 @@ const ViewDetails_Modal = () => {
             const tableItemArray = []
             let inValideUnits = []
             tableArray.ReturnItems.forEach(index => {
-
+                
                 const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
                 if (index.ApproveQuantity === "") {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
@@ -73,14 +74,13 @@ const ViewDetails_Modal = () => {
                         Item: index.Item,
                         Unit: index.Unit,
                         ApprovedQuantity: Quantity,
-                        ApproveComment: index.Comment,
+                        ApproveComment: index.ApproveComment,
                         Approvedby: loginUserID()
                     }
                     tableItemArray.push(ReturnItems)
                 }
-
             })
-
+            
             const jsonBody = JSON.stringify({
                 ReturnID: viewData_redux.Data[0].ReturnID,
                 ReturnItem: tableItemArray
@@ -94,9 +94,7 @@ const ViewDetails_Modal = () => {
 
             } else {
                 dispatch(returnApprove({ jsonBody, btnId }));
-
             }
-
 
         } catch (e) { }
     };
@@ -109,7 +107,9 @@ const ViewDetails_Modal = () => {
         {
             text: "Quantity",
             dataField: "Quantity",
-
+            formatter: (value, row, k) => {
+                return <div style={{ width: "120px" }}>{`${row.Quantity}${row.UnitName}`}</div>
+            }
         },
         {
             text: "Basic Rate",
@@ -130,14 +130,13 @@ const ViewDetails_Modal = () => {
             dataField: "ItemReason",
         },
 
-
-
         {
             text: "Approve Quantity",
             dataField: "Quantity",
+            hidden: tableArray.viewMode === url.PURCHASE_RETURN_LIST ? true : false,
             formatter: (value, row, k) => {
                 if (tableArray.viewMode === url.PURCHASE_RETURN_LIST) {
-                    return <div style={{ width: "120px" }}>{`${row.Quantity}`}</div>
+                    return <div style={{ width: "120px" }}>{`${row.Quantity}${row.UnitName}`}</div>
                 } else {
                     return (
                         <div>
@@ -172,14 +171,14 @@ const ViewDetails_Modal = () => {
                     <div>
 
                         <CInput
-                            key={`Comment-${k}`}
-                            id={`Comment-${k}`}
+                            key={`ApproveComment-${k}`}
+                            id={`ApproveComment-${k}`}
                             cpattern={onlyTextRegx}
-                            defaultValue={row.Comment}
+                            defaultValue={row.ApproveComment}
                             autoComplete="off"
                             placeholder="Enter Comment"
                             onChange={(e) => {
-                                row["Comment"] = e.target.value
+                                row["ApproveComment"] = e.target.value
                             }}
                         />
                     </div>
@@ -187,21 +186,7 @@ const ViewDetails_Modal = () => {
             },
 
         },
-
-
     ];
-
-
-
-
-
-
-
-
-
-
-
-
 
     return (
         <Modal
@@ -247,33 +232,28 @@ const ViewDetails_Modal = () => {
                                     {/* <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}> */}
                                     <div>
 
-                                        {/* <button
-
-                                    title={`Save`}
-                                    className="btn btn-primary w-md"
-                                    autoFocus={false}
-                                >  Saving.. &nbsp;
-                                    <Spinner style={{ height: "13px", width: "13px" }} color="white" />
-                                </button>
-                                : */}
-                                        <button
-                                            type="submit"
-                                            autoFocus={false}
-                                            title={`Save `}
+                                        {saveBtnloading ? <button
+                                            title={`Save`}
                                             className="btn btn-primary w-md"
-                                            onClick={SaveHandler}
-                                        > <i className="fas fa-save me-2"></i> Save
+                                            autoFocus={false}
+                                        >  Saving.. &nbsp;
+                                            <Spinner style={{ height: "13px", width: "13px" }} color="white" />
                                         </button>
+                                            :
+                                            <button
+                                                type="submit"
+                                                autoFocus={false}
+                                                title={`Save `}
+                                                className="btn btn-primary w-md"
+                                                onClick={SaveHandler}
+                                            > <i className="fas fa-save me-2"></i> Save
+                                            </button>}
                                     </div>
                                     {/* </Col> */}
                                 </FormGroup >}
 
                         </div>
-
-
                     </div>
-
-
                 </CardBody>
             </Card>
         </Modal>

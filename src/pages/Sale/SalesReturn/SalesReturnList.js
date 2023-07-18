@@ -190,11 +190,9 @@ const SalesReturnList = () => {
         })
     }
 
-    function viewBtnFunc(row) {
-        const btnId = row.btnId
-        const confirmId = row.viewId
-        const viewMode = subPageMode
-        dispatch(confirm_SalesReturn_Id({ confirmId, btnId, viewMode }))
+    function viewBtnFunc(config) {
+        config["viewMode"] = subPageMode
+        dispatch(confirm_SalesReturn_Id(config))
     }
 
     const HeaderContent = () => {

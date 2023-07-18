@@ -47,11 +47,11 @@ function* delete_SalesReturn_ID_GenFunc({ config }) {
 }
 
 function* SalesReturn_confirmID_GenFunc({ config }) {
-
+    
     try {
         const response = yield call(apiCall.SalesReturn_SingleGet_API, config);
         response.Data[0]["viewMode"] = config.viewMode;
-        response.Data[0]["ReturnID"] = config.confirmId;
+        response.Data[0]["ReturnID"] = config.editId;
         response.Data[0].ReturnItems.map((index) => {
             index["selectCheck"] = false
             return index
@@ -86,9 +86,11 @@ function* addButton_saleReturn_GenFunc({ config }) {
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
 
-function* sendToSSButton_GenFunc({ config }) {         // Update Order by subPageMode
+function* sendToSSButton_GenFunc({ config }) {  // Update Order by subPageMode
+    const { ReturnItemID } = config.jsonBody
     try {
         const response = yield call(apiCall.Send_To_Superstockiest_button_post_API, config);
+        response["ReturnItemID"] = ReturnItemID
         yield put(action.post_Send_to_superStockiest_Id_Succcess(response))
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }

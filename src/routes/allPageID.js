@@ -128,13 +128,14 @@ export const BANK_LIST = 176
 export const CITY = 200
 export const CITY_LIST = 202
 
-
 export const INVOICE_CONFIGURATION = 206
-
 
 export const BANK_ASSIGN = 182
 
 export const PRODUCT_MARGIN_REPORT = 198
+
+export const DISCOUNT_MASTER = 212
+export const DISCOUNT_LIST = 213
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
