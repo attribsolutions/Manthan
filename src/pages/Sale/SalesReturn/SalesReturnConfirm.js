@@ -24,23 +24,30 @@ const ViewDetails_Modal = () => {
 
 
     }))
- 
+
     useEffect(() => {
+
         try {
             if ((viewData_redux.Status === true)) {
-                setTableArray(viewData_redux.Data[0])// modify Custom Table Data
-                setModal_view(true);
+                if (viewData_redux.Data.length > 0) {
+                    setTableArray(viewData_redux.Data[0])// modify Custom Table Data
+                    setModal_view(true);
+                }
+
             }
         } catch (error) { CommonConsole(error) }
     }, [viewData_redux]);
 
 
     useEffect(() => {
+        debugger
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200)) {
             customAlert({
                 Type: 1,
                 Message: updateMsg.Message,
             })
+            setModal_view(false);
+
         }
     }, [updateMsg])
 
@@ -51,14 +58,12 @@ const ViewDetails_Modal = () => {
 
     const SaveHandler = async (event) => {
 
-        event.preventDefault();
         const btnId = event.target.id
         try {
             const tableItemArray = []
             let inValideUnits = []
-
             tableArray.ReturnItems.forEach(index => {
-                debugger
+
                 const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
                 if (index.ApproveQuantity === "") {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
@@ -125,6 +130,8 @@ const ViewDetails_Modal = () => {
             dataField: "ItemReason",
         },
 
+
+
         {
             text: "Approve Quantity",
             dataField: "Quantity",
@@ -156,14 +163,10 @@ const ViewDetails_Modal = () => {
                 }
             },
         },
-
-
-    ];
-
-    if (tableArray.viewMode === url.SALES_RETURN_LIST) {
-        const Comment = {
+        {
             text: "Comment",
             dataField: "",
+            hidden: tableArray.viewMode === url.PURCHASE_RETURN_LIST ? true : false,
             formatter: (value, row, k) => {
                 return (
                     <div>
@@ -183,11 +186,22 @@ const ViewDetails_Modal = () => {
                 )
             },
 
-        }
-        pagesListColumns.push(Comment)
+        },
 
 
-    }
+    ];
+
+
+
+
+
+
+
+
+
+
+
+
 
     return (
         <Modal
