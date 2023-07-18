@@ -192,12 +192,6 @@ const CommonPurchaseList = (props) => {
     }
   }, [editData]);
 
-
-
-
-
-
-
   function makeBtnHandler(rowData) {
 
     rowData["hasSelect"] = true;
@@ -216,12 +210,6 @@ const CommonPurchaseList = (props) => {
     }
     setmodal_edit(false);
   }
-
-
-
-
-
-
 
   const makeBtnColumn = () => {// ======================== for makeBtnColumn Page Action Button ================================
 
@@ -301,12 +289,12 @@ const CommonPurchaseList = (props) => {
   }
 
   const nonSelectedRow = () => {
-    ;
+    
     var noSelectedIds = [];
 
     if (masterPath === url.SALES_RETURN) {
       noSelectedIds = tableList
-        .filter(row => row.Status === "Send To Supplier")
+        .filter(row => (row.Status === "Send To Supplier")||(row.Status === "Open"))
         .map(row => row.id);
     } else {
       noSelectedIds = tableList
