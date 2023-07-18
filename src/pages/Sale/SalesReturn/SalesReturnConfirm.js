@@ -66,7 +66,7 @@ const ViewDetails_Modal = () => {
             const tableItemArray = []
             let inValideUnits = []
             tableArray.ReturnItems.forEach(index => {
-
+                debugger
                 const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
                 if (index.ApproveQuantity === "") {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
@@ -76,7 +76,7 @@ const ViewDetails_Modal = () => {
                         Item: index.Item,
                         Unit: index.Unit,
                         ApprovedQuantity: Quantity,
-                        ApproveComment: index.Comment,
+                        ApproveComment: index.ApproveComment,
                         Approvedby: loginUserID()
                     }
                     tableItemArray.push(ReturnItems)
@@ -138,6 +138,7 @@ const ViewDetails_Modal = () => {
         {
             text: "Approve Quantity",
             dataField: "Quantity",
+            hidden: tableArray.viewMode === url.PURCHASE_RETURN_LIST ? true : false,
             formatter: (value, row, k) => {
                 if (tableArray.viewMode === url.PURCHASE_RETURN_LIST) {
                     return <div style={{ width: "120px" }}>{`${row.Quantity}`}</div>
@@ -175,14 +176,14 @@ const ViewDetails_Modal = () => {
                     <div>
 
                         <CInput
-                            key={`Comment-${k}`}
-                            id={`Comment-${k}`}
+                            key={`ApproveComment-${k}`}
+                            id={`ApproveComment-${k}`}
                             cpattern={onlyTextRegx}
-                            defaultValue={row.Comment}
+                            defaultValue={row.ApproveComment}
                             autoComplete="off"
                             placeholder="Enter Comment"
                             onChange={(e) => {
-                                row["Comment"] = e.target.value
+                                row["ApproveComment"] = e.target.value
                             }}
                         />
                     </div>
