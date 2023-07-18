@@ -65,7 +65,7 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnFunc(arr, btnId);
     };
 
-    const renderButtonOnClick = ({ rowData, btnmode, btnId, actionFunc, dispatchAction }) => {
+    const renderButtonOnClick = async({ rowData, btnmode, btnId, actionFunc, dispatchAction }) => {
 
         try {
             const config = {
@@ -80,7 +80,17 @@ export const listPageActionsButtonFunc = (props) => {
             if (actionFunc) {
                 actionFunc({ ...config });
             } else {
-                dispatch(dispatchAction({ ...config }));
+                if (btnmode === mode.isdelete) {
+                    let alertRepsponse = await customAlert({
+                        Type: 8,
+                        Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
+                    })
+                    if (alertRepsponse) {
+                        dispatch(dispatchAction({ ...config }));
+                    }
+                } else {
+                    dispatch(dispatchAction({ ...config }));
+                }
             }
         } catch (error) {
             customAlert({
@@ -127,17 +137,17 @@ export const listPageActionsButtonFunc = (props) => {
         const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy");
         const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtnHide;
         const canOrderApproval = oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
-   
+
         const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView;
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
 
-        debugger
+        
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
             if (!condition && !isDummyBtn) return null;
-    
             if (!isDummyBtn) {
+            
                 return (
                     <Button
                         type="button"
@@ -242,7 +252,7 @@ export const listPageActionsButtonFunc = (props) => {
                     iconClass: deleteIconClass,
                     actionFunc: deleteBodyfunc,
                     dispatchAction: deleteActionFun,
-                    title: deleteName,
+                    title: "Delete",
                     buttonClasss: deltBtnCss,
                     isDummyBtn: dummyDisable_Delete
 
@@ -253,7 +263,7 @@ export const listPageActionsButtonFunc = (props) => {
                     iconClass: deleteIconClass,
                     actionFunc: deleteBodyfunc,
                     dispatchAction: deleteActionFun,
-                    title: deleteName,
+                    title: "Delete",
                     buttonClasss: deltBtnCss,
                 })}
                 {renderButtonIfNeeded({
