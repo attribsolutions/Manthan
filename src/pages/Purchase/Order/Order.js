@@ -211,7 +211,7 @@ const Order = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(hasEditVal.OrderAmount)}`))
                 setorderdate(hasEditVal.OrderDate)
 
                 if (subPageMode === url.ORDER_4) {
@@ -231,7 +231,7 @@ const Order = (props) => {
                 setDescription(hasEditVal.Description)
                 editVal = {}
                 editVal = hasEditVal
-                setOrderAmount(hasEditVal.OrderAmount)
+                // setOrderAmount(hasEditVal.OrderAmount)
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
 
                 setpoToDate(hasEditVal.POToDate)
@@ -263,7 +263,7 @@ const Order = (props) => {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             setSelecedItemWiseOrder(true)
             setGoBtnDissable(false)
-            setOrderAmount(0);
+            // setOrderAmount(0);
             setTermsAndConTable([]);
             setorderTypeSelect('');
             setisOpen_assignLink(false)
@@ -938,10 +938,9 @@ const Order = (props) => {
 
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList) {
         const calculate = orderCalculateFunc(row) //order calculation function 
-        row["roundedTotalAmount"] = calculate.roundedTotalAmount
-
-        let sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["roundedTotalAmount"]) || 0), 0);
-        setOrderAmount(sumOfAmount.toFixed(2))
+        row["Amount"] = calculate.roundedTotalAmount
+        let sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
+        // setOrderAmount(sumOfAmount.toFixed(2))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(sumOfAmount)}`))
     };
 
@@ -1008,247 +1007,7 @@ const Order = (props) => {
         dispatch(_act.GoButton_For_Order_Add(config))
     };
 
-    const saveHandler1 = async (event) => {
-        event.preventDefault();
 
-        const btnId = event.target.id
-        const gotoInvoiceMode = btnId.substring(0, 14) === "gotoInvoiceBtn";
-
-        try {
-            const division = _cfunc.loginPartyID();
-            const supplier = supplierSelect.value;
-
-            const validMsg = []
-            const itemArr = []
-            const isVDC_POvalidMsg = []
-
-            let IsComparGstIn = { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
-
-            await orderItemTable.forEach(i => {
-
-                if ((i.Quantity > 0) && !(i.Rate > 0)) {
-                    validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
-                }
-                else if (pageMode === mode.edit) {
-
-                    const ischange = (!(Number(i.edit_Qty) === Number(i.Quantity)) || !(i.edit_Unit_id === i.Unit_id));
-
-                    let isedit = 0
-                    if (ischange && !(i.edit_Qty === 0)) {
-                        isedit = 1
-                    }
-                    orderItemFunc({ i, isedit })
-                }
-                else {
-                    const isedit = 0;
-                    orderItemFunc({ i, isedit })
-                };
-            })
-
-
-            function orderItemFunc({ i, isedit }) {
-
-                i.Quantity = ((i.Quantity === null) || (i.Quantity === undefined)) ? 0 : i.Quantity
-
-                if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
-                    var isdel = false;
-                    isRowValueChanged({ i, isedit, isdel })
-                }
-                else if (!(i.Quantity < 0) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
-                    var isdel = true;
-                    isRowValueChanged({ i, isedit, isdel })
-                }
-                else if (!(i.Quantity < 0) && !(i.editrowId) && !(orderTypeSelect.value === 3)) {
-                    return
-                }
-
-
-
-                else if ((i.Quantity > 0) && (i.Rate > 0)) {//isvdc_po logic
-
-                    if (i.Bom) {
-                        if ((itemArr.length === 0)) {
-                            const isdel = false;
-                            isRowValueChanged({ i, isedit, isdel })
-
-                        } else {
-                            if (isVDC_POvalidMsg.length === 0)
-                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
-                        }
-                    } else {
-                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
-                    }
-                }
-                else if ((i.Quantity < 1) && (i.editrowId)) {
-                    if (i.Bom) {
-                        if ((itemArr.length === 0)) {
-                            const isdel = true;
-                            isRowValueChanged({ i, isedit, isdel })
-
-                        } else {
-                            if (isVDC_POvalidMsg.length === 0)
-                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
-                        }
-                    } else {
-                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
-                    }
-                };
-            }
-            // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
-
-
-            function isRowValueChanged({ i, isedit, isdel }) {
-
-
-                const calculate = orderCalculateFunc(i, IsComparGstIn)
-
-
-                const arr = {
-                    Item: i.Item_id,
-                    Quantity: isdel ? 0 : i.Quantity,
-                    MRP: i.MRP_id,
-                    MRPValue: i.MRPValue,
-                    Rate: i.Rate,
-                    Unit: i.Unit_id,
-                    BaseUnitQuantity: (Number(i.BaseUnitQuantity) * Number(i.Quantity)).toFixed(2),
-                    Margin: "",
-
-                    GST: i.GST_id,
-                    CGST: calculate.CGST_Amount,
-                    SGST: calculate.SGST_Amount,
-                    IGST: calculate.IGST_Amount,
-
-                    GSTPercentage: calculate.GST_Percentage,
-                    CGSTPercentage: calculate.CGST_Percentage,
-                    SGSTPercentage: calculate.SGST_Percentage,
-                    IGSTPercentage: calculate.IGST_Percentage,
-
-                    BasicAmount: calculate.basicAmount,
-                    GSTAmount: calculate.roundedGstAmount,
-                    Amount: calculate.roundedTotalAmount,
-
-                    TaxType: 'GST',
-                    DiscountType: i.DiscountType,
-                    Discount: Number(i.Discount) || 0,
-                    DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
-
-                    IsDeleted: isedit,
-                    Comment: i.Comment
-
-                }
-                itemArr.push(arr)
-            };
-
-            const termsAndCondition = await termsAndConTable.map(i => ({
-                TermsAndCondition: i.value,
-                IsDeleted: i.IsDeleted
-            }))
-
-            if (isVDC_POvalidMsg.length > 0) {
-                customAlert({
-                    Type: 4,
-                    Message: isVDC_POvalidMsg,
-                })
-                return
-            };
-            if (validMsg.length > 0) {
-                customAlert({
-                    Type: 4,
-                    Message: validMsg,
-                })
-
-                return
-            }
-            if (itemArr.length === 0) {
-                customAlert({
-                    Type: 4,
-                    Message: "Please Select 1 Item Quantity",
-                })
-
-                return
-            }
-            if (orderTypeSelect.length === 0) {
-                customAlert({
-                    Type: 4,
-                    Message: "Please Select PO Type",
-                })
-                return
-            }
-            if ((termsAndCondition.length === 0) && !(subPageMode === url.ORDER_2)
-                && !(subPageMode === url.ORDER_4) && !(subPageMode === url.IB_ORDER)
-            ) {
-                customAlert({
-                    Type: 4,
-                    Message: "Please Enter One Terms And Condition",
-                })
-                return
-            }
-
-            const po_JsonBody = {
-                OrderDate: orderdate,
-                OrderAmount: orderAmount,
-                OrderItem: itemArr,
-                Customer: division,
-                Supplier: supplier,
-                OrderType: order_Type.PurchaseOrder,
-                IsConfirm: false  // PO Order then IsConfirm true
-            }
-            const SO_JsonBody = {
-                OrderDate: orderdate,
-                OrderAmount: orderAmount,
-                OrderItem: itemArr,
-                Customer: supplier,// swipe supllier 
-                Supplier: division,// swipe Customer
-                OrderType: order_Type.SaleOrder,
-                IsConfirm: true   // SO Order then IsConfirm true
-            }
-            const IB_JsonBody = {
-                DemandDate: orderdate,
-                DemandAmount: orderAmount,
-                DemandItem: itemArr,
-                Customer: division,
-                Supplier: supplier,
-                OrderType: order_Type.PurchaseOrder,
-            }
-            const comm_jsonBody = {
-                DeliveryDate: deliverydate,
-                Description: description,
-                BillingAddress: billAddr.value,
-                ShippingAddress: shippAddr.value,
-                OrderNo: 1,
-                FullOrderNumber: "PO0001",
-                Division: division,
-                POType: orderTypeSelect.value,
-                POFromDate: orderTypeSelect.value === 1 ? currentDate_ymd : poFromDate,
-                POToDate: orderTypeSelect.value === 1 ? currentDate_ymd : poToDate,
-                CreatedBy: _cfunc.loginUserID(),
-                UpdatedBy: _cfunc.loginUserID(),
-                OrderTermsAndConditions: termsAndCondition
-            };
-
-
-            let jsonBody;   //json body decleration 
-            if (subPageMode === url.IB_ORDER) {
-                jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
-            }
-            else if (subPageMode === url.ORDER_4) {
-                jsonBody = JSON.stringify({ ...comm_jsonBody, ...SO_JsonBody });
-            }
-            else {
-                jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
-            }
-            // +*********************************
-
-            if (pageMode === mode.edit) {
-                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
-
-            } else {
-
-                dispatch(_act.saveOrderAction({ jsonBody, subPageMode, gotoInvoiceMode }))
-            }
-
-        } catch (e) { _cfunc.CommonConsole("order_save_", e) }
-    }
 
     // Function to handle the form submission
     const saveHandler = async (event) => {
@@ -1266,10 +1025,11 @@ const Order = (props) => {
             const validationMessages = []; // Stores validation messages for items
             const orderItems = []; // Stores processed order items
             const vdcPoValidationMessages = []; // Stores VDC-PO validation messages
-            
+            let sumOfOrderAmount = 0;//total grand total amount
+
             // Loop through the order items
             await orderItemTable.forEach(item => {
-               
+
                 // Check for item quantity and rate validity
                 if ((item.Quantity > 0) && !(item.Rate > 0)) {
                     validationMessages.push({ [item.ItemName]: "This Item Rate Is Required..." });
@@ -1293,11 +1053,13 @@ const Order = (props) => {
                     const isEdit = 0;
                     processOrderItem({ item, isEdit });
                 }
+                sumOfOrderAmount += Number(item["Amount"])//total grand total amount
+
             });
 
             // Function to handle order items
             function processOrderItem({ item, isEdit }) {
-               
+
                 // Handle quantity for null or undefined values
                 item.Quantity = !Number(item.Quantity) ? 0 : item.Quantity;
 
@@ -1346,7 +1108,7 @@ const Order = (props) => {
 
             // Function to handle value changes in order items
             function processValueChanged({ item, isEdit, isDelete }) {
-               
+
                 const calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() });
 
                 // Create an object for the order item
@@ -1386,6 +1148,7 @@ const Order = (props) => {
                 TermsAndCondition: item.value,
                 IsDeleted: item.IsDeleted
             }));
+
 
             // Check for any validation errors
             if (vdcPoValidationMessages.length > 0) {
@@ -1428,7 +1191,7 @@ const Order = (props) => {
 
             const po_JsonBody = {
                 OrderDate: orderdate,
-                OrderAmount: orderAmount,
+                OrderAmount: sumOfOrderAmount,
                 OrderItem: orderItems,
                 Customer: division,
                 Supplier: supplier,
@@ -1437,7 +1200,7 @@ const Order = (props) => {
             }
             const SO_JsonBody = {
                 OrderDate: orderdate,
-                OrderAmount: orderAmount,
+                OrderAmount: sumOfOrderAmount,
                 OrderItem: orderItems,
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
@@ -1446,7 +1209,7 @@ const Order = (props) => {
             }
             const IB_JsonBody = {
                 DemandDate: orderdate,
-                DemandAmount: orderAmount,
+                DemandAmount: sumOfOrderAmount,
                 DemandItem: orderItems,
                 Customer: division,
                 Supplier: supplier,

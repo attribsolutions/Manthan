@@ -32,14 +32,12 @@ import {
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
 
 const InvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const systemSetting = _cfunc.loginSystemSetting();
 
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
@@ -216,7 +214,7 @@ const InvoiceList = () => {
     });
 
     function downBtnFunc(config) {
-        
+
         config["ReportType"] = report.invoice ;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config))
     }
