@@ -24,7 +24,7 @@ const ViewDetails_Modal = () => {
     }))
 
     useEffect(() => {
-        
+        debugger
         try {
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
@@ -64,7 +64,7 @@ const ViewDetails_Modal = () => {
             const tableItemArray = []
             let inValideUnits = []
             tableArray.ReturnItems.forEach(index => {
-                
+
                 const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
                 if (index.ApproveQuantity === "") {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
@@ -80,7 +80,7 @@ const ViewDetails_Modal = () => {
                     tableItemArray.push(ReturnItems)
                 }
             })
-            
+
             const jsonBody = JSON.stringify({
                 ReturnID: viewData_redux.Data[0].ReturnID,
                 ReturnItem: tableItemArray
@@ -243,6 +243,7 @@ const ViewDetails_Modal = () => {
                                             <button
                                                 type="submit"
                                                 autoFocus={false}
+                                                disabled={tableArray.IsApproved ? true : false}
                                                 title={`Save `}
                                                 className="btn btn-primary w-md"
                                                 onClick={SaveHandler}
