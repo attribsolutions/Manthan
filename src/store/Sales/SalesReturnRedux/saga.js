@@ -47,11 +47,11 @@ function* delete_SalesReturn_ID_GenFunc({ config }) {
 }
 
 function* SalesReturn_confirmID_GenFunc({ config }) {
-
+    debugger
     try {
         const response = yield call(apiCall.SalesReturn_SingleGet_API, config);
         response.Data[0]["viewMode"] = config.viewMode;
-        response.Data[0]["ReturnID"] = config.confirmId;
+        response.Data[0]["ReturnID"] = config.editId;
         response.Data[0].ReturnItems.map((index) => {
             index["selectCheck"] = false
             return index
