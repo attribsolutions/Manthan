@@ -51,7 +51,7 @@ const PurchaseReturnMode3 = (props) => {
     const [subPageMode] = useState(history.location.pathname)
     const [tableData, setTableData] = useState([]);
     const [returnItemIDs, setReturnItemIDs] = useState("");
-   
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         sendToSSbtnTableData,
@@ -71,7 +71,7 @@ const PurchaseReturnMode3 = (props) => {
 
     useEffect(() => {
         if (sendToSSbtnTableData.Status === true) {
-            
+
             const { Data = [] } = sendToSSbtnTableData;
 
             let grand_total = 0;
@@ -81,8 +81,14 @@ const PurchaseReturnMode3 = (props) => {
                 item["roundedTotalAmount"] = calculate.roundedTotalAmount
                 grand_total += Number(calculate.roundedTotalAmount);
 
-                return { ...item, id: index + 1, tableBatchDate: _cfunc.date_dmy_func(item.BatchDate) };
-            })
+                return {
+                    ...item, id: index + 1,
+                    salesQuantity: item.Quantity,
+                    Quantity: item.ApprovedQuantity,
+                    tableBatchDate: _cfunc.date_dmy_func(item.BatchDate)
+                };
+            });
+            
             setTableData(UpdatedTableData);
             dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${grand_total}`))
             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
@@ -172,7 +178,6 @@ const PurchaseReturnMode3 = (props) => {
                                 autoComplete="off"
                                 type="text"
                                 cpattern={decimalRegx}
-                                // placeholder="Enter Quantity"
                                 className="col col-sm text-end"
                                 onChange={(event) => {
                                     row.Quantity = event.target.value;
@@ -284,7 +289,7 @@ const PurchaseReturnMode3 = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id;
         let grand_total = 0;
@@ -301,6 +306,7 @@ const PurchaseReturnMode3 = (props) => {
             .map(item => ({ SubReturn: parseInt(item.trim()) }));
 
         const ReturnItems = tableData.map((i) => {
+            
 
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
@@ -352,7 +358,7 @@ const PurchaseReturnMode3 = (props) => {
                 PurchaseReturnReferences: PurchaseReturnReferences,
                 ReturnItems: ReturnItems,
             });
-            
+
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
