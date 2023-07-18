@@ -131,6 +131,8 @@ export const BANK_LIST = "/BankList"
 
 export const PRODUCT_MARGIN_REPORT = "/ProductMarginReport"
 
+export const DISCOUNT_MASTER = "/Discount_Master"
+export const DISCOUNT_LIST = "/Discount_List"
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"

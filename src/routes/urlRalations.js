@@ -131,6 +131,9 @@ export const RetailerList = url.RETAILER_MASTER
 
 export const ProductMarginReport = url.PRODUCT_MARGIN_REPORT
 
+export const DiscountMaster = url.DISCOUNT_LIST
+export const DiscountList = url.DISCOUNT_MASTER
+
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1
@@ -199,7 +202,8 @@ export const Invoice_1 = url.INVOICE_LIST_1
 
 export const Loading_Sheet_List = url.LOADING_SHEET
 export const Loading_Sheet = url.LOADING_SHEET_LIST
-export const LoadingSheetUpdate = url.LOADING_SHEET_LIST
+export const Loading_Sheet_List_Update = url.LOADING_SHEET_LIST
+export const BulkRecipt = url.LOADING_SHEET_LIST
 
 export const SalesReturn = url.SALES_RETURN_LIST
 export const SalesReturnList = url.SALES_RETURN
