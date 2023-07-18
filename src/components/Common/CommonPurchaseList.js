@@ -366,7 +366,7 @@ const CommonPurchaseList = (props) => {
           </PaginationProvider>
           {
 
-            ((tableList.length > 0) && (selectCheckParams.isShow)) ?
+            ((tableList.length > 0) && (selectCheckParams.isShow) && (selectCheckParams.isRoleAccess)) ?
 
               <div className="row save1 " style={{ paddingBottom: 'center' }}>
                 <button
