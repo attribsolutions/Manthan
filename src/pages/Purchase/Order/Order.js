@@ -1053,7 +1053,7 @@ const Order = (props) => {
                     const isEdit = 0;
                     processOrderItem({ item, isEdit });
                 }
-                sumOfOrderAmount += Number(item["Amount"])//total grand total amount
+                sumOfOrderAmount = (Number(sumOfOrderAmount) + Number(item["Amount"])).toFixed(2) //total grand total amount
 
             });
 
