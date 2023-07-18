@@ -11,7 +11,6 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, onlyNumberRegx, onlyTextRegx } from "../../../CustomValidateForm";
 import { url } from "../../../routes";
 
-
 const ViewDetails_Modal = () => {
 
     const dispatch = useDispatch()
@@ -22,14 +21,10 @@ const ViewDetails_Modal = () => {
         viewData_redux: state.SalesReturnReducer.confirmBtnData, // modify Redux State
         updateMsg: state.SalesReturnReducer.updateMsg,// modify Redux State
         saveBtnloading: state.SalesReturnReducer.saveBtnloading // modify Redux State
-
-
-
-
     }))
 
     useEffect(() => {
-        debugger
+        
         try {
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
@@ -69,7 +64,7 @@ const ViewDetails_Modal = () => {
             const tableItemArray = []
             let inValideUnits = []
             tableArray.ReturnItems.forEach(index => {
-                debugger
+                
                 const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
                 if (index.ApproveQuantity === "") {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
@@ -84,9 +79,8 @@ const ViewDetails_Modal = () => {
                     }
                     tableItemArray.push(ReturnItems)
                 }
-
             })
-            debugger
+            
             const jsonBody = JSON.stringify({
                 ReturnID: viewData_redux.Data[0].ReturnID,
                 ReturnItem: tableItemArray
@@ -100,9 +94,7 @@ const ViewDetails_Modal = () => {
 
             } else {
                 dispatch(returnApprove({ jsonBody, btnId }));
-
             }
-
 
         } catch (e) { }
     };
@@ -118,7 +110,6 @@ const ViewDetails_Modal = () => {
             formatter: (value, row, k) => {
                 return <div style={{ width: "120px" }}>{`${row.Quantity}${row.UnitName}`}</div>
             }
-
         },
         {
             text: "Basic Rate",
@@ -138,8 +129,6 @@ const ViewDetails_Modal = () => {
             text: "NOC",
             dataField: "ItemReason",
         },
-
-
 
         {
             text: "Approve Quantity",
@@ -197,21 +186,7 @@ const ViewDetails_Modal = () => {
             },
 
         },
-
-
     ];
-
-
-
-
-
-
-
-
-
-
-
-
 
     return (
         <Modal
@@ -278,11 +253,7 @@ const ViewDetails_Modal = () => {
                                 </FormGroup >}
 
                         </div>
-
-
                     </div>
-
-
                 </CardBody>
             </Card>
         </Modal>

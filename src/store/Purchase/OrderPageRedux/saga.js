@@ -268,7 +268,7 @@ function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageM
 }
 
 function* OrderSingleGet_GenFunc({ config }) {
-  debugger
+  
 
   try {
     const response = yield call(OrderPage_Edit_ForDownload_API, config);

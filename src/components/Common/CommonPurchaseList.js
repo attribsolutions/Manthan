@@ -95,7 +95,7 @@ const CommonPurchaseList = (props) => {
     },
     selectCheckParams = { isShow: false }
   } = props;
-  
+
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
@@ -301,8 +301,20 @@ const CommonPurchaseList = (props) => {
   }
 
   const nonSelectedRow = () => {
-    return tableList.filter(row => row.forceSelectDissabled ).map(row => row.id)       //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
-  }
+    ;
+    var noSelectedIds = [];
+
+    if (masterPath === url.SALES_RETURN) {
+      noSelectedIds = tableList
+        .filter(row => row.Status === "Send To Supplier")
+        .map(row => row.id);
+    } else {
+      noSelectedIds = tableList
+        .filter(row => row.forceSelectDissabled)
+        .map(row => row.id);
+    }
+    return noSelectedIds;
+  };
 
   if (!(userAccState === "")) {
 

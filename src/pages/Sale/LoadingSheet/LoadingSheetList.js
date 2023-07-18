@@ -99,7 +99,7 @@ const LoadingSheetList = () => {
     }
 
     function downBtnFunc(config) {
-        debugger
+        
         if (config.btnmode === "MultiInvoice") {
             config["ReportType"] = report.invoiceA5
             config["systemSetting"] = systemSetting
@@ -111,7 +111,7 @@ const LoadingSheetList = () => {
     }
 
     const otherBtn_1Func = (list) => {
-        debugger
+        
         dispatch(UpdateLoadingSheet({ RowId: list.rowData.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
 
