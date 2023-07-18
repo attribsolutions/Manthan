@@ -84,8 +84,8 @@ export default InvioceReporta5;
 // fetch("https://pro.mastersindia.co/Einvoiceapis/printQRCode/64a40ecd34dca9247dfa923e", requestOptions)
 //     .then(response => response.text())
 //     .then(result => {
-//         debugger;
+//         ;
 //     })
 //     .catch(error => {
-//         debugger;
+//         ;
 //     });

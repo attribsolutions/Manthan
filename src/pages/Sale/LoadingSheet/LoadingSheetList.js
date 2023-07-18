@@ -11,7 +11,7 @@ import {
     DeleteLoadingSheetSucccess,
     LoadingSheetListAction,
     UpdateLoadingSheet,
-    
+
 } from "../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
@@ -29,6 +29,8 @@ const LoadingSheetList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func()
+    const systemSetting = _cfunc.loginSystemSetting();
+
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [pageMode] = useState(mode.defaultList);
@@ -36,7 +38,7 @@ const LoadingSheetList = () => {
     const reducers = useSelector(
         (state) => ({
             loading: state.LoadingSheetReducer.loading,
-            listBtnLoading: state.LoadingSheetReducer.listBtnLoading,
+            listBtnLoading: (state.LoadingSheetReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
             deleteMsg: state.LoadingSheetReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -96,18 +98,21 @@ const LoadingSheetList = () => {
         setHeaderFilters(newObj)
     }
 
-    function downBtnFunc(row, downbtnType) {
-        if (downbtnType === "IsMultipleInvoicePrint") {
-            let ReportType = report.invoiceA5
-            dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id, Data))
+    function downBtnFunc(config) {
+        debugger
+        if (config.btnmode === "MultiInvoice") {
+            config["ReportType"] = report.invoiceA5
+            config["systemSetting"] = systemSetting
+            dispatch(getpdfReportdata(MultipleInvoice_API, config))
         } else {
-            let ReportType = report.VanLoadingPartyWiseInvoice
-            dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
+            config["ReportType"] = report.VanLoadingPartyWiseInvoice
+            dispatch(getpdfReportdata(LoadingSheet_API, config))
         }
     }
 
     const otherBtn_1Func = (list) => {
-        dispatch(UpdateLoadingSheet({ RowId: list.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
+        debugger
+        dispatch(UpdateLoadingSheet({ RowId: list.rowData.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
 
     return (

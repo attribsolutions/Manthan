@@ -34,7 +34,9 @@ export const columnsWithIGST = [
 export const Footercolumn = [
     "",
 ]
-
+export const INR_NO = [
+    "INR_NO",
+]
 export const BilledBy = [
     "Billed by",
 ]
@@ -79,7 +81,6 @@ export const Rows = (data) => {
             accumulator[key].BatchCode += BatchCode;
             accumulator[key].BatchDate += BatchDate;
             accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
-
         } else {
             accumulator[key] = {
                 ItemName, HSNCode,
@@ -90,15 +91,15 @@ export const Rows = (data) => {
     }, {});
 
     Object.values(groupedItems).forEach((element, key) => {
-
+        
         let HSNcodes = ""
-        if (data.SettingData.HSNCodeDigit.Value === "1") {
+        if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "2") {
+        if (data.SettingData.HSNCodeDigit === "2") {
             HSNcodes = element.HSNCode.slice(0, 6);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "3") {
+        if (data.SettingData.HSNCodeDigit === "3") {
             HSNcodes = element.HSNCode.slice(0, 8);
         }
 
@@ -189,7 +190,7 @@ export const Rows = (data) => {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
-        if (data.SettingData.ShowBatchNoOnInvoicePrint.Value === "1") {
+        if (data.SettingData.ShowBatchNoOnInvoicePrint === "1") {
             returnArr.push((BatchRow))
         }
 
@@ -211,7 +212,6 @@ export const RowsWithIGST = (data) => {
     let totalAmount = 0
     let totalQuantity = 0
     let SrNO = 1
-    let TotalGst = 0
     let GSTPercentage = 0
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
@@ -242,13 +242,13 @@ export const RowsWithIGST = (data) => {
     Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
-        if (data.SettingData.HSNCodeDigit.Value === "1") {
+        if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "2") {
+        if (data.SettingData.HSNCodeDigit === "2") {
             HSNcodes = element.HSNCode.slice(0, 6);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "3") {
+        if (data.SettingData.HSNCodeDigit === "3") {
             HSNcodes = element.HSNCode.slice(0, 8);
         }
 
@@ -329,7 +329,7 @@ export const RowsWithIGST = (data) => {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
-        if (data.SettingData.ShowBatchNoOnInvoicePrint.Value === "1") {
+        if (data.SettingData.ShowBatchNoOnInvoicePrint === "1") {
             returnArr.push((BatchRow))
         }
 
@@ -401,17 +401,14 @@ export const DetailsOfTransportRow = (data) => {
     if (data.InvoiceUploads.length > 0) {
         EwayData = data.InvoiceUploads[0]
     }
-
-
-
-    debugger
+    
     var DetailsOfTransportArray = [
 
         [` PO Number:${OrderNumber}`],
         [data.DriverName === null ? "Driver Name:" : `Driver Name :${data.DriverName}`],
-        [`vehical No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
-        [`E-way Bill : ${EwayData.EwayBillNo === (undefined || null) ? "" : EwayData.EwayBillNo}`],
-        [`IRN NO :${EwayData.AckNo === (undefined || null) ? "" : EwayData.AckNo}`]
+        [`vehicle No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
+        [`E-way Bill : ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
+        [`IRN NO :${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]
 
     return DetailsOfTransportArray;
@@ -430,6 +427,21 @@ export const BankRow = (data) => {
     return reportArray;
 }
 
+
+export const IRNNumberRow = (data) => {
+
+    if (data.isQR) {
+        const IRN_No = (data.InvoiceUploads[0].Irn === null ? "" : data.InvoiceUploads[0].Irn)
+
+
+        var IRNNumberArray = [
+            [`IRN No :${IRN_No}`],
+        ]
+
+    }
+
+    return IRNNumberArray;
+}
 
 
 

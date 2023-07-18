@@ -2,76 +2,35 @@
 import cbm_logo from "../../assets/images/cbm_logo.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
-import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
 import * as table from './TableData'
+
 let initial_y = 0
+
 export const pageBorder = (doc) => {
+
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
     doc.line(30, 815, 30, 16);//vertical line (left)
     doc.line(570, 815, 570, 16);//vertical line (Right)
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
-export const pageHeder = async (doc, data) => {
-    if (data.InvoiceUploads.length > 0) {
-        const url = data.InvoiceUploads[0].QRCodeUrl
-        let desiredPart = null;
-        debugger
-        try {
-            const urlObject = new URL(url);
-            desiredPart = urlObject.pathname;
-        } catch (error) {
-            console.error("Invalid URL:", error);
-        }
+export const pageHeder = (doc, data) => {
 
-        if (desiredPart) {
-            console.log(desiredPart);
-        } else {
-            console.log("Unable to extract the desired part from the URL.");
-        }
+    // doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
+    doc.setDrawColor(0, 0, 0);
+    doc.line(408, 63, 408, 16);//vertical right 1
+    doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
+    doc.addFont("Arial", 'Normal')
+    doc.setFont('Arial')
 
-        doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
-        doc.setDrawColor(0, 0, 0);
-        doc.line(408, 63, 408, 16);//vertical right 1
-        doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
-        doc.addFont("Arial", 'Normal')
-        doc.setFont('Arial')
+    doc.setFontSize(18)
+    if (data.isQR) {
+        doc.text('TAX INVOICE', 160, 55,)
 
-        doc.setFontSize(18)
-        if (data.isQR) {
-            doc.text('TAX INVOICE', 160, 55,)
-
-        } else {
-            doc.text('TAX INVOICE', 200, 45,)
-        }
-
-        await doc.addImage(`/E_invoiceQRCode${desiredPart}`, 'JPEG', 323, 18, 83, 83)
     } else {
-        doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
-        doc.setDrawColor(0, 0, 0);
-        doc.line(408, 63, 408, 16);//vertical right 1
-        doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
-        doc.addFont("Arial", 'Normal')
-        doc.setFont('Arial')
-
-        doc.setFontSize(18)
-        if (data.isQR) {
-            doc.text('TAX INVOICE', 160, 55,)
-
-        } else {
-            doc.text('TAX INVOICE', 200, 45,)
-        }
-
-
+        doc.text('TAX INVOICE', 200, 45,)
     }
-
-
-
-
-
-
-
 
 }
 
@@ -195,13 +154,48 @@ export const reportHeder1 = (doc, data) => {
 
     };
 
-    // let initial_y = 0
     const priLength = () => {
         let final_y = doc.previousAutoTable.finalY
         if (final_y > initial_y) {
             initial_y = final_y
         }
 
+    }
+
+    let IRNNumberDetails = {
+        margin: {
+            top: 45, left: 408, right: 35,
+        },
+        showHead: 'always',
+        theme: 'grid',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 162,
+                halign: 'lfet',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: 50,
+
+    };
+    if (data.isQR) {
+        doc.autoTable(table.INR_NO, table.IRNNumberRow(data), IRNNumberDetails);
     }
 
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
@@ -406,7 +400,7 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(8)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-         of the nature and quantity which it/these purports to be `, 34, 782,)
+         of the nature and quantity which it/these purports to be `, 34, 782)
     doc.setFontSize(10)
     doc.text(`Signature `, 280, 810,)
     doc.text(`Prepared by :${data.PartyName} `, 35, 810,)

@@ -21,7 +21,6 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
-import OrderView from "../../pages/Purchase/Order/OrderView";
 
 let searchCount = 0;
 
@@ -58,6 +57,7 @@ export async function isAlertFunc(type, Msg) {
 }
 
 const CommonPurchaseList = (props) => {
+
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -93,10 +93,9 @@ const CommonPurchaseList = (props) => {
     HeaderContent = () => {
       return null;
     },
-
-    selectAllRow = ''
+    selectCheckParams = { isShow: false }
   } = props;
-
+  
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
@@ -302,7 +301,7 @@ const CommonPurchaseList = (props) => {
   }
 
   const nonSelectedRow = () => {
-    return tableList.filter(row => row.forceSelectDissabled || row.forceHideOrderAprovalBtn === false).map(row => row.id)       //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
+    return tableList.filter(row => row.forceSelectDissabled ).map(row => row.id)       //  row.forceHideOrderAprovalBtn condition  for order approve  checked box disable
   }
 
   if (!(userAccState === "")) {
@@ -330,7 +329,9 @@ const CommonPurchaseList = (props) => {
                             keyField={"id"}
                             responsive
                             bordered={false}
-                            selectRow={selectAllRow ? selectAllCheck(rowSelected(), nonSelectedRow(), "left", "Confirm") : undefined}
+                            selectRow={selectCheckParams.isShow ?
+                              selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
+                              : undefined}
                             defaultSorted={defaultSorted}
                             striped={true}
                             classes={"table  table-bordered table-hover"}
@@ -365,19 +366,20 @@ const CommonPurchaseList = (props) => {
           </PaginationProvider>
           {
 
-            ((tableList.length > 0) && (typeof selectAllRow === 'function')) &&
+            ((tableList.length > 0) && (selectCheckParams.isShow) && (selectCheckParams.isRoleAccess)) ?
 
-            <div className="row save1 " style={{ paddingBottom: 'center' }}>
-              <button
-                disabled={listBtnLoading}
-                style={{ marginTop: "-10px" }}
-                type="button"
-                className="btn btn-primary w-md  "
-                onClick={() => { selectAllRow(tableList) }}
-              >
-                <i class="fas fa-edit me-2"></i>{"Confirm"}
-              </button>
-            </div>
+              <div className="row save1 " style={{ paddingBottom: 'center' }}>
+                <button
+                  disabled={listBtnLoading}
+                  style={{ marginTop: "-10px" }}
+                  type="button"
+                  className="btn btn-primary w-md  "
+                  onClick={() => { selectCheckParams.selectSaveBtnHandler(tableList) }}
+                >
+                  <i class="fas fa-edit me-2"></i>{selectCheckParams.selectSaveBtnLabel}
+                </button>
+              </div>
+              : null
           }
 
           <Modal

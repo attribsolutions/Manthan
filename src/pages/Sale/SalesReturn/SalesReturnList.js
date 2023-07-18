@@ -13,10 +13,13 @@ import { initialFiledFunc } from "../../../components/Common/validationFunction"
 import { GetVenderSupplierCustomer, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import SalesReturn from "./SalesReturn";
-import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
+import { confirm_SalesReturn_Id, delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, post_Send_to_superStockiest_Id, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
+import SalesReturnView_Modal from "./SalesReturnConfirm";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+
 
 const SalesReturnList = () => {
 
@@ -33,7 +36,8 @@ const SalesReturnList = () => {
 
     const [pageMode, setPageMode] = useState(mode.defaultList)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', });
+    const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', buttonMsgLable: '' });
+    const [PurchaseReturnMode_3_Access, setPurchaseReturnMode_3_Access] = useState(false)
     let customerdropdownLabel = subPageMode === url.SALES_RETURN_LIST ? "Customer" : "Supplier"
 
     const reducers = useSelector(
@@ -42,8 +46,8 @@ const SalesReturnList = () => {
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             listBtnLoading: state.SalesReturnReducer.listBtnLoading,
             tableList: state.SalesReturnReducer.salesReturnList,
+            sendToSSbtnTableData: state.SalesReturnReducer.sendToSSbtnTableData,
             deleteMsg: state.SalesReturnReducer.deleteMsg,
-            postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -51,15 +55,24 @@ const SalesReturnList = () => {
         })
     );
 
-    const { pageField, RetailerList, supplier } = reducers;
+    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess } = reducers;
     const values = { ...state.values }
 
     const action = {
         getList: salesReturnListAPI,
         deleteId: delete_SalesReturn_Id,
-        postSucc: postMessage,
         deleteSucc: delete_SalesReturn_Id_Succcess
     }
+
+    // userAccess useEffect
+    useEffect(() => {
+
+        userAccess.find((index) => {
+            if (index.id === pageId.PURCHASE_RETURN_MODE_3) {
+                return setPurchaseReturnMode_3_Access(true)
+            }
+        });
+    }, [userAccess])
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -67,29 +80,46 @@ const SalesReturnList = () => {
         let page_Mode = mode.defaultList;
         let masterPath = '';
         let newBtnPath = false;
+        let buttonMsgLable = '';
 
         if (subPageMode === url.PURCHASE_RETURN_LIST) {
             page_Id = pageId.PURCHASE_RETURN_LIST
             masterPath = url.PURCHASE_RETURN
             newBtnPath = url.PURCHASE_RETURN
+            buttonMsgLable = "Purchase Return"
         }
         else if (subPageMode === url.SALES_RETURN_LIST) {
             page_Id = pageId.SALES_RETURN_LIST;
             masterPath = url.SALES_RETURN
             newBtnPath = url.SALES_RETURN
+            buttonMsgLable = "Sales Return"
         }
         setPageMode(page_Mode)
         setSubPageMode(subPageMode)
-        setOtherState({ masterPath, newBtnPath })
+        setOtherState({ masterPath, newBtnPath, buttonMsgLable })
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Sales Return Count"} :0`))
+        // dispatch(BreadcrumbShowCountlabel(`${otherState.buttonMsgLable}Count :0`))
         goButtonHandler(true)
+        return () => {
+            dispatch(salesReturnListAPISuccess([]))
+        }
     }, []);
 
+
     useEffect(() => {
-        dispatch(salesReturnListAPISuccess([]))
-    }, [])
+
+        if ((sendToSSbtnTableData.Status === true) && (sendToSSbtnTableData.StatusCode === 200)) {
+            history.push({
+                pathname: url.PURCHASE_RETURN_MODE_3
+            })
+        }
+    }, [sendToSSbtnTableData])
+
+    // useEffect(() => {
+    //     let countlabel = subPageMode === url.PURCHASE_RETURN_LIST ? "Purchase Return Count" : "Sales Return Count"
+    //     dispatch(BreadcrumbShowCountlabel(`${countlabel} :0`))
+    // }, [subPageMode])
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
@@ -100,7 +130,6 @@ const SalesReturnList = () => {
         dispatch(Retailer_List(jsonBody));
         dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
     }, []);
-
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -123,7 +152,6 @@ const SalesReturnList = () => {
     });
 
     function goButtonHandler() {
-
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
@@ -154,13 +182,19 @@ const SalesReturnList = () => {
     }
 
     function CustomerOnChange(e) {
-
         setState((i) => {
             const a = { ...i }
             a.values.Customer = e;
             a.hasValid.Customer.valid = true
             return a
         })
+    }
+
+    function viewBtnFunc(row) {
+        const btnId = row.btnId
+        const confirmId = row.viewId
+        const viewMode = subPageMode
+        dispatch(confirm_SalesReturn_Id({ confirmId, btnId, viewMode }))
     }
 
     const HeaderContent = () => {
@@ -223,6 +257,21 @@ const SalesReturnList = () => {
         )
     }
 
+    const selectSaveBtnHandler = (row = []) => {
+
+        let ischeck = row.filter(i => (i.selectCheck))
+        if (!ischeck.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: "Please Select One Checkbox",
+            });
+            return
+        }
+        let idString = ischeck.map(obj => obj.id).join(',')
+        let jsonBody = { ReturnItemID: idString }
+        dispatch(post_Send_to_superStockiest_Id({ jsonBody }))
+    }
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -236,15 +285,25 @@ const SalesReturnList = () => {
                             masterPath={otherState.masterPath}
                             newBtnPath={otherState.newBtnPath}
                             pageMode={pageMode}
+                            viewBtnFunc={viewBtnFunc}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
-                            ButtonMsgLable={"SalesReturn"}
+                            ButtonMsgLable={otherState.buttonMsgLable}
                             deleteName={"FullReturnNumber"}
+
+                            selectCheckParams={{
+                                isRoleAccess: (PurchaseReturnMode_3_Access),
+                                isShow: (subPageMode === url.SALES_RETURN_LIST),
+                                selectSaveBtnHandler: selectSaveBtnHandler,
+                                selectSaveBtnLabel: "Send To Superstockiest",
+                                selectHeaderLabel: "Select",
+                            }}
 
                         />
                         : null
                 }
             </div>
+            <SalesReturnView_Modal />
         </React.Fragment>
     )
 }

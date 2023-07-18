@@ -72,7 +72,8 @@ const OrderList = () => {
                 || state.PdfReportReducers.listBtnLoading
                 || state.OrderReducer.orderConfirmLoading
                 || state.InvoiceReducer.listBtnLoading
-                || state.GRNReducer.listBtnLoading),
+                || state.GRNReducer.listBtnLoading
+                || state.PdfReportReducers.ReportBtnLoading),
         })
     );
 
@@ -271,11 +272,12 @@ const OrderList = () => {
         label: index.Name,
     }));
 
-    function oderAprovalBtnFunc(rowData, ismode, btnId) {
-        _cfunc.btnIsDissablefunc({ btnId, state: false })
+    function oderAprovalBtnFunc({editId, btnId}) {
+      
+        // _cfunc.btnIsDissablefunc({ btnId, state: false })
         let config = {}
         config.btnId = btnId;
-        config.orderId = rowData.id;
+        config.orderId = editId;
         dispatch(getOrderApprovalDetailAction(config))
     }
 
@@ -378,16 +380,13 @@ const OrderList = () => {
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
-    function downBtnFunc(row, printType, btnId) {
-
-        var ReportType = report.order1;
-        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, btnId))
+    function downBtnFunc(config) {
+        config["ReportType"] = report.order1;
+        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
     }
 
-    function viewBtnFunc(row) {
-        const btnId = row.btnId
-        const viewId = row.viewId
-        dispatch(_act.viewOrderSingleget({ viewId, btnId }))
+    function viewBtnFunc(config) {
+        dispatch(_act.viewOrderSingleget(config))
     }
 
 
@@ -481,7 +480,7 @@ const OrderList = () => {
             return a
         })
     }
-    const selectAllRowFunc = (row = []) => {
+    const selectSaveBtnHandler = (row = []) => {
 
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
@@ -616,7 +615,13 @@ const OrderList = () => {
                             MasterModal={Order}
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
-                            selectAllRow={(subPageMode === url.ORDER_LIST_4) && selectAllRowFunc}
+                            selectCheckParams={{
+                                isRoleAccess: (true),
+                                isShow: subPageMode === url.ORDER_LIST_4,
+                                selectSaveBtnHandler: selectSaveBtnHandler,
+                                selectSaveBtnLabel: "Confirm",
+                                selectHeaderLabel: "Confirm"
+                            }}
                         />
                         : null
                 }

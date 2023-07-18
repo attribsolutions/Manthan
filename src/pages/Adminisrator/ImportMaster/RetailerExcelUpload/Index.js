@@ -139,7 +139,7 @@ const RetailerExcelUpload = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        debugger
+        
         if ((partyTypes.length > 0)) {
             let isRetailer = partyTypes.find(i => (i.IsRetailer))
             if (!(isRetailer === undefined)) {
@@ -259,7 +259,7 @@ const RetailerExcelUpload = (props) => {
 
 
     const uploadSaveHandler = (event) => {
-        debugger
+        
         let validMsg = []
         if ((partySelect === "")) {
             validMsg.push({ Msg: "Please Select Party." })

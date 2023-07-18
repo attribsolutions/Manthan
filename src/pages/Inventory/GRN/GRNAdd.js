@@ -335,7 +335,7 @@ const GRNAdd = (props) => {
         },
 
         {  //-------------Rate column ----------------------------------
-            text: "Rate",
+            text:"Basic Rate",
             dataField: "",
             formatter: (value, row, k) => {
                 if (row.Rate === undefined) { row["Rate"] = 0 }

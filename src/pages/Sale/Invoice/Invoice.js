@@ -109,13 +109,12 @@ const Invoice = (props) => {
         customer: state.CommonAPI_Reducer.customer,
         gobutton_Add: state.InvoiceReducer.gobutton_Add,
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
-        PartySettingdata: state.PartySettingReducer.PartySettingdata,
         VehicleNumber: state.VehicleReducer.VehicleList,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         goBtnloading: state.InvoiceReducer.goBtnloading,
     }));
-    const { Data = {} } = PartySettingdata;
+
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 
@@ -129,7 +128,6 @@ const Invoice = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
-        // dispatch(getpartysetting_API(_cfunc.loginPartyID()))
         dispatch(getVehicleList())
 
     }, []);
@@ -158,8 +156,8 @@ const Invoice = (props) => {
 
             if (postMsg.SaveAndDownloadPdfMode) {
 
-                var ReportType = Data.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
-                dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: postMsg.InvoiceID }, Data))
+                var ReportType = systemSetting.A4Print === "1" ? report.invoice : report.invoiceA5;
+                dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: postMsg.InvoiceID }, systemSetting))
                 // history.push({ pathname: url.INVOICE_LIST_1 })
             }
             let btnId = `btn-E-Invoice-Upload-${postMsg.InvoiceID}`
@@ -362,7 +360,7 @@ const Invoice = (props) => {
                                         <samp>Quantity</samp>
                                     </div>
                                 </th>
-                                <th style={{ zIndex: -1 }}>Rate</th>
+                                <th style={{ zIndex: -1 }}>Basic Rate</th>
                                 <th style={{ zIndex: -1 }}>MRP</th>
                             </tr>
                         </Thead>

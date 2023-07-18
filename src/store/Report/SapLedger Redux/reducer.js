@@ -2,12 +2,13 @@ import {
   GET_EXCELBUTTON_API,
   GET_EXCELBUTTON_API_SUCCESS,
   GO_BUTTON_API_SAP_LEDGER,
+  GO_BUTTON_API_SAP_LEDGER_ERROR,
   GO_BUTTON_API_SAP_LEDGER_SUCCESS,
 
 } from "./actionType";
 
 const INIT_STATE = {
-  loading: false,
+  goBtnLoading: false,
   goBtnSapLedger: [],
   ProductMargin: [],
   dounloadProductMargin: false,
@@ -21,14 +22,14 @@ const SapLedgerReducer = (state = INIT_STATE, action) => {
     case GO_BUTTON_API_SAP_LEDGER:
       return {
         ...state,
-        loading: true
+        goBtnLoading: true
       }
     // post
     case GO_BUTTON_API_SAP_LEDGER_SUCCESS:
       return {
         ...state,
         goBtnSapLedger: action.payload,
-        loading: false
+        goBtnLoading: false
       }
 
     case GET_EXCELBUTTON_API:
@@ -43,6 +44,13 @@ const SapLedgerReducer = (state = INIT_STATE, action) => {
         dounloadProductMargin: false,
         ProductMargin: action.payload,
       }
+
+    case GO_BUTTON_API_SAP_LEDGER_ERROR:
+      return {
+        ...state,
+        goBtnLoading: false,
+        dounloadProductMargin: false
+      };
 
     default:
       return state

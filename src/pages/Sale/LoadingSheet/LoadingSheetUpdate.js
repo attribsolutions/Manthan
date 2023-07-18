@@ -50,18 +50,20 @@ const LoadingSheetUpdate = (props) => {
         OpeningBalance: state.ReceiptReducer.OpeningBalance,
     }));
 
+    // const { ReceiptFlag } = LoadingSheetUpdateList
     const lastColumn = () => ({
         text: "Action",
         dataField: "",
         formatExtraData: { listBtnLoading },
         formatter: (cellContent, row, key, { listBtnLoading }) => {
 
+            const { ReceiptFlag } = row
             return (<span style={{ justifyContent: 'center' }}>
                 <Button
                     type="button"
                     id={`btn-makeBtn-${row.id}`}
                     title={"Make Receipt"}
-                    disabled={listBtnLoading}
+                    disabled={listBtnLoading || ReceiptFlag}
                     className={makeBtnCss}
                     onClick={(e) => {
                         makeBtnFunc(e, row)
@@ -154,6 +156,10 @@ const LoadingSheetUpdate = (props) => {
         return tableListData.map((index) => { return (index.selectCheck) && index.id })
     }
 
+    const nonSelectedRow = () => {
+        return tableListData.filter(row => row.ReceiptFlag).map(row => row.id)
+    }
+
     function DateOnchange(e, date) {
         setLoadingDate(date)
     }
@@ -236,7 +242,7 @@ const LoadingSheetUpdate = (props) => {
                                                 keyField={"id"}
                                                 bordered={true}
                                                 striped={false}
-                                                selectRow={selectAllCheck(rowSelected())}
+                                                selectRow={selectAllCheck(rowSelected(), nonSelectedRow())}
                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                                 classes={"table align-middle table-nowrap table-hover"}
                                                 headerWrapperClasses={"thead-light"}
@@ -257,12 +263,15 @@ const LoadingSheetUpdate = (props) => {
                             tableListData.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} className={"row save1"}>
-                                        <button type="button" style={{ width: "120px" }} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>
+                                        <button type="button" style={{ width: "120px" }}
+                                            onClick={MakeReceiptForAll}
+                                            className="btn btn-primary  waves-effect waves-light">
+                                            Make Receipt</button>
                                     </Col>
                                 </FormGroup >
                                 : null
                         }
-
+                     
                     </form >
                 </div >
             </React.Fragment >

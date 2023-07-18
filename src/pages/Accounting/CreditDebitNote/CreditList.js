@@ -57,7 +57,7 @@ const CreditList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            listBtnLoading: state.CredietDebitReducer.listBtnLoading,
+            listBtnLoading: (state.CredietDebitReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
             tableList: state.CredietDebitReducer.CreditList,
             deleteMsg: state.CredietDebitReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
@@ -194,9 +194,10 @@ const CreditList = () => {
         dispatch(GetCreditList(jsonBody, hasPagePath));
     }
 
-    function downBtnFunc(row) {
-        var ReportType = report.Credit;
-        dispatch(getpdfReportdata(Edit_Credit_List_API, ReportType, { editId: row.id }))
+    function downBtnFunc(config) {
+        config["ReportType"] = report.Credit;
+        dispatch(getpdfReportdata(Edit_Credit_List_API, config))
+
     }
 
     function fromdateOnchange(e, date) {

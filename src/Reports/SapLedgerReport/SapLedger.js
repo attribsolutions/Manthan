@@ -37,10 +37,10 @@ const SapLedger = (props) => {
     const {
         userAccess,
         List,
-        loading,
+        goBtnLoading,
         pageField,
     } = useSelector((state) => ({
-        loading: state.SapLedgerReducer.loading,
+        goBtnLoading: state.SapLedgerReducer.goBtnLoading,
         List: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -96,7 +96,7 @@ const SapLedger = (props) => {
     ];
 
     const rowStyle = (row, rowIndex) => {
-        
+
         const style = {};
         if (row.id > 0) {
 
@@ -201,7 +201,7 @@ const SapLedger = (props) => {
                                     </FormGroup>
                                 </Col>
                                 <Col sm="1" className="mt-2 ">
-                                    <Go_Button loading={loading} onClick={goButtonHandler} />
+                                    <Go_Button loading={goBtnLoading} onClick={goButtonHandler} />
 
                                 </Col>
                             </div>

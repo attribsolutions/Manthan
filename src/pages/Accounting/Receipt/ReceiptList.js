@@ -48,7 +48,7 @@ const ReceiptList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            listBtnLoading: state.ReceiptReducer.listBtnLoading,
+            listBtnLoading: (state.ReceiptReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
             loading: state.ReceiptReducer.loading,
             tableList: state.ReceiptReducer.ReceiptList,
             deleteMsg: state.ReceiptReducer.deleteMsg,
@@ -142,9 +142,9 @@ const ReceiptList = () => {
         dispatch(ReceiptListAPI(jsonBody, hasPagePath));
     }
 
-    function downBtnFunc(row) {
-        var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
+    function downBtnFunc(config) {
+        config["ReportType"] = report.Receipt;
+        dispatch(getpdfReportdata(Receipt_Print, config))
     }
 
     function fromdateOnchange(e, date) {

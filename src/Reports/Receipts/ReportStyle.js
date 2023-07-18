@@ -139,7 +139,7 @@ export const Receipts = (doc, data) => {
         doc.text(`Bank Name :`, 40, final_y + 55, 'left');
         doc.setFont(undefined, 'bold')
         doc.text(`${data.DocumentNo}/${data.BankName}`, 100, final_y + 55,);
-        debugger
+        
         var bankwidth = doc.getTextWidth(`${data.DocumentNo}/${data.BankName}`);
         doc.setFont(undefined, 'Normal')
         doc.text(`Depository Bank Name :`, 40 + bankwidth + 80, final_y + 55, 'left');

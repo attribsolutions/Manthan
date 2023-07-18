@@ -8,14 +8,17 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 import { dataGenrator } from "../../../Reports/Invoice report a5/DemoData";
 
 
-function* getpdfData_GenFunc({ urlpath, ReportType, Id, Partysettingdata }) {
+function* getpdfData_GenFunc({ urlpath, config }) {
 
   try {
-    
-    const response = yield call(urlpath, Id);
-    response["ReportType"] = ReportType
-    response.Data["ReportType"] = ReportType
-    response.Data["SettingData"] = Partysettingdata;
+
+    const response = yield call(urlpath, config);
+    response["ReportType"] = config.ReportType
+    response.Data["ReportType"] = config.ReportType
+    if ((config.systemSetting) || (config.subPageMode)) {
+      response.Data["SettingData"] = config.systemSetting
+      response.Data["subPageMode"] = config.subPageMode;
+    }
 
     yield put(getpdfReportdataSuccess(response));
 

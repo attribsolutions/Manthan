@@ -40,7 +40,7 @@ const DriverList = () => {
     })
   );
   const { pageField, GoBtnlistloading } = reducers
-  debugger
+  
 
   const action = {
     getList: getDriverList,

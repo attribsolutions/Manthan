@@ -39,6 +39,8 @@ const InvoiceList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const systemSetting = _cfunc.loginSystemSetting();
+
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
@@ -54,7 +56,6 @@ const InvoiceList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.InvoiceReducer.editData,
-            PartySettingdata: state.PartySettingReducer.PartySettingdata,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             goBtnloading: state.InvoiceReducer.goBtnloading,
@@ -62,7 +63,7 @@ const InvoiceList = () => {
             Uploaded_EwayBill: state.InvoiceReducer.Uploaded_EwayBill,
             Cancel_EInvoice: state.InvoiceReducer.Cancel_EInvoice,
             Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
-            listBtnLoading: state.InvoiceReducer.listBtnLoading
+            listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading)
 
         })
     );
@@ -70,7 +71,6 @@ const InvoiceList = () => {
     const gobtnId = `gobtn-${subPageMode}`
     const { pageField, supplier, Uploaded_EInvoice, Uploaded_EwayBill, Cancel_EInvoice, Cancel_EwayBill, PartySettingdata } = reducers;
     const { fromdate, todate, supplierSelect } = hederFilters;
-    const { Data = {} } = PartySettingdata;
     const action = {
         getList: invoiceListGoBtnfilter,
         deleteId: deleteInvoiceId,
@@ -203,9 +203,7 @@ const InvoiceList = () => {
         }
     }, [Cancel_EwayBill]);
 
-    useEffect(() => {
-        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id, _cfunc.loginCompanyID()))
-    }, [])
+
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -217,10 +215,10 @@ const InvoiceList = () => {
         label: " All"
     });
 
-    function downBtnFunc(row) {
-
-        var ReportType = Data.A4Print.Value === "1" ? report.invoice : report.invoiceA5;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, { editId: row.id }, Data))
+    function downBtnFunc(config) {
+        config["ReportType"] = (systemSetting.A4Print === "1" ? report.invoice : report.invoiceA5);
+        config["systemSetting"] = systemSetting
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config))
     }
 
     function goButtonHandler(event, IBType) {
