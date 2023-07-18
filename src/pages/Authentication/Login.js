@@ -16,7 +16,7 @@ import { divisionDropdownSelectSuccess, getUserDetailsAction, loginError_Action,
 import logo from "../../assets/images/cbm_logo.png"
 
 import CarouselPage from "./CarouselPage"
-import { loginCompanyID} from "../../components/Common/CommonFunction"
+import { loginCompanyID } from "../../components/Common/CommonFunction"
 import { useLayoutEffect } from "react"
 import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 import { getpartysetting_API } from "../../store/Administrator/PartySetting/action"
@@ -210,8 +210,8 @@ const Login = props => {
                         </div>
                         <div className="mb-3">
                           {loading ?
-                            <button className="btn btn-primary w-100 waves-effect waves-light" autoFocus type="submit" id="loginbtn" onClick={SaveHandler}  >
-                              <div className="dot-pulse"> <span> Login</span>     &nbsp;
+                            <button className="btn btn-primary w-100 waves-effect waves-light"  autoFocus type="button">
+                              <div className="dot-pulse"> <span> Login</span> &nbsp;
                                 <div className="bounce1" style={{ background: "white" }}></div>
                                 <div className="bounce2" style={{ background: "white" }}></div>
                                 <div className="bounce3" style={{ background: "white" }}></div>
