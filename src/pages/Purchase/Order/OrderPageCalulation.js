@@ -1,7 +1,7 @@
 import { compareGSTINState } from "../../../components/Common/CommonFunction";
 
 export const orderCalculateFunc = (row, IsComparGstIn) => {
-debugger
+
   // Retrieve values from input object
   const rate = Number(row.Rate) || 0;
   const quantity = Number(row.Quantity) || 0;

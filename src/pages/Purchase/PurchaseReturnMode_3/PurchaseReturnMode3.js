@@ -50,7 +50,8 @@ const PurchaseReturnMode3 = (props) => {
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname)
     const [tableData, setTableData] = useState([]);
-
+    const [returnItemIDs, setReturnItemIDs] = useState("");
+    console.log(returnItemIDs)
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         sendToSSbtnTableData,
@@ -70,7 +71,7 @@ const PurchaseReturnMode3 = (props) => {
 
     useEffect(() => {
         if (sendToSSbtnTableData.Status === true) {
-
+            
             const { Data = [] } = sendToSSbtnTableData;
 
             let grand_total = 0;
@@ -85,6 +86,7 @@ const PurchaseReturnMode3 = (props) => {
             setTableData(UpdatedTableData);
             dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${grand_total}`))
             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
+            setReturnItemIDs(sendToSSbtnTableData.ReturnItemID)
         }
 
     }, []);
@@ -282,7 +284,7 @@ const PurchaseReturnMode3 = (props) => {
     }
 
     const SaveHandler = async (event) => {
-
+        
         event.preventDefault();
         const btnId = event.target.id;
         let grand_total = 0;
@@ -294,6 +296,9 @@ const PurchaseReturnMode3 = (props) => {
             });
             return;
         }
+        const PurchaseReturnReferences = returnItemIDs
+            .split(",")
+            .map(item => ({ SubReturn: parseInt(item.trim()) }));
 
         const ReturnItems = tableData.map((i) => {
 
@@ -344,8 +349,10 @@ const PurchaseReturnMode3 = (props) => {
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 Mode: 3,
+                PurchaseReturnReferences: PurchaseReturnReferences,
                 ReturnItems: ReturnItems,
             });
+            
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }

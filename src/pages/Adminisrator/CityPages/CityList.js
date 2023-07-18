@@ -187,7 +187,6 @@ const CityList = () => {
             <div className="page-content">
 
                 {
-
                     (pageField) &&
                     <CommonPurchaseList
                         action={action}
