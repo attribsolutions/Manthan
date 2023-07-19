@@ -20,6 +20,10 @@ const printInvoiceBtnCss = "badge badge-soft-info font-size-12 btn btn-info wave
 //******************** icon class ******************************
 const editIconClass = "mdi mdi-pencil font-size-16";
 const viewIconClass = "bx bxs-show font-size-16";
+const approvalviewIconClass = " far fa-check-circle font-size-16";
+
+
+
 const makeBtnIconClass = "fas fa-file-invoice font-size-16";
 const printIconClass = "bx bx-printer font-size-16";
 const multiInvoiceIconClass = "fas fa-file-download";
@@ -44,7 +48,7 @@ export const listPageActionsButtonFunc = (props) => {
         editBodyfunc,
         deleteBodyfunc,
         copyBodyfunc,
-        viewBtnFunc,
+        viewApprovalBtnFunc,
         otherBtn_1Func,
         makeBtnFunc = () => { },
         pageMode,
@@ -129,7 +133,8 @@ export const listPageActionsButtonFunc = (props) => {
 
         const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide;
         const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && rowData.CreatedBy === userCreated && !forceEditHide;
-        const canView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf;
+        const canView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && !viewApprovalBtnFunc;
+        const canApprovalView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && viewApprovalBtnFunc;
         const canPrint = hasRole("RoleAccess_IsPrint");
         const canMultiInvoicePrint = hasRole("RoleAccess_IsMultipleInvoicePrint");
         const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide;
@@ -139,7 +144,7 @@ export const listPageActionsButtonFunc = (props) => {
         const canOrderApproval = oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
 
         const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
-        const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView;
+        const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc;
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
 
@@ -206,11 +211,21 @@ export const listPageActionsButtonFunc = (props) => {
                     condition: canView,
                     btnmode: mode.view,
                     iconClass: viewIconClass,
-                    actionFunc: viewBtnFunc,
                     dispatchAction: editActionFun,
                     title: "View",
                     buttonClasss: vieBtnCss,
                 })}
+
+                {renderButtonIfNeeded({
+                    condition: canApprovalView,
+                    btnmode: mode.viewApproval,
+                    iconClass: approvalviewIconClass,
+                    actionFunc: viewApprovalBtnFunc,
+                    title: "Approval View",
+                    buttonClasss: vieBtnCss,
+                })}
+
+
 
                 {renderButtonIfNeeded({
                     condition: canMakeBtn,
