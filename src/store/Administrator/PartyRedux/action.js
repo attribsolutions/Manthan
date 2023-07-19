@@ -15,9 +15,9 @@ import {
 } from "./actionTypes";
 
 // get api
-export const getPartyListAPI = (mode) => ({
+export const getPartyListAPI = (jsonBody) => ({
   type: GET_PARTY_LIST_API,
-  mode,
+  jsonBody,
 });
 
 export const getPartyListAPISuccess = (pages) => ({
