@@ -57,7 +57,6 @@ import ImportFieldAdd_Saga from "./Administrator/ImportFieldAddRedux/saga"
 import ImportExcelPartyMap_Saga from "./Administrator/ImportExcelPartyMapRedux/saga"
 import CitySaga from "./Administrator/CityRedux/saga"
 
-
 //    *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
 
@@ -88,7 +87,7 @@ import OrderSummarySaga from "./Report/OrderSummaryRedux/saga"
 import PartySettingSaga from "./Administrator/PartySetting/saga"
 import StockEntrySaga from "./Inventory/StockEntryRedux/saga"
 import StockReportSaga from "./Report/StockReport/saga"
-
+import RetailerDataSaga from "./Report/RetailerDataRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -163,6 +162,7 @@ export default function* rootSaga() {
     fork(OrderSummarySaga),
     fork(PartySettingSaga),
     fork(StockEntrySaga),
-    fork(StockReportSaga)
+    fork(StockReportSaga),
+    fork(RetailerDataSaga),
   ])
 }

@@ -166,7 +166,8 @@ import StockReport from "../Reports/StockReport/StockReport";
 import PurchaseReturnMode3 from "../pages/Purchase/PurchaseReturnMode_3/PurchaseReturnMode3";
 import DiscountMaster from "../pages/Adminisrator/Discount/DiscountMaster";
 import GenericSaleReport from "../Reports/GenericSaleReport/GenericSaleReport";
-
+import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
+// import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -413,6 +414,8 @@ const userRoutes = [
   { path: path.STOCK_REPORT, component: StockReport },
   
   { path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },
+
+   { path: path.RETAILER_DATA_REPORT, component: RetailerDataReport },
 
   { path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
 
