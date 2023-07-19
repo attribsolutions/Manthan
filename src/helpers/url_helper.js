@@ -376,6 +376,9 @@ export const PARTY_LEDGER = '/PartyLedgerReport'
 // Stock Report
 export const STOCK_REPORT = '/PartyLiveStock'
 
+// Generic Sale Report
+export const GENERIC_SALE_REPORT = '/GenericSaleReport'
+
 // partySetting
 export const PARTY_SETTING = '/PartySettings'
 

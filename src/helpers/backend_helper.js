@@ -640,7 +640,7 @@ export const StockEntry_Post_API = ({ jsonBody, btnId }) => post(url.STOCK_ENTRY
 export const StockReport_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REPORT, jsonBody, btnId)//Go button api
 
 //Generic Sale Report
-export const GenericSale_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REPORT, jsonBody, btnId)//Go button api
+export const GenericSale_GoBtn_API = ({ jsonBody, btnId }) => post(url.GENERIC_SALE_REPORT, jsonBody, btnId)//Go button api
 
 
 export {
