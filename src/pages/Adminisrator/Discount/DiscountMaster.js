@@ -29,6 +29,8 @@ import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/ac
 import PriceDropOptions from "../PartyMaster/MasterAdd/FirstTab/PriceDropOptions";
 import { priceListByPartyAction } from "../../../store/Administrator/PriceList/action";
 import Select from "react-select";
+import { saveDiscountAction, saveDiscountActionSuccess, updateDiscountID } from "../../../store/Administrator/DiscountRedux/actions";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const DiscountMaster = (props) => {
 
@@ -43,7 +45,6 @@ const DiscountMaster = (props) => {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         PartyType: "",
-        PriceList: "",
         Customer: "",
         ItemList: ""
     }
@@ -58,7 +59,7 @@ const DiscountMaster = (props) => {
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [forceReload, setForceReload] = useState(false)
 
-    const [tableData] = useState([{
+    const [discountTableData] = useState([{
         id: 1, ItemName: "Bakarwadi 500 g Tray",
     },
     {
@@ -72,12 +73,18 @@ const DiscountMaster = (props) => {
         customer,
         pageField,
         userAccess,
+        goBtnloading,
+        saveBtnloading,
+        postMsg
     } = useSelector((state) => ({
+        postMsg: state.DiscountReducer.postMsg,
         PartyType: state.PartyTypeReducer.ListData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         customer: state.CommonAPI_Reducer.RetailerList,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+        goBtnloading: state.DiscountReducer.goBtnLoading,
+        saveBtnloading: state.DiscountReducer.saveBtnloading,
     }));
 
     useEffect(() => {
@@ -123,6 +130,37 @@ const DiscountMaster = (props) => {
         }
     }, [pageField])
 
+
+    useEffect(async () => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(saveDiscountActionSuccess({ Status: false }))
+            if (pageMode === mode.dropdownAdd) {
+                customAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+            }
+            else {
+                let isPermission = await customAlert({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                })
+                if (isPermission) {
+                    // history.push({ pathname: url.DRIVER_lIST })
+                }
+            }
+        }
+        else if (postMsg.Status === true) {
+            dispatch(saveDiscountActionSuccess({ Status: false }))
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(postMsg.Message),
+            })
+        }
+    }, [postMsg])
+
+
     const PartyTypeOptions = PartyType.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -146,7 +184,7 @@ const DiscountMaster = (props) => {
                 discountTypeAll: discountTypeAll,
                 changeAllDiscount: changeAllDiscount,
                 forceReload: forceReload,
-                tableList: tableData
+                tableList: discountTableData
             },
 
             headerFormatter: () => {
@@ -225,7 +263,7 @@ const DiscountMaster = (props) => {
                 discountTypeAll: discountTypeAll,
                 changeAllDiscount: changeAllDiscount,
                 forceReload: forceReload,
-                tableList: tableData
+                tableList: discountTableData
             },
             headerFormatter: () => {
                 return (
@@ -350,11 +388,61 @@ const DiscountMaster = (props) => {
         dispatch(priceListByPartyAction(hasSelect.value))
     }
     const goButtonHandler = async (selectSupplier) => {
-        let config = { subPageMode, jsonBody:{} }
+        let config = { subPageMode, jsonBody: {} }
         // dispatch(_act.GoButton_For_Order_Add(config))
     };
 
 
+    const saveHandler = async (event) => {
+        event.preventDefault();
+        debugger
+        try {
+            // if()
+            const filteredDiscounts = discountTableData.reduce((filteredDiscountTable, currentValue) => {
+                if (currentValue.Discount > 0) {
+                    filteredDiscountTable.push({
+                        "FromDate": values.FromDate,
+                        "ToDate": values.ToDate,
+                        "DiscountType": currentValue.DiscountType,
+                        "Discount": currentValue.Discount,
+                        "PartyType": values.PartyType.value,
+                        "PriceList": priceListSelect.value,
+                        "Customer": values.Customer.value,
+                        "Item": currentValue.id,
+                        "Party": _cfunc.loginPartyID(),
+                        "CreatedBy": _cfunc.loginUserID(),
+                        "UpdatedBy": _cfunc.loginUserID(),
+                    });
+                }
+                return filteredDiscountTable;
+            }, []);
+
+
+            var a = [{
+                "FromDate": "2023-07-19",
+                "ToDate": "2023-07-19",
+                "DiscountType": 1,
+                "Discount": 10,
+                "CreatedBy": 1,
+                "UpdatedBy": 1,
+                "PartyType": 11,
+                "PriceList": 3,
+                "Customer": 5,
+                "Party": 24,
+                "Item": 2
+            }]
+            const jsonBody = JSON.stringify(filteredDiscounts);
+            if (pageMode === mode.edit) {
+                // dispatch(updateDiscountID({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
+
+            } else {
+
+                dispatch(saveDiscountAction({ jsonBody }))
+            }
+        } catch (error) {
+            _cfunc.CommonConsole("dicount_Save", error);
+        }
+    }
 
     if (!(userPageAccessState === '')) {
         return (
@@ -499,7 +587,7 @@ const DiscountMaster = (props) => {
                         <div>
                             <ToolkitProvider
                                 keyField={"id"}
-                                data={tableData}
+                                data={discountTableData}
                                 columns={pagesListColumns}
                                 search
                             >
@@ -534,24 +622,21 @@ const DiscountMaster = (props) => {
 
                     </form >
 
-                    {/* {
-                        tableData.length > 0 ?
-                            <div style={{ marginLeft: '-35px' }}>
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"} >
-                                        <SaveButton
-                                            pageMode={mode.edit}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            module={"SalesReturn"}
-                                        />
+                    {
 
-                                    </Col>
-                                </FormGroup >
-                            </div>
-                            : null
-                    } */}
+                        discountTableData &&
+                        <div className="row save1" >
+                            <SaveButton
+                                loading={saveBtnloading}
+                                editCreatedBy={"editCreatedBy"}
+                                pageMode={pageMode}
+                                userAcc={userPageAccessState}
+                                onClick={saveHandler}
+                                forceDisabled={goBtnloading}
+                            />
+
+                        </div>
+                    }
 
                 </div >
             </React.Fragment >

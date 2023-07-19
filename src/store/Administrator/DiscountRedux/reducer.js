@@ -21,24 +21,24 @@ const INIT_STATE = {
   deleteDiscountID: { Status: false },
   postMsg: { Status: false },
   updateMessage: { Status: false },
-  DiscountGroup: [],
+
   saveBtnloading: false,
   listBtnLoading: false,
-  gobtnLoading:false
+  goBtnLoading:false
 }
 
-const DiscountReducere = (state = INIT_STATE, action) => {
+const DiscountReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
     
     case GO_BUTTON_DISCOUNT_ACTION:
       return {
         ...state,
-        gobtnLoading: true,
+        goBtnLoading: true,
       }
     case GO_BUTTON_DISCOUNT_ACTION_SUCCESS:
       return {
         ...state,
-        gobtnLoading: false,
+        goBtnLoading: false,
         gobtnDiscount_redux: action.payload,
       }
 
@@ -111,7 +111,7 @@ const DiscountReducere = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
-        gobtnLoading: false
+        goBtnLoading: false
       };
 
 
@@ -121,4 +121,4 @@ const DiscountReducere = (state = INIT_STATE, action) => {
 
 }
 
-export default DiscountReducere
+export default DiscountReducer
