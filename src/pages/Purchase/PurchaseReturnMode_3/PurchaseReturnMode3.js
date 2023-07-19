@@ -71,7 +71,7 @@ const PurchaseReturnMode3 = (props) => {
 
     useEffect(() => {
         if (sendToSSbtnTableData.Status === true) {
-
+            debugger
             const { Data = [] } = sendToSSbtnTableData;
 
             let grand_total = 0;
@@ -88,7 +88,7 @@ const PurchaseReturnMode3 = (props) => {
                     tableBatchDate: _cfunc.date_dmy_func(item.BatchDate)
                 };
             });
-            
+
             setTableData(UpdatedTableData);
             dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${grand_total}`))
             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
@@ -157,6 +157,19 @@ const PurchaseReturnMode3 = (props) => {
         label: i.Name,
     }));
 
+    function QuantityHandler(event, row, tableData) {
+
+        let input = event.target.value
+
+        let v1 = Number(row.salesQuantity);
+        let v2 = Number(input)
+        if (!(v1 >= v2)) {
+            event.target.value = v1;
+        }
+        row.Quantity = input;
+        totalAmountCalcuationFunc(row, tableData)
+    }
+
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -180,8 +193,7 @@ const PurchaseReturnMode3 = (props) => {
                                 cpattern={decimalRegx}
                                 className="col col-sm text-end"
                                 onChange={(event) => {
-                                    row.Quantity = event.target.value;
-                                    totalAmountCalcuationFunc(row, tableData)
+                                    QuantityHandler(event, row, tableData)
                                 }}
                             />
                         </div>
@@ -306,7 +318,7 @@ const PurchaseReturnMode3 = (props) => {
             .map(item => ({ SubReturn: parseInt(item.trim()) }));
 
         const ReturnItems = tableData.map((i) => {
-            
+
 
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
@@ -340,8 +352,8 @@ const PurchaseReturnMode3 = (props) => {
                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
                 "ReturnItemImages": [],
             };
-        });
-
+        })
+            .filter((item) => item.Quantity !== 0 && item.Quantity !== "");
         try {
             const jsonBody = JSON.stringify({
                 ReturnDate: values.ReturnDate,
@@ -358,7 +370,7 @@ const PurchaseReturnMode3 = (props) => {
                 PurchaseReturnReferences: PurchaseReturnReferences,
                 ReturnItems: ReturnItems,
             });
-
+            
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
