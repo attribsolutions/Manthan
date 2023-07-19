@@ -1,6 +1,7 @@
 import { Button, Spinner } from "reactstrap"
 import { loginUserID } from "./CommonFunction";
 import * as mode from "../../routes/PageMode"
+import { useEffect } from "react";
 
 export function SaveButton(props) {
   const { pageMode = '', userAcc = {}, editCreatedBy } = props
@@ -90,14 +91,14 @@ export function Go_Button(props) {
       type={type}
       disabled
       title={`Go Button Loging...`}
-      color="btn btn-outline-success border-1   "
+      color="btn btn-outline-success border-1"
       onClick={onClick} >
       <Spinner style={{ height: "13px", width: "13px" }} color="success" />
     </Button>
     : <Button
       id={id}
       type={type}
-      color="btn btn-success border-1 font-size-12  "
+      color="btn btn-success border-1 font-size-12"
       onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "16px" }}>Go</span></Button>
 }
 export function Change_Button(props) {
@@ -218,14 +219,29 @@ export function Listloader1({ show = false }) {// common Listcomponent
 
 
 export function CustomSppiner({ isLoading }) {// common Listcomponent
-  if (!isLoading) {
-    return null
-  }
-  return <div id="api_spinner" >
-    <div className="api_spinner_body " >
-      <span className="spinner" style={{ marginLeft: "-20vw" }} ></span>
-    </div>
-  </div>
+  // if (!isLoading) {
+  //   return null
+  // }
+  useEffect(() => {
+    //init body click event fot toggle rightbar
+    // document.body.addEventListener("click", hideRightbar, true);
+
+    if (isLoading === true) {
+      document.getElementById("preloader").style.display = "block";
+      // setTimeout(function () {
+      //   document.getElementById("preloader").style.display = "none";
+      // }, 2500);
+    } else {
+      document.getElementById("preloader").style.display = "none";
+    }
+  }, [isLoading]);
+
+  return <></>
+  // return <div id="api_spinner" >
+  //   <div className="api_spinner_body " >
+  //     <span className="spinner" style={{ marginLeft: "-20vw" }} ></span>
+  //   </div>
+  // </div>
 
 }
 

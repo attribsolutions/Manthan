@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row, } from "reactstrap";
+import { Button, Col, FormGroup, Label, Row, Spinner, } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { Change_Button, Go_Button } from "../../components/Common/CommonButton";
+import { Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
-import { BreadcrumbShowCountlabel, SSDD_List_under_Company, getBaseUnit_ForDropDown } from "../../store/actions";
+import { SSDD_List_under_Company, } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
-import { stockReport_GoButton_API } from "../../store/Report/StockReport/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
+import { GoButton_For_GenericSale_Action, GoButton_For_GenericSale_Success } from "../../store/Report/GenericSaleRedux/action";
+import * as XLSX from 'xlsx';
 
 const GenericSaleReport = (props) => {
 
@@ -31,9 +30,8 @@ const GenericSaleReport = (props) => {
 
     const reducers = useSelector(
         (state) => ({
-            listBtnLoading: state.StockReportReducer.listBtnLoading,
-            tableData: state.StockReportReducer.StockReportGobtn,
-            BaseUnit: state.ItemMastersReducer.BaseUnit,
+            listBtnLoading: state.GenericSaleReportReducer.listBtnLoading,
+            tableData: state.GenericSaleReportReducer.genericSaleGobtn,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
@@ -41,7 +39,7 @@ const GenericSaleReport = (props) => {
     );
     const { tableData = [] } = reducers
 
-    const { userAccess, BaseUnit, SSDD_List } = reducers;
+    const { userAccess, listBtnLoading, SSDD_List } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -65,35 +63,38 @@ const GenericSaleReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(stockReport_GoButton_API_Success([]))
-        dispatch(getBaseUnit_ForDropDown());
+        dispatch(GoButton_For_GenericSale_Success([]))
         dispatch(SSDD_List_under_Company());
     }, [])
-
-    useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Stock Report Count:${tableData.length}`))
-    }, [tableData])
-
-    const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
-        .map(data => ({
-            value: data.id,
-            label: data.Name
-        }));
 
     const Party_Option = SSDD_List.map(i => ({
         value: i.id,
         label: i.Name
     }));
 
+    useEffect(() => {
+
+        if (tableData.Status === true && tableData.StatusCode === 200) {
+            const { Data } = tableData
+            const worksheet = XLSX.utils.json_to_sheet(Data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin1");
+            XLSX.writeFile(workbook, "Product Margin Report.xlsx");
+
+            dispatch(GoButton_For_GenericSale_Success([]));
+        }
+    }, [tableData]);
+
     function goButtonHandler() {
-        const btnId = `gobtn-${url.STOCK_REPORT}`
+
+        const btnId = `gobtn-${url.GENERIC_SALE_REPORT}`
 
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "PartyID": distributorDropdown === "" ? _cfunc.loginPartyID() : distributorDropdown.value,
+            "Party": distributorDropdown === "" ? _cfunc.loginPartyID() : distributorDropdown.value,
         });
-        dispatch(stockReport_GoButton_API({ jsonBody, btnId }))
+        dispatch(GoButton_For_GenericSale_Action({ jsonBody, btnId }))
     }
 
     function fromdateOnchange(e, date) {
@@ -108,24 +109,10 @@ const GenericSaleReport = (props) => {
         setHeaderFilters(newObj)
     }
 
-    const pagesListColumns = [
-        {
-            text: "ItemName",
-            dataField: "ItemName",
-        },
-        {
-            text: "Quantity",
-            dataField: "ActualQty",
-        },
-        {
-            text: "Unit",
-            dataField: "Unit",
-        }
-    ];
-
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
@@ -157,7 +144,7 @@ const GenericSaleReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {/* {isSCMParty && */}
+                        {isSCMParty &&
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3" >
                                     <Label className="col-sm-4 p-2"
@@ -178,45 +165,16 @@ const GenericSaleReport = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
-                        {/* } */}
+                        }
 
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
+                            < Go_Button loading={listBtnLoading}
+                                onClick={(e) => goButtonHandler()} />
                         </Col>
                     </div>
                 </div>
-
-                <ToolkitProvider
-                    keyField={"Item"}
-                    data={tableData}
-                    columns={pagesListColumns}
-                    search
-                >
-                    {(toolkitProps,) => (
-                        <React.Fragment>
-                            <Row>
-                                <Col xl="12">
-                                    <div className="table-responsive table">
-                                        <BootstrapTable
-                                            keyField={"Item"}
-                                            classes={"table  table-bordered table-hover"}
-                                            noDataIndication={
-                                                <div className="text-danger text-center ">
-                                                    Record Not available
-                                                </div>
-                                            }
-                                            {...toolkitProps.baseProps}
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-                                </Col>
-                            </Row>
-
-                        </React.Fragment>
-                    )}
-                </ToolkitProvider>
             </div>
-            <C_Report />
+         
         </React.Fragment >
     )
 }
