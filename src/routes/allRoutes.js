@@ -10,7 +10,7 @@ import Login from "../pages/Authentication/Login"
 import Logout from "../pages/Authentication/Logout"
 import ForgetPwd from "../pages/Authentication/ForgetPassword"
 
-//Import  Administrator : Modules and ModulesListItem
+//Import  Administrator 
 import Modules from "../pages/Adminisrator/ModulesPages/Modules";
 import ModulesList from "../pages/Adminisrator/ModulesPages/ModulesList";
 import CompanyModule from "../pages/Adminisrator/CompanyPages/CompanyModule";
