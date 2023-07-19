@@ -161,9 +161,11 @@ export const IMPORT_FIELD_MAP_FILTER = '/PartyImportFieldFilter'    //gobutton
 export const IMPORT_FIELD_MAP_SAVE = '/PartyImportFieldSave'        //save
 
 //Import Master Map
-export const IMPORT_MASTER_MAP_CUSTOMER = '/PartyCustomerMapping'    //save & get
-export const IMPORT_MASTER_MAP_ITEM = '/ItemsMapping'                //save & get
-export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping'           //save & get
+export const IMPORT_MASTER_MAP_CUSTOMER = '/PartyCustomerMapping'; 
+export const IMPORT_MASTER_MAP_ITEM = '/ItemsMapping' ;               
+export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping';    
+ //Import Master Map       
+export const DISCOUNT_MASTER_SAVE_API = '/DiscountMasterSave'           
 
 //Import Field Map
 export const IMPORT_FIELD_ADD_SAVE = '/ImportField'               //save
