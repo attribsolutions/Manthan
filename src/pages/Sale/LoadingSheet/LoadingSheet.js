@@ -231,29 +231,32 @@ const LoadingSheet = (props) => {
     ];
 
     const saveHandler = async (event) => {
-        try {
-            event.preventDefault();
-            const btnId = event.target.id;
 
-            const { totalInvoices, GrandTotal, LoadingSheetDetails } = Data.reduce(
-                (acc, index) => {
-                    if (index.selectCheck === true) {
-                        acc.totalInvoices++;
-                        acc.GrandTotal += parseFloat(index.GrandTotal);
-                        acc.LoadingSheetDetails.push({ Invoice: index.id });
-                    }
-                    return acc;
-                },
-                { totalInvoices: 0, GrandTotal: 0, LoadingSheetDetails: [] }
-            );
-            if (LoadingSheetDetails.length === 0) {
-                customAlert({
-                    Type: 4,
-                    Status: true,
-                    Message: "Atleast One Invoice Is Select...!",
-                });
-                return;
-            }
+        event.preventDefault();
+        const btnId = event.target.id;
+
+        const { totalInvoices, GrandTotal, LoadingSheetDetails } = Data.reduce(
+            (acc, index) => {
+                if (index.selectCheck === true) {
+                    acc.totalInvoices++;
+                    acc.GrandTotal += parseFloat(index.GrandTotal);
+                    acc.LoadingSheetDetails.push({ Invoice: index.id });
+                }
+                return acc;
+            },
+            { totalInvoices: 0, GrandTotal: 0, LoadingSheetDetails: [] }
+        );
+
+        if (LoadingSheetDetails.length === 0) {
+            customAlert({
+                Type: 4,
+                Status: true,
+                Message: "Atleast One Invoice Is Select...!",
+            });
+            return;
+        }
+
+        try {
 
             if (formValid(state, setState)) {
                 const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
@@ -276,7 +279,6 @@ const LoadingSheet = (props) => {
             _cfunc.CommonConsole(e);
         }
     };
-
 
     function DateOnchange(e, date) {
         setState((i) => {
@@ -497,7 +499,7 @@ const LoadingSheet = (props) => {
                         {
                             Data.length > 0 ?
                                 <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                    <Col sm={2} style={{ marginLeft: "-70px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
                                             loading={saveBtnloading}
                                             forceDisabled={goBtnloadingSpinner}
