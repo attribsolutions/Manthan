@@ -1,4 +1,5 @@
 import { invoice } from "../ReportIndex";
+import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
     "SR",
@@ -91,7 +92,7 @@ export const Rows = (data) => {
     }, {});
 
     Object.values(groupedItems).forEach((element, key) => {
-        
+
         let HSNcodes = ""
         if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
@@ -108,15 +109,15 @@ export const Rows = (data) => {
             `${HSNcodes} ${element.ItemName}`,
             `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}   ${element.UnitName}`,
             `${Number(element.MRPValue).toFixed(2)}`,
-            `${Number(element.Rate).toFixed(2)}`,
+            `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
-            `${Number(element.DiscountAmount).toFixed(2)}`,
-            `${Number(element.BasicAmount).toFixed(2)}`,
+            `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.BasicAmount).toFixed(2))}`,
             `${Number(element.CGSTPercentage).toFixed(1)}%`,
-            `${Number(element.CGST).toFixed(2)}`,
+            `${numberWithCommas(Number(element.CGST).toFixed(2))}`,
             `${Number(element.SGSTPercentage).toFixed(1)}%`,
-            `${Number(element.SGST).toFixed(2)}`,
-            `${Number(element.Amount).toFixed(2)}`,
+            `${numberWithCommas(Number(element.SGST).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
         ];
 
         function totalLots() {
@@ -137,18 +138,18 @@ export const Rows = (data) => {
 
             return [
                 "",
-                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(TotalGst).toFixed(2))} `,
+                ` GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(TotalGst).toFixed(2))} `,
                 " ",
                 ``,
                 "",
                 "",
                 ``,
-                `${Number(totalBasicAmount).toFixed(2)}`,
-                `${Number(totalCGst).toFixed(2)}`,
+                `${numberWithCommas(Number(totalBasicAmount).toFixed(2))}`,
+                `${numberWithCommas(Number(totalCGst).toFixed(2))}`,
                 "isaddition",
-                `${Number(totalSGst).toFixed(2)}`,
+                `${numberWithCommas(Number(totalSGst).toFixed(2))}`,
                 "",
-                `${Number(totalAmount).toFixed(2)}`,
+                `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
             ];
         };
         const BatchRow = [
@@ -174,9 +175,7 @@ export const Rows = (data) => {
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow)
-
         }
-
 
         else {
             returnArr.push(totalrow());
@@ -257,14 +256,14 @@ export const RowsWithIGST = (data) => {
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
             `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}   ${element.UnitName}`,
-            `${Number(element.MRPValue).toFixed(2)}`,
-            `${Number(element.Rate).toFixed(2)}`,
+            `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
-            `${Number(element.DiscountAmount).toFixed(2)}`,
-            `${Number(element.BasicAmount).toFixed(2)}`,
+            `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.BasicAmount).toFixed(2))}`,
             `${Number(element.IGSTPercentage).toFixed(1)}%`,
-            `${Number(element.IGST).toFixed(2)}`,
-            `${Number(element.Amount).toFixed(2)}`,
+            `${numberWithCommas(Number(element.IGST).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
         ];
 
         function totalLots() {
@@ -282,16 +281,16 @@ export const RowsWithIGST = (data) => {
 
             return [
                 "",
-                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(totalIGst).toFixed(2))} `,
+                ` GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(totalIGst).toFixed(2))} `,
                 " ",
                 ``,
                 "",
                 "",
                 ``,
-                `${Number(totalBasicAmount).toFixed(2)}`,
-                `${Number(totalIGst).toFixed(2)}`,
+                `${numberWithCommas(Number(totalBasicAmount).toFixed(2))}`,
+                `${numberWithCommas(Number(totalIGst).toFixed(2))}`,
                 "isaddition",
-                `${Number(totalAmount).toFixed(2)}`,
+                `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
 
             ];
         };
