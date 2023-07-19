@@ -22,7 +22,7 @@ import PdfReportReducers from './Utilites/PdfReport/reducer'
 
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
-import H_Pages from './Administrator/HPagesRedux/reducer'
+import H_Pages from './Administrator/PageMasterRedux/reducer'
 
 import CommonAPI_Reducer from "./CommonAPI/SupplierRedux/reducer"
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
