@@ -236,14 +236,13 @@ export const loginUserGSTIN = () => { //+++++++++++++++++++++ Session Company Id
 
 
 
-export const loginJsonBody = (pageMode) => ({
+export const loginJsonBody = () => ({
   UserID: loginUserID(),
   RoleID: loginRoleID(),
   CompanyID: loginCompanyID(),
   PartyID: loginPartyID(),
   IsSCMCompany: loginIsSCMCompany(),
   CompanyGroup: loginCompanyGroup(),
-  IsRetailer: pageMode.mode === url.PARTY_lIST ? 0 : 1
 });
 
 

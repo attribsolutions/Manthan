@@ -37,11 +37,10 @@ import {
   PARTY_ADDRESS_DELETE_ID,
 } from "./actionTypes";
 
-function* Get_Party_GenFun(mode) {   // Only CompanyID is Required
+function* Get_Party_GenFun() {   // Only CompanyID is Required
 
   try {
-    const response = yield call(Party_Master_Get_API, loginJsonBody(mode));
-    console.log(loginJsonBody(mode))
+    const response = yield call(Party_Master_Get_API, loginJsonBody());
     function address(arr) {
       let result = ''
       const ind = arr.PartyAddress.find((index) => {

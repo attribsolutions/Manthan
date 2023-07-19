@@ -46,7 +46,7 @@ const PartyList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    
+
     const action = {
         getList: getPartyListAPI,
         editId: editPartyID,
@@ -78,7 +78,7 @@ const PartyList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(getPartyListAPI(subPageMode));
+        dispatch(getPartyListAPI());
         return () => {
             dispatch(commonPageFieldListSuccess(null))
             dispatch(updatePartyIDSuccess([]))//for clear privious order list   
