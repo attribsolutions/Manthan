@@ -403,16 +403,16 @@ const userRoutes = [
 
   { path: path.CREDIT, component: Credit },
   { path: path.DEBIT, component: Debit },
+  
+  //**************************** Reports ***********************************//
 
   { path: path.SAP_LEDGER, component: SapLedger },
 
   { path: path.PARTY_LEDGER, component: PartyLedger },
 
   { path: path.STOCK_REPORT, component: StockReport },
-
+  
   { path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },
-
-   //**************************** Reports ***********************************//
 
   { path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
 
