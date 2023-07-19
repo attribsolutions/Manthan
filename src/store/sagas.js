@@ -56,6 +56,7 @@ import ImportExcelFieldMap_Saga from "./Administrator/ImportExportFieldMapRedux/
 import ImportFieldAdd_Saga from "./Administrator/ImportFieldAddRedux/saga"
 import ImportExcelPartyMap_Saga from "./Administrator/ImportExcelPartyMapRedux/saga"
 import CitySaga from "./Administrator/CityRedux/saga"
+import DiscountSaga from "./Administrator/DiscountRedux/saga"
 
 
 //    *********************** Purchase ***********************
@@ -130,6 +131,8 @@ export default function* rootSaga() {
     fork(MarginMasterSaga),
     fork(TermsAndConditionsSaga),
     fork(RoutesSaga),
+    fork(DiscountSaga),
+    
     fork(SalesManSaga),
     fork(CreditLimitSaga),
     fork(GroupTypeSaga),

@@ -61,6 +61,7 @@ import ImportFieldAdd_Reducer from "./Administrator/ImportFieldAddRedux/reducer"
 import ImportExcelPartyMap_Reducer from "./Administrator/ImportExcelPartyMapRedux/reducer"
 import CityReducer from "./Administrator/CityRedux/reducer"
 import PartySettingReducer from "./Administrator/PartySetting/reducer"
+import DiscountReducere from "./Administrator/DiscountRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -138,6 +139,7 @@ const rootReducer = combineReducers({
   MarginMasterReducer,
   TermsAndConditionsReducer,
   RoutesReducer,
+  DiscountReducere,
   CreditLimitReducer,
   PartyMasterBulkUpdateReducer,
   SalesManReducer,
