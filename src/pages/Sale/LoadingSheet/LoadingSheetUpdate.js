@@ -56,28 +56,28 @@ const LoadingSheetUpdate = (props) => {
         text: "Action",
         dataField: "",
         formatExtraData: { listBtnLoading },
-        hidden: true,
+        // hidden: true,
         formatter: (cellContent, row, key, { listBtnLoading }) => {
             const { ReceiptFlag } = row
 
-            return (
-                <span style={{ justifyContent: 'center' }}>
-                    <Button
-                        type="button"
-                        id={`btn-makeBtn-${row.id}`}
-                        title={"Make Receipt"}
-                        disabled={listBtnLoading || ReceiptFlag}
-                        className={makeBtnCss}
-                        onClick={(e) => {
-                            makeBtnFunc(e, row)
-                        }}
-                    >
-                        {(listBtnLoading === `btn-makeBtn-${row.id}`) ?
-                            <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                            : <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                className=" fas fa-file-invoice" ></span>
-                        }
-                    </Button></span>
+            return (<></>
+                // <span style={{ justifyContent: 'center' }}>
+                //     <Button
+                //         type="button"
+                //         id={`btn-makeBtn-${row.id}`}
+                //         title={"Make Receipt"}
+                //         disabled={listBtnLoading || ReceiptFlag}
+                //         className={makeBtnCss}
+                //         onClick={(e) => {
+                //             makeBtnFunc(e, row)
+                //         }}
+                //     >
+                //         {(listBtnLoading === `btn-makeBtn-${row.id}`) ?
+                //             <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                //             : <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                //                 className=" fas fa-file-invoice" ></span>
+                //         }
+                //     </Button></span>
             )
         }
     })
