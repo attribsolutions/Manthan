@@ -79,7 +79,7 @@ const GenericSaleReport = (props) => {
             const worksheet = XLSX.utils.json_to_sheet(Data);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin1");
-            XLSX.writeFile(workbook, "Product Margin Report.xlsx");
+            XLSX.writeFile(workbook, "Generic Sale Report.xlsx");
 
             dispatch(GoButton_For_GenericSale_Success([]));
         }
