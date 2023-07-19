@@ -200,7 +200,7 @@ const SalesReturnList = () => {
         })
     }
 
-    function viewBtnFunc(config) {
+    function viewApprovalBtnFunc(config) {
         config["viewMode"] = subPageMode
         dispatch(confirm_SalesReturn_Id(config))
     }
@@ -293,7 +293,7 @@ const SalesReturnList = () => {
                             masterPath={otherState.masterPath}
                             newBtnPath={otherState.newBtnPath}
                             pageMode={pageMode}
-                            viewBtnFunc={viewBtnFunc}
+                            viewApprovalBtnFunc={viewApprovalBtnFunc}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
                             ButtonMsgLable={otherState.buttonMsgLable}

@@ -272,8 +272,8 @@ const OrderList = () => {
         label: index.Name,
     }));
 
-    function oderAprovalBtnFunc({editId, btnId}) {
-      
+    function oderAprovalBtnFunc({ editId, btnId }) {
+
         // _cfunc.btnIsDissablefunc({ btnId, state: false })
         let config = {}
         config.btnId = btnId;
@@ -385,7 +385,7 @@ const OrderList = () => {
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
     }
 
-    function viewBtnFunc(config) {
+    function viewApprovalBtnFunc(config) {
         dispatch(_act.viewOrderSingleget(config))
     }
 
@@ -604,7 +604,7 @@ const OrderList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
-                            viewBtnFunc={viewBtnFunc}
+                            viewApprovalBtnFunc={viewApprovalBtnFunc}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
