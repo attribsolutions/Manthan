@@ -56,6 +56,7 @@ import ImportExcelFieldMap_Saga from "./Administrator/ImportExportFieldMapRedux/
 import ImportFieldAdd_Saga from "./Administrator/ImportFieldAddRedux/saga"
 import ImportExcelPartyMap_Saga from "./Administrator/ImportExcelPartyMapRedux/saga"
 import CitySaga from "./Administrator/CityRedux/saga"
+import DiscountSaga from "./Administrator/DiscountRedux/saga"
 
 
 //    *********************** Purchase ***********************
@@ -88,6 +89,7 @@ import OrderSummarySaga from "./Report/OrderSummaryRedux/saga"
 import PartySettingSaga from "./Administrator/PartySetting/saga"
 import StockEntrySaga from "./Inventory/StockEntryRedux/saga"
 import StockReportSaga from "./Report/StockReport/saga"
+import GenericSaleReportSaga from "./Report/GenericSaleRedux/saga"
 
 
 export default function* rootSaga() {
@@ -130,6 +132,8 @@ export default function* rootSaga() {
     fork(MarginMasterSaga),
     fork(TermsAndConditionsSaga),
     fork(RoutesSaga),
+    fork(DiscountSaga),
+    
     fork(SalesManSaga),
     fork(CreditLimitSaga),
     fork(GroupTypeSaga),
@@ -163,6 +167,7 @@ export default function* rootSaga() {
     fork(OrderSummarySaga),
     fork(PartySettingSaga),
     fork(StockEntrySaga),
-    fork(StockReportSaga)
+    fork(StockReportSaga),
+    fork(GenericSaleReportSaga),
   ])
 }

@@ -61,6 +61,7 @@ import ImportFieldAdd_Reducer from "./Administrator/ImportFieldAddRedux/reducer"
 import ImportExcelPartyMap_Reducer from "./Administrator/ImportExcelPartyMapRedux/reducer"
 import CityReducer from "./Administrator/CityRedux/reducer"
 import PartySettingReducer from "./Administrator/PartySetting/reducer"
+import DiscountReducere from "./Administrator/DiscountRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -94,6 +95,7 @@ import ReceiptReducer from "./Accounting/Receipt/reducer"
 //***************************Reports ************************** */
 import OrderSummaryReducer from "./Report/OrderSummaryRedux/reducer"
 import StockReportReducer from "./Report/StockReport/reducer"
+import  GenericSaleReportReducer from "./Report/GenericSaleRedux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -138,6 +140,7 @@ const rootReducer = combineReducers({
   MarginMasterReducer,
   TermsAndConditionsReducer,
   RoutesReducer,
+  DiscountReducere,
   CreditLimitReducer,
   PartyMasterBulkUpdateReducer,
   SalesManReducer,
@@ -168,5 +171,6 @@ const rootReducer = combineReducers({
   PartySettingReducer,
   StockEntryReducer,
   StockReportReducer,
+  GenericSaleReportReducer,
 })
 export default rootReducer
