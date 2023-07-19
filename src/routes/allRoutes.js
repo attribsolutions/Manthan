@@ -10,7 +10,7 @@ import Login from "../pages/Authentication/Login"
 import Logout from "../pages/Authentication/Logout"
 import ForgetPwd from "../pages/Authentication/ForgetPassword"
 
-//Import  Administrator : Modules and ModulesListItem
+//Import  Administrator 
 import Modules from "../pages/Adminisrator/ModulesPages/Modules";
 import ModulesList from "../pages/Adminisrator/ModulesPages/ModulesList";
 import CompanyModule from "../pages/Adminisrator/CompanyPages/CompanyModule";
@@ -171,11 +171,12 @@ import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport
 
 const userRoutes = [
   // *************************** DashBord *******************************//
-
+ 
   { path: path.DASHBORD, component: Dashboard },
 
   { path: path.DASHBORD_1, component: Dashboard_1 },
   { path: path.DASHBORD_2, component: Dashboard_1 },
+
   // *************************** Administration *******************************//
   { path: path.MODULE, component: Modules },
   { path: path.MODULE_lIST, component: ModulesList },
@@ -195,6 +196,9 @@ const userRoutes = [
 
   { path: path.ROLE, component: RoleMaster },
   { path: path.ROLE_lIST, component: RoleList },
+  
+  { path: path.COMPANYGROUP, component: CompanyGroupMaster },
+  { path: path.COMPANYGROUP_lIST, component: CompanyGroupList },
 
   // ******************************* Master Module ******************************//
 
@@ -230,9 +234,6 @@ const userRoutes = [
   { path: path.DRIVER, component: DriverMaster },
   { path: path.DRIVER_lIST, component: DriverList },
 
-  { path: path.COMPANYGROUP, component: CompanyGroupMaster },
-  { path: path.COMPANYGROUP_lIST, component: CompanyGroupList },
-
   { path: path.GROUPTYPE, component: GroupTypeMaster },
   { path: path.GROUPTYPE_lIST, component: GroupTypeList },
 
@@ -260,7 +261,6 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY, component: PartySubParty },
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
-
   { path: path.PARTYITEM, component: PartyItems },
   { path: path.PARTYITEM_LIST, component: PartyItemsList },
 
@@ -279,9 +279,6 @@ const userRoutes = [
   { path: path.CITY, component: CityMaster },
   { path: path.CITY_LIST, component: CityList },
 
-  // { path: path.CREDITLIMIT, component: CreditLimitMaster },
-  // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
-
   { path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload },
   { path: path.RETAILER_EXCEL_UPLOAD, component: RetailerExcelUpload },
 
@@ -292,6 +289,7 @@ const userRoutes = [
   { path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportExcelPartyMap },
 
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
+
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
 
   { path: path.MANAGEMENT_PARTIES, component: ManagementEmpParties },
@@ -299,12 +297,9 @@ const userRoutes = [
   { path: path.BANK, component: BankMaster },
   { path: path.BANK_LIST, component: BankList },
 
-  { path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
-
   { path: path.INVOICE_CONFIGURATION, component: InvoiceConfiguration },
 
   { path: path.DISCOUNT_MASTER, component: DiscountMaster },
-
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
@@ -319,8 +314,6 @@ const userRoutes = [
   { path: path.GRN_STP_3, component: OrderList },
 
   { path: path.STOCK_ENTRY, component: StockEntry },
-  // { path: path.GRN_ADD_PAGE_3, component: GRNAdd_3 },
-
 
   //******************************* Purchase Module ************************************//
 
@@ -333,14 +326,9 @@ const userRoutes = [
   { path: path.ORDER_4, component: Order },
   { path: path.ORDER_LIST_4, component: OrderList },
 
-
   { path: path.PURCHASE_RETURN, component: SalesReturn },
   { path: path.PURCHASE_RETURN_LIST, component: SalesReturnList },
-
   { path: path.PURCHASE_RETURN_MODE_3, component: PurchaseReturnMode3 },
-
-  //******************************* All Report ************************************//
-  { path: path.REPORT, component: Report },
 
   //******************************* PRODUCTION  Module ************************************//
   { path: path.BIllOf_MATERIALS, component: BOMMaster },
@@ -361,7 +349,7 @@ const userRoutes = [
   { path: path.PRODUCTION_REISSUE_LIST, component: ProductionReIssueList },
   { path: path.PRODUCTION_REISSUE_STP, component: ProductionList },
 
-  //******************************* Sale  Module ************************************//
+  //******************************* Sale Module ************************************//
 
   { path: path.INVOICE_1, component: Invoice },
   { path: path.INVOICE_LIST_1, component: InvoiceList },
@@ -372,6 +360,7 @@ const userRoutes = [
 
   { path: path.SALES_RETURN, component: SalesReturn },
   { path: path.SALES_RETURN_LIST, component: SalesReturnList },
+  
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: Order },
   { path: path.IB_ORDER_PO_LIST, component: OrderList },
@@ -404,7 +393,7 @@ const userRoutes = [
 
   { path: path.CREDIT, component: Credit },
   { path: path.DEBIT, component: Debit },
-  
+
   //**************************** Reports ***********************************//
 
   { path: path.SAP_LEDGER, component: SapLedger },
@@ -412,14 +401,19 @@ const userRoutes = [
   { path: path.PARTY_LEDGER, component: PartyLedger },
 
   { path: path.STOCK_REPORT, component: StockReport },
-  
+
   { path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },
 
    { path: path.RETAILER_DATA_REPORT, component: RetailerDataReport },
 
   { path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
 
+  { path: path.REPORT, component: Report },
+
+  { path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
+
   // ************************************ Utility **************************************//
+
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
 
@@ -429,7 +423,6 @@ const userRoutes = [
   // { component:() => <Redirect to="/login" /> },
   { path: "/auth-404", component: Error404 },
   { path: "/auth-500", component: Error500 },
-
 
 ]
 

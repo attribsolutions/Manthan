@@ -24,7 +24,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { Change_Button, C_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 import PriceDropOptions from "../PartyMaster/MasterAdd/FirstTab/PriceDropOptions";
 import { priceListByPartyAction } from "../../../store/Administrator/PriceList/action";
@@ -349,6 +349,12 @@ const DiscountMaster = (props) => {
         setPriceListSelect({ label: '' })
         dispatch(priceListByPartyAction(hasSelect.value))
     }
+    const goButtonHandler = async (selectSupplier) => {
+        let config = { subPageMode, jsonBody:{} }
+        // dispatch(_act.GoButton_For_Order_Add(config))
+    };
+
+
 
     if (!(userPageAccessState === '')) {
         return (
@@ -386,8 +392,30 @@ const DiscountMaster = (props) => {
                                                 onChange={ToDate_Onchange}
                                             />
                                         </Col>
+                                        <Col sm="1" className="mx-6 mt-1 ">
+                                            {true ?
+                                                <Go_Button
+                                                    type="button"
+                                                    // loading={addBtnLoading}
+                                                    onClick={goButtonHandler}>
+                                                    GO
+                                                </Go_Button> :
+
+                                                <Change_Button onClick={(e) => {
+                                                    // setTableArr([])
+                                                    // setState((i) => {
+                                                    //     let a = { ...i }
+                                                    //     a.values.ItemName = ""
+                                                    //     a.values.InvoiceNumber = ""
+                                                    //     return a
+                                                    // })
+                                                }} />
+
+                                            }
+                                        </Col>
                                     </FormGroup>
                                 </Col >
+
                             </Row>
 
                             <Row>
