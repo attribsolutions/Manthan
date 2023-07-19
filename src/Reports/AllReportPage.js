@@ -18,7 +18,7 @@ const Report = () => {
         const jsonBody = JSON.stringify({
             InvoiceIDs: [70, 71]
         });
-        var ReportType = report.invoiceA5;
+        var ReportType = report.invoice;
         // dispatch(postpdfMultipleReportdata(MultipleInvoice_API,jsonBody,ReportType))
         dispatch(getpdfReportdata(get_Group_List_Api, ReportType))
 

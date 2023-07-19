@@ -156,17 +156,16 @@ export const getCompanyGroup = () => get(url.GET_COMPANYGROUP)// CompanyGroup Dr
 //PageList And PageMaster
 export const showPagesListOnPageType_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN)
 export const showPagesListOnPageAccess_DropDown_List = (id) => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN)
-export const get_PageType_HPages = (id) => get(url.GET_PAGETYPE)
+export const get_PageType_HPages = () => get(url.GET_PAGETYPE)
 export const ControlTypes_DropDown_Api = () => get(url.GET_CONTROLTYPES_DROPDOWN_API)
 
 //H_pages
-export const get_Module_HPages = () => get(url.H_MODULES_API_URL)// Get subModule For H_pages
-export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)//get H_Pages List 
+export const PageMaster_Get_API = () => get(url.H_PAGES_API_URL)//get H_Pages List 
+export const PageMaster_Edit_API = ({ editId, btnId }) => get(`${url.H_PAGES_API_URL}/${editId}`, btnId)// get edit H_Pages ID Data 
+export const PageMaster_Delete_API = ({ deleteId, btnId }) => del(`${url.H_PAGES_API_URL}/${deleteId}`, btnId)
+export const PageMaster_Update_API = ({ updateId, jsonBody, btnId }) => put(`${url.H_PAGES_API_URL}/${updateId}`, jsonBody, btnId) // Upadate H_Page api
+export const PageMaster_Post_API = ({ jsonBody, btnId }) => post(url.H_PAGES_API_URL, jsonBody, btnId)
 export const GetFieldValidationOnControlType_DropDown_API = (id) => get(`${url.GET_FIELD_VALIDATIONS_DROPDOWN_API}/${id}`)//  GetFieldValidationOnControlType DropDown API
-export const edit_HPageID = ({ editId, btnId }) => get(`${url.H_PAGES_API_URL}/${editId}`, btnId)// get edit H_Pages ID Data 
-export const updateHPages = (Data, id) => put(`${url.H_PAGES_API_URL}/${id}`, Data) // Upadate H_Page api
-export const saveHPagesAPI = (Data) => post(url.H_PAGES_API_URL, Data)
-export const deletHPagesUsingID_API = ({ deleteId, btnId }) => del(`${url.H_PAGES_API_URL}/${deleteId}`, btnId)
 
 // M_Items
 export const Items_Group_Get_API = () => get(url.ITEMS_GROUP_API)//get api
@@ -619,7 +618,7 @@ export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODU
 export const OderSummary_GoBtn_API = ({ jsonBody, btnId }) => post(url.ORDER_SUMMARY, jsonBody, btnId)//post api
 export const PartySettingApi = (Party_id, Comapny_id) => get(`${url.PARTY_SETTING}/${Party_id}/${Comapny_id}`)// Party Setting api
 export const save_PartySetting_API = ({ jsonBody, btnId }) => post(url.PARTY_SETTING, jsonBody, btnId)//  postapi
-export const PartyLedgerReport_API = ({jsonBody}) => post(url.PARTY_LEDGER, jsonBody)//  postapi
+export const PartyLedgerReport_API = ({ jsonBody }) => post(url.PARTY_LEDGER, jsonBody)//  postapi
 
 
 // export const PartyLedger_API = (FromDate,ToDate,SAPCode) => get(`http://web.chitalebandhu.in:8080/FoodERPWebAPIPOS/api/SAPDataSendToSCM/GetSAPCustomerLedgerList?FromDate=${FromDate}&ToDate=${ToDate}&SAPCode=${SAPCode}`)//  postapi

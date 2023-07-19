@@ -21,7 +21,7 @@ export function SaveButton(props) {
   }
   return null
 }
-const SaveBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
+const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled }) => {
   const { Name } = userAcc;
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
@@ -30,20 +30,17 @@ const SaveBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
         <button
           id={btnId}
           title={`Save ${Name} Loging...`}
-          // disabled
+          type={type}
           className="btn btn-primary w-md"
-          autoFocus={false}
-        // onClick={onClick}
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
 
         :
         <button
-          type="submit"
+          type={type}
           id={btnId}
           disabled={forceDisabled}
-          autoFocus={false}
           title={`Save ${Name}`}
           className="btn btn-primary w-md"
           onClick={onClick}
@@ -53,7 +50,7 @@ const SaveBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
   )
 
 }
-const UpdateBtn = ({ onClick, userAcc, loading }) => {
+const UpdateBtn = ({ onClick, userAcc, loading, type = 'button' }) => {
   const { Name } = userAcc;
   const btnId = `Update-${Name.replace(/ /g, "")}`;
 
@@ -63,13 +60,14 @@ const UpdateBtn = ({ onClick, userAcc, loading }) => {
         <button
           id={btnId}
           title={`Updating.. ${Name} `}
+          type={type}
           className="btn btn-success w-md"
         >  Updating.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
         :
         <button
-          type="submit"
+          type={type}
           id={btnId}
           title={`Update ${Name}`}
           className="btn btn-success w-md"
@@ -114,7 +112,6 @@ export function C_Button(props) {
   const {
     loading,
     color,
-    Children
   } = props
 
   return loading ?
@@ -139,18 +136,16 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
       {loading ?
         <button
           id={btnId}
-
+          type="button"
           className="btn btn-info w-md"
-          autoFocus={false}
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
         :
         <button
-          type="submit"
+          type="button"
           id={btnId}
           disabled={forceDisabled}
-          autoFocus={false}
           title={` save & goto Invoice ${Name}`}
           className="btn btn-info w-md"
           onClick={onClick}
@@ -160,7 +155,7 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
   )
 }
 
-export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled }) => {
+export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled, type = "button" }) => {
   const { Name } = userAcc;
   const btnId = `SaveAndDownloadPdfBtn-${Name.replace(/ /g, "")}`;
   return (
@@ -168,18 +163,16 @@ export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled })
       {loading ?
         <button
           id={btnId}
-
+          type={type}
           className="btn btn-info w-md"
-          autoFocus={false}
-        >  Saving.. &nbsp;
+        >Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
         :
         <button
-          type="submit"
+          type={type}
           id={btnId}
           disabled={forceDisabled}
-          autoFocus={false}
           title={` save & goto Invoice ${Name}`}
           className="btn btn-info w-md"
           onClick={onClick}
@@ -237,7 +230,7 @@ export function CustomSppiner({ isLoading }) {// common Listcomponent
 }
 
 export function DashboardLoader() {// linner component
-  return <div className="dot-pulse mt-2"> &nbsp; &nbsp;&nbsp; 
+  return <div className="dot-pulse mt-2"> &nbsp; &nbsp;&nbsp;
     <div className="bounce1" ></div>
     <div className="bounce2" ></div>
     <div className="bounce3" ></div>
