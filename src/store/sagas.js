@@ -20,7 +20,7 @@ import pdfReport_Saga from "./Utilites/PdfReport/saga"
 //    *********************** Module ***********************
 import ModulesSaga from "./Administrator/ModulesRedux/saga"
 import CompanySaga from "./Administrator/CompanyRedux/saga"
-import HPageSaga from "./Administrator/HPagesRedux/saga"
+import HPageSaga from "./Administrator/PageMasterRedux/saga"
 import UserRegistrationSaga from "./Administrator/UserRegistrationRedux/saga"
 import M_EmployeeSaga from "./Administrator/EmployeeRedux/saga"
 import RoleMaster_Saga from "./Administrator/RoleMasterRedux/saga"

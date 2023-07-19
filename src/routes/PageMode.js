@@ -4,6 +4,7 @@ export const edit = "edit";
 export const view = "view";
 export const copy = "copy";
 export const isdelete = "isdelete";
+export const viewApproval = "viewApproval";
 
 export const dropdownAdd = "dropdownAdd";
 export const modeSTPsave = "modeSTPsave";//for in the list page save button show purpose
