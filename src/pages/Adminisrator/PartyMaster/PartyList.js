@@ -78,7 +78,7 @@ const PartyList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(getPartyListAPI());
+        dispatch(getPartyListAPI(subPageMode));
         return () => {
             dispatch(commonPageFieldListSuccess(null))
             dispatch(updatePartyIDSuccess([]))//for clear privious order list   

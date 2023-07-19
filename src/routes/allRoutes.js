@@ -165,6 +165,7 @@ import PartyLedger from "../Reports/PratyLedger/Partyledger";
 import StockReport from "../Reports/StockReport/StockReport";
 import PurchaseReturnMode3 from "../pages/Purchase/PurchaseReturnMode_3/PurchaseReturnMode3";
 import DiscountMaster from "../pages/Adminisrator/Discount/DiscountMaster";
+import GenericSaleReport from "../Reports/GenericSaleReport/GenericSaleReport";
 
 
 const userRoutes = [
@@ -402,14 +403,16 @@ const userRoutes = [
 
   { path: path.CREDIT, component: Credit },
   { path: path.DEBIT, component: Debit },
+  
+  //**************************** Reports ***********************************//
 
   { path: path.SAP_LEDGER, component: SapLedger },
 
   { path: path.PARTY_LEDGER, component: PartyLedger },
 
   { path: path.STOCK_REPORT, component: StockReport },
-
-  //**************************** Reports ***********************************//
+  
+  { path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },
 
   { path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
 

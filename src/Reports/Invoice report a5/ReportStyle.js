@@ -252,19 +252,19 @@ export const reportFooter = (doc, data) => {
 
     } else {
         doc.text(`Total Basic:`, 440, 302,)
-        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 302, 'right')
+        doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 302, 'right')
 
         doc.text(`Total Disc:`, 440, 312,)
-        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 312, 'right')
+        doc.text(`${numberWithCommas(TotalDiscount.toFixed(2))}`, 567, 312, 'right')
 
         doc.text(`Total CGST:`, 440, 322)
-        doc.text(`${totalCGST.toFixed(2)}`, 567, 322, 'right')
+        doc.text(`${numberWithCommas(totalCGST.toFixed(2))}`, 567, 322, 'right')
 
         doc.text(`Total SGST:`, 440, 332,)
-        doc.text(`${totalSGST.toFixed(2)}`, 567, 332, 'right')
+        doc.text(`${numberWithCommas(totalSGST.toFixed(2))}`, 567, 332, 'right')
 
         doc.text(`Total GST:`, 440, 342,)
-        doc.text(` ${TotalGST.toFixed(2)}`, 567, 342, 'right')
+        doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 342, 'right')
 
 
     }
@@ -274,7 +274,7 @@ export const reportFooter = (doc, data) => {
     doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 352, 'right')
 
     doc.text(`TCS Amount:`, 440, 362,)
-    doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 567, 362, 'right')
+    doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 362, 'right')
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(10)
@@ -602,7 +602,7 @@ export const tableBodyWithIGST = (doc, data) => {
                 halign: 'right',
             },
             8: {
-                columnWidth: 24,
+                columnWidth: 26,
                 halign: 'right',
             },
             9: {
@@ -611,7 +611,7 @@ export const tableBodyWithIGST = (doc, data) => {
 
             },
             10: {
-                columnWidth: 54,
+                columnWidth: 52,
                 halign: 'right',
             },
 
