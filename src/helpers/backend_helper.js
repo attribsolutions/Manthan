@@ -643,7 +643,7 @@ export const StockReport_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REP
 export const GenericSale_GoBtn_API = ({ jsonBody, btnId }) => post(url.GENERIC_SALE_REPORT, jsonBody, btnId)//Go button api
 
 //Retailer  data Report
-export const RetailerData_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REPORT, jsonBody, btnId)//Go button api
+export const RetailerData_GoBtn_API = ({ jsonBody, btnId }) => post(url.RETAILER_DATA_REPORT, jsonBody, btnId)//Go button api
 
 export {
   getLoggedInUser,
