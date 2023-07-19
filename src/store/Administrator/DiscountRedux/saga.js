@@ -33,7 +33,6 @@ function* GoBtn_Discount_GenFunc() {
 }
 
 function* Save_Method_ForDiscount_GenFun({ config }) {    
-  debugger     
   try {
     const response = yield call(Discount_Save_Api, config);
     yield put(saveDiscountActionSuccess(response));

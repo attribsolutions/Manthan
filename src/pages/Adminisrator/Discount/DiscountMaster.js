@@ -46,7 +46,7 @@ const DiscountMaster = (props) => {
         ToDate: currentDate_ymd,
         PartyType: "",
         Customer: "",
-        ItemList: ""
+        PriceList: "",
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -384,7 +384,7 @@ const DiscountMaster = (props) => {
     function partyTypeOnChange(hasSelect, evn) {
 
         onChangeSelect({ hasSelect, evn, state, setState })
-        setPriceListSelect({ label: '' })
+        setPriceListSelect({ label: "", value: "" })
         dispatch(priceListByPartyAction(hasSelect.value))
     }
     const goButtonHandler = async (selectSupplier) => {
@@ -397,7 +397,26 @@ const DiscountMaster = (props) => {
         event.preventDefault();
         debugger
         try {
-            // if()
+            // if()const invalidMessages = [];
+
+
+            let invalidMessages = ' Select';
+
+            if (values.PartyType === '') { invalidMessages = invalidMessages + ', ' + "PartyType" };
+            if (values.Customer === '') { invalidMessages = invalidMessages + ', ' + "Customer" };
+            if (priceListSelect.value === '') { invalidMessages = invalidMessages + ', ' + "PriceList" };
+
+            if (priceListSelect.value === '') { invalidMessages = invalidMessages + ', ' + "PriceList" };
+
+            if ((values.PartyType === '') || (values.Customer === '') || (priceListSelect.value === '')) {
+                customAlert({
+                    Type: 4,
+                    Message: invalidMessages,
+                });
+                return;
+            }
+
+
             const filteredDiscounts = discountTableData.reduce((filteredDiscountTable, currentValue) => {
                 if (currentValue.Discount > 0) {
                     filteredDiscountTable.push({
@@ -417,20 +436,14 @@ const DiscountMaster = (props) => {
                 return filteredDiscountTable;
             }, []);
 
+            if ((filteredDiscounts.length === 0)) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Enter One Item Discont",
+                });
+                return;
+            }
 
-            var a = [{
-                "FromDate": "2023-07-19",
-                "ToDate": "2023-07-19",
-                "DiscountType": 1,
-                "Discount": 10,
-                "CreatedBy": 1,
-                "UpdatedBy": 1,
-                "PartyType": 11,
-                "PriceList": 3,
-                "Customer": 5,
-                "Party": 24,
-                "Item": 2
-            }]
             const jsonBody = JSON.stringify(filteredDiscounts);
             if (pageMode === mode.edit) {
                 // dispatch(updateDiscountID({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
