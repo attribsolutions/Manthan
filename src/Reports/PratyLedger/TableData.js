@@ -26,14 +26,14 @@ export const Rows = (data) => {
     let TotalInAmount = 0
 
     InvoiceItems.forEach((element, key) => {
-      
+
         const tableitemRow = [
-            date_dmy_func(element.Date),
-            element.DocumentNO,
-            element.Particular,
-            element.Amount,
-            element.RecieptAmount,
-            Number(element.Balance).toFixed(2),
+            `${date_dmy_func(element.Date)}`,
+            `${element.DocumentNO}`,
+            `${element.Particular}`,
+            `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.RecieptAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Balance).toFixed(2))}`,
 
         ];
 
@@ -195,8 +195,6 @@ export const Rows = (data) => {
                 ``,
             ];
         };
-
-
 
         if (key === 0) {
             returnArr.push(OpeningBalance());
