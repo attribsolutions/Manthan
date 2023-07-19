@@ -8,13 +8,13 @@ import { Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_EInvoiceAction, 
 //******************** button class ******************************
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-const vieBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-const copyBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
+const vieBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
+const copyBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
+const updateBtnCss = "badge badge-soft-info font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
 export const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
 export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
-export const printBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light "
+export const printBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light "
 const printInvoiceBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
 
 //******************** icon class ******************************
@@ -65,7 +65,7 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnFunc(arr, btnId);
     };
 
-    const renderButtonOnClick = async({ rowData, btnmode, btnId, actionFunc, dispatchAction }) => {
+    const renderButtonOnClick = async ({ rowData, btnmode, btnId, actionFunc, dispatchAction }) => {
 
         try {
             const config = {
@@ -143,11 +143,11 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
 
-        
+
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
             if (!condition && !isDummyBtn) return null;
             if (!isDummyBtn) {
-            
+
                 return (
                     <Button
                         type="button"
@@ -325,7 +325,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
         } catch (error) { }
     }
 
-    function Print_EwayBillHander(rowData) {
+    function Print_EwayBillHander(btnId, rowData) {
         const { InvoiceUploads } = rowData;
         if (!(InvoiceUploads === undefined) && InvoiceUploads.length > 0) {
             const pdfUrl = `https://${InvoiceUploads[0].EwayBillUrl}`;
@@ -451,7 +451,8 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
         } catch (error) { }
     }
 
-    function Print_InvoiceHander(rowData) {
+    function Print_InvoiceHander(btnId, rowData) {
+        debugger
         const { InvoiceUploads } = rowData;
         if (!(InvoiceUploads === undefined) && InvoiceUploads.length > 0) {
             const pdfUrl = InvoiceUploads[0].EInvoicePdf;

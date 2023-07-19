@@ -32,7 +32,7 @@ const INIT_STATE = {
     confirmBtnData: { Status: false },
     sendToSSbtnTableData: { Status: false },
     sendToSSbtnLoading: false,
-    updateMsg: { Status: false }
+    ApprovrMsg: { Status: false }
 
 }
 
@@ -90,7 +90,7 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 saveBtnloading: false,
-                updateMsg: action.payload,
+                ApprovrMsg: action.payload,
 
             }
 

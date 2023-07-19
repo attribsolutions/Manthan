@@ -214,7 +214,6 @@ textarea:focus {
 
 
 .transparent1 {
-  // background-color: rgba(204, 24, 24, 0.5);
   background-color: rgba(92, 91, 91, 0.3);
 }
 
@@ -231,6 +230,24 @@ textarea:focus {
   opacity: 0.5;
   cursor: not-allowed !important;
 }
+
+.c_btn-primary {
+
+  &:hover {
+    background-color:  $primary; /* Darker shade of primary color on hover */
+    color: #ffffff; /* Button text color remains white on hover */
+    border-color: $primary; /* Darker shade of primary color for border on hover */
+  }
+
+  /* Style for disabled button */
+  &:disabled {
+    background-color:rgba(107, 111, 200); /* Gray background for disabled state */
+    color: #ffffff; /* Button text color remains white when disabled */
+    border-color: rgba(107, 111, 200); /* Border color for disabled state */
+    cursor: not-allowed; /* Show "not-allowed" cursor for disabled state */
+  }
+}
+
 
 //bostrap class
 
