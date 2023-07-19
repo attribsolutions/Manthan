@@ -233,3 +233,5 @@ export const StockReport = url.STOCK_REPORT
 //**************************** Reports ***********************************//
 
 export const OrderSummaryReport = url.ORDER_SUMMARY_REPORT
+
+export const Generic_Sale_Report = url.GENERIC_SALE_REPORT

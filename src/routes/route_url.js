@@ -244,3 +244,5 @@ export const STOCK_REPORT = "/StockReport"
 //**************************** Reports ***********************************//
 
 export const ORDER_SUMMARY_REPORT = "/OrderSummaryReport"
+
+export const GENERIC_SALE_REPORT = "/Generic_Sale_Report"

@@ -165,6 +165,7 @@ import PartyLedger from "../Reports/PratyLedger/Partyledger";
 import StockReport from "../Reports/StockReport/StockReport";
 import PurchaseReturnMode3 from "../pages/Purchase/PurchaseReturnMode_3/PurchaseReturnMode3";
 import DiscountMaster from "../pages/Adminisrator/Discount/DiscountMaster";
+import GenericSaleReport from "../Reports/GenericSaleReport/GenericSaleReport";
 
 
 const userRoutes = [
@@ -409,7 +410,9 @@ const userRoutes = [
 
   { path: path.STOCK_REPORT, component: StockReport },
 
-  //**************************** Reports ***********************************//
+  { path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },
+
+   //**************************** Reports ***********************************//
 
   { path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
 

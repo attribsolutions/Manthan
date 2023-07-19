@@ -1,4 +1,5 @@
 import { groupBy } from "../../components/Common/CommonFunction";
+import { numberWithCommas } from "../Report_common_function";
 
 // original
 export const columns = [
@@ -62,19 +63,19 @@ export const Rows = (data) => {
 
 
             i.forEach(element => {
-                
+
                 const tableitemRow = [
                     `(${element.HSNCode}) ${element.ItemName}     
                      ${element.Comment === null ? "" : element.Comment}`,
                     `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}  ${element.UnitName}`,
-                    `${element.MRPValue}`,
-                    element.Rate,
-                    element.BasicAmount,
-                    `${element.CGSTPercentage}%`,
-                    element.CGST,
-                    `${element.SGSTPercentage}%`,
-                    element.SGST,
-                    element.Amount,
+                    `${numberWithCommas(Number(element.MRPValue))}`,
+                    `${numberWithCommas(Number(element.Rate))}`,
+                    `${numberWithCommas(Number(element.BasicAmount))}`,
+                    `${Number(element.CGSTPercentage)}%`,
+                    `${numberWithCommas(Number(element.CGST))}`,
+                    `${Number(element.SGSTPercentage)}%`,
+                    `${numberWithCommas(Number(element.SGST))}`,
+                    `${numberWithCommas(Number(element.Amount))}`,
                     "row"
                 ];
 
@@ -91,16 +92,16 @@ export const Rows = (data) => {
 
             function totalrow() {
                 return [
-                    ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(TotalGst).toFixed(2))}`,
+                    `GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(TotalGst).toFixed(2))}`,
                     "",
-                    `${Number(totalBasicAmount).toFixed(2)}`,
+                    `${numberWithCommas(Number(totalBasicAmount).toFixed(2))}`,
                     "",
                     "",
-                    `${Number(totalCGst).toFixed(2)}`,
+                    `${numberWithCommas(Number(totalCGst).toFixed(2))}`,
                     "isaddition",
-                    `${Number(totalSGst).toFixed(2)}`,
+                    `${numberWithCommas(Number(totalSGst).toFixed(2))}`,
                     "",
-                    `${Number(totalAmount).toFixed(2)}`,
+                    `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
                 ];
             };
             hasHedRow.push(totalrow());
@@ -127,17 +128,17 @@ export const RowsWithIGST = (data) => {
 
 
             i.forEach(element => {
-                
+
                 const tableitemRow = [
                     `(${element.HSNCode}) ${element.ItemName}     
                      ${element.Comment === null ? "" : element.Comment}`,
                     `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}                  ${element.UnitName}`,
-                    `${element.MRPValue}`,
-                    element.Rate,
-                    element.BasicAmount,
-                    `${element.IGSTPercentage}%`,
-                    element.IGST,
-                    element.Amount,
+                    `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
+                    `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
+                    `${numberWithCommas(Number(element.BasicAmount).toFixed(2))}`,
+                    `${Number(element.IGSTPercentage)}%`,
+                    `${numberWithCommas(Number(element.IGST).toFixed(2))}`,
+                    `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
                     "row"
                 ];
 
@@ -153,14 +154,14 @@ export const RowsWithIGST = (data) => {
 
             function totalrow() {
                 return [
-                    `GST ${(Number(GSTPercentage))}%  Total:${(Number(totalIGst).toFixed(2))} `,
-                    `${Number(totalBasicAmount).toFixed(2)}`,
+                    `GST ${(Number(GSTPercentage))}%  Total:${(numberWithCommas(Number(totalIGst).toFixed(2)))} `,
+                    `${numberWithCommas(Number(totalBasicAmount).toFixed(2))}`,
                     "",
                     "",
                     "",
-                    `${Number(totalIGst).toFixed(2)}`,
+                    `${numberWithCommas(Number(totalIGst).toFixed(2))}`,
                     "isaddition",
-                    `${Number(totalAmount).toFixed(2)}`,
+                    `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
 
                 ];
             };

@@ -16,7 +16,7 @@ export const pageBorder = (doc) => {
 }
 
 export const pageHeder = (doc, data) => {
-    
+
     doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
@@ -547,29 +547,29 @@ export const pageFooter = (doc, data) => {
         doc.setFontSize(8)
 
         doc.text(`IGST:`, 434, 772,)
-        doc.text(`${(totalIGST).toFixed(2)}`, 568, 772, 'right')
+        doc.text(`${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 772, 'right')
 
         doc.text(`TotalGST:`, 434, 784,)
-        doc.text(` ${(totalIGST).toFixed(2)}`, 568, 784, 'right')
+        doc.text(` ${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 784, 'right')
 
         doc.text(`BasicAmount:`, 434, 795,)
-        doc.text(`${(TotalBasicAmount).toFixed(2)}`, 568, 795, 'right')
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 795, 'right')
 
     } else {
 
         doc.setFontSize(8)
 
         doc.text(`CGST:`, 434, 760,)
-        doc.text(`${(totalCGST).toFixed(2)}`, 568, 760, 'right')
+        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 568, 760, 'right')
 
         doc.text(`SGST:`, 434, 772,)
-        doc.text(`${(totalSGST).toFixed(2)}`, 568, 772, 'right')
+        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 568, 772, 'right')
 
         doc.text(`TotalGST:`, 434, 784,)
-        doc.text(` ${(TotalGST).toFixed(2)}`, 568, 784, 'right')
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 568, 784, 'right')
 
         doc.text(`BasicAmount:`, 434, 795,)
-        doc.text(`${(TotalBasicAmount).toFixed(2)}`, 568, 795, 'right')
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 795, 'right')
     }
 
 
