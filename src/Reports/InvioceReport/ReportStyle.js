@@ -279,47 +279,47 @@ export const reportFooter = (doc, data) => {
     if (isIGST) {
 
         doc.text(`Total Basic:`, 440, 748,)
-        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 748, 'right')
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 748, 'right')
 
         doc.text(`Total Disc:`, 440, 758,)
-        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 758, 'right')
+        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 758, 'right')
 
         doc.text(`Total IGST:`, 440, 768,)
-        doc.text(`${totalICGST.toFixed(2)}`, 567, 768, 'right')
+        doc.text(`${numberWithCommas(Number(totalICGST).toFixed(2))}`, 567, 768, 'right')
 
         doc.text(`Total GST:`, 440, 778,)
-        doc.text(` ${TotalGST.toFixed(2)}`, 567, 778, 'right')
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 778, 'right')
 
         doc.text(`Round Off:`, 440, 788,)
-        doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 788, 'right')
+        doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 788, 'right')
 
         doc.text(`TCS Amount:`, 440, 798,)
-        doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 567, 798, 'right')
+        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 798, 'right')
 
 
 
     } else {
 
         doc.text(`Total Basic:`, 440, 738,)
-        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 738, 'right')
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 738, 'right')
 
         doc.text(`Total Disc:`, 440, 748,)
-        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 748, 'right')
+        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 748, 'right')
 
         doc.text(`Total CGST:`, 440, 758)
-        doc.text(`${totalCGST.toFixed(2)}`, 567, 758, 'right')
+        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 567, 758, 'right')
 
         doc.text(`Total SGST:`, 440, 768,)
-        doc.text(`${totalSGST.toFixed(2)}`, 567, 768, 'right')
+        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 567, 768, 'right')
 
         doc.text(`Total GST:`, 440, 778,)
-        doc.text(` ${TotalGST.toFixed(2)}`, 567, 778, 'right')
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 778, 'right')
 
         doc.text(`Round Off:`, 440, 788,)
-        doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 788, 'right')
+        doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 788, 'right')
 
         doc.text(`TCS Amount:`, 440, 798,)
-        doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 567, 798, 'right')
+        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 798, 'right')
 
         var DetailsOfBankStyle = {
             didParseCell: (data1) => {
