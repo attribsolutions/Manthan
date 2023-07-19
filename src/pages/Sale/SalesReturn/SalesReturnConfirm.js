@@ -5,7 +5,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole, date_dmy_func, loginUserID } from "../../../components/Common/CommonFunction";
-import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove, returnApprove_Success } from "../../../store/actions";
+import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove, returnApprove_Success, salesReturnListAPI } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, onlyNumberRegx, onlyTextRegx } from "../../../CustomValidateForm";
@@ -24,7 +24,7 @@ const ViewDetails_Modal = () => {
     }))
 
     useEffect(() => {
-        
+        debugger
         try {
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
@@ -40,7 +40,6 @@ const ViewDetails_Modal = () => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200)) {
-
             dispatch(confirm_SalesReturn_Id_Succcess({ Status: false }))
             dispatch(returnApprove_Success({ Status: false }))
             customAlert({
@@ -64,8 +63,11 @@ const ViewDetails_Modal = () => {
             const tableItemArray = []
             let inValideUnits = []
             tableArray.ReturnItems.forEach(index => {
-                
+                debugger
                 const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
+                const Comment = index.ApproveComment ? index.ApproveComment : null
+
+
                 if (index.ApproveQuantity === "") {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
                 } else if (Number(Quantity) > 0) {
@@ -74,13 +76,13 @@ const ViewDetails_Modal = () => {
                         Item: index.Item,
                         Unit: index.Unit,
                         ApprovedQuantity: Quantity,
-                        ApproveComment: index.ApproveComment,
+                        ApproveComment: Comment,
                         Approvedby: loginUserID()
                     }
                     tableItemArray.push(ReturnItems)
                 }
             })
-            
+
             const jsonBody = JSON.stringify({
                 ReturnID: viewData_redux.Data[0].ReturnID,
                 ReturnItem: tableItemArray
@@ -243,6 +245,7 @@ const ViewDetails_Modal = () => {
                                             <button
                                                 type="submit"
                                                 autoFocus={false}
+                                                disabled={tableArray.IsApproved ? true : false}
                                                 title={`Save `}
                                                 className="btn btn-primary w-md"
                                                 onClick={SaveHandler}

@@ -44,9 +44,9 @@ const generateReport = (resp) => {
         case VanLoadingPartyWiseInvoice:
             VanLoadingSheet(resp.Data)
             break;
-        case invoiceA5:
-            InvioceReporta5(resp.Data)
-            break;
+        // case invoiceA5:
+        //     InvioceReporta5(resp.Data)
+        //     break;
         case Receipt:
             Receipts(resp.Data)
             break;

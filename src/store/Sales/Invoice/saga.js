@@ -54,13 +54,13 @@ import { orderApprovalActionSuccess } from "../../actions";
 
 //post api for Invoice Master
 function* save_Invoice_Genfun({ config }) {
-  const { subPageMode, btnId, SaveAndDownloadPdfMode } = config;
+  const { subPageMode, btnId, saveAndDownloadPdfMode } = config;
   try {
 
     if (subPageMode === url.INVOICE_1) {
       let response = yield call(Invoice_1_Save_API, config);
       response["btnId"] = btnId
-      response["SaveAndDownloadPdfMode"] = SaveAndDownloadPdfMode
+      response["saveAndDownloadPdfMode"] = saveAndDownloadPdfMode
       yield put(invoiceSaveActionSuccess(response))
     } if (subPageMode === url.IB_INVOICE) {
       let response = yield call(IB_Invoice_Save_API, config);

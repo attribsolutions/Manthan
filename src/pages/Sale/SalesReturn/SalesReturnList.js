@@ -293,7 +293,7 @@ const SalesReturnList = () => {
                                 isRoleAccess: (PurchaseReturnMode_3_Access),
                                 isShow: (subPageMode === url.SALES_RETURN_LIST),
                                 selectSaveBtnHandler: selectSaveBtnHandler,
-                                selectSaveBtnLabel: "Send To Superstockiest",
+                                selectSaveBtnLabel: "Send To Supplier",
                                 selectHeaderLabel: "Select",
                             }}
 
