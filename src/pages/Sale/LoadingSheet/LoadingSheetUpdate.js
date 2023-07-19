@@ -52,35 +52,35 @@ const LoadingSheetUpdate = (props) => {
     }));
 
     // const { ReceiptFlag } = LoadingSheetUpdateList
-    const lastColumn = () => ({
-        text: "Action",
-        dataField: "",
-        formatExtraData: { listBtnLoading },
-        // hidden: true,
-        formatter: (cellContent, row, key, { listBtnLoading }) => {
-            const { ReceiptFlag } = row
+    // const lastColumn = () => ({
+    //     text: "Action",
+    //     dataField: "",
+    //     formatExtraData: { listBtnLoading },
+    //     // hidden: true,
+    //     formatter: (cellContent, row, key, { listBtnLoading }) => {
+    //         const { ReceiptFlag } = row
 
-            return (<></>
-                // <span style={{ justifyContent: 'center' }}>
-                //     <Button
-                //         type="button"
-                //         id={`btn-makeBtn-${row.id}`}
-                //         title={"Make Receipt"}
-                //         disabled={listBtnLoading || ReceiptFlag}
-                //         className={makeBtnCss}
-                //         onClick={(e) => {
-                //             makeBtnFunc(e, row)
-                //         }}
-                //     >
-                //         {(listBtnLoading === `btn-makeBtn-${row.id}`) ?
-                //             <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                //             : <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                //                 className=" fas fa-file-invoice" ></span>
-                //         }
-                //     </Button></span>
-            )
-        }
-    })
+    //         return (<></>
+    //             // <span style={{ justifyContent: 'center' }}>
+    //             //     <Button
+    //             //         type="button"
+    //             //         id={`btn-makeBtn-${row.id}`}
+    //             //         title={"Make Receipt"}
+    //             //         disabled={listBtnLoading || ReceiptFlag}
+    //             //         className={makeBtnCss}
+    //             //         onClick={(e) => {
+    //             //             makeBtnFunc(e, row)
+    //             //         }}
+    //             //     >
+    //             //         {(listBtnLoading === `btn-makeBtn-${row.id}`) ?
+    //             //             <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+    //             //             : <span style={{ marginLeft: "6px", marginRight: "6px" }}
+    //             //                 className=" fas fa-file-invoice" ></span>
+    //             //         }
+    //             //     </Button></span>
+    //         )
+    //     }
+    // })
 
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
@@ -102,7 +102,7 @@ const LoadingSheetUpdate = (props) => {
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    const [tableColumns] = DynamicColumnHook({ pageField, lastColumn, reducers: { listBtnLoading } })
+    const [tableColumns] = DynamicColumnHook({ pageField, reducers: { listBtnLoading } })
 
     // userAccess useEffect
     useEffect(() => {
@@ -134,27 +134,27 @@ const LoadingSheetUpdate = (props) => {
         }
     }, [makeReceipt, OpeningBalance])
 
-    function makeBtnFunc(e, row) {
-        var { CustomerID, id } = row
-        try {
-            const jsonBody = JSON.stringify({
-                PartyID: _cfunc.loginPartyID(),
-                CustomerID: CustomerID,
-                InvoiceID: (id).toString()
-            });
+    // function makeBtnFunc(e, row) {
+    //     var { CustomerID, id } = row
+    //     try {
+    //         const jsonBody = JSON.stringify({
+    //             PartyID: _cfunc.loginPartyID(),
+    //             CustomerID: CustomerID,
+    //             InvoiceID: (id).toString()
+    //         });
 
-            const jsonBody1 = JSON.stringify({
-                PartyID: _cfunc.loginPartyID(),
-                CustomerID: CustomerID,
-                ReceiptDate: currentDate_ymd
-            });
+    //         const jsonBody1 = JSON.stringify({
+    //             PartyID: _cfunc.loginPartyID(),
+    //             CustomerID: CustomerID,
+    //             ReceiptDate: currentDate_ymd
+    //         });
 
-            const config = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row, btnId: `btn-makeBtn-${id}` }
-            dispatch(ReceiptGoButtonMaster(config));
-            dispatch(GetOpeningBalance(jsonBody1));
+    //         const config = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row, btnId: `btn-makeBtn-${id}` }
+    //         dispatch(ReceiptGoButtonMaster(config));
+    //         dispatch(GetOpeningBalance(jsonBody1));
 
-        } catch (e) { }
-    }
+    //     } catch (e) { }
+    // }
 
     function rowSelected() {
         return tableListData.map((index) => { return (index.selectCheck) && index.id })
