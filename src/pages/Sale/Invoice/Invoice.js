@@ -154,12 +154,12 @@ const Invoice = (props) => {
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
-
+debugger
             //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
             if (postMsg.saveAndDownloadPdfMode) {
                 const config = {
                     editId: postMsg.InvoiceID,
-                    ReportType: report.invoiceA5,
+                    ReportType: report.invoice,
                 };
                 dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config));
             }

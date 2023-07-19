@@ -3,7 +3,6 @@ import ordeRreport from "./OrderReport/Page";
 import StockReport from "./StockReport/Page";
 import MaterialReport from "./MaterialReport/Page";
 import VanLoadingSheet from "./Van Loading Party Wise InvoiceList/Page";
-import InvioceReporta5 from "./Invoice report a5/Page";
 import Receipts from "./Receipts/Page";
 import CreditNote from "./CRDRNote Report/Page";
 import PartyLedgerReport from "./PratyLedger/Page";
@@ -17,7 +16,7 @@ export const Materialreport1 = "Materialreport1"
 export const IBinvoice = "IBinvoice"
 export const VanLoadingSheetSKU = "VanLoadingSheetSKU"
 export const VanLoadingPartyWiseInvoice = "VanLoadingPartyWiseInvoice"
-export const invoiceA5 = "invoiceA5"
+
 export const Receipt = "Receipt"
 export const Credit = "Credit"
 export const PartyLedger = "PartyLedger"
@@ -44,9 +43,7 @@ const generateReport = (resp) => {
         case VanLoadingPartyWiseInvoice:
             VanLoadingSheet(resp.Data)
             break;
-        // case invoiceA5:
-        //     InvioceReporta5(resp.Data)
-        //     break;
+      
         case Receipt:
             Receipts(resp.Data)
             break;
