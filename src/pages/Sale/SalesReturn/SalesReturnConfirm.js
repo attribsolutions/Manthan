@@ -17,9 +17,9 @@ const ViewDetails_Modal = () => {
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
 
-    const { viewData_redux = [], updateMsg, saveBtnloading } = useSelector((state) => ({
+    const { viewData_redux = [], ApprovrMsg, saveBtnloading } = useSelector((state) => ({
         viewData_redux: state.SalesReturnReducer.confirmBtnData, // modify Redux State
-        updateMsg: state.SalesReturnReducer.updateMsg,// modify Redux State
+        ApprovrMsg: state.SalesReturnReducer.ApprovrMsg,// modify Redux State
         saveBtnloading: state.SalesReturnReducer.saveBtnloading // modify Redux State
     }))
 
@@ -39,17 +39,17 @@ const ViewDetails_Modal = () => {
 
     useEffect(() => {
 
-        if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200)) {
+        if ((ApprovrMsg.Status === true) && (ApprovrMsg.StatusCode === 200)) {
             dispatch(confirm_SalesReturn_Id_Succcess({ Status: false }))
             dispatch(returnApprove_Success({ Status: false }))
             customAlert({
                 Type: 1,
-                Message: updateMsg.Message,
+                Message: ApprovrMsg.Message,
             })
             setModal_view(false);
 
         }
-    }, [updateMsg])
+    }, [ApprovrMsg])
 
     function modalToggleFunc() {
         setModal_view(false);

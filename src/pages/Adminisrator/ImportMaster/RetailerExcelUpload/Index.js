@@ -22,8 +22,7 @@ import {
     GoButton_ImportFiledMap_AddSuccess
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
-import {
-    InvoiceExcelUpload_save_Success, RetailerExcelUpload_save_action_Success
+import { RetailerExcelUpload_save_action_Success
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
 import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";

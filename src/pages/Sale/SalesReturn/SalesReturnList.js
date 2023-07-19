@@ -51,11 +51,13 @@ const SalesReturnList = () => {
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageFieldList,
+            ApprovrMsg: state.SalesReturnReducer.ApprovrMsg,
+
         })
     );
 
-    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess } = reducers;
+    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -130,6 +132,14 @@ const SalesReturnList = () => {
         dispatch(Retailer_List(jsonBody));
         dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
     }, []);
+
+    useEffect(() => {
+        if ((ApprovrMsg.Status === true) && (ApprovrMsg.StatusCode === 200)) {
+            goButtonHandler()
+        }
+    }, [ApprovrMsg])
+
+
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
