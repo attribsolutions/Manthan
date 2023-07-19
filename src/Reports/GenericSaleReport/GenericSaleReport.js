@@ -161,8 +161,8 @@ const GenericSaleReport = (props) => {
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3" >
                                     <Label className="col-sm-4 p-2"
-                                        style={{ width: "65px" ,marginRight:"20px"}}>Distributor</Label>
-                                    <Col sm="7">
+                                        style={{ width: "65px", marginRight: "20px" }}>Distributor</Label>
+                                    <Col sm="8">
                                         <Select
                                             name="Distributor"
                                             value={distributorDropdown}

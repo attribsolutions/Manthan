@@ -68,14 +68,14 @@ export const Rows = (data) => {
                     `(${element.HSNCode}) ${element.ItemName}     
                      ${element.Comment === null ? "" : element.Comment}`,
                     `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}  ${element.UnitName}`,
-                    `${numberWithCommas(Number(element.MRPValue))}`,
-                    `${numberWithCommas(Number(element.Rate))}`,
-                    `${numberWithCommas(Number(element.BasicAmount))}`,
+                    `${(numberWithCommas(Number(element.MRPValue).toFixed(2)))}`,
+                    `${(numberWithCommas(Number(element.Rate).toFixed(2)))}`,
+                    `${(numberWithCommas(Number(element.BasicAmount).toFixed(2)))}`,
                     `${Number(element.CGSTPercentage)}%`,
-                    `${numberWithCommas(Number(element.CGST))}`,
+                    `${(numberWithCommas(Number(element.CGST).toFixed(2)))}`,
                     `${Number(element.SGSTPercentage)}%`,
-                    `${numberWithCommas(Number(element.SGST))}`,
-                    `${numberWithCommas(Number(element.Amount))}`,
+                    `${(numberWithCommas(Number(element.SGST).toFixed(2)))}`,
+                    `${(numberWithCommas(Number(element.Amount).toFixed(2)))}`,
                     "row"
                 ];
 
