@@ -15,14 +15,14 @@ import { USER } from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 
 import * as pageId from "../../../routes/allPageID"
-import { Listloader } from "../../../components/Common/CommonButton";
+import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const UserList = () => {
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.User_Registration_Reducer.listBtnLoading,
-            loading:state.User_Registration_Reducer.loading,
+            loading: state.User_Registration_Reducer.loading,
             tableList: state.User_Registration_Reducer.pages,
             editData: state.User_Registration_Reducer.editData,
             updateMsg: state.User_Registration_Reducer.updateMessage,
@@ -54,22 +54,18 @@ const UserList = () => {
 
     return (
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             {
-                reducers.loading ?
-                    <Listloader />
-                    :
-                    (pageField) ?
-                        <CommonListPage
-                            action={action}
-                            showBreadcrumb={true}
-                            reducers={reducers}
-                            MasterModal={AddUser}
-                            masterPath={USER}
-                            ButtonMsgLable={"User"}
-                            deleteName={"LoginName"}
-                        />
-                        : <><Listloader /></>
+                (pageField) &&
+                <CommonListPage
+                    action={action}
+                    showBreadcrumb={true}
+                    reducers={reducers}
+                    MasterModal={AddUser}
+                    masterPath={USER}
+                    ButtonMsgLable={"User"}
+                    deleteName={"LoginName"}
+                />
             }
 
         </React.Fragment>

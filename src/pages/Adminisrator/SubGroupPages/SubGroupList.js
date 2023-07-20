@@ -17,7 +17,7 @@ import SubGroupMaster from "./SubGroupMaster";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const SubGroupList = () => {
 
@@ -51,17 +51,14 @@ const SubGroupList = () => {
     dispatch(getSubGroupList());
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField} = reducers
 
   return (
     <React.Fragment>
-      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+     <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
       {
-        reducers.loading ?
-          <Listloader />
-          :
-          (pageField) ?
-            <CommonListPage
+        (pageField) &&
+        <CommonListPage
               action={action}
               reducers={reducers}
               MasterModal={SubGroupMaster}
@@ -69,7 +66,6 @@ const SubGroupList = () => {
               ButtonMsgLable={"SubGroup"}
               deleteName={"Name"}
             />
-            : <><Listloader /></>
       }
     </React.Fragment>
   )

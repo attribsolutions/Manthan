@@ -13,7 +13,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 
 const PartyTypeList = (props) => {
@@ -50,22 +50,22 @@ const PartyTypeList = (props) => {
   }, []);
 
   const { pageField, userAccess = [] } = reducers
-  
+
   return (
     <React.Fragment>
 
+      <PageLoadingSpinner isLoading={(reducers.listBtnLoading || !pageField)} />
       {
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={PartyType}
+          masterPath={url.PARTYTYPE}
+          ButtonMsgLable={"Party Type"}
+          deleteName={"Name"}
+        />
 
-          (pageField) &&
-            <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={PartyType}
-              masterPath={url.PARTYTYPE}
-              ButtonMsgLable={"Party Type"}
-              deleteName={"Name"}
-            />
-            
       }
     </React.Fragment>
   )

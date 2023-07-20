@@ -16,7 +16,7 @@ import {
 import GroupTypeMaster from "./GroupTypeMaster";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
 
 const GroupTypeList = (props) => {
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ const GroupTypeList = (props) => {
 
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       {
         (pageField) &&
         <CommonListPage

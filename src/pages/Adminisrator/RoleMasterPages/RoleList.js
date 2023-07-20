@@ -14,7 +14,7 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const RoleList = (props) => {
 
@@ -22,7 +22,7 @@ const RoleList = (props) => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.RoleMaster_Reducer.listBtnLoading,
-      loading:state.RoleMaster_Reducer.loading,
+      loading: state.RoleMaster_Reducer.loading,
       tableList: state.RoleMaster_Reducer.roleList,
       editData: state.RoleMaster_Reducer.editData,
       updateMsg: state.RoleMaster_Reducer.updateMsg,
@@ -54,20 +54,17 @@ const RoleList = (props) => {
 
   return (
     <React.Fragment>
+      <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
       {
-        reducers.loading ?
-          <Listloader />
-          :
-          (pageField) ?
-            <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={RoleMaster}
-              masterPath={url.ROLE}
-              ButtonMsgLable={"Role"}
-              deleteName={"Name"}
-            />
-            : <Listloader />
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={RoleMaster}
+          masterPath={url.ROLE}
+          ButtonMsgLable={"Role"}
+          deleteName={"Name"}
+        />
       }
 
     </React.Fragment>

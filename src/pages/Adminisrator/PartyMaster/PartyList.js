@@ -17,7 +17,7 @@ import { mode, url, pageId } from "../../../routes/index";
 import { useLayoutEffect } from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Listloader } from '../../../components/Common/CommonButton';
+import { Listloader, PageLoadingSpinner } from '../../../components/Common/CommonButton';
 
 const PartyList = () => {
 
@@ -85,26 +85,25 @@ const PartyList = () => {
         }
     }, []);
 
-    const { pageField, userAccess = [] } = reducers
+    const { pageField } = reducers
 
     return (
         <React.Fragment>
+
+            <PageLoadingSpinner isLoading={(reducers.listBtnLoading || !pageField)} />
             {
-                reducers.loading ?
-                    <Listloader />
-                    :
-                    (pageField) ?
-                        <CommonListPage
-                            action={action}
-                            reducers={reducers}
-                            MasterModal={PartyMaster}
-                            masterPath={otherState.masterPath}
-                            newBtnPath={otherState.newBtnPath}
-                            pageMode={pageMode}
-                            ButtonMsgLable={"Party"}
-                            deleteName={"Name"}
-                        />
-                        : <><Listloader /></>
+                (pageField) &&
+                <CommonListPage
+                    action={action}
+                    reducers={reducers}
+                    MasterModal={PartyMaster}
+                    masterPath={otherState.masterPath}
+                    newBtnPath={otherState.newBtnPath}
+                    pageMode={pageMode}
+                    ButtonMsgLable={"Party"}
+                    deleteName={"Name"}
+                />
+
             }
         </React.Fragment>
     )
