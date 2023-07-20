@@ -16,9 +16,9 @@ import {
 import GroupTypeMaster from "./GroupTypeMaster";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner} from "../../../components/Common/CommonButton";
 
-const GroupTypeList = (props) => {
+const GroupTypeList = () => {
   const dispatch = useDispatch();
 
   const reducers = useSelector(
