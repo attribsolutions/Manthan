@@ -319,7 +319,6 @@ const PurchaseReturnMode3 = (props) => {
 
         const ReturnItems = tableData.map((i) => {
 
-
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
 
@@ -350,6 +349,7 @@ const PurchaseReturnMode3 = (props) => {
                 "DiscountType": calculate.discountType,
                 "Discount": calculate.discount,
                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+                "PurchaseReturn": i.PurchaseReturn,
                 "ReturnItemImages": [],
             };
         })
@@ -370,7 +370,7 @@ const PurchaseReturnMode3 = (props) => {
                 PurchaseReturnReferences: PurchaseReturnReferences,
                 ReturnItems: ReturnItems,
             });
-            
+
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
