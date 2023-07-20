@@ -24,13 +24,14 @@ export const goBtnDiscountAddActionSuccess = (resp) => ({
   payload: resp,
 })
 
-export const getDiscountList = () => ({ // get List Action
+export const getDiscountList = (filterBody) => ({ // get List Action
   type: GET_DISCOUNT_LIST,
+  filterBody
 });
 
-export const getDiscountListSuccess = (companyList) => ({  // get List success
+export const getDiscountListSuccess = (resp) => ({  // get List success
   type: GET_DISCOUNT_LIST_SUCCESS,
-  payload: companyList,
+  payload: resp,
 });
 
 export const saveDiscountAction = (config = {}) => ({  // save Action
@@ -42,8 +43,6 @@ export const saveDiscountActionSuccess = (resp) => ({ // Save  success
   type: SAVE_DISCOUNT_SUBMIT_SUCCESS,
   payload: resp,
 });
-
-
 
 export const editDiscountID = (config = {}) => ({  // Edit Action 
   type: EDIT_DISCOUNT_ID,

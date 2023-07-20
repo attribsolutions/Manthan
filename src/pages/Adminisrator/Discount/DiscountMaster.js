@@ -378,7 +378,6 @@ const DiscountMaster = (props) => {
                 hasNone.display = "none";
             }
         }
-
     };
 
     function partyTypeOnChange(hasSelect, evn) {
@@ -493,27 +492,7 @@ const DiscountMaster = (props) => {
                                                 onChange={ToDate_Onchange}
                                             />
                                         </Col>
-                                        <Col sm="1" className="mx-6 mt-1 ">
-                                            {true ?
-                                                <Go_Button
-                                                    type="button"
-                                                    // loading={addBtnLoading}
-                                                    onClick={goButtonHandler}>
-                                                    GO
-                                                </Go_Button> :
 
-                                                <Change_Button onClick={(e) => {
-                                                    // setTableArr([])
-                                                    // setState((i) => {
-                                                    //     let a = { ...i }
-                                                    //     a.values.ItemName = ""
-                                                    //     a.values.InvoiceNumber = ""
-                                                    //     return a
-                                                    // })
-                                                }} />
-
-                                            }
-                                        </Col>
                                     </FormGroup>
                                 </Col >
 
@@ -594,6 +573,28 @@ const DiscountMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
+                                <Col md={5}> </Col>
+                                <Col sm="1" className="mx-6 mt-1 ">
+                                    {true ?
+                                        <Go_Button
+                                            type="button"
+                                            // loading={addBtnLoading}
+                                            onClick={goButtonHandler}>
+                                            GO
+                                        </Go_Button> :
+
+                                        <Change_Button onClick={(e) => {
+                                            // setTableArr([])
+                                            // setState((i) => {
+                                            //     let a = { ...i }
+                                            //     a.values.ItemName = ""
+                                            //     a.values.InvoiceNumber = ""
+                                            //     return a
+                                            // })
+                                        }} />
+
+                                    }
+                                </Col>
                             </Row>
                         </div>
 

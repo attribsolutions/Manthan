@@ -167,6 +167,7 @@ import PurchaseReturnMode3 from "../pages/Purchase/PurchaseReturnMode_3/Purchase
 import DiscountMaster from "../pages/Adminisrator/Discount/DiscountMaster";
 import GenericSaleReport from "../Reports/GenericSaleReport/GenericSaleReport";
 import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
+import DiscountList from "../pages/Adminisrator/Discount/DiscountList";
 // import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
@@ -300,6 +301,7 @@ const userRoutes = [
   { path: path.INVOICE_CONFIGURATION, component: InvoiceConfiguration },
 
   { path: path.DISCOUNT_MASTER, component: DiscountMaster },
+  { path: path.DISCOUNT_LIST, component: DiscountList},
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },

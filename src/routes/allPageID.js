@@ -103,7 +103,6 @@ export const ROUTES_LIST = 150
 export const SALESMAN = 151
 export const SALESMAN_LIST = 152
 
-
 export const IMPORT_EXCEL_FIELD_MAP = 157
 
 export const IMPORT_MASTER_MAP = 194
@@ -115,7 +114,6 @@ export const IMPORT_FIELD_ADD = 188
 export const IMPORT_FIELD_ADD_LIST = 189
 
 export const IMPORT_EXCEL_PARTY_MAP = 194
-
 
 export const ROUTE_UPDATE = 159
 export const PARTY_MASTER_BULK_UPDATE = 161
