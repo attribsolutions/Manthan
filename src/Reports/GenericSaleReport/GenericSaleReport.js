@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Col, FormGroup, Label, Row, Spinner, } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
@@ -9,10 +9,6 @@ import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
 import { SSDD_List_under_Company, } from "../../store/actions";
-import C_Report from "../../components/Common/C_Report";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { GoButton_For_GenericSale_Action, GoButton_For_GenericSale_Success } from "../../store/Report/GenericSaleRedux/action";
 import * as XLSX from 'xlsx';
 
@@ -25,7 +21,6 @@ const GenericSaleReport = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-
     const [distributorDropdown, setDistributorDropdown] = useState("");
 
     const reducers = useSelector(
@@ -174,7 +169,7 @@ const GenericSaleReport = (props) => {
                     </div>
                 </div>
             </div>
-         
+
         </React.Fragment >
     )
 }
