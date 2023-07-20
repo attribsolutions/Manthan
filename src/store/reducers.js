@@ -95,7 +95,11 @@ import ReceiptReducer from "./Accounting/Receipt/reducer"
 //***************************Reports ************************** */
 import OrderSummaryReducer from "./Report/OrderSummaryRedux/reducer"
 import StockReportReducer from "./Report/StockReport/reducer"
+
+import RetailerDataReducer from "./Report/RetailerDataRedux/reducer"
+
 import  GenericSaleReportReducer from "./Report/GenericSaleRedux/reducer"
+
 
 const rootReducer = combineReducers({
   Layout,
@@ -171,6 +175,8 @@ const rootReducer = combineReducers({
   PartySettingReducer,
   StockEntryReducer,
   StockReportReducer,
+  RetailerDataReducer,
   GenericSaleReportReducer,
+
 })
 export default rootReducer

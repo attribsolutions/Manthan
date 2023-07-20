@@ -237,3 +237,5 @@ export const SAP_LEDGER = 197
 export const ORDER_SUMMARY_REPORT = 203
 
 export const GENERIC_SALE_REPORT = 214
+
+export const RETAILER_DATA_REPORT= 215

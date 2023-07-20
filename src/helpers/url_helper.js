@@ -381,6 +381,9 @@ export const STOCK_REPORT = '/PartyLiveStock'
 // Generic Sale Report
 export const GENERIC_SALE_REPORT = '/GenericSaleReport'
 
+// Retailer Data Report
+export const RETAILER_DATA_REPORT = '/RetailerDataReport'
+
 // partySetting
 export const PARTY_SETTING = '/PartySettings'
 
