@@ -8,9 +8,9 @@ import {
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -50,7 +50,6 @@ const StockEntry = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [TableArr, setTableArr] = useState([]);
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -105,10 +104,8 @@ const StockEntry = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            debugger
             dispatch(saveStockEntrySuccess({ Status: false }))
             setTableArr([])
-            dispatch(Breadcrumb_inputName(''))
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -142,8 +139,6 @@ const StockEntry = (props) => {
     const ItemList_Options = itemList.filter((index) => {
         return index.itemCheck === true
     });
-
-
 
     const pagesListColumns = [
         {
