@@ -38,33 +38,33 @@ const invioceReport_A4 = async (data) => {
     }
     var doc = new jsPDF('p', 'pt', 'a4');
 
-    // if (data.InvoiceUploads.length > 0) {
-    //     const url = data.InvoiceUploads[0].QRCodeUrl;
-    //     let desiredPart = null;
+    if (data.InvoiceUploads.length > 0) {
+        const url = data.InvoiceUploads[0].QRCodeUrl;
+        let desiredPart = null;
 
-    //     try {
-    //         const urlObject = new URL(url);
-    //         desiredPart = urlObject.pathname;
-    //     } catch (w) { }
-    //     debugger
-    //     const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
-    //     if (image) {
-    //         doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
-    //         // console.log(image.currentSrc)
-    //     } else {
-    //         doc.text('Image Not Found', 323, 18);
-    //     }
-    // }
+        try {
+            const urlObject = new URL(url);
+            desiredPart = urlObject.pathname;
+        } catch (w) { }
+        debugger
+        const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
+        if (image) {
+            doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
+            console.log(image.currentSrc)
+        } else {
+            doc.text('Image Not Found', 323, 18);
+        }
+    }
 
-    // function loadImage(url) {
-    //     debugger
-    //     return new Promise((resolve, reject) => {
-    //         const img = new Image();
-    //         img.onload = () => resolve(img);
-    //         img.onerror = () => reject();
-    //         img.src = url;
-    //     });
-    // }
+    function loadImage(url) {
+        debugger
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => reject();
+            img.src = url;
+        });
+    }
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
