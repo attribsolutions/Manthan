@@ -11,7 +11,8 @@ import {
   POST_MODULES_SUBMIT_ERROR,
   SAVE_MODULE_MASTER_SUCCESS,
   UPDATE_MODULE_ID,
-  UPDATE_MODULE_ID_SUCCESS
+  UPDATE_MODULE_ID_SUCCESS,
+  MODULE_API_ERROR_ACTION
 } from "./actionType";
 
 export const getModuleList = () => ({// get List Action
@@ -76,3 +77,6 @@ export const deleteModuleIDError = (deleteModuleIDError) => ({
   type: DELETE_MODULE_ID_ERROR,
   payload: deleteModuleIDError,
 });
+export const moduleApiErrorAction = () => ({
+  type: MODULE_API_ERROR_ACTION,
+})

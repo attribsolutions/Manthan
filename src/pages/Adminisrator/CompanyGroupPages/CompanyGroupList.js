@@ -14,7 +14,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { CustomSppiner, } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, } from "../../../components/Common/CommonButton";
 
 const CompanyGroupList = (props) => {
 
@@ -58,7 +58,7 @@ const CompanyGroupList = (props) => {
 
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       {
         (pageField) &&
         <CommonListPage

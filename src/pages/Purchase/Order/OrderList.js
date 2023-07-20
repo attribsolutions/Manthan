@@ -10,7 +10,7 @@ import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
@@ -79,7 +79,6 @@ const OrderList = () => {
 
     const gobtnId = `gobtn-${subPageMode}`
     const {
-        orderData,
         pageField,
         GRNitem,
         supplier,
@@ -592,6 +591,7 @@ const OrderList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={reducers.loading} />
             <div className="page-content">
                 {
                     (pageField) ?

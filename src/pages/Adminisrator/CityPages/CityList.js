@@ -16,7 +16,7 @@ import {
     ReceiptListAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
-import { Go_Button, Listloader } from "../../../components/Common/CommonButton";
+import { Go_Button, Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, pageId } from "../../../routes/index"
 import CityMaster from "./CityMaster";
@@ -27,8 +27,6 @@ import { C_Select } from "../../../CustomValidateForm";
 const CityList = () => {
 
     const dispatch = useDispatch();
-    const history = useHistory();
-
 
     const fileds = {
         StateName: "",
@@ -36,8 +34,6 @@ const CityList = () => {
         DistrictID: ""
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [userAccState, setUserAccState] = useState('');
-    const [subPageMode] = useState(history.location.pathname);
 
     const reducers = useSelector(
         (state) => ({
@@ -52,7 +48,7 @@ const CityList = () => {
         })
     );
 
-    const { userAccess, pageField, State, district, districtDropDownLoading } = reducers;
+    const { pageField, State, district, districtDropDownLoading } = reducers;
 
     const values = { ...state.values }
 
@@ -71,16 +67,6 @@ const CityList = () => {
         dispatch(getCityOnDistrictSuccess([]))
     }, []);
 
-    useEffect(() => {
-        const page_Id = pageId.CITY_LIST
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
-
 
     const State_DropdownOptions = State.map((data) => ({
         value: data.id,
@@ -93,11 +79,8 @@ const CityList = () => {
     }));
 
 
-
     function goButtonHandler() {
-
         dispatch(getCityOnDistrict(values.DistrictName.value))
-
     }
 
     function District_Dropdown_Handler(e) {
@@ -184,8 +167,8 @@ const CityList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={(reducers.listBtnLoading || !pageField)} />
             <div className="page-content">
-
                 {
                     (pageField) &&
                     <CommonPurchaseList

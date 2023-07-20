@@ -13,7 +13,7 @@ import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { PAGE } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import { CustomSppiner } from "../../../components/Common/CommonButton"
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton"
 
 export default function PageList() {
 
@@ -54,7 +54,7 @@ export default function PageList() {
 
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(loading || !pageField)} />
+      <PageLoadingSpinner isLoading={(loading || !pageField)} />
       {
 
         (pageField) &&

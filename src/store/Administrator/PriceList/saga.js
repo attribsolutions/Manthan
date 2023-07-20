@@ -14,7 +14,8 @@ import {
   savePriceMasterActionSuccess,
   editPriceListSuccess,
   updatePriceListSuccess,
-  priceListByCompay_ActionSuccess
+  priceListByCompay_ActionSuccess,
+  priceList_ApiErrorAction
 } from "./action";
 import {
   DELETE_PRICE_LIST,
@@ -29,7 +30,7 @@ function* PriceList_ByParty_GenFunc({ partyType }) {
   try {
     const response = yield call(get_PriceListByPartyType_API, partyType);
     yield put(priceListByPartyActionSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(priceList_ApiErrorAction()) }
 }
 
 
@@ -37,7 +38,7 @@ function* Save_PriceList_GenFunc({ config }) {
   try {
     const response = yield call(Save_PriceList_API, config);
     yield put(savePriceMasterActionSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(priceList_ApiErrorAction()) }
 }
 
 
@@ -45,7 +46,7 @@ function* get_PriceListPageByCompany_GenFunc() {//listpage
   try {
     const response = yield call(get_PriceListByCompay_API, loginCompanyID());
     yield put(priceListByCompay_ActionSuccess(response.Data))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(priceList_ApiErrorAction()) }
 }
 
 
@@ -53,7 +54,7 @@ function* delete_PriceList_GenFun({ config = {} }) {//delete
   try {
     const response = yield call(delete_PriceList_API, config);
     yield put(delete_PriceListSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(priceList_ApiErrorAction()) }
 }
 
 
@@ -66,7 +67,7 @@ function* Edit_PriceList__GenFunc({ config }) {// edit api
     response.Data["PartyTypeName"] = PartyTypeName
     response.Data["PartyTypeId"] = PartyTypeId
     yield put(editPriceListSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(priceList_ApiErrorAction()) }
 }
 
 
@@ -74,8 +75,9 @@ function* Update_PriceList_GenFunc({ config = {} }) {// update api
   try {
     const response = yield call(update_PriceList, config);
     yield put(updatePriceListSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(priceList_ApiErrorAction()) }
 }
+
 
 function* PriceListSaga() {
   yield takeLatest(POST_PRICE_LIST_DATA, Save_PriceList_GenFunc);

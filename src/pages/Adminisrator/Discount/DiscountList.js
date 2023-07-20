@@ -14,7 +14,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import { CustomSppiner, Go_Button } from "../../../components/Common/CommonButton";
+import { CustomSppiner, Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import DiscountMaster from "./DiscountMaster";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -80,7 +80,7 @@ const DiscountList = () => {
 
     return (
         <React.Fragment>
-            <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+            <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
             <div className="page-content">
 
                 <div className="px-3 c_card_filter header text-black mb-1" >

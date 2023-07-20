@@ -17,7 +17,7 @@ import {
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const TermsAndConditionsList = (props) => {
 
@@ -52,24 +52,21 @@ const TermsAndConditionsList = (props) => {
     dispatch(getTermAndCondition())
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField,} = reducers
 
   return (
     <React.Fragment>
+      <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
       {
-        reducers.loading ?
-          <Listloader />
-          :
-          (pageField) ?
-            <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={TermsAndConditionsMaster}
-              masterPath={url.TERMS_AND_CONDITION}
-              ButtonMsgLable={"Terms & Conditions"}
-              deleteName={"Name"}
-            />
-            : <Listloader />
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={TermsAndConditionsMaster}
+          masterPath={url.TERMS_AND_CONDITION}
+          ButtonMsgLable={"Terms & Conditions"}
+          deleteName={"Name"}
+        />
       }
     </React.Fragment>
   )
