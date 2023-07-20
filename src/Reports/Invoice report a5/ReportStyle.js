@@ -196,7 +196,7 @@ export const reportHeder3 = (doc, data) => {
 
 export const reportFooter = (doc, data) => {
     let stringNumber = toWords(Number(data.GrandTotal))
-    doc.addImage(upi_qr_code, 'JPEG', 359, 310, 75, 65)
+    // doc.addImage(upi_qr_code, 'JPEG', 359, 310, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
     // doc.line(570, 340, 30, 340);//horizontal line Footer 3
