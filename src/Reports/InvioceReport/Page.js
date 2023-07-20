@@ -29,13 +29,13 @@ function pageFooter(doc, data) {
 
 const invioceReport_A4 = async (data) => {
 
-    if (data.InvoiceUploads.length > 0) {
-        if (data.InvoiceUploads[0].QRCodeUrl !== null) {
-            data["isQR"] = true;
-        } else {
-            data["isQR"] = false;
-        }
-    }
+    // if (data.InvoiceUploads.length > 0) {
+    //     if (data.InvoiceUploads[0].QRCodeUrl !== null) {
+    //         data["isQR"] = true;
+    //     } else {
+    //         data["isQR"] = false;
+    //     }
+    // }
     var doc = new jsPDF('p', 'pt', 'a4');
 
     // if (data.InvoiceUploads.length > 0) {
@@ -50,7 +50,7 @@ const invioceReport_A4 = async (data) => {
     //     const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
     //     if (image) {
     //         doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
-    //         // console.log(image.currentSrc)
+    //         console.log(image.currentSrc)
     //     } else {
     //         doc.text('Image Not Found', 323, 18);
     //     }
