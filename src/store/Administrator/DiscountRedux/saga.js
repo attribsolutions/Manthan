@@ -32,28 +32,29 @@ function* GoBtn_Discount_GenFunc() {
   } catch (error) { yield put(discountApiErrorAction()) }
 }
 
-function* Save_Method_ForDiscount_GenFun({ config }) {    
+function* Save_Method_ForDiscount_GenFun({ config }) {
   try {
     const response = yield call(Discount_Save_Api, config);
     yield put(saveDiscountActionSuccess(response));
   } catch (error) { yield put(discountApiErrorAction()) }
 }
 
-function* Get_Discount_List_GenFunc() {                        
+function* Get_Discount_List_GenFunc({filterBody}) {
+  debugger
   try {
-    const response = yield call(Discount_List_Api, loginJsonBody());
+    const response = yield call(Discount_List_Api, filterBody);
     yield put(getDiscountListSuccess(response.Data));
   } catch (error) { yield put(discountApiErrorAction()) }
 }
 
-function* deleteDiscount_ID({ config }) {                      
+function* deleteDiscount_ID({ config }) {
   try {
     const response = yield call(Discount_Delete_Api, config);
     yield put(deleteDiscountIDSuccess(response))
   } catch (error) { yield put(discountApiErrorAction()) }
 }
 
-function* editDiscount_ID({ config }) {               
+function* editDiscount_ID({ config }) {
   const { btnmode } = config;
   try {
     const response = yield call(Discount_Edit_Api, config);
@@ -62,9 +63,9 @@ function* editDiscount_ID({ config }) {
   } catch (error) { yield put(discountApiErrorAction()) }
 }
 
-function* update_Discount({ config }) {            
+function* update_Discount({ config }) {
   try {
-    const response = yield call(  Discount_Update_Api, config);
+    const response = yield call(Discount_Update_Api, config);
     yield put(updateDiscountIDSuccess(response))
   } catch (error) { yield put(discountApiErrorAction()) }
 }

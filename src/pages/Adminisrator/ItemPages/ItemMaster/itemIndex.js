@@ -706,8 +706,8 @@ const ItemsMaster = (props) => {
                     })
                     return btnIsDissablefunc({ btnId, state: false });
                 }
-
-                const jsonBody = {
+                
+                const jsonBody = JSON.stringify({
                     Name: formValue.Name,
                     ShortName: formValue.ShortName,
                     SAPItemCode: formValue.SAPItemCode,
@@ -746,7 +746,7 @@ const ItemsMaster = (props) => {
                             IsAdd: true
                         }
                     ]
-                };
+                });
 
                 if (pageMode === mode.edit) {
                     dispatch(updateItemMasterAction({ jsonBody, updateId: EditData.id, btnId }));
