@@ -81,7 +81,7 @@ const RetailerDataReport = (props) => {
         if (partydropdown === "") {
             customAlert({
                 Type: 3,
-                Message: "please Select party",
+                Message: "Please Select Party",
             })
         }
         else {
@@ -93,7 +93,6 @@ const RetailerDataReport = (props) => {
         }
         
     }
-
 
     return (
         <React.Fragment>
