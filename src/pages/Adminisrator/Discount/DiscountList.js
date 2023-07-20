@@ -7,14 +7,14 @@ import {
     editDriverID,
     deleteDriverID,
     saveDriverMasterSuccess,
-    getDriverListSuccess,
+
 } from "../../../store/Administrator/DriverRedux/action";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import { CustomSppiner, Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import DiscountMaster from "./DiscountMaster";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -28,7 +28,7 @@ const DiscountList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            tableList: state.DriverReducer.DriverList,
+            tableList: state.DiscountReducer.discountList,
             editData: state.DriverReducer.editData,
             updateMsg: state.DriverReducer.updateMessage,
             deleteMsg: state.DriverReducer.deleteMsg,
@@ -55,6 +55,7 @@ const DiscountList = () => {
         const page_Id = pageId.DISCOUNT_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
+        goButtonHandler(true)
     }, []);
 
     const goButtonHandler = () => {
@@ -62,6 +63,7 @@ const DiscountList = () => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
+            "Party": _cfunc.loginPartyID()
         });
         dispatch(getDiscountList(jsonBody));
     }
@@ -135,9 +137,9 @@ const DiscountList = () => {
                             MasterModal={DiscountMaster}
                             masterPath={url.DISCOUNT_MASTER}
                             newBtnPath={url.DISCOUNT_MASTER}
-                            ButtonMsgLable={"Driver"}
+                            ButtonMsgLable={"Discount"}
                             deleteName={"Name"}
-                        // goButnFunc={goButtonHandler}
+                            goButnFunc={goButtonHandler}
                         />
                     </div>
 

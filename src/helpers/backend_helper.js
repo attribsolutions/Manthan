@@ -357,10 +357,10 @@ export const get_City_List_Api = () => get(url.CITY_LIST_API)// get api
 
 
 // Discount API
-export const Discount_AddPage_Button_Api = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_CUSTOMER}/${partyId}`, btnId)//get api
+export const Discount_Go_Button_Api = ({ jsonBody, btnId }) => post(url.DISCOUNT_MASTER_GO_BUTTON_API, jsonBody, btnId)//get api
 export const Discount_Save_Api = ({ jsonBody }) => post(url.DISCOUNT_MASTER_SAVE_API, jsonBody)//get api
 export const Discount_Delete_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_CUSTOMER, jsonBody, btnId)// post api
-export const Discount_List_Api = (filterBody) => post(url.DISCOUNT_MASTER_SAVE_API, filterBody)//get api
+export const Discount_List_Api = (filterBody) => post(url.DISCOUNT_MASTER_LIST_API, filterBody)//get api
 export const Discount_Edit_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_ITEM, jsonBody, btnId)// post api
 export const Discount_Update_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_UNIT, jsonBody, btnId)// post api
 

@@ -6,7 +6,8 @@ import {
   Discount_List_Api,
   Discount_Save_Api,
   Discount_Edit_Api,
-  Discount_Update_Api
+  Discount_Update_Api,
+  Discount_Go_Button_Api
 } from "../../../helpers/backend_helper";
 import {
   deleteDiscountIDSuccess,
@@ -14,7 +15,8 @@ import {
   getDiscountListSuccess,
   saveDiscountActionSuccess,
   updateDiscountIDSuccess,
-  discountApiErrorAction
+  discountApiErrorAction,
+  goBtnDiscountAddActionSuccess
 } from "./actions";
 import {
   DELETE_DISCOUNT_ID,
@@ -25,10 +27,11 @@ import {
   UPDATE_DISCOUNT_ID,
 } from "./actionType";
 
-function* GoBtn_Discount_GenFunc() {
+function* GoBtn_Discount_GenFunc({ config }) {
+  debugger
   try {
-    const response = yield call(Discount_AddPage_Button_Api, loginJsonBody());
-    yield put(getDiscountListSuccess(response.Data));
+    const response = yield call(Discount_Go_Button_Api, config);
+    yield put(goBtnDiscountAddActionSuccess(response));
   } catch (error) { yield put(discountApiErrorAction()) }
 }
 
@@ -39,8 +42,8 @@ function* Save_Method_ForDiscount_GenFun({ config }) {
   } catch (error) { yield put(discountApiErrorAction()) }
 }
 
-function* Get_Discount_List_GenFunc({filterBody}) {
-  debugger
+function* Get_Discount_List_GenFunc({ filterBody }) {
+
   try {
     const response = yield call(Discount_List_Api, filterBody);
     yield put(getDiscountListSuccess(response.Data));
