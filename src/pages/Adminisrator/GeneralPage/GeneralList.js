@@ -15,10 +15,10 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { loginCompanyID } from "../../../components/Common/CommonFunction";
-import { PageLoadingSpinner} from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
 
 
-const GeneralList = () => {
+const GeneralList = (props) => {
 
     const dispatch = useDispatch();
     const reducers = useSelector(
