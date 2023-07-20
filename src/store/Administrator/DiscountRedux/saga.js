@@ -32,7 +32,7 @@ function* GoBtn_Discount_GenFunc() {
   } catch (error) { yield put(discountApiErrorAction()) }
 }
 
-function* Save_Method_ForDiscount_GenFun({ config }) {         
+function* Save_Method_ForDiscount_GenFun({ config }) {    
   try {
     const response = yield call(Discount_Save_Api, config);
     yield put(saveDiscountActionSuccess(response));

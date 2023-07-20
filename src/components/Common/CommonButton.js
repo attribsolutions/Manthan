@@ -219,21 +219,14 @@ export function Listloader1({ show = false }) {// common Listcomponent
 
 
 export function CustomSppiner({ isLoading }) {// common Listcomponent
-  // if (!isLoading) {
-  //   return null
-  // }
   useEffect(() => {
-    //init body click event fot toggle rightbar
-    // document.body.addEventListener("click", hideRightbar, true);
-
-    if (isLoading === true) {
-      document.getElementById("preloader").style.display = "block";
-      // setTimeout(function () {
-      //   document.getElementById("preloader").style.display = "none";
-      // }, 2500);
-    } else {
-      document.getElementById("preloader").style.display = "none";
-    }
+    try {
+      if (isLoading === true) {
+        document.getElementById("preloader").style.display = "block";
+      } else {
+        document.getElementById("preloader").style.display = "none";
+      }
+    } catch (w) { }
   }, [isLoading]);
 
   return <></>
