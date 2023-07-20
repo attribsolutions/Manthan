@@ -31,7 +31,7 @@ const RetailerDataReport = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess,  SSDD_List,listBtnLoading } = reducers;
+    const { userAccess, SSDD_List, listBtnLoading } = reducers;
     const { RetailerGobtn = [] } = reducers
 
     // Featch Modules List data  First Rendering
@@ -91,7 +91,7 @@ const RetailerDataReport = (props) => {
             });
             dispatch(postRetailerData_API({ jsonBody, btnId }));
         }
-        
+
     }
 
     return (
@@ -102,11 +102,11 @@ const RetailerDataReport = (props) => {
                     <div className="row" >
 
                         {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3 mb-3" >
+                            <Col sm={4} >
+                                <FormGroup className="mb- row mt-3 mb-2" >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px" }}>Party</Label>
-                                    <Col sm="7">
+                                    <Col sm="8">
                                         <Select
                                             name="party"
                                             value={partydropdown}
