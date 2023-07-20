@@ -103,7 +103,7 @@ const RetailerDataReport = (props) => {
 
                         {isSCMParty &&
                             <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3 mb-4" >
+                                <FormGroup className="mb- row mt-3 mb-3" >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px" }}>Party</Label>
                                     <Col sm="7">
@@ -125,7 +125,7 @@ const RetailerDataReport = (props) => {
                             </Col>
                         }
 
-                        <Col sm="1" className="mt-3 mb-4 ">
+                        <Col sm="1" className="mt-3 mb-3 ">
                             <Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
                         </Col>
                     </div>
