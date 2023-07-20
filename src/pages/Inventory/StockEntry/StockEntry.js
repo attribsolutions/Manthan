@@ -105,35 +105,22 @@ const StockEntry = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            debugger
             dispatch(saveStockEntrySuccess({ Status: false }))
             setTableArr([])
             dispatch(Breadcrumb_inputName(''))
-
-            if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                }))
-            }
-            else {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                    RedirectPath: url.STOCK_ENTRY,
-                }))
-            }
+            customAlert({
+                Type: 1,
+                Message: postMsg.Message,
+                RedirectPath: url.STOCK_ENTRY,
+            })
         }
         else if (postMsg.Status === true) {
             dispatch(saveStockEntrySuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
