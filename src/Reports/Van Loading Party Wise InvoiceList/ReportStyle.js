@@ -97,19 +97,19 @@ export const reportHeder1 = (doc, data) => {
             2: {
                 valign: "top",
                 columnWidth: 65,
-                halign: 'left',
+                halign: 'right',
             },
             3: {
                 columnWidth: 140,
-                halign: 'left',
+                halign: 'right',
             },
             4: {
                 columnWidth: 60,
-                halign: 'left',
+                halign: 'right',
             },
             5: {
                 columnWidth: 120,
-                halign: 'left',
+                halign: 'right',
             },
 
 
@@ -198,10 +198,10 @@ export const tableBody = (doc, data) => {
                 // halign: 'right',
 
             },
-            // 2: {
-            //     columnWidth: 80,
-            //     halign: 'right',
-            // },
+            2: {
+                columnWidth: 80,
+                halign: 'right',
+            },
             3: {
                 columnWidth: 80,
                 halign: 'right',
