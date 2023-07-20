@@ -50,6 +50,7 @@ const invioceReport_A4 = async (data) => {
         const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
         if (image) {
             doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
+            console.log(image.currentSrc)
         } else {
             doc.text('Image Not Found', 323, 18);
         }
