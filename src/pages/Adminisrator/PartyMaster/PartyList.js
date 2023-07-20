@@ -46,7 +46,7 @@ const PartyList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    
+
     const action = {
         getList: getPartyListAPI,
         editId: editPartyID,

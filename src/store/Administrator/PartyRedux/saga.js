@@ -38,6 +38,7 @@ import {
 } from "./actionTypes";
 
 function* Get_Party_GenFun() {   // Only CompanyID is Required
+
   try {
     const response = yield call(Party_Master_Get_API, loginJsonBody());
     function address(arr) {
@@ -84,9 +85,9 @@ function* Delete_Party_GenFun({ config }) {
 }
 
 function* Edit_Party_GenFun({ config }) {
-  
+
   try {
-   
+
     const response = yield call(Party_Master_Edit_API, config);
     let newData = response.Data.Data //remove chield data array
     newData["PartySubParty"] = response.Data.PartySubParty //remove chield data array 

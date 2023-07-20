@@ -99,9 +99,10 @@ const LoadingSheetList = () => {
     }
 
     function downBtnFunc(config) {
-        
+
         if (config.btnmode === "MultiInvoice") {
-            config["ReportType"] = report.invoice
+            config["ReportType"] = report.invoice;
+            config["forceA5"] = true;
             dispatch(getpdfReportdata(MultipleInvoice_API, config))
         } else {
             config["ReportType"] = report.VanLoadingPartyWiseInvoice
@@ -110,7 +111,7 @@ const LoadingSheetList = () => {
     }
 
     const otherBtn_1Func = (list) => {
-        
+
         dispatch(UpdateLoadingSheet({ RowId: list.rowData.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
 
