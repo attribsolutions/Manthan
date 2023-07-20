@@ -14,14 +14,14 @@ import {
 
     initialFiledFunc,
 } from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, btnIsDissablefunc, metaTagLabel, } from "../../../components/Common/CommonFunction";
 import { mode, pageId } from "../../../routes/index"
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI } from "../../../store/Administrator/RouteUpdateRedux/action";
+import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI, RouteUpdateListSuccess } from "../../../store/Administrator/RouteUpdateRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
@@ -47,11 +47,13 @@ const RouteUpdate = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
+        loading,
         RouteUpdateList,
         pageField,
         RoutesList,
         saveBtnloading,
         userAccess } = useSelector((state) => ({
+            loading: state.RouteUpdateReducer.loading,
             saveBtnloading: state.RouteUpdateReducer.saveBtnloading,
             postMsg: state.RouteUpdateReducer.postMsg,
             RouteUpdateList: state.RouteUpdateReducer.RouteUpdateList,
@@ -67,6 +69,9 @@ const RouteUpdate = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(GetRoutesList())
         dispatch(RouteUpdateListAPI())
+        return () => {
+            dispatch(RouteUpdateListSuccess([]))
+        }
     }, []);
 
     const location = { ...history.location }
@@ -96,7 +101,6 @@ const RouteUpdate = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(Post_RouteUpdateSuccess({ Status: false }))
-            dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
                 customAlert({
@@ -142,6 +146,11 @@ const RouteUpdate = (props) => {
 
     const RouteName_Options = [...RoutesListOptions.filter((index) => index.IsActive === true)];
 
+    RouteName_Options.unshift({
+        value: null,
+        label: "Select...",
+    })
+
     const pagesListColumns = [
         {
             text: "Party Name",
@@ -153,7 +162,7 @@ const RouteUpdate = (props) => {
             style: () => ({ width: "30%" }),
             formatExtraData: { forceRefresh },
             formatter: (value, row, key, { forceRefresh }) => {
-
+                debugger
                 return (
                     <C_Select
                         value={!(row.Route > 0) ? "" : {
@@ -165,11 +174,11 @@ const RouteUpdate = (props) => {
                             row["RouteName"] = e.label
                             setForceRefresh(!forceRefresh)
                         }}
-                        onCancelClick={() => {
-                            row["Route"] = null;
-                            row["RouteName"] = ''
-                            setForceRefresh(!forceRefresh)
-                        }}
+                    // onCancelClick={() => {debugger
+                    //     row["Route"] = null;
+                    //     row["RouteName"] = ''
+                    //     setForceRefresh(!forceRefresh)
+                    // }}
                     >
                     </C_Select >
                 )
@@ -188,11 +197,14 @@ const RouteUpdate = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
+            debugger
             const data = Data.map((index) => ({
                 id: index.id,
                 Party: index.Party,
+                SubPartyName: index.SubPartyName,
                 SubParty: index.SubParty,
                 Route: index.Route,
+                RouteName: index.RouteName,
             }))
             const jsonBody = JSON.stringify({
                 Data: data
@@ -210,6 +222,7 @@ const RouteUpdate = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <PageLoadingSpinner isLoading={(loading || !pageField)} />
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
 
                     <div style={{ minHeight: "45vh" }}>
@@ -241,6 +254,7 @@ const RouteUpdate = (props) => {
                                                 />
                                                 {mySearchProps(toolkitProps.searchProps)}
                                             </div>
+
                                             <Row className="align-items-md-center mt-30">
                                                 <Col className="pagination pagination-rounded justify-content-end mb-2">
                                                     <PaginationListStandalone
@@ -254,7 +268,7 @@ const RouteUpdate = (props) => {
                             )}
                         </PaginationProvider>
                     </div>
-                    
+
                     {Data.length > 0 ?
                         <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode}
