@@ -220,7 +220,7 @@ export function Listloader1({ show = false }) {// common Listcomponent
 
 export function CustomSppiner({ isLoading }) {// common Listcomponent
   useEffect(() => {
-        try {
+    try {
       if (isLoading === true) {
         document.getElementById("preloader").style.display = "block";
       } else {

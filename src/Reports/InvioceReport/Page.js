@@ -75,11 +75,11 @@ const invioceReport_A4 = async (data) => {
 }
 
 const InvioceReport = (data) => {
-
+    debugger
     const SettingData = loginSystemSetting();
     data["SettingData"] = SettingData;
 
-    if (SettingData.A4Print === "1") {
+    if (SettingData.A4Print === "1" && !data.forceA5) {
         invioceReport_A4(data)
     } else {
         InvioceReporta5(data)
