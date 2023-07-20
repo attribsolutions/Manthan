@@ -31,8 +31,8 @@ const RetailerDataReport = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, RetailerGobtn, SSDD_List } = reducers;
-
+    const { userAccess,  SSDD_List,listBtnLoading } = reducers;
+    const { RetailerGobtn = [] } = reducers
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
@@ -103,7 +103,7 @@ const RetailerDataReport = (props) => {
 
                         {isSCMParty &&
                             <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
+                                <FormGroup className="mb- row mt-3 mb-4" >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px" }}>Party</Label>
                                     <Col sm="7">
@@ -125,8 +125,8 @@ const RetailerDataReport = (props) => {
                             </Col>
                         }
 
-                        <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
+                        <Col sm="1" className="mt-3 mb-4 ">
+                            <Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
                         </Col>
                     </div>
                 </div>
