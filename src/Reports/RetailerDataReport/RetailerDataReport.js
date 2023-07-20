@@ -21,7 +21,6 @@ const RetailerDataReport = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [partydropdown, setPartydropdown] = useState('')
 
-
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.RetailerDataReducer.listBtnLoading,
@@ -91,7 +90,6 @@ const RetailerDataReport = (props) => {
             });
             dispatch(postRetailerData_API({ jsonBody, btnId }));
         }
-
     }
 
     return (
