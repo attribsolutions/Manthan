@@ -62,7 +62,6 @@ const CommonPurchaseList = (props) => {
   const history = useHistory();
 
   const [userAccState, setUserAccState] = useState("");
-  const [modal_view, setmodal_view] = useState(false);
   const [modal_edit, setmodal_edit] = useState(false);
   // const [tableList, settableList] = useState([]);
   const {
@@ -283,6 +282,7 @@ const CommonPurchaseList = (props) => {
     makeBtnColumn,
     userAccState: userAccState
   })
+debugger
 
   function rowSelected() {
     return tableList.map((index) => { return (index.selectCheck) })
@@ -327,7 +327,9 @@ const CommonPurchaseList = (props) => {
                         <div className="table-responsive mt-1" >
                           <BootstrapTable
                             keyField={"id"}
+                            // key={`table-key-${pageField.PageHeading}`}
                             responsive
+                            bootstrap4 
                             bordered={false}
                             selectRow={selectCheckParams.isShow ?
                               selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)

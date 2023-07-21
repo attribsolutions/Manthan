@@ -86,11 +86,13 @@ const DynamicColumnHook = ({
         const column = {
           text: i.FieldLabel,
           dataField: i.ControlID,
+          hidden: false,
           sort: true,
+          // key: `column-${k}`,
           classes: "table-cursor-pointer",
           align: i.Alignment || null,
           formatter: (cell, row) => {
-            
+
             if (cell === "Invoice Created") {
               return (
                 <span
