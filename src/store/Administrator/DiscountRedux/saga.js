@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { loginJsonBody } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, loginJsonBody } from "../../../components/Common/CommonFunction";
 import {
   Discount_AddPage_Button_Api,
   Discount_Delete_Api,
@@ -27,8 +27,9 @@ import {
   UPDATE_DISCOUNT_ID,
 } from "./actionType";
 
+// Discount Master Go button API
 function* GoBtn_Discount_GenFunc({ config }) {
-  debugger
+
   try {
     const response = yield call(Discount_Go_Button_Api, config);
     yield put(goBtnDiscountAddActionSuccess(response));
@@ -42,11 +43,25 @@ function* Save_Method_ForDiscount_GenFun({ config }) {
   } catch (error) { yield put(discountApiErrorAction()) }
 }
 
+// Discount List API
 function* Get_Discount_List_GenFunc({ filterBody }) {
 
   try {
     const response = yield call(Discount_List_Api, filterBody);
-    yield put(getDiscountListSuccess(response.Data));
+
+    const newList = yield response.Data.map((i) => {
+      if (i.DiscountType === 2) {
+        i.DiscountType = "%"
+      }
+      else {
+        i.DiscountType = "Rs"
+      }
+      i.FromDate = date_dmy_func(i.FromDate)
+      i.ToDate = date_dmy_func(i.ToDate)
+      return i
+    })
+
+    yield put(getDiscountListSuccess(newList));
   } catch (error) { yield put(discountApiErrorAction()) }
 }
 

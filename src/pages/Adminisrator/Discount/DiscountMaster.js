@@ -101,7 +101,7 @@ const DiscountMaster = (props) => {
     }, []);
 
     useEffect(() => {
-        debugger
+
         if (gobtnDiscount_redux.Status === true) {
 
             const { Data = [] } = gobtnDiscount_redux;
@@ -116,6 +116,8 @@ const DiscountMaster = (props) => {
             dispatch(goBtnDiscountAddActionSuccess([]))
         }
     }, [gobtnDiscount_redux]);
+
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableData]);
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -145,7 +147,6 @@ const DiscountMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -413,16 +414,18 @@ const DiscountMaster = (props) => {
 
     function goButtonHandler() {
 
-        let invalidMessages = ' Select';
-
-        if (values.Partytype === '') { invalidMessages = invalidMessages + ', ' + "PartyType" };
-
-        if (priceListSelect.value === '') { invalidMessages = invalidMessages + ', ' + "PriceList" };
-
-        if ((values.Partytype === '') || (priceListSelect.value === '')) {
+        if (values.Partytype === '') {
             customAlert({
                 Type: 4,
-                Message: invalidMessages,
+                Message: "Select Party Type",
+            });
+            return;
+        }
+
+        else if (priceListSelect.value === '') {
+            customAlert({
+                Type: 4,
+                Message: "Select PriceList",
             });
             return;
         }
@@ -489,6 +492,10 @@ const DiscountMaster = (props) => {
         }
     }
 
+    const onChangeBtnHandler = () => {
+        setTableData([])
+    }
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -507,6 +514,7 @@ const DiscountMaster = (props) => {
                                         <Col sm="7">
                                             <C_DatePicker
                                                 name='FromDate'
+                                                disabled={(tableData.length > 0) && true}
                                                 value={values.FromDate}
                                                 onChange={FromDate_Onchange}
                                             />
@@ -521,6 +529,7 @@ const DiscountMaster = (props) => {
                                         <Col sm="7">
                                             <C_DatePicker
                                                 name='ToDate'
+                                                disabled={(tableData.length > 0) && true}
                                                 value={values.ToDate}
                                                 onChange={ToDate_Onchange}
                                             />
@@ -541,6 +550,7 @@ const DiscountMaster = (props) => {
                                                 id="Partytype "
                                                 name="Partytype"
                                                 value={values.Partytype}
+                                                isDisabled={(tableData.length > 0) && true}
                                                 isSearchable={true}
                                                 options={PartyTypeOptions}
                                                 styles={{
@@ -564,6 +574,7 @@ const DiscountMaster = (props) => {
 
                                             <Input
                                                 value={priceListSelect.label}
+                                                disabled={(tableData.length > 0) && true}
                                                 autoComplete={"off"}
                                                 placeholder="Select..."
                                                 onClick={priceListOnClick}
@@ -589,6 +600,7 @@ const DiscountMaster = (props) => {
                                                 id="CustomerName "
                                                 name="CustomerName"
                                                 value={values.CustomerName}
+                                                isDisabled={(tableData.length > 0) && true}
                                                 isSearchable={true}
                                                 options={customerOptions}
                                                 styles={{
@@ -606,16 +618,21 @@ const DiscountMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
+
                                 <Col md={5}> </Col>
+
                                 <Col sm="1" className="mx-6 mt-1 ">
-
-                                    <Go_Button
-                                        type="button"
-                                        loading={goBtnLoading}
-                                        onClick={goButtonHandler}>
-
-                                    </Go_Button>
-
+                                    {!tableData.length > 0 ?
+                                        <Go_Button
+                                            type="button"
+                                            loading={goBtnLoading}
+                                            onClick={goButtonHandler}>
+                                        </Go_Button>
+                                        :
+                                        <Change_Button
+                                            onClick={(e) => onChangeBtnHandler()}
+                                        />
+                                    }
                                 </Col>
                             </Row>
                         </div>
@@ -627,6 +644,7 @@ const DiscountMaster = (props) => {
                                 columns={pagesListColumns}
                                 search
                             >
+
                                 {(toolkitProps) => (
                                     <React.Fragment>
                                         <Row>
@@ -634,16 +652,16 @@ const DiscountMaster = (props) => {
                                                 <div className="table-responsive table" style={{ minHeight: "60vh" }}>
                                                     <BootstrapTable
                                                         keyField={"tableId"}
-                                                        // id="table_Arrow"
+                                                        id="table_Arrow"
                                                         classes={"table  table-bordered "}
                                                         noDataIndication={
                                                             <div className="text-danger text-center ">
                                                                 Record Not available
                                                             </div>
                                                         }
-                                                        // onDataSizeChange={(e) => {
-                                                        //     _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                        // }}
+                                                        onDataSizeChange={(e) => {
+                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                        }}
                                                         {...toolkitProps.baseProps}
                                                     />
                                                 </div>
