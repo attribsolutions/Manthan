@@ -8,7 +8,7 @@ import {
 
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, Retailer_List, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, Retailer_List, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -17,6 +17,7 @@ import {
     initialFiledFunc,
     onChangeSelect,
     resetFunction,
+
 } from "../../../components/Common/validationFunction";
 import { mode, pageId, url } from "../../../routes/index"
 import "../../Sale/SalesReturn/salesReturn.scss";
@@ -59,7 +60,7 @@ const DiscountMaster = (props) => {
     const [discountValueAll, setDiscountValueAll] = useState("");
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [forceReload, setForceReload] = useState(false)
-
+    console.log(priceListSelect)
     const [tableData, setTableData] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -152,9 +153,9 @@ const DiscountMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
             dispatch(saveDiscountActionSuccess({ Status: false }))
-            dispatch(goBtnDiscountAddActionSuccess([]))
+            setTableData([])
             setState(() => resetFunction(fileds, state))// Clear form values  
-            setPriceListSelect('')
+            setPriceListSelect({ value: '', label: '' })
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
@@ -209,28 +210,33 @@ const DiscountMaster = (props) => {
 
             headerFormatter: () => {
                 return (
-                    <div className="">
-
-                        <div className="row">
-                            <div className="col col-5" style={{ marginTop: "10px" }} >
-                                <Label >Discount Type</Label>
+                    <div className="row">
+                        {tableData.length <= 0 ?
+                            <div className="col col-5" style={{ marginTop: "10px" }}>
+                                <Label>Discount Type</Label>
                             </div>
+                            :
+                            <>
+                                <div className="col col-5" style={{ marginTop: "10px" }} >
+                                    <Label >Discount Type</Label>
+                                </div>
+                                <div className="col col-6" >
+                                    <Select
+                                        type="text"
+                                        defaultValue={discountTypeAll}
+                                        classNamePrefix="select2-selection"
+                                        options={discountDropOption}
+                                        style={{ textAlign: "right" }}
+                                        onChange={(e) => {
+                                            setChangeAllDiscount(true);
+                                            setDiscountTypeAll(e);
+                                            setDiscountValueAll('');
+                                        }}
+                                    />
+                                </div>
+                            </>
+                        }
 
-                            <div className="col col-6" >
-                                <Select
-                                    type="text"
-                                    defaultValue={discountTypeAll}
-                                    classNamePrefix="select2-selection"
-                                    options={discountDropOption}
-                                    style={{ textAlign: "right" }}
-                                    onChange={(e) => {
-                                        setChangeAllDiscount(true);
-                                        setDiscountTypeAll(e);
-                                        setDiscountValueAll('');
-                                    }}
-                                />
-                            </div>
-                        </div>
                     </div>
                 );
             },
@@ -288,37 +294,46 @@ const DiscountMaster = (props) => {
             },
             headerFormatter: () => {
                 return (
+
                     <div className="row">
-                        <div className="col col-3" style={{ marginTop: "10px" }} >
-                            <Label >Discount</Label>
-                        </div>
+                        {tableData.length <= 0 ?
+                            <div className="col col-3" style={{ marginTop: "10px" }}>
+                                <Label>Discount</Label>
+                            </div>
+                            :
+                            <>
+                                <div className="col col-3" style={{ marginTop: "10px" }} >
+                                    <Label >Discount</Label>
+                                </div>
+                                <div className="col col-5" >
+                                    <CInput
+                                        type="text"
+                                        className="input"
+                                        autoComplete='off'
+                                        style={{ textAlign: "right" }}
+                                        cpattern={decimalRegx}
+                                        value={discountValueAll}
+                                        onChange={(e) => {
+                                            let e_val = Number(e.target.value);
 
-                        <div className="col col-5" >
-                            <CInput
-                                type="text"
-                                className="input"
-                                autoComplete='off'
-                                style={{ textAlign: "right" }}
-                                cpattern={decimalRegx}
-                                value={discountValueAll}
-                                onChange={(e) => {
-                                    let e_val = Number(e.target.value);
-
-                                    // Check if discount type is "percentage"
-                                    if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
-                                        // Limit the input to the range of 0 to 100
-                                        if (e_val > 100) {
-                                            e.target.value = 100; // Set the input value to 100 if it exceeds 100
-                                        } else if (!(e_val >= 0 && e_val < 100)) {
-                                            e.target.value = ""; // Clear the input value if it is less than 0
-                                        }
-                                    }
-                                    setChangeAllDiscount(true);
-                                    setDiscountValueAll(e.target.value);
-                                }}
-                            />
-                        </div>
+                                            // Check if discount type is "percentage"
+                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
+                                            }
+                                            setChangeAllDiscount(true);
+                                            setDiscountValueAll(e.target.value);
+                                        }}
+                                    />
+                                </div>
+                            </>
+                        }
                     </div>
+
                 );
             },
 
