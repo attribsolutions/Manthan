@@ -7,11 +7,12 @@ import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useHistory } from "react-router-dom";
-import {  deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
+import { deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import Challan from "./Challan";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { url, mode, pageId } from "../../../routes/index"
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const ChallanList = () => {
 
@@ -27,6 +28,7 @@ const ChallanList = () => {
         (state) => ({
             vender: state.CommonAPI_Reducer.vender,
             tableList: state.ChallanReducer.ChallanList,
+            goBtnLoading: state.ChallanReducer.goBtnLoading,
             deleteMsg: state.ChallanReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,
             postMsg: state.GRNReducer.postMsg,
@@ -36,7 +38,7 @@ const ChallanList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, vender, makeGRN } = reducers;
+    const { pageField, vender, makeGRN } = reducers;
     const { fromdate, todate, venderSelect } = hederFilters;
 
     const action = {
@@ -134,6 +136,7 @@ const ChallanList = () => {
     return (
 
         <React.Fragment>
+            <PageLoadingSpinner isLoading={reducers.goBtnLoading || !pageField} />
             <div className="page-content">
 
                 <div className="px-2  c_card_filter text-black " >
