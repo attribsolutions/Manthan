@@ -13,7 +13,7 @@ import MarginMaster from "./MarginMaster";
 import { delete_MarginList_ID, delete_MarginList_ID_Success, getMarginList, goButtonForMarginSuccess } from "../../../store/Administrator/MarginMasterRedux/action";
 import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const MarginList = () => {
 
@@ -123,7 +123,7 @@ const MarginList = () => {
 
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
         <div className="mt-n1">
           {

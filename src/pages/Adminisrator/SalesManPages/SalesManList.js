@@ -15,7 +15,7 @@ import {
 import { loginCompanyID, loginPartyID, loginUserAdminRole } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const SalesManList = (props) => {
 
@@ -73,22 +73,20 @@ const SalesManList = (props) => {
     return (
 
         <React.Fragment>
+            <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
-
-                {userAdminRole &&
-                    <div className="mb-2">
-                        <PartyDropdown_Common
-                            partySelect={party}
-                            setPartyFunc={partyOnChngeHandler}
-                            goButtonHandler={goButtonHandler}
-                        />
-                    </div>
-                }
                 {
-                    reducers.loading ?
-                        <Listloader />
-                        :
-                        (pageField) &&
+                    (pageField) &&
+                    <>
+                        {userAdminRole &&
+                            <div className="mb-2">
+                                <PartyDropdown_Common
+                                    partySelect={party}
+                                    setPartyFunc={partyOnChngeHandler}
+                                    goButtonHandler={goButtonHandler}
+                                />
+                            </div>
+                        }
                         <div className="mt-n1">
                             <CommonPurchaseList
                                 action={action}
@@ -102,6 +100,7 @@ const SalesManList = (props) => {
                                 goButnFunc={goButtonHandler}
                             />
                         </div>
+                    </>
                 }
             </div>
         </React.Fragment>

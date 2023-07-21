@@ -121,9 +121,6 @@ export const GetCompanyByDivisionTypeIDSuccess = (data) => ({
   payload: data,
 });
 
-export const PartyApiErrorAction = () => ({
-  type: PARTY_API_ERROR_ACTION,
-})
 
 // PartyAddressDelete api
 export const PartyAddressDeleteID = (config = {}) => ({
@@ -135,6 +132,11 @@ export const PartyAddressDeleteIDSuccess = (resp) => ({
   type: PARTY_ADDRESS_DELETE_ID_SUCCESS,
   payload: resp
 });
+
+
+export const PartyApiErrorAction = () => ({
+  type: PARTY_API_ERROR_ACTION,
+})
 
 
 

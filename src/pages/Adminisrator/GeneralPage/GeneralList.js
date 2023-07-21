@@ -15,10 +15,10 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { loginCompanyID } from "../../../components/Common/CommonFunction";
-import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner} from "../../../components/Common/CommonButton";
 
 
-const GeneralList = (props) => {
+const GeneralList = () => {
 
     const dispatch = useDispatch();
     const reducers = useSelector(
@@ -66,7 +66,7 @@ const GeneralList = (props) => {
 
     return (
         <React.Fragment>
-            <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+            <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
             {
                 (pageField) &&
                 <CommonListPage

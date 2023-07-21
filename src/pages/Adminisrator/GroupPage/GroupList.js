@@ -17,7 +17,7 @@ import {
 } from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const GroupList = () => {
 
@@ -58,7 +58,7 @@ const GroupList = () => {
   const { pageField, GoBtnlistloading } = reducers
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       {
         (pageField) &&
         <CommonListPage

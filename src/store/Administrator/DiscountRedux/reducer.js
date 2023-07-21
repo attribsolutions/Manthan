@@ -24,17 +24,18 @@ const INIT_STATE = {
 
   saveBtnloading: false,
   listBtnLoading: false,
-  goBtnLoading:false
+  goBtnLoading: false
 }
 
 const DiscountReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
-    
+
     case GO_BUTTON_DISCOUNT_ACTION:
       return {
         ...state,
         goBtnLoading: true,
       }
+
     case GO_BUTTON_DISCOUNT_ACTION_SUCCESS:
       return {
         ...state,
@@ -42,11 +43,11 @@ const DiscountReducer = (state = INIT_STATE, action) => {
         gobtnDiscount_redux: action.payload,
       }
 
-      case GET_DISCOUNT_LIST:
-        return {
-          ...state,
-          listBtnLoading: true,
-        }
+    case GET_DISCOUNT_LIST:
+      return {
+        ...state,
+        listBtnLoading: true,
+      }
     case GET_DISCOUNT_LIST_SUCCESS:
       return {
         ...state,

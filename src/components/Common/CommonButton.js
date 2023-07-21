@@ -1,7 +1,7 @@
 import { Button, Spinner } from "reactstrap"
 import { loginUserID } from "./CommonFunction";
 import * as mode from "../../routes/PageMode"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function SaveButton(props) {
   const { pageMode = '', userAcc = {}, editCreatedBy } = props
@@ -218,25 +218,30 @@ export function Listloader1({ show = false }) {// common Listcomponent
 }
 
 
-export function CustomSppiner({ isLoading }) {// common Listcomponent
-  useEffect(() => {
-    try {
-      if (isLoading === true) {
-        document.getElementById("preloader").style.display = "block";
-      } else {
-        document.getElementById("preloader").style.display = "none";
-      }
-    } catch (w) { }
-  }, [isLoading]);
+// export function PageLoadingSpinner({ isLoading }) {// common Listcomponent
+//   // if (!isLoading) {
+//   //   return null
+//   // }
+//   useEffect(() => {
+//     //init body click event fot toggle rightbar
+//     // document.body.addEventListener("click", hideRightbar, true);
+//     try {
+//       if (isLoading === true) {
+//         document.getElementById("preloader").style.display = "block";
+//       } else {
+//         document.getElementById("preloader").style.display = "none";
+//       }
+//     } catch (w) { }
+//   }, [isLoading]);
 
-  return <></>
-  // return <div id="api_spinner" >
-  //   <div className="api_spinner_body " >
-  //     <span className="spinner" style={{ marginLeft: "-20vw" }} ></span>
-  //   </div>
-  // </div>
+//   return <></>
+//   // return <div id="api_spinner" >
+//   //   <div className="api_spinner_body " >
+//   //     <span className="spinner" style={{ marginLeft: "-20vw" }} ></span>
+//   //   </div>
+//   // </div>
 
-}
+// }
 
 export function DashboardLoader() {// linner component
   return <div className="dot-pulse mt-2"> &nbsp; &nbsp;&nbsp;
@@ -248,5 +253,27 @@ export function DashboardLoader() {// linner component
 }
 
 
+export function PageLoadingSpinner({ isLoading }) {
+
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+   
+    if (isLoading && isInitialLoad) {
+      document.getElementById('preloader').style.display = 'block';
+      setIsInitialLoad(false);
+    } else {
+      document.getElementById('preloader').style.display = 'none';
+    }
+  }, [isLoading]);
+
+  return (
+    <div className="pace pace-active" id="preloader">
+      <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
+        <div className="pace-progress-inner"></div>
+      </div>
+      <div className="pace-activity"></div></div>
+  );
+}
 
 

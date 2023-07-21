@@ -10,7 +10,8 @@ import {
     UPDATE_PRICE_LIST,
     UPDATE_PRICE_LIST_SUCCESS,
     PRICE_LIST_BY_COMPANY,
-    PRICE_LIST_BY_COMPANY_SUCCESS
+    PRICE_LIST_BY_COMPANY_SUCCESS,
+    PRICE_lIST_API_ERROR_ACTION
 } from "./actionType";
 
 
@@ -75,5 +76,7 @@ export const updatePriceListSuccess = (resp) => ({// update  Success
     payload: resp,
 })
 
-
-
+export const priceList_ApiErrorAction = () => ({
+    type: PRICE_lIST_API_ERROR_ACTION,
+  })
+  

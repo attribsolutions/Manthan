@@ -145,7 +145,7 @@ function* PartyAddressDelete_GenFun({ config }) {
     const response = yield call(Party_Address_Delete_API, config);
     response["deleteId"] = deleteId
     yield put(PartyAddressDeleteIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(PartyApiErrorAction()) }
 }
 
 function* PartyMasterSaga() {

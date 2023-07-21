@@ -13,6 +13,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { PRICE } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const PriceList = () => {
   const dispatch = useDispatch();
@@ -24,11 +25,12 @@ const PriceList = () => {
       deleteMsg: state.PriceListReducer.deleteMsg,
       postMsg: state.PriceListReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageFieldList
+      pageField: state.CommonPageFieldReducer.pageFieldList,
+      listBtnLoading:state.PriceListReducer.listBtnLoading
     })
   );
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField} = reducers
 
   const action = {
     getList: priceListByCompay_Action,
@@ -59,9 +61,10 @@ const PriceList = () => {
 
   return (
     <React.Fragment>
+      <PageLoadingSpinner isLoading={(reducers.listBtnLoading || !pageField)} />
       {
-        (pageField) ?
-          <CommonListPage
+        (pageField) &&
+        <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={PriceMaster}
@@ -70,7 +73,6 @@ const PriceList = () => {
             deleteName={"Name"}
             editBodyfunc={editBodyfunc}
           />
-          : null
       }
 
     </React.Fragment>

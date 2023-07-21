@@ -7,6 +7,7 @@ import {
   FETCH_MODULES_LIST,
   FETCH_MODULES_LIST_ERROR,
   FETCH_MODULES_LIST_SUCCESS,
+  MODULE_API_ERROR_ACTION,
   POST_MODULES_SUBMIT_ERROR,
   SAVE_MODULE_MASTER,
   SAVE_MODULE_MASTER_SUCCESS,
@@ -71,17 +72,17 @@ const Modules = (state = INIT_STATE, action) => {
       }
 
 
-      case DELETE_MODULE_ID:
-        return {
-          ...state,
-          listBtnLoading: action.config.btnId,
-        }
+    case DELETE_MODULE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
 
     case DELETE_MODULE_ID_SUCCESS:
       return {
         ...state,
         deleteModuleIDSuccess: action.payload,
-        listBtnLoading:false
+        listBtnLoading: false
       }
 
     case DELETE_MODULE_ID_ERROR:
@@ -91,17 +92,17 @@ const Modules = (state = INIT_STATE, action) => {
       }
 
 
-      case EDIT_MODULE_ID:
-        return {
-          ...state,
-          listBtnLoading: action.config.btnId,
-        }
+    case EDIT_MODULE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
 
     case EDIT_MODULE_ID_SUCCESS:
       return {
         ...state,
         editData: action.payload,
-        listBtnLoading:false
+        listBtnLoading: false
       }
 
     case UPDATE_MODULE_ID:
@@ -115,10 +116,17 @@ const Modules = (state = INIT_STATE, action) => {
         ...state,
         updateMessage: action.payload,
         saveBtnloading: false,
-        listBtnLoading:false,
-        loading:false
+        listBtnLoading: false,
+        loading: false
 
       }
+    case MODULE_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listBtnLoading: false,
+        loading: false
+      };
 
     default:
       return state

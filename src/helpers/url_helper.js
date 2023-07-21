@@ -161,11 +161,15 @@ export const IMPORT_FIELD_MAP_FILTER = '/PartyImportFieldFilter'    //gobutton
 export const IMPORT_FIELD_MAP_SAVE = '/PartyImportFieldSave'        //save
 
 //Import Master Map
-export const IMPORT_MASTER_MAP_CUSTOMER = '/PartyCustomerMapping'; 
-export const IMPORT_MASTER_MAP_ITEM = '/ItemsMapping' ;               
-export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping';    
- //Import Master Map       
-export const DISCOUNT_MASTER_SAVE_API = '/DiscountMasterSave'           
+export const IMPORT_MASTER_MAP_CUSTOMER = '/PartyCustomerMapping';
+export const IMPORT_MASTER_MAP_ITEM = '/ItemsMapping';
+export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping';
+
+//Discount Master   
+
+export const DISCOUNT_MASTER_SAVE_API = '/DiscountMasterSave'
+export const DISCOUNT_MASTER_GO_BUTTON_API = '/DiscountMaster'
+export const DISCOUNT_MASTER_LIST_API = '/DiscountMasterFilter'
 
 //Import Field Map
 export const IMPORT_FIELD_ADD_SAVE = '/ImportField'               //save
@@ -354,7 +358,7 @@ export const ADD_BUTTON_API_FOR_INVOICE = '/InvoiceReturnCRDR'
 export const SALES_RETURN = '/PurchaseReturn'
 export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
 export const SALES_RETURN_ITEM = '/PurchaseReturn'
-export const SEND_TO_SUPERSTOCKIEST_POST_API="/SalesReturnconsolidateItem"
+export const SEND_TO_SUPERSTOCKIEST_POST_API = "/SalesReturnconsolidateItem"
 export const RETURN_ITEM_APPROVE_AIP = '/ReturnItemApprove'
 
 
