@@ -1,4 +1,4 @@
-import { DELETE_PRICE_LIST_SUCCESS, PRICE_LIST_BY_PARTY_ACTION_SUCCESS, POST_PRICE_LIST_DATA_SUCCESS, EDIT_PRICE_LIST_SUCCESS, UPDATE_PRICE_LIST_SUCCESS, GET_PRICE_LIST_PAGE_SUCCESS, PRICE_LIST_BY_COMPANY_SUCCESS, PRICE_LIST_BY_COMPANY, PRICE_lIST_API_ERROR_ACTION, POST_PRICE_LIST_DATA } from "./actionType";
+import { DELETE_PRICE_LIST_SUCCESS, PRICE_LIST_BY_PARTY_ACTION_SUCCESS, POST_PRICE_LIST_DATA_SUCCESS, EDIT_PRICE_LIST_SUCCESS, UPDATE_PRICE_LIST_SUCCESS, GET_PRICE_LIST_PAGE_SUCCESS, PRICE_LIST_BY_COMPANY_SUCCESS, PRICE_LIST_BY_COMPANY, PRICE_lIST_API_ERROR_ACTION, POST_PRICE_LIST_DATA, PRICE_LIST_BY_PARTY_ACTION } from "./actionType";
 
 const INIT_STATE = {
   postMsg: { Status: false },
@@ -9,6 +9,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   listBtnLoading: false,
   saveBtnloading: false,
+  priceListDropDownLoading: true
 }
 
 const PriceListReducer = (state = INIT_STATE, action) => {
@@ -26,11 +27,20 @@ const PriceListReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false,
         postMsg: action.payload,
       };
+
+    // GET api
+    case PRICE_LIST_BY_PARTY_ACTION:
+      return {
+        ...state,
+        priceListDropDownLoading: true,
+      };
+
     // GET api
     case PRICE_LIST_BY_PARTY_ACTION_SUCCESS:
       return {
         ...state,
         priceListByPartyType: action.payload,
+        priceListDropDownLoading: false,
       };
 
     // GET api
@@ -72,6 +82,7 @@ const PriceListReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        priceListDropDownLoading: false,
       };
 
 
