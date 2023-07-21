@@ -20,6 +20,7 @@ const INIT_STATE = {
     deleteMessage: { Status: false },
     saveBtnloading: false,
     listBtnLoading: false,
+    goBtnLoading:false
 }
 
 const TermsAndConditionsReducer = (state = INIT_STATE, action) => {
@@ -44,14 +45,14 @@ const TermsAndConditionsReducer = (state = INIT_STATE, action) => {
             case GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API:
                 return {
                     ...state,
-                    loading: true,
+                    goBtnLoading: true,
                 }
 
         case GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS:
             return {
                 ...state,
                 tableList: action.payload,
-                loading:false
+                goBtnLoading:false
             }
 
             case EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API:
@@ -99,7 +100,7 @@ const TermsAndConditionsReducer = (state = INIT_STATE, action) => {
                   ...state,
                   saveBtnloading: false,
                   listBtnLoading: false,
-                  loading:false
+                  goBtnLoading:false
                 };
         default:
             return state
