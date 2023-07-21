@@ -154,7 +154,7 @@ const Invoice = (props) => {
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
-debugger
+
             //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
             if (postMsg.saveAndDownloadPdfMode) {
                 const config = {
@@ -473,8 +473,8 @@ debugger
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
 
                 if (formatExtraData.changeAllDiscount) {
-                    index1.Discount = discountValueAll;
-                    index1.DiscountType = discountTypeAll.value;
+                    // index1.Discount = discountValueAll;
+                    // index1.DiscountType = discountTypeAll.value;
                     innerStockCaculation(index1);
                     totalAmountCalcuationFunc(tableList);
                 }
