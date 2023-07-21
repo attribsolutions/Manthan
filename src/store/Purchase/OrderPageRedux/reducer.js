@@ -24,7 +24,7 @@ import {
 
 
 const INIT_STATE = {
-  loading: false,
+  goBtnLoading: false,
   saveBtnloading: false,
   goBtnOrderAdd: null,
   postMsg: { Status: false },
@@ -43,20 +43,20 @@ const INIT_STATE = {
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
-  
+
   switch (action.type) {
 
 
     case GO_BUTTON_FOR_ORDER_PAGE:
       return {
         ...state,
-        loading: true,
+        goBtnLoading: true,
       }
 
     case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        loading: false,
+        goBtnLoading: false,
         goBtnOrderAdd: action.payload,
       }
 
@@ -120,7 +120,8 @@ const OrderReducer = (state = INIT_STATE, action) => {
     case GET_ORDER_LIST_PAGE:
       return {
         ...state,
-        loading: true,
+        goBtnLoading: true,
+        listBtnLoading: true,
         orderList: [],
       }
 
@@ -128,8 +129,9 @@ const OrderReducer = (state = INIT_STATE, action) => {
     case GET_ORDER_LIST_PAGE_SUCCESS:
       return {
         ...state,
+        listBtnLoading: false,
+        goBtnLoading: false,
         orderList: action.payload,
-        loading: false
       }
 
     case GET_ORDER_APPROVAL_DETAIL:
@@ -194,7 +196,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
     case ORDER_API_ERROR_ACTION:
       return {
         ...state,
-        loading: false,
+        goBtnLoading: false,
         saveBtnloading: false,
         listBtnLoading: false,
         orderConfirmLoading: false,

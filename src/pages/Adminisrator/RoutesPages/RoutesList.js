@@ -28,7 +28,7 @@ const RoutesList = (props) => {
 
   const reducers = useSelector(
     (state) => ({
-      loading: state.RoutesReducer.loading,
+      goBtnLoading: state.RoutesReducer.goBtnLoading,
       listBtnLoading: state.RoutesReducer.listBtnLoading,
       tableList: state.RoutesReducer.RoutesList,
       postMsg: state.RoutesReducer.PostData,
@@ -75,7 +75,7 @@ const RoutesList = (props) => {
   return (
 
     <React.Fragment>
-      <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
+      <PageLoadingSpinner isLoading={(reducers.goBtnLoading || !pageField)} />
       <div className="page-content">
         {
           (pageField) &&
