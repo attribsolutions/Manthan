@@ -20,7 +20,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
-  loading:false
+  goBtnLoading:false
 }
 
 const categoryTypeReducer = (state = INIT_STATE, action) => {
@@ -44,14 +44,14 @@ const categoryTypeReducer = (state = INIT_STATE, action) => {
     case GET_CATEGORY_TYPE_LIST:
       return {
         ...state,
-        loading: true,
+        goBtnLoading: true,
       }
 
     case GET_CATEGORY_TYPE_LIST_SUCCESS:
       return {
         ...state,
         categoryTypeListData: action.payload,
-        loading: false,
+        goBtnLoading: false,
       }
 
       case DELETE_CATEGORY_TYPE_ID:
@@ -103,7 +103,7 @@ const categoryTypeReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
-        loading:false
+        goBtnLoading:false
       };
 
     default:
