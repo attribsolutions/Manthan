@@ -52,6 +52,7 @@ const GeneralList = () => {
         dispatch(PostGenerallist(getlistBody()));
         return () => {
             dispatch(PostGenerallistSuccess([]));
+            dispatch(commonPageFieldListSuccess(null))
           }
     }, []);
 
