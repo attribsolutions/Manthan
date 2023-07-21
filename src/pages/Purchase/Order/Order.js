@@ -143,7 +143,8 @@ const Order = (props) => {
         RoutesList,
         supplierADDdropLoading,
         supplierDropLoading,
-        orderTypeDropLoading
+        orderTypeDropLoading,
+        routesDropLoading
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
 
@@ -168,8 +169,8 @@ const Order = (props) => {
         partyDropLoading: state.PartyMasterReducer.partyDropLoading,
 
         RoutesList: state.RoutesReducer.RoutesList,
-        RoutesList: state.RoutesReducer.RoutesList,
-        
+        routesDropLoading: state.RoutesReducer.goBtnLoading,
+
         gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
         goBtnloading: state.OrderReducer.goBtnLoading,
         saveBtnloading: state.OrderReducer.saveBtnloading,
