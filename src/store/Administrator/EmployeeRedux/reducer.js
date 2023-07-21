@@ -18,7 +18,7 @@ import {
 } from "./actionTypes";
 
 const INIT_STATE = {
-  loading:false,
+  goBtnLoading:false,
   listBtnLoading: false,
   saveBtnloading: false,
   designation: [],
@@ -84,14 +84,14 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
     case GET_EMPLOYEE_LIST:
       return {
         ...state,
-        loading: true,
+        goBtnLoading: true,
       }
 
     case GET_EMPLOYEE_LIST_SUCCESS:
       return {
         ...state,
         employeeList: action.payload,
-        loading: false,
+        goBtnLoading: false,
       }
 
     case DELETE_EMPLOYEE_ID:
@@ -149,7 +149,7 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false,
         cityDropDownLoading:false,
         listBtnLoading: false,
-        
+        goBtnLoading:false
       };
 
     default:

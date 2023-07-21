@@ -5,6 +5,7 @@ import {
   delete_PartyType_ID,
   editPartyTypeId,
   getPartyTypelist,
+  getPartyTypelistSuccess,
   SavePartyTypeAPISuccess,
   updatePartyTypeIDSuccess
 } from "../../../store/Administrator/PartyTypeRedux/action";
@@ -13,7 +14,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import {  PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 
 const PartyTypeList = (props) => {
@@ -22,6 +23,7 @@ const PartyTypeList = (props) => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.PartyTypeReducer.listBtnLoading,
+      goBtnLoading: state.PartyTypeReducer.goBtnLoading,
       tableList: state.PartyTypeReducer.ListData,
       editData: state.PartyTypeReducer.editData,
       updateMsg: state.PartyTypeReducer.updateMessage,
@@ -47,14 +49,20 @@ const PartyTypeList = (props) => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getPartyTypelist());
+
+    return () => {
+      dispatch(getPartyTypelistSuccess([]));
+      dispatch(commonPageFieldListSuccess(null))
+    }
+
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField, goBtnLoading } = reducers
 
   return (
     <React.Fragment>
 
-      <PageLoadingSpinner isLoading={(reducers.listBtnLoading || !pageField)} />
+      <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       {
         (pageField) &&
         <CommonListPage

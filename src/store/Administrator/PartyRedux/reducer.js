@@ -19,7 +19,7 @@ import {
 } from "./actionTypes";
 
 const INIT_STATE = {
-    loading: false,
+    goBtnLoading: false,
     partyList: [],
     postMsg: { Status: false },
     deleteMsg: { Status: false },
@@ -39,14 +39,14 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
         case GET_PARTY_LIST_API:
             return {
                 ...state,
-                loading: true,
+                goBtnLoading: true,
             }
 
         case GET_PARTY_LIST_API_SUCCESS:
             return {
                 ...state,
                 partyList: action.payload,
-                loading: false
+                goBtnLoading: false
             }
 
         // post api
@@ -154,7 +154,7 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
                 ...state,
                 saveBtnloading: false,
                 listBtnLoading: false,
-                loading: false,
+                goBtnLoading: false,
                 districtDropDownLoading: false
             };
 

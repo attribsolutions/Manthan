@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -6,7 +5,6 @@ import {
     deletePartyIDSuccess,
     editPartyID,
     getPartyListAPI,
-    partyResetReduxAction,
     postPartyDataSuccess,
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
@@ -17,7 +15,7 @@ import { mode, url, pageId } from "../../../routes/index";
 import { useLayoutEffect } from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Listloader, PageLoadingSpinner } from '../../../components/Common/CommonButton';
+import { PageLoadingSpinner } from '../../../components/Common/CommonButton';
 
 const PartyList = () => {
 
@@ -35,7 +33,7 @@ const PartyList = () => {
     const reducers = useSelector(
 
         (state) => ({
-            loading: state.PartyMasterReducer.loading,
+            goBtnLoading: state.PartyMasterReducer.goBtnLoading,
             listBtnLoading: state.PartyMasterReducer.listBtnLoading,
             tableList: state.PartyMasterReducer.partyList,
             editData: state.PartyMasterReducer.editData,
@@ -79,18 +77,19 @@ const PartyList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(getPartyListAPI());
+
         return () => {
             dispatch(commonPageFieldListSuccess(null))
             dispatch(updatePartyIDSuccess([]))//for clear privious order list   
         }
     }, []);
 
-    const { pageField } = reducers
+    const { pageField, goBtnLoading } = reducers
 
     return (
         <React.Fragment>
 
-            <PageLoadingSpinner isLoading={(reducers.listBtnLoading || !pageField)} />
+            <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             {
                 (pageField) &&
                 <CommonListPage

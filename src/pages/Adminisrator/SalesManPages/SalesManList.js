@@ -10,12 +10,13 @@ import {
     editSalesManID,
     saveSalesManMasterSuccess,
     getSalesManlist,
-    updateSalesManIDSuccess
+    updateSalesManIDSuccess,
+    getSalesManlistSuccess
 } from "../../../store/Administrator/SalesManRedux/actions";
 import { loginCompanyID, loginPartyID, loginUserAdminRole } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const SalesManList = (props) => {
 
@@ -26,7 +27,7 @@ const SalesManList = (props) => {
 
     const reducers = useSelector(
         (state) => ({
-            loading: state.SalesManReducer.loading,
+            goBtnLoading: state.SalesManReducer.goBtnLoading,
             listBtnLoading: state.SalesManReducer.listBtnLoading,
             tableList: state.SalesManReducer.SalesManList,
             postMsg: state.SalesManReducer.PostData,
@@ -38,7 +39,7 @@ const SalesManList = (props) => {
         })
     );
 
-    const { pageField, } = reducers;
+    const { pageField, goBtnLoading } = reducers;
 
     const action = {
         getList: getSalesManlist,
@@ -54,7 +55,12 @@ const SalesManList = (props) => {
         const page_Id = pageId.SALESMAN_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
+
         if (!userAdminRole) { goButtonHandler() }
+        return () => {
+            dispatch(getSalesManlistSuccess([]));
+            dispatch(commonPageFieldListSuccess(null))
+        }
     }, []);
 
     const goButtonHandler = () => {
@@ -73,7 +79,7 @@ const SalesManList = (props) => {
     return (
 
         <React.Fragment>
-            <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
+            <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
                 {
                     (pageField) &&

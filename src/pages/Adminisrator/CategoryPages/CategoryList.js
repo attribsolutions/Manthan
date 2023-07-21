@@ -22,7 +22,7 @@ const CategoryList = (props) => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.CategoryReducer.listBtnLoading,
-      GoBtnlistloading: state.CategoryReducer.loading,
+      goBtnLoading: state.CategoryReducer.goBtnLoading,
       tableList: state.CategoryReducer.CategoryListData,
       editData: state.CategoryReducer.editData,
       updateMsg: state.CategoryReducer.updateMessage,
@@ -55,11 +55,11 @@ const CategoryList = (props) => {
     }
   }, []);
 
-  const { pageField, GoBtnlistloading } = reducers
+  const { pageField, goBtnLoading } = reducers
 
   return (
     <React.Fragment>
-      <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       {
         (pageField) &&
         <CommonListPage
