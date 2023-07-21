@@ -174,7 +174,7 @@ const ProfileMenu = props => {
                 defaultValue={""}
                 type="password"
                 value={currentPwd}
-                autocomplete="off"
+                autoComplete="off"
                 autoFocus={true}
                 onChange={currentpwdOnchange}
                 placeholder="Enter Old Password"
