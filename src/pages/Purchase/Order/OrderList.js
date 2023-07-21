@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import Select from "react-select";
 import { Col, FormGroup, Label, Modal } from "reactstrap";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import Order from "./Order";
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -18,7 +18,7 @@ import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper"
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import { getOrderApprovalDetailAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
-import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
+import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 import OrderView from "./OrderView";
 import OrderView_Modal from "./OrderView";
 
@@ -51,8 +51,7 @@ const OrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            loading: state.OrderReducer.loading,
-            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
+
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
             makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
@@ -60,13 +59,24 @@ const OrderList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.OrderReducer.editData,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageFieldList,
+
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
             approvalDetail: state.OrderReducer.approvalDetail,
+
             customerType: state.PriceListReducer.priceListByCompany,
+            customerTypeDropLoading: state.PriceListReducer.listBtnLoading,
+
             orderConfirmMsg: state.OrderReducer.orderConfirmMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
+            supplierDropLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
+
             gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
+            goBtnloading: state.OrderReducer.goBtnLoading,
             listBtnLoading: (state.OrderReducer.listBtnLoading
                 || state.InvoiceReducer.listBtnLoading
                 || state.PdfReportReducers.listBtnLoading
@@ -88,6 +98,8 @@ const OrderList = () => {
         customerType,
         orderConfirmMsg,
         gobutton_Add_invoice,
+        customerTypeDropLoading,
+        supplierDropLoading
     } = reducers;
 
     const values = { ...state.values }
@@ -181,6 +193,8 @@ const OrderList = () => {
             dispatch(_act.commonPageFieldListSuccess(null))
             dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list  
             dispatch(_act.orderSinglegetSuccess({ Status: false }))
+            dispatch(_act.GetVenderSupplierCustomerSuccess([]))
+            dispatch(priceListByCompay_ActionSuccess([]))
 
 
         }
@@ -192,10 +206,6 @@ const OrderList = () => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
-
-
-
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
@@ -539,13 +549,14 @@ const OrderList = () => {
                                     {!(fieldLabel.CustomerType === '') ? fieldLabel.CustomerType : "Customer Type"}
                                 </Label>
                                 <Col sm="7">
-                                    <Select
+                                    <C_Select
                                         name="CustomerType"
                                         classNamePrefix="select2-Customer"
                                         value={values.CustomerType}
                                         options={customerTypeOptions}
                                         onChange={customerTypeOnchange}
                                         isMulti={true}
+                                        isLoading={customerTypeDropLoading}
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
@@ -566,12 +577,13 @@ const OrderList = () => {
                                 {!(fieldLabel.Supplier === '') ? fieldLabel.Supplier : "Supplier"}
                             </Label>
                             <Col sm="7">
-                                <Select
+                                <C_Select
                                     name="Supplier"
                                     classNamePrefix="select2-Customer"
                                     value={values.Supplier}
                                     options={supplierOptions}
                                     onChange={supplierOnchange}
+                                    isLoading={supplierDropLoading}
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
                                     }}
@@ -591,7 +603,7 @@ const OrderList = () => {
 
     return (
         <React.Fragment>
-            <PageLoadingSpinner isLoading={reducers.loading} />
+            <PageLoadingSpinner isLoading={reducers.goBtnLoading || !pageField} />
             <div className="page-content">
                 {
                     (pageField) ?
