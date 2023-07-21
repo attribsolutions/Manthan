@@ -7,7 +7,7 @@ import { btnIsDissablefunc, date_ymd_func, loginPartyID } from "../../../compone
 import { mode, url, pageId } from "../../../routes/index"
 import * as _act from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import GRNAdd from "./GRNAdd";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
@@ -210,9 +210,8 @@ const GRNList = () => {
     return (
 
         <React.Fragment>
-
+            <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
             <div className="page-content">
-
                 {
                     (pageField) ?
                         <CommonPurchaseList

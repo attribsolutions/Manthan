@@ -18,7 +18,7 @@ import { getDashbordDetails } from '../../../store/Dashboard/Dashboard_1_Redux/a
 import PaymentEntryList from './PaymentEntryList';
 import InvoiceForGRN from './GRNList';
 import SalesReturnListForDashboard from './SalesReturnListForDashboard';
-import { DashboardLoader } from '../../../components/Common/CommonButton';
+import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/CommonButton';
 
 const Dashboard_1 = (props) => {
 
@@ -32,6 +32,7 @@ const Dashboard_1 = (props) => {
         userAccess,
         orderApprovalMsg,
         GRNListLoading,
+        pageField,
         SalesReturnListloading,
         PaymentEntryListloading } = useSelector((state) => ({
             getDashboard: state.DashboardReducer.getDashboard,
@@ -90,6 +91,7 @@ const Dashboard_1 = (props) => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={GRNListLoading || GRNListLoading || !pageField} />
             <div className="page-content">
                 <MetaTags>
                     <title>Dashboard | FoodERP 2.0 - React Admin & Dashboard Template</title>

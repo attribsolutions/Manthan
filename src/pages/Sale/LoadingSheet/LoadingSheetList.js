@@ -22,7 +22,7 @@ import { useHistory } from "react-router-dom";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
 
 const LoadingSheetList = () => {
@@ -117,6 +117,7 @@ const LoadingSheetList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
             <div className="page-content">
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">

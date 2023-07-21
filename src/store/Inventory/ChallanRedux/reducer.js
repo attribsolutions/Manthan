@@ -6,6 +6,7 @@ import {
   GO_BUTTON_FOR_CHALLAN_ADD_SUCCESS,
   ITEM_DROPDOWN_CHALLAN_SUCCESS,
   MAKE_CHALLAN_ACTION_SUCCESS,
+  CHALLAN_LIST_FOR_LIST_PAGE,
 
 } from "./actionType"
 
@@ -17,8 +18,8 @@ const INIT_STATE = {
   GoButton: [],
   challanitems: [],
   postMsg: { Status: false },
-  makeChallan: { Status: false }
-
+  makeChallan: { Status: false },
+  goBtnLoading: false,
 
 }
 
@@ -41,13 +42,19 @@ const ChallanReducer = (state = INIT_STATE, action) => {
         ...state,
         challanitems: action.payload,
       }
-
+    //********************************************************** */
+    case CHALLAN_LIST_FOR_LIST_PAGE: // challan List  by filters
+      return {
+        ...state,
+        goBtnLoading: true,
+      }
     case CHALLAN_LIST_FOR_LIST_PAGE_SUCCESS: // challan List  by filters
       return {
         ...state,
+        goBtnLoading: false,
         ChallanList: action.payload,
       }
-
+    //********************************************************** */
     case DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS://Delete challan
       return {
         ...state,
