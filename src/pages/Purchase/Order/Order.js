@@ -15,7 +15,7 @@ import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { orderCalculateFunc } from "./OrderPageCalulation";
-import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn } from "../../../components/Common/CommonButton";
+import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
@@ -24,7 +24,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/index";
 
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -143,7 +143,8 @@ const Order = (props) => {
         RoutesList,
         supplierADDdropLoading,
         supplierDropLoading,
-        orderTypeDropLoading
+        orderTypeDropLoading,
+        routesDropLoading
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
 
@@ -168,8 +169,8 @@ const Order = (props) => {
         partyDropLoading: state.PartyMasterReducer.partyDropLoading,
 
         RoutesList: state.RoutesReducer.RoutesList,
-        RoutesList: state.RoutesReducer.RoutesList,
-        
+        routesDropLoading: state.RoutesReducer.goBtnLoading,
+
         gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
         goBtnloading: state.OrderReducer.goBtnLoading,
         saveBtnloading: state.OrderReducer.saveBtnloading,
@@ -1286,6 +1287,7 @@ const Order = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+                <PageLoadingSpinner isLoading={!pageField} />
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     {/* {userAdminRole === 2 ?
@@ -1347,13 +1349,14 @@ const Order = (props) => {
                                                     style={{ width: "65px" }}>{fieldLabel.Route}</Label>
                                                 <Col sm="7">
 
-                                                    <Select
+                                                    <C_Select
                                                         classNamePrefix="react-select"
                                                         value={routeSelect}
                                                         options={RouteOptions}
                                                         isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
                                                         // onChange={(e) => { setRouteSelect(e) }}
                                                         onChange={(e) => { RouteOnChange(e) }}
+                                                        isLoading={routesDropLoading}
                                                         styles={{
                                                             menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
@@ -1370,11 +1373,12 @@ const Order = (props) => {
                                             <Label className="col-sm-5 p-2"
                                                 style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
                                             <Col sm="7">
-                                                <Select
+                                                <C_Select
                                                     value={supplierSelect}
                                                     isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
                                                     options={supplierOptions}
                                                     onChange={supplierOnchange}
+                                                    isLoading={supplierDropLoading}
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
@@ -1409,6 +1413,7 @@ const Order = (props) => {
                                                     <Change_Button
                                                         id={`change-btn${subPageMode}`}
                                                         onClick={(e) => {
+                                                            setsupplierSelect('')
                                                             setGoBtnDissable(false)
                                                             setSelecedItemWiseOrder(true)
                                                             setOrderItemTable([])
@@ -1445,10 +1450,11 @@ const Order = (props) => {
                                                 style={{ width: "115px" }}>{fieldLabel.Item}</Label>
 
                                             <Col sm="7">
-                                                <Select
+                                                <C_Select
                                                     value={itemSelect}
                                                     isDisabled={(pageMode === "edit" || goBtnloading) ? true : false}
                                                     options={itemSelectDropOptions}
+                                                    isLoading={goBtnloading}
                                                     onChange={itemSelectOnchange}
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
@@ -1464,7 +1470,6 @@ const Order = (props) => {
                                             <div className="row mt-2 pr-1"  >
                                                 {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
                                                     <Button
-
                                                         className
                                                         color="btn btn-outline-info border-1 font-size-12 "
                                                         disabled={goBtnloading}
@@ -1478,8 +1483,12 @@ const Order = (props) => {
                                                         className='text-blac1k'
                                                         disabled={goBtnloading}
                                                         onClick={() => {
-                                                            setOrderItemTable([])
+                                                            setsupplierSelect('')
+                                                            setGoBtnDissable(false)
                                                             setSelecedItemWiseOrder(true)
+                                                            setOrderItemTable([])
+                                                            setItemSelect('')
+                                                            dispatch(_act.GoButton_For_Order_AddSuccess([]))
                                                         }} >
                                                         Item Wise
                                                     </Button>
@@ -1528,11 +1537,12 @@ const Order = (props) => {
                                             <Label className=" p-2"
                                                 style={{ width: "115px" }}>Billing Address</Label>
                                             <div className="col col-6">
-                                                <Select
+                                                <C_Select
                                                     value={billAddr}
                                                     classNamePrefix="select2-Customer"
                                                     options={supplierAddress}
                                                     onChange={(e) => { setbillAddr(e) }}
+                                                    isLoading={supplierADDdropLoading}
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
@@ -1552,6 +1562,7 @@ const Order = (props) => {
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
+                                                    isLoading={supplierADDdropLoading}
                                                     options={supplierAddress}
                                                     onChange={(e) => { setshippAddr(e) }}
                                                 />
@@ -1571,6 +1582,7 @@ const Order = (props) => {
                                                     classNamePrefix="select2-Customer"
                                                     options={orderTypeOptions}
                                                     onChange={(e) => { setorderTypeSelect(e) }}
+                                                    isLoading={orderTypeDropLoading}
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
