@@ -126,9 +126,6 @@ export const orderApprovalActionSuccess = resp => ({
   payload: resp,
 })
 
-export const orderApiErrorAction = () => ({
-  type: ORDER_API_ERROR_ACTION,
-})
 
 export const postOrderConfirms_API = (config = {}) => ({ // save Action
   type: POST_ORDER_CONFIRM_API,
@@ -139,3 +136,7 @@ export const postOrderConfirms_API_Success = (resp) => ({ // Save  success
   type: POST_ORDER_CONFIRM_API_SUCCESS,
   payload: resp,
 });
+
+export const orderApiErrorAction = () => ({
+  type: ORDER_API_ERROR_ACTION,
+})

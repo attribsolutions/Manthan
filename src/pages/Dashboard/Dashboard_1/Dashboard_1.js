@@ -38,7 +38,7 @@ const Dashboard_1 = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField,
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
-            GRNListLoading: state.OrderReducer.loading,
+            GRNListLoading: state.OrderReducer.goBtnLoading,
             SalesReturnListloading: state.SalesReturnReducer.loading,
             PaymentEntryListloading: state.ReceiptReducer.loading,
         }));

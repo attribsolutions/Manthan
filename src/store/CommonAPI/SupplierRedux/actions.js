@@ -17,6 +17,7 @@ import {
   RETAILER_LIST_SUCCESS,
   PARTY_DROPDOWN_LIST,
   PARTY_DROPDOWN_LIST_SUCCESS,
+  COMMON_API_REDUCER_ERROR_ACTION,
 } from './actionType'
 
 
@@ -30,9 +31,8 @@ export const getSupplierAddressSuccess = address => ({
   type: GET_SUPPLIER_ADDRESS_SUCCESS,
   payload: address,
 })
+
 // ************************************************************
-
-
 export const getSupplier = () => ({
   type: GET_SUPPLIER,
 });
@@ -41,8 +41,8 @@ export const getSupplierSuccess = orders => ({
   type: GET_SUPPLIER_SUCCESS,
   payload: orders,
 })
-// ************************************************************
 
+// ************************************************************
 export const GetVender = () => ({
   type: GET_VENDER,
 });
@@ -51,8 +51,8 @@ export const GetVenderSuccess = orders => ({
   type: GET_VENDER_SUCCESS,
   payload: orders,
 })
-// ************************************************************
 
+// ************************************************************
 export const GetCustomer = () => ({
   type: GET_CUSTOMER,
 });
@@ -61,7 +61,6 @@ export const GetCustomerSuccess = orders => ({
   type: GET_CUSTOMER_SUCCESS,
   payload: orders,
 })
-
 
 // ************************************************************
 export const getOrderType = () => ({
@@ -73,7 +72,7 @@ export const getOrderTypeSuccess = orderType => ({
   payload: orderType,
 })
 
-
+// ************************************************************
 export const GetVenderSupplierCustomer = (data) => ({
   type: GET_VENDER_SUPPLIER_CUSTOMER,
   data
@@ -84,6 +83,7 @@ export const GetVenderSupplierCustomerSuccess = orders => ({
   payload: orders,
 })
 
+// ************************************************************
 // All SS/DD under given Company
 export const SSDD_List_under_Company = () => ({
   type: SSDD_LIST_UNDER_COMPANY,
@@ -93,7 +93,7 @@ export const SSDD_List_under_Company_Success = resp => ({
   type: SSDD_LIST_UNDER_COMPANY_SUCCESS,
   payload: resp,
 })
-
+// ************************************************************
 // All Retailer under given Party and Company
 export const Retailer_List = (data) => ({
   type: RETAILER_LIST,
@@ -105,6 +105,7 @@ export const Retailer_List_Success = resp => ({
   payload: resp,
 })
 
+// ************************************************************
 // Party Dropdown List API For all Pages used
 export const Party_Dropdown_List = (loginEmployeeID) => ({
   type: PARTY_DROPDOWN_LIST,
@@ -114,4 +115,9 @@ export const Party_Dropdown_List = (loginEmployeeID) => ({
 export const Party_Dropdown_List_Success = resp => ({
   type: PARTY_DROPDOWN_LIST_SUCCESS,
   payload: resp,
+})
+
+// ************************************************************
+export const commonApiReducer_ErrorAction = () => ({
+  type: COMMON_API_REDUCER_ERROR_ACTION,
 })
