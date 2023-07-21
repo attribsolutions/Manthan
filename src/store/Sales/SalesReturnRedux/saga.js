@@ -24,16 +24,13 @@ function* save_SalesReturn_GenFunc({ config }) {
 
 // GoButton Post API for Sales Return List
 function* SalesReturn_List_GenFun({ filters }) {
-
     try {
-        yield delay(1000)
         const response = yield call(apiCall.SalesReturn_list_API, filters);
         const newList = yield response.Data.map((i) => {
             i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal)
             i.ReturnDate = concatDateAndTime(i.ReturnDate, i.CreatedOn)
             return i
         })
-
         yield put(action.salesReturnListAPISuccess(newList));
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
