@@ -73,7 +73,7 @@ const DiscountMaster = (props) => {
         userAccess,
         goBtnLoading,
         saveBtnloading,
-        priceListDropDownLoading,
+       
         postMsg
     } = useSelector((state) => ({
         gobtnDiscount_redux: state.DiscountReducer.gobtnDiscount_redux,
@@ -85,7 +85,7 @@ const DiscountMaster = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
         goBtnLoading: state.DiscountReducer.goBtnLoading,
         saveBtnloading: state.DiscountReducer.saveBtnloading,
-        priceListDropDownLoading: state.PriceListReducer.priceListDropDownLoading
+      
     }));
 
     useEffect(() => {
@@ -267,7 +267,7 @@ const DiscountMaster = (props) => {
                                         key={`DicountType_${key}-${index1.tableId}`}
                                         value={defaultDiscountTypelabel}
                                         options={discountDropOption}
-                                        isDisabled={(index1.preDiscountValue > 0) && true}
+                                        isDisabled={(index1.RecordCount === 1) && true}
                                         onChange={(e) => {
 
                                             setChangeAllDiscount(false);
@@ -361,7 +361,7 @@ const DiscountMaster = (props) => {
                                     id={`Dicount_${key}-${index1.tableId}`}
                                     style={{ textAlign: "right" }}
                                     type="text"
-                                    disabled={(index1.preDiscountValue > 0) && true}
+                                    disabled={(index1.RecordCount === 1) && true}
                                     autoComplete='off'
                                     value={index1.Discount}
                                     cpattern={decimalRegx}
@@ -381,7 +381,13 @@ const DiscountMaster = (props) => {
                                         setChangeAllDiscount(false);
                                     }}
                                 />
+                                {((index1.Discount === null) && (index1.RecordCount === 1)) &&
+                                    <span className="text-danger f-8">
+                                        <small>This item is already discounted...!</small>
+                                    </span>
+                                }
                             </div>
+
                         </div>
                     </>
                 );
