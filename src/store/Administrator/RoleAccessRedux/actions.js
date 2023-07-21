@@ -21,7 +21,6 @@ import {
   DELETE_ROLE_ACCESS_MASTER,
   SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE_SUCCESS,
   SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE,
-  ROLE_ACCESS_API_ERROR_ACTION,
 } from "./actionType";
 
 
@@ -147,7 +146,3 @@ export const IscheckRoleAcessMasterAction = (id, cell, check) => ({
   id, cell, check,
 });
 
-
-export const roleAccess_ApiErrorAction = () => ({
-  type: ROLE_ACCESS_API_ERROR_ACTION,
-})

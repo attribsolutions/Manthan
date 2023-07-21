@@ -18,7 +18,7 @@ import { Go_Button, PageLoadingSpinner } from "../../../components/Common/Common
 import DiscountMaster from "./DiscountMaster";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { C_DatePicker } from "../../../CustomValidateForm";
-import { getDiscountList } from "../../../store/Administrator/DiscountRedux/actions";
+import { getDiscountList, getDiscountListSuccess } from "../../../store/Administrator/DiscountRedux/actions";
 
 const DiscountList = () => {
 
@@ -43,19 +43,18 @@ const DiscountList = () => {
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     const action = {
-        getList: getDriverList,
-        editId: editDriverID,
-        deleteId: deleteDriverID,
-        postSucc: saveDriverMasterSuccess,
-        updateSucc: updateDriverID_Success,
-        deleteSucc: deleteDriverID_Success
+        // deleteSucc: deleteDriverID_Success
     }
 
     useEffect(() => {
-        const page_Id = pageId.DISCOUNT_LIST
-        dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
-        goButtonHandler(true)
+        const page_Id = pageId.DISCOUNT_LIST;
+        dispatch(commonPageFieldListSuccess(null));
+        dispatch(commonPageFieldList(page_Id));
+        goButtonHandler(true);
+        return () => {
+            dispatch(getDiscountListSuccess([]));
+            dispatch(commonPageFieldListSuccess(null));
+        }
     }, []);
 
     const goButtonHandler = () => {

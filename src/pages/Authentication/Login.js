@@ -173,7 +173,7 @@ const Login = props => {
                               name="UserName"
                               type="text"
                               value={currentUserName}
-                              autocomplete="off"
+                              autoComplete="off"
                               autoFocus={false}
                               required
                               onChange={currentUserOnchange}
@@ -193,7 +193,7 @@ const Login = props => {
                             <Input
                               name="Password"
                               defaultValue={Password}
-                              autocomplete="off"
+                              autoComplete="off"
                               autoFocus={false}
                               onChange={PasswordOnchange}
                               type="password"
