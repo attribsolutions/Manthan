@@ -21,9 +21,6 @@ const printInvoiceBtnCss = "badge badge-soft-info font-size-12 btn btn-info wave
 const editIconClass = "mdi mdi-pencil font-size-16";
 const viewIconClass = "bx bxs-show font-size-16";
 const approvalviewIconClass = " far fa-check-circle font-size-16";
-
-
-
 const makeBtnIconClass = "fas fa-file-invoice font-size-16";
 const printIconClass = "bx bx-printer font-size-16";
 const multiInvoiceIconClass = "fas fa-file-download";
@@ -33,6 +30,7 @@ const copyIconClass = "bx bxs-copy font-size-16";
 const orderApprovalIconClass = "bx bx-check-shield font-size-20";
 const uploadIconClass = "bx bx-upload font-size-14";
 const cancelIconClass = "mdi mdi-cancel font-size-14";
+
 
 
 export const listPageActionsButtonFunc = (props) => {
@@ -301,28 +299,25 @@ export const listPageActionsButtonFunc = (props) => {
             </div>
         );
     };
-
+    const isActionColunmHidden = !(
+        userAccState.RoleAccess_IsEdit ||
+        userAccState.RoleAccess_IsPrint ||
+        userAccState.RoleAccess_IsMultipleInvoicePrint ||
+        userAccState.RoleAccess_IsView ||
+        userAccState.RoleAccess_IsDelete ||
+        userAccState.RoleAccess_IsDeleteSelf ||
+        userAccState.RoleAccess_IsEditSelf ||
+        makeBtnShow ||
+        oderAprovalBtnFunc
+    );
+    if (isActionColunmHidden) return null;
     return {
         text: "Action",
+        dataField: "",
         formatExtraData: { listBtnLoading },
-        hidden:
-            !(
-                userAccState.RoleAccess_IsEdit ||
-                userAccState.RoleAccess_IsPrint ||
-                userAccState.RoleAccess_IsMultipleInvoicePrint ||
-                userAccState.RoleAccess_IsView ||
-                userAccState.RoleAccess_IsDelete ||
-                userAccState.RoleAccess_IsDeleteSelf ||
-                userAccState.RoleAccess_IsEditSelf ||
-                makeBtnShow ||
-                oderAprovalBtnFunc
-            ),
         formatter: renderActionButton,
     };
 };
-
-
-
 
 export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
     const { listBtnLoading } = reducers;
@@ -348,7 +343,6 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
             window.open(pdfUrl, filename);
         }
     }
-
 
     const getButtonClassName = (btnmode) => {
         if (btnmode === "E-WayBill-Upload") {
@@ -446,12 +440,6 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
 
 
 export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
-    const systemSetting = loginSystemSetting();
-
-    if (!(systemSetting.EInvoiceApplicable === "1")) {
-        return null; // Return null if the column should be hidden
-    }
-
     const { listBtnLoading } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
@@ -467,17 +455,12 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
     }
 
     function Print_InvoiceHander(btnId, rowData) {
-        debugger
         const { InvoiceUploads } = rowData;
         if (!(InvoiceUploads === undefined) && InvoiceUploads.length > 0) {
             const pdfUrl = InvoiceUploads[0].EInvoicePdf;
             window.open(pdfUrl, "_blank");
         }
     }
-
-    const uploadIconClass = "bx bx-upload font-size-14";
-    const cancelIconClass = "mdi mdi-cancel font-size-14";
-    const printIconClass = "bx bx-printer font-size-14";
 
     const getButtonClassName = (btnmode) => {
         if (btnmode === "E-Invoice-Upload") {
@@ -525,6 +508,9 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
         }
     };
 
+    if (!(loginSystemSetting().EInvoiceApplicable === "1")) {
+        return null; // Return null if the column should be hidden
+    }
     return {
         text: "E-Invoice",
         formatExtraData: { listBtnLoading },
