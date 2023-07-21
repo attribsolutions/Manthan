@@ -197,7 +197,7 @@ const DiscountMaster = (props) => {
         },
 
         {//*************** Discount Type ******************* */
-
+            text: "Discount Type",
             formatExtraData: {
                 discountValueAll: discountValueAll,
                 discountTypeAll: discountTypeAll,
@@ -277,7 +277,7 @@ const DiscountMaster = (props) => {
         },
 
         {//***************  Discount ******************************* */
-
+            text: "Discount ",
             formatExtraData: {
                 discountValueAll: discountValueAll,
                 discountTypeAll: discountTypeAll,
