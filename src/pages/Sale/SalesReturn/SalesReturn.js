@@ -835,6 +835,7 @@ const SalesReturn = (props) => {
                 "DiscountType": calculate.discountType,
                 "Discount": calculate.discount,
                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+                "PurchaseReturn": "",
                 "ReturnItemImages": [],
             };
         });

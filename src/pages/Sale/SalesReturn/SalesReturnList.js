@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-    BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../store/actions";
@@ -11,7 +10,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { GetVenderSupplierCustomer, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import SalesReturn from "./SalesReturn";
 import { confirm_SalesReturn_Id, delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, post_Send_to_superStockiest_Id, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -19,7 +18,6 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import SalesReturnView_Modal from "./SalesReturnConfirm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-
 
 const SalesReturnList = () => {
 
@@ -53,11 +51,10 @@ const SalesReturnList = () => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             ApprovrMsg: state.SalesReturnReducer.ApprovrMsg,
-
         })
     );
 
-    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg } = reducers;
+    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg, loading } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -101,13 +98,11 @@ const SalesReturnList = () => {
         setOtherState({ masterPath, newBtnPath, buttonMsgLable })
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(BreadcrumbShowCountlabel(`${otherState.buttonMsgLable}Count :0`))
         goButtonHandler(true)
         return () => {
             dispatch(salesReturnListAPISuccess([]))
         }
     }, []);
-
 
     useEffect(() => {
 
@@ -117,11 +112,6 @@ const SalesReturnList = () => {
             })
         }
     }, [sendToSSbtnTableData])
-
-    // useEffect(() => {
-    //     let countlabel = subPageMode === url.PURCHASE_RETURN_LIST ? "Purchase Return Count" : "Sales Return Count"
-    //     dispatch(BreadcrumbShowCountlabel(`${countlabel} :0`))
-    // }, [subPageMode])
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
@@ -138,8 +128,6 @@ const SalesReturnList = () => {
             goButtonHandler()
         }
     }, [ApprovrMsg])
-
-
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -165,8 +153,6 @@ const SalesReturnList = () => {
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
-            // CustomerID: values.Customer.value,
-            // PartyID: _cfunc.loginPartyID(),
             CustomerID: (subPageMode === url.SALES_RETURN_LIST) ? values.Customer.value : _cfunc.loginPartyID(),
             PartyID: (subPageMode === url.SALES_RETURN_LIST) ? _cfunc.loginPartyID() : values.Customer.value,
         });
@@ -283,6 +269,7 @@ const SalesReturnList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
+                <PageLoadingSpinner isLoading={(loading || !pageField)} />
                 {
                     (pageField) ?
                         <CommonPurchaseList
