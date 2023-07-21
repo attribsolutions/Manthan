@@ -22,7 +22,7 @@ const INIT_STATE = {
   CompanyGroup: [],
   saveBtnloading: false,
   listBtnLoading: false,
-  loading:false,
+  goBtnLoading:false,
 }
 
 const Company = (state = INIT_STATE, action) => {
@@ -31,14 +31,14 @@ const Company = (state = INIT_STATE, action) => {
     case FETCH_COMPANY_LIST:
       return {
         ...state,
-        loading: true,
+        goBtnLoading: true,
       }
 
     case FETCH_COMPANY_LIST_SUCCESS:
       return {
         ...state,
         companyList: action.payload,
-        loading: false,
+        goBtnLoading: false,
       }
 
 
@@ -112,9 +112,8 @@ const Company = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
-        loading:false
+        goBtnLoading:false
       };
-
 
     default:
       return state

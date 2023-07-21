@@ -10,14 +10,14 @@ import {
   delete_SubGroupList_ID,
   editSubGroupID,
   getSubGroupList,
+  getSubGroupListSuccess,
   saveSubGroupSuccess,
   updateSubgroupIDSuccess
 } from "../../../store/Administrator/SubGroupsRedux/action";
 import SubGroupMaster from "./SubGroupMaster";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
-import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const SubGroupList = () => {
 
@@ -25,7 +25,7 @@ const SubGroupList = () => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.SubGroupReducer.listBtnLoading,
-      loading: state.SubGroupReducer.loading,
+      goBtnLoading: state.SubGroupReducer.goBtnLoading,
       tableList: state.SubGroupReducer.SubgroupList,
       editData: state.SubGroupReducer.editData,
       updateMsg: state.SubGroupReducer.updateMsg,
@@ -49,23 +49,28 @@ const SubGroupList = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getSubGroupList());
+
+    return () => {
+      dispatch(getSubGroupListSuccess([]));
+      dispatch(commonPageFieldListSuccess(null))
+    }
   }, []);
 
-  const { pageField} = reducers
+  const { pageField, goBtnLoading } = reducers
 
   return (
     <React.Fragment>
-     <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
+      <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       {
         (pageField) &&
         <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={SubGroupMaster}
-              masterPath={url.SUBGROUP}
-              ButtonMsgLable={"SubGroup"}
-              deleteName={"Name"}
-            />
+          action={action}
+          reducers={reducers}
+          MasterModal={SubGroupMaster}
+          masterPath={url.SUBGROUP}
+          ButtonMsgLable={"SubGroup"}
+          deleteName={"Name"}
+        />
       }
     </React.Fragment>
   )
