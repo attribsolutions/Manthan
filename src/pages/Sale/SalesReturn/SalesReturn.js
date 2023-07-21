@@ -307,6 +307,12 @@ const SalesReturn = (props) => {
             }
         },
         {
+            text: "Stock Quantity",
+            hidden: (subPageMode === url.PURCHASE_RETURN) ? false : true,
+            align: () => "right",
+            formatter: (cell, row) => <Label>{row.Stock}</Label>,
+        },
+        {
             text: "Invoice Qty",
             hidden: (returnMode === 1) ? false : true,
             align: () => "right",
@@ -654,11 +660,11 @@ const SalesReturn = (props) => {
             return
         }
 
-        const jsonBody = {
+        const jsonBody = JSON.stringify({
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
             "Customer": (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID()// Customer Swipe when Po return
-        }
+        })
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
         const nrwReturnMode = (byType === 'ItemWise') ? 2 : 1 //(returnMode === 2) ItemWise
@@ -829,6 +835,7 @@ const SalesReturn = (props) => {
                 "DiscountType": calculate.discountType,
                 "Discount": calculate.discount,
                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+                "PurchaseReturn": "",
                 "ReturnItemImages": [],
             };
         });

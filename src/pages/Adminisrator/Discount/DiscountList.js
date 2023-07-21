@@ -20,10 +20,6 @@ const DiscountList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.DiscountReducer.discountList,
-            editData: state.DriverReducer.editData,
-            updateMsg: state.DriverReducer.updateMessage,
-            deleteMsg: state.DriverReducer.deleteMsg,
-            postMsg: state.DriverReducer.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             listBtnLoading: state.DriverReducer.listBtnLoading,
@@ -33,9 +29,7 @@ const DiscountList = () => {
     const { pageField, GoBtnlistloading } = reducers
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
-    const action = {
-        // deleteSucc: deleteDriverID_Success
-    }
+    const action = {}
 
     useEffect(() => {
         const page_Id = pageId.DISCOUNT_LIST;
