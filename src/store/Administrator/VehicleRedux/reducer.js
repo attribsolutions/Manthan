@@ -14,7 +14,7 @@ import {
 } from "./actionType";
 
 const INIT_STATE = {
-  loading: false,
+  goBtnLoading: false,
   VehicleList: [],
   postMsg: { Status: false },
   deleteMsg: { Status: false },
@@ -30,14 +30,14 @@ const VehicleReducer = (state = INIT_STATE, action) => {
     case GET_VEHICLE_LIST:
       return {
         ...state,
-        loading: true,
+        goBtnLoading: true,
 
       }
 
     case GET_VEHICLE_LIST_SUCCESS:
       return {
         ...state,
-        loading: false,
+        goBtnLoading: false,
         VehicleList: action.payload,
 
       }
@@ -108,7 +108,7 @@ const VehicleReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
-        loading: false,
+        goBtnLoading: false,
       };
 
 
