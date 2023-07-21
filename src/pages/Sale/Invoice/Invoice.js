@@ -473,8 +473,8 @@ const Invoice = (props) => {
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
 
                 if (formatExtraData.changeAllDiscount) {
-                    // index1.Discount = discountValueAll;
-                    // index1.DiscountType = discountTypeAll.value;
+                    index1.Discount = discountValueAll;
+                    index1.DiscountType = discountTypeAll.value;
                     innerStockCaculation(index1);
                     totalAmountCalcuationFunc(tableList);
                 }
