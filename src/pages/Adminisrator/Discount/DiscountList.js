@@ -20,22 +20,15 @@ const DiscountList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.DiscountReducer.discountList,
-            editData: state.DriverReducer.editData,
-            updateMsg: state.DriverReducer.updateMessage,
-            deleteMsg: state.DriverReducer.deleteMsg,
-            postMsg: state.DriverReducer.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-            listBtnLoading: state.DriverReducer.listBtnLoading,
-            GoBtnlistloading: state.DriverReducer.loading
+            goBtnLoading: state.DiscountReducer.goBtnLoading,
         })
     );
-    const { pageField, GoBtnlistloading } = reducers
+    const { pageField, goBtnLoading } = reducers
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
-    const action = {
-        // deleteSucc: deleteDriverID_Success
-    }
+    const action = {}
 
     useEffect(() => {
         const page_Id = pageId.DISCOUNT_LIST;
@@ -72,7 +65,7 @@ const DiscountList = () => {
 
     return (
         <React.Fragment>
-            <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
+            <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
 
                 <div className="px-3 c_card_filter header text-black mb-1" >
@@ -107,7 +100,7 @@ const DiscountList = () => {
                                 <Col md={1}></Col>
                                 <Col sm="1" className="mx-6" >
                                     < Go_Button
-                                        loading={reducers.listBtnLoading}
+                                        loading={goBtnLoading}
                                         onClick={(e) => goButtonHandler()}
                                     />
 

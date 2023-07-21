@@ -10,7 +10,7 @@ import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -21,16 +21,14 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
     Cancel_EInvoiceSuccess,
     Cancel_EwayBillSuccess,
-    Uploaded_EInvoiceAction,
     Uploaded_EInvoiceSuccess,
-    Uploaded_EwayBillAction,
     Uploaded_EwayBillSuccess,
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
     invoiceListGoBtnfilter
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const InvoiceList = () => {
@@ -47,14 +45,15 @@ const InvoiceList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.InvoiceReducer.Invoicelist,
-            GRNitem: state.GRNReducer.GRNitem,
-            deleteMsg: state.InvoiceReducer.deleteMsg,
-            updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.InvoiceReducer.editData,
+            updateMsg: state.OrderReducer.updateMsg,
+            deleteMsg: state.InvoiceReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
+            supplierDropLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
+            GRNitem: state.GRNReducer.GRNitem,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             goBtnloading: state.InvoiceReducer.goBtnloading,
             Uploaded_EInvoice: state.InvoiceReducer.Uploaded_EInvoice,
@@ -66,9 +65,22 @@ const InvoiceList = () => {
         })
     );
 
-    const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, supplier, Uploaded_EInvoice, Uploaded_EwayBill, Cancel_EInvoice, Cancel_EwayBill, PartySettingdata } = reducers;
-    const { fromdate, todate, supplierSelect } = hederFilters;
+    const {
+        pageField,
+        supplier,
+        Uploaded_EInvoice,
+        Uploaded_EwayBill,
+        Cancel_EInvoice,
+        Cancel_EwayBill,
+        supplierDropLoading
+    } = reducers;
+
+    const {
+        fromdate,
+        todate,
+        supplierSelect
+    } = hederFilters;
+
     const action = {
         getList: invoiceListGoBtnfilter,
         deleteId: deleteInvoiceId,
@@ -215,14 +227,12 @@ const InvoiceList = () => {
 
     function downBtnFunc(config) {
 
-        config["ReportType"] = report.invoice ;
+        config["ReportType"] = report.invoice;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config))
     }
 
     function goButtonHandler(event, IBType) {
 
-        const btnId = gobtnId;
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
         try {
             const filtersBody = JSON.stringify({
                 FromDate: fromdate,
@@ -232,9 +242,9 @@ const InvoiceList = () => {
                 IBType: IBType ? IBType : otherState.IBType
             });
 
-            dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody, btnId }));
+            dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody }));
 
-        } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: true }) }
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     function fromdateOnchange(e, date) {
@@ -299,15 +309,14 @@ const InvoiceList = () => {
                     <Col sm="5">
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
-
                                 style={{ width: "115px" }}>Customer</Label>
                             <Col sm="5">
-
-                                <Select
+                                <C_Select
                                     classNamePrefix="react-select"
                                     value={supplierSelect}
                                     options={supplierOptions}
                                     onChange={supplierOnchange}
+                                    isLoading={supplierDropLoading}
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
                                     }}
@@ -317,7 +326,7 @@ const InvoiceList = () => {
                     </Col >
 
                     <Col sm="1" className="mt-3 ">
-                        <Go_Button id={gobtnId} onClick={goButtonHandler}
+                        <Go_Button onClick={goButtonHandler}
                             loading={reducers.goBtnloading} />
                     </Col>
                 </div>
@@ -327,6 +336,7 @@ const InvoiceList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={reducers.listBtnLoading||!pageField} />
             <div className="page-content">
                 {
                     (pageField) ?

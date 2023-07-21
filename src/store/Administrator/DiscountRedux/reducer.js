@@ -39,20 +39,20 @@ const DiscountReducer = (state = INIT_STATE, action) => {
     case GO_BUTTON_DISCOUNT_ACTION_SUCCESS:
       return {
         ...state,
-        goBtnLoading: false,
         gobtnDiscount_redux: action.payload,
+        goBtnLoading: false,
       }
 
     case GET_DISCOUNT_LIST:
       return {
         ...state,
-        listBtnLoading: true,
+        goBtnLoading: true,
       }
     case GET_DISCOUNT_LIST_SUCCESS:
       return {
         ...state,
         discountList: action.payload,
-        listBtnLoading: false,
+        goBtnLoading: false,
       }
 
     case SAVE_DISCOUNT_SUBMIT:

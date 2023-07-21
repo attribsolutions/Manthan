@@ -8,7 +8,7 @@ import {
 
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, Retailer_List, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, Retailer_List, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -17,6 +17,7 @@ import {
     initialFiledFunc,
     onChangeSelect,
     resetFunction,
+
 } from "../../../components/Common/validationFunction";
 import { mode, pageId, url } from "../../../routes/index"
 import "../../Sale/SalesReturn/salesReturn.scss";
@@ -30,7 +31,7 @@ import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/ac
 import PriceDropOptions from "../PartyMaster/MasterAdd/FirstTab/PriceDropOptions";
 import { priceListByPartyAction } from "../../../store/Administrator/PriceList/action";
 import Select from "react-select";
-import { goBtnDiscountAddActionSuccess, saveDiscountAction, saveDiscountActionSuccess, updateDiscountID } from "../../../store/Administrator/DiscountRedux/actions";
+import { goBtnDiscountAddActionSuccess, saveDiscountAction, saveDiscountActionSuccess } from "../../../store/Administrator/DiscountRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { goBtnDiscountAddAction } from "../../../store/Administrator/DiscountRedux/actions";
 
@@ -47,7 +48,7 @@ const DiscountMaster = (props) => {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         Partytype: "",
-        CustomerName: "",
+        CustomerName: { value: "", label: "All" },
         PriceListName: "",
     }
 
@@ -59,7 +60,6 @@ const DiscountMaster = (props) => {
     const [discountValueAll, setDiscountValueAll] = useState("");
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [forceReload, setForceReload] = useState(false)
-
     const [tableData, setTableData] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -73,6 +73,7 @@ const DiscountMaster = (props) => {
         userAccess,
         goBtnLoading,
         saveBtnloading,
+        priceListDropDownLoading,
         postMsg
     } = useSelector((state) => ({
         gobtnDiscount_redux: state.DiscountReducer.gobtnDiscount_redux,
@@ -82,8 +83,9 @@ const DiscountMaster = (props) => {
         customer: state.CommonAPI_Reducer.RetailerList,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        goBtnloading: state.DiscountReducer.goBtnLoading,
+        goBtnLoading: state.DiscountReducer.goBtnLoading,
         saveBtnloading: state.DiscountReducer.saveBtnloading,
+        priceListDropDownLoading: state.PriceListReducer.priceListDropDownLoading
     }));
 
     useEffect(() => {
@@ -101,7 +103,7 @@ const DiscountMaster = (props) => {
     }, []);
 
     useEffect(() => {
-        debugger
+
         if (gobtnDiscount_redux.Status === true) {
 
             const { Data = [] } = gobtnDiscount_redux;
@@ -116,6 +118,8 @@ const DiscountMaster = (props) => {
             dispatch(goBtnDiscountAddActionSuccess([]))
         }
     }, [gobtnDiscount_redux]);
+
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableData]);
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -146,14 +150,13 @@ const DiscountMaster = (props) => {
         }
     }, [pageField])
 
-
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
             dispatch(saveDiscountActionSuccess({ Status: false }))
-            dispatch(goBtnDiscountAddActionSuccess([]))
+            setTableData([])
             setState(() => resetFunction(fileds, state))// Clear form values  
-            setPriceListSelect('')
+            setPriceListSelect({ value: '', label: '' })
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
@@ -190,6 +193,8 @@ const DiscountMaster = (props) => {
         label: index.Name,
     }));
 
+    customerOptions.unshift({ value: "", label: "All" });
+
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -208,28 +213,33 @@ const DiscountMaster = (props) => {
 
             headerFormatter: () => {
                 return (
-                    <div className="">
-
-                        <div className="row">
-                            <div className="col col-5" style={{ marginTop: "10px" }} >
-                                <Label >Discount Type</Label>
+                    <div className="row">
+                        {tableData.length <= 0 ?
+                            <div className="col col-5" style={{ marginTop: "10px" }}>
+                                <Label>Discount Type</Label>
                             </div>
+                            :
+                            <>
+                                <div className="col col-5" style={{ marginTop: "10px" }} >
+                                    <Label >Discount Type</Label>
+                                </div>
+                                <div className="col col-6" >
+                                    <Select
+                                        type="text"
+                                        defaultValue={discountTypeAll}
+                                        classNamePrefix="select2-selection"
+                                        options={discountDropOption}
+                                        style={{ textAlign: "right" }}
+                                        onChange={(e) => {
+                                            setChangeAllDiscount(true);
+                                            setDiscountTypeAll(e);
+                                            setDiscountValueAll('');
+                                        }}
+                                    />
+                                </div>
+                            </>
+                        }
 
-                            <div className="col col-6" >
-                                <Select
-                                    type="text"
-                                    defaultValue={discountTypeAll}
-                                    classNamePrefix="select2-selection"
-                                    options={discountDropOption}
-                                    style={{ textAlign: "right" }}
-                                    onChange={(e) => {
-                                        setChangeAllDiscount(true);
-                                        setDiscountTypeAll(e);
-                                        setDiscountValueAll('');
-                                    }}
-                                />
-                            </div>
-                        </div>
                     </div>
                 );
             },
@@ -287,37 +297,46 @@ const DiscountMaster = (props) => {
             },
             headerFormatter: () => {
                 return (
+
                     <div className="row">
-                        <div className="col col-3" style={{ marginTop: "10px" }} >
-                            <Label >Discount</Label>
-                        </div>
+                        {tableData.length <= 0 ?
+                            <div className="col col-3" style={{ marginTop: "10px" }}>
+                                <Label>Discount</Label>
+                            </div>
+                            :
+                            <>
+                                <div className="col col-3" style={{ marginTop: "10px" }} >
+                                    <Label >Discount</Label>
+                                </div>
+                                <div className="col col-5" >
+                                    <CInput
+                                        type="text"
+                                        className="input"
+                                        autoComplete='off'
+                                        style={{ textAlign: "right" }}
+                                        cpattern={decimalRegx}
+                                        value={discountValueAll}
+                                        onChange={(e) => {
+                                            let e_val = Number(e.target.value);
 
-                        <div className="col col-5" >
-                            <CInput
-                                type="text"
-                                className="input"
-                                autoComplete='off'
-                                style={{ textAlign: "right" }}
-                                cpattern={decimalRegx}
-                                value={discountValueAll}
-                                onChange={(e) => {
-                                    let e_val = Number(e.target.value);
-
-                                    // Check if discount type is "percentage"
-                                    if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
-                                        // Limit the input to the range of 0 to 100
-                                        if (e_val > 100) {
-                                            e.target.value = 100; // Set the input value to 100 if it exceeds 100
-                                        } else if (!(e_val >= 0 && e_val < 100)) {
-                                            e.target.value = ""; // Clear the input value if it is less than 0
-                                        }
-                                    }
-                                    setChangeAllDiscount(true);
-                                    setDiscountValueAll(e.target.value);
-                                }}
-                            />
-                        </div>
+                                            // Check if discount type is "percentage"
+                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
+                                            }
+                                            setChangeAllDiscount(true);
+                                            setDiscountValueAll(e.target.value);
+                                        }}
+                                    />
+                                </div>
+                            </>
+                        }
                     </div>
+
                 );
             },
 
@@ -413,21 +432,23 @@ const DiscountMaster = (props) => {
 
     function goButtonHandler() {
 
-        let invalidMessages = ' Select';
-
-        if (values.Partytype === '') { invalidMessages = invalidMessages + ', ' + "PartyType" };
-
-        if (priceListSelect.value === '') { invalidMessages = invalidMessages + ', ' + "PriceList" };
-
-        if ((values.Partytype === '') || (priceListSelect.value === '')) {
+        if (values.Partytype === '') {
             customAlert({
                 Type: 4,
-                Message: invalidMessages,
+                Message: "Select Party Type",
             });
             return;
         }
 
-        const btnId = `gobtn-${url.DISCOUNT_MASTER}`
+        else if (priceListSelect.value === '') {
+            customAlert({
+                Type: 4,
+                Message: "Select PriceList",
+            });
+            return;
+        }
+
+        // const btnId = `gobtn-${url.DISCOUNT_MASTER}`
 
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
@@ -437,7 +458,7 @@ const DiscountMaster = (props) => {
             "PriceList": priceListSelect.value,
             "Customer": values.CustomerName === "" ? "" : values.CustomerName.value,
         });
-        dispatch(goBtnDiscountAddAction({ jsonBody, btnId }))
+        dispatch(goBtnDiscountAddAction({ jsonBody }))
     }
 
     const saveHandler = async (event) => {
@@ -507,6 +528,7 @@ const DiscountMaster = (props) => {
                                         <Col sm="7">
                                             <C_DatePicker
                                                 name='FromDate'
+                                                disabled={(tableData.length > 0) && true}
                                                 value={values.FromDate}
                                                 onChange={FromDate_Onchange}
                                             />
@@ -521,6 +543,7 @@ const DiscountMaster = (props) => {
                                         <Col sm="7">
                                             <C_DatePicker
                                                 name='ToDate'
+                                                disabled={(tableData.length > 0) && true}
                                                 value={values.ToDate}
                                                 onChange={ToDate_Onchange}
                                             />
@@ -541,6 +564,7 @@ const DiscountMaster = (props) => {
                                                 id="Partytype "
                                                 name="Partytype"
                                                 value={values.Partytype}
+                                                isDisabled={(tableData.length > 0) && true}
                                                 isSearchable={true}
                                                 options={PartyTypeOptions}
                                                 styles={{
@@ -564,6 +588,7 @@ const DiscountMaster = (props) => {
 
                                             <Input
                                                 value={priceListSelect.label}
+                                                disabled={(tableData.length > 0) && true}
                                                 autoComplete={"off"}
                                                 placeholder="Select..."
                                                 onClick={priceListOnClick}
@@ -589,6 +614,7 @@ const DiscountMaster = (props) => {
                                                 id="CustomerName "
                                                 name="CustomerName"
                                                 value={values.CustomerName}
+                                                isDisabled={(tableData.length > 0) && true}
                                                 isSearchable={true}
                                                 options={customerOptions}
                                                 styles={{
@@ -606,16 +632,20 @@ const DiscountMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
+
                                 <Col md={5}> </Col>
+
                                 <Col sm="1" className="mx-6 mt-1 ">
-
-                                    <Go_Button
-                                        type="button"
-                                        loading={goBtnLoading}
-                                        onClick={goButtonHandler}>
-
-                                    </Go_Button>
-
+                                    {!tableData.length > 0 ?
+                                        <Go_Button
+                                            loading={goBtnLoading}
+                                            onClick={goButtonHandler}>
+                                        </Go_Button>
+                                        :
+                                        <Change_Button
+                                            onClick={(e) => setTableData([])}
+                                        />
+                                    }
                                 </Col>
                             </Row>
                         </div>
@@ -627,6 +657,7 @@ const DiscountMaster = (props) => {
                                 columns={pagesListColumns}
                                 search
                             >
+
                                 {(toolkitProps) => (
                                     <React.Fragment>
                                         <Row>
@@ -634,16 +665,16 @@ const DiscountMaster = (props) => {
                                                 <div className="table-responsive table" style={{ minHeight: "60vh" }}>
                                                     <BootstrapTable
                                                         keyField={"tableId"}
-                                                        // id="table_Arrow"
+                                                        id="table_Arrow"
                                                         classes={"table  table-bordered "}
                                                         noDataIndication={
                                                             <div className="text-danger text-center ">
                                                                 Record Not available
                                                             </div>
                                                         }
-                                                        // onDataSizeChange={(e) => {
-                                                        //     _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                        // }}
+                                                        onDataSizeChange={(e) => {
+                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                        }}
                                                         {...toolkitProps.baseProps}
                                                     />
                                                 </div>

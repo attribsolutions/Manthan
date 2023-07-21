@@ -131,8 +131,8 @@ export const RetailerList = url.RETAILER_MASTER
 
 export const ProductMarginReport = url.PRODUCT_MARGIN_REPORT
 
-export const DiscountMaster = url.DISCOUNT_LIST
-export const DiscountList = url.DISCOUNT_MASTER
+export const Discount_Master = url.DISCOUNT_LIST
+export const Discount_List = url.DISCOUNT_MASTER
 
 //******************************* Purchase Module ************************************//
 

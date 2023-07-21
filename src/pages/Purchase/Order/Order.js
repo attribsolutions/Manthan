@@ -30,10 +30,10 @@ import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { editPartyItemID } from "../../../store/Administrator/PartyItemsRedux/action";
-import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { getPartyListAPI, getPartyListAPISuccess } from "../../../store/Administrator/PartyRedux/action";
 import { pageFieldUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
-import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
+import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import { ORDER_4 } from "../../../routes/route_url";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import "./order.scss"
@@ -140,12 +140,22 @@ const Order = (props) => {
         goBtnloading,
         saveBtnloading,
         gotoInvoiceBtnLoading,
-        RoutesList
+        RoutesList,
+        supplierADDdropLoading,
+        supplierDropLoading,
+        orderTypeDropLoading
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
+
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        supplierDropLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
+
         supplierAddress: state.CommonAPI_Reducer.supplierAddress,
+        supplierADDdropLoading: state.CommonAPI_Reducer.supilerADDLoading,
+
         orderType: state.CommonAPI_Reducer.orderType,
+        orderTypeDropLoading: state.CommonAPI_Reducer.orderTypeLoading,
+
         postMsg: state.OrderReducer.postMsg,
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -153,10 +163,15 @@ const Order = (props) => {
         orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
         approvalDetail: state.OrderReducer.approvalDetail,
         assingItemData: state.PartyItemsReducer.editData,
+
         partyList_redux: state.PartyMasterReducer.partyList,
-        gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
+        partyDropLoading: state.PartyMasterReducer.partyDropLoading,
+
         RoutesList: state.RoutesReducer.RoutesList,
-        goBtnloading: state.OrderReducer.loading,
+        RoutesList: state.RoutesReducer.RoutesList,
+        
+        gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
+        goBtnloading: state.OrderReducer.goBtnLoading,
         saveBtnloading: state.OrderReducer.saveBtnloading,
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
 
@@ -170,15 +185,23 @@ const Order = (props) => {
 
     useLayoutEffect(() => {
         dispatch(_act.commonPageFieldSuccess(null));
-        dispatch(_act.GoButton_For_Order_AddSuccess(null))
-        dispatch(_act.commonPageField(page_id))
-        dispatch(_act.getTermAndCondition())
-        dispatch(_act.getOrderType())
+        dispatch(_act.GoButton_For_Order_AddSuccess(null));
+        dispatch(_act.commonPageField(page_id));
+        dispatch(_act.getTermAndCondition());
+        dispatch(_act.getOrderType());
         dispatch(GetRoutesList());
-        dispatch(getPartyListAPI())
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
+        dispatch(getPartyListAPI());
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }));
         if (!(subPageMode === url.ORDER_4)) {
             dispatch(_act.getSupplierAddress(_cfunc.loginPartyID()))
+        }
+        return () => {
+            dispatch(_act.commonPageFieldSuccess(null));
+            dispatch(_act.GoButton_For_Order_AddSuccess(null))
+            dispatch(getPartyListAPISuccess([]));
+            dispatch(GetRoutesListSuccess([]));
+            dispatch(_act.getTermAndCondition_Success([]));
+            dispatch(_act.GetVenderSupplierCustomerSuccess([]));
         }
     }, []);
 

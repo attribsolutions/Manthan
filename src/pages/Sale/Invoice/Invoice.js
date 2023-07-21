@@ -154,7 +154,7 @@ const Invoice = (props) => {
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
-debugger
+
             //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
             if (postMsg.saveAndDownloadPdfMode) {
                 const config = {

@@ -33,6 +33,7 @@ import {
 
 import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
+import { orderApiErrorAction } from "../../actions";
 
 function* supplierAddressGenFunc({ editId }) {
   const config = { editId: editId }
@@ -57,7 +58,10 @@ function* supplierAddressGenFunc({ editId }) {
     newArr = [...first, ...secd]
 
     yield put(getSupplierAddressSuccess(newArr));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 // OrderType Dropdown
@@ -65,7 +69,10 @@ function* OrderType_GenFunc() {
   try {
     const response = yield call(get_OrderType_Api);
     yield put(getOrderTypeSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* getVendorGenFunc() {
@@ -73,7 +80,10 @@ function* getVendorGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
     yield put(GetVenderSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* getSupplierGenFunc() {
@@ -81,14 +91,20 @@ function* getSupplierGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
     yield put(getSupplierSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* getCustomerGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
     yield put(GetCustomerSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* vendorSupplierCustomer_genFunc({ data }) {
@@ -145,14 +161,20 @@ function* vendorSupplierCustomer_genFunc({ data }) {
 
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
   }
-  catch (e) { }
+  catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* SSDD_List_under_Company_GenFunc() {
   try {
     const response = yield call(SSDD_List_under_Company_API, { "Type": 3, "PartyID": loginPartyID(), "CompanyID": loginCompanyID() });
     yield put(SSDD_List_under_Company_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* Retailer_List_GenFunc({ data }) {
@@ -160,7 +182,10 @@ function* Retailer_List_GenFunc({ data }) {
   try {
     const response = yield call(Retailer_List_under_Company_PartyAPI, data);
     yield put(Retailer_List_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* Party_Dropdown_List_GenFunc({ loginEmployeeID }) {
@@ -168,7 +193,10 @@ function* Party_Dropdown_List_GenFunc({ loginEmployeeID }) {
   try {
     const response = yield call(Party_Dropdown_Get_API, loginEmployeeID);
     yield put(Party_Dropdown_List_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* SupplierSaga() {

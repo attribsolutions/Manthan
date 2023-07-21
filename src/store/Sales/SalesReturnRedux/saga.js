@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, delay, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
@@ -24,7 +24,6 @@ function* save_SalesReturn_GenFunc({ config }) {
 
 // GoButton Post API for Sales Return List
 function* SalesReturn_List_GenFun({ filters }) {
-
     try {
         const response = yield call(apiCall.SalesReturn_list_API, filters);
         const newList = yield response.Data.map((i) => {
@@ -32,7 +31,6 @@ function* SalesReturn_List_GenFun({ filters }) {
             i.ReturnDate = concatDateAndTime(i.ReturnDate, i.CreatedOn)
             return i
         })
-
         yield put(action.salesReturnListAPISuccess(newList));
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
@@ -47,7 +45,7 @@ function* delete_SalesReturn_ID_GenFunc({ config }) {
 }
 
 function* SalesReturn_confirmID_GenFunc({ config }) {
-    
+
     try {
         const response = yield call(apiCall.SalesReturn_SingleGet_API, config);
         response.Data[0]["viewMode"] = config.viewMode;
