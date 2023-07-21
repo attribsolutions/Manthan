@@ -51,6 +51,7 @@ const CategoryList = (props) => {
 
     return () => {
       dispatch(getCategorylistSuccess([]));
+      dispatch(commonPageFieldListSuccess(null))
     }
   }, []);
 
