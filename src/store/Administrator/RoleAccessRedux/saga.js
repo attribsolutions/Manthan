@@ -29,7 +29,6 @@ import {
   DeleteRoleAcessSuccess,
   setTableData_roleAccss_AddPageSuccess,
   PageDropdownForRoleAccessList_Success,
-  roleAccess_ApiErrorAction,
 } from "./actions";
 import { btnIsDissablefunc, CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 
@@ -39,10 +38,7 @@ function* GetRoleAccessListForRoleAccessList_GenFunc({ id1, id2 }) {
   try {
     const response = yield call(RoleAccessAdd_RoleDropdown_Api, id1, id2);
     yield put(GetRoleListForRoleAccessListPage_Success(response.Data));
-  } catch (error) {
-    CommonConsole(error);
-    yield put(roleAccess_ApiErrorAction());
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 
@@ -51,10 +47,7 @@ function* PageDropdownForRoleAccessList_GenFunc({ id1, id2 }) {
 
     const response = yield call(RoleAccessAdd_PageDropdown_Api, id1, id2);
     yield put(PageDropdownForRoleAccessList_Success(response.Data));
-  } catch (error) {
-    CommonConsole(error);
-    yield put(roleAccess_ApiErrorAction());
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
@@ -68,10 +61,7 @@ function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
       return i
     })
     yield put(setTableData_roleAccss_AddPageSuccess(newArray));
-  } catch (error) {
-    CommonConsole(error);
-    yield put(roleAccess_ApiErrorAction());
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* AddPageHandlerForRoleAccessList_GenFunc({ id }) {
@@ -89,20 +79,14 @@ function* AddPageHandlerForRoleAccessList_GenFunc({ id }) {
       return i
     })
     yield put(setTableData_roleAccss_AddPageSuccess(newArray));
-  } catch (error) {
-    CommonConsole(error);
-    yield put(roleAccess_ApiErrorAction());
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* saveRoleAccessAdd_GenFunc({ config }) {
   try {
     const response = yield call(RoleAccessAdd_Save_Api, config);
     yield put(saveRoleAccessAddActionSuccess(response));
-  } catch (error) {
-    CommonConsole(error);
-    yield put(roleAccess_ApiErrorAction());
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 
@@ -115,10 +99,7 @@ function* getList_RoleAccessList_GenFunc() { // get api
       return i
     })
     yield put(getRoleAccessListPageSuccess(newResp));
-  } catch (error) {
-    CommonConsole(error);
-    yield put(roleAccess_ApiErrorAction());
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 
@@ -126,10 +107,7 @@ function* Delete_RoleAccessList_GenFunc({ config }) {// delete Api
   try {
     const response = yield call(RoleAccessAdd_Delete_Api, config);
     yield put(DeleteRoleAcessSuccess(response));
-  } catch (error) {
-    CommonConsole(error);
-    yield put(roleAccess_ApiErrorAction());
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 
@@ -139,10 +117,7 @@ function* saveRoleAccessCopy_GenFun({ config }) {
     const response = yield call(RoleAccessCopy_Save_Api, config);
     yield put(saveCopyRoleAccessActionSuccess(response));
 
-  } catch (error) {
-    CommonConsole(error);
-    yield put(roleAccess_ApiErrorAction());
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* deleteRoleAccessMaster_GenFun({ config }) {
@@ -159,8 +134,7 @@ function* deleteRoleAccessMaster_GenFun({ config }) {
   } catch (error) {
     const { btnId } = config;
     btnIsDissablefunc({ btnId, state: false })
-    CommonConsole(error);
-    yield put(roleAccess_ApiErrorAction());
+    CommonConsole(error)
   }
 }
 function* isCheckRoleAccessMaster_GenFun({ id, cell, check }) {
@@ -177,8 +151,7 @@ function* isCheckRoleAccessMaster_GenFun({ id, cell, check }) {
 
   } catch (error) {
 
-    CommonConsole(error);
-    yield put(roleAccess_ApiErrorAction());
+    CommonConsole(error)
   }
 }
 
@@ -198,3 +171,96 @@ export default function* RoleAccessSaga() {
 
 
 }
+
+
+
+// function input_checkBoxHandler(cell, index,) {
+
+//   if (cell === "IsEdit") {
+
+//     if (index[`${cell}`] = check ) {
+//       index.RoleAccess_IsView = 1;
+//       index.RoleAccess_IsViewDisabled = 1;
+//       index.RoleAccess_IsEditSelf = 1;
+//       index.RoleAccess_IsEditSelfDisabled = 1;
+
+//     }
+//     else {
+//       index.RoleAccess_IsEditSelf = 0;
+//       index.RoleAccess_IsEditSelfDisabled = 0;
+//     }
+//     return
+//   }
+//   if (cell === "IsEditSelf") {
+//     let = document.getElementById(`IsView${v}`)
+//     let isEditSelf = document.getElementById(`IsEditSelf${v}`)
+//     let isEdit = document.getElementById(`IsEdit${v}`)
+
+//     if ((index.RoleAccessIsEdit>0) && (e === "IsEditSelf")) {
+//       isEditSelf.checked = true;
+//       isEditSelf.disabled = true
+//     }
+//     else if (isEditSelf.checked) {
+//       isView.checked = true;
+//       isView.disabled = true;
+//     }
+//     else {
+//       isView.disabled = false;
+//     }
+//     return
+//   }
+//   if ((e === "IsView")) {
+//     let isEdit = document.getElementById(`IsEdit${v}`)
+//     if ((isEdit.checked)) {
+//       let isView = document.getElementById(`IsView${v}`)
+//       isView.checked = true;
+//       isView.disabled = true
+//     }
+
+//     return
+//   }
+
+//   if (e === "IsDelete") {
+//     let isDelete = document.getElementById(`IsDelete${v}`)
+//     let isDeleteSelf = document.getElementById(`IsDeleteSelf${v}`)
+//     if (isDelete.checked) {
+//       isDeleteSelf.checked = true;
+//       isDeleteSelf.disabled = true;
+//     }
+//     else {
+//       isDeleteSelf.disabled = false;
+//     }
+//     return
+//   }
+//   if ((e === "IsDeleteSelf")) {
+//     let isDelete = document.getElementById(`IsDelete${v}`)
+//     if ((isDelete.checked)) {
+//       let isDeleteSelf = document.getElementById(`IsDeleteSelf${v}`)
+//       isDeleteSelf.checked = true;
+//       isDeleteSelf.disabled = true
+//     }
+//     return
+//   }
+
+//   if (e === "addIsShowOnMenu") {
+//     let isShowOnMenu = document.getElementById(`addIsShowOnMenu${v}`)
+//     let save = document.getElementById(`IsSave${v}`)
+//     if (isShowOnMenu.checked) {
+//       save.checked = true;
+//       save.disabled = true;
+//     }
+//     else {
+//       save.disabled = false;
+//     }
+//     return
+//   }
+//   if ((e === "IsSave")) {
+//     let isShowOnMenu = document.getElementById(`addIsShowOnMenu${v}`)
+//     if ((isShowOnMenu.checked)) {
+//       let isSave = document.getElementById(`IsSave${v}`)
+//       isSave.checked = true;
+//       isSave.disabled = true
+//     }
+//     return
+//   }
+// }
