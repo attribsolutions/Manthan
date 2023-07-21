@@ -31,7 +31,7 @@ import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/ac
 import PriceDropOptions from "../PartyMaster/MasterAdd/FirstTab/PriceDropOptions";
 import { priceListByPartyAction } from "../../../store/Administrator/PriceList/action";
 import Select from "react-select";
-import { goBtnDiscountAddActionSuccess, saveDiscountAction, saveDiscountActionSuccess, updateDiscountID } from "../../../store/Administrator/DiscountRedux/actions";
+import { goBtnDiscountAddActionSuccess, saveDiscountAction, saveDiscountActionSuccess } from "../../../store/Administrator/DiscountRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { goBtnDiscountAddAction } from "../../../store/Administrator/DiscountRedux/actions";
 
@@ -48,7 +48,7 @@ const DiscountMaster = (props) => {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         Partytype: "",
-        CustomerName: "",
+        CustomerName: { value: "", label: "All" },
         PriceListName: "",
     }
 
@@ -60,7 +60,6 @@ const DiscountMaster = (props) => {
     const [discountValueAll, setDiscountValueAll] = useState("");
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [forceReload, setForceReload] = useState(false)
-    console.log(priceListSelect)
     const [tableData, setTableData] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -74,6 +73,7 @@ const DiscountMaster = (props) => {
         userAccess,
         goBtnLoading,
         saveBtnloading,
+        priceListDropDownLoading,
         postMsg
     } = useSelector((state) => ({
         gobtnDiscount_redux: state.DiscountReducer.gobtnDiscount_redux,
@@ -83,8 +83,9 @@ const DiscountMaster = (props) => {
         customer: state.CommonAPI_Reducer.RetailerList,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        goBtnloading: state.DiscountReducer.goBtnLoading,
+        goBtnLoading: state.DiscountReducer.goBtnLoading,
         saveBtnloading: state.DiscountReducer.saveBtnloading,
+        priceListDropDownLoading: state.PriceListReducer.priceListDropDownLoading
     }));
 
     useEffect(() => {
@@ -191,6 +192,8 @@ const DiscountMaster = (props) => {
         value: index.id,
         label: index.Name,
     }));
+
+    customerOptions.unshift({ value: "", label: "All" });
 
     const pagesListColumns = [
         {
@@ -445,7 +448,7 @@ const DiscountMaster = (props) => {
             return;
         }
 
-        const btnId = `gobtn-${url.DISCOUNT_MASTER}`
+        // const btnId = `gobtn-${url.DISCOUNT_MASTER}`
 
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
@@ -455,7 +458,7 @@ const DiscountMaster = (props) => {
             "PriceList": priceListSelect.value,
             "Customer": values.CustomerName === "" ? "" : values.CustomerName.value,
         });
-        dispatch(goBtnDiscountAddAction({ jsonBody, btnId }))
+        dispatch(goBtnDiscountAddAction({ jsonBody }))
     }
 
     const saveHandler = async (event) => {
@@ -505,10 +508,6 @@ const DiscountMaster = (props) => {
         } catch (error) {
             _cfunc.CommonConsole("dicount_Save", error);
         }
-    }
-
-    const onChangeBtnHandler = () => {
-        setTableData([])
     }
 
     if (!(userPageAccessState === '')) {
@@ -639,13 +638,12 @@ const DiscountMaster = (props) => {
                                 <Col sm="1" className="mx-6 mt-1 ">
                                     {!tableData.length > 0 ?
                                         <Go_Button
-                                            type="button"
                                             loading={goBtnLoading}
                                             onClick={goButtonHandler}>
                                         </Go_Button>
                                         :
                                         <Change_Button
-                                            onClick={(e) => onChangeBtnHandler()}
+                                            onClick={(e) => setTableData([])}
                                         />
                                     }
                                 </Col>

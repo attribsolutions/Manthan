@@ -14,7 +14,6 @@ import {
   GO_BUTTON_DISCOUNT_ACTION_SUCCESS
 } from "./actionType";
 
-
 export const goBtnDiscountAddAction = (config) => ({
   type: GO_BUTTON_DISCOUNT_ACTION,
   config
@@ -62,8 +61,6 @@ export const updateDiscountIDSuccess = (resp) => ({    //Update Success
   type: UPDATE_DISCOUNT_ID_SUCCESS,
   payload: resp,
 });
-
-
 
 export const deleteDiscount_ID = (config = {}) => ({  // Delete  Action
   type: DELETE_DISCOUNT_ID,
