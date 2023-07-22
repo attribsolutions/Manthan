@@ -6,7 +6,7 @@ import * as action from "./action";
 
 
 function* Get_Items_GenFunc() {
-  const filters = loginJsonBody()
+  const filters =JSON.stringify(loginJsonBody());
   try {
     const response = yield call(apiCall.Items_Filter_API, filters);
     yield put(action.getItemListSuccess(response.Data))

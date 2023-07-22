@@ -24,7 +24,8 @@ function* save_Party_Type_GneFunc({ config }) {// post api
 
 function* Get_PartyType_List_GneFunc() { // get api
   try {
-    const jsonBody = { ...loginJsonBody(), "id": 0 }
+
+    const jsonBody = JSON.stringify({ ...loginJsonBody(), "id": 0 });
     const response = yield call(get_PartyType_List_Api, jsonBody);
     yield put(action.getPartyTypelistSuccess(response.Data));
   } catch (error) { yield put(action.PartyTypeApiErrorAction()) }
@@ -40,7 +41,7 @@ function* Delete_PartyType_ID_GneFunc({ config }) { // delete api
 function* Edit_PartyType_ID_GneFunc({ config }) { // edit api
 
   const { btnmode, editId } = config;
-  const body = { ...loginJsonBody(), "id": editId };
+  const body = JSON.stringify({ ...loginJsonBody(), "id": editId });
   config.jsonBody = body;
   try {
     const response = yield call(edit_PartyType_List_Api, config);

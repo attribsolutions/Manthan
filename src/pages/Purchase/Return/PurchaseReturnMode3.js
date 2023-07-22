@@ -71,7 +71,7 @@ const PurchaseReturnMode3 = (props) => {
 
     useEffect(() => {
         if (sendToSSbtnTableData.Status === true) {
-            debugger
+            
             const { Data = [] } = sendToSSbtnTableData;
 
             let grand_total = 0;

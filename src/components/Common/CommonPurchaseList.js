@@ -282,7 +282,7 @@ const CommonPurchaseList = (props) => {
     makeBtnColumn,
     userAccState: userAccState
   })
-debugger
+
 
   function rowSelected() {
     return tableList.map((index) => { return (index.selectCheck) })

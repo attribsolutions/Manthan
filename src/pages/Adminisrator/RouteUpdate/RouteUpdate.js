@@ -162,7 +162,7 @@ const RouteUpdate = (props) => {
             style: () => ({ width: "30%" }),
             formatExtraData: { forceRefresh },
             formatter: (value, row, key, { forceRefresh }) => {
-                debugger
+                
                 return (
                     <C_Select
                         value={!(row.Route > 0) ? "" : {
@@ -174,7 +174,7 @@ const RouteUpdate = (props) => {
                             row["RouteName"] = e.label
                             setForceRefresh(!forceRefresh)
                         }}
-                    // onCancelClick={() => {debugger
+                    // onCancelClick={() => {
                     //     row["Route"] = null;
                     //     row["RouteName"] = ''
                     //     setForceRefresh(!forceRefresh)
@@ -197,7 +197,7 @@ const RouteUpdate = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            debugger
+            
             const data = Data.map((index) => ({
                 id: index.id,
                 Party: index.Party,

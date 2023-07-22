@@ -18,7 +18,8 @@ import { date_dmy_func, loginJsonBody, } from "../../../components/Common/Common
 
 function* Get_Driver_GenFun({ jsonBody }) { // List API Using Post Method
 
-    const filters = (jsonBody === undefined || null ? loginJsonBody() : jsonBody);// required only PartyID and CompanyID
+    const filters = (!jsonBody ? JSON.stringify(loginJsonBody()) : jsonBody);// required only PartyID and CompanyID
+
     try {
         const response = yield call(get_DriverList_API, filters);
         const newList = yield response.Data.map((i) => {

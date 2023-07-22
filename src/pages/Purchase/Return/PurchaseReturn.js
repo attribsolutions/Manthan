@@ -92,7 +92,7 @@ const PurchaseReturn = (props) => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN))
-        dispatch(getpartyItemList(_cfunc.loginJsonBody()))
+        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())))
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.PURCHASE_RETURN, RouteID: "" }))
         dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
     }, []);

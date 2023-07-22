@@ -93,7 +93,7 @@ const SalesReturn = (props) => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.SALES_RETURN))
-        dispatch(getpartyItemList(_cfunc.loginJsonBody()))
+        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())))
 
         const jsonBody = JSON.stringify({
             Type: 1,

@@ -46,7 +46,7 @@ const invioceReport_A4 = async (data) => {
     //         const urlObject = new URL(url);
     //         desiredPart = urlObject.pathname;
     //     } catch (w) { }
-    //     debugger
+    //     
     //     const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
     //     if (image) {
     //         doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
@@ -57,7 +57,7 @@ const invioceReport_A4 = async (data) => {
     // }
 
     // function loadImage(url) {
-    //     debugger
+    //     
     //     return new Promise((resolve, reject) => {
     //         const img = new Image();
     //         img.onload = () => resolve(img);
@@ -77,7 +77,7 @@ const invioceReport_A4 = async (data) => {
 }
 
 const InvioceReport = (data) => {
-    debugger
+    
     const SettingData = loginSystemSetting();
     data["SettingData"] = SettingData;
 

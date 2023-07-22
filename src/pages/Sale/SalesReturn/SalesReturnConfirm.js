@@ -24,7 +24,7 @@ const ViewDetails_Modal = () => {
     }))
 
     useEffect(() => {
-        debugger
+        
         try {
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
@@ -63,7 +63,7 @@ const ViewDetails_Modal = () => {
             const tableItemArray = []
             let inValideUnits = []
             tableArray.ReturnItems.forEach(index => {
-                debugger
+                
                 const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
                 const Comment = index.ApproveComment ? index.ApproveComment : null
 
