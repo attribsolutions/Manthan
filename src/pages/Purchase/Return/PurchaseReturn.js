@@ -798,6 +798,7 @@ const PurchaseReturn = (props) => {
                 "Discount": calculate.discount,
                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
                 "PurchaseReturn": "",
+                "SubReturn": "",
                 "ReturnItemImages": [],
             };
         });
