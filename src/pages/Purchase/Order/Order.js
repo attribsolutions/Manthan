@@ -107,7 +107,6 @@ const Order = (props) => {
     const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
     const [goBtnDissable, setGoBtnDissable] = useState(false)
 
-    const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
     const [orderTypeSelect, setorderTypeSelect] = useState('');
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
@@ -1647,7 +1646,7 @@ const Order = (props) => {
                                             <BootstrapTable
                                                 keyField={"Item_id"}
                                                 id="table_Arrow"
-                                                defaultSorted={defaultSorted}
+                                                defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
                                                 classes={"table  table-bordered table-hover "}
                                                 noDataIndication={
                                                     <div className="text-danger text-center table-cursor-pointer">
