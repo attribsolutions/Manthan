@@ -36,24 +36,6 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 
-
-function initialState(history) {
-
-    let page_Id = '';
-    let listPath = ''
-    let sub_Mode = history.location.pathname;
-
-    if (sub_Mode === url.SALES_RETURN) {
-        page_Id = pageId.SALES_RETURN;
-        listPath = url.SALES_RETURN_LIST
-    }
-    else if (sub_Mode === url.PURCHASE_RETURN) {
-        page_Id = pageId.PURCHASE_RETURN;
-        listPath = url.PURCHASE_RETURN_LIST
-    }
-    return { page_Id, listPath }
-};
-
 const SalesReturn = (props) => {
 
     const dispatch = useDispatch();
@@ -62,8 +44,7 @@ const SalesReturn = (props) => {
 
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [page_id] = useState(() => initialState(history).page_Id)
-    const [listPath] = useState(() => initialState(history).listPath)
+
     const fileds = {
         ReturnDate: currentDate_ymd,
         Customer: "",
@@ -75,7 +56,6 @@ const SalesReturn = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
-    const [subPageMode] = useState(history.location.pathname)
     const [TableArr, setTableArr] = useState([]);
 
     const [returnMode, setReturnMode] = useState(0); //(1==ItemWise) OR (2==invoiceWise)
@@ -90,7 +70,6 @@ const SalesReturn = (props) => {
         InvoiceNo,
         pageField,
         userAccess,
-        supplier,
         addButtonData,
         saveBtnloading,
         addBtnLoading,
@@ -99,7 +78,6 @@ const SalesReturn = (props) => {
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.RetailerList,
-        supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
         ItemList: state.PartyItemsReducer.partyItem,
         ReturnReasonList: state.PartyMasterBulkUpdateReducer.SelectField,
         InvoiceNo: state.SalesReturnReducer.InvoiceNo,
@@ -114,9 +92,9 @@ const SalesReturn = (props) => {
     useEffect(() => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_id))
+        dispatch(commonPageField(pageId.SALES_RETURN))
         dispatch(getpartyItemList(_cfunc.loginJsonBody()))
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
+
         const jsonBody = JSON.stringify({
             Type: 1,
             PartyID: _cfunc.loginPartyID(),
@@ -125,7 +103,6 @@ const SalesReturn = (props) => {
         dispatch(Retailer_List(jsonBody));
         dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
     }, []);
-
 
     useEffect(() => {
         if (TableArr.length === 0) {
@@ -190,7 +167,7 @@ const SalesReturn = (props) => {
                     Message: postMsg.Message,
                 })
                 if (alterRepont) {
-                    history.push({ pathname: listPath })
+                    history.push({ pathname: url.SALES_RETURN })
                 }
             }
         }
@@ -232,7 +209,6 @@ const SalesReturn = (props) => {
                         i.GST = highestGST.GST || "";
                         i.GSTPercentage = highestGST.GSTPercentage || "";
                     }
-
 
                     const InvoiceQuantity = i.Quantity
                     const newItemRow = {
@@ -290,11 +266,6 @@ const SalesReturn = (props) => {
         label: index.FullInvoiceNumber,
     }));
 
-    const supplierOptions = supplier.map((i) => ({
-        value: i.id,
-        label: i.Name,
-    }));
-
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -306,12 +277,12 @@ const SalesReturn = (props) => {
                 )
             }
         },
-        {
-            text: "Stock Quantity",
-            hidden: (subPageMode === url.PURCHASE_RETURN) ? false : true,
-            align: () => "right",
-            formatter: (cell, row) => <Label>{row.Stock}</Label>,
-        },
+        // {
+        //     text: "Stock Quantity",
+        //     hidden: (subPageMode === url.PURCHASE_RETURN) ? false : true,
+        //     align: () => "right",
+        //     formatter: (cell, row) => <Label>{row.Stock}</Label>,
+        // },
         {
             text: "Invoice Qty",
             hidden: (returnMode === 1) ? false : true,
@@ -663,7 +634,7 @@ const SalesReturn = (props) => {
         const jsonBody = JSON.stringify({
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
-            "Customer": (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID()// Customer Swipe when Po return
+            "Customer": values.Customer.value // Customer Swipe when Po return
         })
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
@@ -846,15 +817,15 @@ const SalesReturn = (props) => {
                 ReturnDate: values.ReturnDate,
                 ReturnReason: '',
                 BatchCode: values.BatchCode,
-                Customer: (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID(),// Customer Swipe when Po return
-                Party: (subPageMode === url.SALES_RETURN) ? _cfunc.loginPartyID() : values.Customer.value,// Party Swipe when Po return
+                Customer: values.Customer.value,// Customer Swipe when Po return
+                Party: _cfunc.loginPartyID(),// Party Swipe when Po return
                 Comment: values.Comment,
                 GrandTotal: grand_total,
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-                Mode: (subPageMode === url.SALES_RETURN) ? 1 : 2,
-                IsApproved: (subPageMode === url.SALES_RETURN) && 1,
+                Mode: 1,
+                IsApproved: 1,
                 PurchaseReturnReferences: [],
                 ReturnItems: ReturnItems,
             });
@@ -901,7 +872,7 @@ const SalesReturn = (props) => {
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 isDisabled={((TableArr.length > 0)) ? true : false}
-                                                options={subPageMode === url.SALES_RETURN ? customerOptions : supplierOptions}
+                                                options={customerOptions}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
