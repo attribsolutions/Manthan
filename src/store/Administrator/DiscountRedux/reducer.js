@@ -12,6 +12,10 @@ import {
   GO_BUTTON_DISCOUNT_ACTION,
   GET_DISCOUNT_LIST,
   GET_DISCOUNT_LIST_SUCCESS,
+  DISCOUNT_PARTY_TYPE_DROPDOWN_SUCCESS,
+  DISCOUNT_PARTY_TYPE_DROPDOWN_ACTION,
+  DISCOUNT_CUSTOMER_DROPDOWN_ACTION,
+  DISCOUNT_CUSTOMER_DROPDOWN_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
@@ -21,10 +25,14 @@ const INIT_STATE = {
   deleteDiscountID: { Status: false },
   postMsg: { Status: false },
   updateMessage: { Status: false },
+  partyType: [],
+  customer: [],
 
   saveBtnloading: false,
   listBtnLoading: false,
-  goBtnLoading: false
+  goBtnLoading: false,
+  partyTypeDropDownLoading: false,
+  customerDropDownLoading: false,
 }
 
 const DiscountReducer = (state = INIT_STATE, action) => {
@@ -107,12 +115,40 @@ const DiscountReducer = (state = INIT_STATE, action) => {
         saveBtnloading: false
       }
 
+    case DISCOUNT_PARTY_TYPE_DROPDOWN_ACTION:
+      return {
+        ...state,
+        partyTypeDropDownLoading: true
+      }
+
+    case DISCOUNT_PARTY_TYPE_DROPDOWN_SUCCESS:
+      return {
+        ...state,
+        partyType: action.payload,
+        partyTypeDropDownLoading: false
+      }
+
+    case DISCOUNT_CUSTOMER_DROPDOWN_ACTION:
+      return {
+        ...state,
+        customerDropDownLoading: true
+      }
+
+    case DISCOUNT_CUSTOMER_DROPDOWN_SUCCESS:
+      return {
+        ...state,
+        customer: action.payload,
+        customerDropDownLoading: false
+      }
+
     case DISCOUNT_API_ERROR_ACTION:
       return {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
-        goBtnLoading: false
+        goBtnLoading: false,
+        partyTypeDropDownLoading: false,
+        customerDropDownLoading: false
       };
 
 

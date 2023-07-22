@@ -363,7 +363,8 @@ export const Discount_Delete_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MAST
 export const Discount_List_Api = (filterBody) => post(url.DISCOUNT_MASTER_LIST_API, filterBody)//get api
 export const Discount_Edit_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_ITEM, jsonBody, btnId)// post api
 export const Discount_Update_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_UNIT, jsonBody, btnId)// post api
-
+export const DiscountPartyType_Dropdown_API = ({ PartyID }) => get(`${url.DISCOUNT_PARTY_TYPE_API}/${PartyID}`) // Party Type Drodown API
+export const DiscountCustomer_Dropdown_API = ({ PartyID, PartyTypeID, PricelistID }) => get(`${url.DISCOUNT_CUSTOMER_API}/${PartyID}/${PartyTypeID}/${PricelistID}`) // Party Type Drodown API
 
 // ImportMaster_Map API
 export const ImportMaster_Map_Customer_GoButton_API = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_CUSTOMER}/${partyId}`, btnId)//get api
