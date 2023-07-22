@@ -104,9 +104,8 @@ function* DiscountPartyTypeDropdown_GenFunc() {
 
 //customer dependancy Drodown API
 function* DiscountCustomerDropdown_GenFunc({ config }) {
- 
+
   try {
-    yield delay(1000)
     const response = yield call(DiscountCustomer_Dropdown_API, config);
     yield put(DiscountCustomer_Dropdown_Success(response.Data))
   } catch (error) { yield put(discountApiErrorAction()) }
