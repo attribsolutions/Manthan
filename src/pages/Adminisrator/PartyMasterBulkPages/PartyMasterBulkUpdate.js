@@ -354,7 +354,7 @@ const PartyMasterBulkUpdate = (props) => {
         pagesListColumns.push(District)
     }
 
-    debugger
+    
     const Newvalue = {
         text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
         dataField: "Newvalue",

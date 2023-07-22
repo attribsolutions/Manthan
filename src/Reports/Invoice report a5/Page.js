@@ -121,7 +121,7 @@ const generateReportPage = (doc, data) => {
 
 const InvioceReporta5 = async (data) => {
     var doc = new jsPDF('l', 'pt', 'a5');
-    debugger
+    
     const BATCH_SIZE = 40; // You can adjust the batch size according to your needs
 
     if (Array.isArray(data)) {
