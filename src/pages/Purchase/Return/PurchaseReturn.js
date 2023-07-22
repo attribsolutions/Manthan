@@ -22,7 +22,7 @@ import {
 import Select from "react-select";
 import { Change_Button, C_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
-import { GetVenderSupplierCustomer, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess } from "../../../store/Sales/SalesReturnRedux/action";
@@ -36,24 +36,6 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 
-
-function initialState(history) {
-
-    let page_Id = '';
-    let listPath = ''
-    let sub_Mode = history.location.pathname;
-
-    if (sub_Mode === url.SALES_RETURN) {
-        page_Id = pageId.SALES_RETURN;
-        listPath = url.SALES_RETURN_LIST
-    }
-    else if (sub_Mode === url.PURCHASE_RETURN) {
-        page_Id = pageId.PURCHASE_RETURN;
-        listPath = url.PURCHASE_RETURN_LIST
-    }
-    return { page_Id, listPath }
-};
-
 const PurchaseReturn = (props) => {
 
     const dispatch = useDispatch();
@@ -62,8 +44,7 @@ const PurchaseReturn = (props) => {
 
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [page_id] = useState(() => initialState(history).page_Id)
-    const [listPath] = useState(() => initialState(history).listPath)
+
     const fileds = {
         ReturnDate: currentDate_ymd,
         Customer: "",
@@ -75,16 +56,13 @@ const PurchaseReturn = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
-    const [subPageMode] = useState(history.location.pathname)
     const [TableArr, setTableArr] = useState([]);
-
     const [returnMode, setReturnMode] = useState(0); //(1==ItemWise) OR (2==invoiceWise)
     const [imageTable, setImageTable] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        RetailerList,
         ItemList,
         ReturnReasonList,
         InvoiceNo,
@@ -98,7 +76,6 @@ const PurchaseReturn = (props) => {
     } = useSelector((state) => ({
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
-        RetailerList: state.CommonAPI_Reducer.RetailerList,
         supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
         ItemList: state.PartyItemsReducer.partyItem,
         ReturnReasonList: state.PartyMasterBulkUpdateReducer.SelectField,
@@ -114,18 +91,11 @@ const PurchaseReturn = (props) => {
     useEffect(() => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_id))
+        dispatch(commonPageField(pageId.PURCHASE_RETURN))
         dispatch(getpartyItemList(_cfunc.loginJsonBody()))
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-        const jsonBody = JSON.stringify({
-            Type: 1,
-            PartyID: _cfunc.loginPartyID(),
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
+        dispatch(GetVenderSupplierCustomer({ subPageMode: url.PURCHASE_RETURN, RouteID: "" }))
         dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
     }, []);
-
 
     useEffect(() => {
         if (TableArr.length === 0) {
@@ -190,7 +160,7 @@ const PurchaseReturn = (props) => {
                     Message: postMsg.Message,
                 })
                 if (alterRepont) {
-                    history.push({ pathname: listPath })
+                    history.push({ pathname: url.PURCHASE_RETURN_LIST })
                 }
             }
         }
@@ -265,11 +235,6 @@ const PurchaseReturn = (props) => {
         }
     }, [addButtonData])
 
-    const customerOptions = RetailerList.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
-
     const itemList = ItemList.map((index) => ({
         value: index.Item,
         label: index.ItemName,
@@ -306,18 +271,17 @@ const PurchaseReturn = (props) => {
                 )
             }
         },
-        {
-            text: "Stock Quantity",
-            hidden: (subPageMode === url.PURCHASE_RETURN) ? false : true,
-            align: () => "right",
-            formatter: (cell, row) => <Label>{row.Stock}</Label>,
-        },
+        // {
+        //     text: "Stock Quantity",
+        //     hidden: (subPageMode === url.PURCHASE_RETURN) ? false : true,
+        //     align: () => "right",
+        //     formatter: (cell, row) => <Label>{row.Stock}</Label>,
+        // },
         {
             text: "Invoice Qty",
             hidden: (returnMode === 1) ? false : true,
             align: () => "right",
             formatter: (cell, row) => <Label>{row.InvoiceQuantity}</Label>,
-
         },
         {
             text: "Quantity",
@@ -513,13 +477,10 @@ const PurchaseReturn = (props) => {
                                     }}
                                 />
                             </div>
-
                         </div>
-
                     </>
                 );
             },
-
         },
         {
             text: "Return Reason",
@@ -663,7 +624,7 @@ const PurchaseReturn = (props) => {
         const jsonBody = JSON.stringify({
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
-            "Customer": (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID()// Customer Swipe when Po return
+            "Customer": _cfunc.loginPartyID()// Customer Swipe when Po return
         })
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
@@ -846,15 +807,15 @@ const PurchaseReturn = (props) => {
                 ReturnDate: values.ReturnDate,
                 ReturnReason: '',
                 BatchCode: values.BatchCode,
-                Customer: (subPageMode === url.SALES_RETURN) ? values.Customer.value : _cfunc.loginPartyID(),// Customer Swipe when Po return
-                Party: (subPageMode === url.SALES_RETURN) ? _cfunc.loginPartyID() : values.Customer.value,// Party Swipe when Po return
+                Customer: _cfunc.loginPartyID(),// Customer Swipe when Po return
+                Party: values.Customer.value,// Party Swipe when Po return
                 Comment: values.Comment,
                 GrandTotal: grand_total,
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-                Mode: (subPageMode === url.SALES_RETURN) ? 1 : 2,
-                IsApproved: (subPageMode === url.SALES_RETURN) && 1,
+                Mode: 2,
+                // IsApproved: (subPageMode === url.SALES_RETURN) && 1,
                 PurchaseReturnReferences: [],
                 ReturnItems: ReturnItems,
             });
@@ -901,7 +862,7 @@ const PurchaseReturn = (props) => {
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 isDisabled={((TableArr.length > 0)) ? true : false}
-                                                options={subPageMode === url.SALES_RETURN ? customerOptions : supplierOptions}
+                                                options={supplierOptions}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
@@ -987,13 +948,10 @@ const PurchaseReturn = (props) => {
                                                 <span className="text-danger f-8"><small>{isError.BatchCode}</small></span>
                                             )}
 
-
                                         </Col>
-
                                         <Col sm="1" className="mx-6 mt-1">
                                             {
                                                 (!(returnMode === 1)) &&///(returnMode === 1) InvoiceWise
-
                                                 <C_Button
                                                     type="button"
                                                     loading={addBtnLoading}
@@ -1050,12 +1008,10 @@ const PurchaseReturn = (props) => {
                                                     onClick={() => AddPartyHandler("InvoiceWise")}>
                                                     Select
                                                 </C_Button>
-
                                             }
                                         </Col>
                                     </FormGroup>
                                 </Col >
-
                             </Row>
                         </div>
 
@@ -1108,7 +1064,6 @@ const PurchaseReturn = (props) => {
                                             userAcc={userPageAccessState}
                                             module={"SalesReturn"}
                                         />
-
                                     </Col>
                                 </FormGroup >
                                 : null
@@ -1127,8 +1082,3 @@ const PurchaseReturn = (props) => {
 };
 
 export default PurchaseReturn
-
-
-
-
-
