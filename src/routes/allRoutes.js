@@ -163,7 +163,7 @@ import InvoiceConfiguration from "../pages/Adminisrator/InvoiceConfiguration/Inv
 import StockEntry from "../pages/Inventory/StockEntry/StockEntry";
 import PartyLedger from "../Reports/PratyLedger/Partyledger";
 import StockReport from "../Reports/StockReport/StockReport";
-import PurchaseReturnMode3 from "../pages/Purchase/PurchaseReturnMode_3/PurchaseReturnMode3";
+import PurchaseReturnMode3 from "../pages/Purchase/Return/PurchaseReturnMode3";
 import DiscountMaster from "../pages/Adminisrator/Discount/DiscountMaster";
 import GenericSaleReport from "../Reports/GenericSaleReport/GenericSaleReport";
 import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
