@@ -1647,7 +1647,7 @@ const Order = (props) => {
                                             <BootstrapTable
                                                 keyField={"Item_id"}
                                                 id="table_Arrow"
-                                                defaultSorted={defaultSorted}
+                                                defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
                                                 classes={"table  table-bordered table-hover "}
                                                 noDataIndication={
                                                     <div className="text-danger text-center table-cursor-pointer">
