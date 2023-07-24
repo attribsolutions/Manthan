@@ -167,7 +167,7 @@ const SalesReturn = (props) => {
                     Message: postMsg.Message,
                 })
                 if (alterRepont) {
-                    history.push({ pathname: url.SALES_RETURN })
+                    history.push({ pathname: url.SALES_RETURN_LIST })
                 }
             }
         }
