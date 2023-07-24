@@ -361,15 +361,15 @@ const PurchaseReturn = (props) => {
                             {cellContent.map((index2) => (
                                 <tr key={index1.id}>
                                     <td>
-                                        <div style={{ width: "120px" }}>{index2.BatchCode}</div>
+                                        <div style={{  }}>{index2.BatchCode}</div>
                                     </td>
                                     <td>
-                                        <div style={{ width: "120px", textAlign: "right" }}>
+                                        <div style={{  textAlign: "right" }}>
                                             <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.BaseUnitQuantity}</samp>
                                         </div>
                                     </td>
                                     <td>
-                                        <div style={{ width: "150px" }}>
+                                        <div style={{ }}>
                                             <Input
                                                 type="text"
                                                 disabled={pageMode === 'edit' ? true : false}
@@ -898,9 +898,8 @@ const PurchaseReturn = (props) => {
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 Mode: 2, //if puchase return then mode= 2 AND |Sale return then Mode =1
-                // IsApproved: (subPageMode === url.SALES_RETURN) && 1,
-                PurchaseReturnReferences: [],
                 ReturnItems: processedItems,
+                PurchaseReturnReferences: [],
             });
 
             dispatch(saveSalesReturnMaster({ jsonBody }));

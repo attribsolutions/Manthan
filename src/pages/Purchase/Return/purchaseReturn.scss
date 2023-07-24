@@ -1,7 +1,7 @@
 .sales-return-row {
     position: relative;
     table-layout: fixed;
-    min-width: 30%;
+    width: 15%;
     position: relative;
 }
 
@@ -15,12 +15,12 @@
 .sales-discount-row {
     position: relative;
     table-layout: fixed;
-    min-width: 100px;
+    min-width: 15%;
     position: relative;
 
     .parent {
         display: flex;
-        min-width: 100px;
+        min-width: 15%;
     }
 
     .child {
@@ -37,30 +37,3 @@
     }
 }
 
-.sales-rate-row {
-    position: relative;
-    table-layout: fixed;
-    min-width: 170px;
-    position: relative;
-
-    .parent {
-        display: flex;
-        min-width: 100px;
-    }
-
-    .child {
-        flex-grow: 0;
-        flex-shrink: 0;
-    }
-
-    .child:first-child {
-        flex-basis: 50%;
-        padding-right: 4px;
-    }
-
-    .child:last-child {
-        flex-basis: 50%;
-    }
-
-
-}
