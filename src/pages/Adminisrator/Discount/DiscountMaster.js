@@ -406,11 +406,11 @@ const DiscountMaster = (props) => {
                                         setChangeAllDiscount(false);
                                     }}
                                 />
-                                {((index1.Discount === null) && (index1.RecordCount === 1)) &&
+                                {/* {((index1.Discount === null) && (index1.RecordCount === 1)) &&
                                     <span className="text-danger f-8">
                                         <small>This item is already discounted...!</small>
                                     </span>
-                                }
+                                } */}
                             </div>
 
                         </div>
