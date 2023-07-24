@@ -733,6 +733,7 @@ const Order = (props) => {
                                         defaultValue={discountTypeAll}
                                         classNamePrefix="select2-selection"
                                         options={discountDropOption}
+                                        isDisabled={!(subPageMode === url.ORDER_4)}
                                         style={{ textAlign: "right" }}
                                         onChange={(e) => {
                                             setChangeAllDiscount(true);
@@ -748,6 +749,7 @@ const Order = (props) => {
                                         style={{ textAlign: "right" }}
                                         cpattern={decimalRegx}
                                         value={discountValueAll}
+                                        disabled={!(subPageMode === url.ORDER_4)}
                                         onChange={(e) => {
                                             let e_val = Number(e.target.value);
 
@@ -799,6 +801,7 @@ const Order = (props) => {
                                         classNamePrefix="select2-selection"
                                         key={`DicountType_${key}-${index1.id}`}
                                         value={defaultDiscountTypelabel}
+                                        isDisabled={!(subPageMode === url.ORDER_4)}
                                         options={discountDropOption}
                                         onChange={(e) => {
                                             setChangeAllDiscount(false);
@@ -823,6 +826,7 @@ const Order = (props) => {
                                         style={{ textAlign: "right" }}
                                         type="text"
                                         value={index1.Discount}
+                                        disabled={!(subPageMode === url.ORDER_4)}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
 
@@ -1529,7 +1533,7 @@ const Order = (props) => {
                             </div>
 
                             {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
-                                <div className="row  ">
+                                <div className="row mt-2 ">
 
                                     <div className="col col-6">                             {/* Billing Address */}
                                         <FormGroup className="row  " >
