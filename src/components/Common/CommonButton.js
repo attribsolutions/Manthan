@@ -102,6 +102,7 @@ export function Go_Button(props) {
       color="btn btn-success border-1 font-size-12"
       onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "16px" }}>Go</span></Button>
 }
+
 export function Change_Button(props) {
   const { onClick, id, type = "button" ,forceDisabled} = props
   return <Button

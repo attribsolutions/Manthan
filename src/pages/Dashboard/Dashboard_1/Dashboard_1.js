@@ -91,7 +91,7 @@ const Dashboard_1 = (props) => {
 
     return (
         <React.Fragment>
-            <PageLoadingSpinner isLoading={GRNListLoading || GRNListLoading || !pageField} />
+            <PageLoadingSpinner isLoading={GRNListLoading || PaymentEntryListloading || SalesReturnListloading || !pageField} />
             <div className="page-content">
                 <MetaTags>
                     <title>Dashboard | FoodERP 2.0 - React Admin & Dashboard Template</title>

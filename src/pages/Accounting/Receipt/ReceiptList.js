@@ -27,7 +27,7 @@ import { Go_Button, PageLoadingSpinner } from "../../../components/Common/Common
 import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { Receipt_Print } from "../../../helpers/backend_helper";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 
 const ReceiptList = () => {
 
@@ -49,6 +49,7 @@ const ReceiptList = () => {
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: (state.ReceiptReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
+            retailerDropLoading: state.CommonAPI_Reducer.retailerDropLoading,
             loading: state.ReceiptReducer.loading,
             tableList: state.ReceiptReducer.ReceiptList,
             deleteMsg: state.ReceiptReducer.deleteMsg,
@@ -59,7 +60,7 @@ const ReceiptList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
+    const { userAccess, pageField, RetailerList, ReceiptType ,retailerDropLoading} = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -222,10 +223,11 @@ const ReceiptList = () => {
                             <Label className="col-md-4 p-2"
                                 style={{ width: "115px" }}>Customer</Label>
                             <Col sm="5">
-                                <Select
+                                <C_Select
                                     name="Customer"
                                     classNamePrefix="select2-Customer"
                                     value={values.Customer}
+                                    isLoading={retailerDropLoading}
                                     options={customerOptions}
                                     onChange={CustomerOnChange}
                                     styles={{
