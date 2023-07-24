@@ -92,7 +92,7 @@ export function stockDistributeFunc(index1,_key) {
         }
 
         try {
-            document.getElementById(`batchQty${index1.id}-${index2.id}-${_key}`).value = index2.Qty
+            document.getElementById(`batchQty${index1.id}-${index2.id}-${_key}`).value = Number(index2.Qty)
         } catch (e) { CommonConsole('stockDistributeFunc', e) }
 
         return index2
@@ -191,7 +191,7 @@ export const innerStockCaculation = (index1,_key) => {
     index1.Quantity = QuantityTatal.toFixed(3);
 
     try {
-        document.getElementById(`returnQty-${index1.id}-${_key}`).value = index1.Quantity
+        document.getElementById(`returnQty-${index1.id}-${_key}`).value = Number(index1.Quantity)
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
     try {

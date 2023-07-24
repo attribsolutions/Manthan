@@ -1,28 +1,25 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Input } from 'reactstrap';
 
-export const CInput = (props) => {
-    
-    const { onChange = () => { }, cpattern = '' } = props
-
+export const CInput = ({ onChange = () => { }, cpattern = '', ...rest }) => {
+    const prevValueRef = useRef('');
     function on_Change(e) {
-
-        let val = e.target.value
+        let val = e.target.value;
         const result = cpattern.test(val);
-        if (result) {
-            onChange(e)
-        }
-        else {
-            if ((val === '')) {
-                onChange(e)
-                return
-            }
-            e.target.value = val.slice(0, -1);
+        const isEmpty = val === '';
+
+        if (result || isEmpty) {
+            prevValueRef.current = val;
+            onChange(e);
+        } else {
+            e.target.value = prevValueRef.current;
         }
     }
-    const param = Object.assign({}, props, { onChange: on_Change });
-
-    return (<Input {...param} />)
+    return (
+        <Input
+            onChange={on_Change}
+            {...rest} />
+    )
 }
 
 

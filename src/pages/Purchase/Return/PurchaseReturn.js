@@ -361,17 +361,18 @@ const PurchaseReturn = (props) => {
                             {cellContent.map((index2) => (
                                 <tr key={index1.id}>
                                     <td>
-                                        <div style={{  }}>{index2.BatchCode}</div>
+                                        <div style={{}}>{index2.BatchCode}</div>
                                     </td>
                                     <td>
-                                        <div style={{  textAlign: "right" }}>
+                                        <div style={{ textAlign: "right" }}>
                                             <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.BaseUnitQuantity}</samp>
                                         </div>
                                     </td>
                                     <td>
-                                        <div style={{ }}>
+                                        <div style={{}}>
                                             <Input
                                                 type="text"
+                                                autoComplete="off"
                                                 disabled={pageMode === 'edit' ? true : false}
                                                 style={{ textAlign: "right" }}
                                                 id={`batchQty${index1.id}-${index2.id}-${_key}`}
@@ -545,10 +546,10 @@ const PurchaseReturn = (props) => {
                             </div>
                         </div>
                         <div className="bottom-div">
-                            <span>Amount:</span>
-                            <samp id={`itemTotalAmount-${index1.id}-${_key}`}>
+                            <div>Amount:</div>
+                            <div id={`itemTotalAmount-${index1.id}-${_key}`}>
                                 {_cfunc.amountCommaSeparateFunc(index1.itemTotalAmount)}
-                            </samp>
+                            </div>
                         </div>
                     </>
                 );
@@ -625,8 +626,8 @@ const PurchaseReturn = (props) => {
             text: "Action ",
             dataField: "",
             hidden: returnMode === 1 ? true : false,
-            formatExtraData: { TableArr },
-            formatter: (cellContent, row, key, { TableArr }) => (
+            formatExtraData: { TableArr, addBtnLoading },
+            formatter: (cellContent, row, key, { TableArr, addBtnLoading }) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -634,6 +635,7 @@ const PurchaseReturn = (props) => {
                                 <Button
                                     id={"deleteid"}
                                     type="button"
+                                    disabled={addBtnLoading}
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
                                     onClick={(e) => { deleteButtonAction(row, TableArr) }}>
@@ -943,7 +945,7 @@ const PurchaseReturn = (props) => {
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
-                                                isDisabled={((TableArr.length > 0)) ? true : false}
+                                                isDisabled={((TableArr.length > 0) || addBtnLoading) ? true : false}
                                                 options={supplierOptions}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
@@ -977,7 +979,6 @@ const PurchaseReturn = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-
                                                 options={ItemList_Options}
                                                 onChange={itemNameOnChangeHandler}
                                             />
@@ -1072,15 +1073,17 @@ const PurchaseReturn = (props) => {
                                         </Col>
                                         <Col sm="1" className="mx-6 mt-1 ">
                                             {((TableArr.length > 0) || (!(values.ItemName === ""))) ?
-                                                <Change_Button onClick={(e) => {
-                                                    setTableArr([])
-                                                    setState((i) => {
-                                                        let a = { ...i }
-                                                        a.values.ItemName = ""
-                                                        a.values.InvoiceNumber = ""
-                                                        return a
-                                                    })
-                                                }} />
+                                                <Change_Button
+                                                    forceDisabled={addBtnLoading}
+                                                    onClick={(e) => {
+                                                        setTableArr([])
+                                                        setState((i) => {
+                                                            let a = { ...i }
+                                                            a.values.ItemName = ""
+                                                            a.values.InvoiceNumber = ""
+                                                            return a
+                                                        })
+                                                    }} />
                                                 :
                                                 (!(returnMode === 2)) &&//(returnMode === 2) ItemWise
                                                 <C_Button

@@ -171,8 +171,8 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
       index2["initialRate"] = index2.Rate;
       index2["Rate"] = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
-      index2["ActualQuantity"] = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity).toFixed(2);
-      index1["Quantity"] = Number(index1.Quantity).toFixed(2);
+      index2["ActualQuantity"] = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity).toFixed(3);
+      index1["Quantity"] = Number(index1.Quantity).toFixed(3);
 
       index1["ItemTotalStock"] += Number(index2.ActualQuantity);
 
@@ -181,9 +181,9 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       // Adjust order quantity based on stock availability
       if (orderQty > stockQty && orderQty !== 0) {
         orderQty -= stockQty;
-        index2.Qty = stockQty.toFixed(2);
+        index2.Qty = stockQty.toFixed(3);
       } else if (orderQty <= stockQty && orderQty > 0) {
-        index2.Qty = orderQty.toFixed(2);
+        index2.Qty = orderQty.toFixed(3);
         orderQty = 0;
       } else {
         index2.Qty = 0;
