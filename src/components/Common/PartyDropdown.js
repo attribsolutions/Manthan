@@ -4,6 +4,7 @@ import { Col, FormGroup, Label, } from "reactstrap";
 import Select from "react-select";
 import { getPartyListAPI } from "../../store/Administrator/PartyRedux/action";
 import { Change_Button, Go_Button } from "./CommonButton";
+import { C_Select } from "../../CustomValidateForm";
 
 
 const PartyDropdown_Common = (props) => {
@@ -13,7 +14,8 @@ const PartyDropdown_Common = (props) => {
     const { partySelect, setPartyFunc, goButtonHandler, change_ButtonHandler, changeBtnShow } = props
 
 
-    const { partyList } = useSelector((state) => ({
+    const { partyList, goBtnLoading } = useSelector((state) => ({
+        goBtnLoading: state.PartyMasterReducer.goBtnLoading,
         partyList: state.PartyMasterReducer.partyList,
     }));
 
@@ -36,7 +38,7 @@ const PartyDropdown_Common = (props) => {
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "83px" }}>Party</Label>
                             <Col sm="6">
-                                <Select
+                                <C_Select
                                     value={partySelect}
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
@@ -44,6 +46,7 @@ const PartyDropdown_Common = (props) => {
                                     isSearchable={true}
                                     className="react-dropdown"
                                     classNamePrefix="dropdown"
+                                    isLoading={goBtnLoading}
                                     options={party_DropdownOptions}
                                     onChange={(e) => { setPartyFunc(e) }}
                                 />

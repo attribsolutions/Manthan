@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,6 +40,7 @@ import {
 } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { C_Select } from "../../../CustomValidateForm";
 
 const ManagementEmpParties = (props) => {
 
@@ -62,8 +63,10 @@ const ManagementEmpParties = (props) => {
         pageField,
         loading,
         saveBtnloading,
+        employeeDropdownLoading,
         userAccess } = useSelector((state) => ({
             saveBtnloading: state.ManagementPartiesReducer.saveBtnloading,
+            employeeDropdownLoading: state.ManagementPartiesReducer.employeeDropdownLoading,
             loading: state.ManagementPartiesReducer.loading,
             postMsg: state.ManagementPartiesReducer.postMsg,
             employeeList: state.ManagementPartiesReducer.employeeList,
@@ -143,7 +146,7 @@ const ManagementEmpParties = (props) => {
             dispatch(saveManagementParties_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -253,7 +256,7 @@ const ManagementEmpParties = (props) => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "83px" }}> {fieldLabel.Employee}</Label>
                                     <Col sm="6">
-                                        <Select
+                                        <C_Select
                                             name="Employee"
                                             value={values.Employee}
                                             isSearchable={true}
@@ -261,6 +264,7 @@ const ManagementEmpParties = (props) => {
                                             classNamePrefix="dropdown"
                                             autoFocus={true}
                                             options={employeeListOptions}
+                                            isLoading={employeeDropdownLoading}
                                             isDisabled={(partyList.length > 0) ? true : false}
                                             onChange={(hasSelect, evn) => {
                                                 onChangeSelect({ hasSelect, evn, state, setState, })
