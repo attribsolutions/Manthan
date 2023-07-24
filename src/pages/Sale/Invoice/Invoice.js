@@ -547,8 +547,8 @@ const Invoice = (props) => {
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
-                            <samp id={`roundedTotalAmount-${index1.id}`}>
-                                {_cfunc.amountCommaSeparateFunc(index1.roundedTotalAmount)}
+                            <samp id={`itemTotalAmount-${index1.id}`}>
+                                {_cfunc.amountCommaSeparateFunc(index1.itemTotalAmount)}
                             </samp>
                         </div>
                     </>
@@ -621,36 +621,36 @@ const Invoice = (props) => {
                     const calculate = invoice_discountCalculate_Func(ele, index, IsComparGstIn)
 
                     invoiceItems.push({
-                        Item: index.Item,
-                        Unit: index.default_UnitDropvalue.value,
-                        BatchCode: ele.BatchCode,
-                        Quantity: Number(ele.Qty).toFixed(3),
-                        BatchDate: ele.BatchDate,
-                        BatchID: ele.id,
-                        BaseUnitQuantity: Number(ele.BaseUnitQuantity).toFixed(3),
-                        LiveBatch: ele.LiveBatche,
-                        MRP: ele.LiveBatcheMRPID,
-                        MRPValue: ele.MRP,//changes
-                        Rate: Number(ele.Rate).toFixed(2),
+                        "Item": index.Item,
+                        "Unit": index.default_UnitDropvalue.value,
+                        "BatchCode": ele.BatchCode,
+                        "Quantity": Number(ele.Qty).toFixed(3),
+                        "BatchDate": ele.BatchDate,
+                        "BatchID": ele.id,
+                        "BaseUnitQuantity": Number(ele.BaseUnitQuantity).toFixed(3),
+                        "LiveBatch": ele.LiveBatche,
+                        "MRP": ele.LiveBatcheMRPID,
+                        "MRPValue": ele.MRP,//changes
+                        "Rate": Number(ele.Rate).toFixed(2),
 
-                        GST: ele.LiveBatcheGSTID,
-                        CGST: Number(calculate.CGST_Amount).toFixed(2),
-                        SGST: Number(calculate.SGST_Amount).toFixed(2),
-                        IGST: Number(calculate.IGST_Amount).toFixed(2),
+                        "GST": ele.LiveBatcheGSTID,
+                        "CGST": Number(calculate.CGST_Amount).toFixed(2),
+                        "SGST": Number(calculate.SGST_Amount).toFixed(2),
+                        "IGST": Number(calculate.IGST_Amount).toFixed(2),
 
-                        GSTPercentage: calculate.GST_Percentage,
-                        CGSTPercentage: calculate.CGST_Percentage,
-                        SGSTPercentage: calculate.SGST_Percentage,
-                        IGSTPercentage: calculate.IGST_Percentage,
+                        "GSTPercentage": calculate.GST_Percentage,
+                        "CGSTPercentage": calculate.CGST_Percentage,
+                        "SGSTPercentage": calculate.SGST_Percentage,
+                        "IGSTPercentage": calculate.IGST_Percentage,
 
-                        BasicAmount: Number(calculate.discountBaseAmt).toFixed(2),
-                        GSTAmount: Number(calculate.roundedGstAmount).toFixed(2),
-                        Amount: Number(calculate.roundedTotalAmount).toFixed(2),
+                        "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
+                        "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
+                        "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
 
-                        TaxType: 'GST',
-                        DiscountType: index.DiscountType,
-                        Discount: Number(index.Discount) || 0,
-                        DiscountAmount: Number(calculate.disCountAmt).toFixed(2),
+                        "TaxType": 'GST',
+                        "DiscountType": index.DiscountType,
+                        "Discount": Number(index.Discount) || 0,
+                        "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
                     })
                 }
             })

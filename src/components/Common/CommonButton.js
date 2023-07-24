@@ -83,7 +83,7 @@ const UpdateBtn = ({ onClick, userAcc, loading, type = 'button' }) => {
 
 export function Go_Button(props) {
 
-  const { onClick, id, type = "button", loading } = props
+  const { onClick, id, type = "button", loading,forceDisabled } = props
 
   return loading ?
     <Button
@@ -98,13 +98,15 @@ export function Go_Button(props) {
     : <Button
       id={id}
       type={type}
+      disabled={forceDisabled}
       color="btn btn-success border-1 font-size-12"
       onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "16px" }}>Go</span></Button>
 }
 export function Change_Button(props) {
-  const { onClick, id, type = "button" } = props
+  const { onClick, id, type = "button" ,forceDisabled} = props
   return <Button
     id={id}
+    disabled={forceDisabled}
     type={type}
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>

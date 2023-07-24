@@ -6,6 +6,7 @@ import {
     Input,
     Row,
     Button,
+    Table,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
@@ -30,11 +31,12 @@ import "./purchaseReturn.scss";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
-import { return_discountCalculate_Func } from "./PurchaseReturnCalculation";
+import { innerStockCaculation, returnQtyOnChange, return_discountCalculate_Func, stockQtyOnChange } from "./PurchaseReturnCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import { Tbody, Thead } from "react-super-responsive-table";
 
 const PurchaseReturn = (props) => {
 
@@ -55,10 +57,19 @@ const PurchaseReturn = (props) => {
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
-    const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
     const [TableArr, setTableArr] = useState([]);
     const [returnMode, setReturnMode] = useState(0); //(1==ItemWise) OR (2==invoiceWise)
     const [imageTable, setImageTable] = useState([]);
+
+    // for invoicer page heder dicount functionality useSate ************************************
+    const [discountValueAll, setDiscountValueAll] = useState("");
+    const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
+    const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
+    const [changeAllDiscount, setChangeAllDiscount] = useState(false)
+    const [forceReload, setForceReload] = useState(false)
+    // ****************************************************************************
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -203,25 +214,29 @@ const PurchaseReturn = (props) => {
                         i.GSTPercentage = highestGST.GSTPercentage || "";
                     }
 
-
+                    let ItemTotalStock = i.StockDetails.reduce((accumulator, currentObject) => accumulator + Number(currentObject["BaseUnitQuantity"]) || 0, 0);
                     const InvoiceQuantity = i.Quantity
+
                     const newItemRow = {
                         ...i,
                         Quantity: '',
+                        itemTotalAmount: 0,
                         InvoiceQuantity,
+                        ItemTotalStock,
                         id: nextId,
                         MRPOptions,
                         GSTOptions,
                     }
-                    const caculate = return_discountCalculate_Func(newItemRow)
-                    newItemRow["roundedTotalAmount"] = caculate.roundedTotalAmount;
+                    // const caculate = return_discountCalculate_Func(newItemRow)
+                    // newItemRow["roundedTotalAmount"] = caculate.roundedTotalAmount;
+
                     updateItemArr.push(newItemRow);
                     nextId++;
                 });
 
-                let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-                let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
-                dispatch(BreadcrumbShowCountlabel(count_label));
+                // let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
+                // let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+                // dispatch(BreadcrumbShowCountlabel(count_label));
 
                 setTableArr(updateItemArr);
                 setState((i) => {
@@ -267,221 +282,280 @@ const PurchaseReturn = (props) => {
             hidden: false,
             formatter: (cell, row) => {
                 return (
-                    <Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>
+                    <Label style={{ minWidth: "15%" }}>{row.ItemName}</Label>
                 )
             }
         },
-        // {
-        //     text: "Stock Quantity",
-        //     hidden: (subPageMode === url.PURCHASE_RETURN) ? false : true,
-        //     align: () => "right",
-        //     formatter: (cell, row) => <Label>{row.Stock}</Label>,
-        // },
+
+        {//***************Quantity********************************************************************* */
+            text: "Quantity/Unit",
+            dataField: "",
+            formatExtraData: { tableList: TableArr },
+            // classes: () => ('invoice-quantity-row1'),
+            formatter: (cellContent, index1, _key, { tableList = [] }) => (
+                <>
+                    <div className="div-1 mb-2" >
+                        <CInput
+                            type="text"
+                            cpattern={decimalRegx}
+                            disabled={pageMode === 'edit' ? true : false}
+                            id={`returnQty-${index1.id}-${_key}`}
+                            className="input"
+                            style={{ textAlign: "right" }}
+                            key={index1.id}
+                            autoComplete="off"
+                            defaultValue={index1.Quantity}
+                            onChange={(event) => {
+                                returnQtyOnChange(event, index1, _key);
+                                totalAmountCalcuationFunc(tableList);
+                            }}
+                        />
+                    </div>
+                    <div className="div-1 ">
+                        <div>
+                            <Input
+                                disabled
+                                defaultValue={index1.UnitName}
+                            ></Input>
+                        </div>
+                    </div>
+                    {/* <div className="bottom-div">
+                        <span>Order-Qty :</span>
+                        <samp>{index1.OrderQty}</samp>
+                        <samp>{index1.UnitName}</samp>
+                    </div> */}
+                </>
+            ),
+        },
         {
             text: "Invoice Qty",
             hidden: (returnMode === 1) ? false : true,
             align: () => "right",
             formatter: (cell, row) => <Label>{row.InvoiceQuantity}</Label>,
         },
-        {
-            text: "Quantity",
-            dataField: "",
-            classes: () => "sales-discount-row",
-            hidden: false,
-            formatExtraData: { TableArr },
-            formatter: (cell, row, key, { TableArr }) => {
-                return (
-                    <div className="parent" >
-                        <div className="child" style={{ minWidth: "100px" }}>
-                            <CInput
-
-                                defaultValue={row.Quantity}
-                                autoComplete="off"
-                                type="text"
-                                cpattern={decimalRegx}
-                                placeholder="Enter Quantity"
-                                className="col col-sm text-end"
-                                onChange={(event) => {
-                                    row["Quantity"] = event.target.value;
-                                    totalAmountCalcuationFunc(row, TableArr)
-                                }}
-                            />
-                        </div>
-                        <div className="child mt-2 pl-1">
-                            <label className="label">&nbsp;{row.UnitName}</label>
-                        </div>
-
-                    </div>
-                )
-            }
+        {//***************StockDetails********************************************************************* */
+            text: "Stock Details",
+            dataField: "StockDetails",
+            formatExtraData: { tableList: TableArr },
+            formatter: (cellContent, index1, _key, { tableList }) => (
+                <div>
+                    <Table className="table table-responsive mb-1">
+                        <Thead>
+                            <tr >
+                                <th style={{ zIndex: -1 }}>BatchCode</th>
+                                <th style={{ zIndex: -1 }}>
+                                    <div>
+                                        <samp>Stock Quantity</samp>
+                                    </div>
+                                </th >
+                                <th style={{ zIndex: -1 }}>
+                                    <div>
+                                        <samp>Quantity</samp>
+                                    </div>
+                                </th>
+                                <th style={{ zIndex: -1 }}>Basic Rate</th>
+                                <th style={{ zIndex: -1 }}>MRP</th>
+                            </tr>
+                        </Thead>
+                        <Tbody>
+                            {cellContent.map((index2) => (
+                                <tr key={index1.id}>
+                                    <td>
+                                        <div style={{}}>{index2.BatchCode}</div>
+                                    </td>
+                                    <td>
+                                        <div style={{ textAlign: "right" }}>
+                                            <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.BaseUnitQuantity}</samp>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{}}>
+                                            <Input
+                                                type="text"
+                                                autoComplete="off"
+                                                disabled={pageMode === 'edit' ? true : false}
+                                                style={{ textAlign: "right" }}
+                                                id={`batchQty${index1.id}-${index2.id}-${_key}`}
+                                                defaultValue={index2.Qty}
+                                                onChange={(event) => {
+                                                    stockQtyOnChange(event, index1, index2, _key);
+                                                    totalAmountCalcuationFunc(tableList);
+                                                }}
+                                            ></Input>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "50px" }}>
+                                            <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "50px" }}>{index2.MRP}</div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </Tbody>
+                    </Table>
+                </div>
+            ),
         },
 
-        {
-            text: "MRP",
-            dataField: "MRP",
-            hidden: false,
-            formatExtraData: { TableArr },
-            formatter: (cell, row, key, { TableArr }) => {
-                return (
-                    <>
-                        <div style={{ minWidth: "90px" }}>
-                            <Select
-                                id={`MRP${key}`}
-                                name="MRP"
-                                defaultValue={(row.MRP === "") ? "" : { value: row.MRP, label: row.MRPValue }}
-                                isSearchable={true}
-                                isDisabled={returnMode === 1 && true}
-                                className="react-dropdown"
-                                classNamePrefix="dropdown"
-                                options={row.MRPOptions}
-                                onChange={(event) => {
-                                    try {
-                                        row.MRP = event.value;
-                                        row.MRPValue = event.label;
-                                        row.Rate = event.Rate;
-                                        totalAmountCalcuationFunc(row, TableArr)
-                                        document.getElementById(`Rate-${key}-${row.id}`).value = event.Rate
-                                    } catch (error) {
-                                        _cfunc.CommonConsole(error)
-                                    }
 
-                                }}
 
-                            />
-                        </div>
-                    </>
-                )
-            }
-        },
-
-        {
-            text: "GST",
+        {//***************Discount********************************************************************* */
+            text: "Discount/unit",
             dataField: "",
-            hidden: false,
-            formatExtraData: { TableArr },
-            formatter: (cell, row, key, { TableArr }) => {
-                return (<div style={{ minWidth: "90px" }}>
-                    <Select
-                        id={`GST${key}`}
-                        name="GST"
-                        defaultValue={(row.GST === "") ? "" : { value: row.GST, label: row.GSTPercentage }}
-                        isSearchable={true}
-                        isDisabled={returnMode === 1 && true}
-                        className="react-dropdown"
-                        classNamePrefix="dropdown"
-                        options={row.GSTOptions}
-                        onChange={(event) => {
-                            row.GST = event.value;
-                            row.GSTPercentage = event.label;
-                            totalAmountCalcuationFunc(row, TableArr)
-                        }}
-                    />
-                </div>)
-            }
-        },
-        {
-            text: "Basic Rate",
-            dataField: "",
-            hidden: false,
-            classes: () => "sales-rate-row",
-            formatExtraData: { TableArr },
-            formatter: (cellContent, row, key, { TableArr }) => {
+            formatExtraData: {
+                discountValueAll: discountValueAll,
+                discountTypeAll: discountTypeAll,
+                changeAllDiscount: changeAllDiscount,
+                forceReload: forceReload,
+                tableList: TableArr
+            },
+            classes: () => "invoice-discount-row",
+            headerFormatter: () => {
                 return (
-                    <>
-                        <div className="">
-                            <div className="parent  mb-1">
-                                <div className="child">
+                    <div className="">
+                        {TableArr.length <= 0 ?
+                            <div className="col col-3 mt-2">
+                                <Label>Discount/unit</Label>
+                            </div>
+                            :
+                            <div className="row">
+                                <div className=" mt-n2 mb-n2">
+                                    <Label>Discount/unit</Label>
+                                </div>
+                                <div className="col col-6" >
                                     <Select
-                                        id={`DicountType_${key}`}
+                                        type="text"
+                                        defaultValue={discountTypeAll}
                                         classNamePrefix="select2-selection"
-                                        defaultValue={discountDropOption[1]}
                                         options={discountDropOption}
+                                        style={{ textAlign: "right" }}
                                         onChange={(e) => {
-                                            row.DiscountType = e.value;
-                                            row.Discount = ''
-                                            document.getElementById(`Discount-${key}`).value = ''//changr Discount value  by id
-                                            totalAmountCalcuationFunc(row, TableArr);
+                                            setChangeAllDiscount(true);
+                                            setDiscountTypeAll(e);
+                                            setDiscountValueAll('');
                                         }}
                                     />
                                 </div>
-                                <div className="child">
+                                <div className="col col-6" >
                                     <CInput
                                         type="text"
-                                        id={`Discount-${key}`}//this id use discount type onchange
-                                        placeholder="Dist."
-                                        className="text-end"
+                                        className="input"
+                                        style={{ textAlign: "right" }}
                                         cpattern={decimalRegx}
+                                        value={discountValueAll}
                                         onChange={(e) => {
                                             let e_val = Number(e.target.value);
 
                                             // Check if discount type is "percentage"
-                                            if (Number(row.DiscountType) === 2) {// Discount type 2 represents "percentage"
+                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
                                                 // Limit the input to the range of 0 to 100
-                                                if (e_val >= 100) {
+                                                if (e_val > 100) {
                                                     e.target.value = 100; // Set the input value to 100 if it exceeds 100
                                                 } else if (!(e_val >= 0 && e_val < 100)) {
                                                     e.target.value = ""; // Clear the input value if it is less than 0
                                                 }
                                             }
-                                            row.Discount = e.target.value;
-                                            totalAmountCalcuationFunc(row, TableArr)
+
+                                            setChangeAllDiscount(true);
+                                            setDiscountValueAll(e.target.value);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                );
+            },
+            formatter: (cellContent, index1, _key, formatExtraData) => {
+                let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+                debugger
+                if (formatExtraData.changeAllDiscount) {
+                    index1.Discount = discountValueAll;
+                    index1.DiscountType = discountTypeAll.value;
+                    innerStockCaculation(index1, _key);
+                    totalAmountCalcuationFunc(tableList);
+                }
+                if (!index1.DiscountType) { index1["DiscountType"] = discountTypeAll.value }
+
+                const defaultDiscountTypelabel =
+                    index1.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
+
+                return (
+                    <>
+                        <div className="mb-2">
+                            <div className="parent">
+                                <div className="child">
+                                    <label className="label">Type&nbsp;&nbsp;&nbsp;</label>
+                                </div>
+                                <div className="child">
+                                    <Select
+                                        // id={`DicountType_${key}`}
+                                        classNamePrefix="select2-selection"
+                                        // key={`DicountType_${key}-${index1.id}`}
+                                        value={defaultDiscountTypelabel}
+                                        options={discountDropOption}
+                                        onChange={(e) => {
+                                            setChangeAllDiscount(false);
+                                            setForceReload(!forceReload);
+                                            index1.DiscountType = e.value;
+                                            index1.Discount = '';
+                                            innerStockCaculation(index1, _key);
+                                            totalAmountCalcuationFunc(tableList);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="parent">
+                                <div className="child">
+                                    <label className="label">Value&nbsp;</label>
+                                </div>
+                                <div className="child">
+                                    <CInput
+                                        className="input"
+                                        // id={`Dicount_${key}-${index1.id}`}
+                                        style={{ textAlign: "right" }}
+                                        type="text"
+                                        value={index1.Discount}
+                                        cpattern={decimalRegx}
+                                        onChange={(e) => {
+
+                                            let e_val = Number(e.target.value);
+                                            // Check if discount type is "percentage"
+                                            if (index1.DiscountType === 2) { // Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ''; // Clear the input value if it is less than 0
+                                                }
+                                            }
+                                            index1.Discount = e.target.value;
+                                            setChangeAllDiscount(false);
+                                            setForceReload(!forceReload);
+                                            innerStockCaculation(index1);
+                                            totalAmountCalcuationFunc(tableList);
                                         }}
 
                                     />
                                 </div>
                             </div>
-                            <div className="parent">
-                                <CInput
-                                    defaultValue={row.Rate}
-                                    id={`Rate-${key}-${row.id}`}//this id use discount type onchange
-                                    placeholder="Enter Rate"
-                                    type="text"
-                                    cpattern={decimalRegx}
-                                    className="text-end"
-                                    onChange={(event) => {
-                                        row.Rate = event.target.value
-                                        totalAmountCalcuationFunc(row, TableArr)
-                                    }}
-                                />
-                            </div>
-
                         </div>
-
-                    </>
-                );
-            },
-        },
-        {
-            text: "Batch",
-            dataField: "",
-            classes: () => "sales-rate-row",
-            formatter: (cell, row,) => {
-                return (
-                    <>
-                        <div className="">
-                            <div className="parent mb-1">
-                                <Input
-                                    defaultValue={row.BatchCode}
-                                    placeholder="Enter BatchCode"
-                                    type="text"
-                                    className="col col-sm text-center"
-                                    onChange={(event) => { row.BatchCode = event.target.value }}
-                                />
-                            </div>
-                            <div className="parent">
-                                <C_DatePicker
-                                    placeholder="Enter BatchDate"
-                                    defaultValue={row.BatchDate}
-                                    onChange={(e, date) => {
-                                        row.BatchDate = _cfunc.date_ymd_func(date)
-                                    }}
-                                />
+                        <div className="bottom-div">
+                            <div>Amount:</div>
+                            <div id={`itemTotalAmount-${index1.id}-${_key}`}>
+                                {_cfunc.amountCommaSeparateFunc(index1.itemTotalAmount)}
                             </div>
                         </div>
                     </>
                 );
             },
         },
+
         {
             text: "Return Reason",
             dataField: "",
@@ -526,7 +600,7 @@ const PurchaseReturn = (props) => {
             dataField: "",
             classes: () => "sales-return-Image-row",
             formatter: (cellContent, row, key) => {
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span style={{ justifyContent: 'center' }}>
                     <div>
                         <div className="btn-group btn-group-example mb-3" role="group">
                             <Input
@@ -552,8 +626,8 @@ const PurchaseReturn = (props) => {
             text: "Action ",
             dataField: "",
             hidden: returnMode === 1 ? true : false,
-            formatExtraData: { TableArr },
-            formatter: (cellContent, row, key, { TableArr }) => (
+            formatExtraData: { TableArr, addBtnLoading },
+            formatter: (cellContent, row, key, { TableArr, addBtnLoading }) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -561,6 +635,7 @@ const PurchaseReturn = (props) => {
                                 <Button
                                     id={"deleteid"}
                                     type="button"
+                                    disabled={addBtnLoading}
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
                                     onClick={(e) => { deleteButtonAction(row, TableArr) }}>
@@ -574,18 +649,16 @@ const PurchaseReturn = (props) => {
         },
     ];
 
-    const totalAmountCalcuationFunc = (row, TablelistArray = []) => {
-        const caculate = return_discountCalculate_Func(row)
-        row.roundedTotalAmount = caculate.roundedTotalAmount;
+    const totalAmountCalcuationFunc = (tableList = []) => {
 
-        let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+        let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
         let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label))
     }
 
     const deleteButtonAction = (row, TablelistArray = []) => {
         const newArr = TablelistArray.filter((index) => !(index.id === row.id))
-        let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+        let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
         let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label));
         setTableArr(newArr)
@@ -720,90 +793,101 @@ const PurchaseReturn = (props) => {
     const SaveHandler = async (event) => {
 
         event.preventDefault();
-        const btnId = event.target.id;
-        let grand_total = 0;
-        const invalidMessages = [];
-
-        const filterData = TableArr.filter((i) => {
-            if (i.Quantity > 0) {
-                let msgString = ' Select';
-
-                if (i.MRP === '') { msgString = msgString + ', ' + "MRP" };
-                if (i.GST === '') { msgString = msgString + ', ' + "GST" };
-                if (i.BatchCode === '') { msgString = msgString + ', ' + "BatchCode" };
-                if (i.BatchDate === '') { msgString = msgString + ', ' + "BatchDate" };
-                if (!(Number(i.Rate) > 0)) { msgString = msgString + ', ' + "Rate" };
-                if (!i.defaultReason) { msgString = msgString + ', ' + "Return Reason" };
-
-                if (((!i.defaultReason) || (i.MRP === '') || (i.GST === '')
-                    || (i.BatchCode === '') || (i.BatchDate === '') || !(Number(i.Rate) > 0))) {
-                    invalidMessages.push({ [i.ItemName]: msgString });
-                }
-                return true
-            }
-        });
-
-        if (invalidMessages.length > 0) {
-            customAlert({
-                Type: 4,
-                Message: invalidMessages,
-            });
-            return;
-        }
-
-        if (filterData.length === 0) {
-            customAlert({
-                Type: 4,
-                Message: "Please Enter One Item Quantity",
-            });
-            return;
-        }
-
-        const ReturnItems = filterData.map((i) => {
-            if (!i.defaultReason) {
-                invalidMessages.push({ [i.ItemName]: 'Select Return Reason' });
-            }
-
-            const calculate = return_discountCalculate_Func(i);
-            grand_total += Number(calculate.roundedTotalAmount);
-
-            return {
-                "Item": i.Item,
-                "ItemName": i.ItemName,
-                "ApprovedQuantity": i.Quantity,
-                "Quantity": i.Quantity,
-                "Unit": i.Unit,
-                "BaseUnitQuantity": i.BaseUnitQuantity,
-                "BatchCode": i.BatchCode,
-                "BatchDate": i.BatchDate,
-                "BatchID": "",
-                "MRP": i.MRP,
-                "MRPValue": i.MRPValue,
-                "Rate": i.Rate,
-                "GST": i.GST,
-                "ItemReason": i.defaultReason ? i.defaultReason.value : "",
-                "Comment": i.ItemComment,
-                "CGST": Number(calculate.CGST_Amount).toFixed(2),
-                "SGST": Number(calculate.SGST_Amount).toFixed(2),
-                "IGST": Number(calculate.IGST_Amount).toFixed(2),
-                "GSTPercentage": calculate.GST_Percentage,
-                "CGSTPercentage": calculate.CGST_Percentage,
-                "SGSTPercentage": calculate.SGST_Percentage,
-                "IGSTPercentage": calculate.IGST_Percentage,
-                "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
-                "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
-                "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
-                "TaxType": 'GST',
-                "DiscountType": calculate.discountType,
-                "Discount": calculate.discount,
-                "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
-                "PurchaseReturn": "",
-                "SubReturn": "",
-                "ReturnItemImages": [],
-            };
-        });
-
         try {
+
+            const invalidMessages = [];
+
+            const filterData = TableArr.filter((index) => {
+                if (index.Quantity > 0) {
+                    let msgString = ' Select';
+
+                    if (index.StockInValid) {
+                        invalidMessages.push(`${index.ItemName}:${index.StockInvalidMsg}`);
+                        return
+                    };
+
+                    if (!index.defaultReason) { msgString = msgString + ', ' + "Return Reason" };
+
+                    if (!index.defaultReason) {
+                        invalidMessages.push({ [index.ItemName]: msgString });
+                    }
+                    return true
+                }
+            });
+
+            if (invalidMessages.length > 0) {
+                customAlert({
+                    Type: 4,
+                    Message: invalidMessages,
+                });
+                return;
+            }
+
+            if (filterData.length === 0) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Enter One Item Quantity",
+                });
+                return;
+            }
+
+            // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
+            const IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
+
+            const { processedItems, grandTotal } = filterData.reduce(({ processedItems, grandTotal }, index) => {
+
+                index.StockDetails.forEach((ele) => {
+                    if (ele.Qty > 0) {
+                        //**calculate Amount, Discount Amount based on Discount type */
+                        const calculate = return_discountCalculate_Func(ele, index, IsComparGstIn);
+
+                        grandTotal += Number(calculate.roundedTotalAmount)
+                        processedItems.push({
+                            "Item": index.Item,
+                            "ItemName": index.ItemName,
+                            "Unit": index.Unit,
+                            "BatchCode": ele.BatchCode,
+                            "Quantity": Number(ele.Qty).toFixed(3),
+                            "BatchDate": ele.BatchDate,
+                            "BatchID": ele.id,
+                            "BaseUnitQuantity": Number(ele.BaseUnitQuantity).toFixed(3),
+                            "LiveBatch": ele.LiveBatche,
+                            "MRP": ele.LiveBatcheMRPID,
+                            "MRPValue": ele.MRP, //changes
+                            "Rate": Number(ele.Rate).toFixed(2),
+
+                            "GST": ele.LiveBatcheGSTID,
+                            "CGST": Number(calculate.CGST_Amount).toFixed(2),
+                            "SGST": Number(calculate.SGST_Amount).toFixed(2),
+                            "IGST": Number(calculate.IGST_Amount).toFixed(2),
+
+                            "GSTPercentage": calculate.GST_Percentage,
+                            "CGSTPercentage": calculate.CGST_Percentage,
+                            "SGSTPercentage": calculate.SGST_Percentage,
+                            "IGSTPercentage": calculate.IGST_Percentage,
+
+                            "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
+                            "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
+                            "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
+
+                            "TaxType": 'GST',
+                            "DiscountType": index.DiscountType,
+                            "Discount": Number(index.Discount) || 0,
+                            "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+
+                            "ItemReason": index.defaultReason ? index.defaultReason.value : "",
+                            "Comment": index.ItemComment,
+                            "ApprovedQuantity": "",
+                            "PurchaseReturn": "",
+                            "SubReturn": "",
+                            "ReturnItemImages": [],
+                        });
+                    }
+                });
+                return { processedItems, grandTotal };
+            }, { processedItems: [], grandTotal: 0 });
+
+
             const jsonBody = JSON.stringify({
                 ReturnDate: values.ReturnDate,
                 ReturnReason: '',
@@ -811,17 +895,16 @@ const PurchaseReturn = (props) => {
                 Customer: _cfunc.loginPartyID(),// Customer Swipe when Po return
                 Party: values.Customer.value,// Party Swipe when Po return
                 Comment: values.Comment,
-                GrandTotal: grand_total,
-                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+                GrandTotal: Number(grandTotal).toFixed(2),
+                RoundOffAmount: (grandTotal - Math.trunc(grandTotal)).toFixed(2),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-                Mode: 2,
-                // IsApproved: (subPageMode === url.SALES_RETURN) && 1,
+                Mode: 2, //if puchase return then mode= 2 AND |Sale return then Mode =1
+                ReturnItems: processedItems,
                 PurchaseReturnReferences: [],
-                ReturnItems: ReturnItems,
             });
 
-            dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
+            dispatch(saveSalesReturnMaster({ jsonBody }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
     };
@@ -862,7 +945,7 @@ const PurchaseReturn = (props) => {
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
-                                                isDisabled={((TableArr.length > 0)) ? true : false}
+                                                isDisabled={((TableArr.length > 0) || addBtnLoading) ? true : false}
                                                 options={supplierOptions}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
@@ -896,7 +979,6 @@ const PurchaseReturn = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-
                                                 options={ItemList_Options}
                                                 onChange={itemNameOnChangeHandler}
                                             />
@@ -991,15 +1073,17 @@ const PurchaseReturn = (props) => {
                                         </Col>
                                         <Col sm="1" className="mx-6 mt-1 ">
                                             {((TableArr.length > 0) || (!(values.ItemName === ""))) ?
-                                                <Change_Button onClick={(e) => {
-                                                    setTableArr([])
-                                                    setState((i) => {
-                                                        let a = { ...i }
-                                                        a.values.ItemName = ""
-                                                        a.values.InvoiceNumber = ""
-                                                        return a
-                                                    })
-                                                }} />
+                                                <Change_Button
+                                                    forceDisabled={addBtnLoading}
+                                                    onClick={(e) => {
+                                                        setTableArr([])
+                                                        setState((i) => {
+                                                            let a = { ...i }
+                                                            a.values.ItemName = ""
+                                                            a.values.InvoiceNumber = ""
+                                                            return a
+                                                        })
+                                                    }} />
                                                 :
                                                 (!(returnMode === 2)) &&//(returnMode === 2) ItemWise
                                                 <C_Button
