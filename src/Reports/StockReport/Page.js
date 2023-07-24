@@ -19,8 +19,9 @@ function pageFooter(doc, data) {
     style.reportFooter(doc, data);
 }
 
-const StockReport = () => {
-    const data = Data
+const StockReport = (stockdata) => {
+    const data = stockdata[0]
+
     var doc = new jsPDF('l', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
@@ -28,7 +29,7 @@ const StockReport = () => {
     doc.setProperties({
         title: "Report"
     });
-    const options = { filename: "Receipt Report", }
+    const options = { filename: "Stock Report", }
     doc.output('dataurlnewwindow', options);
     return (<></>);
 }

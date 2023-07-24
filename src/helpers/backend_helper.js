@@ -605,6 +605,10 @@ export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_
 export const SalesReturn_SingleGet_API = ({ btnId, editId }) => get(`${url.SALES_RETURN_ITEM}/${editId}`, btnId)// Sales Return Delete API
 export const Send_To_Superstockiest_button_post_API = ({ jsonBody, btnId }) => post(url.SEND_TO_SUPERSTOCKIEST_POST_API, jsonBody, btnId)// update api
 export const Return_Approve_API = ({ jsonBody, btnId }) => post(url.RETURN_ITEM_APPROVE_AIP, jsonBody, btnId)// update api
+export const ReturnPrint_API = ({ editId }) => get(`${url.PURCHASE_RETURN_PRINT}/${editId}`)//dropdown api
+
+
+
 
 
 // Credit Debit 

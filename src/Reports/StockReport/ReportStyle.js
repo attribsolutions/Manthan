@@ -9,30 +9,24 @@ export const pageBorder = (doc) => {
     doc.line(815, 16, 30, 16);//horizontal line (Top)
     doc.line(30, 570, 30, 16);//vertical line (left)
     doc.line(815, 570, 815, 16);//vertical line (Right)
-    doc.line(815,570, 30, 570);//horizontal line (Bottom)   
+    doc.line(815, 570, 30, 570);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
-    doc.addImage(reportHederPng, 'PNG', 32, 18, 75, 40)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
-    doc.text('Stock Report', 380, 30,'center') //stock Header
+    doc.text('Stock Report', 400, 30, 'center') //stock Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(14)
     doc.setFont(undefined, 'bold')
-    doc.text(`*** ${data.CompanyName} ***`, 380, 50,'center')  //bill by 
+    doc.text(`*** ${data.PartyName} ***`, 400, 50, 'center')  //bill by 
     doc.line(815, 60, 30, 60) //horizontal line 1 billby upper
     doc.line(815, 16, 30, 16);//horizontal line 2
-    // doc.line(815, 80, 30, 80);//horizontal line 3
-    // doc.line(409, 100, 30, 100) //horizontal line 4
     doc.line(30, 400, 30, 16);//vertical left 1
-    // doc.line(570, 789, 570, 10);//vertical left 2
-    doc.line(680, 60, 680, 16);//vertical right 1
-    doc.line(407, 200, 407, 60);//vertical right 2
+    doc.line(407, 150, 407, 60); //vertical line middle 
     doc.line(300, 100, 815, 100) //horizontal line Current date upper
-    // doc.line(815, 35, 700, 35) //horizontal line 1 billby upper
 
 
 
@@ -61,14 +55,7 @@ export const reportHeder1 = (doc, data) => {
                 columnWidth: 200,
                 halign: 'lfet',
             },
-            1: {
-                columnWidth: 200,
-                halign: 'left',
-            },
-            2: {
-                columnWidth: 200,
-                halign: 'left',
-            },
+           
         },
         tableLineColor: "black",
         startY: doc.autoTableEndPosY() + 63,// 45,
@@ -86,118 +73,13 @@ export const reportHeder3 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`Current Time: ${data.Time}`, 685, 50) //Invoice Id
-    doc.text(`Date: ${data.InvoiceDate}`, 685, 30) //Invoice date
+    // doc.text(`Current Time: ${data.Time}`, 685, 50) //Invoice Id
+    // doc.text(`Date: ${data.InvoiceDate}`, 685, 30) //Invoice date
 }
 // original
 
 export const reportFooter = (doc, data) => {
-    var optionsTable2 = {
-        margin: {
-            top: 45, left: 35, right: 35,
-        },
-        theme: 'grid',
-        headerStyles: {
-            cellPadding: 4,
-            lineWidth: 1,
-            valign: 'top',
-            fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
-            fillColor: "white",
-            textColor: [0, 0, 0], //Black     
-            fontSize: 8,
-            rowHeight: 10,
-            lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            textColor: [30, 30, 30],
-            cellPadding: 3,
-            fontSize: 7,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 80,
-            },
-            1: {
-                columnWidth: 50,
-                halign: 'right',
-            },
-            2: {
-                columnWidth: 40,
-                halign: 'center',
-            },
-            3: {
-                halign: 'center',
-            },
-            4: {
-                halign: 'center',
-            },
-            5: {
-                halign: 'center',
-            },
-            6: {
-                halign: 'center',
-            },
-            7: {
-                halign: 'center',
-            },
-            8: {
-                fontStyle: 'bold',
-                halign: 'center',
-            },
-        },
-        startY: doc.autoTableEndPosY(),// 45,
-    };
-    const optionsTable3 = {
 
-        margin: {
-            top: 45, left: 35, right: 200
-        },
-        showHead: 'never',
-        theme: 'plain',
-        headerStyles: {
-            cellPadding: 1,
-            lineWidth: 0,
-            valign: 'top',
-            fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
-            fillColor: "white",
-            textColor: [0, 0, 0], //Black     
-            fontSize: 8,
-            rowHeight: 10,
-            lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            textColor: [30, 30, 30],
-            cellPadding: 1,
-            fontSize: 7,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                // valign: "top",
-                // columnWidth: 280,
-                // fontStyle: 'bold',
-            },
-        },
-        didParseCell: function (cell, data) {
-            if (cell.row.index === 0) {
-                cell.cell.styles.fontSize = 7;
-                cell.cell.styles.lineColor = 'gray'
-                cell.cell.styles.lineWidth = 0.5
-            }
-        },
-        startY: 745,
-
-
-    };
-    // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),);
-
-  
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
@@ -210,7 +92,7 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[0].colSpan = 12
                 data1.row.cells[4].colSpan = 1
                 data1.row.cells[6].colSpan = 1
-                
+
                 data1.row.cells[0].styles.fontSize = 10
                 data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
@@ -220,11 +102,11 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[6.].styles.fontStyle = "bold"
             }
 
-            if (data1.row.cells[5].raw === "packing" ) {
+            if (data1.row.cells[5].raw === "packing") {
                 data1.row.cells[0].colSpan = 12
 
                 data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[0.].styles.fontStyle = "bold"                 
+                data1.row.cells[0.].styles.fontStyle = "bold"
             }
         },
         margin: {
@@ -253,23 +135,23 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 100,
+                columnWidth: 137,
             },
             1: {
-                columnWidth: 60,
+                columnWidth: 80,
                 halign: 'right',
 
             },
             2: {
-                columnWidth: 60,
+                columnWidth: 80,
                 halign: 'right',
             },
             3: {
-                columnWidth: 60,
+                columnWidth: 80,
                 halign: 'right',
             },
             4: {
-                columnWidth: 60,
+                columnWidth: 50,
                 halign: 'right',
             },
             5: {
@@ -281,11 +163,11 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             7: {
-                columnWidth:70,
+                columnWidth: 58,
                 halign: 'right',
             },
             8: {
-                columnWidth: 75,
+                columnWidth: 60,
                 fontStyle: 'bold',
                 halign: 'right',
             },
@@ -294,11 +176,11 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             10: {
-                columnWidth:60,
+                columnWidth: 60,
                 halign: 'right',
             },
             11: {
-                columnWidth: 60,
+                columnWidth: 80,
                 fontStyle: 'bold',
                 halign: 'right',
             },
@@ -313,90 +195,15 @@ export const tableBody = (doc, data) => {
 
 
     });
-    // Auto table for footer
-    // const optionsTable4 = {
-    //     margin: {
-    //         left: 30, right: 30, bottom: 140
-    //     },
-    //     // showHead: 'never',
-    // };
-
-    // doc.autoTable(optionsTable4);
-
-    // doc.autoTable({
-    //     html: '#table',
-    //     didParseCell(data) {
-    //         if (data.cell.row.index === 0) {
-    //             data.cell.styles.textColor = [255, 255, 255];
-    //             data.cell.styles.fillColor = '#FF5783';
-    //         }
-    //     }
-    // })
 
 
 }
 
 export const pageFooter = (doc, data) => {
-    var th = ['', 'thousand', 'million', 'billion', 'trillion'];
-    var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-    var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-    var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-
-  
-    let stringNumber = toWords(data.GrandTotal)
-    // doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
-    // doc.setDrawColor(0, 0, 0);
-    // doc.line(570, 745, 30, 745);//horizontal line Footer 2
-    // doc.line(570, 680, 30, 680);//horizontal line Footer 3
-    // doc.line(430, 700, 30, 700);//horizontal line Footer 3 Ruppe section
-    // doc.line(460, 745, 460, 815);//vertical right1 Qr Left 1
-    // doc.line(430, 680, 430, 745);//vertical right1 Sub Total
-    // doc.setFont('Tahoma')
-    // doc.line(460, 775, 30, 775);//horizontal line (Bottom)
-
-
-//     doc.setFontSize(8)
-
-//     doc.text(`CGST:`, 434, 690,)
-//     doc.text(`${totalCGST.toFixed(2)}`, 560, 690, 'right')
-
-//     doc.text(`SGST:`, 434, 700,)
-//     doc.text(`${totalSGST.toFixed(2)}`, 560, 700, 'right')
-
-//     doc.text(`TotalGST:`, 434, 710,)
-//     doc.text(` ${TotalGST.toFixed(2)}`, 560, 710, 'right')
-
-//     doc.text(`BasicAmount:`, 434, 720,)
-//     doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 720, 'right')
-
-//     doc.setFont(undefined, 'Normal')
-//     doc.setFontSize(12)
-//     doc.setFont(undefined, 'bold')
-//     doc.text(`Amount :`, 434, 740,)
-//     doc.text(`${data.GrandTotal}`, 560, 740, 'right')
-//     doc.setFont(undefined, 'Normal')
-//     doc.setFont('Tahoma')
-//     doc.setFontSize(9)
-//     doc.setFont('Tahoma')
-//     doc.setFontSize(8)
-//     doc.text(`Prepared by `, 35, 785,)
-//     doc.text(`Received By `, 180, 785,)
-//     doc.setFontSize(10)
-//     doc.text(`${data.PartyName} `, 390, 785,)
-//     doc.setFontSize(10)
-//     doc.text(`${data.CustomerName} `, 140, 811,)
-//     doc.setFontSize(9)
-//     doc.text(`Signature `, 400, 811,)
-//     doc.setFont("Arimo");
-//     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and
-//    quantity whitch it/these purports to be `, 34, 760,)
-//     doc.text(`A/C No: 2715500356 IFSC Code:BKID00015422 `, 34, 710,)
-//     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
-//     doc.text(`Ruppe:${stringNumber} `, 33, 693,)
 
     let finalY = doc.previousAutoTable.finalY;
     if (finalY > 675) {
-        
+
         pageBorder(doc)
         reportFooter(doc, data)
     } else {
@@ -415,4 +222,3 @@ export const pageFooter = (doc, data) => {
     }
 }
 
-// original
