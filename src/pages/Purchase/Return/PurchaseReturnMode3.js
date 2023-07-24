@@ -318,7 +318,7 @@ const PurchaseReturnMode3 = (props) => {
             .map(item => ({ SubReturn: parseInt(item.trim()) }));
 
         const ReturnItems = tableData.map((i) => {
-
+            
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
 
@@ -329,7 +329,7 @@ const PurchaseReturnMode3 = (props) => {
                 "BaseUnitQuantity": i.BaseUnitQuantity,
                 "BatchCode": i.BatchCode,
                 "BatchDate": i.BatchDate,
-                "BatchID":"",
+                "BatchID": "",
                 "MRP": i.MRP,
                 "MRPValue": i.MRPValue,
                 "Rate": i.Rate,
@@ -351,6 +351,7 @@ const PurchaseReturnMode3 = (props) => {
                 "Discount": calculate.discount,
                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
                 "PurchaseReturn": i.PurchaseReturn,
+                "SubReturn": i.PurchaseReturn,
                 "ReturnItemImages": [],
             };
         })
