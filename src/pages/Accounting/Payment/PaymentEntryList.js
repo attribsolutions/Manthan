@@ -19,7 +19,7 @@ import {
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import PaymentEntry from "./PaymentEntry";
 import { Receipt_Print } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
@@ -229,7 +229,7 @@ const PaymentEntryList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
-        
+
         var { CustomerID, ReceiptDate, id } = list[0]
 
         try {
@@ -314,6 +314,7 @@ const PaymentEntryList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
                 {
                     (pageField) ?
