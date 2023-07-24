@@ -61,16 +61,16 @@ export const return_discountCalculate_Func = (row, index1, IsComparGstIn) => {
     };
 };
 
-
+// ************************************************************************
 
 export function stockDistributeFunc(index1,_key) {
-debugger
+
     let itemTotalAmount = 0
     let orderqty = Number(index1.Quantity);
     let _ItemTotalStock = 0
 
     index1.StockDetails = index1.StockDetails.map(index2 => {
-        debugger
+
         let stockqty = Number(index2.BaseUnitQuantity);
 
         _ItemTotalStock = _ItemTotalStock + stockqty// addition of total index2.ActualQuantity
@@ -122,6 +122,7 @@ debugger
 
 };
 
+// ************************************************************************
 
 export function returnQtyOnChange(event, index,_key) {
 
@@ -146,9 +147,7 @@ export function returnQtyOnChange(event, index,_key) {
     stockDistributeFunc(index,_key)
 };
 
-
-
-
+// ************************************************************************
 
 export function stockQtyOnChange(event, index1, index2,_key) {
 
@@ -174,18 +173,18 @@ export function stockQtyOnChange(event, index1, index2,_key) {
 
 };
 
-
+// ************************************************************************
 export const innerStockCaculation = (index1,_key) => {
-debugger
+
     let QuantityTatal = 0
     let itemTotalAmount = 0;
 
     index1.StockDetails.forEach(index2 => {
-        //**discount calculation function  */
+        if(Number(index2.Qty)>0){
         const calculate = return_discountCalculate_Func(index2, index1);
-
-        itemTotalAmount = itemTotalAmount + Number(calculate.roundedTotalAmount)
-        QuantityTatal = Number(QuantityTatal) + Number(index2.Qty);
+        itemTotalAmount += Number(calculate.roundedTotalAmount);
+        QuantityTatal += Number(index2.Qty);
+        }
     });
 
     index1.itemTotalAmount = itemTotalAmount.toFixed(2)
@@ -200,188 +199,3 @@ debugger
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
 }
-
-
-
-// export function invoice_GoButton_dataConversion_Func(response, customer = '') {
-//     const { IsTCSParty, ISCustomerPAN } = customer;
-  
-//     // Iterate over OrderItemDetails array and perform data conversion
-//     response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
-//       const defaultunit = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
-//       let roundedTotalAmount = 0;
-  
-//       // Set properties for data conversion
-//       index1["OrderQty"] = index1.Quantity;
-//     //   index1["default_UnitDropvalue"] = {
-//     //     value: index1.Unit,
-//     //     label: index1.UnitName,
-//     //     ConversionUnit: '1',
-//     //     Unitlabel: index1.UnitName,
-//     //     BaseUnitQuantity: defaultunit.BaseUnitQuantity,
-//     //     BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantity,
-//     //   };
-  
-//       index1["InpStockQtyTotal"] = `${Number(index1.Quantity) * Number(index1.ConversionUnit)}`;
-//       index1["ItemTotalStock"] = 0;
-//       index1["StockInValid"] = false;
-//       index1["StockInvalidMsg"] = '';
-  
-//       index1["IsTCSParty"] = IsTCSParty//is tcsParty flag for  
-//       index1["IsCustomerPAN"] = ISCustomerPAN//
-  
-//       let orderQty = Number(index1.Quantity);
-  
-//       // Iterate over StockDetails array and perform data conversion
-//       index1.StockDetails = index1.StockDetails.map(index2 => {
-  
-//         // index2["initialRate"] = index2.Rate;
-//         // index2["Rate"] = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
-//         // index2["ActualQuantity"] = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity).toFixed(2);
-//         // index1["Quantity"] = Number(index1.Quantity).toFixed(2);
-  
-//         index1["ItemTotalStock"] += Number(index2.ActualQuantity);
-  
-//         let stockQty = Number(index2.ActualQuantity);
-  
-//         // Adjust order quantity based on stock availability
-//         if (orderQty > stockQty && orderQty !== 0) {
-//           orderQty -= stockQty;
-//           index2.Qty = stockQty.toFixed(2);
-//         } else if (orderQty <= stockQty && orderQty > 0) {
-//           index2.Qty = orderQty.toFixed(2);
-//           orderQty = 0;
-//         } else {
-//           index2.Qty = 0;
-//         }
-  
-//         // Calculate total amount if quantity is greater than 0
-//         if (index2.Qty > 0) {
-//           const calculate = invoice_discountCalculate_Func(index2, index1);
-//           roundedTotalAmount += Number(calculate.roundedTotalAmount);
-//         }
-  
-//         return index2;
-//       });
-  
-//       const t1 = Number(index1.ItemTotalStock).toFixed(3);
-//       const t2 = Number(index1.Quantity);
-//       const tA4 = roundedTotalAmount.toFixed(2);
-  
-//       index1["roundedTotalAmount"] = tA4;
-  
-//       // Check for stock availability and set corresponding message
-//       if (t1 < t2) {
-//         index1["StockInValid"] = true;
-//         const diffrence = Math.abs(t1 - t2);
-//         const msg1 = `Short Stock Quantity ${Number(index1.Quantity).toFixed(3)}`;
-//         const msg2 = `Short Stock Quantity ${Number(diffrence).toFixed(3)}`;
-//         index1["StockInvalidMsg"] = index1.ItemTotalStock === 0 ? msg1 : msg2;
-//       }
-  
-//       return index1;
-//     });
-  
-//     return response;
-//   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export const calculateSalesReturnFunc = (row) => {
-//     let rate = 0;
-//     let quantity = 0;
-//     let gstPercentage = 0;
-
-//     if (row.rate !== '') {
-//         rate = parseFloat(row.rate);
-//     }
-
-//     if (row.quantity !== '') {
-//         quantity = parseFloat(row.quantity);
-//     }
-
-//     let basicAmount = rate * quantity;
-//     if (isNaN(basicAmount)) {
-//         basicAmount = 0;
-//     }
-
-//     if (row.gstPercentage !== '') {
-//         gstPercentage = parseFloat(row.gstPercentage);
-//     }
-
-//     let gstAmount = (basicAmount * gstPercentage) / 100;
-//     const totalAmount = gstAmount + basicAmount;
-//     const CGST_Amount = (gstAmount / 2).toFixed(2);
-//     const SGST_Amount = CGST_Amount;
-//     const roundedGstAmount = gstAmount.toFixed(2);
-//     const roundedTotalAmount = totalAmount.toFixed(2);
-
-//     return {
-//         basicAmount,
-//         roundedGstAmount,
-//         roundedTotalAmount,
-//         CGST_Amount,
-//         SGST_Amount,
-//     };
-// };
-
-// export const return_discountCalculate_Func1 = (row,) => {
-//     // Extract values from the input parameters
-//     const rate = Number(row.Rate) || 0;
-//     const qty = Number(row.Qty) || 0;
-//     const gstPercentage = Number(row.GSTPercentage) || 0;
-//     const discount = Number(row.Discount) || 0;
-//     const discountType = Number(row.DiscountType) && Number(row.DiscountType) > 0 ? Number(row.DiscountType) : 2;
-
-//     // Calculate the base amount
-//     const basicAmount = rate * qty;
-
-//     // Calculate the discount amount based on the discount type
-//     const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : qty * discount;
-
-//     // Calculate the discounted base amount
-//     const discountBaseAmt = basicAmount - disCountAmt;
-
-//     // Calculate the GST amount
-//     let gstAmt = discountBaseAmt * (gstPercentage / 100);
-//     let CGST_Amount = Number((gstAmt / 2).toFixed(2));
-//     let SGST_Amount = CGST_Amount;
-//     let IGST_Amount = 0 //initial GST Amount 
-
-//     // Calculate the total amount after discount and GST
-//     const roundedGstAmount = CGST_Amount + SGST_Amount;
-//     let total = roundedGstAmount + discountBaseAmt;
-
-//     let GST_Percentage = Number(row.GSTPercentage) || 0;
-//     let IGST_Percentage = 0;
-//     let SGST_Percentage = (GST_Percentage / 2);
-//     let CGST_Percentage = (GST_Percentage / 2);
-
-
-//     // Return the calculated values as an object
-//     return {
-//         discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
-//         disCountAmt: Number(disCountAmt.toFixed(2)),
-//         roundedGstAmount: Number(roundedGstAmount.toFixed(2)),
-//         roundedTotalAmount: Number(total.toFixed(2)),
-//         CGST_Amount,
-//         SGST_Amount,
-//         IGST_Amount,
-//         GST_Percentage: GST_Percentage.toFixed(2),
-//         CGST_Percentage: CGST_Percentage.toFixed(2),
-//         SGST_Percentage: SGST_Percentage.toFixed(2),
-//         IGST_Percentage: IGST_Percentage.toFixed(2),
-//         discount,
-//         discountType
-//     };
-// };
