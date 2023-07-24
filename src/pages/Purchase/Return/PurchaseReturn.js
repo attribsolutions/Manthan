@@ -893,7 +893,7 @@ const PurchaseReturn = (props) => {
                 Customer: _cfunc.loginPartyID(),// Customer Swipe when Po return
                 Party: values.Customer.value,// Party Swipe when Po return
                 Comment: values.Comment,
-                GrandTotal: grandTotal,
+                GrandTotal: Number(grandTotal).toFixed(2),
                 RoundOffAmount: (grandTotal - Math.trunc(grandTotal)).toFixed(2),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
