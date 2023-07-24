@@ -143,7 +143,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
   // Iterate over OrderItemDetails array and perform data conversion
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
     const defaultunit = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
-    let roundedTotalAmount = 0;
+    let itemTotalAmount = 0;
 
     // Set properties for data conversion
     index1["OrderQty"] = index1.Quantity;
@@ -192,7 +192,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       // Calculate total amount if quantity is greater than 0
       if (index2.Qty > 0) {
         const calculate = invoice_discountCalculate_Func(index2, index1);
-        roundedTotalAmount += Number(calculate.roundedTotalAmount);
+        itemTotalAmount += Number(calculate.roundedTotalAmount);
       }
 
       return index2;
@@ -200,9 +200,9 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
     const t1 = Number(index1.ItemTotalStock).toFixed(3);
     const t2 = Number(index1.Quantity);
-    const tA4 = roundedTotalAmount.toFixed(2);
+    const tA4 = itemTotalAmount.toFixed(2);
 
-    index1["roundedTotalAmount"] = tA4;
+    index1["itemTotalAmount"] = tA4;
 
     // Check for stock availability and set corresponding message
     if (t1 < t2) {

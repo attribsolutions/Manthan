@@ -108,9 +108,9 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
     const systemSetting = loginSystemSetting();
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
     const isTCS_AmtRound = systemSetting.TCSAmountRoundConfiguration === '1';
-
-    // Calculate the sum of the roundedTotalAmount in the tableList
-    let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+debugger
+    // Calculate the sum of the itemTotalAmount in the tableList
+    let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
     let TCS_Amount = 0; // Initial TCS Amount
 
     if (tableList[0].IsTCSParty) {
@@ -138,7 +138,7 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
 
 export function stockDistributeFunc(index1) {
 
-    let roundedTotalAmount = 0
+    let itemTotalAmount = 0
     let orderqty = Number(index1.Quantity);
     let _ItemTotalStock = 0
 
@@ -162,7 +162,7 @@ export function stockDistributeFunc(index1) {
         if (index2.Qty > 0) {
 
             const calculate = invoice_discountCalculate_Func(index2, index1)
-            roundedTotalAmount = roundedTotalAmount + Number(calculate.roundedTotalAmount)
+            itemTotalAmount = itemTotalAmount + Number(calculate.roundedTotalAmount)
         }
 
         try {
@@ -178,9 +178,9 @@ export function stockDistributeFunc(index1) {
     index1.ItemTotalStock = _ItemTotalStock;
 
     const t2 = index1.ItemTotalStock;
-    const tA4 = roundedTotalAmount.toFixed(2);
+    const tA4 = itemTotalAmount.toFixed(2);
 
-    index1.roundedTotalAmount = tA4
+    index1.itemTotalAmount = tA4
 
     if (orderqty > t2) {
         try {
@@ -194,7 +194,7 @@ export function stockDistributeFunc(index1) {
     } catch (e) { CommonConsole('stockDistributeFunc ', e) };
 
     try {
-        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(tA4);
+        document.getElementById(`itemTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(tA4);
     } catch (e) { CommonConsole('stockDistributeFunc', e) };
 
 };
@@ -270,17 +270,17 @@ export function stockQtyOnChange(event, index1, index2) {
 export const innerStockCaculation = (index1) => {
 
     let QuantityTatal = 0
-    let roundedTotalAmount = 0;
+    let itemTotalAmount = 0;
 
     index1.StockDetails.forEach(index2 => {
         //**discount calculation function  */
         const calculate = invoice_discountCalculate_Func(index2, index1);
 
-        roundedTotalAmount = roundedTotalAmount + Number(calculate.roundedTotalAmount)
+        itemTotalAmount = itemTotalAmount + Number(calculate.roundedTotalAmount)
         QuantityTatal = Number(QuantityTatal) + Number(index2.Qty);
     });
 
-    index1.roundedTotalAmount = roundedTotalAmount.toFixed(2)
+    index1.itemTotalAmount = itemTotalAmount.toFixed(2)
     index1.Quantity = QuantityTatal.toFixed(3);
 
     try {
@@ -288,7 +288,7 @@ export const innerStockCaculation = (index1) => {
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
     try {
-        document.getElementById(`roundedTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(index1.roundedTotalAmount);
+        document.getElementById(`itemTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(index1.itemTotalAmount);
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
 }
