@@ -329,7 +329,7 @@ const PurchaseReturnMode3 = (props) => {
                 "BaseUnitQuantity": i.BaseUnitQuantity,
                 "BatchCode": i.BatchCode,
                 "BatchDate": i.BatchDate,
-                "BatchID": "",
+                "BatchID": 1,
                 "MRP": i.MRP,
                 "MRPValue": i.MRPValue,
                 "Rate": i.Rate,
