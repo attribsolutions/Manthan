@@ -23,7 +23,7 @@ import {
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { Receipt_Print } from "../../../helpers/backend_helper";
@@ -246,6 +246,7 @@ const ReceiptList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
                 {
                     (pageField) ?

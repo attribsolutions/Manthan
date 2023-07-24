@@ -17,7 +17,7 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { Edit_Credit_List_API, } from "../../../helpers/backend_helper";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import {
     CredietDebitType,
     Edit_CreditList_ID,
@@ -316,6 +316,7 @@ const CreditList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={(reducers.listBtnLoading || !pageField)} />
             <div className="page-content">
                 {
                     (pageField) ?
