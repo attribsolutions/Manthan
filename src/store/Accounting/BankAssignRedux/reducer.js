@@ -5,7 +5,8 @@ import {
   UPDATE_BANK_ASSIGN_ID_SUCCESS,
   UPDATE_BANK_ASSIGN_ID,
   BANK_ASSIGN_API_ERROR_ACTION,
-  SAVE_BANK_ASSIGN
+  SAVE_BANK_ASSIGN,
+  PARTY_BANK_FILTER
 } from "./actionType";
 
 const INIT_STATE = {
@@ -24,7 +25,6 @@ const BankAssignReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: true,
-
       }
 
     case SAVE_BANK_ASSIGN_SUCCESS:
@@ -32,13 +32,19 @@ const BankAssignReducer = (state = INIT_STATE, action) => {
         ...state,
         postMsg: action.payload,
         saveBtnloading: false,
+      }
 
+    case PARTY_BANK_FILTER:
+      return {
+        ...state,
+        loading: true,
       }
 
     case PARTY_BANK_FILTER_SUCCESS:
       return {
         ...state,
         bankTableList: action.payload,
+        loading: false,
       }
 
     case EDIT_BANK_ASSIGN_ID_SUCCESS:
@@ -48,7 +54,6 @@ const BankAssignReducer = (state = INIT_STATE, action) => {
       };
 
     // update api
-
     case UPDATE_BANK_ASSIGN_ID:
       return {
         ...state,
@@ -66,6 +71,7 @@ const BankAssignReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
+        loading: false,
       };
 
     default:

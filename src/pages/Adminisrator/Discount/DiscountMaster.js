@@ -103,6 +103,7 @@ const DiscountMaster = (props) => {
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
+        
         return () => {
             dispatch(DiscountCustomer_Dropdown_Success([]));
             dispatch(commonPageFieldSuccess(null));
