@@ -25,7 +25,7 @@ import {
     GoButton_ImportFiledMap_Add,
     GoButton_ImportFiledMap_AddSuccess
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import {
     ExcelUpload_save_action,
     ExcelUpload_save_action_Success
@@ -117,14 +117,14 @@ const UploadExcel = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(ExcelUpload_save_action_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
         }
         else if (postMsg.Status === true) {
             dispatch(ExcelUpload_save_action_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                  Message: JSON.stringify(postMsg.Message),
             })
@@ -151,7 +151,7 @@ const UploadExcel = (props) => {
 
         var files = selectedFiles;
         if (files.length == 0) {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Please choose any file...",
             })
@@ -180,7 +180,7 @@ const UploadExcel = (props) => {
             }
 
         } else {
-            CustomAlert({
+            customAlert({
                 Type: 3,
                 Message: "Please select a valid excel file.",
             })
@@ -190,7 +190,7 @@ const UploadExcel = (props) => {
     async function handleAcceptedFiles(files) {
 
         if (selectedFiles.length > 0) {
-            const isConfirmed = await CustomAlert({
+            const isConfirmed = await customAlert({
                 Type: 8,
                 Message: "Do you confirm your choice?",
             });

@@ -30,7 +30,7 @@ import {
     save_ImportFiledMap,
     save_ImportFiledMap_Success
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
-import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 
 const ImportExcelFieldMap = (props) => {
@@ -112,7 +112,7 @@ const ImportExcelFieldMap = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(save_ImportFiledMap_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             })
@@ -121,7 +121,7 @@ const ImportExcelFieldMap = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(save_ImportFiledMap_Success({ Status: false }))
-            CustomAlert({
+            customAlert({
                 Type: 4,
                  Message: JSON.stringify(postMsg.Message),
             })
@@ -216,7 +216,7 @@ const ImportExcelFieldMap = (props) => {
         })
 
         if (invalid.length > 0) {
-            CustomAlert({ Type: 3, Message: invalid })
+            customAlert({ Type: 3, Message: invalid })
             return
         } else {
             const jsonBody = JSON.stringify(jsonArr);

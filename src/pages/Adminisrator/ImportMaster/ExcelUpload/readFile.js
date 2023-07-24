@@ -1,6 +1,6 @@
 // import { groupBy } from 'lodash';
 import { groupBy, invertDatefunc } from '../../../../components/Common/CommonFunction';
-import { CustomAlert } from '../../../../CustomAlert/ConfirmDialog';
+import { customAlert } from '../../../../CustomAlert/ConfirmDialog';
 
 const XLSX = require('xlsx');
 
@@ -60,7 +60,7 @@ export const readExcelFile = async ({ file, compareParam }) => {
       processing(count)
     })
     if (invalidMsg.length > 0) {
-      CustomAlert({
+      customAlert({
         Type: 3,
         Message: JSON.stringify(invalidMsg),
       })
