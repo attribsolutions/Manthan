@@ -1,43 +1,24 @@
-export const  Data= {
-    id: 21,
-    InvoiceDate: "2023-01-21",
-    Todate: "2023-01-21",
-    InvoiceNumber: 2,
-    FullInvoiceNumber: "IN 2",
-    GrandTotal: "61097.00",
-    RoundOffAmount: "0.88",
-    Customer: 24,
-    CompanyName: "CHITLE SWEETS AND SNACKS PVT.LTD",
-    CustomerName: "Chitale Bandu Mithaiwale (Bajirao road)",
-    CustomerGSTIN: "27AAAAA0000A1Z5",
-    Party: 4,
-    Time:"1:12:45 PM",
-    PartyName: "Shade No-44",
-    PartyGSTIN: "22AAAAA0000A1Z5",
-    InvoiceItems: [
+
+export const Data = [
+  {
+    FromDate: "2023-06-20",
+    ToDate: "2023-06-20",
+    PartyName: "Demo DD",
+    StockDetails: [
       {
-        
-        Item: 44,
-        ItemName: "Khawa",
-        Quantity: "2.000",
-        MRP: null,
-        Rate: "100.00",
-        TaxType: "GST",
-        UnitName: "No",
-        BaseUnitQuantity: "2.000",
-        GSTPercentage: "5.00",
-        MarginValue: null,
-        BasicAmount: "200.00",
-        GSTAmount: "10.00",
-        CGST: "5.00",
-        SGST: "5.00",
-        IGST: "0.00",
-        CGSTPercentage: "2.50",
-        SGSTPercentage: "2.50",
-        IGSTPercentage: "0.00",
-        Amount: "210.00",
-        BatchCode: "0",
-        BatchDate: "2023-01-21"
+        Item_id: 3,
+        Unit_id: 1,
+        OpeningBalance: "0.000",
+        GRNInward: "5840.000",
+        SalesReturn: "1.000",
+        Sale: "1057.000",
+        PurchaseReturn: "2.000",
+        ClosingBalance: "4782.000",
+        ActualStock: "0.000",
+        ItemName: "Bakarwadi Easy Carry Pack",
+        GroupTypeName: "Primary",
+        GroupName: "Bakarwadi",
+        SubGroupName: "Easy Carry Pack"
       },
     ]
-  }
+  }]

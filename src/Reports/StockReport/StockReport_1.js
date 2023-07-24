@@ -10,8 +10,11 @@ import { MetaTags } from "react-meta-tags";
 import C_Report from "../../components/Common/C_Report";
 import { StockProcessing_API_Success, StockProcessing_Action, stockReport_1_GoButton_API, stockReport_1_GoButton_API_Success } from "../../store/Report/StockReport/action";
 import { stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
-import { getBaseUnit_ForDropDown } from "../../store/actions";
+import { getBaseUnit_ForDropDown, getpdfReportdata } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import { StockReport_1_GoBtn_API, StockReport_GoBtn_API } from "../../helpers/backend_helper";
+import * as report from '../ReportIndex'
+
 
 const StockReport_1 = (props) => {
 
@@ -114,7 +117,10 @@ const StockReport_1 = (props) => {
             "Unit": unitDropdown.value,
             "Party": _cfunc.loginPartyID(),
         });
-        dispatch(stockReport_1_GoButton_API({ jsonBody, btnId }))
+
+        let config = { ReportType: report.Stock, jsonBody }
+        dispatch(getpdfReportdata(StockReport_1_GoBtn_API, config))
+
     }
 
     function fromdateOnchange(e, date) {
@@ -143,7 +149,7 @@ const StockReport_1 = (props) => {
                                     <C_DatePicker
                                         name='fromdate'
                                         value={fromdate}
-                                        disabled={true}
+                                
                                         onChange={fromdateOnchange}
                                     />
                                 </Col>
@@ -158,7 +164,7 @@ const StockReport_1 = (props) => {
                                     <C_DatePicker
                                         nane='todate'
                                         value={todate}
-                                        disabled={true}
+                                
                                         onChange={todateOnchange}
                                     />
                                 </Col>

@@ -1,18 +1,16 @@
 
 export const columns = [
     "Item Name",
+    "Group Name",
+    "Group Type Name",
+    "Sub Group Name",
     "Opening balance",
-    "GRN",
-    "InterBranch/return ",
-    "Prod'n Quantity",
-    "Total Quantity",
-    "Dispatch",
-    "Sales/Purchase",
-    "Prod'n Issue/Reproduction",
+    "GRN Inward",
+    "SalesReturn ",
+    "Sale",
+    "Purchase Return",
     "Closing balance",
     "Actual Stock",
-    "Difference",
-
 ];
 
 export const PageHedercolumns = [
@@ -22,8 +20,8 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
-    const { InvoiceItems = [] } = data
-    InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+    const { StockDetails = [] } = data
+    StockDetails.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Item = 0
     let totalBasicAmount = 0
@@ -32,19 +30,19 @@ export const Rows = (data) => {
     let totalAmount = 0
     let totalQuantity = 0
 
-    InvoiceItems.forEach((element, key) => {
+    StockDetails.forEach((element, key) => {
         const tableitemRow = [
             element.ItemName,
-            `${element.Quantity} ${element.UnitName}`,
-            element.Rate,
-            element.BasicAmount,
-            element.CGSTPercentage,
-            element.CGST,
-            element.SGSTPercentage,
-            element.SGST,
-            element.Amount,
-            element.GSTPercentage,
-            element.GSTAmount,
+            element.GroupName,
+            element.GroupTypeName,
+            element.SubGroupName,
+            element.OpeningBalance,
+            element.GRNInward,
+            element.SalesReturn,
+            element.Sales,
+            element.PurchaseReturn,
+            element.ClosingBalance,
+            element.ActualStock,
             "row"
         ];
 
@@ -52,9 +50,9 @@ export const Rows = (data) => {
             totalQuantity = Number(totalQuantity) + Number(element.Quantity)
             totalCGst = Number(totalCGst) + Number(element.CGST)
             totalSGst = Number(totalSGst) + Number(element.SGST)
-            totalAmount = Number(totalAmount) + Number( element.Amount)
+            totalAmount = Number(totalAmount) + Number(element.Amount)
             let cgst = data["tableTot"].TotalCGst
-            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
+            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst) })
         };
 
         function totalrow() {
@@ -90,8 +88,8 @@ export const Rows = (data) => {
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
         if ((Item === element.Item)) {
             data["tableTot"] = totalLots()
-            returnArr.push(totalrow());
-            returnArr.push(materialRow());
+            // returnArr.push(totalrow());
+            // returnArr.push(materialRow());
 
 
             returnArr.push(tableitemRow);
@@ -108,8 +106,8 @@ export const Rows = (data) => {
             data["tableTot"] = totalLots()
             Item = element.Item;
         }
-        if (key === InvoiceItems.length - 1) {
-            returnArr.push(totalrow());
+        if (key === StockDetails.length - 1) {
+            // returnArr.push(totalrow());
         }
     })
     return returnArr;
@@ -123,8 +121,8 @@ export const ReportFotterColumns = [
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [`${data.CustomerName}`, ,`From Date:  ${data.InvoiceDate}`,],
-        [`maharashtra`, , `To Date:      ${data.Todate}`],
+        [ `From Date:  ${data.FromDate}`,],
+        [ `To Date:      ${data.ToDate}`],
         // [``, ,],
         // [,,`INR NO :${data.FullInvoiceNumber}`]
     ]
