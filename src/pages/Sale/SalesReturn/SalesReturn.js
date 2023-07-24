@@ -786,7 +786,7 @@ const SalesReturn = (props) => {
                 "BaseUnitQuantity": i.BaseUnitQuantity,
                 "BatchCode": i.BatchCode,
                 "BatchDate": i.BatchDate,
-                "BatchID": "",
+                "BatchID": 1,  //when Mode=1 then BatchID=1
                 "MRP": i.MRP,
                 "MRPValue": i.MRPValue,
                 "Rate": i.Rate,
@@ -825,7 +825,7 @@ const SalesReturn = (props) => {
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-                Mode: 1,
+                Mode: 1,  //when Mode=1 then BatchID=1
                 IsApproved: 1,
                 PurchaseReturnReferences: [],
                 ReturnItems: ReturnItems,
