@@ -16,7 +16,7 @@ const INIT_STATE = {
   partyItem: [],
   partyList: [],
 
-  partyItemListLoading:false,
+  partyItemListLoading: false,
   saveBtnloading: false
 }
 
@@ -47,13 +47,13 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
     case GET_PARTY_ITEM_LIST:
       return {
         ...state,
-        partyItemListLoading:true,
+        partyItemListLoading: true,
       }
     case GET_PARTY_ITEM_LIST_SUCCESS:
       return {
         ...state,
         partyItem: action.payload,
-        partyItemListLoading:false,
+        partyItemListLoading: false,
       }
 
     case EDIT_PARTY_ITEM_ID_SUCCESS:
@@ -66,7 +66,7 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        partyItemListLoading:false,
+        partyItemListLoading: false,
       }
 
     default:

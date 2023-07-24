@@ -52,7 +52,7 @@ const PartyItems = (props) => {
         userAccess,
     } = useSelector((state) => ({
         saveBtnloading: state.PartyItemsReducer.saveBtnloading,
-        partyItemListLoading:state.PartyItemsReducer.partyItemListLoading,
+        partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         postMsg: state.PartyItemsReducer.postMsg,
         tableList: state.PartyItemsReducer.partyItem,
         supplier: state.PartyMasterReducer.partyList,
