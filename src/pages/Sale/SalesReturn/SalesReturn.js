@@ -821,7 +821,7 @@ const SalesReturn = (props) => {
                 Customer: values.Customer.value,// Customer Swipe when Po return
                 Party: _cfunc.loginPartyID(),// Party Swipe when Po return
                 Comment: values.Comment,
-                GrandTotal: grand_total,
+                GrandTotal: Number(grand_total).toFixed(2),
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
