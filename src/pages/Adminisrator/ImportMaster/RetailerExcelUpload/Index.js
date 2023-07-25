@@ -22,14 +22,16 @@ import {
     GoButton_ImportFiledMap_AddSuccess
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
-import { RetailerExcelUpload_save_action_Success
+import {
+    RetailerExcelUpload_save_action_Success
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
 import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
 import PriceDropOptions from "../../PartyMaster/MasterAdd/FirstTab/PriceDropOptions";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
-import { getPartyTypelist } from "../../../../store/Administrator/PartyTypeRedux/action";
-import { readExcelFile, retailer_FileDetails, retailer_SaveHandler } from "./AllHndlerFunc";
+import { getPartyTypelist, getPartyTypelistSuccess } from "../../../../store/Administrator/PartyTypeRedux/action";
+import { readExcelFile, retailer_SaveHandler } from "./AllHndlerFunc";
+import { C_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 
 
 const RetailerExcelUpload = (props) => {
@@ -41,7 +43,7 @@ const RetailerExcelUpload = (props) => {
     const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [], partyNO: [] }
 
 
-    const [priceListSelect, setPriceListSelect] = useState({ value: '' });
+    const [priceListSelect, setPriceListSelect] = useState({ value: '', label: "" })
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [retailerId, setRetailerId] = useState('')
@@ -59,14 +61,29 @@ const RetailerExcelUpload = (props) => {
         userAccess,
         priceListByPartyType = [],
         compareParameter = [],
-        partyTypes
+        partyTypes,
+        compareParamLoading,
+        saveBtnLoading,
+        priceListDropDownLoading,
+        partyTypesDropDownLoading,
+        partyDropDownLoading
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.partyExcelUploadMsg,
+        saveBtnLoading: state.ImportExcelPartyMap_Reducer.partyUploadSaveLoading,
+
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+
         partyTypes: state.PartyTypeReducer.ListData,
+        partyTypesDropDownLoading: state.PartyTypeReducer.goBtnLoading,
+        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
+
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
+        priceListDropDownLoading: state.PriceListReducer.priceListDropDownLoading,
+
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
+        compareParamLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
+
     }));
 
     useLayoutEffect(() => {
@@ -75,14 +92,16 @@ const RetailerExcelUpload = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         dispatch(priceListByPartyActionSuccess([]))
-        dispatch(getPartyListAPI());
         dispatch(getPartyTypelist());
         goButtonHandler()
         if (!userAdminRole) {
             SetPartySelect({ value: _cfunc.loginPartyID() })
         }
         return () => {
+            dispatch(commonPageFieldSuccess(null));
             dispatch(GoButton_ImportFiledMap_AddSuccess([]));
+            dispatch(priceListByPartyActionSuccess([]))
+            dispatch(getPartyTypelistSuccess([]))
         }
     }, []);
 
@@ -113,32 +132,31 @@ const RetailerExcelUpload = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(RetailerExcelUpload_save_action_Success({ Status: false }))
-            customAlert({
-                Type: 1,
-                Message: postMsg.Message,
-            })
+
             //clear all states
-            setPriceListSelect({ value: '' });
-            setPriceListSelect({ value: '' });
+            setPriceListSelect({ value: '', label: "" });
             setRetailerId('')
             setselectedFiles([])
             setPreUploadjson([])
             setPreViewDivShow(false)
             SetPartySelect('')
 
-
+            customAlert({
+                Type: 1,
+                Message: postMsg.Message,
+            })
         }
         else if (postMsg.Status === true) {
             dispatch(RetailerExcelUpload_save_action_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
 
     useEffect(() => {
-        
+
         if ((partyTypes.length > 0)) {
             let isRetailer = partyTypes.find(i => (i.IsRetailer))
             if (!(isRetailer === undefined)) {
@@ -258,7 +276,7 @@ const RetailerExcelUpload = (props) => {
 
 
     const uploadSaveHandler = (event) => {
-        
+
         let validMsg = []
         if ((partySelect === "")) {
             validMsg.push({ Msg: "Please Select Party." })
@@ -290,12 +308,10 @@ const RetailerExcelUpload = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-
+                <PageLoadingSpinner isLoading={(partyTypesDropDownLoading || partyDropDownLoading || compareParamLoading || !pageField)} />
                 <form noValidate>
                     <div className="page-content">
-
                         {
-
                             userAdminRole ? <>
                                 <div className="px-2 c_card_header text-black" >
                                     <div className="   c_card_filter text-black" style={{ paddingBottom: "3px" }} >
@@ -312,6 +328,7 @@ const RetailerExcelUpload = (props) => {
                                                     <Col md={5}>
                                                         <Input
                                                             value={priceListSelect.label}
+                                                            disabled={partyDropDownLoading}
                                                             autoComplete={"off"}
                                                             placeholder="Select..."
                                                             onClick={priceListOnClick}
@@ -353,6 +370,7 @@ const RetailerExcelUpload = (props) => {
                                                                 <Col md={5}>
                                                                     <Input
                                                                         value={priceListSelect.label}
+                                                                        disabled={partyDropDownLoading}
                                                                         autoComplete={"off"}
                                                                         placeholder="Select..."
                                                                         onClick={priceListOnClick}
@@ -436,45 +454,6 @@ const RetailerExcelUpload = (props) => {
                                         </Card>
                                     )
                                 })}
-                                {/* {preViewDivShow &&
-                                    <Card style={{ borderTop: "0px" }}>
-                                        <div id="filedetail">
-
-                                            <details>
-                                                <summary>No. of Invoice: {readJsonDetail.invoice.size}</summary>
-                                                <div className="error-msg">
-                                                    <p>
-                                                        {readJsonDetail.invoiceNO.map(i => (<Label>{i} ,&#160;</Label>))}
-                                                    </p>
-                                                </div>
-
-                                            </details>
-
-                                            <details>
-                                                <summary>No. of Party :{readJsonDetail.partyNO.length}</summary>
-                                                <div className="error-msg">
-                                                    <p>
-                                                        {readJsonDetail.partyNO.map(i => (<Label>{i} ,&#160;</Label>))}
-                                                    </p>
-                                                </div>
-                                            </details>
-
-                                            <details>
-                                                <summary>No. of Dates :{readJsonDetail.invoiceDate.length}</summary>
-                                                <div className="error-msg">
-                                                    <p>
-                                                        {readJsonDetail.invoiceDate.map(i => (<Label>{i} ,&#160;</Label>))}
-                                                    </p>
-                                                </div>
-                                            </details>
-
-                                            <details>
-                                                <summary>Total Amount :{readJsonDetail.amount}</summary>
-                                            </details>
-
-                                        </div>
-                                    </Card>
-                                } */}
                             </div>
 
 
@@ -482,24 +461,25 @@ const RetailerExcelUpload = (props) => {
 
                         <div className="text- mt-4" >
                             {preViewDivShow ?
-                                <button
+                                <C_Button
                                     type="button"
-                                    // style={{ display: "none" }}
                                     id='btn-uploadBtnFunc'
-                                    className="btn btn-success "
+                                    className="btn btn-success"
+                                    loading={saveBtnLoading}
                                     onClick={uploadSaveHandler}
                                 >
                                     Upload Files
-                                </button>
+                                </C_Button>
                                 :
-                                <button
+                                <C_Button
                                     type="button"
                                     id='btn-verify'
-                                    className="btn btn-primary "
+                                    loading={saveBtnLoading}
+                                    className="btn btn-primary"
                                     onClick={veifyExcelBtn_Handler}
                                 >
                                     Verify Files
-                                </button>
+                                </C_Button>
                             }
                         </div>
 

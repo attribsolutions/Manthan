@@ -17,7 +17,7 @@ import { useHistory } from "react-router-dom";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
-import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, PageLoadingSpinner, SaveButton } from "../../../../components/Common/CommonButton";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
@@ -58,13 +58,18 @@ const ImportExcelFieldMap = (props) => {
         pageField,
         userAccess,
         goButtonItem,
+        partyDropDownLoading,
+        saveBtnLoading
     } = useSelector((state) => ({
         postMsg: state.ImportExportFieldMap_Reducer.postMsg,
+        saveBtnLoading: state.ImportExportFieldMap_Reducer.saveBtnLoading,
+
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         goButtonItem: state.ImportExportFieldMap_Reducer.addGoButton,
-        partyList: state.PartyMasterReducer.partyList,
+        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
+
     }));
 
     useEffect(() => {
@@ -118,7 +123,7 @@ const ImportExcelFieldMap = (props) => {
             dispatch(save_ImportFiledMap_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -169,7 +174,7 @@ const ImportExcelFieldMap = (props) => {
     ];
 
     async function goButtonHandler() {
-       
+
         let partyId = !userAdminRole ? _cfunc.loginPartyID() : partySelect.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
@@ -223,57 +228,60 @@ const ImportExcelFieldMap = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+                <PageLoadingSpinner isLoading={((partyDropDownLoading && (userAdminRole)) || !pageField)} />
 
-                <form >
-                    <div className="page-content">
-                        {userAdminRole &&
-                            <PartyDropdown_Common
-                                partySelect={partySelect}
-                                setPartyFunc={partyOnChngeHandler}
-                                goButtonHandler={goButtonHandler}
-                                changeBtnShow={!(goButtonItem.length === 0)}
-                                change_ButtonHandler={change_ButtonHandler}
-                            />
-                        }
-                        <div >
-                            <ToolkitProvider
-                                keyField="id"
-                                data={goButtonItem}
-                                columns={pagesListColumns}
-                                search
-                            >
-                                {toolkitProps => (
-                                    <React.Fragment>
-                                        <div className="table mt-1">
-                                            <BootstrapTable
-                                                bordered={true}
-                                                striped={false}
-                                                id="table_Arrow"
-                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                classes={"table align-middle  table-hover"}
-                                                headerWrapperClasses={"thead-light"}
 
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {mySearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </React.Fragment>
-                                )
-                                }
-                            </ToolkitProvider>
-                        </div>
+                <div className="page-content">
+                    {userAdminRole &&
+                        <PartyDropdown_Common
+                            partySelect={partySelect}
+                            setPartyFunc={partyOnChngeHandler}
+                            goButtonHandler={goButtonHandler}
+                            changeBtnShow={!(goButtonItem.length === 0)}
+                            change_ButtonHandler={change_ButtonHandler}
+                        />
+                    }
+                    <div >
+                        <ToolkitProvider
+                            keyField="id"
+                            data={goButtonItem}
+                            columns={pagesListColumns}
+                            search
+                        >
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    <div className="table mt-1">
+                                        <BootstrapTable
+                                            bordered={true}
+                                            striped={false}
+                                            id="table_Arrow"
+                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                            classes={"table align-middle  table-hover"}
+                                            headerWrapperClasses={"thead-light"}
+
+                                            {...toolkitProps.baseProps}
+                                        />
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
+                                </React.Fragment>
+                            )
+                            }
+                        </ToolkitProvider>
                     </div>
+                </div>
 
-                    <FormGroup>
-                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                            {(goButtonItem.length > 0) &&
-                                <SaveButton pageMode={pageMode}
-                                    userAcc={userPageAccessState}
-                                    onClick={SaveHandler}
-                                />}
-                        </Col>
-                    </FormGroup >
-                </form>
+                <FormGroup>
+                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                        {(goButtonItem.length > 0) &&
+                            <SaveButton
+                                pageMode={pageMode}
+                                loading={saveBtnLoading}
+                                userAcc={userPageAccessState}
+                                onClick={SaveHandler}
+                            />}
+                    </Col>
+                </FormGroup >
+
             </React.Fragment>
         );
     }

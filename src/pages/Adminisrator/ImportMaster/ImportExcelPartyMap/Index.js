@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
-import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, PageLoadingSpinner, SaveButton } from "../../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
@@ -27,7 +27,7 @@ import {
     initialFiledFunc,
     onChangeSelect,
 } from "../../../../components/Common/validationFunction";
-import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
+import { getPartyListAPI, getPartyListAPISuccess } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
@@ -66,6 +66,7 @@ const ImportExcelPartyMap = (props) => {
         partyList,
         listBtnLoading,
         saveBtnloading,
+        partyDropDownLoading
     } = useSelector((state) => ({
         saveBtnloading: state.GroupReducer.saveBtnloading,
         listBtnLoading: state.ImportExcelPartyMap_Reducer.listBtnLoading,
@@ -75,6 +76,7 @@ const ImportExcelPartyMap = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
         goButtonArr: state.ImportExcelPartyMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
+        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
     }));
     useEffect(() => {
         const page_Id = pageId.IMPORT_MASTER_MAP
@@ -82,6 +84,11 @@ const ImportExcelPartyMap = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
         dispatch(GoButton_ImportExcelPartyMap_Success([]));
+        return () => {
+            dispatch(getPartyListAPISuccess([]))
+            dispatch(GoButton_ImportExcelPartyMap_Success([]));
+            dispatch(commonPageFieldSuccess(null));
+        }
 
     }, []);
 
@@ -134,7 +141,7 @@ const ImportExcelPartyMap = (props) => {
             dispatch(save_ImportExcelPartyMap_Sucess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -272,6 +279,7 @@ const ImportExcelPartyMap = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <PageLoadingSpinner isLoading={((partyDropDownLoading && !(loginIsSCMCompany() === 1)) || !pageField)} />
 
                 <div className="page-content">
                     <div className="px-2 c_card_header text-black" >
@@ -315,7 +323,7 @@ const ImportExcelPartyMap = (props) => {
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
-                                                    isDisabled={!(goButtonArr.length === 0) && true}
+                                                    isDisabled={(!(goButtonArr.length === 0) || (partyDropDownLoading && !(loginIsSCMCompany() === 1)))}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={mapTypeDropdown_Options}
@@ -330,7 +338,9 @@ const ImportExcelPartyMap = (props) => {
 
                                     <Col sm="2" className="mt-3 ">
                                         {(goButtonArr.length === 0) ?
-                                            <Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
+                                            <Go_Button
+                                                forceDisabled={(partyDropDownLoading && !(loginIsSCMCompany() === 1))}
+                                                onClick={goButtonHandler} loading={listBtnLoading} />
                                             :
                                             <Change_Button onClick={change_ButtonHandler} />
                                         }
@@ -369,18 +379,21 @@ const ImportExcelPartyMap = (props) => {
 
                     </div>
                 </div>
-                <form onSubmit={(event) => SaveHandler(event)} noValidate>
-                    <FormGroup>
-                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                            {(goButtonArr.length > 0) &&
-                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                    loading={saveBtnloading}
-                                // module={"Import Master Map"} 
-                                />
-                            }
-                        </Col>
-                    </FormGroup>
-                </form>
+
+                <FormGroup>
+                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                        {(goButtonArr.length > 0) &&
+                            <SaveButton
+                                onclick={SaveHandler}
+                                pageMode={pageMode}
+                                userAcc={userPageAccessState}
+                                loading={saveBtnloading}
+                            // module={"Import Master Map"} 
+                            />
+                        }
+                    </Col>
+                </FormGroup>
+
             </React.Fragment>
         );
     }
