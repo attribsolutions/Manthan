@@ -1,3 +1,4 @@
+import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
     "Item Name",
@@ -35,17 +36,17 @@ export const Rows = (data) => {
 
     StockDetails.forEach((element, key) => {
         const tableitemRow = [
-            element.ItemName,
-            element.GroupName,
-            element.GroupTypeName,
-            element.SubGroupName,
-            element.OpeningBalance,
-            element.GRNInward,
-            element.SalesReturn,
-            element.Sale,
-            element.PurchaseReturn,
-            element.ClosingBalance,
-            element.ActualStock,
+            `${element.ItemName}`,
+            `${element.GroupName}`,
+            `${element.GroupTypeName}`,
+            `${element.SubGroupName}`,
+            `${numberWithCommas(Number(element.OpeningBalance).toFixed(2))}`,
+            `${numberWithCommas(Number(element.GRNInward).toFixed(2))}`,
+            `${numberWithCommas(Number(element.SalesReturn).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Sale).toFixed(2))}`,
+            `${numberWithCommas(Number(element.PurchaseReturn).toFixed(2))}`,
+            `${numberWithCommas(Number(element.ClosingBalance).toFixed(2))}`,
+            `${element.ActualStock}`,
         ];
 
         function totalLots() {
@@ -63,30 +64,16 @@ export const Rows = (data) => {
                 ``,
                 ``,
                 ``,
-                `${TotalOpeningBalance}`,
-                `${TotalGRNInward}`,
-                `${TotalSalesReturn}`,
-                `${TotalSale}`,
-                `${TotalPurchaseReturn}`,
-                `${TotalClosingBalance}`,
+                `${numberWithCommas(Number(TotalOpeningBalance).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalGRNInward).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalSalesReturn).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalSale).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalPurchaseReturn).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalClosingBalance).toFixed(2))}`,
                 ``,
 
             ];
         };
-        function materialRow() {
-            return [
-                `Packing Roll`,
-                " ",
-                ``,
-                "",
-                ``,
-                "packing",
-                ``,
-                "",
-                ``,
-            ];
-        };
-
 
         if (Item === 0) { Item = element.Item };
         if ((Item === element.Item)) {
@@ -113,8 +100,6 @@ export const ReportHederRows = (data) => {
     var reportArray = [
         [`From Date:  ${data.FromDate}`,],
         [`To Date:      ${data.ToDate}`],
-        // [``, ,],
-        // [,,`INR NO :${data.FullInvoiceNumber}`]
     ]
     return reportArray;
 }
