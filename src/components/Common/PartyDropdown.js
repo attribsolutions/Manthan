@@ -2,7 +2,7 @@ import React, { useLayoutEffect, } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, FormGroup, Label, } from "reactstrap";
 import Select from "react-select";
-import { getPartyListAPI } from "../../store/Administrator/PartyRedux/action";
+import { getPartyListAPI, getPartyListAPISuccess } from "../../store/Administrator/PartyRedux/action";
 import { Change_Button, Go_Button } from "./CommonButton";
 import { C_Select } from "../../CustomValidateForm";
 
@@ -14,13 +14,16 @@ const PartyDropdown_Common = (props) => {
     const { partySelect, setPartyFunc, goButtonHandler, change_ButtonHandler, changeBtnShow } = props
 
 
-    const { partyList, goBtnLoading } = useSelector((state) => ({
-        goBtnLoading: state.PartyMasterReducer.goBtnLoading,
+    const { partyList, partyDropDownLoading } = useSelector((state) => ({
+        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
         partyList: state.PartyMasterReducer.partyList,
     }));
 
     useLayoutEffect(() => {
         dispatch(getPartyListAPI())
+        return () => {
+            dispatch(getPartyListAPISuccess([]))
+        }
     }, []);
 
     const party_DropdownOptions = partyList.map((data) => ({
@@ -46,8 +49,9 @@ const PartyDropdown_Common = (props) => {
                                     isSearchable={true}
                                     className="react-dropdown"
                                     classNamePrefix="dropdown"
-                                    isLoading={goBtnLoading}
+                                    isLoading={partyDropDownLoading}
                                     options={party_DropdownOptions}
+                                    isDisabled={changeBtnShow}
                                     onChange={(e) => { setPartyFunc(e) }}
                                 />
                             </Col>
@@ -57,7 +61,9 @@ const PartyDropdown_Common = (props) => {
                     {goButtonHandler &&
                         <Col sm="1" >
                             {!changeBtnShow ?
-                                < Go_Button onClick={() => goButtonHandler()} />
+                                < Go_Button
+                                    forceDisabled={partyDropDownLoading}
+                                    onClick={() => goButtonHandler()} />
                                 :
                                 <Change_Button onClick={() => change_ButtonHandler()} />
                             }

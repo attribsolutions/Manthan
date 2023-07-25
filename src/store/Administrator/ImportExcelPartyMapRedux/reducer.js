@@ -7,17 +7,19 @@ import {
   GO_BUTTON_IMPORT_EXCEL_PARTY_MAP,
   RETAILER_EXCEL_UPLOAD_API_ERROR_ACTION,
   RETAILER_EXCEL_UPLOAD_SAVE,
+  INVOICE_EXCEL_UPLOAD_SAVE,
 } from "./actionType";
 
 const INIT_STATE = {
-  saveBtnLoading: false,
-  listBtnLoading: false,
+
   postMsg: { Status: false },
-  partyUploadSaveLoading: false,
   addGoButton: [],
   invoiceExcelUploadMsg: { Status: false },
   partyExcelUploadMsg: { Status: false },
-
+  saveBtnLoading: false,
+  listBtnLoading: false,
+  partyUploadSaveLoading: false,
+  invoiceUploadSaveLoading:false
 }
 
 const ImportExcelPartyMap_Reducer = (state = INIT_STATE, action) => {
@@ -35,6 +37,7 @@ const ImportExcelPartyMap_Reducer = (state = INIT_STATE, action) => {
         addGoButton: action.payload,
         listBtnLoading: false,
       }
+    // *********************************************************
 
     case SAVE_IMPORT_EXCEL_PARTY_MAP:
       return {
@@ -48,12 +51,20 @@ const ImportExcelPartyMap_Reducer = (state = INIT_STATE, action) => {
         postMsg: action.payload,
         saveBtnLoading: false,
       }
+    // *********************************************************
+    case INVOICE_EXCEL_UPLOAD_SAVE:
+      return {
+        ...state,
+        invoiceUploadSaveLoading: true,
+      }
 
     case INVOICE_EXCEL_UPLOAD_SAVE_SUCCESS:
       return {
         ...state,
+        invoiceUploadSaveLoading: false,
         invoiceExcelUploadMsg: action.payload,
       }
+    // *********************************************************
 
     case RETAILER_EXCEL_UPLOAD_SAVE:
       return {
@@ -67,10 +78,12 @@ const ImportExcelPartyMap_Reducer = (state = INIT_STATE, action) => {
         partyUploadSaveLoading: false,
         partyExcelUploadMsg: action.payload,
       }
+    // *********************************************************
 
     case RETAILER_EXCEL_UPLOAD_API_ERROR_ACTION:
       return {
         ...state,
+        invoiceUploadSaveLoading: false,
         partyUploadSaveLoading: false,
         saveBtnLoading: false,
         listBtnLoading: false,

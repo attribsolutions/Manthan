@@ -29,7 +29,7 @@ import './scss.scss'
 import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
 import PriceDropOptions from "../../PartyMaster/MasterAdd/FirstTab/PriceDropOptions";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
-import { getPartyTypelist } from "../../../../store/Administrator/PartyTypeRedux/action";
+import { getPartyTypelist, getPartyTypelistSuccess } from "../../../../store/Administrator/PartyTypeRedux/action";
 import { readExcelFile, retailer_SaveHandler } from "./AllHndlerFunc";
 import { C_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 
@@ -92,14 +92,16 @@ const RetailerExcelUpload = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         dispatch(priceListByPartyActionSuccess([]))
-        dispatch(getPartyListAPI());
         dispatch(getPartyTypelist());
         goButtonHandler()
         if (!userAdminRole) {
             SetPartySelect({ value: _cfunc.loginPartyID() })
         }
         return () => {
+            dispatch(commonPageFieldSuccess(null));
             dispatch(GoButton_ImportFiledMap_AddSuccess([]));
+            dispatch(priceListByPartyActionSuccess([]))
+            dispatch(getPartyTypelistSuccess([]))
         }
     }, []);
 

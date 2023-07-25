@@ -18,7 +18,7 @@ import {
     comAddPageFieldFunc,
     initialFiledFunc,
 } from "../../../../components/Common/validationFunction";
-import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
+import { getPartyListAPI, getPartyListAPISuccess } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
 import { fileDetails, readExcelFile } from "./readFile";
 import {
@@ -32,6 +32,7 @@ import {
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
 import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
+import { C_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 
 
 const InvoiceExcelUpload = (props) => {
@@ -59,23 +60,33 @@ const InvoiceExcelUpload = (props) => {
     const {
         postMsg,
         userAccess,
-        compareParameter = []
+        compareParameter = [],
+        partyDropDownLoading,
+        compareParamLoading,
+        saveBtnLoading,
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
+        saveBtnLoading: state.ImportExcelPartyMap_Reducer.invoiceUploadSaveLoading,
         userAccess: state.Login.RoleAccessUpdateData,
         partyList: state.PartyMasterReducer.partyList,
+        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
+
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
+        compareParamLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
     }));
 
     useEffect(() => {
-        dispatch(getPartyListAPI());
+        debugger
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         if (!userAdminRole) {
             goButtonHandler()
         }
         return () => {
             dispatch(GoButton_ImportFiledMap_AddSuccess([]));
+            dispatch(getPartyListAPISuccess([]));
+            dispatch(commonPageFieldSuccess(null));
         }
+
     }, []);
 
     const location = { ...history.location }
@@ -118,7 +129,7 @@ const InvoiceExcelUpload = (props) => {
             dispatch(InvoiceExcelUpload_save_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             });
         };
     }, [postMsg])
@@ -134,7 +145,7 @@ const InvoiceExcelUpload = (props) => {
     };
 
 
-    async function uploadBtnFunc() {
+    async function veifyExcelBtn_Handler() {
 
         if (compareParameter.length === 0) {
             customAlert({
@@ -237,7 +248,7 @@ const InvoiceExcelUpload = (props) => {
     }
 
 
-    const SaveHandler = async (event) => {
+    const uploadSaveHandler = async (event) => {
 
         event.preventDefault();
         const btnId = event.target.id
@@ -314,6 +325,7 @@ const InvoiceExcelUpload = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+                <PageLoadingSpinner isLoading={((partyDropDownLoading && (userAdminRole)) || compareParamLoading)} />
 
                 <form noValidate>
                     <div className="page-content">
@@ -332,7 +344,7 @@ const InvoiceExcelUpload = (props) => {
                                             {(!(compareParameter.length > 0)) ?
                                                 <div className="row ">
                                                     <div className="d-flex justify-content-start p-2 ">
-                                                        <div>Please wait Downloading field Details.</div>
+                                                        <div>Please wait Downloading field Details. other wise check filed mapping </div>
                                                         <div >
                                                             <div className="dot-pulse">
                                                                 <div className="bounce1"></div>
@@ -461,28 +473,29 @@ const InvoiceExcelUpload = (props) => {
 
                         <div className="text- mt-4" >
                             {preViewDivShow ?
-                                <button
+
+                                <C_Button
                                     type="button"
-                                    // style={{ display: "none" }}
                                     id='btn-uploadBtnFunc'
-                                    className="btn btn-success "
-                                    onClick={SaveHandler}
+                                    className="btn btn-success"
+                                    loading={saveBtnLoading}
+                                    onClick={uploadSaveHandler}
                                 >
                                     Upload Files
-                                </button>
+                                </C_Button>
                                 :
-                                <button
+                                <C_Button
                                     type="button"
                                     id='btn-verify'
-                                    className="btn btn-primary "
-                                    onClick={uploadBtnFunc}
+                                    loading={saveBtnLoading}
+                                    className="btn btn-primary"
+                                    onClick={veifyExcelBtn_Handler}
                                 >
                                     Verify Files
-                                </button>
+                                </C_Button>
+
                             }
                         </div>
-
-
 
                     </div>
 
