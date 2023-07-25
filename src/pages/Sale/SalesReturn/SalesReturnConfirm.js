@@ -119,8 +119,9 @@ const ViewDetails_Modal = () => {
             })
 
             const jsonBody = JSON.stringify({
-                ReturnID: viewData_redux.Data[0].ReturnID,
-                ReturnItem: tableItemArray
+                "ReturnID": viewData_redux.Data[0].ReturnID,
+                "UserID": loginUserID(),
+                "ReturnItem": tableItemArray
             });
 
             if (inValideUnits.length > 0) {
