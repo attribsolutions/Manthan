@@ -18,13 +18,13 @@ let initial_y = 0
 
 
 
-export const pageBorder = (doc) => {
-
+export const pageBorder = (doc, data) => {
+    debugger
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
-    doc.line(30, false ? 379 : 815, 30, 16);//vertical line (left)
-    doc.line(570, false ? 379 : 815, 570, 16);//vertical line (Right)
-    doc.line(570, false ? 379 : 815, 30, false ? 379 : 815);//horizontal line (Bottom)   
+    doc.line(30, data.PrintType ? 379 : 815, 30, 16);//vertical line (left)
+    doc.line(570, data.PrintType ? 379 : 815, 570, 16);//vertical line (Right)
+    doc.line(570, data.PrintType ? 379 : 815, 30, data.PrintType ? 379 : 815);//horizontal line (Bottom)   
 }
 
 
@@ -81,7 +81,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 2,
+            cellPadding: data.PrintType ? 1 : 2,
             fontSize: 8,
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
@@ -112,7 +112,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 2,
+            cellPadding: data.PrintType ? 1 : 2,
             fontSize: 8,
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
@@ -614,7 +614,7 @@ export const pageFooter = (doc, data) => {
     for (var i = 1; i <= pageCount; i++) {
         doc.setPage(i)
         pageHeder(doc, data)
-        pageBorder(doc)
+        pageBorder(doc, data)
         reportHeder3(doc, data)
         doc.setFont('helvetica', 'Normal')
         doc.text('Page ' + String(i) + ' of ' + String(pageCount), 520, 828,)
