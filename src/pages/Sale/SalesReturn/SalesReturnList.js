@@ -271,7 +271,7 @@ const SalesReturnList = () => {
             return
         }
         let idString = ischeck.map(obj => obj.id).join(',')
-        let jsonBody = { ReturnItemID: idString }
+        let jsonBody = { ReturnID: idString, PartyID: _cfunc.loginPartyID(), }
         dispatch(post_Send_to_superStockiest_Id({ jsonBody }))
     }
 
