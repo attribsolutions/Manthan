@@ -3,6 +3,7 @@ import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { toWords } from "../Report_common_function";
+import { CurrentTime, currentDate_dmy } from "../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {
@@ -55,7 +56,7 @@ export const reportHeder1 = (doc, data) => {
                 columnWidth: 200,
                 halign: 'lfet',
             },
-           
+
         },
         tableLineColor: "black",
         startY: doc.autoTableEndPosY() + 63,// 45,
@@ -83,23 +84,28 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
-    const tableRow = table.Rows(data);
-    console.log(tableRow)
+    debugger
     var options = {
-
         didParseCell: (data1) => {
-            if (data1.row.cells[5].raw === "isaddition") {
-                data1.row.cells[0].colSpan = 12
-                data1.row.cells[4].colSpan = 1
-                data1.row.cells[6].colSpan = 1
-
-                data1.row.cells[0].styles.fontSize = 10
+            debugger
+            if (data1.row.cells[0].raw === `Total`) {
+                data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
+                data1.row.cells[5].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
+                data1.row.cells[7].styles.fontSize = 8
+                data1.row.cells[8].styles.fontSize = 8
+                data1.row.cells[9].styles.fontSize = 8
 
-                data1.row.cells[0.].styles.halign = "center"
-                data1.row.cells[0.].styles.fontStyle = "bold"
-                data1.row.cells[6.].styles.fontStyle = "bold"
+
+                data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
+                data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
+
             }
 
             if (data1.row.cells[5].raw === "packing") {
@@ -118,7 +124,7 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'center',    //'center' or 'right'
             fillColor: "white",
             textColor: [0, 0, 0], //Black     
             fontSize: 8,
@@ -168,7 +174,7 @@ export const tableBody = (doc, data) => {
             },
             8: {
                 columnWidth: 60,
-                fontStyle: 'bold',
+
                 halign: 'right',
             },
             9: {
@@ -179,11 +185,7 @@ export const tableBody = (doc, data) => {
                 columnWidth: 60,
                 halign: 'right',
             },
-            11: {
-                columnWidth: 80,
-                fontStyle: 'bold',
-                halign: 'right',
-            },
+
         },
 
         tableLineColor: "black",
@@ -200,10 +202,8 @@ export const tableBody = (doc, data) => {
 }
 
 export const pageFooter = (doc, data) => {
-
     let finalY = doc.previousAutoTable.finalY;
     if (finalY > 675) {
-
         pageBorder(doc)
         reportFooter(doc, data)
     } else {
@@ -215,10 +215,11 @@ export const pageFooter = (doc, data) => {
     doc.setFontSize(8)
     for (var i = 1; i <= pageCount; i++) {
         doc.setPage(i)
-        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 580, {
+        doc.text('Page ' + String(i) + ' of ' + String(pageCount), 790, 580, {
             align: 'center'
         })
-        console.log("aaa", doc.internal.pageSize.height)
+        doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 580,)
+
     }
 }
 

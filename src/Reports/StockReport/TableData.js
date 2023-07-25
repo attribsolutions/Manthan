@@ -1,3 +1,4 @@
+import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
     "Item Name",
@@ -11,6 +12,7 @@ export const columns = [
     "Purchase Return",
     "Closing balance",
     "Actual Stock",
+
 ];
 
 export const PageHedercolumns = [
@@ -24,90 +26,65 @@ export const Rows = (data) => {
     StockDetails.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Item = 0
-    let totalBasicAmount = 0
-    let totalCGst = 0
-    let totalSGst = 0
-    let totalAmount = 0
-    let totalQuantity = 0
+    let TotalOpeningBalance = 0
+    let TotalClosingBalance = 0
+    let TotalGRNInward = 0
+    let TotalSalesReturn = 0
+    let TotalSale = 0
+    let TotalPurchaseReturn = 0
+
 
     StockDetails.forEach((element, key) => {
         const tableitemRow = [
-            element.ItemName,
-            element.GroupName,
-            element.GroupTypeName,
-            element.SubGroupName,
-            element.OpeningBalance,
-            element.GRNInward,
-            element.SalesReturn,
-            element.Sales,
-            element.PurchaseReturn,
-            element.ClosingBalance,
-            element.ActualStock,
-            "row"
+            `${element.ItemName}`,
+            `${element.GroupName}`,
+            `${element.GroupTypeName}`,
+            `${element.SubGroupName}`,
+            `${numberWithCommas(Number(element.OpeningBalance).toFixed(2))}`,
+            `${numberWithCommas(Number(element.GRNInward).toFixed(2))}`,
+            `${numberWithCommas(Number(element.SalesReturn).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Sale).toFixed(2))}`,
+            `${numberWithCommas(Number(element.PurchaseReturn).toFixed(2))}`,
+            `${numberWithCommas(Number(element.ClosingBalance).toFixed(2))}`,
+            `${element.ActualStock}`,
         ];
 
         function totalLots() {
-            totalQuantity = Number(totalQuantity) + Number(element.Quantity)
-            totalCGst = Number(totalCGst) + Number(element.CGST)
-            totalSGst = Number(totalSGst) + Number(element.SGST)
-            totalAmount = Number(totalAmount) + Number(element.Amount)
-            let cgst = data["tableTot"].TotalCGst
-            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst) })
+            TotalOpeningBalance = Number(TotalOpeningBalance) + Number(element.OpeningBalance)
+            TotalClosingBalance = Number(TotalClosingBalance) + Number(element.ClosingBalance)
+            TotalGRNInward = Number(TotalGRNInward) + Number(element.GRNInward)
+            TotalSalesReturn = Number(TotalSalesReturn) + Number(element.SalesReturn)
+            TotalSale = Number(TotalSale) + Number(element.Sale)
+            TotalPurchaseReturn = Number(TotalPurchaseReturn) + Number(element.PurchaseReturn)
         };
 
         function totalrow() {
             return [
-                `Raw material`,
-                " ",
+                `Total`,
                 ``,
-                "",
                 ``,
-                "isaddition",
                 ``,
-                "",
+                `${numberWithCommas(Number(TotalOpeningBalance).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalGRNInward).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalSalesReturn).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalSale).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalPurchaseReturn).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalClosingBalance).toFixed(2))}`,
                 ``,
-            ];
-        };
-        function materialRow() {
-            return [
-                `Packing Roll`,
-                " ",
-                ``,
-                "",
-                ``,
-                "packing",
-                ``,
-                "",
-                ``,
-            ];
-        };
 
+            ];
+        };
 
         if (Item === 0) { Item = element.Item };
-        let aa = { TotalCGst: 0, totalSGst: 0 }
-        if (data["tableTot"] === undefined) { data["tableTot"] = aa }
         if ((Item === element.Item)) {
-            data["tableTot"] = totalLots()
             // returnArr.push(totalrow());
             // returnArr.push(materialRow());
-
-
             returnArr.push(tableitemRow);
-        }
-        else {
-            // returnArr.push(totalrow());
-            returnArr.push(tableitemRow);
-            totalBasicAmount = 0
-            totalCGst = 0
-            totalSGst = 0
-            totalAmount = 0
-            totalQuantity = 0
-
             data["tableTot"] = totalLots()
-            Item = element.Item;
+
         }
         if (key === StockDetails.length - 1) {
-            // returnArr.push(totalrow());
+            returnArr.push(totalrow());
         }
     })
     return returnArr;
@@ -121,10 +98,8 @@ export const ReportFotterColumns = [
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [ `From Date:  ${data.FromDate}`,],
-        [ `To Date:      ${data.ToDate}`],
-        // [``, ,],
-        // [,,`INR NO :${data.FullInvoiceNumber}`]
+        [`From Date:  ${data.FromDate}`,],
+        [`To Date:      ${data.ToDate}`],
     ]
     return reportArray;
 }

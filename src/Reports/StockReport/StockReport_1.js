@@ -28,7 +28,7 @@ const StockReport_1 = (props) => {
 
     const reducers = useSelector(
         (state) => ({
-            listBtnLoading: state.StockReportReducer.listBtnLoading,
+            goBtnLoading: state.PdfReportReducers.goBtnLoading,
             stockProcessingLoading: state.StockReportReducer.stockProcessingLoading,
             StockProcessingBtn: state.StockReportReducer.StockProcessingBtn,
             BaseUnit: state.ItemMastersReducer.BaseUnit,
@@ -149,7 +149,7 @@ const StockReport_1 = (props) => {
                                     <C_DatePicker
                                         name='fromdate'
                                         value={fromdate}
-                                
+
                                         onChange={fromdateOnchange}
                                     />
                                 </Col>
@@ -164,7 +164,7 @@ const StockReport_1 = (props) => {
                                     <C_DatePicker
                                         nane='todate'
                                         value={todate}
-                                
+
                                         onChange={todateOnchange}
                                     />
                                 </Col>
@@ -205,7 +205,7 @@ const StockReport_1 = (props) => {
                         </Col>
 
                         <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
-                            < Go_Button loading={reducers.listBtnLoading}
+                            < Go_Button loading={reducers.goBtnLoading}
                                 onClick={(e) => goButtonHandler()}
                             />
                         </Col>

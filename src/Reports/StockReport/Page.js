@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { Data } from "./DemoData";
+
 
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
@@ -21,7 +21,6 @@ function pageFooter(doc, data) {
 
 const StockReport = (stockdata) => {
     const data = stockdata[0]
-
     var doc = new jsPDF('l', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
