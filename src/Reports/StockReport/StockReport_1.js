@@ -197,7 +197,7 @@ const StockReport_1 = (props) => {
                             <C_Button
                                 type="button"
                                 loading={reducers.stockProcessingLoading}
-                                color="btn btn-outline-primary border-1 font-size-10 text-center"
+                                className="btn btn-outline-primary border-1 font-size-10 text-center"
                                 onClick={() => StockProccessHandler()}>
                                 Stock Process
                             </C_Button>

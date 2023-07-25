@@ -1038,7 +1038,7 @@ const PurchaseReturn = (props) => {
                                                 <C_Button
                                                     type="button"
                                                     loading={addBtnLoading}
-                                                    color="btn btn-outline-primary border-1 font-size-12 text-center"
+                                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
                                                     onClick={() => AddPartyHandler("ItemWise")}>
                                                     Add
                                                 </C_Button>
@@ -1089,7 +1089,7 @@ const PurchaseReturn = (props) => {
                                                 <C_Button
                                                     type="button"
                                                     loading={addBtnLoading}
-                                                    color="btn btn-outline-primary border-1 font-size-12 text-center"
+                                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
                                                     onClick={() => AddPartyHandler("InvoiceWise")}>
                                                     Select
                                                 </C_Button>

@@ -83,7 +83,7 @@ const UpdateBtn = ({ onClick, userAcc, loading, type = 'button' }) => {
 
 export function Go_Button(props) {
 
-  const { onClick, id, type = "button", loading,forceDisabled } = props
+  const { onClick, id, type = "button", loading, forceDisabled } = props
 
   return loading ?
     <Button
@@ -104,7 +104,7 @@ export function Go_Button(props) {
 }
 
 export function Change_Button(props) {
-  const { onClick, id, type = "button" ,forceDisabled} = props
+  const { onClick, id, type = "button", forceDisabled } = props
   return <Button
     id={id}
     disabled={forceDisabled}
@@ -112,23 +112,29 @@ export function Change_Button(props) {
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>
 }
-export function C_Button(props) {
-  const {
-    loading,
-    color,
-  } = props
+export function C_Button({
+  loading,
+  color,
+  onClick,
+  forceDisabled,
+  children,
+  spinnerColor = "primary",
+  ...rest
+}) {
+
 
   return loading ?
-    <Button
-      color={color}
-      disabled
+    <button
+      // disabled
       title={`Add Button Loging...`}
-    >
-      <Spinner style={{ height: "12px", width: "12px" }} color="primary" />
-    </Button>
-    : <Button
-      {...props}
-    />
+      {...rest}
+    >{children} &nbsp;<Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
+    </button>
+    :
+    <button
+      disabled={forceDisabled}
+      onClick={onClick}
+      {...rest} >{children}</button>
 }
 
 
@@ -261,7 +267,7 @@ export function PageLoadingSpinner({ isLoading }) {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-   
+
     if (isLoading && isInitialLoad) {
       document.getElementById('preloader').style.display = 'block';
       setIsInitialLoad(false);
