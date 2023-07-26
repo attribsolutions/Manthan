@@ -109,11 +109,10 @@ const BreadcrumbNew = () => {
   //   }
   // }
 
-  function isMobileDevice() {
-    var threshold = window.matchMedia("(max-width: 768px)"); // Adjust the media query as needed
-    return threshold.matches;
+  function getScreenWidth() {
+    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   }
-
+  const screenWidth = getScreenWidth();
 
   function ExcelCheckBox() {
     const arrDiv = []
@@ -150,7 +149,7 @@ const BreadcrumbNew = () => {
       <header id="page-topbar1" style={{ zIndex: "1" }}  >
         <div className="navbar-header blur1" style={{ paddingRight: "-10px", zIndex: "-1" }}>
           <div className="d-flex" >
-            {isMobileDevice ? <div className="navbar-brand-box" style={{ backgroundColor: "white" }} ></div> : null}
+            {screenWidth > 768 ? <div className="navbar-brand-box" style={{ backgroundColor: "white" }} ></div> : null}
             <div style={{ paddingLeft: "7px" }} >
 
               {
@@ -246,7 +245,7 @@ const BreadcrumbNew = () => {
           </AvForm>
         </div>
       </Modal>
-    </React.Fragment>
+    </React.Fragment >
   )
 
 }

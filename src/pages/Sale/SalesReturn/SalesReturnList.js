@@ -44,6 +44,7 @@ const SalesReturnList = () => {
 
     const reducers = useSelector(
         (state) => ({
+            sendToSSbtnLoading: state.SalesReturnReducer.sendToSSbtnLoading,
             loading: state.SalesReturnReducer.loading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             listBtnLoading: (state.SalesReturnReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
@@ -58,7 +59,7 @@ const SalesReturnList = () => {
         })
     );
 
-    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg, loading } = reducers;
+    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg, loading, sendToSSbtnLoading } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -302,6 +303,7 @@ const SalesReturnList = () => {
                                 selectSaveBtnHandler: selectSaveBtnHandler,
                                 selectSaveBtnLabel: "Send To Supplier",
                                 selectHeaderLabel: "Select",
+                                selectSaveBtnLoading: sendToSSbtnLoading
                             }}
 
                         />
