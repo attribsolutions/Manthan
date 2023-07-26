@@ -19,7 +19,7 @@ function* StockProccessing_GenFunc({ config }) {
 }
 
 function* StockReport_1_GenFunc({ config }) {
-    debugger
+    
     try {
         const response = yield call(StockReport_1_GoBtn_API, config);
         yield put(stockReport_1_GoButton_API_Success(response.Data))

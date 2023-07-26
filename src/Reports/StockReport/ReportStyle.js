@@ -84,10 +84,10 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
-    debugger
+    
     var options = {
         didParseCell: (data1) => {
-            debugger
+            
             if (data1.row.cells[0].raw === `Total`) {
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
@@ -141,16 +141,16 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 137,
+                columnWidth: 80,
             },
             1: {
                 columnWidth: 80,
-                halign: 'right',
+                
 
             },
             2: {
-                columnWidth: 80,
-                halign: 'right',
+                columnWidth: 140,
+               
             },
             3: {
                 columnWidth: 80,
