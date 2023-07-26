@@ -140,7 +140,6 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 sendToSSbtnLoading: true,
-                listBtnLoading: action.config.btnId,
             }
 
         case POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS:
@@ -148,7 +147,6 @@ const SalesReturnReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 sendToSSbtnLoading: false,
-                listBtnLoading: false,
                 sendToSSbtnTableData: action.payload,
             }
 

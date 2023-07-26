@@ -21,6 +21,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
+import { C_Button } from "./CommonButton";
 
 let searchCount = 0;
 
@@ -289,12 +290,12 @@ const CommonPurchaseList = (props) => {
   }
 
   const nonSelectedRow = () => {
-    
+
     var noSelectedIds = [];
 
     if (masterPath === url.SALES_RETURN) {
       noSelectedIds = tableList
-        .filter(row => (row.Status === "Send To Supplier")||(row.Status === "Open"))
+        .filter(row => (row.Status === "Send To Supplier") || (row.Status === "Open"))
         .map(row => row.id);
     } else {
       noSelectedIds = tableList
@@ -329,7 +330,7 @@ const CommonPurchaseList = (props) => {
                             keyField={"id"}
                             // key={`table-key-${pageField.PageHeading}`}
                             responsive
-                            bootstrap4 
+                            bootstrap4
                             bordered={false}
                             selectRow={selectCheckParams.isShow ?
                               selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
@@ -371,15 +372,17 @@ const CommonPurchaseList = (props) => {
             ((tableList.length > 0) && (selectCheckParams.isShow) && (selectCheckParams.isRoleAccess)) ?
 
               <div className="row save1 " style={{ paddingBottom: 'center' }}>
-                <button
-                  disabled={listBtnLoading}
+                <C_Button
+                  forceDisabled={listBtnLoading}
+                  loading={selectCheckParams.selectSaveBtnLoading}
                   style={{ marginTop: "-10px" }}
                   type="button"
+                  spinnerColor="white"
                   className="btn btn-primary w-md  "
                   onClick={() => { selectCheckParams.selectSaveBtnHandler(tableList) }}
                 >
                   <i class="fas fa-edit me-2"></i>{selectCheckParams.selectSaveBtnLabel}
-                </button>
+                </C_Button>
               </div>
               : null
           }
