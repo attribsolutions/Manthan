@@ -190,7 +190,6 @@ export const BilledByRow = (data) => {
         [`GSTIN:${data.CustomerGSTIN}`,],
         [`FSSAINo:${data.CustomerFSSAINo}`],
         [`MobileNo:${data.CustomerMobileNo}`],
-
     ]
     return BilledByArray;
 }
@@ -207,7 +206,6 @@ export const BilledToRow = (data) => {
         [`GSTIN:${data.PartyGSTIN}`],
         [`FSSAINo:${data.PartyFSSAINo}`],
         [`MobileNo:${data.PartyMobileNo}`],
-
     ]
 
     return BilledToArray;
