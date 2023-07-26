@@ -141,16 +141,16 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 137,
+                columnWidth: 80,
             },
             1: {
                 columnWidth: 80,
-                halign: 'right',
+                
 
             },
             2: {
-                columnWidth: 80,
-                halign: 'right',
+                columnWidth: 140,
+               
             },
             3: {
                 columnWidth: 80,
