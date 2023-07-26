@@ -126,6 +126,9 @@ const PartyMaster = (props) => {
 
             }))
         }
+        return () => {
+            dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
+        }
     }, [])
 
     useEffect(() => {
@@ -338,7 +341,7 @@ const PartyMaster = (props) => {
         let addressTabDetail = addressTabRef.current.getCurrentState()
         let prefixValue = prefixTabRef.current.getCurrentState().values
         let addressTabIsAddressEnter = addressTabRef.current.IsAddressEnter()
-        
+
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
 
         let isError = addressTabIsAddressEnter.isError
@@ -413,7 +416,7 @@ const PartyMaster = (props) => {
                 })
                 return;
             }
-            
+
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,
                 "PriceList": priceListSelect.value,

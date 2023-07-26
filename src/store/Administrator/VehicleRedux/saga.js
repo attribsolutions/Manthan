@@ -20,13 +20,11 @@ import {
   EDIT_VEHICLE_ID,
   UPDATE_VEHICLE_ID
 } from "./actionType";
-import {loginJsonBody } from "../../../components/Common/CommonFunction";
+import { loginJsonBody } from "../../../components/Common/CommonFunction";
 
-// const jsonBody = { "Party": loginPartyID(), "Company": loginCompanyID() }
 // Get List Page API
 function* Get_Vehicle_GenFun({ jsonBody }) {
-
-  const filters = (jsonBody === undefined || null ? loginJsonBody() : jsonBody); // required only PartyID and CompanyID
+  const filters = (!jsonBody ? JSON.stringify(loginJsonBody()) : jsonBody);// required only PartyID and CompanyID
   try {
     const response = yield call(Vehicle_Get_API, filters);
     yield put(getVehicleListSuccess(response.Data));
@@ -40,7 +38,6 @@ function* Post_Vehicle_Master_GenFun({ config }) {
     yield put(saveVehicleMasterSuccess(response));
   } catch (error) { yield put(VehicleErrorAction()) }
 }
-
 
 // edit api
 function* Edit_Vehicle_ID_GenFun({ config }) {
@@ -70,7 +67,7 @@ function* Delete_Vehicle_ID_GenFun({ config }) {
 
 // get VehicleTypes Dropdown API
 function* get_VehicleTypes_DropDown_GenFun() {
-  const filters = loginJsonBody()
+  const filters = JSON.stringify(loginJsonBody());
   try {
     const response = yield call(VehicleTypes_Get_API_for_Dropdown, filters);
     yield put(getVehicleType_for_dropdown_Success(response.Data));

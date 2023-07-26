@@ -6,7 +6,7 @@ import VanLoadingSheet from "./Van Loading Party Wise InvoiceList/Page";
 import Receipts from "./Receipts/Page";
 import CreditNote from "./CRDRNote Report/Page";
 import PartyLedgerReport from "./PratyLedger/Page";
-
+import ReturnReport from "./PurchaseReturnReport/Page";
 
 
 export const order1 = "order1"
@@ -16,10 +16,10 @@ export const Materialreport1 = "Materialreport1"
 export const IBinvoice = "IBinvoice"
 export const VanLoadingSheetSKU = "VanLoadingSheetSKU"
 export const VanLoadingPartyWiseInvoice = "VanLoadingPartyWiseInvoice"
-
 export const Receipt = "Receipt"
 export const Credit = "Credit"
 export const PartyLedger = "PartyLedger"
+export const Return = "Return"
 
 
 const generateReport = (resp) => {
@@ -43,7 +43,6 @@ const generateReport = (resp) => {
         case VanLoadingPartyWiseInvoice:
             VanLoadingSheet(resp.Data)
             break;
-      
         case Receipt:
             Receipts(resp.Data)
             break;
@@ -53,7 +52,9 @@ const generateReport = (resp) => {
         case PartyLedger:
             PartyLedgerReport(resp.Data)
             break;
-
+        case Return:
+            ReturnReport(resp.Data)
+            break;
         default:
             break;
     }

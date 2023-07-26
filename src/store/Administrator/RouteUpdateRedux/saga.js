@@ -7,9 +7,9 @@ import { POST_ROUTE_UPDATE, ROUTE_UPDATE_LIST } from "./actionType";
 //Routes List Api Using Post Method
 function* RouteUpdate_List_GenratorFunction() {
 
-    const filters = loginJsonBody() // Only PartyID is Required
+    const filters = JSON.stringify(loginJsonBody()); // Only PartyID is Required
     try {
-        debugger
+        
         const response = yield call(Route_Update_List_API, filters);
         yield put(RouteUpdateListSuccess(response));
     } catch (error) { yield put(RouteUpdateApiErrorAction()) }

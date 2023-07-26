@@ -49,7 +49,7 @@ import {
 } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
@@ -82,6 +82,7 @@ const Receipts = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
+        retailerDropLoading,
         ReceiptGoButton,
         OpeningBalance,
         pageField,
@@ -91,6 +92,7 @@ const Receipts = (props) => {
         ReceiptType,
         saveBtnloading,
         userAccess } = useSelector((state) => ({
+            retailerDropLoading: state.CommonAPI_Reducer.retailerDropLoading,
             saveBtnloading: state.ReceiptReducer.saveBtnloading,
             postMsg: state.ReceiptReducer.postMsg,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
@@ -394,7 +396,7 @@ const Receipts = (props) => {
     };
 
     function AmountPaid_onChange(event) {
-        
+
         if (IsSystemSetting) {
             onChangeText({ event, state, setState })
         }
@@ -644,7 +646,7 @@ const Receipts = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
-                                            <Select
+                                            <C_Select
                                                 name="Customer"
                                                 isDisabled={(page_Mode === mode.modeSTPsave) || (page_Mode === mode.modeSTPList) ? true : false}
                                                 value={values.Customer}
@@ -654,6 +656,7 @@ const Receipts = (props) => {
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 classNamePrefix="dropdown"
+                                                isLoading={retailerDropLoading}
                                                 options={customerOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });

@@ -170,6 +170,8 @@ export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping';
 export const DISCOUNT_MASTER_SAVE_API = '/DiscountMasterSave'
 export const DISCOUNT_MASTER_GO_BUTTON_API = '/DiscountMaster'
 export const DISCOUNT_MASTER_LIST_API = '/DiscountMasterFilter'
+export const DISCOUNT_PARTY_TYPE_API = '/DiscountPartyType'
+export const DISCOUNT_CUSTOMER_API = '/DiscountCustomer'
 
 //Import Field Map
 export const IMPORT_FIELD_ADD_SAVE = '/ImportField'               //save
@@ -335,6 +337,10 @@ export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOI
 //  Report Api
 export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter Api
 export const LOADINGSHEET_PARTY_WISE_INVOICE = '/LoadingSheetPrint'// Loading sheet Print Api
+export const PURCHASE_RETURN_PRINT = '/PurchaseReturnPrint'// Loading sheet Print Api
+
+
+
 
 // Management Parties API
 export const MANAGEMENT_PARTIES = '/ManagementEmpParties'
@@ -381,6 +387,8 @@ export const PARTY_LEDGER = '/PartyLedgerReport'
 
 // Stock Report
 export const STOCK_REPORT = '/PartyLiveStock'
+export const STOCK_PROCESSING = '/StockProcessing'
+export const STOCK_REPORT_1 = '/StockReport'
 
 // Generic Sale Report
 export const GENERIC_SALE_REPORT = '/GenericSaleReport'

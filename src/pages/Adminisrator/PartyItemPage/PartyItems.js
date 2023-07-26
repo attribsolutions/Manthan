@@ -7,7 +7,7 @@ import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from ".
 import { useHistory } from "react-router-dom";
 import { editPartyItemIDSuccess, getpartyItemList, getPartyItemListSuccess, SavePartyItems, SavePartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -48,9 +48,11 @@ const PartyItems = (props) => {
         pageField,
         tableList,
         saveBtnloading,
+        partyItemListLoading,
         userAccess,
     } = useSelector((state) => ({
         saveBtnloading: state.PartyItemsReducer.saveBtnloading,
+        partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         postMsg: state.PartyItemsReducer.postMsg,
         tableList: state.PartyItemsReducer.partyItem,
         supplier: state.PartyMasterReducer.partyList,
@@ -330,6 +332,7 @@ const PartyItems = (props) => {
 
     return (
         <>
+            <PageLoadingSpinner isLoading={(partyItemListLoading || !pageField)} />
             {userPageAccessState && (
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>

@@ -9,11 +9,6 @@ import LayoutSaga from "./layout/saga"
 import ChangePasswordSaga from "./auth/changepassword/saga"
 
 
-// {/*   *********************** spinner ***********************
-import Spinner_Saga from "./Utilites/Spinner/saga"
-
-//    *********************** Alert ***********************
-// import Alert_Saga from "./Utilites/CustomAlertRedux/saga"
 import CommonPageField_Saga from "./Utilites/PageFiled/saga"
 import pdfReport_Saga from "./Utilites/PdfReport/saga"
 
@@ -107,10 +102,10 @@ export default function* rootSaga() {
     fork(ForgetSaga),
     fork(ProfileSaga),
     fork(LayoutSaga),
-    fork(Spinner_Saga),
+   
     fork(CommonPageField_Saga),
     fork(pdfReport_Saga),
-    // fork(Alert_Saga),
+  
     fork(SupplierSaga),
     fork(ModulesSaga),
     fork(CompanySaga),

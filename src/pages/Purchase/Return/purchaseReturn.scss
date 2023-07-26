@@ -1,0 +1,39 @@
+.sales-return-row {
+    position: relative;
+    table-layout: fixed;
+    width: 15%;
+    position: relative;
+}
+
+.sales-return-Image-row {
+    position: relative;
+    table-layout: fixed;
+    width: 10%;
+    position: relative;
+}
+
+.sales-discount-row {
+    position: relative;
+    table-layout: fixed;
+    min-width: 15%;
+    position: relative;
+
+    .parent {
+        display: flex;
+        min-width: 15%;
+    }
+
+    .child {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    .child:first-child {
+        flex-basis: 30%;
+    }
+
+    .child:last-child {
+        flex-basis: 70%;
+    }
+}
+

@@ -21,7 +21,7 @@ import {
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     CommonConsole,
@@ -55,10 +55,12 @@ const BankAssign = (props) => {
 
     //Access redux store bankTableList /  'save_ModuleSuccess' action data
     const {
+        loading,
         postMsg,
         bankTableList,
         saveBtnloading,
         userAccess } = useSelector((state) => ({
+            loading: state.BankAssignReducer.loading,
             saveBtnloading: state.BankAssignReducer.saveBtnloading,
             postMsg: state.BankAssignReducer.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -325,6 +327,7 @@ const BankAssign = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
+                <PageLoadingSpinner isLoading={loading} />
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>

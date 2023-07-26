@@ -14,7 +14,7 @@ function* Post_EmployeeType_GneratorFunction({ config }) {           // post api
 }
 
 function* Get_EmployeeTypeList_GenratorFunction() {
-  const filters = loginJsonBody()   // only required CompanyID                 // get api
+  const filters = JSON.stringify(loginJsonBody())   // only required CompanyID                 // get api
   try {
     const response = yield call(get_EmployeeType_List_Api, filters);
     yield put(getEmployeeTypelistSuccess(response.Data));

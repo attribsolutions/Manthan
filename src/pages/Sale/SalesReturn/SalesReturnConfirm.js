@@ -24,7 +24,7 @@ const ViewDetails_Modal = () => {
     }))
 
     useEffect(() => {
-        debugger
+
         try {
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
@@ -63,7 +63,7 @@ const ViewDetails_Modal = () => {
             const tableItemArray = []
             let inValideUnits = []
             tableArray.ReturnItems.forEach(index => {
-                debugger
+
                 const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
                 const Comment = index.ApproveComment ? index.ApproveComment : null
 
@@ -72,20 +72,56 @@ const ViewDetails_Modal = () => {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
                 } else if (Number(Quantity) > 0) {
                     const ReturnItems = {
-                        id: index.id,
-                        Item: index.Item,
-                        Unit: index.Unit,
-                        ApprovedQuantity: Quantity,
-                        ApproveComment: Comment,
-                        Approvedby: loginUserID()
+                        // id: index.id,
+                        // Item: index.Item,
+                        // Unit: index.Unit,
+                        // ApprovedQuantity: Quantity,
+                        // ApproveComment: Comment,
+                        // Approvedby: loginUserID()
+
+                        "id": index.id,
+                        "Item": index.Item,
+                        "Unit": 1,
+                        "ApprovedQuantity": Quantity,
+                        "ApproveComment": Comment,
+                        "Approvedby": loginUserID(),
+                        "ItemComment": index.ItemComment,
+                        "Quantity": index.Quantity,
+                        "BaseUnitQuantity": index.BaseUnitQuantity,
+                        "MRPValue": index.MRPValue,
+                        "Rate": index.Rate,
+                        "BasicAmount": index.BasicAmount,
+                        "TaxType": index.TaxType,
+                        "GSTPercentage": index.GSTPercentage,
+                        "GSTAmount": index.GSTAmount,
+                        "Amount": index.Amount,
+                        "CGST": index.CGST,
+                        "SGST": index.SGST,
+                        "IGST": index.IGST,
+                        "CGSTPercentage": index.CGSTPercentage,
+                        "SGSTPercentage": index.SGSTPercentage,
+                        "IGSTPercentage": index.IGSTPercentage,
+                        "BatchDate": index.BatchDate,
+                        "BatchCode": index.BatchCode,
+                        "CreatedOn": index.CreatedOn,
+                        "GST": index.GST,
+                        "ItemName": index.ItemName,
+                        "MRP": index.MRP,
+                        "PurchaseReturn": index.PurchaseReturn,
+                        "UnitName": index.UnitName,
+                        "ItemReasonID": index.ItemReasonID,
+                        "ItemReason": index.ItemReason,
+                        "Comment": index.Comment,
+
                     }
                     tableItemArray.push(ReturnItems)
                 }
             })
 
             const jsonBody = JSON.stringify({
-                ReturnID: viewData_redux.Data[0].ReturnID,
-                ReturnItem: tableItemArray
+                "ReturnID": viewData_redux.Data[0].ReturnID,
+                "UserID": loginUserID(),
+                "ReturnItem": tableItemArray
             });
 
             if (inValideUnits.length > 0) {

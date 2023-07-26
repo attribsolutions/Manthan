@@ -8,7 +8,7 @@ import {
 
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, Retailer_List, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, Retailer_List, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -31,9 +31,10 @@ import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/ac
 import PriceDropOptions from "../PartyMaster/MasterAdd/FirstTab/PriceDropOptions";
 import { priceListByPartyAction } from "../../../store/Administrator/PriceList/action";
 import Select from "react-select";
-import { goBtnDiscountAddActionSuccess, saveDiscountAction, saveDiscountActionSuccess } from "../../../store/Administrator/DiscountRedux/actions";
+import { DiscountCustomer_Dropdown_Action, DiscountCustomer_Dropdown_Success, DiscountPartyType_Dropdown_Action, DiscountPartyType_Dropdown_Success, goBtnDiscountAddActionSuccess, saveDiscountAction, saveDiscountActionSuccess } from "../../../store/Administrator/DiscountRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { goBtnDiscountAddAction } from "../../../store/Administrator/DiscountRedux/actions";
+import { priceListByPartyActionSuccess } from "../../../store/Administrator/PriceList/action";
 
 const DiscountMaster = (props) => {
 
@@ -66,32 +67,34 @@ const DiscountMaster = (props) => {
 
     const {
         gobtnDiscount_redux,
-        Partytype,
+        partyType_redux,
         priceListByPartyType,
+        postMsg,
         customer,
         pageField,
         userAccess,
         goBtnLoading,
         saveBtnloading,
-       
-        postMsg
+        partyTypeDropDownLoading,
+        customerDropDownLoading,
     } = useSelector((state) => ({
         gobtnDiscount_redux: state.DiscountReducer.gobtnDiscount_redux,
         postMsg: state.DiscountReducer.postMsg,
-        Partytype: state.PartyTypeReducer.ListData,
+        partyType_redux: state.DiscountReducer.partyType,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
-        customer: state.CommonAPI_Reducer.RetailerList,
+        customer: state.DiscountReducer.customer,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         goBtnLoading: state.DiscountReducer.goBtnLoading,
         saveBtnloading: state.DiscountReducer.saveBtnloading,
-      
+        partyTypeDropDownLoading: state.DiscountReducer.partyTypeDropDownLoading,
+        customerDropDownLoading: state.DiscountReducer.customerDropDownLoading
     }));
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.DISCOUNT_MASTER))
-        dispatch(getPartyTypelist())
+        dispatch(DiscountPartyType_Dropdown_Action())
         dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
 
         const jsonBody = JSON.stringify({
@@ -100,33 +103,15 @@ const DiscountMaster = (props) => {
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
-    }, []);
-
-    useEffect(() => {
-
-        if (gobtnDiscount_redux.Status === true) {
-
-            const { Data = [] } = gobtnDiscount_redux;
-            const UpdatedTableData = Data.map((item, index) => {
-                return {
-                    ...item, tableId: index + 1,
-                    preDiscountValue: item.Discount,
-                };
-            });
-
-            setTableData(UpdatedTableData);
-            dispatch(goBtnDiscountAddActionSuccess([]))
+        
+        return () => {
+            dispatch(DiscountCustomer_Dropdown_Success([]));
+            dispatch(commonPageFieldSuccess(null));
+            dispatch(GetVenderSupplierCustomerSuccess([]));
+            dispatch(DiscountPartyType_Dropdown_Success([]));
+            dispatch(priceListByPartyActionSuccess([]));
         }
-    }, [gobtnDiscount_redux]);
-
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableData]);
-
-    const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
+    }, []);
 
     useEffect(() => {// userAccess useEffect
         let userAcc = null;
@@ -143,12 +128,21 @@ const DiscountMaster = (props) => {
         };
     }, [userAccess])
 
+    const location = { ...history.location }
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableData]);
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -183,7 +177,39 @@ const DiscountMaster = (props) => {
         }
     }, [postMsg])
 
-    const PartyTypeOptions = Partytype.map((i) => ({
+    useEffect(() => {
+
+        if (gobtnDiscount_redux.Status === true) {
+            const { Data = [] } = gobtnDiscount_redux;
+            const UpdatedTableData = Data.map((item, index) => {
+                return {
+                    ...item, tableId: index + 1,
+                    preDiscountValue: item.Discount,
+                };
+            });
+            setTableData(UpdatedTableData);
+            dispatch(goBtnDiscountAddActionSuccess([]))
+        }
+    }, [gobtnDiscount_redux]);
+
+    useEffect(() => {
+        if (priceListSelect.value > 0) {
+            const config = {
+                PartyID: _cfunc.loginPartyID(),
+                PartyTypeID: values.Partytype.value,
+                PricelistID: priceListSelect.value
+            }
+            dispatch(DiscountCustomer_Dropdown_Action(config))
+        }
+        setState((i) => {
+            const a = { ...i }
+            a.values.CustomerName = { value: "", label: "All" };
+            a.hasValid.CustomerName.valid = false
+            return a
+        })
+    }, [priceListSelect]);
+
+    const PartyTypeOptions = partyType_redux.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
@@ -293,7 +319,7 @@ const DiscountMaster = (props) => {
                 discountTypeAll: discountTypeAll,
                 changeAllDiscount: changeAllDiscount,
                 forceReload: forceReload,
-                tableList: tableData
+                tableList: tableData,
             },
             headerFormatter: () => {
                 return (
@@ -343,7 +369,7 @@ const DiscountMaster = (props) => {
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
 
-                let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+                let { tableList, discountValueAll, discountTypeAll, showMessage } = formatExtraData;
 
                 if (formatExtraData.changeAllDiscount) {
                     index1["Discount"] = discountValueAll;
@@ -381,11 +407,11 @@ const DiscountMaster = (props) => {
                                         setChangeAllDiscount(false);
                                     }}
                                 />
-                                {((index1.Discount === null) && (index1.RecordCount === 1)) &&
+                                {/* {((index1.Discount === null) && (index1.RecordCount === 1)) &&
                                     <span className="text-danger f-8">
                                         <small>This item is already discounted...!</small>
                                     </span>
-                                }
+                                } */}
                             </div>
 
                         </div>
@@ -421,6 +447,7 @@ const DiscountMaster = (props) => {
         const hasNone = document.getElementById("price-drop").style;
 
         if ((priceListByPartyType.length > 0)) {
+
             if ((hasNone.display === "none") || (hasNone.display === "")) {
                 hasNone.display = "block";
             } else {
@@ -430,9 +457,14 @@ const DiscountMaster = (props) => {
     };
 
     function partyTypeOnChange(hasSelect, evn) {
-
         onChangeSelect({ hasSelect, evn, state, setState })
         setPriceListSelect({ label: "", value: "" })
+        setState((i) => {
+            const a = { ...i }
+            a.values.CustomerName = { value: "", label: "All" };
+            a.hasValid.CustomerName.valid = false
+            return a
+        })
         dispatch(priceListByPartyAction(hasSelect.value))
     }
 
@@ -453,8 +485,6 @@ const DiscountMaster = (props) => {
             });
             return;
         }
-
-        // const btnId = `gobtn-${url.DISCOUNT_MASTER}`
 
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
@@ -491,7 +521,7 @@ const DiscountMaster = (props) => {
                 return filteredDiscountTable;
             }, []);
 
-            debugger
+
             const Find = filteredDiscounts.filter((index) => {   // condition for margin save without 0
                 return ((index.Discount > 0) && (index.id === null))
             })
@@ -573,17 +603,13 @@ const DiscountMaster = (props) => {
                                                 isDisabled={(tableData.length > 0) && true}
                                                 isSearchable={true}
                                                 options={PartyTypeOptions}
+                                                isLoading={partyTypeDropDownLoading}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 onChange={partyTypeOnChange}
-
                                             />
-                                            {isError.Partytype.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Partytype}</small></span>
-                                            )}
                                         </Col>
-
                                     </FormGroup>
                                 </Col >
                                 <Col sm="6">
@@ -622,6 +648,7 @@ const DiscountMaster = (props) => {
                                                 value={values.CustomerName}
                                                 isDisabled={(tableData.length > 0) && true}
                                                 isSearchable={true}
+                                                isLoading={customerDropDownLoading}
                                                 options={customerOptions}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
@@ -630,11 +657,8 @@ const DiscountMaster = (props) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                 }
                                                 }
-
                                             />
-                                            {isError.CustomerName.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.CustomerName}</small></span>
-                                            )}
+
                                         </Col>
                                     </FormGroup>
                                 </Col >

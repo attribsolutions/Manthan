@@ -89,9 +89,8 @@ function* saveRoleAccessAdd_GenFunc({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
-
 function* getList_RoleAccessList_GenFunc() { // get api 
-  const JsonBody = loginJsonBody();
+  const JsonBody = JSON.stringify(loginJsonBody());
   try {
     const response = yield call(RoleAccessAdd_List_Api, JsonBody);
     const newResp = response.Data.map((i, k) => {

@@ -163,16 +163,18 @@ import InvoiceConfiguration from "../pages/Adminisrator/InvoiceConfiguration/Inv
 import StockEntry from "../pages/Inventory/StockEntry/StockEntry";
 import PartyLedger from "../Reports/PratyLedger/Partyledger";
 import StockReport from "../Reports/StockReport/StockReport";
-import PurchaseReturnMode3 from "../pages/Purchase/PurchaseReturnMode_3/PurchaseReturnMode3";
+import PurchaseReturnMode3 from "../pages/Purchase/Return/PurchaseReturnMode3";
 import DiscountMaster from "../pages/Adminisrator/Discount/DiscountMaster";
 import GenericSaleReport from "../Reports/GenericSaleReport/GenericSaleReport";
 import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 import DiscountList from "../pages/Adminisrator/Discount/DiscountList";
+import PurchaseReturn from "../pages/Purchase/Return/PurchaseReturn";
+import StockReport_1 from "../Reports/StockReport/StockReport_1";
 // import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
- 
+
   { path: path.DASHBORD, component: Dashboard },
 
   { path: path.DASHBORD_1, component: Dashboard_1 },
@@ -197,7 +199,7 @@ const userRoutes = [
 
   { path: path.ROLE, component: RoleMaster },
   { path: path.ROLE_lIST, component: RoleList },
-  
+
   { path: path.COMPANYGROUP, component: CompanyGroupMaster },
   { path: path.COMPANYGROUP_lIST, component: CompanyGroupList },
 
@@ -301,7 +303,7 @@ const userRoutes = [
   { path: path.INVOICE_CONFIGURATION, component: InvoiceConfiguration },
 
   { path: path.DISCOUNT_MASTER, component: DiscountMaster },
-  { path: path.DISCOUNT_LIST, component: DiscountList},
+  { path: path.DISCOUNT_LIST, component: DiscountList },
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
@@ -328,7 +330,7 @@ const userRoutes = [
   { path: path.ORDER_4, component: Order },
   { path: path.ORDER_LIST_4, component: OrderList },
 
-  { path: path.PURCHASE_RETURN, component: SalesReturn },
+  { path: path.PURCHASE_RETURN, component: PurchaseReturn },
   { path: path.PURCHASE_RETURN_LIST, component: SalesReturnList },
   { path: path.PURCHASE_RETURN_MODE_3, component: PurchaseReturnMode3 },
 
@@ -362,7 +364,7 @@ const userRoutes = [
 
   { path: path.SALES_RETURN, component: SalesReturn },
   { path: path.SALES_RETURN_LIST, component: SalesReturnList },
-  
+
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: Order },
   { path: path.IB_ORDER_PO_LIST, component: OrderList },
@@ -404,9 +406,11 @@ const userRoutes = [
 
   { path: path.STOCK_REPORT, component: StockReport },
 
+  { path: path.STOCK_REPORT_1, component: StockReport_1 },
+
   { path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },
 
-   { path: path.RETAILER_DATA_REPORT, component: RetailerDataReport },
+  { path: path.RETAILER_DATA_REPORT, component: RetailerDataReport },
 
   { path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
 

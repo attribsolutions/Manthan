@@ -177,12 +177,7 @@ export const ReportHederRows = (doc, data) => {
 
     var reportArray = [
         ["Address:", `${Address}`,],
-
-        // ["Routes:", `${Routes}                   DriverName:${  DriverName}                      Vehicle No:${VehicleNo}     `],
         ["Routes:", `${Routes} `, " DriverName:", `${DriverName}`, "Vehicle No:", `${VehicleNo}`],
-
-
-        //
 
         // [`FSSAI :f23dfxxxxxwe55`, ,`To Date:      ${data.Todate}`  ],
         // [,,`INR NO :${data.FullInvoiceNumber}`]

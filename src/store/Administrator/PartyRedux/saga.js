@@ -36,11 +36,16 @@ import {
   UPDATE_PARTY_ID,
   PARTY_ADDRESS_DELETE_ID,
 } from "./actionTypes";
+import * as url from "../../../routes/route_url";
 
-function* Get_Party_GenFun() {   // Only CompanyID is Required
+function* Get_Party_GenFun({ subPageMode }) {   // Only CompanyID is Required
+  
+  var IsRetailer = subPageMode === url.RETAILER_LIST ? 1 : 0
+
+  var jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ IsRetailer: IsRetailer } });
 
   try {
-    const response = yield call(Party_Master_Get_API, loginJsonBody());
+    const response = yield call(Party_Master_Get_API, jsonBody);
     function address(arr) {
       let result = ''
       const ind = arr.PartyAddress.find((index) => {

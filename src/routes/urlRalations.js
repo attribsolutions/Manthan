@@ -230,6 +230,8 @@ export const SapLedger = url.SAP_LEDGER
 
 export const StockReport = url.STOCK_REPORT
 
+export const Stock_Report_1 = url.STOCK_REPORT_1
+
 //**************************** Reports ***********************************//
 
 export const OrderSummaryReport = url.ORDER_SUMMARY_REPORT

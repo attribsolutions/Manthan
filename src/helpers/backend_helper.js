@@ -363,7 +363,8 @@ export const Discount_Delete_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MAST
 export const Discount_List_Api = (filterBody) => post(url.DISCOUNT_MASTER_LIST_API, filterBody)//get api
 export const Discount_Edit_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_ITEM, jsonBody, btnId)// post api
 export const Discount_Update_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_UNIT, jsonBody, btnId)// post api
-
+export const DiscountPartyType_Dropdown_API = ({ PartyID }) => get(`${url.DISCOUNT_PARTY_TYPE_API}/${PartyID}`) // Party Type Drodown API
+export const DiscountCustomer_Dropdown_API = ({ PartyID, PartyTypeID, PricelistID }) => get(`${url.DISCOUNT_CUSTOMER_API}/${PartyID}/${PartyTypeID}/${PricelistID}`) // Party Type Drodown API
 
 // ImportMaster_Map API
 export const ImportMaster_Map_Customer_GoButton_API = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_CUSTOMER}/${partyId}`, btnId)//get api
@@ -604,6 +605,10 @@ export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_
 export const SalesReturn_SingleGet_API = ({ btnId, editId }) => get(`${url.SALES_RETURN_ITEM}/${editId}`, btnId)// Sales Return Delete API
 export const Send_To_Superstockiest_button_post_API = ({ jsonBody, btnId }) => post(url.SEND_TO_SUPERSTOCKIEST_POST_API, jsonBody, btnId)// update api
 export const Return_Approve_API = ({ jsonBody, btnId }) => post(url.RETURN_ITEM_APPROVE_AIP, jsonBody, btnId)// update api
+export const ReturnPrint_API = ({ editId }) => get(`${url.PURCHASE_RETURN_PRINT}/${editId}`)//dropdown api
+
+
+
 
 
 // Credit Debit 
@@ -638,6 +643,8 @@ export const StockEntry_Post_API = ({ jsonBody, btnId }) => post(url.STOCK_ENTRY
 
 //Stock Report
 export const StockReport_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REPORT, jsonBody, btnId)//Go button api
+export const StockProcessing_API = ({ jsonBody, btnId }) => post(url.STOCK_PROCESSING, jsonBody, btnId)//Go button api
+export const StockReport_1_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REPORT_1, jsonBody, btnId)//Go button api
 
 //Generic Sale Report
 export const GenericSale_GoBtn_API = ({ jsonBody, btnId }) => post(url.GENERIC_SALE_REPORT, jsonBody, btnId)//Go button api

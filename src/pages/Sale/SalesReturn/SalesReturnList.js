@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     commonPageFieldList,
-    commonPageFieldListSuccess
+    commonPageFieldListSuccess,
+    getpdfReportdata
 } from "../../../store/actions";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
@@ -18,6 +19,9 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import SalesReturnView_Modal from "./SalesReturnConfirm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as report from '../../../Reports/ReportIndex'
+import { ReturnPrint_API, SalesReturn_SingleGet_API } from "../../../helpers/backend_helper";
+
 
 const SalesReturnList = () => {
 
@@ -42,7 +46,7 @@ const SalesReturnList = () => {
         (state) => ({
             loading: state.SalesReturnReducer.loading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
-            listBtnLoading: state.SalesReturnReducer.listBtnLoading,
+            listBtnLoading: (state.SalesReturnReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
             tableList: state.SalesReturnReducer.salesReturnList,
             sendToSSbtnTableData: state.SalesReturnReducer.sendToSSbtnTableData,
             deleteMsg: state.SalesReturnReducer.deleteMsg,
@@ -191,6 +195,11 @@ const SalesReturnList = () => {
         dispatch(confirm_SalesReturn_Id(config))
     }
 
+    function downBtnFunc(config) {
+        config["ReportType"] = report.Return;
+        dispatch(getpdfReportdata(ReturnPrint_API, config))
+    }
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -262,8 +271,8 @@ const SalesReturnList = () => {
             return
         }
         let idString = ischeck.map(obj => obj.id).join(',')
-        let jsonBody = { ReturnItemID: idString }
-        dispatch(post_Send_to_superStockiest_Id({ jsonBody }))
+        let jsonBody = JSON.stringify({ PartyID: _cfunc.loginPartyID(), ReturnID: idString })
+        dispatch(post_Send_to_superStockiest_Id({ jsonBody, ReturnID: idString }))
     }
 
     return (
@@ -282,6 +291,7 @@ const SalesReturnList = () => {
                             pageMode={pageMode}
                             viewApprovalBtnFunc={viewApprovalBtnFunc}
                             HeaderContent={HeaderContent}
+                            downBtnFunc={downBtnFunc}
                             goButnFunc={goButtonHandler}
                             ButtonMsgLable={otherState.buttonMsgLable}
                             deleteName={"FullReturnNumber"}

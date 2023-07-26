@@ -84,11 +84,12 @@ function* addButton_saleReturn_GenFunc({ config }) {
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
 
-function* sendToSSButton_GenFunc({ config }) {  // Update Order by subPageMode
-    const { ReturnItemID } = config.jsonBody
+function* sendToSSButton_GenFunc({ config }) { // Update Order by subPageMode
+    
+    const { ReturnID } = config
     try {
         const response = yield call(apiCall.Send_To_Superstockiest_button_post_API, config);
-        response["ReturnItemID"] = ReturnItemID
+        response["ReturnItemID"] = ReturnID
         yield put(action.post_Send_to_superStockiest_Id_Succcess(response))
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }

@@ -107,7 +107,6 @@ const Order = (props) => {
     const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
     const [goBtnDissable, setGoBtnDissable] = useState(false)
 
-    const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
     const [orderTypeSelect, setorderTypeSelect] = useState('');
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
@@ -734,6 +733,7 @@ const Order = (props) => {
                                         defaultValue={discountTypeAll}
                                         classNamePrefix="select2-selection"
                                         options={discountDropOption}
+                                        isDisabled={(subPageMode === url.ORDER_2)}
                                         style={{ textAlign: "right" }}
                                         onChange={(e) => {
                                             setChangeAllDiscount(true);
@@ -749,6 +749,7 @@ const Order = (props) => {
                                         style={{ textAlign: "right" }}
                                         cpattern={decimalRegx}
                                         value={discountValueAll}
+                                        disabled={(subPageMode === url.ORDER_2)}
                                         onChange={(e) => {
                                             let e_val = Number(e.target.value);
 
@@ -800,6 +801,7 @@ const Order = (props) => {
                                         classNamePrefix="select2-selection"
                                         key={`DicountType_${key}-${index1.id}`}
                                         value={defaultDiscountTypelabel}
+                                        isDisabled={(subPageMode === url.ORDER_2)}
                                         options={discountDropOption}
                                         onChange={(e) => {
                                             setChangeAllDiscount(false);
@@ -824,6 +826,7 @@ const Order = (props) => {
                                         style={{ textAlign: "right" }}
                                         type="text"
                                         value={index1.Discount}
+                                        disabled={(subPageMode === url.ORDER_2)}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
 
@@ -1530,7 +1533,7 @@ const Order = (props) => {
                             </div>
 
                             {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
-                                <div className="row  ">
+                                <div className="row mt-2 ">
 
                                     <div className="col col-6">                             {/* Billing Address */}
                                         <FormGroup className="row  " >
@@ -1647,7 +1650,7 @@ const Order = (props) => {
                                             <BootstrapTable
                                                 keyField={"Item_id"}
                                                 id="table_Arrow"
-                                                defaultSorted={defaultSorted}
+                                                defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
                                                 classes={"table  table-bordered table-hover "}
                                                 noDataIndication={
                                                     <div className="text-danger text-center table-cursor-pointer">

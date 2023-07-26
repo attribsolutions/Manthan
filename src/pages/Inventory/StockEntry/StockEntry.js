@@ -70,7 +70,7 @@ const StockEntry = (props) => {
         const page_Id = pageId.STOCK_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartyItemList(_cfunc.loginJsonBody()))
+        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())))
     }, []);
 
     const location = { ...history.location }

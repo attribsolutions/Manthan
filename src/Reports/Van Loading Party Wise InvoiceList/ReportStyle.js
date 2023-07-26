@@ -67,7 +67,7 @@ export const reportHeder1 = (doc, data) => {
         },
 
         margin: {
-            // top: 20, left: 35, right: 35,// bottom:100 /
+            left: 30,
         },
         showHead: 'always',
         theme: 'plain',
@@ -101,7 +101,7 @@ export const reportHeder1 = (doc, data) => {
             },
             3: {
                 columnWidth: 140,
-                halign: 'right',
+                halign: 'left',
             },
             4: {
                 columnWidth: 60,
@@ -109,7 +109,7 @@ export const reportHeder1 = (doc, data) => {
             },
             5: {
                 columnWidth: 120,
-                halign: 'right',
+                halign: 'left',
             },
 
 
