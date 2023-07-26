@@ -1,10 +1,9 @@
 import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
-    "Item Name",
     "Group Name",
-    "Group Type Name",
     "Sub Group Name",
+    "Item Name",
     "Opening balance",
     "GRN Inward",
     "SalesReturn ",
@@ -12,6 +11,7 @@ export const columns = [
     "Purchase Return",
     "Closing balance",
     "Actual Stock",
+    "Unit"
 
 ];
 
@@ -36,10 +36,9 @@ export const Rows = (data) => {
 
     StockDetails.forEach((element, key) => {
         const tableitemRow = [
-            `${element.ItemName}`,
             `${element.GroupName}`,
-            `${element.GroupTypeName}`,
             `${element.SubGroupName}`,
+            `${element.ItemName}`,
             `${numberWithCommas(Number(element.OpeningBalance).toFixed(2))}`,
             `${numberWithCommas(Number(element.GRNInward).toFixed(2))}`,
             `${numberWithCommas(Number(element.SalesReturn).toFixed(2))}`,
@@ -47,6 +46,8 @@ export const Rows = (data) => {
             `${numberWithCommas(Number(element.PurchaseReturn).toFixed(2))}`,
             `${numberWithCommas(Number(element.ClosingBalance).toFixed(2))}`,
             `${element.ActualStock}`,
+            `${element.UnitName}`,
+
         ];
 
         function totalLots() {
@@ -89,12 +90,7 @@ export const Rows = (data) => {
     })
     return returnArr;
 }
-export const ReportFotterColumns = [
-    "SGST",
-    "CGST", "Quantity",
-    "GST % ",
-    "TaxbleAmt.", "IGST", "Total Amt"
-];
+
 
 export const ReportHederRows = (data) => {
     var reportArray = [
