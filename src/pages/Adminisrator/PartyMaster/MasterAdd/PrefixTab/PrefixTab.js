@@ -17,6 +17,7 @@ const PrefixTab = forwardRef(({ subPageMode }, ref) => {
         DemandPrefix: '',
         IBChallanPrefix: '',
         IBInwardPrefix: '',
+        PurchaseReturnprefix:'',
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -140,93 +141,120 @@ const PrefixTab = forwardRef(({ subPageMode }, ref) => {
                         )}
                     </FormGroup>
 
+                    {/* {!(subPageMode === url.PARTY_SELF_EDIT) ?
+                        <FormGroup className="mb-3">
+                            <Label className='col col-4'>{fieldLabel.WorkOrderPrefix} </Label>
+                            <Col sm={4}>
+                                <Input
+                                    name="WorkOrderPrefix"
+                                    value={values.WorkOrderPrefix}
+                                    type="text"
+                                    className={isError.WorkOrderPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                    placeholder="Please Enter WorkOrder Prefix"
+                                    autoComplete='off'
+                                    onChange={(event) => {
+                                        onChangeText({ event, state, setState })
+                                    }}
+                                />
+                            </Col>
+
+                            {isError.WorkOrderPrefix.length > 0 && (
+                                <span className="invalid-feedback">{isError.WorkOrderPrefix}</span>
+                            )}
+                        </FormGroup>
+                        : null
+                    } */}
+
+                    {/* {!(subPageMode === url.PARTY_SELF_EDIT) ?
+                        <FormGroup className="mb-3">
+                            <Label className='col col-4'>{fieldLabel.MaterialIssuePrefix} </Label>
+                            <Col sm={4}>
+                                <Input
+                                    name="MaterialIssuePrefix"
+                                    value={values.MaterialIssuePrefix}
+                                    type="text"
+                                    className={isError.MaterialIssuePrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                    placeholder="Please Enter Material Issue Prefix"
+                                    autoComplete='off'
+                                    onChange={(event) => {
+                                        onChangeText({ event, state, setState })
+                                    }}
+                                />
+                            </Col>
+
+                            {isError.MaterialIssuePrefix.length > 0 && (
+                                <span className="invalid-feedback">{isError.MaterialIssuePrefix}</span>
+                            )}
+                        </FormGroup>
+                        : null
+                    } */}
+
+                    {/* {!(subPageMode === url.PARTY_SELF_EDIT) ?
+                        <FormGroup className="mb-3">
+                            <Label className='col col-4'>{fieldLabel.DemandPrefix} </Label>
+                            <Col sm={4}>
+                                <Input
+                                    name="DemandPrefix"
+                                    value={values.DemandPrefix}
+                                    type="text"
+                                    className={isError.DemandPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                    placeholder="Please Enter Demand Prefix"
+                                    autoComplete='off'
+                                    onChange={(event) => {
+                                        onChangeText({ event, state, setState })
+                                    }}
+                                />
+                            </Col>
+
+                            {isError.DemandPrefix.length > 0 && (
+                                <span className="invalid-feedback">{isError.DemandPrefix}</span>
+                            )}
+                        </FormGroup>
+                        : null
+                    } */}
+
+                    {/* {!(subPageMode === url.PARTY_SELF_EDIT) ?
+                        <FormGroup className="mb-3">
+                            <Label className='col col-4'>{fieldLabel.ChallanPrefix} </Label>
+                            <Col sm={4}>
+                                <Input
+                                    name="ChallanPrefix"
+                                    value={values.ChallanPrefix}
+                                    type="text"
+                                    className={isError.ChallanPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                    placeholder="Please Enter Challan Prefix"
+                                    autoComplete='off'
+                                    onChange={(event) => {
+                                        onChangeText({ event, state, setState })
+                                    }}
+                                />
+                            </Col>
+                            {isError.ChallanPrefix.length > 0 && (
+                                <span className="invalid-feedback">{isError.ChallanPrefix}</span>
+                            )}
+                        </FormGroup>
+                        : null
+                    } */}
 
                     <FormGroup className="mb-3">
-                        <Label className='col col-4'>{fieldLabel.WorkOrderPrefix} </Label>
+                        <Label className='col col-4'>{fieldLabel.PurchaseReturnprefix} </Label>
                         <Col sm={4}>
                             <Input
-                                name="WorkOrderPrefix"
-                                value={values.WorkOrderPrefix}
+                                name="PurchaseReturnprefix"
+                                value={values.PurchaseReturnprefix}
                                 type="text"
-                                className={isError.WorkOrderPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                placeholder="Please Enter WorkOrder Prefix"
+                                className={isError.PurchaseReturnprefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Purchase Return prefix"
                                 autoComplete='off'
                                 onChange={(event) => {
                                     onChangeText({ event, state, setState })
                                 }}
                             />
                         </Col>
-
-                        {isError.WorkOrderPrefix.length > 0 && (
-                            <span className="invalid-feedback">{isError.WorkOrderPrefix}</span>
+                        {isError.PurchaseReturnprefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.PurchaseReturnprefix}</span>
                         )}
                     </FormGroup>
-
-
-                    <FormGroup className="mb-3">
-                        <Label className='col col-4'>{fieldLabel.MaterialIssuePrefix} </Label>
-                        <Col sm={4}>
-                            <Input
-                                name="MaterialIssuePrefix"
-                                value={values.MaterialIssuePrefix}
-                                type="text"
-                                className={isError.MaterialIssuePrefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                placeholder="Please Enter Material Issue Prefix"
-                                autoComplete='off'
-                                onChange={(event) => {
-                                    onChangeText({ event, state, setState })
-                                }}
-                            />
-                        </Col>
-
-                        {isError.MaterialIssuePrefix.length > 0 && (
-                            <span className="invalid-feedback">{isError.MaterialIssuePrefix}</span>
-                        )}
-                    </FormGroup>
-
-
-                    <FormGroup className="mb-3">
-                        <Label className='col col-4'>{fieldLabel.DemandPrefix} </Label>
-                        <Col sm={4}>
-                            <Input
-                                name="DemandPrefix"
-                                value={values.DemandPrefix}
-                                type="text"
-                                className={isError.DemandPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                placeholder="Please Enter Demand Prefix"
-                                autoComplete='off'
-                                onChange={(event) => {
-                                    onChangeText({ event, state, setState })
-                                }}
-                            />
-                        </Col>
-
-                        {isError.DemandPrefix.length > 0 && (
-                            <span className="invalid-feedback">{isError.DemandPrefix}</span>
-                        )}
-                    </FormGroup>
-
-
-                    <FormGroup className="mb-3">
-                        <Label className='col col-4'>{fieldLabel.ChallanPrefix} </Label>
-                        <Col sm={4}>
-                            <Input
-                                name="ChallanPrefix"
-                                value={values.ChallanPrefix}
-                                type="text"
-                                className={isError.ChallanPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                placeholder="Please Enter Challan Prefix"
-                                autoComplete='off'
-                                onChange={(event) => {
-                                    onChangeText({ event, state, setState })
-                                }}
-                            />
-                        </Col>
-                        {isError.ChallanPrefix.length > 0 && (
-                            <span className="invalid-feedback">{isError.ChallanPrefix}</span>
-                        )}
-                    </FormGroup>
-
 
 
                 </CardBody>

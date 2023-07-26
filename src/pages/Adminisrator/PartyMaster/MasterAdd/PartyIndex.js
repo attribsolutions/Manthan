@@ -217,6 +217,7 @@ const PartyMaster = (props) => {
                             DemandPrefix: prefix.Demandprefix,
                             IBChallanPrefix: prefix.IBChallanprefix,
                             IBInwardPrefix: prefix.IBInwardprefix,
+                            PurchaseReturnprefix: prefix.PurchaseReturnprefix,
                         };
 
                         let editPriceList = (hasEditVal.PriceList) ? {
@@ -451,7 +452,8 @@ const PartyMaster = (props) => {
                         "MaterialIssueprefix": prefixValue.MaterialIssuePrefix,
                         "Demandprefix": prefixValue.DemandPrefix,
                         "IBChallanprefix": prefixValue.IBChallanPrefix,
-                        "IBInwardprefix": prefixValue.IBInwardPrefix
+                        "IBInwardprefix": prefixValue.IBInwardPrefix,
+                        "PurchaseReturnprefix":prefixValue.PurchaseReturnprefix,
                     }
                 ],
 
