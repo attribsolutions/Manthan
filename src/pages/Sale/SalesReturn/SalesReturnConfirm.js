@@ -207,11 +207,9 @@ const ViewDetails_Modal = () => {
             formatter: (value, row, k) => {
                 return (
                     <div>
-
-                        <CInput
+                        <Input
                             key={`ApproveComment-${k}`}
                             id={`ApproveComment-${k}`}
-                            cpattern={onlyTextRegx}
                             defaultValue={row.ApproveComment}
                             autoComplete="off"
                             placeholder="Enter Comment"
