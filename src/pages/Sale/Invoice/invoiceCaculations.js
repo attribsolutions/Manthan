@@ -108,7 +108,7 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
     const systemSetting = loginSystemSetting();
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
     const isTCS_AmtRound = systemSetting.TCSAmountRoundConfiguration === '1';
-    debugger
+    
     // Calculate the sum of the itemTotalAmount in the tableList
     let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
     let TCS_Amount = 0; // Initial TCS Amount

@@ -43,7 +43,7 @@ export const Bankcolumn = [
 ]
 
 export const Rows = (data) => {
-    debugger
+    
     const { ReturnItems = [] } = data
     ReturnItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -180,9 +180,9 @@ export const Rows = (data) => {
 
 
 
-debugger
+
 export const BilledByRow = (data) => {
-    debugger
+    
     var BilledByArray = [
         [`${data.CustomerName}`],
         [`${data.CustomerAddress}`],

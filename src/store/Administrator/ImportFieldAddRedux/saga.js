@@ -33,11 +33,9 @@ function* Save_ImportFieldAdd_GenFun({ config }) {              // Save API
   } catch (error) { CommonConsole(error) }
 }
 
-function* Post_ImportFieldAdd_GenFun(jsonBody) { // getList API
-
+function* Post_ImportFieldAdd_GenFun({jsonBody}) { // getList API
   try {
-
-    const response = yield call(ImportFieldAdd_Post_API, jsonBody.jsonBody);
+    const response = yield call(ImportFieldAdd_Post_API, jsonBody);
     yield put(post_ImportFiledAdd_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }
@@ -71,8 +69,6 @@ function* Get_ImportEXcelType_GenFun({ config }) {
     yield put(get_ImportExcelType_Success(response.Data))
   } catch (error) { CommonConsole(error) }
 };
-
-
 
 function* ImportFieldAdd_Saga() {
   yield takeLatest(SAVE_IMPORT_FIELD_ADD, Save_ImportFieldAdd_GenFun)

@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, delay, put, takeLatest } from "redux-saga/effects";
 import { loginCompanyID } from "../../../components/Common/CommonFunction";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
@@ -13,6 +13,7 @@ function* save_ManagementParties_GenFunc({ config }) {
 
 function* getPartyListGenFunc({ jsonBody }) {                                   // getList API
   try {
+    yield delay(100)
     const response = yield call(apiCall.Go_Button_Post_API, jsonBody);
     response.Data.map((party) => {
       party["selectCheck"] = false
