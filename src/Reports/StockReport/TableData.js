@@ -1,4 +1,5 @@
 import { numberWithCommas } from "../Report_common_function";
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 
 export const columns = [
     "Group Name",
@@ -94,8 +95,8 @@ export const Rows = (data) => {
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [`From Date:  ${data.FromDate}`,],
-        [`To Date:      ${data.ToDate}`],
+        [`From Date:  ${date_dmy_func(data.FromDate)}`,],
+        [`To Date:      ${date_dmy_func(data.ToDate)}`],
     ]
     return reportArray;
 }
