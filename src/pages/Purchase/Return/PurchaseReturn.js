@@ -471,7 +471,7 @@ const PurchaseReturn = (props) => {
             },
             formatter: (cellContent, index1, _key, formatExtraData) => {
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
-                debugger
+                
                 if (formatExtraData.changeAllDiscount) {
                     index1.Discount = discountValueAll;
                     index1.DiscountType = discountTypeAll.value;

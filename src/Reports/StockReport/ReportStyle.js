@@ -84,10 +84,10 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
-    debugger
+    
     var options = {
         didParseCell: (data1) => {
-            debugger
+            
             if (data1.row.cells[0].raw === `Total`) {
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
