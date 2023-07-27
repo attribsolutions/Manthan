@@ -1,24 +1,22 @@
 import MetaTags from "react-meta-tags"
 import React, { useState } from "react"
 import { Row, Col, Container } from "reactstrap"
-
 import { useSelector, useDispatch } from "react-redux"
-
 import { Link, useHistory } from "react-router-dom"
-
-import { divisionDropdownSelectAction, divisionDropdownSelectSuccess, getUserDetailsAction, RoleAccessUpdateSuccess, roleAceessAction, roleAceessActionSuccess } from "../../store/actions"
+import {
+  divisionDropdownSelectAction,
+  divisionDropdownSelectSuccess,
+  RoleAccessUpdateSuccess,
+  roleAceessActionSuccess
+} from "../../store/actions"
 import logo from "../../assets/images/cbm_logo.png"
-
-//Import config
 import CarouselPage from "./CarouselPage"
-import { loginCompanyID } from "../../components/Common/CommonFunction"
 import { useLayoutEffect } from "react"
-import { getpartysetting_API } from "../../store/Administrator/PartySetting/action"
 import { Go_Button } from "../../components/Common/CommonButton"
 import { C_Select } from "../../CustomValidateForm"
-import { commonPartyDrodown } from "../../store/Utilites/PartyDrodown/action"
+import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc"
 
-const SelectDivisionPage = props => {
+const SelectDivisionPage = () => {
   const dispatch = useDispatch()
   const history = useHistory();
 
@@ -73,17 +71,9 @@ const SelectDivisionPage = props => {
       divisionDropdown_redux.forEach(i => {
         if (i.Party_id === null) { i.Party_id = 0 }
       });
-      let value = divisionDropdown_redux[divisionDropdowSelect.value]
-      var employee = value.Employee_id;
-      var party = value.Party_id
-
-      const isPartyNull = value.Party_id === 0;
-
-      localStorage.setItem("roleId", JSON.stringify(value));
-      localStorage.setItem("selectedParty", JSON.stringify((isPartyNull) ? "" : { value: value.Party_id, label: value.PartyName }));
-      dispatch(roleAceessAction(party, employee, loginCompanyID()))
-      dispatch(getpartysetting_API(party, loginCompanyID()))//login party id pass to getpartysetting_API
-      dispatch(commonPartyDrodown())  // Party Dropdown Action 
+      let user = divisionDropdown_redux[divisionDropdowSelect.value];
+      //api call roleAceessAction Api,partysetting Api , Party Dropdown Api and set localstorage roleId ;
+      afterloginOneTimeAPI(user, dispatch);// all common function
     }
 
 
@@ -108,9 +98,6 @@ const SelectDivisionPage = props => {
                     </div>
 
                     <div className="auth-content my-auto">
-                      {/* <div className="mb-3">
-                        <h5 className="text-danger" >Please Select Division...!</h5>
-                      </div> */}
 
                       <div className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
@@ -118,7 +105,6 @@ const SelectDivisionPage = props => {
                       </div>
 
                       <div className="mb-3">
-                        {/* <Label className="form-label font-size-13 "></Label> */}
                         <C_Select
                           value={divisionDropdowSelect}
                           options={divisionDropdown_DropdownOption}

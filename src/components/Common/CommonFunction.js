@@ -170,7 +170,7 @@ export const loginCompanyName = () => { //+++++++++++++++++++++ Session Company 
 };
 
 export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
- 
+
   try {
     return JSON.parse(localStorage.getItem("selectedParty")).value;
   } catch (e) {

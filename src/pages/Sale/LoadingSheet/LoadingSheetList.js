@@ -122,17 +122,19 @@ const LoadingSheetList = () => {
     }
 
     const otherBtn_1Func = (list) => {
-
         dispatch(UpdateLoadingSheet({ RowId: list.rowData.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
-
+    function partyOnChngeButtonHandler() {
+        dispatch(LoadingSheetListActionSuccess([]))
+    }
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
 
             <div className="page-content">
 
-                <PartyDropdown_Common />
+                <PartyDropdown_Common
+                    changeButtonHandler={partyOnChngeButtonHandler} />
 
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">

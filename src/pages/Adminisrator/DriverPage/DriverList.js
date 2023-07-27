@@ -17,6 +17,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const DriverList = () => {
 
@@ -57,13 +58,20 @@ const DriverList = () => {
   }, []);
 
   const goButtonHandler = () => {
+    try {
+      if (_cfunc.loginPartyID() === 0) {
+        customAlert({ Type: 3, Message: "Please Select Party" });
+        return;
+      };
+      const jsonBody = JSON.stringify({
+        CompanyID: _cfunc.loginCompanyID(),
+        PartyID: _cfunc.loginPartyID(),
+      });
 
-    const jsonBody = JSON.stringify({
-      CompanyID: _cfunc.loginCompanyID(),
-      PartyID: _cfunc.loginPartyID(),
-    });
-    dispatch(getDriverList(jsonBody));
-  }
+      dispatch(getDriverList(jsonBody));
+    } catch (error) { }
+    return
+  };
 
   const partyOnChngeButtonHandler = (e) => {
     dispatch(getDriverListSuccess([]));
@@ -74,9 +82,9 @@ const DriverList = () => {
       <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
 
-        <PartyDropdown_Common goButtonHandler={goButtonHandler}
-          changeBtnShow={!(tableList.length === 0)}
-          change_ButtonHandler={partyOnChngeButtonHandler}
+        <PartyDropdown_Common
+          goButtonHandler={goButtonHandler}
+          changeButtonHandler={partyOnChngeButtonHandler}
         />
 
         {

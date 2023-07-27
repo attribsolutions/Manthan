@@ -1,26 +1,15 @@
 import PropTypes from "prop-types"
 import MetaTags from "react-meta-tags"
 import React, { useEffect, useState } from "react"
-
 import { Row, Col, Alert, Container, Input } from "reactstrap"
-
-//redux
 import { useSelector, useDispatch } from "react-redux"
-
 import { withRouter, Link, useHistory } from "react-router-dom"
-
-// availity-reactstrap-validation
-
 import { divisionDropdownSelectSuccess, getUserDetailsAction, loginError_Action, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
-
 import logo from "../../assets/images/cbm_logo.png"
-
 import CarouselPage from "./CarouselPage"
-import { loginCompanyID } from "../../components/Common/CommonFunction"
 import { useLayoutEffect } from "react"
 import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
-import { getpartysetting_API } from "../../store/Administrator/PartySetting/action"
-import { commonPartyDrodown } from "../../store/Utilites/PartyDrodown/action"
+import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc"
 
 const Login = props => {
 
@@ -73,23 +62,13 @@ const Login = props => {
   useEffect(() => {
 
     if (divisionDropdown_redux.length === 1) {
-
-      let value = divisionDropdown_redux[0];
-      let employee = value.Employee_id;
-      let party = value.Party_id;
-      if (party === null) {
-        party = 0;
-        value.Party_id = 0;
+      let user = divisionDropdown_redux[0];
+      if (user.Party_id === null) {
+        user.Party_id = 0;
       }
-      const isPartyNull = value.Party_id === 0;
+      //api call roleAceessAction Api,partysetting Api , Party Dropdown Api and set localstorage roleId ;
+      afterloginOneTimeAPI(user, dispatch);// all common function
 
-      localStorage.setItem("roleId", JSON.stringify(value));
-
-      localStorage.setItem("selectedParty", JSON.stringify(isPartyNull ? "" : { value: value.Party_id, label: value.PartyName }));
-      localStorage.setItem("roleId2", JSON.stringify(value));
-      dispatch(roleAceessAction(party, employee, loginCompanyID()));
-      dispatch(getpartysetting_API(value.Party_id, loginCompanyID()));
-      dispatch(commonPartyDrodown()) // Party Dropdown Action 
     }
     else if (divisionDropdown_redux.length > 1) {
       history.push("/division");
