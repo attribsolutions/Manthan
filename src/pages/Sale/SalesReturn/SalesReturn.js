@@ -733,6 +733,7 @@ const SalesReturn = (props) => {
         const btnId = event.target.id;
         let grand_total = 0;
         const invalidMessages = [];
+        const imageArray = []
 
         const filterData = TableArr.filter((i) => {
             if (i.Quantity > 0) {
@@ -773,6 +774,10 @@ const SalesReturn = (props) => {
             if (!i.defaultReason) {
                 invalidMessages.push({ [i.ItemName]: 'Select Return Reason' });
             }
+            imageArray.push({ Item_pic: 'Select Return Reason', Image: imageTable });
+
+
+
 
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
@@ -809,7 +814,7 @@ const SalesReturn = (props) => {
                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
                 "PurchaseReturn": "",
                 "SubReturn": "",
-                "ReturnItemImages": [],
+                "ReturnItemImages": imageArray,
             };
         });
 
@@ -830,7 +835,7 @@ const SalesReturn = (props) => {
                 PurchaseReturnReferences: [],
                 ReturnItems: ReturnItems,
             });
-
+            debugger
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
