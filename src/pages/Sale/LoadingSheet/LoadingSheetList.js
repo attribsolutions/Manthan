@@ -10,6 +10,8 @@ import {
     DeleteLoadingSheet,
     DeleteLoadingSheetSucccess,
     LoadingSheetListAction,
+    LoadingSheetListActionSuccess,
+    LoadingSheet_GoBtn_API_Succcess,
     UpdateLoadingSheet,
 
 } from "../../../store/Sales/LoadingSheetRedux/action";
@@ -24,17 +26,17 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const LoadingSheetList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func()
-    const systemSetting = _cfunc.loginSystemSetting();
-
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [pageMode] = useState(mode.defaultList);
-
+    const [party, setParty] = useState({ value: "", label: "Select..." });
     const reducers = useSelector(
         (state) => ({
             loading: state.LoadingSheetReducer.loading,
@@ -64,9 +66,11 @@ const LoadingSheetList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
-        goButtonHandler()
+        goButtonHandler(true)
         dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id, _cfunc.loginCompanyID()))
-
+        return () => {
+            dispatch(LoadingSheetListActionSuccess([]))
+        }
     }, []);
 
     useEffect(() => {
@@ -78,6 +82,13 @@ const LoadingSheetList = () => {
     }, [LoadingSheetUpdateList])
 
     function goButtonHandler() {
+
+        if ((party.value === 0)) {
+            customAlert({
+                Type: 4,
+                Message: "Please Select Party"
+            })
+        }
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -118,7 +129,11 @@ const LoadingSheetList = () => {
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
+
             <div className="page-content">
+
+                <PartyDropdown_Common />
+
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">
                         <div className=" row mt-2 mb-1">

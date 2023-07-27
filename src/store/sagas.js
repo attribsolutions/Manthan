@@ -83,12 +83,9 @@ import OrderSummarySaga from "./Report/OrderSummaryRedux/saga"
 import PartySettingSaga from "./Administrator/PartySetting/saga"
 import StockEntrySaga from "./Inventory/StockEntryRedux/saga"
 import StockReportSaga from "./Report/StockReport/saga"
-
 import RetailerDataSaga from "./Report/RetailerDataRedux/saga"
-
 import GenericSaleReportSaga from "./Report/GenericSaleRedux/saga"
-
-
+import CommonPartyDrodown_Saga from "./Utilites/PartyDrodown/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -102,10 +99,10 @@ export default function* rootSaga() {
     fork(ForgetSaga),
     fork(ProfileSaga),
     fork(LayoutSaga),
-   
+
     fork(CommonPageField_Saga),
     fork(pdfReport_Saga),
-  
+
     fork(SupplierSaga),
     fork(ModulesSaga),
     fork(CompanySaga),
@@ -131,7 +128,7 @@ export default function* rootSaga() {
     fork(TermsAndConditionsSaga),
     fork(RoutesSaga),
     fork(DiscountSaga),
-    
+
     fork(SalesManSaga),
     fork(CreditLimitSaga),
     fork(GroupTypeSaga),
@@ -166,10 +163,8 @@ export default function* rootSaga() {
     fork(PartySettingSaga),
     fork(StockEntrySaga),
     fork(StockReportSaga),
-
     fork(RetailerDataSaga),
-
     fork(GenericSaleReportSaga),
-
+    fork(CommonPartyDrodown_Saga),
   ])
 }

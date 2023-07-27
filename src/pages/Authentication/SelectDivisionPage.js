@@ -16,6 +16,7 @@ import { useLayoutEffect } from "react"
 import { getpartysetting_API } from "../../store/Administrator/PartySetting/action"
 import { Go_Button } from "../../components/Common/CommonButton"
 import { C_Select } from "../../CustomValidateForm"
+import { commonPartyDrodown } from "../../store/Utilites/PartyDrodown/action"
 
 const SelectDivisionPage = props => {
   const dispatch = useDispatch()
@@ -76,9 +77,13 @@ const SelectDivisionPage = props => {
       var employee = value.Employee_id;
       var party = value.Party_id
 
-      localStorage.setItem("roleId", JSON.stringify(value))
+      const isPartyNull = value.Party_id === 0;
+
+      localStorage.setItem("roleId", JSON.stringify(value));
+      localStorage.setItem("selectedParty", JSON.stringify((isPartyNull) ? "" : { value: value.Party_id, label: value.PartyName }));
       dispatch(roleAceessAction(party, employee, loginCompanyID()))
       dispatch(getpartysetting_API(party, loginCompanyID()))//login party id pass to getpartysetting_API
+      dispatch(commonPartyDrodown())  // Party Dropdown Action 
     }
 
 

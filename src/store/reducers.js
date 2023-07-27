@@ -17,6 +17,7 @@ import ChangePasswordReducer from "./auth/changepassword/reducer"
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 import CommonPageFieldReducer from './Utilites/PageFiled/reducer'
 import PdfReportReducers from './Utilites/PdfReport/reducer'
+import CommonPartyDropdownReducer from './Utilites/PartyDrodown/reducer'
 
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
@@ -110,6 +111,7 @@ const rootReducer = combineReducers({
   // CommonError,
   BreadcrumbReducer,
   CommonPageFieldReducer,
+  CommonPartyDropdownReducer,
   PdfReportReducers,
   ImportExportFieldMap_Reducer,
   ImportFieldAdd_Reducer,

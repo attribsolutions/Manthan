@@ -124,7 +124,7 @@ export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company 
 export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
     const detail = JSON.parse(localStorage.getItem("roleId"));
-    return (detail.Role === 2);
+    return (detail.Role === 7);
   } catch (e) {
     CommonConsole("Common loginUserAdminRole  Error");
   }
@@ -170,8 +170,9 @@ export const loginCompanyName = () => { //+++++++++++++++++++++ Session Company 
 };
 
 export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
+ 
   try {
-    return JSON.parse(localStorage.getItem("roleId")).Party_id;
+    return JSON.parse(localStorage.getItem("selectedParty")).value;
   } catch (e) {
     CommonConsole("Common login PartyID Func  Error");
   }

@@ -13,7 +13,7 @@ import {
     updateSalesManIDSuccess,
     getSalesManlistSuccess
 } from "../../../store/Administrator/SalesManRedux/actions";
-import { loginCompanyID, loginPartyID, loginUserAdminRole } from "../../../components/Common/CommonFunction";
+import { loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
@@ -21,9 +21,6 @@ import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 const SalesManList = (props) => {
 
     const dispatch = useDispatch();
-    const userAdminRole = loginUserAdminRole();
-
-    const [party, setParty] = useState({ value: loginPartyID(), label: "Select..." });
 
     const reducers = useSelector(
         (state) => ({
@@ -39,7 +36,7 @@ const SalesManList = (props) => {
         })
     );
 
-    const { pageField, goBtnLoading } = reducers;
+    const { pageField, goBtnLoading, tableList } = reducers;
 
     const action = {
         getList: getSalesManlist,
@@ -55,8 +52,7 @@ const SalesManList = (props) => {
         const page_Id = pageId.SALESMAN_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-
-        if (!userAdminRole) { goButtonHandler() }
+        goButtonHandler()
         return () => {
             dispatch(getSalesManlistSuccess([]));
             dispatch(commonPageFieldListSuccess(null))
@@ -67,32 +63,27 @@ const SalesManList = (props) => {
 
         const jsonBody = JSON.stringify({
             CompanyID: loginCompanyID(),
-            PartyID: party.value,
+            PartyID: loginPartyID(),
         });
         dispatch(getSalesManlist(jsonBody));
     }
 
-    const partyOnChngeHandler = (e) => {
-        setParty(e)
+    const partyOnChngeButtonHandler = (e) => {
+        dispatch(getSalesManlistSuccess([]));
     }
-
+    
     return (
 
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
+                <PartyDropdown_Common goButtonHandler={goButtonHandler}
+                    changeBtnShow={!(tableList.length === 0)}
+                    change_ButtonHandler={partyOnChngeButtonHandler}
+                />
                 {
                     (pageField) &&
                     <>
-                        {userAdminRole &&
-                            <div className="mb-2">
-                                <PartyDropdown_Common
-                                    partySelect={party}
-                                    setPartyFunc={partyOnChngeHandler}
-                                    goButtonHandler={goButtonHandler}
-                                />
-                            </div>
-                        }
                         <div className="mt-n1">
                             <CommonPurchaseList
                                 action={action}

@@ -11,7 +11,7 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,9 +50,7 @@ const RoutesMaster = (props) => {
 
     const history = useHistory();
     const dispatch = useDispatch();
-    const userAdminRole = loginUserAdminRole();
-
-
+    
     const fileds = {
         id: "",
         Name: "",
@@ -201,7 +199,7 @@ const RoutesMaster = (props) => {
             dispatch(GetRoutesListSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -217,7 +215,7 @@ const RoutesMaster = (props) => {
 
         else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateRoutesIDSuccess({ Status: false }));
-             customAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -232,13 +230,6 @@ const RoutesMaster = (props) => {
         }
     }, [pageField])
 
-    const partyOnChngeHandler = (e) => {
-        setState((i) => {
-            const a = { ...i }
-            a.values.Party = e;
-            return a
-        })
-    }
 
     const SaveHandler = async (event) => {
 
@@ -252,7 +243,7 @@ const RoutesMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     IsActive: values.IsActive,
-                    Party: userAdminRole ? values.Party.value : loginPartyID(),
+                    Party: loginPartyID(),
                     Sunday: values.Sunday,
                     Monday: values.Monday,
                     Tuesday: values.Tuesday,
@@ -286,13 +277,9 @@ const RoutesMaster = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <Container fluid>
+                    <PartyDropdown_Common />
 
-                        {userAdminRole &&
-                            <PartyDropdown_Common
-                                partySelect={values.Party}
-                                setPartyFunc={partyOnChngeHandler} />
-                        }
+                    <Container fluid>
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header">
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

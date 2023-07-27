@@ -38,7 +38,7 @@ const VehicleList = () => {
       pageField: state.CommonPageFieldReducer.pageFieldList,
     })
   );
-  const { pageField, goBtnLoading } = reducers
+  const { pageField, goBtnLoading, tableList } = reducers
 
   const action = {
     getList: getVehicleList,
@@ -55,42 +55,35 @@ const VehicleList = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
 
-    if (!userAdminRole) { goButtonHandler() }
+    goButtonHandler()
     return () => {
       dispatch(getVehicleListSuccess([]));
       dispatch(commonPageFieldListSuccess(null))
     }
   }, []);
 
-
   const goButtonHandler = () => {
 
     const jsonBody = JSON.stringify({
       CompanyID: _cfunc.loginCompanyID(),
-      PartyID: party.value,
+      PartyID: _cfunc.loginPartyID()
     });
     dispatch(getVehicleList(jsonBody));
   }
 
-  const partyOnChngeHandler = (e) => {
-    setParty(e)
+  const partyOnChngeButtonHandler = (e) => {
+    dispatch(getVehicleListSuccess([]));
   }
-
 
   return (
     <React.Fragment>
       <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       <div className="page-content">
 
-        {userAdminRole &&
-          <div className="mb-2">
-            <PartyDropdown_Common
-              partySelect={party}
-              setPartyFunc={partyOnChngeHandler}
-              goButtonHandler={goButtonHandler}
-            />
-          </div>
-        }
+        <PartyDropdown_Common goButtonHandler={goButtonHandler}
+          changeBtnShow={!(tableList.length === 0)}
+          change_ButtonHandler={partyOnChngeButtonHandler}
+        />
 
         {
           (pageField) &&
