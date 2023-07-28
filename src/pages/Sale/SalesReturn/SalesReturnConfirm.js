@@ -1,14 +1,14 @@
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { Card, CardBody, Col, FormGroup, Input, Modal, Row, Spinner, } from "reactstrap";
+import { Card, CardBody, FormGroup, Input, Modal, Spinner, } from "reactstrap";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole, date_dmy_func, loginUserID } from "../../../components/Common/CommonFunction";
-import { confirm_SalesReturn_Id_Succcess, orderSinglegetSuccess, returnApprove, returnApprove_Success, salesReturnListAPI } from "../../../store/actions";
+import { confirm_SalesReturn_Id_Succcess, returnApprove, returnApprove_Success } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CInput, onlyNumberRegx, onlyTextRegx } from "../../../CustomValidateForm";
+import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
 import { url } from "../../../routes";
 
 const ViewDetails_Modal = () => {
@@ -72,13 +72,6 @@ const ViewDetails_Modal = () => {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
                 } else if (Number(Quantity) > 0) {
                     const ReturnItems = {
-                        // id: index.id,
-                        // Item: index.Item,
-                        // Unit: index.Unit,
-                        // ApprovedQuantity: Quantity,
-                        // ApproveComment: Comment,
-                        // Approvedby: loginUserID()
-
                         "id": index.id,
                         "Item": index.Item,
                         "Unit": 1,
@@ -146,7 +139,7 @@ const ViewDetails_Modal = () => {
             text: "Quantity",
             dataField: "Quantity",
             formatter: (value, row, k) => {
-                return <div style={{ width: "120px" }}>{`${row.Quantity}${row.UnitName}`}</div>
+                return <div style={{ width: "120px" }}>{`${row.Quantity} ${row.UnitName}`}</div>
             }
         },
         {
@@ -174,15 +167,18 @@ const ViewDetails_Modal = () => {
             hidden: tableArray.viewMode === url.PURCHASE_RETURN_LIST ? true : false,
             formatter: (value, row, k) => {
                 if (tableArray.viewMode === url.PURCHASE_RETURN_LIST) {
-                    return <div style={{ width: "120px" }}>{`${row.Quantity}${row.UnitName}`}</div>
+                    return <div style={{ width: "120px" }}>{`${row.Quantity} ${row.UnitName}`}</div>
                 } else {
+                    debugger
+                    const defaultQuantity = tableArray.IsApproved ? row.ApprovedQuantity : row.Quantity;
                     return (
                         <div>
                             <CInput
                                 key={`Quantity-${k}`}
                                 id={`Quantity-${k}`}
                                 cpattern={onlyNumberRegx}
-                                defaultValue={row.Quantity}
+                                defaultValue={defaultQuantity}
+                                disabled={tableArray.IsApproved}
                                 autoComplete="off"
                                 className=" text-end"
                                 onChange={(e) => {
@@ -263,7 +259,7 @@ const ViewDetails_Modal = () => {
                                 )
                                 }
                             </ToolkitProvider>
-                            {tableArray.viewMode === url.PURCHASE_RETURN_LIST ? null :
+                            {(!(tableArray.viewMode === url.PURCHASE_RETURN_LIST) && !tableArray.IsApproved) &&
                                 <FormGroup>
                                     {/* <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}> */}
                                     <div>
@@ -279,7 +275,6 @@ const ViewDetails_Modal = () => {
                                             <button
                                                 type="submit"
                                                 autoFocus={false}
-                                                disabled={tableArray.IsApproved ? true : false}
                                                 title={`Save `}
                                                 className="btn btn-primary w-md"
                                                 onClick={SaveHandler}
