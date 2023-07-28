@@ -20,9 +20,8 @@ import { url, mode, pageId } from "../../../routes/index"
 import SalesReturnView_Modal from "./SalesReturnConfirm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as report from '../../../Reports/ReportIndex'
-import { ReturnPrint_API, SalesReturn_SingleGet_API } from "../../../helpers/backend_helper";
+import { ReturnPrint_API } from "../../../helpers/backend_helper";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-
 
 const SalesReturnList = () => {
 
@@ -159,29 +158,36 @@ const SalesReturnList = () => {
         label: " All"
     });
 
-    function goButtonHandler() {
-        const salesReturnJsonBody = JSON.stringify({
-            FromDate: values.FromDate,
-            ToDate: values.ToDate,
-            CustomerID: values.Customer.value,
-            PartyID: _cfunc.loginPartyID()
-        });
-        const purchaseReturnJsonBody = JSON.stringify({
-            FromDate: values.FromDate,
-            ToDate: values.ToDate,
-            CustomerID: _cfunc.loginPartyID(),
-            PartyID: values.Customer.value,
-        });
+    const goButtonHandler = () => {
+        try {
+            if (_cfunc.loginPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const salesReturnJsonBody = JSON.stringify({
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                CustomerID: values.Customer.value,
+                PartyID: _cfunc.loginPartyID()
+            });
+            const purchaseReturnJsonBody = JSON.stringify({
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                CustomerID: _cfunc.loginPartyID(),
+                PartyID: values.Customer.value,
+            });
 
-        let jsonBody;
-        if (subPageMode === url.SALES_RETURN_LIST) {
-            jsonBody = (salesReturnJsonBody);
-        }
-        else {
-            jsonBody = (purchaseReturnJsonBody);
-        }
-        dispatch(salesReturnListAPI(jsonBody));
-    }
+            let jsonBody;
+            if (subPageMode === url.SALES_RETURN_LIST) {
+                jsonBody = (salesReturnJsonBody);
+            }
+            else {
+                jsonBody = (purchaseReturnJsonBody);
+            }
+            dispatch(salesReturnListAPI(jsonBody));
+        } catch (error) { }
+        return
+    };
 
     function fromdateOnchange(e, date) {
         setState((i) => {
@@ -218,6 +224,10 @@ const SalesReturnList = () => {
     function downBtnFunc(config) {
         config["ReportType"] = report.Return;
         dispatch(getpdfReportdata(ReturnPrint_API, config))
+    }
+
+    function partyOnChngeButtonHandler() {
+        dispatch(salesReturnListAPISuccess([]))
     }
 
     const HeaderContent = () => {
@@ -300,7 +310,7 @@ const SalesReturnList = () => {
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(loading || !pageField)} />
 
-                <PartyDropdown_Common />
+                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
 
                 {
                     (pageField) ?

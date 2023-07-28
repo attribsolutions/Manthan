@@ -342,7 +342,7 @@ const LoadingSheet = (props) => {
                     <PartyDropdown_Common
                         goButtonHandler={partySelectButtonHandler}
                         changeBtnShow={!(Driver_Options.length === 0) && !(VehicleNumber_Options.length === 0) && !(RouteName_Options.length === 0)}
-                        change_ButtonHandler={partyOnChngeButtonHandler}
+                        changeButtonHandler={partyOnChngeButtonHandler}
                     />
 
                     <form noValidate>

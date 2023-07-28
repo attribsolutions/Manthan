@@ -83,6 +83,7 @@ const DriverList = () => {
       <div className="page-content">
 
         <PartyDropdown_Common
+          goBtnLoading={GoBtnlistloading}
           goButtonHandler={goButtonHandler}
           changeButtonHandler={partyOnChngeButtonHandler}
         />

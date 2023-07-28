@@ -40,7 +40,7 @@ import {
     loginUserID,
     btnIsDissablefunc,
     metaTagLabel,
-    loginUserAdminRole
+    
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"

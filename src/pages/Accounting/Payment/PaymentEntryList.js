@@ -27,12 +27,15 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PaymentEntryList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func()
+    const userAdminRole = _cfunc.loginUserAdminRole()
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -70,14 +73,15 @@ const PaymentEntryList = () => {
     const values = { ...state.values }
 
     const action = {
-        getList: ReceiptListAPI,
         deleteId: deleteReceiptList,
         postSucc: postMessage,
         deleteSucc: deleteReceiptList_Success
     }
 
     useEffect(() => {
-        dispatch(ReceiptListAPISuccess([]))
+        return () => {
+            dispatch(ReceiptListAPISuccess([]))
+        }
     }, [])
 
     // Receipt Type API Values **** only Post Json Body
@@ -101,7 +105,7 @@ const PaymentEntryList = () => {
 
     // onLoad Go_Button useEffect
     useEffect(() => {
-        if (ReceiptType.length > 0) {
+        if (ReceiptType.length > 0 && !(userAdminRole)) {
             goButtonHandler(true)
         }
     }, [ReceiptType]);
@@ -180,20 +184,28 @@ const PaymentEntryList = () => {
         label: " All"
     });
 
-    function goButtonHandler() {
-        const ReceiptTypeID = ReceiptType.find((index) => {
-            return index.Name === "Payment Entry"
-        })
+    const goButtonHandler = async () => {
+        try {
+            if (_cfunc.loginPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const ReceiptTypeID = ReceiptType.find((index) => {
+                return index.Name === "Payment Entry"
+            })
 
-        const jsonBody = JSON.stringify({
-            FromDate: values.FromDate,
-            ToDate: values.ToDate,
-            CustomerID: values.Customer.value,
-            PartyID: _cfunc.loginPartyID(),
-            ReceiptType: ReceiptTypeID.id,
-        });
-        dispatch(ReceiptListAPI(jsonBody, subPageMode));
-    }
+            const jsonBody = JSON.stringify({
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                CustomerID: values.Customer.value,
+                PartyID: _cfunc.loginPartyID(),
+                ReceiptType: ReceiptTypeID.id,
+            });
+
+            await dispatch(ReceiptListAPI(jsonBody, subPageMode));
+        } catch (error) { }
+        return
+    };
 
     function fromdateOnchange(e, date) {
         setState((i) => {
@@ -226,6 +238,10 @@ const PaymentEntryList = () => {
     function downBtnFunc(row) {
         var ReportType = report.Receipt;
         dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
+    }
+
+    function partyOnChngeButtonHandler() {
+        dispatch(ReceiptListAPISuccess([]))
     }
 
     const makeBtnFunc = (list = [], btnId) => {
@@ -316,6 +332,7 @@ const PaymentEntryList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
+                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList

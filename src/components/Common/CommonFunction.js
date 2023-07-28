@@ -2,13 +2,9 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { CommonBreadcrumbDetails } from "../../store/actions";
 import { createBrowserHistory } from 'history';
 import * as mode from "../../routes/PageMode"
-import { url } from "../../routes/index";
-
 import $ from 'jquery';
 
-
 export const history = createBrowserHistory();
-
 
 function isDateInitial(isdate) {
 
@@ -106,6 +102,7 @@ export const amountCommaSeparateFunc = (amount) => { //+++++++++++++++++++++ Ses
   });
 };
 
+
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
   try {
@@ -122,9 +119,10 @@ export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company 
 
 
 export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+  
   try {
-    const detail = JSON.parse(localStorage.getItem("roleId"));
-    return (detail.Role === 7);
+    const detail = loginUserDetails();
+    return (detail.PartyType === "Company Division");
   } catch (e) {
     CommonConsole("Common loginUserAdminRole  Error");
   }
@@ -132,8 +130,9 @@ export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Compan
 };
 
 export const loginRoleID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+  
   try {
-    const detail = JSON.parse(localStorage.getItem("roleId"));
+    const detail = loginUserDetails();
     return detail.Role;
   } catch (e) {
     CommonConsole("Common Role ID  Error");
@@ -180,8 +179,9 @@ export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID 
 };
 
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
+ 
   try {
-    return JSON.parse(localStorage.getItem("roleId")).Employee_id;
+    return loginUserDetails().Employee_id;
   } catch (e) {
     alert("Common login EmployeeID Func  Error");
   }
@@ -209,10 +209,10 @@ export const loginCompanyGroup = () => {//+++++++++++++++++++++ Session loginPar
 
 export const loginIsSCMParty = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
-    const detail = JSON.parse(localStorage.getItem("roleId"));
+    const detail = loginUserDetails();
     return (detail.IsSCMPartyType === 0) || (detail.IsSCMPartyType === null);
   } catch (e) {
-    CommonConsole("Common loginUserAdminRole  Error");
+    CommonConsole("Common loginIsSCMParty Error");
   }
   return false;
 };
@@ -226,18 +226,17 @@ export const loginSystemSetting = () => { //+++++++++++++++++++++ Session Compan
   }
   return "";
 };
+
 export const loginUserGSTIN = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
-    return JSON.parse(localStorage.getItem("roleId")).GSTIN;
+    return loginUserDetails().GSTIN;
   } catch (e) {
     CommonConsole("Common loginUserGSTIN func  Error");
   }
   return '';
 };
 
-
-
-export const loginJsonBody = () => ({
+export const loginJsonBody = () => ({ //+++++++++++++++++++++ loginJsonBody for Filter API +++++++++++++++++++++++++++++
   UserID: loginUserID(),
   RoleID: loginRoleID(),
   CompanyID: loginCompanyID(),
@@ -245,7 +244,6 @@ export const loginJsonBody = () => ({
   IsSCMCompany: loginIsSCMCompany(),
   CompanyGroup: loginCompanyGroup(),
 });
-
 
 export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
   gstin1 = String(gstin1) || ""

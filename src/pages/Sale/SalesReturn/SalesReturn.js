@@ -875,7 +875,7 @@ const SalesReturn = (props) => {
                     <PartyDropdown_Common
                         goButtonHandler={partySelectButtonHandler}
                         changeBtnShow={!(ReturnReasonOptions.length === 0) && !(ItemList_Options.length === 0) && !(InvoiceNo_Options.length === 0)}
-                        change_ButtonHandler={partyOnChngeButtonHandler}
+                        changeButtonHandler={partyOnChngeButtonHandler}
                     />
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >

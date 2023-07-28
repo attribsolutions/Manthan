@@ -5,11 +5,10 @@ import {
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../store/actions";
-import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate_ymd, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { currentDate_ymd, loginCompanyID, loginPartyID, loginUserAdminRole } from "../../../components/Common/CommonFunction";
 import Receipts from "./Receipts";
 import * as report from '../../../Reports/ReportIndex'
 import * as pageId from "../../../routes//allPageID";
@@ -28,11 +27,14 @@ import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { Receipt_Print } from "../../../helpers/backend_helper";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const ReceiptList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const userAdminRole = loginUserAdminRole()
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -60,17 +62,18 @@ const ReceiptList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList, ReceiptType ,retailerDropLoading} = reducers;
+    const { userAccess, pageField, RetailerList, ReceiptType, retailerDropLoading } = reducers;
     const values = { ...state.values }
 
     const action = {
-        getList: ReceiptListAPI,
         deleteId: deleteReceiptList,
         deleteSucc: deleteReceiptList_Success
     }
 
     useEffect(() => {
-        dispatch(ReceiptListAPISuccess([]))
+        return () => {
+            dispatch(ReceiptListAPISuccess([]))
+        }
     }, [])
 
     // Featch Modules List data  First Rendering
@@ -92,8 +95,8 @@ const ReceiptList = () => {
         }
     }, [userAccess])
 
-    // Receipt Type API Values **** only Post Json Body
-    useEffect(() => {
+
+    useEffect(() => { // Receipt Type API Values **** only Post Json Body
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
             TypeID: 3
@@ -102,8 +105,9 @@ const ReceiptList = () => {
 
     }, []);
 
-    useEffect(() => {
-        if (ReceiptType.length > 0) {
+
+    useEffect(() => { // When ReceiptType api call give me Receipt id then Go Button true
+        if (ReceiptType.length > 0 && !(userAdminRole)) {
             goButtonHandler(true)
         }
     }, [ReceiptType]);
@@ -127,21 +131,28 @@ const ReceiptList = () => {
         label: " All"
     });
 
-    function goButtonHandler() {
+    const goButtonHandler = () => {
+        try {
+            if (loginPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const ReceiptTypeID = ReceiptType.find((index) => {
+                return index.Name === "Receipt"
+            })
 
-        const ReceiptTypeID = ReceiptType.find((index) => {
-            return index.Name === "Receipt"
-        })
+            const jsonBody = JSON.stringify({
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                CustomerID: values.Customer.value,
+                PartyID: loginPartyID(),
+                ReceiptType: ReceiptTypeID.id,
+            });
 
-        const jsonBody = JSON.stringify({
-            FromDate: values.FromDate,
-            ToDate: values.ToDate,
-            CustomerID: values.Customer.value,
-            PartyID: loginPartyID(),
-            ReceiptType: ReceiptTypeID.id,
-        });
-        dispatch(ReceiptListAPI(jsonBody, hasPagePath));
-    }
+            dispatch(ReceiptListAPI(jsonBody, hasPagePath));
+        } catch (error) { }
+        return
+    };
 
     function downBtnFunc(config) {
         config["ReportType"] = report.Receipt;
@@ -183,7 +194,6 @@ const ReceiptList = () => {
             a.hasValid.Customer.valid = true
             return a
         })
-
     }
 
     const HeaderContent = () => {
@@ -246,10 +256,15 @@ const ReceiptList = () => {
         )
     }
 
+    function partyOnChngeButtonHandler() {
+        dispatch(ReceiptListAPISuccess([]))
+    }
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
+                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList

@@ -17,6 +17,7 @@ import { loginCompanyID, loginPartyID } from "../../../components/Common/CommonF
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoutesList = (props) => {
 
@@ -36,7 +37,7 @@ const RoutesList = (props) => {
     })
   );
 
-  const { pageField, tableList } = reducers;
+  const { pageField, goBtnLoading } = reducers;
 
   const action = {
     getList: GetRoutesList,
@@ -59,12 +60,19 @@ const RoutesList = (props) => {
   }, []);
 
   const goButtonHandler = () => {
+    try {
+      if (loginPartyID() === 0) {
+        customAlert({ Type: 3, Message: "Please Select Party" });
+        return;
+      };
+      const jsonBody = JSON.stringify({
+        CompanyID: loginCompanyID(),
+        PartyID: loginPartyID(),
+      });
 
-    const jsonBody = JSON.stringify({
-      CompanyID: loginCompanyID(),
-      PartyID: loginPartyID(),
-    });
-    dispatch(GetRoutesList(jsonBody));
+      dispatch(GetRoutesList(jsonBody));
+    } catch (error) { }
+    return
   };
 
   const partyOnChngeButtonHandler = (e) => {
@@ -73,18 +81,17 @@ const RoutesList = (props) => {
 
   return (
     <React.Fragment>
-      <PageLoadingSpinner isLoading={(reducers.goBtnLoading || !pageField)} />
+      <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       <div className="page-content">
 
-        <PartyDropdown_Common goButtonHandler={goButtonHandler}
-          changeBtnShow={!(tableList.length === 0)}
-          change_ButtonHandler={partyOnChngeButtonHandler}
+        <PartyDropdown_Common
+          goBtnLoading={goBtnLoading}
+          goButtonHandler={goButtonHandler}
+          changeButtonHandler={partyOnChngeButtonHandler}
         />
 
         {
           (pageField) &&
-
-
           <div className="mt-n1">
             <CommonPurchaseList
               action={action}

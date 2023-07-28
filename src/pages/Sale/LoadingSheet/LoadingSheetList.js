@@ -81,21 +81,22 @@ const LoadingSheetList = () => {
         }
     }, [LoadingSheetUpdateList])
 
-    function goButtonHandler() {
+    const goButtonHandler = () => {
+        try {
+            if (_cfunc.loginPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = JSON.stringify({
+                FromDate: fromdate,
+                ToDate: todate,
+                PartyID: _cfunc.loginPartyID(),
+            });
 
-        if ((party.value === 0)) {
-            customAlert({
-                Type: 4,
-                Message: "Please Select Party"
-            })
-        }
-        const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            PartyID: _cfunc.loginPartyID(),
-        });
-        dispatch(LoadingSheetListAction(jsonBody));
-    }
+            dispatch(LoadingSheetListAction(jsonBody));
+        } catch (error) { }
+        return
+    };
 
     function fromdateOnchange(e, date) {
         let newObj = { ...headerFilters }
@@ -124,17 +125,18 @@ const LoadingSheetList = () => {
     const otherBtn_1Func = (list) => {
         dispatch(UpdateLoadingSheet({ RowId: list.rowData.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
+
     function partyOnChngeButtonHandler() {
         dispatch(LoadingSheetListActionSuccess([]))
     }
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
 
             <div className="page-content">
 
-                <PartyDropdown_Common
-                    changeButtonHandler={partyOnChngeButtonHandler} />
+                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
 
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">

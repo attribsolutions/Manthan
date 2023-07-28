@@ -41,7 +41,6 @@ const SelectDivisionPage = () => {
     }
   }, [])
 
-
   useLayoutEffect(() => {
 
     let dashboardFound = userAccess.find((i) => {
@@ -58,12 +57,10 @@ const SelectDivisionPage = () => {
     }
   }, [userAccess])
 
-
   const divisionDropdown_DropdownOption = divisionDropdown_redux.map((d, key) => ({
     value: key,
     label: d.PartyName,
   }));
-
 
   function goButtonHandller() {
 
@@ -75,9 +72,8 @@ const SelectDivisionPage = () => {
       //api call roleAceessAction Api,partysetting Api , Party Dropdown Api and set localstorage roleId ;
       afterloginOneTimeAPI(user, dispatch);// all common function
     }
-
-
   }
+
   return (
     <React.Fragment>
       <MetaTags>

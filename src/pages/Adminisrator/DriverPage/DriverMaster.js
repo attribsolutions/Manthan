@@ -131,13 +131,13 @@ const DriverMaster = (props) => {
                 hasValid.Name.valid = true;
                 hasValid.DOB.valid = true;
                 hasValid.Address.valid = true;
-                hasValid.Party.valid = true;
+                // hasValid.Party.valid = true;
 
                 values.Name = Name;
                 values.DOB = DOB;
                 values.Address = Address;
                 values.id = id
-                values.Party = { value: Party, label: PartyName }
+                // values.Party = { value: Party, label: PartyName }
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.DriverMaster))
@@ -239,7 +239,7 @@ const DriverMaster = (props) => {
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        
+
                         <PartyDropdown_Common />
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>
