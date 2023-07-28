@@ -77,7 +77,7 @@ const invioceReport_A4 = async (data) => {
 }
 
 const InvioceReport = (data) => {
-    
+
     const SettingData = loginSystemSetting();
     data["SettingData"] = SettingData;
 
@@ -90,3 +90,5 @@ const InvioceReport = (data) => {
 }
 
 export default InvioceReport;
+
+
