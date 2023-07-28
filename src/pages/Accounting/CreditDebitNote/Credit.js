@@ -469,7 +469,7 @@ const Credit = (props) => {
                         key={`Qty${row.Item}${key}`}
                         id={`Qty${key}`}
                         cpattern={onlyNumberRegx}
-                        defaultValue={null}
+                        defaultValue={pageMode === mode.view ? row.Quantity : ""}
                         autoComplete="off"
                         className=" text-end"
                         onChange={(e) => {

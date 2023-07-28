@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, delay, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import {
   GetCompanyByDivisionTypeID_For_Dropdown,
@@ -39,12 +39,13 @@ import {
 import * as url from "../../../routes/route_url";
 
 function* Get_Party_GenFun({ subPageMode }) {   // Only CompanyID is Required
-  
+
   var IsRetailer = subPageMode === url.RETAILER_LIST ? 1 : 0
 
   var jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ IsRetailer: IsRetailer } });
 
   try {
+
     const response = yield call(Party_Master_Get_API, jsonBody);
     function address(arr) {
       let result = ''

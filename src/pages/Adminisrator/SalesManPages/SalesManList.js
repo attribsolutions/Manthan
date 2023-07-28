@@ -17,6 +17,7 @@ import { loginCompanyID, loginPartyID } from "../../../components/Common/CommonF
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const SalesManList = (props) => {
 
@@ -60,26 +61,34 @@ const SalesManList = (props) => {
     }, []);
 
     const goButtonHandler = () => {
+        try {
+            if (loginPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = JSON.stringify({
+                CompanyID: loginCompanyID(),
+                PartyID: loginPartyID(),
+            });
 
-        const jsonBody = JSON.stringify({
-            CompanyID: loginCompanyID(),
-            PartyID: loginPartyID(),
-        });
-        dispatch(getSalesManlist(jsonBody));
-    }
+            dispatch(getSalesManlist(jsonBody));
+        } catch (error) { }
+        return
+    };
 
     const partyOnChngeButtonHandler = (e) => {
         dispatch(getSalesManlistSuccess([]));
     }
-    
+
     return (
 
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common goButtonHandler={goButtonHandler}
-                    changeBtnShow={!(tableList.length === 0)}
-                    change_ButtonHandler={partyOnChngeButtonHandler}
+                <PartyDropdown_Common
+                    goBtnLoading={goBtnLoading}
+                    goButtonHandler={goButtonHandler}
+                    changeButtonHandler={partyOnChngeButtonHandler}
                 />
                 {
                     (pageField) &&

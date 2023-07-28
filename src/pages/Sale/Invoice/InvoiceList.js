@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Select from "react-select";
 import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
@@ -25,18 +24,19 @@ import {
     Uploaded_EwayBillSuccess,
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
-    invoiceListGoBtnfilter
+    invoiceListGoBtnfilter,
+    invoiceListGoBtnfilterSucccess
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const InvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
@@ -61,7 +61,6 @@ const InvoiceList = () => {
             Cancel_EInvoice: state.InvoiceReducer.Cancel_EInvoice,
             Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
             listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading)
-
         })
     );
 
@@ -82,7 +81,6 @@ const InvoiceList = () => {
     } = hederFilters;
 
     const action = {
-        getList: invoiceListGoBtnfilter,
         deleteId: deleteInvoiceId,
         deleteSucc: deleteInvoiceIdSuccess
     }
@@ -213,8 +211,6 @@ const InvoiceList = () => {
         }
     }, [Cancel_EwayBill]);
 
-
-
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -234,6 +230,10 @@ const InvoiceList = () => {
     function goButtonHandler(event, IBType) {
 
         try {
+            if (_cfunc.loginPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
             const filtersBody = JSON.stringify({
                 FromDate: fromdate,
                 ToDate: todate,
@@ -264,6 +264,9 @@ const InvoiceList = () => {
         let newObj = { ...hederFilters }
         newObj.supplierSelect = e
         setHederFilters(newObj)
+    }
+    function partyOnChngeButtonHandler() {
+        dispatch(invoiceListGoBtnfilterSucccess([]))
     }
 
     const makeBtnFunc = (list = {}, btnId) => {
@@ -336,8 +339,9 @@ const InvoiceList = () => {
 
     return (
         <React.Fragment>
-            <PageLoadingSpinner isLoading={reducers.listBtnLoading||!pageField} />
+            <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
             <div className="page-content">
+                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList

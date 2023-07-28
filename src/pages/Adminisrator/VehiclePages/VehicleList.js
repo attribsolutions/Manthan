@@ -17,14 +17,13 @@ import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 const VehicleList = () => {
 
   const dispatch = useDispatch();
-  const userAdminRole = _cfunc.loginUserAdminRole();
-  const [party, setParty] = useState({ value: _cfunc.loginPartyID(), label: "Select..." });
-
+ 
   const reducers = useSelector(
     (state) => ({
       goBtnLoading: state.VehicleReducer.goBtnLoading,
@@ -38,7 +37,7 @@ const VehicleList = () => {
       pageField: state.CommonPageFieldReducer.pageFieldList,
     })
   );
-  const { pageField, goBtnLoading, tableList } = reducers
+  const { pageField, goBtnLoading } = reducers
 
   const action = {
     getList: getVehicleList,
@@ -63,15 +62,22 @@ const VehicleList = () => {
   }, []);
 
   const goButtonHandler = () => {
+    try {
+      if (_cfunc.loginPartyID() === 0) {
+        customAlert({ Type: 3, Message: "Please Select Party" });
+        return;
+      };
+      const jsonBody = JSON.stringify({
+        CompanyID: _cfunc.loginCompanyID(),
+        PartyID: _cfunc.loginPartyID()
+      });
 
-    const jsonBody = JSON.stringify({
-      CompanyID: _cfunc.loginCompanyID(),
-      PartyID: _cfunc.loginPartyID()
-    });
-    dispatch(getVehicleList(jsonBody));
-  }
+      dispatch(getVehicleList(jsonBody));
+    } catch (error) { }
+    return
+  };
 
-  const partyOnChngeButtonHandler = (e) => {
+  const partyOnChngeButtonHandler = () => {
     dispatch(getVehicleListSuccess([]));
   }
 
@@ -80,9 +86,10 @@ const VehicleList = () => {
       <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       <div className="page-content">
 
-        <PartyDropdown_Common goButtonHandler={goButtonHandler}
-          changeBtnShow={!(tableList.length === 0)}
-          change_ButtonHandler={partyOnChngeButtonHandler}
+        <PartyDropdown_Common
+          goBtnLoading={goBtnLoading}
+          goButtonHandler={goButtonHandler}
+          changeButtonHandler={partyOnChngeButtonHandler}
         />
 
         {

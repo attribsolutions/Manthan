@@ -23,9 +23,9 @@ import Select from "react-select";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
-import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
+import { getPartyItemListSuccess, getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
 import { StockEntry_GO_button_api_For_Item } from "../../../helpers/backend_helper";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
@@ -33,6 +33,7 @@ import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inve
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const StockEntry = (props) => {
 
@@ -58,7 +59,9 @@ const StockEntry = (props) => {
         pageField,
         userAccess,
         saveBtnloading,
+        partyItemListLoading
     } = useSelector((state) => ({
+        partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         saveBtnloading: state.StockEntryReducer.saveBtnloading,
         postMsg: state.StockEntryReducer.postMsg,
         ItemList: state.PartyItemsReducer.partyItem,
@@ -300,7 +303,6 @@ const StockEntry = (props) => {
         },
     ];
 
-
     const AddPartyHandler = async () => {
 
         // Display alert if Item Name is empty
@@ -415,6 +417,7 @@ const StockEntry = (props) => {
 
         } catch (w) { }
     }
+
     function deleteButtonAction(row, { TableArr = [], setTableArr }) {
 
         const newArr = TableArr.filter((index) => !(index.id === row.id))
@@ -498,12 +501,27 @@ const StockEntry = (props) => {
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    function partyOnChngeButtonHandler() {
+        dispatch(getPartyItemListSuccess([]))
+        setState((i) => {
+            const a = { ...i }
+            a.values.ItemName = '';
+            return a
+        })
+    }
+
+    function goButtonHandler() {
+        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())))
+    }
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-
                 <div className="page-content">
+                    <PartyDropdown_Common
+                        goButtonHandler={goButtonHandler}
+                        changeButtonHandler={partyOnChngeButtonHandler} />
 
                     <form noValidate>
                         <div className="px-3 c_card_filter header text-black mb-1" >
@@ -528,11 +546,12 @@ const StockEntry = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
                                         <Col sm="7">
-                                            <Select
+                                            <C_Select
                                                 id="ItemName "
                                                 name="ItemName"
                                                 value={values.ItemName}
                                                 isSearchable={true}
+                                                isLoading={partyItemListLoading}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{

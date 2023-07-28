@@ -29,7 +29,7 @@ import {
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction"
 import { C_DatePicker } from "../../../CustomValidateForm";
-
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const CreditList = () => {
 
@@ -70,7 +70,7 @@ const CreditList = () => {
         })
     );
 
-    const { pageField, RetailerList, CreditDebitType } = reducers;
+    const { pageField, RetailerList, CreditDebitType, listBtnLoading } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -235,6 +235,9 @@ const CreditList = () => {
             return a
         })
     }
+    function partyOnChngeButtonHandler() {
+        dispatch(GetCreditListSuccess([]))
+    }
 
     const HeaderContent = () => {
         return (
@@ -307,7 +310,7 @@ const CreditList = () => {
                     </Col >
 
                     <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
-                        <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
+                        <Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
                     </Col>
                 </div>
             </div>
@@ -316,8 +319,11 @@ const CreditList = () => {
 
     return (
         <React.Fragment>
-            <PageLoadingSpinner isLoading={(reducers.listBtnLoading || !pageField)} />
+            <PageLoadingSpinner isLoading={(listBtnLoading || !pageField)} />
             <div className="page-content">
+                <PartyDropdown_Common
+                    changeButtonHandler={partyOnChngeButtonHandler}
+                />
                 {
                     (pageField) ?
                         <CommonPurchaseList

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
-import { C_Button, Change_Button } from "./CommonButton";
+import { C_Button } from "./CommonButton";
 import { C_Select } from "../../CustomValidateForm";
 import { loginUserAdminRole } from "./CommonFunction";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const initialLocalStorageParty = () => {
     let party = JSON.parse(localStorage.getItem("selectedParty"));
@@ -12,19 +13,25 @@ const initialLocalStorageParty = () => {
     }
     return party
 }
-const PartyDropdown = ({ goButtonHandler, changeButtonHandler }) => {
+const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading }) => {
 
     const [selectedParty, setSelectedParty] = useState(initialLocalStorageParty);
     const [changeButtonShow, setChangeButtonShow] = useState(() => !(initialLocalStorageParty().value === 0));
 
-
-    const partyList = useSelector((state) => state.CommonPartyDropdownReducer.commonPartyDropdown);
+    const { partyList, partyDropdownLoading } = useSelector((state) => ({
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
+    }));
 
     const updateSelectedParty = (newValue) => {
         setSelectedParty(newValue);
     };
 
     const internalGoBtnHandler = async () => {
+        if (selectedParty.value === 0) {
+            customAlert({ Type: 3, Message: "Please Select Party" });
+            return;
+        }
         localStorage.setItem("selectedParty", JSON.stringify(selectedParty));
         if (goButtonHandler) {
             await goButtonHandler();
@@ -55,13 +62,14 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler }) => {
                                     value={selectedParty}
                                     styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
                                     isSearchable={true}
+                                    isLoading={partyDropdownLoading}
                                     className="react-dropdown"
                                     classNamePrefix="dropdown"
                                     options={partyList.map((data) => ({
                                         value: data.id,
                                         label: data.Name,
                                     }))}
-                                    isDisabled={(changeButtonShow)}
+                                    isDisabled={(changeButtonShow && !(selectedParty.value === 0))}
                                     onChange={(e) => updateSelectedParty(e)}
                                 />
                             </Col>
@@ -70,17 +78,21 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler }) => {
 
 
                     <Col sm="1">
-                        {(!changeButtonShow) ? (
+                        {(!(changeButtonShow)) ? (
                             <C_Button
                                 type="button"
-                                loading={false}
                                 className="btn btn-outline-primary border-1 font-size-12 text-center"
                                 onClick={internalGoBtnHandler}
                             >
                                 Select
                             </C_Button>
                         ) : (
-                            <Change_Button onClick={internalChangeBtnHandler} />
+                            <C_Button
+                                type="button"
+                                spinnerColor={"info"}
+                                className="btn btn-outline-info border-1 font-size-12 "
+                                onClick={internalChangeBtnHandler}
+                                loading={goBtnLoading} >Change</C_Button>
                         )}
                     </Col>
 
