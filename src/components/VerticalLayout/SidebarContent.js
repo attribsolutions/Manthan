@@ -8,12 +8,12 @@ import { withTranslation } from "react-i18next";
 import MetisMenu from "metismenujs";
 import { useHistory, withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { roleAceessAction, roleAceessActionError } from "../../store/actions";
-import { loginCompanyID, loginUserDetails, loginEmployeeID, loginPartyID } from "../Common/CommonFunction";
+import { roleAceessActionError } from "../../store/actions";
+import { loginUserDetails } from "../Common/CommonFunction";
 import * as urlRel from "../../routes/urlRalations";
 import { useDispatch, useSelector } from "react-redux";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { getpartysetting_API } from "../../store/Administrator/PartySetting/action";
+import { afterloginOneTimeAPI } from "../Common/AfterLoginApiFunc";
 
 const SidebarContent = (props) => {
   const dispatch = useDispatch();
@@ -46,13 +46,10 @@ const SidebarContent = (props) => {
   useEffect(() => {
 
     if (RoleAccessUpdateData.length <= 0) {
-      let role = loginUserDetails()
-      if (role) {
-        let party = loginPartyID()
-        let employee = loginEmployeeID();
-        let company = loginCompanyID();
-        dispatch(roleAceessAction(party, employee, company))
-        dispatch(getpartysetting_API(party, company))//login party id pass to getpartysetting_API
+      let user = loginUserDetails()
+      if (user) {
+        //api call roleAceessAction Api,partysetting Api , Party Dropdown Api and set localstorage roleId ;
+        afterloginOneTimeAPI(user, dispatch);// all common function
       };
     }
   }, [])

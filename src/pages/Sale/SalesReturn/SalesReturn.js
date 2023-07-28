@@ -8,7 +8,7 @@ import {
     Button,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, Retailer_List_Success, commonPageFieldSuccess, getPartyItemListSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -35,6 +35,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const SalesReturn = (props) => {
 
@@ -841,13 +842,46 @@ const SalesReturn = (props) => {
         } catch (e) { _cfunc.CommonConsole(e) }
     };
 
+    const partySelectButtonHandler = (e) => {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+        // dispatch(getVehicleList())
+        // dispatch(getDriverList())
+    }
+
+    const partyOnChngeButtonHandler = (e) => {
+        dispatch(InvoiceNumberSuccess([]));
+        dispatch(getPartyItemListSuccess([]));
+        dispatch(Retailer_List_Success([]));
+        setState((i) => {
+
+            let a = { ...i }
+            a.values.Customer = ""
+            a.values.ItemName = ""
+            a.values.InvoiceNumber = ''
+
+            a.hasValid.Customer.valid = true;
+            a.hasValid.ItemName.valid = true;
+            a.hasValid.InvoiceNumber.valid = true;
+            return a
+        })
+    }
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-
+                    <PartyDropdown_Common
+                        goButtonHandler={partySelectButtonHandler}
+                        changeBtnShow={!(ReturnReasonOptions.length === 0) && !(ItemList_Options.length === 0) && !(InvoiceNo_Options.length === 0)}
+                        changeButtonHandler={partyOnChngeButtonHandler}
+                    />
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             {/* < img id='add-img' className='abc1' src={''} style={{ top: "400px" }} /> */}

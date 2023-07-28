@@ -10,6 +10,8 @@ import DiscountMaster from "./DiscountMaster";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { getDiscountList, getDiscountListSuccess } from "../../../store/Administrator/DiscountRedux/actions";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const DiscountList = () => {
 
@@ -42,14 +44,21 @@ const DiscountList = () => {
     }, []);
 
     const goButtonHandler = () => {
+        try {
+            if (_cfunc.loginPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = JSON.stringify({
+                "FromDate": fromdate,
+                "ToDate": todate,
+                "Party": _cfunc.loginPartyID()
+            });
 
-        const jsonBody = JSON.stringify({
-            "FromDate": fromdate,
-            "ToDate": todate,
-            "Party": _cfunc.loginPartyID()
-        });
-        dispatch(getDiscountList(jsonBody));
-    }
+            dispatch(getDiscountList(jsonBody));
+        } catch (error) { }
+        return
+    };
 
     function fromdateOnchange(e, date) {
         let newObj = { ...headerFilters }
@@ -63,11 +72,17 @@ const DiscountList = () => {
         setHeaderFilters(newObj)
     }
 
+    function partyOnChngeButtonHandler() {
+        dispatch(getDiscountListSuccess([]));
+    }
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-
+                <PartyDropdown_Common
+                    changeButtonHandler={partyOnChngeButtonHandler}
+                />
                 <div className="px-3 c_card_filter header text-black mb-1" >
 
                     <Row >

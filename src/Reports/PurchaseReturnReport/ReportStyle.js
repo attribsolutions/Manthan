@@ -19,7 +19,7 @@ let initial_y = 0
 
 
 export const pageBorder = (doc, data) => {
-    debugger
+    
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
     doc.line(30, data.PrintType ? 379 : 815, 30, 16);//vertical line (left)

@@ -21,6 +21,7 @@ import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 import OrderView from "./OrderView";
 import OrderView_Modal from "./OrderView";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 
 const OrderList = () => {
@@ -398,12 +399,14 @@ const OrderList = () => {
         dispatch(_act.viewOrderSingleget(config))
     }
 
-
-
     function goButtonHandler(event, IBType) {
 
         _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
+            if (_cfunc.loginPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
             let filtersBody = {}
             const isCustomerType = values.CustomerType.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
 
@@ -489,6 +492,7 @@ const OrderList = () => {
             return a
         })
     }
+
     const selectSaveBtnHandler = (row = []) => {
 
         let ischeck = row.filter(i => (i.selectCheck))
@@ -601,10 +605,15 @@ const OrderList = () => {
         )
     }
 
+    function partyOnChngeButtonHandler() {
+        dispatch(_act.getOrderListPageSuccess([]))
+    }
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.goBtnLoading || !pageField} />
             <div className="page-content">
+                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList

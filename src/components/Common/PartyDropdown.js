@@ -1,77 +1,105 @@
-import React, { useLayoutEffect, } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Col, FormGroup, Label, } from "reactstrap";
-import Select from "react-select";
-import { getPartyListAPI, getPartyListAPISuccess } from "../../store/Administrator/PartyRedux/action";
-import { Change_Button, Go_Button } from "./CommonButton";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { Col, FormGroup, Label } from "reactstrap";
+import { C_Button } from "./CommonButton";
 import { C_Select } from "../../CustomValidateForm";
+import { loginUserAdminRole } from "./CommonFunction";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
+const initialLocalStorageParty = () => {
+    let party = JSON.parse(localStorage.getItem("selectedParty"));
+    if (party.value === 0) {
+        return { value: 0, label: "Select..." }
+    }
+    return party
+}
+const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading }) => {
 
-const PartyDropdown_Common = (props) => {
+    const [selectedParty, setSelectedParty] = useState(initialLocalStorageParty);
+    const [changeButtonShow, setChangeButtonShow] = useState(() => !(initialLocalStorageParty().value === 0));
 
-    const dispatch = useDispatch();
-
-    const { partySelect, setPartyFunc, goButtonHandler, change_ButtonHandler, changeBtnShow } = props
-
-
-    const { partyList, partyDropDownLoading } = useSelector((state) => ({
-        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
-        partyList: state.PartyMasterReducer.partyList,
+    const { partyList, partyDropdownLoading } = useSelector((state) => ({
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
     }));
 
-    useLayoutEffect(() => {
-        dispatch(getPartyListAPI())
-        return () => {
-            dispatch(getPartyListAPISuccess([]))
+    const updateSelectedParty = (newValue) => {
+        setSelectedParty(newValue);
+    };
+
+    const internalGoBtnHandler = async () => {
+        if (selectedParty.value === 0) {
+            customAlert({ Type: 3, Message: "Please Select Party" });
+            return;
         }
-    }, []);
+        localStorage.setItem("selectedParty", JSON.stringify(selectedParty));
+        if (goButtonHandler) {
+            await goButtonHandler();
+        }
+        setChangeButtonShow(true)
+    }
 
-    const party_DropdownOptions = partyList.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
-
+    const internalChangeBtnHandler = () => {
+        if (changeButtonHandler) {
+            changeButtonHandler();
+        }
+        localStorage.setItem("selectedParty", JSON.stringify({ value: 0 }));
+        setSelectedParty({ value: 0, label: "Select..." })
+        setChangeButtonShow(false)
+    };
 
     return (
-        <React.Fragment>
-            <div className="px-2   c_card_header text-black  " >
+        loginUserAdminRole() && (
+            <div className="px-2 c_card_header text-black mb-1">
                 <div className="row pt-2">
                     <Col sm="5">
-                        <FormGroup className=" row " >
-                            <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>Party</Label>
+                        <FormGroup className="row">
+                            <Label className="col-sm-5 p-2" style={{ width: "83px" }}>
+                                Party
+                            </Label>
                             <Col sm="6">
                                 <C_Select
-                                    value={partySelect}
-                                    styles={{
-                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                    }}
+                                    value={selectedParty}
+                                    styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
                                     isSearchable={true}
+                                    isLoading={partyDropdownLoading}
                                     className="react-dropdown"
                                     classNamePrefix="dropdown"
-                                    isLoading={partyDropDownLoading}
-                                    options={party_DropdownOptions}
-                                    isDisabled={changeBtnShow}
-                                    onChange={(e) => { setPartyFunc(e) }}
+                                    options={partyList.map((data) => ({
+                                        value: data.id,
+                                        label: data.Name,
+                                    }))}
+                                    isDisabled={(changeButtonShow && !(selectedParty.value === 0))}
+                                    onChange={(e) => updateSelectedParty(e)}
                                 />
                             </Col>
                         </FormGroup>
                     </Col>
 
-                    {goButtonHandler &&
-                        <Col sm="1" >
-                            {!changeBtnShow ?
-                                < Go_Button
-                                    forceDisabled={partyDropDownLoading}
-                                    onClick={() => goButtonHandler()} />
-                                :
-                                <Change_Button onClick={() => change_ButtonHandler()} />
-                            }
-                        </Col>
-                    }
+
+                    <Col sm="1">
+                        {(!(changeButtonShow)) ? (
+                            <C_Button
+                                type="button"
+                                className="btn btn-outline-primary border-1 font-size-12 text-center"
+                                onClick={internalGoBtnHandler}
+                            >
+                                Select
+                            </C_Button>
+                        ) : (
+                            <C_Button
+                                type="button"
+                                spinnerColor={"info"}
+                                className="btn btn-outline-info border-1 font-size-12 "
+                                onClick={internalChangeBtnHandler}
+                                loading={goBtnLoading} >Change</C_Button>
+                        )}
+                    </Col>
+
                 </div>
             </div>
-        </React.Fragment >
-    )
-}
-export default PartyDropdown_Common
+        )
+    );
+};
+
+export default PartyDropdown;

@@ -20,14 +20,15 @@ import { url, mode, pageId } from "../../../routes/index"
 import SalesReturnView_Modal from "./SalesReturnConfirm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as report from '../../../Reports/ReportIndex'
-import { ReturnPrint_API, SalesReturn_SingleGet_API } from "../../../helpers/backend_helper";
-
+import { ReturnPrint_API } from "../../../helpers/backend_helper";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const SalesReturnList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
@@ -40,6 +41,7 @@ const SalesReturnList = () => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', buttonMsgLable: '' });
     const [PurchaseReturnMode_3_Access, setPurchaseReturnMode_3_Access] = useState(false)
+
     let customerdropdownLabel = subPageMode === url.SALES_RETURN_LIST ? "Customer" : "Supplier"
 
     const reducers = useSelector(
@@ -59,7 +61,8 @@ const SalesReturnList = () => {
         })
     );
 
-    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg, loading, sendToSSbtnLoading } = reducers;
+    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg, loading, sendToSSbtnLoading, tableList } = reducers;
+
     const values = { ...state.values }
 
     const action = {
@@ -104,6 +107,7 @@ const SalesReturnList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
+
         return () => {
             dispatch(salesReturnListAPISuccess([]))
         }
@@ -154,15 +158,36 @@ const SalesReturnList = () => {
         label: " All"
     });
 
-    function goButtonHandler() {
-        const jsonBody = JSON.stringify({
-            FromDate: values.FromDate,
-            ToDate: values.ToDate,
-            CustomerID: (subPageMode === url.SALES_RETURN_LIST) ? values.Customer.value : _cfunc.loginPartyID(),
-            PartyID: (subPageMode === url.SALES_RETURN_LIST) ? _cfunc.loginPartyID() : values.Customer.value,
-        });
-        dispatch(salesReturnListAPI(jsonBody));
-    }
+    const goButtonHandler = () => {
+        try {
+            if (_cfunc.loginPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const salesReturnJsonBody = JSON.stringify({
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                CustomerID: values.Customer.value,
+                PartyID: _cfunc.loginPartyID()
+            });
+            const purchaseReturnJsonBody = JSON.stringify({
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                CustomerID: _cfunc.loginPartyID(),
+                PartyID: values.Customer.value,
+            });
+
+            let jsonBody;
+            if (subPageMode === url.SALES_RETURN_LIST) {
+                jsonBody = (salesReturnJsonBody);
+            }
+            else {
+                jsonBody = (purchaseReturnJsonBody);
+            }
+            dispatch(salesReturnListAPI(jsonBody));
+        } catch (error) { }
+        return
+    };
 
     function fromdateOnchange(e, date) {
         setState((i) => {
@@ -199,6 +224,10 @@ const SalesReturnList = () => {
     function downBtnFunc(config) {
         config["ReportType"] = report.Return;
         dispatch(getpdfReportdata(ReturnPrint_API, config))
+    }
+
+    function partyOnChngeButtonHandler() {
+        dispatch(salesReturnListAPISuccess([]))
     }
 
     const HeaderContent = () => {
@@ -280,6 +309,9 @@ const SalesReturnList = () => {
         <React.Fragment>
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(loading || !pageField)} />
+
+                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
+
                 {
                     (pageField) ?
                         <CommonPurchaseList
