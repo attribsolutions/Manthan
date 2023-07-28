@@ -20,11 +20,10 @@ import Select from "react-select";
 import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx, floatRegx, onlyNumberRegx } from "../../../CustomValidateForm";
+import { C_DatePicker } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { useLayoutEffect } from "react";
-
 
 const GRNAdd3 = (props) => {
 
@@ -43,7 +42,6 @@ const GRNAdd3 = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
 
-
     const fileds = {
         GRNDate: currentDate_ymd,
     }
@@ -58,7 +56,6 @@ const GRNAdd3 = (props) => {
         saveBtnloading,
         genralMaster_type69
     } = useSelector((state) => ({
-        // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
@@ -67,8 +64,6 @@ const GRNAdd3 = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
         genralMaster_type69: state.PartyMasterBulkUpdateReducer.SelectField,
     }));
-
-
 
     const values = { ...state.values }
 
@@ -115,7 +110,6 @@ const GRNAdd3 = (props) => {
         if ((items.Status === true)) {
 
             const grnDetails = { ...items.Data }
-
             setGrnItemTableList(grnDetails.OrderItem)
 
             setInvoiceNo(grnDetails.InvoiceNumber)
@@ -213,15 +207,15 @@ const GRNAdd3 = (props) => {
             ),
         },
 
-        {  //-------------MRP column ----------------------------------
+        {  //-------------GST column ----------------------------------
             text: "GST",
             dataField: "GSTDropdown",
             align: () => ('right'),
             style: () => ({ minWidth: "100px" }),
             formatter: (cellContent, row, key) => (
                 <Select
-                    id={`MRP${key}`}
-                    name="MRP"
+                    id={`GST${key}`}
+                    name="GST"
                     defaultValue={row.DefaultGST}
                     isSearchable={true}
                     className="react-dropdown"
@@ -261,7 +255,6 @@ const GRNAdd3 = (props) => {
                     </div>
                 </>
             ),
-
         },
 
         {//------------- Batch Date column ----------------------------------
@@ -298,7 +291,6 @@ const GRNAdd3 = (props) => {
                 )
             }
         },
-
     ];
 
     const defaultSorted = [
@@ -320,7 +312,7 @@ const GRNAdd3 = (props) => {
             let sum = 0
             let inValidMsg = []
             grnItemTableList.forEach(i => {
-                
+
 
                 if (!(i.Quantity > 0)) {
                     inValidMsg.push({ [i.ItemName]: "This Item Quantity Is Require..." });
@@ -433,7 +425,6 @@ const GRNAdd3 = (props) => {
                                         <Input
                                             type="text"
                                             value={pageMode === mode.view ? EditData.CustomerName : grnDetail.SupplierName}
-                                            // disabled={pageMode === mode.view ? true : false} 
                                             disabled={(pageMode === mode.view) && true}
                                         />
                                     </Col>
@@ -485,7 +476,7 @@ const GRNAdd3 = (props) => {
                                             style={{ paddingTop: "7px" }}
                                             placeholder="Enter Invoice No"
                                             disabled={true}
-                                        // onChange={(e) => openPOdata[0].Inward = true}
+
                                         />
 
                                     </Col>
@@ -529,7 +520,6 @@ const GRNAdd3 = (props) => {
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
-
 
                     {
                         (grnItemTableList.length > 0) ?

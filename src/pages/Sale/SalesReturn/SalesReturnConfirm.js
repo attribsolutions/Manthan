@@ -169,7 +169,7 @@ const ViewDetails_Modal = () => {
                 if (tableArray.viewMode === url.PURCHASE_RETURN_LIST) {
                     return <div style={{ width: "120px" }}>{`${row.Quantity} ${row.UnitName}`}</div>
                 } else {
-                    debugger
+                    
                     const defaultQuantity = tableArray.IsApproved ? row.ApprovedQuantity : row.Quantity;
                     return (
                         <div>

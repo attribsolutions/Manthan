@@ -36,7 +36,9 @@ const DiscountList = () => {
         const page_Id = pageId.DISCOUNT_LIST;
         dispatch(commonPageFieldListSuccess(null));
         dispatch(commonPageFieldList(page_Id));
-        goButtonHandler(true);
+        if (!(_cfunc.loginPartyID() === 0)) {
+            goButtonHandler()
+          }
         return () => {
             dispatch(getDiscountListSuccess([]));
             dispatch(commonPageFieldListSuccess(null));

@@ -11,7 +11,7 @@ import {
     PartyMasterBulkUpdate_GoButton_Post_API,
     Post_PartyMasterBulkUpdateAPI,
     post_PartyAPI,
-    post_SelectFieldAPI,
+    GenralMasterSubType,
     Update_Party_Bulk,
 } from "../../../helpers/backend_helper";
 import {
@@ -52,7 +52,7 @@ function* Post_Party_GenratorFunction({ jsonBody }) {
 function* Post_SelectField_GenratorFunction({ jsonBody }) {
 
     try {
-        const response = yield call(post_SelectFieldAPI, jsonBody);
+        const response = yield call(GenralMasterSubType, jsonBody);
         yield put(postSelect_Field_for_dropdown_Success(response.Data));
     } catch (error) { yield put(PartyBulkApiErrorAction()) }
 }

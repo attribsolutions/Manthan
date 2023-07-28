@@ -53,7 +53,9 @@ const SalesManList = (props) => {
         const page_Id = pageId.SALESMAN_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        goButtonHandler()
+        if (!(loginPartyID() === 0)) {
+            goButtonHandler()
+        }
         return () => {
             dispatch(getSalesManlistSuccess([]));
             dispatch(commonPageFieldListSuccess(null))
@@ -62,16 +64,12 @@ const SalesManList = (props) => {
 
     const goButtonHandler = () => {
         try {
-            if (loginPartyID() === 0) {
+            const loginParty = loginPartyID();
+            if (loginParty === 0) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
-            const jsonBody = JSON.stringify({
-                CompanyID: loginCompanyID(),
-                PartyID: loginPartyID(),
-            });
-
-            dispatch(getSalesManlist(jsonBody));
+            dispatch(getSalesManlist());
         } catch (error) { }
         return
     };

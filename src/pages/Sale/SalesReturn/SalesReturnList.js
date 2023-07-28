@@ -106,7 +106,9 @@ const SalesReturnList = () => {
         setOtherState({ masterPath, newBtnPath, buttonMsgLable })
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        goButtonHandler(true)
+        if (!(_cfunc.loginPartyID() === 0)) {
+            goButtonHandler()
+        }
 
         return () => {
             dispatch(salesReturnListAPISuccess([]))

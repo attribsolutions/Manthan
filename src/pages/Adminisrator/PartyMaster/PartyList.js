@@ -19,6 +19,7 @@ import { useHistory } from 'react-router-dom';
 import { PageLoadingSpinner } from '../../../components/Common/CommonButton';
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import CommonPurchaseList from '../../../components/Common/CommonPurchaseList';
+import { loginPartyID } from '../../../components/Common/CommonFunction';
 
 const PartyList = () => {
 
@@ -86,7 +87,7 @@ const PartyList = () => {
         }
     }, []);
 
-    const { pageField, goBtnLoading, tableList } = reducers
+      const { pageField, goBtnLoading, tableList } = reducers
 
     function goButtonHandler() {
         dispatch(getPartyListAPI(subPageMode));

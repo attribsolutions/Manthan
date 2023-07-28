@@ -19,7 +19,6 @@ export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
 export const CHANGEPASSWORD_API = "/ChangePassword"
 
-
 export const SUPER_ADMIN_API = '/SuperAdmin'
 
 export const TOKEN_REFRESH_API = '/api/token/refresh/'
@@ -79,7 +78,6 @@ export const GET_SUBGROUP_BY_GROUP_ID = "/GetSubGroupByGroupID"
 export const GET_ITEM_TAG = "/ItemTag"
 export const GET_BRAND_TAG = "/ItemBrand"
 export const GENERAL_MASTER_BRAND_NAME = "/GeneralMasterBrandName"
-
 
 // M_Items_group Api
 export const ITEMS_GROUP_API = "/ItemGroups"
@@ -209,7 +207,6 @@ export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
 export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 export const PARTY_ITEM_FILTER = '/PartyItemFilter' // FOR Get
 
-
 //Routes
 export const ROUTES_FILTER = '/RoutesFilter '
 export const ROUTES_FOR_MASTER = '/Routes'
@@ -275,7 +272,6 @@ export const CHALLAN_SAVE_GRN_LIST = "/Challan"
 export const CHALLAN_ITEMS = "/ChallanItems"
 export const CHALLAN_ITEMS_STOCK = "/ChallanItemStock"
 
-
 //Bill Of Master
 export const BOM = '/Billofmaterial'
 export const GET_ITEM_UNITS = '/GetItemUnits'
@@ -339,9 +335,6 @@ export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter A
 export const LOADINGSHEET_PARTY_WISE_INVOICE = '/LoadingSheetPrint'// Loading sheet Print Api
 export const PURCHASE_RETURN_PRINT = '/PurchaseReturnPrint'// Loading sheet Print Api
 
-
-
-
 // Management Parties API
 export const MANAGEMENT_PARTIES = '/ManagementEmpParties'
 export const GO_BUTTON_API_MANAGEMENT_PARTIES = '/ManagementEmpPartiesFilter'
@@ -367,7 +360,6 @@ export const SALES_RETURN_ITEM = '/PurchaseReturn'
 export const SEND_TO_SUPERSTOCKIEST_POST_API = "/SalesReturnconsolidateItem"
 export const RETURN_ITEM_APPROVE_AIP = '/ReturnItemApprove'
 
-
 // Credit and Debit API
 export const CREDIT_DEBIT = '/CreditDebitNote'
 export const CREDIT_DEBIT_FILTER = '/CreditDebitNoteFilter'
@@ -376,7 +368,6 @@ export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
 
 export const PARTY_LEDGER_API = '/SAPLedger'
 export const PRODUCT_MARGIN_REPORT_API = '/ProductMarginReport'
-
 
 // Dashboard
 export const DASHBOARD = '/getdashboard'
@@ -402,5 +393,4 @@ export const PARTY_SETTING = '/PartySettings'
 // StockEntry
 export const STOCK_ENTRY = '/PartyStockEntry'
 export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"
-
 

@@ -187,7 +187,9 @@ const OrderList = () => {
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-        goButtonHandler("event", IBType)
+        if (!(_cfunc.loginPartyID() === 0)) {
+            goButtonHandler("event", IBType)
+        }
         dispatch(priceListByCompay_Action());
 
         return () => {

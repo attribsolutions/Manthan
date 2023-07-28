@@ -124,7 +124,11 @@ const InvoiceList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-        goButtonHandler("event", IBType)
+      
+        if (!(_cfunc.loginPartyID() === 0)) {
+            goButtonHandler("event", IBType)
+        }
+
     }, [dispatch]);
 
     useEffect(() => {
