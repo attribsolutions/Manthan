@@ -24,9 +24,9 @@ export const SUPER_ADMIN_API = '/SuperAdmin'
 
 export const TOKEN_REFRESH_API = '/api/token/refresh/'
 
-
-
 export const PAGE_FIELD = '/PageMaster'
+
+export const COMMON_PARTY_DROPDOWN_API = '/ManagementEmpParties'
 
 //PAGE Master
 export const GET_DEFAULT_MODULE = "/HModules"

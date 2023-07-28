@@ -2,29 +2,26 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RoutesMaster from "./RoutesMaster";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import {
   deleteRoutesID_Success,
   deleteRoutesID,
   editRoutesID,
   SaveRoutesMasterSuccess,
   GetRoutesList,
-  updateRoutesIDSuccess
+  updateRoutesIDSuccess,
+  GetRoutesListSuccess
 } from "../../../store/Administrator/RoutesRedux/actions";
-import { loginCompanyID, loginPartyID, loginUserAdminRole } from "../../../components/Common/CommonFunction";
+import { loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoutesList = (props) => {
 
   const dispatch = useDispatch();
-  const userAdminRole = loginUserAdminRole();
-
-  const [party, setParty] = useState({ value: loginPartyID(), label: "Select..." });
 
   const reducers = useSelector(
     (state) => ({
@@ -40,7 +37,7 @@ const RoutesList = (props) => {
     })
   );
 
-  const { pageField, } = reducers;
+  const { pageField, goBtnLoading } = reducers;
 
   const action = {
     getList: GetRoutesList,
@@ -56,53 +53,59 @@ const RoutesList = (props) => {
     const page_Id = pageId.ROUTES_LIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    if (!userAdminRole) { goButtonHandler() }
+    goButtonHandler()
+    return () => {
+      dispatch(GetRoutesListSuccess([]));
+    }
   }, []);
 
   const goButtonHandler = () => {
+    try {
+      if (loginPartyID() === 0) {
+        customAlert({ Type: 3, Message: "Please Select Party" });
+        return;
+      };
+      const jsonBody = JSON.stringify({
+        CompanyID: loginCompanyID(),
+        PartyID: loginPartyID(),
+      });
 
-    const jsonBody = JSON.stringify({
-      CompanyID: loginCompanyID(),
-      PartyID: party.value,
-    });
-    dispatch(GetRoutesList(jsonBody));
+      dispatch(GetRoutesList(jsonBody));
+    } catch (error) { }
+    return
   };
 
-  const partyOnChngeHandler = (e) => {
-    setParty(e)
-  };
+  const partyOnChngeButtonHandler = (e) => {
+    dispatch(GetRoutesListSuccess([]));
+  }
 
   return (
-
     <React.Fragment>
-      <PageLoadingSpinner isLoading={(reducers.goBtnLoading || !pageField)} />
+      <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       <div className="page-content">
+
+        <PartyDropdown_Common
+          goBtnLoading={goBtnLoading}
+          goButtonHandler={goButtonHandler}
+          changeButtonHandler={partyOnChngeButtonHandler}
+        />
+
         {
           (pageField) &&
-          <>
-            {userAdminRole &&
-              <div className="mb-2">
-                <PartyDropdown_Common
-                  partySelect={party}
-                  setPartyFunc={partyOnChngeHandler}
-                  goButtonHandler={goButtonHandler}
-                />
-              </div>
-            }
-            <div className="mt-n1">
-              <CommonPurchaseList
-                action={action}
-                reducers={reducers}
-                showBreadcrumb={false}
-                MasterModal={RoutesMaster}
-                masterPath={url.ROUTES}
-                newBtnPath={url.ROUTES}
-                ButtonMsgLable={"Routes"}
-                deleteName={"Name"}
-                goButnFunc={goButtonHandler}
-              />
-            </div>
-          </>
+          <div className="mt-n1">
+            <CommonPurchaseList
+              action={action}
+              reducers={reducers}
+              showBreadcrumb={false}
+              MasterModal={RoutesMaster}
+              masterPath={url.ROUTES}
+              newBtnPath={url.ROUTES}
+              ButtonMsgLable={"Routes"}
+              deleteName={"Name"}
+              goButnFunc={goButtonHandler}
+            />
+          </div>
+
         }
       </div>
 

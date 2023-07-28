@@ -109,6 +109,8 @@ export const post_SuperAdmin = (data) => post(url.SUPER_ADMIN_API, data) //save 
 
 //  common pages get data for page filed and validation
 export const commonPageFiled_API = (pageId) => get(`${url.PAGE_FIELD}/${pageId}`)
+export const commonPartyDropdown_API = (employeeID) => get(`${url.COMMON_PARTY_DROPDOWN_API}/${employeeID}`)
+
 
 // Employees  Component All Api 
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)

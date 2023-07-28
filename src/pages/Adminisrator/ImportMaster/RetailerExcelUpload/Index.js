@@ -42,7 +42,6 @@ const RetailerExcelUpload = (props) => {
 
     const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [], partyNO: [] }
 
-
     const [priceListSelect, setPriceListSelect] = useState({ value: '', label: "" })
 
     const [userPageAccessState, setUserAccState] = useState('');

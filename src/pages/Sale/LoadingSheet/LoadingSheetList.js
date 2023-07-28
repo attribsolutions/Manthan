@@ -10,6 +10,8 @@ import {
     DeleteLoadingSheet,
     DeleteLoadingSheetSucccess,
     LoadingSheetListAction,
+    LoadingSheetListActionSuccess,
+    LoadingSheet_GoBtn_API_Succcess,
     UpdateLoadingSheet,
 
 } from "../../../store/Sales/LoadingSheetRedux/action";
@@ -24,17 +26,17 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const LoadingSheetList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func()
-    const systemSetting = _cfunc.loginSystemSetting();
-
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [pageMode] = useState(mode.defaultList);
-
+    const [party, setParty] = useState({ value: "", label: "Select..." });
     const reducers = useSelector(
         (state) => ({
             loading: state.LoadingSheetReducer.loading,
@@ -64,9 +66,11 @@ const LoadingSheetList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
-        goButtonHandler()
+        goButtonHandler(true)
         dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id, _cfunc.loginCompanyID()))
-
+        return () => {
+            dispatch(LoadingSheetListActionSuccess([]))
+        }
     }, []);
 
     useEffect(() => {
@@ -77,14 +81,22 @@ const LoadingSheetList = () => {
         }
     }, [LoadingSheetUpdateList])
 
-    function goButtonHandler() {
-        const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            PartyID: _cfunc.loginPartyID(),
-        });
-        dispatch(LoadingSheetListAction(jsonBody));
-    }
+    const goButtonHandler = () => {
+        try {
+            if (_cfunc.loginPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = JSON.stringify({
+                FromDate: fromdate,
+                ToDate: todate,
+                PartyID: _cfunc.loginPartyID(),
+            });
+
+            dispatch(LoadingSheetListAction(jsonBody));
+        } catch (error) { }
+        return
+    };
 
     function fromdateOnchange(e, date) {
         let newObj = { ...headerFilters }
@@ -111,14 +123,21 @@ const LoadingSheetList = () => {
     }
 
     const otherBtn_1Func = (list) => {
-
         dispatch(UpdateLoadingSheet({ RowId: list.rowData.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
+
+    function partyOnChngeButtonHandler() {
+        dispatch(LoadingSheetListActionSuccess([]))
+    }
 
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
+
             <div className="page-content">
+
+                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
+
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">
                         <div className=" row mt-2 mb-1">
