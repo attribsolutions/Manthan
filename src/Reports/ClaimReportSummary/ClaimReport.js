@@ -14,8 +14,10 @@ import * as XLSX from 'xlsx';
 import { GetVenderSupplierCustomer, SSDD_List_under_Company, getpdfReportdata } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
-import { ClaimSummary_API, PartyLedgerReport_API } from "../../helpers/backend_helper";
+import { ClaimSummary_API, MasterClaimSummary_API, PartyLedgerReport_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
+import { postClaimMasterCreate_API, postMasterClaimCreat_API_Success } from "../../store/Report/ClaimSummary/action";
+import { formatDate } from "@fullcalendar/react";
 
 const ClaimSummary = (props) => {
 
@@ -40,6 +42,7 @@ const ClaimSummary = (props) => {
 
     const reducers = useSelector(
         (state) => ({
+            ClaimSummaryGobtn: state.ClaimSummaryReducer.ClaimSummaryGobtn,
             pdfdata: state.PdfReportReducers.pdfdata,
             ReportBtnLoading: state.PdfReportReducers.ReportBtnLoading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -48,7 +51,7 @@ const ClaimSummary = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, orderSummaryGobtn, SSDD_List, supplier, pdfdata } = reducers;
+    const { userAccess, orderSummaryGobtn, SSDD_List, supplier, pdfdata, ClaimSummaryGobtn } = reducers;
 
     const values = { ...state.values }
 
@@ -78,8 +81,6 @@ const ClaimSummary = (props) => {
     }, [])
 
     useEffect(() => {
-
-
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
             customAlert({
                 Type: 3,
@@ -88,6 +89,18 @@ const ClaimSummary = (props) => {
             return
         }
     }, [pdfdata])
+
+
+    useEffect(() => {
+        if ((ClaimSummaryGobtn.Status === true) && (ClaimSummaryGobtn.StatusCode === 200)) {
+            dispatch(postMasterClaimCreat_API_Success([]))
+            customAlert({
+                Type: 1,
+                Message: ClaimSummaryGobtn.Message,
+            })
+            return
+        }
+    }, [ClaimSummaryGobtn])
 
 
     const CustomerOptions = supplier.map((i) => ({
@@ -107,21 +120,26 @@ const ClaimSummary = (props) => {
 
 
     function goButtonHandler(type) {
-        
-        let config = {}
 
+        let config = {}
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Customer": values.PartyName.value,
-            "Party": _cfunc.loginPartyID()
+            "Party": values.PartyName.value
         });
+
+
         if (type === 1) {
             const btnId = `gobtn-${report.ClaimSummary}`
             config = { ReportType: report.ClaimSummary, jsonBody, btnId: btnId }
-        } else {
+        }
+        if (type === 2) {
             const btnId = `gobtn-${report.CustomerWiseReturn}`
             config = { ReportType: report.CustomerWiseReturn, jsonBody, btnId: btnId }
+        }
+        if (type === 3) {
+            const btnId = `gobtn-${report.CompanyWiseBudget}`
+            config = { ReportType: report.CompanyWiseBudget, jsonBody, btnId: btnId, ToDate: values.ToDate, FromDate: values.FromDate }
         }
 
         if (values.PartyName === "") {
@@ -131,7 +149,17 @@ const ClaimSummary = (props) => {
             })
             return
         } else {
-            dispatch(getpdfReportdata(ClaimSummary_API, config))
+            if (type === 3) {
+                dispatch(getpdfReportdata(MasterClaimSummary_API, config))
+            }
+            if (type === 4) {
+                dispatch(postClaimMasterCreate_API(jsonBody))
+            }
+
+            if ((type === 2) || (type === 1)) {
+                dispatch(getpdfReportdata(ClaimSummary_API, config))
+
+            }
         }
     }
 
@@ -209,9 +237,29 @@ const ClaimSummary = (props) => {
                             </FormGroup>
                         </Col>
 
-
                         <Col sm={2}
-                            className="mt-3 ">
+                            className="mt-3  mb-3">
+                            {/* <C_Button onClick={goButtonHandler} loading={reducers.goBtnLoading} /> */}
+                            <C_Button
+                                loading={reducers.ReportBtnLoading}
+                                type="button"
+                                spinnerColor="white"
+                                className="btn btn-primary w-md  "
+                                onClick={(e) => { goButtonHandler(4) }}
+                                btnID={`gobtn-${report.CustomerWiseReturn}`}
+                            >
+                                Create Claim
+                            </C_Button>
+                        </Col>
+
+                    </div>
+                </div>
+
+                <div className="px-2 mt-2 mb-2  c_card_filter text-black"  >
+                    <div className=" d-flex justify-content-start  gap-2" >
+
+                        <div
+                            className="mt-3  mb-3">
                             {/* <C_Button onClick={goButtonHandler} loading={reducers.goBtnLoading} /> */}
                             <C_Button
                                 loading={reducers.ReportBtnLoading}
@@ -224,11 +272,11 @@ const ClaimSummary = (props) => {
                             >
                                 Claim Summary
                             </C_Button>
-                        </Col>
+                        </div>
 
 
-                        <Col sm={2}
-                            className="mt-3 ">
+                        <div
+                            className="mt-3 mb-3 ">
                             <C_Button
                                 loading={reducers.ReportBtnLoading}
                                 type="button"
@@ -239,7 +287,25 @@ const ClaimSummary = (props) => {
                             >
                                 Customer wise return
                             </C_Button>
-                        </Col>
+                        </div>
+
+
+                        <div
+                            className="mt-3  mb-3">
+                            <C_Button
+                                loading={reducers.ReportBtnLoading}
+                                type="button"
+                                spinnerColor="white"
+                                className="btn btn-primary w-md  "
+                                btnID={`gobtn-${report.CompanyWiseBudget}`}
+                                onClick={(e) => { goButtonHandler(3) }}
+                            >
+                                Master Claim
+                            </C_Button>
+                        </div>
+
+
+
                     </div>
                 </div>
             </div>

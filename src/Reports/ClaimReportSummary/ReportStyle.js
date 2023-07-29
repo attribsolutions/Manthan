@@ -19,8 +19,8 @@ export const pageBorder = (doc) => {
 
 export const pageHeder = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
-    doc.line(408, 63, 408, 16);//vertical right 1
-    doc.line(570, 63, 30, 63)  //horizontal line 1 billby upper for repeat header
+    doc.line(408, 63, 408, 16);//vertical Line header repeat header
+    doc.line(570, 63, 30, 63)  //horizontal line upper for repeat header
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
@@ -151,15 +151,10 @@ export const reportHeder1 = (doc, data) => {
 
 export const reportHeder3 = (doc, data) => {
     var date = date_dmy_func(data.InvoiceDate)
-
     doc.setFont('Tahoma')
     doc.setFontSize(10)
-    doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
-    // doc.line(570, 49, 408, 49) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
-
     doc.text(`Return Date: ${date}`, 415, 43) //Invoice date
-    // doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 60) //Invoice date
 }
 
 export const tableBody = (doc, data) => {

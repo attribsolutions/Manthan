@@ -9,11 +9,13 @@ import { dataGenrator } from "../../../Reports/Invoice report a5/DemoData";
 
 
 function* getpdfData_GenFunc({ urlpath, config }) {
-  
+
   try {
     const response = yield call(urlpath, config);
     response["ReportType"] = config.ReportType
     response.Data["ReportType"] = config.ReportType
+    response.Data["Period"] = config
+
 
     if ((config.systemSetting) || (config.subPageMode)) {
       response.Data["SettingData"] = config.systemSetting

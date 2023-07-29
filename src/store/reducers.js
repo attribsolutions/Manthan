@@ -93,6 +93,8 @@ import ReceiptReducer from "./Accounting/Receipt/reducer"
 
 //***************************Reports ************************** */
 import OrderSummaryReducer from "./Report/OrderSummaryRedux/reducer"
+import ClaimSummaryReducer from "./Report/ClaimSummary/reducer"
+
 import StockReportReducer from "./Report/StockReport/reducer"
 
 import RetailerDataReducer from "./Report/RetailerDataRedux/reducer"
@@ -177,6 +179,7 @@ const rootReducer = combineReducers({
   StockReportReducer,
   RetailerDataReducer,
   GenericSaleReportReducer,
+  ClaimSummaryReducer
 
 })
 export default rootReducer

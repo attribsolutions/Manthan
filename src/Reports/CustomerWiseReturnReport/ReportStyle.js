@@ -154,7 +154,7 @@ export const reportHeder3 = (doc, data) => {
 
     doc.setFont('Tahoma')
     doc.setFontSize(10)
-    doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
+    // doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
     // doc.line(570, 49, 408, 49) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
 
@@ -165,6 +165,7 @@ export const reportHeder3 = (doc, data) => {
 export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
+            debugger
             if (data1.row.cells[0].raw === "Total") {
                 data1.row.cells[1].colSpan = 3
 
