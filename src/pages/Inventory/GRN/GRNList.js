@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import { btnIsDissablefunc, date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
+import { date_ymd_func, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { mode, url, pageId } from "../../../routes/index"
 import * as _act from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -45,7 +45,7 @@ const GRNList = () => {
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, customer, makeChallan, tableList } = reducers;
+    const { pageField, customer, makeChallan } = reducers;
     const { fromdate, todate, venderSelect } = hederFilters;
 
     const action = {
@@ -82,7 +82,7 @@ const GRNList = () => {
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-        if (!(loginPartyID() === 0)) {
+        if (!(loginSelectedPartyID() === 0)) {
             goButtonHandler()
         }
     }, []);
@@ -118,10 +118,8 @@ const GRNList = () => {
     };
 
     function goButtonHandler() {
-        const btnId = gobtnId;
-        btnIsDissablefunc({ btnId, state: true })
         try {
-            if (loginPartyID() === 0) {
+            if (loginSelectedPartyID() === 0) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
@@ -129,9 +127,9 @@ const GRNList = () => {
                 FromDate: fromdate,
                 ToDate: todate,
                 Supplier: venderSelect === "" ? '' : venderSelect.value,
-                Party: loginPartyID(),
+                Party: loginSelectedPartyID(),
             });
-            dispatch(_act.getGRNListPage({ filtersBody, btnId }));
+            dispatch(_act.getGRNListPage({ filtersBody}));
         } catch (error) { }
     }
 

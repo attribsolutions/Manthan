@@ -11,21 +11,19 @@ import {
     DeleteLoadingSheetSucccess,
     LoadingSheetListAction,
     LoadingSheetListActionSuccess,
-    LoadingSheet_GoBtn_API_Succcess,
     UpdateLoadingSheet,
 
 } from "../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import {Col, FormGroup, Label } from "reactstrap";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { useHistory } from "react-router-dom";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
-import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
@@ -36,7 +34,7 @@ const LoadingSheetList = () => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [pageMode] = useState(mode.defaultList);
-    const [party, setParty] = useState({ value: "", label: "Select..." });
+ 
     const reducers = useSelector(
         (state) => ({
             loading: state.LoadingSheetReducer.loading,
@@ -45,14 +43,13 @@ const LoadingSheetList = () => {
             deleteMsg: state.LoadingSheetReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-            PartySettingdata: state.PartySettingReducer.PartySettingdata,
             LoadingSheetUpdateList: state.LoadingSheetReducer.LoadingSheetUpdate,
         })
     );
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
-    const { userAccess, pageField, PartySettingdata, LoadingSheetUpdateList } = reducers;
-    const { Data = {} } = PartySettingdata;
+    const { pageField, LoadingSheetUpdateList } = reducers;
+
 
     const action = {
         getList: LoadingSheetListAction,
@@ -69,8 +66,6 @@ const LoadingSheetList = () => {
         if (!(_cfunc.loginPartyID() === 0)) {
             goButtonHandler()
         }
-
-        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id, _cfunc.loginCompanyID()))
         return () => {
             dispatch(LoadingSheetListActionSuccess([]))
         }
@@ -86,14 +81,14 @@ const LoadingSheetList = () => {
 
     const goButtonHandler = () => {
         try {
-            if (_cfunc.loginPartyID() === 0) {
+            if ((_cfunc.loginSelectedPartyID() === 0)) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
             const jsonBody = JSON.stringify({
                 FromDate: fromdate,
                 ToDate: todate,
-                PartyID: _cfunc.loginPartyID(),
+                PartyID: _cfunc.loginSelectedPartyID(),
             });
 
             dispatch(LoadingSheetListAction(jsonBody));

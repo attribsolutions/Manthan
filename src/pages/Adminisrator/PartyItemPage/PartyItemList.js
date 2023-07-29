@@ -57,7 +57,7 @@ const PartyItemsList = (props) => {
     dispatch(editPartyItemID({ jsonBody, config }))
   }
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField} = reducers
 
   return (
     <React.Fragment>

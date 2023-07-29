@@ -13,8 +13,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
-import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import {PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const RoleList = (props) => {
 

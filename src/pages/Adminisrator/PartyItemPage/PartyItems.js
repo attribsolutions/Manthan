@@ -14,7 +14,7 @@ import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginIsSCMCompany, loginJsonBody, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc,loginIsSCMCompany, loginJsonBody, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../components/Common/CommonFunction";

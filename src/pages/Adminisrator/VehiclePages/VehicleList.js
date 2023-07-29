@@ -53,7 +53,7 @@ const VehicleList = () => {
     const page_Id = pageId.VEHICLE_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    if (!(_cfunc.loginPartyID() === 0)) {
+    if (!(_cfunc.loginSelectedPartyID() === 0)) {
       goButtonHandler()
     }
     return () => {
@@ -64,7 +64,7 @@ const VehicleList = () => {
 
   const goButtonHandler = () => {
     try {
-      if (_cfunc.loginPartyID() === 0) {
+      if (_cfunc.loginSelectedPartyID() === 0) {
         customAlert({ Type: 3, Message: "Please Select Party" });
         return;
       };
