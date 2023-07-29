@@ -39,7 +39,7 @@ import {
 import * as url from "../../../routes/route_url";
 
 function* Get_Party_GenFun({ subPageMode }) {   // Only CompanyID is Required
-  
+
   var IsRetailer = subPageMode === url.RETAILER_LIST ? 1 : 0
 
   var jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ IsRetailer: IsRetailer } });
@@ -70,8 +70,8 @@ function* Get_Party_GenFun({ subPageMode }) {   // Only CompanyID is Required
 
     yield put(getPartyListAPISuccess(data1))
   } catch (error) {
-    CommonConsole(error)
-
+    CommonConsole(error);
+    yield put(PartyApiErrorAction());
   }
 }
 
@@ -79,7 +79,10 @@ function* save_Party_Master_GenFun({ config }) {
   try {
     const response = yield call(Party_Master_Post_API, config);
     yield put(postPartyDataSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PartyApiErrorAction());
+  }
 }
 
 function* Delete_Party_GenFun({ config }) {
@@ -87,7 +90,10 @@ function* Delete_Party_GenFun({ config }) {
   try {
     const response = yield call(Party_Master_Delete_API, config);
     yield put(deletePartyIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PartyApiErrorAction());
+  }
 }
 
 function* Edit_Party_GenFun({ config }) {
@@ -101,14 +107,20 @@ function* Edit_Party_GenFun({ config }) {
     response["pageMode"] = config.btnmode
 
     yield put(editPartyIDSuccess(response));
-  } catch (error) { yield put(PartyApiErrorAction()) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PartyApiErrorAction());
+  }
 }
 
 function* Update_Party_GenFun({ config }) {
   try {
     const response = yield call(Party_Master_Update_API, config);
     yield put(updatePartyIDSuccess(response))
-  } catch (error) { yield put(PartyApiErrorAction()) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PartyApiErrorAction());
+  }
 }
 
 // GetDistrictOnState API
@@ -116,7 +128,10 @@ function* GetDistrictOnState_saga({ id }) {
   try {
     const response = yield call(GetDistrictOnState_For_Dropdown, id);
     yield put(getDistrictOnStateSuccess(response.Data));
-  } catch (error) { yield put(PartyApiErrorAction()) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PartyApiErrorAction());
+  }
 }
 
 
@@ -125,7 +140,10 @@ function* GetAddressTypes_saga() {
   try {
     const response = yield call(GetAddressTypes_For_Dropdown);
     yield put(getAddressTypesSuccess(response.Data));
-  } catch (error) { yield put(PartyApiErrorAction()) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PartyApiErrorAction());
+  }
 }
 
 // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
@@ -133,7 +151,10 @@ function* GetPartyTypeByDivisionTypeID_GenFun({ id }) {
   try {
     const response = yield call(GetPartyTypeByDivisionTypeID_For_Dropdown, id);
     yield put(GetPartyTypeByDivisionTypeIDSuccess(response.Data));
-  } catch (error) { yield put(PartyApiErrorAction()) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PartyApiErrorAction());
+  }
 }
 
 // GetCompanyByDivisionTypeID/1 API dependent on DivisionTypes api
@@ -141,7 +162,10 @@ function* GetCompanyByDivisionTypeID_GenFun({ id }) {
   try {
     const response = yield call(GetCompanyByDivisionTypeID_For_Dropdown, id);
     yield put(GetCompanyByDivisionTypeIDSuccess(response.Data));
-  } catch (error) { yield put(PartyApiErrorAction()) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PartyApiErrorAction());
+  }
 }
 
 
@@ -151,7 +175,10 @@ function* PartyAddressDelete_GenFun({ config }) {
     const response = yield call(Party_Address_Delete_API, config);
     response["deleteId"] = deleteId
     yield put(PartyAddressDeleteIDSuccess(response))
-  } catch (error) { yield put(PartyApiErrorAction()) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PartyApiErrorAction());
+  }
 }
 
 function* PartyMasterSaga() {
