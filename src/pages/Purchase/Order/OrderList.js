@@ -402,7 +402,7 @@ const OrderList = () => {
 
         _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
-            if (_cfunc.loginSelectedPartyID() === 0) {
+            if ((_cfunc.loginSelectedPartyID() === 0)) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
@@ -614,7 +614,7 @@ const OrderList = () => {
         dispatch(_act.GetVenderSupplierCustomerSuccess([]));
         setState((i) => {
             let a = { ...i }
-            a.values.CustomerType = { value: "", label: "All" }
+            a.values.CustomerType = [{ value: "", label: "All" }]
             a.values.Supplier = { value: "", label: "All" }
             a.hasValid.CustomerType.valid = true;
             a.hasValid.Supplier.valid = true;
