@@ -34,7 +34,7 @@ export const Rows = (data) => {
     let TotalBudgetOnlyExpiryFrom = 0
     let TotalCXClaimAmount = 0
     let TotalNetSale = 0
- 
+
     ReasonwiseMasterClaim[0].RetailerClaim.forEach((element, key) => {
         const tableitemRow = [
             element.ItemReasonName,
@@ -87,6 +87,7 @@ export const Rows = (data) => {
 
 
 export const ProductWiseRows = (data) => {
+    debugger
     const { ProductwiseBudgetReport = [] } = data
     ProductwiseBudgetReport.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
