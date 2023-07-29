@@ -8,7 +8,6 @@ import {
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { useHistory } from "react-router-dom";
 import * as report from '../../../Reports/ReportIndex'
-import { updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
@@ -26,7 +25,7 @@ import {
     delete_CreditList_ID,
     GetCreditListSuccess
 } from "../../../store/Accounting/CreditRedux/action";
-import { Retailer_List, Retailer_List_Success, getSupplier, getSupplierSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List, Retailer_List_Success, getSupplierSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction"
 import { C_DatePicker } from "../../../CustomValidateForm";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
@@ -48,7 +47,7 @@ const CreditList = () => {
     const hasPagePath = history.location.pathname
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
-    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [subPageMode] = useState(history.location.pathname);
     const [otherState, setOtherState] = useState({
         masterPath: '',
         buttonMsgLable: '',
@@ -103,7 +102,7 @@ const CreditList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${buttonMsgLable} Count : 0`));
-        
+
         return () => {
             dispatch(GetCreditListSuccess([]));
             dispatch(Retailer_List_Success([]));
