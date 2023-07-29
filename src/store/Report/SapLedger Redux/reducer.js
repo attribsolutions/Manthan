@@ -11,7 +11,7 @@ const INIT_STATE = {
   goBtnLoading: false,
   goBtnSapLedger: [],
   ProductMargin: [],
-  dounloadProductMargin: false,
+  downloadProductMargin: false,
 
 
 }
@@ -35,13 +35,13 @@ const SapLedgerReducer = (state = INIT_STATE, action) => {
     case GET_EXCELBUTTON_API:
       return {
         ...state,
-        dounloadProductMargin: true,
+        downloadProductMargin: true,
       }
 
     case GET_EXCELBUTTON_API_SUCCESS:
       return {
         ...state,
-        dounloadProductMargin: false,
+        downloadProductMargin: false,
         ProductMargin: action.payload,
       }
 
@@ -49,7 +49,7 @@ const SapLedgerReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         goBtnLoading: false,
-        dounloadProductMargin: false
+        downloadProductMargin: false
       };
 
     default:

@@ -11,7 +11,7 @@ import {
 } from "./action";
 import {
   Credit_Debit_Save_API,
-  Credit_Debit_Type,
+  GenralMasterSubType,
   Edit_Credit_List_API,
   Go_Button_Credit_Debit_Post_API,
   InvoiceReturn_API,
@@ -64,7 +64,7 @@ function* Delete_Credit_ID_GenFunc({ config }) {         // delete API
 function* CreditDeitType_ID_GenFunc(data) {                // edit API 
 
   try {
-    const response = yield call(Credit_Debit_Type, data.data);
+    const response = yield call(GenralMasterSubType, data.data);
     yield put(CredietDebitTypeSuccess(response.Data));
   } catch (error) { yield put(CreditDebitApiErrorAction()) }
 }

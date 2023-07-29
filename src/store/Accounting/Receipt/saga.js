@@ -74,7 +74,7 @@ function* save_Receipt_GenFunc({ config }) {
 function* Receipt_Type_GenFunc({ jsonBody }) {
 
   try {
-    const response = yield call(apiCall.Receipt_Type_API, jsonBody);
+    const response = yield call(apiCall.GenralMasterSubType, jsonBody);
     yield put(action.ReceiptTypeAPISuccess(response.Data));
   } catch (error) { yield put(action.ReceiptAndPaymentApiErrorAction()) }
 }

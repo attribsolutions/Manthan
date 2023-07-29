@@ -82,8 +82,9 @@ const GRNList = () => {
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-        goButtonHandler()
-
+        if (!(loginPartyID() === 0)) {
+            goButtonHandler()
+        }
     }, []);
 
     useEffect(() => {

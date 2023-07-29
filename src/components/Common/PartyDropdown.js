@@ -13,6 +13,7 @@ const initialLocalStorageParty = () => {
     }
     return party
 }
+
 const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading }) => {
 
     const [selectedParty, setSelectedParty] = useState(initialLocalStorageParty);

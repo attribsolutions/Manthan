@@ -36,10 +36,9 @@ const DriverList = () => {
       GoBtnlistloading: state.DriverReducer.loading
     })
   );
-  const { pageField, GoBtnlistloading, tableList } = reducers
+  const { pageField, GoBtnlistloading } = reducers
 
   const action = {
-    getList: getDriverList,
     editId: editDriverID,
     deleteId: deleteDriverID,
     postSucc: saveDriverMasterSuccess,
@@ -51,29 +50,23 @@ const DriverList = () => {
     const page_Id = pageId.DRIVER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    goButtonHandler()
+    if (!(_cfunc.loginPartyID() === 0)) {
+      goButtonHandler()
+    }
     return () => {
       dispatch(getDriverListSuccess([]));
     }
   }, []);
 
-  const goButtonHandler = () => {
+  function goButtonHandler() {
     try {
-      if (_cfunc.loginPartyID() === 0) {
-        customAlert({ Type: 3, Message: "Please Select Party" });
-        return;
-      };
-      const jsonBody = JSON.stringify({
-        CompanyID: _cfunc.loginCompanyID(),
-        PartyID: _cfunc.loginPartyID(),
-      });
-
-      dispatch(getDriverList(jsonBody));
-    } catch (error) { }
+      dispatch(getDriverList());
+    }
+    catch (error) { }
     return
   };
 
-  const partyOnChngeButtonHandler = (e) => {
+  function partyOnChngeButtonHandler() {
     dispatch(getDriverListSuccess([]));
   }
 

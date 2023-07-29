@@ -53,7 +53,9 @@ const RoutesList = (props) => {
     const page_Id = pageId.ROUTES_LIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    goButtonHandler()
+    if (!(loginPartyID() === 0)) {
+      goButtonHandler()
+    }
     return () => {
       dispatch(GetRoutesListSuccess([]));
     }

@@ -1,45 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
     Button,
-    Card,
     CardBody,
-    CardHeader,
     Col,
-    Container, Label, Row, Spinner,
+    Container,
+    Row,
+    Spinner,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginUserDetails } from '../../components/Common/CommonFunction';
-import * as url from "../../routes/route_url";
+import { breadcrumbReturnFunc, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
 import { getExcel_Button_API, getExcel_Button_API_Success } from '../../store/Report/SapLedger Redux/action';
 import * as XLSX from 'xlsx';
+import { useState } from 'react';
 
 const ProductMarginReport = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
-
-    const [pageMode, setPageMode] = useState(mode.defaultsave);//changes
-    const [modalCss, setModalCss] = useState(false);
-    const [userPageAccessState, setUserAccState] = useState(123);
-
+    const [userPageAccessState, setUserAccState] = useState('');
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         userAccess,
         ProductMarginData,
-        dounloadProductMargin,
+        downloadProductMargin,
     } = useSelector((state) => ({
         userAccess: state.Login.RoleAccessUpdateData,
         ProductMarginData: state.SapLedgerReducer.ProductMargin,
         pageField: state.CommonPageFieldReducer.pageField,
-        dounloadProductMargin: state.SapLedgerReducer.dounloadProductMargin,
-
+        downloadProductMargin: state.SapLedgerReducer.downloadProductMargin,
     }));
-
 
     useEffect(() => {
         const page_Id = pageId.PRODUCT_MARGIN_REPORT//changes
@@ -97,31 +91,23 @@ const ProductMarginReport = (props) => {
         }
     }, [ProductMarginData]);
 
-    function excelhandler(event) {
-
+    function excelhandler() {
         const userDetails = loginUserDetails()
-        dispatch(getExcel_Button_API(userDetails.IsSCMPartyType === null ? 0 : userDetails.IsSCMPartyType, userDetails.Party_id))
-
-        // event.preventDefault();
-        // const userDetails = loginUserDetails()
-        // const btnId = "excelbtn-id"
-        // const ProductMargin = []
-        // dispatch(getExcel_Button_API())
+        dispatch(getExcel_Button_API(Number(userDetails.IsSCMPartyType) || 0, userDetails.Party_id))
     }
 
     return (
         <React.Fragment>
+            <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <MetaTags>
-                    <title>ProductMarginReport | FoodERP 2.0 - React Admin & Dashboard Template</title>
-                </MetaTags>
+
                 <Container fluid>
                     <Row>
                         <Col xl={4} md={4} >
                             <CardBody>
                                 <Row>
                                     <Col lg={6}>
-                                        {dounloadProductMargin ?
+                                        {downloadProductMargin ?
                                             <Button type='button'
                                                 className='btn btn-success'
                                                 id="excelbtn-id"

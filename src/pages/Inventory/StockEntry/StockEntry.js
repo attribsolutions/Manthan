@@ -503,6 +503,7 @@ const StockEntry = (props) => {
 
     function partyOnChngeButtonHandler() {
         dispatch(getPartyItemListSuccess([]))
+        setTableArr([])
         setState((i) => {
             const a = { ...i }
             a.values.ItemName = '';

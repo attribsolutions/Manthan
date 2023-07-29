@@ -23,7 +23,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 const VehicleList = () => {
 
   const dispatch = useDispatch();
- 
+
   const reducers = useSelector(
     (state) => ({
       goBtnLoading: state.VehicleReducer.goBtnLoading,
@@ -53,8 +53,9 @@ const VehicleList = () => {
     const page_Id = pageId.VEHICLE_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-
-    goButtonHandler()
+    if (!(_cfunc.loginPartyID() === 0)) {
+      goButtonHandler()
+    }
     return () => {
       dispatch(getVehicleListSuccess([]));
       dispatch(commonPageFieldListSuccess(null))
@@ -67,12 +68,7 @@ const VehicleList = () => {
         customAlert({ Type: 3, Message: "Please Select Party" });
         return;
       };
-      const jsonBody = JSON.stringify({
-        CompanyID: _cfunc.loginCompanyID(),
-        PartyID: _cfunc.loginPartyID()
-      });
-
-      dispatch(getVehicleList(jsonBody));
+      dispatch(getVehicleList());
     } catch (error) { }
     return
   };
