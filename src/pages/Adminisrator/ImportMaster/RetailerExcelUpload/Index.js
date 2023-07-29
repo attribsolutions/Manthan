@@ -195,8 +195,8 @@ const RetailerExcelUpload = (props) => {
 
         var filename = files[0].name;
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
-        if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
 
+        if (extension == '.CSV') {
 
             const readjson = await readExcelFile({ file: files[0], compareParameter, })
             if (readjson.length > 0) {
@@ -209,7 +209,7 @@ const RetailerExcelUpload = (props) => {
         } else {
             customAlert({
                 Type: 3,
-                Message: "Please select a valid excel file.",
+                Message: "Please select a valid CSV file.",
             })
         }
     }

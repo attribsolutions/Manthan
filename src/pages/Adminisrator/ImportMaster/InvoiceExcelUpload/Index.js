@@ -7,17 +7,12 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
+import {commonPageFieldSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import Select from "react-select";
-import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
-import {
-    comAddPageFieldFunc,
-    initialFiledFunc,
-} from "../../../../components/Common/validationFunction";
+
 import { getPartyListAPI, getPartyListAPISuccess } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
 import { fileDetails, readExcelFile } from "./readFile";
@@ -31,7 +26,6 @@ import {
     InvoiceExcelUpload_save_Success
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
-import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
 import { C_Button, Go_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 import { C_Select } from "../../../../CustomValidateForm";
 
@@ -43,16 +37,9 @@ const InvoiceExcelUpload = (props) => {
     const userAdminRole = _cfunc.loginUserAdminRole();
 
     const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [], partyNO: [] }
-    const fileds = {
-        id: "",
-        Party: "",
-        ImportType: "",
-        PatternType: ""
-    }
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [selectedFiles, setselectedFiles] = useState([])
-    const [preUploadjson, setPreUploadjson] = useState([])
     const [readJsonDetail, setReadJsonDetail] = useState(preDetails)
     const [preViewDivShow, setPreViewDivShow] = useState(false)
     const [partySelect, SetPartySelect] = useState([])
@@ -123,7 +110,6 @@ const InvoiceExcelUpload = (props) => {
                 Message: postMsg.Message,
             });
             setselectedFiles([]);
-            setPreUploadjson([]);
             setPreViewDivShow(false);
             SetPartySelect('');
             setReadJsonDetail(preDetails);
@@ -169,9 +155,7 @@ const InvoiceExcelUpload = (props) => {
 
         var filename = files[0].name;
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
-        if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
-
-
+        if (extension == '.CSV') {
             const readjson = await readExcelFile({ file: files[0], compareParameter, })
             if (readjson.length > 0) {
 
@@ -179,7 +163,6 @@ const InvoiceExcelUpload = (props) => {
                 let { invoiceNO } = isdetails;
                 if ((invoiceNO.length > 0)) {
                     setReadJsonDetail(isdetails)
-                    setPreUploadjson(readjson)
                     setPreViewDivShow(true)
                 } else {
                     customAlert({
@@ -192,7 +175,7 @@ const InvoiceExcelUpload = (props) => {
         } else {
             customAlert({
                 Type: 3,
-                Message: "Please select a valid excel file.",
+                Message: "Please select a valid CSV file.",
             })
         }
     }
@@ -219,7 +202,6 @@ const InvoiceExcelUpload = (props) => {
         };
 
         setReadJsonDetail(preDetails)
-        setPreUploadjson([])
         setPreViewDivShow(false)
         // try {
         //     const btnerify = document.getElementById("btn-verify")
