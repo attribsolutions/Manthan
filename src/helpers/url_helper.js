@@ -375,6 +375,10 @@ export const DASHBOARD = '/getdashboard'
 //Report
 export const ORDER_SUMMARY = '/OrderSummaryReport'
 export const PARTY_LEDGER = '/PartyLedgerReport'
+export const CLAIM_SUMMARY = '/ClaimSummary'
+
+
+
 
 // Stock Report
 export const STOCK_REPORT = '/PartyLiveStock'

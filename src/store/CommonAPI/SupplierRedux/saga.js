@@ -128,8 +128,9 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.ORDER_LIST_4
     || subPageMode === url.INVOICE_1
     || subPageMode === url.INVOICE_LIST_1
-
-    || subPageMode === url.PARTY_LEDGER);
+    || subPageMode === url.PARTY_LEDGER
+    || subPageMode === url.CLAIM_SUMMARY_REPORT
+  );
 
 
   const isDivisions = (subPageMode === url.IB_ORDER //divisions mode 4
