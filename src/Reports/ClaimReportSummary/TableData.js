@@ -180,12 +180,11 @@ export const BilledByRow = (data) => {
 }
 export const BilledToRow = (data) => {
 
+
     var BilledToArray = [
-
         [`Expiry From Retailer Claim summary`],
-        [`${data.PartyDetails.GSTIN}`],
-        [`${data.PartyDetails.FSSAINo}`],
-
+        [`GSTIN NO :${data.PartyDetails.GSTIN}`],
+        [`FSSAI NO :${data.PartyDetails.FSSAINo}`],
     ]
 
     return BilledToArray;
@@ -201,7 +200,6 @@ export const DetailsOfTransportRow = (data) => {
 
     return DetailsOfTransportArray;
 }
-
 
 export const ReturnReason = (data) => {
 

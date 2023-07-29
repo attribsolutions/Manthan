@@ -376,6 +376,13 @@ export const DASHBOARD = '/getdashboard'
 export const ORDER_SUMMARY = '/OrderSummaryReport'
 export const PARTY_LEDGER = '/PartyLedgerReport'
 export const CLAIM_SUMMARY = '/ClaimSummary'
+export const MASTER_CLAIM_SUMMARY = '/MasterClaimPrint'
+export const MASTER_CLAIM_CREATE = '/MasterClaimCreate'
+
+
+
+
+
 
 
 

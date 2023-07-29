@@ -612,6 +612,8 @@ export const PartySettingApi = (Party_id, Comapny_id) => get(`${url.PARTY_SETTIN
 export const save_PartySetting_API = ({ jsonBody, btnId }) => post(url.PARTY_SETTING, jsonBody, btnId)//  postapi
 export const PartyLedgerReport_API = ({ jsonBody }) => post(url.PARTY_LEDGER, jsonBody)//  postapi
 export const ClaimSummary_API = ({ jsonBody }) => post(url.CLAIM_SUMMARY, jsonBody)//  postapi
+export const MasterClaimSummary_API = ({ jsonBody }) => post(url.MASTER_CLAIM_SUMMARY, jsonBody)//  postapi
+export const MasterClaimCreate_API = (jsonBody) => post(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
 
 
 

@@ -86,6 +86,7 @@ import StockReportSaga from "./Report/StockReport/saga"
 import RetailerDataSaga from "./Report/RetailerDataRedux/saga"
 import GenericSaleReportSaga from "./Report/GenericSaleRedux/saga"
 import CommonPartyDrodown_Saga from "./Utilites/PartyDrodown/saga"
+import MasterClaimCreatSaga from "./Report/ClaimSummary/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -166,5 +167,9 @@ export default function* rootSaga() {
     fork(RetailerDataSaga),
     fork(GenericSaleReportSaga),
     fork(CommonPartyDrodown_Saga),
+    fork(MasterClaimCreatSaga),
+
+
+    
   ])
 }
