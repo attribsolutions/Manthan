@@ -338,7 +338,7 @@ export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
 export const edit_PartyItem_List_Api = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
 
 //Post api VendorSupplierCustomer 
-export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, post_PartyId)//Post api
+export const VendorSupplierCustomer = (jsonBody) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, jsonBody)//Post api
 export const SSDD_List_under_Company_API = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)//Post api
 export const Retailer_List_under_Company_PartyAPI = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)//Post api
 export const Party_Dropdown_Get_API = (id) => get(`${url.MANAGEMENT_PARTIES}/${id}`)// Party dropdown Api

@@ -32,6 +32,7 @@ import {
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
+import { C_Select } from "../../../../CustomValidateForm";
 
 const ImportExcelFieldMap = (props) => {
 
@@ -58,16 +59,21 @@ const ImportExcelFieldMap = (props) => {
         pageField,
         userAccess,
         goButtonItem,
+        goBtnLoading,
         partyDropDownLoading,
+        partyList,
         saveBtnLoading
     } = useSelector((state) => ({
         postMsg: state.ImportExportFieldMap_Reducer.postMsg,
-        saveBtnLoading: state.ImportExportFieldMap_Reducer.saveBtnLoading,
 
-        updateMsg: state.BOMReducer.updateMsg,
+        saveBtnLoading: state.ImportExportFieldMap_Reducer.saveBtnLoading,
+        goBtnLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
+
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         goButtonItem: state.ImportExportFieldMap_Reducer.addGoButton,
+
+        partyList: state.PartyMasterReducer.partyList,
         partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
 
     }));
@@ -76,6 +82,7 @@ const ImportExcelFieldMap = (props) => {
         const page_Id = pageId.IMPORT_EXCEL_FIELD_MAP
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         if (!userAdminRole) { goButtonHandler() }
     }, []);
@@ -187,10 +194,6 @@ const ImportExcelFieldMap = (props) => {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]))
     }
 
-    const partyOnChngeHandler = (e) => {
-        SetPartySelect(e)
-    }
-
     function SaveHandler(event) {
         event.preventDefault();
 
@@ -233,13 +236,49 @@ const ImportExcelFieldMap = (props) => {
 
                 <div className="page-content">
                     {userAdminRole &&
-                        <PartyDropdown_Common
-                            partySelect={partySelect}
-                            setPartyFunc={partyOnChngeHandler}
-                            goButtonHandler={goButtonHandler}
-                            changeBtnShow={!(goButtonItem.length === 0)}
-                            change_ButtonHandler={change_ButtonHandler}
-                        />
+                        // <PartyDropdown_Common
+                        //     partySelect={partySelect}
+                        //     setPartyFunc={partyOnChngeHandler}
+                        //     goButtonHandler={goButtonHandler}
+                        //     changeBtnShow={!(goButtonItem.length === 0)}
+                        //     change_ButtonHandler={change_ButtonHandler}
+                        // />
+                        <div className="px-2   c_card_filter text-black" >
+                            <div className="row pt-2">
+                                <Col sm="5">
+                                    <FormGroup className="row px-1">
+                                        <Label className="col-sm-5 p-2" style={{ width: "83px" }}>
+                                            Party
+                                        </Label>
+                                        <Col sm="6">
+                                            <C_Select
+                                                value={partySelect}
+                                                isSearchable={true}
+                                                isLoading={partyDropDownLoading}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={partyList.map((data) => ({
+                                                    value: data.id,
+                                                    label: data.Name,
+                                                }))}
+
+                                                onChange={(e) => { SetPartySelect(e) }}
+                                                styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                                <Col sm="1" className="mb-1">
+                                    {(goButtonItem.length === 0) ?
+                                        <Go_Button
+                                            loading={goBtnLoading}
+                                            onClick={goButtonHandler} />
+                                        :
+                                        <Change_Button onClick={change_ButtonHandler} />
+                                    }
+                                </Col>
+                            </div>
+                        </div>
                     }
                     <div >
                         <ToolkitProvider

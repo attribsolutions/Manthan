@@ -5,7 +5,6 @@ import {
     deletePartyIDSuccess,
     editPartyID,
     getPartyListAPI,
-    getPartyListAPISuccess,
     postPartyDataSuccess,
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
@@ -17,9 +16,6 @@ import { useLayoutEffect } from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { PageLoadingSpinner } from '../../../components/Common/CommonButton';
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import CommonPurchaseList from '../../../components/Common/CommonPurchaseList';
-import { loginPartyID } from '../../../components/Common/CommonFunction';
 
 const PartyList = () => {
 
@@ -79,7 +75,7 @@ const PartyList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(getPartyListAPI(subPageMode));
+        dispatch(getPartyListAPI());
 
         return () => {
             dispatch(commonPageFieldListSuccess(null))
@@ -87,41 +83,26 @@ const PartyList = () => {
         }
     }, []);
 
-      const { pageField, goBtnLoading, tableList } = reducers
-
-    function goButtonHandler() {
-        dispatch(getPartyListAPI(subPageMode));
-    }
-
-    function partyOnChngeButtonHandler() {
-        dispatch(getPartyListAPISuccess([]))
-    }
+    const { pageField, goBtnLoading } = reducers
 
     return (
         <React.Fragment>
-            <div className="page-content">
-                <PartyDropdown_Common
-                    goBtnLoading={goBtnLoading}
-                    goButtonHandler={goButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler}
+
+            <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
+            {
+                (pageField) &&
+                <CommonListPage
+                    action={action}
+                    reducers={reducers}
+                    MasterModal={PartyMaster}
+                    masterPath={otherState.masterPath}
+                    newBtnPath={otherState.newBtnPath}
+                    pageMode={pageMode}
+                    ButtonMsgLable={"Party"}
+                    deleteName={"Name"}
                 />
-                <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
-                {
-                    (pageField) &&
-                    <div className="mt-n1">
-                        <CommonPurchaseList
-                            action={action}
-                            reducers={reducers}
-                            MasterModal={PartyMaster}
-                            masterPath={otherState.masterPath}
-                            newBtnPath={otherState.newBtnPath}
-                            pageMode={pageMode}
-                            ButtonMsgLable={"Party"}
-                            deleteName={"Name"}
-                        />
-                    </div>
-                }
-            </div>
+
+            }
         </React.Fragment>
     )
 }
