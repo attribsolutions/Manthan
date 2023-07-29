@@ -19,7 +19,7 @@ let initial_y = 0
 
 
 export const pageBorder = (doc, data) => {
-    
+
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
     doc.line(30, data.PrintType ? 379 : 815, 30, 16);//vertical line (left)
@@ -195,8 +195,6 @@ export const reportHeder3 = (doc, data) => {
     doc.text(`Return No:   ${data.FullReturnNumber}`, 415, 27) //Invoice Id
     doc.text(`Return Date: ${date}`, 415, 43) //Invoice date
     // doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 60) //Invoice date
-
-
 
 }
 // original

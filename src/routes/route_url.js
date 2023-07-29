@@ -250,3 +250,7 @@ export const ORDER_SUMMARY_REPORT = "/OrderSummaryReport"
 export const GENERIC_SALE_REPORT = "/Generic_Sale_Report"
 
 export const RETAILER_DATA_REPORT = "/RetailerDataReport"
+
+export const CLAIM_SUMMARY_REPORT = "/ClaimSummary"
+
+

@@ -170,6 +170,7 @@ import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport
 import DiscountList from "../pages/Adminisrator/Discount/DiscountList";
 import PurchaseReturn from "../pages/Purchase/Return/PurchaseReturn";
 import StockReport_1 from "../Reports/StockReport/StockReport_1";
+import ClaimSummary from "../Reports/ClaimReportSummary/ClaimReport";
 // import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
@@ -413,6 +414,12 @@ const userRoutes = [
   { path: path.RETAILER_DATA_REPORT, component: RetailerDataReport },
 
   { path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
+
+  { path: path.CLAIM_SUMMARY_REPORT, component: ClaimSummary },
+
+
+
+
 
   { path: path.REPORT, component: Report },
 

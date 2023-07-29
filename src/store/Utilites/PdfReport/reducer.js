@@ -3,17 +3,22 @@ import { GET_PDF_REPORT_DATA, GET_PDF_REPORT_DATA_ERROR, GET_PDF_REPORT_DATA_SUC
 const INIT_STATE = {
   pdfdata: { Status: false },
   ReportBtnLoading: false,
-  goBtnLoading: false
+  goBtnLoading: false,
+  customerWiseBtnloading: false,
+  claimSummaryBtnLoading: false
 }
 
 const PdfReportReducers = (state = INIT_STATE, action) => {
-  
+  debugger
   switch (action.type) {
     case GET_PDF_REPORT_DATA:
       return {
         ...state,
         ReportBtnLoading: action.config.btnId,
-        goBtnLoading: true
+        goBtnLoading: true,
+        customerWiseBtnloading: true,
+
+
       }
 
     case GET_PDF_REPORT_DATA_SUCCESS:
@@ -21,6 +26,7 @@ const PdfReportReducers = (state = INIT_STATE, action) => {
         ...state,
         ReportBtnLoading: false,
         goBtnLoading: false,
+        customerWiseBtnloading: false,
         pdfdata: action.payload,
 
       }
