@@ -9,14 +9,8 @@ import {
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
-import { useHistory } from "react-router-dom";
-import {
-    deleteReceiptList,
-    deleteReceiptList_Success,
-    ReceiptListAPI,
-} from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
-import { Go_Button, Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, pageId } from "../../../routes/index"
 import CityMaster from "./CityMaster";
@@ -52,12 +46,7 @@ const CityList = () => {
 
     const values = { ...state.values }
 
-    const action = {
-        getList: ReceiptListAPI,
-        deleteId: deleteReceiptList,
-        postSucc: postMessage,
-        deleteSucc: deleteReceiptList_Success
-    }
+    const action = {}
 
     useEffect(() => {
         const page_Id = pageId.CITY_LIST
@@ -66,7 +55,6 @@ const CityList = () => {
         dispatch(getState());
         dispatch(getCityOnDistrictSuccess([]))
     }, []);
-
 
     const State_DropdownOptions = State.map((data) => ({
         value: data.id,
@@ -77,7 +65,6 @@ const CityList = () => {
         value: data.id,
         label: data.Name
     }));
-
 
     function goButtonHandler() {
         dispatch(getCityOnDistrict(values.DistrictName.value))
@@ -103,7 +90,6 @@ const CityList = () => {
             return a
         })
     }
-
 
     const HeaderContent = () => {
         return (

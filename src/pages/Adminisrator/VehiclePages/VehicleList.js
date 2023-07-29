@@ -68,7 +68,12 @@ const VehicleList = () => {
         customAlert({ Type: 3, Message: "Please Select Party" });
         return;
       };
-      dispatch(getVehicleList());
+      const jsonBody = {
+        ..._cfunc.loginJsonBody(),
+        PartyID: _cfunc.loginSelectedPartyID()
+      };
+
+      dispatch(getVehicleList(jsonBody));
     } catch (error) { }
     return
   };

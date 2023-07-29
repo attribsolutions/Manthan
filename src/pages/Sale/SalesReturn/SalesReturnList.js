@@ -10,7 +10,7 @@ import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
-import { GetVenderSupplierCustomer, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import SalesReturn from "./SalesReturn";
 import { confirm_SalesReturn_Id, delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, post_Send_to_superStockiest_Id, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
@@ -106,7 +106,7 @@ const SalesReturnList = () => {
         setOtherState({ masterPath, newBtnPath, buttonMsgLable })
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        if (!(_cfunc.loginPartyID() === 0)) {
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler()
         }
 
@@ -127,11 +127,11 @@ const SalesReturnList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
+        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
     }, []);
 
     useEffect(() => {
@@ -161,8 +161,9 @@ const SalesReturnList = () => {
     });
 
     const goButtonHandler = () => {
+
         try {
-            if (_cfunc.loginPartyID() === 0) {
+            if (_cfunc.loginSelectedPartyID() === 0) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
@@ -170,12 +171,12 @@ const SalesReturnList = () => {
                 FromDate: values.FromDate,
                 ToDate: values.ToDate,
                 CustomerID: values.Customer.value,
-                PartyID: _cfunc.loginPartyID()
+                PartyID: _cfunc.loginSelectedPartyID(),
             });
             const purchaseReturnJsonBody = JSON.stringify({
                 FromDate: values.FromDate,
                 ToDate: values.ToDate,
-                CustomerID: _cfunc.loginPartyID(),
+                CustomerID: _cfunc.loginSelectedPartyID(),
                 PartyID: values.Customer.value,
             });
 
@@ -190,6 +191,16 @@ const SalesReturnList = () => {
         } catch (error) { }
         return
     };
+
+    const partySelectButtonHandler = (e) => {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: _cfunc.loginSelectedPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }
+
 
     function fromdateOnchange(e, date) {
         setState((i) => {
@@ -228,8 +239,17 @@ const SalesReturnList = () => {
         dispatch(getpdfReportdata(ReturnPrint_API, config))
     }
 
-    function partyOnChngeButtonHandler() {
-        dispatch(salesReturnListAPISuccess([]))
+    function partySelectOnChangeHandler() {
+        dispatch(salesReturnListAPISuccess([]));
+        dispatch(Retailer_List_Success([]));
+        dispatch(GetVenderSupplierCustomerSuccess([]));
+
+        setState((i) => {
+            let a = { ...i }
+            a.values.Customer = { value: "", label: "All" }
+            a.hasValid.Customer.valid = true;
+            return a
+        })
     }
 
     const HeaderContent = () => {
@@ -303,7 +323,7 @@ const SalesReturnList = () => {
             return
         }
         let idString = ischeck.map(obj => obj.id).join(',')
-        let jsonBody = JSON.stringify({ PartyID: _cfunc.loginPartyID(), ReturnID: idString })
+        let jsonBody = JSON.stringify({ PartyID: _cfunc.loginSelectedPartyID(), ReturnID: idString })
         dispatch(post_Send_to_superStockiest_Id({ jsonBody, ReturnID: idString }))
     }
 
@@ -312,7 +332,9 @@ const SalesReturnList = () => {
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(loading || !pageField)} />
 
-                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
+                <PartyDropdown_Common
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partySelectOnChangeHandler} />
 
                 {
                     (pageField) ?
