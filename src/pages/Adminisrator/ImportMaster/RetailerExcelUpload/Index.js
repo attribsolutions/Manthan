@@ -15,7 +15,6 @@ import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 
-import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
 import {
     GoButton_ImportFiledMap_Add,
@@ -26,13 +25,13 @@ import {
     RetailerExcelUpload_save_action_Success
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
-import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
 import PriceDropOptions from "../../PartyMaster/MasterAdd/FirstTab/PriceDropOptions";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { getPartyTypelist, getPartyTypelistSuccess } from "../../../../store/Administrator/PartyTypeRedux/action";
 import { readExcelFile, retailer_SaveHandler } from "./AllHndlerFunc";
 import { C_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
-
+import { C_Select } from "../../../../CustomValidateForm";
+import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 
 const RetailerExcelUpload = (props) => {
 
@@ -65,6 +64,7 @@ const RetailerExcelUpload = (props) => {
         saveBtnLoading,
         priceListDropDownLoading,
         partyTypesDropDownLoading,
+        partyList,
         partyDropDownLoading
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.partyExcelUploadMsg,
@@ -75,6 +75,8 @@ const RetailerExcelUpload = (props) => {
 
         partyTypes: state.PartyTypeReducer.ListData,
         partyTypesDropDownLoading: state.PartyTypeReducer.goBtnLoading,
+
+        partyList: state.PartyMasterReducer.partyList,
         partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
 
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
@@ -92,6 +94,7 @@ const RetailerExcelUpload = (props) => {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         dispatch(priceListByPartyActionSuccess([]))
         dispatch(getPartyTypelist());
+        dispatch(getPartyListAPI());
         goButtonHandler()
         if (!userAdminRole) {
             SetPartySelect({ value: _cfunc.loginPartyID() })
@@ -123,9 +126,6 @@ const RetailerExcelUpload = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
-
-
-
 
     useEffect(async () => {
 
@@ -164,7 +164,6 @@ const RetailerExcelUpload = (props) => {
             }
         }
     }, [partyTypes])
-
 
     function goButtonHandler(e) {
         const jsonBody = JSON.stringify({
@@ -315,15 +314,36 @@ const RetailerExcelUpload = (props) => {
                                 <div className="px-2 c_card_header text-black" >
                                     <div className="   c_card_filter text-black" style={{ paddingBottom: "3px" }} >
 
-                                        <PartyDropdown_Common
-                                            partySelect={partySelect}
-                                            setPartyFunc={(e) => SetPartySelect(e)}
-                                        />
+                                        <Row className="pt-2">
+                                            <Col sm="5">
+                                                <FormGroup className="row px-1">
+                                                    <Label className="col-sm-5 p-2" style={{ width: "83px" }}>
+                                                        Party
+                                                    </Label>
+                                                    <Col sm="6">
+                                                        <C_Select
+                                                            value={partySelect}
+                                                            isSearchable={true}
+                                                            isLoading={partyDropDownLoading}
+                                                            className="react-dropdown"
+                                                            classNamePrefix="dropdown"
+                                                            options={partyList.map((data) => ({
+                                                                value: data.id,
+                                                                label: data.Name,
+                                                            }))}
+
+                                                            onChange={(e) => { SetPartySelect(e) }}
+                                                            styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
+                                                        />
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
+                                        </Row>
 
                                         <row className='mb-2'>
                                             < Col md={6}>
                                                 <FormGroup className=" row px-1">
-                                                    <Label className="col col-sm-1" style={{ width: "83px" }}>PriceList </Label>
+                                                    <Label className="col-sm-5 p-2" style={{ width: "83px" }}>PriceList </Label>
                                                     <Col md={5}>
                                                         <Input
                                                             value={priceListSelect.label}

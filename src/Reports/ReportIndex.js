@@ -7,6 +7,9 @@ import Receipts from "./Receipts/Page";
 import CreditNote from "./CRDRNote Report/Page";
 import PartyLedgerReport from "./PratyLedger/Page";
 import ReturnReport from "./PurchaseReturnReport/Page";
+import CompanyWiseBudgetReport from "./CompanyWiseBugetReport/Page";
+import ClaimSummaryReport from "./ClaimReportSummary/Page";
+import CustomerWiseReturnReport from "./CustomerWiseReturnReport/Page";
 
 
 export const order1 = "order1"
@@ -20,6 +23,10 @@ export const Receipt = "Receipt"
 export const Credit = "Credit"
 export const PartyLedger = "PartyLedger"
 export const Return = "Return"
+export const CompanyWiseBudget = "CompanyWiseBudget"
+export const ClaimSummary = "ClaimSummary"
+export const CustomerWiseReturn = "CustomerWiseReturn"
+
 
 
 const generateReport = (resp) => {
@@ -55,6 +62,17 @@ const generateReport = (resp) => {
         case Return:
             ReturnReport(resp.Data)
             break;
+        case CompanyWiseBudget:
+            CompanyWiseBudgetReport(resp.Data)
+            break;
+        case ClaimSummary:
+            ClaimSummaryReport(resp.Data)
+            break;
+        case CustomerWiseReturn:
+            CustomerWiseReturnReport(resp.Data)
+            break;
+
+
         default:
             break;
     }

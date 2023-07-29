@@ -36,9 +36,9 @@ const DiscountList = () => {
         const page_Id = pageId.DISCOUNT_LIST;
         dispatch(commonPageFieldListSuccess(null));
         dispatch(commonPageFieldList(page_Id));
-        if (!(_cfunc.loginPartyID() === 0)) {
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler()
-          }
+        }
         return () => {
             dispatch(getDiscountListSuccess([]));
             dispatch(commonPageFieldListSuccess(null));
@@ -47,14 +47,14 @@ const DiscountList = () => {
 
     const goButtonHandler = () => {
         try {
-            if (_cfunc.loginPartyID() === 0) {
+            if (_cfunc.loginSelectedPartyID() === 0) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
             const jsonBody = JSON.stringify({
                 "FromDate": fromdate,
                 "ToDate": todate,
-                "Party": _cfunc.loginPartyID()
+                "Party": _cfunc.loginSelectedPartyID()
             });
 
             dispatch(getDiscountList(jsonBody));

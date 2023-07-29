@@ -3,15 +3,18 @@ import { useSelector } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import { C_Button } from "./CommonButton";
 import { C_Select } from "../../CustomValidateForm";
-import { loginUserAdminRole } from "./CommonFunction";
+import { CommonConsole, loginUserAdminRole } from "./CommonFunction";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const initialLocalStorageParty = () => {
-    let party = JSON.parse(localStorage.getItem("selectedParty"));
-    if (party.value === 0) {
-        return { value: 0, label: "Select..." }
-    }
-    return party
+    try {
+        let party = JSON.parse(localStorage.getItem("selectedParty"));
+        if (party.value === 0) {
+            return { value: 0, label: "Select..." }
+        }
+        return party
+    } catch (w) { CommonConsole(w) }
+    return { value: 0, label: "Select..." }
 }
 
 const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading }) => {

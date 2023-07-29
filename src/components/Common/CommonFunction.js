@@ -119,7 +119,7 @@ export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company 
 
 
 export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-  
+
   try {
     const detail = loginUserDetails();
     return (detail.PartyType === "Company Division");
@@ -130,7 +130,7 @@ export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Compan
 };
 
 export const loginRoleID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-  
+
   try {
     const detail = loginUserDetails();
     return detail.Role;
@@ -171,6 +171,15 @@ export const loginCompanyName = () => { //+++++++++++++++++++++ Session Company 
 export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
 
   try {
+    return loginUserDetails().Party_id;
+  } catch (e) {
+    CommonConsole("Common login PartyID Func  Error");
+  }
+  return 0;
+};
+
+export const loginSelectedPartyID = () => {//+++++++++++++++++++++ Session common party dropdown id +++++++++++++++++++++++++++++++
+  try {
     return JSON.parse(localStorage.getItem("selectedParty")).value;
   } catch (e) {
     CommonConsole("Common login PartyID Func  Error");
@@ -179,7 +188,7 @@ export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID 
 };
 
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
- 
+
   try {
     return loginUserDetails().Employee_id;
   } catch (e) {

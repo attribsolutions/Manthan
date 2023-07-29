@@ -33,8 +33,9 @@ export const getSupplierAddressSuccess = address => ({
 })
 
 // ************************************************************
-export const getSupplier = () => ({
+export const getSupplier = (jsonBody) => ({
   type: GET_SUPPLIER,
+  jsonBody
 });
 
 export const getSupplierSuccess = orders => ({

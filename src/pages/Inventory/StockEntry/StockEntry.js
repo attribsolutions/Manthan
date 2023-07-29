@@ -73,7 +73,7 @@ const StockEntry = (props) => {
         const page_Id = pageId.STOCK_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())))
+        dispatch(getpartyItemList(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
     }, []);
 
     const location = { ...history.location }
@@ -507,12 +507,13 @@ const StockEntry = (props) => {
         setState((i) => {
             const a = { ...i }
             a.values.ItemName = '';
+            a.hasValid.ItemName.valid = true
             return a
         })
     }
 
     function goButtonHandler() {
-        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())))
+        dispatch(getpartyItemList(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
     }
 
     if (!(userPageAccessState === '')) {

@@ -44,7 +44,7 @@ export const reportHeder1 = (doc, data) => {
 
     doc.setFont('Tahoma')
     doc.setFontSize(11)
-    doc.setFont(undefined, 'bold')
+    doc.setFont(undefined,'bold')
     doc.text("Billed by", 80, Y1)  //bill by 
     doc.text('Billed to', 280, Y1) //billed to
     doc.text('Details of Transport', 440, Y1)

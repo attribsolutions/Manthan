@@ -186,8 +186,8 @@ const OrderList = () => {
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-        if (!(_cfunc.loginPartyID() === 0)) {
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler("event", IBType)
         }
         dispatch(priceListByCompay_Action());
@@ -198,8 +198,6 @@ const OrderList = () => {
             dispatch(_act.orderSinglegetSuccess({ Status: false }))
             dispatch(_act.GetVenderSupplierCustomerSuccess([]))
             dispatch(priceListByCompay_ActionSuccess([]))
-
-
         }
     }, []);
 
@@ -236,7 +234,6 @@ const OrderList = () => {
             })
         }
     }, [gobutton_Add_invoice]);
-
 
     useEffect(() => {
 
@@ -307,7 +304,7 @@ const OrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: obj.preOrderDate,
             Customer: obj.CustomerID,
-            Party: _cfunc.loginPartyID(),
+            Party: _cfunc.loginSelectedPartyID(),
             OrderIDs: obj.id.toString(),
         });
 
@@ -405,7 +402,7 @@ const OrderList = () => {
 
         _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
-            if (_cfunc.loginPartyID() === 0) {
+            if (_cfunc.loginSelectedPartyID() === 0) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
@@ -416,7 +413,7 @@ const OrderList = () => {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
                 "Supplier": values.Supplier.value,
-                "Customer": _cfunc.loginPartyID(),
+                "Customer": _cfunc.loginSelectedPartyID(),
                 "OrderType": order_Type.PurchaseOrder,
                 "CustomerType": "",
                 "IBType": IBType ? IBType : otherState.IBType
@@ -424,7 +421,7 @@ const OrderList = () => {
             const SO_filters = {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
-                "Supplier": _cfunc.loginPartyID(),//Suppiler swipe
+                "Supplier": _cfunc.loginSelectedPartyID(),//Suppiler swipe
                 "Customer": values.Supplier.value,//customer swipe
                 "OrderType": order_Type.SaleOrder,
                 "CustomerType": isCustomerType,
@@ -434,7 +431,7 @@ const OrderList = () => {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
                 "Supplier": values.Supplier.value,
-                "Customer": _cfunc.loginPartyID(),
+                "Customer": _cfunc.loginSelectedPartyID(),
                 "OrderType": order_Type.InvoiceToGRN,
                 "CustomerType": '',
                 "IBType": IBType ? IBType : otherState.IBType
@@ -448,6 +445,7 @@ const OrderList = () => {
             else {
                 filtersBody = JSON.stringify(PO_filters);
             }
+
             dispatch(_act.getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
 
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: false }) }
@@ -607,15 +605,31 @@ const OrderList = () => {
         )
     }
 
+    function partySelectButtonHandler() {
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
+    }
+
     function partyOnChngeButtonHandler() {
-        dispatch(_act.getOrderListPageSuccess([]))
+        dispatch(_act.getOrderListPageSuccess([]));
+        dispatch(_act.GetVenderSupplierCustomerSuccess([]));
+        setState((i) => {
+            let a = { ...i }
+            a.values.CustomerType = { value: "", label: "All" }
+            a.values.Supplier = { value: "", label: "All" }
+            a.hasValid.CustomerType.valid = true;
+            a.hasValid.Supplier.valid = true;
+            return a
+        })
     }
 
     return (
         <React.Fragment>
-            <PageLoadingSpinner isLoading={reducers.goBtnLoading || !pageField} />
+            <PageLoadingSpinner isLoading={reducers.goBtnloading || !pageField} />
+
             <div className="page-content">
-                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
+                <PartyDropdown_Common
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partyOnChngeButtonHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList

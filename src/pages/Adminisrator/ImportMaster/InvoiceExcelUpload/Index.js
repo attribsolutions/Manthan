@@ -32,7 +32,8 @@ import {
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
 import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
-import { C_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
+import { C_Button, Go_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
+import { C_Select } from "../../../../CustomValidateForm";
 
 
 const InvoiceExcelUpload = (props) => {
@@ -61,23 +62,25 @@ const InvoiceExcelUpload = (props) => {
         postMsg,
         userAccess,
         compareParameter = [],
+        partyList,
         partyDropDownLoading,
         compareParamLoading,
         saveBtnLoading,
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
         saveBtnLoading: state.ImportExcelPartyMap_Reducer.invoiceUploadSaveLoading,
-        userAccess: state.Login.RoleAccessUpdateData,
+
         partyList: state.PartyMasterReducer.partyList,
         partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
 
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
         compareParamLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
 
     useEffect(() => {
-        
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
+        dispatch(getPartyListAPI());
         if (!userAdminRole) {
             goButtonHandler()
         }
@@ -334,11 +337,42 @@ const InvoiceExcelUpload = (props) => {
                             <div className="px-2   c_card_filter text-black" >
                                 {
                                     userAdminRole ? <>
-                                        <PartyDropdown_Common
+                                        {/* <PartyDropdown_Common
                                             partySelect={partySelect}
                                             setPartyFunc={(e) => SetPartySelect(e)}
                                             goButtonHandler={goButtonHandler}
-                                        />
+                                        /> */}
+
+                                        <div className="row pt-2">
+                                            <Col sm="5">
+                                                <FormGroup className="row px-1">
+                                                    <Label className="col-sm-5 p-2" style={{ width: "83px" }}>
+                                                        Party
+                                                    </Label>
+                                                    <Col sm="6">
+                                                        <C_Select
+                                                            value={partySelect}
+                                                            isSearchable={true}
+                                                            isLoading={partyDropDownLoading}
+                                                            className="react-dropdown"
+                                                            classNamePrefix="dropdown"
+                                                            options={partyList.map((data) => ({
+                                                                value: data.id,
+                                                                label: data.Name,
+                                                            }))}
+
+                                                            onChange={(e) => { SetPartySelect(e) }}
+                                                            styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
+                                                        />
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col sm="1" className="mb-1">
+                                                <Go_Button
+                                                    // loading={reducers.loading}
+                                                    onClick={goButtonHandler} />
+                                            </Col>
+                                        </div>
                                     </>
                                         : <>
                                             {(!(compareParameter.length > 0)) ?

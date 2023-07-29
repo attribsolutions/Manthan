@@ -60,7 +60,15 @@ const DriverList = () => {
 
   function goButtonHandler() {
     try {
-      dispatch(getDriverList());
+      if (_cfunc.loginPartyID() === 0) {
+        customAlert({ Type: 3, Message: "Please Select Party" });
+        return;
+      };
+      const jsonBody = {
+        ..._cfunc.loginJsonBody(),
+        PartyID: _cfunc.loginSelectedPartyID()
+      };
+      dispatch(getDriverList(jsonBody));
     }
     catch (error) { }
     return

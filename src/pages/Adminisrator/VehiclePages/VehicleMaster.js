@@ -270,11 +270,11 @@ const VehicleMaster = (props) => {
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                        {userAdminRole &&
+                        {/* {userAdminRole &&
                             <PartyDropdown_Common
                                 partySelect={values.Party}
                                 setPartyFunc={partyOnChngeHandler} />
-                        }
+                        } */}
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header" >

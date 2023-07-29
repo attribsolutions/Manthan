@@ -8,7 +8,7 @@ import {
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
@@ -123,9 +123,9 @@ const InvoiceList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-      
-        if (!(_cfunc.loginPartyID() === 0)) {
+        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
+
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler("event", IBType)
         }
 
@@ -234,7 +234,7 @@ const InvoiceList = () => {
     function goButtonHandler(event, IBType) {
 
         try {
-            if (_cfunc.loginPartyID() === 0) {
+            if (_cfunc.loginSelectedPartyID() === 0) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
@@ -242,7 +242,7 @@ const InvoiceList = () => {
                 FromDate: fromdate,
                 ToDate: todate,
                 Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
-                Party: _cfunc.loginPartyID(),
+                Party: _cfunc.loginSelectedPartyID(),
                 IBType: IBType ? IBType : otherState.IBType
             });
 
@@ -269,8 +269,17 @@ const InvoiceList = () => {
         newObj.supplierSelect = e
         setHederFilters(newObj)
     }
-    function partyOnChngeButtonHandler() {
-        dispatch(invoiceListGoBtnfilterSucccess([]))
+
+    const partySelectButtonHandler = (e) => {
+        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
+    }
+
+    function partySelectOnChangeHandler() {
+        dispatch(invoiceListGoBtnfilterSucccess([]));
+        dispatch(GetVenderSupplierCustomerSuccess([]));
+        let newObj = { ...hederFilters }
+        newObj.supplierSelect = { value: '', label: "All" }
+        setHederFilters(newObj)
     }
 
     const makeBtnFunc = (list = {}, btnId) => {
@@ -345,7 +354,9 @@ const InvoiceList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
             <div className="page-content">
-                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
+                <PartyDropdown_Common
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partySelectOnChangeHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList

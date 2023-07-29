@@ -608,10 +608,6 @@ const PartySubParty = (props) => {
                                                 </CardBody>
                                             </Card>
 
-                                            {/* <CustomTable2 keyField="id"
-                                                data={[...partyTableArr]}
-                                                columns={pagesListColumns}
-                                                classes={"table align-middle table-nowrap table-hover"} /> */}
 
 
                                             {/* <PaginationProvider

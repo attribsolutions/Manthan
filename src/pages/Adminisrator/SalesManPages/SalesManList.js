@@ -13,7 +13,7 @@ import {
     updateSalesManIDSuccess,
     getSalesManlistSuccess
 } from "../../../store/Administrator/SalesManRedux/actions";
-import { loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import {  loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
@@ -53,7 +53,7 @@ const SalesManList = (props) => {
         const page_Id = pageId.SALESMAN_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        if (!(loginPartyID() === 0)) {
+        if (!(loginSelectedPartyID() === 0)) {
             goButtonHandler()
         }
         return () => {
@@ -64,7 +64,7 @@ const SalesManList = (props) => {
 
     const goButtonHandler = () => {
         try {
-            const loginParty = loginPartyID();
+            const loginParty = loginSelectedPartyID();
             if (loginParty === 0) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;

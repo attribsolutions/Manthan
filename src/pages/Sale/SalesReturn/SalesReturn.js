@@ -734,6 +734,7 @@ const SalesReturn = (props) => {
         const btnId = event.target.id;
         let grand_total = 0;
         const invalidMessages = [];
+        const imageArray = []
 
         const filterData = TableArr.filter((i) => {
             if (i.Quantity > 0) {
@@ -774,6 +775,10 @@ const SalesReturn = (props) => {
             if (!i.defaultReason) {
                 invalidMessages.push({ [i.ItemName]: 'Select Return Reason' });
             }
+            imageArray.push({ Item_pic: 'Select Return Reason', Image: imageTable });
+
+
+
 
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
@@ -810,7 +815,7 @@ const SalesReturn = (props) => {
                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
                 "PurchaseReturn": "",
                 "SubReturn": "",
-                "ReturnItemImages": [],
+                "ReturnItemImages": imageArray,
             };
         });
 
@@ -831,7 +836,7 @@ const SalesReturn = (props) => {
                 PurchaseReturnReferences: [],
                 ReturnItems: ReturnItems,
             });
-
+            
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
@@ -872,11 +877,11 @@ const SalesReturn = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <PartyDropdown_Common
+                    {/* <PartyDropdown_Common
                         goButtonHandler={partySelectButtonHandler}
                         changeBtnShow={!(ReturnReasonOptions.length === 0) && !(ItemList_Options.length === 0) && !(InvoiceNo_Options.length === 0)}
                         changeButtonHandler={partyOnChngeButtonHandler}
-                    />
+                    /> */}
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             {/* < img id='add-img' className='abc1' src={''} style={{ top: "400px" }} /> */}

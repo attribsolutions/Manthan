@@ -26,7 +26,7 @@ import {
     delete_CreditList_ID,
     GetCreditListSuccess
 } from "../../../store/Accounting/CreditRedux/action";
-import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List, Retailer_List_Success, getSupplier, getSupplierSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction"
 import { C_DatePicker } from "../../../CustomValidateForm";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
@@ -74,17 +74,10 @@ const CreditList = () => {
     const values = { ...state.values }
 
     const action = {
-        getList: GetCreditList,
         editId: Edit_CreditList_ID,
         deleteId: delete_CreditList_ID,
-        postSucc: postMessage,
-        updateSucc: updateBOMListSuccess,
         deleteSucc: deleteCreditlistSuccess
     }
-
-    useEffect(() => {
-        dispatch(GetCreditListSuccess([]))
-    }, [])
 
     useEffect(() => {
         let page_Id = '';
@@ -109,9 +102,14 @@ const CreditList = () => {
         setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${buttonMsgLable} Count : 0`))
+        dispatch(BreadcrumbShowCountlabel(`${buttonMsgLable} Count : 0`));
+        
+        return () => {
+            dispatch(GetCreditListSuccess([]));
+            dispatch(Retailer_List_Success([]));
+            dispatch(getSupplierSuccess([]));
+        }
     }, []);
-
 
     //   Note Type Api for Type identify
     useEffect(() => {
@@ -122,12 +120,11 @@ const CreditList = () => {
         dispatch(CredietDebitType(jsonBody));
     }, []);
 
-
     // Retailer DropDown List Type 1 for credit list drop down
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -146,7 +143,7 @@ const CreditList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -187,7 +184,7 @@ const CreditList = () => {
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             NoteType: values.NoteType.value,
             Note: otherState.buttonMsgLable
         });
@@ -235,10 +232,28 @@ const CreditList = () => {
             return a
         })
     }
-    function partyOnChngeButtonHandler() {
-        dispatch(GetCreditListSuccess([]))
+
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: _cfunc.loginSelectedPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
     }
 
+    function partySelectOnChangeHandler() {
+        dispatch(GetCreditListSuccess([]));
+        dispatch(Retailer_List_Success([]));
+        setState((i) => {
+            const a = { ...i }
+            a.values.Customer = { value: "", label: "All" }
+            a.values.NoteType = { value: "", label: "All" }
+            a.hasValid.Customer.valid = true;
+            a.hasValid.NoteType.valid = true;
+            return a
+        })
+    }
     const HeaderContent = () => {
         return (
             <div className="px-2 c_card_filter text-black" >
@@ -322,8 +337,8 @@ const CreditList = () => {
             <PageLoadingSpinner isLoading={(listBtnLoading || !pageField)} />
             <div className="page-content">
                 <PartyDropdown_Common
-                    changeButtonHandler={partyOnChngeButtonHandler}
-                />
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partySelectOnChangeHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList

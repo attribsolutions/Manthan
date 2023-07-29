@@ -86,10 +86,10 @@ function* getVendorGenFunc() {
   }
 }
 
-function* getSupplierGenFunc() {
-
+function* getSupplierGenFunc({ jsonBody }) {
+  const { PartyID = loginPartyID() } = jsonBody
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": PartyID, "Company": loginCompanyID(), Route: "" });
     yield put(getSupplierSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);
@@ -108,7 +108,11 @@ function* getCustomerGenFunc() {
 }
 
 function* vendorSupplierCustomer_genFunc({ data }) {
-  const { subPageMode, RouteID = "" } = data
+  const {
+    subPageMode,
+    RouteID = "",
+    PartyID = loginPartyID(),
+    Company = loginCompanyID() } = data
 
   let response;
 
@@ -128,8 +132,9 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.ORDER_LIST_4
     || subPageMode === url.INVOICE_1
     || subPageMode === url.INVOICE_LIST_1
-
-    || subPageMode === url.PARTY_LEDGER);
+    || subPageMode === url.PARTY_LEDGER
+    || subPageMode === url.CLAIM_SUMMARY_REPORT
+  );
 
 
   const isDivisions = (subPageMode === url.IB_ORDER //divisions mode 4
@@ -140,20 +145,24 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.INWARD_LIST
   );
 
-  const json = { "PartyID": loginPartyID(), "Company": loginCompanyID() }
+  const jsonBody = {
+    "PartyID": PartyID,
+    "Company": Company,
+    "Route": RouteID
+  }
 
   try {
     if (isVender) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 1, Route: RouteID });//vendor mode 1
+      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 1, }));//vendor mode 1
     }
     else if (isSuppiler) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 2, Route: RouteID });//supplier mode 2
+      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 2, }));//supplier mode 2
     }
     else if (isCustomer) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 3, Route: RouteID });//Customer mode 3
+      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 3, }));//Customer mode 3
     }
     else if (isDivisions) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 4, Route: RouteID });//divisions mode 4
+      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 4, }));//divisions mode 4
     }
     else {
       response = { Data: [] }
