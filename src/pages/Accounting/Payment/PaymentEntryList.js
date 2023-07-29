@@ -18,7 +18,7 @@ import {
     ReceiptListAPI, ReceiptListAPISuccess, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
-import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { getSupplier, Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import PaymentEntry from "./PaymentEntry";
 import { Receipt_Print } from "../../../helpers/backend_helper";
@@ -97,7 +97,7 @@ const PaymentEntryList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -186,7 +186,7 @@ const PaymentEntryList = () => {
 
     const goButtonHandler = async () => {
         try {
-            if (_cfunc.loginPartyID() === 0) {
+            if ((_cfunc.loginSelectedPartyID() === 0)) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
@@ -198,7 +198,7 @@ const PaymentEntryList = () => {
                 FromDate: values.FromDate,
                 ToDate: values.ToDate,
                 CustomerID: values.Customer.value,
-                PartyID: _cfunc.loginPartyID(),
+                PartyID: _cfunc.loginSelectedPartyID(),
                 ReceiptType: ReceiptTypeID.id,
             });
 
@@ -240,8 +240,24 @@ const PaymentEntryList = () => {
         dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
     }
 
-    function partyOnChngeButtonHandler() {
-        dispatch(ReceiptListAPISuccess([]))
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: _cfunc.loginSelectedPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }
+
+    function partySelectOnChangeHandler() {
+        dispatch(ReceiptListAPISuccess([]));
+        dispatch(Retailer_List_Success([]));
+        setState((i) => {
+            const a = { ...i }
+            a.values.Customer = { value: "", label: "All" }
+            a.hasValid.Customer.valid = true
+            return a
+        })
     }
 
     const makeBtnFunc = (list = [], btnId) => {
@@ -250,13 +266,13 @@ const PaymentEntryList = () => {
 
         try {
             const jsonBody = JSON.stringify({
-                PartyID: _cfunc.loginPartyID(),
+                PartyID: _cfunc.loginSelectedPartyID(),
                 CustomerID: CustomerID,
                 InvoiceID: ""
             });
 
             const jsonBody1 = JSON.stringify({
-                PartyID: _cfunc.loginPartyID(),
+                PartyID: _cfunc.loginSelectedPartyID(),
                 CustomerID: CustomerID,
                 ReceiptDate: currentDate_ymd
             });
@@ -332,7 +348,9 @@ const PaymentEntryList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
+                <PartyDropdown_Common
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partySelectOnChangeHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList
