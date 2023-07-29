@@ -39,7 +39,7 @@ import {
 import * as url from "../../../routes/route_url";
 
 function* Get_Party_GenFun({ subPageMode }) {   // Only CompanyID is Required
-  debugger
+  
   var IsRetailer = subPageMode === url.RETAILER_LIST ? 1 : 0
 
   var jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ IsRetailer: IsRetailer } });

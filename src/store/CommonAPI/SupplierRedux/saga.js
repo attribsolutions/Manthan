@@ -86,10 +86,10 @@ function* getVendorGenFunc() {
   }
 }
 
-function* getSupplierGenFunc() {
-
+function* getSupplierGenFunc({ jsonBody }) {
+  const { PartyID = loginPartyID() } = jsonBody
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": PartyID, "Company": loginCompanyID(), Route: "" });
     yield put(getSupplierSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);

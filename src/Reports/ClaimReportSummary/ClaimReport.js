@@ -107,7 +107,7 @@ const ClaimSummary = (props) => {
 
 
     function goButtonHandler(type) {
-        debugger
+        
         let config = {}
 
         const jsonBody = JSON.stringify({

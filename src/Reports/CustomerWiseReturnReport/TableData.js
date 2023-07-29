@@ -80,7 +80,7 @@ export const Rows = (data) => {
     // }, {});
 
     ClaimSummaryItemDetails.forEach((element, key) => {
-        debugger
+        
         const tableitemRow = [
             `${date_dmy_func(element.ReturnDate)}`,
             `${(element.FullReturnNumber)}`,

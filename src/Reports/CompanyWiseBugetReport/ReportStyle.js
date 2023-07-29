@@ -38,7 +38,7 @@ export const tableBody = (doc, data) => {
     const options = {
 
         didParseCell: (data1) => {
-            debugger
+            
             if (data1.row.cells[0].raw === "Total") {
                 data1.row.cells[1].styles.fontSize = 8
                 data1.row.cells[2].styles.fontSize = 8

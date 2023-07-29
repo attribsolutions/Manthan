@@ -79,7 +79,7 @@ export const Rows = (data) => {
     // }, {});
 
     ClaimSummaryItemDetails.forEach((element, key) => {
-        debugger
+        
         const tableitemRow = [
             `${element.ItemName}`,
             `${numberWithCommas(Number(element.MRP).toFixed(2))}`,

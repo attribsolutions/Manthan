@@ -22,7 +22,7 @@ const CompanyWiseBudgetReport = () => {
     pageFooter(doc, data);
 
     function generateSaveAndOpenPDFReport() {
-        debugger
+        
         // doc.save(`CompanyWiseBudget_report.pdf`);
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
         const options = { filename: "CompanyWiseBudget_report" }

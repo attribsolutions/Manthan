@@ -836,7 +836,7 @@ const SalesReturn = (props) => {
                 PurchaseReturnReferences: [],
                 ReturnItems: ReturnItems,
             });
-            debugger
+            
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }

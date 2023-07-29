@@ -18,7 +18,7 @@ import {
     ReceiptListAPI, ReceiptListAPISuccess, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
-import { getSupplier, Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { getSupplier, getSupplierSuccess, Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import PaymentEntry from "./PaymentEntry";
 import { Receipt_Print } from "../../../helpers/backend_helper";
@@ -55,12 +55,9 @@ const PaymentEntryList = () => {
             loading: state.ReceiptReducer.loading,
             tableList: state.ReceiptReducer.ReceiptList,
             deleteMsg: state.ReceiptReducer.deleteMsg,
-            updateMsg: state.BOMReducer.updateMsg,
-            postMsg: state.OrderReducer.postMsg,
             RetailerListForPayment: state.CommonAPI_Reducer.supplier,
             RetailerListForReceipt: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
-            editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             makeReceipt: state.ReceiptReducer.ReceiptGoButton,
@@ -137,7 +134,9 @@ const PaymentEntryList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Payment Entry Count"} :0`))
-        dispatch(getSupplier())
+        // dispatch(getSupplier())
+        dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
+
 
     }, []);
 
@@ -241,17 +240,21 @@ const PaymentEntryList = () => {
     }
 
     function partySelectButtonHandler() {
+        
         const jsonBody = JSON.stringify({
             Type: 4,
             PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
+        dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
     }
 
     function partySelectOnChangeHandler() {
         dispatch(ReceiptListAPISuccess([]));
         dispatch(Retailer_List_Success([]));
+        dispatch(getSupplierSuccess([]));
+
         setState((i) => {
             const a = { ...i }
             a.values.Customer = { value: "", label: "All" }
