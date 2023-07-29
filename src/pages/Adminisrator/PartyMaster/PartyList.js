@@ -5,6 +5,7 @@ import {
     deletePartyIDSuccess,
     editPartyID,
     getPartyListAPI,
+    getPartyListAPISuccess,
     postPartyDataSuccess,
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
@@ -16,6 +17,7 @@ import { useLayoutEffect } from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { PageLoadingSpinner } from '../../../components/Common/CommonButton';
+import CommonPurchaseList from '../../../components/Common/CommonPurchaseList';
 
 const PartyList = () => {
 
@@ -46,7 +48,6 @@ const PartyList = () => {
     );
 
     const action = {
-        getList: getPartyListAPI,
         editId: editPartyID,
         deleteId: deletePartyID,
         updateSucc: updatePartyIDSuccess,
@@ -78,8 +79,9 @@ const PartyList = () => {
         dispatch(getPartyListAPI(subPageMode));
 
         return () => {
-            dispatch(commonPageFieldListSuccess(null))
-            dispatch(updatePartyIDSuccess([]))//for clear privious order list   
+            // dispatch(commonPageFieldListSuccess(null));
+            dispatch(updatePartyIDSuccess([])); //for clear privious order list 
+            dispatch(getPartyListAPISuccess([]));
         }
     }, []);
 
@@ -87,22 +89,23 @@ const PartyList = () => {
 
     return (
         <React.Fragment>
-
-            <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
-            {
-                (pageField) &&
-                <CommonListPage
-                    action={action}
-                    reducers={reducers}
-                    MasterModal={PartyMaster}
-                    masterPath={otherState.masterPath}
-                    newBtnPath={otherState.newBtnPath}
-                    pageMode={pageMode}
-                    ButtonMsgLable={"Party"}
-                    deleteName={"Name"}
-                />
-
-            }
+            <div className="page-content">
+                <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
+                {
+                    (pageField) &&
+                    <CommonPurchaseList
+                        action={action}
+                        reducers={reducers}
+                        showBreadcrumb={false}
+                        MasterModal={PartyMaster}
+                        masterPath={otherState.masterPath}
+                        newBtnPath={otherState.newBtnPath}
+                        pageMode={pageMode}
+                        ButtonMsgLable={"Party"}
+                        deleteName={"Name"}
+                    />
+                }
+            </div>
         </React.Fragment>
     )
 }
