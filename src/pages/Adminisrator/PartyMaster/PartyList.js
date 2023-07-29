@@ -5,6 +5,7 @@ import {
     deletePartyIDSuccess,
     editPartyID,
     getPartyListAPI,
+    getPartyListAPISuccess,
     postPartyDataSuccess,
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
@@ -46,7 +47,6 @@ const PartyList = () => {
     );
 
     const action = {
-        getList: getPartyListAPI,
         editId: editPartyID,
         deleteId: deletePartyID,
         updateSucc: updatePartyIDSuccess,
@@ -78,8 +78,9 @@ const PartyList = () => {
         dispatch(getPartyListAPI(subPageMode));
 
         return () => {
-            dispatch(commonPageFieldListSuccess(null))
-            dispatch(updatePartyIDSuccess([]))//for clear privious order list   
+            dispatch(commonPageFieldListSuccess(null));
+            dispatch(updatePartyIDSuccess([])); //for clear privious order list 
+            dispatch(getPartyListAPISuccess([]));
         }
     }, []);
 
