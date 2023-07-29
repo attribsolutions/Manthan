@@ -187,6 +187,25 @@ const LoadingSheet = (props) => {
         label: index.Name,
     }));
     
+   
+    const pagesListColumns = [
+        {
+            text: "Invoice Date",
+            dataField: "InvoiceDate",
+        },
+        {
+            text: "Invoice Number",
+            dataField: "FullInvoiceNumber",
+        },
+        {
+            text: "Customer",
+            dataField: "Customer",
+        },
+        {
+            text: "GrandTotal",
+            dataField: "GrandTotal",
+        },
+    ];
     const onChangeBtnHandler = () => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
     }
@@ -236,25 +255,6 @@ const LoadingSheet = (props) => {
         });
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
     }
-
-    const pagesListColumns = [
-        {
-            text: "Invoice Date",
-            dataField: "InvoiceDate",
-        },
-        {
-            text: "Invoice Number",
-            dataField: "FullInvoiceNumber",
-        },
-        {
-            text: "Customer",
-            dataField: "Customer",
-        },
-        {
-            text: "GrandTotal",
-            dataField: "GrandTotal",
-        },
-    ];
 
     const saveHandler = async (event) => {
 
@@ -339,11 +339,11 @@ const LoadingSheet = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
-                    <PartyDropdown_Common
+                    {/* <PartyDropdown_Common
                         goButtonHandler={partySelectButtonHandler}
                         changeBtnShow={!(Driver_Options.length === 0) && !(VehicleNumber_Options.length === 0) && !(RouteName_Options.length === 0)}
                         changeButtonHandler={partyOnChngeButtonHandler}
-                    />
+                    /> */}
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >

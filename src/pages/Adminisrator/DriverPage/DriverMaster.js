@@ -240,7 +240,7 @@ const DriverMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
 
-                        <PartyDropdown_Common />
+                        {/* <PartyDropdown_Common /> */}
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header"  >

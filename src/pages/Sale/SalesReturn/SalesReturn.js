@@ -877,11 +877,11 @@ const SalesReturn = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <PartyDropdown_Common
+                    {/* <PartyDropdown_Common
                         goButtonHandler={partySelectButtonHandler}
                         changeBtnShow={!(ReturnReasonOptions.length === 0) && !(ItemList_Options.length === 0) && !(InvoiceNo_Options.length === 0)}
                         changeButtonHandler={partyOnChngeButtonHandler}
-                    />
+                    /> */}
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             {/* < img id='add-img' className='abc1' src={''} style={{ top: "400px" }} /> */}

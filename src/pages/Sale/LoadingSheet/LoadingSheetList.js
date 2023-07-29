@@ -63,7 +63,7 @@ const LoadingSheetList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
-        if (!(_cfunc.loginPartyID() === 0)) {
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler()
         }
         return () => {
