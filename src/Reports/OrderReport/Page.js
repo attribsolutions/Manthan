@@ -20,8 +20,6 @@ function reportBody(doc, data) {
     } else {
         style.tableBody(doc, data);
     }
-
-
 }
 
 function pageFooter(doc, data) {
@@ -37,8 +35,13 @@ const ordeRreport = (data) => {
     doc.setProperties({
         title: `POReport/${data.OrderDate}-${data.CustomerName} `
     });
-    const options = { filename: "Order Report" }
-    doc.output('dataurlnewwindow', options);
+
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        const options = { filename: `POReport/${data.CustomerName}/${data.OrderDate} ` }
+        window.open(pdfUrl, options);
+    }
+    generateSaveAndOpenPDFReport();
 
 }
 export default ordeRreport;

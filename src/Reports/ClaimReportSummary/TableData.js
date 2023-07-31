@@ -79,16 +79,16 @@ export const Rows = (data) => {
     // }, {});
 
     ClaimSummaryItemDetails.forEach((element, key) => {
-        
+
         const tableitemRow = [
             `${element.ItemName}`,
             `${numberWithCommas(Number(element.MRP).toFixed(2))}`,
             `${numberWithCommas(Number(element.Quantity).toFixed(2))}`,
             `${numberWithCommas(Number(element.GST).toFixed(2))}%`,
-            `${numberWithCommas(Number("").toFixed(2))}`,
+            `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${numberWithCommas(Number(element.Discount).toFixed(2))}`,
             `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
-            `${numberWithCommas(Number("").toFixed(2))}`,
+            `${numberWithCommas(Number(element.TaxableAmount).toFixed(2))}`,
             `${numberWithCommas(Number(element.CGST).toFixed(2))}`,
             `${numberWithCommas(Number(element.SGST).toFixed(2))}`,
             `${numberWithCommas(Number(element.Amount).toFixed(2))}`,

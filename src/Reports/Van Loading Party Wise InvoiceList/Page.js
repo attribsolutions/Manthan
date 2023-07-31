@@ -20,16 +20,21 @@ function reportBody(doc, data) {
 // }
 
 const VanLoadingSheet = (data) => {
-
+    debugger
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
     // pageFooter(doc,data);
     doc.setProperties({
-        title: "Report"
+        title: `LoadingSheet_Report/${data.PartyDetails.Date}-${data.PartyDetails.Party} `
     });
-    const options = { filename: "LoadingSheet Report" }
-    doc.output('dataurlnewwindow', options);
+
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        const options = { filename: `LoadingSheet_Report/${data.PartyDetails.Date}-${data.PartyDetails.Party}` }
+        window.open(pdfUrl, options);
+    }
+    generateSaveAndOpenPDFReport();
 
     // return(<></>);
 }

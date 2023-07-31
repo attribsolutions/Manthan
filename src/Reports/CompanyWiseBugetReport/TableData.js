@@ -1,25 +1,25 @@
 
 export const columns = [
     "Company",
-    "CX primary Amount @ SS Landing",
-    "CX Purchase Amount",
-    "CX return Value",
-    "CX Net Purchase Value",
-    "Budget Only Expiry From CX",
-    "CX Claim Amount",
-    "CX Claim Against % Net Sale",
+    "Primary Amount @ SS Landing",
+    "Purchase Amount",
+    "Return Value",
+    "Net Purchase Value",
+    "Budget Only Expiry ",
+    "Claim Amount",
+    "Claim Against % Net Sale",
 ];
 
 export const ProductWisecolumns = [
     // "Customer Name",
     "Product",
-    "CX Purchase @ SS Landing Amount ",
-    "CX Purchase Amount",
-    "CX return Value",
-    "CX Net Sale Value",
-    "CX Budget Generated",
-    "CX Claim Amount",
-    "CX Claim Against % Net Sale",
+    "Purchase @ SS Landing Amount ",
+    "Purchase Amount",
+    "Return Value",
+    "Net Sale Value",
+    "Budget Generated",
+    "Claim Amount",
+    "Claim Against % Net Sale",
 ];
 
 
@@ -56,9 +56,6 @@ export const Rows = (data) => {
             TotalBudgetOnlyExpiryFrom = Number(TotalBudgetOnlyExpiryFrom) + Number(element.Budget)
             TotalCXClaimAmount = Number(TotalCXClaimAmount) + Number(element.ClaimAmount)
             TotalNetSale = Number(TotalNetSale) + Number(element.ClaimAgainstNetSale)
-
-
-
 
         };
 

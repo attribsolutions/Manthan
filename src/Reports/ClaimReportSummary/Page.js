@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle';
-import { loginSystemSetting } from "../../components/Common/CommonFunction";
+import { date_dmy_func, loginSystemSetting } from "../../components/Common/CommonFunction";
 import { Data } from "./DemoData";
 
 
@@ -23,17 +23,21 @@ function pageFooter(doc, data) {
 }
 
 const ClaimSummaryReport = (data) => {
-  
+    debugger
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
 
     doc.setProperties({
-        title: " Claim Summary Report"
+        title: `ClaimSummary_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `
     });
-    const options = { filename: "Claim Summary Report" }
-    doc.output('dataurlnewwindow', options);
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        const options = { filename: `ClaimSummary_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)}` }
+        window.open(pdfUrl, options);
+    }
+    generateSaveAndOpenPDFReport();
 }
 
 export default ClaimSummaryReport;

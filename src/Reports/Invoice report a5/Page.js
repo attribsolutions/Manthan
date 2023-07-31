@@ -121,7 +121,7 @@ const generateReportPage = (doc, data) => {
 
 const InvioceReporta5 = async (data) => {
     var doc = new jsPDF('l', 'pt', 'a5');
-    
+
     const BATCH_SIZE = 40; // You can adjust the batch size according to your needs
 
     if (Array.isArray(data)) {
@@ -144,11 +144,17 @@ const InvioceReporta5 = async (data) => {
             }
         });
     }
-
     doc.setProperties({
-        title: " Invoice Report"
+        title: `InvoiceReport/${data.CustomerName}/${data.InvoiceDate} `
     });
-    doc.output('dataurlnewwindow', { filename: "Invoice Report" });
+
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        const options = { filename: "InvoiceReport" }
+        window.open(pdfUrl, options);
+    }
+    generateSaveAndOpenPDFReport();
+
 }
 
 export default InvioceReporta5;

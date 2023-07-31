@@ -2,6 +2,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { Data } from "./DemoData";
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
@@ -15,17 +16,17 @@ function pageFooter(doc, data) {
 }
 
 const CompanyWiseBudgetReport = (data) => {
-
+    debugger
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
-
+    doc.setProperties({
+        title: `MasterClaim_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `
+    });
     function generateSaveAndOpenPDFReport() {
-        
-        // doc.save(`CompanyWiseBudget_report.pdf`);
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        const options = { filename: "CompanyWiseBudget_report" }
+        const options = { filename: `MasterClaim_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} ` }
         window.open(pdfUrl, options);
     }
     generateSaveAndOpenPDFReport();
