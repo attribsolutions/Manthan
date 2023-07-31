@@ -84,7 +84,7 @@ export const Rows = (data) => {
 
 
 export const ProductWiseRows = (data) => {
-    debugger
+    
     const { ProductwiseBudgetReport = [] } = data
     ProductwiseBudgetReport.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];

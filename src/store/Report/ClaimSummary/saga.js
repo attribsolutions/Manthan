@@ -7,7 +7,7 @@ import { MasterClaimCreatApiErrorAction, OrderSummaryApiErrorAction, postMasterC
 import { MasterClaimCreate_API, OderSummary_GoBtn_API } from "../../../helpers/backend_helper";
 
 function* MasterClaimCreat_GenFunc({ config }) {
-    debugger
+    
     try {
         const response = yield call(MasterClaimCreate_API, config);
         yield put(postMasterClaimCreat_API_Success(response))

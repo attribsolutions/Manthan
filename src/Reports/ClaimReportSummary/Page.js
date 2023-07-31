@@ -23,7 +23,7 @@ function pageFooter(doc, data) {
 }
 
 const ClaimSummaryReport = (data) => {
-    debugger
+    
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);

@@ -86,7 +86,8 @@ function* getVendorGenFunc() {
   }
 }
 
-function* getSupplierGenFunc({ jsonBody }) {
+function* getSupplierGenFunc({ jsonBody = '' }) {
+  
   const { PartyID = loginPartyID() } = jsonBody
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": PartyID, "Company": loginCompanyID(), Route: "" });

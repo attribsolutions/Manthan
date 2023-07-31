@@ -7,7 +7,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
@@ -34,10 +34,10 @@ const PaymentEntry = (props) => {
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func()
 
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [modalCss] = useState(false);
+    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
-    const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [editCreatedBy] = useState("");
 
     const fileds = {
         ReceiptDate: currentDate_ymd,
@@ -253,11 +253,11 @@ const PaymentEntry = (props) => {
                 || (values.DepositorBankName === "")
                 || (values.DocumentNo === "")
             ) {
-                    customAlert({
-                        Type: 4,
-                        Status: true,
-                        Message: JSON.stringify(invalidMsg1),
-                    })
+                customAlert({
+                    Type: 4,
+                    Status: true,
+                    Message: JSON.stringify(invalidMsg1),
+                })
                 return;
             }
         }
@@ -541,7 +541,6 @@ const PaymentEntry = (props) => {
                                     userAcc={userPageAccessState}
                                     editCreatedBy={editCreatedBy}
                                 />
-
                             </Col>
                         </FormGroup >
 

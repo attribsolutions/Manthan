@@ -165,7 +165,7 @@ export const reportHeder3 = (doc, data) => {
 export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
-            debugger
+            
             if (data1.row.cells[0].raw === "Total") {
                 data1.row.cells[1].colSpan = 3
 
