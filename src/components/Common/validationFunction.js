@@ -169,7 +169,7 @@ export function defaultSetValidAll({ state, setState, fieldArr }) {
 }
 
 export const onChangeSelect = ({ hasSelect, evn, state, setState }) => {
-    
+
     const event = { change: { name: evn.name, value: hasSelect }, type: "select" }
     formValChange({ event, state, setState })
 }
@@ -210,7 +210,7 @@ export const onChangeCheckbox = ({ event, state, setState }) => {
 }
 
 export const initialFiledFunc = (field) => {
-
+    
     const obj = {}
     obj["values"] = field;
     obj["fieldLabel"] = {}

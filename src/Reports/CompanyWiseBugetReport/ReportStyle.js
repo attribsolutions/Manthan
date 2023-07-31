@@ -25,113 +25,105 @@ export const pageHeder = (doc, data) => {
     doc.text(`GT And Xpress Claim`, 300, 95, 'center')
     doc.line(570, 52, 30, 52);//horizontal Line Below Name
 }
-
-
 export const tableBody = (doc, data) => {
+    let tableStartY = 100;
+    data.ReasonwiseMasterClaim.forEach((index1) => {
+        Object.keys(index1).forEach((index2) => {
 
-    const options = {
+            const options = {
 
-        didParseCell: (data1) => {
+                didParseCell: (data1) => {
+                    if (data1.row.cells[0].raw === "Total") {
 
+                        data1.row.cells[1].styles.fontSize = 8
+                        data1.row.cells[2].styles.fontSize = 8
+                        data1.row.cells[3].styles.fontSize = 8
+                        data1.row.cells[4].styles.fontSize = 8
+                        data1.row.cells[5].styles.fontSize = 8
+                        data1.row.cells[6].styles.fontSize = 8
+                        data1.row.cells[7].styles.fontSize = 8
 
-            // if (data1.row.cells[0].raw === "Transport Damage") {
-            //     data1.row.cells[1].rowSpan = 5
-            // }
+                        data1.row.cells[0].styles.fontStyle = "bold"
+                        data1.row.cells[1].styles.fontStyle = "bold"
+                        data1.row.cells[2].styles.fontStyle = "bold"
+                        data1.row.cells[3].styles.fontStyle = "bold"
+                        data1.row.cells[4].styles.fontStyle = "bold"
+                        data1.row.cells[5].styles.fontStyle = "bold"
+                        data1.row.cells[6].styles.fontStyle = "bold"
+                        data1.row.cells[7].styles.fontStyle = "bold"
+                        data1.row.cells[0].rowSpan = 1
+                    }
+                },
+                margin: {
+                    left: 30, right: 25,//200 bottom
+                },
+                theme: 'grid',
+                headerStyles: {
+                    cellPadding: 4,
+                    lineWidth: 1,
+                    valign: 'top',
+                    fontStyle: 'bold',
+                    halign: 'center',    //'center' or 'right'
+                    fillColor: "white",
+                    textColor: [0, 0, 0], //Black     
+                    fontSize: 8,
+                    rowHeight: 10,
+                    lineColor: [0, 0, 0]
+                },
+                bodyStyles: {
+                    textColor: [30, 30, 30],
+                    cellPadding: 3,
+                    fontSize: 7,
+                    columnWidth: 'wrap',
+                    lineColor: [0, 0, 0],
+                },
+                columnStyles: {
+                    0: {
+                        valign: "top",
+                        columnWidth: 125,
+                    },
+                    1: {
+                        columnWidth: 70,
+                        halign: 'right',
 
+                    },
+                    2: {
+                        columnWidth: 70,
+                        halign: 'right',
+                    },
+                    3: {
+                        columnWidth: 55,
+                        halign: 'right',
+                    },
+                    4: {
+                        columnWidth: 55,
+                        halign: 'right',
+                    },
+                    5: {
+                        columnWidth: 55,
+                        halign: 'right',
+                    },
+                    6: {
+                        columnWidth: 55,
+                        halign: 'right',
+                    },
+                    7: {
+                        columnWidth: 55,
+                        halign: 'right',
+                    },
 
-            if (data1.row.cells[0].raw === "Total") {
+                },
 
-                data1.row.cells[1].styles.fontSize = 8
-                data1.row.cells[2].styles.fontSize = 8
-                data1.row.cells[3].styles.fontSize = 8
-                data1.row.cells[4].styles.fontSize = 8
-                data1.row.cells[5].styles.fontSize = 8
-                data1.row.cells[6].styles.fontSize = 8
-                data1.row.cells[7].styles.fontSize = 8
-
-                data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[2].styles.fontStyle = "bold"
-                data1.row.cells[3].styles.fontStyle = "bold"
-                data1.row.cells[4].styles.fontStyle = "bold"
-                data1.row.cells[5].styles.fontStyle = "bold"
-                data1.row.cells[6].styles.fontStyle = "bold"
-                data1.row.cells[7].styles.fontStyle = "bold"
-
-                data1.row.cells[0].rowSpan = 1
-
+                startY: tableStartY,
             }
 
-
-
-        },
-        margin: {
-            left: 30, right: 25,//200 bottom
-        },
-        theme: 'grid',
-        headerStyles: {
-            cellPadding: 4,
-            lineWidth: 1,
-            valign: 'top',
-            fontStyle: 'bold',
-            halign: 'center',    //'center' or 'right'
-            fillColor: "white",
-            textColor: [0, 0, 0], //Black     
-            fontSize: 8,
-            rowHeight: 10,
-            lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            textColor: [30, 30, 30],
-            cellPadding: 3,
-            fontSize: 7,
-            columnWidth: 'wrap',
-            lineColor: [0, 0, 0],
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 125,
-            },
-            1: {
-                columnWidth: 70,
-                halign: 'right',
-
-            },
-            2: {
-                columnWidth: 70,
-                halign: 'right',
-            },
-            3: {
-                columnWidth: 55,
-                halign: 'right',
-            },
-            4: {
-                columnWidth: 55,
-                halign: 'right',
-            },
-            5: {
-                columnWidth: 55,
-                halign: 'right',
-            },
-            6: {
-                columnWidth: 55,
-                halign: 'right',
-            },
-            7: {
-                columnWidth: 55,
-                halign: 'right',
-            },
-
-
-        },
-
-        startY: 100,
-    }
+            doc.autoTable(table.columns, table.Rows(index1[index2]), options);
+            console.log(doc.previousAutoTable.finalY + 15)
+            tableStartY = doc.previousAutoTable.finalY + 15;
+        })
+    })
     const ProductWiseoptions = {
-
         didParseCell: (data1) => {
-
             if (data1.row.cells[0].raw === "Total") {
                 data1.row.cells[1].styles.fontSize = 9
                 data1.row.cells[2].styles.fontSize = 9
@@ -141,7 +133,6 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[6].styles.fontSize = 9
                 data1.row.cells[7].styles.fontSize = 9
 
-
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[1].styles.fontStyle = "bold"
                 data1.row.cells[2].styles.fontStyle = "bold"
@@ -152,7 +143,6 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[7].styles.fontStyle = "bold"
 
             }
-
 
         },
         margin: {
@@ -220,17 +210,13 @@ export const tableBody = (doc, data) => {
                 columnWidth: 60,
                 halign: 'right',
             },
-
-
         },
         tableLineColor: "black",
-        startY: doc.previousAutoTable.finalY,
+        startY: doc.previousAutoTable.finalY + 20,
     }
-
-
-    doc.autoTable(table.columns, table.Rows(data), options);
+    // doc.autoTable(table.columns, table.Rows(data), options);
     doc.setFont(undefined, 'bold')
-    doc.text(`Product Wise Budget Report`, 300, doc.previousAutoTable.finalY + 13, 'center')
+    doc.text(`Product Wise Budget Report`, 300, doc.previousAutoTable.finalY + 14, 'center')
     doc.autoTable(table.ProductWisecolumns, table.ProductWiseRows(data), ProductWiseoptions);
 
 }
