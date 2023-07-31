@@ -390,7 +390,7 @@ const OrderList = () => {
     }
 
     function downBtnFunc(config) {
-        config["ReportType"] = report.CompanyWiseBudget;
+        config["ReportType"] = report.order1;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
     }
 
