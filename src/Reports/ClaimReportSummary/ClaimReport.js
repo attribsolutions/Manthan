@@ -360,24 +360,20 @@
 
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Card, CardBody, Col, FormGroup, Input, Label, Row } from "reactstrap";
+import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { initialFiledFunc, onChangeSelect } from "../../components/Common/validationFunction";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker } from "../../CustomValidateForm";
+import { initialFiledFunc } from "../../components/Common/validationFunction";
+import { C_Button } from "../../components/Common/CommonButton";
+
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { url, mode, pageId } from "../../routes/index"
+import { mode } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import Select from "react-select";
-import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
-import * as XLSX from 'xlsx';
-import { GetVenderSupplierCustomer, SSDD_List_under_Company, getpdfReportdata } from "../../store/actions";
+import { GetVenderSupplierCustomer, getpdfReportdata } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
-import { ClaimSummary_API, MasterClaimSummary_API, PartyLedgerReport_API } from "../../helpers/backend_helper";
+import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
 import { postClaimMasterCreate_API, postMasterClaimCreat_API_Success } from "../../store/Report/ClaimSummary/action";
-import { formatDate } from "@fullcalendar/react";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
@@ -484,29 +480,29 @@ const ClaimSummary = (props) => {
 
 
     function goButtonHandler(type, row) {
+
         debugger
         let config = {}
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "Party": row.id,
-            // "Mode": type === 1 ? 1 : 2
+            "Mode": type === 1 ? 1 : 2
         });
 
 
         if (type === 1) {
-            const btnId = `gobtn-${report.ClaimSummary}`
+            const btnId = `gobtn-${report.ClaimSummary}-${row.id}`
             config = { ReportType: report.ClaimSummary, jsonBody, btnId: btnId }
         }
         if (type === 2) {
-            const btnId = `gobtn-${report.CustomerWiseReturn}`
+            const btnId = `gobtn-${report.CustomerWiseReturn}-${row.id}`
             config = { ReportType: report.CustomerWiseReturn, jsonBody, btnId: btnId }
         }
         if (type === 3) {
-            const btnId = `gobtn-${report.CompanyWiseBudget}`
+            const btnId = `gobtn-${report.CompanyWiseBudget}-${row.id}`
             config = { ReportType: report.CompanyWiseBudget, jsonBody, btnId: btnId, ToDate: values.ToDate, FromDate: values.FromDate }
         }
-
 
         if (type === 3) {
             dispatch(getpdfReportdata(MasterClaimSummary_API, config))
@@ -586,7 +582,7 @@ const ClaimSummary = (props) => {
                                     spinnerColor="white"
                                     className="btn btn-success w-md  "
                                     onClick={(e) => { goButtonHandler(4, row) }}
-                                    btnID={`gobtn-${report.CustomerWiseReturn}`}
+                                    btnID={`gobtn-${report.CustomerWiseReturn}-${row.id}`}
                                 >
                                     Create Claim
                                 </C_Button>
@@ -601,7 +597,7 @@ const ClaimSummary = (props) => {
                                     spinnerColor="white"
                                     className="btn btn-primary w-md  "
                                     onClick={(e) => { goButtonHandler(1, row) }}
-                                    btnID={`gobtn-${report.CustomerWiseReturn}`}
+                                    btnID={`gobtn-${report.CustomerWiseReturn}-${row.id}`}
 
                                 >
                                     Claim Summary
@@ -616,7 +612,7 @@ const ClaimSummary = (props) => {
                                     type="button"
                                     spinnerColor="white"
                                     className="btn btn-primary w-md  "
-                                    btnID={`gobtn-${report.ClaimSummary}`}
+                                    btnID={`gobtn-${report.ClaimSummary}-${row.id}`}
                                     onClick={(e) => { goButtonHandler(2, row) }}
                                 >
                                     Customer wise return
@@ -631,7 +627,7 @@ const ClaimSummary = (props) => {
                                     type="button"
                                     spinnerColor="white"
                                     className="btn btn-primary w-md  "
-                                    btnID={`gobtn-${report.CompanyWiseBudget}`}
+                                    btnID={`gobtn-${report.CompanyWiseBudget}-${row.id}`}
                                     onClick={(e) => { goButtonHandler(3, row) }}
                                 >
                                     Master Claim
