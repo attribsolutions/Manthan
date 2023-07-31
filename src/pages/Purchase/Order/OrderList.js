@@ -598,7 +598,7 @@ const OrderList = () => {
 
                     <Col sm="1" />
                     <Col sm="1" className="mt-3 ">
-                        <Go_Button loading={reducers.loading} id={gobtnId} onClick={goButtonHandler} />
+                        <Go_Button loading={reducers.goBtnloading} id={gobtnId} onClick={goButtonHandler} />
                     </Col>
                 </div>
             </div>
