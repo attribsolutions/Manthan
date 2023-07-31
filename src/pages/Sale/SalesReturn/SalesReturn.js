@@ -396,6 +396,9 @@ const SalesReturn = (props) => {
             classes: () => "sales-rate-row",
             formatExtraData: { TableArr },
             formatter: (cellContent, row, key, { TableArr }) => {
+                if (!Number(row["DiscountType"])) {
+                    row["DiscountType"] = 2;
+                }
                 return (
                     <>
                         <div className="">
