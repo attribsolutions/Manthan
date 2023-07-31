@@ -20,7 +20,7 @@ function reportBody(doc, data) {
 // }
 
 const VanLoadingSheet = (data) => {
-    debugger
+    
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);

@@ -781,8 +781,6 @@ const SalesReturn = (props) => {
             if (!i.defaultReason) {
                 invalidMessages.push({ [i.ItemName]: 'Select Return Reason' });
             }
-            // imageArray.push({ Item_pic: 'Select Return Reason', Image: imageTable });
-            imageArray.push({ Item_pic: 'Select Return Reason', });
 
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
@@ -819,7 +817,7 @@ const SalesReturn = (props) => {
                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
                 "PurchaseReturn": "",
                 "SubReturn": "",
-                "ReturnItemImages": imageArray,
+                "ReturnItemImages": [{ Item_pic: 'Select Return Reason' }],
             };
         });
 

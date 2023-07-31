@@ -17,7 +17,7 @@ function pageFooter(doc, data) {
 
 
 const PartyLedgerReport = (data1) => {
-    debugger
+    
     const data = data1[0]
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);

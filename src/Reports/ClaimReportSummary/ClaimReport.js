@@ -412,7 +412,7 @@ const ClaimSummary = (props) => {
         })
     );
     const { userAccess, orderSummaryGobtn, SSDD_List, supplier, pdfdata, ClaimSummaryGobtn } = reducers;
-    debugger
+    
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
