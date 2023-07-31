@@ -404,7 +404,7 @@ const ClaimSummary = (props) => {
         (state) => ({
             ClaimSummaryGobtn: state.ClaimSummaryReducer.ClaimSummaryGobtn,
             pdfdata: state.PdfReportReducers.pdfdata,
-            ReportBtnLoading: state.PdfReportReducers.ReportBtnLoading,
+            ReportBtnLoading: (state.PdfReportReducers.ReportBtnLoading) || (state.ClaimSummaryReducer.CreateClaimLoading),
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
@@ -479,39 +479,39 @@ const ClaimSummary = (props) => {
     }
 
 
-    function goButtonHandler(type, row) {
-
-        debugger
-        let config = {}
+    function goButtonHandler(reportType, row, btnId) {
+     
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "Party": row.id,
-            "Mode": type === 1 ? 1 : 2
+            "Mode": (reportType === report.ClaimSummary) ? 1 : 2
         });
+        let config = { ReportType: reportType, jsonBody, btnId: btnId, ToDate: values.ToDate, FromDate: values.FromDate }
 
 
-        if (type === 1) {
-            const btnId = `gobtn-${report.ClaimSummary}-${row.id}`
-            config = { ReportType: report.ClaimSummary, jsonBody, btnId: btnId }
-        }
-        if (type === 2) {
-            const btnId = `gobtn-${report.CustomerWiseReturn}-${row.id}`
-            config = { ReportType: report.CustomerWiseReturn, jsonBody, btnId: btnId }
-        }
-        if (type === 3) {
-            const btnId = `gobtn-${report.CompanyWiseBudget}-${row.id}`
-            config = { ReportType: report.CompanyWiseBudget, jsonBody, btnId: btnId, ToDate: values.ToDate, FromDate: values.FromDate }
-        }
 
-        if (type === 3) {
+        // if (type === 1) {
+        //     const btnId = `gobtn-${report.ClaimSummary}-${row.id}`
+        //     config = { ReportType: report.ClaimSummary, jsonBody, btnId: btnId }
+        // }
+        // if (type === 2) {
+        //     const btnId = `gobtn-${report.CustomerWiseReturn}-${row.id}`
+        //     config = { ReportType: report.CustomerWiseReturn, jsonBody, btnId: btnId }
+        // }
+        // if (type === 3) {
+        //     const btnId = `gobtn-${report.CompanyWiseBudget}-${row.id}`
+        //     config = { ReportType: report.CompanyWiseBudget, jsonBody, btnId: btnId, ToDate: values.ToDate, FromDate: values.FromDate }
+        // }
+
+        if (reportType === report.CompanyWiseBudget) {
             dispatch(getpdfReportdata(MasterClaimSummary_API, config))
         }
-        if (type === 4) {
-            dispatch(postClaimMasterCreate_API(jsonBody))
+        if (reportType === "createClaim") {
+            dispatch(postClaimMasterCreate_API(config))
         }
 
-        if ((type === 2) || (type === 1)) {
+        if ((reportType === report.CustomerWiseReturn) || (reportType === report.ClaimSummary)) {
             dispatch(getpdfReportdata(ClaimSummary_API, config))
 
         }
@@ -541,7 +541,7 @@ const ClaimSummary = (props) => {
 
     function todateOnchange(e) {
         let selectedMonth = e.target.value
-        debugger
+
         const { firstDate, lastDate } = getFirstAndLastDateOfMonth(selectedMonth);
         setState((i) => {
             const a = { ...i }
@@ -567,8 +567,10 @@ const ClaimSummary = (props) => {
             style: {
                 width: "600px"
             },
-            formatter: (value, row, k,) => {
+            formatExtraData: { btnLoading: reducers.ReportBtnLoading },
 
+            formatter: (value, row, key, { btnLoading }) => {
+              
                 return (
                     <>
                         <div className=" d-flex justify-content-start  gap-2" >
@@ -577,14 +579,14 @@ const ClaimSummary = (props) => {
                                 className="mt-3  mb-3">
                                 {/* <C_Button onClick={goButtonHandler} loading={reducers.goBtnLoading} /> */}
                                 <C_Button
-                                    loading={reducers.ReportBtnLoading}
+                                    loading={btnLoading === `gobtn-${"createClaim"}-${row.id}-${key}`}
+                                    forceDisabled={btnLoading}
                                     type="button"
                                     spinnerColor="white"
                                     className="btn btn-success w-md  "
-                                    onClick={(e) => { goButtonHandler(4, row) }}
-                                    btnID={`gobtn-${report.CustomerWiseReturn}-${row.id}`}
+                                    onClick={(e) => { goButtonHandler("createClaim", row, `gobtn-${"createClaim"}-${row.id}-${key}`) }}
                                 >
-                                    Create Claim
+                                    Create
                                 </C_Button>
                             </div>
 
@@ -592,12 +594,12 @@ const ClaimSummary = (props) => {
                                 className="mt-3  mb-3">
                                 {/* <C_Button onClick={goButtonHandler} loading={reducers.goBtnLoading} /> */}
                                 <C_Button
-                                    loading={reducers.ReportBtnLoading}
+                                    loading={btnLoading === `gobtn-${report.ClaimSummary}-${row.id}-${key}`}
                                     type="button"
+                                    forceDisabled={btnLoading}
                                     spinnerColor="white"
                                     className="btn btn-primary w-md  "
-                                    onClick={(e) => { goButtonHandler(1, row) }}
-                                    btnID={`gobtn-${report.CustomerWiseReturn}-${row.id}`}
+                                    onClick={(e) => { goButtonHandler(report.ClaimSummary, row, `gobtn-${report.ClaimSummary}-${row.id}-${key}`) }}
 
                                 >
                                     Claim Summary
@@ -608,12 +610,13 @@ const ClaimSummary = (props) => {
                             <div
                                 className="mt-3 mb-3 ">
                                 <C_Button
-                                    loading={reducers.ReportBtnLoading}
+                                    loading={btnLoading === `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`}
                                     type="button"
+                                    forceDisabled={btnLoading}
                                     spinnerColor="white"
                                     className="btn btn-primary w-md  "
-                                    btnID={`gobtn-${report.ClaimSummary}-${row.id}`}
-                                    onClick={(e) => { goButtonHandler(2, row) }}
+                                    onClick={(e) => { goButtonHandler(report.CustomerWiseReturn, row, `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`) }}
+
                                 >
                                     Customer wise return
                                 </C_Button>
@@ -623,12 +626,13 @@ const ClaimSummary = (props) => {
                             <div
                                 className="mt-3  mb-3">
                                 <C_Button
-                                    loading={reducers.ReportBtnLoading}
+                                    loading={btnLoading === `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`}
+                                    forceDisabled={btnLoading}
                                     type="button"
                                     spinnerColor="white"
                                     className="btn btn-primary w-md  "
-                                    btnID={`gobtn-${report.CompanyWiseBudget}-${row.id}`}
-                                    onClick={(e) => { goButtonHandler(3, row) }}
+                                    onClick={(e) => { goButtonHandler(report.CompanyWiseBudget, row, `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`) }}
+
                                 >
                                     Master Claim
                                 </C_Button>

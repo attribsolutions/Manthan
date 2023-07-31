@@ -17,7 +17,7 @@ function pageFooter(doc, data) {
 
 
 const PartyLedgerReport = (data1) => {
-    
+    debugger
     const data = data1[0]
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
@@ -25,14 +25,14 @@ const PartyLedgerReport = (data1) => {
     pageFooter(doc, data);
 
     doc.setProperties({
-        title: 'Party Ledger Report',
+        title: `PartyLedger_Report/${data.FormDate}-${data.ToDate} `
     });
-
-    doc.setProperties({
-        title: `Party Ledger Report`
-    });
-    const options = { filename: "PartyLedgerReport.pdf" }
-    return (doc.output('dataurlnewwindow', options))
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        const options = { filename: `PartyLedger_Report/${data.FormDate}-${data.ToDate}` }
+        window.open(pdfUrl, options);
+    }
+    generateSaveAndOpenPDFReport();
 };
 
 export default PartyLedgerReport;

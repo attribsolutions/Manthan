@@ -133,7 +133,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.INVOICE_1
     || subPageMode === url.INVOICE_LIST_1
     || subPageMode === url.PARTY_LEDGER
-    || subPageMode === url.CLAIM_SUMMARY_REPORT
+
   );
 
 
@@ -144,6 +144,8 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.IB_INVOICE_LIST
     || subPageMode === url.INWARD_LIST
   );
+
+  const isPartyWithoutRetailers = (subPageMode === url.CLAIM_SUMMARY_REPORT)
 
   const jsonBody = {
     "PartyID": PartyID,
@@ -163,6 +165,9 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     }
     else if (isDivisions) {
       response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 4, }));//divisions mode 4
+    }
+    else if (isPartyWithoutRetailers) {
+      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 5, }));//divisions mode 4
     }
     else {
       response = { Data: [] }

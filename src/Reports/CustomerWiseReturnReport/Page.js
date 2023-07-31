@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle';
-import { loginSystemSetting } from "../../components/Common/CommonFunction";
+import { date_dmy_func, loginSystemSetting } from "../../components/Common/CommonFunction";
 import { Data } from "./DemoData";
 
 
@@ -31,10 +31,14 @@ const CustomerWiseReturnReport = (data) => {
     pageFooter(doc, data);
 
     doc.setProperties({
-        title: " Customer Wise Return Report"
+        title: `CustomerWiseReturn_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)}`
     });
-    const options = { filename: "Customer_Wise_Return_Report" }
-    doc.output('dataurlnewwindow', options);
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        const options = { filename: `CustomerWiseReturn_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} ` }
+        window.open(pdfUrl, options);
+    }
+    generateSaveAndOpenPDFReport();
 }
 
 export default CustomerWiseReturnReport;
