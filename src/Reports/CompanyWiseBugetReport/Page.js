@@ -16,20 +16,26 @@ function pageFooter(doc, data) {
 }
 
 const CompanyWiseBudgetReport = (data) => {
-    
+
+
     var doc = new jsPDF('p', 'pt', 'a4');
-    pageHeder(doc, data);
-    reportBody(doc, data);
-    pageFooter(doc, data);
-    doc.setProperties({
-        title: `MasterClaim_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `
-    });
-    function generateSaveAndOpenPDFReport() {
-        const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        const options = { filename: `MasterClaim_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} ` }
-        window.open(pdfUrl, options);
+    try {
+        pageHeder(doc, data);
+        reportBody(doc, data);
+        pageFooter(doc, data);
+        doc.setProperties({
+            title: `MasterClaim_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `
+        });
+        function generateSaveAndOpenPDFReport() {
+            const pdfUrl = URL.createObjectURL(doc.output('blob'));
+            const options = { filename: `MasterClaim_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} ` }
+            window.open(pdfUrl,);
+        }
+        generateSaveAndOpenPDFReport();
+    } catch (error) {
+        console.log("MasterClaim_Report Error", error)
     }
-    generateSaveAndOpenPDFReport();
+
 
 }
 export default CompanyWiseBudgetReport;

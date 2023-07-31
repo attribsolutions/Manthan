@@ -23,8 +23,9 @@ export const ProductWisecolumns = [
 ];
 
 
-export const Rows = (data) => {
-    const { ReasonwiseMasterClaim = [] } = data
+export const Rows = (table = []) => {
+
+
     // InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let TotalCXprimaryAmount = 0
@@ -35,27 +36,28 @@ export const Rows = (data) => {
     let TotalCXClaimAmount = 0
     let TotalNetSale = 0
 
-    ReasonwiseMasterClaim[0].RetailerClaim.forEach((element, key) => {
+    table.forEach((index, key) => {
+
         const tableitemRow = [
-            element.ItemReasonName,
-            element.PrimaryAmount,
-            element.SecondaryAmount,
-            element.ReturnAmount,
-            element.NetSaleValue,
-            element.Budget,
-            element.ClaimAmount,
-            element.ClaimAgainstNetSale,
+            index.ItemReasonName,
+            index.PrimaryAmount,
+            index.SecondaryAmount,
+            index.ReturnAmount,
+            index.NetSaleValue,
+            index.Budget,
+            index.ClaimAmount,
+            index.ClaimAgainstNetSale,
 
         ];
 
         function totalLots() {
-            TotalCXprimaryAmount = Number(TotalCXprimaryAmount) + Number(element.PrimaryAmount)
-            TotalCXPurchaseAmount = Number(TotalCXPurchaseAmount) + Number(element.SecondaryAmount)
-            TotalCXreturnValue = Number(TotalCXreturnValue) + Number(element.ReturnAmount)
-            TotalCXNetPurchaseValue = Number(TotalCXNetPurchaseValue) + Number(element.NetSaleValue)
-            TotalBudgetOnlyExpiryFrom = Number(TotalBudgetOnlyExpiryFrom) + Number(element.Budget)
-            TotalCXClaimAmount = Number(TotalCXClaimAmount) + Number(element.ClaimAmount)
-            TotalNetSale = Number(TotalNetSale) + Number(element.ClaimAgainstNetSale)
+            TotalCXprimaryAmount = Number(TotalCXprimaryAmount) + Number(index.PrimaryAmount)
+            TotalCXPurchaseAmount = Number(TotalCXPurchaseAmount) + Number(index.SecondaryAmount)
+            TotalCXreturnValue = Number(TotalCXreturnValue) + Number(index.ReturnAmount)
+            TotalCXNetPurchaseValue = Number(TotalCXNetPurchaseValue) + Number(index.NetSaleValue)
+            TotalBudgetOnlyExpiryFrom = Number(TotalBudgetOnlyExpiryFrom) + Number(index.Budget)
+            TotalCXClaimAmount = Number(TotalCXClaimAmount) + Number(index.ClaimAmount)
+            TotalNetSale = Number(TotalNetSale) + Number(index.ClaimAgainstNetSale)
 
         };
 
@@ -73,18 +75,19 @@ export const Rows = (data) => {
         };
 
         returnArr.push(tableitemRow);
-        data["tableTot"] = totalLots()
+        totalLots()
 
-        if (key === ReasonwiseMasterClaim[0].RetailerClaim.length - 1) {
+        if (key === table.length - 1) {
             returnArr.push(totalrow());
         }
+
     })
     return returnArr;
 }
 
 
 export const ProductWiseRows = (data) => {
-    
+
     const { ProductwiseBudgetReport = [] } = data
     ProductwiseBudgetReport.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
