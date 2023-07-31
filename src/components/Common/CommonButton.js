@@ -112,6 +112,7 @@ export function Change_Button(props) {
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>
 }
+
 export function C_Button({
   loading,
   color,
@@ -121,20 +122,27 @@ export function C_Button({
   spinnerColor = "primary",
   ...rest
 }) {
+  if (loading) {
+    return (
+      <button
+        disabled
+        title={`Add Button Loading...`}
+        {...rest}
+      >
+        <Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
+      </button>
+    );
+  }
 
-
-  return loading ?
-    <button
-      // disabled
-      title={`Add Button Loging...`}
-      {...rest}
-    >{children} &nbsp;<Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
-    </button>
-    :
+  return (
     <button
       disabled={forceDisabled}
       onClick={onClick}
-      {...rest} >{children}</button>
+      {...rest}
+    >
+      {children}
+    </button>
+  );
 }
 
 
@@ -193,8 +201,6 @@ export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled, t
   )
 }
 
-
-
 export function Loader() {// linner component
   return <div className="dot-pulse"> <span> </span>     &nbsp;
     <div className="bounce1" style={{ background: "white" }}></div>
@@ -204,7 +210,6 @@ export function Loader() {// linner component
 
 }
 
-
 export function Listloader() {// common Listcomponent
   return <div id="api_spinner" >
     <div className="api_spinner_body " >
@@ -213,7 +218,6 @@ export function Listloader() {// common Listcomponent
   </div>
 
 }
-
 
 export function Listloader1({ show = false }) {// common Listcomponent
   if (!show) { return null }

@@ -75,6 +75,7 @@ const SalesReturn = (props) => {
         saveBtnloading,
         addBtnLoading,
         invoiceNoDropDownLoading,
+        retailerDropLoading,
     } = useSelector((state) => ({
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
@@ -87,6 +88,7 @@ const SalesReturn = (props) => {
         saveBtnloading: state.SalesReturnReducer.saveBtnloading,
         addBtnLoading: state.SalesReturnReducer.addBtnLoading,
         invoiceNoDropDownLoading: state.SalesReturnReducer.invoiceNoDropDownLoading,
+        retailerDropLoading: state.CommonAPI_Reducer.retailerDropLoading
 
     }));
 
@@ -271,7 +273,7 @@ const SalesReturn = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
-            hidden: false,
+
             formatter: (cell, row) => {
                 return (
                     <Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>
@@ -295,7 +297,7 @@ const SalesReturn = (props) => {
             text: "Quantity",
             dataField: "",
             classes: () => "sales-discount-row",
-            hidden: false,
+
             formatExtraData: { TableArr },
             formatter: (cell, row, key, { TableArr }) => {
                 return (
@@ -327,7 +329,7 @@ const SalesReturn = (props) => {
         {
             text: "MRP",
             dataField: "MRP",
-            hidden: false,
+
             formatExtraData: { TableArr },
             formatter: (cell, row, key, { TableArr }) => {
                 return (
@@ -365,7 +367,7 @@ const SalesReturn = (props) => {
         {
             text: "GST",
             dataField: "",
-            hidden: false,
+
             formatExtraData: { TableArr },
             formatter: (cell, row, key, { TableArr }) => {
                 return (<div style={{ minWidth: "90px" }}>
@@ -390,7 +392,7 @@ const SalesReturn = (props) => {
         {
             text: "Basic Rate",
             dataField: "",
-            hidden: false,
+
             classes: () => "sales-rate-row",
             formatExtraData: { TableArr },
             formatter: (cellContent, row, key, { TableArr }) => {
@@ -535,6 +537,7 @@ const SalesReturn = (props) => {
         {
             text: "Image",
             dataField: "",
+            hidden: true,
             classes: () => "sales-return-Image-row",
             formatter: (cellContent, row, key) => {
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
@@ -738,7 +741,7 @@ const SalesReturn = (props) => {
 
         const filterData = TableArr.filter((i) => {
             if (i.Quantity > 0) {
-                let msgString = ' Select';
+                let msgString = ' Please Select';
 
                 if (i.MRP === '') { msgString = msgString + ', ' + "MRP" };
                 if (i.GST === '') { msgString = msgString + ', ' + "GST" };
@@ -775,10 +778,8 @@ const SalesReturn = (props) => {
             if (!i.defaultReason) {
                 invalidMessages.push({ [i.ItemName]: 'Select Return Reason' });
             }
-            imageArray.push({ Item_pic: 'Select Return Reason', Image: imageTable });
-
-
-
+            // imageArray.push({ Item_pic: 'Select Return Reason', Image: imageTable });
+            imageArray.push({ Item_pic: 'Select Return Reason', });
 
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
@@ -836,7 +837,7 @@ const SalesReturn = (props) => {
                 PurchaseReturnReferences: [],
                 ReturnItems: ReturnItems,
             });
-            
+
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
@@ -911,6 +912,7 @@ const SalesReturn = (props) => {
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
+                                                isLoading={retailerDropLoading}
                                                 isDisabled={((TableArr.length > 0)) ? true : false}
                                                 options={customerOptions}
                                                 styles={{
@@ -1002,14 +1004,14 @@ const SalesReturn = (props) => {
                                         </Col>
 
                                         <Col sm="1" className="mx-6 mt-1">
-                                            {
-                                                (!(returnMode === 1)) &&///(returnMode === 1) InvoiceWise
 
+                                            {(!(returnMode === 1)) &&///(returnMode === 1) InvoiceWise */}
                                                 <C_Button
                                                     type="button"
                                                     loading={addBtnLoading}
                                                     className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                                    onClick={() => AddPartyHandler("ItemWise")}>
+                                                    onClick={() => AddPartyHandler("ItemWise")}
+                                                >
                                                     Add
                                                 </C_Button>
                                             }
@@ -1017,7 +1019,8 @@ const SalesReturn = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
-                                <Col sm="6">
+
+                                {/* <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.InvoiceNumber}</Label>
@@ -1065,7 +1068,7 @@ const SalesReturn = (props) => {
                                             }
                                         </Col>
                                     </FormGroup>
-                                </Col >
+                                </Col > */}
 
                             </Row>
                         </div>
