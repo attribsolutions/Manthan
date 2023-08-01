@@ -320,6 +320,7 @@ export const UPLOADED_E_INVOICE = '/Uploaded_EInvoicea' // Uploaded_EInvoicea
 export const UPLOADED_E_WAY_BILL = '/Uploaded_EwayBill' // Uploaded_E-wayBill
 export const CANCEL_E_INVOICE = '/Cancel_EInvoicea' // Uploaded_E-Invoice
 export const CANCEL_E_WAY_BILL = '/Cancel_EwayBill' // Uploaded_E-wayBill
+export const UPDATE_VEHICLE_INVOICE = '/UpdateVehicleInvoice' // Uploaded_E-wayBill
 
 //BulkInvoices
 export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 

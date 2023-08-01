@@ -20,6 +20,7 @@ import {
   EInvoice_Cancel_Get_API,
   EwayBill_Uploade_Get_API,
   EwayBill_Cancel_Get_API,
+  Update_Vehicle_Invoice_API,
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -33,6 +34,7 @@ import {
   Uploaded_EwayBillSuccess,
   Cancel_EInvoiceSuccess,
   Cancel_EwayBillSuccess,
+  UpdateVehicleInvoice_Success,
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -44,6 +46,7 @@ import {
   UPLOADED_E_WAY_BILL_ACTION,
   CANCLE_E_WAY_BILL_ACTION,
   CANCLE_E_INVOICE_ACTION,
+  UPDATE_VEHICLE_INVOICE_ACTION,
 
 } from "./actionType";
 import *as url from "../../../routes/route_url"
@@ -315,6 +318,17 @@ function* Cancle_EwayBillGenFunc({ config }) {
   }
 }
 
+// UpdateVehicleInvoice
+function* UpdateVehicleInvoice_GenFunc({ config }) {
+
+  try {
+    const response = yield call(Update_Vehicle_Invoice_API, config)
+    yield put(UpdateVehicleInvoice_Success(response));
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
+}
+
 // MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
 
@@ -328,6 +342,7 @@ function* InvoiceSaga() {
   yield takeLatest(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc)
   yield takeLatest(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc)
   yield takeLatest(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc)
+  yield takeLatest(UPDATE_VEHICLE_INVOICE_ACTION, UpdateVehicleInvoice_GenFunc)
 }
 
 export default InvoiceSaga;
