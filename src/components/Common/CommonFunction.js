@@ -95,6 +95,27 @@ export function CurrentTime() {
 
 }
 
+
+export const getFirstAndLastDateOfMonth = (inputDate) => {
+  const [year, month] = inputDate.split('-').map(Number);
+  const firstDate = new Date(year, month - 1, 1);
+  const lastDate = new Date(year, month, 0);
+  const formattedFirstDate = `${year}-${String(month).padStart(2, '0')}-01`;
+  const formattedLastDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDate.getDate()).padStart(2, '0')}`;
+  return {
+    firstDate: formattedFirstDate,
+    lastDate: formattedLastDate
+  };
+}
+
+export const getCurrentMonthAndYear = () => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+
+  return `${year}-${month}`;
+}
+
 export const amountCommaSeparateFunc = (amount) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   return Number(amount).toLocaleString(undefined, {
     minimumFractionDigits: 2,
@@ -244,6 +265,11 @@ export const loginUserGSTIN = () => { //+++++++++++++++++++++ Session Company Id
   }
   return '';
 };
+
+
+
+
+
 
 export const loginJsonBody = () => ({ //+++++++++++++++++++++ loginJsonBody for Filter API +++++++++++++++++++++++++++++
   UserID: loginUserID(),

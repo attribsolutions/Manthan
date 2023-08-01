@@ -358,7 +358,7 @@
 
 
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -378,21 +378,21 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 
+
 const ClaimSummary = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const currentDate_ymd = _cfunc.date_ymd_func();
-    const isSCMParty = _cfunc.loginIsSCMParty();
-    const FirstAndLastDate = getFirstAndLastDateOfMonth(getCurrentMonthAndYear())
+
+    const FirstAndLastDate = _cfunc.getFirstAndLastDateOfMonth(_cfunc.getCurrentMonthAndYear())
+    const SelectedMonth = _cfunc.getCurrentMonthAndYear()
 
     const fileds = {
         FromDate: FirstAndLastDate.firstDate,
         ToDate: FirstAndLastDate.lastDate,
         PartyName: "",
-        SelectedMonth: getCurrentMonthAndYear()
+        SelectedMonth: SelectedMonth,
     }
-
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -411,8 +411,12 @@ const ClaimSummary = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
+
     const { userAccess, orderSummaryGobtn, SSDD_List, supplier, pdfdata, ClaimSummaryGobtn } = reducers;
     
+
+    debugger
+
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -463,24 +467,8 @@ const ClaimSummary = (props) => {
     }, [ClaimSummaryGobtn])
 
 
-    const CustomerOptions = supplier.map((i) => ({
-        value: i.id,
-        label: i.Name,
-    }))
-
-
-    const onselecthandel = (e) => {
-        setState((i) => {
-            const a = { ...i }
-            a.values.PartyName = e;
-            a.hasValid.PartyName.valid = true
-            return a
-        })
-    }
-
-
     function goButtonHandler(reportType, row, btnId) {
-     
+        debugger
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
@@ -519,30 +507,13 @@ const ClaimSummary = (props) => {
     }
 
 
-    function getFirstAndLastDateOfMonth(inputDate) {
-        const [year, month] = inputDate.split('-').map(Number);
-        const firstDate = new Date(year, month - 1, 1);
-        const lastDate = new Date(year, month, 0);
-        const formattedFirstDate = `${year}-${String(month).padStart(2, '0')}-01`;
-        const formattedLastDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDate.getDate()).padStart(2, '0')}`;
-        return {
-            firstDate: formattedFirstDate,
-            lastDate: formattedLastDate
-        };
-    }
 
-    function getCurrentMonthAndYear() {
-        const currentDate = new Date();
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
-
-        return `${year}-${month}`;
-    }
 
     function todateOnchange(e) {
+        debugger
         let selectedMonth = e.target.value
 
-        const { firstDate, lastDate } = getFirstAndLastDateOfMonth(selectedMonth);
+        const { firstDate, lastDate } = _cfunc.getFirstAndLastDateOfMonth(selectedMonth);
         setState((i) => {
             const a = { ...i }
             a.values.FromDate = firstDate;
@@ -567,10 +538,10 @@ const ClaimSummary = (props) => {
             style: {
                 width: "600px"
             },
-            formatExtraData: { btnLoading: reducers.ReportBtnLoading },
+            formatExtraData: { btnLoading: reducers.ReportBtnLoading, values },
 
-            formatter: (value, row, key, { btnLoading }) => {
-              
+            formatter: (value, row, key, { btnLoading, values }) => {
+                debugger
                 return (
                     <>
                         <div className=" d-flex justify-content-start  gap-2" >
