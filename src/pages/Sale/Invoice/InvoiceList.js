@@ -137,6 +137,11 @@ const InvoiceList = () => {
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler("event", IBType)
         }
+        return () => {
+            setmodal(false);
+            dispatch(UpdateVehicleInvoice_Success([]));
+            // dispatch(Uploaded_EwayBillSuccess({ Status: false }));
+        }
 
     }, [dispatch]);
 
@@ -153,13 +158,13 @@ const InvoiceList = () => {
 
         else if (Update_Vehicle_Invoice.Status === true) {
             dispatch(UpdateVehicleInvoice_Success([]))
+            setmodal(false);
             customAlert({
                 Type: 3,
                 Message: JSON.stringify(Update_Vehicle_Invoice.Message),
             })
         }
     }, [Update_Vehicle_Invoice]);
-
 
     useEffect(() => {
         if (Uploaded_EInvoice.Status === true && Uploaded_EInvoice.StatusCode === 200) {
@@ -181,11 +186,12 @@ const InvoiceList = () => {
     }, [Uploaded_EInvoice]);
 
     useEffect(() => {
-
-        if (Uploaded_EwayBill.Status === true && Uploaded_EwayBill.StatusCode === 204) {
+        debugger
+        if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 204)) {
+            // dispatch(Uploaded_EwayBillSuccess({ Status: false }))
             setmodal(true);
         }
-        else if (Uploaded_EwayBill.Status === true && Uploaded_EwayBill.StatusCode === 200) {
+        else if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 200)) {
             dispatch(Uploaded_EwayBillSuccess({ Status: false }))
             goButtonHandler("event")
             customAlert({
@@ -319,6 +325,13 @@ const InvoiceList = () => {
         setHederFilters(newObj)
     }
 
+    function UpdateVehicleNumber() {
+
+        const { Data } = reducers.Uploaded_EwayBill
+        var config = { Invoiceid: Data, vehicleid: VehicleNo.value }
+        dispatch(UpdateVehicleInvoice_Action(config))
+    }
+
     const makeBtnFunc = (list = {}, btnId) => {
         const config = { makeInwardId: list[0].id, btnId }
         dispatch(makeInward(config))
@@ -387,13 +400,6 @@ const InvoiceList = () => {
         )
     }
 
-    function UpdateVehicleNumber() {
-
-        const { Data } = reducers.Uploaded_EwayBill
-        var config = { Invoiceid: Data, vehicleid: VehicleNo.value }
-        dispatch(UpdateVehicleInvoice_Action(config))
-    }
-
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
@@ -431,7 +437,7 @@ const InvoiceList = () => {
                     }}
                     centered={true}
                 >
-                    <div className="modal-header">
+                    <div className="modal-header" style={{ position: "relative" }}>
                         <h5 className="modal-title mt-0 align-middle">Please Select Vehicle Number</h5>
                         <button
                             type="button"
@@ -463,14 +469,14 @@ const InvoiceList = () => {
                                             onChange={(e) => {
                                                 setVehicleNo(e)
                                             }}
-                                            styles={{
-                                                menu: provided => ({
-                                                    ...provided,
-                                                    zIndex: 5,
-                                                    maxHeight: '200px',
-                                                    overflowY: 'auto',
-                                                }),
-                                            }}
+                                        // styles={{
+                                        //     menu: (provided) => ({
+                                        //         ...provided,
+                                        //         zIndex: 5,
+                                        //         maxHeight: "200px", // Set a fixed height for the dropdown
+                                        //         overflowY: "auto", // Add a scrollbar if the content exceeds the height
+                                        //     }),
+                                        // }}
                                         />
 
                                     </Col>
