@@ -71,7 +71,7 @@ const PurchaseReturnMode3 = (props) => {
 
     useEffect(() => {
         if (sendToSSbtnTableData.Status === true) {
-            
+
             const { Data = [] } = sendToSSbtnTableData;
 
             let grand_total = 0;
@@ -174,6 +174,9 @@ const PurchaseReturnMode3 = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
+            headerStyle: () => {
+                return { width: '150px', textAlign: 'center' };
+            }
         },
 
         {
@@ -200,12 +203,18 @@ const PurchaseReturnMode3 = (props) => {
 
                     </div>
                 )
+            },
+            headerStyle: () => {
+                return { width: '120px', textAlign: 'center' };
             }
         },
 
         {
-            text: "UnitName",
+            text: "Unit",
             dataField: "UnitName",
+            headerStyle: () => {
+                return { width: '80px', textAlign: 'center' };
+            }
         },
 
         {
@@ -318,7 +327,7 @@ const PurchaseReturnMode3 = (props) => {
             .map(item => ({ SubReturn: parseInt(item.trim()) }));
 
         const ReturnItems = tableData.map((i) => {
-            
+
             const calculate = return_discountCalculate_Func(i);
             grand_total += Number(calculate.roundedTotalAmount);
 

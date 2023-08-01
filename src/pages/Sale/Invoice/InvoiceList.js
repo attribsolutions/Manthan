@@ -6,7 +6,7 @@ import {
     commonPageFieldListSuccess,
 } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
-import { Col, FormGroup, Label } from "reactstrap";
+import { Card, Col, FormGroup, Label, Modal, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
@@ -20,6 +20,8 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
     Cancel_EInvoiceSuccess,
     Cancel_EwayBillSuccess,
+    UpdateVehicleInvoice_Action,
+    UpdateVehicleInvoice_Success,
     Uploaded_EInvoiceSuccess,
     Uploaded_EwayBillSuccess,
     deleteInvoiceId,
@@ -31,6 +33,8 @@ import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import C_Modal from "../../../components/Common/C_Modal";
+import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
 
 const InvoiceList = () => {
 
@@ -42,6 +46,8 @@ const InvoiceList = () => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
+    const [VehicleNo, setVehicleNo] = useState('')
+    const [modal, setmodal] = useState(false);
 
     const reducers = useSelector(
         (state) => ({
@@ -60,6 +66,8 @@ const InvoiceList = () => {
             Uploaded_EwayBill: state.InvoiceReducer.Uploaded_EwayBill,
             Cancel_EInvoice: state.InvoiceReducer.Cancel_EInvoice,
             Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
+            VehicleNumber: state.VehicleReducer.VehicleList,
+            Update_Vehicle_Invoice: state.InvoiceReducer.Update_Vehicle_Invoice,
             listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading)
         })
     );
@@ -71,7 +79,9 @@ const InvoiceList = () => {
         Uploaded_EwayBill,
         Cancel_EInvoice,
         Cancel_EwayBill,
-        supplierDropLoading
+        supplierDropLoading,
+        VehicleNumber,
+        Update_Vehicle_Invoice
     } = reducers;
 
     const {
@@ -124,7 +134,7 @@ const InvoiceList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
-
+        dispatch(getVehicleList())
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler("event", IBType)
         }
@@ -132,7 +142,27 @@ const InvoiceList = () => {
     }, [dispatch]);
 
     useEffect(() => {
+        if (Update_Vehicle_Invoice.Status === true && Update_Vehicle_Invoice.StatusCode === 200) {
+            dispatch(UpdateVehicleInvoice_Success([]))
+            goButtonHandler("event");
+            setmodal(false);
+            customAlert({
+                Type: 1,
+                Message: JSON.stringify(Update_Vehicle_Invoice.Message),
+            })
+        }
 
+        else if (Update_Vehicle_Invoice.Status === true) {
+            dispatch(UpdateVehicleInvoice_Success([]))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Update_Vehicle_Invoice.Message),
+            })
+        }
+    }, [Update_Vehicle_Invoice]);
+
+
+    useEffect(() => {
         if (Uploaded_EInvoice.Status === true && Uploaded_EInvoice.StatusCode === 200) {
             dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
             goButtonHandler("event")
@@ -153,7 +183,10 @@ const InvoiceList = () => {
 
     useEffect(() => {
 
-        if (Uploaded_EwayBill.Status === true && Uploaded_EwayBill.StatusCode === 200) {
+        if (Uploaded_EwayBill.Status === true && Uploaded_EwayBill.StatusCode === 204) {
+            setmodal(true);
+        }
+        else if (Uploaded_EwayBill.Status === true && Uploaded_EwayBill.StatusCode === 200) {
             dispatch(Uploaded_EwayBillSuccess({ Status: false }))
             goButtonHandler("event")
             customAlert({
@@ -224,6 +257,11 @@ const InvoiceList = () => {
         value: "",
         label: " All"
     });
+
+    const VehicleNumber_Options = VehicleNumber.map((index) => ({
+        value: index.id,
+        label: index.VehicleNumber,
+    }));
 
     function downBtnFunc(config) {
 
@@ -350,6 +388,13 @@ const InvoiceList = () => {
         )
     }
 
+    function UpdateVehicleNumber() {
+        
+        const { Data } = reducers.Uploaded_EwayBill
+        var config = { Invoiceid: Data, vehicleid: VehicleNo.value }
+        dispatch(UpdateVehicleInvoice_Action(config))
+    }
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
@@ -379,6 +424,77 @@ const InvoiceList = () => {
                         />
                         : null
                 }
+
+                <Modal
+                    isOpen={modal}
+                    toggle={() => {
+                        setmodal(false);
+                    }}
+                    centered={true}
+                >
+                    <div className="modal-header">
+                        <h5 className="modal-title mt-0 align-middle">Please Select Vehicle Number</h5>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setmodal(false);
+                            }}
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <Row >
+                            <Col sm="8" className="">
+                                <FormGroup className="mb- row mt-1 " >
+                                    <Label className="col-sm-6 p-2 text-black"
+                                        style={{ width: "65px" }}>VehicleNo</Label>
+                                    <Col sm="8">
+                                        <C_Select
+                                            name="VehicleNo"
+                                            value={VehicleNo}
+                                            isSearchable={true}
+                                            id={'VehicleNoselect'}
+                                            className="card-header align-items-center d-flex"
+                                            classNamePrefix="dropdown"
+                                            options={VehicleNumber_Options}
+                                            onChange={(e) => {
+                                                setVehicleNo(e)
+                                            }}
+                                            styles={{
+                                                menu: provided => ({
+                                                    ...provided,
+                                                    zIndex: 5,
+                                                    maxHeight: '200px',
+                                                    overflowY: 'auto',
+                                                }),
+                                            }}
+                                        />
+
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                        <div className="modal-footer">
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={() => setmodal(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                onClick={(e) => { UpdateVehicleNumber(e) }}>
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </Modal>
             </div>
         </React.Fragment>
     )

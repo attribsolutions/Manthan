@@ -20,14 +20,10 @@ import {
     CANCLE_E_INVOICE_ACTION_SUCCESS,
     CANCLE_E_WAY_BILL_ACTION,
     CANCLE_E_WAY_BILL_ACTION_SUCCESS,
-    PRINT_E_WAY_BILL_ACTION,
-    PRINT_E_WAY_BILL_SUCCESS,
-    PRINT_E_INVOICE_ACTION,
-    PRINT_E_INVOICE_SUCCESS
+    UPDATE_VEHICLE_INVOICE_ACTION,
+    UPDATE_VEHICLE_INVOICE_SUCCESS,
+
 } from "./actionType";
-
-
-
 
 //get listpage api
 export const invoiceListGoBtnfilter = (config = {}) => ({
@@ -142,6 +138,17 @@ export const Cancel_EwayBillAction = (config) => ({
 
 export const Cancel_EwayBillSuccess = (data) => ({
     type: CANCLE_E_WAY_BILL_ACTION_SUCCESS,
+    payload: data,
+});
+
+// UpdateVehicleInvoice Action
+export const UpdateVehicleInvoice_Action = (config) => ({
+    type: UPDATE_VEHICLE_INVOICE_ACTION,
+    config
+});
+
+export const UpdateVehicleInvoice_Success = (data) => ({
+    type: UPDATE_VEHICLE_INVOICE_SUCCESS,
     payload: data,
 });
 
