@@ -527,7 +527,7 @@ const Receipts = (props) => {
             || (values.AmountPaid === "0")) {
             customAlert({
                 Type: 4,
-                Message: `Amount Paid value can not be 0`,
+                Message: `The Receipt amount must be greater than zero.`,
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
