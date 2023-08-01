@@ -33,7 +33,6 @@ import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import C_Modal from "../../../components/Common/C_Modal";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
 
 const InvoiceList = () => {
@@ -389,7 +388,7 @@ const InvoiceList = () => {
     }
 
     function UpdateVehicleNumber() {
-        
+
         const { Data } = reducers.Uploaded_EwayBill
         var config = { Invoiceid: Data, vehicleid: VehicleNo.value }
         dispatch(UpdateVehicleInvoice_Action(config))
