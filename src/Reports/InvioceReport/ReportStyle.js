@@ -44,7 +44,7 @@ export const reportHeder1 = (doc, data) => {
 
     doc.setFont('Tahoma')
     doc.setFontSize(11)
-    doc.setFont(undefined,'bold')
+    doc.setFont(undefined, 'bold')
     doc.text("Billed by", 80, Y1)  //bill by 
     doc.text('Billed to', 280, Y1) //billed to
     doc.text('Details of Transport', 440, Y1)
@@ -53,12 +53,9 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, data.isQR ? 120 : 80, 30, data.isQR ? 120 : 80);//horizontal line 3
-    // doc.line(30, 789, 30, 16);//vertical left 1
 
-    doc.line(408, data.isQR ? 210 : 170, 408, 16);//vertical line header section billby 
-    doc.line(220, data.isQR ? 210 : 170, 220, data.isQR ? 103 : 63);//vertical  line header section billto
-
-
+    // doc.line(408, data.isQR ? 210 : 170, 408, 16);//vertical line header section billby 
+    // doc.line(220, data.isQR ? 210 : 170, 220, data.isQR ? 103 : 63);//vertical  line header section billto
 
     var BilledByStyle = {
         margin: {
@@ -380,11 +377,6 @@ export const reportFooter = (doc, data) => {
     }
 
 
-
-
-
-
-
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
@@ -406,36 +398,6 @@ export const reportFooter = (doc, data) => {
     doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
     doc.setFontSize(8)
 
-
-    // if (data.BankData.length > 0) {
-    //     let BankData = data.BankData[0]
-    //     doc.setFont(undefined, 'bold')
-
-    //     doc.text(`A/C No:`, 34, 755,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.AccountNo}`, 70, 755,)
-
-    //     doc.setFont(undefined, 'bold')
-
-    //     doc.text(`IFSC Code:`, 130, 755,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.IFSC}`, 175, 755,)
-
-    //     doc.setFont(undefined, 'bold')
-    //     doc.text(`Branch:`, 260, 755,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.BranchName}`, 290, 755,)
-
-    //     doc.setFont(undefined, 'bold')
-    //     doc.text(`Bank Name:`, 34, 768,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.BankName}`, 90, 768,)
-
-    // } else {
-    //     doc.setFont(undefined, 'bold')
-    //     doc.text(`Bank Details Not Avaliable`, 34, 761,)
-    //     doc.setFont(undefined, 'Normal')
-    // }
     doc.setFont(undefined, 'bold')
     doc.text(`Rupees:`, 33, 740,)
     doc.addFont("Arial", 'Normal')
@@ -569,6 +531,9 @@ export const tableBody = (doc, data) => {
         startY: initial_y,
     };
 
+    doc.line(408, data.isQR ? initial_y : initial_y, 408, 16);//vertical line header section billby 
+    doc.line(220, data.isQR ? initial_y : initial_y, 220, data.isQR ? 103 : 63);//vertical  line header section billto
+
     doc.autoTable(table.columns, table.Rows(data), options,);
     const optionsTable4 = {
         margin: {
@@ -697,7 +662,9 @@ export const tableBodyWithIGST = (doc, data) => {
         tableLineColor: "black",
         startY: initial_y,
     };
-
+    doc.line(408, data.isQR ? initial_y : initial_y, 408, 16);//vertical line header section billby 
+    doc.line(220, data.isQR ? initial_y : initial_y, 220, data.isQR ? 103 : 63);//vertical  line header section billto
+    
     doc.autoTable(table.columnsWithIGST, table.RowsWithIGST(data), options,);
     const optionsTable4 = {
         margin: {

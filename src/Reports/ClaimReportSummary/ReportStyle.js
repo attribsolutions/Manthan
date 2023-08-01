@@ -38,6 +38,8 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 80, 30, 80);//horizontal line 3
     doc.line(408, 63, 408, 16);//vertical line header section billby 
     doc.line(292, 170, 292, 80);//vertical  line header section billto
+    doc.line(570, 40, 408, 40);//horizontal line 3
+
 
     var BilledByStyle = {
         margin: {
@@ -100,38 +102,6 @@ export const reportHeder1 = (doc, data) => {
         startY: 80,
     };
 
-    var DetailsOfTransportStyle = {
-        margin: {
-            top: 45, left: 408, right: 35,
-        },
-        showHead: 'always',
-        theme: 'plain',
-        styles: {
-            overflow: 'linebreak',
-            fontSize: 8,
-            height: 0,
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: 2,
-            fontSize: 8,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 162,
-                halign: 'lfet',
-            },
-
-        },
-        tableLineColor: "black",
-
-        startY: 80,
-
-    };
 
     const priLength = () => {
         let final_y = doc.previousAutoTable.finalY
@@ -150,11 +120,12 @@ export const reportHeder1 = (doc, data) => {
 }
 
 export const reportHeder3 = (doc, data) => {
-    var date = date_dmy_func(data.InvoiceDate)
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`Return Date: ${date}`, 415, 43) //Invoice date
+    doc.text(`From Date:  ${date_dmy_func(data.Period.FromDate)}`, 415, 30)
+    doc.text(`To Date:       ${date_dmy_func(data.Period.ToDate)}`, 415, 53)
+
 }
 
 export const tableBody = (doc, data) => {

@@ -1,15 +1,11 @@
 
-import reportHederPng from "../../assets/images/reportHeder.png"
-import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
-import { toWords } from "../Report_common_function";
 import { CurrentTime, currentDate_dmy } from "../../components/Common/CommonFunction";
 
-
 export const pageBorder = (doc) => {
-    doc.line(815, 16, 30, 16);//horizontal line (Top)
+    doc.line(817, 16, 30, 16);//horizontal line (Top)
     doc.line(30, 570, 30, 16);//vertical line (left)
-    doc.line(815, 570, 815, 16);//vertical line (Right)
+    doc.line(817, 570, 817, 16);//vertical line (Right)
     doc.line(815, 570, 30, 570);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
@@ -26,8 +22,8 @@ export const reportHeder1 = (doc, data) => {
     doc.line(815, 60, 30, 60) //horizontal line 1 billby upper
     doc.line(815, 16, 30, 16);//horizontal line 2
     doc.line(30, 400, 30, 16);//vertical left 1
-    doc.line(407, 150, 407, 60); //vertical line middle 
-    doc.line(300, 100, 815, 100) //horizontal line Current date upper
+    doc.line(407, 100, 407, 60); //vertical line middle 
+    doc.line(30, 100, 815, 100) //horizontal line Current date upper
 
 
 
@@ -84,10 +80,10 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
-    
+
     var options = {
         didParseCell: (data1) => {
-            
+
             if (data1.row.cells[0].raw === `Total`) {
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[3].styles.fontSize = 8
@@ -147,12 +143,9 @@ export const tableBody = (doc, data) => {
             },
             1: {
                 columnWidth: 80,
-                
-
             },
             2: {
-                columnWidth: 140,
-               
+                columnWidth: 100,
             },
             3: {
                 columnWidth: 80,
@@ -175,12 +168,11 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             8: {
-                columnWidth: 60,
-
+                columnWidth: 58,
                 halign: 'right',
             },
             9: {
-                columnWidth: 60,
+                columnWidth: 58,
                 halign: 'right',
             },
             10: {
@@ -194,13 +186,7 @@ export const tableBody = (doc, data) => {
         startY: doc.autoTableEndPosY(45),// 45,
 
     };
-
-    doc.autoTable(table.columns, table.Rows(data), options, {
-
-
-    });
-
-
+    doc.autoTable(table.columns, table.Rows(data), options,);
 }
 
 export const pageFooter = (doc, data) => {

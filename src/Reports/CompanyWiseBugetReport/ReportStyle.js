@@ -27,6 +27,7 @@ export const pageHeder = (doc, data) => {
 }
 export const tableBody = (doc, data) => {
     let tableStartY = 100;
+    // Loop for multiple table 
     data.ReasonwiseMasterClaim.forEach((index1) => {
         Object.keys(index1).forEach((index2) => {
 
@@ -42,7 +43,6 @@ export const tableBody = (doc, data) => {
                         data1.row.cells[5].styles.fontSize = 8
                         data1.row.cells[6].styles.fontSize = 8
                         data1.row.cells[7].styles.fontSize = 8
-
                         data1.row.cells[0].styles.fontStyle = "bold"
                         data1.row.cells[1].styles.fontStyle = "bold"
                         data1.row.cells[2].styles.fontStyle = "bold"
@@ -111,12 +111,9 @@ export const tableBody = (doc, data) => {
                         columnWidth: 55,
                         halign: 'right',
                     },
-
                 },
-
                 startY: tableStartY,
             }
-
             doc.autoTable(table.columns, table.Rows(index1[index2]), options);
             console.log(doc.previousAutoTable.finalY + 15)
             tableStartY = doc.previousAutoTable.finalY + 15;
@@ -146,7 +143,7 @@ export const tableBody = (doc, data) => {
 
         },
         margin: {
-            left: 30, right: 25,//200 bottom
+            left: 30, right: 25,
         },
         theme: 'grid',
         headerStyles: {
@@ -154,9 +151,9 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'center',    //'center' or 'right'
+            halign: 'center',
             fillColor: "white",
-            textColor: [0, 0, 0], //Black     
+            textColor: [0, 0, 0],
             fontSize: 8,
             rowHeight: 10,
             lineColor: [0, 0, 0]
@@ -169,10 +166,7 @@ export const tableBody = (doc, data) => {
             lineColor: [0, 0, 0],
         },
         columnStyles: {
-            // 0: {
-            //     valign: "top",
-            //     columnWidth: 100,
-            // },
+
             0: {
                 columnWidth: 130,
                 halign: 'left',
@@ -214,11 +208,10 @@ export const tableBody = (doc, data) => {
         tableLineColor: "black",
         startY: doc.previousAutoTable.finalY + 20,
     }
-    // doc.autoTable(table.columns, table.Rows(data), options);
+
     doc.setFont(undefined, 'bold')
     doc.text(`Product Wise Budget Report`, 300, doc.previousAutoTable.finalY + 14, 'center')
     doc.autoTable(table.ProductWisecolumns, table.ProductWiseRows(data), ProductWiseoptions);
-
 }
 
 export const pageFooter = (doc, data) => {

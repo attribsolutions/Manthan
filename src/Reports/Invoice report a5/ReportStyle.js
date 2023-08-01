@@ -43,9 +43,12 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 68, 30, 68);// full horizontal bill by bill to below line 
     doc.line(30, 350, 30, 16);//vertical left 1
     doc.line(570, 350, 570, 16);//vertical left 2
-    doc.line(408, 145, 408, 16);//vertical right 1
-    doc.line(220, 145, 220, 56);//vertical line between billby billto
-    doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
+    // doc.line(408, initial_y, 408, 16);//vertical right 1
+    // console.log("good", initial_y)
+    // doc.line(220, initial_y, 220, 56);//vertical line between billby billto
+    // doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
+    // console.log("good", initial_y)
+
 
     var BilledByStyle = {
         margin: {
@@ -187,9 +190,7 @@ export const reportHeder3 = (doc, data) => {
     doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 25) //Invoice Id
     var date = date_dmy_func(data.InvoiceDate)
     var time = convertOnlyTimefunc(data.CreatedOn)
-
     doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date
-
 
 }
 
@@ -363,7 +364,12 @@ export const reportFooter = (doc, data) => {
     doc.autoTable(table.Bankcolumn, table.BankRow(data), DetailsOfBankStyle,);
 }
 
+
+
+
+
 export const tableBody = (doc, data) => {
+
     var options = {
 
         didParseCell: (data1) => {
@@ -489,7 +495,15 @@ export const tableBody = (doc, data) => {
         },
         tableLineColor: "black",
         startY: initial_y,
+
     };
+
+    ////  lines when report  header line when table cordinates
+    doc.line(408, initial_y, 408, 16);//vertical right 1
+    doc.line(220, initial_y, 220, 56);//vertical line between billby billto
+    doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
+
+
 
     doc.autoTable(table.columns, table.Rows(data), options,);
     const optionsTable4 = {
@@ -498,8 +512,10 @@ export const tableBody = (doc, data) => {
         },
     };
 
+
     doc.autoTable(optionsTable4);
 }
+////  lines when report  header line when table cordinates
 
 export const tableBodyWithIGST = (doc, data) => {
     var options = {
@@ -619,7 +635,9 @@ export const tableBodyWithIGST = (doc, data) => {
         tableLineColor: "black",
         startY: initial_y,
     };
-
+    doc.line(408, initial_y, 408, 16);//vertical right 1
+    doc.line(220, initial_y, 220, 56);//vertical line between billby billto
+    doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
     doc.autoTable(table.columnsWithIGST, table.RowsWithIGST(data), options,);
     const optionsTable4 = {
         margin: {
@@ -633,29 +651,30 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 export const pageFooter = (doc, data, islast = 0, array = []) => {
-
+    debugger
     const pageCount = doc.internal.getNumberOfPages()
     console.log(pageCount)
 
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
 
-    for (let i = 1; i <= pageCount; i++) {
-
-        pageHeder(doc, data)
-        pageBorder(doc)
-        reportHeder3(doc, data)
-        // doc.text('Page' + String(pageCount) + ' of ', 500, 390,)
-    }
-
-    let condition1 = (array.length - 1 === islast)
-    if (condition1) {
-        for (let j = 1; j <= pageCount; j++) {
-            doc.setPage(j)
-            doc.text('Page' + String(pageCount) + ' of ' + String(j), 500, 390,)
-            doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
+    if (!data.isMultiPrint) {
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i)
+            pageHeder(doc, data)
+            pageBorder(doc)
+            reportHeder3(doc, data)
         }
     }
+
+
+
+    for (let j = 1; j <= pageCount; j++) {
+        doc.setPage(j)
+        doc.text('Page' + String(pageCount) + ' of ' + String(j), 500, 390,)
+        doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
+    }
+
 }
 
 // original

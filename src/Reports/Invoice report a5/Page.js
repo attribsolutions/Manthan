@@ -68,22 +68,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
@@ -128,6 +112,8 @@ const InvioceReporta5 = async (data) => {
         for (let i = 0; i < data.length; i += BATCH_SIZE) {
             const batch = data.slice(i, i + BATCH_SIZE);
             batch.forEach((item, index) => {
+                // flag for condition check in loading sheet multiple invoice print 
+                item["isMultiPrint"] = true
                 item.SettingData = data.SettingData;
                 generateReportPage(doc, item);
                 if (index !== batch.length - 1) {
@@ -138,6 +124,7 @@ const InvioceReporta5 = async (data) => {
     } else {
         const Data = [data];
         Data.forEach((item, index) => {
+            item["isMultiPrint"] = false
             generateReportPage(doc, item);
             if (index !== Data.length - 1) {
                 doc.addPage();

@@ -1,3 +1,4 @@
+import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
     "Company",
@@ -11,7 +12,6 @@ export const columns = [
 ];
 
 export const ProductWisecolumns = [
-    // "Customer Name",
     "Product",
     "Purchase @ SS Landing Amount ",
     "Purchase Amount",
@@ -25,8 +25,6 @@ export const ProductWisecolumns = [
 
 export const Rows = (table = []) => {
 
-
-    // InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let TotalCXprimaryAmount = 0
     let TotalCXPurchaseAmount = 0
@@ -39,15 +37,14 @@ export const Rows = (table = []) => {
     table.forEach((index, key) => {
 
         const tableitemRow = [
-            index.ItemReasonName,
-            index.PrimaryAmount,
-            index.SecondaryAmount,
-            index.ReturnAmount,
-            index.NetSaleValue,
-            index.Budget,
-            index.ClaimAmount,
-            index.ClaimAgainstNetSale,
-
+            `${index.ItemReasonName}`,
+            `${numberWithCommas(Number(index.PrimaryAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(index.SecondaryAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(index.ReturnAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(index.NetSaleValue).toFixed(2))}`,
+            `${numberWithCommas(Number(index.Budget).toFixed(2))}`,
+            `${numberWithCommas(Number(index.ClaimAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(index.ClaimAgainstNetSale).toFixed(2))}`,
         ];
 
         function totalLots() {
@@ -58,19 +55,18 @@ export const Rows = (table = []) => {
             TotalBudgetOnlyExpiryFrom = Number(TotalBudgetOnlyExpiryFrom) + Number(index.Budget)
             TotalCXClaimAmount = Number(TotalCXClaimAmount) + Number(index.ClaimAmount)
             TotalNetSale = Number(TotalNetSale) + Number(index.ClaimAgainstNetSale)
-
         };
 
         function totalrow() {
             return [
                 "Total",
-                `${Number(TotalCXprimaryAmount).toFixed(2)}`,
-                `${Number(TotalCXPurchaseAmount).toFixed(2)}`,
-                `${Number(TotalCXreturnValue).toFixed(2)}`,
-                `${Number(TotalCXNetPurchaseValue).toFixed(2)}`,
-                `${Number(TotalBudgetOnlyExpiryFrom).toFixed(2)}`,
-                `${Number(TotalCXClaimAmount).toFixed(2)}`,
-                `${Number(TotalNetSale).toFixed(2)}`,
+                `${numberWithCommas(Number(TotalCXprimaryAmount).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalCXPurchaseAmount).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalCXreturnValue).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalCXNetPurchaseValue).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalBudgetOnlyExpiryFrom).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalCXClaimAmount).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalNetSale).toFixed(2))}`,
             ];
         };
 
@@ -87,29 +83,22 @@ export const Rows = (table = []) => {
 
 
 export const ProductWiseRows = (data) => {
-
     const { ProductwiseBudgetReport = [] } = data
     ProductwiseBudgetReport.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
-    let Gst = 0
     let TotalInQuantity = 0
-
-
     ProductwiseBudgetReport.forEach((element, key) => {
         const tableitemRow = [
             // element.BatchDate,
-            element.Product,
-            element.PrimaryAmount,
-            element.SecondaryAmount,
-            element.ReturnAmount,
-            element.NetSaleValue,
-            element.Budget,
-            element.ClaimAmount,
-            element.ClaimAgainstNetSale,
-
-
+            `${element.Product}`,
+            `${numberWithCommas(Number(element.PrimaryAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.SecondaryAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.ReturnAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.NetSaleValue).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Budget).toFixed(2))}`,
+            `${numberWithCommas(Number(element.ClaimAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.ClaimAgainstNetSale).toFixed(2))}`,
         ];
-
         function totalLots() {
             TotalInQuantity = Number(TotalInQuantity) + Number(element.InQuantity)
 
@@ -126,17 +115,10 @@ export const ProductWiseRows = (data) => {
                 "",
                 "",
                 "",
-
-
             ];
         };
 
-
-
-
         returnArr.push(tableitemRow);
-
-
         if (key === ProductwiseBudgetReport.length - 1) {
             returnArr.push(totalrow());
         }

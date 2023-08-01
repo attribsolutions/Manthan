@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 
 
 var pageHeder = function (doc, data) {
@@ -21,15 +22,19 @@ function pageFooter(doc, data) {
 
 const StockReport = (stockdata) => {
     const data = stockdata[0]
+    debugger
     var doc = new jsPDF('l', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
     doc.setProperties({
-        title: "Report"
+        title: `Stock_Report/${data.PartyName}/${date_dmy_func()} `
     });
-    const options = { filename: "Stock Report", }
-    doc.output('dataurlnewwindow', options);
-    return (<></>);
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        const options = { filename: `Stock_Report/${data.PartyName}/${date_dmy_func()}` }
+        window.open(pdfUrl, options);
+    }
+    generateSaveAndOpenPDFReport();
 }
 export default StockReport;

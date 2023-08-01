@@ -1,14 +1,12 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle';
-import { date_dmy_func, loginSystemSetting } from "../../components/Common/CommonFunction";
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 import { Data } from "./DemoData";
-
-
 
 const pageHeder = (doc, data) => {
     style.pageBorder(doc, data);
-    style.pageHeder(doc, data);     //Title
+    style.pageHeder(doc, data);
     style.reportHeder1(doc, data);
     return true;
 };
@@ -23,7 +21,7 @@ function pageFooter(doc, data) {
 }
 
 const ClaimSummaryReport = (data) => {
-    
+
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
@@ -38,6 +36,8 @@ const ClaimSummaryReport = (data) => {
         window.open(pdfUrl, options);
     }
     generateSaveAndOpenPDFReport();
+
+
 }
 
 export default ClaimSummaryReport;

@@ -25,7 +25,7 @@ const ClaimSummaryReducer = (state = INIT_STATE, action) => {
         case POST_CLAIM_CREATE_SUMMARY_API_ERROR_ACTION:
             return {
                 ...state,
-                listBtnLoading: false,
+                CreateClaimLoading: false
             };
 
 

@@ -28,7 +28,6 @@ export const pageHeder = (doc, data) => {
 }
 
 export const reportHeder1 = (doc, data) => {
-
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
@@ -37,135 +36,25 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
     doc.line(408, 63, 408, 16);//vertical line header section billby 
-    doc.line(292, 170, 292, 80);//vertical  line header section billto
+    doc.line(570, 40, 408, 40);//horizontal line 3
 
-    var BilledByStyle = {
-        margin: {
-            top: 45, left: 30, right: 35,
-        },
-        showHead: 'always',
-        theme: 'plain',
-        styles: {
-            overflow: 'linebreak',
-            fontSize: 8,
-            height: 0,
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: 2,
-            fontSize: 8,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 300,
-                halign: 'lfet',
-            }
-        },
-        tableLineColor: "black",
-
-        startY: 80
-    };
-
-    var BilledToStyle = {
-        margin: {
-            top: 45, left: 292, right: 35,
-        },
-        showHead: 'always',
-        theme: 'plain',
-        styles: {
-            overflow: 'linebreak',
-            fontSize: 8,
-            height: 0,
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: data.PrintType ? 1 : 2,
-            fontSize: 8,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 270,
-                halign: 'lfet',
-            },
-        },
-        tableLineColor: "black",
-        startY: 80,
-    };
-
-    var DetailsOfTransportStyle = {
-        margin: {
-            top: 45, left: 408, right: 35,
-        },
-        showHead: 'always',
-        theme: 'plain',
-        styles: {
-            overflow: 'linebreak',
-            fontSize: 8,
-            height: 0,
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: 2,
-            fontSize: 8,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 162,
-                halign: 'lfet',
-            },
-
-        },
-        tableLineColor: "black",
-
-        startY: 80,
-
-    };
-
-    // const priLength = () => {
-    //     let final_y = doc.previousAutoTable.finalY
-    //     if (final_y > initial_y) {
-    //         initial_y = final_y
-    //     }
-
-    // }
-
-    // doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
-    // priLength()
-
-    // doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
-    // priLength()
 
 }
 
 export const reportHeder3 = (doc, data) => {
-    var date = date_dmy_func(data.InvoiceDate)
-
+    debugger
     doc.setFont('Tahoma')
     doc.setFontSize(10)
-    // doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
-    // doc.line(570, 49, 408, 49) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
+    doc.text(`From Date:  ${date_dmy_func(data.Period.FromDate)}`, 415, 30)
+    doc.text(`To Date:       ${date_dmy_func(data.Period.ToDate)}`, 415, 53)
 
-    doc.text(`Return Date: ${date}`, 415, 43) //Invoice date
-    // doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 60) //Invoice date
 }
 
 export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
-            
+
             if (data1.row.cells[0].raw === "Total") {
                 data1.row.cells[1].colSpan = 3
 
@@ -184,7 +73,6 @@ export const tableBody = (doc, data) => {
             }
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
-
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
             }
@@ -199,9 +87,9 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'center',    //'center' or 'right'
+            halign: 'center',
             fillColor: "white",
-            textColor: [0, 0, 0], //Black     
+            textColor: [0, 0, 0],
             fontSize: 7,
             rowHeight: 10,
             lineColor: [0, 0, 0]
@@ -260,7 +148,6 @@ export const tableBody = (doc, data) => {
                 columnWidth: 43,
                 halign: 'right',
             },
-
         },
         tableLineColor: "black",
         startY: 80,
@@ -277,16 +164,12 @@ export const tableBody = (doc, data) => {
 }
 
 export const reportFooter = (doc, data) => {
-
-    // doc.addImage(upi_qr_code, 'PNG', 359, 747, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
     doc.line(435, 745, 30, 745);//horizontal line Footer 2
     doc.line(435, 775, 30, 775);//horizontal line Footer 3
     doc.line(435, 795, 30, 795);//horizontal line Footer 3
-
     doc.line(435, 730, 435, 815);//vertical right Sub Total
-    // doc.line(360, 745, 360, 815);//vertical right Qr Code    /////////////////
     doc.setFont('Tahoma')
 
     const a = data.ClaimSummaryItemDetails.map((data) => ({
@@ -310,7 +193,6 @@ export const reportFooter = (doc, data) => {
 
     });
     const TotalGST = totalCGST + totalSGST;
-    // const GrandTotal = TotalGST + TotalAmount;
     let stringNumber = toWords(Number(TotalAmount))
 
 
@@ -347,60 +229,19 @@ export const reportFooter = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(8)
     doc.setFont("Arimo");
-    // doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-    //      of the nature and quantity which it/these purports to be `, 34, 782)
     doc.setFontSize(10)
     doc.text(`Signature `, 280, 810,)
     doc.text(`Prepared by :${data.PartyDetails.PartyName} `, 35, 810,)
     doc.setFontSize(8)
     doc.text(`${stringNumber}`, 65, 740,)
 
-
     doc.setFont(undefined, 'bold')
     doc.text(`Rupees:`, 33, 740,)
     doc.addFont("Arial", 'Normal')
     doc.setFont("Arimo");
-
-
-    let ReturnReasonDetails = {
-        margin: {
-            top: 45, left: 30, right: 35,
-        },
-        showHead: 'always',
-        theme: 'plain',
-        styles: {
-            overflow: 'linebreak',
-            fontSize: 8,
-            height: 0,
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: 4,
-            fontSize: 8,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 250,
-                halign: 'lfet',
-            },
-
-        },
-        tableLineColor: "black",
-
-        startY: 745,
-
-    };
-
-    // doc.autoTable(table.Return, table.ReturnReason(data), ReturnReasonDetails);
 }
 
-
 export const pageFooter = (doc, data) => {
-
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
