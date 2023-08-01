@@ -23,7 +23,7 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, BankListAPISuccess, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -56,16 +56,18 @@ const PaymentEntry = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         pageField,
-        RetailerList,
+        SupplierList,
         OpeningBalance,
         BankList,
         ReceiptModeList,
         ReceiptType,
         saveBtnloading,
+        SupplierDropdownLoading,
         userAccess } = useSelector((state) => ({
             saveBtnloading: state.ReceiptReducer.saveBtnloading,
+            SupplierDropdownLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
             postMsg: state.ReceiptReducer.postMsg,
-            RetailerList: state.CommonAPI_Reducer.supplier,
+            SupplierList: state.CommonAPI_Reducer.supplier,
             OpeningBalance: state.ReceiptReducer.OpeningBalance,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             BankList: state.ReceiptReducer.bankList,
@@ -84,7 +86,7 @@ const PaymentEntry = (props) => {
         dispatch(GetOpeningBalance_Success([]))
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { // ReceiptMode Dropdown useEffect
         const jsonBody = JSON.stringify({
             Company: _cfunc.loginCompanyID(),
             TypeID: 4
@@ -106,7 +108,6 @@ const PaymentEntry = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
@@ -172,7 +173,7 @@ const PaymentEntry = (props) => {
         return index.Name === "Payment Entry"
     })
 
-    const customerOptions = RetailerList.map((index) => ({
+    const SupplierOptions = SupplierList.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
@@ -265,7 +266,13 @@ const PaymentEntry = (props) => {
         try {
             if (formValid(state, setState)) {
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
-
+                if (Number(values.AmountPaid) === 0) {
+                    customAlert({
+                        Type: 4,
+                        Message: `The payment amount must be greater than zero.`,
+                    })
+                    return _cfunc.btnIsDissablefunc({ btnId, state: false })
+                }
                 var BulkData = [{
                     "ReceiptDate": values.ReceiptDate,
                     "Description": values.Description,
@@ -326,23 +333,24 @@ const PaymentEntry = (props) => {
                                 </Col >
                             </Row>
 
-                            <Row>
+                            <Row> {/* Supplier Dropdown*/}
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
-                                            <Select
+                                            <C_Select
                                                 id="Customer "
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
+                                                isLoading={SupplierDropdownLoading}
                                                 className="react-dropdown"
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 classNamePrefix="dropdown"
-                                                options={customerOptions}
+                                                options={SupplierOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                     CustomerOnChange(hasSelect)
