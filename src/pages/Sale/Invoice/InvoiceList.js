@@ -134,11 +134,11 @@ const InvoiceList = () => {
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
         dispatch(getVehicleList())
+        setmodal(false);
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler("event", IBType)
         }
         return () => {
-            setmodal(false);
             dispatch(UpdateVehicleInvoice_Success([]));
             // dispatch(Uploaded_EwayBillSuccess({ Status: false }));
         }
@@ -186,9 +186,41 @@ const InvoiceList = () => {
     }, [Uploaded_EInvoice]);
 
     useEffect(() => {
-        debugger
+        
         if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 204)) {
-            // dispatch(Uploaded_EwayBillSuccess({ Status: false }))
+            setmodal(true);
+        }
+        else if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 200)) {
+            dispatch(Uploaded_EwayBillSuccess({ Status: false }))
+            goButtonHandler("event")
+            customAlert({
+                Type: 1,
+                Message: JSON.stringify(Uploaded_EwayBill.Message),
+            })
+        }
+
+        else if (Uploaded_EwayBill.Status === true) {
+            dispatch(Uploaded_EwayBillSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Uploaded_EwayBill.Message),
+            })
+            return
+        }
+        return () => {
+            if (Uploaded_EwayBill.Status === true) {
+                dispatch(Uploaded_EwayBillSuccess({ Status: false }));
+            }
+        };
+    }, [Uploaded_EwayBill]);
+
+
+
+
+
+    useEffect(() => {
+
+        if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 204)) {
             setmodal(true);
         }
         else if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 200)) {
@@ -469,14 +501,14 @@ const InvoiceList = () => {
                                             onChange={(e) => {
                                                 setVehicleNo(e)
                                             }}
-                                        // styles={{
-                                        //     menu: (provided) => ({
-                                        //         ...provided,
-                                        //         zIndex: 5,
-                                        //         maxHeight: "200px", // Set a fixed height for the dropdown
-                                        //         overflowY: "auto", // Add a scrollbar if the content exceeds the height
-                                        //     }),
-                                        // }}
+                                            styles={{
+                                                menu: (provided) => ({
+                                                    ...provided,
+                                                    zIndex: 5,
+                                                    maxHeight: "200px", // Set a fixed height for the dropdown
+                                                    overflowY: "auto", // Add a scrollbar if the content exceeds the height
+                                                }),
+                                            }}
                                         />
 
                                     </Col>
