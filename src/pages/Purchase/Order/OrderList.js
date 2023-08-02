@@ -498,7 +498,7 @@ const OrderList = () => {
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
             customAlert({
-                Type: 2,
+                Type: 4,
                 Message: "Please Select One Order",
             });
             return
