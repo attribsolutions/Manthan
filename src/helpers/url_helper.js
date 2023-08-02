@@ -406,3 +406,12 @@ export const PARTY_SETTING = '/PartySettings'
 export const STOCK_ENTRY = '/PartyStockEntry'
 export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"
 
+export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"
+export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
+
+
+
+
+
+
+

@@ -171,6 +171,8 @@ import DiscountList from "../pages/Adminisrator/Discount/DiscountList";
 import PurchaseReturn from "../pages/Purchase/Return/PurchaseReturn";
 import StockReport_1 from "../Reports/StockReport/StockReport_1";
 import ClaimSummary from "../Reports/ClaimReportSummary/ClaimReport";
+import InvoiceDataExport from "../Reports/InvoiceDataExport/InvoiceDataExport.js";
+import PurchaseGSTReport from "../Reports/PurchaseGSTReport/PurchaseGSTReport.js";
 // import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
@@ -417,9 +419,9 @@ const userRoutes = [
 
   { path: path.CLAIM_SUMMARY_REPORT, component: ClaimSummary },
 
+  { path: path.PURCHASE_GST_REPORT, component: PurchaseGSTReport },
 
-
-
+  { path: path.INVOICE_DATA_EXPORT, component: InvoiceDataExport },
 
   { path: path.REPORT, component: Report },
 

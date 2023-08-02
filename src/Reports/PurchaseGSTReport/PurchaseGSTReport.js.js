@@ -1,0 +1,337 @@
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Col, FormGroup, Input, Label, Row } from "reactstrap";
+import { useHistory } from "react-router-dom";
+import { initialFiledFunc, } from "../../components/Common/validationFunction";
+import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_DatePicker } from "../../CustomValidateForm";
+import * as _cfunc from "../../components/Common/CommonFunction";
+import { url, mode } from "../../routes/index"
+import { MetaTags } from "react-meta-tags";
+import { GetVenderSupplierCustomer } from "../../store/actions";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import * as XLSX from 'xlsx';
+import { postPurchaseGSTReport_API, postPurchaseGSTReport_API_Success } from "../../store/Report/PurchaseGSTRedux/action";
+import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+
+
+const PurchaseGSTReport = (props) => {
+
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
+    const isSCMParty = _cfunc.loginIsSCMParty();
+
+
+    const fileds = {
+        FromDate: currentDate_ymd,
+        ToDate: currentDate_ymd,
+        CheckSelect: ""
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const [subPageMode] = useState(history.location.pathname);
+    const [userPageAccessState, setUserAccState] = useState('');
+    const [GSTRateWise, setGSTRateWise] = useState(false);
+
+
+
+    const reducers = useSelector(
+        (state) => ({
+            tableData: state.PurchaseGSTReportReducer.PurchaseGSTGobtn,
+            excleData: state.PurchaseGSTReportReducer.PurchaseGSTExcleBtn,
+            goBtnLoading: state.PdfReportReducers.goBtnLoading,
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
+            userAccess: state.Login.RoleAccessUpdateData,
+            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            pageField: state.CommonPageFieldReducer.pageFieldList
+        })
+    );
+    const { userAccess, tableData, excleData } = reducers;
+    const { PurchaseGSTDetails = [], PurchaseGSTRateWiseDetails = [] } = tableData;
+
+    const values = { ...state.values }
+
+    // Featch Modules List data  First Rendering
+    const location = { ...history.location }
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    // userAccess useEffect
+    useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+        if (userAcc) {
+            setUserAccState(userAcc)
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
+        };
+    }, [userAccess])
+
+    useEffect(() => {
+        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
+
+    }, [])
+
+
+    function goButtonHandler() {
+        // const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
+        const jsonBody = JSON.stringify({
+            "FromDate": values.FromDate,
+            "ToDate": values.ToDate,
+            "Party": _cfunc.loginPartyID(),
+            "GSTRatewise": GSTRateWise === true ? 1 : 0
+        });
+        let config = { jsonBody }
+        dispatch(postPurchaseGSTReport_API(config))
+    }
+
+    function fromdateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.FromDate = date;
+            a.hasValid.FromDate.valid = true
+            return a
+        })
+    }
+
+    function todateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.ToDate = date;
+            a.hasValid.ToDate.valid = true
+            return a
+        })
+    }
+
+    debugger
+    useEffect(() => {
+
+        if (GSTRateWise ? PurchaseGSTRateWiseDetails.length : PurchaseGSTDetails.length > 1) {
+            const worksheet = XLSX.utils.json_to_sheet(GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "PurchaseGSTReport");
+            XLSX.writeFile(workbook, "Purchase GST Report.xlsx");
+            dispatch(postPurchaseGSTReport_API_Success([]));
+        }
+    }, []);
+
+    function excelhandler() {
+        const jsonBody = JSON.stringify({
+            "FromDate": values.FromDate,
+            "ToDate": values.ToDate,
+            "Party": _cfunc.loginPartyID(),
+            "GSTRatewise": GSTRateWise === true ? 1 : 0
+        });
+        let config = { jsonBody, Type: "excel" }
+        dispatch(postPurchaseGSTReport_API(config))
+
+    }
+
+    const WithoutGSTRateWiseColumn = [
+        {
+            text: "Name",
+            dataField: "Name",
+
+
+        },
+        {
+            text: "Full GRN Number",
+            dataField: "FullGRNNumber",
+
+
+        },
+        {
+            text: "Invoice Number",
+            dataField: "InvoiceNumber",
+
+
+        },
+        {
+            text: "GRN Date",
+            dataField: "GRNDate",
+
+        },
+        {
+            text: "GST Rate",
+            dataField: "GSTRate",
+
+        },
+
+        {
+            text: "GST Percentage",
+            dataField: "GSTPercentage",
+        },
+        {
+            text: "CGST",
+            dataField: "CGST",
+        },
+        {
+            text: "SGST",
+            dataField: "SGST",
+        },
+        {
+            text: "IGST",
+            dataField: "IGST",
+        },
+        {
+            text: "GST Amount",
+            dataField: "GSTAmount",
+        },
+        {
+            text: "Discount Amount",
+            dataField: "DiscountAmount",
+            hidden: GSTRateWise
+
+        },
+        {
+            text: "Taxable Value",
+            dataField: "TaxableValue",
+
+        },
+
+        {
+            text: "Total Value",
+            dataField: "TotalValue",
+        },
+
+
+    ];
+
+    const GSTRateWiseColumn = [
+
+        {
+            text: "GST Percentage",
+            dataField: "GSTPercentage",
+        },
+        {
+            text: "CGST",
+            dataField: "CGST",
+        },
+        {
+            text: "SGST",
+            dataField: "SGST",
+        },
+        {
+            text: "IGST",
+            dataField: "IGST",
+        },
+        {
+            text: "GST Amount",
+            dataField: "GSTAmount",
+        },
+        {
+            text: "Taxable Value",
+            dataField: "TaxableValue",
+        },
+        {
+            text: "Total Value",
+            dataField: "TotalValue",
+        },
+
+
+    ];
+
+
+    return (
+        <React.Fragment>
+            <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+            <div className="page-content">
+                <div className="px-2   c_card_filter text-black" >
+                    <div className="row" >
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt-3 mb-2 " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name='FromDate'
+                                        value={values.FromDate}
+                                        onChange={fromdateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt-3 mb-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name="ToDate"
+                                        value={values.ToDate}
+                                        onChange={todateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={3} >
+                            <FormGroup className="mb- row mt-3 mb-2">
+                                <Label style={{ width: "170px" }} className="col-4 p-2" >GST Rate Wise Report</Label>
+                                <Col sm="4" className=" mt-2 ">
+                                    <Input type="checkbox"
+                                        className="p-2"
+                                        checked={GSTRateWise}
+                                        onChange={(e) => setGSTRateWise(e.target.checked)}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+                        <Col sm={1} className="mt-3 ">
+                            <Go_Button onClick={goButtonHandler} loading={reducers.goBtnLoading} />
+                        </Col>
+                        <Col sm={2} className="mt-3 ">
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                className="btn btn-primary w-md  "
+                                onClick={(e) => { excelhandler() }}
+                            >
+                                Excel Downlode
+                            </C_Button>
+                        </Col>
+
+                    </div>
+                </div>
+                <ToolkitProvider
+                    keyField={"key"}
+                    data={GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails}
+                    columns={GSTRateWise ? GSTRateWiseColumn : WithoutGSTRateWiseColumn}
+                >
+                    {(toolkitProps,) => (
+                        <React.Fragment>
+                            <Row>
+                                <Col xl="12">
+                                    <div className="table-responsive table">
+                                        <BootstrapTable
+                                            keyField={"key"}
+                                            classes={"table  table-bordered table-hover"}
+                                            noDataIndication={
+                                                <div className="text-danger text-center ">
+                                                    Record Not available
+                                                </div>
+                                            }
+                                            {...toolkitProps.baseProps}
+                                        />
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
+                                </Col>
+                            </Row>
+
+                        </React.Fragment>
+                    )}
+                </ToolkitProvider>
+            </div>
+
+        </React.Fragment >
+    )
+}
+
+export default PurchaseGSTReport;
