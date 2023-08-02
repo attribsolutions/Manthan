@@ -47,6 +47,8 @@ const InvoiceList = () => {
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
     const [VehicleNo, setVehicleNo] = useState('')
     const [modal, setmodal] = useState(false);
+    const [vehicleErrorMsg, setvehicleErrorMsg] = useState(false);
+
 
     const reducers = useSelector(
         (state) => ({
@@ -140,7 +142,6 @@ const InvoiceList = () => {
         }
         return () => {
             dispatch(UpdateVehicleInvoice_Success([]));
-            // dispatch(Uploaded_EwayBillSuccess({ Status: false }));
         }
 
     }, [dispatch]);
@@ -186,7 +187,7 @@ const InvoiceList = () => {
     }, [Uploaded_EInvoice]);
 
     useEffect(() => {
-        
+
         if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 204)) {
             setmodal(true);
         }
@@ -213,10 +214,6 @@ const InvoiceList = () => {
             }
         };
     }, [Uploaded_EwayBill]);
-
-
-
-
 
     useEffect(() => {
 
@@ -339,10 +336,9 @@ const InvoiceList = () => {
     }
 
     function supplierOnchange(e) {
-
         let newObj = { ...hederFilters }
         newObj.supplierSelect = e
-        setHederFilters(newObj)
+        setHederFilters(newObj);
     }
 
     const partySelectButtonHandler = (e) => {
@@ -357,11 +353,21 @@ const InvoiceList = () => {
         setHederFilters(newObj)
     }
 
+    function VehicleOnChangeHandler(e) {
+        setVehicleNo(e)
+        setvehicleErrorMsg(false);
+    }
+
     function UpdateVehicleNumber() {
 
-        const { Data } = reducers.Uploaded_EwayBill
-        var config = { Invoiceid: Data, vehicleid: VehicleNo.value }
-        dispatch(UpdateVehicleInvoice_Action(config))
+        const { Data } = reducers.Uploaded_EwayBill;
+        const vehicleValue = VehicleNo.value
+        if (vehicleValue === undefined) {
+            setvehicleErrorMsg(true);
+        } else {
+            var config = { Invoiceid: Data, vehicleid: vehicleValue };
+            dispatch(UpdateVehicleInvoice_Action(config));
+        }
     }
 
     const makeBtnFunc = (list = {}, btnId) => {
@@ -498,9 +504,7 @@ const InvoiceList = () => {
                                             className="card-header align-items-center d-flex"
                                             classNamePrefix="dropdown"
                                             options={VehicleNumber_Options}
-                                            onChange={(e) => {
-                                                setVehicleNo(e)
-                                            }}
+                                            onChange={(e) => { VehicleOnChangeHandler(e) }}
                                             styles={{
                                                 menu: (provided) => ({
                                                     ...provided,
@@ -510,6 +514,9 @@ const InvoiceList = () => {
                                                 }),
                                             }}
                                         />
+                                        {(vehicleErrorMsg) && (
+                                            <span className="text-danger f-8"><small>Please Select Vehicle Number</small></span>
+                                        )}
 
                                     </Col>
                                 </FormGroup>
