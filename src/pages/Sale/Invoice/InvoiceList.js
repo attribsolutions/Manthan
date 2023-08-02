@@ -148,7 +148,10 @@ const InvoiceList = () => {
 
     useEffect(() => {    // Vehicle Update against Invoice Id
         if (Update_Vehicle_Invoice.Status === true && Update_Vehicle_Invoice.StatusCode === 200) {
-            dispatch(UpdateVehicleInvoice_Success([]))
+            dispatch(UpdateVehicleInvoice_Success([]));
+            setInvoiceID('');
+            setVehicleNoDropdown('');
+            setvehicleErrorMsg(false);
             goButtonHandler("event");
             setmodal(false);
             customAlert({
