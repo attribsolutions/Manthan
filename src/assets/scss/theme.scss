@@ -227,7 +227,8 @@ textarea:focus {
 }
 
 .c_disableBtn {
-  opacity: 0.5;
+  opacity: 0.2;
+  // visibility: hidden;
   cursor: not-allowed !important;
 }
 

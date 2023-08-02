@@ -157,35 +157,39 @@ export const listPageActionsButtonFunc = (props) => {
                         id={`btn-${btnmode}-${rowData.id}`}
                         className={buttonClasss}
                         title={`${title} ${ButtonMsgLable}`}
-                        disabled={listBtnLoading}
-                        onClick={() =>
-                            renderButtonOnClick({
-                                rowData: rowData,
-                                btnmode: mode[btnmode],
-                                btnId: `btn-${btnmode}-${rowData.id}`,
-                                actionFunc: actionFunc,
-                                dispatchAction: dispatchAction
-                            })
+                        // disabled={listBtnLoading}
+                        onClick={() => {
+                            if (!listBtnLoading) {
+                                renderButtonOnClick({
+                                    rowData: rowData,
+                                    btnmode: mode[btnmode],
+                                    btnId: `btn-${btnmode}-${rowData.id}`,
+                                    actionFunc: actionFunc,
+                                    dispatchAction: dispatchAction
+                                })
+                            }
+                        }
                         }
                     >
                         {renderButtonWithSpinner(`btn-${btnmode}-${rowData.id}`, "white", iconClass)}
                     </Button>
                 );
-            } else {
-                return (
-                    < Button
-                        type="button"
-                        id={`btn-${btnmode}-${rowData.id}`}
-                        className={`${buttonClasss} c_disableBtn`}
-                    >
-                        <i className={iconClass} ></i>
-                    </Button >
-                )
             }
+            //  else {
+            //     return (
+            //         < Button
+            //             type="button"
+            //             id={`btn-${btnmode}-${rowData.id}`}
+            //             className={`${buttonClasss} c_disableBtn`}
+            //         >
+            //             <i className={iconClass} ></i>
+            //         </Button >
+            //     )
+            // }
         };
 
         return (
-            <div id="ActionBtn" className="center gap-3">
+            <div id="ActionBtn">
                 {renderButtonIfNeeded({
                     condition: canEdit,
                     btnmode: mode.edit,
@@ -401,7 +405,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
             const canPrint = ((rowData.InvoiceUploads.length > 0) && (rowData.InvoiceUploads[0]?.EwayBillUrl !== null));
 
             return (
-                <div id="ActionBtn" className="center gap-3 p-0">
+                <div id="ActionBtn" >
                     {renderButtonIfNeeded({
                         condition: canUpload,
                         btnmode: "E-WayBill-Upload",
