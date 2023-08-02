@@ -6,7 +6,7 @@ import {
     commonPageFieldListSuccess,
 } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
-import { Card, Col, FormGroup, Label, Modal, Row } from "reactstrap";
+import { Col, FormGroup, Label, Modal, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
@@ -45,10 +45,10 @@ const InvoiceList = () => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
-    const [VehicleNo, setVehicleNo] = useState('')
+    const [VehicleNoDropdown, setVehicleNoDropdown] = useState('')
     const [modal, setmodal] = useState(false);
     const [vehicleErrorMsg, setvehicleErrorMsg] = useState(false);
-
+    const [InvoiceID, setInvoiceID] = useState("");
 
     const reducers = useSelector(
         (state) => ({
@@ -135,7 +135,7 @@ const InvoiceList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
-        dispatch(getVehicleList())
+
         setmodal(false);
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler("event", IBType)
@@ -146,7 +146,7 @@ const InvoiceList = () => {
 
     }, [dispatch]);
 
-    useEffect(() => {
+    useEffect(() => {    // Vehicle Update against Invoice Id
         if (Update_Vehicle_Invoice.Status === true && Update_Vehicle_Invoice.StatusCode === 200) {
             dispatch(UpdateVehicleInvoice_Success([]))
             goButtonHandler("event");
@@ -167,7 +167,7 @@ const InvoiceList = () => {
         }
     }, [Update_Vehicle_Invoice]);
 
-    useEffect(() => {
+    useEffect(() => {   // Uploaded EInvoice useEffect 
         if (Uploaded_EInvoice.Status === true && Uploaded_EInvoice.StatusCode === 200) {
             dispatch(Uploaded_EInvoiceSuccess({ Status: false }))
             goButtonHandler("event")
@@ -186,41 +186,9 @@ const InvoiceList = () => {
         }
     }, [Uploaded_EInvoice]);
 
-    useEffect(() => {
+    useEffect(() => {   // Uploaded E-way Bill useEffect 
 
-        if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 204)) {
-            setmodal(true);
-        }
-        else if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 200)) {
-            dispatch(Uploaded_EwayBillSuccess({ Status: false }))
-            goButtonHandler("event")
-            customAlert({
-                Type: 1,
-                Message: JSON.stringify(Uploaded_EwayBill.Message),
-            })
-        }
-
-        else if (Uploaded_EwayBill.Status === true) {
-            dispatch(Uploaded_EwayBillSuccess({ Status: false }))
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(Uploaded_EwayBill.Message),
-            })
-            return
-        }
-        return () => {
-            if (Uploaded_EwayBill.Status === true) {
-                dispatch(Uploaded_EwayBillSuccess({ Status: false }));
-            }
-        };
-    }, [Uploaded_EwayBill]);
-
-    useEffect(() => {
-
-        if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 204)) {
-            setmodal(true);
-        }
-        else if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 200)) {
+        if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 200)) {
             dispatch(Uploaded_EwayBillSuccess({ Status: false }))
             goButtonHandler("event")
             customAlert({
@@ -239,7 +207,7 @@ const InvoiceList = () => {
         }
     }, [Uploaded_EwayBill]);
 
-    useEffect(async () => {
+    useEffect(async () => {   // Uploaded Cancel E-Invoice useEffect 
 
         if (Cancel_EInvoice.Status === true && Cancel_EInvoice.StatusCode === 200) {
             dispatch(Cancel_EInvoiceSuccess({ Status: false }))
@@ -261,7 +229,7 @@ const InvoiceList = () => {
         }
     }, [Cancel_EInvoice]);
 
-    useEffect(async () => {
+    useEffect(async () => {    // Uploaded Cancel E-way Bill useEffect 
 
         if (Cancel_EwayBill.Status === true && Cancel_EwayBill.StatusCode === 200) {
             dispatch(Cancel_EwayBillSuccess({ Status: false }))
@@ -354,21 +322,15 @@ const InvoiceList = () => {
     }
 
     function VehicleOnChangeHandler(e) {
-        setVehicleNo(e)
+        setVehicleNoDropdown(e)
         setvehicleErrorMsg(false);
     }
 
-    function UpdateVehicleNumber() {
-
-        const { Data } = reducers.Uploaded_EwayBill;
-        const vehicleValue = VehicleNo.value
-        if (vehicleValue === undefined) {
-            setvehicleErrorMsg(true);
-        } else {
-            var config = { Invoiceid: Data, vehicleid: vehicleValue };
-            dispatch(UpdateVehicleInvoice_Action(config));
-        }
-    }
+    function toggleModal() {
+        setmodal(!modal);
+        setVehicleNoDropdown('')
+        setvehicleErrorMsg(false);
+    };
 
     const makeBtnFunc = (list = {}, btnId) => {
         const config = { makeInwardId: list[0].id, btnId }
@@ -438,6 +400,29 @@ const InvoiceList = () => {
         )
     }
 
+    function e_WayBill_ActionsBtnFunc(rowData) {
+
+        const { VehicleNo = '', id } = rowData
+        if (VehicleNo === null) {
+            setmodal(true);
+            dispatch(getVehicleList())
+            setInvoiceID(id)
+        }
+    }
+
+    const updateVehicleInvoice = () => {
+
+        if (VehicleNoDropdown === "") {
+            setvehicleErrorMsg(true);
+        } else {
+            const invoiceAndVehicleID = {
+                Invoiceid: InvoiceID,
+                vehicleid: VehicleNoDropdown.value,
+            };
+            dispatch(UpdateVehicleInvoice_Action(invoiceAndVehicleID));
+        }
+    };
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
@@ -464,24 +449,21 @@ const InvoiceList = () => {
                             makeBtnName={"Make GRN"}
                             filters={hederFilters}
                             forceNewBtnView={false}
+                            e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
                         />
                         : null
                 }
 
                 <Modal
                     isOpen={modal}
-                    toggle={() => {
-                        setmodal(false);
-                    }}
+                    toggle={toggleModal}
                     centered={true}
                 >
                     <div className="modal-header" style={{ position: "relative" }}>
                         <h5 className="modal-title mt-0 align-middle">Please Select Vehicle Number</h5>
                         <button
                             type="button"
-                            onClick={() => {
-                                setmodal(false);
-                            }}
+                            onClick={toggleModal}
                             className="close"
                             data-dismiss="modal"
                             aria-label="Close"
@@ -498,7 +480,7 @@ const InvoiceList = () => {
                                     <Col sm="8">
                                         <C_Select
                                             name="VehicleNo"
-                                            value={VehicleNo}
+                                            value={VehicleNoDropdown}
                                             isSearchable={true}
                                             id={'VehicleNoselect'}
                                             className="card-header align-items-center d-flex"
@@ -509,7 +491,7 @@ const InvoiceList = () => {
                                                 menu: (provided) => ({
                                                     ...provided,
                                                     zIndex: 5,
-                                                    maxHeight: "200px", // Set a fixed height for the dropdown
+                                                    maxHeight: "80px", // Set a fixed height for the dropdown
                                                     overflowY: "auto", // Add a scrollbar if the content exceeds the height
                                                 }),
                                             }}
@@ -526,14 +508,14 @@ const InvoiceList = () => {
                             <button
                                 type="button"
                                 className="btn btn-secondary"
-                                onClick={() => setmodal(false)}
+                                onClick={toggleModal}
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
                                 className="btn btn-primary"
-                                onClick={(e) => { UpdateVehicleNumber(e) }}>
+                                onClick={updateVehicleInvoice}>
                                 Update
                             </button>
                         </div>

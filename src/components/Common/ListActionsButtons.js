@@ -323,13 +323,21 @@ export const listPageActionsButtonFunc = (props) => {
     };
 };
 
-export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
+// ************************* E-Way Bill Button *****************************************************
+export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_ActionsBtnFunc }) => {
+
     const { listBtnLoading } = reducers;
 
     function Uploaded_EwayBillHandler(btnId, rowData) {
         try {
+
             let config = { btnId, RowId: rowData.id, UserID: loginUserID() };
-            dispatch(Uploaded_EwayBillAction(config));
+            if ((rowData.VehicleNo === null) && !(rowData.VehicleNo === "") && (e_WayBill_ActionsBtnFunc)) {
+                e_WayBill_ActionsBtnFunc(rowData)
+            }
+            else {
+                dispatch(Uploaded_EwayBillAction(config));
+            }
         } catch (error) { }
     }
 
@@ -368,12 +376,14 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
                     type="button"
                     id={`btn-${btnmode}-${rowData.id}`}
                     className={getButtonClassName(btnmode)}
-                    disabled={listBtnLoading}
                     title={title}
                     onClick={() => {
-                        let btnId = `btn-${btnmode}-${rowData.id}`;
-                        actionFunc(btnId, rowData);
-                    }}
+                        if (!listBtnLoading) {
+                            let btnId = `btn-${btnmode}-${rowData.id}`;
+                            actionFunc(btnId, rowData);
+                        }
+                    }
+                    }
                 >
                     {listBtnLoading === `btn-${btnmode}-${rowData.id}` ? (
                         <Spinner style={{ height: "16px", width: "16px" }} color="white" />
@@ -382,17 +392,18 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
                     )}
                 </Button>
             );
-        } else {
-            return (
-                < Button
-                    type="button"
-                    id={`btn-${btnmode}-${rowData.id}`}
-                    className={`${getButtonClassName(btnmode)} c_disableBtn`}
-                >
-                    <i className={iconClass} ></i>
-                </Button >
-            )
         }
+        //  else {
+        //     return (
+        //         < Button
+        //             type="button"
+        //             id={`btn-${btnmode}-${rowData.id}`}
+        //             className={`${getButtonClassName(btnmode)} c_disableBtn`}
+        //         >
+        //             <i className={iconClass} ></i>
+        //         </Button >
+        //     )
+        // }
     };
 
     return {
@@ -405,7 +416,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
             const canPrint = ((rowData.InvoiceUploads.length > 0) && (rowData.InvoiceUploads[0]?.EwayBillUrl !== null));
 
             return (
-                <div id="ActionBtn" >
+                <div id="ActionBtn">
                     {renderButtonIfNeeded({
                         condition: canUpload,
                         btnmode: "E-WayBill-Upload",
@@ -442,6 +453,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers }) => {
     };
 };
 
+// ************************* E-Invoice Button *****************************************************
 
 export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
     const { listBtnLoading } = reducers;
@@ -485,12 +497,14 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
                     type="button"
                     id={`btn-${btnmode}-${rowData.id}`}
                     className={getButtonClassName(btnmode)}
-                    disabled={listBtnLoading}
                     title={title}
                     onClick={() => {
-                        let btnId = `btn-${btnmode}-${rowData.id}`;
-                        actionFunc(btnId, rowData);
-                    }}
+                        if (!listBtnLoading) {
+                            let btnId = `btn-${btnmode}-${rowData.id}`;
+                            actionFunc(btnId, rowData);
+                        }
+                    }
+                    }
                 >
                     {listBtnLoading === `btn-${btnmode}-${rowData.id}` ? (
                         <Spinner style={{ height: "16px", width: "16px" }} color="white" />
@@ -499,17 +513,18 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
                     )}
                 </Button>
             );
-        } else {
-            return (
-                < Button
-                    type="button"
-                    id={`btn-${btnmode}-${rowData.id}`}
-                    className={`${getButtonClassName(btnmode)} c_disableBtn`}
-                >
-                    <i className={iconClass} ></i>
-                </Button >
-            )
         }
+        //  else {
+        //     return (
+        //         < Button
+        //             type="button"
+        //             id={`btn-${btnmode}-${rowData.id}`}
+        //             className={`${getButtonClassName(btnmode)} c_disableBtn`}
+        //         >
+        //             <i className={iconClass} ></i>
+        //         </Button >
+        //     )
+        // }
     };
 
     if (!(loginSystemSetting().EInvoiceApplicable === "1")) {
@@ -525,7 +540,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
             const canPrint = ((rowData.InvoiceUploads.length > 0) && (rowData.InvoiceUploads[0]?.EInvoicePdf !== null));
 
             return (
-                <div id="ActionBtn" className="center gap-3 p-0">
+                <div id="ActionBtn" >
                     {renderButtonIfNeeded({
                         condition: canUpload,
                         btnmode: "E-Invoice-Upload",

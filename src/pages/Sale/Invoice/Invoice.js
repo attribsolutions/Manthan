@@ -612,13 +612,13 @@ const Invoice = (props) => {
                 validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
                 return
             };
-
+            
             let isSameMRPinStock = '';//this is check is Enterd stock Quantity is Same MRP
             index.StockDetails.forEach((ele) => {
 
-                if (ele.Qty > 0) {
+                if (Number(ele.Qty) > 0) {
 
-                    if ((isSameMRPinStock === "") && (isSameMRPinStock === false)) {//this is check is Enterd stock Quantity is Same MRP
+                    if ((isSameMRPinStock === "") && !(isSameMRPinStock === false)) {//this is check is Enterd stock Quantity is Same MRP
                         isSameMRPinStock = parseFloat(ele.MRP)
                     } else if (isSameMRPinStock !== parseFloat(ele.MRP)) {
                         isSameMRPinStock = false
@@ -662,6 +662,7 @@ const Invoice = (props) => {
                     })
                 }
             })
+            
             if (isSameMRPinStock === false) {
                 validMsg.push(`${index.ItemName}: This Item Enter Same MRP Stock Quantity`);
                 return
@@ -726,7 +727,7 @@ const Invoice = (props) => {
                     return
                 }
                 else {
-                    // dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, saveAndDownloadPdfMode }));
+                    dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, saveAndDownloadPdfMode }));
                 }
             }
         } catch (e) { _cfunc.CommonConsole("invode save Handler", e) }
