@@ -115,6 +115,9 @@ function MRPTab(props) {
                       <Select
                         id={`dropDivision-${0}`}
                         value={division}
+                        styles={{
+                          menu: provided => ({ ...provided, zIndex: 2 })
+                        }}
                         options={Division_DropdownOptions}
                         onChange={DivisiontHandler}
                       />
@@ -124,6 +127,9 @@ function MRPTab(props) {
                         <Select
                           id={`dropPartyName-${0}`}
                           value={partyName}
+                          styles={{
+                            menu: provided => ({ ...provided, zIndex: 2 })
+                          }}
                           options={Party_DropdownOptions}
                           onChange={PartyNameHandler}
                         />
@@ -137,7 +143,7 @@ function MRPTab(props) {
                       <C_DatePicker
                         id={`txtEffectiveDate${0}`}
                         value={effectiveDate}
-                        placeholder = "Please Enter EffectiveDate"
+                        placeholder="Please Enter EffectiveDate"
                         onChange={EffectiveDateHandler}
                       />
                     </div>

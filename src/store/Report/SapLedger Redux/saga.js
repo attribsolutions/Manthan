@@ -10,7 +10,7 @@ import {
 import {
   GET_EXCELBUTTON_API, GO_BUTTON_API_SAP_LEDGER,
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
+
 import * as XLSX from 'xlsx';
 
 function* goBtn_Get_API_GenFun({ filters }) {

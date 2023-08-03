@@ -40,17 +40,16 @@ const PurchaseGSTReport = (props) => {
     const reducers = useSelector(
         (state) => ({
             tableData: state.PurchaseGSTReportReducer.PurchaseGSTGobtn,
-            excleData: state.PurchaseGSTReportReducer.PurchaseGSTExcleBtn,
-            goBtnLoading: state.PdfReportReducers.goBtnLoading,
-            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
+            ExcelBtnLoading: state.PurchaseGSTReportReducer.ExcelBtnLoading,
+            GoBtnLoading: state.PurchaseGSTReportReducer.GoBtnLoading,
             userAccess: state.Login.RoleAccessUpdateData,
-            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, tableData, excleData } = reducers;
-    const { PurchaseGSTDetails = [], PurchaseGSTRateWiseDetails = [] } = tableData;
 
+    const { userAccess, tableData, ExcelBtnLoading, GoBtnLoading } = reducers;
+    const { PurchaseGSTDetails = [], PurchaseGSTRateWiseDetails = [] } = tableData;
+    debugger
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -80,14 +79,14 @@ const PurchaseGSTReport = (props) => {
 
 
     function goButtonHandler() {
-        // const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
+        const btnId = `gobtn-${url.PURCHASE_GST_REPORT}`
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "Party": _cfunc.loginPartyID(),
             "GSTRatewise": GSTRateWise === true ? 1 : 0
         });
-        let config = { jsonBody }
+        let config = { jsonBody, btnId }
         dispatch(postPurchaseGSTReport_API(config))
     }
 
@@ -109,17 +108,18 @@ const PurchaseGSTReport = (props) => {
         })
     }
 
-    debugger
-    useEffect(() => {
 
-        if (GSTRateWise ? PurchaseGSTRateWiseDetails.length : PurchaseGSTDetails.length > 1) {
-            const worksheet = XLSX.utils.json_to_sheet(GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "PurchaseGSTReport");
-            XLSX.writeFile(workbook, "Purchase GST Report.xlsx");
-            dispatch(postPurchaseGSTReport_API_Success([]));
+    useEffect(() => {
+        if (tableData.btnId === "excel_btnId") {
+            if (GSTRateWise ? PurchaseGSTRateWiseDetails.length : PurchaseGSTDetails.length > 1) {
+                const worksheet = XLSX.utils.json_to_sheet(GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "PurchaseGSTReport");
+                XLSX.writeFile(workbook, "Purchase GST Report.xlsx");
+                dispatch(postPurchaseGSTReport_API_Success([]));
+            }
         }
-    }, []);
+    }, [tableData]);
 
     function excelhandler() {
         const jsonBody = JSON.stringify({
@@ -128,7 +128,7 @@ const PurchaseGSTReport = (props) => {
             "Party": _cfunc.loginPartyID(),
             "GSTRatewise": GSTRateWise === true ? 1 : 0
         });
-        let config = { jsonBody, Type: "excel" }
+        let config = { jsonBody, btnId: "excel_btnId" }
         dispatch(postPurchaseGSTReport_API(config))
 
     }
@@ -237,6 +237,25 @@ const PurchaseGSTReport = (props) => {
 
     ];
 
+    const rowStyle = (row, rowIndex) => {
+
+        if ((PurchaseGSTRateWiseDetails.length - 1) === rowIndex) {
+            const style = {};
+            style.backgroundColor = 'rgb(239, 239, 239)';
+            style.fontWeight = 'bold';
+            style.fontSize = '4';
+            return style;
+        }
+        if ((PurchaseGSTDetails.length - 1) === rowIndex) {
+            const style = {};
+            style.backgroundColor = 'rgb(239, 239, 239)';
+            style.fontWeight = 'bold';
+            style.fontSize = '4';
+            return style;
+        }
+
+    };
+
 
     return (
         <React.Fragment>
@@ -285,12 +304,15 @@ const PurchaseGSTReport = (props) => {
                             </FormGroup>
                         </Col>
                         <Col sm={1} className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.goBtnLoading} />
+                            <Go_Button
+                                onClick={goButtonHandler}
+                                loading={GoBtnLoading === `gobtn-${url.PURCHASE_GST_REPORT}`} />
                         </Col>
                         <Col sm={2} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
+                                loading={ExcelBtnLoading === `excel_btnId`}
                                 className="btn btn-primary w-md  "
                                 onClick={(e) => { excelhandler() }}
                             >
@@ -301,7 +323,7 @@ const PurchaseGSTReport = (props) => {
                     </div>
                 </div>
                 <ToolkitProvider
-                    keyField={"key"}
+                    keyField={"id"}
                     data={GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails}
                     columns={GSTRateWise ? GSTRateWiseColumn : WithoutGSTRateWiseColumn}
                 >
@@ -311,7 +333,8 @@ const PurchaseGSTReport = (props) => {
                                 <Col xl="12">
                                     <div className="table-responsive table">
                                         <BootstrapTable
-                                            keyField={"key"}
+                                            keyField={"id"}
+                                            rowStyle={rowStyle}
                                             classes={"table  table-bordered table-hover"}
                                             noDataIndication={
                                                 <div className="text-danger text-center ">
