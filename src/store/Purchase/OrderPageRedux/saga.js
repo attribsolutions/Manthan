@@ -158,9 +158,11 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
 
-      i["preOrderDate"] = i.OrderDate
+      i["preOrderDate"] = i.OrderDate;
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
       i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
+      i["transactionDate"] = i.CreatedOn;
+
       i.DeliveryDate = (`${DeliveryDate}`)
 
       i.forceEditHide = false;
@@ -203,7 +205,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       }
 
       //**********************************order Aproval button Show Condition ********************************************************** */
-   
+
       if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
@@ -268,7 +270,7 @@ function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageM
 }
 
 function* OrderSingleGet_GenFunc({ config }) {
-  
+
 
   try {
     const response = yield call(OrderPage_Edit_ForDownload_API, config);

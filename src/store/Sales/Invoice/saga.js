@@ -95,6 +95,7 @@ function* InvoiceListGenFunc({ config }) {
       }
       i["preInvoiceDate"] = i.InvoiceDate
       i.InvoiceDate = concatDateAndTime(i.InvoiceDate, i.CreatedOn)
+      i["transactionDate"] = i.CreatedOn;
       return i
     })
     yield put(invoiceListGoBtnfilterSucccess(newList));

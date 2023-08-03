@@ -64,9 +64,8 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
       // i.BatchDate = _cfunc.date_ymd_func(i.BatchDate)
       i.GrandTotal = _cfunc.amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
 
-      var date = date_dmy_func(i.GRNDate)
-      var time = convertTimefunc(i.CreatedOn)
-      i.GRNDate = (`${date} ${time}`)
+      i.GRNDate = _cfunc.concatDateAndTime(i.GRNDate, i.CreatedOn)
+      i["transactionDate"] = i.CreatedOn;
       return i
     })
     yield put(getGRNListPageSuccess(newList))
@@ -75,7 +74,7 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
 
 function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
-  
+
   const { jsonBody, pageMode = '', path = '', grnRef = [], challanNo = '' } = config
   try {
     const response = yield call(GRN_Make_API, config);

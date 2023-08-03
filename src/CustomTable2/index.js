@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import './CustomTable.scss';
 import { customTableSearch } from '../components/Common/SearchBox/MySearch';
 import BootstrapTable from 'react-bootstrap-table-next';
+import CustomPagination from './CustomPagination';
 
 const CustomTable = ({
     data, // table row data
@@ -58,7 +59,7 @@ const CustomTable = ({
             <BootstrapTable data={slicedData} columns={columns} {...rest} />
 
             {/* Pagination component */}
-            <div className="pagination-container1">
+            <div>
                 <CustomPagination
                     pageCount={pageCount}
                     currentPage={currentPage}
@@ -71,66 +72,3 @@ const CustomTable = ({
 
 export default CustomTable;
 
-function CustomPagination({ pageCount, currentPage, handlePageChange }) {
-
-    const pages = [];
-    const maxVisiblePages = 5; // Total number of visible pagination items
-
-    const getPageNumbers = () => {
-        let startPage = Math.max(currentPage - 2, 1);
-        let endPage = Math.min(startPage + maxVisiblePages - 1, pageCount);
-
-        if (endPage - startPage + 1 < maxVisiblePages) {
-            startPage = Math.max(endPage - maxVisiblePages + 1, 1);
-        }
-
-        return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-    };
-
-    const visiblePages = getPageNumbers();
-
-    // Function to render pagination item
-    const renderPageItem = (pageNumber, label) => {
-        const isActive = pageNumber === currentPage;
-
-        return (
-            <li
-                key={label}
-                className={isActive ? 'active' : ''}
-                onClick={() => handlePageChange(pageNumber)}
-            >
-                {label}
-            </li>
-        );
-    };
-
-    // Render start arrow
-    if (currentPage > 1) {
-        pages.push(renderPageItem(1, '<<'));
-    }
-
-    // Render previous arrow
-    if (currentPage > 1) {
-        const previousPage = currentPage - 1;
-        pages.push(renderPageItem(previousPage, '<'));
-    }
-
-    // Render page numbers
-    for (let i = 0; i < visiblePages.length; i++) {
-        const pageNumber = visiblePages[i];
-        pages.push(renderPageItem(pageNumber, pageNumber));
-    }
-
-    // Render next arrow
-    if (currentPage < pageCount) {
-        const nextPage = currentPage + 1;
-        pages.push(renderPageItem(nextPage, '>'));
-    }
-
-    // Render end arrow
-    if (currentPage < pageCount) {
-        pages.push(renderPageItem(pageCount, '>>'));
-    }
-
-    return <ul id="c__pagination">{pages}</ul>;
-}

@@ -24,12 +24,13 @@ function* save_SalesReturn_GenFunc({ config }) {
 
 // GoButton Post API for Sales Return List
 function* SalesReturn_List_GenFun({ filters }) {
-    
+
     try {
         const response = yield call(apiCall.SalesReturn_list_API, filters);
         const newList = yield response.Data.map((i) => {
             i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal)
             i.ReturnDate = concatDateAndTime(i.ReturnDate, i.CreatedOn)
+            i["transactionDate"] = i.CreatedOn;
             return i
         })
         yield put(action.salesReturnListAPISuccess(newList));
@@ -86,7 +87,7 @@ function* addButton_saleReturn_GenFunc({ config }) {
 }
 
 function* sendToSSButton_GenFunc({ config }) { // Update Order by subPageMode
-    
+
     const { ReturnID } = config
     try {
         const response = yield call(apiCall.Send_To_Superstockiest_button_post_API, config);

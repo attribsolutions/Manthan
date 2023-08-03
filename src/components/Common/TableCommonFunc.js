@@ -1,6 +1,7 @@
 import { Input } from "reactstrap"
 import { useState } from "react";
 import { useEffect } from "react";
+import { concatDateAndTime } from "./CommonFunction";
 
 const onSelectAll = (event, allarray,) => {
 
@@ -92,7 +93,13 @@ const DynamicColumnHook = ({
           classes: "table-cursor-pointer",
           align: i.Alignment || null,
           formatter: (cell, row) => {
-
+            if (i.ControlID === "transactionDate") {
+              return (
+                <div>
+                  {concatDateAndTime(row.OrderDate, row.CreatedOn)}
+                </div>
+              )
+            }
             if (cell === "Invoice Created") {
               return (
                 <span

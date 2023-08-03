@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import {concatDateAndTime} from "../../../components/Common/CommonFunction";
+// import {concatDateAndTime} from "../../../components/Common/CommonFunction";
 import {
   delete_MarginList_API,
   GetMarginList_For_Listpage,
@@ -36,7 +36,8 @@ function* get_Margin_GenFunc() {
     const response = yield call(GetMarginList_For_Listpage);
     response.Data.map(i => {
       i["preEffectiveDate"] = i.EffectiveDate
-      i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
+      // i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
+      i["transactionDate"] = i.CreatedOn;
     })
     yield put(getMarginListSuccess(response.Data))
   } catch (error) { yield put(MarginApiErrorAction()) }
