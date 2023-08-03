@@ -145,7 +145,7 @@ export const tableBody = (doc, data) => {
                 columnWidth: 80,
             },
             2: {
-                columnWidth: 100,
+                columnWidth: 145,
             },
             3: {
                 columnWidth: 80,

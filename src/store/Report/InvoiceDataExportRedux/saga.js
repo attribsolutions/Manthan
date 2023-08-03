@@ -9,7 +9,7 @@ import { InvoiceDataExport_GoBtn_API } from "../../../helpers/backend_helper";
 function* InvoiceDataExport_Gen({ config }) {
     try {
         const response = yield call(InvoiceDataExport_GoBtn_API, config);
-
+        response.Data["btnId"] = config.btnId;
         yield put(postInvoiceDataExport_API_Success(response.Data))
     } catch (error) { yield put(postInvoiceDataExportApiErrorAction()) }
 }

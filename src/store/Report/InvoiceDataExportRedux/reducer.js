@@ -2,7 +2,8 @@ import { POST_INVOICE_DATA_EXPORT_API, POST_INVOICE_DATA_EXPORT_API_SUCCESS, POS
 
 const INIT_STATE = {
     InvoiceDataExportGobtn: [],
-    GoBtnLoading: false
+    GoBtnLoading: false,
+    ExcelBtnLoading: false
 }
 
 const InvoiceDataExportReducer = (state = INIT_STATE, action) => {
@@ -11,20 +12,23 @@ const InvoiceDataExportReducer = (state = INIT_STATE, action) => {
         case POST_INVOICE_DATA_EXPORT_API:
             return {
                 ...state,
-                GoBtnLoading: true
+                GoBtnLoading: action.config.btnId,
+                ExcelBtnLoading: action.config.btnId
             }
 
         case POST_INVOICE_DATA_EXPORT_API_SUCCESS:
             return {
                 ...state,
                 InvoiceDataExportGobtn: action.payload,
-                GoBtnLoading: false
+                GoBtnLoading: false,
+                ExcelBtnLoading: false
             }
 
         case POST_INVOICE_DATA_EXPORT_API_ERROR_ACTION:
             return {
                 ...state,
                 GoBtnLoading: false,
+                ExcelBtnLoading: false
             };
 
 
