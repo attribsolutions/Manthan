@@ -417,9 +417,10 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
         text: "E-Way Bill",
         formatExtraData: { listBtnLoading },
         formatter: (__cell, rowData,) => {
-            const canUpload = ((rowData.InvoiceUploads[0]?.EwayBillNo === null));
-            const canCancel = ((!canUpload && (rowData.InvoiceUploads[0]?.EwayBillIsCancel === false)));
-            const canPrint = ((rowData.InvoiceUploads[0]?.EwayBillUrl !== null));
+
+            const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EwayBillNo === null));
+            const canCancel = (!canUpload && (rowData.InvoiceUploads[0]?.EwayBillIsCancel === false));
+            const canPrint = (!canUpload && (rowData.InvoiceUploads[0]?.EwayBillUrl !== null));
 
             return (
                 <div id="ActionBtn">
@@ -547,9 +548,10 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
         text: "E-Invoice",
         formatExtraData: { listBtnLoading },
         formatter: (__cell, rowData) => {
-            const canUpload = ((rowData.InvoiceUploads[0]?.Irn === null));
-            const canCancel = ((rowData.InvoiceUploads[0]?.EInvoiceIsCancel === false));
-            const canPrint = ((rowData.InvoiceUploads[0]?.EInvoicePdf !== null));
+         
+            const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.Irn === null));
+            const canCancel = ((!canUpload) && (rowData.InvoiceUploads[0]?.EInvoiceIsCancel === false));
+            const canPrint = ((!canUpload ) && (rowData.InvoiceUploads[0]?.EInvoicePdf !== null));
 
             return (
                 <div id="ActionBtn" >
