@@ -175,17 +175,17 @@ export const listPageActionsButtonFunc = (props) => {
                     </Button>
                 );
             }
-            //  else {
-            //     return (
-            //         < Button
-            //             type="button"
-            //             id={`btn-${btnmode}-${rowData.id}`}
-            //             className={`${buttonClasss} c_disableBtn`}
-            //         >
-            //             <i className={iconClass} ></i>
-            //         </Button >
-            //     )
-            // }
+            else {
+                return (
+                    < Button
+                        type="button"
+                        id={`btn-${btnmode}-${rowData.id}`}
+                        className={`${buttonClasss} c_disableBtn`}
+                    >
+                        <i className={iconClass} ></i>
+                    </Button >
+                )
+            }
         };
 
         return (
@@ -324,7 +324,7 @@ export const listPageActionsButtonFunc = (props) => {
 };
 
 // ************************* E-Way Bill Button *****************************************************
-export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_ActionsBtnFunc }) => {
+export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_ActionsBtnFunc, deleteName }) => {
 
     const { listBtnLoading } = reducers;
 
@@ -341,9 +341,16 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
         } catch (error) { }
     }
 
-    function Cancel_EwayBillHandler(btnId, rowData) {
+    async function Cancel_EwayBillHandler(btnId, rowData) {
         try {
-            dispatch(Cancel_EwayBillAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+            let alertRepsponse = await customAlert({
+                Type: 8,
+                Message: `Are you sure you want to Cancel EwayBill : "${rowData[deleteName]}"`,
+            })
+            if (alertRepsponse) {
+                dispatch(Cancel_EwayBillAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+            }
+
         } catch (error) { }
     }
 
@@ -393,27 +400,26 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
                 </Button>
             );
         }
-        //  else {
-        //     return (
-        //         < Button
-        //             type="button"
-        //             id={`btn-${btnmode}-${rowData.id}`}
-        //             className={`${getButtonClassName(btnmode)} c_disableBtn`}
-        //         >
-        //             <i className={iconClass} ></i>
-        //         </Button >
-        //     )
-        // }
+        else {
+            return (
+                < Button
+                    type="button"
+                    id={`btn-${btnmode}-${rowData.id}`}
+                    className={`${getButtonClassName(btnmode)} c_disableBtn`}
+                >
+                    <i className={iconClass} ></i>
+                </Button >
+            )
+        }
     };
 
     return {
         text: "E-Way Bill",
         formatExtraData: { listBtnLoading },
         formatter: (__cell, rowData,) => {
-
-            const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EwayBillNo === null));
-            const canCancel = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EwayBillIsCancel === false));
-            const canPrint = ((rowData.InvoiceUploads.length > 0) && (rowData.InvoiceUploads[0]?.EwayBillUrl !== null));
+            const canUpload = ((rowData.InvoiceUploads[0]?.EwayBillNo === null));
+            const canCancel = ((!canUpload && (rowData.InvoiceUploads[0]?.EwayBillIsCancel === false)));
+            const canPrint = ((rowData.InvoiceUploads[0]?.EwayBillUrl !== null));
 
             return (
                 <div id="ActionBtn">
@@ -455,7 +461,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
 
 // ************************* E-Invoice Button *****************************************************
 
-export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
+export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) => {
     const { listBtnLoading } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
@@ -464,9 +470,16 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
         } catch (error) { }
     }
 
-    function Cancel_EInvoiceHandler(btnId, rowData) {
+    async function Cancel_EInvoiceHandler(btnId, rowData) {
         try {
-            dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+            let alertRepsponse = await customAlert({
+                Type: 8,
+                Message: `Are you sure you want to Cancel EInvoice : "${rowData[deleteName]}"`,
+            })
+            if (alertRepsponse) {
+                dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+            }
+
         } catch (error) { }
     }
 
@@ -514,17 +527,17 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
                 </Button>
             );
         }
-        //  else {
-        //     return (
-        //         < Button
-        //             type="button"
-        //             id={`btn-${btnmode}-${rowData.id}`}
-        //             className={`${getButtonClassName(btnmode)} c_disableBtn`}
-        //         >
-        //             <i className={iconClass} ></i>
-        //         </Button >
-        //     )
-        // }
+        else {
+            return (
+                < Button
+                    type="button"
+                    id={`btn-${btnmode}-${rowData.id}`}
+                    className={`${getButtonClassName(btnmode)} c_disableBtn`}
+                >
+                    <i className={iconClass} ></i>
+                </Button >
+            )
+        }
     };
 
     if (!(loginSystemSetting().EInvoiceApplicable === "1")) {
@@ -534,10 +547,9 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers }) => {
         text: "E-Invoice",
         formatExtraData: { listBtnLoading },
         formatter: (__cell, rowData) => {
-
-            const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.Irn === null));
-            const canCancel = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EInvoiceIsCancel === false));
-            const canPrint = ((rowData.InvoiceUploads.length > 0) && (rowData.InvoiceUploads[0]?.EInvoicePdf !== null));
+            const canUpload = ((rowData.InvoiceUploads[0]?.Irn === null));
+            const canCancel = ((rowData.InvoiceUploads[0]?.EInvoiceIsCancel === false));
+            const canPrint = ((rowData.InvoiceUploads[0]?.EInvoicePdf !== null));
 
             return (
                 <div id="ActionBtn" >

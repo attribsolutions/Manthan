@@ -102,12 +102,7 @@ import RetailerDataReducer from "./Report/RetailerDataRedux/reducer"
 import  GenericSaleReportReducer from "./Report/GenericSaleRedux/reducer"
 import  InvoiceDataExportReducer from "./Report/InvoiceDataExportRedux/reducer"
 import  PurchaseGSTReportReducer from "./Report/PurchaseGSTRedux/reducer"
-
-
-
-
-
-
+import DamageStockReportReducer from "./Report/DamageStockReportRedux/reducer"
 
 
 const rootReducer = combineReducers({
@@ -190,6 +185,7 @@ const rootReducer = combineReducers({
   ClaimSummaryReducer,
   InvoiceDataExportReducer,
   PurchaseGSTReportReducer,
+  DamageStockReportReducer
 
 })
 export default rootReducer

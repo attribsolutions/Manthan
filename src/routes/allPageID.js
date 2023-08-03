@@ -239,8 +239,10 @@ export const ORDER_SUMMARY_REPORT = 203
 
 export const GENERIC_SALE_REPORT = 214
 
-export const RETAILER_DATA_REPORT= 215
+export const RETAILER_DATA_REPORT = 215
 
-export const CLAIM_SUMMARY_REPORT= 217
+export const CLAIM_SUMMARY_REPORT = 217
+
+export const DAMAGE_STOCK_REPORT = 220
 
 
