@@ -370,7 +370,6 @@ const StockEntry = (props) => {
                 const itemId = index.ItemId;
 
                 let batchCodeCounter = 0;
-
                 initialTableData.forEach((tableItem) => {
                     if (tableItem.ItemId === itemId) {
                         const existingBatchCode = tableItem.BatchCode.split('_').pop(); // Extract the batchCode from existing BatchCode
@@ -388,7 +387,7 @@ const StockEntry = (props) => {
                 existingBatchCodes[newBatchCode] = true;// Record the new batch code as existing
 
                 initialTableData.push({
-                    id: newBatchCode, // Use newBatchCode as the ID
+                    id: initialTableData.length + 1, // Use initialTableData length+1 as the ID
                     Unit_DropdownOptions: index.UnitDroupDownOptions,
                     MRP_DropdownOptions: index.MRP_DropdownOptions,
                     ItemGSTHSNDetails: index.GST_DropdownOptions,
@@ -404,7 +403,6 @@ const StockEntry = (props) => {
 
 
             });
-
             setState((prevState) => {
                 const newState = { ...prevState };
                 newState.values.ItemName = "";
@@ -412,6 +410,7 @@ const StockEntry = (props) => {
                 return newState;
             });
 
+            initialTableData.sort((a, b) => b.id - a.id);
             setTableArr(initialTableData);
 
 
@@ -516,6 +515,8 @@ const StockEntry = (props) => {
         dispatch(getpartyItemList(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
     }
 
+
+    console.log(TableArr)
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
