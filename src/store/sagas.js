@@ -66,6 +66,9 @@ import WorkOrderSaga from "./Production/WorkOrder/saga"
 import MaterialIssueSaga from "./Production/Matrial_Issue/saga"
 import ProductionSaga from "./Production/ProductionRedux/saga"
 import Production_ReIssueSaga from "./Production/ProductionReissueRedux/saga"
+import PartySettingSaga from "./Administrator/PartySetting/saga"
+import StockEntrySaga from "./Inventory/StockEntryRedux/saga"
+import CommonPartyDrodown_Saga from "./Utilites/PartyDrodown/saga"
 
 //  *********************** Sale ***********************
 import InvoiceSaga from "./Sales/Invoice/saga"
@@ -78,17 +81,18 @@ import SalesReturnSaga from "./Sales/SalesReturnRedux/saga"
 import CreditDebitSaga from "./Accounting/CreditRedux/saga"
 import DashboardSaga from "./Dashboard/Dashboard_1_Redux/saga"
 import { sessionAlive_saga } from "./auth/sessionAlive/saga"
+
+//  *********************** Report ***********************
+
 import SapLedgerSaga from "./Report/SapLedger Redux/saga"
 import OrderSummarySaga from "./Report/OrderSummaryRedux/saga"
-import PartySettingSaga from "./Administrator/PartySetting/saga"
-import StockEntrySaga from "./Inventory/StockEntryRedux/saga"
 import StockReportSaga from "./Report/StockReport/saga"
 import RetailerDataSaga from "./Report/RetailerDataRedux/saga"
 import GenericSaleReportSaga from "./Report/GenericSaleRedux/saga"
-import CommonPartyDrodown_Saga from "./Utilites/PartyDrodown/saga"
 import MasterClaimCreatSaga from "./Report/ClaimSummary/saga"
 import InvoiceDataExportSaga from "./Report/InvoiceDataExportRedux/saga"
 import PurchaseGSTReportSaga from "./Report/PurchaseGSTRedux/saga"
+import DamageStockReportSaga from "./Report/DamageStockReportRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -104,7 +108,7 @@ export default function* rootSaga() {
     fork(LayoutSaga),
 
     fork(CommonPageField_Saga),
-    fork(pdfReport_Saga),
+
 
     fork(SupplierSaga),
     fork(ModulesSaga),
@@ -165,12 +169,18 @@ export default function* rootSaga() {
     fork(OrderSummarySaga),
     fork(PartySettingSaga),
     fork(StockEntrySaga),
-    fork(StockReportSaga),
+
     fork(RetailerDataSaga),
-    fork(GenericSaleReportSaga),
     fork(CommonPartyDrodown_Saga),
     fork(MasterClaimCreatSaga),
-    fork(InvoiceDataExportSaga),
+
+    fork(pdfReport_Saga),
+    fork(StockReportSaga),
+    fork(DamageStockReportSaga),
+    fork(GenericSaleReportSaga),
     fork(PurchaseGSTReportSaga),
+    fork(InvoiceDataExportSaga),
+
+
   ])
 }

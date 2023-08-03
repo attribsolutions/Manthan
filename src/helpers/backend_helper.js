@@ -632,6 +632,8 @@ export const StockEntry_Post_API = ({ jsonBody, btnId }) => post(url.STOCK_ENTRY
 export const StockReport_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REPORT, jsonBody, btnId)//Go button api
 export const StockProcessing_API = ({ jsonBody, btnId }) => post(url.STOCK_PROCESSING, jsonBody, btnId)//Go button api
 export const StockReport_1_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REPORT_1, jsonBody, btnId)//Go button api
+// Damage Stock Report 
+export const DamageStockReport_GoBtn_API =({partyId})=>get(`${url.DAMAGE_STOCK_REPORT_GO_BUTTON}/${partyId}`)//add button get api
 
 //Generic Sale Report
 export const GenericSale_GoBtn_API = ({ jsonBody, btnId }) => post(url.GENERIC_SALE_REPORT, jsonBody, btnId)//Go button api

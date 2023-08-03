@@ -7,7 +7,7 @@ const INIT_STATE = {
 }
 
 const PurchaseGSTReportReducer = (state = INIT_STATE, action) => {
-    debugger
+    
     switch (action.type) {
 
         case POST_PURCHASE_GST_REPORT_API:
