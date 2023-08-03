@@ -20,25 +20,21 @@ const DamageStockReport = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const isSCMParty = _cfunc.loginIsSCMParty();
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-
-    const [partyDropdown, setPartyDropdown] = useState("");
 
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.DamageStockReportReducer.listBtnLoading,
             tableData: state.DamageStockReportReducer.StockReportGobtn,
-            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
     const { tableData = [] } = reducers
 
-    const { userAccess,  SSDD_List } = reducers;
+    const { userAccess } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -63,21 +59,15 @@ const DamageStockReport = (props) => {
 
     useEffect(() => {
         dispatch(damageStockReport_GoButton_API_Success([]))
-        dispatch(SSDD_List_under_Company());
     }, [])
 
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`Stock Report Count:${tableData.length}`))
     }, [tableData])
-;
-
-    const Party_Option = SSDD_List.map(i => ({
-        value: i.id,
-        label: i.Name
-    }));
+        ;
 
     function goButtonHandler() {
-        dispatch(damageStockReport_GoButton_API({ partyId:_cfunc.loginPartyID()}))
+        dispatch(damageStockReport_GoButton_API({ partyId: _cfunc.loginPartyID() }))
     }
 
     function fromdateOnchange(e, date) {
@@ -99,11 +89,11 @@ const DamageStockReport = (props) => {
         },
         {
             text: "Quantity",
-            dataField: "ActualQty",
+            dataField: "Qty",
         },
         {
             text: "Unit",
-            dataField: "Unit",
+            dataField: "UnitName",
         }
     ];
 
@@ -113,7 +103,7 @@ const DamageStockReport = (props) => {
             <div className="page-content">
                 <div className="px-2 c_card_filter text-black mb-1" >
                     <div className="row" >
-                        <Col sm={(isSCMParty) ? 2 : 3} className="">
+                        <Col sm={4} >
                             <FormGroup className=" mb-2 row mt-3 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "66px" }}>FromDate</Label>
@@ -128,7 +118,7 @@ const DamageStockReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={(isSCMParty) ? 2 : 3} className="">
+                        <Col sm={4} >
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "60px" }}>ToDate</Label>
@@ -143,58 +133,10 @@ const DamageStockReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {/* <Col sm={(isSCMParty) ? 3 : 4}>
-                            <FormGroup className=" row mt-3 " >
-                                <Label className="col-sm-2 p-2"
-                                    style={{ width: "85px" }}>Unit</Label>
-                                <Col sm={7}>
-                                    <Select
-                                        name="Unit"
-                                        value={unitDropdown}
-                                        isDisabled={tableData.length > 0 && true}
-                                        isSearchable={true}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={BaseUnit_DropdownOptions}
-                                        onChange={(e) => { setUnitDropdown(e) }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col > */}
-
-                        {isSCMParty &&
-                            <Col sm={3}>
-                                <FormGroup className=" row mt-3 " >
-                                    <Label className="col-md-3 p-2"
-                                        style={{ width: "90px" }}>Party</Label>
-                                    <Col sm={8}>
-                                        <Select
-                                            name="Party"
-                                            value={partyDropdown}
-                                            isSearchable={true}
-                                            isDisabled={tableData.length > 0 && true}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            styles={{
-                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                            }}
-                                            options={Party_Option}
-                                            onChange={(e) => { setPartyDropdown(e) }}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col >
-                        }
-
                         <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
-                            {!tableData.length > 0 ?
-                                < Go_Button loading={reducers.listBtnLoading} onClick={(e) => goButtonHandler()} />
-                                : <Change_Button onClick={(e) => dispatch(damageStockReport_GoButton_API_Success([]))}
-                                />
-                            }
+
+                            < Go_Button loading={reducers.listBtnLoading} onClick={(e) => goButtonHandler()} />
+
                         </Col>
                     </div>
 

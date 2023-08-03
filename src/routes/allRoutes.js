@@ -173,6 +173,7 @@ import StockReport_1 from "../Reports/StockReport/StockReport_1";
 import ClaimSummary from "../Reports/ClaimReportSummary/ClaimReport";
 import InvoiceDataExport from "../Reports/InvoiceDataExport/InvoiceDataExport.js";
 import PurchaseGSTReport from "../Reports/PurchaseGSTReport/PurchaseGSTReport.js";
+import DamageStockReport from "../Reports/DamageStockReport";
 // import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
@@ -427,6 +428,7 @@ const userRoutes = [
 
   { path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
 
+  { path: path.DAMAGE_STOCK_REPORT, component: DamageStockReport },
   // ************************************ Utility **************************************//
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

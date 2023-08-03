@@ -239,3 +239,6 @@ export const OrderSummaryReport = url.ORDER_SUMMARY_REPORT
 export const Generic_Sale_Report = url.GENERIC_SALE_REPORT
 
 export const RetailerDataReport = url.RETAILER_DATA_REPORT
+
+export const Damage_Stock_Report = url.DAMAGE_STOCK_REPORT
+
