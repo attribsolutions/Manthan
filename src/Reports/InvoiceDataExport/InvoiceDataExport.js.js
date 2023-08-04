@@ -31,7 +31,7 @@ const InvoiceDataExport = (props) => {
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [columns] = useState([{}]);
+    const [columns, setColumns] = useState([{}]);
     const [columnsCreated, setColumnsCreated] = useState(false)
     const reducers = useSelector(
         (state) => ({
@@ -108,6 +108,7 @@ const InvoiceDataExport = (props) => {
 
         if (InvoiceExportSerializerDetails.length > 0) {
             const objectAtIndex0 = InvoiceExportSerializerDetails[0];
+            const internalColumn = []
             for (const key in objectAtIndex0) {
                 const column = {
                     text: key,
@@ -115,8 +116,10 @@ const InvoiceDataExport = (props) => {
                     sort: true,
                     classes: "table-cursor-pointer",
                 };
-                columns.push(column);
+                internalColumn.push(column);
             }
+
+            setColumns(internalColumn)
             setColumnsCreated(true)
         }
     }
