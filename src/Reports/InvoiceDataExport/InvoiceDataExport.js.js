@@ -77,8 +77,8 @@ const InvoiceDataExport = (props) => {
             if (InvoiceExportSerializerDetails.length > 0) {
                 const worksheet = XLSX.utils.json_to_sheet(InvoiceExportSerializerDetails);
                 const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, "InvoiceDataExportReport");
-                XLSX.writeFile(workbook, "InvoiceDataExportReport.xlsx");
+                XLSX.utils.book_append_sheet(workbook, worksheet, `InvoiceDataExportReport`);
+                XLSX.writeFile(workbook, `Invoice Data Export Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
             }
         }
     }, [tableData]);

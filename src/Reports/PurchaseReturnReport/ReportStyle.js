@@ -169,23 +169,19 @@ export const reportHeder1 = (doc, data) => {
 
     }
 
-
-
-    doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
+    doc.autoTable(table.BilledBy, table.ReturnByRow(data), BilledByStyle);
     priLength()
 
-    doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
+    doc.autoTable(table.BilledTo, table.ReturnToRow(data), BilledToStyle);
     priLength()
 
-    // doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
-    // priLength()
 }
 
 
 
 
 export const reportHeder3 = (doc, data) => {
-    var date = date_dmy_func(data.InvoiceDate)
+    var date = date_dmy_func(data.ReturnDate)
 
     doc.setFont('Tahoma')
     doc.setFontSize(10)
@@ -605,7 +601,7 @@ export const tableBody = (doc, data) => {
 
 
 export const pageFooter = (doc, data) => {
-
+    
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
@@ -615,10 +611,14 @@ export const pageFooter = (doc, data) => {
         pageBorder(doc, data)
         reportHeder3(doc, data)
         doc.setFont('helvetica', 'Normal')
-        doc.text('Page ' + String(i) + ' of ' + String(pageCount), 520, 828,)
+        if (data.PrintType) {
+            doc.text('Page' + String(i) + ' of ' + String(pageCount), 500, 390,)
+            doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
+        } else {
+            doc.text('Page ' + String(i) + ' of ' + String(pageCount), 520, 828,)
+            doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 828,)
+        }
 
-        doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 828,)
-        console.log("aaa", doc.internal.pageSize.height)
     }
 }
 
