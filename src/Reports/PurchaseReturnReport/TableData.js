@@ -43,7 +43,7 @@ export const Bankcolumn = [
 ]
 
 export const Rows = (data) => {
-    
+
     const { ReturnItems = [] } = data
     ReturnItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -179,11 +179,9 @@ export const Rows = (data) => {
 }
 
 
+export const ReturnByRow = (data) => {
 
-
-export const BilledByRow = (data) => {
-    
-    var BilledByArray = [
+    var ReturnByArray = [
         [`${data.CustomerName}`],
         [`${data.CustomerAddress}`],
         [`${data.CustomerState}`],
@@ -191,15 +189,11 @@ export const BilledByRow = (data) => {
         [`FSSAINo:${data.CustomerFSSAINo}`],
         [`MobileNo:${data.CustomerMobileNo}`],
     ]
-    return BilledByArray;
+    return ReturnByArray;
 }
-export const BilledToRow = (data) => {
+export const ReturnToRow = (data) => {
 
-
-    var BilledToArray = [
-
-
-
+    var ReturnToArray = [
         [`${data.PartyName}`],
         [`${data.PartyAddress}`],
         [`${data.PartyState}`],
@@ -208,20 +202,15 @@ export const BilledToRow = (data) => {
         [`MobileNo:${data.PartyMobileNo}`],
     ]
 
-    return BilledToArray;
+    return ReturnToArray;
 }
-export const DetailsOfTransportRow = (data) => {
-
-
-    var DetailsOfTransportArray = [
-
-        [`Claim No: {}`],
-        [`Period :`],
-
-    ]
-
-    return DetailsOfTransportArray;
-}
+// export const DetailsOfTransportRow = (data) => {
+//     var DetailsOfTransportArray = [
+//         [`Claim No: {}`],
+//         [`Period :`],
+//     ]
+//     return DetailsOfTransportArray;
+// }
 
 
 export const ReturnReason = (data) => {

@@ -115,7 +115,7 @@ const PurchaseGSTReport = (props) => {
                 const worksheet = XLSX.utils.json_to_sheet(GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails);
                 const workbook = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(workbook, worksheet, "PurchaseGSTReport");
-                XLSX.writeFile(workbook, "Purchase GST Report.xlsx");
+                XLSX.writeFile(workbook, `Purchase GST Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
                 dispatch(postPurchaseGSTReport_API_Success([]));
             }
         }

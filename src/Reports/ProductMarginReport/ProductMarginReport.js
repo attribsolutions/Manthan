@@ -10,7 +10,7 @@ import {
     Row,
     Spinner,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, date_dmy_func, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
@@ -84,8 +84,8 @@ const ProductMarginReport = (props) => {
 
             const worksheet = XLSX.utils.json_to_sheet(newArray);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin1");
-            XLSX.writeFile(workbook, "Product Margin Report.xlsx");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin");
+            XLSX.writeFile(workbook, `Product Margin Report.xlsx`);
 
             dispatch(getExcel_Button_API_Success([]));
         }

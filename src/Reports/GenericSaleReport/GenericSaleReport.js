@@ -74,7 +74,7 @@ const GenericSaleReport = (props) => {
             const worksheet = XLSX.utils.json_to_sheet(Data);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "GenericSaleReport");
-            XLSX.writeFile(workbook, "Generic Sale Report.xlsx");
+            XLSX.writeFile(workbook, `Generic Sale Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
 
             dispatch(GoButton_For_GenericSale_Success([]));
         }

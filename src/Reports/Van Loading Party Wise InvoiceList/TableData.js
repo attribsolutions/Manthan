@@ -3,13 +3,11 @@ import { date_dmy_func } from "../../components/Common/CommonFunction";
 export const columns = [
     "SR No.",
     "ItemName",
-    // "BatchCode",
     "MRP",
     "Box",
-    // "Outer ",
     "Pcs",
     "Quantity",
-    // "Unit",
+
 ];
 export const columns1 = [
     "SR No.",
@@ -34,9 +32,7 @@ export const PageHedercolumns = [
 
 export const Rows = (data) => {
     const { InvoiceItems = [] } = data
-    // InvoiceItemNames.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
-    let Gst = 0
     let TotalMRP = 0
     let TotalBox = 0
     let TotalPcs = 0
@@ -60,18 +56,15 @@ export const Rows = (data) => {
         return accumulator;
     }, {});
 
-
-    // Object.values(groupedItems).forEach((element, key) => {
     InvoiceItems.forEach((element, key) => {
 
         const tableitemRow = [
             SrNO++,
             element.ItemName,
-            // element.BatchCode,
             element.MRPValue,
             Number(element.BoxQty).toFixed(2),
             Number(element.PiecesQty).toFixed(2),
-            element.QtyInNo,
+            Number(element.QtyInNo).toFixed(2),
         ];
 
         function totalLots() {
@@ -89,9 +82,6 @@ export const Rows = (data) => {
                 `${Number(TotalBox).toFixed(2)}`,
                 ` `,
                 `${Number(TotalQuantity).toFixed(2)}`,
-                // `${Number(TotalQuantity).toFixed(2)}`,
-
-
             ];
         };
         returnArr.push(tableitemRow);
@@ -107,7 +97,6 @@ export const Rows = (data) => {
 
 export const Rows1 = (data) => {
     const { InvoiceParent = [] } = data
-    // InvoiceItemNames.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Gst = 0
     let TotalAmount = 0
@@ -125,7 +114,6 @@ export const Rows1 = (data) => {
             element.Credit,
             element.OnlineRTGS,
         ];
-
 
         function totalLots() {
             TotalAmount = Number(TotalAmount) + Number(element.GrandTotal)
@@ -146,17 +134,6 @@ export const Rows1 = (data) => {
 
             ];
         };
-
-
-        // if (Gst === 0) { Gst = element.GSTPercentage };
-        // let aa = { TotalCGst: 0, totalSGst: 0 }
-        // if (data["tableTot"] === undefined) { data["tableTot"] = aa }
-
-        // else {
-        //     // returnArr.push(totalrow());
-        //     returnArr.push(tableitemRow);
-        //     data["tableTot"] = totalLots()
-        // }
         returnArr.push(tableitemRow);
         data["tableTot"] = totalLots()
 
@@ -178,9 +155,6 @@ export const ReportHederRows = (doc, data) => {
     var reportArray = [
         ["Address:", `${Address}`,],
         ["Routes:", `${Routes} `, " DriverName:", `${DriverName}`, "Vehicle No:", `${VehicleNo}`],
-
-        // [`FSSAI :f23dfxxxxxwe55`, ,`To Date:      ${data.Todate}`  ],
-        // [,,`INR NO :${data.FullInvoiceNumber}`]
     ]
     return reportArray;
 } 
