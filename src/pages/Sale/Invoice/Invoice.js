@@ -664,7 +664,7 @@ const Invoice = (props) => {
             })
             
             if (isSameMRPinStock === false) {
-                validMsg.push(`${index.ItemName}: This Item Enter Same MRP Stock Quantity`);
+                validMsg.push(`${index.ItemName}: Multiple MRP’S Invoice not allowed.`);
                 return
             };
         })
