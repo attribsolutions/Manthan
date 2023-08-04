@@ -140,64 +140,87 @@ const PurchaseGSTReport = (props) => {
 
 
         },
-        {
-            text: "Full GRN Number",
-            dataField: "FullGRNNumber",
 
-
-        },
         {
             text: "Invoice Number",
             dataField: "InvoiceNumber",
+            align: 'right'
 
 
         },
         {
-            text: "GRN Date",
-            dataField: "GRNDate",
+            text: "Full Invoice Number",
+            dataField: "FullInvoiceNumber",
+            align: 'right'
+
+
+
+        },
+        {
+            text: "Invoice Date",
+            dataField: "InvoiceDate",
 
         },
         {
             text: "GST Rate",
             dataField: "GSTRate",
+            align: 'right'
+
+
 
         },
 
         {
             text: "GST Percentage",
             dataField: "GSTPercentage",
+            align: 'right'
+
         },
         {
             text: "CGST",
             dataField: "CGST",
+            align: 'right'
+
         },
         {
             text: "SGST",
             dataField: "SGST",
+            align: 'right'
+
         },
         {
             text: "IGST",
             dataField: "IGST",
+            align: 'right'
+
         },
         {
             text: "GST Amount",
             dataField: "GSTAmount",
+            align: 'right'
+
         },
         {
             text: "Discount Amount",
             dataField: "DiscountAmount",
-            hidden: GSTRateWise
+            align: 'right'
+
+
 
         },
         {
             text: "Taxable Value",
             dataField: "TaxableValue",
+            align: 'right'
+
 
         },
 
         {
             text: "Total Value",
             dataField: "TotalValue",
+            align: 'right'
+
         },
 
 
@@ -208,30 +231,44 @@ const PurchaseGSTReport = (props) => {
         {
             text: "GST Percentage",
             dataField: "GSTPercentage",
+            align: 'right'
+
         },
         {
             text: "CGST",
             dataField: "CGST",
+            align: 'right'
+
         },
         {
             text: "SGST",
             dataField: "SGST",
+            align: 'right'
+
         },
         {
             text: "IGST",
             dataField: "IGST",
+            align: 'right'
+
         },
         {
             text: "GST Amount",
             dataField: "GSTAmount",
+            align: 'right'
+
         },
         {
             text: "Taxable Value",
             dataField: "TaxableValue",
+            align: 'right'
+
         },
         {
             text: "Total Value",
             dataField: "TotalValue",
+            align: 'right'
+
         },
 
 

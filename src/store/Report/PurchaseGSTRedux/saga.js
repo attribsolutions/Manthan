@@ -13,7 +13,7 @@ function* PurchaseGSTReport_Gen({ config }) {
         const response = yield call(PurchaseGSTReportSaga_GoBtn_API, config);
         response.Data["btnId"] = config.btnId;
         let newresponse = []
-        
+
         if (response.Data.PurchaseGSTDetails) {
             let TotalTaxableValue = 0
             let TotalCGST = 0
@@ -32,7 +32,7 @@ function* PurchaseGSTReport_Gen({ config }) {
                 TotalGSTAmount = Number(TotalGSTAmount) + Number(i.GSTAmount)
                 TotalDiscountAmount = Number(TotalDiscountAmount) + Number(i.DiscountAmount)
                 TotalTotalValue = Number(TotalTotalValue) + Number(i.TotalValue)
-                i["GRNDate"] = date_dmy_func(i.GRNDate)
+                i["InvoiceDate"] = date_dmy_func(i.InvoiceDate)
                 return i
             })
 
@@ -81,7 +81,7 @@ function* PurchaseGSTReport_Gen({ config }) {
             })
 
         }
-        
+
         if (response.Data.PurchaseGSTDetails) {
             response.Data["PurchaseGSTDetails"] = newresponse;
         } else {
