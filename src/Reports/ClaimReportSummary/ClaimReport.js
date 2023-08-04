@@ -97,7 +97,7 @@ const ClaimSummary = (props) => {
     }, [ClaimSummaryGobtn])
 
     function goButtonHandler(reportType, row, btnId) {
-        
+
         const jsonBody = JSON.stringify({
             "FromDate": row.selectedDate.FromDate,
             "ToDate": row.selectedDate.ToDate,
@@ -257,7 +257,7 @@ const ClaimSummary = (props) => {
                                                 classes={"table  table-bordered table-hover "}
                                                 noDataIndication={
                                                     <div className="text-danger text-center table-cursor-pointer">
-                                                        Items Not available
+                                                        Record Not available
                                                     </div>
                                                 }
                                                 onDataSizeChange={(e) => {
