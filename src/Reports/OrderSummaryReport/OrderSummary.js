@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { initialFiledFunc, onChangeSelect } from "../../components/Common/validationFunction";
+import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { Go_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker } from "../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { url, mode, pageId } from "../../routes/index"
+import { url, mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import Select from "react-select";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
 import * as XLSX from 'xlsx';
 import { SSDD_List_under_Company } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+
 const OrderSummary = (props) => {
 
     const dispatch = useDispatch();
@@ -39,10 +39,11 @@ const OrderSummary = (props) => {
             orderSummaryGobtn: state.OrderSummaryReducer.orderSummaryGobtn,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, orderSummaryGobtn, SSDD_List } = reducers;
+    const { userAccess, orderSummaryGobtn, SSDD_List, partyLoading } = reducers;
     const { Data = [] } = orderSummaryGobtn;
     const values = { ...state.values }
 
@@ -226,10 +227,11 @@ const OrderSummary = (props) => {
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px" }}>Party</Label>
                                     <Col sm="7">
-                                        <Select
+                                        <C_Select
                                             name="DistrictName"
                                             value={values.PartyName}
                                             isSearchable={true}
+                                            isLoading={partyLoading}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{

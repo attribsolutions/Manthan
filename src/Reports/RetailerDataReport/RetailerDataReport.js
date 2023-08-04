@@ -6,11 +6,11 @@ import { Go_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { url, mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import Select from "react-select";
 import * as XLSX from 'xlsx';
 import { SSDD_List_under_Company } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { postRetailerData_API, postRetailerData_API_Success } from "../../store/Report/RetailerDataRedux/action";
+import { C_Select } from "../../CustomValidateForm";
 
 const RetailerDataReport = (props) => {
 
@@ -24,13 +24,14 @@ const RetailerDataReport = (props) => {
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.RetailerDataReducer.listBtnLoading,
+            partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
             RetailerGobtn: state.RetailerDataReducer.RetailerGobtn,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, SSDD_List, listBtnLoading } = reducers;
+    const { userAccess, SSDD_List, listBtnLoading, partyLoading } = reducers;
     const { RetailerGobtn = [] } = reducers
 
     // Featch Modules List data  First Rendering
@@ -105,10 +106,11 @@ const RetailerDataReport = (props) => {
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px" }}>Party</Label>
                                     <Col sm="8">
-                                        <Select
+                                        <C_Select
                                             name="party"
                                             value={partydropdown}
                                             isSearchable={true}
+                                            isLoading={partyLoading}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{

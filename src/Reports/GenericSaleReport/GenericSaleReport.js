@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { Go_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker } from "../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
@@ -28,6 +28,7 @@ const GenericSaleReport = (props) => {
             listBtnLoading: state.GenericSaleReportReducer.listBtnLoading,
             tableData: state.GenericSaleReportReducer.genericSaleGobtn,
             // SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
@@ -35,7 +36,7 @@ const GenericSaleReport = (props) => {
     );
     const { tableData = [] } = reducers
 
-    const { userAccess, listBtnLoading, Distributor } = reducers;
+    const { userAccess, listBtnLoading, Distributor, partyDropdownLoading } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -60,7 +61,7 @@ const GenericSaleReport = (props) => {
 
     useEffect(() => {
         dispatch(GoButton_For_GenericSale_Success([]))
-        dispatch(SSDD_List_under_Company());
+        // dispatch(SSDD_List_under_Company());
     }, [])
 
     const Party_Option = Distributor.map(i => ({
@@ -147,10 +148,11 @@ const GenericSaleReport = (props) => {
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px", marginRight: "20px" }}>Distributor</Label>
                                     <Col sm="8">
-                                        <Select
+                                        <C_Select
                                             name="Distributor"
                                             value={distributorDropdown}
                                             isSearchable={true}
+                                            isLoading={partyDropdownLoading}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{

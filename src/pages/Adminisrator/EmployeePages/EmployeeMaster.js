@@ -22,7 +22,7 @@ import {
   getCityOnDistrict,
   getCityOnDistrictSuccess
 } from "../../../store/Administrator/EmployeeRedux/action";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import {
   getDistrictOnState,
   getDistrictOnStateSuccess,
@@ -56,7 +56,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
 import AddMaster from "./Drodown";
 import PartyMaster from "../PartyMaster/MasterAdd/PartyIndex";
-import { C_DatePicker, C_Select} from "../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import CityMaster from "../CityPages/CityMaster";
 
 const AddEmployee = (props) => {
@@ -102,6 +102,9 @@ const AddEmployee = (props) => {
     userAccess,
     pageField,
     saveBtnloading,
+    stateDropDownLoading,
+    employeeTypeLoading,
+    partyDropdownLoading,
     districtDropDownLoading,
     cityDropDownLoading,
     updateMsg } = useSelector((state) => ({
@@ -115,6 +118,9 @@ const AddEmployee = (props) => {
       updateMsg: state.EmployeesReducer.updateMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField,
+      employeeTypeLoading: state.EmployeeTypeReducer.goBtnLoading,
+      partyDropdownLoading: state.PartyMasterReducer.goBtnLoading,
+      stateDropDownLoading: state.EmployeesReducer.stateDropDownLoading,
       districtDropDownLoading: state.PartyMasterReducer.districtDropDownLoading,
       cityDropDownLoading: state.EmployeesReducer.cityDropDownLoading,
     }));
@@ -254,25 +260,25 @@ const AddEmployee = (props) => {
         customAlert({
           Type: 1,
           Message: postMsg.Message,
-      })
+        })
       }
       else {
         let isPermission = await customAlert({
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-      })
-      if (isPermission) {
+        })
+        if (isPermission) {
           history.push({ pathname: url.EMPLOYEE_lIST })
-      }
+        }
       }
     }
     else if (postMsg.Status === true) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       customAlert({
         Type: 4,
-         Message: JSON.stringify(postMsg.Message),
-    })
+        Message: JSON.stringify(postMsg.Message),
+      })
     }
   }, [postMsg])
 
@@ -565,11 +571,12 @@ const AddEmployee = (props) => {
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01"> {fieldLabel.StateName} </Label>
                           <Col sm={12}>
-                          <Select
+                            <C_Select
                               name="StateName"
                               id="state"
                               value={values.StateName}
                               isSearchable={true}
+                              isLoading={stateDropDownLoading}
                               classNamePrefix="dropdown"
                               options={State_DropdownOptions}
                               onChange={(hasSelect, evn) => {
@@ -661,10 +668,11 @@ const AddEmployee = (props) => {
                         <Col md="3">
                           <FormGroup className="mb-3 ">
                             <Label > {fieldLabel.EmployeeTypeName}</Label>
-                            <Select
+                            <C_Select
                               name="EmployeeTypeName"
                               value={values.EmployeeTypeName}
                               isSearchable={true}
+                              isLoading={employeeTypeLoading}
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={EmployeeType_DropdownOptions}
@@ -689,10 +697,11 @@ const AddEmployee = (props) => {
                         <Col md="3">
                           <FormGroup className="mb-3">
                             <Label>{fieldLabel.EmployeeParties}</Label>
-                            <Select
+                            <C_Select
                               name="EmployeeParties"
                               value={values.EmployeeParties}
                               isMulti={true}
+                              isLoading={partyDropdownLoading}
                               className="react-dropdown"
                               options={Party_DropdownOptions}
                               onChange={(hasSelect, evn) => {
