@@ -12,6 +12,7 @@ function* goBtn_Post_API_GenFun({ filters }) {
 
         response.Data.map((index) => {
             index["selectCheck"] = false
+            index["preInvoiceDate"] =date_dmy_func(index.InvoiceDate);
             return index
         });
 
