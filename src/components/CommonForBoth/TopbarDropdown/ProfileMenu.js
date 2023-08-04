@@ -249,8 +249,8 @@ const ProfileMenu = props => {
             src={user1}
             alt="Header Avatar"
           /> */}
-          <span className="d-none d-xl-inline-block ms-2 me-1">{username}</span>
-          <i className="mdi mdi-chevron-down d-none d-xl-inline-block" />
+          <span className=" d-xl-inline-block ms-2 me-1">{username}</span>
+          <i className="mdi mdi-chevron-down d-none d-xl-inline-block"/>
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
 

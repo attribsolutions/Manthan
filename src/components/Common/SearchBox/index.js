@@ -114,7 +114,12 @@ export const MainSearchBox = () => {
 
   return (
     <React.Fragment>
-      <MySearch />
+      <div className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
+        <div className="position-relative">
+          <MySearch />
+        </div>
+      </div>
+
     </React.Fragment>
   );
 };

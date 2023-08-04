@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
-import React, { useState } from "react"
-import { connect} from "react-redux"
+import React, { useEffect, useState } from "react"
+import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 
 //import drawer
@@ -30,6 +30,7 @@ import {
   changelayoutMode
 } from "../../store/actions"
 import { MainSearchBox, } from '../Common/SearchBox/index';
+import { MySearch } from '../Common/SearchBox/MySearch';
 
 const Header = props => {
   const { onChangeLayoutMode } = props;
@@ -56,6 +57,16 @@ const Header = props => {
       document.body.setAttribute('data-sidebar-size', 'lg');
     }
   }
+   // Check the window width on the first load and set the initial state of isClick
+   useEffect(() => {
+    function handleResize() {
+      setClick(window.innerWidth >= 768); // Set isClick to true if the window width is greater than or equal to 768, otherwise set it to false
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Call it on the first load
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <React.Fragment>
@@ -64,11 +75,11 @@ const Header = props => {
           <div className="d-flex">
             <div className="navbar-brand-box" >
               <Link to="/dashboard" className="logo logo-dark">
-                <span className="logo-sm">
+                <span className="logo-sm" >
                   <img src={logoSvg} alt="" height="35" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="35" /> <span className="logo-txt" style={{color:'white'}}>FoodERP 2.0</span>
+                  <img src={logoSvg} alt="" height="35" /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
                 </span>
               </Link>
 
@@ -77,31 +88,34 @@ const Header = props => {
                   <img src={logoSvg} alt="" height="35" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="35" /> <span className="logo-txt">FoodERP</span>
+                  <img src={logoSvg} alt="" height="35" /> <span className="logo-txt">FoodERP 2.0</span>
                 </span>
               </Link>
             </div>
+            <div>
+              <button
+                onClick={() => {
+                  tToggle()
+                }}
+                type="button" className="btn btn-sm  font-size-16 header-item" id="vertical-menu-btn">
+                <i className="fa fa-fw fa-bars"></i>
+              </button>
+            </div>
+          <MainSearchBox />
 
-            <button
-              onClick={() => {
-                tToggle()
-              }}
-              type="button" className="btn btn-sm px-2 font-size-16 header-item" id="vertical-menu-btn">
-              <i className="fa fa-fw fa-bars"></i>
-            </button>
-            <MainSearchBox />
 
           </div>
 
+
           <div className="d-flex">
             <div className="dropdown d-inline-block d-lg-none ms-2">
-              <button type="button" className="btn header-item" id="page-header-search-dropdown"
+              {/* <button type="button" className="btn header-item" id="page-header-search-dropdown"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <FeatherIcon
                   icon="search"
                   className="icon-lg"
                 />
-              </button>
+              </button> */}
               <div className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                 aria-labelledby="page-header-search-dropdown">
 
@@ -138,7 +152,10 @@ const Header = props => {
                 }
                 aria-labelledby="page-header-search-dropdown"
               >
-                <form className="p-3">
+                <div className=" d-flex position-relative">
+                  <MySearch />
+                </div>
+                {/* <form className="p-3">
                   <div className="form-group m-0">
                     <div className="input-group">
                       <input
@@ -154,12 +171,13 @@ const Header = props => {
                       </div>
                     </div>
                   </div>
-                </form>
+                </form> */}
+
               </div>
             </div>
 
             <NotificationDropdown />
-           
+
             <ProfileMenu />
 
           </div>
