@@ -353,7 +353,7 @@ const PurchaseGSTReport = (props) => {
                                 className="btn btn-primary w-md  "
                                 onClick={(e) => { excelhandler() }}
                             >
-                                Excel Downlode
+                                Excel Download
                             </C_Button>
                         </Col>
 
