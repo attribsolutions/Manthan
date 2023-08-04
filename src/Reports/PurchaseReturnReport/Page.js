@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle';
-import { loginSystemSetting } from "../../components/Common/CommonFunction";
+import { date_dmy_func, loginSystemSetting } from "../../components/Common/CommonFunction";
 
 
 const pageHeder = (doc, data) => {
@@ -41,10 +41,15 @@ const ReturnReport = (data) => {
     pageFooter(doc, data);
 
     doc.setProperties({
-        title: " Return Report"
+        title: `Return Report (${date_dmy_func(data.ReturnDate)}) `
     });
-    const options = { filename: "Return Report" }
-    doc.output('dataurlnewwindow', options);
+    
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        const options = { filename: "ReturnReport" }
+        window.open(pdfUrl, options);
+    }
+    generateSaveAndOpenPDFReport();
 }
 
 

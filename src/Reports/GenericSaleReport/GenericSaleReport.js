@@ -27,14 +27,15 @@ const GenericSaleReport = (props) => {
         (state) => ({
             listBtnLoading: state.GenericSaleReportReducer.listBtnLoading,
             tableData: state.GenericSaleReportReducer.genericSaleGobtn,
-            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            // SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
     const { tableData = [] } = reducers
 
-    const { userAccess, listBtnLoading, SSDD_List } = reducers;
+    const { userAccess, listBtnLoading, Distributor } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -62,7 +63,7 @@ const GenericSaleReport = (props) => {
         dispatch(SSDD_List_under_Company());
     }, [])
 
-    const Party_Option = SSDD_List.map(i => ({
+    const Party_Option = Distributor.map(i => ({
         value: i.id,
         label: i.Name
     }));
@@ -74,9 +75,10 @@ const GenericSaleReport = (props) => {
             const worksheet = XLSX.utils.json_to_sheet(Data);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "GenericSaleReport");
-            XLSX.writeFile(workbook, "Generic Sale Report.xlsx");
+            XLSX.writeFile(workbook, `Generic Sale Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
 
             dispatch(GoButton_For_GenericSale_Success([]));
+            setDistributorDropdown('')
         }
     }, [tableData]);
 

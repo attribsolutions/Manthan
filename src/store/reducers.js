@@ -99,9 +99,9 @@ import StockReportReducer from "./Report/StockReport/reducer"
 
 import RetailerDataReducer from "./Report/RetailerDataRedux/reducer"
 
-import  GenericSaleReportReducer from "./Report/GenericSaleRedux/reducer"
-import  InvoiceDataExportReducer from "./Report/InvoiceDataExportRedux/reducer"
-import  PurchaseGSTReportReducer from "./Report/PurchaseGSTRedux/reducer"
+import GenericSaleReportReducer from "./Report/GenericSaleRedux/reducer"
+import InvoiceDataExportReducer from "./Report/InvoiceDataExportRedux/reducer"
+import PurchaseGSTReportReducer from "./Report/PurchaseGSTRedux/reducer"
 import DamageStockReportReducer from "./Report/DamageStockReportRedux/reducer"
 
 

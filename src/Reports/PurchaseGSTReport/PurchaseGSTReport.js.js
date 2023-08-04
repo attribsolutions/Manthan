@@ -115,7 +115,7 @@ const PurchaseGSTReport = (props) => {
                 const worksheet = XLSX.utils.json_to_sheet(GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails);
                 const workbook = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(workbook, worksheet, "PurchaseGSTReport");
-                XLSX.writeFile(workbook, "Purchase GST Report.xlsx");
+                XLSX.writeFile(workbook, `Purchase GST Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
                 dispatch(postPurchaseGSTReport_API_Success([]));
             }
         }
@@ -140,64 +140,87 @@ const PurchaseGSTReport = (props) => {
 
 
         },
-        {
-            text: "Full GRN Number",
-            dataField: "FullGRNNumber",
 
-
-        },
         {
             text: "Invoice Number",
             dataField: "InvoiceNumber",
+            align: 'right'
 
 
         },
         {
-            text: "GRN Date",
-            dataField: "GRNDate",
+            text: "Full Invoice Number",
+            dataField: "FullInvoiceNumber",
+            align: 'right'
+
+
+
+        },
+        {
+            text: "Invoice Date",
+            dataField: "InvoiceDate",
 
         },
         {
             text: "GST Rate",
             dataField: "GSTRate",
+            align: 'right'
+
+
 
         },
 
         {
             text: "GST Percentage",
             dataField: "GSTPercentage",
+            align: 'right'
+
         },
         {
             text: "CGST",
             dataField: "CGST",
+            align: 'right'
+
         },
         {
             text: "SGST",
             dataField: "SGST",
+            align: 'right'
+
         },
         {
             text: "IGST",
             dataField: "IGST",
+            align: 'right'
+
         },
         {
             text: "GST Amount",
             dataField: "GSTAmount",
+            align: 'right'
+
         },
         {
             text: "Discount Amount",
             dataField: "DiscountAmount",
-            hidden: GSTRateWise
+            align: 'right'
+
+
 
         },
         {
             text: "Taxable Value",
             dataField: "TaxableValue",
+            align: 'right'
+
 
         },
 
         {
             text: "Total Value",
             dataField: "TotalValue",
+            align: 'right'
+
         },
 
 
@@ -208,30 +231,44 @@ const PurchaseGSTReport = (props) => {
         {
             text: "GST Percentage",
             dataField: "GSTPercentage",
+            align: 'right'
+
         },
         {
             text: "CGST",
             dataField: "CGST",
+            align: 'right'
+
         },
         {
             text: "SGST",
             dataField: "SGST",
+            align: 'right'
+
         },
         {
             text: "IGST",
             dataField: "IGST",
+            align: 'right'
+
         },
         {
             text: "GST Amount",
             dataField: "GSTAmount",
+            align: 'right'
+
         },
         {
             text: "Taxable Value",
             dataField: "TaxableValue",
+            align: 'right'
+
         },
         {
             text: "Total Value",
             dataField: "TotalValue",
+            align: 'right'
+
         },
 
 
@@ -316,7 +353,7 @@ const PurchaseGSTReport = (props) => {
                                 className="btn btn-primary w-md  "
                                 onClick={(e) => { excelhandler() }}
                             >
-                                Excel Downlode
+                                Excel Download
                             </C_Button>
                         </Col>
 

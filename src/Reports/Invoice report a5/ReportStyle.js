@@ -651,7 +651,7 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 export const pageFooter = (doc, data, islast = 0, array = []) => {
-    debugger
+    
     const pageCount = doc.internal.getNumberOfPages()
     console.log(pageCount)
 

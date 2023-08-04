@@ -4,6 +4,7 @@ import {
 } from "./actionType";
 import { postPurchaseGSTReport_API_Success, postPurchaseGSTReportApiErrorAction, postRetailerData_API_Success, RetailerDataApiErrorAction } from "./action";
 import { PurchaseGSTReportSaga_GoBtn_API } from "../../../helpers/backend_helper";
+import { date_dmy_func } from "../../../components/Common/CommonFunction";
 
 function* PurchaseGSTReport_Gen({ config }) {
 
@@ -12,7 +13,7 @@ function* PurchaseGSTReport_Gen({ config }) {
         const response = yield call(PurchaseGSTReportSaga_GoBtn_API, config);
         response.Data["btnId"] = config.btnId;
         let newresponse = []
-        debugger
+
         if (response.Data.PurchaseGSTDetails) {
             let TotalTaxableValue = 0
             let TotalCGST = 0
@@ -31,12 +32,13 @@ function* PurchaseGSTReport_Gen({ config }) {
                 TotalGSTAmount = Number(TotalGSTAmount) + Number(i.GSTAmount)
                 TotalDiscountAmount = Number(TotalDiscountAmount) + Number(i.DiscountAmount)
                 TotalTotalValue = Number(TotalTotalValue) + Number(i.TotalValue)
+                i["InvoiceDate"] = date_dmy_func(i.InvoiceDate)
                 return i
             })
 
             newresponse.push({
                 id: response.Data.PurchaseGSTDetails.length + 1,
-                PostingDate: "Total",
+                Name: "Total",
                 TaxableValue: TotalTaxableValue.toFixed(2),
                 CGST: TotalCGST.toFixed(2),
                 SGST: TotalSGST.toFixed(2),
@@ -69,7 +71,7 @@ function* PurchaseGSTReport_Gen({ config }) {
 
             newresponse.push({
                 id: response.Data.PurchaseGSTRateWiseDetails.length + 1,
-                PostingDate: "Total",
+                GSTPercentage: "Total",
                 TaxableValue: TotalTaxableValue.toFixed(2),
                 CGST: TotalCGST.toFixed(2),
                 SGST: TotalSGST.toFixed(2),
@@ -79,7 +81,7 @@ function* PurchaseGSTReport_Gen({ config }) {
             })
 
         }
-        debugger
+
         if (response.Data.PurchaseGSTDetails) {
             response.Data["PurchaseGSTDetails"] = newresponse;
         } else {

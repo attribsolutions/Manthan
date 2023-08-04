@@ -31,7 +31,7 @@ const InvoiceDataExport = (props) => {
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [columns] = useState([{}]);
+    const [columns, setColumns] = useState([{}]);
     const [columnsCreated, setColumnsCreated] = useState(false)
     const reducers = useSelector(
         (state) => ({
@@ -77,8 +77,8 @@ const InvoiceDataExport = (props) => {
             if (InvoiceExportSerializerDetails.length > 0) {
                 const worksheet = XLSX.utils.json_to_sheet(InvoiceExportSerializerDetails);
                 const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, "InvoiceDataExportReport");
-                XLSX.writeFile(workbook, "InvoiceDataExportReport.xlsx");
+                XLSX.utils.book_append_sheet(workbook, worksheet, `InvoiceDataExportReport`);
+                XLSX.writeFile(workbook, `Invoice Data Export Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
             }
         }
     }, [tableData]);
@@ -108,6 +108,7 @@ const InvoiceDataExport = (props) => {
 
         if (InvoiceExportSerializerDetails.length > 0) {
             const objectAtIndex0 = InvoiceExportSerializerDetails[0];
+            const internalColumn = []
             for (const key in objectAtIndex0) {
                 const column = {
                     text: key,
@@ -115,8 +116,10 @@ const InvoiceDataExport = (props) => {
                     sort: true,
                     classes: "table-cursor-pointer",
                 };
-                columns.push(column);
+                internalColumn.push(column);
             }
+
+            setColumns(internalColumn)
             setColumnsCreated(true)
         }
     }
@@ -190,7 +193,7 @@ const InvoiceDataExport = (props) => {
                                 className="btn btn-primary w-md  "
                                 onClick={(e) => { excelhandler() }}
                             >
-                                Excel Downlode
+                                Excel Download
                             </C_Button>
                         </Col>
                     </div>

@@ -21,6 +21,7 @@ function pageFooter(doc, data) {
 }
 
 const StockReport = (stockdata) => {
+    debugger
     const data = stockdata[0]
     debugger
     var doc = new jsPDF('l', 'pt', 'a4');
@@ -28,7 +29,7 @@ const StockReport = (stockdata) => {
     reportBody(doc, data);
     pageFooter(doc, data);
     doc.setProperties({
-        title: `Stock_Report/${data.PartyName}/${date_dmy_func()} `
+        title: `Stock_Report From  ${date_dmy_func(data.FromDate)} To ${date_dmy_func(data.ToDate)} Praty (${data.PartyName})`
     });
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
