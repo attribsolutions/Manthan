@@ -58,7 +58,7 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
       i["ChequeDate"] = i.ReceiptModeName === "Cash" ? "" : date_dmy_func(i.ChequeDate)
       i["transactionDate"] = i.CreatedOn;
       i["transactionDateLabel"] = concatDateAndTime(i.ReceiptDate, i.CreatedOn);
-     
+
       return i
     })
 
