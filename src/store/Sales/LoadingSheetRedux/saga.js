@@ -59,8 +59,10 @@ function* get_LoadingSheet_List_GenFun({ filters }) {
         const newList = yield response.Data.map((i) => {
 
             i.TotalAmount = amountCommaSeparateFunc(i.TotalAmount)
-            i.Date = concatDateAndTime(i.Date, i.CreatedOn)
+
+            //tranzaction date is only for fiterand page field but UI show transactionDateLabel
             i["transactionDate"] = i.CreatedOn;
+            i["transactionDateLabel"] = concatDateAndTime(i.Date, i.CreatedOn);
             return i
         })
         yield put(LoadingSheetListActionSuccess(newList));

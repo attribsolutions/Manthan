@@ -90,12 +90,12 @@ const GSTList = () => {
   function editBodyfunc(index) {
 
     const { rowData, btnId } = index
-    let { preEffectiveDate } = rowData;
+    let { EffectiveDate } = rowData;
     _cfunc.btnIsDissablefunc({ btnId, state: true })
 
     try {
       const jsonBody = JSON.stringify({
-        EffectiveDate: preEffectiveDate
+        EffectiveDate: EffectiveDate
       })
       let config = { jsonBody, pathname: url.GST, btnmode: mode.edit, rowData: rowData }
       // sessionStorage.setItem("margin_Master", config)

@@ -16,8 +16,10 @@ function* ReceiptGoButtonGenFunc({ config }) {
     response["ListData"] = ListData;
     response["path"] = path;
     response.Data.map((i) => {
-      i.InvoiceDate = concatDateAndTime(i.InvoiceDate, i.CreatedOn)
+
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] = concatDateAndTime(i.InvoiceDate, i.CreatedOn);
 
       i["Calculate"] = 0
       return i
@@ -50,9 +52,11 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
 
     const newList = yield response.Data.map((i) => {
       i.AmountPaid = amountCommaSeparateFunc(i.AmountPaid) //  AmountPaid show with commas
-      i["preReceipDate"] = i.ReceiptDate;
-      i.ReceiptDate = concatDateAndTime(i.ReceiptDate, i.CreatedOn)
+
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] = concatDateAndTime(i.ReceiptDate, i.CreatedOn);
+
       i.ChequeDate = date_dmy_func(i.ChequeDate)
       return i
     })

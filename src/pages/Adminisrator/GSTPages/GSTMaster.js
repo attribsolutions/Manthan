@@ -136,10 +136,10 @@ const GSTMaster = (props) => {
 
             if (hasEditVal) {
 
-                const { id, preEffectiveDate } = hasEditVal
+                const { id, EffectiveDate } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                values.EffectiveDate = preEffectiveDate
+                values.EffectiveDate = EffectiveDate
                 values.id = id
 
                 hasValid.EffectiveDate.valid = true;

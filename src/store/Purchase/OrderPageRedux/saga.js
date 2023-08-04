@@ -157,11 +157,12 @@ function* orderList_GoBtn_GenFunc({ config }) {
     newList = yield response.Data.map((i) => {
 
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
-
-      i["preOrderDate"] = i.OrderDate;
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
-      i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
+      
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] =concatDateAndTime(i.OrderDate, i.CreatedOn);
+
 
       i.DeliveryDate = (`${DeliveryDate}`)
 

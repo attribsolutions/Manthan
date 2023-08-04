@@ -151,11 +151,11 @@ const MarginMaster = (props) => {
 
             if (hasEditVal) {
 
-                const { id, PriceList_id, PriceListName, Party_id, PartyName, preEffectiveDate } = hasEditVal
+                const { id, PriceList_id, PriceListName, Party_id, PartyName, EffectiveDate } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.PriceListName = { label: PriceListName, value: PriceList_id };
                 values.PartyName = Party_id === null ? { label: "select", value: "" } : { label: PartyName, value: Party_id };
-                values.EffectiveDate = preEffectiveDate
+                values.EffectiveDate = EffectiveDate
                 values.id = id
 
                 hasValid.PriceListName.valid = true;

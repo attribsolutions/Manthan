@@ -95,9 +95,9 @@ const DynamicColumnHook = ({
           formatter: (cell, row) => {
             if (i.ControlID === "transactionDate") {
               return (
-                <div>
-                  {concatDateAndTime(row.OrderDate, row.CreatedOn)}
-                </div>
+                <>
+                  {row.transactionDateLabel}
+                </>
               )
             }
             if (cell === "Invoice Created") {

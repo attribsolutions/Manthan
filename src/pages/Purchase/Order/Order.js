@@ -307,7 +307,7 @@ const Order = (props) => {
 
                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
                 if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
-
+debugger
                     const customer = supplierSelect
                     const jsonBody = JSON.stringify({
                         OrderIDs: postMsg.OrderID.toString(),
@@ -316,7 +316,8 @@ const Order = (props) => {
                         Party: _cfunc.loginPartyID(),
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
-                        jsonBody, subPageMode: url.INVOICE_1,
+                        jsonBody, 
+                        subPageMode: url.INVOICE_1,
                         path: url.INVOICE_1,
                         pageMode: mode.defaultsave,
                         customer,
@@ -331,6 +332,7 @@ const Order = (props) => {
                     if (a) {
                         history.push({
                             pathname: listPath,
+                            updatedRowBlinkId:postMsg.OrderID
                         });
                     }
                 }
@@ -435,11 +437,7 @@ const Order = (props) => {
         label: i.Name,
     }));
 
-    const Party_DropdownOptions = partyList_redux.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
-
+ 
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
         label: index.Name,

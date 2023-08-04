@@ -1,8 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Select from "react-select";
-import { Col, FormGroup, Label, Modal } from "reactstrap";
+import { Col, FormGroup, Label} from "reactstrap";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import Order from "./Order";
@@ -29,7 +28,7 @@ const OrderList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-
+  
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
@@ -302,7 +301,7 @@ const OrderList = () => {
             ISCustomerPAN: obj.CustomerPAN
         }
         const jsonBody = JSON.stringify({
-            FromDate: obj.preOrderDate,
+            FromDate: obj.OrderDate,
             Customer: obj.CustomerID,
             Party: _cfunc.loginSelectedPartyID(),
             OrderIDs: obj.id.toString(),
@@ -380,7 +379,7 @@ const OrderList = () => {
             const jsonBody = JSON.stringify({
                 Party: rowData.SupplierID,
                 Customer: rowData.CustomerID,
-                EffectiveDate: rowData.preOrderDate,
+                EffectiveDate: rowData.OrderDate,
                 OrderID: rowData.id,
                 RateParty: rowData.CustomerID,
                 OrderType: subPageMode === url.ORDER_4 ? order_Type.SaleOrder : order_Type.PurchaseOrder

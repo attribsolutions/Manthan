@@ -29,8 +29,10 @@ function* SalesReturn_List_GenFun({ filters }) {
         const response = yield call(apiCall.SalesReturn_list_API, filters);
         const newList = yield response.Data.map((i) => {
             i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal)
-            i.ReturnDate = concatDateAndTime(i.ReturnDate, i.CreatedOn)
+
+            //tranzaction date is only for fiterand page field but UI show transactionDateLabel
             i["transactionDate"] = i.CreatedOn;
+            i["transactionDateLabel"] = concatDateAndTime(i.ReturnDate, i.CreatedOn);
             return i
         })
         yield put(action.salesReturnListAPISuccess(newList));

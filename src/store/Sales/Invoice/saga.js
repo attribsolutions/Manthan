@@ -93,9 +93,10 @@ function* InvoiceListGenFunc({ config }) {
       } else {
         i["LoadingSheetCreated"] = ""
       }
-      i["preInvoiceDate"] = i.InvoiceDate
-      i.InvoiceDate = concatDateAndTime(i.InvoiceDate, i.CreatedOn)
+
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] =  concatDateAndTime(i.InvoiceDate, i.CreatedOn);
       return i
     })
     yield put(invoiceListGoBtnfilterSucccess(newList));

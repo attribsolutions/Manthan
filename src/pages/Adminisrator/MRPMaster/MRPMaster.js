@@ -141,11 +141,11 @@ const MRPMaster = (props) => {
 
             if (hasEditVal) {
 
-                const { id, Division_id, DivisionName, Party_id, PartyName, preEffectiveDate } = hasEditVal
+                const { id, Division_id, DivisionName, Party_id, PartyName, EffectiveDate } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.DivisionName = { label: DivisionName, value: Division_id };
                 values.PartyName = Party_id === null ? { label: "select", value: "" } : { label: PartyName, value: Party_id };
-                values.EffectiveDate = preEffectiveDate
+                values.EffectiveDate = EffectiveDate
                 values.id = id
 
                 hasValid.DivisionName.valid = true;

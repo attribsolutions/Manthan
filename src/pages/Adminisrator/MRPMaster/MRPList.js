@@ -76,12 +76,12 @@ const MRPList = () => {
   function editBodyfunc(index) {
 
     const { rowData} = index
-    let { Division_id, Party_id, preEffectiveDate } = rowData;
+    let { Division_id, Party_id, EffectiveDate } = rowData;
     try {
       const jsonBody = JSON.stringify({
         Division: Division_id === null ? 0 : Division_id,
         Party: Party_id === null ? 0 : Party_id,
-        EffectiveDate: preEffectiveDate
+        EffectiveDate: EffectiveDate
       })
       let config = { jsonBody, pathname: url.MRP, btnmode: mode.edit, rowData: rowData }
       dispatch(_act.GoButtonForMRP_Master(config));
