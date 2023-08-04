@@ -190,7 +190,7 @@ const LoadingSheet = (props) => {
     const pagesListColumns = [
         {
             text: "Invoice Date",
-            dataField: "InvoiceDate",
+            dataField: "preInvoiceDate",
         },
         {
             text: "Invoice Number",
