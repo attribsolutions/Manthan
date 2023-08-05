@@ -51,8 +51,8 @@ const InvoiceDataExport = (props) => {
     );
     const { userAccess, tableData = [], ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
     const { InvoiceExportSerializerDetails = [] } = tableData;
-    debugger
-    debugger
+    
+    
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -76,7 +76,7 @@ const InvoiceDataExport = (props) => {
     }, [userAccess])
     useEffect(() => { return () => { dispatch(postInvoiceDataExport_API_Success([])); } }, [])
     useEffect(() => {
-        debugger
+        
         if (tableData.btnId === "excel_btnId") {
             if (InvoiceExportSerializerDetails.length > 0) {
                 const worksheet = XLSX.utils.json_to_sheet(InvoiceExportSerializerDetails);

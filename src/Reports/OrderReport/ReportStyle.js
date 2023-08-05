@@ -442,7 +442,7 @@ export const tableBodyWithIGST = (doc, data) => {
 
             }
             if (data1.row.cells[0].raw === "HSN Item Name") {
-                debugger
+                
                 let TotalBox = 0;
                 OrderItem.forEach((element, key) => {
                     if (element.PrimaryUnitName === "Box") {

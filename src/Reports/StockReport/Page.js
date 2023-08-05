@@ -21,9 +21,9 @@ function pageFooter(doc, data) {
 }
 
 const StockReport = (stockdata) => {
-    debugger
+    
     const data = stockdata[0]
-    debugger
+    
     var doc = new jsPDF('l', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);

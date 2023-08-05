@@ -4,8 +4,10 @@ import { GenericSaleReportApiErrorAction, GoButton_For_GenericSale_Success } fro
 import { GenericSale_GoBtn_API } from "../../../helpers/backend_helper";
 
 function* GenericSaleReport_GenFunc({ config }) {
+    
     try {
         const response = yield call(GenericSale_GoBtn_API, config);
+        response["btnId"] = config.btnId;
         yield put(GoButton_For_GenericSale_Success(response))
     } catch (error) { yield put(GenericSaleReportApiErrorAction()) }
 }

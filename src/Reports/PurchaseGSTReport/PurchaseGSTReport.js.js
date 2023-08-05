@@ -23,7 +23,7 @@ const PurchaseGSTReport = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    debugger
+    
     const isSCMParty = _cfunc.loginIsSCMParty();
 
 
@@ -54,7 +54,7 @@ const PurchaseGSTReport = (props) => {
 
     const { userAccess, tableData, ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
     const { PurchaseGSTDetails = [], PurchaseGSTRateWiseDetails = [] } = tableData;
-    debugger
+    
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
