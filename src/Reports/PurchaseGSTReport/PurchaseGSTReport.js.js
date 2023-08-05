@@ -12,8 +12,10 @@ import { GetVenderSupplierCustomer } from "../../store/actions";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import * as XLSX from 'xlsx';
+import Select from "react-select";
 import { postPurchaseGSTReport_API, postPurchaseGSTReport_API_Success } from "../../store/Report/PurchaseGSTRedux/action";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+
 
 
 const PurchaseGSTReport = (props) => {
@@ -21,6 +23,7 @@ const PurchaseGSTReport = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    debugger
     const isSCMParty = _cfunc.loginIsSCMParty();
 
 
@@ -34,6 +37,7 @@ const PurchaseGSTReport = (props) => {
     const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
     const [GSTRateWise, setGSTRateWise] = useState(false);
+    const [PartyDropdown, setPartyDropdown] = useState("");
 
 
 
@@ -42,12 +46,13 @@ const PurchaseGSTReport = (props) => {
             tableData: state.PurchaseGSTReportReducer.PurchaseGSTGobtn,
             ExcelBtnLoading: state.PurchaseGSTReportReducer.ExcelBtnLoading,
             GoBtnLoading: state.PurchaseGSTReportReducer.GoBtnLoading,
+            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
 
-    const { userAccess, tableData, ExcelBtnLoading, GoBtnLoading } = reducers;
+    const { userAccess, tableData, ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
     const { PurchaseGSTDetails = [], PurchaseGSTRateWiseDetails = [] } = tableData;
     debugger
     const values = { ...state.values }
@@ -73,17 +78,25 @@ const PurchaseGSTReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-
+        return () => {
+            dispatch(postPurchaseGSTReport_API_Success([]));
+        }
     }, [])
 
 
+    const Party_Option = Distributor.map(i => ({
+        value: i.id,
+        label: i.Name
+    }));
+
+
     function goButtonHandler() {
+
         const btnId = `gobtn-${url.PURCHASE_GST_REPORT}`
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Party": _cfunc.loginPartyID(),
+            "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
             "GSTRatewise": GSTRateWise === true ? 1 : 0
         });
         let config = { jsonBody, btnId }
@@ -117,6 +130,8 @@ const PurchaseGSTReport = (props) => {
                 XLSX.utils.book_append_sheet(workbook, worksheet, "PurchaseGSTReport");
                 XLSX.writeFile(workbook, `Purchase GST Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
                 dispatch(postPurchaseGSTReport_API_Success([]));
+                setPartyDropdown('')
+
             }
         }
     }, [tableData]);
@@ -125,7 +140,7 @@ const PurchaseGSTReport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Party": _cfunc.loginPartyID(),
+            "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
             "GSTRatewise": GSTRateWise === true ? 1 : 0
         });
         let config = { jsonBody, btnId: "excel_btnId" }
@@ -137,7 +152,6 @@ const PurchaseGSTReport = (props) => {
         {
             text: "Name",
             dataField: "Name",
-
 
         },
 
@@ -300,7 +314,7 @@ const PurchaseGSTReport = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -314,7 +328,7 @@ const PurchaseGSTReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className="mb- row mt-3 mb-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -328,9 +342,9 @@ const PurchaseGSTReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} >
+                        <Col sm={2} >
                             <FormGroup className="mb- row mt-3 mb-2">
-                                <Label style={{ width: "170px" }} className="col-4 p-2" >GST Rate Wise Report</Label>
+                                <Label style={{ width: "120px" }} className="col-4 p-2" >GST Rate Wise</Label>
                                 <Col sm="4" className=" mt-2 ">
                                     <Input type="checkbox"
                                         className="p-2"
@@ -340,10 +354,41 @@ const PurchaseGSTReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
+                        {isSCMParty &&
+                            <Col sm={3} className="">
+                                <FormGroup className="mb- row mt-3" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                    <Col sm="8">
+                                        <Select
+                                            name="Party"
+                                            value={PartyDropdown}
+                                            isSearchable={true}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={Party_Option}
+                                            onChange={(e) => { setPartyDropdown(e) }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        }
+
                         <Col sm={1} className="mt-3 ">
-                            <Go_Button
+
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={GoBtnLoading === `gobtn-${url.PURCHASE_GST_REPORT}`}
+                                className="btn btn-primary w-md  "
                                 onClick={goButtonHandler}
-                                loading={GoBtnLoading === `gobtn-${url.PURCHASE_GST_REPORT}`} />
+                            >
+                                Show
+                            </C_Button>
+
                         </Col>
                         <Col sm={2} className="mt-3 ">
                             <C_Button
