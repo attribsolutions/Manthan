@@ -221,7 +221,7 @@ const InvoiceDataExport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 loading={GoBtnLoading === `gobtn-${url.INVOICE_DATA_EXPORT}`}
-                                className="btn btn-primary   "
+                                className="btn btn-success   "
                                 onClick={goButtonHandler}
                             >
                                 Show
