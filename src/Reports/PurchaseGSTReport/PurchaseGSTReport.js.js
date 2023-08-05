@@ -358,7 +358,7 @@ const PurchaseGSTReport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 loading={GoBtnLoading === `gobtn-${url.PURCHASE_GST_REPORT}`}
-                                className="btn btn-primary   "
+                                className="btn btn-success   "
                                 onClick={goButtonHandler}
                             >
                                 Show
