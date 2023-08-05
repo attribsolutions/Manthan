@@ -1,7 +1,7 @@
 
 
 import PropTypes from "prop-types";
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import FeatherIcon from "feather-icons-react";
 import SimpleBar from "simplebar-react";
 import { withTranslation } from "react-i18next";
@@ -20,6 +20,8 @@ const SidebarContent = (props) => {
   const ref = useRef();
   const history = useHistory();
 
+  const [sortedRoleAccessData, setSortedRoleAccessData] = useState([]);
+
   const {
     RoleAccessData,
     RoleAccessUpdateData,
@@ -30,6 +32,13 @@ const SidebarContent = (props) => {
     roleAccesssForSidbarError: state.Login.roleAccesssForSidbarError,
   }));
 
+  useEffect(() => {
+    const sortedData = [...RoleAccessData];
+    sortedData.forEach((module) => {
+      module.ModuleData.sort((a, b) => a.DisplayIndex - b.DisplayIndex);
+    });
+    setSortedRoleAccessData(sortedData);
+  }, [RoleAccessData]);
 
   useEffect(async () => {
     if (roleAccesssForSidbarError) {
@@ -140,12 +149,6 @@ const SidebarContent = (props) => {
     }
   }
 
-  // const productMarginReport_Link_Onclick = () => {
-
-  //   const userDetails = loginUserDetails()
-  //   dispatch(getExcel_Button_API(userDetails.IsSCMPartyType === null ? 0 : userDetails.IsSCMPartyType, userDetails.Party_id))
-  // }
-
   return (
     <React.Fragment>
 
@@ -153,7 +156,7 @@ const SidebarContent = (props) => {
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled " id="side-menu">
 
-            {RoleAccessData.map((item) => {
+            {sortedRoleAccessData.map((item) => {
 
               if (item.ModuleName === "Dashboard") {
                 let isdashboard = ''
@@ -177,18 +180,6 @@ const SidebarContent = (props) => {
                   <ul className="sub-menu">
                     {item.ModuleData.map((index, j) => {
                       if (index.RoleAccess_IsShowOnMenu === true) {
-                        // if (index.ActualPagePath === "ProductMarginReport") {
-                        //   return (
-                        //     <li>
-
-                        //       <div
-                        //         title={`Download ${index.Name}`}
-                        //         onClick={productMarginReport_Link_Onclick}>
-                        //         {props.t(index.Name)}
-                        //       </div>
-                        //     </li>
-                        //   )
-                        // }
                         return (
                           <li>
                             <Link to={{ pathname: `/${index.ActualPagePath}` }}>
