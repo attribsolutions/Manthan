@@ -288,6 +288,11 @@ const PurchaseGSTReport = (props) => {
 
     ];
 
+    const partyOnchange = (e) => {
+        setPartyDropdown(e)
+        dispatch(postPurchaseGSTReport_API_Success([]));
+    }
+
     const rowStyle = (row, rowIndex) => {
 
         if ((PurchaseGSTRateWiseDetails.length - 1) === rowIndex) {
@@ -317,7 +322,7 @@ const PurchaseGSTReport = (props) => {
                         <Col sm={2} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "83px" }}>FromDate</Label>
+                                    style={{ width: "78px" }}>FromDate</Label>
                                 <Col sm="6">
                                     <C_DatePicker
                                         name='FromDate'
@@ -344,12 +349,14 @@ const PurchaseGSTReport = (props) => {
 
                         <Col sm={2} >
                             <FormGroup className="mb- row mt-3 mb-2">
-                                <Label style={{ width: "120px" }} className="col-4 p-2" >GST Rate Wise</Label>
-                                <Col sm="4" className=" mt-2 ">
+                                <Label style={{ width: "110px" }} className="col-4 p-2" >GST Rate Wise</Label>
+                                <Col sm="2" className=" mt-2 ">
                                     <Input type="checkbox"
                                         className="p-2"
                                         checked={GSTRateWise}
                                         onChange={(e) => setGSTRateWise(e.target.checked)}
+
+
                                     />
                                 </Col>
                             </FormGroup>
@@ -358,7 +365,7 @@ const PurchaseGSTReport = (props) => {
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3" >
                                     <Label className="col-sm-4 p-2"
-                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                        style={{ width: "50px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
                                         <Select
                                             name="Party"
@@ -370,7 +377,7 @@ const PurchaseGSTReport = (props) => {
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
                                             options={Party_Option}
-                                            onChange={(e) => { setPartyDropdown(e) }}
+                                            onChange={(e) => { partyOnchange(e) }}
                                         />
                                     </Col>
                                 </FormGroup>

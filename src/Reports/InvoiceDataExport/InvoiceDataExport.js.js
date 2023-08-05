@@ -151,6 +151,11 @@ const InvoiceDataExport = (props) => {
         })
     }
 
+    const partyOnchange = (e) => {
+        setPartyDropdown(e)
+        dispatch(postInvoiceDataExport_API_Success([]))
+    }
+
     const Party_Option = Distributor.map(i => ({
         value: i.id,
         label: i.Name
@@ -205,7 +210,7 @@ const InvoiceDataExport = (props) => {
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
                                             options={Party_Option}
-                                            onChange={(e) => { setPartyDropdown(e) }}
+                                            onChange={(e) => { partyOnchange(e) }}
                                         />
                                     </Col>
                                 </FormGroup>
