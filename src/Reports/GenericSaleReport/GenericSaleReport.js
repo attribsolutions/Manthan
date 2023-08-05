@@ -7,8 +7,6 @@ import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import Select from "react-select";
-import { SSDD_List_under_Company, } from "../../store/actions";
 import { GoButton_For_GenericSale_Action, GoButton_For_GenericSale_Success } from "../../store/Report/GenericSaleRedux/action";
 import * as XLSX from 'xlsx';
 
@@ -69,21 +67,25 @@ const GenericSaleReport = (props) => {
     }));
 
     useEffect(() => {
+        
+        try {
+            if (tableData.Status === true && tableData.StatusCode === 200) {
+                const { GenericSaleDetails } = tableData.Data
+                const worksheet = XLSX.utils.json_to_sheet(GenericSaleDetails);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "GenericSaleReport");
+                XLSX.writeFile(workbook, `Generic Sale Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
 
-        if (tableData.Status === true && tableData.StatusCode === 200) {
-            const { Data } = tableData
-            const worksheet = XLSX.utils.json_to_sheet(Data);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "GenericSaleReport");
-            XLSX.writeFile(workbook, `Generic Sale Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
-
-            dispatch(GoButton_For_GenericSale_Success([]));
-            setDistributorDropdown('')
+                dispatch(GoButton_For_GenericSale_Success([]));
+                setDistributorDropdown('')
+            }
         }
+        catch (e) { console.log(e) }
+
     }, [tableData]);
 
     function goButtonHandler() {
-        debugger
+        
         const btnId = `gobtn-${url.GENERIC_SALE_REPORT}`
 
         var isDistributorDropdown = ''
@@ -93,7 +95,6 @@ const GenericSaleReport = (props) => {
         else {
             isDistributorDropdown = distributorDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
         }
-
 
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
