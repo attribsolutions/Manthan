@@ -35,7 +35,7 @@ const StockReport = (props) => {
             listBtnLoading: state.StockReportReducer.listBtnLoading,
             tableData: state.StockReportReducer.StockReportGobtn,
             BaseUnit: state.ItemMastersReducer.BaseUnit,
-            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
@@ -68,7 +68,7 @@ const StockReport = (props) => {
     useEffect(() => {
         dispatch(stockReport_GoButton_API_Success([]))
         dispatch(getBaseUnit_ForDropDown());
-        dispatch(SSDD_List_under_Company());
+        // dispatch(SSDD_List_under_Company());
     }, [])
 
     useEffect(() => {

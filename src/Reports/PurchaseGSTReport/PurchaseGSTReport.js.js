@@ -152,55 +152,41 @@ const PurchaseGSTReport = (props) => {
         {
             text: "Name",
             dataField: "Name",
-
         },
-
         {
             text: "Invoice Number",
             dataField: "InvoiceNumber",
             align: 'right'
-
-
         },
         {
             text: "Full Invoice Number",
             dataField: "FullInvoiceNumber",
             align: 'right'
-
-
-
         },
         {
             text: "Invoice Date",
             dataField: "InvoiceDate",
-
         },
         {
             text: "GST Rate",
             dataField: "GSTRate",
             align: 'right'
-
-
-
         },
 
         {
             text: "GST Percentage",
             dataField: "GSTPercentage",
             align: 'right'
-
         },
         {
             text: "CGST",
             dataField: "CGST",
             align: 'right'
-
         },
         {
             text: "SGST",
             dataField: "SGST",
             align: 'right'
-
         },
         {
             text: "IGST",
@@ -218,26 +204,17 @@ const PurchaseGSTReport = (props) => {
             text: "Discount Amount",
             dataField: "DiscountAmount",
             align: 'right'
-
-
-
         },
         {
             text: "Taxable Value",
             dataField: "TaxableValue",
             align: 'right'
-
-
         },
-
         {
             text: "Total Value",
             dataField: "TotalValue",
             align: 'right'
-
         },
-
-
     ];
 
     const GSTRateWiseColumn = [
@@ -246,46 +223,37 @@ const PurchaseGSTReport = (props) => {
             text: "GST Percentage",
             dataField: "GSTPercentage",
             align: 'right'
-
         },
         {
             text: "CGST",
             dataField: "CGST",
             align: 'right'
-
         },
         {
             text: "SGST",
             dataField: "SGST",
             align: 'right'
-
         },
         {
             text: "IGST",
             dataField: "IGST",
             align: 'right'
-
         },
         {
             text: "GST Amount",
             dataField: "GSTAmount",
             align: 'right'
-
         },
         {
             text: "Taxable Value",
             dataField: "TaxableValue",
             align: 'right'
-
         },
         {
             text: "Total Value",
             dataField: "TotalValue",
             align: 'right'
-
         },
-
-
     ];
 
     const rowStyle = (row, rowIndex) => {
@@ -304,7 +272,6 @@ const PurchaseGSTReport = (props) => {
             style.fontSize = '4';
             return style;
         }
-
     };
 
 
@@ -354,6 +321,7 @@ const PurchaseGSTReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
+                        
                         {isSCMParty &&
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3" >
