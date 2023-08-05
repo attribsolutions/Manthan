@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
-import { Go_Button } from "../../components/Common/CommonButton";
+import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { url, mode, } from "../../routes/index"
@@ -38,7 +38,7 @@ const OrderSummary = (props) => {
             listBtnLoading: state.OrderSummaryReducer.listBtnLoading,
             orderSummaryGobtn: state.OrderSummaryReducer.orderSummaryGobtn,
             userAccess: state.Login.RoleAccessUpdateData,
-            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
             partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
@@ -66,10 +66,6 @@ const OrderSummary = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
-
-    useEffect(() => {
-        dispatch(SSDD_List_under_Company());
-    }, [])
 
     useEffect(() => {
         if ((orderSummaryGobtn.Status === true) && (orderSummaryGobtn.StatusCode === 204)) {
@@ -193,7 +189,7 @@ const OrderSummary = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -207,7 +203,7 @@ const OrderSummary = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -246,8 +242,17 @@ const OrderSummary = (props) => {
                             </Col>
                         }
 
-                        <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
+                        <Col sm="2" className="mt-3 ">
+                            {/* <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} /> */}
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={reducers.listBtnLoading}
+                                className="btn btn-primary w-md"
+                                onClick={goButtonHandler}
+                            >
+                                Excel Download
+                            </C_Button>
                         </Col>
                     </div>
                 </div>
