@@ -252,37 +252,43 @@ export const tableBody = (doc, data) => {
     const { OrderItem = [] } = data
     var options = {
         didParseCell: (data1) => {
-            if (data1.row.cells[6].raw === "isaddition") {
+
+            if (data1.row.cells[8].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 2
-                data1.row.cells[2].colSpan = 3
+                data1.row.cells[2].colSpan = 2
+                data1.row.cells[4].colSpan = 2
+
                 data1.row.cells[5].colSpan = 2
                 data1.row.cells[7].colSpan = 2
+                data1.row.cells[9].colSpan = 2
+
                 data1.row.cells[0].styles.halign = "right"
 
 
-                data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[2].styles.fontSize = 8
-                data1.row.cells[5].styles.fontSize = 8
-                data1.row.cells[7].styles.fontSize = 8
-
-
+                data1.row.cells[0].styles.fontSize = 7
+                data1.row.cells[4].styles.fontSize = 7
+                data1.row.cells[6].styles.fontSize = 7
+                data1.row.cells[7].styles.fontSize = 7
+                data1.row.cells[9].styles.fontSize = 7
+                data1.row.cells[11].styles.fontSize = 7
                 data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[2].styles.fontStyle = "bold"
-                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
                 data1.row.cells[7].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
+                data1.row.cells[11].styles.fontStyle = "bold"
+            }
+            if (data1.row.cells[0].raw === "HSN Item Name") {
+                let TotalBox = 0;
+                OrderItem.forEach((element, key) => {
+                    if (element.PrimaryUnitName === "Box") {
+                        TotalBox = Number(TotalBox) + Number(element.Quantity)
+                    }
+                })
 
-                // if (data1.row.cells[0].raw === "HSN Item Name") {
-                //     
-                //     let TotalBox = 0;
-                //     OrderItem.forEach((element, key) => {
-                //         if (element.PrimaryUnitName === "Box") {
-                //             TotalBox = Number(TotalBox) + Number(element.Quantity)
-                //         }
-                //     })
-
-                //     data1.row.cells[1].text[0] = ` HSN Item Name (${OrderItem.length})  (${TotalBox} Box)`
-                // }
-
+                data1.row.cells[0].text[0] = ` HSN Item Name (${OrderItem.length})  (${TotalBox} Box)`
+                data1.row.cells[7].colSpan = 2
+                data1.row.cells[9].colSpan = 2
             }
         },
         margin: {
@@ -312,15 +318,15 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 140,
+                columnWidth: 125,
             },
             1: {
-                columnWidth: 50,
+                columnWidth: 45,
                 halign: 'right',
 
             },
             2: {
-                columnWidth: 40,
+                columnWidth: 36,
                 halign: 'right',
 
             },
@@ -330,11 +336,11 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             4: {
-                columnWidth: 48,
+                columnWidth: 44,
                 halign: 'right',
             },
             5: {
-                columnWidth: 40,
+                columnWidth: 43,
                 halign: 'right',
             },
             6: {
@@ -342,18 +348,29 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             7: {
-                columnWidth: 40,
+                columnWidth: 25,
                 halign: 'right',
             },
             8: {
-                columnWidth: 43,
+                columnWidth: 34,
                 halign: 'right',
             },
             9: {
-                columnWidth: 56,
+                columnWidth: 25,
                 fontStyle: 'bold',
                 halign: 'right',
             },
+            10: {
+                columnWidth: 34,
+                fontStyle: 'bold',
+                halign: 'right',
+            },
+            11: {
+                columnWidth: 46,
+                fontStyle: 'bold',
+                halign: 'right',
+            },
+
 
         },
 
@@ -390,30 +407,55 @@ export const tableBodyWithIGST = (doc, data) => {
     //Body table  Css
     var options = {
         didParseCell: (data1) => {
-            if (data1.row.cells[6].raw === "isaddition") {
-
-                data1.row.cells[1].colSpan = 4
-                data1.row.cells[5].colSpan = 2
+            if (data1.row.cells[8].raw === "isaddition") {
+                data1.row.cells[0].colSpan = 2
+                data1.row.cells[2].colSpan = 2
+                data1.row.cells[4].colSpan = 2
+                data1.row.cells[7].colSpan = 2
 
 
                 data1.row.cells[0].styles.halign = "right"
                 data1.row.cells[1].styles.halign = "right"
-
-
                 data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[1].styles.fontSize = 8
 
 
                 data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[5].styles.fontSize = 8
+                data1.row.cells[2].styles.fontSize = 8
+                data1.row.cells[4].styles.fontSize = 8
+                data1.row.cells[6].styles.fontSize = 8
+                data1.row.cells[7].styles.fontSize = 8
+                data1.row.cells[9].styles.fontSize = 8
+
+
 
 
                 data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
+
+
+
 
 
             }
+            if (data1.row.cells[0].raw === "HSN Item Name") {
+                debugger
+                let TotalBox = 0;
+                OrderItem.forEach((element, key) => {
+                    if (element.PrimaryUnitName === "Box") {
+                        TotalBox = Number(TotalBox) + Number(element.Quantity)
+                    }
+                })
+
+                data1.row.cells[0].text[0] = ` HSN Item Name (${OrderItem.length})  (${TotalBox} Box)`
+                data1.row.cells[7].colSpan = 2
+            }
+
+
+
         },
         margin: {
             left: 30, right: 25, top: 65
@@ -442,10 +484,10 @@ export const tableBodyWithIGST = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 190,
+                columnWidth: 140,
             },
             1: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'left',
 
             },
@@ -462,17 +504,26 @@ export const tableBodyWithIGST = (doc, data) => {
                 halign: 'right',
             },
             5: {
-                columnWidth: 40,
+                columnWidth: 43,
                 halign: 'right',
             },
             6: {
-                columnWidth: 55,
+                columnWidth: 45,
                 halign: 'right',
             },
             7: {
-                columnWidth: 65,
+                columnWidth: 26,
                 halign: 'right',
             },
+            8: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            9: {
+                columnWidth: 61,
+                halign: 'right',
+            },
+
 
 
 
@@ -511,32 +562,34 @@ export const pageFooter = (doc, data) => {
     let stringNumber = toWords(Number(GrandTotal))
     // doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 750, 30, 750);//horizontal line Footer 2
+    doc.line(570, 735, 30, 735);//horizontal line Footer 2
     // doc.line(570, 680, 30, 680);//horizontal line Footer 3
     // doc.line(430, 700, 30, 700);//horizontal line Footer 3 Ruppe section
     // doc.line(460, 745, 460, 815);//vertical right1 Qr Left 1
-    doc.line(430, 750, 430, 815);//vertical right1 Sub Total
+    doc.line(430, 735, 430, 815);//vertical right1 Sub Total
     doc.setFont('Tahoma')
-    doc.line(430, 765, 30, 765);//horizontal line (Bottom)
+    doc.line(430, 750, 30, 750);//horizontal line (Bottom)
 
     const a = data.OrderItem.map((data) => ({
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
         BasicAmount: Number(data.BasicAmount),
         IGST: Number(data.IGST),
+        DiscountAmount: Number(data.DiscountAmount),
 
     }));
-    var totalCGST = 0;
-    var totalSGST = 0;
-    var TotalBasicAmount = 0;
-    var totalIGST = 0;
+    let totalCGST = 0;
+    let totalSGST = 0;
+    let TotalBasicAmount = 0;
+    let totalIGST = 0;
+    let totalDiscount = 0;
+
     a.forEach(arg => {
         totalCGST += arg.CGST;
         totalSGST += arg.SGST;
         TotalBasicAmount += arg.BasicAmount;
         totalIGST += arg.IGST;
-
-
+        totalDiscount += arg.DiscountAmount;
     });
 
     const TotalGST = totalCGST + totalSGST;
@@ -545,31 +598,38 @@ export const pageFooter = (doc, data) => {
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
     if (isIGST) {
         doc.setFontSize(8)
+        doc.text(`Total Basic:`, 434, 752,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 752, 'right')
 
-        doc.text(`IGST:`, 434, 772,)
+        doc.text(`Total Disc:`, 434, 762,)
+        doc.text(`${numberWithCommas(Number(totalDiscount).toFixed(2))}`, 568, 762, 'right')
+
+        doc.text(`Total IGST:`, 434, 772,)
         doc.text(`${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 772, 'right')
 
-        doc.text(`TotalGST:`, 434, 784,)
-        doc.text(` ${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 784, 'right')
+        doc.text(`Total GST:`, 434, 782,)
+        doc.text(` ${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 782, 'right')
 
-        doc.text(`BasicAmount:`, 434, 795,)
-        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 795, 'right')
+
 
     } else {
 
         doc.setFontSize(8)
+        doc.text(`Total Basic:`, 434, 752,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 752, 'right')
 
-        doc.text(`CGST:`, 434, 760,)
-        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 568, 760, 'right')
+        doc.text(`Total Disc:`, 434, 762,)
+        doc.text(`${numberWithCommas(Number(totalDiscount).toFixed(2))}`, 568, 762, 'right')
 
-        doc.text(`SGST:`, 434, 772,)
-        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 568, 772, 'right')
+        doc.text(`Total CGST:`, 434, 772,)
+        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 568, 772, 'right')
 
-        doc.text(`TotalGST:`, 434, 784,)
-        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 568, 784, 'right')
+        doc.text(`Total SGST:`, 434, 782,)
+        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 568, 782, 'right')
 
-        doc.text(`BasicAmount:`, 434, 795,)
-        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 795, 'right')
+        doc.text(`Total GST:`, 434, 792,)
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 568, 792, 'right')
+
     }
 
 
@@ -617,9 +677,9 @@ export const pageFooter = (doc, data) => {
     // doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
     // doc.text(`INR NO : 12547yfewyrt5675w6wer78sdf687s6d7f8676yse87fugh43 `, 34, 740)
     doc.setFont(undefined, 'bold')
-    doc.text(`Rupees:`, 33, 762,)
+    doc.text(`Rupees:`, 33, 747,)
     doc.setFont(undefined, 'Normal')
-    doc.text(`${stringNumber}`, 65, 762,)
+    doc.text(`${stringNumber}`, 65, 747,)
 
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
