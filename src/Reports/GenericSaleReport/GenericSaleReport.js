@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { Go_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker } from "../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
@@ -21,13 +21,13 @@ const GenericSaleReport = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [distributorDropdown, setDistributorDropdown] = useState("");
+    const [distributorDropdown, setDistributorDropdown] = useState([{ value: "", label: "All" }]);
 
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.GenericSaleReportReducer.listBtnLoading,
             tableData: state.GenericSaleReportReducer.genericSaleGobtn,
-            // SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
@@ -35,7 +35,7 @@ const GenericSaleReport = (props) => {
     );
     const { tableData = [] } = reducers
 
-    const { userAccess, listBtnLoading, Distributor } = reducers;
+    const { userAccess, listBtnLoading, Distributor, partyDropdownLoading } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -60,8 +60,8 @@ const GenericSaleReport = (props) => {
 
     useEffect(() => {
         dispatch(GoButton_For_GenericSale_Success([]))
-        dispatch(SSDD_List_under_Company());
     }, [])
+
 
     const Party_Option = Distributor.map(i => ({
         value: i.id,
@@ -83,13 +83,22 @@ const GenericSaleReport = (props) => {
     }, [tableData]);
 
     function goButtonHandler() {
-
+        debugger
         const btnId = `gobtn-${url.GENERIC_SALE_REPORT}`
+
+        var isDistributorDropdown = ''
+        if (distributorDropdown[0].value === "") {
+            isDistributorDropdown = Party_Option.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+        }
+        else {
+            isDistributorDropdown = distributorDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+        }
+
 
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": distributorDropdown === "" ? _cfunc.loginPartyID() : distributorDropdown.value,
+            "Party": isDistributorDropdown,
         });
         dispatch(GoButton_For_GenericSale_Action({ jsonBody, btnId }))
     }
@@ -104,6 +113,16 @@ const GenericSaleReport = (props) => {
         let newObj = { ...headerFilters }
         newObj.todate = date
         setHeaderFilters(newObj)
+    }
+
+    function PartyDrodownOnChange(e = []) {
+        debugger
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setDistributorDropdown(e)
     }
 
     return (
@@ -145,19 +164,21 @@ const GenericSaleReport = (props) => {
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3" >
                                     <Label className="col-sm-4 p-2"
-                                        style={{ width: "65px", marginRight: "20px" }}>Distributor</Label>
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
-                                        <Select
+                                        <C_Select
                                             name="Distributor"
                                             value={distributorDropdown}
                                             isSearchable={true}
+                                            isMulti={true}
+                                            isLoading={partyDropdownLoading}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
                                             options={Party_Option}
-                                            onChange={(e) => { setDistributorDropdown(e) }}
+                                            onChange={PartyDrodownOnChange}
                                         />
                                     </Col>
                                 </FormGroup>

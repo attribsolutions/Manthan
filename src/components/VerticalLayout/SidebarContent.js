@@ -30,7 +30,6 @@ const SidebarContent = (props) => {
     roleAccesssForSidbarError: state.Login.roleAccesssForSidbarError,
   }));
 
-
   useEffect(async () => {
     if (roleAccesssForSidbarError) {
       await customAlert({
