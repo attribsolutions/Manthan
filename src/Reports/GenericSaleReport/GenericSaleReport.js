@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { Go_Button } from "../../components/Common/CommonButton";
+import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { GoButton_For_GenericSale_Action, GoButton_For_GenericSale_Success } from "../../store/Report/GenericSaleRedux/action";
 import * as XLSX from 'xlsx';
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
+import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 
 const GenericSaleReport = (props) => {
 
@@ -20,19 +23,23 @@ const GenericSaleReport = (props) => {
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
     const [distributorDropdown, setDistributorDropdown] = useState([{ value: "", label: "All" }]);
+    const [tableData, setTableData] = useState([]);
+    const [columns, setColumns] = useState([{}]);
+    const [columnsCreated, setColumnsCreated] = useState(false)
 
+    console.log("tableData", tableData)
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.GenericSaleReportReducer.listBtnLoading,
-            tableData: state.GenericSaleReportReducer.genericSaleGobtn,
+            goButtonData: state.GenericSaleReportReducer.genericSaleGobtn,
             partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { tableData = [] } = reducers
-
+    const { goButtonData = [] } = reducers
+    debugger
     const { userAccess, listBtnLoading, Distributor, partyDropdownLoading } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
@@ -60,32 +67,44 @@ const GenericSaleReport = (props) => {
         dispatch(GoButton_For_GenericSale_Success([]))
     }, [])
 
-
     const Party_Option = Distributor.map(i => ({
         value: i.id,
         label: i.Name
     }));
 
     useEffect(() => {
-        
-        try {
-            if (tableData.Status === true && tableData.StatusCode === 200) {
-                const { GenericSaleDetails } = tableData.Data
-                const worksheet = XLSX.utils.json_to_sheet(GenericSaleDetails);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, "GenericSaleReport");
-                XLSX.writeFile(workbook, `Generic Sale Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
 
-                dispatch(GoButton_For_GenericSale_Success([]));
-                setDistributorDropdown('')
+        try {
+            if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
+                const { GenericSaleDetails } = goButtonData.Data
+                if (goButtonData.btnId === "excel_btnId") {
+                    const worksheet = XLSX.utils.json_to_sheet(GenericSaleDetails);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, "GenericSaleReport");
+                    XLSX.writeFile(workbook, `Generic Sale Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
+
+                    dispatch(GoButton_For_GenericSale_Success([]));
+                    setDistributorDropdown([{ value: "", label: "All" }])
+                }
+                else {
+                    const UpdatedTableData = GenericSaleDetails.map((item, index) => {
+
+                        return {
+                            ...item, id: index + 1,
+                        };
+                    });
+                    setTableData(UpdatedTableData);
+                    dispatch(GoButton_For_GenericSale_Success([]));
+                    setDistributorDropdown([{ value: "", label: "All" }])
+                }
             }
         }
         catch (e) { console.log(e) }
 
-    }, [tableData]);
+    }, [goButtonData]);
 
     function goButtonHandler() {
-        
+
         const btnId = `gobtn-${url.GENERIC_SALE_REPORT}`
 
         var isDistributorDropdown = ''
@@ -99,9 +118,28 @@ const GenericSaleReport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": isDistributorDropdown,
+            "Party": !(isSCMParty) ?  _cfunc.loginPartyID().toString() : isDistributorDropdown,
         });
         dispatch(GoButton_For_GenericSale_Action({ jsonBody, btnId }))
+    }
+
+    function excelhandler() {
+
+        var isDistributorDropdown = ''
+        if (distributorDropdown[0].value === "") {
+            isDistributorDropdown = Party_Option.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+        }
+        else {
+            isDistributorDropdown = distributorDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+        }
+
+        const jsonBody = JSON.stringify({
+            "FromDate": fromdate,
+            "ToDate": todate,
+            "Party": isSCMParty ? _cfunc.loginPartyID() : isDistributorDropdown,
+        });
+        let config = { jsonBody, btnId: "excel_btnId" }
+        dispatch(GoButton_For_GenericSale_Action(config))
     }
 
     function fromdateOnchange(e, date) {
@@ -117,7 +155,7 @@ const GenericSaleReport = (props) => {
     }
 
     function PartyDrodownOnChange(e = []) {
-        debugger
+
         if (e.length === 0) {
             e = [{ value: "", label: "All" }]
         } else {
@@ -126,14 +164,37 @@ const GenericSaleReport = (props) => {
         setDistributorDropdown(e)
     }
 
+    const pagesListColumns = () => {
+        if (tableData.length > 0) {
+            const objectAtIndex0 = tableData[0];
+            const internalColumn = []
+            for (const key in objectAtIndex0) {
+                const column = {
+                    text: key,
+                    dataField: key,
+                    sort: true,
+                    classes: "table-cursor-pointer",
+                };
+                internalColumn.push(column);
+            }
+
+            setColumns(internalColumn)
+            setColumnsCreated(true)
+        }
+    }
+
+    if (!columnsCreated) {
+        pagesListColumns();
+    }
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
             <div className="page-content">
-                <div className="px-2   c_card_filter text-black" >
+                <div className="px-2   c_card_filter text-black mb-1" >
                     <div className="row" >
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -147,7 +208,7 @@ const GenericSaleReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -186,12 +247,68 @@ const GenericSaleReport = (props) => {
                             </Col>
                         }
 
-                        <Col sm="1" className="mt-3 ">
-                            < Go_Button loading={listBtnLoading}
-                                onClick={(e) => goButtonHandler()} />
+                        <Col sm={1} className="mt-3" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                // loading={goButtonData.btnId === `gobtn-${url.GENERIC_SALE_REPORT}`}
+                                className="btn btn-success w-md  "
+                                onClick={(e) => goButtonHandler()}
+                            >
+                                Show
+                            </C_Button>
+
+                        </Col>
+
+                        <Col sm={2} className="mt-3 ">
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                // loading={goButtonData === `excel_btnId`}
+                                className="btn btn-primary w-md  "
+                                onClick={(e) => { excelhandler() }}
+                            >
+                                Excel Download
+                            </C_Button>
                         </Col>
                     </div>
                 </div>
+
+                <div>
+                    <ToolkitProvider
+                        keyField={"id"}
+                        // data={tableData}
+                        // columns={pagesListColumns}
+                        data={goButtonData.btnId !== "excel_btnId" ? tableData : [{}]}
+                        columns={goButtonData.btnId !== "excel_btnId" ? columns : [{}]}
+                        search
+                    >
+                        {(toolkitProps,) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive table">
+                                            <BootstrapTable
+                                                keyField={"id"}
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Record Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
+
+                </div>
+
             </div>
 
         </React.Fragment >
