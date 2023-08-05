@@ -216,7 +216,7 @@ const InvoiceDataExport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 loading={GoBtnLoading === `gobtn-${url.INVOICE_DATA_EXPORT}`}
-                                className="btn btn-primary w-md  "
+                                className="btn btn-primary   "
                                 onClick={goButtonHandler}
                             >
                                 Show
@@ -229,7 +229,7 @@ const InvoiceDataExport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 loading={ExcelBtnLoading === `excel_btnId`}
-                                className="btn btn-primary w-md  "
+                                className="btn btn-primary   "
                                 onClick={(e) => { excelhandler() }}
                             >
                                 Excel Download
