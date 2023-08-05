@@ -103,7 +103,7 @@ const DiscountMaster = (props) => {
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
-        
+
         return () => {
             dispatch(DiscountCustomer_Dropdown_Success([]));
             dispatch(commonPageFieldSuccess(null));
@@ -222,6 +222,13 @@ const DiscountMaster = (props) => {
     customerOptions.unshift({ value: "", label: "All" });
 
     const pagesListColumns = [
+        {
+            text: "Group Name",
+            dataField: "GroupName",
+        }, {
+            text: "Sub Group Name",
+            dataField: "SubGroupName",
+        },
         {
             text: "Item Name",
             dataField: "ItemName",
@@ -551,7 +558,7 @@ const DiscountMaster = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
+                <div className="page-content" >
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
