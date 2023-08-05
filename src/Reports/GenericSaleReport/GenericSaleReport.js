@@ -252,7 +252,7 @@ const GenericSaleReport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 // loading={goButtonData.btnId === `gobtn-${url.GENERIC_SALE_REPORT}`}
-                                className="btn btn-success w-md"
+                                className="btn btn-success"
                                 onClick={(e) => goButtonHandler()}
                             >
                                 Show
@@ -265,7 +265,7 @@ const GenericSaleReport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 // loading={goButtonData === `excel_btnId`}
-                                className="btn btn-primary w-md"
+                                className="btn btn-primary"
                                 onClick={(e) => { excelhandler() }}
                             >
                                 Excel Download
