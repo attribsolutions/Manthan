@@ -27,7 +27,6 @@ const GenericSaleReport = (props) => {
     const [columns, setColumns] = useState([{}]);
     const [columnsCreated, setColumnsCreated] = useState(false)
 
-    console.log("tableData", tableData)
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.GenericSaleReportReducer.listBtnLoading,
@@ -39,7 +38,7 @@ const GenericSaleReport = (props) => {
         })
     );
     const { goButtonData = [] } = reducers
-    debugger
+    
     const { userAccess, listBtnLoading, Distributor, partyDropdownLoading } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
@@ -95,7 +94,7 @@ const GenericSaleReport = (props) => {
                     });
                     setTableData(UpdatedTableData);
                     dispatch(GoButton_For_GenericSale_Success([]));
-                    setDistributorDropdown([{ value: "", label: "All" }])
+                    // setDistributorDropdown([{ value: "", label: "All" }])
                 }
             }
         }
@@ -118,7 +117,7 @@ const GenericSaleReport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": !(isSCMParty) ?  _cfunc.loginPartyID().toString() : isDistributorDropdown,
+            "Party": !(isSCMParty) ? _cfunc.loginPartyID().toString() : isDistributorDropdown,
         });
         dispatch(GoButton_For_GenericSale_Action({ jsonBody, btnId }))
     }
@@ -136,7 +135,7 @@ const GenericSaleReport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": isSCMParty ? _cfunc.loginPartyID() : isDistributorDropdown,
+            "Party": !(isSCMParty) ? _cfunc.loginPartyID().toString() : isDistributorDropdown,
         });
         let config = { jsonBody, btnId: "excel_btnId" }
         dispatch(GoButton_For_GenericSale_Action(config))
@@ -162,6 +161,7 @@ const GenericSaleReport = (props) => {
             e = e.filter(i => !(i.value === ''))
         }
         setDistributorDropdown(e)
+        setTableData([])
     }
 
     const pagesListColumns = () => {
@@ -252,7 +252,7 @@ const GenericSaleReport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 // loading={goButtonData.btnId === `gobtn-${url.GENERIC_SALE_REPORT}`}
-                                className="btn btn-success w-md  "
+                                className="btn btn-success w-md"
                                 onClick={(e) => goButtonHandler()}
                             >
                                 Show
@@ -265,7 +265,7 @@ const GenericSaleReport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 // loading={goButtonData === `excel_btnId`}
-                                className="btn btn-primary w-md  "
+                                className="btn btn-primary w-md"
                                 onClick={(e) => { excelhandler() }}
                             >
                                 Excel Download
