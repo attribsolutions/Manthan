@@ -7,7 +7,8 @@ import {
 
 const INIT_STATE = {
     genericSaleGobtn: [],
-    listBtnLoading: false
+    GoBtnLoading: false,
+    ExcelBtnLoading: false
 }
 
 const GenericSaleReportReducer = (state = INIT_STATE, action) => {
@@ -16,20 +17,23 @@ const GenericSaleReportReducer = (state = INIT_STATE, action) => {
         case GO_BUTTON_FOR_GENERIC_SALE_ACTION:
             return {
                 ...state,
-                listBtnLoading: true
+                GoBtnLoading: action.config.btnId,
+                ExcelBtnLoading: action.config.btnId
             }
 
         case GO_BUTTON_FOR_GENERIC_SALE_SUCCESS:
             return {
                 ...state,
                 genericSaleGobtn: action.payload,
-                listBtnLoading: false
+                GoBtnLoading: false,
+                ExcelBtnLoading: false
             }
 
         case GENERIC_SALE_REPORT_API_ERROR_ACTION:
             return {
                 ...state,
-                listBtnLoading: false,
+                GoBtnLoading: false,
+                ExcelBtnLoading: false
             };
 
 

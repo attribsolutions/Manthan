@@ -29,7 +29,8 @@ const GenericSaleReport = (props) => {
 
     const reducers = useSelector(
         (state) => ({
-            listBtnLoading: state.GenericSaleReportReducer.listBtnLoading,
+            GoBtnLoading: state.GenericSaleReportReducer.GoBtnLoading,
+            ExcelBtnLoading: state.GenericSaleReportReducer.ExcelBtnLoading,
             goButtonData: state.GenericSaleReportReducer.genericSaleGobtn,
             partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
@@ -38,8 +39,9 @@ const GenericSaleReport = (props) => {
         })
     );
     const { goButtonData = [] } = reducers
-    
-    const { userAccess, listBtnLoading, Distributor, partyDropdownLoading } = reducers;
+
+    const { userAccess, Distributor, partyDropdownLoading, GoBtnLoading, ExcelBtnLoading } = reducers;
+    debugger
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -251,7 +253,7 @@ const GenericSaleReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                // loading={goButtonData.btnId === `gobtn-${url.GENERIC_SALE_REPORT}`}
+                                loading={GoBtnLoading.btnId === `gobtn-${url.GENERIC_SALE_REPORT}` && true}
                                 className="btn btn-success"
                                 onClick={(e) => goButtonHandler()}
                             >
@@ -264,7 +266,7 @@ const GenericSaleReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                // loading={goButtonData === `excel_btnId`}
+                                loading={ExcelBtnLoading === `excel_btnId` && true}
                                 className="btn btn-primary"
                                 onClick={(e) => { excelhandler() }}
                             >

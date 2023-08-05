@@ -39,7 +39,8 @@ const OrderSummary = (props) => {
 
     const reducers = useSelector(
         (state) => ({
-            listBtnLoading: state.OrderSummaryReducer.listBtnLoading,
+            GoBtnLoading: state.OrderSummaryReducer.GoBtnLoading,
+            ExcelBtnLoading: state.OrderSummaryReducer.ExcelBtnLoading,
             goButtonData: state.OrderSummaryReducer.orderSummaryGobtn,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
@@ -47,7 +48,7 @@ const OrderSummary = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, goButtonData, SSDD_List, partyLoading } = reducers;
+    const { userAccess, goButtonData, SSDD_List, partyLoading, GoBtnLoading, ExcelBtnLoading } = reducers;
     const { Data = [] } = goButtonData;
     const values = { ...state.values }
 
@@ -113,7 +114,6 @@ const OrderSummary = (props) => {
                     });
                     setTableData(UpdatedTableData);
                     dispatch(postOrderSummary_API_Success([]));
-                    // setDistributorDropdown([{ value: "", label: "All" }])
                 }
 
             }
@@ -176,7 +176,7 @@ const OrderSummary = (props) => {
             a.hasValid.PartyName.valid = true
             return a
         })
-       setTableData([])
+        setTableData([])
     }
 
     function goButtonHandler() {
@@ -308,7 +308,7 @@ const OrderSummary = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                // loading={goButtonData.btnId === `gobtn-${url.GENERIC_SALE_REPORT}`}
+                                loading={GoBtnLoading === `gobtn-${url.ORDER_SUMMARY_REPORT}`}
                                 className="btn btn-success"
                                 onClick={goButtonHandler}
                             >
@@ -318,11 +318,11 @@ const OrderSummary = (props) => {
                         </Col>
 
                         <Col sm="2" className="mt-3 ">
-                            {/* <Go_Button onClick={excelhandler} loading={reducers.listBtnLoading} /> */}
+
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                // loading={reducers.listBtnLoading}
+                                loading={ExcelBtnLoading === `excel_btnId`}
                                 className="btn btn-primary"
                                 onClick={excelhandler}
                             >
