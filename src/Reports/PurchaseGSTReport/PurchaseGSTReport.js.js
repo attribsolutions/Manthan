@@ -351,7 +351,7 @@ const PurchaseGSTReport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 loading={GoBtnLoading === `gobtn-${url.PURCHASE_GST_REPORT}`}
-                                className="btn btn-primary w-md  "
+                                className="btn btn-primary   "
                                 onClick={goButtonHandler}
                             >
                                 Show
@@ -363,7 +363,7 @@ const PurchaseGSTReport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 loading={ExcelBtnLoading === `excel_btnId`}
-                                className="btn btn-primary w-md  "
+                                className="btn btn-primary  "
                                 onClick={(e) => { excelhandler() }}
                             >
                                 Excel Download
