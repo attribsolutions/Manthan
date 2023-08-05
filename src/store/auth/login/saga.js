@@ -98,46 +98,99 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
 
     const RoleResponse = yield call(RoleAccessApi_url, party, employee, company);
 
-    if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
+    // if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
 
-      let arrayMain = []
-      let objMain = {}
-      let arrayChild = []
-      let objChild = {}
-      let all_DataInSinlgeArray = []
+    //   let arrayMain = []
+    //   let objMain = {}
+    //   let arrayChild = []
+    //   let objChild = {}
+    //   let all_DataInSinlgeArray = []
+
+    //   RoleResponse.Data.forEach((parent) => {
+    //     objMain = parent;
+
+    //     parent.ModuleData.forEach((child) => {
+
+    //       objChild = child;
+
+    //       PageAccessApi.Data.forEach((page) => {
+    //         objChild[`RoleAccess_${page.Name}`] = false;
+    //       })
+
+    //       child.RolePageAccess.forEach((role) => {
+    //         child[`RoleAccess_${role.Name}`] = true;
+    //       })
+
+    //       arrayChild.push(objChild)
+    //       delete objMain.ModuleData
+    //       objMain["ModuleData"] = arrayChild
+    //       objChild = {};
+    //     });
+    //     arrayMain.push(objMain)
+    //     arrayChild = []
+    //     objMain = {}
+    //   })
+    //   arrayMain.forEach((i) => {
+    //     i.ModuleData.forEach((index) => {
+    //       index.ModuleName = i.ModuleName;
+    //       all_DataInSinlgeArray.push(index)
+    //     })
+    //   })
+
+
+
+    //   yield put(roleAceessActionSuccess(arrayMain))
+    //   yield put(RoleAccessUpdateSuccess(all_DataInSinlgeArray))
+    // }
+
+    if (RoleResponse.Data.length > 0 && PageAccessApi.Data.length > 0) {
+      let arrayMain = [];
+      let objMain = {};
+      let arrayChild = [];
+      let objChild = {};
+      let all_DataInSinlgeArray = [];
 
       RoleResponse.Data.forEach((parent) => {
         objMain = parent;
 
         parent.ModuleData.forEach((child) => {
-
           objChild = child;
 
           PageAccessApi.Data.forEach((page) => {
             objChild[`RoleAccess_${page.Name}`] = false;
-          })
+          });
 
           child.RolePageAccess.forEach((role) => {
-            child[`RoleAccess_${role.Name}`] = true;
-          })
-          arrayChild.push(objChild)
-          delete objMain.ModuleData
-          objMain["ModuleData"] = arrayChild
+            objChild[`RoleAccess_${role.Name}`] = true;
+          });
+
+          arrayChild.push(objChild);
           objChild = {};
         });
-        arrayMain.push(objMain)
-        arrayChild = []
-        objMain = {}
-      })
+
+        // Sort child pages based on DisplayIndex in ascending order
+        arrayChild.sort((a, b) => a.DisplayIndex - b.DisplayIndex);
+
+        delete objMain.ModuleData;
+        objMain["ModuleData"] = arrayChild;
+        arrayMain.push(objMain);
+
+        arrayChild = [];
+        objMain = {};
+      });
+
+      // Sort modules based on DisplayIndex in ascending order
+      arrayMain.sort((a, b) => a.DisplayIndex - b.DisplayIndex);
+
       arrayMain.forEach((i) => {
         i.ModuleData.forEach((index) => {
           index.ModuleName = i.ModuleName;
-          all_DataInSinlgeArray.push(index)
-        })
-      })
+          all_DataInSinlgeArray.push(index);
+        });
+      });
 
-      yield put(roleAceessActionSuccess(arrayMain))
-      yield put(RoleAccessUpdateSuccess(all_DataInSinlgeArray))
+      yield put(roleAceessActionSuccess(arrayMain));
+      yield put(RoleAccessUpdateSuccess(all_DataInSinlgeArray));
     }
 
   } catch (error) {
