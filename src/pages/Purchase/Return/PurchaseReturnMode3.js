@@ -192,6 +192,7 @@ const PurchaseReturnMode3 = (props) => {
                             <CInput
                                 defaultValue={row.Quantity}
                                 autoComplete="off"
+                                disabled={true}
                                 type="text"
                                 cpattern={decimalRegx}
                                 className="col col-sm text-end"
@@ -514,7 +515,7 @@ const PurchaseReturnMode3 = (props) => {
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"} >
                                         <SaveButton
-                                            pageMode={mode.edit}
+                                            pageMode={mode.modeSTPsave}
                                             loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
