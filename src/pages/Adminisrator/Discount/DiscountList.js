@@ -9,7 +9,7 @@ import { Go_Button, PageLoadingSpinner } from "../../../components/Common/Common
 import DiscountMaster from "./DiscountMaster";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { C_DatePicker } from "../../../CustomValidateForm";
-import { getDiscountList, getDiscountListSuccess } from "../../../store/Administrator/DiscountRedux/actions";
+import { deleteDiscountIDSuccess, deleteDiscount_ID, getDiscountList, getDiscountListSuccess } from "../../../store/Administrator/DiscountRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
@@ -21,7 +21,9 @@ const DiscountList = () => {
 
     const reducers = useSelector(
         (state) => ({
+            listBtnLoading: state.DiscountReducer.listBtnLoading,
             tableList: state.DiscountReducer.discountList,
+            deleteMsg: state.DiscountReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             goBtnLoading: state.DiscountReducer.goBtnLoading,
@@ -30,7 +32,10 @@ const DiscountList = () => {
     const { pageField, goBtnLoading } = reducers
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
-    const action = {}
+    const action = {
+        deleteId: deleteDiscount_ID,
+        deleteSucc: deleteDiscountIDSuccess
+    }
 
     useEffect(() => {
         const page_Id = pageId.DISCOUNT_LIST;
@@ -138,7 +143,7 @@ const DiscountList = () => {
                             masterPath={url.DISCOUNT_MASTER}
                             newBtnPath={url.DISCOUNT_MASTER}
                             ButtonMsgLable={"Discount"}
-                            deleteName={"Name"}
+                            deleteName={"CustomerName"}
                             goButnFunc={goButtonHandler}
                         />
                     </div>
