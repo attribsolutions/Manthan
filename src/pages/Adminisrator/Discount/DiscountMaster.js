@@ -61,6 +61,8 @@ const DiscountMaster = (props) => {
     const [discountValueAll, setDiscountValueAll] = useState("");
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [forceReload, setForceReload] = useState(false)
+    const [customerDropdown, setCustomerDropdown] = useState([{ value: "", label: "All" }]);
+
     const [tableData, setTableData] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -475,7 +477,24 @@ const DiscountMaster = (props) => {
         dispatch(priceListByPartyAction(hasSelect.value))
     }
 
+    function CustomerTypeOnChange(e = []) {
+
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setCustomerDropdown(e)
+        setTableData([])
+    }
+
     function goButtonHandler() {
+
+        debugger
+        var isCustomerDropdown = ''
+        if (customerDropdown.length > 0) {
+            isCustomerDropdown = customerDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+        }
 
         if (values.Partytype === '') {
             customAlert({
@@ -492,44 +511,49 @@ const DiscountMaster = (props) => {
             });
             return;
         }
-
+        debugger
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "Party": _cfunc.loginPartyID(),
             "PartyType": values.Partytype.value,
             "PriceList": priceListSelect.value,
-            "Customer": values.CustomerName === "" ? "" : values.CustomerName.value,
+            "Customer": isCustomerDropdown === "" ? "" : isCustomerDropdown,
         });
         dispatch(goBtnDiscountAddAction({ jsonBody }))
     }
 
     const saveHandler = async (event) => {
         event.preventDefault();
-
+        debugger
         try {
             const filteredDiscounts = tableData.reduce((filteredDiscountTable, currentValue) => {
                 if (currentValue.Discount > 0) {
-                    filteredDiscountTable.push({
-                        "FromDate": values.FromDate,
-                        "ToDate": values.ToDate,
-                        "DiscountType": currentValue.DiscountType,
-                        "Discount": currentValue.Discount,
-                        "PartyType": values.Partytype.value,
-                        "PriceList": priceListSelect.value,
-                        "Customer": values.CustomerName === "" ? "" : values.CustomerName.value,
-                        "Item": currentValue.ItemID,
-                        "Party": _cfunc.loginPartyID(),
-                        "CreatedBy": _cfunc.loginUserID(),
-                        "UpdatedBy": _cfunc.loginUserID(),
-                        "id": currentValue.id
+                    customerDropdown.forEach(index => {
+                        debugger
+                        filteredDiscountTable.push({
+                            "FromDate": values.FromDate,
+                            "ToDate": values.ToDate,
+                            "DiscountType": currentValue.DiscountType,
+                            "Discount": currentValue.Discount,
+                            "PartyType": values.Partytype.value,
+                            "PriceList": priceListSelect.value,
+                            "Customer": index.value === "" ? "" : index.value,
+                            "Item": currentValue.ItemID,
+                            "Party": _cfunc.loginPartyID(),
+                            "CreatedBy": _cfunc.loginUserID(),
+                            "UpdatedBy": _cfunc.loginUserID(),
+                            "id": currentValue.id
+                        });
                     });
+
                 }
+
                 return filteredDiscountTable;
             }, []);
 
 
-            const Find = filteredDiscounts.filter((index) => {   // condition for margin save without 0
+            const Find = filteredDiscounts.filter((index) => {   // condition for Discount save without 0
                 return ((index.Discount > 0) && (index.id === null))
             })
             if ((Find.length === 0)) {
@@ -619,6 +643,10 @@ const DiscountMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
+
+
+
+
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
@@ -644,7 +672,32 @@ const DiscountMaster = (props) => {
                             </Row>
 
                             <Row>
-                                <Col sm="6">
+
+
+                                <Col sm={6} className="">
+                                    <FormGroup className="mb- row mt-2" >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CustomerName}</Label>
+                                        <Col sm="7">
+                                            <C_Select
+                                                id="CustomerName "
+                                                name="CustomerName"
+                                                value={customerDropdown}
+                                                isSearchable={true}
+                                                isMulti={true}
+                                                isLoading={customerDropDownLoading}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={customerOptions}
+                                                onChange={CustomerTypeOnChange}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                                {/* <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CustomerName} </Label>
@@ -668,7 +721,7 @@ const DiscountMaster = (props) => {
 
                                         </Col>
                                     </FormGroup>
-                                </Col >
+                                </Col > */}
 
                                 <Col md={5}> </Col>
 
