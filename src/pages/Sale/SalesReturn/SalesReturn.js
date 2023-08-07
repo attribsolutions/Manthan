@@ -483,6 +483,12 @@ const SalesReturn = (props) => {
                             </div>
                             <div className="parent">
                                 <C_DatePicker
+                                    options={{
+                                        maxDate: 'today',
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
                                     placeholder="Enter BatchDate"
                                     defaultValue={row.BatchDate}
                                     onChange={(e, date) => {
