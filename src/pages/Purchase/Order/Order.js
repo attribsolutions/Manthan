@@ -307,7 +307,7 @@ const Order = (props) => {
 
                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
                 if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
-debugger
+
                     const customer = supplierSelect
                     const jsonBody = JSON.stringify({
                         OrderIDs: postMsg.OrderID.toString(),

@@ -10,7 +10,6 @@ import {
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './MasterAdd/PartyIndex';
-import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { mode, url, pageId } from "../../../routes/index";
 import { useLayoutEffect } from 'react';
@@ -18,6 +17,9 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { PageLoadingSpinner } from '../../../components/Common/CommonButton';
 import CommonPurchaseList from '../../../components/Common/CommonPurchaseList';
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { customAlert } from '../../../CustomAlert/ConfirmDialog';
 
 const PartyList = () => {
 
@@ -87,10 +89,35 @@ const PartyList = () => {
 
     const { pageField, goBtnLoading } = reducers
 
+    function goButtonHandler() {
+        try {
+            if ((_cfunc.loginSelectedPartyID() === 0)) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = {
+                ..._cfunc.loginJsonBody(),
+                PartyID: _cfunc.loginSelectedPartyID(),
+                IsRetailer: subPageMode === url.RETAILER_LIST ? 1 : 0
+            };
+            dispatch(getPartyListAPI(jsonBody));
+        }
+        catch (error) { }
+        return
+    };
+
+    function partyOnChngeButtonHandler() {
+        dispatch(getPartyListAPISuccess([]));
+    }
+
     return (
         <React.Fragment>
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
+                <PartyDropdown_Common
+                    goButtonHandler={goButtonHandler}
+                    changeButtonHandler={partyOnChngeButtonHandler}
+                />
                 {
                     (pageField) &&
                     <CommonPurchaseList

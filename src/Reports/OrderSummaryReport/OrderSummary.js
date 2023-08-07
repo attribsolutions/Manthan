@@ -3,15 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
-import { Go_Button } from "../../components/Common/CommonButton";
+import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { url, mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
 import * as XLSX from 'xlsx';
-import { SSDD_List_under_Company } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
+import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 
 const OrderSummary = (props) => {
 
@@ -31,20 +33,22 @@ const OrderSummary = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [groupByDate, setGroupByDate] = useState(false);
     const [groupByParty, setGroupByParty] = useState(false);
-
+    const [tableData, setTableData] = useState([]);
+    const [columns, setColumns] = useState([{}]);
+    const [columnsCreated, setColumnsCreated] = useState(false)
+    const [btnMode, setBtnMode] = useState(0);
 
     const reducers = useSelector(
         (state) => ({
-            listBtnLoading: state.OrderSummaryReducer.listBtnLoading,
-            orderSummaryGobtn: state.OrderSummaryReducer.orderSummaryGobtn,
+
+            goButtonData: state.OrderSummaryReducer.orderSummaryGobtn,
             userAccess: state.Login.RoleAccessUpdateData,
-            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
             partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, orderSummaryGobtn, SSDD_List, partyLoading } = reducers;
-    const { Data = [] } = orderSummaryGobtn;
+    const { userAccess, goButtonData, SSDD_List, partyLoading, } = reducers;
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -68,39 +72,67 @@ const OrderSummary = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(SSDD_List_under_Company());
-    }, [])
-
-    useEffect(() => {
-        if ((orderSummaryGobtn.Status === true) && (orderSummaryGobtn.StatusCode === 204)) {
-            dispatch(postOrderSummary_API_Success([]))
+        if ((goButtonData.Status === true) && (goButtonData.StatusCode === 204)) {
+            dispatch(postOrderSummary_API_Success([]));
             customAlert({
                 Type: 3,
-                Message: orderSummaryGobtn.Message,
+                Message: goButtonData.Message,
             })
             return
         }
-    }, [orderSummaryGobtn])
+    }, [goButtonData])
 
     useEffect(() => {
-        if (Data.length > 0) {
-            var arr = []
-            if (groupByDate) {
-                arr.push('OrderDate')
+        if (tableData.length === 0) {
+            setBtnMode(0)
+        }
+    }, [tableData]);
+
+    useEffect(() => {
+
+        try {
+
+            if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
+                setBtnMode(0);
+                const { Data } = goButtonData
+                if (btnMode === 2) {
+                    var arr = []
+                    if (groupByDate) {
+                        arr.push('OrderDate')
+                    }
+                    if (groupByParty) {
+                        arr.push('CustomerName')
+                    }
+
+                    const groupData = groupByColumnsWithSumFunc(tableData, [...arr, ...['Group', 'SubGroup', 'MaterialName']]);
+                    _cfunc.CommonConsole(JSON.stringify("groupData", tableData))
+                    const worksheet = XLSX.utils.json_to_sheet(groupData);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
+                    XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
+                    dispatch(postOrderSummary_API_Success([]));
+                }
+                else {
+                    const UpdatedTableData = Data.map((item, index) => {
+
+                        return {
+                            ...item, id: index + 1,
+                        };
+                    });
+                    setTableData(UpdatedTableData);
+                    dispatch(postOrderSummary_API_Success([]));
+                }
             }
-            if (groupByParty) {
-                arr.push('CustomerName')
+            else if ((goButtonData.Status === true)) {
+                dispatch(postOrderSummary_API_Success([]));
             }
 
-            const groupData = groupByColumnsWithSumFunc(Data, [...arr, ...['Group', 'SubGroup', 'MaterialName']]);
-            _cfunc.CommonConsole(JSON.stringify("groupData", Data))
-            const worksheet = XLSX.utils.json_to_sheet(groupData);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
-            XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
-            dispatch(postOrderSummary_API_Success([]));
+            setBtnMode(0);
         }
-    }, [Data]);
+        catch (e) { console.log(e) }
+
+    }, [goButtonData]);
+
 
     const groupByColumnsWithSumFunc = (jsonData, columnNames) => {
         const columnSumsByGroup = jsonData.reduce((result, item) => {
@@ -140,6 +172,7 @@ const OrderSummary = (props) => {
         value: i.id,
         label: i.Name
     }));
+
     Party_Option.unshift({
         value: "",
         label: " All"
@@ -153,12 +186,11 @@ const OrderSummary = (props) => {
             a.hasValid.PartyName.valid = true
             return a
         })
+        setTableData([]);
     }
 
-
-    function goButtonHandler() {
-
-        const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
+    function excel_And_GoBtnHandler(e, Btnmode) {
+        setBtnMode(Btnmode);
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
@@ -166,7 +198,7 @@ const OrderSummary = (props) => {
             "PartyID": isSCMParty ? values.PartyName.value : _cfunc.loginPartyID()
 
         });
-        dispatch(postOrderSummary_API({ jsonBody, btnId }));
+        dispatch(postOrderSummary_API({ jsonBody }));
     }
 
     function fromdateOnchange(e, date) {
@@ -175,7 +207,8 @@ const OrderSummary = (props) => {
             a.values.FromDate = date;
             a.hasValid.FromDate.valid = true
             return a
-        })
+        });
+        setTableData([]);
     }
 
     function todateOnchange(e, date) {
@@ -184,7 +217,31 @@ const OrderSummary = (props) => {
             a.values.ToDate = date;
             a.hasValid.ToDate.valid = true
             return a
-        })
+        });
+        setTableData([]);
+    }
+
+    const pagesListColumns = () => {
+        if (tableData.length > 0) {
+            const objectAtIndex0 = tableData[0];
+            const internalColumn = []
+            for (const key in objectAtIndex0) {
+                const column = {
+                    text: key,
+                    dataField: key,
+                    sort: true,
+                    classes: "table-cursor-pointer",
+                };
+                internalColumn.push(column);
+            }
+
+            setColumns(internalColumn)
+            setColumnsCreated(true)
+        }
+    }
+
+    if (!columnsCreated) {
+        pagesListColumns();
     }
 
     return (
@@ -193,7 +250,7 @@ const OrderSummary = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -207,7 +264,7 @@ const OrderSummary = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -228,7 +285,7 @@ const OrderSummary = (props) => {
                                         style={{ width: "65px" }}>Party</Label>
                                     <Col sm="7">
                                         <C_Select
-                                            name="DistrictName"
+                                            name="PartyName"
                                             value={values.PartyName}
                                             isSearchable={true}
                                             isLoading={partyLoading}
@@ -246,8 +303,30 @@ const OrderSummary = (props) => {
                             </Col>
                         }
 
-                        <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
+                        <Col sm={1} className="mt-3" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={btnMode === 1 && true}
+                                className="btn btn-success"
+                                onClick={(e) => excel_And_GoBtnHandler(e, 1)}
+                            >
+                                Show
+                            </C_Button>
+
+                        </Col>
+
+                        <Col sm="2" className="mt-3 ">
+
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={btnMode === 2 && true}
+                                className="btn btn-primary"
+                                onClick={(e) => excel_And_GoBtnHandler(e, 2)}
+                            >
+                                Excel Download
+                            </C_Button>
                         </Col>
                     </div>
                 </div>
@@ -280,6 +359,39 @@ const OrderSummary = (props) => {
                         </Row>
                     </CardBody>
                 </Card>
+
+                <div className="">
+                    <ToolkitProvider
+                        keyField={"id"}
+                        data={tableData}
+                        columns={columns}
+                        search
+                    >
+                        {(toolkitProps,) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive table">
+                                            <BootstrapTable
+                                                keyField={"id"}
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Record Not available
+                                                    </div>
+                                                }
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
+
+                </div>
             </div>
         </React.Fragment >
     )

@@ -13,7 +13,3 @@ export const GoButton_For_GenericSale_Success = resp => ({
     type: GO_BUTTON_FOR_GENERIC_SALE_SUCCESS,
     payload: resp,
 })
-
-export const GenericSaleReportApiErrorAction = () => ({
-    type: GENERIC_SALE_REPORT_API_ERROR_ACTION,
-})

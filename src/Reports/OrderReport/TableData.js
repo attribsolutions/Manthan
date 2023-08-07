@@ -7,10 +7,12 @@ export const columns = [
     "Quantity",
     "MRP",
     "Rate",
+    "Discount",
+    "Discount Amount",
     "Basic   Amount ",
-    "CGST%",
+    "       CGST       %     Amount",
     "CGST   Amount ",
-    "SGST%",
+    "        SGST      %      Amount",
     "SGST   Amount",
     "Total Amount"];
 
@@ -19,10 +21,14 @@ export const columnsWithIGST = [
     "Quantity",
     "MRP",
     "Rate",
+    "Discount",
+    "Discount Amount",
     "Basic   Amount ",
-    "IGST%",
+
+    "        IGST        %       Amount",
     "IGST   Amount ",
-    "Total Amount"];
+    "Total Amount",
+];
 
 export const PageHedercolumns = [
     "Billed by",
@@ -60,6 +66,9 @@ export const Rows = (data) => {
             let totalQuantity = 0
             let TotalGst = 0
             let GSTPercentage = 0
+            let totalDiscountAmount = 0
+
+
 
 
             i.forEach(element => {
@@ -70,13 +79,15 @@ export const Rows = (data) => {
                     `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}  ${element.UnitName}`,
                     `${(numberWithCommas(Number(element.MRPValue).toFixed(2)))}`,
                     `${(numberWithCommas(Number(element.Rate).toFixed(2)))}`,
+                    `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
+                    `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
                     `${(numberWithCommas(Number(element.BasicAmount).toFixed(2)))}`,
                     `${Number(element.CGSTPercentage)}%`,
                     `${(numberWithCommas(Number(element.CGST).toFixed(2)))}`,
                     `${Number(element.SGSTPercentage)}%`,
                     `${(numberWithCommas(Number(element.SGST).toFixed(2)))}`,
                     `${(numberWithCommas(Number(element.Amount).toFixed(2)))}`,
-                    "row"
+
                 ];
 
                 totalQuantity = Number(totalQuantity) + Number(element.Quantity)
@@ -86,6 +97,8 @@ export const Rows = (data) => {
                 totalAmount = Number(totalAmount) + Number(element.Amount)
                 GSTPercentage = Number(element.CGSTPercentage) + Number(element.SGSTPercentage)
                 totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
+                totalDiscountAmount = Number(totalDiscountAmount) + Number(element.DiscountAmount)
+
 
                 hasHedRow.push(tableitemRow);
             })
@@ -94,9 +107,11 @@ export const Rows = (data) => {
                 return [
                     `GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(TotalGst).toFixed(2))}`,
                     "",
+                    "",
+                    "",
+                    `${numberWithCommas(Number(totalDiscountAmount).toFixed(2))}`,
+                    "",
                     `${numberWithCommas(Number(totalBasicAmount).toFixed(2))}`,
-                    "",
-                    "",
                     `${numberWithCommas(Number(totalCGst).toFixed(2))}`,
                     "isaddition",
                     `${numberWithCommas(Number(totalSGst).toFixed(2))}`,
@@ -125,6 +140,8 @@ export const RowsWithIGST = (data) => {
             let totalAmount = 0
             let totalQuantity = 0
             let GSTPercentage = 0
+            let totalDiscountAmount = 0
+
 
 
             i.forEach(element => {
@@ -135,6 +152,8 @@ export const RowsWithIGST = (data) => {
                     `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}                  ${element.UnitName}`,
                     `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
                     `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
+                    `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
+                    `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
                     `${numberWithCommas(Number(element.BasicAmount).toFixed(2))}`,
                     `${Number(element.IGSTPercentage)}%`,
                     `${numberWithCommas(Number(element.IGST).toFixed(2))}`,
@@ -147,6 +166,8 @@ export const RowsWithIGST = (data) => {
                 totalAmount = Number(totalAmount) + Number(element.Amount)
                 totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
                 GSTPercentage = Number(element.IGSTPercentage)
+                totalDiscountAmount = Number(totalDiscountAmount) + Number(element.DiscountAmount)
+
 
 
                 hasHedRow.push(tableitemRow);
@@ -155,10 +176,12 @@ export const RowsWithIGST = (data) => {
             function totalrow() {
                 return [
                     `GST ${(Number(GSTPercentage))}%  Total:${(numberWithCommas(Number(totalIGst).toFixed(2)))} `,
+                    "",
+                    "",
+                    "",
+                    `${numberWithCommas(Number(totalDiscountAmount).toFixed(2))}`,
+                    "",
                     `${numberWithCommas(Number(totalBasicAmount).toFixed(2))}`,
-                    "",
-                    "",
-                    "",
                     `${numberWithCommas(Number(totalIGst).toFixed(2))}`,
                     "isaddition",
                     `${numberWithCommas(Number(totalAmount).toFixed(2))}`,

@@ -732,10 +732,10 @@ const PageMaster = (props) => {
                                       required: {
                                         value: true,
                                         errorMessage:
-                                          "Please Enter Display Index Only 2 Digit ",
+                                          "Please Enter Display Index ",
                                       },
                                       tel: {
-                                        pattern: /^\d{1,2}$/,
+                                        pattern: /^\d{1,8}$/,
                                       },
                                     }}
                                   />

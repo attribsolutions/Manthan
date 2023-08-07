@@ -3,17 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import * as XLSX from 'xlsx';
-import { GetVenderSupplierCustomer } from "../../store/actions";
-import C_Report from "../../components/Common/C_Report";
+
 import { postInvoiceDataExport_API, postInvoiceDataExport_API_Success } from "../../store/Report/InvoiceDataExportRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
+import Select from "react-select";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 
 const InvoiceDataExport = (props) => {
@@ -21,6 +21,8 @@ const InvoiceDataExport = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const isSCMParty = _cfunc.loginIsSCMParty();
+
 
 
 
@@ -33,11 +35,13 @@ const InvoiceDataExport = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [columns, setColumns] = useState([{}]);
     const [columnsCreated, setColumnsCreated] = useState(false)
+    const [PartyDropdown, setPartyDropdown] = useState("");
+
     const reducers = useSelector(
         (state) => ({
-            pdfdata: state.PdfReportReducers.pdfdata,
             tableData: state.InvoiceDataExportReducer.InvoiceDataExportGobtn,
             GoBtnLoading: state.InvoiceDataExportReducer.GoBtnLoading,
+            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             ExcelBtnLoading: state.InvoiceDataExportReducer.ExcelBtnLoading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -45,10 +49,10 @@ const InvoiceDataExport = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, tableData = [], ExcelBtnLoading, GoBtnLoading } = reducers;
+    const { userAccess, tableData = [], ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
     const { InvoiceExportSerializerDetails = [] } = tableData;
-
-    debugger
+    
+    
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -72,7 +76,7 @@ const InvoiceDataExport = (props) => {
     }, [userAccess])
     useEffect(() => { return () => { dispatch(postInvoiceDataExport_API_Success([])); } }, [])
     useEffect(() => {
-        debugger
+        
         if (tableData.btnId === "excel_btnId") {
             if (InvoiceExportSerializerDetails.length > 0) {
                 const worksheet = XLSX.utils.json_to_sheet(InvoiceExportSerializerDetails);
@@ -88,7 +92,7 @@ const InvoiceDataExport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Party": _cfunc.loginPartyID(),
+            "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
         });
         let config = { jsonBody, btnId: "excel_btnId" }
         dispatch(postInvoiceDataExport_API(config))
@@ -99,13 +103,13 @@ const InvoiceDataExport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Party": _cfunc.loginPartyID(),
+            "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
         });
         let config = { jsonBody, btnId }
         dispatch(postInvoiceDataExport_API(config))
     }
-    const createColumns = () => {
 
+    const createColumns = () => {
         if (InvoiceExportSerializerDetails.length > 0) {
             const objectAtIndex0 = InvoiceExportSerializerDetails[0];
             const internalColumn = []
@@ -147,13 +151,23 @@ const InvoiceDataExport = (props) => {
         })
     }
 
+    const partyOnchange = (e) => {
+        setPartyDropdown(e)
+        dispatch(postInvoiceDataExport_API_Success([]))
+    }
+
+    const Party_Option = Distributor.map(i => ({
+        value: i.id,
+        label: i.Name
+    }));
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -166,7 +180,7 @@ const InvoiceDataExport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -179,10 +193,40 @@ const InvoiceDataExport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm={2} className="mt-3 ">
-                            <Go_Button
+
+                        {isSCMParty &&
+                            <Col sm={3} className="">
+                                <FormGroup className="mb- row mt-3" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                    <Col sm="8">
+                                        <Select
+                                            name="Party"
+                                            value={PartyDropdown}
+                                            isSearchable={true}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={Party_Option}
+                                            onChange={(e) => { partyOnchange(e) }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        }
+                        <Col sm={1} className="mt-3 ">
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={GoBtnLoading === `gobtn-${url.INVOICE_DATA_EXPORT}`}
+                                className="btn btn-success   "
                                 onClick={goButtonHandler}
-                                loading={GoBtnLoading === `gobtn-${url.INVOICE_DATA_EXPORT}`} />
+                            >
+                                Show
+                            </C_Button>
+
                         </Col>
 
                         <Col sm={2} className="mt-3 ">
@@ -190,19 +234,21 @@ const InvoiceDataExport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 loading={ExcelBtnLoading === `excel_btnId`}
-                                className="btn btn-primary w-md  "
+                                className="btn btn-primary   "
                                 onClick={(e) => { excelhandler() }}
                             >
                                 Excel Download
                             </C_Button>
                         </Col>
+
+
                     </div>
                 </div>
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="PartyID"
-                        data={InvoiceExportSerializerDetails}
-                        columns={columns}
+                        data={tableData.btnId !== "excel_btnId" ? InvoiceExportSerializerDetails : [{}]}
+                        columns={tableData.btnId !== "excel_btnId" ? columns : [{}]}
                         search
                     >
                         {(toolkitProps,) => (
