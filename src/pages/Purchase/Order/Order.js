@@ -9,13 +9,14 @@ import {
     Label,
     Modal,
     Row,
+    Spinner,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { orderCalculateFunc } from "./OrderPageCalulation";
-import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner, Listloader, DashboardLoader } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
@@ -136,6 +137,7 @@ const Order = (props) => {
         approvalDetail,
         orderApprovalMsg,
         gobutton_Add_invoice,
+        invoiceGoBtnloading,
         goBtnloading,
         saveBtnloading,
         gotoInvoiceBtnLoading,
@@ -171,12 +173,14 @@ const Order = (props) => {
         routesDropLoading: state.RoutesReducer.goBtnLoading,
 
         gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
+        invoiceGoBtnloading: state.InvoiceReducer.goBtnloading,
+
         goBtnloading: state.OrderReducer.goBtnLoading,
         saveBtnloading: state.OrderReducer.saveBtnloading,
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
 
     }));;
-
+    debugger
     const { fieldLabel } = state;
 
     const location = { ...history.location }
@@ -316,7 +320,7 @@ const Order = (props) => {
                         Party: _cfunc.loginPartyID(),
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
-                        jsonBody, 
+                        jsonBody,
                         subPageMode: url.INVOICE_1,
                         path: url.INVOICE_1,
                         pageMode: mode.defaultsave,
@@ -332,7 +336,7 @@ const Order = (props) => {
                     if (a) {
                         history.push({
                             pathname: listPath,
-                            updatedRowBlinkId:postMsg.OrderID
+                            updatedRowBlinkId: postMsg.OrderID
                         });
                     }
                 }
@@ -437,7 +441,7 @@ const Order = (props) => {
         label: i.Name,
     }));
 
- 
+
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -1289,9 +1293,18 @@ const Order = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <PageLoadingSpinner isLoading={!pageField} />
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
+                <div className="page-container1">
+                    {invoiceGoBtnloading && <div className="c_spinner-container">
+                        <div className="d-flex">
+                            <div className="">
+                                <span className="font-size-18 color-primary">Please Wait...</span>
+                            </div>
+                            <DashboardLoader />
+                        </div>
 
-                    {/* {userAdminRole === 2 ?
+                    </div>}
+                    <div className="page-content" style={{ marginBottom: "5cm" }}>
+                        {/* {userAdminRole === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
                             <div className=" mt-1 mb-2 row ">
                                 <Col sm="6">
@@ -1317,200 +1330,200 @@ const Order = (props) => {
                         </div>
                         : null} */}
 
-                    {userAdminRole &&
-                        <PartyDropdown_Common
-                            partySelect={partySelect}
-                            setPartyFunc={partyOnchange} />
-                    }
+                        {userAdminRole &&
+                            <PartyDropdown_Common
+                                partySelect={partySelect}
+                                setPartyFunc={partyOnchange} />
+                        }
 
-                    <div>
-                        <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
+                        <div>
+                            <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
 
-                            <div>
-                                <Row >
-                                    <Col sm="4" >
-                                        <FormGroup className=" row mt-2" >
-                                            <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>Delivery Date</Label>
-                                            <Col sm="7">
-                                                <C_DatePicker
-                                                    name="orderdate"
-                                                    value={orderdate}
-                                                    disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                    onChange={orderdateOnchange}
-                                                />
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
-
-                                    {(subPageMode === ORDER_4) ?
-                                        <Col sm="3">
-                                            <FormGroup className=" row mt-2 " >
+                                <div>
+                                    <Row >
+                                        <Col sm="4" >
+                                            <FormGroup className=" row mt-2" >
                                                 <Label className="col-sm-5 p-2"
-                                                    style={{ width: "65px" }}>{fieldLabel.Route}</Label>
+                                                    style={{ width: "115px" }}>Delivery Date</Label>
                                                 <Col sm="7">
+                                                    <C_DatePicker
+                                                        name="orderdate"
+                                                        value={orderdate}
+                                                        disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                                        onChange={orderdateOnchange}
+                                                    />
+                                                </Col>
+                                            </FormGroup>
+                                        </Col>
 
+                                        {(subPageMode === ORDER_4) ?
+                                            <Col sm="3">
+                                                <FormGroup className=" row mt-2 " >
+                                                    <Label className="col-sm-5 p-2"
+                                                        style={{ width: "65px" }}>{fieldLabel.Route}</Label>
+                                                    <Col sm="7">
+
+                                                        <C_Select
+                                                            classNamePrefix="react-select"
+                                                            value={routeSelect}
+                                                            options={RouteOptions}
+                                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
+                                                            // onChange={(e) => { setRouteSelect(e) }}
+                                                            onChange={(e) => { RouteOnChange(e) }}
+                                                            isLoading={routesDropLoading}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                        />
+
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col >
+                                            : <Col sm='3' />
+                                        }
+
+                                        <Col sm="4" className="">
+                                            <FormGroup className="row mt-2" >
+                                                <Label className="col-sm-5 p-2"
+                                                    style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
+                                                <Col sm="7">
                                                     <C_Select
-                                                        classNamePrefix="react-select"
-                                                        value={routeSelect}
-                                                        options={RouteOptions}
+                                                        value={supplierSelect}
                                                         isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
-                                                        // onChange={(e) => { setRouteSelect(e) }}
-                                                        onChange={(e) => { RouteOnChange(e) }}
-                                                        isLoading={routesDropLoading}
+                                                        options={supplierOptions}
+                                                        onChange={supplierOnchange}
+                                                        isLoading={supplierDropLoading}
                                                         styles={{
                                                             menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
                                                     />
-
+                                                    {(FSSAI_Date_Is_Expired) &&
+                                                        <span className="text-danger f-8">
+                                                            <small>{FSSAI_Date_Is_Expired} </small>
+                                                        </span>
+                                                    }
                                                 </Col>
+
+                                            </FormGroup>
+                                        </Col>
+
+                                        <Col sm="1">                      {/*Go_Button  */}
+
+                                            <div className="row mt-2  pr-1">
+                                                {pageMode === mode.defaultsave ?
+                                                    // (!selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
+                                                    (!goBtnDissable) ?
+
+                                                        < Go_Button
+                                                            loading={goBtnloading}
+                                                            id={`go-btn${subPageMode}`}
+                                                            onClick={(e) => {
+                                                                setSelecedItemWiseOrder(false)
+                                                                setOrderItemTable(itemSelectDropOptions)
+                                                                setItemSelect('')
+                                                                setGoBtnDissable(true)
+                                                            }} />
+                                                        : (!selecedItemWiseOrder) &&
+                                                        <Change_Button
+                                                            id={`change-btn${subPageMode}`}
+                                                            onClick={(e) => {
+                                                                setsupplierSelect('')
+                                                                setGoBtnDissable(false)
+                                                                setSelecedItemWiseOrder(true)
+                                                                setOrderItemTable([])
+                                                                setItemSelect('')
+                                                                dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                                                            }}
+                                                        />
+                                                    : null
+                                                }
+                                            </div>
+                                        </Col>
+
+                                    </Row>
+                                    <Row>
+                                        <Col sm="4">                               {/*  Description field */}
+                                            <FormGroup className="row mt-1" >
+                                                <Label className="col-sm-5 p-2"
+                                                    style={{ width: "115px" }}>Description</Label>
+                                                <div className="col-7">
+                                                    <Input type="text"
+                                                        value={description}
+                                                        placeholder='Enter Order Description'
+                                                        onChange={e => setDescription(e.target.value)}
+                                                    />
+
+                                                </div>
+
                                             </FormGroup>
                                         </Col >
-                                        : <Col sm='3' />
-                                    }
+                                        <Col sm="3" />
+                                        <Col sm="4">
+                                            <FormGroup className="row mt-1" >
+                                                <Label className="col-sm-5 p-2"
+                                                    style={{ width: "115px" }}>{fieldLabel.Item}</Label>
 
-                                    <Col sm="4" className="">
-                                        <FormGroup className="row mt-2" >
-                                            <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
-                                            <Col sm="7">
-                                                <C_Select
-                                                    value={supplierSelect}
-                                                    isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
-                                                    options={supplierOptions}
-                                                    onChange={supplierOnchange}
-                                                    isLoading={supplierDropLoading}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                                {(FSSAI_Date_Is_Expired) &&
-                                                    <span className="text-danger f-8">
-                                                        <small>{FSSAI_Date_Is_Expired} </small>
-                                                    </span>
-                                                }
-                                            </Col>
-
-                                        </FormGroup>
-                                    </Col>
-
-                                    <Col sm="1">                      {/*Go_Button  */}
-
-                                        <div className="row mt-2  pr-1">
-                                            {pageMode === mode.defaultsave ?
-                                                // (!selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
-                                                (!goBtnDissable) ?
-
-                                                    < Go_Button
-                                                        loading={goBtnloading}
-                                                        id={`go-btn${subPageMode}`}
-                                                        onClick={(e) => {
-                                                            setSelecedItemWiseOrder(false)
-                                                            setOrderItemTable(itemSelectDropOptions)
-                                                            setItemSelect('')
-                                                            setGoBtnDissable(true)
-                                                        }} />
-                                                    : (!selecedItemWiseOrder) &&
-                                                    <Change_Button
-                                                        id={`change-btn${subPageMode}`}
-                                                        onClick={(e) => {
-                                                            setsupplierSelect('')
-                                                            setGoBtnDissable(false)
-                                                            setSelecedItemWiseOrder(true)
-                                                            setOrderItemTable([])
-                                                            setItemSelect('')
-                                                            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                                                <Col sm="7">
+                                                    <C_Select
+                                                        value={itemSelect}
+                                                        isDisabled={(pageMode === "edit" || goBtnloading) ? true : false}
+                                                        options={itemSelectDropOptions}
+                                                        isLoading={goBtnloading}
+                                                        onChange={itemSelectOnchange}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
                                                     />
-                                                : null
+                                                </Col>
+
+                                            </FormGroup>
+                                        </Col>
+                                        <Col sm="1"  >
+
+                                            {pageMode === mode.defaultsave ?
+                                                <div className="row mt-2 pr-1"  >
+                                                    {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
+                                                        <Button
+                                                            className
+                                                            color="btn btn-outline-info border-1 font-size-12 "
+                                                            disabled={goBtnloading}
+                                                            onClick={() => item_AddButtonHandler()} >
+                                                            Add Item
+                                                        </Button>
+                                                        :
+                                                        ((itemSelectDropOptions.length > 0)) &&
+                                                        <Button
+                                                            color="btn btn-secondary border-1 font-size-12"
+                                                            className='text-blac1k'
+                                                            disabled={goBtnloading}
+                                                            onClick={() => {
+                                                                setsupplierSelect('')
+                                                                setGoBtnDissable(false)
+                                                                setSelecedItemWiseOrder(true)
+                                                                setOrderItemTable([])
+                                                                setItemSelect('')
+                                                                dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                                                            }} >
+                                                            Item Wise
+                                                        </Button>
+
+                                                    }
+
+                                                </div> : null
                                             }
-                                        </div>
-                                    </Col>
+                                        </Col>
 
-                                </Row>
-                                <Row>
-                                    <Col sm="4">                               {/*  Description field */}
-                                        <FormGroup className="row mt-1" >
-                                            <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>Description</Label>
-                                            <div className="col-7">
-                                                <Input type="text"
-                                                    value={description}
-                                                    placeholder='Enter Order Description'
-                                                    onChange={e => setDescription(e.target.value)}
-                                                />
+                                    </Row>
+                                </div>
 
-                                            </div>
-
-                                        </FormGroup>
-                                    </Col >
-                                    <Col sm="3" />
-                                    <Col sm="4">
-                                        <FormGroup className="row mt-1" >
-                                            <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>{fieldLabel.Item}</Label>
-
-                                            <Col sm="7">
-                                                <C_Select
-                                                    value={itemSelect}
-                                                    isDisabled={(pageMode === "edit" || goBtnloading) ? true : false}
-                                                    options={itemSelectDropOptions}
-                                                    isLoading={goBtnloading}
-                                                    onChange={itemSelectOnchange}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                            </Col>
-
-                                        </FormGroup>
-                                    </Col>
-                                    <Col sm="1"  >
-
-                                        {pageMode === mode.defaultsave ?
-                                            <div className="row mt-2 pr-1"  >
-                                                {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
-                                                    <Button
-                                                        className
-                                                        color="btn btn-outline-info border-1 font-size-12 "
-                                                        disabled={goBtnloading}
-                                                        onClick={() => item_AddButtonHandler()} >
-                                                        Add Item
-                                                    </Button>
-                                                    :
-                                                    ((itemSelectDropOptions.length > 0)) &&
-                                                    <Button
-                                                        color="btn btn-secondary border-1 font-size-12"
-                                                        className='text-blac1k'
-                                                        disabled={goBtnloading}
-                                                        onClick={() => {
-                                                            setsupplierSelect('')
-                                                            setGoBtnDissable(false)
-                                                            setSelecedItemWiseOrder(true)
-                                                            setOrderItemTable([])
-                                                            setItemSelect('')
-                                                            dispatch(_act.GoButton_For_Order_AddSuccess([]))
-                                                        }} >
-                                                        Item Wise
-                                                    </Button>
-
-                                                }
-
-                                            </div> : null
-                                        }
-                                    </Col>
-
-                                </Row>
                             </div>
 
-                        </div>
-
-                        <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
-                            <div className="row">                                         {/*  Description and Delivery Date  field */}
+                            <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
+                                <div className="row">                                         {/*  Description and Delivery Date  field */}
 
 
-                                {/*  Delivery Date field */}
-                                {/* {!(subPageMode === url.IB_ORDER) ?
+                                    {/*  Delivery Date field */}
+                                    {/* {!(subPageMode === url.IB_ORDER) ?
                                     <div className="col col-6" >
                                         <FormGroup className=" row mt-3 " >
                                             <Label className=" p-2"
@@ -1528,177 +1541,177 @@ const Order = (props) => {
                                         </FormGroup>
                                     </div > : null} */}
 
-                            </div>
-
-                            {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
-                                <div className="row mt-2 ">
-
-                                    <div className="col col-6">                             {/* Billing Address */}
-                                        <FormGroup className="row  " >
-                                            <Label className=" p-2"
-                                                style={{ width: "115px" }}>Billing Address</Label>
-                                            <div className="col col-6">
-                                                <C_Select
-                                                    value={billAddr}
-                                                    classNamePrefix="select2-Customer"
-                                                    options={supplierAddress}
-                                                    onChange={(e) => { setbillAddr(e) }}
-                                                    isLoading={supplierADDdropLoading}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                            </div>
-                                        </FormGroup>
-                                    </div >
-
-                                    <div className="col col-6">                               {/*  Billing Shipping Address */}
-                                        <FormGroup className=" row " >
-                                            <Label className=" p-2"
-                                                style={{ width: "130px" }}>Shipping Address</Label>
-                                            <div className="col col-6">
-                                                <Select
-                                                    value={shippAddr}
-                                                    classNamePrefix="select2-Customer"
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                    isLoading={supplierADDdropLoading}
-                                                    options={supplierAddress}
-                                                    onChange={(e) => { setshippAddr(e) }}
-                                                />
-                                            </div>
-                                        </FormGroup>
-                                    </div >
                                 </div>
 
-                                <div className="row" >                                        {/**PO Type  (PO From Date and PO To Date)*/}
-                                    <div className="col col-6" >                              {/**PO Type */}
-                                        <FormGroup className=" row  " >
-                                            <Label className=" p-2"
-                                                style={{ width: "115px" }}>PO Type</Label>
-                                            <div className="col col-6 ">
-                                                <Select
-                                                    value={orderTypeSelect}
-                                                    classNamePrefix="select2-Customer"
-                                                    options={orderTypeOptions}
-                                                    onChange={(e) => { setorderTypeSelect(e) }}
-                                                    isLoading={orderTypeDropLoading}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                            </div>
-                                        </FormGroup>
-                                    </div >
-                                </div>
+                                {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
+                                    <div className="row mt-2 ">
 
+                                        <div className="col col-6">                             {/* Billing Address */}
+                                            <FormGroup className="row  " >
+                                                <Label className=" p-2"
+                                                    style={{ width: "115px" }}>Billing Address</Label>
+                                                <div className="col col-6">
+                                                    <C_Select
+                                                        value={billAddr}
+                                                        classNamePrefix="select2-Customer"
+                                                        options={supplierAddress}
+                                                        onChange={(e) => { setbillAddr(e) }}
+                                                        isLoading={supplierADDdropLoading}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
+                                                    />
+                                                </div>
+                                            </FormGroup>
+                                        </div >
 
-                                {(orderTypeSelect.label === 'Open PO') ?
-                                    <div className="row" >                                    {/*PO From Date */}
-                                        <div className="col col-6" >
+                                        <div className="col col-6">                               {/*  Billing Shipping Address */}
                                             <FormGroup className=" row " >
                                                 <Label className=" p-2"
-                                                    style={{ width: "115px" }}>PO From Date</Label>
-                                                <div className="col col-6 ">
-                                                    <C_DatePicker
-                                                        id="pofromdate"
-                                                        name="pofromdate"
-                                                        value={poFromDate}
-                                                        onChange={(e, date) => { setpoFromDate(date) }}
+                                                    style={{ width: "130px" }}>Shipping Address</Label>
+                                                <div className="col col-6">
+                                                    <Select
+                                                        value={shippAddr}
+                                                        classNamePrefix="select2-Customer"
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
+                                                        isLoading={supplierADDdropLoading}
+                                                        options={supplierAddress}
+                                                        onChange={(e) => { setshippAddr(e) }}
                                                     />
                                                 </div>
                                             </FormGroup>
                                         </div >
+                                    </div>
 
-                                        <div className="col col-6" >                        {/*PO To Date */}
+                                    <div className="row" >                                        {/**PO Type  (PO From Date and PO To Date)*/}
+                                        <div className="col col-6" >                              {/**PO Type */}
                                             <FormGroup className=" row  " >
                                                 <Label className=" p-2"
-                                                    style={{ width: "130px" }}>PO To Date</Label>
+                                                    style={{ width: "115px" }}>PO Type</Label>
                                                 <div className="col col-6 ">
-                                                    <C_DatePicker
-                                                        id="potodate"
-                                                        name="potodate"
-                                                        value={poToDate}
-                                                        onChange={(e, date) => { setpoToDate(date) }}
+                                                    <Select
+                                                        value={orderTypeSelect}
+                                                        classNamePrefix="select2-Customer"
+                                                        options={orderTypeOptions}
+                                                        onChange={(e) => { setorderTypeSelect(e) }}
+                                                        isLoading={orderTypeDropLoading}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
                                                     />
                                                 </div>
                                             </FormGroup>
                                         </div >
-                                    </div> : null}
-                            </div>
-                                : null}
-
-                        </div>
-
-                    </div>
+                                    </div>
 
 
-                    <ToolkitProvider
-                        keyField={"Item_id"}
-                        data={orderItemTable}
-                        columns={pagesListColumns}
-                        search
-                    >
-                        {(toolkitProps,) => (
-                            <React.Fragment>
-                                <Row>
-                                    <Col xl="12">
-                                        <div className="table-responsive table " style={{ minHeight: "45vh" }} >
-                                            <BootstrapTable
-                                                keyField={"Item_id"}
-                                                id="table_Arrow"
-                                                defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
-                                                classes={"table  table-bordered table-hover "}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center table-cursor-pointer">
-                                                        Items Not available
+                                    {(orderTypeSelect.label === 'Open PO') ?
+                                        <div className="row" >                                    {/*PO From Date */}
+                                            <div className="col col-6" >
+                                                <FormGroup className=" row " >
+                                                    <Label className=" p-2"
+                                                        style={{ width: "115px" }}>PO From Date</Label>
+                                                    <div className="col col-6 ">
+                                                        <C_DatePicker
+                                                            id="pofromdate"
+                                                            name="pofromdate"
+                                                            value={poFromDate}
+                                                            onChange={(e, date) => { setpoFromDate(date) }}
+                                                        />
                                                     </div>
-                                                }
-                                                onDataSizeChange={(e) => {
-                                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                }}
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {mySearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </Col>
-                                </Row>
+                                                </FormGroup>
+                                            </div >
 
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
+                                            <div className="col col-6" >                        {/*PO To Date */}
+                                                <FormGroup className=" row  " >
+                                                    <Label className=" p-2"
+                                                        style={{ width: "130px" }}>PO To Date</Label>
+                                                    <div className="col col-6 ">
+                                                        <C_DatePicker
+                                                            id="potodate"
+                                                            name="potodate"
+                                                            value={poToDate}
+                                                            onChange={(e, date) => { setpoToDate(date) }}
+                                                        />
+                                                    </div>
+                                                </FormGroup>
+                                            </div >
+                                        </div> : null}
+                                </div>
+                                    : null}
 
-                    <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
+                            </div>
 
-                    {
-                        ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <Col>
-                                <SaveButton
-                                    loading={saveBtnloading}
-                                    editCreatedBy={editCreatedBy}
-                                    pageMode={pageMode}
-                                    userAcc={userPageAccessState}
-                                    onClick={saveHandler}
-                                    forceDisabled={gotoInvoiceBtnLoading}
-                                />
-                            </Col>
-                            {
-                                (subPageMode === url.ORDER_4) && (pageMode === mode.defaultsave) ?
-                                    <Col>
-                                        <GotoInvoiceBtn
-                                            forceDisabled={gotoInvoiceBtnLoading}
-                                            loading={gotoInvoiceBtnLoading}
-                                            pageMode={pageMode}
-                                            userAcc={userPageAccessState}
-                                            onClick={saveHandler}
-                                        />
-                                    </Col> : null}
                         </div>
-                            : <div className="row save1"></div>
-                    }
-                </div >
 
+
+                        <ToolkitProvider
+                            keyField={"Item_id"}
+                            data={orderItemTable}
+                            columns={pagesListColumns}
+                            search
+                        >
+                            {(toolkitProps,) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive table " style={{ minHeight: "45vh" }} >
+                                                <BootstrapTable
+                                                    keyField={"Item_id"}
+                                                    id="table_Arrow"
+                                                    defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
+                                                    classes={"table  table-bordered table-hover "}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center table-cursor-pointer">
+                                                            Items Not available
+                                                        </div>
+                                                    }
+                                                    onDataSizeChange={(e) => {
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    }}
+                                                    {...toolkitProps.baseProps}
+                                                />
+                                                {mySearchProps(toolkitProps.searchProps)}
+                                            </div>
+                                        </Col>
+                                    </Row>
+
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+
+                        <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
+
+                        {
+                            ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                                <Col>
+                                    <SaveButton
+                                        loading={saveBtnloading}
+                                        editCreatedBy={editCreatedBy}
+                                        pageMode={pageMode}
+                                        userAcc={userPageAccessState}
+                                        onClick={saveHandler}
+                                        forceDisabled={gotoInvoiceBtnLoading}
+                                    />
+                                </Col>
+                                {
+                                    (subPageMode === url.ORDER_4) && (pageMode === mode.defaultsave) ?
+                                        <Col>
+                                            <GotoInvoiceBtn
+                                                forceDisabled={gotoInvoiceBtnLoading}
+                                                loading={gotoInvoiceBtnLoading}
+                                                pageMode={pageMode}
+                                                userAcc={userPageAccessState}
+                                                onClick={saveHandler}
+                                            />
+                                        </Col> : null}
+                            </div>
+                                : <div className="row save1"></div>
+                        }
+                    </div >
+                </div>
                 <Modal
                     isOpen={isOpen_assignLink}
                     toggle={() => {
