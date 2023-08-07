@@ -22,7 +22,7 @@ const INIT_STATE = {
   gobtnDiscount_redux: [],
   discountList: [],
   editData: { Status: false },
-  deleteDiscountID: { Status: false },
+  deleteMsg: { Status: false },
   postMsg: { Status: false },
   updateMessage: { Status: false },
   partyType: [],
@@ -86,7 +86,7 @@ const DiscountReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         listBtnLoading: false,
-        deleteDiscountID: action.payload,
+        deleteMsg: action.payload,
       }
 
     case EDIT_DISCOUNT_ID:

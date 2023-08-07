@@ -167,6 +167,7 @@ export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping';
 
 export const DISCOUNT_MASTER_SAVE_API = '/DiscountMasterSave'
 export const DISCOUNT_MASTER_GO_BUTTON_API = '/DiscountMaster'
+export const DISCOUNT_MASTER_DELETE_API = '/DiscountMasterr'
 export const DISCOUNT_MASTER_LIST_API = '/DiscountMasterFilter'
 export const DISCOUNT_PARTY_TYPE_API = '/DiscountPartyType'
 export const DISCOUNT_CUSTOMER_API = '/DiscountCustomer'

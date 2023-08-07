@@ -354,7 +354,7 @@ export const get_City_List_Api = () => get(url.CITY_LIST_API)// get api
 // Discount API
 export const Discount_Go_Button_Api = ({ jsonBody, btnId }) => post(url.DISCOUNT_MASTER_GO_BUTTON_API, jsonBody, btnId)//get api
 export const Discount_Save_Api = ({ jsonBody }) => post(url.DISCOUNT_MASTER_SAVE_API, jsonBody)//get api
-export const Discount_Delete_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_CUSTOMER, jsonBody, btnId)// post api
+export const Discount_Delete_Api = ({ deleteId, btnId }) => del(`${url.DISCOUNT_MASTER_DELETE_API}/${deleteId}`, btnId)// delete api
 export const Discount_List_Api = (filterBody) => post(url.DISCOUNT_MASTER_LIST_API, filterBody)//get api
 export const Discount_Edit_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_ITEM, jsonBody, btnId)// post api
 export const Discount_Update_Api = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_UNIT, jsonBody, btnId)// post api
@@ -633,7 +633,7 @@ export const StockReport_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REP
 export const StockProcessing_API = ({ jsonBody, btnId }) => post(url.STOCK_PROCESSING, jsonBody, btnId)//Go button api
 export const StockReport_1_GoBtn_API = ({ jsonBody, btnId }) => post(url.STOCK_REPORT_1, jsonBody, btnId)//Go button api
 // Damage Stock Report 
-export const DamageStockReport_GoBtn_API =({partyId})=>get(`${url.DAMAGE_STOCK_REPORT_GO_BUTTON}/${partyId}`)//add button get api
+export const DamageStockReport_GoBtn_API = ({ partyId }) => get(`${url.DAMAGE_STOCK_REPORT_GO_BUTTON}/${partyId}`)//add button get api
 
 //Generic Sale Report
 export const GenericSale_GoBtn_API = ({ jsonBody, btnId }) => post(url.GENERIC_SALE_REPORT, jsonBody, btnId)//Go button api

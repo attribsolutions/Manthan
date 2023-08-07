@@ -400,8 +400,6 @@ const PurchaseReturn = (props) => {
             ),
         },
 
-
-
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
             dataField: "",
@@ -471,7 +469,7 @@ const PurchaseReturn = (props) => {
             },
             formatter: (cellContent, index1, _key, formatExtraData) => {
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
-                
+
                 if (formatExtraData.changeAllDiscount) {
                     index1.Discount = discountValueAll;
                     index1.DiscountType = discountTypeAll.value;
@@ -598,6 +596,7 @@ const PurchaseReturn = (props) => {
         {
             text: "Image",
             dataField: "",
+            hidden: true,
             classes: () => "sales-return-Image-row",
             formatter: (cellContent, row, key) => {
                 return (<span style={{ justifyContent: 'center' }}>
@@ -622,6 +621,7 @@ const PurchaseReturn = (props) => {
                 </span>)
             }
         },
+
         {
             text: "Action ",
             dataField: "",
