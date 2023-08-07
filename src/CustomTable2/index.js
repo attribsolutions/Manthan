@@ -55,7 +55,8 @@ const CustomTable = ({
     };
 
     return (
-        <div>
+        <div className="table-responsive table "  >
+
             <BootstrapTable data={slicedData} columns={columns} {...rest} />
 
             {/* Pagination component */}
