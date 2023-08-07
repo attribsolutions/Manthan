@@ -23,7 +23,7 @@ const PurchaseGSTReport = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    
+
     const isSCMParty = _cfunc.loginIsSCMParty();
 
 
@@ -54,7 +54,7 @@ const PurchaseGSTReport = (props) => {
 
     const { userAccess, tableData, ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
     const { PurchaseGSTDetails = [], PurchaseGSTRateWiseDetails = [] } = tableData;
-    
+
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -101,6 +101,8 @@ const PurchaseGSTReport = (props) => {
         });
         let config = { jsonBody, btnId }
         dispatch(postPurchaseGSTReport_API(config))
+        dispatch(postPurchaseGSTReport_API_Success([]));
+
     }
 
     function fromdateOnchange(e, date) {
@@ -328,7 +330,7 @@ const PurchaseGSTReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        
+
                         {isSCMParty &&
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3" >

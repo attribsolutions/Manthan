@@ -139,7 +139,8 @@ const ViewDetails_Modal = () => {
             text: "Quantity",
             dataField: "Quantity",
             formatter: (value, row, k) => {
-                return <div style={{ width: "120px" }}>{`${row.Quantity} ${row.UnitName}`}</div>
+
+                return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
             }
         },
         {
@@ -167,9 +168,10 @@ const ViewDetails_Modal = () => {
             hidden: tableArray.viewMode === url.PURCHASE_RETURN_LIST ? true : false,
             formatter: (value, row, k) => {
                 if (tableArray.viewMode === url.PURCHASE_RETURN_LIST) {
-                    return <div style={{ width: "120px" }}>{`${row.Quantity} ${row.UnitName}`}</div>
+
+                    return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
                 } else {
-                    
+
                     const defaultQuantity = tableArray.IsApproved ? row.ApprovedQuantity : row.Quantity;
                     return (
                         <div>
@@ -177,7 +179,7 @@ const ViewDetails_Modal = () => {
                                 key={`Quantity-${k}`}
                                 id={`Quantity-${k}`}
                                 cpattern={onlyNumberRegx}
-                                defaultValue={defaultQuantity}
+                                defaultValue={Number(defaultQuantity).toFixed(0)}
                                 disabled={tableArray.IsApproved}
                                 autoComplete="off"
                                 className=" text-end"
