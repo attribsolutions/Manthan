@@ -12,7 +12,7 @@ function isDateInitial(isdate) {
 
   let month = current.getMonth() + 1;
   let dd = current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`;
-  let mm = -month < 10 ? `0${month}` : `${month}`;
+  let mm = month < 10 ? `0${month}` : `${month}`;
   let yy = current.getFullYear();
 
   return { dd, mm, yy }
