@@ -112,7 +112,7 @@ const BreadcrumbNew = () => {
   function getScreenWidth() {
     return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   }
-  const screenWidth = getScreenWidth();
+  // const screenWidth = getScreenWidth();
 
   function ExcelCheckBox() {
     const arrDiv = []
@@ -149,7 +149,7 @@ const BreadcrumbNew = () => {
       <header id="page-topbar1" style={{ zIndex: "1" }}  >
         <div className="navbar-header blur1" style={{ paddingRight: "-10px", zIndex: "-1" }}>
           <div className="d-flex" >
-            {screenWidth > 768 ? <div className="navbar-brand-box" style={{ backgroundColor: "white" }} ></div> : null}
+            <div className="navbar-brand-box d-none d-lg-block" style={{ backgroundColor: "white" }} ></div> 
             <div style={{ paddingLeft: "7px" }} >
 
               {
