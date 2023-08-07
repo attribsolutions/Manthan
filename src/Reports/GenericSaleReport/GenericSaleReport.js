@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, url } from "../../routes/index"
+import { mode } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { GoButton_For_GenericSale_Action, GoButton_For_GenericSale_Success } from "../../store/Report/GenericSaleRedux/action";
 import * as XLSX from 'xlsx';
@@ -26,11 +26,10 @@ const GenericSaleReport = (props) => {
     const [tableData, setTableData] = useState([]);
     const [columns, setColumns] = useState([{}]);
     const [columnsCreated, setColumnsCreated] = useState(false)
+    const [btnMode, setBtnMode] = useState(0);
 
     const reducers = useSelector(
         (state) => ({
-            GoBtnLoading: state.GenericSaleReportReducer.GoBtnLoading,
-            ExcelBtnLoading: state.GenericSaleReportReducer.ExcelBtnLoading,
             goButtonData: state.GenericSaleReportReducer.genericSaleGobtn,
             partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
@@ -40,8 +39,8 @@ const GenericSaleReport = (props) => {
     );
     const { goButtonData = [] } = reducers
 
-    const { userAccess, Distributor, partyDropdownLoading, GoBtnLoading, ExcelBtnLoading } = reducers;
-    debugger
+    const { userAccess, Distributor, partyDropdownLoading } = reducers;
+
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -65,8 +64,16 @@ const GenericSaleReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(GoButton_For_GenericSale_Success([]))
+        return () => {
+            setTableData([]);
+        }
     }, [])
+
+    useEffect(() => {
+        if (tableData.length === 0) {
+            setBtnMode(0)
+        }
+    }, [tableData]);
 
     const Party_Option = Distributor.map(i => ({
         value: i.id,
@@ -77,8 +84,9 @@ const GenericSaleReport = (props) => {
 
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
+                setBtnMode(0);
                 const { GenericSaleDetails } = goButtonData.Data
-                if (goButtonData.btnId === "excel_btnId") {
+                if (btnMode === 2) {
                     const worksheet = XLSX.utils.json_to_sheet(GenericSaleDetails);
                     const workbook = XLSX.utils.book_new();
                     XLSX.utils.book_append_sheet(workbook, worksheet, "GenericSaleReport");
@@ -96,35 +104,21 @@ const GenericSaleReport = (props) => {
                     });
                     setTableData(UpdatedTableData);
                     dispatch(GoButton_For_GenericSale_Success([]));
-                    // setDistributorDropdown([{ value: "", label: "All" }])
+
                 }
             }
+            else if ((goButtonData.Status === true)) {
+                setTableData([]);
+            }
+            setBtnMode(0);
         }
         catch (e) { console.log(e) }
 
     }, [goButtonData]);
 
-    function goButtonHandler() {
+    function excel_And_GoBtnHandler(e, Btnmode) {
 
-        const btnId = `gobtn-${url.GENERIC_SALE_REPORT}`
-
-        var isDistributorDropdown = ''
-        if (distributorDropdown[0].value === "") {
-            isDistributorDropdown = Party_Option.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
-        }
-        else {
-            isDistributorDropdown = distributorDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
-        }
-
-        const jsonBody = JSON.stringify({
-            "FromDate": fromdate,
-            "ToDate": todate,
-            "Party": !(isSCMParty) ? _cfunc.loginPartyID().toString() : isDistributorDropdown,
-        });
-        dispatch(GoButton_For_GenericSale_Action({ jsonBody, btnId }))
-    }
-
-    function excelhandler() {
+        setBtnMode(Btnmode);
 
         var isDistributorDropdown = ''
         if (distributorDropdown[0].value === "") {
@@ -139,20 +133,24 @@ const GenericSaleReport = (props) => {
             "ToDate": todate,
             "Party": !(isSCMParty) ? _cfunc.loginPartyID().toString() : isDistributorDropdown,
         });
-        let config = { jsonBody, btnId: "excel_btnId" }
-        dispatch(GoButton_For_GenericSale_Action(config))
+        let config = { jsonBody }
+        dispatch(GoButton_For_GenericSale_Action(config));
     }
 
     function fromdateOnchange(e, date) {
+
         let newObj = { ...headerFilters }
         newObj.fromdate = date
         setHeaderFilters(newObj)
+        setTableData([]);
     }
 
     function todateOnchange(e, date) {
+
         let newObj = { ...headerFilters }
         newObj.todate = date
-        setHeaderFilters(newObj)
+        setHeaderFilters(newObj);
+        setTableData([]);
     }
 
     function PartyDrodownOnChange(e = []) {
@@ -162,8 +160,8 @@ const GenericSaleReport = (props) => {
         } else {
             e = e.filter(i => !(i.value === ''))
         }
-        setDistributorDropdown(e)
-        setTableData([])
+        setDistributorDropdown(e);
+        setTableData([]);
     }
 
     const pagesListColumns = () => {
@@ -180,8 +178,8 @@ const GenericSaleReport = (props) => {
                 internalColumn.push(column);
             }
 
-            setColumns(internalColumn)
-            setColumnsCreated(true)
+            setColumns(internalColumn);
+            setColumnsCreated(true);
         }
     }
 
@@ -253,9 +251,9 @@ const GenericSaleReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={GoBtnLoading.btnId === `gobtn-${url.GENERIC_SALE_REPORT}` && true}
+                                loading={btnMode === 1 && true}
                                 className="btn btn-success"
-                                onClick={(e) => goButtonHandler()}
+                                onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
                                 Show
                             </C_Button>
@@ -266,9 +264,9 @@ const GenericSaleReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={ExcelBtnLoading === `excel_btnId` && true}
+                                loading={btnMode === 2 && true}
                                 className="btn btn-primary"
-                                onClick={(e) => { excelhandler() }}
+                                onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
                                 Excel Download
                             </C_Button>
@@ -279,10 +277,8 @@ const GenericSaleReport = (props) => {
                 <div>
                     <ToolkitProvider
                         keyField={"id"}
-                        // data={tableData}
-                        // columns={pagesListColumns}
-                        data={goButtonData.btnId !== "excel_btnId" ? tableData : [{}]}
-                        columns={goButtonData.btnId !== "excel_btnId" ? columns : [{}]}
+                        data={tableData}
+                        columns={columns}
                         search
                     >
                         {(toolkitProps,) => (

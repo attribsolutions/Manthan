@@ -36,11 +36,11 @@ const OrderSummary = (props) => {
     const [tableData, setTableData] = useState([]);
     const [columns, setColumns] = useState([{}]);
     const [columnsCreated, setColumnsCreated] = useState(false)
+    const [btnMode, setBtnMode] = useState(0);
 
     const reducers = useSelector(
         (state) => ({
-            GoBtnLoading: state.OrderSummaryReducer.GoBtnLoading,
-            ExcelBtnLoading: state.OrderSummaryReducer.ExcelBtnLoading,
+
             goButtonData: state.OrderSummaryReducer.orderSummaryGobtn,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
@@ -48,8 +48,7 @@ const OrderSummary = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, goButtonData, SSDD_List, partyLoading, GoBtnLoading, ExcelBtnLoading } = reducers;
-    const { Data = [] } = goButtonData;
+    const { userAccess, goButtonData, SSDD_List, partyLoading, } = reducers;
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -74,7 +73,7 @@ const OrderSummary = (props) => {
 
     useEffect(() => {
         if ((goButtonData.Status === true) && (goButtonData.StatusCode === 204)) {
-            dispatch(postOrderSummary_API_Success([]))
+            dispatch(postOrderSummary_API_Success([]));
             customAlert({
                 Type: 3,
                 Message: goButtonData.Message,
@@ -84,11 +83,19 @@ const OrderSummary = (props) => {
     }, [goButtonData])
 
     useEffect(() => {
+        if (tableData.length === 0) {
+            setBtnMode(0)
+        }
+    }, [tableData]);
+
+    useEffect(() => {
 
         try {
 
-            if (Data.length > 0) {
-                if (goButtonData.btnId === "excel_btnId") {
+            if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
+                setBtnMode(0);
+                const { Data } = goButtonData
+                if (btnMode === 2) {
                     var arr = []
                     if (groupByDate) {
                         arr.push('OrderDate')
@@ -97,8 +104,8 @@ const OrderSummary = (props) => {
                         arr.push('CustomerName')
                     }
 
-                    const groupData = groupByColumnsWithSumFunc(Data, [...arr, ...['Group', 'SubGroup', 'MaterialName']]);
-                    _cfunc.CommonConsole(JSON.stringify("groupData", Data))
+                    const groupData = groupByColumnsWithSumFunc(tableData, [...arr, ...['Group', 'SubGroup', 'MaterialName']]);
+                    _cfunc.CommonConsole(JSON.stringify("groupData", tableData))
                     const worksheet = XLSX.utils.json_to_sheet(groupData);
                     const workbook = XLSX.utils.book_new();
                     XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
@@ -115,13 +122,16 @@ const OrderSummary = (props) => {
                     setTableData(UpdatedTableData);
                     dispatch(postOrderSummary_API_Success([]));
                 }
-
+            }
+            else if ((goButtonData.Status === true)) {
+                dispatch(postOrderSummary_API_Success([]));
             }
 
+            setBtnMode(0);
         }
         catch (e) { console.log(e) }
 
-    }, [Data]);
+    }, [goButtonData]);
 
 
     const groupByColumnsWithSumFunc = (jsonData, columnNames) => {
@@ -176,12 +186,11 @@ const OrderSummary = (props) => {
             a.hasValid.PartyName.valid = true
             return a
         })
-        setTableData([])
+        setTableData([]);
     }
 
-    function goButtonHandler() {
-
-        const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
+    function excel_And_GoBtnHandler(e, Btnmode) {
+        setBtnMode(Btnmode);
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
@@ -189,19 +198,7 @@ const OrderSummary = (props) => {
             "PartyID": isSCMParty ? values.PartyName.value : _cfunc.loginPartyID()
 
         });
-        dispatch(postOrderSummary_API({ jsonBody, btnId }));
-    }
-
-    function excelhandler() {
-
-        const jsonBody = JSON.stringify({
-            "FromDate": values.FromDate,
-            "ToDate": values.ToDate,
-            "CompanyID": _cfunc.loginCompanyID(),
-            "PartyID": isSCMParty ? values.PartyName.value : _cfunc.loginPartyID()
-
-        });
-        dispatch(postOrderSummary_API({ jsonBody, btnId: "excel_btnId" }));
+        dispatch(postOrderSummary_API({ jsonBody }));
     }
 
     function fromdateOnchange(e, date) {
@@ -210,7 +207,8 @@ const OrderSummary = (props) => {
             a.values.FromDate = date;
             a.hasValid.FromDate.valid = true
             return a
-        })
+        });
+        setTableData([]);
     }
 
     function todateOnchange(e, date) {
@@ -219,7 +217,8 @@ const OrderSummary = (props) => {
             a.values.ToDate = date;
             a.hasValid.ToDate.valid = true
             return a
-        })
+        });
+        setTableData([]);
     }
 
     const pagesListColumns = () => {
@@ -286,7 +285,7 @@ const OrderSummary = (props) => {
                                         style={{ width: "65px" }}>Party</Label>
                                     <Col sm="7">
                                         <C_Select
-                                            name="DistrictName"
+                                            name="PartyName"
                                             value={values.PartyName}
                                             isSearchable={true}
                                             isLoading={partyLoading}
@@ -308,9 +307,9 @@ const OrderSummary = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={GoBtnLoading === `gobtn-${url.ORDER_SUMMARY_REPORT}`}
+                                loading={btnMode === 1 && true}
                                 className="btn btn-success"
-                                onClick={goButtonHandler}
+                                onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
                                 Show
                             </C_Button>
@@ -322,9 +321,9 @@ const OrderSummary = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={ExcelBtnLoading === `excel_btnId`}
+                                loading={btnMode === 2 && true}
                                 className="btn btn-primary"
-                                onClick={excelhandler}
+                                onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
                                 Excel Download
                             </C_Button>
@@ -364,10 +363,8 @@ const OrderSummary = (props) => {
                 <div className="">
                     <ToolkitProvider
                         keyField={"id"}
-                        // data={tableData}
-                        // columns={pagesListColumns}
-                        data={goButtonData.btnId !== "excel_btnId" ? tableData : [{}]}
-                        columns={goButtonData.btnId !== "excel_btnId" ? columns : [{}]}
+                        data={tableData}
+                        columns={columns}
                         search
                     >
                         {(toolkitProps,) => (
