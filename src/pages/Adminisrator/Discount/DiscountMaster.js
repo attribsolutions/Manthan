@@ -697,33 +697,9 @@ const DiscountMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                {/* <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CustomerName} </Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="CustomerName "
-                                                name="CustomerName"
-                                                value={values.CustomerName}
-                                                isDisabled={(tableData.length > 0) && true}
-                                                isSearchable={true}
-                                                isLoading={customerDropDownLoading}
-                                                options={customerOptions}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                }
-                                                }
-                                            />
 
-                                        </Col>
-                                    </FormGroup>
-                                </Col > */}
 
-                                <Col md={5}> </Col>
+                                <Col md={4}> </Col>
 
                                 <Col sm="1" className="mx-6 mt-1 ">
                                     {!tableData.length > 0 ?
