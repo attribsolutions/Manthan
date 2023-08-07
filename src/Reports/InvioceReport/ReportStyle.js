@@ -432,12 +432,15 @@ export const tableBody = (doc, data) => {
 
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
+
                 let Box = 0;
-                for (let i = 0; i < data.InvoiceItems.length; i++) {
-                    if (data.InvoiceItems[i].PrimaryUnitName === "Box") {
-                        Box++;
+
+                data.InvoiceItems.forEach((element, key) => {
+                    if (element.PrimaryUnitName === "Box") {
+                        Box = Number(Box) + Number(element.Quantity)
                     }
-                }
+                })
+
                 data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length}) (${Box} Box)`
 
                 data1.row.cells[8].colSpan = 2
@@ -664,7 +667,7 @@ export const tableBodyWithIGST = (doc, data) => {
     };
     doc.line(408, data.isQR ? initial_y : initial_y, 408, 16);//vertical line header section billby 
     doc.line(220, data.isQR ? initial_y : initial_y, 220, data.isQR ? 103 : 63);//vertical  line header section billto
-    
+
     doc.autoTable(table.columnsWithIGST, table.RowsWithIGST(data), options,);
     const optionsTable4 = {
         margin: {
