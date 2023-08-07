@@ -327,45 +327,48 @@ const PurchaseReturnMode3 = (props) => {
             .split(",")
             .map(item => ({ SubReturn: parseInt(item.trim()) }));
 
-        const ReturnItems = tableData.map((i) => {
+        const ReturnItems = tableData.reduce((filterdItem, i) => {
+            if (Number(i.Quantity) > 0) {
+                const calculate = return_discountCalculate_Func(i);
+                
+                grand_total += Number(calculate.roundedTotalAmount);
 
-            const calculate = return_discountCalculate_Func(i);
-            grand_total += Number(calculate.roundedTotalAmount);
-
-            return {
-                "Item": i.Item,
-                "Quantity": i.Quantity,
-                "Unit": i.Unit,
-                "BaseUnitQuantity": i.BaseUnitQuantity,
-                "BatchCode": i.BatchCode,
-                "BatchDate": i.BatchDate,
-                "BatchID": 1,
-                "MRP": i.MRP,
-                "MRPValue": i.MRPValue,
-                "Rate": i.Rate,
-                "GST": i.GST,
-                "ItemReason": i.ItemReason,
-                "Comment": i.ItemComment,
-                "CGST": i.CGST,
-                "SGST": i.SGST,
-                "IGST": i.IGST,
-                "GSTPercentage": i.GSTPercentage,
-                "CGSTPercentage": i.CGSTPercentage,
-                "SGSTPercentage": i.SGSTPercentage,
-                "IGSTPercentage": i.IGSTPercentage,
-                "BasicAmount": i.BasicAmount,
-                "GSTAmount": i.GSTAmount,
-                "Amount": i.Amount,
-                "TaxType": 'GST',
-                "DiscountType": calculate.discountType,
-                "Discount": calculate.discount,
-                "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
-                "PurchaseReturn": i.PurchaseReturn,
-                "SubReturn": i.PurchaseReturn,
-                "ReturnItemImages": [],
-            };
-        })
-            .filter((item) => item.Quantity !== 0 && item.Quantity !== "");
+                filterdItem.push({
+                    "Item": i.Item,
+                    "Quantity": i.Quantity,
+                    "Unit": i.Unit,
+                    "BaseUnitQuantity": i.BaseUnitQuantity,
+                    "BatchCode": i.BatchCode,
+                    "BatchDate": i.BatchDate,
+                    "BatchID": 1,
+                    "MRP": i.MRP,
+                    "MRPValue": i.MRPValue,
+                    "Rate": i.Rate,
+                    "GST": i.GST,
+                    "ItemReason": i.ItemReason,
+                    "Comment": i.ItemComment,
+                    "CGST": Number(calculate.CGST_Amount).toFixed(2),
+                    "SGST": Number(calculate.SGST_Amount).toFixed(2),
+                    "IGST": Number(calculate.IGST_Amount).toFixed(2),
+                    "GSTPercentage": calculate.GST_Percentage,
+                    "CGSTPercentage": calculate.CGST_Percentage,
+                    "SGSTPercentage": calculate.SGST_Percentage,
+                    "IGSTPercentage": calculate.IGST_Percentage,
+                    "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
+                    "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
+                    "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
+                    "TaxType": 'GST',
+                    "DiscountType": calculate.discountType,
+                    "Discount": calculate.discount,
+                    "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+                    "PurchaseReturn": i.PurchaseReturn,
+                    "SubReturn": i.PurchaseReturn,
+                    "ReturnItemImages": [],
+                });
+                return filterdItem
+            }
+        }, [])
+       
         try {
             const jsonBody = JSON.stringify({
                 ReturnDate: values.ReturnDate,
