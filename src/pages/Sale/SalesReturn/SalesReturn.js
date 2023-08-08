@@ -231,7 +231,7 @@ const SalesReturn = (props) => {
                 let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
                 let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
                 dispatch(BreadcrumbShowCountlabel(count_label));
-
+                updateItemArr.sort((a, b) => b.id - a.id);
                 setTableArr(updateItemArr);
                 setState((i) => {
                     let a = { ...i }
@@ -884,7 +884,7 @@ const SalesReturn = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
+                <div className="page-content" >
                     {/* <PartyDropdown_Common
                         goButtonHandler={partySelectButtonHandler}
                         changeBtnShow={!(ReturnReasonOptions.length === 0) && !(ItemList_Options.length === 0) && !(InvoiceNo_Options.length === 0)}
