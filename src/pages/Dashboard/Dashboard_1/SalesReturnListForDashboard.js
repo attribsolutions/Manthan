@@ -33,7 +33,7 @@ export default function SalesReturnListForDashboard() {
         },
         {
             text: "Return Date",
-            dataField: "ReturnDate",
+            dataField: "dashboardReturnDate",
         },
         {
             text: "FullReturnNumber",

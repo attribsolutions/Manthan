@@ -158,10 +158,11 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
-      
+
+      i.dashboardOrderDate = date_dmy_func(i.OrderDate);
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] =concatDateAndTime(i.OrderDate, i.CreatedOn);
+      i["transactionDateLabel"] = concatDateAndTime(i.OrderDate, i.CreatedOn);
 
 
       i.DeliveryDate = (`${DeliveryDate}`)

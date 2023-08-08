@@ -88,7 +88,7 @@ export default function InvoiceForGRN() {
     const pagesListColumns = [
         {
             text: "InvoiceDate",
-            dataField: "OrderDate",
+            dataField: "dashboardOrderDate",
         },
         {
             text: "InvoiceNo",
@@ -108,7 +108,7 @@ export default function InvoiceForGRN() {
             dataField: "",
             formatExtraData: { listBtnLoading: listBtnLoading, },
             formatter: (cellContent, rowData, key, formatExtra) => {
-                
+
                 let { listBtnLoading } = formatExtra;
                 return (<>
                     < Button

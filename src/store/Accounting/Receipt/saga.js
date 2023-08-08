@@ -54,7 +54,7 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
       i.AmountPaid = amountCommaSeparateFunc(i.AmountPaid) //  AmountPaid show with commas
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
-
+      i.dashboardReceiptDate = date_dmy_func(i.ReceiptDate);
       i["ChequeDate"] = i.ReceiptModeName === "Cash" ? "" : date_dmy_func(i.ChequeDate)
       i["transactionDate"] = i.CreatedOn;
       i["transactionDateLabel"] = concatDateAndTime(i.ReceiptDate, i.CreatedOn);
