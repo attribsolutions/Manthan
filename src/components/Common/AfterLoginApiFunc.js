@@ -9,12 +9,12 @@ export const afterloginOneTimeAPI = (user, dispatch) => {
     const partyId = user.Party_id;
     const partyName = user.PartyName
 
-    // if (user.PartyType === "Company Division") {
-    //     localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select..." }));
-    // }
-    // else {
+    if (user.PartyType === "Company Division") {
+        localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select..." }));
+    }
+    else {
     localStorage.setItem("selectedParty", JSON.stringify({ value: partyId, label: partyName }));
-    // }
+    }
 
     localStorage.setItem("roleId", JSON.stringify(user));
     localStorage.setItem("roleId2", JSON.stringify(user));
