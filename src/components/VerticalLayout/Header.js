@@ -57,8 +57,8 @@ const Header = props => {
       document.body.setAttribute('data-sidebar-size', 'lg');
     }
   }
-   // Check the window width on the first load and set the initial state of isClick
-   useEffect(() => {
+  // Check the window width on the first load and set the initial state of isClick
+  useEffect(() => {
     function handleResize() {
       setClick(window.innerWidth >= 768); // Set isClick to true if the window width is greater than or equal to 768, otherwise set it to false
     }
@@ -79,7 +79,7 @@ const Header = props => {
                   <img src={logoSvg} alt="" height="35" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="35" /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
+                  <img src={logoSvg} alt="" height="45" /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
                 </span>
               </Link>
 
@@ -101,7 +101,7 @@ const Header = props => {
                 <i className="fa fa-fw fa-bars"></i>
               </button>
             </div>
-          <MainSearchBox />
+            <MainSearchBox />
 
 
           </div>

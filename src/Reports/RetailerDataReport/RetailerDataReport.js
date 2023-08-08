@@ -61,8 +61,9 @@ const RetailerDataReport = (props) => {
     useEffect(() => {
 
         if (RetailerGobtn.Status === true && RetailerGobtn.StatusCode === 200) {
+            debugger
             const { Data } = RetailerGobtn
-            const worksheet = XLSX.utils.json_to_sheet(Data);
+            const worksheet = XLSX.utils.json_to_sheet(Data.ReportExportSerializerDetails);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "RetailerDataReport");
             XLSX.writeFile(workbook, "Retailer Data Report.xlsx");
