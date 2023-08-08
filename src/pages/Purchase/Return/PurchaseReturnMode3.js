@@ -255,6 +255,7 @@ const PurchaseReturnMode3 = (props) => {
                             id={`Rate-${key}-${row.id}`}//this id use discount type onchange
                             // placeholder="Enter Rate"
                             type="text"
+                            disabled={true}
                             cpattern={decimalRegx}
                             className="text-end"
                             onChange={(event) => {
@@ -330,7 +331,7 @@ const PurchaseReturnMode3 = (props) => {
         const ReturnItems = tableData.reduce((filterdItem, i) => {
             if (Number(i.Quantity) > 0) {
                 const calculate = return_discountCalculate_Func(i);
-                
+
                 grand_total += Number(calculate.roundedTotalAmount);
 
                 filterdItem.push({
@@ -368,7 +369,7 @@ const PurchaseReturnMode3 = (props) => {
                 return filterdItem
             }
         }, [])
-       
+
         try {
             const jsonBody = JSON.stringify({
                 ReturnDate: values.ReturnDate,

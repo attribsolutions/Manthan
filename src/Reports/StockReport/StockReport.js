@@ -68,7 +68,6 @@ const StockReport = (props) => {
     useEffect(() => {
         dispatch(stockReport_GoButton_API_Success([]))
         dispatch(getBaseUnit_ForDropDown());
-        // dispatch(SSDD_List_under_Company());
     }, [])
 
     useEffect(() => {

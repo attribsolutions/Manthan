@@ -12,6 +12,7 @@ import * as XLSX from 'xlsx';
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { BreadcrumbShowCountlabel } from "../../store/actions";
 
 const GenericSaleReport = (props) => {
 
@@ -73,6 +74,7 @@ const GenericSaleReport = (props) => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
+        dispatch(BreadcrumbShowCountlabel(`GenericSale Count:${tableData.length}`));
     }, [tableData]);
 
     const Party_Option = Distributor.map(i => ({
