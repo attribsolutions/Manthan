@@ -8,7 +8,7 @@ import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { url, mode } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer } from "../../store/actions";
+import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer } from "../../store/actions";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import * as XLSX from 'xlsx';
@@ -112,6 +112,8 @@ const PurchaseGSTReport = (props) => {
             a.hasValid.FromDate.valid = true
             return a
         })
+        dispatch(postPurchaseGSTReport_API_Success([]));
+
     }
 
     function todateOnchange(e, date) {
@@ -121,10 +123,13 @@ const PurchaseGSTReport = (props) => {
             a.hasValid.ToDate.valid = true
             return a
         })
+        dispatch(postPurchaseGSTReport_API_Success([]));
+
     }
 
 
     useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${"Purchase GST count"} :${Number(GSTRateWise ? PurchaseGSTRateWiseDetails.length : PurchaseGSTDetails.length)}`))
         if (tableData.btnId === "excel_btnId") {
             if (GSTRateWise ? PurchaseGSTRateWiseDetails.length : PurchaseGSTDetails.length > 1) {
                 const worksheet = XLSX.utils.json_to_sheet(GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails);
