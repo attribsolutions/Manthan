@@ -17,8 +17,8 @@ const initialLocalStorageParty = () => {
     return { value: 0, label: "Select..." }
 }
 
-const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading }) => {
-
+const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAPLedgerOptions }) => {
+    
     const [selectedParty, setSelectedParty] = useState(initialLocalStorageParty);
     const [changeButtonShow, setChangeButtonShow] = useState(() => !(initialLocalStorageParty().value === 0));
 
@@ -48,9 +48,15 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading }) =
             changeButtonHandler();
         }
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0 }));
-        setSelectedParty({ value: 0, label: "Select..." })
+        setSelectedParty({ value: 0, label: "Select...", SAPPartyCode: "" })
         setChangeButtonShow(false)
     };
+
+    const PartyDropdownOptions = partyList.map((data) => ({
+        value: data.id,
+        label: data.Name,
+        SAPPartyCode: data.SAPPartyCode
+    }))
 
     return (
         loginUserAdminRole() && (
@@ -69,10 +75,7 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading }) =
                                     isLoading={partyDropdownLoading}
                                     className="react-dropdown"
                                     classNamePrefix="dropdown"
-                                    options={partyList.map((data) => ({
-                                        value: data.id,
-                                        label: data.Name,
-                                    }))}
+                                    options={(SAPLedgerOptions === undefined) ? PartyDropdownOptions : SAPLedgerOptions}
                                     isDisabled={(changeButtonShow && !(selectedParty.value === 0))}
                                     onChange={(e) => updateSelectedParty(e)}
                                 />

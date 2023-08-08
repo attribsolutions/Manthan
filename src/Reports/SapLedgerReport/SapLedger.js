@@ -23,12 +23,15 @@ import { C_DatePicker } from "../../CustomValidateForm";
 import { commonPageField } from "../../store/actions";
 import { SapLedger_Go_Button_API, SapLedger_Go_Button_API_Success } from "../../store/Report/SapLedger Redux/action";
 import { Go_Button } from "../../components/Common/CommonButton";
+import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const SapLedger = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const userAdminRole = _cfunc.loginUserAdminRole();
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
@@ -39,8 +42,10 @@ const SapLedger = (props) => {
         List,
         goBtnLoading,
         pageField,
+        partyList
     } = useSelector((state) => ({
         goBtnLoading: state.SapLedgerReducer.goBtnLoading,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
         List: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -79,14 +84,11 @@ const SapLedger = (props) => {
             text: "Debit Amount",
             dataField: "Debit_Amount",
             align: "right"
-
         },
         {
             text: "	Credit Amount",
             dataField: "Credit_Amount",
             align: "right"
-
-
         },
         {
             text: "	ItemText",
@@ -141,18 +143,46 @@ const SapLedger = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Sap Ledger count"} :${Number(data.length)}`))
     }, [List])
 
+    const PartyDropdown = partyList.map((data) => ({
+        value: data.id,
+        label: data.Name,
+        SAPPartyCode: data.SAPPartyCode
+    }))
+
+    const PartyDropdownOptions = [...PartyDropdown.filter((index) => !(index.SAPPartyCode === null))];
+
     let partdata = localStorage.getItem("roleId")
     var partyDivisiondata = JSON.parse(partdata);
 
-    function goButtonHandler() {
+    const SelectedPartyDropdown = () => {//+++++++++++++++++++++ Session common party dropdown id +++++++++++++++++++++++++++++++
+        try {
+            return JSON.parse(localStorage.getItem("selectedParty"));
+        } catch (e) {
+            _cfunc.CommonConsole(e);
+        }
+        return 0;
+    };
 
-        const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            SAPCode: partyDivisiondata.SAPPartyCode
-        });
-        dispatch(SapLedger_Go_Button_API_Success([]))
-        dispatch(SapLedger_Go_Button_API(jsonBody));
+    function goButtonHandler() {
+        try {
+
+            if ((userAdminRole) && (SelectedPartyDropdown().value === 0)) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+
+            }
+            const jsonBody = JSON.stringify({
+                FromDate: fromdate,
+                ToDate: todate,
+                SAPCode: (userAdminRole) ? SelectedPartyDropdown().SAPPartyCode : partyDivisiondata.SAPPartyCode
+            });
+            dispatch(SapLedger_Go_Button_API_Success([]))
+            dispatch(SapLedger_Go_Button_API(jsonBody));
+        }
+        catch (e) {
+            _cfunc.CommonConsole(e);
+        }
+
     }
 
     function fromdateOnchange(e, date) {
@@ -171,12 +201,21 @@ const SapLedger = (props) => {
 
     }
 
+    function partySelectOnChangeHandler() {
+        dispatch(SapLedger_Go_Button_API_Success([]))
+    }
+
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
+
+                    <PartyDropdown_Common
+                        changeButtonHandler={partySelectOnChangeHandler}
+                        SAPLedgerOptions={PartyDropdownOptions} />
 
                     <div className="px-2  c_card_filter text-black " >
                         <div className="row">

@@ -4,16 +4,16 @@ import { commonPartyDrodown } from "../../store/Utilites/PartyDrodown/action";
 import { loginCompanyID } from "./CommonFunction";
 
 export const afterloginOneTimeAPI = (user, dispatch) => {
-
+debugger
     const employeeId = user.Employee_id;
     const partyId = user.Party_id;
     const partyName = user.PartyName
 
     if (user.PartyType === "Company Division") {
-        localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select..." }));
+        localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select...", SAPPartyCode: "" }));
     }
     else {
-        localStorage.setItem("selectedParty", JSON.stringify({ value: partyId, label: partyName }));
+        localStorage.setItem("selectedParty", JSON.stringify({ value: partyId, label: partyName, SAPPartyCode: "" }));
     }
 
     localStorage.setItem("roleId", JSON.stringify(user));
