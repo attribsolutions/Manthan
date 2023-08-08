@@ -54,10 +54,19 @@ const CustomTable = ({
         setCurrentPage(page);
     };
 
+    const rowStyles = (row) => {
+        if (row.IsRecordDeleted) {
+            return { textDecoration: 'line-through' };
+        }
+        return {};
+    };
+
     return (
         <div className="table-responsive table "  >
 
-            <BootstrapTable data={slicedData} columns={columns} {...rest} />
+            <BootstrapTable data={slicedData} columns={columns}
+                rowStyle={rowStyles}
+                {...rest} />
 
             {/* Pagination component */}
             <div>

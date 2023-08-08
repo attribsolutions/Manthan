@@ -32,7 +32,6 @@ const uploadIconClass = "bx bx-upload font-size-14";
 const cancelIconClass = "mdi mdi-cancel font-size-14";
 
 
-
 export const listPageActionsButtonFunc = (props) => {
     const {
         dispatch,
@@ -123,6 +122,7 @@ export const listPageActionsButtonFunc = (props) => {
             forceDeleteHide,
             forceHideOrderAprovalBtn,
             forceMakeBtnHide,
+            IsRecordDeleted
         } = rowData;
 
         rowData.hasSelect = false;
@@ -148,7 +148,7 @@ export const listPageActionsButtonFunc = (props) => {
 
 
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
-            if (!condition && !isDummyBtn) return null;
+            if ((!condition && !isDummyBtn) || IsRecordDeleted) return null;
             if (!isDummyBtn) {
 
                 return (
@@ -548,10 +548,10 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
         text: "E-Invoice",
         formatExtraData: { listBtnLoading },
         formatter: (__cell, rowData) => {
-         
+
             const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.Irn === null));
             const canCancel = ((!canUpload) && (rowData.InvoiceUploads[0]?.EInvoiceIsCancel === false));
-            const canPrint = ((!canUpload ) && (rowData.InvoiceUploads[0]?.EInvoicePdf !== null));
+            const canPrint = ((!canUpload) && (rowData.InvoiceUploads[0]?.EInvoicePdf !== null));
 
             return (
                 <div id="ActionBtn" >
