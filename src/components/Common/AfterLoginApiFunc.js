@@ -4,7 +4,7 @@ import { commonPartyDrodown } from "../../store/Utilites/PartyDrodown/action";
 import { loginCompanyID } from "./CommonFunction";
 
 export const afterloginOneTimeAPI = (user, dispatch) => {
-debugger
+
     const employeeId = user.Employee_id;
     const partyId = user.Party_id;
     const partyName = user.PartyName
