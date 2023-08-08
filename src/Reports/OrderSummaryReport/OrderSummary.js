@@ -14,6 +14,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { BreadcrumbShowCountlabel } from "../../store/actions";
 
 const OrderSummary = (props) => {
 
@@ -21,7 +22,6 @@ const OrderSummary = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const isSCMParty = _cfunc.loginIsSCMParty();
-
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -86,6 +86,7 @@ const OrderSummary = (props) => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
+        dispatch(BreadcrumbShowCountlabel(`OrderSummary Count:${tableData.length}`))
     }, [tableData]);
 
     useEffect(() => {
@@ -132,7 +133,6 @@ const OrderSummary = (props) => {
         catch (e) { console.log(e) }
 
     }, [goButtonData]);
-
 
     const groupByColumnsWithSumFunc = (jsonData, columnNames) => {
         const columnSumsByGroup = jsonData.reduce((result, item) => {
