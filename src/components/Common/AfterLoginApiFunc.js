@@ -13,7 +13,7 @@ export const afterloginOneTimeAPI = (user, dispatch) => {
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select..." }));
     }
     else {
-    localStorage.setItem("selectedParty", JSON.stringify({ value: partyId, label: partyName }));
+        localStorage.setItem("selectedParty", JSON.stringify({ value: partyId, label: partyName }));
     }
 
     localStorage.setItem("roleId", JSON.stringify(user));
