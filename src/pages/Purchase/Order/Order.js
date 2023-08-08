@@ -180,7 +180,7 @@ const Order = (props) => {
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
 
     }));;
-    
+
     const { fieldLabel } = state;
 
     const location = { ...history.location }
@@ -1303,7 +1303,7 @@ const Order = (props) => {
                         </div>
 
                     </div>}
-                    <div className="page-content" style={{ marginBottom: "5cm" }}>
+                    <div className="page-content">
                         {/* {userAdminRole === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
                             <div className=" mt-1 mb-2 row ">
