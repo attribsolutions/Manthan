@@ -15,6 +15,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import Select from "react-select";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { BreadcrumbShowCountlabel } from "../../store/actions";
 
 const InvoiceDataExport = (props) => {
 
@@ -76,6 +77,7 @@ const InvoiceDataExport = (props) => {
     }, [userAccess])
     useEffect(() => { return () => { dispatch(postInvoiceDataExport_API_Success([])); } }, [])
     useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${"Invoice Data Export count"} :${Number(InvoiceExportSerializerDetails.length)}`))
 
         if (tableData.btnId === "excel_btnId") {
             if (InvoiceExportSerializerDetails.length > 0) {
@@ -143,6 +145,7 @@ const InvoiceDataExport = (props) => {
             a.hasValid.FromDate.valid = true
             return a
         })
+        dispatch(postInvoiceDataExport_API_Success([]))
     }
 
     function todateOnchange(e, date) {
@@ -152,6 +155,8 @@ const InvoiceDataExport = (props) => {
             a.hasValid.ToDate.valid = true
             return a
         })
+        dispatch(postInvoiceDataExport_API_Success([]))
+
     }
 
     const partyOnchange = (e) => {

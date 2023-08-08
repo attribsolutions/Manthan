@@ -8,7 +8,7 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageFieldSuccess } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useHistory } from "react-router-dom";
@@ -137,6 +137,9 @@ const SapLedger = (props) => {
         };
     }, [userAccess])
 
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${"Sap Ledger count"} :${Number(data.length)}`))
+    }, [List])
 
     let partdata = localStorage.getItem("roleId")
     var partyDivisiondata = JSON.parse(partdata);
@@ -156,12 +159,16 @@ const SapLedger = (props) => {
         let newObj = { ...headerFilters }
         newObj.fromdate = date
         setHeaderFilters(newObj)
+        dispatch(SapLedger_Go_Button_API_Success([]))
+
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...headerFilters }
         newObj.todate = date
         setHeaderFilters(newObj)
+        dispatch(SapLedger_Go_Button_API_Success([]))
+
     }
 
     if (!(userPageAccessState === '')) {
