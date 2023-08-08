@@ -8,7 +8,7 @@ export const return_discountCalculate_Func = (row, index1, IsComparGstIn) => {
     const quantity = Number(row.Qty) || 0;
     const gstPercentage = Number(row.GST) || 0;
     const discount = Number(index1.Discount) || 0;
-    const discountType = index1.DiscountType || 2;
+    const discountType = Number(index1.DiscountType) || 2;
 
     // Calculate the base amount
     const basicAmount = rate * quantity;

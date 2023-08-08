@@ -1,6 +1,6 @@
 
 export const calculateSalesReturnFunc = (row) => {
-    debugger
+    
     let rate = 0;
     let quantity = 0;
     let gstPercentage = 0;

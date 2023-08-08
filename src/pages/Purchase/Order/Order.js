@@ -180,7 +180,7 @@ const Order = (props) => {
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
 
     }));;
-    debugger
+    
     const { fieldLabel } = state;
 
     const location = { ...history.location }
