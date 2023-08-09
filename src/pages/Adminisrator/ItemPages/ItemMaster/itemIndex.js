@@ -98,7 +98,6 @@ const ItemsMaster = (props) => {
         Tag: '',
         Sequence: '',
         BrandName: [],
-        ShelfLife: '',
         IsSCM: false
     }
     const initialInValid = ["txtName0", "txtShortName0",]
@@ -115,6 +114,7 @@ const ItemsMaster = (props) => {
     let [isValidate, setIsValidate] = useState(initialInValid);
 
     const [formValue, setFormValue] = useState(initial);
+    console.log(formValue)
     const [marginMaster, setMarginMaster] = useState([]);
 
     const [imageTabTable, setImageTabTable] = useState([{
@@ -137,10 +137,10 @@ const ItemsMaster = (props) => {
         StoringCondition: '',
     });
 
-    const [shelfLife, setShelfLife] = useState('');
+    const [isShelfLife, setIsShelfLife] = useState('');
+    const [editItemShelfLife, setEditItemShelfLife] = useState('');
 
     const {
-        companyList,
         BaseUnit,
         postMsg,
         userAccess,
@@ -155,7 +155,6 @@ const ItemsMaster = (props) => {
         categotyDropDownLoading,
     } = useSelector((state) => ({
         saveBtnloading: state.ItemMastersReducer.saveBtnloading,
-        companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         userAccess: state.Login.RoleAccessUpdateData,
         postMsg: state.ItemMastersReducer.postMsg,
@@ -281,12 +280,13 @@ const ItemsMaster = (props) => {
                 // })
                 // setImageTabTable(ItemImagesDetails)
 
-
-                let ShelfLife = hasEditVal.ItemShelfLife.map((index) => {
+                debugger
+                let ItemShelfLife = hasEditVal.ItemShelfLife.map((index) => {
 
                     return index.Days
                 })
-                setShelfLife(ShelfLife)
+                setEditItemShelfLife(ItemShelfLife[0])
+                setIsShelfLife(ItemShelfLife[0])
                 // ====================== Unit Conversion tab  start ======================
 
                 const UnitDetails = []
@@ -401,11 +401,6 @@ const ItemsMaster = (props) => {
             setactiveTab1(tab)
         }
     }
-
-    const Company_DropdownOptions = companyList.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
 
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
         value: data.id,
@@ -706,7 +701,18 @@ const ItemsMaster = (props) => {
                     })
                     return btnIsDissablefunc({ btnId, state: false });
                 }
-                
+
+                const isShelfLifeArr = [];
+
+                if (Number(editItemShelfLife) !== isShelfLife) {
+                    isShelfLifeArr.push({
+                        Days: isShelfLife,
+                        CreatedBy: loginUserID(),
+                        UpdatedBy: loginUserID(),
+                        IsAdd: true
+                    });
+                }
+
                 const jsonBody = JSON.stringify({
                     Name: formValue.Name,
                     ShortName: formValue.ShortName,
@@ -738,14 +744,7 @@ const ItemsMaster = (props) => {
                     ItemMarginDetails: hasAdd_Margin,
                     ItemGSTHSNDetails: hasAdd_GST,
                     ItemGroupDetails: Group_Tab_TableData,
-                    ItemShelfLife: [
-                        {
-                            Days: formValue.ShelfLife,
-                            CreatedBy: loginUserID(),
-                            UpdatedBy: loginUserID(),
-                            IsAdd: true
-                        }
-                    ]
+                    ItemShelfLife: isShelfLifeArr
                 });
 
                 if (pageMode === mode.edit) {
@@ -1038,31 +1037,17 @@ const ItemsMaster = (props) => {
                                                                         />
                                                                     </FormGroup>
 
-                                                                    {/* <FormGroup className=" col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom21">Company</Label>
-                                                                        <Select
-                                                                            id='dropCompany-0'
-                                                                            value={formValue.Company}
-                                                                            options={Company_DropdownOptions}
-                                                                            styles={{
-                                                                                control: base => ({
-                                                                                    ...base,
-                                                                                    border: inValidDrop.Company ? '1px solid red' : '',
-                                                                                })
-                                                                            }}
-                                                                            onChange={(event) => dropDownValidation(event, "Company")}
-                                                                        />
-                                                                    </FormGroup> */}
                                                                     <FormGroup className=" col col-sm-4 " >
                                                                         <Label >Shelf Life<samp className="text-secondary">/Day</samp></Label>
                                                                         <Input
                                                                             type="text"
                                                                             rows="1"
                                                                             id='txtShelfLife0'
-                                                                            defaultValue={pageMode === 'edit' ? shelfLife[0] : ''}
+                                                                            // defaultValue={pageMode === 'edit' ? isShelfLife : ''}
+                                                                            Value={isShelfLife}
                                                                             placeholder=" Please Enter Days "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShelfLife") }}
+                                                                            onChange={(e) => { setIsShelfLife(e.target.value) }}
                                                                         />
                                                                     </FormGroup>
                                                                 </Row>
