@@ -18,7 +18,7 @@ const initialLocalStorageParty = () => {
 }
 
 const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAPLedgerOptions }) => {
-    
+
     const [selectedParty, setSelectedParty] = useState(initialLocalStorageParty);
     const [changeButtonShow, setChangeButtonShow] = useState(() => !(initialLocalStorageParty().value === 0));
 

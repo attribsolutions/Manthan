@@ -245,4 +245,6 @@ export const CLAIM_SUMMARY_REPORT = 217
 
 export const DAMAGE_STOCK_REPORT = 220
 
+export const DELETE_INVOICE_DATA_EXPORT = 221
+
 

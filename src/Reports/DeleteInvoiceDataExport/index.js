@@ -9,15 +9,14 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import * as XLSX from 'xlsx';
-
-import { postInvoiceDataExport_API, postInvoiceDataExport_API_Success } from "../../store/Report/InvoiceDataExportRedux/action";
+import { postDeleteInvoiceDataExport_API, postDeleteInvoiceDataExport_API_Success } from "../../store/Report/InvoiceDataExportRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import Select from "react-select";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel } from "../../store/actions";
 
-const InvoiceDataExport = (props) => {
+const DeleteInvoiceDataExport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -37,19 +36,22 @@ const InvoiceDataExport = (props) => {
 
     const reducers = useSelector(
         (state) => ({
-            tableData: state.InvoiceDataExportReducer.InvoiceDataExportGobtn,
+            tableData: state.InvoiceDataExportReducer.DeleteInvoiceDataExportGobtn,
             GoBtnLoading: state.InvoiceDataExportReducer.GoBtnLoading,
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             ExcelBtnLoading: state.InvoiceDataExportReducer.ExcelBtnLoading,
-            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
-            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
-            pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, tableData = [], ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
-    const { InvoiceExportSerializerDetails = [] } = tableData;
 
+    const { userAccess, tableData = [], ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
+    const { DeletedInvoiceExportSerializerDetails = [] } = tableData;
+
+    useEffect(() => {
+        return () => {
+            dispatch(postDeleteInvoiceDataExport_API_Success([]))
+        }
+    }, [])
 
     const values = { ...state.values }
 
@@ -73,17 +75,17 @@ const InvoiceDataExport = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => { return () => { dispatch(postInvoiceDataExport_API_Success([])); } }, [])
-    
+    useEffect(() => { return () => { dispatch(postDeleteInvoiceDataExport_API_Success([])); } }, [])
+
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Invoice Data Export count"} :${Number(InvoiceExportSerializerDetails.length)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Delete Invoice Data count"} :${Number(DeletedInvoiceExportSerializerDetails.length)}`))
 
         if (tableData.btnId === "excel_btnId") {
-            if (InvoiceExportSerializerDetails.length > 0) {
-                const worksheet = XLSX.utils.json_to_sheet(InvoiceExportSerializerDetails);
+            if (DeletedInvoiceExportSerializerDetails.length > 0) {
+                const worksheet = XLSX.utils.json_to_sheet(DeletedInvoiceExportSerializerDetails);
                 const workbook = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(workbook, worksheet, `InvoiceDataExportReport`);
-                XLSX.writeFile(workbook, `Invoice Data Export Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
+                XLSX.writeFile(workbook, `Delete Invoice Data Export Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
             }
         }
     }, [tableData]);
@@ -95,25 +97,25 @@ const InvoiceDataExport = (props) => {
             "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
         });
         let config = { jsonBody, btnId: "excel_btnId" }
-        dispatch(postInvoiceDataExport_API(config))
-        dispatch(postInvoiceDataExport_API_Success([]))
+        dispatch(postDeleteInvoiceDataExport_API(config))
+        dispatch(postDeleteInvoiceDataExport_API_Success([]))
     }
 
     function goButtonHandler() {
-        const btnId = `gobtn-${url.INVOICE_DATA_EXPORT}`
+        const btnId = `gobtn-${url.DELETE_INVOICE_DATA_EXPORT}`
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
         });
         let config = { jsonBody, btnId }
-        dispatch(postInvoiceDataExport_API(config))
-        dispatch(postInvoiceDataExport_API_Success([]))
+        dispatch(postDeleteInvoiceDataExport_API(config))
+        dispatch(postDeleteInvoiceDataExport_API_Success([]))
     }
 
     const createColumns = () => {
-        if (InvoiceExportSerializerDetails.length > 0) {
-            const objectAtIndex0 = InvoiceExportSerializerDetails[0];
+        if (DeletedInvoiceExportSerializerDetails.length > 0) {
+            const objectAtIndex0 = DeletedInvoiceExportSerializerDetails[0];
             const internalColumn = []
             for (const key in objectAtIndex0) {
                 const column = {
@@ -134,7 +136,6 @@ const InvoiceDataExport = (props) => {
         createColumns();
     }
 
-
     function fromdateOnchange(e, date) {
         setState((i) => {
             const a = { ...i }
@@ -142,7 +143,7 @@ const InvoiceDataExport = (props) => {
             a.hasValid.FromDate.valid = true
             return a
         })
-        dispatch(postInvoiceDataExport_API_Success([]))
+        dispatch(postDeleteInvoiceDataExport_API_Success([]))
     }
 
     function todateOnchange(e, date) {
@@ -152,13 +153,12 @@ const InvoiceDataExport = (props) => {
             a.hasValid.ToDate.valid = true
             return a
         })
-        dispatch(postInvoiceDataExport_API_Success([]))
-
+        dispatch(postDeleteInvoiceDataExport_API_Success([]))
     }
 
     const partyOnchange = (e) => {
         setPartyDropdown(e)
-        dispatch(postInvoiceDataExport_API_Success([]))
+        dispatch(postDeleteInvoiceDataExport_API_Success([]))
     }
 
     const Party_Option = Distributor.map(i => ({
@@ -225,7 +225,7 @@ const InvoiceDataExport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={GoBtnLoading === `gobtn-${url.INVOICE_DATA_EXPORT}`}
+                                loading={GoBtnLoading === `gobtn-${url.DELETE_INVOICE_DATA_EXPORT}`}
                                 className="btn btn-success   "
                                 onClick={goButtonHandler}
                             >
@@ -252,7 +252,7 @@ const InvoiceDataExport = (props) => {
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="PartyID"
-                        data={tableData.btnId !== "excel_btnId" ? InvoiceExportSerializerDetails : [{}]}
+                        data={tableData.btnId !== "excel_btnId" ? DeletedInvoiceExportSerializerDetails : [{}]}
                         columns={tableData.btnId !== "excel_btnId" ? columns : [{}]}
                         search
                     >
@@ -286,4 +286,4 @@ const InvoiceDataExport = (props) => {
     )
 }
 
-export default InvoiceDataExport;
+export default DeleteInvoiceDataExport;

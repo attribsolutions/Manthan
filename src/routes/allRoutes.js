@@ -174,6 +174,7 @@ import ClaimSummary from "../Reports/ClaimReportSummary/ClaimReport";
 import InvoiceDataExport from "../Reports/InvoiceDataExport/InvoiceDataExport.js";
 import PurchaseGSTReport from "../Reports/PurchaseGSTReport/PurchaseGSTReport.js";
 import DamageStockReport from "../Reports/DamageStockReport";
+import DeleteInvoiceDataExport from "../Reports/DeleteInvoiceDataExport";
 // import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
@@ -423,6 +424,8 @@ const userRoutes = [
   { path: path.PURCHASE_GST_REPORT, component: PurchaseGSTReport },
 
   { path: path.INVOICE_DATA_EXPORT, component: InvoiceDataExport },
+
+  { path: path.DELETE_INVOICE_DATA_EXPORT, component: DeleteInvoiceDataExport },
 
   { path: path.REPORT, component: Report },
 

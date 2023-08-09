@@ -643,10 +643,9 @@ export const RetailerData_GoBtn_API = ({ jsonBody, btnId }) => post(url.RETAILER
 export const InvoiceDataExport_GoBtn_API = ({ jsonBody, btnId }) => post(url.INVOICE_DATA_EXPORT, jsonBody, btnId)//Go button api
 export const PurchaseGSTReportSaga_GoBtn_API = ({ jsonBody, btnId }) => post(url.PURCHASE_GST_REPORT, jsonBody, btnId)//Go button api
 
+//DeletedInvoiceData
 
-
-
-
+export const DeleteInvoiceDataExport_GoBtn_API = ({ jsonBody, btnId }) => post(url.DELETE_INVOICE_DATA_EXPORT, jsonBody, btnId)//Go button api
 
 export {
   getLoggedInUser,

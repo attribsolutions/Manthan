@@ -490,7 +490,7 @@
 
 //     function goButtonHandler() {
 
-//         debugger
+//         
 //         var isCustomerDropdown = ''
 //         if (customerDropdown.length > 0) {
 //             isCustomerDropdown = customerDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
@@ -511,7 +511,7 @@
 //             });
 //             return;
 //         }
-//         debugger
+//         
 //         const jsonBody = JSON.stringify({
 //             "FromDate": values.FromDate,
 //             "ToDate": values.ToDate,
@@ -525,12 +525,12 @@
 
 //     const saveHandler = async (event) => {
 //         event.preventDefault();
-//         debugger
+//         
 //         try {
 //             const filteredDiscounts = tableData.reduce((filteredDiscountTable, currentValue) => {
 //                 if (currentValue.Discount > 0) {
 //                     customerDropdown.forEach(index => {
-//                         debugger
+//                         
 //                         filteredDiscountTable.push({
 //                             "FromDate": values.FromDate,
 //                             "ToDate": values.ToDate,

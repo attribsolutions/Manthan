@@ -242,3 +242,4 @@ export const RetailerDataReport = url.RETAILER_DATA_REPORT
 
 export const Damage_Stock_Report = url.DAMAGE_STOCK_REPORT
 
+export const DeleteInvoiceDataExport = url.DELETE_INVOICE_DATA_EXPORT
