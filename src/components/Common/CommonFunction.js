@@ -316,7 +316,7 @@ export function metaTagLabel(userPageAccess = '') {
 
 }
 export function CommonConsole(msg1, msg2 = '', msg3 = '') {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
-  console.log("CommonConsole =>:", msg1, msg2, msg3);
+  console.log(msg1, msg2, msg3);
 }
 
 export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Function +++++++++++++++++++++++++++++++

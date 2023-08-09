@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { url, mode, } from "../../routes/index"
+import {  mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
 import * as XLSX from 'xlsx';
@@ -33,22 +33,22 @@ const OrderSummary = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [groupByDate, setGroupByDate] = useState(false);
     const [groupByParty, setGroupByParty] = useState(false);
-    const [tableData, setTableData] = useState([]);
-    const [columns, setColumns] = useState([{}]);
-    const [columnsCreated, setColumnsCreated] = useState(false)
+    const [showTableData, setShowTableData] = useState([]);
+    const [orderSummaryApiData, setOrderSummaryApiData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
 
-    const reducers = useSelector(
+    const { userAccess, goButtonData, SSDD_List, partyLoading, goBtnLoading } = useSelector(
         (state) => ({
 
             goButtonData: state.OrderSummaryReducer.orderSummaryGobtn,
+            goBtnLoading: state.OrderSummaryReducer.goBtnLoading,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
             partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, goButtonData, SSDD_List, partyLoading, } = reducers;
+
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -72,78 +72,87 @@ const OrderSummary = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        if ((goButtonData.Status === true) && (goButtonData.StatusCode === 204)) {
-            dispatch(postOrderSummary_API_Success([]));
-            customAlert({
-                Type: 3,
-                Message: goButtonData.Message,
-            })
-            return
-        }
-    }, [goButtonData])
-
-    useEffect(() => {
-        if (tableData.length === 0) {
-            setBtnMode(0)
-        }
-        dispatch(BreadcrumbShowCountlabel(`OrderSummary Count:${tableData.length}`))
-    }, [tableData]);
-
-    useEffect(() => {
-
+        
         try {
 
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
-                setBtnMode(0);
+                dispatch(postOrderSummary_API_Success({ Status: false }));
                 const { Data } = goButtonData
-                if (btnMode === 2) {
-                    var arr = []
-                    if (groupByDate) {
-                        arr.push('OrderDate')
-                    }
-                    if (groupByParty) {
-                        arr.push('CustomerName')
-                    }
-
-                    const groupData = groupByColumnsWithSumFunc(tableData, [...arr, ...['Group', 'SubGroup', 'MaterialName']]);
-                    _cfunc.CommonConsole(JSON.stringify("groupData", tableData))
-                    const worksheet = XLSX.utils.json_to_sheet(groupData);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
-                    XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
-                    dispatch(postOrderSummary_API_Success([]));
-                }
-                else {
-                    const UpdatedTableData = Data.map((item, index) => {
-
-                        return {
-                            ...item, id: index + 1,
-                        };
-                    });
-                    setTableData(UpdatedTableData);
-                    dispatch(postOrderSummary_API_Success([]));
+                if ((btnMode === 2)) {
+                    setBtnMode(0);
+                    downloadExcelFunction(Data)
+                } else {
+                    setOrderSummaryApiData(Data);
                 }
             }
-            else if ((goButtonData.Status === true)) {
-                dispatch(postOrderSummary_API_Success([]));
+            else if ((goButtonData.Status === true) && (goButtonData.StatusCode === 204)) {
+                dispatch(postOrderSummary_API_Success({ Status: false }));
+                setBtnMode(0);
+                customAlert({
+                    Type: 3,
+                    Message: goButtonData.Message,
+                })
             }
-
-            setBtnMode(0);
         }
-        catch (e) { console.log(e) }
+        catch (e) {_cfunc.CommonConsole(e)}
 
     }, [goButtonData]);
 
-    const groupByColumnsWithSumFunc = (jsonData, columnNames) => {
+    useEffect(() => {
+
+        if (orderSummaryApiData.length > 0) {
+            if (btnMode === 1) {
+                setBtnMode(0)
+                const groupData = groupByColumnsWithSumFunc(orderSummaryApiData);
+                const updatedTableData = groupData.map((item, index) => {
+                    return {
+                        ...item, keyId: index + 1,
+                    };
+                });
+                setShowTableData(updatedTableData);
+            }
+        }
+    }, [orderSummaryApiData, btnMode])
+
+    useEffect(() => {
+        if (showTableData.length === 0) {
+            setBtnMode(0)
+        }
+        dispatch(BreadcrumbShowCountlabel(`OrderSummary Count:${showTableData.length}`))
+    }, [showTableData]);
+
+    const downloadExcelFunction = (excelTableData) => {
+        if ((btnMode === 2)) {
+            const groupData = groupByColumnsWithSumFunc(excelTableData);
+            _cfunc.CommonConsole(JSON.stringify("groupData", excelTableData))
+            const worksheet = XLSX.utils.json_to_sheet(groupData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
+            XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
+        }
+
+    }
+
+    const groupByColumnsWithSumFunc = (jsonData) => {
+        let dynamicColumn = []
+        if (groupByDate) {
+            dynamicColumn.push('OrderDate')
+        }
+        if (groupByParty) {
+            dynamicColumn.push('SupplierName')
+        }
+
+        let currentColumnName = [...dynamicColumn, ...['GroupName', 'SubGroup', 'MaterialName']]
         const columnSumsByGroup = jsonData.reduce((result, item) => {
-            const groupKey = columnNames.map(columnName => item[columnName]).join('|');
+            const groupKey = currentColumnName.map(columnName => item[columnName]).join('|');
+            
             if (!result[groupKey]) {
                 result[groupKey] = {
                     sums: {},
                     data: []
                 };
 
-                columnNames.forEach((key) => {
+                currentColumnName.forEach((key) => {
                     result[groupKey].sums[key] = item[key];
                 })
             }
@@ -152,8 +161,12 @@ const OrderSummary = (props) => {
             group.data.push(item);
 
             Object.entries(item).forEach(([key, value]) => {
-                if (typeof value === 'number') {
+                if (((typeof value === 'number') && !(key === "id"))) {
                     group.sums[key] = (group.sums[key] || 0) + value;
+                }
+                else if (key === "OrderAmount") {
+                    group.sums[key] = (group.sums[key] || 0) + Number(value);
+                    group.sums[key] = + Number((group.sums[key]).toFixed(2));
                 }
             });
 
@@ -164,7 +177,7 @@ const OrderSummary = (props) => {
             delete columnSumsByGroup[i].sums.Orderid
             arr.push(columnSumsByGroup[i].sums)
         })
-
+        
         return arr
     };
 
@@ -178,7 +191,7 @@ const OrderSummary = (props) => {
         label: " All"
     });
 
-    const onselecthandel = (e) => {
+    const partySlectHandler = (e) => {
 
         setState((i) => {
             const a = { ...i }
@@ -186,7 +199,8 @@ const OrderSummary = (props) => {
             a.hasValid.PartyName.valid = true
             return a
         })
-        setTableData([]);
+        setOrderSummaryApiData([]);
+        setShowTableData([]);
     }
 
     function excel_And_GoBtnHandler(e, Btnmode) {
@@ -208,7 +222,7 @@ const OrderSummary = (props) => {
             a.hasValid.FromDate.valid = true
             return a
         });
-        setTableData([]);
+        setShowTableData([]);
     }
 
     function todateOnchange(e, date) {
@@ -218,32 +232,39 @@ const OrderSummary = (props) => {
             a.hasValid.ToDate.valid = true
             return a
         });
-        setTableData([]);
+        setShowTableData([]);
     }
+    function groupByDateHandler(e) {
+        setGroupByDate(e.target.checked)
+        setBtnMode(1)
+    }
+    function groupByPartyHandler(e) {
+        setGroupByParty(e.target.checked)
+        setBtnMode(1)
+    }
+    const pagesListColumns = useMemo(() => {
+        let internalColumn = [{}];
+        if (showTableData.length > 0) {
+            internalColumn = [];
 
-    const pagesListColumns = () => {
-        if (tableData.length > 0) {
-            const objectAtIndex0 = tableData[0];
-            const internalColumn = []
+            const objectAtIndex0 = showTableData[0];
             for (const key in objectAtIndex0) {
-                const column = {
-                    text: key,
-                    dataField: key,
-                    sort: true,
-                    classes: "table-cursor-pointer",
-                };
-                internalColumn.push(column);
+                if (!(key === "keyId")) {
+                    const column = {
+                        text: key,
+                        dataField: key,
+                        sort: true,
+                        classes: "table-cursor-pointer",
+                    };
+                    internalColumn.push(column);
+                }
             }
-
-            setColumns(internalColumn)
-            setColumnsCreated(true)
         }
-    }
+        return internalColumn
+        
+    }, [showTableData]);
 
-    if (!columnsCreated) {
-        pagesListColumns();
-    }
-
+    
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -295,7 +316,7 @@ const OrderSummary = (props) => {
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
                                             options={Party_Option}
-                                            onChange={(e) => { onselecthandel(e) }}
+                                            onChange={partySlectHandler}
 
                                         />
                                     </Col>
@@ -307,7 +328,7 @@ const OrderSummary = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={btnMode === 1 && true}
+                                loading={btnMode === 1 && goBtnLoading}
                                 className="btn btn-success"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
@@ -321,7 +342,7 @@ const OrderSummary = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={btnMode === 2 && true}
+                                loading={btnMode === 2 && goBtnLoading}
                                 className="btn btn-primary"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
@@ -340,7 +361,7 @@ const OrderSummary = (props) => {
                                     <Col sm="4">
                                         <Input type="checkbox"
                                             checked={groupByDate}
-                                            onChange={(e) => setGroupByDate(e.target.checked)} />
+                                            onChange={groupByDateHandler} />
                                     </Col>
                                 </FormGroup>
                             </Col>
@@ -351,7 +372,7 @@ const OrderSummary = (props) => {
                                     <Col sm="4" style={{ marginTop: '9px', }}>
                                         <Input type="checkbox"
                                             checked={groupByParty}
-                                            onChange={(e) => setGroupByParty(e.target.checked)}
+                                            onChange={groupByPartyHandler}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -362,9 +383,9 @@ const OrderSummary = (props) => {
 
                 <div className="">
                     <ToolkitProvider
-                        keyField={"id"}
-                        data={tableData}
-                        columns={columns}
+                        keyField={"keyId"}
+                        data={showTableData}
+                        columns={pagesListColumns}
                         search
                     >
                         {(toolkitProps,) => (
