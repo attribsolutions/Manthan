@@ -1347,6 +1347,11 @@ const Order = (props) => {
                                                     style={{ width: "115px" }}>Delivery Date</Label>
                                                 <Col sm="7">
                                                     <C_DatePicker
+                                                        options={{
+                                                            altInput: true,
+                                                            altFormat: "d-m-Y",
+                                                            dateFormat: "Y-m-d",
+                                                        }}
                                                         name="deliverydate"
                                                         value={deliverydate}
                                                         disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}

@@ -1357,6 +1357,12 @@ const DiscountMaster = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.FromDate}  </Label>
                                         <Col sm="7">
                                             <C_DatePicker
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                    maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),// Set the maximum date
+                                                }}
                                                 name='FromDate'
                                                 disabled={(tableData.length > 0) && true}
                                                 value={values.FromDate}
@@ -1372,6 +1378,12 @@ const DiscountMaster = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ToDate}  </Label>
                                         <Col sm="7">
                                             <C_DatePicker
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                    maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),// Set the maximum date
+                                                }}
                                                 name='ToDate'
                                                 disabled={(tableData.length > 0) && true}
                                                 value={values.ToDate}
