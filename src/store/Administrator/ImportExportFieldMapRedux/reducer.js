@@ -1,15 +1,16 @@
 import {
+  GO_BUTTON_IMPORT_FIELD_MAP_ADD,
   GO_BUTTON_IMPORT_FIELD_MAP_ADD_SUCCESS,
+  IMPORT_FIELD_MAP_API_ERROR_ACTION,
+  SAVE_IMPORT_FIELD_MAP,
   SAVE_IMPORT_FIELD_MAP_SUCCESS,
 } from "./actionType";
 
 const INIT_STATE = {
   postMsg: { Status: false },
-  addGoButton:[],
-  groupList: [],
-  deleteMsg: { Status: false },
-  editData: { Status: false },
-  updateMsg: { Status: false },
+  addGoButton: [],
+  goBtnLoading: false,
+  saveBtnLoading: false
 }
 
 const ImportExportFieldMap_Reducer = (state = INIT_STATE, action) => {
@@ -17,44 +18,39 @@ const ImportExportFieldMap_Reducer = (state = INIT_STATE, action) => {
 
   switch (action.type) {
 
+    case GO_BUTTON_IMPORT_FIELD_MAP_ADD:
+      return {
+        ...state,
+        goBtnLoading: true,
+      }
+
     case GO_BUTTON_IMPORT_FIELD_MAP_ADD_SUCCESS:
       return {
         ...state,
+        goBtnLoading: false,
         addGoButton: action.payload,
       }
 
-    // post
+    case SAVE_IMPORT_FIELD_MAP:
+      return {
+        ...state,
+        saveBtnLoading: true
+      }
+
     case SAVE_IMPORT_FIELD_MAP_SUCCESS:
       return {
         ...state,
+        saveBtnLoading: false,
         postMsg: action.payload,
       }
+    case IMPORT_FIELD_MAP_API_ERROR_ACTION:
+      return {
+        ...state,
+        goBtnLoading: false,
+        saveBtnLoading: false
+      }
 
-    // // get 
-    // case GET_EXCEL_IMPORT_LIST_SUCCESS:
-    //   return {
-    //     ...state,
-    //     groupList: action.payload,
-    //   }
-    // //  del
-    // case DELETE_EXCEL_IMPORT_LIST_ID_SUCCESS:
-    //   return {
-    //     ...state,
-    //     deleteMsg: action.payload,
-    //   };
-    // // edit
-    // case EDIT_EXCEL_IMPORTMASTER_ID_SUCCESS:
-    //   return {
-    //     ...state,
-    //     editData: action.payload,
-    //   };
 
-    // // update api
-    // case UPDATE_EXCEL_IMPORTMASTER_ID_SUCCESS:
-    //   return {
-    //     ...state,
-    //     updateMsg: action.payload,
-    //   };
 
     default:
       return state

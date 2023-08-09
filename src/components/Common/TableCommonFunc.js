@@ -1,191 +1,242 @@
 import { Input } from "reactstrap"
 import { useState } from "react";
 import { useEffect } from "react";
+import { concatDateAndTime } from "./CommonFunction";
 
 const onSelectAll = (event, allarray,) => {
-    debugger
-    allarray.forEach(ele => {
-        ele.selectCheck = event
-    })
+
+  allarray.forEach(ele => {
+    ele.selectCheck = event
+  })
 }
 
 const selectRow = (row, event) => {
-    debugger
-    row.selectCheck = event
+
+  row.selectCheck = event
 }
 export const selectAllCheck = (selected, nonSelectable, position, headLabel) => ({
 
-    mode: "checkbox",
-    onSelectAll: onSelectAll,
-    onSelect: selectRow,
-    selected: selected,
-    selectColumnPosition: position ? position : "right",
-    nonSelectable: nonSelectable,
+  mode: "checkbox",
+  onSelectAll: onSelectAll,
+  onSelect: selectRow,
+  selected: selected,
+  selectColumnPosition: position ? position : "right",
+  nonSelectable: nonSelectable,
 
-    selectionHeaderRenderer: (head) => {
+  selectionHeaderRenderer: (head) => {
 
-        return <div className="">
-            <Input type="checkbox" checked={head.checked} />
-            <label style={{ paddingLeft: "7px" }}>{headLabel ? headLabel : "SelectAll"}</label>
-        </div>
-    },
-    selectionRenderer: ({ mode, ...rest }) => {
-        if (rest.disabled) {
-            return <Input
-                type="checkbox"
-                disabled
-                style={{
-                    opacity: 0.5,
-                    cursor: 'not-allowed',
-                    backgroundColor: "#ababab82",
-                }}
-            />;
-        }
-        return <Input type="checkbox"  {...rest} />
-
+    return <div className="">
+      <Input type="checkbox" checked={head.checked} />
+      <label style={{ paddingLeft: "7px" }}>{headLabel ? headLabel : "SelectAll"}</label>
+    </div>
+  },
+  selectionRenderer: ({ mode, ...rest }) => {
+    if (rest.disabled) {
+      return <Input
+        type="checkbox"
+        disabled
+        style={{
+          opacity: 0.5,
+          cursor: 'not-allowed',
+          backgroundColor: "#ababab82",
+        }}
+      />;
     }
+    return <Input type="checkbox"  {...rest} />
+
+  }
 
 })
 
-const DynamicColumnHook = ({ reducers = "",
-    pageField = '',
-    lastColumn,
-    secondLastColumn,
-    thirdLastColumn,
-    makeBtnColumn,
-    userAccState }) => {
+const DynamicColumnHook = ({
+  reducers = "",
+  pageField = "",
+  lastColumn,
+  secondLastColumn,
+  thirdLastColumn,
+  makeBtnColumn,
+  userAccState,
+}) => {
+  const { listBtnLoading } = reducers;
+  const [tableColumns, setTableColumns] = useState([{ text: "ID", dataField: "id" }]);
+  const [defaultSorted, setDefaultSorted] = useState([]);
+  const [pageOptions, setPageOptions] = useState({
+    custom: true,
+    sizePerPage: 15,
+  });
+  const { PageFieldMaster = [] } = { ...pageField };
 
-    const { listBtnLoading } = reducers
-    const [tableColumns, setTableColumns] = useState([{
-        text: "ID",
-        dataField: "id",
-    }])
+  useEffect(() => {
+    if (userAccState === "") {
+      return;
+    }
 
-    const [defaultSorted, setDefaultSorted] = useState('')
-    const [pageOptions, setPageOptions] = useState({
-        custom: true,
-        sizePerPage: 15,
-        // totalSize: tableList.length
-    })
+    let sortLabel = "";
+    let sortType = "asc";
+    let columns = [];
 
-    const { PageFieldMaster = [] } = { ...pageField };
+    // Sort PageFieldMaster by ListPageSeq
+    PageFieldMaster.sort((a, b) => a.ListPageSeq - b.ListPageSeq);
 
-    useEffect(() => {
+    if (PageFieldMaster.length === 0) {
+      columns.push({ text: "Page Field Is Blank...", dataField: "id" });
+    }
 
-        if (userAccState === "") {
-            return
+    PageFieldMaster.forEach((i, k) => {
+      if (i.ShowInListPage) {
+        const column = {
+          text: i.FieldLabel,
+          dataField: i.ControlID,
+          hidden: false,
+          sort: true,
+          // key: `column-${k}`,
+          classes: "table-cursor-pointer",
+          align: i.Alignment || null,
+          formatter: (cell, row) => {
+            if (i.ControlID === "transactionDate") {
+              return (
+                <>
+                  {row.transactionDateLabel}
+                </>
+              )
+            }
+            if (cell === "Invoice Created") {
+              return (
+                <span
+                  className="label label-"
+                  style={{
+                    backgroundColor: "#b6efdcf7",
+                    color: "#0e0d0d",
+                    fontSize: "12px",
+                    padding: "2px 4px 2px 4px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  {cell}
+                </span>
+              );
+            }
+            if (cell === "Order Confirm") {
+              return (
+                <span
+                  className="label label"
+                  style={{
+                    backgroundColor: "#f7dfb6",
+                    color: "#0e0d0d",
+                    fontSize: "12px",
+                    padding: "2px 4px 2px 4px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  {cell}
+                </span>
+              );
+            }
+            if (cell === "Open") {
+              return (
+                <span
+                  className="label label"
+                  style={{
+                    backgroundColor: "#c3bfc7a6",
+                    color: "#0e0d0d",
+                    fontSize: "12px",
+                    padding: "2px 4px 2px 4px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  {cell}
+                </span>
+              );
+            }
+            if (cell === "Send To Supplier") {
+              return (
+                <span
+                  className="label label-"
+                  style={{
+                    backgroundColor: "#b6efdcf7",
+                    color: "#0e0d0d",
+                    fontSize: "12px",
+                    padding: "2px 4px 2px 4px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  {cell}
+                </span>
+              );
+            }
+            if (cell === "Approved") {
+              return (
+                <span
+                  className="label label"
+                  style={{
+                    backgroundColor: "#f7dfb6",
+                    color: "#0e0d0d",
+                    fontSize: "12px",
+                    padding: "2px 4px 2px 4px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  {cell}
+                </span>
+              );
+            }
+            return <span>{typeof cell === "boolean" ? String(cell) : cell}</span>;
+          },
         };
 
-        let sortLabel = ""
-        let sortType = "asc"
-        let columns = []
-        // ****** columns sort by sequnce
-        PageFieldMaster.sort(function (a, b) {
-            //sort function is  sort list page coloumn by asending order by listpage sequense
-            return a.ListPageSeq - b.ListPageSeq;
-        });
-        // *******
+        columns.push(column);
 
-        if (!(PageFieldMaster.length > 0)) {
-            columns.push({ text: "Page Field Is Blank...", dataField: "id", });
+        if (i.DefaultSort === 1) {
+          sortLabel = i.ControlID;
+          sortType = "asc";
+        } else if (i.DefaultSort === 2) {
+          sortLabel = i.ControlID;
+          sortType = "desc";
         }
+      }
 
-
-        PageFieldMaster.forEach((i, k) => {
-
-            if (i.ShowInListPage) {
-                columns.push({
-                    text: i.FieldLabel,
-                    dataField: i.ControlID,
-                    sort: true,
-                    classes: 'table-cursor-pointer',
-
-                    align: () => {
-                        if (i.Alignment) return i.Alignment;
-                    },
-
-                    formatter: (cell, row) => {
-                        if (cell === "Invoice Created") {
-                            return (
-                                <span class="label label-" style={{
-                                    backgroundColor: '#b6efdcf7', color: "#0e0d0d", fontSize: "12px",
-                                    padding: "2px 4px 2px 4px", borderRadius: "5px"
-                                }}>{cell}</span>
-                            )
-                        }
-                        if (cell === "Order Confirm") {
-                            return (
-                                <span class="label label" style={{
-                                    backgroundColor: '#f7dfb6', color: "#0e0d0d", fontSize: "12px",
-                                    padding: "2px 4px 2px 4px", borderRadius: "5px"
-                                }} >{cell}</span>
-                            )
-                        }
-                        if (cell === "Open") {
-                            return (
-                                <span class="label label" style={{
-                                    backgroundColor: '#c3bfc7a6', color: "#0e0d0d", fontSize: "12px",
-                                    padding: "2px 4px 2px 4px", borderRadius: "5px"
-                                }} >{cell}</span>
-                            )
-                        }
-
-                        return (
-                            <span>{typeof cell === 'boolean' ? String(cell) : cell}</span>
-
-                        );
-                    }
-                })
-
-                if (i.DefaultSort === 1) {
-                    sortLabel = i.ControlID
-                    sortType = "asc"
-                } else if (i.DefaultSort === 2) {
-                    sortLabel = i.ControlID;
-                    sortType = "desc"
-                }
-            }
-
-
-            if ((PageFieldMaster.length - 1 === k) && makeBtnColumn) {
-                let isCol = makeBtnColumn();
-                if (isCol) { columns.push(isCol) }
-            }
-            if ((PageFieldMaster.length - 1 === k) && thirdLastColumn) {
-                let isCol = thirdLastColumn();
-                if (isCol) { columns.push(isCol) }
-            }
-            if ((PageFieldMaster.length - 1 === k) && secondLastColumn) {
-                let isCol = secondLastColumn();
-                if (isCol) { columns.push(isCol) }
-            }
-
-
-            if ((PageFieldMaster.length - 1 === k) && lastColumn) {
-                let islastCol = lastColumn()
-                if (islastCol) {
-                    columns.push(lastColumn())
-                }
-            }
-        })
-        if (columns.length > 0) {
-            setTableColumns(columns)
+      if (PageFieldMaster.length - 1 === k && makeBtnColumn) {
+        const isCol = makeBtnColumn();
+        if (isCol) {
+          columns.push(isCol);
         }
-        setDefaultSorted([
-            {
-                dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
-                order: sortType, // desc or asc
-            },
-        ])
+      }
+      if (PageFieldMaster.length - 1 === k && thirdLastColumn) {
+        const isCol = thirdLastColumn();
+        if (isCol) {
+          columns.push(isCol);
+        }
+      }
+      if (PageFieldMaster.length - 1 === k && secondLastColumn) {
+        const isCol = secondLastColumn();
+        if (isCol) {
+          columns.push(isCol);
+        }
+      }
+      if (PageFieldMaster.length - 1 === k && lastColumn) {
+        const islastCol = lastColumn();
+        if (islastCol) {
+          columns.push(lastColumn());
+        }
+      }
+    });
 
-        setPageOptions({
-            custom: true,
-            sizePerPage: 15,
-            // totalSize: tableList.length
-        })
+    setTableColumns(columns);
 
-    }, [pageField, userAccState, listBtnLoading])
+    setDefaultSorted([
+      {
+        dataField: sortLabel,
+        order: sortType,
+      },
+    ]);
 
-    return [tableColumns, defaultSorted, pageOptions]
-}
+    setPageOptions({
+      custom: true,
+      sizePerPage: 15,
+    });
+  }, [pageField, userAccState, listBtnLoading]);
+
+  return [tableColumns, defaultSorted, pageOptions];
+};
+
 export default DynamicColumnHook

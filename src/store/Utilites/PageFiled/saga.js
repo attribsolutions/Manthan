@@ -10,10 +10,10 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 function* commonPageFiled_GenFunc({ pageId }) {
+  
   try {
-
     const response = yield call(commonPageFiled_API, pageId);
-
+    
     const { PageFieldMaster } = response.Data
 
     if ((PageFieldMaster.length > 0)) {

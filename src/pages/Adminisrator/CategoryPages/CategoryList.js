@@ -14,7 +14,7 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { CustomSppiner } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const CategoryList = (props) => {
 
@@ -22,7 +22,7 @@ const CategoryList = (props) => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.CategoryReducer.listBtnLoading,
-      GoBtnlistloading: state.CategoryReducer.loading,
+      goBtnLoading: state.CategoryReducer.goBtnLoading,
       tableList: state.CategoryReducer.CategoryListData,
       editData: state.CategoryReducer.editData,
       updateMsg: state.CategoryReducer.updateMessage,
@@ -51,14 +51,15 @@ const CategoryList = (props) => {
 
     return () => {
       dispatch(getCategorylistSuccess([]));
+      dispatch(commonPageFieldListSuccess(null))
     }
   }, []);
 
-  const { pageField, GoBtnlistloading } = reducers
+  const { pageField, goBtnLoading } = reducers
 
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       {
         (pageField) &&
         <CommonListPage

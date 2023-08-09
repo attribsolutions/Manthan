@@ -14,11 +14,12 @@ import {
   EMPLOYEE_API_ERROR_ACTION,
   DELETE_EMPLOYEE_ID,
   EDIT_EMPLOYEE_ID,
-  GET_CITY_ON_DISTRICT
+  GET_CITY_ON_DISTRICT,
+  GET_STATE
 } from "./actionTypes";
 
 const INIT_STATE = {
-  loading:false,
+  goBtnLoading: false,
   listBtnLoading: false,
   saveBtnloading: false,
   designation: [],
@@ -31,7 +32,8 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   CompanyNames: [],
   PartyTypes: [],
-  cityDropDownLoading:false
+  cityDropDownLoading: false,
+  stateDropDownLoading: false
 };
 
 const EmployeesReducer = (state = INIT_STATE, action) => {
@@ -45,10 +47,18 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       };
 
     // State Dropdown api
+    case GET_STATE:
+      return {
+        ...state,
+        stateDropDownLoading: true
+      };
+
+    // State Dropdown api
     case GET_STATE_SUCCESS:
       return {
         ...state,
         State: action.payload,
+        stateDropDownLoading: false
       };
 
     // CITY Dropdown api
@@ -56,14 +66,14 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
     case GET_CITY_ON_DISTRICT:
       return {
         ...state,
-        cityDropDownLoading:true
+        cityDropDownLoading: true
       };
 
     case GET_CITY_ON_DISTRICT_SUCCESS:
       return {
         ...state,
         City: action.payload,
-        cityDropDownLoading:false
+        cityDropDownLoading: false
       };
 
     case SAVE_EMPLOYEE_MASTER:
@@ -84,14 +94,14 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
     case GET_EMPLOYEE_LIST:
       return {
         ...state,
-        loading: true,
+        goBtnLoading: true,
       }
 
     case GET_EMPLOYEE_LIST_SUCCESS:
       return {
         ...state,
         employeeList: action.payload,
-        loading: false,
+        goBtnLoading: false,
       }
 
     case DELETE_EMPLOYEE_ID:
@@ -147,9 +157,10 @@ const EmployeesReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        cityDropDownLoading:false,
+        goBtnLoading: false,
+        stateDropDownLoading: false,
+        cityDropDownLoading: false,
         listBtnLoading: false,
-        
       };
 
     default:

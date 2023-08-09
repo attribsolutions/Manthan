@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import ReactApexChart from "react-apexcharts"
 import {
-    Button,
     Card,
     CardBody,
     CardHeader,
     Col,
-    Container, Label, Row,
+    Container, Label, Row, Spinner,
 } from "reactstrap";
 import { breadcrumbReturnFunc } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
@@ -17,38 +15,36 @@ import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
 import * as mode from "../../../routes/PageMode"
 import { getDashbordDetails } from '../../../store/Dashboard/Dashboard_1_Redux/action';
-import { options } from '../Options';
 import PaymentEntryList from './PaymentEntryList';
 import InvoiceForGRN from './GRNList';
 import SalesReturnListForDashboard from './SalesReturnListForDashboard';
-import { orderApprovalAction, orderApprovalActionSuccess } from '../../../store/Purchase/OrderPageRedux/actions';
-import { customAlert } from '../../../CustomAlert/ConfirmDialog';
-import { getExcel_Button_API, getExcel_Button_API_Success } from '../../../store/Report/SapLedger Redux/action';
-import * as XLSX from 'xlsx';
+import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/CommonButton';
 
 const Dashboard_1 = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
-
-    const [pageMode, setPageMode] = useState(mode.defaultsave);//changes
-    const [modalCss, setModalCss] = useState(false);
-    const [userPageAccessState, setUserAccState] = useState(123);
+    const [userPageAccessState, setUserAccState] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         getDashboard,
         userAccess,
-        ProductMarginData,
-        orderApprovalMsg } = useSelector((state) => ({
+        orderApprovalMsg,
+        GRNListLoading,
+        pageField,
+        SalesReturnListloading,
+        PaymentEntryListloading } = useSelector((state) => ({
             getDashboard: state.DashboardReducer.getDashboard,
             userAccess: state.Login.RoleAccessUpdateData,
-            ProductMarginData: state.SapLedgerReducer.ProductMargin,
             pageField: state.CommonPageFieldReducer.pageField,
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
+            GRNListLoading: state.OrderReducer.goBtnLoading,
+            SalesReturnListloading: state.SalesReturnReducer.loading,
+            PaymentEntryListloading: state.ReceiptReducer.loading,
         }));
 
-    const { OrderCount, InvoiceCount, GRNsCount } = getDashboard
+    const { OrderCount, InvoiceCount, GRNsCount, } = getDashboard
 
     useEffect(() => {
         const page_Id = pageId.DASHBORD_1//changes
@@ -59,7 +55,6 @@ const Dashboard_1 = (props) => {
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
     const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
 
     // userAccess useEffect
@@ -94,53 +89,9 @@ const Dashboard_1 = (props) => {
         history.push(url.SALES_RETURN_LIST)
     }
 
-    // ******************************** SAP button code **********************************
-    useEffect(() => {
-
-        if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
-            dispatch(orderApprovalActionSuccess({ Status: false }))
-            customAlert({
-                Type: 1,
-                Message: orderApprovalMsg.Message,
-            })
-        } else if (orderApprovalMsg.Status === true) {
-            dispatch(orderApprovalActionSuccess({ Status: false }))
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(orderApprovalMsg.Message),
-            })
-        }
-
-    }, [orderApprovalMsg]);
-
-    //$$$$$$$$$$$$$$$$$$$$$$$$ SAP Button Code *************** Dont remove*****************
-
-    // function demoSAPhandler(event) {
-    //     event.preventDefault();
-    //     const btnId = "sapbtn-id"
-    //     let jsonBody = {
-    //         "Customer": "500581",
-    //         "DocDate": "04.05.2023",
-    //         "Indicator": "F",
-    //         "OrderNo": "127407",
-    //         "Stats": "1",
-    //         "OrderItemSet": [{
-    //             "OrderNo": "127407",
-    //             "ItemNo": "3706465",
-    //             "Material": "1200249",
-    //             "Quantity": "1.000",
-    //             "Unit": "KG",
-    //             "Plant": "IW03",
-    //             "Batch": ""
-    //         }],
-    //         "CancelFlag": " "
-    //     }
-
-    //     dispatch(orderApprovalAction({ jsonBody, btnId }))
-    // }
-
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={GRNListLoading || PaymentEntryListloading || SalesReturnListloading || !pageField} />
             <div className="page-content">
                 <MetaTags>
                     <title>Dashboard | FoodERP 2.0 - React Admin & Dashboard Template</title>
@@ -203,13 +154,20 @@ const Dashboard_1 = (props) => {
 
                     <Row>
                         <Col lg={6}>
-                            <Card >
+                            <Card className=''>
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}
                                     className="card-header align-items-center d-flex text-center">
+
                                     <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
                                         onClick={paymentEntry_onClick}
+                                        disabled={PaymentEntryListloading}
+                                        style={{ cursor: "pointer" }}
                                     >
-                                        Todays Payment Entry</Label>
+                                        Todays Payment Entry</Label>&nbsp;&nbsp;&nbsp;
+                                    {(PaymentEntryListloading) &&
+                                        <DashboardLoader />
+                                    }
+
                                 </CardHeader>
                                 <PaymentEntryList />
                             </Card>
@@ -218,13 +176,23 @@ const Dashboard_1 = (props) => {
                         <Col lg={6}>
                             <Card >
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}
+
                                     className="card-header align-items-center d-flex">
-                                    <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+
+                                    <Label
+                                        className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                        disabled={GRNListLoading}
                                         onClick={InvoiceFoRGRN_onClick}
+                                        style={{ cursor: "pointer" }}
+
                                     >
                                         Invoices For GRN</Label>
+                                    {(GRNListLoading) &&
+                                        <DashboardLoader />
+                                    }
                                 </CardHeader>
                                 <InvoiceForGRN />
+
                             </Card>
                         </Col>
                     </Row>
@@ -236,42 +204,20 @@ const Dashboard_1 = (props) => {
                                     className="card-header align-items-center d-flex text-center">
                                     <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
                                         onClick={salesReturn_onClick}
+                                        disabled={SalesReturnListloading}
+                                        style={{ cursor: "pointer" }}
+
                                     >
                                         Sales Return List</Label>
+                                    {(SalesReturnListloading) &&
+                                        <DashboardLoader />
+                                    }
                                 </CardHeader>
                                 <SalesReturnListForDashboard />
                             </Card>
                         </Col>
-                        {  /*  //$$$$$$$$$$$$$$$$$$$$$$$$ SAP Button Code *************** Dont remove*****************
-                        
-                        <Col lg={6}>
-                            <Button type='button'
-                                className='btn btn-success'
-                                id="sapbtn-id"
-                                onClick={demoSAPhandler}>demoSAP
-                            </Button>
-                        </Col> */}
 
-                        {/* <Col lg={6}>
-                            <Button type='button'
-                                className='btn btn-success'
-                                id="excelbtn-id"
-                                onClick={excelhandler}>excelBtnView
-                            </Button>
-                        </Col> */}
                     </Row>
-
-                    {/* <div className="card">
-                        <div className="card-header align-items-center d-flex">
-                            <h4 className="card-title mb-0 flex-grow-1">Transactions</h4>
-                            <Label className=" text-primary text-bold mb-n2 text-decoration-underline"
-                                onClick={InvoiceFoRGRN_onClick}
-                            >
-                                Invoices For GRN</Label>
-                         
-                        </div>
-                        <InvoiceForGRN />
-                    </div> */}
 
                 </Container>
             </div>

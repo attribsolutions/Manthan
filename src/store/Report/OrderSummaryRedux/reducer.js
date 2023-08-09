@@ -1,32 +1,33 @@
 import { ORDER_SUMMARY_API_ERROR_ACTION, POST_ORDER_SUMMARY_API, POST_ORDER_SUMMARY_API_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
-    orderSummaryGobtn: [],
-    listBtnLoading: false
+    orderSummaryGobtn: { Status: false },
+    goBtnLoading: false,
 }
 
 const OrderSummaryReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
+
         case POST_ORDER_SUMMARY_API:
             return {
                 ...state,
-                listBtnLoading: true
+                goBtnLoading: true
+                ,
             }
 
         case POST_ORDER_SUMMARY_API_SUCCESS:
             return {
                 ...state,
+                goBtnLoading: false,
                 orderSummaryGobtn: action.payload,
-                listBtnLoading: false
-            }
+            };
 
         case ORDER_SUMMARY_API_ERROR_ACTION:
             return {
                 ...state,
-                listBtnLoading: false,
-            };
-
+                goBtnLoading: false,
+            }
 
         default:
             return state

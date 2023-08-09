@@ -13,7 +13,7 @@ import {
 } from "./actionTypes";
 
 const INIT_STATE = {
-  loading:false,
+  goBtnLoading:false,
   PostData: { Status: false },
   SalesManList: [],
   deleteMessage: { Status: false },
@@ -42,14 +42,14 @@ const SalesManReducer = (state = INIT_STATE, action) => {
     case GET_SALESMAN_LIST:
       return {
         ...state,
-        loading: true
+        goBtnLoading: true
       }
 
     case GET_SALESMAN_LIST_SUCCESS:
       return {
         ...state,
         SalesManList: action.payload,
-        loading: false
+        goBtnLoading: false
 
       }
 
@@ -97,7 +97,7 @@ const SalesManReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
-        loading:false
+        goBtnLoading:false
       };
 
     default:

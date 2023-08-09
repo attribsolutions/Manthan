@@ -131,6 +131,8 @@ export const BANK_LIST = "/BankList"
 
 export const PRODUCT_MARGIN_REPORT = "/ProductMarginReport"
 
+export const DISCOUNT_MASTER = "/Discount_Master"
+export const DISCOUNT_LIST = "/Discount_List"
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
@@ -194,6 +196,8 @@ export const LOADING_SHEET_LIST_UPDATE = "/Loading_Sheet_List_Update"
 export const SALES_RETURN = "/SalesReturn"
 export const SALES_RETURN_LIST = "/SalesReturnList"
 
+export const PURCHASE_RETURN_MODE_3 = "/Purchase_Return_Mode_3"
+
 //******************************* InterBranch Module ************************************//
 
 export const IB_ORDER = "/IB_Order" // IB Order
@@ -237,6 +241,26 @@ export const PARTY_LEDGER = "/PartyLedger"
 
 export const STOCK_REPORT = "/StockReport"
 
+export const STOCK_REPORT_1 = "/Stock_Report_1"
+
 //**************************** Reports ***********************************//
 
 export const ORDER_SUMMARY_REPORT = "/OrderSummaryReport"
+
+export const GENERIC_SALE_REPORT = "/Generic_Sale_Report"
+
+export const RETAILER_DATA_REPORT = "/RetailerDataReport"
+
+export const CLAIM_SUMMARY_REPORT = "/ClaimSummary"
+
+export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
+
+export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"
+
+export const DELETE_INVOICE_DATA_EXPORT = "/DeleteInvoiceDataExport"
+
+export const DAMAGE_STOCK_REPORT = "/Damage_Stock_Report"
+
+
+
+

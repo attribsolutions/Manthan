@@ -76,12 +76,16 @@ export const saveMsgUseEffect = async ({
 
 export const updateMsgUseEffect = async ({
     updateMsg, updateSuccss, modalCss, dispatch, history, listPath, status200 }) => {
-   
+
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
         dispatch(updateSuccss({ Status: false }))
 
         if (status200) { status200() };
 
+        await customAlert({
+            Type: 1,
+            Message: JSON.stringify(updateMsg.Message),
+        })
         history.push({
             pathname: listPath,
         })

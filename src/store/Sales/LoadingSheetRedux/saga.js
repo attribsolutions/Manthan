@@ -1,5 +1,5 @@
-import { call, put,takeLatest } from "redux-saga/effects";
-import { CommonConsole, date_dmy_func, convertTimefunc, amountCommaSeparateFunc, } from "../../../components/Common/CommonFunction";
+import { call, put, takeLatest } from "redux-saga/effects";
+import { CommonConsole, date_dmy_func, convertTimefunc, amountCommaSeparateFunc, concatDateAndTime, } from "../../../components/Common/CommonFunction";
 import { Loading_Sheet_Del_API, Loading_Sheet_get_API, Loading_Sheet_Go_Button_API, Loading_Sheet_Post_API, Loading_Sheet_Update_API, LoadingSheet_API } from "../../../helpers/backend_helper";
 import { DeleteLoadingSheetSucccess, LoadingSheetApiErrorAction, LoadingSheetListActionSuccess, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMasterSucccess, UpdateLoadingSheetSucccess } from "./action";
 import { LOADING_SHEET_LIST_ACTION, LOADING_SHEET_GO_BUTTON_API, SAVE_LOADING_SHEET_MASTER, LOADING_SHEET_UPDATE_API, DELETE_LOADING_SHEET } from "./actionType";
@@ -12,6 +12,7 @@ function* goBtn_Post_API_GenFun({ filters }) {
 
         response.Data.map((index) => {
             index["selectCheck"] = false
+            index["preInvoiceDate"] =date_dmy_func(index.InvoiceDate);
             return index
         });
 
@@ -59,9 +60,10 @@ function* get_LoadingSheet_List_GenFun({ filters }) {
         const newList = yield response.Data.map((i) => {
 
             i.TotalAmount = amountCommaSeparateFunc(i.TotalAmount)
-            var date = date_dmy_func(i.Date)
-            var time = convertTimefunc(i.CreatedOn)
-            i.Date = (`${date} ${time}`)
+
+            //tranzaction date is only for fiterand page field but UI show transactionDateLabel
+            i["transactionDate"] = i.CreatedOn;
+            i["transactionDateLabel"] = concatDateAndTime(i.Date, i.CreatedOn);
             return i
         })
         yield put(LoadingSheetListActionSuccess(newList));

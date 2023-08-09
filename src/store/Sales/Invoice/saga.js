@@ -20,6 +20,7 @@ import {
   EInvoice_Cancel_Get_API,
   EwayBill_Uploade_Get_API,
   EwayBill_Cancel_Get_API,
+  Update_Vehicle_Invoice_API,
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -33,6 +34,7 @@ import {
   Uploaded_EwayBillSuccess,
   Cancel_EInvoiceSuccess,
   Cancel_EwayBillSuccess,
+  UpdateVehicleInvoice_Success,
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -44,6 +46,7 @@ import {
   UPLOADED_E_WAY_BILL_ACTION,
   CANCLE_E_WAY_BILL_ACTION,
   CANCLE_E_INVOICE_ACTION,
+  UPDATE_VEHICLE_INVOICE_ACTION,
 
 } from "./actionType";
 import *as url from "../../../routes/route_url"
@@ -54,13 +57,13 @@ import { orderApprovalActionSuccess } from "../../actions";
 
 //post api for Invoice Master
 function* save_Invoice_Genfun({ config }) {
-  const { subPageMode, btnId, SaveAndDownloadPdfMode } = config;
+  const { subPageMode, btnId, saveAndDownloadPdfMode } = config;
   try {
 
     if (subPageMode === url.INVOICE_1) {
       let response = yield call(Invoice_1_Save_API, config);
       response["btnId"] = btnId
-      response["SaveAndDownloadPdfMode"] = SaveAndDownloadPdfMode
+      response["saveAndDownloadPdfMode"] = saveAndDownloadPdfMode
       yield put(invoiceSaveActionSuccess(response))
     } if (subPageMode === url.IB_INVOICE) {
       let response = yield call(IB_Invoice_Save_API, config);
@@ -90,8 +93,10 @@ function* InvoiceListGenFunc({ config }) {
       } else {
         i["LoadingSheetCreated"] = ""
       }
-      i["preInvoiceDate"] = i.InvoiceDate
-      i.InvoiceDate = concatDateAndTime(i.InvoiceDate, i.CreatedOn)
+
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
+      i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] =  concatDateAndTime(i.InvoiceDate, i.CreatedOn);
       return i
     })
     yield put(invoiceListGoBtnfilterSucccess(newList));
@@ -143,7 +148,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
   // Iterate over OrderItemDetails array and perform data conversion
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
     const defaultunit = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
-    let roundedTotalAmount = 0;
+    let itemTotalAmount = 0;
 
     // Set properties for data conversion
     index1["OrderQty"] = index1.Quantity;
@@ -171,8 +176,8 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
       index2["initialRate"] = index2.Rate;
       index2["Rate"] = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
-      index2["ActualQuantity"] = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity).toFixed(2);
-      index1["Quantity"] = Number(index1.Quantity).toFixed(2);
+      index2["ActualQuantity"] = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity).toFixed(3);
+      index1["Quantity"] = Number(index1.Quantity).toFixed(3);
 
       index1["ItemTotalStock"] += Number(index2.ActualQuantity);
 
@@ -181,9 +186,9 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       // Adjust order quantity based on stock availability
       if (orderQty > stockQty && orderQty !== 0) {
         orderQty -= stockQty;
-        index2.Qty = stockQty.toFixed(2);
+        index2.Qty = stockQty.toFixed(3);
       } else if (orderQty <= stockQty && orderQty > 0) {
-        index2.Qty = orderQty.toFixed(2);
+        index2.Qty = orderQty.toFixed(3);
         orderQty = 0;
       } else {
         index2.Qty = 0;
@@ -192,7 +197,7 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       // Calculate total amount if quantity is greater than 0
       if (index2.Qty > 0) {
         const calculate = invoice_discountCalculate_Func(index2, index1);
-        roundedTotalAmount += Number(calculate.roundedTotalAmount);
+        itemTotalAmount += Number(calculate.roundedTotalAmount);
       }
 
       return index2;
@@ -200,9 +205,9 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
     const t1 = Number(index1.ItemTotalStock).toFixed(3);
     const t2 = Number(index1.Quantity);
-    const tA4 = roundedTotalAmount.toFixed(2);
+    const tA4 = itemTotalAmount.toFixed(2);
 
-    index1["roundedTotalAmount"] = tA4;
+    index1["itemTotalAmount"] = tA4;
 
     // Check for stock availability and set corresponding message
     if (t1 < t2) {
@@ -315,6 +320,17 @@ function* Cancle_EwayBillGenFunc({ config }) {
   }
 }
 
+// UpdateVehicleInvoice
+function* UpdateVehicleInvoice_GenFunc({ config }) {
+
+  try {
+    const response = yield call(Update_Vehicle_Invoice_API, config)
+    yield put(UpdateVehicleInvoice_Success(response));
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
+}
+
 // MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
 
@@ -328,6 +344,11 @@ function* InvoiceSaga() {
   yield takeLatest(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc)
   yield takeLatest(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc)
   yield takeLatest(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc)
+  yield takeLatest(UPDATE_VEHICLE_INVOICE_ACTION, UpdateVehicleInvoice_GenFunc)
 }
 
 export default InvoiceSaga;
+
+
+
+

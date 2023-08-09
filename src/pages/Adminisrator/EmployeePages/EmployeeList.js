@@ -14,7 +14,7 @@ import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { CustomSppiner, Listloader, } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const Employee_List = () => {
 
@@ -22,7 +22,7 @@ const Employee_List = () => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.EmployeesReducer.listBtnLoading,
-      GoBtnlistloading: state.EmployeesReducer.loading,
+      goBtnLoading: state.EmployeesReducer.goBtnLoading,
       tableList: state.EmployeesReducer.employeeList,
       editData: state.EmployeesReducer.editData,
       updateMsg: state.EmployeesReducer.updateMessage,
@@ -48,16 +48,18 @@ const Employee_List = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getEmployeelist());
+
     return () => {
       dispatch(getEmployeelistSuccess([]));
+      dispatch(commonPageFieldListSuccess(null))
     }
   }, []);
 
-  const { pageField, GoBtnlistloading } = reducers
+  const { pageField, goBtnLoading } = reducers
 
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       {
         (pageField) &&
         <CommonListPage

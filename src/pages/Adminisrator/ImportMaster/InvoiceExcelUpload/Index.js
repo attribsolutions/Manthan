@@ -7,18 +7,13 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
+import {commonPageFieldSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import Select from "react-select";
-import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
-import {
-    comAddPageFieldFunc,
-    initialFiledFunc,
-} from "../../../../components/Common/validationFunction";
-import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
+
+import { getPartyListAPI, getPartyListAPISuccess } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
 import { fileDetails, readExcelFile } from "./readFile";
 import {
@@ -31,7 +26,8 @@ import {
     InvoiceExcelUpload_save_Success
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
-import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
+import { C_Button, Go_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
+import { C_Select } from "../../../../CustomValidateForm";
 
 
 const InvoiceExcelUpload = (props) => {
@@ -41,16 +37,9 @@ const InvoiceExcelUpload = (props) => {
     const userAdminRole = _cfunc.loginUserAdminRole();
 
     const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [], partyNO: [] }
-    const fileds = {
-        id: "",
-        Party: "",
-        ImportType: "",
-        PatternType: ""
-    }
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [selectedFiles, setselectedFiles] = useState([])
-    const [preUploadjson, setPreUploadjson] = useState([])
     const [readJsonDetail, setReadJsonDetail] = useState(preDetails)
     const [preViewDivShow, setPreViewDivShow] = useState(false)
     const [partySelect, SetPartySelect] = useState([])
@@ -59,23 +48,35 @@ const InvoiceExcelUpload = (props) => {
     const {
         postMsg,
         userAccess,
-        compareParameter = []
+        compareParameter = [],
+        partyList,
+        partyDropDownLoading,
+        compareParamLoading,
+        saveBtnLoading,
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
-        userAccess: state.Login.RoleAccessUpdateData,
+        saveBtnLoading: state.ImportExcelPartyMap_Reducer.invoiceUploadSaveLoading,
+
         partyList: state.PartyMasterReducer.partyList,
+        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
+
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
+        compareParamLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
 
     useEffect(() => {
-        dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
+        dispatch(getPartyListAPI());
         if (!userAdminRole) {
             goButtonHandler()
         }
         return () => {
             dispatch(GoButton_ImportFiledMap_AddSuccess([]));
+            dispatch(getPartyListAPISuccess([]));
+            dispatch(commonPageFieldSuccess(null));
         }
+
     }, []);
 
     const location = { ...history.location }
@@ -109,7 +110,6 @@ const InvoiceExcelUpload = (props) => {
                 Message: postMsg.Message,
             });
             setselectedFiles([]);
-            setPreUploadjson([]);
             setPreViewDivShow(false);
             SetPartySelect('');
             setReadJsonDetail(preDetails);
@@ -118,7 +118,7 @@ const InvoiceExcelUpload = (props) => {
             dispatch(InvoiceExcelUpload_save_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             });
         };
     }, [postMsg])
@@ -134,7 +134,7 @@ const InvoiceExcelUpload = (props) => {
     };
 
 
-    async function uploadBtnFunc() {
+    async function veifyExcelBtn_Handler() {
 
         if (compareParameter.length === 0) {
             customAlert({
@@ -155,9 +155,7 @@ const InvoiceExcelUpload = (props) => {
 
         var filename = files[0].name;
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
-        if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
-
-
+        if (extension == '.CSV') {
             const readjson = await readExcelFile({ file: files[0], compareParameter, })
             if (readjson.length > 0) {
 
@@ -165,7 +163,6 @@ const InvoiceExcelUpload = (props) => {
                 let { invoiceNO } = isdetails;
                 if ((invoiceNO.length > 0)) {
                     setReadJsonDetail(isdetails)
-                    setPreUploadjson(readjson)
                     setPreViewDivShow(true)
                 } else {
                     customAlert({
@@ -178,7 +175,7 @@ const InvoiceExcelUpload = (props) => {
         } else {
             customAlert({
                 Type: 3,
-                Message: "Please select a valid excel file.",
+                Message: "Please select a valid CSV file.",
             })
         }
     }
@@ -205,7 +202,6 @@ const InvoiceExcelUpload = (props) => {
         };
 
         setReadJsonDetail(preDetails)
-        setPreUploadjson([])
         setPreViewDivShow(false)
         // try {
         //     const btnerify = document.getElementById("btn-verify")
@@ -237,7 +233,7 @@ const InvoiceExcelUpload = (props) => {
     }
 
 
-    const SaveHandler = async (event) => {
+    const uploadSaveHandler = async (event) => {
 
         event.preventDefault();
         const btnId = event.target.id
@@ -314,6 +310,7 @@ const InvoiceExcelUpload = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+                <PageLoadingSpinner isLoading={((partyDropDownLoading && (userAdminRole)) || compareParamLoading)} />
 
                 <form noValidate>
                     <div className="page-content">
@@ -322,17 +319,48 @@ const InvoiceExcelUpload = (props) => {
                             <div className="px-2   c_card_filter text-black" >
                                 {
                                     userAdminRole ? <>
-                                        <PartyDropdown_Common
+                                        {/* <PartyDropdown_Common
                                             partySelect={partySelect}
                                             setPartyFunc={(e) => SetPartySelect(e)}
                                             goButtonHandler={goButtonHandler}
-                                        />
+                                        /> */}
+
+                                        <div className="row pt-2">
+                                            <Col sm="5">
+                                                <FormGroup className="row px-1">
+                                                    <Label className="col-sm-5 p-2" style={{ width: "83px" }}>
+                                                        Party
+                                                    </Label>
+                                                    <Col sm="6">
+                                                        <C_Select
+                                                            value={partySelect}
+                                                            isSearchable={true}
+                                                            isLoading={partyDropDownLoading}
+                                                            className="react-dropdown"
+                                                            classNamePrefix="dropdown"
+                                                            options={partyList.map((data) => ({
+                                                                value: data.id,
+                                                                label: data.Name,
+                                                            }))}
+
+                                                            onChange={(e) => { SetPartySelect(e) }}
+                                                            styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
+                                                        />
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col sm="1" className="mb-1">
+                                                <Go_Button
+                                                    // loading={reducers.loading}
+                                                    onClick={goButtonHandler} />
+                                            </Col>
+                                        </div>
                                     </>
                                         : <>
                                             {(!(compareParameter.length > 0)) ?
                                                 <div className="row ">
                                                     <div className="d-flex justify-content-start p-2 ">
-                                                        <div>Please wait Downloading field Details.</div>
+                                                        <div>Please wait Downloading field Details. other wise check filed mapping </div>
                                                         <div >
                                                             <div className="dot-pulse">
                                                                 <div className="bounce1"></div>
@@ -461,28 +489,29 @@ const InvoiceExcelUpload = (props) => {
 
                         <div className="text- mt-4" >
                             {preViewDivShow ?
-                                <button
+
+                                <C_Button
                                     type="button"
-                                    // style={{ display: "none" }}
                                     id='btn-uploadBtnFunc'
-                                    className="btn btn-success "
-                                    onClick={SaveHandler}
+                                    className="btn btn-success"
+                                    loading={saveBtnLoading}
+                                    onClick={uploadSaveHandler}
                                 >
                                     Upload Files
-                                </button>
+                                </C_Button>
                                 :
-                                <button
+                                <C_Button
                                     type="button"
                                     id='btn-verify'
-                                    className="btn btn-primary "
-                                    onClick={uploadBtnFunc}
+                                    loading={saveBtnLoading}
+                                    className="btn btn-primary"
+                                    onClick={veifyExcelBtn_Handler}
                                 >
                                     Verify Files
-                                </button>
+                                </C_Button>
+
                             }
                         </div>
-
-
 
                     </div>
 

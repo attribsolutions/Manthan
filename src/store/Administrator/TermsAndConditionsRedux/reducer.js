@@ -20,6 +20,7 @@ const INIT_STATE = {
     deleteMessage: { Status: false },
     saveBtnloading: false,
     listBtnLoading: false,
+    goBtnLoading: false
 }
 
 const TermsAndConditionsReducer = (state = INIT_STATE, action) => {
@@ -30,41 +31,38 @@ const TermsAndConditionsReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 saveBtnloading: true,
-
             }
 
         case POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API_SUCCESS:
             return {
                 ...state,
-                PostData: action.payload,
                 saveBtnloading: false,
-
+                PostData: action.payload,
             }
 
-            case GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API:
-                return {
-                    ...state,
-                    loading: true,
-                }
+        case GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API:
+            return {
+                ...state,
+                goBtnLoading: true,
+            }
 
         case GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS:
             return {
                 ...state,
                 tableList: action.payload,
-                loading:false
+                goBtnLoading: false
             }
 
-            case EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API:
-                return {
-                    ...state,
-                    listBtnLoading: action.config.btnId,
+        case EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            }
 
-                }
-    
         case EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS:
             return {
                 ...state,
-                listBtnLoading:false,
+                listBtnLoading: false,
                 editData: action.payload,
             }
 
@@ -77,30 +75,30 @@ const TermsAndConditionsReducer = (state = INIT_STATE, action) => {
         case UPDATE_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS:
             return {
                 ...state,
-                updateMessage: action.payload,
                 saveBtnloading: false,
+                updateMessage: action.payload,
             }
 
-            case DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API:
+        case DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API:
             return {
                 ...state,
                 listBtnLoading: action.config.btnId,
             }
 
-
         case DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS:
             return {
                 ...state,
+                listBtnLoading: false,
                 deleteMessage: action.payload,
             }
 
-            case TERMS_AND_CONDITIONS_API_ERROR_ACTION:
-                return {
-                  ...state,
-                  saveBtnloading: false,
-                  listBtnLoading: false,
-                  loading:false
-                };
+        case TERMS_AND_CONDITIONS_API_ERROR_ACTION:
+            return {
+                ...state,
+                saveBtnloading: false,
+                listBtnLoading: false,
+                goBtnLoading: false
+            };
         default:
             return state
     }

@@ -10,20 +10,22 @@ import {
     DeleteLoadingSheet,
     DeleteLoadingSheetSucccess,
     LoadingSheetListAction,
+    LoadingSheetListActionSuccess,
     UpdateLoadingSheet,
-    
+
 } from "../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import {Col, FormGroup, Label } from "reactstrap";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { useHistory } from "react-router-dom";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
-import { Go_Button } from "../../../components/Common/CommonButton";
-import { getpartysetting_API } from "../../../store/Administrator/PartySetting/action";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const LoadingSheetList = () => {
     const history = useHistory();
@@ -32,23 +34,22 @@ const LoadingSheetList = () => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [pageMode] = useState(mode.defaultList);
-
+ 
     const reducers = useSelector(
         (state) => ({
             loading: state.LoadingSheetReducer.loading,
-            listBtnLoading: state.LoadingSheetReducer.listBtnLoading,
+            listBtnLoading: (state.LoadingSheetReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
             deleteMsg: state.LoadingSheetReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-            PartySettingdata: state.PartySettingReducer.PartySettingdata,
             LoadingSheetUpdateList: state.LoadingSheetReducer.LoadingSheetUpdate,
         })
     );
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
-    const { userAccess, pageField, PartySettingdata, LoadingSheetUpdateList } = reducers;
-    const { Data = {} } = PartySettingdata;
+    const { pageField, LoadingSheetUpdateList } = reducers;
+
 
     const action = {
         getList: LoadingSheetListAction,
@@ -62,9 +63,12 @@ const LoadingSheetList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
-        goButtonHandler()
-        dispatch(getpartysetting_API(_cfunc.loginUserDetails().Party_id, _cfunc.loginCompanyID()))
-
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            goButtonHandler()
+        }
+        return () => {
+            dispatch(LoadingSheetListActionSuccess([]))
+        }
     }, []);
 
     useEffect(() => {
@@ -75,14 +79,22 @@ const LoadingSheetList = () => {
         }
     }, [LoadingSheetUpdateList])
 
-    function goButtonHandler() {
-        const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            PartyID: _cfunc.loginPartyID(),
-        });
-        dispatch(LoadingSheetListAction(jsonBody));
-    }
+    const goButtonHandler = () => {
+        try {
+            if ((_cfunc.loginSelectedPartyID() === 0)) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = JSON.stringify({
+                FromDate: fromdate,
+                ToDate: todate,
+                PartyID: _cfunc.loginSelectedPartyID(),
+            });
+
+            dispatch(LoadingSheetListAction(jsonBody));
+        } catch (error) { }
+        return
+    };
 
     function fromdateOnchange(e, date) {
         let newObj = { ...headerFilters }
@@ -96,23 +108,34 @@ const LoadingSheetList = () => {
         setHeaderFilters(newObj)
     }
 
-    function downBtnFunc(row, downbtnType) {
-        if (downbtnType === "IsMultipleInvoicePrint") {
-            let ReportType = report.invoiceA5
-            dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id, Data))
+    function downBtnFunc(config) {
+
+        if (config.btnmode === "MultiInvoice") {
+            config["ReportType"] = report.invoice;
+            config["forceA5"] = true;
+            dispatch(getpdfReportdata(MultipleInvoice_API, config))
         } else {
-            let ReportType = report.VanLoadingPartyWiseInvoice
-            dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
+            config["ReportType"] = report.VanLoadingPartyWiseInvoice
+            dispatch(getpdfReportdata(LoadingSheet_API, config))
         }
     }
 
     const otherBtn_1Func = (list) => {
-        dispatch(UpdateLoadingSheet({ RowId: list.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
+        dispatch(UpdateLoadingSheet({ RowId: list.rowData.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
+
+    function partyOnChngeButtonHandler() {
+        dispatch(LoadingSheetListActionSuccess([]))
+    }
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
+
             <div className="page-content">
+
+                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
+
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">
                         <div className=" row mt-2 mb-1">

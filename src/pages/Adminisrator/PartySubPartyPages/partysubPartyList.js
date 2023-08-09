@@ -45,21 +45,20 @@ const PartySubPartyList = () => {
     dispatch(getPartySubPartylist());
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField } = reducers
 
   return (
     <React.Fragment>
       {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={PartySubParty}
-            masterPath={url.PARTY_SUB_PARTY}
-            ButtonMsgLable={"PartySubParty"}
-            deleteName={"PartySubParty"}
-          />
-          : null
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={PartySubParty}
+          masterPath={url.PARTY_SUB_PARTY}
+          ButtonMsgLable={"PartySubParty"}
+          deleteName={"PartySubParty"}
+        />
       }
     </React.Fragment>
   )

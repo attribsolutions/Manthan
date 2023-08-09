@@ -13,7 +13,7 @@ import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import GSTMaster from "./GSTMaster";
 import { deleteGSTListId, deleteGSTListId_Success, getGSTList, goButtonForGST_Master_Success } from "../../../store/Administrator/GSTRedux/action";
-import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
 
 const GSTList = () => {
 
@@ -90,12 +90,12 @@ const GSTList = () => {
   function editBodyfunc(index) {
 
     const { rowData, btnId } = index
-    let { preEffectiveDate } = rowData;
+    let { EffectiveDate } = rowData;
     _cfunc.btnIsDissablefunc({ btnId, state: true })
 
     try {
       const jsonBody = JSON.stringify({
-        EffectiveDate: preEffectiveDate
+        EffectiveDate: EffectiveDate
       })
       let config = { jsonBody, pathname: url.GST, btnmode: mode.edit, rowData: rowData }
       // sessionStorage.setItem("margin_Master", config)
@@ -124,7 +124,7 @@ const GSTList = () => {
 
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
         {
 

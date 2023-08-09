@@ -131,6 +131,9 @@ export const RetailerList = url.RETAILER_MASTER
 
 export const ProductMarginReport = url.PRODUCT_MARGIN_REPORT
 
+export const Discount_Master = url.DISCOUNT_LIST
+export const Discount_List = url.DISCOUNT_MASTER
+
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1
@@ -199,10 +202,13 @@ export const Invoice_1 = url.INVOICE_LIST_1
 
 export const Loading_Sheet_List = url.LOADING_SHEET
 export const Loading_Sheet = url.LOADING_SHEET_LIST
-export const LoadingSheetUpdate = url.LOADING_SHEET_LIST
+export const Loading_Sheet_List_Update = url.LOADING_SHEET_LIST
+export const BulkRecipt = url.LOADING_SHEET_LIST
 
 export const SalesReturn = url.SALES_RETURN_LIST
 export const SalesReturnList = url.SALES_RETURN
+
+export const Purchase_Return_Mode_3 = url.SALES_RETURN_LIST
 
 //********************************Accounting ***********************************//
 export const Receipts = url.RECEIPTS_LIST
@@ -224,6 +230,16 @@ export const SapLedger = url.SAP_LEDGER
 
 export const StockReport = url.STOCK_REPORT
 
+export const Stock_Report_1 = url.STOCK_REPORT_1
+
 //**************************** Reports ***********************************//
 
 export const OrderSummaryReport = url.ORDER_SUMMARY_REPORT
+
+export const Generic_Sale_Report = url.GENERIC_SALE_REPORT
+
+export const RetailerDataReport = url.RETAILER_DATA_REPORT
+
+export const Damage_Stock_Report = url.DAMAGE_STOCK_REPORT
+
+export const DeleteInvoiceDataExport = url.DELETE_INVOICE_DATA_EXPORT

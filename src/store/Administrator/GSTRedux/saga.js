@@ -1,8 +1,8 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import {concatDateAndTime } from "../../../components/Common/CommonFunction";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
+import { concatDateAndTime } from "../../../components/Common/CommonFunction";
 
 function* save_GSTMaster_GenFunc({ config }) {
   try {
@@ -17,8 +17,10 @@ function* get_GSTList_GenFunc() {
   try {
     const response = yield call(apiCall.GetGSTList_For_Listpage);
     response.Data.map(i => {
-      i["preEffectiveDate"] = i.EffectiveDate
-      i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
+
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
+      i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] = concatDateAndTime(i.EffectiveDate, i.CreatedOn);
     })
     yield put(action.getGSTListSuccess(response.Data));
   } catch (error) { yield put(action.GSTApiErrorAction()) }

@@ -1,7 +1,7 @@
 import { Button, Spinner } from "reactstrap"
 import { loginUserID } from "./CommonFunction";
 import * as mode from "../../routes/PageMode"
-import { Children } from "react";
+import { useEffect, useState } from "react";
 
 export function SaveButton(props) {
   const { pageMode = '', userAcc = {}, editCreatedBy } = props
@@ -22,7 +22,7 @@ export function SaveButton(props) {
   }
   return null
 }
-const SaveBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
+const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled }) => {
   const { Name } = userAcc;
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
@@ -31,20 +31,17 @@ const SaveBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
         <button
           id={btnId}
           title={`Save ${Name} Loging...`}
-          // disabled
+          type={type}
           className="btn btn-primary w-md"
-          autoFocus={false}
-        // onClick={onClick}
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
 
         :
         <button
-          type="submit"
+          type={type}
           id={btnId}
           disabled={forceDisabled}
-          autoFocus={false}
           title={`Save ${Name}`}
           className="btn btn-primary w-md"
           onClick={onClick}
@@ -54,7 +51,7 @@ const SaveBtn = ({ onClick, userAcc, loading, forceDisabled }) => {
   )
 
 }
-const UpdateBtn = ({ onClick, userAcc, loading }) => {
+const UpdateBtn = ({ onClick, userAcc, loading, type = 'button' }) => {
   const { Name } = userAcc;
   const btnId = `Update-${Name.replace(/ /g, "")}`;
 
@@ -64,13 +61,14 @@ const UpdateBtn = ({ onClick, userAcc, loading }) => {
         <button
           id={btnId}
           title={`Updating.. ${Name} `}
+          type={type}
           className="btn btn-success w-md"
         >  Updating.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
         :
         <button
-          type="submit"
+          type={type}
           id={btnId}
           title={`Update ${Name}`}
           className="btn btn-success w-md"
@@ -85,7 +83,7 @@ const UpdateBtn = ({ onClick, userAcc, loading }) => {
 
 export function Go_Button(props) {
 
-  const { onClick, id, type = "button", loading } = props
+  const { onClick, id, type = "button", loading, forceDisabled } = props
 
   return loading ?
     <Button
@@ -93,42 +91,58 @@ export function Go_Button(props) {
       type={type}
       disabled
       title={`Go Button Loging...`}
-      color="btn btn-outline-success border-1   "
+      color="btn btn-outline-success border-1"
       onClick={onClick} >
       <Spinner style={{ height: "13px", width: "13px" }} color="success" />
     </Button>
     : <Button
       id={id}
       type={type}
-      color="btn btn-success border-1 font-size-12  "
+      disabled={forceDisabled}
+      color="btn btn-success border-1 font-size-12"
       onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "16px" }}>Go</span></Button>
 }
+
 export function Change_Button(props) {
-  const { onClick, id, type = "button" } = props
+  const { onClick, id, type = "button", forceDisabled } = props
   return <Button
     id={id}
+    disabled={forceDisabled}
     type={type}
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>
 }
-export function C_Button(props) {
-  const {
-    loading,
-    color,
-    Children
-  } = props
 
-  return loading ?
-    <Button
-      color={color}
-      disabled
-      title={`Add Button Loging...`}
+export function C_Button({
+  loading,
+  color,
+  onClick,
+  forceDisabled,
+  children,
+  spinnerColor = "primary",
+  ...rest
+}) {
+  if (loading) {
+    return (
+      <button
+        disabled
+        title={`Add Button Loading...`}
+        {...rest}
+      >
+        <Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
+      </button>
+    );
+  }
+
+  return (
+    <button
+      disabled={forceDisabled}
+      onClick={onClick}
+      {...rest}
     >
-      <Spinner style={{ height: "12px", width: "12px" }} color="primary" />
-    </Button>
-    : <Button
-      {...props}
-    />
+      {children}
+    </button>
+  );
 }
 
 
@@ -140,18 +154,16 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
       {loading ?
         <button
           id={btnId}
-
+          type="button"
           className="btn btn-info w-md"
-          autoFocus={false}
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
         :
         <button
-          type="submit"
+          type="button"
           id={btnId}
           disabled={forceDisabled}
-          autoFocus={false}
           title={` save & goto Invoice ${Name}`}
           className="btn btn-info w-md"
           onClick={onClick}
@@ -161,7 +173,7 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
   )
 }
 
-export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled }) => {
+export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled, type = "button" }) => {
   const { Name } = userAcc;
   const btnId = `SaveAndDownloadPdfBtn-${Name.replace(/ /g, "")}`;
   return (
@@ -169,28 +181,25 @@ export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled })
       {loading ?
         <button
           id={btnId}
-
+          type={type}
           className="btn btn-info w-md"
-          autoFocus={false}
-        >  Saving.. &nbsp;
+        >Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
         </button>
         :
         <button
-          type="submit"
+          type={type}
           id={btnId}
           disabled={forceDisabled}
-          autoFocus={false}
           title={` save & goto Invoice ${Name}`}
           className="btn btn-info w-md"
           onClick={onClick}
-        >  Save & PDF
+        >  Save & Print
         </button>}
+
     </div>
   )
 }
-
-
 
 export function Loader() {// linner component
   return <div className="dot-pulse"> <span> </span>     &nbsp;
@@ -201,7 +210,6 @@ export function Loader() {// linner component
 
 }
 
-
 export function Listloader() {// common Listcomponent
   return <div id="api_spinner" >
     <div className="api_spinner_body " >
@@ -210,7 +218,6 @@ export function Listloader() {// common Listcomponent
   </div>
 
 }
-
 
 export function Listloader1({ show = false }) {// common Listcomponent
   if (!show) { return null }
@@ -224,20 +231,62 @@ export function Listloader1({ show = false }) {// common Listcomponent
 }
 
 
-export function CustomSppiner({ isLoading }) {// common Listcomponent
-  if (!isLoading) {
-    return null
-  }
-  return <div id="api_spinner" >
-    <div className="api_spinner_body " >
-      <span className="spinner" style={{ marginLeft: "-20vw" }} ></span>
-    </div>
+// export function PageLoadingSpinner({ isLoading }) {// common Listcomponent
+//   // if (!isLoading) {
+//   //   return null
+//   // }
+//   useEffect(() => {
+//     //init body click event fot toggle rightbar
+//     // document.body.addEventListener("click", hideRightbar, true);
+//     try {
+//       if (isLoading === true) {
+//         document.getElementById("preloader").style.display = "block";
+//       } else {
+//         document.getElementById("preloader").style.display = "none";
+//       }
+//     } catch (w) { }
+//   }, [isLoading]);
+
+//   return <></>
+//   // return <div id="api_spinner" >
+//   //   <div className="api_spinner_body " >
+//   //     <span className="spinner" style={{ marginLeft: "-20vw" }} ></span>
+//   //   </div>
+//   // </div>
+
+// }
+
+export function DashboardLoader() {// linner component
+  return <div className="dot-pulse mt-2"> &nbsp; &nbsp;&nbsp;
+    <div className="bounce1" ></div>
+    <div className="bounce2" ></div>
+    <div className="bounce3" ></div>
   </div>
 
 }
 
 
+export function PageLoadingSpinner({ isLoading }) {
 
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
+  useEffect(() => {
+
+    if (isLoading && isInitialLoad) {
+      document.getElementById('preloader').style.display = 'block';
+      setIsInitialLoad(false);
+    } else {
+      document.getElementById('preloader').style.display = 'none';
+    }
+  }, [isLoading]);
+
+  return (
+    <div className="pace pace-active" id="preloader">
+      <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
+        <div className="pace-progress-inner"></div>
+      </div>
+      <div className="pace-activity"></div></div>
+  );
+}
 
 

@@ -1,4 +1,6 @@
+
 import { invoice } from "../ReportIndex";
+import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
     "SR",
@@ -69,8 +71,28 @@ export const Rows = (data) => {
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
 
         const { HSNCode, ItemName, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName } = currentItem;
+        let PcsinNumber = ""
+        let PcsinNumberUnit = ""
+        const pattern = /\((.*?)\)/;
+        // const patterSeprateCharAndNo = /^(\d+\.\d+)/;
+        if (currentItem.UnitName !== "") {
+            const matchFound = currentItem.UnitName.match(pattern);
+            const extractedText = matchFound[1];
+            console.log(extractedText); // Output: "19.0 No"
+            const match = extractedText.split(" ")
+            // const match = extractedText.match(patterSeprateCharAndNo);
+            PcsinNumber = match[0];
+            PcsinNumberUnit = match[1];
+
+        }
+
+
+
+
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
+            accumulator[key].PcsinNumber += Number(PcsinNumber);
+            accumulator[key].UnitName += Number(UnitName);
             accumulator[key].DiscountAmount += Number(DiscountAmount);
             accumulator[key].Quantity += Number(Quantity);
             accumulator[key].BasicAmount += Number(BasicAmount);
@@ -84,7 +106,7 @@ export const Rows = (data) => {
         } else {
             accumulator[key] = {
                 ItemName, HSNCode,
-                MRPValue, DiscountType, Rate, Discount, CGST: Number(CGST), SGST: Number(SGST), Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount), Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate, BatchCode: BatchCode, BatchDate: BatchDate, quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName
+                MRPValue, DiscountType, Rate, Discount, PcsinNumberUnit: PcsinNumberUnit, PcsinNumber: Number(PcsinNumber), CGST: Number(CGST), SGST: Number(SGST), Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount), Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate, BatchCode: BatchCode, BatchDate: BatchDate, quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName
             };
         }
         return accumulator;
@@ -93,30 +115,30 @@ export const Rows = (data) => {
     Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
-        if (data.SettingData.HSNCodeDigit.Value === "1") {
+        if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "2") {
+        if (data.SettingData.HSNCodeDigit === "2") {
             HSNcodes = element.HSNCode.slice(0, 6);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "3") {
+        if (data.SettingData.HSNCodeDigit === "3") {
             HSNcodes = element.HSNCode.slice(0, 8);
         }
-
+        
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
-            `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}   ${element.UnitName}`,
+            element.UnitName === "" ? `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}      (${element.PcsinNumber} ${element.PcsinNumberUnit})`,
             `${Number(element.MRPValue).toFixed(2)}`,
-            `${Number(element.Rate).toFixed(2)}`,
+            `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
-            `${Number(element.DiscountAmount).toFixed(2)}`,
-            `${Number(element.BasicAmount).toFixed(2)}`,
+            `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.BasicAmount).toFixed(2))}`,
             `${Number(element.CGSTPercentage).toFixed(1)}%`,
-            `${Number(element.CGST).toFixed(2)}`,
+            `${numberWithCommas(Number(element.CGST).toFixed(2))}`,
             `${Number(element.SGSTPercentage).toFixed(1)}%`,
-            `${Number(element.SGST).toFixed(2)}`,
-            `${Number(element.Amount).toFixed(2)}`,
+            `${numberWithCommas(Number(element.SGST).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
         ];
 
         function totalLots() {
@@ -137,18 +159,18 @@ export const Rows = (data) => {
 
             return [
                 "",
-                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(TotalGst).toFixed(2))} `,
+                ` GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(TotalGst).toFixed(2))} `,
                 " ",
                 ``,
                 "",
                 "",
                 ``,
-                `${Number(totalBasicAmount).toFixed(2)}`,
-                `${Number(totalCGst).toFixed(2)}`,
+                `${numberWithCommas(Number(totalBasicAmount).toFixed(2))}`,
+                `${numberWithCommas(Number(totalCGst).toFixed(2))}`,
                 "isaddition",
-                `${Number(totalSGst).toFixed(2)}`,
+                `${numberWithCommas(Number(totalSGst).toFixed(2))}`,
                 "",
-                `${Number(totalAmount).toFixed(2)}`,
+                `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
             ];
         };
         const BatchRow = [
@@ -174,9 +196,7 @@ export const Rows = (data) => {
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow)
-
         }
-
 
         else {
             returnArr.push(totalrow());
@@ -190,7 +210,7 @@ export const Rows = (data) => {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
-        if (data.SettingData.ShowBatchNoOnInvoicePrint.Value === "1") {
+        if (data.SettingData.ShowBatchNoOnInvoicePrint === "1") {
             returnArr.push((BatchRow))
         }
 
@@ -243,13 +263,13 @@ export const RowsWithIGST = (data) => {
     Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
-        if (data.SettingData.HSNCodeDigit.Value === "1") {
+        if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "2") {
+        if (data.SettingData.HSNCodeDigit === "2") {
             HSNcodes = element.HSNCode.slice(0, 6);
         }
-        if (data.SettingData.HSNCodeDigit.Value === "3") {
+        if (data.SettingData.HSNCodeDigit === "3") {
             HSNcodes = element.HSNCode.slice(0, 8);
         }
 
@@ -257,14 +277,14 @@ export const RowsWithIGST = (data) => {
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
             `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}   ${element.UnitName}`,
-            `${Number(element.MRPValue).toFixed(2)}`,
-            `${Number(element.Rate).toFixed(2)}`,
+            `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
-            `${Number(element.DiscountAmount).toFixed(2)}`,
-            `${Number(element.BasicAmount).toFixed(2)}`,
+            `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.BasicAmount).toFixed(2))}`,
             `${Number(element.IGSTPercentage).toFixed(1)}%`,
-            `${Number(element.IGST).toFixed(2)}`,
-            `${Number(element.Amount).toFixed(2)}`,
+            `${numberWithCommas(Number(element.IGST).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
         ];
 
         function totalLots() {
@@ -282,16 +302,16 @@ export const RowsWithIGST = (data) => {
 
             return [
                 "",
-                ` GST ${(parseFloat(GSTPercentage))}%  Total:${(Number(totalIGst).toFixed(2))} `,
+                ` GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(totalIGst).toFixed(2))} `,
                 " ",
                 ``,
                 "",
                 "",
                 ``,
-                `${Number(totalBasicAmount).toFixed(2)}`,
-                `${Number(totalIGst).toFixed(2)}`,
+                `${numberWithCommas(Number(totalBasicAmount).toFixed(2))}`,
+                `${numberWithCommas(Number(totalIGst).toFixed(2))}`,
                 "isaddition",
-                `${Number(totalAmount).toFixed(2)}`,
+                `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
 
             ];
         };
@@ -330,7 +350,7 @@ export const RowsWithIGST = (data) => {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
-        if (data.SettingData.ShowBatchNoOnInvoicePrint.Value === "1") {
+        if (data.SettingData.ShowBatchNoOnInvoicePrint === "1") {
             returnArr.push((BatchRow))
         }
 
@@ -405,9 +425,9 @@ export const DetailsOfTransportRow = (data) => {
     var DetailsOfTransportArray = [
         [`PO Number:${OrderNumber}`],
         [data.DriverName === null ? "Driver Name:" : `Driver Name :${data.DriverName}`],
-        [`vehical No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
-        [`E-way Bill : ${EwayData.EwayBillNo === (undefined || null) ? "" : EwayData.EwayBillNo}`],
-        [`IRN NO :${EwayData.AckNo === (undefined || null) ? "" : EwayData.AckNo}`]
+        [`vehicle No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
+        [`E-way Bill : ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
+        [`IRN NO :${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]
 
     return DetailsOfTransportArray;

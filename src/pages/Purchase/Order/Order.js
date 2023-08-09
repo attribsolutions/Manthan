@@ -9,13 +9,14 @@ import {
     Label,
     Modal,
     Row,
+    Spinner,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { orderCalculateFunc } from "./OrderPageCalulation";
-import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn } from "../../../components/Common/CommonButton";
+import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner, Listloader, DashboardLoader } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
@@ -24,22 +25,19 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { useRef } from "react";
-import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/index";
 
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { editPartyItemID } from "../../../store/Administrator/PartyItemsRedux/action";
-import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { getPartyListAPI, getPartyListAPISuccess } from "../../../store/Administrator/PartyRedux/action";
 import { pageFieldUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
-import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
+import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import { ORDER_4 } from "../../../routes/route_url";
-import { getItemList } from "../../../store/actions";
-import CustomTable from "../../../CustomTable2/Custom";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-
+import "./order.scss"
 
 let editVal = {}
 let initial_BredcrumbMsg = "Order Amount :0.00"
@@ -110,13 +108,20 @@ const Order = (props) => {
     const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
     const [goBtnDissable, setGoBtnDissable] = useState(false)
 
-    const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
     const [orderTypeSelect, setorderTypeSelect] = useState('');
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
-    const [orderItemTable, setorderItemTable] = useState([])
+    const [orderItemTable, setOrderItemTable] = useState([])
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
     const [FSSAI_Date_Is_Expired, setFSSAI_Date_Is_Expired] = useState("")
+
+    // for Order page heder dicount functionality useSate ************************************
+    const [discountValueAll, setDiscountValueAll] = useState("");
+    const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
+    const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
+    const [changeAllDiscount, setChangeAllDiscount] = useState(false)
+    const [forceReload, setForceReload] = useState(false)
+    // ****************************************************************************
 
     const {
         goBtnOrderdata,
@@ -132,15 +137,27 @@ const Order = (props) => {
         approvalDetail,
         orderApprovalMsg,
         gobutton_Add_invoice,
+        invoiceGoBtnloading,
         goBtnloading,
         saveBtnloading,
         gotoInvoiceBtnLoading,
-        RoutesList
+        RoutesList,
+        supplierADDdropLoading,
+        supplierDropLoading,
+        orderTypeDropLoading,
+        routesDropLoading
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
+
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        supplierDropLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
+
         supplierAddress: state.CommonAPI_Reducer.supplierAddress,
+        supplierADDdropLoading: state.CommonAPI_Reducer.supilerADDLoading,
+
         orderType: state.CommonAPI_Reducer.orderType,
+        orderTypeDropLoading: state.CommonAPI_Reducer.orderTypeLoading,
+
         postMsg: state.OrderReducer.postMsg,
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -148,10 +165,17 @@ const Order = (props) => {
         orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
         approvalDetail: state.OrderReducer.approvalDetail,
         assingItemData: state.PartyItemsReducer.editData,
+
         partyList_redux: state.PartyMasterReducer.partyList,
-        gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
+        partyDropLoading: state.PartyMasterReducer.partyDropLoading,
+
         RoutesList: state.RoutesReducer.RoutesList,
-        goBtnloading: state.OrderReducer.loading,
+        routesDropLoading: state.RoutesReducer.goBtnLoading,
+
+        gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
+        invoiceGoBtnloading: state.InvoiceReducer.goBtnloading,
+
+        goBtnloading: state.OrderReducer.goBtnLoading,
         saveBtnloading: state.OrderReducer.saveBtnloading,
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
 
@@ -165,15 +189,23 @@ const Order = (props) => {
 
     useLayoutEffect(() => {
         dispatch(_act.commonPageFieldSuccess(null));
-        dispatch(_act.GoButton_For_Order_AddSuccess(null))
-        dispatch(_act.commonPageField(page_id))
-        dispatch(_act.getTermAndCondition())
-        dispatch(_act.getOrderType())
+        dispatch(_act.GoButton_For_Order_AddSuccess(null));
+        dispatch(_act.commonPageField(page_id));
+        dispatch(_act.getTermAndCondition());
+        dispatch(_act.getOrderType());
         dispatch(GetRoutesList());
-        dispatch(getPartyListAPI())
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
+        dispatch(getPartyListAPI());
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }));
         if (!(subPageMode === url.ORDER_4)) {
             dispatch(_act.getSupplierAddress(_cfunc.loginPartyID()))
+        }
+        return () => {
+            dispatch(_act.commonPageFieldSuccess(null));
+            dispatch(_act.GoButton_For_Order_AddSuccess(null))
+            dispatch(getPartyListAPISuccess([]));
+            dispatch(GetRoutesListSuccess([]));
+            dispatch(_act.getTermAndCondition_Success([]));
+            dispatch(_act.GetVenderSupplierCustomerSuccess([]));
         }
     }, []);
 
@@ -206,7 +238,7 @@ const Order = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(hasEditVal.OrderAmount)}`))
                 setorderdate(hasEditVal.OrderDate)
 
                 if (subPageMode === url.ORDER_4) {
@@ -226,7 +258,7 @@ const Order = (props) => {
                 setDescription(hasEditVal.Description)
                 editVal = {}
                 editVal = hasEditVal
-                setOrderAmount(hasEditVal.OrderAmount)
+                // setOrderAmount(hasEditVal.OrderAmount)
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
 
                 setpoToDate(hasEditVal.POToDate)
@@ -243,7 +275,7 @@ const Order = (props) => {
                     ele["id"] = k + 1
                     return ele
                 });
-                setorderItemTable(orderItems)
+                setOrderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
@@ -258,11 +290,11 @@ const Order = (props) => {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             setSelecedItemWiseOrder(true)
             setGoBtnDissable(false)
-            setOrderAmount(0);
+            // setOrderAmount(0);
             setTermsAndConTable([]);
             setorderTypeSelect('');
             setisOpen_assignLink(false)
-            setorderItemTable([])
+            setOrderItemTable([])
             setsupplierSelect('');
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
@@ -288,7 +320,8 @@ const Order = (props) => {
                         Party: _cfunc.loginPartyID(),
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
-                        jsonBody, subPageMode: url.INVOICE_1,
+                        jsonBody,
+                        subPageMode: url.INVOICE_1,
                         path: url.INVOICE_1,
                         pageMode: mode.defaultsave,
                         customer,
@@ -303,6 +336,7 @@ const Order = (props) => {
                     if (a) {
                         history.push({
                             pathname: listPath,
+                            updatedRowBlinkId: postMsg.OrderID
                         });
                     }
                 }
@@ -343,7 +377,7 @@ const Order = (props) => {
     useEffect(() => {
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
-            if (!selecedItemWiseOrder) { setorderItemTable(OrderItems) }
+            if (!selecedItemWiseOrder) { setOrderItemTable(OrderItems) }
             setitemSelectOptions(OrderItems.map(i => ({ ...i, value: i.Item_id, label: i.ItemName })))
 
             setTermsAndConTable(TermsAndConditions)
@@ -407,10 +441,6 @@ const Order = (props) => {
         label: i.Name,
     }));
 
-    const Party_DropdownOptions = partyList_redux.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
 
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
@@ -433,12 +463,18 @@ const Order = (props) => {
             text: "Group",
             classes: 'table-cursor-pointer',
             sort: true,
+            headerStyle: () => {
+                return { minWidth: '100px', textAlign: 'center' };
+            },
         },
         {
             dataField: "SubGroupName",
             text: "SubGroup",
             classes: 'table-cursor-pointer',
             sort: true,
+            headerStyle: () => {
+                return { minWidth: '100px', textAlign: 'center' };
+            },
         },
 
         {//------------- ItemName column ----------------------------------
@@ -446,6 +482,9 @@ const Order = (props) => {
             text: "Item Name",
             classes: 'table-cursor-pointer',
             sort: true,
+            headerStyle: () => {
+                return { minWidth: '200px', textAlign: 'center' };
+            },
             sortValue: (cell, row) => row["ItemName"],
             headerFormatter: (value, row, k, f) => {
                 return (
@@ -469,13 +508,20 @@ const Order = (props) => {
             classes: 'table-cursor-pointer',
             align: () => "right",
             sort: true,
-
+            headerStyle: () => {
+                return { minWidth: '100px', textAlign: 'center' };
+            },
         },
 
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             classes: 'table-cursor-pointer',
-            formatter: (value, row, k) => {
+            headerStyle: () => {
+                return { width: '10%', textAlign: 'center' };
+            },
+            formatExtraData: { tableList: orderItemTable },
+            formatter: (value, row, k, { tableList }) => {
+
                 return (
                     <>
                         <CInput
@@ -487,27 +533,24 @@ const Order = (props) => {
                             className=" text-end"
                             onChange={(e) => {
                                 row["Quantity"] = e.target.value
-                                itemWise_CalculationFunc(row)
+                                itemWise_CalculationFunc(row, undefined, tableList)
                             }}
                         />
                     </>
                 )
             },
 
-            headerStyle: () => {
-                return { width: '140px', textAlign: 'center' };
-            }
         },
 
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             classes: 'table-cursor-pointer',
             dataField: "",
-
             headerStyle: () => {
-                return { width: '150px', textAlign: 'center' };
+                return { width: '9%', textAlign: 'center' };
             },
-            formatter: (value, row, key) => {
+            formatExtraData: { tableList: orderItemTable },
+            formatter: (value, row, key, { tableList }) => {
 
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
@@ -560,6 +603,13 @@ const Order = (props) => {
                     if (!row["edit_Unit_id"]) {
                         row["edit_Unit_id"] = row.Unit_id;
                     }
+
+                    if (!row["edit_Discount"]) {
+                        row["edit_Discount"] = row.Discount;
+                    }
+                    if (!row["edit_DiscountType"]) {
+                        row["edit_DiscountType"] = row.DiscountType;
+                    }
                 }
 
                 return (
@@ -584,7 +634,8 @@ const Order = (props) => {
                                 row["BaseUnitQuantity"] = e.BaseUnitQuantity;
 
                                 row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
-                                itemWise_CalculationFunc(row)
+                                itemWise_CalculationFunc(row, undefined, tableList)
+
                                 document.getElementById(`Rate-${key}`).innerText = _cfunc.amountCommaSeparateFunc(row.Rate)
                             }}
                         >
@@ -596,10 +647,14 @@ const Order = (props) => {
         },
 
         {//------------- Rate column ----------------------------------
-            text: "Rate/Unit",
+            text: "Basic Rate",
             classes: 'table-cursor-pointer',
             dataField: "",
-            formatter: (value, row, k) => {
+            headerStyle: () => {
+                return { width: '9%', textAlign: 'center' };
+            },
+            formatExtraData: { tableList: orderItemTable },
+            formatter: (value, row, k, { tableList }) => {
                 if (subPageMode === url.ORDER_1) {
                     return (
                         <div key={row.id} className="text-end">
@@ -611,7 +666,8 @@ const Order = (props) => {
                                 className="text-end"
                                 onChange={(event) => {
                                     row.Rate = event.target.value;
-                                    itemWise_CalculationFunc(row);
+                                    itemWise_CalculationFunc(row, undefined, tableList)
+
                                 }}
                             />
 
@@ -629,16 +685,15 @@ const Order = (props) => {
 
             },
 
-            headerStyle: () => {
-                return { width: '140px', textAlign: 'center' };
-            }
         },
-
 
         {//------------- MRP column ----------------------------------
             text: "MRP",
             classes: 'table-cursor-pointer',
             dataField: "",
+            headerStyle: () => {
+                return { width: '8%', textAlign: 'center' };
+            },
             formatter: (value, row, k) => {
 
                 return (
@@ -647,8 +702,164 @@ const Order = (props) => {
                     </div>
                 )
             },
+
+        },
+        {//***************Discount********************************************************************* */
+            text: "Discount/unit",
+            dataField: "",
+            formatExtraData: {
+                discountValueAll: discountValueAll,
+                discountTypeAll: discountTypeAll,
+                changeAllDiscount: changeAllDiscount,
+                forceReload: forceReload,
+                tableList: orderItemTable
+            },
             headerStyle: () => {
-                return { width: '140px', textAlign: 'center' };
+                return { width: '11%', textAlign: 'center' };
+            },
+            headerFormatter: () => {
+                return (
+                    <div className="" >
+                        {orderItemTable.length <= 0 ?
+                            <div className="col col-3 mt-2">
+                                <Label>Discount/unit</Label>
+                            </div>
+                            :
+                            <div className="row">
+                                <div className=" mt-n2 mb-n2">
+                                    <Label>Discount/unit</Label>
+                                </div>
+                                <div className="col col-6" >
+                                    <Select
+                                        type="text"
+                                        defaultValue={discountTypeAll}
+                                        classNamePrefix="select2-selection"
+                                        options={discountDropOption}
+                                        isDisabled={(subPageMode === url.ORDER_2)}
+                                        style={{ textAlign: "right" }}
+                                        onChange={(e) => {
+                                            setChangeAllDiscount(true);
+                                            setDiscountTypeAll(e);
+                                            setDiscountValueAll('');
+                                        }}
+                                    />
+                                </div>
+                                <div className="col col-6" >
+                                    <CInput
+                                        type="text"
+                                        className="input"
+                                        style={{ textAlign: "right" }}
+                                        cpattern={decimalRegx}
+                                        value={discountValueAll}
+                                        disabled={(subPageMode === url.ORDER_2)}
+                                        onChange={(e) => {
+                                            let e_val = Number(e.target.value);
+
+                                            // Check if discount type is "percentage"
+                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
+                                            }
+
+                                            setChangeAllDiscount(true);
+                                            setDiscountValueAll(e.target.value);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                );
+            },
+
+            classes: () => "order-discount-row",
+            formatter: (cellContent, index1, key, formatExtraData) => {
+                let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+
+                if (formatExtraData.changeAllDiscount) {
+                    index1.Discount = discountValueAll;
+                    index1.DiscountType = discountTypeAll.value;
+                    itemWise_CalculationFunc(index1, undefined, tableList)
+                }
+                if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
+
+                const defaultDiscountTypelabel =
+                    index1.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
+
+                return (
+                    <>
+                        <div className="mb-2">
+                            <div className="parent">
+                                <div className="child">
+                                    <label className="label">Type&nbsp;&nbsp;&nbsp;</label>
+                                </div>
+                                <div className="child">
+                                    <Select
+                                        id={`DicountType_${key}`}
+                                        classNamePrefix="select2-selection"
+                                        key={`DicountType_${key}-${index1.id}`}
+                                        value={defaultDiscountTypelabel}
+                                        isDisabled={(subPageMode === url.ORDER_2)}
+                                        options={discountDropOption}
+                                        onChange={(e) => {
+                                            setChangeAllDiscount(false);
+                                            setForceReload(!forceReload);
+                                            index1.DiscountType = e.value;
+                                            index1.Discount = '';
+                                            itemWise_CalculationFunc(index1, undefined, tableList)
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="parent">
+                                <div className="child">
+                                    <label className="label">Value&nbsp;</label>
+                                </div>
+                                <div className="child">
+                                    <CInput
+                                        className="input"
+                                        id={`Dicount_${key}-${index1.id}`}
+                                        style={{ textAlign: "right" }}
+                                        type="text"
+                                        value={index1.Discount}
+                                        disabled={(subPageMode === url.ORDER_2)}
+                                        cpattern={decimalRegx}
+                                        onChange={(e) => {
+
+                                            let e_val = Number(e.target.value);
+                                            // Check if discount type is "percentage"
+                                            if (index1.DiscountType === 2) { // Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val > 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ''; // Clear the input value if it is less than 0
+                                                }
+                                            }
+                                            index1.Discount = e.target.value;
+                                            setChangeAllDiscount(false);
+                                            setForceReload(!forceReload);
+                                            itemWise_CalculationFunc(index1, undefined, tableList)
+                                        }}
+
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        {/* <div className="bottom-div">
+                            <span>Amount:</span>
+                            <samp id={`roundedTotalAmount-${index1.id}`}>
+                                {_cfunc.amountCommaSeparateFunc(index1.roundedTotalAmount)}
+                            </samp>
+                        </div> */}
+                    </>
+                );
             },
         },
 
@@ -672,7 +883,7 @@ const Order = (props) => {
             },
 
             headerStyle: () => {
-                return { width: '140px', textAlign: 'center' };
+                return { width: '9%', textAlign: 'center' };
             }
         },
     ];
@@ -703,7 +914,7 @@ const Order = (props) => {
                 setFSSAI_Date_Is_Expired("")
             }
         }
-        setorderItemTable([])
+        setOrderItemTable([])
         setItemSelect('')
         goButtonHandler(e.value)
     };
@@ -754,12 +965,11 @@ const Order = (props) => {
         };
     };
 
-    function itemWise_CalculationFunc(row) {
+    function itemWise_CalculationFunc(row, IsComparGstIn, tableList) {
         const calculate = orderCalculateFunc(row) //order calculation function 
         row["Amount"] = calculate.roundedTotalAmount
-
-        let sumOfAmount = orderItemTable.reduce((accumulator, currentObject) => accumulator + Number(currentObject["Amount"]) || 0, 0);
-        setOrderAmount(sumOfAmount.toFixed(2))
+        let sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
+        // setOrderAmount(sumOfAmount.toFixed(2))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(sumOfAmount)}`))
     };
 
@@ -774,7 +984,7 @@ const Order = (props) => {
             customAlert({ Type: 4, Message: `Select Item Name` })
         }
         else if (isfound === undefined) {
-            setorderItemTable([itemSelect].concat(orderItemTable))
+            setOrderItemTable([itemSelect].concat(orderItemTable))
         }
         else {
             customAlert({ Type: 3, Message: "This Item Already Exist" })
@@ -826,181 +1036,192 @@ const Order = (props) => {
         dispatch(_act.GoButton_For_Order_Add(config))
     };
 
-    const saveHandeller = async (event) => {
+
+
+    // Function to handle the form submission
+    const saveHandler = async (event) => {
         event.preventDefault();
 
-        const btnId = event.target.id
-        const gotoInvoiceMode = btnId.substring(0, 14) === "gotoInvoiceBtn";
+        // Extract the ID from the target element
+        const buttonId = event.target.id;
+        const gotoInvoiceMode = buttonId.substring(0, 14) === "gotoInvoiceBtn";
 
         try {
+            // Get the division from the loginPartyID function
             const division = _cfunc.loginPartyID();
             const supplier = supplierSelect.value;
 
-            const validMsg = []
-            const itemArr = []
-            const isVDC_POvalidMsg = []
+            const validationMessages = []; // Stores validation messages for items
+            const orderItems = []; // Stores processed order items
+            const vdcPoValidationMessages = []; // Stores VDC-PO validation messages
+            let sumOfOrderAmount = 0;//total grand total amount
 
-            let IsComparGstIn = { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
+            // Loop through the order items
+            await orderItemTable.forEach(item => {
 
-            await orderItemTable.forEach(i => {
-
-                if ((i.Quantity > 0) && !(i.Rate > 0)) {
-                    validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
+                // Check for item quantity and rate validity
+                if ((item.Quantity > 0) && !(item.Rate > 0)) {
+                    validationMessages.push({ [item.ItemName]: "This Item Rate Is Required..." });
                 }
                 else if (pageMode === mode.edit) {
+                    // Check if the item quantity or unit has changed in edit mode
+                    const isChange = (
+                        !(Number(item.edit_Qty) === Number(item.Quantity))
+                        || !(item.edit_Unit_id === item.Unit_id)
+                        || !(Number(item.edit_Discount) === Number(item.Discount))
+                        || !(Number(item.edit_DiscountType) === Number(item.DiscountType))
+                    );
 
-                    const ischange = (!(Number(i.edit_Qty) === Number(i.Quantity)) || !(i.edit_Unit_id === i.Unit_id));
-
-                    let isedit = 0
-                    if (ischange && !(i.edit_Qty === 0)) {
-                        isedit = 1
+                    let isEdit = 0;
+                    if (isChange && !(item.edit_Qty === 0)) {
+                        isEdit = 1;
                     }
-                    orderItemFunc({ i, isedit })
+                    processOrderItem({ item, isEdit });
                 }
                 else {
-                    const isedit = 0;
-                    orderItemFunc({ i, isedit })
-                };
-            })
-
-
-            function orderItemFunc({ i, isedit }) {
-
-                i.Quantity = ((i.Quantity === null) || (i.Quantity === undefined)) ? 0 : i.Quantity
-
-                if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
-                    var isdel = false;
-                    isRowValueChanged({ i, isedit, isdel })
+                    const isEdit = 0;
+                    processOrderItem({ item, isEdit });
                 }
-                else if (!(i.Quantity < 0) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
-                    var isdel = true;
-                    isRowValueChanged({ i, isedit, isdel })
+                sumOfOrderAmount = (Number(sumOfOrderAmount) + Number(item["Amount"])).toFixed(2) //total grand total amount
+
+            });
+
+            // Function to handle order items
+            function processOrderItem({ item, isEdit }) {
+
+                // Handle quantity for null or undefined values
+                item.Quantity = !Number(item.Quantity) ? 0 : item.Quantity;
+
+                // Check various conditions for item processing
+                if ((item.Quantity > 0) && (item.Rate > 0) && !(orderTypeSelect.value === 3)) {
+                    // Item is not deleted and has value changes
+                    processValueChanged({ item, isEdit, isDelete: false });
                 }
-                else if (!(i.Quantity < 0) && !(i.editrowId) && !(orderTypeSelect.value === 3)) {
-                    return
+                else if (!(item.Quantity < 0) && (item.editrowId) && !(orderTypeSelect.value === 3)) {
+                    // Item is deleted (set quantity to 0) and has value changes
+                    processValueChanged({ item, isEdit, isDelete: true });
                 }
-
-
-
-                else if ((i.Quantity > 0) && (i.Rate > 0)) {//isvdc_po logic
-
-                    if (i.Bom) {
-                        if ((itemArr.length === 0)) {
-                            const isdel = false;
-                            isRowValueChanged({ i, isedit, isdel })
-
+                else if (!(item.Quantity < 0) && !(item.editrowId) && !(orderTypeSelect.value === 3)) {
+                    // Item is not deleted and has no value changes, skip
+                    return;
+                }
+                else if ((item.Quantity > 0) && (item.Rate > 0)) { // Logic for VDC-PO
+                    if (item.Bom) {
+                        if ((orderItems.length === 0)) {
+                            // First VDC-PO item, not deleted and has value changes
+                            processValueChanged({ item, isEdit, isDelete: false });
                         } else {
-                            if (isVDC_POvalidMsg.length === 0)
-                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
+                            if (vdcPoValidationMessages.length === 0) {
+                                vdcPoValidationMessages.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
+                            }
                         }
                     } else {
-                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                        vdcPoValidationMessages.push({ [item.ItemName]: "This Is Not VDC-PO Item..." });
                     }
                 }
-                else if ((i.Quantity < 1) && (i.editrowId)) {
-                    if (i.Bom) {
-                        if ((itemArr.length === 0)) {
-                            const isdel = true;
-                            isRowValueChanged({ i, isedit, isdel })
-
+                else if ((item.Quantity < 1) && (item.editrowId)) {
+                    if (item.Bom) {
+                        if ((orderItems.length === 0)) {
+                            // First VDC-PO item, deleted and has value changes
+                            processValueChanged({ item, isEdit, isDelete: true });
                         } else {
-                            if (isVDC_POvalidMsg.length === 0)
-                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
+                            if (vdcPoValidationMessages.length === 0) {
+                                vdcPoValidationMessages.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
+                            }
                         }
                     } else {
-                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                        vdcPoValidationMessages.push({ [item.ItemName]: "This Is Not VDC-PO Item..." });
                     }
-                };
+                }
             }
-            // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
 
+            // Function to handle value changes in order items
+            function processValueChanged({ item, isEdit, isDelete }) {
 
-            function isRowValueChanged({ i, isedit, isdel }) {
+                const calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() });
 
-
-                const calculate = orderCalculateFunc(i, IsComparGstIn)
-
-
-                const arr = {
-                    // id: i.editrowId,
-                    Item: i.Item_id,
-                    Quantity: isdel ? 0 : i.Quantity,
-                    MRP: i.MRP_id,
-                    MRPValue: i.MRPValue,
-                    Rate: i.Rate,
-                    Unit: i.Unit_id,
-                    BaseUnitQuantity: (Number(i.BaseUnitQuantity) * Number(i.Quantity)).toFixed(2),
+                // Create an object for the order item
+                const orderItem = {
+                    Item: item.Item_id,
+                    Quantity: isDelete ? 0 : item.Quantity,
+                    MRP: item.MRP_id,
+                    MRPValue: item.MRPValue,
+                    Rate: item.Rate,
+                    Unit: item.Unit_id,
+                    BaseUnitQuantity: (Number(item.BaseUnitQuantity) * Number(item.Quantity)).toFixed(2),
                     Margin: "",
+                    GST: item.GST_id,
+                    CGST: calculated.CGST_Amount,
+                    SGST: calculated.SGST_Amount,
+                    IGST: calculated.IGST_Amount,
+                    GSTPercentage: calculated.GST_Percentage,
+                    CGSTPercentage: calculated.CGST_Percentage,
+                    SGSTPercentage: calculated.SGST_Percentage,
+                    IGSTPercentage: calculated.IGST_Percentage,
+                    BasicAmount: calculated.basicAmount,
+                    GSTAmount: calculated.roundedGstAmount,
+                    Amount: calculated.roundedTotalAmount,
+                    TaxType: 'GST',
+                    DiscountType: item.DiscountType,
+                    Discount: Number(item.Discount) || 0,
+                    DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
+                    IsDeleted: isEdit, // Set to 1 if item is edited, otherwise 0 for delete
+                    Comment: item.Comment
+                };
 
-                    GST: i.GST_id,
-                    CGST: calculate.CGST_Amount,
-                    SGST: calculate.SGST_Amount,
-                    IGST: calculate.IGST_Amount,
-
-                    GSTPercentage: calculate.GST_Percentage,
-                    CGSTPercentage: calculate.CGST_Percentage,
-                    SGSTPercentage: calculate.SGST_Percentage,
-                    IGSTPercentage: calculate.IGST_Percentage,
-
-                    BasicAmount: calculate.basicAmount,
-                    GSTAmount: calculate.roundedGstAmount,
-                    Amount: calculate.roundedTotalAmount,
-
-                    IsDeleted: isedit,
-                    Comment: i.Comment
-                }
-                itemArr.push(arr)
-            };
-
-            const termsAndCondition = await termsAndConTable.map(i => ({
-                TermsAndCondition: i.value,
-                IsDeleted: i.IsDeleted
-            }))
-
-            if (isVDC_POvalidMsg.length > 0) {
-                customAlert({
-                    Type: 4,
-                    Message: isVDC_POvalidMsg,
-                })
-                return
-            };
-            if (validMsg.length > 0) {
-                customAlert({
-                    Type: 4,
-                    Message: validMsg,
-                })
-
-                return
+                orderItems.push(orderItem);
             }
-            if (itemArr.length === 0) {
+
+            // Get terms and conditions
+            const termsAndConditions = await termsAndConTable.map(item => ({
+                TermsAndCondition: item.value,
+                IsDeleted: item.IsDeleted
+            }));
+
+
+            // Check for any validation errors
+            if (vdcPoValidationMessages.length > 0) {
+                customAlert({
+                    Type: 4,
+                    Message: vdcPoValidationMessages,
+                });
+                return;
+            }
+            if (validationMessages.length > 0) {
+                customAlert({
+                    Type: 4,
+                    Message: validationMessages,
+                });
+                return;
+            }
+            if (orderItems.length === 0) {
                 customAlert({
                     Type: 4,
                     Message: "Please Select 1 Item Quantity",
-                })
-
-                return
+                });
+                return;
             }
             if (orderTypeSelect.length === 0) {
                 customAlert({
                     Type: 4,
                     Message: "Please Select PO Type",
-                })
-                return
+                });
+                return;
             }
-            if ((termsAndCondition.length === 0) && !(subPageMode === url.ORDER_2)
+            if ((termsAndConditions.length === 0) && !(subPageMode === url.ORDER_2)
                 && !(subPageMode === url.ORDER_4) && !(subPageMode === url.IB_ORDER)
             ) {
                 customAlert({
                     Type: 4,
                     Message: "Please Enter One Terms And Condition",
-                })
-                return
+                });
+                return;
             }
 
             const po_JsonBody = {
                 OrderDate: orderdate,
-                OrderAmount: orderAmount,
-                OrderItem: itemArr,
+                OrderAmount: sumOfOrderAmount,
+                OrderItem: orderItems,
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
@@ -1008,8 +1229,8 @@ const Order = (props) => {
             }
             const SO_JsonBody = {
                 OrderDate: orderdate,
-                OrderAmount: orderAmount,
-                OrderItem: itemArr,
+                OrderAmount: sumOfOrderAmount,
+                OrderItem: orderItems,
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
@@ -1017,8 +1238,8 @@ const Order = (props) => {
             }
             const IB_JsonBody = {
                 DemandDate: orderdate,
-                DemandAmount: orderAmount,
-                DemandItem: itemArr,
+                DemandAmount: sumOfOrderAmount,
+                DemandItem: orderItems,
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
@@ -1036,7 +1257,7 @@ const Order = (props) => {
                 POToDate: orderTypeSelect.value === 1 ? currentDate_ymd : poToDate,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-                OrderTermsAndConditions: termsAndCondition
+                OrderTermsAndConditions: termsAndConditions
             };
 
 
@@ -1059,17 +1280,31 @@ const Order = (props) => {
 
                 dispatch(_act.saveOrderAction({ jsonBody, subPageMode, gotoInvoiceMode }))
             }
+        } catch (error) {
+            _cfunc.CommonConsole("order_save_", error);
+        }
+    };
 
-        } catch (e) { _cfunc.CommonConsole("order_save_", e) }
-    }
+
+
 
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
+                <PageLoadingSpinner isLoading={!pageField} />
+                <div className="page-container1">
+                    {invoiceGoBtnloading && <div className="c_spinner-container">
+                        <div className="d-flex">
+                            <div className="">
+                                <span className="font-size-18 color-primary">Please Wait...</span>
+                            </div>
+                            <DashboardLoader />
+                        </div>
 
-                    {/* {userAdminRole === 2 ?
+                    </div>}
+                    <div className="page-content">
+                        {/* {userAdminRole === 2 ?
                         <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
                             <div className=" mt-1 mb-2 row ">
                                 <Col sm="6">
@@ -1095,193 +1330,200 @@ const Order = (props) => {
                         </div>
                         : null} */}
 
-                    {userAdminRole &&
-                        <PartyDropdown_Common
-                            partySelect={partySelect}
-                            setPartyFunc={partyOnchange} />
-                    }
+                        {userAdminRole &&
+                            <PartyDropdown_Common
+                                partySelect={partySelect}
+                                setPartyFunc={partyOnchange} />
+                        }
 
-                    <div>
-                        <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
+                        <div>
+                            <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
 
-                            <div>
-                                <Row >
-                                    <Col sm="4" >
-                                        <FormGroup className=" row mt-2" >
-                                            <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>Delivery Date</Label>
-                                            <Col sm="7">
-                                                <C_DatePicker
-                                                    name="orderdate"
-                                                    value={orderdate}
-                                                    disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                    onChange={orderdateOnchange}
-                                                />
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
-
-                                    {(subPageMode === ORDER_4) ?
-                                        <Col sm="3">
-                                            <FormGroup className=" row mt-2 " >
+                                <div>
+                                    <Row >
+                                        <Col sm="4" >
+                                            <FormGroup className=" row mt-2" >
                                                 <Label className="col-sm-5 p-2"
-                                                    style={{ width: "65px" }}>{fieldLabel.Route}</Label>
+                                                    style={{ width: "115px" }}>Delivery Date</Label>
                                                 <Col sm="7">
+                                                    <C_DatePicker
+                                                        name="deliverydate"
+                                                        value={deliverydate}
+                                                        disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                                        onChange={(e, date) => { setdeliverydate(date) }}
+                                                    />
+                                                </Col>
+                                            </FormGroup>
+                                        </Col>
 
-                                                    <Select
-                                                        classNamePrefix="react-select"
-                                                        value={routeSelect}
-                                                        options={RouteOptions}
+                                        {(subPageMode === ORDER_4) ?
+                                            <Col sm="3">
+                                                <FormGroup className=" row mt-2 " >
+                                                    <Label className="col-sm-5 p-2"
+                                                        style={{ width: "65px" }}>{fieldLabel.Route}</Label>
+                                                    <Col sm="7">
+
+                                                        <C_Select
+                                                            classNamePrefix="react-select"
+                                                            value={routeSelect}
+                                                            options={RouteOptions}
+                                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
+                                                            // onChange={(e) => { setRouteSelect(e) }}
+                                                            onChange={(e) => { RouteOnChange(e) }}
+                                                            isLoading={routesDropLoading}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                        />
+
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col >
+                                            : <Col sm='3' />
+                                        }
+
+                                        <Col sm="4" className="">
+                                            <FormGroup className="row mt-2" >
+                                                <Label className="col-sm-5 p-2"
+                                                    style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
+                                                <Col sm="7">
+                                                    <C_Select
+                                                        value={supplierSelect}
                                                         isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
-                                                        // onChange={(e) => { setRouteSelect(e) }}
-                                                        onChange={(e) => { RouteOnChange(e) }}
+                                                        options={supplierOptions}
+                                                        onChange={supplierOnchange}
+                                                        isLoading={supplierDropLoading}
                                                         styles={{
                                                             menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
                                                     />
-
+                                                    {(FSSAI_Date_Is_Expired) &&
+                                                        <span className="text-danger f-8">
+                                                            <small>{FSSAI_Date_Is_Expired} </small>
+                                                        </span>
+                                                    }
                                                 </Col>
+
+                                            </FormGroup>
+                                        </Col>
+
+                                        <Col sm="1">                      {/*Go_Button  */}
+
+                                            <div className="row mt-2  pr-1">
+                                                {pageMode === mode.defaultsave ?
+                                                    // (!selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
+                                                    (!goBtnDissable) ?
+
+                                                        < Go_Button
+                                                            loading={goBtnloading}
+                                                            id={`go-btn${subPageMode}`}
+                                                            onClick={(e) => {
+                                                                setSelecedItemWiseOrder(false)
+                                                                setOrderItemTable(itemSelectDropOptions)
+                                                                setItemSelect('')
+                                                                setGoBtnDissable(true)
+                                                            }} />
+                                                        : (!selecedItemWiseOrder) &&
+                                                        <Change_Button
+                                                            id={`change-btn${subPageMode}`}
+                                                            onClick={(e) => {
+                                                                setsupplierSelect('')
+                                                                setGoBtnDissable(false)
+                                                                setSelecedItemWiseOrder(true)
+                                                                setOrderItemTable([])
+                                                                setItemSelect('')
+                                                                dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                                                            }}
+                                                        />
+                                                    : null
+                                                }
+                                            </div>
+                                        </Col>
+
+                                    </Row>
+                                    <Row>
+                                        <Col sm="4">                               {/*  Description field */}
+                                            <FormGroup className="row mt-1" >
+                                                <Label className="col-sm-5 p-2"
+                                                    style={{ width: "115px" }}>Description</Label>
+                                                <div className="col-7">
+                                                    <Input type="text"
+                                                        value={description}
+                                                        placeholder='Enter Order Description'
+                                                        onChange={e => setDescription(e.target.value)}
+                                                    />
+
+                                                </div>
+
                                             </FormGroup>
                                         </Col >
-                                        : <Col sm='3' />
-                                    }
+                                        <Col sm="3" />
+                                        <Col sm="4">
+                                            <FormGroup className="row mt-1" >
+                                                <Label className="col-sm-5 p-2"
+                                                    style={{ width: "115px" }}>{fieldLabel.Item}</Label>
 
-                                    <Col sm="4" className="">
-                                        <FormGroup className="row mt-2" >
-                                            <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
-                                            <Col sm="7">
-                                                <Select
-                                                    value={supplierSelect}
-                                                    isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
-                                                    options={supplierOptions}
-                                                    onChange={supplierOnchange}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                                {(FSSAI_Date_Is_Expired) &&
-                                                    <span className="text-danger f-8">
-                                                        <small>{FSSAI_Date_Is_Expired} </small>
-                                                    </span>
-                                                }
-                                            </Col>
-
-                                        </FormGroup>
-                                    </Col>
-
-                                    <Col sm="1">                      {/*Go_Button  */}
-
-                                        <div className="row mt-2  pr-1">
-                                            {pageMode === mode.defaultsave ?
-                                                // (!selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
-                                                (!goBtnDissable) ?
-
-                                                    < Go_Button
-                                                        loading={goBtnloading}
-                                                        id={`go-btn${subPageMode}`}
-                                                        onClick={(e) => {
-                                                            setSelecedItemWiseOrder(false)
-                                                            setorderItemTable(itemSelectDropOptions)
-                                                            setItemSelect('')
-                                                            setGoBtnDissable(true)
-                                                        }} />
-                                                    : (!selecedItemWiseOrder) &&
-                                                    <Change_Button
-                                                        id={`change-btn${subPageMode}`}
-                                                        onClick={(e) => {
-                                                            setGoBtnDissable(false)
-                                                            setSelecedItemWiseOrder(true)
-                                                            setorderItemTable([])
-                                                            setItemSelect('')
-                                                            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                                                <Col sm="7">
+                                                    <C_Select
+                                                        value={itemSelect}
+                                                        isDisabled={(pageMode === "edit" || goBtnloading) ? true : false}
+                                                        options={itemSelectDropOptions}
+                                                        isLoading={goBtnloading}
+                                                        onChange={itemSelectOnchange}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
                                                     />
-                                                : null
+                                                </Col>
+
+                                            </FormGroup>
+                                        </Col>
+                                        <Col sm="1"  >
+
+                                            {pageMode === mode.defaultsave ?
+                                                <div className="row mt-2 pr-1"  >
+                                                    {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
+                                                        <Button
+                                                            className
+                                                            color="btn btn-outline-info border-1 font-size-12 "
+                                                            disabled={goBtnloading}
+                                                            onClick={() => item_AddButtonHandler()} >
+                                                            Add Item
+                                                        </Button>
+                                                        :
+                                                        ((itemSelectDropOptions.length > 0)) &&
+                                                        <Button
+                                                            color="btn btn-secondary border-1 font-size-12"
+                                                            className='text-blac1k'
+                                                            disabled={goBtnloading}
+                                                            onClick={() => {
+                                                                setsupplierSelect('')
+                                                                setGoBtnDissable(false)
+                                                                setSelecedItemWiseOrder(true)
+                                                                setOrderItemTable([])
+                                                                setItemSelect('')
+                                                                dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                                                            }} >
+                                                            Item Wise
+                                                        </Button>
+
+                                                    }
+
+                                                </div> : null
                                             }
-                                        </div>
-                                    </Col>
+                                        </Col>
 
-                                </Row>
-                                <Row>
-                                    <Col sm="4">                               {/*  Description field */}
-                                        <FormGroup className="row mt-1" >
-                                            <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>Description</Label>
-                                            <div className="col-7">
-                                                <Input type="text"
-                                                    value={description}
-                                                    placeholder='Enter Order Description'
-                                                    onChange={e => setDescription(e.target.value)}
-                                                />
+                                    </Row>
+                                </div>
 
-                                            </div>
-
-                                        </FormGroup>
-                                    </Col >
-                                    <Col sm="3" />
-                                    <Col sm="4">
-                                        <FormGroup className="row mt-1" >
-                                            <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>{fieldLabel.Item}</Label>
-
-                                            <Col sm="7">
-                                                <Select
-                                                    value={itemSelect}
-                                                    isDisabled={(pageMode === "edit" || goBtnloading) ? true : false}
-                                                    options={itemSelectDropOptions}
-                                                    onChange={itemSelectOnchange}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                            </Col>
-
-                                        </FormGroup>
-                                    </Col>
-                                    <Col sm="1"  >
-
-                                        {pageMode === mode.defaultsave ?
-                                            <div className="row mt-2 pr-1"  >
-                                                {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
-                                                    <Button
-
-                                                        className
-                                                        color="btn btn-outline-info border-1 font-size-12 "
-                                                        disabled={goBtnloading}
-                                                        onClick={() => item_AddButtonHandler()} >
-                                                        Add Item
-                                                    </Button>
-                                                    :
-                                                    ((itemSelectDropOptions.length > 0)) &&
-                                                    <Button
-                                                        color="btn btn-secondary border-1 font-size-12"
-                                                        className='text-blac1k'
-                                                        disabled={goBtnloading}
-                                                        onClick={() => {
-                                                            setorderItemTable([])
-                                                            setSelecedItemWiseOrder(true)
-                                                        }} >
-                                                        Item Wise
-                                                    </Button>
-
-                                                }
-
-                                            </div> : null
-                                        }
-                                    </Col>
-
-                                </Row>
                             </div>
 
-                        </div>
-
-                        <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
-                            <div className="row">                                         {/*  Description and Delivery Date  field */}
+                            <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
+                                <div className="row">                                         {/*  Description and Delivery Date  field */}
 
 
-                                {/*  Delivery Date field */}
-                                {/* {!(subPageMode === url.IB_ORDER) ?
+                                    {/*  Delivery Date field */}
+                                    {/* {!(subPageMode === url.IB_ORDER) ?
                                     <div className="col col-6" >
                                         <FormGroup className=" row mt-3 " >
                                             <Label className=" p-2"
@@ -1299,174 +1541,177 @@ const Order = (props) => {
                                         </FormGroup>
                                     </div > : null} */}
 
-                            </div>
-
-                            {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
-                                <div className="row  ">
-
-                                    <div className="col col-6">                             {/* Billing Address */}
-                                        <FormGroup className="row  " >
-                                            <Label className=" p-2"
-                                                style={{ width: "115px" }}>Billing Address</Label>
-                                            <div className="col col-6">
-                                                <Select
-                                                    value={billAddr}
-                                                    classNamePrefix="select2-Customer"
-                                                    options={supplierAddress}
-                                                    onChange={(e) => { setbillAddr(e) }}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                            </div>
-                                        </FormGroup>
-                                    </div >
-
-                                    <div className="col col-6">                               {/*  Billing Shipping Address */}
-                                        <FormGroup className=" row " >
-                                            <Label className=" p-2"
-                                                style={{ width: "130px" }}>Shipping Address</Label>
-                                            <div className="col col-6">
-                                                <Select
-                                                    value={shippAddr}
-                                                    classNamePrefix="select2-Customer"
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                    options={supplierAddress}
-                                                    onChange={(e) => { setshippAddr(e) }}
-                                                />
-                                            </div>
-                                        </FormGroup>
-                                    </div >
                                 </div>
 
-                                <div className="row" >                                        {/**PO Type  (PO From Date and PO To Date)*/}
-                                    <div className="col col-6" >                              {/**PO Type */}
-                                        <FormGroup className=" row  " >
-                                            <Label className=" p-2"
-                                                style={{ width: "115px" }}>PO Type</Label>
-                                            <div className="col col-6 ">
-                                                <Select
-                                                    value={orderTypeSelect}
-                                                    classNamePrefix="select2-Customer"
-                                                    options={orderTypeOptions}
-                                                    onChange={(e) => { setorderTypeSelect(e) }}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                            </div>
-                                        </FormGroup>
-                                    </div >
-                                </div>
+                                {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
+                                    <div className="row mt-2 ">
 
+                                        <div className="col col-6">                             {/* Billing Address */}
+                                            <FormGroup className="row  " >
+                                                <Label className=" p-2"
+                                                    style={{ width: "115px" }}>Billing Address</Label>
+                                                <div className="col col-6">
+                                                    <C_Select
+                                                        value={billAddr}
+                                                        classNamePrefix="select2-Customer"
+                                                        options={supplierAddress}
+                                                        onChange={(e) => { setbillAddr(e) }}
+                                                        isLoading={supplierADDdropLoading}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
+                                                    />
+                                                </div>
+                                            </FormGroup>
+                                        </div >
 
-                                {(orderTypeSelect.label === 'Open PO') ?
-                                    <div className="row" >                                    {/*PO From Date */}
-                                        <div className="col col-6" >
+                                        <div className="col col-6">                               {/*  Billing Shipping Address */}
                                             <FormGroup className=" row " >
                                                 <Label className=" p-2"
-                                                    style={{ width: "115px" }}>PO From Date</Label>
-                                                <div className="col col-6 ">
-                                                    <C_DatePicker
-                                                        id="pofromdate"
-                                                        name="pofromdate"
-                                                        value={poFromDate}
-                                                        onChange={(e, date) => { setpoFromDate(date) }}
+                                                    style={{ width: "130px" }}>Shipping Address</Label>
+                                                <div className="col col-6">
+                                                    <Select
+                                                        value={shippAddr}
+                                                        classNamePrefix="select2-Customer"
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
+                                                        isLoading={supplierADDdropLoading}
+                                                        options={supplierAddress}
+                                                        onChange={(e) => { setshippAddr(e) }}
                                                     />
                                                 </div>
                                             </FormGroup>
                                         </div >
+                                    </div>
 
-                                        <div className="col col-6" >                        {/*PO To Date */}
+                                    <div className="row" >                                        {/**PO Type  (PO From Date and PO To Date)*/}
+                                        <div className="col col-6" >                              {/**PO Type */}
                                             <FormGroup className=" row  " >
                                                 <Label className=" p-2"
-                                                    style={{ width: "130px" }}>PO To Date</Label>
+                                                    style={{ width: "115px" }}>PO Type</Label>
                                                 <div className="col col-6 ">
-                                                    <C_DatePicker
-                                                        id="potodate"
-                                                        name="potodate"
-                                                        value={poToDate}
-                                                        onChange={(e, date) => { setpoToDate(date) }}
+                                                    <Select
+                                                        value={orderTypeSelect}
+                                                        classNamePrefix="select2-Customer"
+                                                        options={orderTypeOptions}
+                                                        onChange={(e) => { setorderTypeSelect(e) }}
+                                                        isLoading={orderTypeDropLoading}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
                                                     />
                                                 </div>
                                             </FormGroup>
                                         </div >
-                                    </div> : null}
-                            </div>
-                                : null}
-
-                        </div>
-
-                    </div>
+                                    </div>
 
 
-                    <ToolkitProvider
-                        keyField={"Item_id"}
-                        data={orderItemTable}
-                        columns={pagesListColumns}
-                        search
-                    >
-                        {(toolkitProps,) => (
-                            <React.Fragment>
-                                <Row>
-                                    <Col xl="12">
-                                        <div className="table-responsive table " style={{ minHeight: "45vh" }} >
-                                            <BootstrapTable
-                                                keyField={"Item_id"}
-                                                id="table_Arrow"
-                                                defaultSorted={defaultSorted}
-                                                classes={"table  table-bordered table-hover "}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center table-cursor-pointer">
-                                                        Items Not available
+                                    {(orderTypeSelect.label === 'Open PO') ?
+                                        <div className="row" >                                    {/*PO From Date */}
+                                            <div className="col col-6" >
+                                                <FormGroup className=" row " >
+                                                    <Label className=" p-2"
+                                                        style={{ width: "115px" }}>PO From Date</Label>
+                                                    <div className="col col-6 ">
+                                                        <C_DatePicker
+                                                            id="pofromdate"
+                                                            name="pofromdate"
+                                                            value={poFromDate}
+                                                            onChange={(e, date) => { setpoFromDate(date) }}
+                                                        />
                                                     </div>
-                                                }
-                                                onDataSizeChange={(e) => {
-                                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                }}
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {mySearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </Col>
-                                </Row>
+                                                </FormGroup>
+                                            </div >
 
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
+                                            <div className="col col-6" >                        {/*PO To Date */}
+                                                <FormGroup className=" row  " >
+                                                    <Label className=" p-2"
+                                                        style={{ width: "130px" }}>PO To Date</Label>
+                                                    <div className="col col-6 ">
+                                                        <C_DatePicker
+                                                            id="potodate"
+                                                            name="potodate"
+                                                            value={poToDate}
+                                                            onChange={(e, date) => { setpoToDate(date) }}
+                                                        />
+                                                    </div>
+                                                </FormGroup>
+                                            </div >
+                                        </div> : null}
+                                </div>
+                                    : null}
 
-                    <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
+                            </div>
 
-                    {
-                        ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <Col>
-                                <SaveButton
-                                    loading={saveBtnloading}
-                                    editCreatedBy={editCreatedBy}
-                                    pageMode={pageMode}
-                                    userAcc={userPageAccessState}
-                                    onClick={saveHandeller}
-                                    forceDisabled={gotoInvoiceBtnLoading}
-                                />
-                            </Col>
-                            {
-                                (subPageMode === url.ORDER_4) && (pageMode === mode.defaultsave) ?
-                                    <Col>
-                                        <GotoInvoiceBtn
-                                            forceDisabled={gotoInvoiceBtnLoading}
-                                            loading={gotoInvoiceBtnLoading}
-                                            pageMode={pageMode}
-                                            userAcc={userPageAccessState}
-                                            onClick={saveHandeller}
-                                        />
-                                    </Col> : null}
                         </div>
-                            : <div className="row save1"></div>
-                    }
-                </div >
 
+
+                        <ToolkitProvider
+                            keyField={"Item_id"}
+                            data={orderItemTable}
+                            columns={pagesListColumns}
+                            search
+                        >
+                            {(toolkitProps,) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive table " style={{ minHeight: "45vh" }} >
+                                                <BootstrapTable
+                                                    keyField={"Item_id"}
+                                                    id="table_Arrow"
+                                                    defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
+                                                    classes={"table  table-bordered table-hover "}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center table-cursor-pointer">
+                                                            Items Not available
+                                                        </div>
+                                                    }
+                                                    onDataSizeChange={(e) => {
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    }}
+                                                    {...toolkitProps.baseProps}
+                                                />
+                                                {mySearchProps(toolkitProps.searchProps)}
+                                            </div>
+                                        </Col>
+                                    </Row>
+
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+
+                        <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
+
+                        {
+                            ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                                <Col>
+                                    <SaveButton
+                                        loading={saveBtnloading}
+                                        editCreatedBy={editCreatedBy}
+                                        pageMode={pageMode}
+                                        userAcc={userPageAccessState}
+                                        onClick={saveHandler}
+                                        forceDisabled={gotoInvoiceBtnLoading}
+                                    />
+                                </Col>
+                                {
+                                    (subPageMode === url.ORDER_4) && (pageMode === mode.defaultsave) ?
+                                        <Col>
+                                            <GotoInvoiceBtn
+                                                forceDisabled={gotoInvoiceBtnLoading}
+                                                loading={gotoInvoiceBtnLoading}
+                                                pageMode={pageMode}
+                                                userAcc={userPageAccessState}
+                                                onClick={saveHandler}
+                                            />
+                                        </Col> : null}
+                            </div>
+                                : <div className="row save1"></div>
+                        }
+                    </div >
+                </div>
                 <Modal
                     isOpen={isOpen_assignLink}
                     toggle={() => {

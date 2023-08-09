@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +19,7 @@ import {
     onChangeSelect,
     resetFunction,
 } from "../../../components/Common/validationFunction";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     loginCompanyID,
@@ -40,6 +40,7 @@ import {
 } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { C_Select } from "../../../CustomValidateForm";
 
 const ManagementEmpParties = (props) => {
 
@@ -62,8 +63,10 @@ const ManagementEmpParties = (props) => {
         pageField,
         loading,
         saveBtnloading,
+        employeeDropdownLoading,
         userAccess } = useSelector((state) => ({
             saveBtnloading: state.ManagementPartiesReducer.saveBtnloading,
+            employeeDropdownLoading: state.ManagementPartiesReducer.employeeDropdownLoading,
             loading: state.ManagementPartiesReducer.loading,
             postMsg: state.ManagementPartiesReducer.postMsg,
             employeeList: state.ManagementPartiesReducer.employeeList,
@@ -143,7 +146,7 @@ const ManagementEmpParties = (props) => {
             dispatch(saveManagementParties_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -193,47 +196,19 @@ const ManagementEmpParties = (props) => {
         },
     ];
 
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: partyList.length,
-        custom: true,
-    };
-
     const SaveHandler = async (event) => {
+
         event.preventDefault();
-        const btnId = event.target.id
+        const btnId = event.target.id;
 
-        const CheckArray = partyList.filter((index) => {
-            return (index.selectCheck === true)
-        })
+        const CheckArray = partyList.filter(index => index.selectCheck === true);
 
-        const PartiesJson = CheckArray.map((index) => ({
-            Employee: values.Employee.value,
-            Party: index.id,
-        }))
-
-        const trueValues = partyList.map((index) => {
-            return (index.selectCheck === true)
-        })
-
-        const totalTrueValues = trueValues.reduce((count, value) => {
-            if (value === true) {
-                count++
-            }
-            return count
-        }, 0)
-
-        if ((totalTrueValues === 0)) {
-            dispatch(
-                customAlert({
-                    Type: 4,
-                    Status: true,
-                    Message: "At least One Party is Selected",
-                })
-            );
+        if (CheckArray.length === 0) {
+            customAlert({ Type: 4, Status: true, Message: "At least One Party is Selected" });
             return;
         }
-        const jsonBody = JSON.stringify(PartiesJson)
+        const PartiesJson = CheckArray.map(index => ({ Employee: values.Employee.value, Party: index.id }));
+        const jsonBody = JSON.stringify(PartiesJson);
         dispatch(saveManagementParties({ jsonBody, btnId }));
     };
 
@@ -244,16 +219,17 @@ const ManagementEmpParties = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
+                <PageLoadingSpinner isLoading={(!pageField)} />
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
                     <div className="px-2   c_card_header text-black mb-1" >
                         <div className="row">
                             <Col sm="5">
-                                <FormGroup className=" row mt-2 " >
+                                <FormGroup className=" row mt-2  mb-1" >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "83px" }}> {fieldLabel.Employee}</Label>
                                     <Col sm="6">
-                                        <Select
+                                        <C_Select
                                             name="Employee"
                                             value={values.Employee}
                                             isSearchable={true}
@@ -261,6 +237,7 @@ const ManagementEmpParties = (props) => {
                                             classNamePrefix="dropdown"
                                             autoFocus={true}
                                             options={employeeListOptions}
+                                            isLoading={employeeDropdownLoading}
                                             isDisabled={(partyList.length > 0) ? true : false}
                                             onChange={(hasSelect, evn) => {
                                                 onChangeSelect({ hasSelect, evn, state, setState, })
@@ -275,30 +252,23 @@ const ManagementEmpParties = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
-                            {partyList.length === 0 ?
-                                <Col sm="1" className="mt-2 ">
+
+                            <Col sm="1" className="mt-2  mb-1">
+                                {partyList.length === 0 ?
                                     <Go_Button
                                         loading={loading}
                                         onClick={goButtonHandler}
                                     />
-                                </Col> :
-                                <Col sm="1" className="mx-4 mt-3">
+                                    :
                                     <Change_Button onClick={(e) => dispatch(getPartyTableListSuccess([]))} />
-                                </Col>
-                            }
+                                }
+                            </Col>
 
                         </div>
                     </div>
 
                     <form noValidate>
-
-                        {/* <PaginationProvider
-
-                            pagination={paginationFactory(pageOptions)}
-                        >
-                            {({ paginationProps, paginationTableProps }) => ( */}
                         <ToolkitProvider
-
                             keyField="id"
                             data={partyList}
                             columns={pagesListColumns}
@@ -315,29 +285,16 @@ const ManagementEmpParties = (props) => {
                                             noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
-
                                             {...toolkitProps.baseProps}
-                                        // {...paginationTableProps}
                                         />
 
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
 
-                                    {/* <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
-                                                    />
-                                                </Col>
-                                            </Row> */}
                                 </React.Fragment>
                             )
                             }
                         </ToolkitProvider>
-                        {/* )
-                            }
-
-                        </PaginationProvider> */}
 
                         {partyList.length > 0 ?
                             <FormGroup style={{ marginTop: "-25px" }}>
@@ -357,7 +314,6 @@ const ManagementEmpParties = (props) => {
                         }
 
                     </form>
-                    {/* </Container> */}
                 </div>
             </React.Fragment>
         );

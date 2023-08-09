@@ -10,23 +10,22 @@ import {
     editSalesManID,
     saveSalesManMasterSuccess,
     getSalesManlist,
-    updateSalesManIDSuccess
+    updateSalesManIDSuccess,
+    getSalesManlistSuccess
 } from "../../../store/Administrator/SalesManRedux/actions";
-import { loginCompanyID, loginPartyID, loginUserAdminRole } from "../../../components/Common/CommonFunction";
+import {  loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const SalesManList = (props) => {
 
     const dispatch = useDispatch();
-    const userAdminRole = loginUserAdminRole();
-
-    const [party, setParty] = useState({ value: loginPartyID(), label: "Select..." });
 
     const reducers = useSelector(
         (state) => ({
-            loading: state.SalesManReducer.loading,
+            goBtnLoading: state.SalesManReducer.goBtnLoading,
             listBtnLoading: state.SalesManReducer.listBtnLoading,
             tableList: state.SalesManReducer.SalesManList,
             postMsg: state.SalesManReducer.PostData,
@@ -38,7 +37,7 @@ const SalesManList = (props) => {
         })
     );
 
-    const { pageField, } = reducers;
+    const { pageField, goBtnLoading, tableList } = reducers;
 
     const action = {
         getList: getSalesManlist,
@@ -54,41 +53,44 @@ const SalesManList = (props) => {
         const page_Id = pageId.SALESMAN_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        if (!userAdminRole) { goButtonHandler() }
+        if (!(loginSelectedPartyID() === 0)) {
+            goButtonHandler()
+        }
+        return () => {
+            dispatch(getSalesManlistSuccess([]));
+            dispatch(commonPageFieldListSuccess(null))
+        }
     }, []);
 
     const goButtonHandler = () => {
+        try {
+            const loginParty = loginSelectedPartyID();
+            if (loginParty === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            dispatch(getSalesManlist());
+        } catch (error) { }
+        return
+    };
 
-        const jsonBody = JSON.stringify({
-            CompanyID: loginCompanyID(),
-            PartyID: party.value,
-        });
-        dispatch(getSalesManlist(jsonBody));
-    }
-
-    const partyOnChngeHandler = (e) => {
-        setParty(e)
+    const partyOnChngeButtonHandler = (e) => {
+        dispatch(getSalesManlistSuccess([]));
     }
 
     return (
 
         <React.Fragment>
+            <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-
-                {userAdminRole &&
-                    <div className="mb-2">
-                        <PartyDropdown_Common
-                            partySelect={party}
-                            setPartyFunc={partyOnChngeHandler}
-                            goButtonHandler={goButtonHandler}
-                        />
-                    </div>
-                }
+                <PartyDropdown_Common
+                    goBtnLoading={goBtnLoading}
+                    goButtonHandler={goButtonHandler}
+                    changeButtonHandler={partyOnChngeButtonHandler}
+                />
                 {
-                    reducers.loading ?
-                        <Listloader />
-                        :
-                        (pageField) &&
+                    (pageField) &&
+                    <>
                         <div className="mt-n1">
                             <CommonPurchaseList
                                 action={action}
@@ -102,6 +104,7 @@ const SalesManList = (props) => {
                                 goButnFunc={goButtonHandler}
                             />
                         </div>
+                    </>
                 }
             </div>
         </React.Fragment>

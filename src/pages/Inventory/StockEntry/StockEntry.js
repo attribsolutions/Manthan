@@ -8,9 +8,9 @@ import {
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -23,9 +23,9 @@ import Select from "react-select";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
-import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
+import { getPartyItemListSuccess, getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
 import { StockEntry_GO_button_api_For_Item } from "../../../helpers/backend_helper";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
@@ -33,6 +33,7 @@ import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inve
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const StockEntry = (props) => {
 
@@ -51,7 +52,6 @@ const StockEntry = (props) => {
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [TableArr, setTableArr] = useState([]);
 
-
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -59,7 +59,9 @@ const StockEntry = (props) => {
         pageField,
         userAccess,
         saveBtnloading,
+        partyItemListLoading
     } = useSelector((state) => ({
+        partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         saveBtnloading: state.StockEntryReducer.saveBtnloading,
         postMsg: state.StockEntryReducer.postMsg,
         ItemList: state.PartyItemsReducer.partyItem,
@@ -71,7 +73,7 @@ const StockEntry = (props) => {
         const page_Id = pageId.STOCK_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartyItemList(_cfunc.loginJsonBody()))
+        dispatch(getpartyItemList(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
     }, []);
 
     const location = { ...history.location }
@@ -107,33 +109,18 @@ const StockEntry = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveStockEntrySuccess({ Status: false }))
             setTableArr([])
-            dispatch(Breadcrumb_inputName(''))
-
-            if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                }))
-            }
-            else {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                    RedirectPath: url.STOCK_ENTRY,
-                }))
-            }
+            customAlert({
+                Type: 1,
+                Message: postMsg.Message,
+                RedirectPath: url.STOCK_ENTRY,
+            })
         }
         else if (postMsg.Status === true) {
             dispatch(saveStockEntrySuccess({ Status: false }))
-            dispatch(AlertState({
+            customAlert({
                 Type: 4,
-                Status: true,
-                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
@@ -156,13 +143,11 @@ const StockEntry = (props) => {
         return index.itemCheck === true
     });
 
-
-
     const pagesListColumns = [
         {
             text: "Item Name",
             dataField: "id",
-            classes: () => "sales-return-row",
+            classes: () => "",
             formatter: (cellContent, row, key) => {
                 return (
                     <Label>{row.ItemName}</Label>
@@ -172,17 +157,17 @@ const StockEntry = (props) => {
         {
             text: "Quantity",
             dataField: "",
-            classes: () => "sales-return-row",
+            classes: () => "",
             formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span style={{ justifyContent: 'center' }}>
                     <CInput
                         id={`Qty${key}`}
                         key={`Qty${row.id}`}
                         autoComplete="off"
                         type="text"
                         cpattern={decimalRegx}
-                        className="col col-sm text-end"
+                        className="text-end"
                         onChange={(e) => { row.Qty = e.target.value }}
                     />
                 </span>)
@@ -191,10 +176,11 @@ const StockEntry = (props) => {
         {
             text: "Unit",
             dataField: "",
-            classes: () => "sales-return-row",
+            classes: () => "",
+            style: { minWidth: "10vw" },
             formatter: (cellContent, row, key,) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span style={{ justifyContent: 'center' }}>
                     <Select
                         id={`Unit${key}`}
                         name="Unit"
@@ -216,18 +202,19 @@ const StockEntry = (props) => {
         {
             text: "MRP",
             dataField: "",
-            classes: () => "sales-return-row",
+            style: { minWidth: "10vw" },
+            classes: () => "",
             formatter: (cellContent, row, key) => {
 
                 return (
                     <>
-                        <span style={{ justifyContent: 'center', width: "100px" }}>
+                        <span >
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
                                 defaultValue={row.defaultMRP}
                                 isSearchable={true}
-                                className="react-dropdown"
+                                className="react-dropdown "
                                 classNamePrefix="dropdown"
                                 options={row.MRP_DropdownOptions}
                                 onChange={(event) => { row.defaultMRP = event }}
@@ -238,9 +225,10 @@ const StockEntry = (props) => {
         {
             text: "GST",
             dataField: "",
-            classes: () => "sales-return-row",
+            style: { minWidth: "10vw" },
+            classes: () => "",
             formatter: (cellContent, row, key) => {
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span >
                     <Select
                         id={`GST${key}`}
                         name="GST"
@@ -257,16 +245,16 @@ const StockEntry = (props) => {
         {
             text: "BatchCode",
             dataField: "",
-            classes: () => "sales-return-row",
+            classes: () => "",
             formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span >
                     <Input
                         id=""
                         key={row.id}
                         defaultValue={row.BatchCode}
                         type="text"
-                        className="col col-sm text-center"
+                        className=" text-center"
                         onChange={(event) => { row.BatchCode = event.target.value }}
                     />
                 </span>)
@@ -275,10 +263,10 @@ const StockEntry = (props) => {
         {
             text: "BatchDate",
             dataField: "",
-            classes: () => "sales-return-row",
+            classes: () => "",
             formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                return (<span style={{ justifyContent: 'center' }}>
                     <C_DatePicker
                         name='Date'
                         value={row.BatchDate}
@@ -314,7 +302,6 @@ const StockEntry = (props) => {
             ),
         },
     ];
-
 
     const AddPartyHandler = async () => {
 
@@ -383,7 +370,6 @@ const StockEntry = (props) => {
                 const itemId = index.ItemId;
 
                 let batchCodeCounter = 0;
-
                 initialTableData.forEach((tableItem) => {
                     if (tableItem.ItemId === itemId) {
                         const existingBatchCode = tableItem.BatchCode.split('_').pop(); // Extract the batchCode from existing BatchCode
@@ -401,7 +387,7 @@ const StockEntry = (props) => {
                 existingBatchCodes[newBatchCode] = true;// Record the new batch code as existing
 
                 initialTableData.push({
-                    id: newBatchCode, // Use newBatchCode as the ID
+                    id: initialTableData.length + 1, // Use initialTableData length+1 as the ID
                     Unit_DropdownOptions: index.UnitDroupDownOptions,
                     MRP_DropdownOptions: index.MRP_DropdownOptions,
                     ItemGSTHSNDetails: index.GST_DropdownOptions,
@@ -417,7 +403,6 @@ const StockEntry = (props) => {
 
 
             });
-
             setState((prevState) => {
                 const newState = { ...prevState };
                 newState.values.ItemName = "";
@@ -425,11 +410,13 @@ const StockEntry = (props) => {
                 return newState;
             });
 
+            initialTableData.sort((a, b) => b.id - a.id);
             setTableArr(initialTableData);
 
 
         } catch (w) { }
     }
+
     function deleteButtonAction(row, { TableArr = [], setTableArr }) {
 
         const newArr = TableArr.filter((index) => !(index.id === row.id))
@@ -513,12 +500,31 @@ const StockEntry = (props) => {
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    function partyOnChngeButtonHandler() {
+        dispatch(getPartyItemListSuccess([]))
+        setTableArr([])
+        setState((i) => {
+            const a = { ...i }
+            a.values.ItemName = '';
+            a.hasValid.ItemName.valid = true
+            return a
+        })
+    }
+
+    function goButtonHandler() {
+        dispatch(getpartyItemList(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
+    }
+
+
+    console.log(TableArr)
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-
                 <div className="page-content">
+                    <PartyDropdown_Common
+                        goButtonHandler={goButtonHandler}
+                        changeButtonHandler={partyOnChngeButtonHandler} />
 
                     <form noValidate>
                         <div className="px-3 c_card_filter header text-black mb-1" >
@@ -543,11 +549,12 @@ const StockEntry = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
                                         <Col sm="7">
-                                            <Select
+                                            <C_Select
                                                 id="ItemName "
                                                 name="ItemName"
                                                 value={values.ItemName}
                                                 isSearchable={true}
+                                                isLoading={partyItemListLoading}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
@@ -583,20 +590,18 @@ const StockEntry = (props) => {
                                 <React.Fragment>
                                     <Row>
                                         <Col xl="12">
-                                            <div className="table-responsive table">
+                                            <div className="table-responsive table" style={{ minHeight: "45vh" }}>
                                                 <BootstrapTable
                                                     keyField={"id"}
                                                     id="table_Arrow"
-
-
-                                                    classes={"table  table-bordered table-hover"}
+                                                    classes={"table  table-bordered table-hover "}
                                                     noDataIndication={
                                                         <div className="text-danger text-center ">
                                                             Items Not available
                                                         </div>
                                                     }
                                                     onDataSizeChange={(e) => {
-                                                        // _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
                                                     }}
                                                     {...toolkitProps.baseProps}
                                                 />

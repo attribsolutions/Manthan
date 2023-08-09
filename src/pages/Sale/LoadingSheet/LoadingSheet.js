@@ -8,7 +8,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -34,11 +34,13 @@ import {
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { getDriverList } from "../../../store/Administrator/DriverRedux/action";
+import { getDriverList, getDriverListSuccess } from "../../../store/Administrator/DriverRedux/action";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
+import { getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
 
 const LoadingSheet = (props) => {
 
@@ -49,6 +51,7 @@ const LoadingSheet = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [party, setParty] = useState({ value: "", label: "Select..." });
 
     const fileds = {
         id: "",
@@ -94,14 +97,13 @@ const LoadingSheet = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(GetRoutesList());
         dispatch(getVehicleList())
-        dispatch(invoiceListGoBtnfilter())
         dispatch(getDriverList())
+        dispatch(invoiceListGoBtnfilter())
     }, []);
 
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`LoadingSheet Count:${Data.length}`))
     }, [GoButton]);
-
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -184,8 +186,50 @@ const LoadingSheet = (props) => {
         label: index.Name,
     }));
 
+
+    const pagesListColumns = [
+        {
+            text: "Invoice Date",
+            dataField: "preInvoiceDate",
+        },
+        {
+            text: "Invoice Number",
+            dataField: "FullInvoiceNumber",
+        },
+        {
+            text: "Customer",
+            dataField: "Customer",
+        },
+        {
+            text: "GrandTotal",
+            dataField: "GrandTotal",
+        },
+    ];
     const onChangeBtnHandler = () => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
+    }
+
+    const partySelectButtonHandler = (e) => {
+        dispatch(GetRoutesList());
+        dispatch(getVehicleList())
+        dispatch(getDriverList())
+    }
+
+    const partyOnChngeButtonHandler = (e) => {
+        dispatch(GetRoutesListSuccess([]));
+        dispatch(getVehicleListSuccess([]));
+        dispatch(getDriverListSuccess([]));
+        setState((i) => {
+            let a = { ...i }
+            a.values.RouteName = []
+            a.values.VehicleNumber = ""
+            a.values.DriverName = ''
+
+            a.hasValid.RouteName.valid = true;
+            a.hasValid.VehicleNumber.valid = true;
+            a.hasValid.DriverName.valid = true;
+            return a
+        })
     }
 
     function goButtonHandler() {
@@ -211,49 +255,33 @@ const LoadingSheet = (props) => {
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
     }
 
-    const pagesListColumns = [
-        {
-            text: "Invoice Date",
-            dataField: "InvoiceDate",
-        },
-        {
-            text: "Invoice Number",
-            dataField: "FullInvoiceNumber",
-        },
-        {
-            text: "Customer",
-            dataField: "Customer",
-        },
-        {
-            text: "GrandTotal",
-            dataField: "GrandTotal",
-        },
-    ];
-
     const saveHandler = async (event) => {
-        try {
-            event.preventDefault();
-            const btnId = event.target.id;
 
-            const { totalInvoices, GrandTotal, LoadingSheetDetails } = Data.reduce(
-                (acc, index) => {
-                    if (index.selectCheck === true) {
-                        acc.totalInvoices++;
-                        acc.GrandTotal += parseFloat(index.GrandTotal);
-                        acc.LoadingSheetDetails.push({ Invoice: index.id });
-                    }
-                    return acc;
-                },
-                { totalInvoices: 0, GrandTotal: 0, LoadingSheetDetails: [] }
-            );
-            if (LoadingSheetDetails.length === 0) {
-                customAlert({
-                    Type: 4,
-                    Status: true,
-                    Message: "Atleast One Invoice Is Select...!",
-                });
-                return;
-            }
+        event.preventDefault();
+        const btnId = event.target.id;
+
+        const { totalInvoices, GrandTotal, LoadingSheetDetails } = Data.reduce(
+            (acc, index) => {
+                if (index.selectCheck === true) {
+                    acc.totalInvoices++;
+                    acc.GrandTotal += parseFloat(index.GrandTotal);
+                    acc.LoadingSheetDetails.push({ Invoice: index.id });
+                }
+                return acc;
+            },
+            { totalInvoices: 0, GrandTotal: 0, LoadingSheetDetails: [] }
+        );
+
+        if (LoadingSheetDetails.length === 0) {
+            customAlert({
+                Type: 4,
+                Status: true,
+                Message: "Atleast One Invoice Is Select...!",
+            });
+            return;
+        }
+
+        try {
 
             if (formValid(state, setState)) {
                 const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
@@ -276,7 +304,6 @@ const LoadingSheet = (props) => {
             _cfunc.CommonConsole(e);
         }
     };
-
 
     function DateOnchange(e, date) {
         setState((i) => {
@@ -310,6 +337,12 @@ const LoadingSheet = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
+
+                    {/* <PartyDropdown_Common
+                        goButtonHandler={partySelectButtonHandler}
+                        changeBtnShow={!(Driver_Options.length === 0) && !(VehicleNumber_Options.length === 0) && !(RouteName_Options.length === 0)}
+                        changeButtonHandler={partyOnChngeButtonHandler}
+                    /> */}
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
@@ -497,7 +530,7 @@ const LoadingSheet = (props) => {
                         {
                             Data.length > 0 ?
                                 <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                    <Col sm={2} style={{ marginLeft: "-70px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
                                             loading={saveBtnloading}
                                             forceDisabled={goBtnloadingSpinner}

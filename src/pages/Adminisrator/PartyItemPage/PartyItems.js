@@ -7,14 +7,14 @@ import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from ".
 import { useHistory } from "react-router-dom";
 import { editPartyItemIDSuccess, getpartyItemList, getPartyItemListSuccess, SavePartyItems, SavePartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginIsSCMCompany, loginJsonBody, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc,loginIsSCMCompany, loginJsonBody, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -48,9 +48,11 @@ const PartyItems = (props) => {
         pageField,
         tableList,
         saveBtnloading,
+        partyItemListLoading,
         userAccess,
     } = useSelector((state) => ({
         saveBtnloading: state.PartyItemsReducer.saveBtnloading,
+        partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         postMsg: state.PartyItemsReducer.postMsg,
         tableList: state.PartyItemsReducer.partyItem,
         supplier: state.PartyMasterReducer.partyList,
@@ -330,6 +332,7 @@ const PartyItems = (props) => {
 
     return (
         <>
+            <PageLoadingSpinner isLoading={(partyItemListLoading || !pageField)} />
             {userPageAccessState && (
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>

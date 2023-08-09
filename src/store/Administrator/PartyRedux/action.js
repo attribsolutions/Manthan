@@ -15,9 +15,9 @@ import {
 } from "./actionTypes";
 
 // get api
-export const getPartyListAPI = (jsonbody) => ({
+export const getPartyListAPI = (subPageMode) => ({
   type: GET_PARTY_LIST_API,
-  jsonbody,
+  subPageMode,
 });
 
 export const getPartyListAPISuccess = (pages) => ({
@@ -121,9 +121,6 @@ export const GetCompanyByDivisionTypeIDSuccess = (data) => ({
   payload: data,
 });
 
-export const PartyApiErrorAction = () => ({
-  type: PARTY_API_ERROR_ACTION,
-})
 
 // PartyAddressDelete api
 export const PartyAddressDeleteID = (config = {}) => ({
@@ -135,6 +132,11 @@ export const PartyAddressDeleteIDSuccess = (resp) => ({
   type: PARTY_ADDRESS_DELETE_ID_SUCCESS,
   payload: resp
 });
+
+
+export const PartyApiErrorAction = () => ({
+  type: PARTY_API_ERROR_ACTION,
+})
 
 
 

@@ -21,7 +21,7 @@ import {
     SAVE_ROUTES_MASTER,
     UPDATE_ROUTES_ID
 } from "./actionTypes";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
+import { loginJsonBody } from "../../../components/Common/CommonFunction";
 
 function* save_Routes_Master_GenFun({ config = {} }) {
     try {
@@ -31,8 +31,10 @@ function* save_Routes_Master_GenFun({ config = {} }) {
 }
 
 function* Routes_List_GenratorFunction({ jsonBody }) { //Routes List Api Using Post Method
-    const filters = (jsonBody === undefined || null ? loginJsonBody() : jsonBody);
+
+    const filters = (!jsonBody ? JSON.stringify(loginJsonBody()) : jsonBody);
     try {
+        
         const response = yield call(Routes_Get_API, filters);
         yield put(GetRoutesListSuccess(response.Data));
     } catch (error) { yield put(RouteApiErrorAction()) }

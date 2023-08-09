@@ -1,6 +1,7 @@
 
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
+  LedgerApiErrorAction,
   SapLedger_Go_Button_API_Success, getExcel_Button_API_Success
 } from "./action";
 import {
@@ -9,7 +10,7 @@ import {
 import {
   GET_EXCELBUTTON_API, GO_BUTTON_API_SAP_LEDGER,
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
+
 import * as XLSX from 'xlsx';
 
 function* goBtn_Get_API_GenFun({ filters }) {
@@ -45,7 +46,7 @@ function* goBtn_Get_API_GenFun({ filters }) {
 
     yield put(SapLedger_Go_Button_API_Success(response));
 
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(LedgerApiErrorAction()) }
 }
 
 function* GetExcelButton_saga({ IsSCM_ID, PartyID }) {
@@ -78,7 +79,7 @@ function* GetExcelButton_saga({ IsSCM_ID, PartyID }) {
     yield put(getExcel_Button_API_Success([]));
   } catch (error) {
     yield put(getExcel_Button_API_Success([]));
-    CommonConsole(error)
+    LedgerApiErrorAction()
   }
 }
 

@@ -50,6 +50,7 @@ import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
+import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
 
 
 const PartyMasterBulkUpdate = (props) => {
@@ -195,7 +196,7 @@ const PartyMasterBulkUpdate = (props) => {
     }, [postMsg.Status])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Party Count"} :${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Party Bulk Update Count"} :${Data.length}`))
     }, [Data])
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
@@ -279,11 +280,9 @@ const PartyMasterBulkUpdate = (props) => {
 
     function divisionhandler(event, user) {
         user.Newvalue = event.target.checked
-
     }
 
     function TCSPartyhandler(event, user) {
-
         user.Newvalue = event.target.checked
     }
 
@@ -308,6 +307,8 @@ const PartyMasterBulkUpdate = (props) => {
 
     function handllerDistrictOnState(event, user) {
         user.NewDistrict = event.value
+        // setDistrict_dropdown_Select(event)
+        // dispatch(getDistrictOnState(event.value))
     }
 
     function fromdateOnchange(event, user) {
@@ -331,6 +332,7 @@ const PartyMasterBulkUpdate = (props) => {
         value: "",
         label: " All"
     });
+
     RouteName_Options.unshift({
         value: "",
         label: " All"
@@ -352,6 +354,7 @@ const PartyMasterBulkUpdate = (props) => {
         pagesListColumns.push(District)
     }
 
+    
     const Newvalue = {
         text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
         dataField: "Newvalue",
@@ -364,7 +367,7 @@ const PartyMasterBulkUpdate = (props) => {
                     <div style={{ width: "180px" }}>
                         <Col>
                             <FormGroup >
-                                <Select
+                                <C_Select
                                     id={key}
                                     value={state_DropDown_select}
                                     options={StateValues}

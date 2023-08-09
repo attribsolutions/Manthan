@@ -35,7 +35,7 @@ const StockReport = (props) => {
             listBtnLoading: state.StockReportReducer.listBtnLoading,
             tableData: state.StockReportReducer.StockReportGobtn,
             BaseUnit: state.ItemMastersReducer.BaseUnit,
-            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
@@ -68,7 +68,6 @@ const StockReport = (props) => {
     useEffect(() => {
         dispatch(stockReport_GoButton_API_Success([]))
         dispatch(getBaseUnit_ForDropDown());
-        dispatch(SSDD_List_under_Company());
     }, [])
 
     useEffect(() => {
@@ -87,22 +86,29 @@ const StockReport = (props) => {
     }));
 
     function goButtonHandler() {
-        const btnId = `gobtn-${url.STOCK_REPORT}`
+        try {
+            const btnId = `gobtn-${url.STOCK_REPORT}`
+            if ((isSCMParty) && (partyDropdown === "")) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            }
+            else if (unitDropdown === "") {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Select Unit"
+                })
+                return
+            }
+            const jsonBody = JSON.stringify({
+                "FromDate": fromdate,
+                "ToDate": todate,
+                "Unit": unitDropdown.value,
+                "PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
+            });
+            let config = { jsonBody, btnId: btnId }
+            dispatch(stockReport_GoButton_API(config))
 
-        if (unitDropdown === "") {
-            customAlert({
-                Type: 4,
-                Message: "Please Select Unit"
-            })
-            return
-        }
-        const jsonBody = JSON.stringify({
-            "FromDate": fromdate,
-            "ToDate": todate,
-            "Unit": unitDropdown.value,
-            "PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
-        });
-        dispatch(stockReport_GoButton_API({ jsonBody, btnId }))
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     function fromdateOnchange(e, date) {

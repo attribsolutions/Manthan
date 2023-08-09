@@ -20,7 +20,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
-  loading: false
+  goBtnLoading: false
 }
 
 const EmployeeTypeReducer = (state = INIT_STATE, action) => {
@@ -45,14 +45,14 @@ const EmployeeTypeReducer = (state = INIT_STATE, action) => {
     case GET_EMPLOYEE_TYPE_LIST:
       return {
         ...state,
-        loading: true,
+        goBtnLoading: true,
       }
 
     case GET_EMPLOYEE_TYPE_LIST_SUCCESS:
       return {
         ...state,
         EmployeeTypeList: action.payload,
-        loading: false,
+        goBtnLoading: false,
       }
 
     case DELETE_EMPLOYEE_TYPE_ID:
@@ -103,7 +103,7 @@ const EmployeeTypeReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
-        loading: false
+        goBtnLoading: false
       };
 
 

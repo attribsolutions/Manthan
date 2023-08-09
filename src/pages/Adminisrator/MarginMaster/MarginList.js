@@ -13,7 +13,7 @@ import MarginMaster from "./MarginMaster";
 import { delete_MarginList_ID, delete_MarginList_ID_Success, getMarginList, goButtonForMarginSuccess } from "../../../store/Administrator/MarginMasterRedux/action";
 import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
 
 const MarginList = () => {
 
@@ -87,14 +87,14 @@ const MarginList = () => {
   function editBodyfunc(index) {
 
     const { rowData, btnId } = index
-    let { PriceList_id, Party_id, preEffectiveDate } = rowData;
+    let { PriceList_id, Party_id, EffectiveDate } = rowData;
     _cfunc.btnIsDissablefunc({ btnId, state: true })
 
     try {
       const jsonBody = JSON.stringify({
         PriceList: PriceList_id,
         Party: Party_id === null ? 0 : Party_id,
-        EffectiveDate: preEffectiveDate
+        EffectiveDate: EffectiveDate
       })
       let config = { jsonBody, pathname: url.MARGIN, btnmode: mode.edit, rowData: rowData }
       // sessionStorage.setItem("margin_Master", config)
@@ -123,7 +123,7 @@ const MarginList = () => {
 
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
         <div className="mt-n1">
           {

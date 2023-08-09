@@ -2,6 +2,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { Data } from "./DemoData";
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
@@ -17,7 +18,7 @@ function pageFooter(doc, data) {
 
 
 const PartyLedgerReport = (data1) => {
-    
+
     const data = data1[0]
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
@@ -25,14 +26,14 @@ const PartyLedgerReport = (data1) => {
     pageFooter(doc, data);
 
     doc.setProperties({
-        title: 'Party Ledger Report',
+        title: `PartyLedger_Report From ${date_dmy_func(data.FormDate)} To ${date_dmy_func(data.ToDate)} `
     });
-
-    doc.setProperties({
-        title: `Party Ledger Report`
-    });
-    const options = { filename: "PartyLedgerReport.pdf" }
-    return (doc.output('dataurlnewwindow', options))
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        const options = { filename: `PartyLedger_Report/From${date_dmy_func(data.FormDate)}To${date_dmy_func(data.ToDate)}` }
+        window.open(pdfUrl, options);
+    }
+    generateSaveAndOpenPDFReport();
 };
 
 export default PartyLedgerReport;

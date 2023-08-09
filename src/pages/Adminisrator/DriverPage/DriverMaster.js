@@ -13,7 +13,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {  commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import {
     saveDriverMaster,
     saveDriverMasterSuccess,
@@ -40,19 +40,16 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
-
 const DriverMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const userAdminRole = _cfunc.loginUserAdminRole();
 
     const fileds = {
         id: "",
         Name: "",
         Address: "",
         DOB: '',
-        Party: ''
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -127,20 +124,20 @@ const DriverMaster = (props) => {
             }
 
             if (hasEditVal) {
-                
+
                 const { id, Name, DOB, Address, Party, PartyName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
                 hasValid.DOB.valid = true;
                 hasValid.Address.valid = true;
-                hasValid.Party.valid = true;
+                // hasValid.Party.valid = true;
 
                 values.Name = Name;
                 values.DOB = DOB;
                 values.Address = Address;
                 values.id = id
-                values.Party = { value: Party, label: PartyName }
+                // values.Party = { value: Party, label: PartyName }
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.DriverMaster))
@@ -149,7 +146,6 @@ const DriverMaster = (props) => {
             dispatch(editDriverID_Success({ Status: false }))
         }
     }, [])
-
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -190,7 +186,7 @@ const DriverMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateDriverID_Success({ Status: false }));
-             customAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -204,14 +200,6 @@ const DriverMaster = (props) => {
         }
     }, [pageField])
 
-    const partyOnChngeHandler = (e) => {
-        setState((i) => {
-            const a = { ...i }
-            a.values.Party = e;
-            return a
-        })
-    }
-
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -223,7 +211,7 @@ const DriverMaster = (props) => {
                     Name: values.Name,
                     Address: values.Address,
                     DOB: values.DOB,
-                    Party: userAdminRole ? values.Party.value : _cfunc.loginPartyID(),
+                    Party: _cfunc.loginPartyID(),
                     Company: _cfunc.loginCompanyID(),
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID()
@@ -251,11 +239,8 @@ const DriverMaster = (props) => {
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        {userAdminRole &&
-                            <PartyDropdown_Common
-                                partySelect={values.Party}
-                                setPartyFunc={partyOnChngeHandler} />
-                        }
+
+                        {/* <PartyDropdown_Common /> */}
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header"  >

@@ -3,6 +3,7 @@ import {
   deleteModuleIDSuccess,
   editModuleIDSuccess,
   getModuleListSuccess,
+  moduleApiErrorAction,
   saveModuleMasterSuccess,
   updateModuleIDSuccess
 } from "./actions";
@@ -20,21 +21,20 @@ import {
   SAVE_MODULE_MASTER,
   UPDATE_MODULE_ID
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 function* get_ModuleList_GenFun() { // get API
   try {
     const response = yield call(Module_Get_API);
-   
+
     yield put(getModuleListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(moduleApiErrorAction()) }
 }
 
 function* save_Module_GenFun({ config }) {  // Post API
   try {
     const response = yield call(Module_Post_API, config);
     yield put(saveModuleMasterSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(moduleApiErrorAction()) }
 }
 
 function* editModule_ID_GenFun({ config }) {//Edit API
@@ -43,21 +43,21 @@ function* editModule_ID_GenFun({ config }) {//Edit API
     const response = yield call(Module_Edit_API, config);
     response.pageMode = btnmode
     yield put(editModuleIDSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(moduleApiErrorAction()) }
 }
 
 function* update_Module_GenFun({ config }) { // Update API
   try {
     const response = yield call(Module_Update_API, config);
     yield put(updateModuleIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(moduleApiErrorAction()) }
 }
 
 function* delete_Module_ID_GenFun({ config }) { // Delete API
   try {
     const response = yield call(Module_Delete_API, config);
     yield put(deleteModuleIDSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(moduleApiErrorAction()) }
 }
 
 function* ModulesSaga() {

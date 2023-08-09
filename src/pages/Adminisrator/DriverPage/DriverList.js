@@ -16,15 +16,12 @@ import * as url from "../../../routes/route_url";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const DriverList = () => {
 
   const dispatch = useDispatch();
-  const userAdminRole = _cfunc.loginUserAdminRole();
-
-
-  const [party, setParty] = useState({ value: _cfunc.loginPartyID(), label: "Select..." });
 
   const reducers = useSelector(
     (state) => ({
@@ -40,10 +37,8 @@ const DriverList = () => {
     })
   );
   const { pageField, GoBtnlistloading } = reducers
-  debugger
 
   const action = {
-    getList: getDriverList,
     editId: editDriverID,
     deleteId: deleteDriverID,
     postSucc: saveDriverMasterSuccess,
@@ -55,39 +50,44 @@ const DriverList = () => {
     const page_Id = pageId.DRIVER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-
-    if (!userAdminRole) { goButtonHandler() }
+    if (!(_cfunc.loginPartyID() === 0)) {
+      goButtonHandler()
+    }
     return () => {
       dispatch(getDriverListSuccess([]));
     }
   }, []);
 
-  const goButtonHandler = () => {
+  function goButtonHandler() {
+    try {
+      if (_cfunc.loginPartyID() === 0) {
+        customAlert({ Type: 3, Message: "Please Select Party" });
+        return;
+      };
+      const jsonBody = {
+        ..._cfunc.loginJsonBody(),
+        PartyID: _cfunc.loginSelectedPartyID()
+      };
+      dispatch(getDriverList(jsonBody));
+    }
+    catch (error) { }
+    return
+  };
 
-    const jsonBody = JSON.stringify({
-      CompanyID: _cfunc.loginCompanyID(),
-      PartyID: party.value,
-    });
-    dispatch(getDriverList(jsonBody));
+  function partyOnChngeButtonHandler() {
+    dispatch(getDriverListSuccess([]));
   }
 
-  const partyOnChngeHandler = (e) => {
-    setParty(e)
-  }
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
 
-        {userAdminRole &&
-          <div className="mb-2">
-            <PartyDropdown_Common
-              partySelect={party}
-              setPartyFunc={partyOnChngeHandler}
-              goButtonHandler={goButtonHandler}
-            />
-          </div>
-        }
+        <PartyDropdown_Common
+          goBtnLoading={GoBtnlistloading}
+          goButtonHandler={goButtonHandler}
+          changeButtonHandler={partyOnChngeButtonHandler}
+        />
 
         {
           (pageField) &&

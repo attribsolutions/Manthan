@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -6,18 +5,21 @@ import {
     deletePartyIDSuccess,
     editPartyID,
     getPartyListAPI,
-    partyResetReduxAction,
+    getPartyListAPISuccess,
     postPartyDataSuccess,
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './MasterAdd/PartyIndex';
-import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { mode, url, pageId } from "../../../routes/index";
 import { useLayoutEffect } from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Listloader } from '../../../components/Common/CommonButton';
+import { PageLoadingSpinner } from '../../../components/Common/CommonButton';
+import CommonPurchaseList from '../../../components/Common/CommonPurchaseList';
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { customAlert } from '../../../CustomAlert/ConfirmDialog';
 
 const PartyList = () => {
 
@@ -35,7 +37,7 @@ const PartyList = () => {
     const reducers = useSelector(
 
         (state) => ({
-            loading: state.PartyMasterReducer.loading,
+            goBtnLoading: state.PartyMasterReducer.goBtnLoading,
             listBtnLoading: state.PartyMasterReducer.listBtnLoading,
             tableList: state.PartyMasterReducer.partyList,
             editData: state.PartyMasterReducer.editData,
@@ -46,9 +48,8 @@ const PartyList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    
+
     const action = {
-        getList: getPartyListAPI,
         editId: editPartyID,
         deleteId: deletePartyID,
         updateSucc: updatePartyIDSuccess,
@@ -73,39 +74,65 @@ const PartyList = () => {
             newBtnPath = url.RETAILER_MASTER;
         }
 
-
         setOtherState({ masterPath, newBtnPath, })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(getPartyListAPI());
+        dispatch(getPartyListAPI(subPageMode));
+
         return () => {
-            dispatch(commonPageFieldListSuccess(null))
-            dispatch(updatePartyIDSuccess([]))//for clear privious order list   
+            // dispatch(commonPageFieldListSuccess(null));
+            dispatch(updatePartyIDSuccess([])); //for clear privious order list 
+            dispatch(getPartyListAPISuccess([]));
         }
     }, []);
 
-    const { pageField, userAccess = [] } = reducers
+    const { pageField, goBtnLoading } = reducers
+
+    function goButtonHandler() {
+        try {
+            if ((_cfunc.loginSelectedPartyID() === 0)) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = {
+                ..._cfunc.loginJsonBody(),
+                PartyID: _cfunc.loginSelectedPartyID(),
+                IsRetailer: subPageMode === url.RETAILER_LIST ? 1 : 0
+            };
+            dispatch(getPartyListAPI(jsonBody));
+        }
+        catch (error) { }
+        return
+    };
+
+    function partyOnChngeButtonHandler() {
+        dispatch(getPartyListAPISuccess([]));
+    }
 
     return (
         <React.Fragment>
-            {
-                reducers.loading ?
-                    <Listloader />
-                    :
-                    (pageField) ?
-                        <CommonListPage
-                            action={action}
-                            reducers={reducers}
-                            MasterModal={PartyMaster}
-                            masterPath={otherState.masterPath}
-                            newBtnPath={otherState.newBtnPath}
-                            pageMode={pageMode}
-                            ButtonMsgLable={"Party"}
-                            deleteName={"Name"}
-                        />
-                        : <><Listloader /></>
-            }
+            <div className="page-content">
+                <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
+                <PartyDropdown_Common
+                    goButtonHandler={goButtonHandler}
+                    changeButtonHandler={partyOnChngeButtonHandler}
+                />
+                {
+                    (pageField) &&
+                    <CommonPurchaseList
+                        action={action}
+                        reducers={reducers}
+                        showBreadcrumb={false}
+                        MasterModal={PartyMaster}
+                        masterPath={otherState.masterPath}
+                        newBtnPath={otherState.newBtnPath}
+                        pageMode={pageMode}
+                        ButtonMsgLable={"Party"}
+                        deleteName={"Name"}
+                    />
+                }
+            </div>
         </React.Fragment>
     )
 }

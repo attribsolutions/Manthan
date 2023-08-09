@@ -7,7 +7,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
@@ -49,7 +49,7 @@ import {
 } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CInput, C_DatePicker } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
@@ -57,6 +57,7 @@ const Receipts = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+    const loginSystemSetting = _cfunc.loginSystemSetting()
 
     const fileds = {
         ReceiptDate: currentDate_ymd,
@@ -77,9 +78,11 @@ const Receipts = (props) => {
 
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [IsSystemSetting, setIsSystemSetting] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
+        retailerDropLoading,
         ReceiptGoButton,
         OpeningBalance,
         pageField,
@@ -89,6 +92,7 @@ const Receipts = (props) => {
         ReceiptType,
         saveBtnloading,
         userAccess } = useSelector((state) => ({
+            retailerDropLoading: state.CommonAPI_Reducer.retailerDropLoading,
             saveBtnloading: state.ReceiptReducer.saveBtnloading,
             postMsg: state.ReceiptReducer.postMsg,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
@@ -118,7 +122,6 @@ const Receipts = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
-
 
     // Customer dropdown Options
     useEffect(() => {
@@ -175,6 +178,13 @@ const Receipts = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
+    useEffect(() => {
+
+        if (loginSystemSetting.IsAmountadjustedinInvoice === "0") {
+            setIsSystemSetting(true)
+        }
+    }, []);
 
     // loction useEffect
     useEffect(() => {
@@ -255,7 +265,7 @@ const Receipts = (props) => {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -383,25 +393,28 @@ const Receipts = (props) => {
                 return a
             })
         }
-
     };
 
     function AmountPaid_onChange(event) {
 
-        let input = event.target.value
-        let sum = 0
-        Data.forEach(element => {
-            sum = sum + Number(element.BalanceAmount)
-        });
-
-        let v1 = Number(sum);
-        let v2 = Number(input)
-        if (!(v1 >= v2)) {
-            event.target.value = v1;
+        if (IsSystemSetting) {
+            onChangeText({ event, state, setState })
         }
-        onChangeText({ event, state, setState })
-        AmountPaidDistribution(event.target.value)
+        else {
+            let input = event.target.value
+            let sum = 0
+            Data.forEach(element => {
+                sum = sum + Number(element.BalanceAmount)
+            });
 
+            let v1 = Number(sum);
+            let v2 = Number(input)
+            if (!(v1 >= v2)) {
+                event.target.value = v1;
+            }
+            onChangeText({ event, state, setState })
+            AmountPaidDistribution(event.target.value)
+        }
     }
 
     function AmountPaidDistribution(val1) {
@@ -479,22 +492,24 @@ const Receipts = (props) => {
             calSum = calSum + Number(element.Calculate)
         });
 
-        let diffrence = Math.abs(calSum - values.AmountPaid);
-        if (Number(values.AmountPaid) < calSum) {
-            customAlert({
-                Type: 4,
-                Message: `Amount Paid value is Excess ${diffrence}`,
-            })
-            return btnIsDissablefunc({ btnId, state: false })
+        if (!(IsSystemSetting)) {
+            let diffrence = Math.abs(calSum - values.AmountPaid);
+            if (Number(values.AmountPaid) < calSum) {
+                customAlert({
+                    Type: 4,
+                    Message: `Amount Paid value is Excess ${diffrence}`,
+                })
+                return btnIsDissablefunc({ btnId, state: false })
 
-        }
-        else if (Number(values.AmountPaid) > calSum) {
-            customAlert({
-                Type: 4,
-                Message: `Amount Paid value is Short ${diffrence}`,
-            })
-            return btnIsDissablefunc({ btnId, state: false })
+            }
+            else if (Number(values.AmountPaid) > calSum) {
+                customAlert({
+                    Type: 4,
+                    Message: `Amount Paid value is Short ${diffrence}`,
+                })
+                return btnIsDissablefunc({ btnId, state: false })
 
+            }
         }
 
         if ((values.ReceiptModeName.value === undefined) || values.ReceiptModeName.value === "") {
@@ -512,7 +527,7 @@ const Receipts = (props) => {
             || (values.AmountPaid === "0")) {
             customAlert({
                 Type: 4,
-                Message: `Amount Paid value can not be 0`,
+                Message: `The Receipt amount must be greater than zero.`,
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
@@ -576,7 +591,7 @@ const Receipts = (props) => {
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
-                    "ReceiptInvoices": FilterReceiptInvoices,
+                    "ReceiptInvoices": !(IsSystemSetting) ? FilterReceiptInvoices : [],
                     "PaymentReceipt": page_Mode === mode.modeSTPsave ? PaymentReceipt : []
                 }]
 
@@ -631,7 +646,7 @@ const Receipts = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
-                                            <Select
+                                            <C_Select
                                                 name="Customer"
                                                 isDisabled={(page_Mode === mode.modeSTPsave) || (page_Mode === mode.modeSTPList) ? true : false}
                                                 value={values.Customer}
@@ -641,6 +656,7 @@ const Receipts = (props) => {
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 classNamePrefix="dropdown"
+                                                isLoading={retailerDropLoading}
                                                 options={customerOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
@@ -864,8 +880,7 @@ const Receipts = (props) => {
                             </Row>
                         </div>
 
-
-                        <ToolkitProvider
+                        {!(IsSystemSetting) && <ToolkitProvider
                             keyField="id"
                             data={Data}
                             columns={pagesListColumns}
@@ -890,10 +905,22 @@ const Receipts = (props) => {
                             )
                             }
                         </ToolkitProvider>
+                        }
 
-                        {Data.length > 0 ?
-                            <FormGroup>
-                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                        {!(IsSystemSetting) ?
+                            Data.length > 0 ?
+                                <FormGroup>
+                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            onClick={saveHandeller}
+                                            userAcc={userPageAccessState}
+                                            editCreatedBy={editCreatedBy}
+                                        />
+                                    </Col>
+                                </FormGroup > : null
+                            : <FormGroup >
+                                <Col style={{ marginTop: "8px" }}>
                                     <SaveButton pageMode={pageMode}
                                         loading={saveBtnloading}
                                         onClick={saveHandeller}
@@ -902,7 +929,6 @@ const Receipts = (props) => {
                                     />
                                 </Col>
                             </FormGroup >
-                            : null
                         }
 
                     </form>

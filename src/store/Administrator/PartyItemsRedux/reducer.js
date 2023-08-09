@@ -1,5 +1,6 @@
 import {
   EDIT_PARTY_ITEM_ID_SUCCESS,
+  GET_PARTY_ITEM_LIST,
   GET_PARTY_ITEM_LIST_SUCCESS,
   GET_PARTY_LIST_SUCCESS,
   PARTY_ITEM_API_ERROR_ACTION,
@@ -14,6 +15,8 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   partyItem: [],
   partyList: [],
+
+  partyItemListLoading: false,
   saveBtnloading: false
 }
 
@@ -41,10 +44,16 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
         partyList: action.payload,
       }
 
+    case GET_PARTY_ITEM_LIST:
+      return {
+        ...state,
+        partyItemListLoading: true,
+      }
     case GET_PARTY_ITEM_LIST_SUCCESS:
       return {
         ...state,
         partyItem: action.payload,
+        partyItemListLoading: false,
       }
 
     case EDIT_PARTY_ITEM_ID_SUCCESS:
@@ -56,7 +65,8 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
     case PARTY_ITEM_API_ERROR_ACTION:
       return {
         ...state,
-        saveBtnloading: false
+        saveBtnloading: false,
+        partyItemListLoading: false,
       }
 
     default:

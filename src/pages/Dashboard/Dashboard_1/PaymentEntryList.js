@@ -31,7 +31,7 @@ export default function PaymentEntryList() {
     const pagesListColumns = [
         {
             text: "Date",
-            dataField: "ReceiptDate",
+            dataField: "dashboardReceiptDate",
         },
         {
             text: "FullReceiptNumber",

@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-    BreadcrumbShowCountlabel,
     commonPageFieldList,
-    commonPageFieldListSuccess
+    commonPageFieldListSuccess,
+    getpdfReportdata
 } from "../../../store/actions";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
-import { GetVenderSupplierCustomer, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import SalesReturn from "./SalesReturn";
-import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
+import { confirm_SalesReturn_Id, delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, post_Send_to_superStockiest_Id, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
+import SalesReturnView_Modal from "./SalesReturnConfirm";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as report from '../../../Reports/ReportIndex'
+import { ReturnPrint_API } from "../../../helpers/backend_helper";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const SalesReturnList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
@@ -33,33 +39,47 @@ const SalesReturnList = () => {
 
     const [pageMode, setPageMode] = useState(mode.defaultList)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', });
+    const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', buttonMsgLable: '' });
+    const [PurchaseReturnMode_3_Access, setPurchaseReturnMode_3_Access] = useState(false)
+
     let customerdropdownLabel = subPageMode === url.SALES_RETURN_LIST ? "Customer" : "Supplier"
 
     const reducers = useSelector(
         (state) => ({
+            sendToSSbtnLoading: state.SalesReturnReducer.sendToSSbtnLoading,
             loading: state.SalesReturnReducer.loading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
-            listBtnLoading: state.SalesReturnReducer.listBtnLoading,
+            listBtnLoading: (state.SalesReturnReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
             tableList: state.SalesReturnReducer.salesReturnList,
+            sendToSSbtnTableData: state.SalesReturnReducer.sendToSSbtnTableData,
             deleteMsg: state.SalesReturnReducer.deleteMsg,
-            postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageFieldList,
+            ApprovrMsg: state.SalesReturnReducer.ApprovrMsg,
         })
     );
 
-    const { pageField, RetailerList, supplier } = reducers;
+    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg, loading, sendToSSbtnLoading, tableList } = reducers;
+
     const values = { ...state.values }
 
     const action = {
         getList: salesReturnListAPI,
         deleteId: delete_SalesReturn_Id,
-        postSucc: postMessage,
         deleteSucc: delete_SalesReturn_Id_Succcess
     }
+
+    // userAccess useEffect
+    useEffect(() => {
+
+        userAccess.find((index) => {
+            if (index.id === pageId.PURCHASE_RETURN_MODE_3) {
+                return setPurchaseReturnMode_3_Access(true)
+            }
+        });
+    }, [userAccess])
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -67,40 +87,58 @@ const SalesReturnList = () => {
         let page_Mode = mode.defaultList;
         let masterPath = '';
         let newBtnPath = false;
+        let buttonMsgLable = '';
 
         if (subPageMode === url.PURCHASE_RETURN_LIST) {
             page_Id = pageId.PURCHASE_RETURN_LIST
             masterPath = url.PURCHASE_RETURN
             newBtnPath = url.PURCHASE_RETURN
+            buttonMsgLable = "Purchase Return"
         }
         else if (subPageMode === url.SALES_RETURN_LIST) {
             page_Id = pageId.SALES_RETURN_LIST;
             masterPath = url.SALES_RETURN
             newBtnPath = url.SALES_RETURN
+            buttonMsgLable = "Sales Return"
         }
         setPageMode(page_Mode)
         setSubPageMode(subPageMode)
-        setOtherState({ masterPath, newBtnPath })
+        setOtherState({ masterPath, newBtnPath, buttonMsgLable })
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Sales Return Count"} :0`))
-        goButtonHandler(true)
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            goButtonHandler()
+        }
+
+        return () => {
+            dispatch(salesReturnListAPISuccess([]))
+        }
     }, []);
 
     useEffect(() => {
-        dispatch(salesReturnListAPISuccess([]))
-    }, [])
+
+        if ((sendToSSbtnTableData.Status === true) && (sendToSSbtnTableData.StatusCode === 200)) {
+            history.push({
+                pathname: url.PURCHASE_RETURN_MODE_3
+            })
+        }
+    }, [sendToSSbtnTableData])
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
+        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
     }, []);
 
+    useEffect(() => {
+        if ((ApprovrMsg.Status === true) && (ApprovrMsg.StatusCode === 200)) {
+            goButtonHandler()
+        }
+    }, [ApprovrMsg])
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -122,18 +160,47 @@ const SalesReturnList = () => {
         label: " All"
     });
 
-    function goButtonHandler() {
+    const goButtonHandler = () => {
 
+        try {
+            if (_cfunc.loginSelectedPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const salesReturnJsonBody = JSON.stringify({
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                CustomerID: values.Customer.value,
+                PartyID: _cfunc.loginSelectedPartyID(),
+            });
+            const purchaseReturnJsonBody = JSON.stringify({
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                CustomerID: _cfunc.loginSelectedPartyID(),
+                PartyID: values.Customer.value,
+            });
+
+            let jsonBody;
+            if (subPageMode === url.SALES_RETURN_LIST) {
+                jsonBody = (salesReturnJsonBody);
+            }
+            else {
+                jsonBody = (purchaseReturnJsonBody);
+            }
+            dispatch(salesReturnListAPI(jsonBody));
+        } catch (error) { }
+        return
+    };
+
+    const partySelectButtonHandler = (e) => {
         const jsonBody = JSON.stringify({
-            FromDate: values.FromDate,
-            ToDate: values.ToDate,
-            // CustomerID: values.Customer.value,
-            // PartyID: _cfunc.loginPartyID(),
-            CustomerID: (subPageMode === url.SALES_RETURN_LIST) ? values.Customer.value : _cfunc.loginPartyID(),
-            PartyID: (subPageMode === url.SALES_RETURN_LIST) ? _cfunc.loginPartyID() : values.Customer.value,
+            Type: 1,
+            PartyID: _cfunc.loginSelectedPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
         });
-        dispatch(salesReturnListAPI(jsonBody));
+        dispatch(Retailer_List(jsonBody));
     }
+
 
     function fromdateOnchange(e, date) {
         setState((i) => {
@@ -154,11 +221,33 @@ const SalesReturnList = () => {
     }
 
     function CustomerOnChange(e) {
-
         setState((i) => {
             const a = { ...i }
             a.values.Customer = e;
             a.hasValid.Customer.valid = true
+            return a
+        })
+    }
+
+    function viewApprovalBtnFunc(config) {
+        config["viewMode"] = subPageMode
+        dispatch(confirm_SalesReturn_Id(config))
+    }
+
+    function downBtnFunc(config) {
+        config["ReportType"] = report.Return;
+        dispatch(getpdfReportdata(ReturnPrint_API, config))
+    }
+
+    function partySelectOnChangeHandler() {
+        dispatch(salesReturnListAPISuccess([]));
+        dispatch(Retailer_List_Success([]));
+        dispatch(GetVenderSupplierCustomerSuccess([]));
+
+        setState((i) => {
+            let a = { ...i }
+            a.values.Customer = { value: "", label: "All" }
+            a.hasValid.Customer.valid = true;
             return a
         })
     }
@@ -223,9 +312,30 @@ const SalesReturnList = () => {
         )
     }
 
+    const selectSaveBtnHandler = (row = []) => {
+
+        let ischeck = row.filter(i => (i.selectCheck))
+        if (!ischeck.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: "Please Select One Checkbox",
+            });
+            return
+        }
+        let idString = ischeck.map(obj => obj.id).join(',')
+        let jsonBody = JSON.stringify({ PartyID: _cfunc.loginSelectedPartyID(), ReturnID: idString })
+        dispatch(post_Send_to_superStockiest_Id({ jsonBody, ReturnID: idString }))
+    }
+
     return (
         <React.Fragment>
             <div className="page-content">
+                <PageLoadingSpinner isLoading={(loading || !pageField)} />
+
+                <PartyDropdown_Common
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partySelectOnChangeHandler} />
+
                 {
                     (pageField) ?
                         <CommonPurchaseList
@@ -236,15 +346,27 @@ const SalesReturnList = () => {
                             masterPath={otherState.masterPath}
                             newBtnPath={otherState.newBtnPath}
                             pageMode={pageMode}
+                            viewApprovalBtnFunc={viewApprovalBtnFunc}
                             HeaderContent={HeaderContent}
+                            downBtnFunc={downBtnFunc}
                             goButnFunc={goButtonHandler}
-                            ButtonMsgLable={"SalesReturn"}
+                            ButtonMsgLable={otherState.buttonMsgLable}
                             deleteName={"FullReturnNumber"}
+
+                            selectCheckParams={{
+                                isRoleAccess: (PurchaseReturnMode_3_Access),
+                                isShow: (subPageMode === url.SALES_RETURN_LIST),
+                                selectSaveBtnHandler: selectSaveBtnHandler,
+                                selectSaveBtnLabel: "Send To Supplier",
+                                selectHeaderLabel: "Select",
+                                selectSaveBtnLoading: sendToSSbtnLoading
+                            }}
 
                         />
                         : null
                 }
             </div>
+            <SalesReturnView_Modal />
         </React.Fragment>
     )
 }

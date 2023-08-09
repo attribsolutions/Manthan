@@ -16,7 +16,6 @@ import Footer from "./Footer";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import CustomAlert from "../Common/CustomAlert";
 import BreadcrumbNew from "../../components/Common/BreadcrumbNew"
 
 import { useHistory } from "react-router-dom";
@@ -65,25 +64,20 @@ const Layout = props => {
   layout  settings
   */
 
-  useEffect(() => {
-    // document.body.addEventListener("click", hideRightbar, true);
-    try {
-      if (isPreloader === true) {
-        document.getElementById("preloader").style.display = "block";
+  // useEffect(() => {
+  //   //init body click event fot toggle rightbar
+  //   // document.body.addEventListener("click", hideRightbar, true);
 
-        setTimeout(function () {
-          try {
-            document.getElementById("preloader").style.display = "none";
-          } catch (e) { }
-        }, 4000);
+  //   if (isPreloader === true) {
+  //     document.getElementById("preloader").style.display = "block";
 
-      } else {
-        try {
-          document.getElementById("preloader").style.display = "none";
-        } catch (e) { }
-      }
-    } catch (e) { }
-  }, [isPreloader]);
+  //     setTimeout(function () {
+  //       document.getElementById("preloader").style.display = "none";
+  //     }, 2500);
+  //   } else {
+  //     document.getElementById("preloader").style.display = "none";
+  //   }
+  // }, [isPreloader]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -144,12 +138,7 @@ const Layout = props => {
 
   return (
     <React.Fragment>
-      {/* 
-      <div className="pace pace-active" id="preloader">
-        <div className="pace-progress" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
-        </div>
-      </div> */}
-
+     
       <div id="layout-wrapper">
         <LogoutChecker />
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />

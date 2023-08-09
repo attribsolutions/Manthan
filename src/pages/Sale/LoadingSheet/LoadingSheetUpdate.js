@@ -29,6 +29,7 @@ const LoadingSheetUpdate = (props) => {
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+    const [subPageMode] = useState(history.location.pathname)
     const [userPageAccessState, setUserAccState] = useState('');
     const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
     const [tableListData, setTableListData] = useState([]);
@@ -50,31 +51,36 @@ const LoadingSheetUpdate = (props) => {
         OpeningBalance: state.ReceiptReducer.OpeningBalance,
     }));
 
-    const lastColumn = () => ({
-        text: "Action",
-        dataField: "",
-        formatExtraData: { listBtnLoading },
-        formatter: (cellContent, row, key, { listBtnLoading }) => {
+    // const { ReceiptFlag } = LoadingSheetUpdateList
+    // const lastColumn = () => ({
+    //     text: "Action",
+    //     dataField: "",
+    //     formatExtraData: { listBtnLoading },
+    //     // hidden: true,
+    //     formatter: (cellContent, row, key, { listBtnLoading }) => {
+    //         const { ReceiptFlag } = row
 
-            return (<span style={{ justifyContent: 'center' }}>
-                <Button
-                    type="button"
-                    id={`btn-makeBtn-${row.id}`}
-                    title={"Make Receipt"}
-                    disabled={listBtnLoading}
-                    className={makeBtnCss}
-                    onClick={(e) => {
-                        makeBtnFunc(e, row)
-                    }}
-                >
-                    {(listBtnLoading === `btn-makeBtn-${row.id}`) ?
-                        <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                        : <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                            className=" fas fa-file-invoice" ></span>
-                    }
-                </Button></span>)
-        }
-    })
+    //         return (<></>
+    //             // <span style={{ justifyContent: 'center' }}>
+    //             //     <Button
+    //             //         type="button"
+    //             //         id={`btn-makeBtn-${row.id}`}
+    //             //         title={"Make Receipt"}
+    //             //         disabled={listBtnLoading || ReceiptFlag}
+    //             //         className={makeBtnCss}
+    //             //         onClick={(e) => {
+    //             //             makeBtnFunc(e, row)
+    //             //         }}
+    //             //     >
+    //             //         {(listBtnLoading === `btn-makeBtn-${row.id}`) ?
+    //             //             <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+    //             //             : <span style={{ marginLeft: "6px", marginRight: "6px" }}
+    //             //                 className=" fas fa-file-invoice" ></span>
+    //             //         }
+    //             //     </Button></span>
+    //         )
+    //     }
+    // })
 
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
@@ -96,7 +102,7 @@ const LoadingSheetUpdate = (props) => {
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    const [tableColumns] = DynamicColumnHook({ pageField, lastColumn, reducers: { listBtnLoading } })
+    const [tableColumns] = DynamicColumnHook({ pageField, reducers: { listBtnLoading } })
 
     // userAccess useEffect
     useEffect(() => {
@@ -128,30 +134,34 @@ const LoadingSheetUpdate = (props) => {
         }
     }, [makeReceipt, OpeningBalance])
 
-    function makeBtnFunc(e, row) {
-        var { CustomerID, id } = row
-        try {
-            const jsonBody = JSON.stringify({
-                PartyID: _cfunc.loginPartyID(),
-                CustomerID: CustomerID,
-                InvoiceID: (id).toString()
-            });
+    // function makeBtnFunc(e, row) {
+    //     var { CustomerID, id } = row
+    //     try {
+    //         const jsonBody = JSON.stringify({
+    //             PartyID: _cfunc.loginPartyID(),
+    //             CustomerID: CustomerID,
+    //             InvoiceID: (id).toString()
+    //         });
 
-            const jsonBody1 = JSON.stringify({
-                PartyID: _cfunc.loginPartyID(),
-                CustomerID: CustomerID,
-                ReceiptDate: currentDate_ymd
-            });
+    //         const jsonBody1 = JSON.stringify({
+    //             PartyID: _cfunc.loginPartyID(),
+    //             CustomerID: CustomerID,
+    //             ReceiptDate: currentDate_ymd
+    //         });
 
-            const config = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row, btnId: `btn-makeBtn-${id}` }
-            dispatch(ReceiptGoButtonMaster(config));
-            dispatch(GetOpeningBalance(jsonBody1));
+    //         const config = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row, btnId: `btn-makeBtn-${id}` }
+    //         dispatch(ReceiptGoButtonMaster(config));
+    //         dispatch(GetOpeningBalance(jsonBody1));
 
-        } catch (e) { }
-    }
+    //     } catch (e) { }
+    // }
 
     function rowSelected() {
         return tableListData.map((index) => { return (index.selectCheck) && index.id })
+    }
+
+    const nonSelectedRow = () => {
+        return tableListData.filter(row => row.ReceiptFlag).map(row => row.id)
     }
 
     function DateOnchange(e, date) {
@@ -183,6 +193,30 @@ const LoadingSheetUpdate = (props) => {
             history.push(url.BULK_RECIPT);
         }
     }
+
+    const pagesListColumns = [
+        {
+            text: "Bill Date",
+            dataField: "InvoiceDate",
+        },
+
+        {
+            text: "Bill NO",
+            dataField: "FullInvoiceNumber",
+        },
+
+        {
+            text: "Customer Name",
+            dataField: "Customer",
+        },
+
+        {
+            text: "Amount",
+            dataField: "AmountPaid",
+            align:"right"
+        },
+             
+    ];
 
     if (!(userPageAccessState === '')) {
         return (
@@ -226,7 +260,7 @@ const LoadingSheetUpdate = (props) => {
                             <ToolkitProvider
                                 keyField="id"
                                 data={tableListData}
-                                columns={tableColumns}
+                                columns={pagesListColumns}
                                 search
                             >
                                 {toolkitProps => (
@@ -236,7 +270,7 @@ const LoadingSheetUpdate = (props) => {
                                                 keyField={"id"}
                                                 bordered={true}
                                                 striped={false}
-                                                selectRow={selectAllCheck(rowSelected())}
+                                                selectRow={selectAllCheck(rowSelected(), nonSelectedRow())}
                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                                 classes={"table align-middle table-nowrap table-hover"}
                                                 headerWrapperClasses={"thead-light"}
@@ -257,11 +291,15 @@ const LoadingSheetUpdate = (props) => {
                             tableListData.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} className={"row save1"}>
-                                        <button type="button" style={{ width: "120px" }} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>
+                                        <button type="button" style={{ width: "120px" }}
+                                            onClick={MakeReceiptForAll}
+                                            className="btn btn-primary  waves-effect waves-light">
+                                            Make Receipt</button>
                                     </Col>
                                 </FormGroup >
                                 : null
                         }
+
 
                     </form >
                 </div >

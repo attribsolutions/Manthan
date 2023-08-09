@@ -18,8 +18,8 @@ import {
     ReceiptListAPI, ReceiptListAPISuccess, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
-import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { getSupplier, getSupplierSuccess, Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import PaymentEntry from "./PaymentEntry";
 import { Receipt_Print } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
@@ -27,12 +27,15 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PaymentEntryList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func()
+    const userAdminRole = _cfunc.loginUserAdminRole()
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -52,12 +55,9 @@ const PaymentEntryList = () => {
             loading: state.ReceiptReducer.loading,
             tableList: state.ReceiptReducer.ReceiptList,
             deleteMsg: state.ReceiptReducer.deleteMsg,
-            updateMsg: state.BOMReducer.updateMsg,
-            postMsg: state.OrderReducer.postMsg,
             RetailerListForPayment: state.CommonAPI_Reducer.supplier,
             RetailerListForReceipt: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
-            editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             makeReceipt: state.ReceiptReducer.ReceiptGoButton,
@@ -70,14 +70,15 @@ const PaymentEntryList = () => {
     const values = { ...state.values }
 
     const action = {
-        getList: ReceiptListAPI,
         deleteId: deleteReceiptList,
         postSucc: postMessage,
         deleteSucc: deleteReceiptList_Success
     }
 
     useEffect(() => {
-        dispatch(ReceiptListAPISuccess([]))
+        return () => {
+            dispatch(ReceiptListAPISuccess([]))
+        }
     }, [])
 
     // Receipt Type API Values **** only Post Json Body
@@ -93,7 +94,7 @@ const PaymentEntryList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -101,7 +102,7 @@ const PaymentEntryList = () => {
 
     // onLoad Go_Button useEffect
     useEffect(() => {
-        if (ReceiptType.length > 0) {
+        if (ReceiptType.length > 0 && !(userAdminRole)) {
             goButtonHandler(true)
         }
     }, [ReceiptType]);
@@ -133,7 +134,9 @@ const PaymentEntryList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Payment Entry Count"} :0`))
-        dispatch(getSupplier())
+        // dispatch(getSupplier())
+        dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
+
 
     }, []);
 
@@ -180,20 +183,28 @@ const PaymentEntryList = () => {
         label: " All"
     });
 
-    function goButtonHandler() {
-        const ReceiptTypeID = ReceiptType.find((index) => {
-            return index.Name === "Payment Entry"
-        })
+    const goButtonHandler = async () => {
+        try {
+            if ((_cfunc.loginSelectedPartyID() === 0)) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const ReceiptTypeID = ReceiptType.find((index) => {
+                return index.Name === "Payment Entry"
+            })
 
-        const jsonBody = JSON.stringify({
-            FromDate: values.FromDate,
-            ToDate: values.ToDate,
-            CustomerID: values.Customer.value,
-            PartyID: _cfunc.loginPartyID(),
-            ReceiptType: ReceiptTypeID.id,
-        });
-        dispatch(ReceiptListAPI(jsonBody, subPageMode));
-    }
+            const jsonBody = JSON.stringify({
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                CustomerID: values.Customer.value,
+                PartyID: _cfunc.loginSelectedPartyID(),
+                ReceiptType: ReceiptTypeID.id,
+            });
+
+            await dispatch(ReceiptListAPI(jsonBody, subPageMode));
+        } catch (error) { }
+        return
+    };
 
     function fromdateOnchange(e, date) {
         setState((i) => {
@@ -228,19 +239,43 @@ const PaymentEntryList = () => {
         dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
     }
 
-    const makeBtnFunc = (list = [], btnId) => {
+    function partySelectButtonHandler() {
         
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: _cfunc.loginSelectedPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+        dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
+    }
+
+    function partySelectOnChangeHandler() {
+        dispatch(ReceiptListAPISuccess([]));
+        dispatch(Retailer_List_Success([]));
+        dispatch(getSupplierSuccess([]));
+
+        setState((i) => {
+            const a = { ...i }
+            a.values.Customer = { value: "", label: "All" }
+            a.hasValid.Customer.valid = true
+            return a
+        })
+    }
+
+    const makeBtnFunc = (list = [], btnId) => {
+
         var { CustomerID, ReceiptDate, id } = list[0]
 
         try {
             const jsonBody = JSON.stringify({
-                PartyID: _cfunc.loginPartyID(),
+                PartyID: _cfunc.loginSelectedPartyID(),
                 CustomerID: CustomerID,
                 InvoiceID: ""
             });
 
             const jsonBody1 = JSON.stringify({
-                PartyID: _cfunc.loginPartyID(),
+                PartyID: _cfunc.loginSelectedPartyID(),
                 CustomerID: CustomerID,
                 ReceiptDate: currentDate_ymd
             });
@@ -314,7 +349,11 @@ const PaymentEntryList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
+                <PartyDropdown_Common
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partySelectOnChangeHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList

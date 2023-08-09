@@ -22,7 +22,6 @@ const MRPList = () => {
   const hasPagePath = history.location.pathname
 
   const [pageMode, setpageMode] = useState(mode.defaultsave)
-  const [userAccState, setUserAccState] = useState('');
 
   const reducers = useSelector(
     (state) => ({
@@ -35,7 +34,7 @@ const MRPList = () => {
     })
   );
 
-  const { userAccess, pageField, MRPGoButton, deleteMsg } = reducers;
+  const {pageField, MRPGoButton, deleteMsg } = reducers;
 
   const action = {
     getList: getMRPList,
@@ -53,15 +52,6 @@ const MRPList = () => {
     dispatch(getMRPList())
 
   }, []);
-
-  useEffect(() => {
-    let userAcc = userAccess.find((inx) => {
-      return (inx.id === page_Id)
-    })
-    if (!(userAcc === undefined)) {
-      setUserAccState(userAcc)
-    }
-  }, [userAccess])
 
   useEffect(() => {
 
@@ -85,20 +75,17 @@ const MRPList = () => {
 
   function editBodyfunc(index) {
 
-    const { rowData, btnId } = index
-    let { Division_id, Party_id, preEffectiveDate } = rowData;
-    _cfunc.btnIsDissablefunc({ btnId, state: true })
-
+    const { rowData} = index
+    let { Division_id, Party_id, EffectiveDate } = rowData;
     try {
       const jsonBody = JSON.stringify({
         Division: Division_id === null ? 0 : Division_id,
         Party: Party_id === null ? 0 : Party_id,
-        EffectiveDate: preEffectiveDate
+        EffectiveDate: EffectiveDate
       })
       let config = { jsonBody, pathname: url.MRP, btnmode: mode.edit, rowData: rowData }
-      // sessionStorage.setItem("margin_Master", config)
       dispatch(_act.GoButtonForMRP_Master(config));
-    } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+    } catch (error) {}
   }
 
   async function deleteBodyfunc(index) {
@@ -110,12 +97,11 @@ const MRPList = () => {
         Message: `Are you sure you want to delete this ${"EffectiveDate"}: "${rowData.EffectiveDate}"`,
       })
       if (rep) {
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
         let config = { btnId, deleteId: rowData.CommonID }
         try {
           dispatch(deleteMRPList_Id(config))
         }
-        catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        catch (error) {}
       }
     }
   }

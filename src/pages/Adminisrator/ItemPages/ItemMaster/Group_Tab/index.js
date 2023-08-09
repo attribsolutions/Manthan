@@ -18,6 +18,7 @@ import {
     get_Sub_Group_By_Group_ForDropDown_Success
 } from "../../../../../store/Administrator/ItemsRedux/action";
 import { customAlert } from "../../../../../CustomAlert/ConfirmDialog";
+import { C_Select } from "../../../../../CustomValidateForm";
 
 function GroupTab(props) {
     const dispatch = useDispatch();
@@ -25,10 +26,12 @@ function GroupTab(props) {
     const [groupDropdownSelect, setGroupDropdownSelect] = useState("");
     const [subGroupDropdownSelect, setSubGroupDropdownSelect] = useState("");
 
-    const { GroupType, GroupList, SubGroupList } = useSelector((state) => ({
+    const { GroupType, GroupList, SubGroupList, groupDropDownLoading, subgroupDropDownLoading} = useSelector((state) => ({
         GroupType: state.GroupTypeReducer.GroupType,
         GroupList: state.ItemMastersReducer.GroupList,
         SubGroupList: state.ItemMastersReducer.SubGroupList,
+        groupDropDownLoading: state.ItemMastersReducer.groupDropDownLoading,
+        subgroupDropDownLoading: state.ItemMastersReducer.subgroupDropDownLoading,
     }));
 
     useEffect(() => {
@@ -161,10 +164,11 @@ function GroupTab(props) {
 
                                     <FormGroup className=" col col-sm-4 ">
                                         <Label>Group</Label>
-                                        <Select
+                                        <C_Select
                                             value={groupDropdownSelect}
                                             options={Group_DropdownOptions}
                                             onChange={Group_Handler}
+                                            isLoading={groupDropDownLoading}
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
@@ -173,9 +177,10 @@ function GroupTab(props) {
 
                                     <FormGroup className="mb-3 col col-sm-4 ">
                                         <Label>Sub Group</Label>
-                                        <Select
+                                        <C_Select
                                             value={subGroupDropdownSelect}
                                             options={SubGroup_DropdownOptions}
+                                            isLoading={subgroupDropDownLoading}
                                             onChange={SubGroup_Handler}
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })

@@ -2,26 +2,27 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { CommonConsole, amountCommaSeparateFunc, concatDateAndTime, date_dmy_func, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, concatDateAndTime, date_dmy_func, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 
 // customer dropdown click then table values display
 function* ReceiptGoButtonGenFunc({ config }) {
-  
-  const { ListData, jsonBody, path, pageMode } = config
+
+  const { ListData, path, pageMode } = config
   try {
 
     const response = yield call(apiCall.Receipt_Go_Button_API, config);
     response["pageMode"] = pageMode;
     response["ListData"] = ListData;
     response["path"] = path;
-    response.Data.map((index) => {
-      // index.BalanceAmount = amountCommaSeparateFunc(index.BalanceAmount) //  BalanceAmount show with commas
-      // index.PaidAmount = amountCommaSeparateFunc(index.PaidAmount) //  PaidAmount show with commas
-      // index.GrandTotal = amountCommaSeparateFunc(index.GrandTotal) //  GrandTotal show with commas
-      index.InvoiceDate = concatDateAndTime(index.InvoiceDate, index.CreatedOn)
-      index["Calculate"] = 0
-      return index
+    response.Data.map((i) => {
+
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
+      i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] = concatDateAndTime(i.InvoiceDate, i.CreatedOn);
+
+      i["Calculate"] = 0
+      return i
     });
 
     yield put(action.ReceiptGoButtonMaster_Success(response));
@@ -51,9 +52,13 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
 
     const newList = yield response.Data.map((i) => {
       i.AmountPaid = amountCommaSeparateFunc(i.AmountPaid) //  AmountPaid show with commas
-      i["preReceipDate"] = i.ReceiptDate;
-      i.ReceiptDate = concatDateAndTime(i.ReceiptDate, i.CreatedOn)
-      i.ChequeDate = date_dmy_func(i.ChequeDate)
+
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
+      i.dashboardReceiptDate = date_dmy_func(i.ReceiptDate);
+      i["ChequeDate"] = i.ReceiptModeName === "Cash" ? "" : date_dmy_func(i.ChequeDate)
+      i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] = concatDateAndTime(i.ReceiptDate, i.CreatedOn);
+
       return i
     })
 
@@ -74,7 +79,7 @@ function* save_Receipt_GenFunc({ config }) {
 function* Receipt_Type_GenFunc({ jsonBody }) {
 
   try {
-    const response = yield call(apiCall.Receipt_Type_API, jsonBody);
+    const response = yield call(apiCall.GenralMasterSubType, jsonBody);
     yield put(action.ReceiptTypeAPISuccess(response.Data));
   } catch (error) { yield put(action.ReceiptAndPaymentApiErrorAction()) }
 }

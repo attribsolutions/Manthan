@@ -8,21 +8,20 @@ import Login from "./auth/login/reducer"
 import Account from "./auth/register/reducer"
 import ForgetPassword from "./auth/forgetpwd/reducer"
 import Profile from "./auth/profile/reducer"
-import SpinnerReducer from './Utilites/Spinner/reducer'
 import ChangePasswordReducer from "./auth/changepassword/reducer"
 
 
 //  *********************** Administrator ***********************
-// import AlertReducer from './Utilites/CustomAlertRedux/reducer'
-// import CommonError from './Utilites/CommonError/reducer'
+
 
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 import CommonPageFieldReducer from './Utilites/PageFiled/reducer'
 import PdfReportReducers from './Utilites/PdfReport/reducer'
+import CommonPartyDropdownReducer from './Utilites/PartyDrodown/reducer'
 
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
-import H_Pages from './Administrator/HPagesRedux/reducer'
+import H_Pages from './Administrator/PageMasterRedux/reducer'
 
 import CommonAPI_Reducer from "./CommonAPI/SupplierRedux/reducer"
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
@@ -61,6 +60,7 @@ import ImportFieldAdd_Reducer from "./Administrator/ImportFieldAddRedux/reducer"
 import ImportExcelPartyMap_Reducer from "./Administrator/ImportExcelPartyMapRedux/reducer"
 import CityReducer from "./Administrator/CityRedux/reducer"
 import PartySettingReducer from "./Administrator/PartySetting/reducer"
+import DiscountReducer from "./Administrator/DiscountRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -93,7 +93,17 @@ import ReceiptReducer from "./Accounting/Receipt/reducer"
 
 //***************************Reports ************************** */
 import OrderSummaryReducer from "./Report/OrderSummaryRedux/reducer"
+import ClaimSummaryReducer from "./Report/ClaimSummary/reducer"
+
 import StockReportReducer from "./Report/StockReport/reducer"
+
+import RetailerDataReducer from "./Report/RetailerDataRedux/reducer"
+
+import GenericSaleReportReducer from "./Report/GenericSaleRedux/reducer"
+import InvoiceDataExportReducer from "./Report/InvoiceDataExportRedux/reducer"
+import PurchaseGSTReportReducer from "./Report/PurchaseGSTRedux/reducer"
+import DamageStockReportReducer from "./Report/DamageStockReportRedux/reducer"
+
 
 const rootReducer = combineReducers({
   Layout,
@@ -101,11 +111,12 @@ const rootReducer = combineReducers({
   Account,
   ForgetPassword,
   Profile,
-  SpinnerReducer,
+  // SpinnerReducer,
   // AlertReducer,
   // CommonError,
   BreadcrumbReducer,
   CommonPageFieldReducer,
+  CommonPartyDropdownReducer,
   PdfReportReducers,
   ImportExportFieldMap_Reducer,
   ImportFieldAdd_Reducer,
@@ -138,6 +149,7 @@ const rootReducer = combineReducers({
   MarginMasterReducer,
   TermsAndConditionsReducer,
   RoutesReducer,
+  DiscountReducer,
   CreditLimitReducer,
   PartyMasterBulkUpdateReducer,
   SalesManReducer,
@@ -168,5 +180,12 @@ const rootReducer = combineReducers({
   PartySettingReducer,
   StockEntryReducer,
   StockReportReducer,
+  RetailerDataReducer,
+  GenericSaleReportReducer,
+  ClaimSummaryReducer,
+  InvoiceDataExportReducer,
+  PurchaseGSTReportReducer,
+  DamageStockReportReducer
+
 })
 export default rootReducer

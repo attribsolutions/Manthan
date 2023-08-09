@@ -17,13 +17,14 @@ import {
   update_ImportFiledAdd_Success
 } from "../../../../store/Administrator/ImportFieldAddRedux/action";
 import { loginCompanyID } from "../../../../components/Common/CommonFunction";
-import { Listloader } from "../../../../components/Common/CommonButton";
+import { Listloader, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 
 const ImportFieldAddList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
+      loading: state.ImportFieldAdd_Reducer.loading,
       listBtnLoading: state.ImportFieldAdd_Reducer.listBtnLoading,
       tableList: state.ImportFieldAdd_Reducer.getList,
       editData: state.ImportFieldAdd_Reducer.editData,
@@ -48,7 +49,7 @@ const ImportFieldAddList = () => {
     const page_Id = pageId.IMPORT_FIELD_ADD_LIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-     dispatch(post_ImportFiledAdd(getlistBody()));
+    dispatch(post_ImportFiledAdd(getlistBody()));
   }, []);
 
   function getlistBody() {
@@ -56,26 +57,23 @@ const ImportFieldAddList = () => {
       CompanyID: loginCompanyID(),
     });
   }
- 
 
-  const { pageField  } = reducers
+
+  const { pageField } = reducers
   return (
     <React.Fragment>
+      <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
       {
-        reducers.loading ?
-        <Listloader />
-        :
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={ImportFieldAdd}
-             getListbodyFunc={getlistBody}
-            masterPath={url.IMPORT_FIELD_ADD}
-            ButtonMsgLable={"ImportField"}
-            deleteName={"FieldName"}
-          />
-          : <Listloader />
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={ImportFieldAdd}
+          getListbodyFunc={getlistBody}
+          masterPath={url.IMPORT_FIELD_ADD}
+          ButtonMsgLable={"ImportField"}
+          deleteName={"FieldName"}
+        />
       }
     </React.Fragment>
   )

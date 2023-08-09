@@ -11,7 +11,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,7 +40,7 @@ import {
     loginUserID,
     btnIsDissablefunc,
     metaTagLabel,
-    loginUserAdminRole
+    
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -53,8 +53,6 @@ const SalesManMaster = (props) => {
 
     const history = useHistory();
     const dispatch = useDispatch();
-    const userAdminRole = loginUserAdminRole();
-
 
     const fileds = {
         id: "",
@@ -193,7 +191,7 @@ const SalesManMaster = (props) => {
             dispatch(getSalesManlistSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -206,7 +204,7 @@ const SalesManMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateSalesManIDSuccess({ Status: false }));
-             customAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -230,14 +228,6 @@ const SalesManMaster = (props) => {
         return index.IsActive === true
     });
 
-    const partyOnChngeHandler = (e) => {
-        setState((i) => {
-            const a = { ...i }
-            a.values.Party = e;
-            return a
-        })
-    };
-
     const SaveHandler = async (event) => {
 
         event.preventDefault();
@@ -255,7 +245,7 @@ const SalesManMaster = (props) => {
                     Name: values.Name,
                     MobileNo: values.MobileNo,
                     IsActive: values.IsActive,
-                    Party: userAdminRole ? values.Party.value : loginPartyID(),
+                    Party: loginPartyID(),
                     SalesmanRoute: routeArr,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
@@ -283,13 +273,9 @@ const SalesManMaster = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <Container fluid>
+                    {/* <PartyDropdown_Common /> */}
 
-                        {userAdminRole &&
-                            <PartyDropdown_Common
-                                partySelect={values.Party}
-                                setPartyFunc={partyOnChngeHandler} />
-                        }
+                    <Container fluid>
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header">
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

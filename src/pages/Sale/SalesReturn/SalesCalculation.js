@@ -1,5 +1,6 @@
 
 export const calculateSalesReturnFunc = (row) => {
+    
     let rate = 0;
     let quantity = 0;
     let gstPercentage = 0;
@@ -38,6 +39,7 @@ export const calculateSalesReturnFunc = (row) => {
 };
 
 export const return_discountCalculate_Func = (row,) => {
+    
     // Extract values from the input parameters
     const rate = Number(row.Rate) || 0;
     const qty = Number(row.Quantity) || 0;
@@ -69,7 +71,7 @@ export const return_discountCalculate_Func = (row,) => {
     let SGST_Percentage = (GST_Percentage / 2);
     let CGST_Percentage = (GST_Percentage / 2);
 
-
+    
     // Return the calculated values as an object
     return {
         discountBaseAmt: Number(discountBaseAmt.toFixed(2)),

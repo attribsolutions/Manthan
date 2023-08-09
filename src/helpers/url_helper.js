@@ -19,14 +19,13 @@ export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
 export const CHANGEPASSWORD_API = "/ChangePassword"
 
-
 export const SUPER_ADMIN_API = '/SuperAdmin'
 
 export const TOKEN_REFRESH_API = '/api/token/refresh/'
 
-
-
 export const PAGE_FIELD = '/PageMaster'
+
+export const COMMON_PARTY_DROPDOWN_API = '/ManagementEmpParties'
 
 //PAGE Master
 export const GET_DEFAULT_MODULE = "/HModules"
@@ -79,7 +78,6 @@ export const GET_SUBGROUP_BY_GROUP_ID = "/GetSubGroupByGroupID"
 export const GET_ITEM_TAG = "/ItemTag"
 export const GET_BRAND_TAG = "/ItemBrand"
 export const GENERAL_MASTER_BRAND_NAME = "/GeneralMasterBrandName"
-
 
 // M_Items_group Api
 export const ITEMS_GROUP_API = "/ItemGroups"
@@ -161,9 +159,18 @@ export const IMPORT_FIELD_MAP_FILTER = '/PartyImportFieldFilter'    //gobutton
 export const IMPORT_FIELD_MAP_SAVE = '/PartyImportFieldSave'        //save
 
 //Import Master Map
-export const IMPORT_MASTER_MAP_CUSTOMER = '/PartyCustomerMapping'    //save & get
-export const IMPORT_MASTER_MAP_ITEM = '/ItemsMapping'                //save & get
-export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping'           //save & get
+export const IMPORT_MASTER_MAP_CUSTOMER = '/PartyCustomerMapping';
+export const IMPORT_MASTER_MAP_ITEM = '/ItemsMapping';
+export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping';
+
+//Discount Master   
+
+export const DISCOUNT_MASTER_SAVE_API = '/DiscountMasterSave'
+export const DISCOUNT_MASTER_GO_BUTTON_API = '/DiscountMaster'
+export const DISCOUNT_MASTER_DELETE_API = '/DiscountMasterr'
+export const DISCOUNT_MASTER_LIST_API = '/DiscountMasterFilter'
+export const DISCOUNT_PARTY_TYPE_API = '/DiscountPartyType'
+export const DISCOUNT_CUSTOMER_API = '/DiscountCustomer'
 
 //Import Field Map
 export const IMPORT_FIELD_ADD_SAVE = '/ImportField'               //save
@@ -200,7 +207,6 @@ export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
 export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 export const PARTY_ITEM_FILTER = '/PartyItemFilter' // FOR Get
-
 
 //Routes
 export const ROUTES_FILTER = '/RoutesFilter '
@@ -267,7 +273,6 @@ export const CHALLAN_SAVE_GRN_LIST = "/Challan"
 export const CHALLAN_ITEMS = "/ChallanItems"
 export const CHALLAN_ITEMS_STOCK = "/ChallanItemStock"
 
-
 //Bill Of Master
 export const BOM = '/Billofmaterial'
 export const GET_ITEM_UNITS = '/GetItemUnits'
@@ -316,6 +321,7 @@ export const UPLOADED_E_INVOICE = '/Uploaded_EInvoicea' // Uploaded_EInvoicea
 export const UPLOADED_E_WAY_BILL = '/Uploaded_EwayBill' // Uploaded_E-wayBill
 export const CANCEL_E_INVOICE = '/Cancel_EInvoicea' // Uploaded_E-Invoice
 export const CANCEL_E_WAY_BILL = '/Cancel_EwayBill' // Uploaded_E-wayBill
+export const UPDATE_VEHICLE_INVOICE = '/UpdateVehicleInvoice' // Uploaded_E-wayBill
 
 //BulkInvoices
 export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 
@@ -329,6 +335,7 @@ export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOI
 //  Report Api
 export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter Api
 export const LOADINGSHEET_PARTY_WISE_INVOICE = '/LoadingSheetPrint'// Loading sheet Print Api
+export const PURCHASE_RETURN_PRINT = '/PurchaseReturnPrint'// Loading sheet Print Api
 
 // Management Parties API
 export const MANAGEMENT_PARTIES = '/ManagementEmpParties'
@@ -351,6 +358,9 @@ export const ADD_BUTTON_API_FOR_ITEM = '/ReturnItemBatchcode' // privious Api  =
 export const ADD_BUTTON_API_FOR_INVOICE = '/InvoiceReturnCRDR'
 export const SALES_RETURN = '/PurchaseReturn'
 export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
+export const SALES_RETURN_ITEM = '/PurchaseReturn'
+export const SEND_TO_SUPERSTOCKIEST_POST_API = "/SalesReturnconsolidateItem"
+export const RETURN_ITEM_APPROVE_AIP = '/ReturnItemApprove'
 
 // Credit and Debit API
 export const CREDIT_DEBIT = '/CreditDebitNote'
@@ -361,16 +371,36 @@ export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
 export const PARTY_LEDGER_API = '/SAPLedger'
 export const PRODUCT_MARGIN_REPORT_API = '/ProductMarginReport'
 
-
 // Dashboard
 export const DASHBOARD = '/getdashboard'
 
 //Report
 export const ORDER_SUMMARY = '/OrderSummaryReport'
 export const PARTY_LEDGER = '/PartyLedgerReport'
+export const CLAIM_SUMMARY = '/ClaimSummary'
+export const MASTER_CLAIM_SUMMARY = '/MasterClaimPrint'
+export const MASTER_CLAIM_CREATE = '/MasterClaimCreate'
+
+
+
+
+
+
+
+
 
 // Stock Report
 export const STOCK_REPORT = '/PartyLiveStock'
+export const STOCK_PROCESSING = '/StockProcessing'
+export const STOCK_REPORT_1 = '/StockReport'
+
+export const DAMAGE_STOCK_REPORT_GO_BUTTON = '/DamageStockReport'
+
+// Generic Sale Report
+export const GENERIC_SALE_REPORT = '/GenericSaleReport'
+
+// Retailer Data Report
+export const RETAILER_DATA_REPORT = '/RetailerDataReport'
 
 // partySetting
 export const PARTY_SETTING = '/PartySettings'
@@ -378,5 +408,15 @@ export const PARTY_SETTING = '/PartySettings'
 // StockEntry
 export const STOCK_ENTRY = '/PartyStockEntry'
 export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"
+
+export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"
+export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
+
+//Deleted Invoice Data Export Report 
+export const DELETE_INVOICE_DATA_EXPORT="/DeletedInvoiceData"
+
+
+
+
 
 

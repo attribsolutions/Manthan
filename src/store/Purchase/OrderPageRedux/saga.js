@@ -157,26 +157,30 @@ function* orderList_GoBtn_GenFunc({ config }) {
     newList = yield response.Data.map((i) => {
 
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
-
-      i["preOrderDate"] = i.OrderDate
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
-      i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
+
+      i.dashboardOrderDate = date_dmy_func(i.OrderDate);
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
+      i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] = concatDateAndTime(i.OrderDate, i.CreatedOn);
+
+
       i.DeliveryDate = (`${DeliveryDate}`)
 
       i.forceEditHide = false;
-      i.forceMakeBtn = true;
+      i.forceMakeBtnHide = true;
       i.forceDeleteHide = false;
       i.forceSelectDissabled = false;
       i.forceHideOrderAprovalBtn = true;
-      i.Status = "Open";
-      i.Inward = "Open";
-
 
 
       if (i.Inward > 0) {
         i.Inward = "Close"
         i.Status = "Close"
         i.forceEditHide = true
+      } else {
+        i.Status = "Open";
+        i.Inward = "Open";
       }
 
       //+++++++++++++++++++++++++  Status colonm show Status    ++++++++++++++++++++++++++++++++++++++
@@ -188,25 +192,22 @@ function* orderList_GoBtn_GenFunc({ config }) {
       }
       else if (i.IsConfirm === true) {
         i.Status = "Order Confirm"
-        i.forceMakeBtn = false
       }
 
       //**********************************order Aproval button Show Condition ********************************************************** */
-
-
 
       if (!i.SAPResponse && i.CustomerSAPCode) {//order Aproval button Show Condition 
         i.forceHideOrderAprovalBtn = false;
+        i.forceSelectDissabled = true;//select row check box dessible 
       }
 
-
-
       //++++++++++++++++++++++++++++++++++++++ make invoice Button dessiable/vissbble ++++++++++++++++++++++++++++++++++++++
-      if (i.InvoiceCreated === true) {
-        i.forceMakeBtn = true
+      if (!(i.InvoiceCreated === true) && (i.IsConfirm === true)) {
+        i.forceMakeBtnHide = false
       }
 
       //**********************************order Aproval button Show Condition ********************************************************** */
+
       if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
@@ -271,12 +272,10 @@ function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageM
 }
 
 function* OrderSingleGet_GenFunc({ config }) {
-  const { viewId, subPageMode } = config
+
 
   try {
-    
-    const response = yield call(OrderPage_Edit_ForDownload_API, viewId);
-    response["subPageMode"] = subPageMode;
+    const response = yield call(OrderPage_Edit_ForDownload_API, config);
     yield put(orderSinglegetSuccess(response))
 
   } catch (error) {

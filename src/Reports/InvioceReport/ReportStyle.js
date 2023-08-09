@@ -2,11 +2,13 @@
 import cbm_logo from "../../assets/images/cbm_logo.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
-import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
 import * as table from './TableData'
+
 let initial_y = 0
+
 export const pageBorder = (doc) => {
+
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
     doc.line(30, 815, 30, 16);//vertical line (left)
@@ -14,27 +16,8 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
-    if (data.InvoiceUploads.length > 0) {
-        const url = data.InvoiceUploads[0].QRCodeUrl
-        let desiredPart = null;
-        try {
-            const urlObject = new URL(url);
-            desiredPart = urlObject.pathname;
-        } catch (error) {
-            console.error("Invalid URL:", error);
-        }
 
-        if (desiredPart) {
-            console.log(desiredPart);
-        } else {
-            console.log("Unable to extract the desired part from the URL.");
-        }
-
-        doc.addImage(`/E_invoiceQRCode${desiredPart}`, 'JPEG', 323, 18, 83, 83)
-    }
-
-
-    doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
+    // doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.setDrawColor(0, 0, 0);
     doc.line(408, 63, 408, 16);//vertical right 1
     doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
@@ -48,10 +31,6 @@ export const pageHeder = (doc, data) => {
     } else {
         doc.text('TAX INVOICE', 200, 45,)
     }
-
-
-
-
 
 }
 
@@ -74,12 +53,9 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, data.isQR ? 120 : 80, 30, data.isQR ? 120 : 80);//horizontal line 3
-    // doc.line(30, 789, 30, 16);//vertical left 1
 
-    doc.line(408, data.isQR ? 210 : 170, 408, 16);//vertical line header section billby 
-    doc.line(220, data.isQR ? 210 : 170, 220, data.isQR ? 103 : 63);//vertical  line header section billto
-
-
+    // doc.line(408, data.isQR ? 210 : 170, 408, 16);//vertical line header section billby 
+    // doc.line(220, data.isQR ? 210 : 170, 220, data.isQR ? 103 : 63);//vertical  line header section billto
 
     var BilledByStyle = {
         margin: {
@@ -109,7 +85,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
 
-        startY: data.isQR > 0 ? 120 : 80
+        startY: data.isQR ? 120 : 80
     };
 
     var BilledToStyle = {
@@ -171,17 +147,52 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
 
-        startY: data.isQR > 0 ? 120 : 80,
+        startY: data.isQR ? 120 : 80,
 
     };
 
-    // let initial_y = 0
     const priLength = () => {
         let final_y = doc.previousAutoTable.finalY
         if (final_y > initial_y) {
             initial_y = final_y
         }
 
+    }
+
+    let IRNNumberDetails = {
+        margin: {
+            top: 45, left: 408, right: 35,
+        },
+        showHead: 'always',
+        theme: 'grid',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 162,
+                halign: 'lfet',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: 50,
+
+    };
+    if (data.isQR) {
+        doc.autoTable(table.INR_NO, table.IRNNumberRow(data), IRNNumberDetails);
     }
 
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
@@ -224,7 +235,7 @@ export const reportHeder3 = (doc, data) => {
 export const reportFooter = (doc, data) => {
 
     let stringNumber = toWords(Number(data.GrandTotal))
-    doc.addImage(upi_qr_code, 'PNG', 359, 747, 75, 65)
+    // doc.addImage(upi_qr_code, 'PNG', 359, 747, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
     doc.line(435, 745, 30, 745);//horizontal line Footer 2
@@ -265,47 +276,47 @@ export const reportFooter = (doc, data) => {
     if (isIGST) {
 
         doc.text(`Total Basic:`, 440, 748,)
-        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 748, 'right')
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 748, 'right')
 
         doc.text(`Total Disc:`, 440, 758,)
-        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 758, 'right')
+        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 758, 'right')
 
         doc.text(`Total IGST:`, 440, 768,)
-        doc.text(`${totalICGST.toFixed(2)}`, 567, 768, 'right')
+        doc.text(`${numberWithCommas(Number(totalICGST).toFixed(2))}`, 567, 768, 'right')
 
         doc.text(`Total GST:`, 440, 778,)
-        doc.text(` ${TotalGST.toFixed(2)}`, 567, 778, 'right')
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 778, 'right')
 
         doc.text(`Round Off:`, 440, 788,)
-        doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 788, 'right')
+        doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 788, 'right')
 
         doc.text(`TCS Amount:`, 440, 798,)
-        doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 567, 798, 'right')
+        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 798, 'right')
 
 
 
     } else {
 
         doc.text(`Total Basic:`, 440, 738,)
-        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 738, 'right')
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 738, 'right')
 
         doc.text(`Total Disc:`, 440, 748,)
-        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 748, 'right')
+        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 748, 'right')
 
         doc.text(`Total CGST:`, 440, 758)
-        doc.text(`${totalCGST.toFixed(2)}`, 567, 758, 'right')
+        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 567, 758, 'right')
 
         doc.text(`Total SGST:`, 440, 768,)
-        doc.text(`${totalSGST.toFixed(2)}`, 567, 768, 'right')
+        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 567, 768, 'right')
 
         doc.text(`Total GST:`, 440, 778,)
-        doc.text(` ${TotalGST.toFixed(2)}`, 567, 778, 'right')
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 778, 'right')
 
         doc.text(`Round Off:`, 440, 788,)
-        doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 788, 'right')
+        doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 788, 'right')
 
         doc.text(`TCS Amount:`, 440, 798,)
-        doc.text(` ${Number(data.TCSAmount).toFixed(2)}`, 567, 798, 'right')
+        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 798, 'right')
 
         var DetailsOfBankStyle = {
             didParseCell: (data1) => {
@@ -366,11 +377,6 @@ export const reportFooter = (doc, data) => {
     }
 
 
-
-
-
-
-
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
@@ -386,42 +392,12 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(8)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-         of the nature and quantity which it/these purports to be `, 34, 782,)
+         of the nature and quantity which it/these purports to be `, 34, 782)
     doc.setFontSize(10)
     doc.text(`Signature `, 280, 810,)
     doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
     doc.setFontSize(8)
 
-
-    // if (data.BankData.length > 0) {
-    //     let BankData = data.BankData[0]
-    //     doc.setFont(undefined, 'bold')
-
-    //     doc.text(`A/C No:`, 34, 755,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.AccountNo}`, 70, 755,)
-
-    //     doc.setFont(undefined, 'bold')
-
-    //     doc.text(`IFSC Code:`, 130, 755,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.IFSC}`, 175, 755,)
-
-    //     doc.setFont(undefined, 'bold')
-    //     doc.text(`Branch:`, 260, 755,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.BranchName}`, 290, 755,)
-
-    //     doc.setFont(undefined, 'bold')
-    //     doc.text(`Bank Name:`, 34, 768,)
-    //     doc.setFont(undefined, 'Normal')
-    //     doc.text(`${BankData.BankName}`, 90, 768,)
-
-    // } else {
-    //     doc.setFont(undefined, 'bold')
-    //     doc.text(`Bank Details Not Avaliable`, 34, 761,)
-    //     doc.setFont(undefined, 'Normal')
-    // }
     doc.setFont(undefined, 'bold')
     doc.text(`Rupees:`, 33, 740,)
     doc.addFont("Arial", 'Normal')
@@ -456,12 +432,15 @@ export const tableBody = (doc, data) => {
 
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
+
                 let Box = 0;
-                for (let i = 0; i < data.InvoiceItems.length; i++) {
-                    if (data.InvoiceItems[i].PrimaryUnitName === "Box") {
-                        Box++;
+
+                data.InvoiceItems.forEach((element, key) => {
+                    if (element.PrimaryUnitName === "Box") {
+                        Box = Number(Box) + Number(element.Quantity)
                     }
-                }
+                })
+
                 data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length}) (${Box} Box)`
 
                 data1.row.cells[8].colSpan = 2
@@ -554,6 +533,9 @@ export const tableBody = (doc, data) => {
         tableLineColor: "black",
         startY: initial_y,
     };
+
+    doc.line(408, data.isQR ? initial_y : initial_y, 408, 16);//vertical line header section billby 
+    doc.line(220, data.isQR ? initial_y : initial_y, 220, data.isQR ? 103 : 63);//vertical  line header section billto
 
     doc.autoTable(table.columns, table.Rows(data), options,);
     const optionsTable4 = {
@@ -683,6 +665,8 @@ export const tableBodyWithIGST = (doc, data) => {
         tableLineColor: "black",
         startY: initial_y,
     };
+    doc.line(408, data.isQR ? initial_y : initial_y, 408, 16);//vertical line header section billby 
+    doc.line(220, data.isQR ? initial_y : initial_y, 220, data.isQR ? 103 : 63);//vertical  line header section billto
 
     doc.autoTable(table.columnsWithIGST, table.RowsWithIGST(data), options,);
     const optionsTable4 = {

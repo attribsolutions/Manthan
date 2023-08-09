@@ -5,7 +5,9 @@ import {
   RoleAccessAdd_RoleDropdown_Api,
   RoleAccessAdd_List_Api,
   RoleAccessAdd_GO_Button_Api,
-  RoleAccessAdd_PageDropdown_Api, RoleAccessAdd_Save_Api, RoleAccessCopy_Save_Api,
+  RoleAccessAdd_PageDropdown_Api,
+  RoleAccessAdd_Save_Api,
+  RoleAccessCopy_Save_Api,
 
 } from "../../../helpers/backend_helper";
 import {
@@ -42,18 +44,18 @@ function* GetRoleAccessListForRoleAccessList_GenFunc({ id1, id2 }) {
 
 function* PageDropdownForRoleAccessList_GenFunc({ id1, id2 }) {
   try {
-    
+
     const response = yield call(RoleAccessAdd_PageDropdown_Api, id1, id2);
     yield put(PageDropdownForRoleAccessList_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
-  
+
   try {
-    
+
     const response = yield call(RoleAccessAdd_GO_Button_Api, id1, id2, id3);
-    
+
     const newArray = response.Data.map((i, k) => {
       i.id = k + 1;
       return i
@@ -65,7 +67,7 @@ function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
 function* AddPageHandlerForRoleAccessList_GenFunc({ id }) {
 
   try {
-    
+
     const response = yield call(RoleAccessAdd_AddPage_Button_Api, id);
     const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
     const tableList = yield select(getState);
@@ -87,9 +89,8 @@ function* saveRoleAccessAdd_GenFunc({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
-
 function* getList_RoleAccessList_GenFunc() { // get api 
-  const JsonBody = loginJsonBody();
+  const JsonBody = JSON.stringify(loginJsonBody());
   try {
     const response = yield call(RoleAccessAdd_List_Api, JsonBody);
     const newResp = response.Data.map((i, k) => {

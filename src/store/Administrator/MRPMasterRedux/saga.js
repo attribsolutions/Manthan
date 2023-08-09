@@ -16,8 +16,10 @@ function* get_MRPMaster_GenFunc() {
   try {
     const response = yield call(apiCall.MRPMaster_Get_API);
     response.Data.map(i => {
-      i["preEffectiveDate"] = i.EffectiveDate
-      i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
+
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
+      i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] = concatDateAndTime(i.EffectiveDate, i.CreatedOn);
     })
     yield put(action.getMRPList_Success(response.Data))
   } catch (error) { yield put(action.MRPApiErrorAction()) }

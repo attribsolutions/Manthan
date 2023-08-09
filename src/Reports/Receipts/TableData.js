@@ -14,7 +14,7 @@ export const Details = [
 
 
 export const ReceiptDetails = (doc, data) => {
-    debugger
+    
     let stringNumber = toWordswithoutRS(Number(data.AmountPaid))
     var ReceiptDetails = [
 

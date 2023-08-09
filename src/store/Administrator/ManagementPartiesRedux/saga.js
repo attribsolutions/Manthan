@@ -1,5 +1,5 @@
-import { call, put, takeLatest } from "redux-saga/effects";
-import { CommonConsole, loginCompanyID } from "../../../components/Common/CommonFunction";
+import { call, delay, put, takeLatest } from "redux-saga/effects";
+import { loginCompanyID } from "../../../components/Common/CommonFunction";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
@@ -8,11 +8,12 @@ function* save_ManagementParties_GenFunc({ config }) {
   try {
     const response = yield call(apiCall.Management_Parties_Post_API, config);
     yield put(action.saveManagementParties_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ManagementPartiesApiErrorAction()) }
 }
 
 function* getPartyListGenFunc({ jsonBody }) {                                   // getList API
   try {
+    yield delay(100)
     const response = yield call(apiCall.Go_Button_Post_API, jsonBody);
     response.Data.map((party) => {
       party["selectCheck"] = false
@@ -22,14 +23,14 @@ function* getPartyListGenFunc({ jsonBody }) {                                   
       return party
     });
     yield put(action.getPartyTableListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ManagementPartiesApiErrorAction()) }
 }
 
 function* getEmployeeDrodownListGenFunc() {                                   // getList API
   try {
     const response = yield call(apiCall.Employee_drodown_Post_API, { "Company": loginCompanyID() });
     yield put(action.getEmployeedropdownListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(action.ManagementPartiesApiErrorAction()) }
 }
 
 function* ManagementPartiesSaga() {

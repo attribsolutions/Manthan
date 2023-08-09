@@ -7,7 +7,8 @@ import {
   getVehicleList,
   editVehicleID,
   deleteVehicleID,
-  saveVehicleMasterSuccess
+  saveVehicleMasterSuccess,
+  getVehicleListSuccess
 } from "../../../store/Administrator/VehicleRedux/action";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
@@ -15,20 +16,17 @@ import * as url from "../../../routes/route_url";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 const VehicleList = () => {
 
   const dispatch = useDispatch();
-  const userAdminRole = _cfunc.loginUserAdminRole();
-
-
-  const [party, setParty] = useState({ value: _cfunc.loginPartyID(), label: "Select..." });
 
   const reducers = useSelector(
     (state) => ({
-      loading: state.VehicleReducer.loading,
+      goBtnLoading: state.VehicleReducer.goBtnLoading,
       listBtnLoading: state.VehicleReducer.listBtnLoading,
       tableList: state.VehicleReducer.VehicleList,
       postMsg: state.VehicleReducer.postMsg,
@@ -39,7 +37,7 @@ const VehicleList = () => {
       pageField: state.CommonPageFieldReducer.pageFieldList,
     })
   );
-  const { pageField, } = reducers
+  const { pageField, goBtnLoading } = reducers
 
   const action = {
     getList: getVehicleList,
@@ -55,55 +53,62 @@ const VehicleList = () => {
     const page_Id = pageId.VEHICLE_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-
-    if (!userAdminRole) { goButtonHandler() }
+    if (!(_cfunc.loginSelectedPartyID() === 0)) {
+      goButtonHandler()
+    }
+    return () => {
+      dispatch(getVehicleListSuccess([]));
+      dispatch(commonPageFieldListSuccess(null))
+    }
   }, []);
 
   const goButtonHandler = () => {
+    try {
+      if (_cfunc.loginSelectedPartyID() === 0) {
+        customAlert({ Type: 3, Message: "Please Select Party" });
+        return;
+      };
+      const jsonBody = {
+        ..._cfunc.loginJsonBody(),
+        PartyID: _cfunc.loginSelectedPartyID()
+      };
 
-    const jsonBody = JSON.stringify({
-      CompanyID: _cfunc.loginCompanyID(),
-      PartyID: party.value,
-    });
-    dispatch(getVehicleList(jsonBody));
-  }
-  const partyOnChngeHandler = (e) => {
-    setParty(e)
+      dispatch(getVehicleList(jsonBody));
+    } catch (error) { }
+    return
+  };
+
+  const partyOnChngeButtonHandler = () => {
+    dispatch(getVehicleListSuccess([]));
   }
 
   return (
-
     <React.Fragment>
+      <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       <div className="page-content">
-        {userAdminRole &&
-          <div className="mb-2">
-            <PartyDropdown_Common
-              partySelect={party}
-              setPartyFunc={partyOnChngeHandler}
-              goButtonHandler={goButtonHandler}
-            />
-          </div>
-        }
+
+        <PartyDropdown_Common
+          goBtnLoading={goBtnLoading}
+          goButtonHandler={goButtonHandler}
+          changeButtonHandler={partyOnChngeButtonHandler}
+        />
 
         {
-          reducers.loading ?
-            <Listloader />
-            :
-            (pageField) ?
-              <div className="mt-n1">
-                <CommonPurchaseList
-                  action={action}
-                  reducers={reducers}
-                  showBreadcrumb={false}
-                  MasterModal={VehicleMaster}
-                  masterPath={url.VEHICLE}
-                  newBtnPath={url.VEHICLE}
-                  ButtonMsgLable={"Vehicle"}
-                  deleteName={"VehicleNumber"}
-                  goButnFunc={goButtonHandler}
-                />
-              </div>
-              : <><Listloader /></>
+          (pageField) &&
+          <div className="mt-n1">
+            <CommonPurchaseList
+              action={action}
+              reducers={reducers}
+              showBreadcrumb={false}
+              MasterModal={VehicleMaster}
+              masterPath={url.VEHICLE}
+              newBtnPath={url.VEHICLE}
+              ButtonMsgLable={"Vehicle"}
+              deleteName={"VehicleNumber"}
+              goButnFunc={goButtonHandler}
+            />
+          </div>
+
         }
       </div>
     </React.Fragment>

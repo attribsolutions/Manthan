@@ -16,7 +16,6 @@ import {
     commonPageFieldSuccess,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -52,11 +51,13 @@ import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Ret
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { calculateSalesReturnFunc } from "../../Sale/SalesReturn/SalesCalculation";
+import { C_Select } from "../../../CustomValidateForm";
 
 const Credit = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const loginSystemSetting = _cfunc.loginSystemSetting()
 
     const fileds = {
         CRDRNoteDate: currentDate_ymd,
@@ -78,6 +79,7 @@ const Credit = (props) => {
     const [Table, setTable] = useState([]);
     const [Table1, setTable1] = useState([]);
     const [TotalSum, setTotalSum] = useState(0);
+    const [IsSystemSetting, setIsSystemSetting] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -90,8 +92,10 @@ const Credit = (props) => {
         ReceiptModeList,
         InvoiceReturn,
         saveBtnloading,
+        invoiceNoDropDownLoading,
         userAccess } = useSelector((state) => ({
             saveBtnloading: state.CredietDebitReducer.saveBtnloading,
+            invoiceNoDropDownLoading: state.SalesReturnReducer.invoiceNoDropDownLoading,
             postMsg: state.CredietDebitReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             CreditDebitType: state.CredietDebitReducer.CreditDebitType,
@@ -118,6 +122,7 @@ const Credit = (props) => {
     const { fieldLabel } = state;
     let { Data = [] } = ReceiptGoButton;
     const { InvoiceItems = [] } = InvoiceReturn;
+
     const location = { ...history.location };
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
     const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
@@ -140,6 +145,12 @@ const Credit = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
+    useEffect(() => {
+        if (loginSystemSetting.IsAmountadjustedinInvoice === "0") {
+            setIsSystemSetting(true)
+        }
+    }, []);
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -288,9 +299,12 @@ const Credit = (props) => {
     };
 
     function CustomerOnChange(e) { // Customer dropdown function
+        dispatch(Invoice_Return_ID_Success([]))
         setState((i) => {
             i.values.GrandTotal = 0
+            i.values.InvoiceNO = ""
             i.hasValid.GrandTotal.valid = true;
+            i.hasValid.InvoiceNO.valid = true;
             return i
         })
 
@@ -299,6 +313,7 @@ const Credit = (props) => {
             CustomerID: e.value,
             InvoiceID: ""
         });
+
         const body = { jsonBody, pageMode }
         dispatch(ReceiptGoButtonMaster(body));
         const jsonBody1 = JSON.stringify({
@@ -330,23 +345,31 @@ const Credit = (props) => {
     };
 
     function AmountPaid_onChange(event) {
-        let input = event.target.value
-        let sum = 0
-        Data.forEach(element => {
-            sum = sum + Number(element.BalanceAmount)
-        });
 
-        let v1 = Number(sum);
-        let v2 = Number(input)
-        if (!(v1 >= v2)) {
-            event.target.value = Number(v1.toFixed(2));
+        if (IsSystemSetting) {
+            onChangeText({ event, state, setState })
         }
-        onChangeText({ event, state, setState })
-        AmountPaidDistribution(event.target.value)
-        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${_cfunc.amountCommaSeparateFunc(event.target.value)}`))
+        else {
+            let input = event.target.value
+            let sum = 0
+            Data.forEach(element => {
+                sum = sum + Number(element.BalanceAmount)
+            });
+
+            let v1 = Number(sum);
+            let v2 = Number(input)
+            if (!(v1 >= v2)) {
+                event.target.value = Number(v1.toFixed(2));
+            }
+            onChangeText({ event, state, setState })
+
+            AmountPaidDistribution(event.target.value)
+            dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${_cfunc.amountCommaSeparateFunc(event.target.value)}`))
+        }
     }
 
     function AmountPaidDistribution(val1) {
+
         let value = Number(val1)
         let Amount = value
         Data.map((index) => {
@@ -446,7 +469,7 @@ const Credit = (props) => {
                         key={`Qty${row.Item}${key}`}
                         id={`Qty${key}`}
                         cpattern={onlyNumberRegx}
-                        defaultValue={null}
+                        defaultValue={pageMode === mode.view ? row.Quantity : ""}
                         autoComplete="off"
                         className=" text-end"
                         onChange={(e) => {
@@ -583,7 +606,7 @@ const Credit = (props) => {
     ];
 
     const saveHandeller = async (event) => {
-        const arr1 = []
+        const tableItemArray = []
         event.preventDefault();
         const btnId = event.target.id;
         if ((values.Amount === 0) || (values.Amount === "NaN")) {
@@ -635,7 +658,7 @@ const Credit = (props) => {
                     IGSTPercentage: index.IGSTPercentage,
 
                 }
-                arr1.push(CRDRNoteItems)
+                tableItemArray.push(CRDRNoteItems)
             }
 
         })
@@ -655,15 +678,15 @@ const Credit = (props) => {
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
                     Customer: values.Customer.value,
-                    NoteType: arr1.length === 0 ? CreditDebitTypeId.id : GoodsCreditType.id,
+                    NoteType: tableItemArray.length === 0 ? CreditDebitTypeId.id : GoodsCreditType.id,
                     GrandTotal: values.GrandTotal,
                     Narration: values.Narration,
                     NoteReason: values.NoteReason.value,
-                    CRDRNoteItems: arr1 ? arr1 : [],
+                    CRDRNoteItems: tableItemArray ? tableItemArray : [],
                     Party: loginPartyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
-                    CRDRInvoices: FilterReceiptInvoices,
+                    CRDRInvoices: !(IsSystemSetting) ? FilterReceiptInvoices : [],
                 })
                 dispatch(saveCredit({ jsonBody, btnId }));
             }
@@ -818,13 +841,14 @@ const Credit = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.InvoiceNO}</Label>
                                         <Col sm="7">
-                                            <Select
+                                            <C_Select
                                                 id="InvoiceNO "
                                                 name="InvoiceNO"
                                                 value={values.InvoiceNO}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={InvoiceNo_Options}
+                                                isLoading={invoiceNoDropDownLoading}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                     InvoiceNoOnChange(hasSelect)
@@ -837,6 +861,7 @@ const Credit = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
+
                             </Row>
                         </div>
 
@@ -886,39 +911,40 @@ const Credit = (props) => {
                             )
                             }
                         </ToolkitProvider>
+
+                        {!(IsSystemSetting) && <ToolkitProvider
+
+                            keyField="id"
+                            data={Table.length <= 0 ? Data : Table}
+                            columns={pagesListColumns}
+
+                            search
+                        >
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    <div className="table">
+                                        <BootstrapTable
+                                            keyField={"id"}
+                                            bordered={true}
+                                            striped={false}
+                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                            classes={"table align-middle table-nowrap table-hover"}
+                                            headerWrapperClasses={"thead-light"}
+
+                                            {...toolkitProps.baseProps}
+
+                                        />
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
+
+                                </React.Fragment>
+                            )
+                            }
+                        </ToolkitProvider>}
+
+
                         {
-                            <ToolkitProvider
-
-                                keyField="id"
-                                data={Table.length <= 0 ? Data : Table}
-                                columns={pagesListColumns}
-
-                                search
-                            >
-                                {toolkitProps => (
-                                    <React.Fragment>
-                                        <div className="table">
-                                            <BootstrapTable
-                                                keyField={"id"}
-                                                bordered={true}
-                                                striped={false}
-                                                noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                classes={"table align-middle table-nowrap table-hover"}
-                                                headerWrapperClasses={"thead-light"}
-
-                                                {...toolkitProps.baseProps}
-
-                                            />
-
-                                            {mySearchProps(toolkitProps.searchProps)}
-                                        </div>
-
-                                    </React.Fragment>
-                                )
-                                }
-                            </ToolkitProvider>}
-
-                        {Data.length > 0 ?
+                            // Data.length > 0 ?
                             <FormGroup>
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                     <SaveButton pageMode={pageMode}
@@ -929,10 +955,9 @@ const Credit = (props) => {
                                         module={"Receipts"}
 
                                     />
-
                                 </Col>
                             </FormGroup >
-                            : null
+                            // : null
                         }
 
                     </form >

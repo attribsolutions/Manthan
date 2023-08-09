@@ -1,7 +1,7 @@
 
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
-import { date_dmy_func, convertOnlyTimefunc } from "../../components/Common/CommonFunction";
+import { date_dmy_func, convertOnlyTimefunc, CurrentTime, currentDate_dmy } from "../../components/Common/CommonFunction";
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
@@ -12,16 +12,12 @@ export const pageBorder = (doc) => {
 }
 export const pageHeder = (doc, data) => {
 
-    // doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
-
     doc.text('Van Loading Sheet SKU Wise Summary', 100, 40,)
 }
 export const pageHeder1 = (doc, data) => {
-
-    // doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
@@ -38,19 +34,9 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 10, 30, 10);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
     doc.line(570, 100, 30, 100);//horizontal line middle address routes 
-
-    // doc.line(409, 100, 30, 100) //horizontal line 4
     doc.line(30, 789, 30, 10);//vertical left 1
     doc.line(570, 789, 570, 10);//vertical left 2
     doc.line(408, 60, 408, 10);//vertical right 1
-    // doc.line(250, 134, 250, 80);//vertical right 2
-
-
-    // doc.line(250, 100, 408, 100) //horizontal line Current date upper
-    // doc.line(250, 117, 408, 117) //horizontal line Current date upper
-    // doc.line(408, 107, 570, 107) //horizontal line Current date upper
-
-
 
     var options3 = {
         didParseCell: (data1) => {
@@ -67,7 +53,7 @@ export const reportHeder1 = (doc, data) => {
         },
 
         margin: {
-            // top: 20, left: 35, right: 35,// bottom:100 /
+            left: 30,
         },
         showHead: 'always',
         theme: 'plain',
@@ -97,7 +83,7 @@ export const reportHeder1 = (doc, data) => {
             2: {
                 valign: "top",
                 columnWidth: 65,
-                halign: 'left',
+                halign: 'right',
             },
             3: {
                 columnWidth: 140,
@@ -105,7 +91,7 @@ export const reportHeder1 = (doc, data) => {
             },
             4: {
                 columnWidth: 60,
-                halign: 'left',
+                halign: 'right',
             },
             5: {
                 columnWidth: 120,
@@ -121,7 +107,7 @@ export const reportHeder1 = (doc, data) => {
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(doc, data), options3);
     const YAxis = doc.previousAutoTable.finalY
-    doc.line(570, YAxis, 30, YAxis);//horizontal line table 
+    doc.line(570, YAxis, 30, YAxis);
 
 }
 
@@ -156,17 +142,17 @@ export const tableBody = (doc, data) => {
 
                 data1.row.cells[3].styles.fontStyle = "bold"
                 data1.row.cells[5].styles.fontStyle = "bold"
-                // data1.row.cells[6].styles.fontStyle = "bold"
+
 
                 data1.row.cells[1].styles.fontSize = 9
                 data1.row.cells[3].styles.fontSize = 9
                 data1.row.cells[5].styles.fontSize = 9
-                // data1.row.cells[6].styles.fontSize = 9
+
             }
         },
 
         margin: {
-            left: 30, right: 25,//200 bottom
+            left: 30, right: 25,
         },
         theme: 'grid',
         headerStyles: {
@@ -176,7 +162,7 @@ export const tableBody = (doc, data) => {
             fontStyle: 'bold',
             halign: 'center',
             fillColor: "white",
-            textColor: [0, 0, 0], //Black     
+            textColor: [0, 0, 0],
             fontSize: 8,
             rowHeight: 10,
             lineColor: [0, 0, 0]
@@ -198,10 +184,10 @@ export const tableBody = (doc, data) => {
                 // halign: 'right',
 
             },
-            // 2: {
-            //     columnWidth: 80,
-            //     halign: 'right',
-            // },
+            2: {
+                columnWidth: 80,
+                halign: 'right',
+            },
             3: {
                 columnWidth: 80,
                 halign: 'right',
@@ -215,10 +201,7 @@ export const tableBody = (doc, data) => {
                 columnWidth: 80,
                 halign: 'right',
             },
-            // 6: {
-            //     columnWidth: 70,
-            //     halign: 'right',
-            // },
+
 
         },
         tableLineColor: "black",
@@ -316,7 +299,6 @@ export const tableBody = (doc, data) => {
     reportHeder2(doc, data);
     reportHeder3(doc, data);
     doc.autoTable(table.columns1, table.Rows1(data), options1);
-
     // Auto table for footer
     const optionsTable4 = {
         margin: {
@@ -338,6 +320,21 @@ export const tableBody = (doc, data) => {
     })
 
 
+}
+export const pageFooter = (doc, data) => {
+
+
+    const pageCount = doc.internal.getNumberOfPages()
+    doc.setFont('helvetica', 'Normal')
+    doc.setFontSize(8)
+    for (var i = 1; i <= pageCount; i++) {
+        doc.setPage(i)
+        doc.setFont('helvetica', 'Normal')
+        doc.text('Page ' + String(i) + ' of ' + String(pageCount), 520, 828,)
+
+        doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 828,)
+        console.log("aaa", doc.internal.pageSize.height)
+    }
 }
 
 

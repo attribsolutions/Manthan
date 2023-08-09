@@ -103,7 +103,6 @@ export const ROUTES_LIST = 150
 export const SALESMAN = 151
 export const SALESMAN_LIST = 152
 
-
 export const IMPORT_EXCEL_FIELD_MAP = 157
 
 export const IMPORT_MASTER_MAP = 194
@@ -116,7 +115,6 @@ export const IMPORT_FIELD_ADD_LIST = 189
 
 export const IMPORT_EXCEL_PARTY_MAP = 194
 
-
 export const ROUTE_UPDATE = 159
 export const PARTY_MASTER_BULK_UPDATE = 161
 
@@ -128,13 +126,14 @@ export const BANK_LIST = 176
 export const CITY = 200
 export const CITY_LIST = 202
 
-
 export const INVOICE_CONFIGURATION = 206
-
 
 export const BANK_ASSIGN = 182
 
 export const PRODUCT_MARGIN_REPORT = 198
+
+export const DISCOUNT_MASTER = 212
+export const DISCOUNT_LIST = 213
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
@@ -180,7 +179,10 @@ export const INVOICE_1 = 121
 export const INVOICE_LIST_1 = 122
 
 export const STOCK_ENTRY = 205
+
 export const STOCK_REPORT = 208
+
+export const STOCK_REPORT_1 = 216
 
 export const PURCHASE_RETURN = 209
 export const PURCHASE_RETURN_LIST = 210
@@ -210,6 +212,8 @@ export const LOADING_SHEET_LIST_UPDATE = 179
 export const SALES_RETURN = 186
 export const SALES_RETURN_LIST = 187
 
+export const PURCHASE_RETURN_MODE_3 = 211
+
 //**************************** Accounting ***********************************//
 export const CREDIT_LIST = 191
 export const CREDIT = 190
@@ -232,3 +236,15 @@ export const SAP_LEDGER = 197
 //**************************** Reports ***********************************//
 
 export const ORDER_SUMMARY_REPORT = 203
+
+export const GENERIC_SALE_REPORT = 214
+
+export const RETAILER_DATA_REPORT = 215
+
+export const CLAIM_SUMMARY_REPORT = 217
+
+export const DAMAGE_STOCK_REPORT = 220
+
+export const DELETE_INVOICE_DATA_EXPORT = 221
+
+

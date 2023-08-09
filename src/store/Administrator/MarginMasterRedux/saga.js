@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import {concatDateAndTime} from "../../../components/Common/CommonFunction";
+import { concatDateAndTime } from "../../../components/Common/CommonFunction";
+// import {concatDateAndTime} from "../../../components/Common/CommonFunction";
 import {
   delete_MarginList_API,
   GetMarginList_For_Listpage,
@@ -35,8 +36,10 @@ function* get_Margin_GenFunc() {
   try {
     const response = yield call(GetMarginList_For_Listpage);
     response.Data.map(i => {
-      i["preEffectiveDate"] = i.EffectiveDate
-      i.EffectiveDate = concatDateAndTime(i.EffectiveDate, i.CreatedOn)
+
+      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
+      i["transactionDate"] = i.CreatedOn;
+      i["transactionDateLabel"] = concatDateAndTime(i.EffectiveDate, i.CreatedOn);
     })
     yield put(getMarginListSuccess(response.Data))
   } catch (error) { yield put(MarginApiErrorAction()) }
@@ -54,7 +57,7 @@ function* delete_Margin_GenFunc({ config }) {
 function* goButton_Margin_GenFunc({ data }) {
   const { jsonBody, pathname, btnmode, rowData } = data
   try {
-    
+
     const response = yield call(GoButton_Post_API_For_MarginMaster, jsonBody);
     response.pageMode = btnmode
     response.pathname = pathname

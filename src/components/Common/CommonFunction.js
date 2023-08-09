@@ -4,9 +4,7 @@ import { createBrowserHistory } from 'history';
 import * as mode from "../../routes/PageMode"
 import $ from 'jquery';
 
-
 export const history = createBrowserHistory();
-
 
 function isDateInitial(isdate) {
 
@@ -14,7 +12,7 @@ function isDateInitial(isdate) {
 
   let month = current.getMonth() + 1;
   let dd = current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`;
-  let mm = -month < 10 ? `0${month}` : `${month}`;
+  let mm = month < 10 ? `0${month}` : `${month}`;
   let yy = current.getFullYear();
 
   return { dd, mm, yy }
@@ -97,12 +95,34 @@ export function CurrentTime() {
 
 }
 
+
+export const getFirstAndLastDateOfMonth = (inputDate) => {
+  const [year, month] = inputDate.split('-').map(Number);
+  const firstDate = new Date(year, month - 1, 1);
+  const lastDate = new Date(year, month, 0);
+  const formattedFirstDate = `${year}-${String(month).padStart(2, '0')}-01`;
+  const formattedLastDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDate.getDate()).padStart(2, '0')}`;
+  return {
+    firstDate: formattedFirstDate,
+    lastDate: formattedLastDate
+  };
+}
+
+export const getCurrentMonthAndYear = () => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+
+  return `${year}-${month}`;
+}
+
 export const amountCommaSeparateFunc = (amount) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   return Number(amount).toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 };
+
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
@@ -120,9 +140,10 @@ export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company 
 
 
 export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+
   try {
-    const detail = JSON.parse(localStorage.getItem("roleId"));
-    return (detail.Role === 2);
+    const detail = loginUserDetails();
+    return (detail.PartyType === "Company Division");
   } catch (e) {
     CommonConsole("Common loginUserAdminRole  Error");
   }
@@ -130,8 +151,9 @@ export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Compan
 };
 
 export const loginRoleID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+
   try {
-    const detail = JSON.parse(localStorage.getItem("roleId"));
+    const detail = loginUserDetails();
     return detail.Role;
   } catch (e) {
     CommonConsole("Common Role ID  Error");
@@ -168,8 +190,18 @@ export const loginCompanyName = () => { //+++++++++++++++++++++ Session Company 
 };
 
 export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
+
   try {
-    return JSON.parse(localStorage.getItem("roleId")).Party_id;
+    return loginUserDetails().Party_id;
+  } catch (e) {
+    CommonConsole("Common login PartyID Func  Error");
+  }
+  return 0;
+};
+
+export const loginSelectedPartyID = () => {//+++++++++++++++++++++ Session common party dropdown id +++++++++++++++++++++++++++++++
+  try {
+    return JSON.parse(localStorage.getItem("selectedParty")).value;
   } catch (e) {
     CommonConsole("Common login PartyID Func  Error");
   }
@@ -177,8 +209,9 @@ export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID 
 };
 
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
+
   try {
-    return JSON.parse(localStorage.getItem("roleId")).Employee_id;
+    return loginUserDetails().Employee_id;
   } catch (e) {
     alert("Common login EmployeeID Func  Error");
   }
@@ -206,10 +239,10 @@ export const loginCompanyGroup = () => {//+++++++++++++++++++++ Session loginPar
 
 export const loginIsSCMParty = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
-    const detail = JSON.parse(localStorage.getItem("roleId"));
+    const detail = loginUserDetails();
     return (detail.IsSCMPartyType === 0) || (detail.IsSCMPartyType === null);
   } catch (e) {
-    CommonConsole("Common loginUserAdminRole  Error");
+    CommonConsole("Common loginIsSCMParty Error");
   }
   return false;
 };
@@ -223,9 +256,10 @@ export const loginSystemSetting = () => { //+++++++++++++++++++++ Session Compan
   }
   return "";
 };
+
 export const loginUserGSTIN = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
-    return JSON.parse(localStorage.getItem("roleId")).GSTIN;
+    return loginUserDetails().GSTIN;
   } catch (e) {
     CommonConsole("Common loginUserGSTIN func  Error");
   }
@@ -234,7 +268,10 @@ export const loginUserGSTIN = () => { //+++++++++++++++++++++ Session Company Id
 
 
 
-export const loginJsonBody = () => ({
+
+
+
+export const loginJsonBody = () => ({ //+++++++++++++++++++++ loginJsonBody for Filter API +++++++++++++++++++++++++++++
   UserID: loginUserID(),
   RoleID: loginRoleID(),
   CompanyID: loginCompanyID(),
@@ -242,7 +279,6 @@ export const loginJsonBody = () => ({
   IsSCMCompany: loginIsSCMCompany(),
   CompanyGroup: loginCompanyGroup(),
 });
-
 
 export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
   gstin1 = String(gstin1) || ""
@@ -280,7 +316,7 @@ export function metaTagLabel(userPageAccess = '') {
 
 }
 export function CommonConsole(msg1, msg2 = '', msg3 = '') {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
-  console.log("CommonConsole =>:", msg1, msg2, msg3);
+  console.log(msg1, msg2, msg3);
 }
 
 export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Function +++++++++++++++++++++++++++++++
@@ -314,7 +350,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
 }
 
 export async function CheckAPIResponse({ method, url, response = {}, body, error = '' }) {
-  
+
   const { data = {} } = response;
   const statusCode = data.StatusCode;
   const MessgeAlreadyShow = error.MessgeAlreadyShow || false

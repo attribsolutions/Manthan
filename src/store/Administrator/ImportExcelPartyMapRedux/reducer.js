@@ -2,25 +2,24 @@ import {
   INVOICE_EXCEL_UPLOAD_SAVE_SUCCESS,
   GO_BUTTON_IMPORT_EXCEL_PARTY_MAP_SUCCESS,
   SAVE_IMPORT_EXCEL_PARTY_MAP_SUCCESS,
-  PARTY_EXCEL_UPLOAD_SAVE_SUCCESS,
   RETAILER_EXCEL_UPLOAD_SAVE_SUCCESS,
   SAVE_IMPORT_EXCEL_PARTY_MAP,
   GO_BUTTON_IMPORT_EXCEL_PARTY_MAP,
   RETAILER_EXCEL_UPLOAD_API_ERROR_ACTION,
+  RETAILER_EXCEL_UPLOAD_SAVE,
+  INVOICE_EXCEL_UPLOAD_SAVE,
 } from "./actionType";
 
 const INIT_STATE = {
-  saveBtnloading: false,
-  listBtnLoading: false,
+
   postMsg: { Status: false },
   addGoButton: [],
-  groupList: [],
-  deleteMsg: { Status: false },
-  editData: { Status: false },
-  updateMsg: { Status: false },
   invoiceExcelUploadMsg: { Status: false },
-  partyExcelUploadMsg: { Status: false }
-
+  partyExcelUploadMsg: { Status: false },
+  saveBtnLoading: false,
+  listBtnLoading: false,
+  partyUploadSaveLoading: false,
+  invoiceUploadSaveLoading:false
 }
 
 const ImportExcelPartyMap_Reducer = (state = INIT_STATE, action) => {
@@ -38,36 +37,55 @@ const ImportExcelPartyMap_Reducer = (state = INIT_STATE, action) => {
         addGoButton: action.payload,
         listBtnLoading: false,
       }
+    // *********************************************************
 
     case SAVE_IMPORT_EXCEL_PARTY_MAP:
       return {
         ...state,
-        saveBtnloading: true,
+        saveBtnLoading: true,
       }
 
     case SAVE_IMPORT_EXCEL_PARTY_MAP_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
-        saveBtnloading: false,
+        saveBtnLoading: false,
+      }
+    // *********************************************************
+    case INVOICE_EXCEL_UPLOAD_SAVE:
+      return {
+        ...state,
+        invoiceUploadSaveLoading: true,
       }
 
     case INVOICE_EXCEL_UPLOAD_SAVE_SUCCESS:
       return {
         ...state,
+        invoiceUploadSaveLoading: false,
         invoiceExcelUploadMsg: action.payload,
+      }
+    // *********************************************************
+
+    case RETAILER_EXCEL_UPLOAD_SAVE:
+      return {
+        ...state,
+        partyUploadSaveLoading: true,
       }
 
     case RETAILER_EXCEL_UPLOAD_SAVE_SUCCESS:
       return {
         ...state,
+        partyUploadSaveLoading: false,
         partyExcelUploadMsg: action.payload,
       }
+    // *********************************************************
 
     case RETAILER_EXCEL_UPLOAD_API_ERROR_ACTION:
       return {
         ...state,
-        saveBtnloading: false,
+        invoiceUploadSaveLoading: false,
+        partyUploadSaveLoading: false,
+        saveBtnLoading: false,
         listBtnLoading: false,
       };
     default:

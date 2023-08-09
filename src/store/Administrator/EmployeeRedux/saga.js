@@ -63,7 +63,7 @@ function* Save_Employee_GenFunc({ config }) { // post api
 
 function* Get_EmployeeList_GenFunc() { // get api  
   try {
-    const filters = loginJsonBody();
+    const filters = JSON.stringify(loginJsonBody());
     const response = yield call(get_EmployeelistApi, filters);
     yield put(getEmployeelistSuccess(response.Data));
   } catch (error) { yield put(EmployeeApiErrorAction()) }

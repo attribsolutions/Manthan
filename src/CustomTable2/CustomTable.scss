@@ -1,0 +1,24 @@
+ #c__pagination {
+     list-style: none;
+     display: flex;
+     justify-content: end;
+
+ }
+ #c__pagination li {
+         display: inline-block;
+         padding: 5px 10px;
+         margin: 0 2px;
+         border-radius: 35%;
+         cursor: pointer;
+         transition: background-color 0.3s ease;
+     }
+
+     #c__pagination li:hover {
+         background-color: #ddd;
+     }
+
+     #c__pagination li.active {
+         background-color: rgb(72, 90, 247);
+         color: #fff;
+     }
+ 

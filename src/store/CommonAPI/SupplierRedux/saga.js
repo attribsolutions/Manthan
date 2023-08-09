@@ -33,6 +33,7 @@ import {
 
 import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
+import { orderApiErrorAction } from "../../actions";
 
 function* supplierAddressGenFunc({ editId }) {
   const config = { editId: editId }
@@ -57,7 +58,10 @@ function* supplierAddressGenFunc({ editId }) {
     newArr = [...first, ...secd]
 
     yield put(getSupplierAddressSuccess(newArr));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 // OrderType Dropdown
@@ -65,7 +69,10 @@ function* OrderType_GenFunc() {
   try {
     const response = yield call(get_OrderType_Api);
     yield put(getOrderTypeSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* getVendorGenFunc() {
@@ -73,26 +80,40 @@ function* getVendorGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
     yield put(GetVenderSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
-function* getSupplierGenFunc() {
-
+function* getSupplierGenFunc({ jsonBody = '' }) {
+  
+  const { PartyID = loginPartyID() } = jsonBody
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": PartyID, "Company": loginCompanyID(), Route: "" });
     yield put(getSupplierSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* getCustomerGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
     yield put(GetCustomerSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* vendorSupplierCustomer_genFunc({ data }) {
-  const { subPageMode, RouteID = "" } = data
+  const {
+    subPageMode,
+    RouteID = "",
+    PartyID = loginPartyID(),
+    Company = loginCompanyID() } = data
 
   let response;
 
@@ -105,14 +126,16 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.GRN_STP_3
     || subPageMode === url.GRN_LIST_3
     || subPageMode === url.PURCHASE_RETURN_LIST
-    || subPageMode === url.PURCHASE_RETURN);
+    || subPageMode === url.PURCHASE_RETURN
+    || subPageMode === url.PURCHASE_RETURN_MODE_3);
 
   const isCustomer = (subPageMode === url.ORDER_4                 //Customer mode 3
     || subPageMode === url.ORDER_LIST_4
     || subPageMode === url.INVOICE_1
     || subPageMode === url.INVOICE_LIST_1
+    || subPageMode === url.PARTY_LEDGER
 
-    || subPageMode === url.PARTY_LEDGER);
+  );
 
 
   const isDivisions = (subPageMode === url.IB_ORDER //divisions mode 4
@@ -123,20 +146,29 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.INWARD_LIST
   );
 
-  const json = { "PartyID": loginPartyID(), "Company": loginCompanyID() }
+  const isPartyWithoutRetailers = (subPageMode === url.CLAIM_SUMMARY_REPORT)
+
+  const jsonBody = {
+    "PartyID": PartyID,
+    "Company": Company,
+    "Route": RouteID
+  }
 
   try {
     if (isVender) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 1, Route: RouteID });//vendor mode 1
+      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 1, }));//vendor mode 1
     }
     else if (isSuppiler) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 2, Route: RouteID });//supplier mode 2
+      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 2, }));//supplier mode 2
     }
     else if (isCustomer) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 3, Route: RouteID });//Customer mode 3
+      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 3, }));//Customer mode 3
     }
     else if (isDivisions) {
-      response = yield call(VendorSupplierCustomer, { ...json, Type: 4, Route: RouteID });//divisions mode 4
+      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 4, }));//divisions mode 4
+    }
+    else if (isPartyWithoutRetailers) {
+      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 5, }));//divisions mode 4
     }
     else {
       response = { Data: [] }
@@ -144,14 +176,20 @@ function* vendorSupplierCustomer_genFunc({ data }) {
 
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
   }
-  catch (e) { }
+  catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* SSDD_List_under_Company_GenFunc() {
   try {
     const response = yield call(SSDD_List_under_Company_API, { "Type": 3, "PartyID": loginPartyID(), "CompanyID": loginCompanyID() });
     yield put(SSDD_List_under_Company_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* Retailer_List_GenFunc({ data }) {
@@ -159,7 +197,10 @@ function* Retailer_List_GenFunc({ data }) {
   try {
     const response = yield call(Retailer_List_under_Company_PartyAPI, data);
     yield put(Retailer_List_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* Party_Dropdown_List_GenFunc({ loginEmployeeID }) {
@@ -167,7 +208,10 @@ function* Party_Dropdown_List_GenFunc({ loginEmployeeID }) {
   try {
     const response = yield call(Party_Dropdown_Get_API, loginEmployeeID);
     yield put(Party_Dropdown_List_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
 }
 
 function* SupplierSaga() {

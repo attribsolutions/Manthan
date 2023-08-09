@@ -63,7 +63,7 @@ const BreadcrumbNew = () => {
     var keysValues = {}
 
     if (!(downBtnData === undefined)) {
-    
+
       if ((downBtnData.length > 0)) {
         const propertyNames = Object.keys(downBtnData[0]);
         setDownListKey(propertyNames)
@@ -75,7 +75,7 @@ const BreadcrumbNew = () => {
   }, [downBtnData])
 
   const DownloadInExcelButtonHanler = (event, values) => {
-  
+
     let list = []
     let object1 = {}
     var selectedValues = Object.keys(values);
@@ -99,7 +99,7 @@ const BreadcrumbNew = () => {
   }
 
   // function OnChangeFunc(event, value, key) {
-   
+
   //   var data = downListKey.map((i, key) => { return key })
   //   console.log(data)
   //   if (value === "SelectAll") {
@@ -108,6 +108,11 @@ const BreadcrumbNew = () => {
   //     })
   //   }
   // }
+
+  function getScreenWidth() {
+    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  }
+  // const screenWidth = getScreenWidth();
 
   function ExcelCheckBox() {
     const arrDiv = []
@@ -127,7 +132,7 @@ const BreadcrumbNew = () => {
                     return (index === i) ? true : false
                   })}
                   name={index}
-                  // onChange={(e) => { OnChangeFunc(e.target.checked, index, key) }}
+                // onChange={(e) => { OnChangeFunc(e.target.checked, index, key) }}
                 />&nbsp;&nbsp;&nbsp;
                 <label className="form-label text-black"> {index} </label>
               </div>
@@ -144,7 +149,7 @@ const BreadcrumbNew = () => {
       <header id="page-topbar1" style={{ zIndex: "1" }}  >
         <div className="navbar-header blur1" style={{ paddingRight: "-10px", zIndex: "-1" }}>
           <div className="d-flex" >
-            <div className="navbar-brand-box" style={{ backgroundColor: "white" }} ></div>
+            <div className="navbar-brand-box d-none d-lg-block" style={{ backgroundColor: "white" }} ></div> 
             <div style={{ paddingLeft: "7px" }} >
 
               {
@@ -240,7 +245,7 @@ const BreadcrumbNew = () => {
           </AvForm>
         </div>
       </Modal>
-    </React.Fragment>
+    </React.Fragment >
   )
 
 }

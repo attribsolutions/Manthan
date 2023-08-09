@@ -17,7 +17,7 @@ import {
 } from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { CustomSppiner, Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const GroupList = () => {
 
@@ -25,7 +25,7 @@ const GroupList = () => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.GroupReducer.listBtnLoading,
-      GoBtnlistloading: state.GroupReducer.loading,
+      goBtnLoading: state.GroupReducer.goBtnLoading,
       tableList: state.GroupReducer.groupList,
       editData: state.GroupReducer.editData,
       updateMsg: state.GroupReducer.updateMsg,
@@ -50,15 +50,17 @@ const GroupList = () => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getGroupList());
+
     return () => {
       dispatch(getGroupListSuccess([]));
+      dispatch(commonPageFieldListSuccess(null))
     }
   }, []);
 
-  const { pageField, GoBtnlistloading } = reducers
+  const { pageField, goBtnLoading } = reducers
   return (
     <React.Fragment>
-      <CustomSppiner isLoading={(GoBtnlistloading || !pageField)} />
+      <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       {
         (pageField) &&
         <CommonListPage

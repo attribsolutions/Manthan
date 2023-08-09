@@ -176,9 +176,8 @@ const AddressTabForm = forwardRef((props, ref) => {
                             </FormGroup>
 
                         </Col>
-                        <Col md="1">
 
-                        </Col>
+                        <Col md="1"> </Col>
                         <Col md="4">
                             <FormGroup className="mb-3">
                                 <Label htmlFor="validationCustom01">{fieldLabel.FSSAIExipry} </Label>
@@ -195,51 +194,53 @@ const AddressTabForm = forwardRef((props, ref) => {
 
                         </Col>
 
+                    </Row>
+
+
+                    <Row >
+                        <Col md="4">
+                            <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">{fieldLabel.PIN} </Label>
+                                <Input
+                                    name="PIN"
+                                    value={values.PIN}
+                                    type="text"
+                                    className={isError.PIN.length > 0 ? "is-invalid form-control" : "form-control"}
+                                    placeholder="Please Enter PIN"
+                                    autoComplete='off'
+                                    onChange={(event) => {
+                                        onChangeText({ event, state, setState })
+                                    }}
+                                />
+                                {isError.PIN.length > 0 && (
+                                    <span className="invalid-feedback">{isError.PIN}</span>
+                                )}
+                            </FormGroup>
+                        </Col>
+
                         <Col md="1"></Col>
 
-                        <Row className='col col-12'>
-                            <Col md="4">
-                                <FormGroup className="mb-3">
-                                    <Label htmlFor="validationCustom01">{fieldLabel.PIN} </Label>
-                                    <Input
-                                        name="PIN"
-                                        value={values.PIN}
-                                        type="text"
-                                        className={isError.PIN.length > 0 ? "is-invalid form-control" : "form-control"}
-                                        placeholder="Please Enter PIN"
-                                        autoComplete='off'
-                                        onChange={(event) => {
-                                            onChangeText({ event, state, setState })
-                                        }}
-                                    />
-                                    {isError.PIN.length > 0 && (
-                                        <span className="invalid-feedback">{isError.PIN}</span>
-                                    )}
-                                </FormGroup>
-                            </Col>
+                        <Col md="4" >
+                            <FormGroup >
+                                <Label >FSSI Document</Label>
+                                <Input type="file"
+                                    className="form-control "
+                                    name="image"
+                                    id="file"
+                                    accept=".jpg, .jpeg, .png ,.pdf"
+                                    onChange={(event) => { onchangeHandler(event) }}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </Row>
 
-                            <Col md="1"></Col>
-
-                            <Col md="4" >
-                                <FormGroup >
-                                    <Label >FSSI Document</Label>
-                                    <Input type="file"
-                                        className="form-control "
-                                        name="image"
-                                        id="file"
-                                        accept=".jpg, .jpeg, .png ,.pdf"
-                                        onChange={(event) => { onchangeHandler(event) }}
-                                    />
-                                </FormGroup>
-                            </Col>
-
-                            <Col md="1"></Col>
-
-                            <FormGroup className="col col-sm-4 mt-4">
-                                <Row className="justify-content-md-left">
-                                    <Label htmlFor="validationCustom01">{fieldLabel.IsDefault} </Label>
-                                    <Col md={3} style={{ marginTop: '9px' }} >
-                                        <div className="form-check form-switch form-switch-md " dir="ltr">
+                    <Row>
+                        <Col md="3">
+                            <FormGroup className="mb-3">
+                                <Row style={{ marginTop: '25px' }}>
+                                    <Label className="col-sm-4 col-form-label">{fieldLabel.IsDefault} </Label>
+                                    <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                        <div className="form-check form-switch form-switch-md mb-3">
                                             <Input type="checkbox"
                                                 name="IsDefault"
                                                 className="form-check-input"
@@ -248,13 +249,11 @@ const AddressTabForm = forwardRef((props, ref) => {
                                                     onChangeCheckbox({ event, state, setState })
                                                 }}
                                             />
-                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                         </div>
                                     </Col>
                                 </Row>
                             </FormGroup>
-
-                        </Row>
+                        </Col>
                     </Row>
 
                 </CardBody>

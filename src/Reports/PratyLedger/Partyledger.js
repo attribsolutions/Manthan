@@ -1,54 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Card, CardBody, Col, FormGroup, Input, Label, Row } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { initialFiledFunc, onChangeSelect } from "../../components/Common/validationFunction";
+import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { Go_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker } from "../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { url, mode, pageId } from "../../routes/index"
+import { url, mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
-import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
-import * as XLSX from 'xlsx';
-import { GetVenderSupplierCustomer, SSDD_List_under_Company, getpdfReportdata } from "../../store/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { PartyLedgerReport_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
+import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 
 const PartyLedger = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const isSCMParty = _cfunc.loginIsSCMParty();
-
 
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        PartyName: "",
+        Customer: { value: "", label: "All" },
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [groupByDate, setGroupByDate] = useState(false);
-    const [groupByParty, setGroupByParty] = useState(false);
-
 
     const reducers = useSelector(
         (state) => ({
             pdfdata: state.PdfReportReducers.pdfdata,
-            listBtnLoading: state.OrderSummaryReducer.listBtnLoading,
+            goBtnLoading: state.PdfReportReducers.goBtnLoading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            CustomerLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, orderSummaryGobtn, SSDD_List, supplier, pdfdata } = reducers;
+    const { userAccess, supplier, pdfdata, CustomerLoading } = reducers;
 
     const values = { ...state.values }
 
@@ -73,14 +68,10 @@ const PartyLedger = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-
+        dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": _cfunc.loginSelectedPartyID() }))
     }, [])
 
     useEffect(() => {
-
-
-        
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
             customAlert({
                 Type: 3,
@@ -90,44 +81,39 @@ const PartyLedger = (props) => {
         }
     }, [pdfdata])
 
-
     const CustomerOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
     }))
 
-
     const onselecthandel = (e) => {
         setState((i) => {
             const a = { ...i }
-            a.values.PartyName = e;
-            a.hasValid.PartyName.valid = true
+            a.values.Customer = e;
+            a.hasValid.Customer.valid = true
             return a
         })
     }
 
-
     function goButtonHandler() {
 
-        const btnId = `gobtn-${url.ORDER_SUMMARY_REPORT}`
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Customer": values.PartyName.value,
-            "Party": _cfunc.loginPartyID()
+            "Customer": values.Customer.value,
+            "Party": _cfunc.loginSelectedPartyID()
         });
-        var ReportType = report.PartyLedger
 
+        let config = { ReportType: report.PartyLedger, jsonBody }
 
-
-        if (values.PartyName === "") {
+        if (values.Customer === "") {
             customAlert({
                 Type: 3,
                 Message: "Please Select Customer",
             })
             return
         } else {
-            dispatch(getpdfReportdata(PartyLedgerReport_API, ReportType, jsonBody))
+            dispatch(getpdfReportdata(PartyLedgerReport_API, config))
         }
     }
 
@@ -149,10 +135,29 @@ const PartyLedger = (props) => {
         })
     }
 
+    function partySelectButtonHandler() {
+        dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": _cfunc.loginSelectedPartyID() }));
+    }
+
+    function partyOnChngeButtonHandler() {
+        dispatch(getpdfReportdataSuccess({ Status: false }));
+        dispatch(GetVenderSupplierCustomerSuccess([]));
+        setState((i) => {
+            let a = { ...i }
+            a.values.Customer = { value: "", label: "All" }
+            a.hasValid.Customer.valid = true;
+            return a
+        })
+    }
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
+                <PartyDropdown_Common
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partyOnChngeButtonHandler} />
+
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm={4} className="">
@@ -189,10 +194,11 @@ const PartyLedger = (props) => {
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "80px" }}>Customer</Label>
                                 <Col sm="7">
-                                    <Select
-                                        name="DistrictName"
-                                        value={values.PartyName}
+                                    <C_Select
+                                        name="Customer"
+                                        value={values.Customer}
                                         isSearchable={true}
+                                        isLoading={CustomerLoading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
@@ -208,7 +214,7 @@ const PartyLedger = (props) => {
 
 
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.listBtnLoading} />
+                            <Go_Button onClick={goButtonHandler} loading={reducers.goBtnLoading} />
                         </Col>
                     </div>
                 </div>

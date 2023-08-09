@@ -3,13 +3,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import { btnIsDissablefunc, date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
+import { date_ymd_func, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { mode, url, pageId } from "../../../routes/index"
 import * as _act from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import GRNAdd from "./GRNAdd";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const GRNList = () => {
 
@@ -24,6 +26,7 @@ const GRNList = () => {
         makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '', orderType: ''
     });
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
+
     const reducers = useSelector(
         (state) => ({
             loading: state.GRNReducer.loading,
@@ -40,12 +43,12 @@ const GRNList = () => {
 
         })
     );
+
     const gobtnId = `gobtn-${subPageMode}`
     const { pageField, customer, makeChallan } = reducers;
     const { fromdate, todate, venderSelect } = hederFilters;
 
     const action = {
-        getList: _act.getGRNListPage,
         editId: _act.editGRNAction,
         deleteId: _act.deleteGRNId,
         postSucc: _act.saveGRNSuccess,
@@ -79,7 +82,9 @@ const GRNList = () => {
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-        goButtonHandler()
+        if (!(loginSelectedPartyID() === 0)) {
+            goButtonHandler()
+        }
     }, []);
 
     useEffect(() => {
@@ -103,7 +108,6 @@ const GRNList = () => {
         label: " All"
     });
 
-
     const makeBtnFunc = (list = []) => {
 
         const id = list[0].id
@@ -114,16 +118,18 @@ const GRNList = () => {
     };
 
     function goButtonHandler() {
-        const btnId = gobtnId;
-        btnIsDissablefunc({ btnId, state: true })
         try {
+            if (loginSelectedPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
             const filtersBody = JSON.stringify({
                 FromDate: fromdate,
                 ToDate: todate,
                 Supplier: venderSelect === "" ? '' : venderSelect.value,
-                Party: loginPartyID(),
+                Party: loginSelectedPartyID(),
             });
-            dispatch(_act.getGRNListPage({ filtersBody, btnId }));
+            dispatch(_act.getGRNListPage({ filtersBody}));
         } catch (error) { }
     }
 
@@ -207,11 +213,15 @@ const GRNList = () => {
         </div>
     }
 
+    function partyOnChngeButtonHandler() {
+        dispatch(_act.getGRNListPageSuccess([]));
+    }
+
     return (
-
         <React.Fragment>
-
+            <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
             <div className="page-content">
+                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
 
                 {
                     (pageField) ?

@@ -1,16 +1,15 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Select from "react-select";
-import { Col, FormGroup, Label, Modal } from "reactstrap";
+import { Col, FormGroup, Label} from "reactstrap";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import Order from "./Order";
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
@@ -18,9 +17,10 @@ import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper"
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import { getOrderApprovalDetailAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
-import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
+import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 import OrderView from "./OrderView";
 import OrderView_Modal from "./OrderView";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 
 const OrderList = () => {
@@ -28,7 +28,7 @@ const OrderList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-
+  
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
@@ -51,8 +51,7 @@ const OrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            loading: state.OrderReducer.loading,
-            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
+
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
             makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
@@ -60,25 +59,36 @@ const OrderList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.OrderReducer.editData,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageFieldList,
+
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
             approvalDetail: state.OrderReducer.approvalDetail,
+
             customerType: state.PriceListReducer.priceListByCompany,
+            customerTypeDropLoading: state.PriceListReducer.listBtnLoading,
+
             orderConfirmMsg: state.OrderReducer.orderConfirmMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
+            supplierDropLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
+
             gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
+            goBtnloading: state.OrderReducer.goBtnLoading,
             listBtnLoading: (state.OrderReducer.listBtnLoading
                 || state.InvoiceReducer.listBtnLoading
                 || state.PdfReportReducers.listBtnLoading
                 || state.OrderReducer.orderConfirmLoading
                 || state.InvoiceReducer.listBtnLoading
-                || state.GRNReducer.listBtnLoading),
+                || state.GRNReducer.listBtnLoading
+                || state.PdfReportReducers.ReportBtnLoading),
         })
     );
 
     const gobtnId = `gobtn-${subPageMode}`
     const {
-        orderData,
         pageField,
         GRNitem,
         supplier,
@@ -88,6 +98,8 @@ const OrderList = () => {
         customerType,
         orderConfirmMsg,
         gobutton_Add_invoice,
+        customerTypeDropLoading,
+        supplierDropLoading
     } = reducers;
 
     const values = { ...state.values }
@@ -173,16 +185,18 @@ const OrderList = () => {
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-        goButtonHandler("event", IBType)
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            goButtonHandler("event", IBType)
+        }
         dispatch(priceListByCompay_Action());
 
         return () => {
             dispatch(_act.commonPageFieldListSuccess(null))
             dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list  
             dispatch(_act.orderSinglegetSuccess({ Status: false }))
-
-
+            dispatch(_act.GetVenderSupplierCustomerSuccess([]))
+            dispatch(priceListByCompay_ActionSuccess([]))
         }
     }, []);
 
@@ -192,10 +206,6 @@ const OrderList = () => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
-
-
-
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
@@ -223,7 +233,6 @@ const OrderList = () => {
             })
         }
     }, [gobutton_Add_invoice]);
-
 
     useEffect(() => {
 
@@ -271,11 +280,12 @@ const OrderList = () => {
         label: index.Name,
     }));
 
-    function oderAprovalBtnFunc(rowData, ismode, btnId) {
-        _cfunc.btnIsDissablefunc({ btnId, state: false })
+    function oderAprovalBtnFunc({ editId, btnId }) {
+
+        // _cfunc.btnIsDissablefunc({ btnId, state: false })
         let config = {}
         config.btnId = btnId;
-        config.orderId = rowData.id;
+        config.orderId = editId;
         dispatch(getOrderApprovalDetailAction(config))
     }
 
@@ -291,9 +301,9 @@ const OrderList = () => {
             ISCustomerPAN: obj.CustomerPAN
         }
         const jsonBody = JSON.stringify({
-            FromDate: obj.preOrderDate,
+            FromDate: obj.OrderDate,
             Customer: obj.CustomerID,
-            Party: _cfunc.loginPartyID(),
+            Party: _cfunc.loginSelectedPartyID(),
             OrderIDs: obj.id.toString(),
         });
 
@@ -369,7 +379,7 @@ const OrderList = () => {
             const jsonBody = JSON.stringify({
                 Party: rowData.SupplierID,
                 Customer: rowData.CustomerID,
-                EffectiveDate: rowData.preOrderDate,
+                EffectiveDate: rowData.OrderDate,
                 OrderID: rowData.id,
                 RateParty: rowData.CustomerID,
                 OrderType: subPageMode === url.ORDER_4 ? order_Type.SaleOrder : order_Type.PurchaseOrder
@@ -378,24 +388,23 @@ const OrderList = () => {
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     }
 
-    function downBtnFunc(row, printType, btnId) {
-
-        var ReportType = report.order1;
-        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id, btnId))
+    function downBtnFunc(config) {
+        config["ReportType"] = report.order1;
+        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
     }
 
-    function viewBtnFunc(row) {
-        const btnId = row.btnId
-        const viewId = row.viewId
-        dispatch(_act.viewOrderSingleget({ viewId, btnId }))
+    function viewApprovalBtnFunc(config) {
+        dispatch(_act.viewOrderSingleget(config))
     }
-
-
 
     function goButtonHandler(event, IBType) {
 
         _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
+            if ((_cfunc.loginSelectedPartyID() === 0)) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
             let filtersBody = {}
             const isCustomerType = values.CustomerType.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
 
@@ -403,7 +412,7 @@ const OrderList = () => {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
                 "Supplier": values.Supplier.value,
-                "Customer": _cfunc.loginPartyID(),
+                "Customer": _cfunc.loginSelectedPartyID(),
                 "OrderType": order_Type.PurchaseOrder,
                 "CustomerType": "",
                 "IBType": IBType ? IBType : otherState.IBType
@@ -411,7 +420,7 @@ const OrderList = () => {
             const SO_filters = {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
-                "Supplier": _cfunc.loginPartyID(),//Suppiler swipe
+                "Supplier": _cfunc.loginSelectedPartyID(),//Suppiler swipe
                 "Customer": values.Supplier.value,//customer swipe
                 "OrderType": order_Type.SaleOrder,
                 "CustomerType": isCustomerType,
@@ -421,7 +430,7 @@ const OrderList = () => {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
                 "Supplier": values.Supplier.value,
-                "Customer": _cfunc.loginPartyID(),
+                "Customer": _cfunc.loginSelectedPartyID(),
                 "OrderType": order_Type.InvoiceToGRN,
                 "CustomerType": '',
                 "IBType": IBType ? IBType : otherState.IBType
@@ -435,6 +444,7 @@ const OrderList = () => {
             else {
                 filtersBody = JSON.stringify(PO_filters);
             }
+
             dispatch(_act.getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
 
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: false }) }
@@ -481,12 +491,13 @@ const OrderList = () => {
             return a
         })
     }
-    const selectAllRowFunc = (row = []) => {
+
+    const selectSaveBtnHandler = (row = []) => {
 
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
             customAlert({
-                Type: 2,
+                Type: 4,
                 Message: "Please Select One Order",
             });
             return
@@ -541,13 +552,14 @@ const OrderList = () => {
                                     {!(fieldLabel.CustomerType === '') ? fieldLabel.CustomerType : "Customer Type"}
                                 </Label>
                                 <Col sm="7">
-                                    <Select
+                                    <C_Select
                                         name="CustomerType"
                                         classNamePrefix="select2-Customer"
                                         value={values.CustomerType}
                                         options={customerTypeOptions}
                                         onChange={customerTypeOnchange}
                                         isMulti={true}
+                                        isLoading={customerTypeDropLoading}
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
@@ -568,12 +580,13 @@ const OrderList = () => {
                                 {!(fieldLabel.Supplier === '') ? fieldLabel.Supplier : "Supplier"}
                             </Label>
                             <Col sm="7">
-                                <Select
+                                <C_Select
                                     name="Supplier"
                                     classNamePrefix="select2-Customer"
                                     value={values.Supplier}
                                     options={supplierOptions}
                                     onChange={supplierOnchange}
+                                    isLoading={supplierDropLoading}
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
                                     }}
@@ -584,16 +597,38 @@ const OrderList = () => {
 
                     <Col sm="1" />
                     <Col sm="1" className="mt-3 ">
-                        <Go_Button loading={reducers.loading} id={gobtnId} onClick={goButtonHandler} />
+                        <Go_Button loading={reducers.goBtnloading} id={gobtnId} onClick={goButtonHandler} />
                     </Col>
                 </div>
             </div>
         )
     }
 
+    function partySelectButtonHandler() {
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
+    }
+
+    function partyOnChngeButtonHandler() {
+        dispatch(_act.getOrderListPageSuccess([]));
+        dispatch(_act.GetVenderSupplierCustomerSuccess([]));
+        setState((i) => {
+            let a = { ...i }
+            a.values.CustomerType = [{ value: "", label: "All" }]
+            a.values.Supplier = { value: "", label: "All" }
+            a.hasValid.CustomerType.valid = true;
+            a.hasValid.Supplier.valid = true;
+            return a
+        })
+    }
+
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={reducers.goBtnloading || !pageField} />
+
             <div className="page-content">
+                <PartyDropdown_Common
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partyOnChngeButtonHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList
@@ -605,7 +640,7 @@ const OrderList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
-                            viewBtnFunc={viewBtnFunc}
+                            viewApprovalBtnFunc={viewApprovalBtnFunc}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
@@ -616,7 +651,13 @@ const OrderList = () => {
                             MasterModal={Order}
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
-                            selectAllRow={(subPageMode === url.ORDER_LIST_4) && selectAllRowFunc}
+                            selectCheckParams={{
+                                isRoleAccess: (true),
+                                isShow: subPageMode === url.ORDER_LIST_4,
+                                selectSaveBtnHandler: selectSaveBtnHandler,
+                                selectSaveBtnLabel: "Confirm",
+                                selectHeaderLabel: "Confirm"
+                            }}
                         />
                         : null
                 }

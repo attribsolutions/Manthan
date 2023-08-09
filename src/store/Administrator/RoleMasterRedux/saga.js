@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import {loginJsonBody } from "../../../components/Common/CommonFunction";
+import { loginJsonBody } from "../../../components/Common/CommonFunction";
 import {
   Role_Master_Delete_API,
   Role_Master_Edit_API,
@@ -24,7 +24,7 @@ import {
 
 function* Get_Roles_GenratorFunction() {                                    //Get Role List
   try {
-    const response = yield call(Role_Master_Get_API, loginJsonBody());
+    const response = yield call(Role_Master_Get_API, JSON.stringify(loginJsonBody()));
     yield put(getRoleSuccess(response.Data));
   } catch (error) { yield put(RoleApiErrorAction()) }
 }

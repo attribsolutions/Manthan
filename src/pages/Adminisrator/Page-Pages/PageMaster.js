@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Button,
   Card,
   CardBody,
   CardHeader,
@@ -14,7 +13,6 @@ import {
   NavLink,
   Row,
   TabContent,
-  Table,
   TabPane,
 } from "reactstrap";
 import MetaTags from "react-meta-tags"
@@ -23,17 +21,17 @@ import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
 import {
   Breadcrumb_inputName,
-  editHPagesIDSuccess,
+  edit_PageListID_Success,
   getModuleList,
   getPageAccess_DropDown_API,
-  getPageList,
-  getPageListSuccess,
+  RelatedPageListDropdownAction,
+  RelatedPageListDropdownSuccess,
   saveModuleMasterSuccess,
-  saveHPages,
-  saveHPagesSuccess,
-  updateHPages,
-  updateHPagesSuccess,
-  getPageType
+  save_PageMaster_Action,
+  save_PageMaster_Success,
+  update_PageListId_Action,
+  update_PageListId_Success,
+  getPageType,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -59,7 +57,6 @@ const PageMaster = (props) => {
 
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [relatedPageListShowUI, setRelatedPageListShowUI] = useState(false);
-  const [tablePageAccessDataState, setTablePageAccessDataState] = useState([]);
   const [module_DropdownSelect, setModule_DropdownSelect] = useState("");
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
@@ -167,7 +164,6 @@ const PageMaster = (props) => {
         setPageAccessData(hasEditVal.PagePageAccess);
         seteditCreatedBy(hasEditVal.CreatedBy);
 
-
         setModule_DropdownSelect({
           label: hasEditVal.ModuleName,
           value: hasEditVal.Module,
@@ -253,7 +249,7 @@ const PageMaster = (props) => {
         });
       }
 
-      dispatch(editHPagesIDSuccess({ Status: false }));
+      dispatch(edit_PageListID_Success({ Status: false }));
     }
   }, []);
 
@@ -274,7 +270,7 @@ const PageMaster = (props) => {
   // This UseEffect clear Form Data and when modules Save Successfully.
   useEffect(async () => {
     if (postMsg.Status === true && postMsg.StatusCode === 200) {
-      dispatch(saveHPagesSuccess({ Status: false }));
+      dispatch(save_PageMaster_Success({ Status: false }));
       setModule_DropdownSelect("");
       setPageType_DropdownSelect("");
       setrelatedPage_DropdownSelect("");
@@ -284,24 +280,24 @@ const PageMaster = (props) => {
           customAlert({
             Type: 1,
             Message: postMsg.Message,
-        })
+          })
         );
       } else {
         let isPermission = await customAlert({
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-      })
-      if (isPermission) {
+        })
+        if (isPermission) {
           history.push({ pathname: url.PAGE_lIST })
-      }
+        }
       }
     } else if (postMsg.Status === true) {
-      dispatch(saveHPagesSuccess({ Status: false }));
+      dispatch(save_PageMaster_Success({ Status: false }));
       customAlert({
         Type: 4,
-         Message: JSON.stringify(postMsg.Message),
-    })
+        Message: JSON.stringify(postMsg.Message),
+      })
     }
   }, [postMsg]);
 
@@ -334,11 +330,11 @@ const PageMaster = (props) => {
         pathname: PAGE_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
-      dispatch(updateHPagesSuccess({ Status: false }));
+      dispatch(update_PageListId_Success({ Status: false }));
       customAlert({
-                Type: 3,
-                Message: JSON.stringify(updateMsg.Message),
-            })
+        Type: 3,
+        Message: JSON.stringify(updateMsg.Message),
+      })
     }
   }, [updateMsg, modalCss]);
 
@@ -365,7 +361,10 @@ const PageMaster = (props) => {
     }
   };
 
-  const FormSubmitButton_Handler = (event, values) => {
+  const SaveHandler = (event, values) => {
+
+    event.preventDefault();
+    const btnId = event.target.id;
 
     let Access = []
     PageAccess.forEach((element, key) => {
@@ -456,11 +455,11 @@ const PageMaster = (props) => {
     }
 
     if (pageMode === mode.edit) {
-      dispatch(updateHPages(jsonBody, EditData.id));
+      dispatch(update_PageListId_Action({ jsonBody, updateId: EditData.id, btnId }));
 
     } else {
 
-      dispatch(saveHPages(jsonBody));
+      dispatch(save_PageMaster_Action({ jsonBody, btnId }));
 
     }
   };
@@ -476,21 +475,20 @@ const PageMaster = (props) => {
     if (e.value === 2) {
       relatedPage_DropdownSelectHandller()
       setRelatedPageListShowUI(true)
-      dispatch(getPageList(e.value));
+      dispatch(RelatedPageListDropdownAction(e.value));
       setPageAccessDropDownView(true);
     }
     else if (e.value === 1) {
       setRelatedPageListShowUI(false)
-      setTablePageAccessDataState([]);
       setPageAccessDropDownView(false);
-      dispatch(getPageListSuccess([]));
+      dispatch(RelatedPageListDropdownSuccess([]));
       setrelatedPage_DropdownSelect({ value: 0 });
     }
     else if (e.value === 3) {
       setRelatedPageListShowUI(false)
-      setTablePageAccessDataState([]);
+
       setPageAccessDropDownView(true);
-      dispatch(getPageListSuccess([]));
+      dispatch(RelatedPageListDropdownSuccess([]));
       // setrelatedPage_DropdownSelect({ value: 0 });
     }
     setPageType_DropdownSelect(e);
@@ -518,7 +516,7 @@ const PageMaster = (props) => {
             <AvForm
               id="mainForm"
               name="mainForm"
-              onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
+              onValidSubmit={(e, v) => { SaveHandler(e, v); }}>
 
               <Col lg={12}>
                 <Card className="text-black " style={{ minHeight: "100px" }}>
@@ -734,10 +732,10 @@ const PageMaster = (props) => {
                                       required: {
                                         value: true,
                                         errorMessage:
-                                          "Please Enter Display Index Only 2 Digit ",
+                                          "Please Enter Display Index ",
                                       },
                                       tel: {
-                                        pattern: /^\d{1,2}$/,
+                                        pattern: /^\d{1,8}$/,
                                       },
                                     }}
                                   />
@@ -1016,6 +1014,7 @@ const PageMaster = (props) => {
                   <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
                     <SaveButton
                       loading={saveBtnloading}
+                      type="submit"
                       pageMode={pageMode}
                       userAcc={userPageAccessState}
                       editCreatedBy={editCreatedBy}

@@ -12,12 +12,12 @@ import {
   EditTermsAndCondtions,
   DeleteTermsAndCondtions,
   DeleteTermsAndCondtions_Success,
-  UpdateTermsAndCondtions_Success
+  UpdateTermsAndCondtions_Success,
+  getTermAndCondition_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const TermsAndConditionsList = (props) => {
 
@@ -25,6 +25,7 @@ const TermsAndConditionsList = (props) => {
   const reducers = useSelector(
     (state) => ({
       listBtnLoading: state.TermsAndConditionsReducer.listBtnLoading,
+      goBtnLoading: state.TermsAndConditionsReducer.goBtnLoading,
       tableList: state.TermsAndConditionsReducer.tableList,
       postMsg: state.TermsAndConditionsReducer.PostData,
       editData: state.TermsAndConditionsReducer.editData,
@@ -50,26 +51,28 @@ const TermsAndConditionsList = (props) => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getTermAndCondition())
+
+    return () => {
+      dispatch(getTermAndCondition_Success([]));
+      dispatch(commonPageFieldListSuccess(null))
+    }
   }, []);
 
-  const { pageField, userAccess = [] } = reducers
+  const { pageField, goBtnLoading} = reducers
 
   return (
     <React.Fragment>
+      <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       {
-        reducers.loading ?
-          <Listloader />
-          :
-          (pageField) ?
-            <CommonListPage
-              action={action}
-              reducers={reducers}
-              MasterModal={TermsAndConditionsMaster}
-              masterPath={url.TERMS_AND_CONDITION}
-              ButtonMsgLable={"Terms & Conditions"}
-              deleteName={"Name"}
-            />
-            : <Listloader />
+        (pageField) &&
+        <CommonListPage
+          action={action}
+          reducers={reducers}
+          MasterModal={TermsAndConditionsMaster}
+          masterPath={url.TERMS_AND_CONDITION}
+          ButtonMsgLable={"Terms & Conditions"}
+          deleteName={"Name"}
+        />
       }
     </React.Fragment>
   )

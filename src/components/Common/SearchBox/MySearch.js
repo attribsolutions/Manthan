@@ -1,3 +1,4 @@
+import React from "react";
 
 let props1 = { onSearch: () => { } }
 let input = '';
@@ -54,24 +55,22 @@ export const MySearch = () => {//compont start
         }
     };
     return (
-        <div className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
-            <div className="position-relative">
-                <input
-                    id="myInput"
-                    className="form-control"
-                    placeholder="Search..."
-                    type="text"
-                    onChange={handleClick}
-                    name="myCountry"
-                    autoComplete="off"
-                    autoFocus={true}
-                />
-                <button className="btn btn-primary"
-                    type="butten">
-                    <i className="bx bx-search-alt align-middle" />
-                </button>
+        <React.Fragment>
+            <input
+                id="myInput"
+                className="form-control"
+                placeholder="Search..."
+                type="text"
+                onChange={handleClick}
+                name="myCountry"
+                autoComplete="off"
+                autoFocus={true}
+            />
+            <button className="btn btn-primary"
+                type="butten">
+                <i className="bx bx-search-alt align-middle" />
+            </button>
 
-            </div>
-        </div>
+        </React.Fragment>
     );
 }

@@ -28,7 +28,7 @@ function* Save_Method_ForBankAssign_GenFun({ config }) {   // Save API
 }
 
 function* PartyBank_Assign_GenFunc() {
-    const filters = loginJsonBody();// required only PartyID and CompanyID
+    const filters = JSON.stringify(loginJsonBody());// required only PartyID and CompanyID
     try {
         const response = yield call(PartyBankfilter_API, filters);
         yield put(PartyBankfilterSuccess(response.Data));

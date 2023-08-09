@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import {loginJsonBody } from "../../../components/Common/CommonFunction";
+import { loginJsonBody } from "../../../components/Common/CommonFunction";
 import { delete_CompanyID, edit_CompanyID, fetch_CompanyList, getCompanyGroup, postSubmit_Company, updateCompany_ID } from "../../../helpers/backend_helper";
 import {
   deleteCompanyIDSuccess,
@@ -26,9 +26,10 @@ function* Save_Method_ForCompany_GenFun({ config }) {         // Save API
   } catch (error) { yield put(companyApiErrorAction()) }
 }
 
-function* Get_Company_List_GenFunc() {                          // getList API
+function* Get_Company_List_GenFunc() {
+  // getList API
   try {
-    const response = yield call(fetch_CompanyList, loginJsonBody());
+    const response = yield call(fetch_CompanyList, JSON.stringify(loginJsonBody()));
     yield put(getCompanyListSuccess(response.Data));
   } catch (error) { yield put(companyApiErrorAction()) }
 }

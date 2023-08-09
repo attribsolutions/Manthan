@@ -126,6 +126,9 @@ const PartyMaster = (props) => {
 
             }))
         }
+        return () => {
+            dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
+        }
     }, [])
 
     useEffect(() => {
@@ -214,6 +217,7 @@ const PartyMaster = (props) => {
                             DemandPrefix: prefix.Demandprefix,
                             IBChallanPrefix: prefix.IBChallanprefix,
                             IBInwardPrefix: prefix.IBInwardprefix,
+                            PurchaseReturnprefix: prefix.PurchaseReturnprefix,
                         };
 
                         let editPriceList = (hasEditVal.PriceList) ? {
@@ -338,7 +342,7 @@ const PartyMaster = (props) => {
         let addressTabDetail = addressTabRef.current.getCurrentState()
         let prefixValue = prefixTabRef.current.getCurrentState().values
         let addressTabIsAddressEnter = addressTabRef.current.IsAddressEnter()
-        
+
         const validBasetab = formValid(baseTabDetail, setBaseTabDetail)
 
         let isError = addressTabIsAddressEnter.isError
@@ -413,7 +417,7 @@ const PartyMaster = (props) => {
                 })
                 return;
             }
-            
+
             const jsonBody = JSON.stringify({
                 "Name": baseValue.Name,
                 "PriceList": priceListSelect.value,
@@ -448,7 +452,8 @@ const PartyMaster = (props) => {
                         "MaterialIssueprefix": prefixValue.MaterialIssuePrefix,
                         "Demandprefix": prefixValue.DemandPrefix,
                         "IBChallanprefix": prefixValue.IBChallanPrefix,
-                        "IBInwardprefix": prefixValue.IBInwardPrefix
+                        "IBInwardprefix": prefixValue.IBInwardPrefix,
+                        "PurchaseReturnprefix":prefixValue.PurchaseReturnprefix,
                     }
                 ],
 

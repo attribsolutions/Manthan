@@ -21,7 +21,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
-  loading:false
+  goBtnLoading:false
 }
 
 const RoutesReducer = (state = INIT_STATE, action) => {
@@ -46,15 +46,15 @@ const RoutesReducer = (state = INIT_STATE, action) => {
     case GET_ROUTES_LIST:
       return {
         ...state,
-      loading: true,
+        goBtnLoading: true,
       }
 
 
     case GET_ROUTES_LIST_SUCCESS:
       return {
         ...state,
+        goBtnLoading: false,
         RoutesList: action.payload,
-        loading: false,
 
       }
 
@@ -103,7 +103,7 @@ const RoutesReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
-        loading:false
+        goBtnLoading:false
       };
 
 
