@@ -6,7 +6,7 @@ import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import {  mode, } from "../../routes/index"
+import { mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
 import * as XLSX from 'xlsx';
@@ -32,7 +32,8 @@ const OrderSummary = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
     const [groupByDate, setGroupByDate] = useState(false);
-    const [groupByParty, setGroupByParty] = useState(false);
+    const [groupBySupplier, setGroupBySupplier] = useState(false);
+    const [groupByCustomer, setGroupByCustomer] = useState(false);
     const [showTableData, setShowTableData] = useState([]);
     const [orderSummaryApiData, setOrderSummaryApiData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
@@ -72,7 +73,7 @@ const OrderSummary = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        
+
         try {
 
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
@@ -94,7 +95,7 @@ const OrderSummary = (props) => {
                 })
             }
         }
-        catch (e) {_cfunc.CommonConsole(e)}
+        catch (e) { _cfunc.CommonConsole(e) }
 
     }, [goButtonData]);
 
@@ -105,9 +106,13 @@ const OrderSummary = (props) => {
                 setBtnMode(0)
                 const groupData = groupByColumnsWithSumFunc(orderSummaryApiData);
                 const updatedTableData = groupData.map((item, index) => {
-                    return {
+                    let initaial = {
                         ...item, keyId: index + 1,
-                    };
+                    }
+                    if (item.OrderDate) {
+                        initaial.OrderDate = _cfunc.date_dmy_func(item.OrderDate)
+                    }
+                    return initaial
                 });
                 setShowTableData(updatedTableData);
             }
@@ -138,14 +143,17 @@ const OrderSummary = (props) => {
         if (groupByDate) {
             dynamicColumn.push('OrderDate')
         }
-        if (groupByParty) {
+        if (groupBySupplier) {
             dynamicColumn.push('SupplierName')
+        }
+        if (groupByCustomer) {
+            dynamicColumn.push('CustomerName')
         }
 
         let currentColumnName = [...dynamicColumn, ...['GroupName', 'SubGroup', 'MaterialName']]
         const columnSumsByGroup = jsonData.reduce((result, item) => {
             const groupKey = currentColumnName.map(columnName => item[columnName]).join('|');
-            
+
             if (!result[groupKey]) {
                 result[groupKey] = {
                     sums: {},
@@ -161,12 +169,24 @@ const OrderSummary = (props) => {
             group.data.push(item);
 
             Object.entries(item).forEach(([key, value]) => {
-                if (((typeof value === 'number') && !(key === "id"))) {
-                    group.sums[key] = (group.sums[key] || 0) + value;
-                }
-                else if (key === "OrderAmount") {
+                // if (((typeof value === 'number') && !(key === "id"))) {
+                //     group.sums[key] = (group.sums[key] || 0) + value;
+                // }
+                if (key === "QtyInBox") {
                     group.sums[key] = (group.sums[key] || 0) + Number(value);
-                    group.sums[key] = + Number((group.sums[key]).toFixed(2));
+                    group.sums[key] = + Number((group.sums[key]).toFixed());
+                }
+                if (key === "QtyInKg") {
+                    group.sums[key] = (group.sums[key] || 0) + Number(value);
+                    group.sums[key] = + Number((group.sums[key]).toFixed());
+                }
+                if (key === "QtyInNo") {
+                    group.sums[key] = (group.sums[key] || 0) + Number(value);
+                    group.sums[key] = + Number((group.sums[key]).toFixed());
+                }
+                if (key === "Amount") {
+                    group.sums[key] = (group.sums[key] || 0) + Number(value);
+                    group.sums[key] = + Number((group.sums[key]).toFixed());
                 }
             });
 
@@ -177,7 +197,7 @@ const OrderSummary = (props) => {
             delete columnSumsByGroup[i].sums.Orderid
             arr.push(columnSumsByGroup[i].sums)
         })
-        
+
         return arr
     };
 
@@ -238,8 +258,12 @@ const OrderSummary = (props) => {
         setGroupByDate(e.target.checked)
         setBtnMode(1)
     }
-    function groupByPartyHandler(e) {
-        setGroupByParty(e.target.checked)
+    function groupBySupplierHamdler(e) {
+        setGroupBySupplier(e.target.checked)
+        setBtnMode(1)
+    }
+    function groupByCustomerHamdler(e) {
+        setGroupByCustomer(e.target.checked)
         setBtnMode(1)
     }
     const pagesListColumns = useMemo(() => {
@@ -261,10 +285,10 @@ const OrderSummary = (props) => {
             }
         }
         return internalColumn
-        
+
     }, [showTableData]);
 
-    
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -368,11 +392,22 @@ const OrderSummary = (props) => {
 
                             <Col sm={4} >
                                 <FormGroup className="row">
-                                    <Label className="col-4 p-2" >By Party Name</Label>
+                                    <Label className="col-4 p-2" >By Supplier Name</Label>
                                     <Col sm="4" style={{ marginTop: '9px', }}>
                                         <Input type="checkbox"
-                                            checked={groupByParty}
-                                            onChange={groupByPartyHandler}
+                                            checked={groupBySupplier}
+                                            onChange={groupBySupplierHamdler}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                            <Col sm={4} >
+                                <FormGroup className="row">
+                                    <Label className="col-4 p-2" >By Customer Name</Label>
+                                    <Col sm="4" style={{ marginTop: '9px', }}>
+                                        <Input type="checkbox"
+                                            checked={groupByCustomer}
+                                            onChange={groupByCustomerHamdler}
                                         />
                                     </Col>
                                 </FormGroup>
