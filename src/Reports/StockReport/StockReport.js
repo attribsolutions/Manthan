@@ -86,22 +86,29 @@ const StockReport = (props) => {
     }));
 
     function goButtonHandler() {
-        const btnId = `gobtn-${url.STOCK_REPORT}`
+        try {
+            const btnId = `gobtn-${url.STOCK_REPORT}`
+            if ((isSCMParty) && (partyDropdown === "")) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            }
+            else if (unitDropdown === "") {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Select Unit"
+                })
+                return
+            }
+            const jsonBody = JSON.stringify({
+                "FromDate": fromdate,
+                "ToDate": todate,
+                "Unit": unitDropdown.value,
+                "PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
+            });
+            let config = { jsonBody, btnId: btnId }
+            dispatch(stockReport_GoButton_API(config))
 
-        if (unitDropdown === "") {
-            customAlert({
-                Type: 4,
-                Message: "Please Select Unit"
-            })
-            return
-        }
-        const jsonBody = JSON.stringify({
-            "FromDate": fromdate,
-            "ToDate": todate,
-            "Unit": unitDropdown.value,
-            "PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
-        });
-        dispatch(stockReport_GoButton_API({ jsonBody, btnId }))
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     function fromdateOnchange(e, date) {

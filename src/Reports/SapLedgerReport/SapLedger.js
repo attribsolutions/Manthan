@@ -41,15 +41,12 @@ const SapLedger = (props) => {
         userAccess,
         List,
         goBtnLoading,
-        pageField,
         partyList
     } = useSelector((state) => ({
         goBtnLoading: state.SapLedgerReducer.goBtnLoading,
         partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
         List: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField,
-
     }));
 
     const { data = [], Data = [] } = List
@@ -110,8 +107,6 @@ const SapLedger = (props) => {
         return style;
     };
 
-    // const [tableColumns] = DynamicColumnHook({ pageField })
-
     useEffect(() => {
         dispatch(SapLedger_Go_Button_API_Success([]))
         const page_Id = pageId.SAP_LEDGER
@@ -120,7 +115,6 @@ const SapLedger = (props) => {
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
@@ -140,7 +134,7 @@ const SapLedger = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Sap Ledger count"} :${Number(data.length)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Sap Ledger count"} :${Number(data.length > 0 && data.length - 1)}`))
     }, [List])
 
     const PartyDropdown = partyList.map((data) => ({
