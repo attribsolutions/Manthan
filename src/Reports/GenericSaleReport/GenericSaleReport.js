@@ -5,14 +5,15 @@ import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode } from "../../routes/index"
+import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { GoButton_For_GenericSale_Action, GoButton_For_GenericSale_Success } from "../../store/Report/GenericSaleRedux/action";
 import * as XLSX from 'xlsx';
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { BreadcrumbShowCountlabel } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
+import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 
 const GenericSaleReport = (props) => {
 
@@ -35,11 +36,12 @@ const GenericSaleReport = (props) => {
             partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageFieldList: state.CommonPageFieldReducer.pageFieldList,
+            pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { goButtonData = [] } = reducers
-
+    const { goButtonData = [], pageField, } = reducers
+    debugger
     const { userAccess, Distributor, partyDropdownLoading } = reducers;
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
@@ -47,6 +49,12 @@ const GenericSaleReport = (props) => {
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.GENERIC_SALE_REPORT))
+
+    }, []);
 
     // userAccess useEffect
     useEffect(() => {
@@ -81,6 +89,8 @@ const GenericSaleReport = (props) => {
         value: i.id,
         label: i.Name
     }));
+
+    const [tableColumns] = DynamicColumnHook({ pageField, })
 
     useEffect(() => {
 
@@ -164,29 +174,6 @@ const GenericSaleReport = (props) => {
         }
         setDistributorDropdown(e);
         setTableData([]);
-    }
-
-    const pagesListColumns = () => {
-        if (tableData.length > 0) {
-            const objectAtIndex0 = tableData[0];
-            const internalColumn = []
-            for (const key in objectAtIndex0) {
-                const column = {
-                    text: key,
-                    dataField: key,
-                    sort: true,
-                    classes: "table-cursor-pointer",
-                };
-                internalColumn.push(column);
-            }
-
-            setColumns(internalColumn);
-            setColumnsCreated(true);
-        }
-    }
-
-    if (!columnsCreated) {
-        pagesListColumns();
     }
 
     return (
@@ -280,7 +267,7 @@ const GenericSaleReport = (props) => {
                     <ToolkitProvider
                         keyField={"id"}
                         data={tableData}
-                        columns={columns}
+                        columns={tableColumns}
                         search
                     >
                         {(toolkitProps,) => (

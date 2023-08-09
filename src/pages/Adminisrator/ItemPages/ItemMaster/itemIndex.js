@@ -702,15 +702,6 @@ const ItemsMaster = (props) => {
                     return btnIsDissablefunc({ btnId, state: false });
                 }
 
-                // const isShelfLifeArr = [
-                //     {
-                //         Days: formValue.ShelfLife,
-                //         CreatedBy: loginUserID(),
-                //         UpdatedBy: loginUserID(),
-                //         IsAdd: true
-                //     }
-                // ]
-                debugger
                 const isShelfLifeArr = [];
 
                 if (Number(editItemShelfLife) !== isShelfLife) {
