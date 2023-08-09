@@ -4,12 +4,12 @@ import {
   CommonConsole,
 } from "../components/Common/CommonFunction";
 
-// const API_URL = "http://192.168.1.114:8000"
+const API_URL = "http://192.168.1.114:8000"
 
 // const API_URL = "http://117.248.109.234:8000"
 // const API_URL = "http://10.4.5.64:8000"
 
-const API_URL = "http://cbmfooderp.com:8000";
+// const API_URL = "http://cbmfooderp.com:8000";
 
 const axiosApi = axios.create({
   baseURL: API_URL,
