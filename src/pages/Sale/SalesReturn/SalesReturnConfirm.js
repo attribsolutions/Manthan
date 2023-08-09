@@ -4,12 +4,13 @@ import { Card, CardBody, FormGroup, Input, Modal, Spinner, } from "reactstrap";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CommonConsole, date_dmy_func, loginUserID } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, loginUserID, tableInputArrowUpDounFunc } from "../../../components/Common/CommonFunction";
 import { confirm_SalesReturn_Id_Succcess, returnApprove, returnApprove_Success } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
 import { url } from "../../../routes";
+import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
 
 const ViewDetails_Modal = () => {
 
@@ -56,8 +57,11 @@ const ViewDetails_Modal = () => {
         dispatch(confirm_SalesReturn_Id_Succcess({ Status: false }))// modify Custom Api Action call
     }
 
-    const SaveHandler = async (event) => {
+    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [viewData_redux]);
 
+
+    const SaveHandler = async (event) => {
+        debugger
         const btnId = event.target.id
         try {
             const tableItemArray = []
@@ -140,7 +144,7 @@ const ViewDetails_Modal = () => {
             dataField: "Quantity",
             formatter: (value, row, k) => {
 
-                return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(2)} ${row.UnitName}`}</div>
+                return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
             }
         },
         {
@@ -166,31 +170,39 @@ const ViewDetails_Modal = () => {
             text: "Approve Quantity",
             dataField: "Quantity",
             hidden: tableArray.viewMode === url.PURCHASE_RETURN_LIST ? true : false,
-            formatter: (value, row, k) => {
+
+
+            formatter: (value, row, k,) => {
                 if (tableArray.viewMode === url.PURCHASE_RETURN_LIST) {
 
-                    return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(2)} ${row.UnitName}`}</div>
+                    return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
                 } else {
-
-                    const defaultQuantity = tableArray.IsApproved ? row.ApprovedQuantity : row.Quantity;
+                    debugger
+                    let defaultQuantity = tableArray.IsApproved ? row.ApprovedQuantity : row.Quantity;
                     return (
                         <div>
-                            <CInput
+                            <Input
                                 key={`Quantity-${k}`}
                                 id={`Quantity-${k}`}
-                                cpattern={onlyNumberRegx}
-                                defaultValue={Number(defaultQuantity).toFixed(2)}
+                                // cpattern={onlyNumberRegx}
+                                defaultValue={Number(defaultQuantity).toFixed(0)}
                                 disabled={tableArray.IsApproved}
                                 autoComplete="off"
                                 className=" text-end"
-                                onChange={(e) => {
-
-                                    if (Number(e.target.value) > Number(value)) {
-                                        e.target.value = value
-                                        row["ApproveQuantity"] = e.target.value
-                                    } else {
-                                        row["ApproveQuantity"] = e.target.value
-                                    }
+                                onChange={(event) => {
+                                    debugger
+                                    let input = Number(event.target.value)
+                                    let result = /^\d*(\.\d{0,3})?$/.test(input);
+                                    if (result) {
+                                        let Qty = Number(defaultQuantity)
+                                        let inputQty = Number(input)
+                                        if (inputQty >= Qty) {
+                                            event.target.value = Number(defaultQuantity).toFixed(0)
+                                            row.ApproveQuantity = event.target.value
+                                        } else {
+                                            row.ApproveQuantity = Number(event.target.value)
+                                        }
+                                    };
                                 }}
                             />
                         </div>
@@ -247,10 +259,13 @@ const ViewDetails_Modal = () => {
                                         <div className="table">
                                             <BootstrapTable
                                                 keyField={"id"}
+                                                id="table_Arrow"
                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                classes={"table align-middle table-hover"}
+                                                classes={"table  table-bordered table-hover"}
                                                 headerWrapperClasses={"thead-light"}
-
+                                                onDataSizeChange={(e) => {
+                                                    tableInputArrowUpDounFunc("#table_Arrow")
+                                                }}
                                                 {...toolkitProps.baseProps}
 
                                             />
