@@ -16,6 +16,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import Select from "react-select";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel } from "../../store/actions";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const InvoiceDataExport = (props) => {
 
@@ -74,7 +75,7 @@ const InvoiceDataExport = (props) => {
     }, [userAccess])
 
     useEffect(() => { return () => { dispatch(postInvoiceDataExport_API_Success([])); } }, [])
-    
+
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Data Export count"} :${Number(InvoiceExportSerializerDetails.length)}`))
 
@@ -89,26 +90,42 @@ const InvoiceDataExport = (props) => {
     }, [tableData]);
 
     function excelhandler() {
-        const jsonBody = JSON.stringify({
-            "FromDate": values.FromDate,
-            "ToDate": values.ToDate,
-            "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
-        });
-        let config = { jsonBody, btnId: "excel_btnId" }
-        dispatch(postInvoiceDataExport_API(config))
-        dispatch(postInvoiceDataExport_API_Success([]))
+
+        try {
+            if ((isSCMParty) && (PartyDropdown === "")) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = JSON.stringify({
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
+            });
+            let config = { jsonBody, btnId: "excel_btnId" }
+            dispatch(postInvoiceDataExport_API(config))
+            dispatch(postInvoiceDataExport_API_Success([]))
+
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     function goButtonHandler() {
-        const btnId = `gobtn-${url.INVOICE_DATA_EXPORT}`
-        const jsonBody = JSON.stringify({
-            "FromDate": values.FromDate,
-            "ToDate": values.ToDate,
-            "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
-        });
-        let config = { jsonBody, btnId }
-        dispatch(postInvoiceDataExport_API(config))
-        dispatch(postInvoiceDataExport_API_Success([]))
+
+        try {
+            const btnId = `gobtn-${url.INVOICE_DATA_EXPORT}`
+            if ((isSCMParty) && (PartyDropdown === "")) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = JSON.stringify({
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
+            });
+            let config = { jsonBody, btnId: btnId }
+            dispatch(postInvoiceDataExport_API(config))
+            dispatch(postInvoiceDataExport_API_Success([]))
+
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     const createColumns = () => {
@@ -153,7 +170,6 @@ const InvoiceDataExport = (props) => {
             return a
         })
         dispatch(postInvoiceDataExport_API_Success([]))
-
     }
 
     const partyOnchange = (e) => {
