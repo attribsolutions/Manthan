@@ -51,7 +51,6 @@ const InvoiceDataExport = (props) => {
     const { userAccess, tableData = [], ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
     const { InvoiceExportSerializerDetails = [] } = tableData;
 
-
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -150,7 +149,6 @@ const InvoiceDataExport = (props) => {
     if (!columnsCreated) {
         createColumns();
     }
-
 
     function fromdateOnchange(e, date) {
         setState((i) => {

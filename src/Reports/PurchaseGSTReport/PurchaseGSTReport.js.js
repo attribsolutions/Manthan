@@ -15,8 +15,7 @@ import * as XLSX from 'xlsx';
 import Select from "react-select";
 import { postPurchaseGSTReport_API, postPurchaseGSTReport_API_Success } from "../../store/Report/PurchaseGSTRedux/action";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-
-
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const PurchaseGSTReport = (props) => {
 
@@ -26,7 +25,6 @@ const PurchaseGSTReport = (props) => {
 
     const isSCMParty = _cfunc.loginIsSCMParty();
 
-
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
@@ -34,12 +32,9 @@ const PurchaseGSTReport = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
     const [GSTRateWise, setGSTRateWise] = useState(false);
     const [PartyDropdown, setPartyDropdown] = useState("");
-
-
 
     const reducers = useSelector(
         (state) => ({
@@ -48,7 +43,6 @@ const PurchaseGSTReport = (props) => {
             GoBtnLoading: state.PurchaseGSTReportReducer.GoBtnLoading,
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
 
@@ -83,53 +77,34 @@ const PurchaseGSTReport = (props) => {
         }
     }, [])
 
-
     const Party_Option = Distributor.map(i => ({
         value: i.id,
         label: i.Name
     }));
 
-
     function goButtonHandler() {
 
-        const btnId = `gobtn-${url.PURCHASE_GST_REPORT}`
-        const jsonBody = JSON.stringify({
-            "FromDate": values.FromDate,
-            "ToDate": values.ToDate,
-            "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
-            "GSTRatewise": GSTRateWise === true ? 1 : 0
-        });
-        let config = { jsonBody, btnId }
-        dispatch(postPurchaseGSTReport_API(config))
-        dispatch(postPurchaseGSTReport_API_Success([]));
+        try {
+            const btnId = `gobtn-${url.PURCHASE_GST_REPORT}`
+            if ((isSCMParty) && (PartyDropdown === "")) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            }
 
+            const jsonBody = JSON.stringify({
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
+                "GSTRatewise": GSTRateWise === true ? 1 : 0
+            });
+            let config = { jsonBody, btnId }
+            dispatch(postPurchaseGSTReport_API(config))
+            dispatch(postPurchaseGSTReport_API_Success([]));
+
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
-
-    function fromdateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.FromDate = date;
-            a.hasValid.FromDate.valid = true
-            return a
-        })
-        dispatch(postPurchaseGSTReport_API_Success([]));
-
-    }
-
-    function todateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.ToDate = date;
-            a.hasValid.ToDate.valid = true
-            return a
-        })
-        dispatch(postPurchaseGSTReport_API_Success([]));
-
-    }
-
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Purchase GST count"} :${Number(GSTRateWise ? PurchaseGSTRateWiseDetails.length : PurchaseGSTDetails.length)}`))
         if (tableData.btnId === "excel_btnId") {
             if (GSTRateWise ? PurchaseGSTRateWiseDetails.length : PurchaseGSTDetails.length > 1) {
                 const worksheet = XLSX.utils.json_to_sheet(GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails);
@@ -138,21 +113,30 @@ const PurchaseGSTReport = (props) => {
                 XLSX.writeFile(workbook, `Purchase GST Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
                 dispatch(postPurchaseGSTReport_API_Success([]));
                 setPartyDropdown('')
-
             }
         }
+        dispatch(BreadcrumbShowCountlabel(`${"Purchase GST count"} :${Number(GSTRateWise ? PurchaseGSTRateWiseDetails.length > 0 && PurchaseGSTRateWiseDetails.length - 1 : PurchaseGSTDetails.length > 0 && PurchaseGSTDetails.length - 1)}`))
     }, [tableData]);
 
     function excelhandler() {
-        const jsonBody = JSON.stringify({
-            "FromDate": values.FromDate,
-            "ToDate": values.ToDate,
-            "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
-            "GSTRatewise": GSTRateWise === true ? 1 : 0
-        });
-        let config = { jsonBody, btnId: "excel_btnId" }
-        dispatch(postPurchaseGSTReport_API(config))
 
+        try {
+            if ((isSCMParty) && (PartyDropdown === "")) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            }
+
+            const jsonBody = JSON.stringify({
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
+                "GSTRatewise": GSTRateWise === true ? 1 : 0
+            });
+            let config = { jsonBody, btnId: "excel_btnId" }
+            dispatch(postPurchaseGSTReport_API(config))
+            dispatch(postPurchaseGSTReport_API_Success([]));
+
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     const WithoutGSTRateWiseColumn = [
@@ -286,6 +270,25 @@ const PurchaseGSTReport = (props) => {
         }
     };
 
+    function fromdateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.FromDate = date;
+            a.hasValid.FromDate.valid = true
+            return a
+        })
+        dispatch(postPurchaseGSTReport_API_Success([]));
+    }
+
+    function todateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.ToDate = date;
+            a.hasValid.ToDate.valid = true
+            return a
+        })
+        dispatch(postPurchaseGSTReport_API_Success([]));
+    }
 
     return (
         <React.Fragment>
