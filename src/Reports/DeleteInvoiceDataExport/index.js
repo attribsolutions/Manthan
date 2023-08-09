@@ -15,6 +15,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import Select from "react-select";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel } from "../../store/actions";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const DeleteInvoiceDataExport = (props) => {
 
@@ -84,33 +85,48 @@ const DeleteInvoiceDataExport = (props) => {
             if (DeletedInvoiceExportSerializerDetails.length > 0) {
                 const worksheet = XLSX.utils.json_to_sheet(DeletedInvoiceExportSerializerDetails);
                 const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, `InvoiceDataExportReport`);
+                XLSX.utils.book_append_sheet(workbook, worksheet, `DeleteInvoiceDataExportReport`);
                 XLSX.writeFile(workbook, `Delete Invoice Data Export Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
             }
         }
     }, [tableData]);
 
     function excelhandler() {
-        const jsonBody = JSON.stringify({
-            "FromDate": values.FromDate,
-            "ToDate": values.ToDate,
-            "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
-        });
-        let config = { jsonBody, btnId: "excel_btnId" }
-        dispatch(postDeleteInvoiceDataExport_API(config))
-        dispatch(postDeleteInvoiceDataExport_API_Success([]))
+
+        try {
+            if ((isSCMParty) && (PartyDropdown === "")) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = JSON.stringify({
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
+            });
+            let config = { jsonBody, btnId: "excel_btnId" }
+            dispatch(postDeleteInvoiceDataExport_API(config))
+            dispatch(postDeleteInvoiceDataExport_API_Success([]))
+
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     function goButtonHandler() {
-        const btnId = `gobtn-${url.DELETE_INVOICE_DATA_EXPORT}`
-        const jsonBody = JSON.stringify({
-            "FromDate": values.FromDate,
-            "ToDate": values.ToDate,
-            "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
-        });
-        let config = { jsonBody, btnId }
-        dispatch(postDeleteInvoiceDataExport_API(config))
-        dispatch(postDeleteInvoiceDataExport_API_Success([]))
+        try {
+            const btnId = `gobtn-${url.INVOICE_DATA_EXPORT}`
+            if ((isSCMParty) && (PartyDropdown === "")) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
+            const jsonBody = JSON.stringify({
+                "FromDate": values.FromDate,
+                "ToDate": values.ToDate,
+                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
+            });
+            let config = { jsonBody, btnId: btnId }
+            dispatch(postDeleteInvoiceDataExport_API(config))
+            dispatch(postDeleteInvoiceDataExport_API_Success([]))
+
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     const createColumns = () => {
