@@ -14,9 +14,9 @@ import { date_dmy_func } from "../../../components/Common/CommonFunction";
 function* InvoiceDataExport_Gen({ config }) {
 
     try {
-        
+
         const response = yield call(InvoiceDataExport_GoBtn_API, config);
-        response.Data["btnId"] = config.btnId;
+        response.Data["goBtnMode"] = config.goBtnMode;
         const newresponse = yield response.Data.InvoiceExportSerializerDetails.map((i, key) => {
             i["InvoiceDate"] = date_dmy_func(i.InvoiceDate)
             return i
@@ -28,7 +28,7 @@ function* InvoiceDataExport_Gen({ config }) {
 
 function* DeleteInvoiceDataExport_Gen({ config }) {
     try {
-        
+
         const response = yield call(DeleteInvoiceDataExport_GoBtn_API, config);
         response.Data["btnId"] = config.btnId;
 

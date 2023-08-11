@@ -260,7 +260,11 @@ import React, { useEffect, useState } from "react"
 import { Row, Modal, Button, Col, } from "reactstrap"
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { BreadcrumbDeleteButton, BreadcrumbNonDeleteButton, BreadcrumbReset } from "../../store/Utilites/Breadcrumb/actions";
+import {
+  BreadcrumbDeleteButton,
+  BreadcrumbNonDeleteButton,
+  BreadcrumbReset
+} from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 
@@ -272,15 +276,20 @@ const BreadcrumbNew = () => {
   const [downListKey, setDownListKey] = useState([]);
   const [trueValues, setTrueValues] = useState({});
 
-  let { showCountlabel = '', bredcrumbItemName = '', breadcrumbDetail, IsRadioButtonView, RadioButtonNonDeleteValue } = useSelector((state) => ({
+  let {
+    showCountlabel = '',
+    bredcrumbItemName = '',
+    breadcrumbDetail,
+    IsRadioButtonView,
+    radioButtonNonDelete,
+    radioButtonDelete
+  } = useSelector((state) => ({
     showCountlabel: state.BreadcrumbReducer.showCountlabel,
     bredcrumbItemName: state.BreadcrumbReducer.bredcrumbItemName,
     breadcrumbDetail: state.BreadcrumbReducer.breadcrumbDetail,
     IsRadioButtonView: state.BreadcrumbReducer.IsRadioButtonView,
-    RadioButtonNonDeleteValue: state.BreadcrumbReducer.RadioButtonNonDeleteValue,
-
-
-
+    radioButtonNonDelete: state.BreadcrumbReducer.radioButtonNonDelete,
+    radioButtonDelete: state.BreadcrumbReducer.radioButtonDelete,
   }));
 
   const {
@@ -294,11 +303,6 @@ const BreadcrumbNew = () => {
     defaultDownBtnData = {}
   } = breadcrumbDetail;
 
-  // console.log(downListKey)
-
-  // useEffect(() => {
-  //   downListKey.splice(0, 0, 'SelectAll')
-  // }, [downListKey])
 
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
@@ -318,6 +322,10 @@ const BreadcrumbNew = () => {
 
   useEffect(() => {
     dispatch(BreadcrumbReset())
+    return () => {
+      dispatch(BreadcrumbNonDeleteButton(true));
+      dispatch(BreadcrumbDeleteButton(false));
+    }
   }, [history.location.pathname]);
 
   useEffect(() => {
@@ -359,30 +367,25 @@ const BreadcrumbNew = () => {
     setmodal_scroll(false)
   }
 
-  // function OnChangeFunc(event, value, key) {
-
-  //   var data = downListKey.map((i, key) => { return key })
-  //   console.log(data)
-  //   if (value === "SelectAll") {
-  //     data.map((indx, key) => {
-  //       document.getElementById(`chckbox${indx}`).checked = event
-  //     })
-  //   }
-  // }
 
 
-
-
-  const nondeleteHandler = (event, type) => {
+  const nondeleteHandler = (event) => {
     let CheckedValue = event.target.checked
-    let config = { CheckedValue, type }
-    dispatch(BreadcrumbNonDeleteButton(config))
+    if (!CheckedValue && !radioButtonDelete) {
+      event.target.checked = true
+      return;
+    }
+    dispatch(BreadcrumbNonDeleteButton(CheckedValue))
+
   }
 
-  const deleteHandler = (event, type) => {
+  const deleteHandler = (event) => {
     let CheckedValue = event.target.checked
-    let config = { CheckedValue, type }
-    dispatch(BreadcrumbDeleteButton(config))
+    if (!CheckedValue && !radioButtonNonDelete) {
+      event.target.checked = true
+      return;
+    }
+    dispatch(BreadcrumbDeleteButton(CheckedValue))
   }
 
   function ExcelCheckBox() {
@@ -403,7 +406,6 @@ const BreadcrumbNew = () => {
                     return (index === i) ? true : false
                   })}
                   name={index}
-                // onChange={(e) => { OnChangeFunc(e.target.checked, index, key) }}
                 />&nbsp;&nbsp;&nbsp;
                 <label className="form-label text-black"> {index} </label>
               </div>
@@ -425,7 +427,7 @@ const BreadcrumbNew = () => {
 
               {
                 newBtnView ?
-                  <div >
+                  <div  >
                     <button type="button" className="btn btn-success"
                       data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
                       onClick={NewButtonHandeller}>
@@ -464,15 +466,26 @@ const BreadcrumbNew = () => {
               </div>
               : null}
             {IsRadioButtonView ?
+              <div >
+                <div className="btn-group mt-1"
+                  role="group" aria-label="Basic checkbox toggle button group">
 
-              <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                  <input type="checkbox"
+                    id='btncheckNonDeleted'
+                    className="btn-check" autoComplete="off"
+                    checked={radioButtonNonDelete}
+                    onChange={nondeleteHandler}
+                  />
+                  <label className="btn btn-outline-secondary" htmlFor="btncheckNonDeleted">NonDeleted</label>
 
-                <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" onChange={(event) => { nondeleteHandler(event, "isNonDeleted") }} checked={RadioButtonNonDeleteValue.CheckedValue} />
-                <label className="btn btn-outline-secondary" htmlFor="btncheck1">NonDeleted</label>
+                  <input type="checkbox" className="btn-check"
+                    id='btncheckDeleted'
+                    autoComplete="off"
+                    checked={radioButtonDelete}
+                    onChange={deleteHandler} />
+                  <label className="btn btn-outline-secondary" htmlFor="btncheckDeleted" > Deleted</label>
 
-                <input type="checkbox" className="btn-check" id="btncheck2" autoComplete="off" onChange={(event) => { deleteHandler(event, "isDeleted") }} />
-                <label className="btn btn-outline-secondary" htmlFor="btncheck2"> Deleted</label>
-
+                </div>
               </div>
               : null}
             {
