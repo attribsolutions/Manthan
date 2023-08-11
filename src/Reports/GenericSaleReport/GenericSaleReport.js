@@ -26,23 +26,22 @@ const GenericSaleReport = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [distributorDropdown, setDistributorDropdown] = useState([{ value: "", label: "All" }]);
     const [tableData, setTableData] = useState([]);
-    const [columns, setColumns] = useState([{}]);
-    const [columnsCreated, setColumnsCreated] = useState(false)
     const [btnMode, setBtnMode] = useState(0);
 
-    const reducers = useSelector(
-        (state) => ({
-            goButtonData: state.GenericSaleReportReducer.genericSaleGobtn,
-            partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
-            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
-            userAccess: state.Login.RoleAccessUpdateData,
-            pageFieldList: state.CommonPageFieldReducer.pageFieldList,
-            pageField: state.CommonPageFieldReducer.pageField
-        })
+    const {
+        goButtonData = [],
+        pageField,
+        userAccess,
+        Distributor,
+        partyDropdownLoading
+    } = useSelector((state) => ({
+        goButtonData: state.GenericSaleReportReducer.genericSaleGobtn,
+        partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
+        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        userAccess: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField
+    })
     );
-    const { goButtonData = [], pageField, } = reducers
-    
-    const { userAccess, Distributor, partyDropdownLoading } = reducers;
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
