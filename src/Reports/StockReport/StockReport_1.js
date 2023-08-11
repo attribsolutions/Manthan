@@ -8,13 +8,11 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import C_Report from "../../components/Common/C_Report";
-import { StockProcessing_API_Success, StockProcessing_Action, stockReport_1_GoButton_API, stockReport_1_GoButton_API_Success } from "../../store/Report/StockReport/action";
-import { stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
+import { StockProcessing_API_Success, StockProcessing_Action, stockReport_1_GoButton_API_Success } from "../../store/Report/StockReport/action";
 import { getBaseUnit_ForDropDown, getpdfReportdata } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { StockReport_1_GoBtn_API, StockReport_GoBtn_API } from "../../helpers/backend_helper";
+import { StockReport_1_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../ReportIndex'
-
 
 const StockReport_1 = (props) => {
 
@@ -85,10 +83,11 @@ const StockReport_1 = (props) => {
         }
     }, [StockProcessingBtn])
 
-    const BaseUnit_DropdownOptions = BaseUnit.map(data => ({
-        value: data.id,
-        label: data.Name
-    }));
+    const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
+        .map(data => ({
+            value: data.id,
+            label: data.Name
+        }));
 
     function StockProccessHandler() {
 
@@ -103,7 +102,6 @@ const StockReport_1 = (props) => {
 
     function goButtonHandler() {
 
-        const btnId = `gobtn-${url.STOCK_REPORT_1}`
         if (unitDropdown === "") {
             customAlert({
                 Type: 4,
@@ -120,7 +118,6 @@ const StockReport_1 = (props) => {
 
         let config = { ReportType: report.Stock, jsonBody }
         dispatch(getpdfReportdata(StockReport_1_GoBtn_API, config))
-
     }
 
     function fromdateOnchange(e, date) {
