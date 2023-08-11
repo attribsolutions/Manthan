@@ -56,12 +56,10 @@ const ProfileMenu = props => {
 
   }))
 
-
-
   useEffect(() => {
 
-    if (localStorage.getItem("UserName")) {
-      const obj = localStorage.getItem("UserName")
+    if (localStorage.getItem("EmployeeName")) {
+      const obj = localStorage.getItem("EmployeeName")
       setusername(obj)
     }
   }, [props.success, user])
