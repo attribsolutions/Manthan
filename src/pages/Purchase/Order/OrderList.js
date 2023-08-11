@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Col, FormGroup, Label} from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import Order from "./Order";
@@ -28,7 +28,7 @@ const OrderList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-  
+
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
@@ -520,6 +520,11 @@ const OrderList = () => {
                             </Label>
                             <Col sm="7">
                                 <C_DatePicker
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
                                     name='FromDate'
                                     value={values.FromDate}
                                     onChange={fromdateOnchange}
@@ -536,6 +541,11 @@ const OrderList = () => {
                             </Label>
                             <Col sm="7">
                                 <C_DatePicker
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
                                     name="ToDate"
                                     value={values.ToDate}
                                     onChange={todateOnchange}
