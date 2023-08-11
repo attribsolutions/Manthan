@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button,  Modal,  Spinner } from "reactstrap";
+import { Button, Modal, Spinner } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
@@ -295,6 +295,7 @@ const CommonPurchaseList = (props) => {
             striped={true}
             classes={"table  table-bordered table-hover"}
             onDataSizeChange={({ dataCount }) => {
+              
               dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
             }}
             noDataIndication={

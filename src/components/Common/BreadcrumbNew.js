@@ -282,7 +282,7 @@ const BreadcrumbNew = () => {
 
 
   }));
-  debugger
+
   const {
     newBtnView = true,
     excelBtnView = true,

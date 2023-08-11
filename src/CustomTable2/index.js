@@ -68,7 +68,7 @@ const CustomTable = ({
 
     //  code for deleted, nondeleted and both  Record   ///
     useEffect(() => {
-        debugger
+        
 
         const IsDeleted = slicedData
             .filter(item => item.IsRecordDeleted === true)
