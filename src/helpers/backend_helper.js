@@ -468,6 +468,10 @@ export const GRN_Post_API = ({ jsonBody, btnId }) => post(url.GRN, jsonBody, btn
 export const GRN_update_API = ({ jsonBody, updateId, btnId }) => put(`${url.GRN}/${updateId}`, jsonBody, btnId)// update api
 export const GRN_delete_API = ({ deleteId, btnId }) => del(`${url.GRN}/${deleteId}`, btnId)//Delete Order
 export const GRN_Make_API = ({ jsonBody, btnId }) => post(url.GRN_MAKE_API, jsonBody, btnId)
+export const Hide_Invoice_For_GRN_API = ({ InvoiceId, IsHide }) => del(`${url.HIDE_INVOICE_FOR_GRN}/${InvoiceId}/${IsHide}`)
+
+
+
 
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)

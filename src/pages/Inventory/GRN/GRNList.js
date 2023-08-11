@@ -56,6 +56,8 @@ const GRNList = () => {
         deleteSucc: _act.deleteGRNIdSuccess
     }
 
+
+
     useLayoutEffect(() => {
         let page_Id = '';
         let page_Mode = mode.defaultList;
@@ -82,6 +84,8 @@ const GRNList = () => {
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
+        
+
         if (!(loginSelectedPartyID() === 0)) {
             goButtonHandler()
         }
@@ -129,7 +133,7 @@ const GRNList = () => {
                 Supplier: venderSelect === "" ? '' : venderSelect.value,
                 Party: loginSelectedPartyID(),
             });
-            dispatch(_act.getGRNListPage({ filtersBody}));
+            dispatch(_act.getGRNListPage({ filtersBody }));
         } catch (error) { }
     }
 

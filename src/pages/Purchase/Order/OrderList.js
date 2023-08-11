@@ -113,6 +113,8 @@ const OrderList = () => {
         deleteSucc: _act.deleteOrderIdSuccess,
     }
 
+
+
     // Featch Modules List data  First Rendering
     useLayoutEffect(() => {
 
@@ -199,6 +201,13 @@ const OrderList = () => {
             dispatch(priceListByCompay_ActionSuccess([]))
         }
     }, []);
+
+    useEffect(() => {
+        if (subPageMode === url.GRN_STP_3) {
+            dispatch(_act.BreadcrumbRadioButtonView(true));
+        }
+    }, [])
+
 
     useEffect(() => {
         if (pageField) {
