@@ -105,6 +105,9 @@ const SalesReturn = (props) => {
         });
         dispatch(Retailer_List(jsonBody));
         dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
+        return () => {
+            dispatch(Retailer_List_Success([]));
+        }
     }, []);
 
     useEffect(() => {

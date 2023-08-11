@@ -61,7 +61,7 @@ const ViewDetails_Modal = () => {
 
 
     const SaveHandler = async (event) => {
-        debugger
+        
         const btnId = event.target.id
         try {
             const tableItemArray = []
@@ -177,7 +177,7 @@ const ViewDetails_Modal = () => {
 
                     return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
                 } else {
-                    debugger
+                    
                     let defaultQuantity = tableArray.IsApproved ? row.ApprovedQuantity : row.Quantity;
                     return (
                         <div>
@@ -190,7 +190,7 @@ const ViewDetails_Modal = () => {
                                 autoComplete="off"
                                 className=" text-end"
                                 onChange={(event) => {
-                                    debugger
+                                    
                                     let input = Number(event.target.value)
                                     let result = /^\d*(\.\d{0,3})?$/.test(input);
                                     if (result) {

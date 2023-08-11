@@ -280,7 +280,7 @@ const ItemsMaster = (props) => {
                 // })
                 // setImageTabTable(ItemImagesDetails)
 
-                debugger
+                
                 let ItemShelfLife = hasEditVal.ItemShelfLife.map((index) => {
 
                     return index.Days
