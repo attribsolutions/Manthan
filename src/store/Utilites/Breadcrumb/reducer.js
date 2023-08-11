@@ -3,13 +3,19 @@ import {
   BREADCRUMB_ITEM_NAME,
   BREADCRUMB_SHOW_COUNT_LABLE,
   BREADCRUMB_DOWN_BTN_DATA,
-  BREADCRUMB_REST
+  BREADCRUMB_REST,
+  BREADCRUMB_RADIO_BUTTON_VIEW,
+  BREADCRUMB_NON_DELETE_BUTTON,
+  BREADCRUMB_DELETE_BUTTON
 } from "./actionType"
 
 
 const INIT_STATE = {
   bredcrumbItemName: "",
   showCountlabel: '',
+  IsRadioButtonView: false,
+  RadioButtonDeleteValue: { CheckedValue: false, type: "isDeleted" },
+  RadioButtonNonDeleteValue: { CheckedValue: true, type: "isNonDeleted" },
   breadcrumbDetail: {
     breadShow: false,
     newBtnView: false,
@@ -24,6 +30,7 @@ const INIT_STATE = {
   downBtnData: []
 }
 const BreadcrumbReducer = (state = INIT_STATE, action) => {
+  
   switch (action.type) {
 
     case BREADCRUMB_ITEM_NAME:
@@ -47,12 +54,35 @@ const BreadcrumbReducer = (state = INIT_STATE, action) => {
         ...state,
         downBtnData: action.payload,
       }
+
+    case BREADCRUMB_NON_DELETE_BUTTON:
+      return {
+        ...state,
+        RadioButtonNonDeleteValue: action.config,
+      }
+
+    case BREADCRUMB_DELETE_BUTTON:
+      return {
+        ...state,
+        RadioButtonDeleteValue: action.config,
+      }
+
+
+
+
+
+    case BREADCRUMB_RADIO_BUTTON_VIEW:
+      return {
+        ...state,
+        IsRadioButtonView: action.IsView,
+      }
+
     case BREADCRUMB_REST:
       return {
         ...INIT_STATE,
       }
 
-      default:
+    default:
       return state
   }
 }

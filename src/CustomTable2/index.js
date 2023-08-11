@@ -1,8 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import './CustomTable.scss';
 import { customTableSearch } from '../components/Common/SearchBox/MySearch';
 import BootstrapTable from 'react-bootstrap-table-next';
 import CustomPagination from './CustomPagination';
+import { useDispatch, useSelector } from 'react-redux';
+import { BreadcrumbNonDeleteButton } from '../store/actions';
 
 const CustomTable = ({
     data, // table row data
@@ -13,6 +15,16 @@ const CustomTable = ({
 }) => {
     const [searchText, setSearchText] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [modifiyRowKeys, setModifiyRowKeys] = useState([]);
+    const dispatch = useDispatch();
+
+
+
+
+    const { RadioButtonNonDeleteValue, RadioButtonDeleteValue } = useSelector(state => ({
+        RadioButtonNonDeleteValue: state.BreadcrumbReducer.RadioButtonNonDeleteValue,
+        RadioButtonDeleteValue: state.BreadcrumbReducer.RadioButtonDeleteValue,
+    }))
 
     // Function to handle search
     const handleSearch = (val) => {
@@ -54,6 +66,41 @@ const CustomTable = ({
         setCurrentPage(page);
     };
 
+    //  code for deleted, nondeleted and both  Record   ///
+    useEffect(() => {
+        debugger
+
+        const IsDeleted = slicedData
+            .filter(item => item.IsRecordDeleted === true)
+            .map(item => item.id);
+        const IsNonDeleted = slicedData
+            .filter(item => item.IsRecordDeleted !== true)
+            .map(item => item.id);
+
+        // const IsBoth = slicedData.map(item => item.id);
+
+        if ((RadioButtonDeleteValue.CheckedValue === true) && (RadioButtonNonDeleteValue.CheckedValue === true)) {
+            setModifiyRowKeys([]);
+        } else {
+            if ((RadioButtonNonDeleteValue.CheckedValue === true) && (RadioButtonNonDeleteValue.type === "isNonDeleted")) {
+                setModifiyRowKeys(IsDeleted);
+            } else if ((RadioButtonDeleteValue.CheckedValue === true) && (RadioButtonDeleteValue.type === "isDeleted")) {
+                setModifiyRowKeys(IsNonDeleted);
+            } else if ((RadioButtonDeleteValue.CheckedValue === false) && (RadioButtonNonDeleteValue.CheckedValue === false)) {
+                dispatch(BreadcrumbNonDeleteButton({ CheckedValue: true, type: "isNonDeleted" }))
+            }
+        }
+
+
+
+    }, [RadioButtonNonDeleteValue, RadioButtonDeleteValue, slicedData])
+
+
+    //  code for deleted, nondeleted and both  Record   /////
+
+
+
+
     const rowStyles = (row) => {
         if (row.IsRecordDeleted) {
             return { textDecoration: 'line-through' };
@@ -66,6 +113,7 @@ const CustomTable = ({
 
             <BootstrapTable data={slicedData} columns={columns}
                 rowStyle={rowStyles}
+                hiddenRows={modifiyRowKeys}
                 {...rest} />
 
             {/* Pagination component */}

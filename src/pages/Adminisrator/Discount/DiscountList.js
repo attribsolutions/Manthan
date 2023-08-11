@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { BreadcrumbRadioButtonView, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -40,6 +40,7 @@ const DiscountList = () => {
     useEffect(() => {
         const page_Id = pageId.DISCOUNT_LIST;
         dispatch(commonPageFieldListSuccess(null));
+        dispatch(BreadcrumbRadioButtonView(true));
         dispatch(commonPageFieldList(page_Id));
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler()
