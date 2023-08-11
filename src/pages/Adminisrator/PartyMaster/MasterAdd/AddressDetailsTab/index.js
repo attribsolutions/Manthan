@@ -13,7 +13,6 @@ import {
 } from '../../../../../components/Common/validationFunction';
 import { C_DatePicker } from '../../../../../CustomValidateForm';
 
-
 const AddressTabForm = forwardRef((props, ref) => {
 
     const fileds = {
@@ -87,7 +86,6 @@ const AddressTabForm = forwardRef((props, ref) => {
                 setState(resetFunction(fileds, state))// Clear form values 
             }
         } catch (error) { }
-
     }
 
     const onchangeHandler = async (event) => {
@@ -152,7 +150,6 @@ const AddressTabForm = forwardRef((props, ref) => {
                                 </Col>
                             </Row>
                         </Col>
-
                     </Row>
 
                     <Row>
@@ -174,7 +171,6 @@ const AddressTabForm = forwardRef((props, ref) => {
                                     <span className="invalid-feedback">{isError.FSSAINo}</span>
                                 )}
                             </FormGroup>
-
                         </Col>
 
                         <Col md="1"> </Col>
@@ -182,6 +178,12 @@ const AddressTabForm = forwardRef((props, ref) => {
                             <FormGroup className="mb-3">
                                 <Label htmlFor="validationCustom01">{fieldLabel.FSSAIExipry} </Label>
                                 <C_DatePicker
+                                    options={{
+                                        minDate: "today",
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
                                     name="FSSAIExipry"
                                     value={values.FSSAIExipry}
                                     placeholder={"DD/MM/YYYY"}
@@ -191,11 +193,8 @@ const AddressTabForm = forwardRef((props, ref) => {
                                     <span className="text-danger f-8"><small>{isError.FSSAIExipry}</small></span>
                                 )}
                             </FormGroup>
-
                         </Col>
-
                     </Row>
-
 
                     <Row >
                         <Col md="4">

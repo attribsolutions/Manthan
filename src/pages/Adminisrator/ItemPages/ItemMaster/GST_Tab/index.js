@@ -72,11 +72,16 @@ function GSTTab(props) {
                                 <div id={`txtEffectiveDate${0}`} >
                                     <C_DatePicker
                                         id={`txtEffectiveDate${0}`}
-                                        name="FSSAIExipry"
-                                        placeholder = "Please Enter EffectiveDate"
+                                        name="EffectiveDate"
+                                        placeholder="Please Enter EffectiveDate"
                                         value={effectiveDate}
                                         required={true}
                                         onChange={EffectiveDateHandler}
+                                        options={{
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
                                     />
                                 </div>
                             </FormGroup>
@@ -109,8 +114,8 @@ function GSTTab(props) {
                                 <Row className=" mt-3">
                                     <Col >
                                         <Button
-                                              className=" button_add"
-                                              color="btn btn-outline-primary border-2 font-size-12"
+                                            className=" button_add"
+                                            color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"
                                             onClick={addRowsHandler}
                                         >
