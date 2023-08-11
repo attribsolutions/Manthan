@@ -15,7 +15,7 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import {  Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import { get_Division_ForDropDown, get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -271,7 +271,7 @@ const MRPMaster = (props) => {
             dispatch(saveMRPMasterSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -401,7 +401,7 @@ const MRPMaster = (props) => {
                 MRP: index.MRP,
                 id: index.id
             }))
-            
+
             const Find = ItemData.filter((index) => {
                 return (Number(index.MRP) > 0)
             })
@@ -512,6 +512,11 @@ const MRPMaster = (props) => {
                                                             isDisabled={pageMode === mode.edit ? true : false}
                                                             onChange={(y, v, e) => {
                                                                 onChangeDate({ e, v, state, setState })
+                                                            }}
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
                                                             }}
                                                         />
                                                         {isError.EffectiveDate.length > 0 && (

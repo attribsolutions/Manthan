@@ -181,7 +181,7 @@ const GSTMaster = (props) => {
             dispatch(saveGSTMasterSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -457,6 +457,11 @@ const GSTMaster = (props) => {
                                                             isDisabled={pageMode === mode.edit ? true : false}
                                                             onChange={(y, v, e) => {
                                                                 onChangeDate({ e, v, state, setState })
+                                                            }}
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
                                                             }}
                                                         />
                                                         {isError.EffectiveDate.length > 0 && (
