@@ -452,7 +452,7 @@ const BreadcrumbNew = () => {
 
           <div className=" d-flex gap-2 justify-content-end"  >
 
-            {excelBtnView ?
+            {(excelBtnView && !(downBtnData.length === 0)) ?
               <div className="px-2 " style={{ marginTop: "7px" }}>
                 <Button
                   type="button"
