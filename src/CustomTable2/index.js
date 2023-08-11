@@ -60,7 +60,6 @@ const CustomTable = ({
         return filteredData.slice(startIndex, endIndex);
     }, [filteredData, startIndex, endIndex]);
 
-
     // Function to handle page change
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -68,7 +67,6 @@ const CustomTable = ({
 
     //  code for deleted, nondeleted and both  Record   ///
     useEffect(() => {
-        
 
         const IsDeleted = slicedData
             .filter(item => item.IsRecordDeleted === true)
@@ -77,15 +75,21 @@ const CustomTable = ({
             .filter(item => item.IsRecordDeleted !== true)
             .map(item => item.id);
 
-        // const IsBoth = slicedData.map(item => item.id);
+        const IsBoth = slicedData.map(item => item.id);
 
         if ((RadioButtonDeleteValue.CheckedValue === true) && (RadioButtonNonDeleteValue.CheckedValue === true)) {
             setModifiyRowKeys([]);
+            onDataSizeChange({ dataCount: IsBoth.length });
+
         } else {
             if ((RadioButtonNonDeleteValue.CheckedValue === true) && (RadioButtonNonDeleteValue.type === "isNonDeleted")) {
                 setModifiyRowKeys(IsDeleted);
+                onDataSizeChange({ dataCount: IsNonDeleted.length });
+
             } else if ((RadioButtonDeleteValue.CheckedValue === true) && (RadioButtonDeleteValue.type === "isDeleted")) {
                 setModifiyRowKeys(IsNonDeleted);
+                onDataSizeChange({ dataCount: IsDeleted.length });
+
             } else if ((RadioButtonDeleteValue.CheckedValue === false) && (RadioButtonNonDeleteValue.CheckedValue === false)) {
                 dispatch(BreadcrumbNonDeleteButton({ CheckedValue: true, type: "isNonDeleted" }))
             }
