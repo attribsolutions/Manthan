@@ -61,7 +61,10 @@ const DamageStockReport = (props) => {
     }, [])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Damage Stock Report Count:${tableData.length}`))
+        if (tableData.length > 0) {
+            dispatch(BreadcrumbShowCountlabel(`Damage Stock Report Count:${tableData.length}`))
+
+        }
     }, [tableData])
 
     function goButtonHandler() {
