@@ -16,6 +16,7 @@ import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
 import { C_Button } from "./CommonButton";
 import CustomTable from "../../CustomTable2";
+import ExtraTableWrapper from "../../CustomTable2/TableWrapper";
 
 
 export async function isAlertFunc(type, Msg) {
@@ -281,29 +282,33 @@ const CommonPurchaseList = (props) => {
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <HeaderContent />
         <div >
-          <CustomTable
-            keyField={"id"}
+          <ExtraTableWrapper
             data={tableList}
-            columns={tableColumns}
-            responsive
-            bootstrap4
-            bordered={false}
-            selectRow={selectCheckParams.isShow ?
-              selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
-              : undefined}
-            defaultSorted={defaultSorted}
-            striped={true}
-            classes={"table  table-bordered table-hover"}
-            onDataSizeChange={({ dataCount }) => {
-              
-              dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
-            }}
-            noDataIndication={
-              <div className="text-danger text-center ">
-                No record(s) Not Found.
-              </div>
-            }
-          />
+          >
+            {(tableProps) => (
+              <CustomTable
+                keyField={"id"}
+                data={tableProps}
+                columns={tableColumns}
+                responsive
+                bootstrap4
+                bordered={false}
+                selectRow={selectCheckParams.isShow ?
+                  selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
+                  : undefined}
+                defaultSorted={defaultSorted}
+                striped={true}
+                classes={"table  table-bordered table-hover"}
+                onDataSizeChange={({ dataCount }) => {
+                  dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
+                }}
+                noDataIndication={
+                  <div className="text-danger text-center ">
+                    No record(s) Not Found.
+                  </div>
+                }
+              />)}
+          </ExtraTableWrapper>
           {
 
             ((tableList.length > 0) && (selectCheckParams.isShow) && (selectCheckParams.isRoleAccess)) ?

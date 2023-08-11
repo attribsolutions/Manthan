@@ -6,17 +6,17 @@ import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, url } from "../../routes/index"
+import { mode, pageId, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import * as XLSX from 'xlsx';
-
 import { postInvoiceDataExport_API, postInvoiceDataExport_API_Success } from "../../store/Report/InvoiceDataExportRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import Select from "react-select";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { BreadcrumbShowCountlabel } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 
 const InvoiceDataExport = (props) => {
 
@@ -32,24 +32,28 @@ const InvoiceDataExport = (props) => {
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [columns, setColumns] = useState([{}]);
-    const [columnsCreated, setColumnsCreated] = useState(false)
     const [PartyDropdown, setPartyDropdown] = useState("");
 
-    const reducers = useSelector(
-        (state) => ({
-            tableData: state.InvoiceDataExportReducer.InvoiceDataExportGobtn,
-            GoBtnLoading: state.InvoiceDataExportReducer.GoBtnLoading,
-            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
-            ExcelBtnLoading: state.InvoiceDataExportReducer.ExcelBtnLoading,
-            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
-            userAccess: state.Login.RoleAccessUpdateData,
-            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
-            pageField: state.CommonPageFieldReducer.pageFieldList
-        })
+    const {
+        userAccess,
+        tableData = "",
+        ExcelBtnLoading,
+        GoBtnLoading,
+        Distributor,
+        pageField
+    } = useSelector((state) => ({
+        tableData: state.InvoiceDataExportReducer.InvoiceDataExportGobtn,
+        GoBtnLoading: state.InvoiceDataExportReducer.GoBtnLoading,
+        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        ExcelBtnLoading: state.InvoiceDataExportReducer.ExcelBtnLoading,
+        supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        userAccess: state.Login.RoleAccessUpdateData,
+        SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+        pageField: state.CommonPageFieldReducer.pageField
+    })
     );
-    const { userAccess, tableData = [], ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
-    const { InvoiceExportSerializerDetails = [] } = tableData;
+
+    const { InvoiceExportSerializerDetails = [], goBtnMode } = tableData;
 
     const values = { ...state.values }
 
@@ -57,6 +61,13 @@ const InvoiceDataExport = (props) => {
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.INVOICE_DATA_EXPORT))
+        return () => {
+            dispatch(commonPageFieldSuccess(null));
+        }
+    }, []);
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -76,9 +87,9 @@ const InvoiceDataExport = (props) => {
     useEffect(() => { return () => { dispatch(postInvoiceDataExport_API_Success([])); } }, [])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Invoice Data Export count"} :${Number(InvoiceExportSerializerDetails.length)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Invoice count"} :${Number(InvoiceExportSerializerDetails.length)}`))
 
-        if (tableData.btnId === "excel_btnId") {
+        if (goBtnMode === "downloadExcel") {
             if (InvoiceExportSerializerDetails.length > 0) {
                 const worksheet = XLSX.utils.json_to_sheet(InvoiceExportSerializerDetails);
                 const workbook = XLSX.utils.book_new();
@@ -88,7 +99,9 @@ const InvoiceDataExport = (props) => {
         }
     }, [tableData]);
 
-    function excelhandler() {
+
+
+    function goButtonHandler(goBtnMode) {
 
         try {
             if ((isSCMParty) && (PartyDropdown === "")) {
@@ -100,54 +113,10 @@ const InvoiceDataExport = (props) => {
                 "ToDate": values.ToDate,
                 "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
             });
-            let config = { jsonBody, btnId: "excel_btnId" }
+            const config = { jsonBody, goBtnMode: goBtnMode, btnId: goBtnMode };
             dispatch(postInvoiceDataExport_API(config))
-            dispatch(postInvoiceDataExport_API_Success([]))
 
         } catch (error) { _cfunc.CommonConsole(error) }
-    }
-
-    function goButtonHandler() {
-
-        try {
-            const btnId = `gobtn-${url.INVOICE_DATA_EXPORT}`
-            if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
-                return;
-            };
-            const jsonBody = JSON.stringify({
-                "FromDate": values.FromDate,
-                "ToDate": values.ToDate,
-                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
-            });
-            let config = { jsonBody, btnId: btnId }
-            dispatch(postInvoiceDataExport_API(config))
-            dispatch(postInvoiceDataExport_API_Success([]))
-
-        } catch (error) { _cfunc.CommonConsole(error) }
-    }
-
-    const createColumns = () => {
-        if (InvoiceExportSerializerDetails.length > 0) {
-            const objectAtIndex0 = InvoiceExportSerializerDetails[0];
-            const internalColumn = []
-            for (const key in objectAtIndex0) {
-                const column = {
-                    text: key,
-                    dataField: key,
-                    sort: true,
-                    classes: "table-cursor-pointer",
-                };
-                internalColumn.push(column);
-            }
-
-            setColumns(internalColumn)
-            setColumnsCreated(true)
-        }
-    }
-
-    if (!columnsCreated) {
-        createColumns();
     }
 
     function fromdateOnchange(e, date) {
@@ -179,7 +148,7 @@ const InvoiceDataExport = (props) => {
         value: i.id,
         label: i.Name
     }));
-
+    const [tableColumns] = DynamicColumnHook({ pageField, })
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -239,9 +208,9 @@ const InvoiceDataExport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={GoBtnLoading === `gobtn-${url.INVOICE_DATA_EXPORT}`}
-                                className="btn btn-success   "
-                                onClick={goButtonHandler}
+                                loading={GoBtnLoading === "showOnTable"}
+                                className="btn btn-success"
+                                onClick={() => goButtonHandler("showOnTable")}
                             >
                                 Show
                             </C_Button>
@@ -252,9 +221,9 @@ const InvoiceDataExport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={ExcelBtnLoading === `excel_btnId`}
-                                className="btn btn-primary   "
-                                onClick={(e) => { excelhandler() }}
+                                loading={ExcelBtnLoading === "downloadExcel"}
+                                className="btn btn-primary"
+                                onClick={() => goButtonHandler("downloadExcel")}
                             >
                                 Excel Download
                             </C_Button>
@@ -263,11 +232,12 @@ const InvoiceDataExport = (props) => {
 
                     </div>
                 </div>
+                
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="PartyID"
-                        data={tableData.btnId !== "excel_btnId" ? InvoiceExportSerializerDetails : [{}]}
-                        columns={tableData.btnId !== "excel_btnId" ? columns : [{}]}
+                        data={goBtnMode === "showOnTable" ? InvoiceExportSerializerDetails : [{}]}
+                        columns={goBtnMode === "showOnTable" ? tableColumns : [{}]}
                         search
                     >
                         {(toolkitProps,) => (
@@ -279,11 +249,12 @@ const InvoiceDataExport = (props) => {
                                                 keyField="PartyID"
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
-                                                    <div className="text-danger text-center ">
+                                                     goBtnMode === "showOnTable" && <div className="text-danger text-center ">
                                                         Record Not available
                                                     </div>
+                                                    
                                                 }
-                                                {...toolkitProps.baseProps}
+                                            {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
                                         </div>
