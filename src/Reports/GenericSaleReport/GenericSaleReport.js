@@ -41,7 +41,7 @@ const GenericSaleReport = (props) => {
         })
     );
     const { goButtonData = [], pageField, } = reducers
-    debugger
+    
     const { userAccess, Distributor, partyDropdownLoading } = reducers;
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;

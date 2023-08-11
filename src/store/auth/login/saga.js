@@ -56,13 +56,14 @@ function* afterLoginUserDetails_genFun({ id }) {
     } else {
       throw new Error('Exception message');
     }
-
+    
     yield put(getUserDetailsActionSuccess(response.Data))
     localStorage.setItem("UserName", (response.Data.UserName))
     localStorage.setItem("Company", response.Data.CompanyID)
     localStorage.setItem("CompanyName", response.Data.CompanyName)
     localStorage.setItem("CompanyGroup", response.Data.CompanyGroup)
     localStorage.setItem("EmployeeID", response.Data.EmployeeID)
+    localStorage.setItem("EmployeeName", response.Data.EmployeeName)
     if (response.Data.IsSCMCompany) {
       localStorage.setItem("IsSCMCompany", 1)
     }

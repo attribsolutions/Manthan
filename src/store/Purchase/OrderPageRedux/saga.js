@@ -159,11 +159,10 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
 
-      i.dashboardOrderDate = date_dmy_func(i.OrderDate);
+      i.dashboardOrderDate = date_dmy_func(i.OrderDate); // Only for Dashoard 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.OrderDate, i.CreatedOn);
-
+      i["transactionDateLabel"] = concatDateAndTime(i.DeliveryDate, i.CreatedOn);
 
       i.DeliveryDate = (`${DeliveryDate}`)
 
@@ -172,7 +171,6 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceDeleteHide = false;
       i.forceSelectDissabled = false;
       i.forceHideOrderAprovalBtn = true;
-
 
       if (i.Inward > 0) {
         i.Inward = "Close"
@@ -295,10 +293,6 @@ function* OrderPageSaga() {
   yield takeLatest(POST_ORDER_CONFIRM_API, OrderConfirm_GenFunc);
 
   yield takeLatest(ORDER_SINGLE_GET_API, OrderSingleGet_GenFunc);
-
-
-
-
 
 }
 
