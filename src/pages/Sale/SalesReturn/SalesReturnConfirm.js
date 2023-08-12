@@ -116,9 +116,10 @@ const ViewDetails_Modal = () => {
                     }
                     if (parseInt(ReturnFinalApprovalRole) === loginRoleID()) {
 
-                        ReturnItems.ApprovedByCompany = index.ApprovedQuantity;
+                        ReturnItems.ApprovedByCompany = Number(Quantity).toFixed(2);
                         ReturnItems.FinalApprovalDate = date_ymd_func();
                     }
+
                     tableItemArray.push(ReturnItems)
                 }
             })
