@@ -414,6 +414,11 @@ export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"
 export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"
 export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
 
+export const GST_R1_REPORT = "/generate-excel"
+
+
+
+
 //Deleted Invoice Data Export Report 
 export const DELETE_INVOICE_DATA_EXPORT = "/DeletedInvoiceData"
 

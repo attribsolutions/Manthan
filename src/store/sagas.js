@@ -93,6 +93,10 @@ import MasterClaimCreatSaga from "./Report/ClaimSummary/saga"
 import InvoiceDataExportSaga from "./Report/InvoiceDataExportRedux/saga"
 import PurchaseGSTReportSaga from "./Report/PurchaseGSTRedux/saga"
 import DamageStockReportSaga from "./Report/DamageStockReportRedux/saga"
+import GstR1ReportSaga from "./Report/GSTR1ReportRedux/saga"
+
+
+
 
 export default function* rootSaga() {
   yield all([
@@ -180,6 +184,9 @@ export default function* rootSaga() {
     fork(GenericSaleReportSaga),
     fork(PurchaseGSTReportSaga),
     fork(InvoiceDataExportSaga),
+    fork(GstR1ReportSaga),
+
+    
 
 
   ])

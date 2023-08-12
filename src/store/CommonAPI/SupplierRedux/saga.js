@@ -134,6 +134,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.INVOICE_1
     || subPageMode === url.INVOICE_LIST_1
     || subPageMode === url.PARTY_LEDGER
+    || subPageMode === url.GST_R1_REPORT
 
   );
 
