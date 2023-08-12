@@ -4,6 +4,7 @@ import {
   deleteGRNIdSuccess,
   editGRNIdSuccess,
   getGRNListPageSuccess,
+  hideInvoiceForGRFActionSuccess,
   makeGRN_Mode_1ActionSuccess,
   saveGRNSuccess,
   updateGRNIdSuccess,
@@ -13,6 +14,7 @@ import {
   GRN_Edit_API,
   GRN_get_API, GRN_Make_API, GRN_Post_API,
   GRN_update_API,
+  Hide_Invoice_For_GRN_API,
 } from "../../../helpers/backend_helper";
 import {
   DELETE_GRN_FOR_GRN_PAGE,
@@ -21,6 +23,7 @@ import {
   GET_GRN_LIST_PAGE,
   SAVE_GRN_FROM_GRN_PAGE_ACTION,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
+  HIDE_INVOICE_FOR_GRN_ACTION,
 } from "./actionType";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -61,7 +64,7 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
   try {
     const response = yield call(GRN_get_API, config);
     const newList = yield response.Data.map((i) => {
-     
+
       i.GrandTotal = _cfunc.amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
@@ -70,6 +73,13 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
       return i
     })
     yield put(getGRNListPageSuccess(newList))
+  } catch (error) { yield put(GrnApiErrorAction()) }
+}
+
+function* HideInvoiceForGRNGenFunc({ config }) {             // Upadte GRN  genrator function
+  try {
+    const response = yield call(Hide_Invoice_For_GRN_API, config);
+    yield put(hideInvoiceForGRFActionSuccess(response))
   } catch (error) { yield put(GrnApiErrorAction()) }
 }
 
@@ -116,6 +126,7 @@ function* makeGRN_Mode1_GenFunc({ config }) {
 
 function* GRNSaga() {
 
+  yield takeLatest(HIDE_INVOICE_FOR_GRN_ACTION, HideInvoiceForGRNGenFunc);
   yield takeLatest(MAKE_GRN_MODE_1_ACTION, makeGRN_Mode1_GenFunc);
   yield takeLatest(SAVE_GRN_FROM_GRN_PAGE_ACTION, saveGRNGenFunc);
   yield takeLatest(EDIT_GRN_FOR_GRN_PAGE, Edit_GRN_GenratorFunction);

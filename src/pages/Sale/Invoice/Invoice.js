@@ -310,7 +310,7 @@ const Invoice = (props) => {
                             <Select
                                 classNamePrefix="select2-selection"
                                 id={"ddlUnit"}
-                                isDisabled={pageMode === 'edit' ? true : false}
+                                isDisabled={true}
                                 defaultValue={index1.default_UnitDropvalue}
                                 options={index1.UnitDetails.map(i => ({
                                     "label": i.UnitName,
@@ -612,7 +612,7 @@ const Invoice = (props) => {
                 validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
                 return
             };
-            
+
             let isSameMRPinStock = '';//this is check is Enterd stock Quantity is Same MRP
             index.StockDetails.forEach((ele) => {
 
@@ -662,7 +662,7 @@ const Invoice = (props) => {
                     })
                 }
             })
-            
+
             if (isSameMRPinStock === false) {
                 validMsg.push(`${index.ItemName}: Multiple MRP’S Invoice not allowed.`);
                 return

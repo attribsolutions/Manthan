@@ -895,9 +895,6 @@ const Order = (props) => {
         },
     ];
 
-    function orderdateOnchange(e, date) {
-        setorderdate(date)
-    };
 
     function supplierOnchange(e) {
 
@@ -1219,18 +1216,12 @@ const Order = (props) => {
             }
 
             const po_JsonBody = {
-                OrderDate: orderdate,
-                OrderAmount: sumOfOrderAmount,
-                OrderItem: orderItems,
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
                 IsConfirm: false  // PO Order then IsConfirm true
             }
             const SO_JsonBody = {
-                OrderDate: orderdate,
-                OrderAmount: sumOfOrderAmount,
-                OrderItem: orderItems,
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
@@ -1245,7 +1236,11 @@ const Order = (props) => {
                 OrderType: order_Type.PurchaseOrder,
             }
             const comm_jsonBody = {
+                OrderDate: deliverydate,// order Date as a delivery date 
                 DeliveryDate: deliverydate,
+                OrderAmount: sumOfOrderAmount,
+                OrderItem: orderItems,
+
                 Description: description,
                 BillingAddress: billAddr.value,
                 ShippingAddress: shippAddr.value,
@@ -1347,6 +1342,11 @@ const Order = (props) => {
                                                     style={{ width: "115px" }}>Delivery Date</Label>
                                                 <Col sm="7">
                                                     <C_DatePicker
+                                                        options={{
+                                                            altInput: true,
+                                                            altFormat: "d-m-Y",
+                                                            dateFormat: "Y-m-d",
+                                                        }}
                                                         name="deliverydate"
                                                         value={deliverydate}
                                                         disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}

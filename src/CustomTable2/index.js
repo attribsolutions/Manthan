@@ -1,8 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import './CustomTable.scss';
 import { customTableSearch } from '../components/Common/SearchBox/MySearch';
 import BootstrapTable from 'react-bootstrap-table-next';
 import CustomPagination from './CustomPagination';
+import { useDispatch, useSelector } from 'react-redux';
+import { BreadcrumbNonDeleteButton } from '../store/actions';
 
 const CustomTable = ({
     data, // table row data
@@ -13,7 +15,7 @@ const CustomTable = ({
 }) => {
     const [searchText, setSearchText] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-
+  
     // Function to handle search
     const handleSearch = (val) => {
         setSearchText(val);
@@ -48,12 +50,12 @@ const CustomTable = ({
         return filteredData.slice(startIndex, endIndex);
     }, [filteredData, startIndex, endIndex]);
 
-
     // Function to handle page change
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
+  
     const rowStyles = (row) => {
         if (row.IsRecordDeleted) {
             return { textDecoration: 'line-through' };

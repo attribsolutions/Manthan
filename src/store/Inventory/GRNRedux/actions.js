@@ -12,7 +12,9 @@ import {
   SAVE_GRN_FROM_GRN_PAGE_SUCCESS,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
   UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS,
-  GRN_API_ERROR_ACTION
+  GRN_API_ERROR_ACTION,
+  HIDE_INVOICE_FOR_GRN_ACTION,
+  HIDE_INVOICE_FOR_GRN_ACTION_SUCCESS
 } from './actionType'
 
 
@@ -75,6 +77,18 @@ export const makeGRN_Mode_1ActionSuccess = list => ({
   type: MAKE_GRN_MODE_1_ACTION_SUCCESS,
   payload: list,
 })
+
+export const hideInvoiceForGRFAction = (config = {}) => ({
+  type: HIDE_INVOICE_FOR_GRN_ACTION,
+  config
+});
+
+export const hideInvoiceForGRFActionSuccess = (response) => ({
+  type: HIDE_INVOICE_FOR_GRN_ACTION_SUCCESS,
+  payload: response
+});
+
+
 
 
 export const GrnApiErrorAction = () => ({

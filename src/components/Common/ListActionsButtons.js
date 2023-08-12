@@ -16,6 +16,8 @@ export const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger w
 export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 export const printBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light "
 const printInvoiceBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
+export const hideBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light "
+
 
 //******************** icon class ******************************
 const editIconClass = "mdi mdi-pencil font-size-16";

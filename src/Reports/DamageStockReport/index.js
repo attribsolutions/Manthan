@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { Change_Button, Go_Button } from "../../components/Common/CommonButton";
+import { Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import Select from "react-select";
-import { BreadcrumbShowCountlabel, SSDD_List_under_Company } from "../../store/actions";
+import { BreadcrumbShowCountlabel } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -62,9 +61,11 @@ const DamageStockReport = (props) => {
     }, [])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Stock Report Count:${tableData.length}`))
+        if (tableData.length > 0) {
+            dispatch(BreadcrumbShowCountlabel(`Damage Stock Report Count:${tableData.length}`))
+
+        }
     }, [tableData])
-        ;
 
     function goButtonHandler() {
         dispatch(damageStockReport_GoButton_API({ partyId: _cfunc.loginPartyID() }))

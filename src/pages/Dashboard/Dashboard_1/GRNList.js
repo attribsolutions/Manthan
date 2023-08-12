@@ -11,6 +11,7 @@ import { Button, Spinner } from 'reactstrap';
 import { makeGRN_Mode_1Action } from '../../../store/Inventory/GRNRedux/actions';
 import { mode, url } from "../../../routes/index";
 
+
 export default function InvoiceForGRN() {
 
     const dispatch = useDispatch();
@@ -23,7 +24,12 @@ export default function InvoiceForGRN() {
         listBtnLoading: state.GRNReducer.listBtnLoading
     }));
 
+
+    const TableListWithNonDeleteRecord = tableList.filter(i => i.IsRecordDeleted === false);
+
+
     useEffect(() => {
+
         dispatch(getOrderListPageSuccess([]))
         let subPageMode = url.GRN_STP_3
         const gobtnId = `gobtn-${subPageMode}`
@@ -138,7 +144,7 @@ export default function InvoiceForGRN() {
     return (
         <ToolkitProvider
             keyField="Invoice"
-            data={tableList}
+            data={TableListWithNonDeleteRecord}
             columns={pagesListColumns}
             search
         >

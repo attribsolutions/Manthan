@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button,  Modal,  Spinner } from "reactstrap";
+import { Button, Input, Modal, Spinner } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
@@ -11,11 +11,12 @@ import { breadcrumbReturnFunc, metaTagLabel } from "./CommonFunction";
 import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
+import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, hideBtnCss, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
 import { C_Button } from "./CommonButton";
 import CustomTable from "../../CustomTable2";
+import ExtraTableWrapper from "../../CustomTable2/TableWrapper";
 
 
 export async function isAlertFunc(type, Msg) {
@@ -54,6 +55,7 @@ const CommonPurchaseList = (props) => {
     ButtonMsgLable,
     goButnFunc = () => { },
     makeBtnFunc = () => { },
+    hideBtnFunc = () => { },
     makeBtnShow,
     makeBtnName,
     pageMode,
@@ -169,6 +171,17 @@ const CommonPurchaseList = (props) => {
     makeBtnFunc(arr);
   }
 
+
+
+  function hideBtnHandler(rowData) {
+    rowData["isHideValue"] = "0";
+    let arr = [];
+    arr.push(rowData);
+    hideBtnFunc(arr);
+  }
+
+
+
   function tog_center() {
     if (modal_edit) {
       breadcrumbReturnFunc({
@@ -192,30 +205,58 @@ const CommonPurchaseList = (props) => {
         sort: true,
         formatter: (cellContent, rowData, key) => {
           rowData["hasSelect"] = false;
+          if (rowData.IsRecordDeleted === true) {   ///hide button in GRN list 3 STP page last action column for Make Button
+            return (
+              <div>
+                <div>
+                  <Button
+                    type="button"
+                    className={hideBtnCss}
+                    data-mdb-toggle="tooltip"
+                    data-mdb-placement="top"
+                    disabled={listBtnLoading}
+                    title={"UnHide"}
+                    onClick={() => {
+                      hideBtnHandler(rowData);
+                    }}
+                  >
+                    {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
+                      <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                      : <span
+                        style={{ marginLeft: "4px", marginRight: "4px" }}
+                        className=" fas fa-eye"
+                      ></span>
+                    }
+                  </Button>
+                </div>
+              </div>
+            );
+          } else {
+            return (
+              <div>
+                <Button
+                  type="button"
+                  className={makeBtnCss}
+                  data-mdb-toggle="tooltip"
+                  data-mdb-placement="top"
+                  disabled={listBtnLoading}
+                  title={makeBtnName}
+                  onClick={() => {
+                    makeBtnHandler(rowData);
+                  }}
+                >
+                  {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
+                    <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                    : <span
+                      style={{ marginLeft: "6px", marginRight: "6px" }}
+                      className=" fas fa-file-invoice"
+                    ></span>
+                  }
+                </Button>
+              </div>
+            );
+          }
 
-          return (
-            <div>
-              <Button
-                type="button"
-                className={makeBtnCss}
-                data-mdb-toggle="tooltip"
-                data-mdb-placement="top"
-                disabled={listBtnLoading}
-                title={makeBtnName}
-                onClick={() => {
-                  makeBtnHandler(rowData);
-                }}
-              >
-                {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
-                  <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                  : <span
-                    style={{ marginLeft: "6px", marginRight: "6px" }}
-                    className=" fas fa-file-invoice"
-                  ></span>
-                }
-              </Button>
-            </div>
-          );
           // }
         },
       }
@@ -281,28 +322,33 @@ const CommonPurchaseList = (props) => {
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <HeaderContent />
         <div >
-          <CustomTable
-            keyField={"id"}
+          <ExtraTableWrapper
             data={tableList}
-            columns={tableColumns}
-            responsive
-            bootstrap4
-            bordered={false}
-            selectRow={selectCheckParams.isShow ?
-              selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
-              : undefined}
-            defaultSorted={defaultSorted}
-            striped={true}
-            classes={"table  table-bordered table-hover"}
-            onDataSizeChange={({ dataCount }) => {
-              dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
-            }}
-            noDataIndication={
-              <div className="text-danger text-center ">
-                No record(s) Not Found.
-              </div>
-            }
-          />
+          >
+            {(tableProps) => (
+              <CustomTable
+                keyField={"id"}
+                data={tableProps}
+                columns={tableColumns}
+                responsive
+                bootstrap4
+                bordered={false}
+                selectRow={selectCheckParams.isShow ?
+                  selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
+                  : undefined}
+                defaultSorted={defaultSorted}
+                striped={true}
+                classes={"table  table-bordered table-hover"}
+                onDataSizeChange={({ dataCount }) => {
+                  dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
+                }}
+                noDataIndication={
+                  <div className="text-danger text-center ">
+                    No record(s) Not Found.
+                  </div>
+                }
+              />)}
+          </ExtraTableWrapper>
           {
 
             ((tableList.length > 0) && (selectCheckParams.isShow) && (selectCheckParams.isRoleAccess)) ?

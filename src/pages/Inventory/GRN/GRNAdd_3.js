@@ -14,7 +14,7 @@ import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, postSelect_Field_for_dropdown } from "../../../store/actions";
 import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
+import { editGRNIdSuccess, hideInvoiceForGRFAction, hideInvoiceForGRFActionSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import Select from "react-select";
 import { mode, url, pageId } from "../../../routes/index";
@@ -39,6 +39,10 @@ const GRNAdd3 = (props) => {
     const [grnItemTableList, setGrnItemTableList] = useState([]);
     const [openPOdata, setopenPOdata] = useState([]);
     const [invoiceNo, setInvoiceNo] = useState('');
+    const [InvoiceID, setInvoiceID] = useState('');
+
+
+
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
 
@@ -54,10 +58,12 @@ const GRNAdd3 = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
-        genralMaster_type69
+        genralMaster_type69,
+        hideMsg
     } = useSelector((state) => ({
         saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
+        hideMsg: state.GRNReducer.hideMsg,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -108,8 +114,11 @@ const GRNAdd3 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true)) {
-
+            debugger
             const grnDetails = { ...items.Data }
+            const InvoiceID = grnDetails.GRNReferences[0].Invoice
+            setInvoiceID(InvoiceID)
+
             setGrnItemTableList(grnDetails.OrderItem)
 
             setInvoiceNo(grnDetails.InvoiceNumber)
@@ -124,6 +133,26 @@ const GRNAdd3 = (props) => {
         }
 
     }, [items])
+
+
+    useEffect(() => {
+        debugger
+        if (hideMsg.Status === true && hideMsg.StatusCode === 200) {
+            // setState(() => resetFunction(fileds, state)) // Clear form values 
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(hideMsg.Message),
+            })
+            history.push({
+                pathname: url.GRN_STP_3,
+            })
+            dispatch(hideInvoiceForGRFActionSuccess({ Status: false }));
+
+        } else if (hideMsg.Status === true) {
+            dispatch(hideInvoiceForGRFActionSuccess({ Status: false }));
+
+        }
+    }, [hideMsg]);
 
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
@@ -299,6 +328,14 @@ const GRNAdd3 = (props) => {
             order: "asc", // desc or asc
         },
     ];
+
+    const hideHandler = (event) => {
+        let isHide = event.target.checked
+        const HideValue = isHide ? "1" : "0"
+        let config = { InvoiceId: InvoiceID, IsHide: HideValue }
+        dispatch(hideInvoiceForGRFAction(config))
+
+    }
 
     const saveHandeller = (event) => {
 
@@ -524,13 +561,27 @@ const GRNAdd3 = (props) => {
                     {
                         (grnItemTableList.length > 0) ?
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
-                                <SaveButton pageMode={pageMode}
-                                    loading={saveBtnloading}
-                                    editCreatedBy={editCreatedBy}
-                                    userAcc={userPageAccessState}
-                                    module={"GRN"} onClick={saveHandeller}
-                                />
+                                <Col sm={6}>
+                                    <SaveButton pageMode={pageMode}
+                                        loading={saveBtnloading}
+                                        editCreatedBy={editCreatedBy}
+                                        userAcc={userPageAccessState}
+                                        module={"GRN"} onClick={saveHandeller}
+                                    />
+                                </Col>
+                                <Col sm={6}>
+
+
+                                    <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                        <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" onChange={(event) => { hideHandler(event) }} />
+                                        <label className="btn btn-outline-primary" htmlFor="btncheck1">Hide</label>
+
+                                    </div>
+                                </Col>
+
                             </div>
+
+
                             :
                             <div className="row save1"></div>
                     }

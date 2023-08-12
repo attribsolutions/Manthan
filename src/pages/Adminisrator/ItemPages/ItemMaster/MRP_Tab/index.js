@@ -145,6 +145,11 @@ function MRPTab(props) {
                         value={effectiveDate}
                         placeholder="Please Enter EffectiveDate"
                         onChange={EffectiveDateHandler}
+                        options={{
+                          altInput: true,
+                          altFormat: "d-m-Y",
+                          dateFormat: "Y-m-d",
+                        }}
                       />
                     </div>
                   </div>

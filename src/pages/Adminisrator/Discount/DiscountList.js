@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { BreadcrumbRadioButtonView, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -40,6 +40,7 @@ const DiscountList = () => {
     useEffect(() => {
         const page_Id = pageId.DISCOUNT_LIST;
         dispatch(commonPageFieldListSuccess(null));
+        dispatch(BreadcrumbRadioButtonView(true));
         dispatch(commonPageFieldList(page_Id));
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler()
@@ -99,6 +100,12 @@ const DiscountList = () => {
                                     style={{ width: "115px", marginRight: "0.1cm" }}>FromDate </Label>
                                 <Col sm="7">
                                     <C_DatePicker
+                                        options={{
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                            maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),// Set the maximum date
+                                        }}
                                         name='Date'
                                         value={fromdate}
                                         onChange={fromdateOnchange}
@@ -113,6 +120,12 @@ const DiscountList = () => {
                                     style={{ width: "115px", marginRight: "0.1cm" }}>ToDate</Label>
                                 <Col sm="7">
                                     <C_DatePicker
+                                        options={{
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                            maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),// Set the maximum date
+                                        }}
                                         name='Date'
                                         value={todate}
                                         onChange={todateOnchange}

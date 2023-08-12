@@ -11,7 +11,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {  commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -36,17 +36,18 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect, useRef, useState } from "react";
-import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
+import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import {
     GoButton_For_Party_Master_Bulk_Update_Add,
     GoButton_For_Party_Master_Bulk_Update_AddSuccess,
     postPartyName_for_dropdown,
+    postPartyName_for_dropdown_Success,
     postParty_Master_Bulk_Update,
     postParty_Master_Bulk_Update_Success,
     postSelect_Field_for_dropdown,
     updatePartyMasterBulkID
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { getState } from "../../../store/Administrator/EmployeeRedux/action";
+import { getState, getStateESuccess } from "../../../store/Administrator/EmployeeRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
@@ -126,6 +127,11 @@ const PartyMasterBulkUpdate = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(GetRoutesList());
         dispatch(getState())
+        return () => {
+            dispatch(GetRoutesListSuccess([]))
+            dispatch(getStateESuccess([]))
+            dispatch(postPartyName_for_dropdown_Success([]))
+        }
     }, []);
 
     // userAccess useEffect
@@ -190,7 +196,7 @@ const PartyMasterBulkUpdate = (props) => {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg.Status])
@@ -354,7 +360,7 @@ const PartyMasterBulkUpdate = (props) => {
         pagesListColumns.push(District)
     }
 
-    
+
     const Newvalue = {
         text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
         dataField: "Newvalue",
@@ -409,7 +415,7 @@ const PartyMasterBulkUpdate = (props) => {
                                         <Input
                                             id={key}
                                             type="text"
-                                            placeholder="Enter New Value"
+                                            placeholder={`Enter New ${SelectFieldName.label}`}
                                             defaultValue={user.Newvalue}
                                             className="col col-sm "
                                             onChange={(event) => tableSelectHandler(event, user)}
@@ -481,15 +487,15 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     const SaveHandler = (event) => {
-        
+
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
         try {
-            
+
             btnIsDissablefunc({ btnId, state: true })
             Data.forEach(i => {
-                
+
                 if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict || i.Newvalue === false) {
                     const arr = {
                         SubPartyID: i.SubPartyID,

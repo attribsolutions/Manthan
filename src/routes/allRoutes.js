@@ -175,6 +175,7 @@ import InvoiceDataExport from "../Reports/InvoiceDataExport/InvoiceDataExport.js
 import PurchaseGSTReport from "../Reports/PurchaseGSTReport/PurchaseGSTReport.js";
 import DamageStockReport from "../Reports/DamageStockReport";
 import DeleteInvoiceDataExport from "../Reports/DeleteInvoiceDataExport";
+import GSTR1Report from "../Reports/GSTR1Report/GSTR1Report";
 // import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
@@ -432,6 +433,9 @@ const userRoutes = [
   { path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
 
   { path: path.DAMAGE_STOCK_REPORT, component: DamageStockReport },
+
+  { path: path.GST_R1_REPORT, component: GSTR1Report },
+
   // ************************************ Utility **************************************//
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

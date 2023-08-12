@@ -43,6 +43,7 @@ const PurchaseReturn = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const { SaleableItemReasonID = '' } = _cfunc.loginSystemSetting();
 
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -69,13 +70,17 @@ const PurchaseReturn = (props) => {
     const [forceReload, setForceReload] = useState(false)
     // ****************************************************************************
 
-
+    // for IsSaleableStock Checkbox functionality useSate ************************************
+    const [isSaleableStock, setIsSaleableStock] = useState(false);
+    const [ReturnReasonFilterData, setReturnReasonOptions] = useState([]);
+    const [filteredReasonArr, setFilteredReasonArr] = useState([]);
+    const [reasonArrExceptPartyID, setReasonArrExceptPartyID] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         ItemList,
-        ReturnReasonList,
+        ReturnReasonListRedux,
         InvoiceNo,
         pageField,
         userAccess,
@@ -89,7 +94,7 @@ const PurchaseReturn = (props) => {
         postMsg: state.SalesReturnReducer.postMsg,
         supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
         ItemList: state.PartyItemsReducer.partyItem,
-        ReturnReasonList: state.PartyMasterBulkUpdateReducer.SelectField,
+        ReturnReasonListRedux: state.PartyMasterBulkUpdateReducer.SelectField,
         InvoiceNo: state.SalesReturnReducer.InvoiceNo,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -250,6 +255,28 @@ const PurchaseReturn = (props) => {
         }
     }, [addButtonData])
 
+    useEffect(async () => {
+
+        try {
+            let partyIDsArray = SaleableItemReasonID.split(",").map(id => parseInt(id.trim(), 10));
+            let filteredReasons = ReturnReasonListRedux.filter(item => partyIDsArray.includes(item.id));
+            let reasonsExceptPartyID = ReturnReasonListRedux.filter(item => !partyIDsArray.includes(item.id));
+            setFilteredReasonArr(filteredReasons);
+            setReasonArrExceptPartyID(reasonsExceptPartyID);
+
+        } catch (e) { }
+
+    }, [ReturnReasonListRedux]);
+
+    useEffect(() => {
+
+        if (isSaleableStock) {
+            setReturnReasonOptions(filteredReasonArr);
+        } else {
+            setReturnReasonOptions(reasonArrExceptPartyID);
+        }
+    }, [isSaleableStock, filteredReasonArr, reasonArrExceptPartyID]);
+
     const itemList = ItemList.map((index) => ({
         value: index.Item,
         label: index.ItemName,
@@ -260,10 +287,13 @@ const PurchaseReturn = (props) => {
         return index.itemCheck === true
     });
 
-    const ReturnReasonOptions = ReturnReasonList.map((index) => ({
+
+
+    const ReturnReasonOptions = ReturnReasonFilterData.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
+
 
     const InvoiceNo_Options = InvoiceNo.map((index) => ({
         value: index.Invoice,
@@ -558,7 +588,9 @@ const PurchaseReturn = (props) => {
             text: "Return Reason",
             dataField: "",
             classes: () => "sales-return-row",
-            formatter: (cellContent, row) => {
+            formatExtraData: { ReturnReasonOptions }, // Pass ReturnReasonOptions as part of formatExtraData
+
+            formatter: (cellContent, row, rowIndex, { ReturnReasonOptions }) => {
                 return (<>
                     <div className="parent mb-1">
                         <div className="child">
@@ -566,14 +598,13 @@ const PurchaseReturn = (props) => {
                                 isSearchable={true}
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
-                                defaultValue={row.defaultReason}
+                                value={ReturnReasonOptions.find(option => option.value === row.defaultReason)}
                                 styles={{
                                     menu: provided => ({ ...provided, zIndex: 2 })
                                 }}
                                 options={ReturnReasonOptions}
                                 onChange={event => {
-
-                                    row["defaultReason"] = event
+                                    row["defaultReason"] = event.value;
                                 }}
                             />
                         </div>
@@ -592,7 +623,6 @@ const PurchaseReturn = (props) => {
                 )
             }
         },
-
         {
             text: "Image",
             dataField: "",
@@ -875,7 +905,7 @@ const PurchaseReturn = (props) => {
                             "Discount": Number(index.Discount) || 0,
                             "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
 
-                            "ItemReason": index.defaultReason ? index.defaultReason.value : "",
+                            "ItemReason": index.defaultReason ? index.defaultReason : "",
                             "Comment": index.ItemComment,
                             "ApprovedQuantity": "",
                             "PurchaseReturn": "",
@@ -1095,6 +1125,25 @@ const PurchaseReturn = (props) => {
                                                 </C_Button>
                                             }
                                         </Col>
+                                    </FormGroup>
+                                </Col >
+                            </Row>
+
+                            <Row>
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-1 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>IsSaleableStock</Label>
+                                        <Col sm="7">
+                                            <Input
+                                                style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}
+                                                type="checkbox"
+                                                defaultChecked={isSaleableStock}
+                                                onChange={(event) => { setIsSaleableStock(event.target.checked) }}
+                                            />
+
+                                        </Col>
+
                                     </FormGroup>
                                 </Col >
                             </Row>

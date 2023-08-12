@@ -88,7 +88,7 @@ function Margin_Tab(props) {
             clearState();
 
         }
-        else { customAlert({ Type: 4, Message: "Please Enter value" })}
+        else { customAlert({ Type: 4, Message: "Please Enter value" }) }
     };
 
     const clearState = () => {
@@ -132,8 +132,13 @@ function Margin_Tab(props) {
                                             <C_DatePicker
                                                 id={`txtEffectiveDate${0}`}
                                                 value={effectiveDate}
-                                                placeholder = "Please Enter EffectiveDate"
+                                                placeholder="Please Enter EffectiveDate"
                                                 onChange={EffectiveDateHandler}
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
                                             />
                                         </div>
                                     </FormGroup>

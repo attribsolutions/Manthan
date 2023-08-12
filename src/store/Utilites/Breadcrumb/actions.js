@@ -4,6 +4,10 @@ import {
   BREADCRUMB_ITEM_NAME,
   BREADCRUMB_DOWN_BTN_DATA,
   BREADCRUMB_REST,
+  BREADCRUMB_CHECK_RADIO_BUTTON,
+  BREADCRUMB_RADIO_BUTTON_VIEW,
+  BREADCRUMB_NON_DELETE_BUTTON,
+  BREADCRUMB_DELETE_BUTTON,
 } from "./actionType";
 
 
@@ -34,6 +38,26 @@ export const BreadcrumbReset = (label) => {
   }
 }
 
+export const BreadcrumbNonDeleteButton = (config = {}) => {
+  return {
+    type: BREADCRUMB_NON_DELETE_BUTTON,
+    config
+  }
+}
+
+export const BreadcrumbDeleteButton = (config = {}) => {
+  return {
+    type: BREADCRUMB_DELETE_BUTTON,
+    config
+  }
+}
+
+export const BreadcrumbRadioButtonView = (IsView) => {
+  return {
+    type: BREADCRUMB_RADIO_BUTTON_VIEW,
+    IsView
+  }
+}
 
 // export const CommonBreadcrumbDetails_reducer = (props) => ({
 //   type: COMMON_BREADCRUMB_ALL_DETAIL_redux,

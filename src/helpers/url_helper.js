@@ -265,6 +265,8 @@ export const GRN_STP_FOR_ORDER_lIST_goBtn = "/OrdersFilterSecond"
 export const GRN_MAKE_API = "/MakeOrdersGrn"
 export const GRN = "/GRN"
 export const GRN_LiST_BY_FILTERS = "/GRNFilter"
+export const HIDE_INVOICE_FOR_GRN = "/InvoiceHide"
+
 
 //Challan
 export const CHALLAN_LIST_BY_FILTERS = "/ChallanFilter"
@@ -412,8 +414,13 @@ export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"
 export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"
 export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
 
+export const GST_R1_REPORT = "/generate-excel"
+
+
+
+
 //Deleted Invoice Data Export Report 
-export const DELETE_INVOICE_DATA_EXPORT="/DeletedInvoiceData"
+export const DELETE_INVOICE_DATA_EXPORT = "/DeletedInvoiceData"
 
 
 

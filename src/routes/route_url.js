@@ -261,6 +261,12 @@ export const DELETE_INVOICE_DATA_EXPORT = "/DeleteInvoiceDataExport"
 
 export const DAMAGE_STOCK_REPORT = "/Damage_Stock_Report"
 
+export const GST_R1_REPORT = "/Gst_R1_Report"
+
+
+
+
+
 
 
 

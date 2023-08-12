@@ -10,6 +10,8 @@ export const dropdownAdd = "dropdownAdd";
 export const modeSTPsave = "modeSTPsave";//for in the list page save button show purpose
 export const modeSTPList = "modeSTPList"; // only list page and buttons
 export const orderApproval = "orderApproval";
+export const hide = "hide";
+
 export const makeBtn = "makeBtn";
 export const download = "download";
 export const otherBtn_1 = "otherBtn_1";
