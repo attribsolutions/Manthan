@@ -106,10 +106,6 @@ const GSTR1Report = (props) => {
         })
     }
 
-
-
-
-
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
