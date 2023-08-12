@@ -480,6 +480,11 @@ const PaymentEntry = (props) => {
                                                     name='ChequeDate'
                                                     value={values.ChequeDate}
                                                     onChange={ChequeDate_Onchange}
+                                                    options={{
+                                                        altInput: true,
+                                                        altFormat: "d-m-Y",
+                                                        dateFormat: "Y-m-d",
+                                                      }}
                                                 />
                                             </Col>
                                         </FormGroup>

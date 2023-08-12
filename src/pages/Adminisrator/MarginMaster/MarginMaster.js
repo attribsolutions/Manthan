@@ -15,7 +15,7 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import {  Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
@@ -279,7 +279,7 @@ const MarginMaster = (props) => {
             dispatch(saveMarginMasterSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -413,7 +413,7 @@ const MarginMaster = (props) => {
             const Find = ItemData.filter((index) => {   // condition for margin save without 0
                 return (Number(index.Margin) > 0)
             })
-            
+
             const jsonBody = JSON.stringify(Find)
 
             if (!(Find.length > 0)) {
@@ -517,6 +517,11 @@ const MarginMaster = (props) => {
                                                         isDisabled={pageMode === mode.edit ? true : false}
                                                         onChange={(y, v, e) => {
                                                             onChangeDate({ e, v, state, setState })
+                                                        }}
+                                                        options={{
+                                                            altInput: true,
+                                                            altFormat: "d-m-Y",
+                                                            dateFormat: "Y-m-d",
                                                         }}
                                                     />
                                                     {isError.EffectiveDate.length > 0 && (
