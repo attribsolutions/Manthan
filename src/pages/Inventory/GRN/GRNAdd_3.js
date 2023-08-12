@@ -144,7 +144,7 @@ const GRNAdd3 = (props) => {
                 Message: JSON.stringify(hideMsg.Message),
             })
             history.push({
-                pathname: url.GRN_ADD_3,
+                pathname: url.GRN_STP_3,
             })
             dispatch(hideInvoiceForGRFActionSuccess({ Status: false }));
 
@@ -571,7 +571,7 @@ const GRNAdd3 = (props) => {
                                 </Col>
                                 <Col sm={6}>
 
-                                    
+
                                     <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                                         <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" onChange={(event) => { hideHandler(event) }} />
                                         <label className="btn btn-outline-primary" htmlFor="btncheck1">Hide</label>
