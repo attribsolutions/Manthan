@@ -1077,7 +1077,7 @@ const PurchaseReturn = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
-                                <Col sm="6">
+                                {/* <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.InvoiceNumber}</Label>
@@ -1087,7 +1087,8 @@ const PurchaseReturn = (props) => {
                                                 name="InvoiceNumber"
                                                 value={values.InvoiceNumber}
                                                 //(returnMode === 2) ItemWise
-                                                isDisabled={((returnMode === 2) || invoiceNoDropDownLoading || (TableArr.length > 0)) ? true : false}
+                                                // isDisabled={((returnMode === 2) || invoiceNoDropDownLoading || (TableArr.length > 0)) ? true : false}
+                                                isDisabled={true}
                                                 isSearchable={true}
                                                 isLoading={invoiceNoDropDownLoading}
                                                 styles={{
@@ -1126,10 +1127,8 @@ const PurchaseReturn = (props) => {
                                             }
                                         </Col>
                                     </FormGroup>
-                                </Col >
-                            </Row>
+                                </Col > */}
 
-                            <Row>
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
@@ -1147,6 +1146,7 @@ const PurchaseReturn = (props) => {
                                     </FormGroup>
                                 </Col >
                             </Row>
+                           
                         </div>
 
                         <div>
