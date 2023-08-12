@@ -115,14 +115,14 @@ const ViewDetails_Modal = () => {
                         "FinalApprovalDate": null
                     }
                     if (parseInt(ReturnFinalApprovalRole) === loginRoleID()) {
-
-                        ReturnItems.ApprovedByCompany = index.ApprovedQuantity;
+                        debugger
+                        ReturnItems.ApprovedByCompany = Quantity;
                         ReturnItems.FinalApprovalDate = date_ymd_func();
                     }
                     tableItemArray.push(ReturnItems)
                 }
             })
-
+            
             const jsonBody = JSON.stringify({
                 "ReturnID": viewData_redux.Data[0].ReturnID,
                 "UserID": loginUserID(),
