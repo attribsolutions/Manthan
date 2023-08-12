@@ -14,7 +14,7 @@ import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, Retailer_L
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import SalesReturn from "./SalesReturn";
 import { confirm_SalesReturn_Id, delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, post_Send_to_superStockiest_Id, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import SalesReturnView_Modal from "./SalesReturnConfirm";
@@ -47,6 +47,8 @@ const SalesReturnList = () => {
     const reducers = useSelector(
         (state) => ({
             sendToSSbtnLoading: state.SalesReturnReducer.sendToSSbtnLoading,
+            retailerDropLoading: state.CommonAPI_Reducer.retailerDropLoading,
+            vendorSupplierCustomerLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
             loading: state.SalesReturnReducer.loading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             listBtnLoading: (state.SalesReturnReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
@@ -61,7 +63,7 @@ const SalesReturnList = () => {
         })
     );
 
-    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg, loading, sendToSSbtnLoading, tableList } = reducers;
+    const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg, loading, sendToSSbtnLoading, retailerDropLoading, vendorSupplierCustomerLoading } = reducers;
 
     const values = { ...state.values }
 
@@ -111,7 +113,9 @@ const SalesReturnList = () => {
         }
 
         return () => {
-            dispatch(salesReturnListAPISuccess([]))
+            dispatch(salesReturnListAPISuccess([]));
+            dispatch(GetVenderSupplierCustomerSuccess([]));
+            dispatch(Retailer_List_Success([]));
         }
     }, []);
 
@@ -290,10 +294,11 @@ const SalesReturnList = () => {
 
                                 style={{ width: "115px" }}>{customerdropdownLabel}</Label>
                             <Col sm="5">
-                                <Select
+                                <C_Select
                                     name="Customer"
                                     classNamePrefix="select2-Customer"
                                     value={values.Customer}
+                                    isLoading={subPageMode === url.SALES_RETURN_LIST ? retailerDropLoading : vendorSupplierCustomerLoading}
                                     options={subPageMode === url.SALES_RETURN_LIST ? customerOptions : supplierOptions}
                                     onChange={CustomerOnChange}
                                     styles={{

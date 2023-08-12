@@ -364,12 +364,13 @@ const PurchaseReturnMode3 = (props) => {
                     "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
                     "PurchaseReturn": i.PurchaseReturn,
                     "SubReturn": i.PurchaseReturn,
+                    "primarySourceID": i.primarySourceID,
                     "ReturnItemImages": [],
                 });
                 return filterdItem
             }
         }, [])
-
+        
         try {
             const jsonBody = JSON.stringify({
                 ReturnDate: values.ReturnDate,

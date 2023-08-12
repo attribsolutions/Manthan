@@ -4,7 +4,7 @@ import { Card, CardBody, FormGroup, Input, Modal, Spinner, } from "reactstrap";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CommonConsole, date_dmy_func, loginUserID, tableInputArrowUpDounFunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, currentDate_ymd, date_dmy_func, date_ymd_func, loginRoleID, loginSystemSetting, loginUserID, tableInputArrowUpDounFunc } from "../../../components/Common/CommonFunction";
 import { confirm_SalesReturn_Id_Succcess, returnApprove, returnApprove_Success } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -14,7 +14,9 @@ import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect
 
 const ViewDetails_Modal = () => {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const { ReturnFinalApprovalRole = '' } = loginSystemSetting();
+
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
 
@@ -61,7 +63,7 @@ const ViewDetails_Modal = () => {
 
 
     const SaveHandler = async (event) => {
-        
+
         const btnId = event.target.id
         try {
             const tableItemArray = []
@@ -106,10 +108,16 @@ const ViewDetails_Modal = () => {
                         "MRP": index.MRP,
                         "PurchaseReturn": index.PurchaseReturn,
                         "UnitName": index.UnitName,
-                        "ItemReasonID": index.ItemReasonID,
-                        "ItemReason": index.ItemReason,
+                        "ItemReason": index.ItemReasonID,
                         "Comment": index.Comment,
+                        "primarySourceID": index.primarySourceID,
+                        "ApprovedByCompany": null,
+                        "FinalApprovalDate": null
+                    }
+                    if (parseInt(ReturnFinalApprovalRole) === loginRoleID()) {
 
+                        ReturnItems.ApprovedByCompany = index.ApprovedQuantity;
+                        ReturnItems.FinalApprovalDate = date_ymd_func();
                     }
                     tableItemArray.push(ReturnItems)
                 }
@@ -177,7 +185,7 @@ const ViewDetails_Modal = () => {
 
                     return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
                 } else {
-                    
+
                     let defaultQuantity = tableArray.IsApproved ? row.ApprovedQuantity : row.Quantity;
                     return (
                         <div>
@@ -190,7 +198,7 @@ const ViewDetails_Modal = () => {
                                 autoComplete="off"
                                 className=" text-end"
                                 onChange={(event) => {
-                                    
+
                                     let input = Number(event.target.value)
                                     let result = /^\d*(\.\d{0,3})?$/.test(input);
                                     if (result) {
