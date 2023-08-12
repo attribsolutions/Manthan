@@ -6,6 +6,9 @@ import {
 
 const API_URL = "http://192.168.1.114:8000"
 
+// const API_URL = "http://192.168.1.108:8000"
+
+
 
 
 // const API_URL = "http://117.248.109.234:8000"
@@ -31,11 +34,11 @@ axiosApi.interceptors.response.use(
   (error) => Promise.reject(error)
 );
 
-export function get(url,param) {
+export function get(url, param) {
   CommonConsole("get api call", url);
   AuthonticationFunction();
   return axiosApi
-    .get(url,param)
+    .get(url, param)
     .then((response) => {
       return CheckAPIResponse({ method: "get", url, response });
     })
@@ -78,7 +81,7 @@ export function put(url, body) {
       return CheckAPIResponse({ method: "put", url, response, body });
     })
     .catch((error) => {
-      return CheckAPIResponse({ method: "put", url, error, body,  });
+      return CheckAPIResponse({ method: "put", url, error, body, });
     });
 }
 
@@ -148,21 +151,22 @@ export function getWithotMsg(url) {
 }
 
 
-
 // code for excel download method get method 
 
-export function getMethodExcel(url) {
-  CommonConsole(`${url} :get api call `);
+export function postMethodExcel(url, body) {
+  CommonConsole(`${url} :post api call `);
   AuthonticationFunction();
   return axiosApi
-    .get(url, {
+    .post(url, body, {
       responseType: 'arraybuffer',
     })
     .then((response) => {
+      console.log(`${url} Body :`, body);
       console.log(`${url} response :`, response);
       return response.data;
     })
     .catch((error) => {
+      console.log(`${url} Body :`, body);
       console.log(`${url} error :`, error);
       return Promise.reject(error);
     });

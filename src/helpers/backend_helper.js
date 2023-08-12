@@ -1,5 +1,5 @@
 import axios from "axios"
-import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, } from "./api_helper"
+import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, postMethodExcel, } from "./api_helper"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -646,6 +646,12 @@ export const GenericSale_GoBtn_API = ({ jsonBody }) => post(url.GENERIC_SALE_REP
 export const RetailerData_GoBtn_API = ({ jsonBody }) => post(url.RETAILER_DATA_REPORT, jsonBody)//Go button api
 export const InvoiceDataExport_GoBtn_API = ({ jsonBody }) => post(url.INVOICE_DATA_EXPORT, jsonBody)//Go button api
 export const PurchaseGSTReportSaga_GoBtn_API = ({ jsonBody }) => post(url.PURCHASE_GST_REPORT, jsonBody)//Go button api
+
+
+export const Gst_R1_Report_API = ({ jsonBody }) => postMethodExcel(url.GST_R1_REPORT, jsonBody)//Go button api
+
+
+
 
 //DeletedInvoiceData
 
