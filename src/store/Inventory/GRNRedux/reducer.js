@@ -12,11 +12,13 @@ import {
   DELETE_GRN_FOR_GRN_PAGE,
   EDIT_GRN_FOR_GRN_PAGE,
   MAKE_GRN_MODE_1_ACTION,
+  HIDE_INVOICE_FOR_GRN_ACTION_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
 
   loading: false,
+  hideMsg: { Status: false },
   postMsg: { Status: false },
   editData: { Status: false },
   updateMsg: { Status: false },
@@ -86,6 +88,7 @@ const GRNReducer = (state = INIT_STATE, action) => {
         listBtnLoading: action.config.btnId,
       }
 
+
     case EDIT_GRN_FOR_GRN_PAGE_SUCCESS:
       return {
         ...state,
@@ -111,6 +114,16 @@ const GRNReducer = (state = INIT_STATE, action) => {
         ...state,
         listBtnLoading: action.config.btnId,
       }
+
+    case HIDE_INVOICE_FOR_GRN_ACTION_SUCCESS:
+      return {
+        ...state,
+        hideMsg: action.payload,
+      }
+
+
+
+
 
     case DELETE_GRN_FOR_GRN_PAGE_SUCCESS:
       return {

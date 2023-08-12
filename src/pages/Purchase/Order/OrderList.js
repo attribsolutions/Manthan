@@ -51,7 +51,7 @@ const OrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
-
+            unhideMsg: state.GRNReducer.hideMsg,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
             makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
@@ -99,7 +99,8 @@ const OrderList = () => {
         orderConfirmMsg,
         gobutton_Add_invoice,
         customerTypeDropLoading,
-        supplierDropLoading
+        supplierDropLoading,
+        unhideMsg
     } = reducers;
 
     const values = { ...state.values }
@@ -112,6 +113,8 @@ const OrderList = () => {
         updateSucc: _act.updateOrderIdSuccess,
         deleteSucc: _act.deleteOrderIdSuccess,
     }
+
+
 
     // Featch Modules List data  First Rendering
     useLayoutEffect(() => {
@@ -201,6 +204,13 @@ const OrderList = () => {
     }, []);
 
     useEffect(() => {
+        if (subPageMode === url.GRN_STP_3) {
+            dispatch(_act.BreadcrumbRadioButtonView(true));
+        }
+    }, [])
+
+
+    useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldList
             comAddPageFieldFunc({ state, setState, fieldArr })
@@ -263,6 +273,25 @@ const OrderList = () => {
     useEffect(() => {
         orderApprovalFunc({ dispatch, approvalDetail })
     }, [approvalDetail]);
+
+    useEffect(() => {
+        if (unhideMsg.Status === true && unhideMsg.StatusCode === 200) {
+            dispatch(_act.hideInvoiceForGRFActionSuccess({ Status: false }));
+            goButtonHandler("event")
+            customAlert({
+                Type: 1,
+                Message: unhideMsg.Message,
+            })
+        } else if (unhideMsg.Status === true) {
+            dispatch(_act.hideInvoiceForGRFActionSuccess({ Status: false }));
+            customAlert({
+                Type: 2,
+                Message: JSON.stringify(unhideMsg.Message),
+            })
+        }
+
+    }, [unhideMsg]);
+
 
 
     const supplierOptions = supplier.map((i) => ({
@@ -391,6 +420,15 @@ const OrderList = () => {
     function downBtnFunc(config) {
         config["ReportType"] = report.order1;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
+    }
+
+
+
+    function hideBtnFunc(rowdata) {
+        const isHideValue = rowdata[0].isHideValue
+        const RowInvoiceId = rowdata[0].id
+        let config = { InvoiceId: RowInvoiceId, IsHide: isHideValue }
+        dispatch(_act.hideInvoiceForGRFAction(config))
     }
 
     function viewApprovalBtnFunc(config) {
@@ -655,6 +693,7 @@ const OrderList = () => {
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
                             makeBtnFunc={makeBtnFunc}
+                            hideBtnFunc={hideBtnFunc}
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
                             makeBtnName={otherState.makeBtnName}
