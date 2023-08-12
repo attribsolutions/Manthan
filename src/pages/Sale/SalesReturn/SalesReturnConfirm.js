@@ -4,18 +4,17 @@ import { Card, CardBody, FormGroup, Input, Modal, Spinner, } from "reactstrap";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CommonConsole, currentDate_ymd, date_dmy_func, date_ymd_func, loginRoleID, loginSystemSetting, loginUserID, tableInputArrowUpDounFunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, date_ymd_func, loginRoleID, loginSystemSetting, loginUserID, tableInputArrowUpDounFunc } from "../../../components/Common/CommonFunction";
 import { confirm_SalesReturn_Id_Succcess, returnApprove, returnApprove_Success } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
 import { url } from "../../../routes";
 import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
 
 const ViewDetails_Modal = () => {
 
     const dispatch = useDispatch();
-    const { ReturnFinalApprovalRole = '' } = loginSystemSetting();
+    const { ReturnFinalApprovalRole = '' } = loginSystemSetting()
 
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
@@ -114,12 +113,13 @@ const ViewDetails_Modal = () => {
                         "ApprovedByCompany": null,
                         "FinalApprovalDate": null
                     }
-                    if (parseInt(ReturnFinalApprovalRole) === loginRoleID()) {
 
+                    const allowedRoles = ReturnFinalApprovalRole.split(",").map(role => parseInt(role.trim()));
+
+                    if (allowedRoles.includes(loginRoleID())) {
                         ReturnItems.ApprovedByCompany = Number(Quantity).toFixed(2);
                         ReturnItems.FinalApprovalDate = date_ymd_func();
                     }
-
                     tableItemArray.push(ReturnItems)
                 }
             })

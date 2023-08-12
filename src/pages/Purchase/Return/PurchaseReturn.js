@@ -1137,7 +1137,7 @@ const PurchaseReturn = (props) => {
                                             <Input
                                                 style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}
                                                 type="checkbox"
-                                                disabled={TableArr.length>0&&true}
+                                                disabled={TableArr.length > 0 && true}
                                                 defaultChecked={isSaleableStock}
                                                 onChange={(event) => { setIsSaleableStock(event.target.checked) }}
                                             />
