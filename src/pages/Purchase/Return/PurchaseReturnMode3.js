@@ -329,6 +329,7 @@ const PurchaseReturnMode3 = (props) => {
             .map(item => ({ SubReturn: parseInt(item.trim()) }));
 
         const ReturnItems = tableData.reduce((filterdItem, i) => {
+
             if (Number(i.Quantity) > 0) {
                 const calculate = return_discountCalculate_Func(i);
 
@@ -364,10 +365,11 @@ const PurchaseReturnMode3 = (props) => {
                     "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
                     "PurchaseReturn": i.PurchaseReturn,
                     "SubReturn": i.PurchaseReturn,
+                    "primarySourceID": i.primarySourceID,
                     "ReturnItemImages": [],
                 });
-                return filterdItem
             }
+            return filterdItem
         }, [])
 
         try {

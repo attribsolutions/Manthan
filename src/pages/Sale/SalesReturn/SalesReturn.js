@@ -42,6 +42,7 @@ const SalesReturn = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const { SaleableItemReasonID = '' } = _cfunc.loginSystemSetting();
 
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -62,12 +63,17 @@ const SalesReturn = (props) => {
     const [returnMode, setReturnMode] = useState(0); //(1==ItemWise) OR (2==invoiceWise)
     const [imageTable, setImageTable] = useState([]);
 
+    const [isSaleableStock, setIsSaleableStock] = useState(false);
+    const [ReturnReasonFilterData, setReturnReasonOptions] = useState([]);
+    const [filteredReasonArr, setFilteredReasonArr] = useState([]);
+    const [reasonArrExceptPartyID, setReasonArrExceptPartyID] = useState([]);
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         RetailerList,
         ItemList,
-        ReturnReasonList,
+        ReturnReasonListRedux,
         InvoiceNo,
         pageField,
         userAccess,
@@ -81,7 +87,7 @@ const SalesReturn = (props) => {
         postMsg: state.SalesReturnReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.RetailerList,
         ItemList: state.PartyItemsReducer.partyItem,
-        ReturnReasonList: state.PartyMasterBulkUpdateReducer.SelectField,
+        ReturnReasonListRedux: state.PartyMasterBulkUpdateReducer.SelectField,
         InvoiceNo: state.SalesReturnReducer.InvoiceNo,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -91,6 +97,7 @@ const SalesReturn = (props) => {
         retailerDropLoading: state.CommonAPI_Reducer.retailerDropLoading
 
     }));
+
 
     useEffect(() => {
         dispatch(InvoiceNumberSuccess([]))
@@ -262,7 +269,29 @@ const SalesReturn = (props) => {
         return index.itemCheck === true
     });
 
-    const ReturnReasonOptions = ReturnReasonList.map((index) => ({
+    useEffect(async () => {
+
+        try {
+            let partyIDsArray = SaleableItemReasonID.split(",").map(id => parseInt(id.trim(), 10));
+            let filteredReasons = ReturnReasonListRedux.filter(item => partyIDsArray.includes(item.id));
+            let reasonsExceptPartyID = ReturnReasonListRedux.filter(item => !partyIDsArray.includes(item.id));
+            setFilteredReasonArr(filteredReasons);
+            setReasonArrExceptPartyID(reasonsExceptPartyID);
+
+        } catch (e) { }
+
+    }, [ReturnReasonListRedux]);
+
+    useEffect(() => {
+
+        if (isSaleableStock) {
+            setReturnReasonOptions(filteredReasonArr);
+        } else {
+            setReturnReasonOptions(reasonArrExceptPartyID);
+        }
+    }, [isSaleableStock, filteredReasonArr, reasonArrExceptPartyID]);
+
+    const ReturnReasonOptions = ReturnReasonFilterData.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
@@ -283,12 +312,7 @@ const SalesReturn = (props) => {
                 )
             }
         },
-        // {
-        //     text: "Stock Quantity",
-        //     hidden: (subPageMode === url.PURCHASE_RETURN) ? false : true,
-        //     align: () => "right",
-        //     formatter: (cell, row) => <Label>{row.Stock}</Label>,
-        // },
+
         {
             text: "Invoice Qty",
             hidden: (returnMode === 1) ? false : true,
@@ -511,7 +535,9 @@ const SalesReturn = (props) => {
             text: "Return Reason",
             dataField: "",
             classes: () => "sales-return-row",
-            formatter: (cellContent, row) => {
+            formatExtraData: { ReturnReasonOptions }, // Pass ReturnReasonOptions as part of formatExtraData
+
+            formatter: (cellContent, row, rowIndex, { ReturnReasonOptions }) => {
                 return (<>
                     <div className="parent mb-1">
                         <div className="child">
@@ -519,14 +545,13 @@ const SalesReturn = (props) => {
                                 isSearchable={true}
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
-                                defaultValue={row.defaultReason}
+                                value={ReturnReasonOptions.find(option => option.value === row.defaultReason)}
                                 styles={{
                                     menu: provided => ({ ...provided, zIndex: 2 })
                                 }}
                                 options={ReturnReasonOptions}
                                 onChange={event => {
-
-                                    row["defaultReason"] = event
+                                    row["defaultReason"] = event.value;
                                 }}
                             />
                         </div>
@@ -808,7 +833,7 @@ const SalesReturn = (props) => {
                 "MRPValue": i.MRPValue,
                 "Rate": i.Rate,
                 "GST": i.GST,
-                "ItemReason": i.defaultReason ? i.defaultReason.value : "",
+                "ItemReason": i.defaultReason ? i.defaultReason : "",
                 "Comment": i.ItemComment,
                 "CGST": Number(calculate.CGST_Amount).toFixed(2),
                 "SGST": Number(calculate.SGST_Amount).toFixed(2),
@@ -829,11 +854,11 @@ const SalesReturn = (props) => {
                 "ReturnItemImages": [{ Item_pic: 'Select Return Reason' }],
             };
         });
-
+        
         try {
             const jsonBody = JSON.stringify({
                 ReturnDate: values.ReturnDate,
-                ReturnReason: '',
+                ReturnReasonOptions: '',
                 BatchCode: values.BatchCode,
                 Customer: values.Customer.value,// Customer Swipe when Po return
                 Party: _cfunc.loginPartyID(),// Party Swipe when Po return
@@ -890,7 +915,7 @@ const SalesReturn = (props) => {
                 <div className="page-content" >
                     {/* <PartyDropdown_Common
                         goButtonHandler={partySelectButtonHandler}
-                        changeBtnShow={!(ReturnReasonOptions.length === 0) && !(ItemList_Options.length === 0) && !(InvoiceNo_Options.length === 0)}
+                        changeBtnShow={!(ReturnReasonFilterData.length === 0) && !(ItemList_Options.length === 0) && !(InvoiceNo_Options.length === 0)}
                         changeButtonHandler={partyOnChngeButtonHandler}
                     /> */}
                     <form noValidate>
@@ -1027,6 +1052,24 @@ const SalesReturn = (props) => {
                                             }
 
                                         </Col>
+                                    </FormGroup>
+                                </Col >
+
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-1 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>IsSaleableStock</Label>
+                                        <Col sm="7">
+                                            <Input
+                                                style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}
+                                                type="checkbox"
+                                                disabled={TableArr.length > 0 && true}
+                                                defaultChecked={isSaleableStock}
+                                                onChange={(event) => { setIsSaleableStock(event.target.checked) }}
+                                            />
+
+                                        </Col>
+
                                     </FormGroup>
                                 </Col >
 

@@ -4,17 +4,19 @@ import { Card, CardBody, FormGroup, Input, Modal, Spinner, } from "reactstrap";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CommonConsole, date_dmy_func, loginUserID, tableInputArrowUpDounFunc } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func, date_ymd_func, loginRoleID, loginSystemSetting, loginUserID, tableInputArrowUpDounFunc } from "../../../components/Common/CommonFunction";
 import { confirm_SalesReturn_Id_Succcess, returnApprove, returnApprove_Success } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
 import { url } from "../../../routes";
 import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
+import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
 
 const ViewDetails_Modal = () => {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const { ReturnFinalApprovalRole = '' } = loginSystemSetting()
+
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
 
@@ -37,7 +39,6 @@ const ViewDetails_Modal = () => {
         } catch (error) { CommonConsole(error) }
     }, [viewData_redux]);
 
-
     useEffect(() => {
 
         if ((ApprovrMsg.Status === true) && (ApprovrMsg.StatusCode === 200)) {
@@ -59,80 +60,17 @@ const ViewDetails_Modal = () => {
 
     useEffect(() => table_ArrowUseEffect("#table_Arrow"), [viewData_redux]);
 
+    function QuantityHandler(event, row,) {
 
-    const SaveHandler = async (event) => {
-        
-        const btnId = event.target.id
-        try {
-            const tableItemArray = []
-            let inValideUnits = []
-            tableArray.ReturnItems.forEach(index => {
+        let input = event.target.value
 
-                const Quantity = index.ApproveQuantity ? index.ApproveQuantity : index.Quantity
-                const Comment = index.ApproveComment ? index.ApproveComment : null
-
-
-                if (index.ApproveQuantity === "") {
-                    inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
-                } else if (Number(Quantity) > 0) {
-                    const ReturnItems = {
-                        "id": index.id,
-                        "Item": index.Item,
-                        "Unit": 1,
-                        "ApprovedQuantity": Quantity,
-                        "ApproveComment": Comment,
-                        "Approvedby": loginUserID(),
-                        "ItemComment": index.ItemComment,
-                        "Quantity": index.Quantity,
-                        "BaseUnitQuantity": index.BaseUnitQuantity,
-                        "MRPValue": index.MRPValue,
-                        "Rate": index.Rate,
-                        "BasicAmount": index.BasicAmount,
-                        "TaxType": index.TaxType,
-                        "GSTPercentage": index.GSTPercentage,
-                        "GSTAmount": index.GSTAmount,
-                        "Amount": index.Amount,
-                        "CGST": index.CGST,
-                        "SGST": index.SGST,
-                        "IGST": index.IGST,
-                        "CGSTPercentage": index.CGSTPercentage,
-                        "SGSTPercentage": index.SGSTPercentage,
-                        "IGSTPercentage": index.IGSTPercentage,
-                        "BatchDate": index.BatchDate,
-                        "BatchCode": index.BatchCode,
-                        "CreatedOn": index.CreatedOn,
-                        "GST": index.GST,
-                        "ItemName": index.ItemName,
-                        "MRP": index.MRP,
-                        "PurchaseReturn": index.PurchaseReturn,
-                        "UnitName": index.UnitName,
-                        "ItemReasonID": index.ItemReasonID,
-                        "ItemReason": index.ItemReason,
-                        "Comment": index.Comment,
-
-                    }
-                    tableItemArray.push(ReturnItems)
-                }
-            })
-
-            const jsonBody = JSON.stringify({
-                "ReturnID": viewData_redux.Data[0].ReturnID,
-                "UserID": loginUserID(),
-                "ReturnItem": tableItemArray
-            });
-
-            if (inValideUnits.length > 0) {
-                customAlert({
-                    Type: 3,
-                    Message: inValideUnits
-                })
-
-            } else {
-                dispatch(returnApprove({ jsonBody, btnId }));
-            }
-
-        } catch (e) { }
-    };
+        let v1 = Number(row.Quantity);
+        let v2 = Number(input)
+        if (!(v1 >= v2)) {
+            event.target.value = v1;
+        }
+        row.ApprovedQuantity = input;
+    }
 
     const pagesListColumns = [
         {
@@ -170,39 +108,24 @@ const ViewDetails_Modal = () => {
             text: "Approve Quantity",
             dataField: "Quantity",
             hidden: tableArray.viewMode === url.PURCHASE_RETURN_LIST ? true : false,
-
-
             formatter: (value, row, k,) => {
                 if (tableArray.viewMode === url.PURCHASE_RETURN_LIST) {
 
                     return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
                 } else {
-                    
+
                     let defaultQuantity = tableArray.IsApproved ? row.ApprovedQuantity : row.Quantity;
                     return (
                         <div>
-                            <Input
-                                key={`Quantity-${k}`}
-                                id={`Quantity-${k}`}
-                                // cpattern={onlyNumberRegx}
-                                defaultValue={Number(defaultQuantity).toFixed(0)}
-                                disabled={tableArray.IsApproved}
+                            <CInput
+                                defaultValue={Number(defaultQuantity)}
                                 autoComplete="off"
-                                className=" text-end"
+                                type="text"
+                                disabled={tableArray.IsApproved}
+                                cpattern={onlyNumberRegx}
+                                className="col col-sm text-end"
                                 onChange={(event) => {
-                                    
-                                    let input = Number(event.target.value)
-                                    let result = /^\d*(\.\d{0,3})?$/.test(input);
-                                    if (result) {
-                                        let Qty = Number(defaultQuantity)
-                                        let inputQty = Number(input)
-                                        if (inputQty >= Qty) {
-                                            event.target.value = Number(defaultQuantity).toFixed(0)
-                                            row.ApproveQuantity = event.target.value
-                                        } else {
-                                            row.ApproveQuantity = Number(event.target.value)
-                                        }
-                                    };
+                                    QuantityHandler(event, row)
                                 }}
                             />
                         </div>
@@ -230,9 +153,89 @@ const ViewDetails_Modal = () => {
                     </div>
                 )
             },
-
         },
     ];
+
+    const SaveHandler = async (event) => {
+
+        const btnId = event.target.id
+        try {
+            const tableItemArray = []
+            let inValideUnits = []
+            tableArray.ReturnItems.forEach(index => {
+
+                const approvedQty = index.ApprovedQuantity ? index.ApprovedQuantity : index.Quantity
+                const Comment = index.ApproveComment ? index.ApproveComment : null
+
+                if (index.ApprovedQuantity === "") {
+                    inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
+                } else if (Number(approvedQty) > 0) {
+                    const ReturnItems = {
+                        "id": index.id,
+                        "Item": index.Item,
+                        "Unit": 1,
+                        "ApprovedQuantity": approvedQty,
+                        "ApproveComment": Comment,
+                        "Approvedby": loginUserID(),
+                        "ItemComment": index.ItemComment,
+                        "Quantity": index.Quantity,
+                        "BaseUnitQuantity": index.BaseUnitQuantity,
+                        "MRPValue": index.MRPValue,
+                        "Rate": index.Rate,
+                        "BasicAmount": index.BasicAmount,
+                        "TaxType": index.TaxType,
+                        "GSTPercentage": index.GSTPercentage,
+                        "GSTAmount": index.GSTAmount,
+                        "Amount": index.Amount,
+                        "CGST": index.CGST,
+                        "SGST": index.SGST,
+                        "IGST": index.IGST,
+                        "CGSTPercentage": index.CGSTPercentage,
+                        "SGSTPercentage": index.SGSTPercentage,
+                        "IGSTPercentage": index.IGSTPercentage,
+                        "BatchDate": index.BatchDate,
+                        "BatchCode": index.BatchCode,
+                        "CreatedOn": index.CreatedOn,
+                        "GST": index.GST,
+                        "ItemName": index.ItemName,
+                        "MRP": index.MRP,
+                        "PurchaseReturn": index.PurchaseReturn,
+                        "UnitName": index.UnitName,
+                        "ItemReason": index.ItemReasonID,
+                        "Comment": index.Comment,
+                        "primarySourceID": index.primarySourceID,
+                        "ApprovedByCompany": null,
+                        "FinalApprovalDate": null
+                    }
+
+                    const allowedRoles = ReturnFinalApprovalRole.split(",").map(role => parseInt(role.trim()));
+
+                    if (allowedRoles.includes(loginRoleID())) {
+                        ReturnItems.ApprovedByCompany = Number(approvedQty).toFixed(2);
+                        ReturnItems.FinalApprovalDate = date_ymd_func();
+                    }
+                    tableItemArray.push(ReturnItems)
+                }
+            })
+
+            const jsonBody = JSON.stringify({
+                "ReturnID": viewData_redux.Data[0].ReturnID,
+                "UserID": loginUserID(),
+                "ReturnItem": tableItemArray
+            });
+
+            if (inValideUnits.length > 0) {
+                customAlert({
+                    Type: 3,
+                    Message: inValideUnits
+                })
+
+            } else {
+                dispatch(returnApprove({ jsonBody, btnId }));
+            }
+
+        } catch (e) { }
+    };
 
     return (
         <Modal
@@ -278,7 +281,6 @@ const ViewDetails_Modal = () => {
                             </ToolkitProvider>
                             {(!(tableArray.viewMode === url.PURCHASE_RETURN_LIST) && !tableArray.IsApproved) &&
                                 <FormGroup>
-                                    {/* <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}> */}
                                     <div>
 
                                         {saveBtnloading ? <button
@@ -298,7 +300,6 @@ const ViewDetails_Modal = () => {
                                             > <i className="fas fa-save me-2"></i> Save
                                             </button>}
                                     </div>
-                                    {/* </Col> */}
                                 </FormGroup >}
 
                         </div>

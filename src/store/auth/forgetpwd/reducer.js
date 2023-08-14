@@ -13,7 +13,7 @@ const initialState = {
   sendOtpError: null,
   sendPasswordMsg: null,
   sendPasswordError: null,
-  Loading:false
+  Loading: false
 }
 
 const forgetPassword = (state = initialState, action) => {
@@ -36,6 +36,7 @@ const forgetPassword = (state = initialState, action) => {
     case SEND_OTP_FOR_FORGET_PASSWORD_ERROR:
       state = {
         ...state,
+        Loading: false,
         sendOtpMegError: action.payload
       }
       break
