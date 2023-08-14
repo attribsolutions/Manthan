@@ -854,11 +854,11 @@ const SalesReturn = (props) => {
                 "ReturnItemImages": [{ Item_pic: 'Select Return Reason' }],
             };
         });
-        
+
         try {
             const jsonBody = JSON.stringify({
                 ReturnDate: values.ReturnDate,
-                ReturnReasonOptions: '',
+                ReturnReasonOptions: isSaleableStock ? 1 : 0,
                 BatchCode: values.BatchCode,
                 Customer: values.Customer.value,// Customer Swipe when Po return
                 Party: _cfunc.loginPartyID(),// Party Swipe when Po return
