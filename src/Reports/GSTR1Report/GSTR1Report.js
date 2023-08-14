@@ -131,7 +131,7 @@ const GSTR1Report = (props) => {
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -145,7 +145,7 @@ const GSTR1Report = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -158,10 +158,10 @@ const GSTR1Report = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm={1} className="mt-3" >
+                        <Col sm={2} className="mt-3" >
                             <C_Button
                                 type="button"
-                                style={{ width: "130px" }}
+                                style={{ width: "90px" }}
                                 spinnerColor="white"
                                 loading={GstR1BtnLoading}
                                 className="btn btn-primary"
@@ -170,10 +170,11 @@ const GSTR1Report = (props) => {
                                 GST R1
                             </C_Button>
                         </Col>
+
                         <Col sm={2} className="mt-3" >
                             <C_Button
                                 type="button"
-                                style={{ width: "130px" }}
+                                style={{ width: "90px" }}
                                 spinnerColor="white"
                                 loading={GstR3BBtnLoading}
                                 className="btn btn-primary"
