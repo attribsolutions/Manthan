@@ -145,7 +145,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       response = yield call(OrderList_get_Filter_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
     else if ((subPageMode === url.GRN_STP_1) || subPageMode === url.GRN_STP_3) {
-      
+
       response = yield call(GRN_STP_for_orderList_goBtn, config); // GO-Botton IB-invoice Add Page API
     }
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
@@ -163,7 +163,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.dashboardOrderDate = date_dmy_func(i.OrderDate); // Only for Dashoard 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.DeliveryDate, i.CreatedOn);
+      i["transactionDateLabel"] = concatDateAndTime(i.OrderDate, i.CreatedOn);
 
       i.DeliveryDate = (`${DeliveryDate}`)
 
@@ -225,7 +225,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
       return i
     })
-    
+
     yield put(getOrderListPageSuccess(newList))
 
   } catch (error) {
