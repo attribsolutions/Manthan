@@ -390,7 +390,6 @@ export const MASTER_CLAIM_CREATE = '/MasterClaimCreate'
 
 
 
-
 // Stock Report
 export const STOCK_REPORT = '/PartyLiveStock'
 export const STOCK_PROCESSING = '/StockProcessing'
@@ -414,7 +413,10 @@ export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"
 export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"
 export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
 
-export const GST_R1_REPORT = "/generate-excel"
+export const GST_R1_REPORT = "/GSTR1Excel"
+
+export const GST_R3B_REPORT = "/GSTR3BExcel"
+
 
 
 

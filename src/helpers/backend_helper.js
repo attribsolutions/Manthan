@@ -649,6 +649,8 @@ export const PurchaseGSTReportSaga_GoBtn_API = ({ jsonBody }) => post(url.PURCHA
 
 
 export const Gst_R1_Report_API = ({ jsonBody }) => postMethodExcel(url.GST_R1_REPORT, jsonBody)//Go button api
+export const Gst_R3B_Report_API = ({ jsonBody }) => postMethodExcel(url.GST_R3B_REPORT, jsonBody)//Go button api
+
 
 
 
