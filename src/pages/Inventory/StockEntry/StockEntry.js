@@ -515,8 +515,6 @@ const StockEntry = (props) => {
         dispatch(getpartyItemList(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
     }
 
-
-    console.log(TableArr)
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
