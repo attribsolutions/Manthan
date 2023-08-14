@@ -111,6 +111,10 @@ const AddressTabForm = forwardRef((props, ref) => {
         })
     }
 
+    const FSSAIverifyhandler = () => {
+        window.open("https://foscos.fssai.gov.in/");
+    }
+
     const AddressTab = (
         <Row>
             <Card className="text-black" style={{ backgroundColor: "whitesmoke" }}>
@@ -172,8 +176,17 @@ const AddressTabForm = forwardRef((props, ref) => {
                                 )}
                             </FormGroup>
                         </Col>
+                        <Col md="1" className=" mt-3">
+                            <Button
+                                className=" p-1 mt-3 "
+                                color="btn btn-outline-primary border-2 font-size-10 "
+                                type="button"
+                                onClick={FSSAIverifyhandler}
+                            > Verify FSSAI
+                            </Button>
+                        </Col>
 
-                        <Col md="1"> </Col>
+                        {/* <Col md="1"> </Col> */}
                         <Col md="4">
                             <FormGroup className="mb-3">
                                 <Label htmlFor="validationCustom01">{fieldLabel.FSSAIExipry} </Label>
