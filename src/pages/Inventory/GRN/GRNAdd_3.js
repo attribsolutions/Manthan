@@ -114,7 +114,7 @@ const GRNAdd3 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true)) {
-            debugger
+
             const grnDetails = { ...items.Data }
             const InvoiceID = grnDetails.GRNReferences[0].Invoice
             setInvoiceID(InvoiceID)
@@ -136,7 +136,7 @@ const GRNAdd3 = (props) => {
 
 
     useEffect(() => {
-        debugger
+
         if (hideMsg.Status === true && hideMsg.StatusCode === 200) {
             // setState(() => resetFunction(fileds, state)) // Clear form values 
             customAlert({
@@ -155,6 +155,7 @@ const GRNAdd3 = (props) => {
     }, [hideMsg]);
 
     useEffect(() => {
+
         if ((hasShowloction || hasShowModal)) {
             let hasEditVal = null
             if (hasShowloction) {
@@ -560,7 +561,7 @@ const GRNAdd3 = (props) => {
 
                     {
                         (grnItemTableList.length > 0) ?
-                            <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
+                            <div className="row save1" style={{ marginTop: "-30px" }}>
                                 <Col sm={6}>
                                     <SaveButton pageMode={pageMode}
                                         loading={saveBtnloading}
@@ -569,14 +570,15 @@ const GRNAdd3 = (props) => {
                                         module={"GRN"} onClick={saveHandeller}
                                     />
                                 </Col>
+
                                 <Col sm={6}>
 
+                                    {pageMode === mode.view ? null :
+                                        <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                            <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" onChange={(event) => { hideHandler(event) }} />
+                                            <label className="btn btn-outline-primary" htmlFor="btncheck1">Hide</label>
 
-                                    <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                                        <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" onChange={(event) => { hideHandler(event) }} />
-                                        <label className="btn btn-outline-primary" htmlFor="btncheck1">Hide</label>
-
-                                    </div>
+                                        </div>}
                                 </Col>
 
                             </div>
