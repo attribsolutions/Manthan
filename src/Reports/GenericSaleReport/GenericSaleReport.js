@@ -81,7 +81,7 @@ const GenericSaleReport = (props) => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-        dispatch(BreadcrumbShowCountlabel(`GenericSale Count:${tableData.length}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
     }, [tableData]);
 
     const Party_Option = Distributor.map(i => ({

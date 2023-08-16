@@ -115,7 +115,7 @@ const PurchaseGSTReport = (props) => {
                 setPartyDropdown('')
             }
         }
-        dispatch(BreadcrumbShowCountlabel(`${"Purchase GST count"} :${Number(GSTRateWise ? PurchaseGSTRateWiseDetails.length > 0 && PurchaseGSTRateWiseDetails.length - 1 : PurchaseGSTDetails.length > 0 && PurchaseGSTDetails.length - 1)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Number(GSTRateWise ? PurchaseGSTRateWiseDetails.length > 0 && PurchaseGSTRateWiseDetails.length - 1 : PurchaseGSTDetails.length > 0 && PurchaseGSTDetails.length - 1)}`))
     }, [tableData]);
 
     function excelhandler() {

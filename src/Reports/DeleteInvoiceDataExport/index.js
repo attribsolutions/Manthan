@@ -79,7 +79,7 @@ const DeleteInvoiceDataExport = (props) => {
     useEffect(() => { return () => { dispatch(postDeleteInvoiceDataExport_API_Success([])); } }, [])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Delete Invoice Data count"} :${Number(DeletedInvoiceExportSerializerDetails.length)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Number(DeletedInvoiceExportSerializerDetails.length)}`))
 
         if (tableData.btnId === "excel_btnId") {
             if (DeletedInvoiceExportSerializerDetails.length > 0) {

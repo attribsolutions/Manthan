@@ -58,12 +58,12 @@ const DamageStockReport = (props) => {
 
     useEffect(() => {
         dispatch(damageStockReport_GoButton_API_Success([]))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`))
     }, [])
 
     useEffect(() => {
         if (tableData.length > 0) {
-            dispatch(BreadcrumbShowCountlabel(`Damage Stock Report Count:${tableData.length}`))
-
+            dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`))
         }
     }, [tableData])
 
