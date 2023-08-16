@@ -50,7 +50,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { calculateSalesReturnFunc } from "../../Sale/SalesReturn/SalesCalculation";
+import { calculateSalesReturnFunc, return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 
 const Credit = (props) => {
@@ -400,20 +400,21 @@ const Credit = (props) => {
             row["Rate"] = val
         }
         row.gstPercentage = row.GSTPercentage
-        const calculate = calculateSalesReturnFunc(row)
+        const calculate = return_discountCalculate_Func(row)
 
         row["AmountTotal"] = Number(calculate.roundedTotalAmount);
-        row["BasicAmount"] = Number(calculate.basicAmount);
+        row["DiscBasicAmount"] = Number(calculate.discountBaseAmt);
         row["GSTAmount"] = Number(calculate.roundedGstAmount);
         row["CGSTAmount"] = Number(calculate.CGST_Amount);
         row["SGSTAmount"] = Number(calculate.SGST_Amount);
 
         let sum = 0
         InvoiceItems.forEach(ind => {
+
             if (ind.AmountTotal === undefined) {
                 ind.AmountTotal = 0
             }
-            var amt = parseFloat(ind.AmountTotal)
+            var amt = Number(ind.AmountTotal)
             sum = sum + amt
         });
         let v1 = (row.BaseUnitQuantity);
@@ -485,18 +486,20 @@ const Credit = (props) => {
             dataField: "",
             formatter: (cellContent, row, key) => {
 
+
                 if (pageMode !== mode.view) {
                     const Units = row.ItemUnitDetails.map((index) => ({
                         value: index.Unit,
                         label: index.UnitName,
                     }));
 
+                    row["unit"] = { label: row.UnitName, value: row.Unit };
 
-                    return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    return (<span style={{ justifyContent: 'center', width: "200px" }}>
                         <Select
                             id={`Unit${key}`}
                             name="Unit"
-                            defaultValue={row.Calculate}
+                            defaultValue={row.unit}
                             isSearchable={true}
                             className="react-dropdown"
                             classNamePrefix="dropdown"
@@ -507,7 +510,7 @@ const Credit = (props) => {
                     </span>)
                 } else {
                     row.unit = { label: row.UnitName, value: row.Unit };
-                    return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    return (<span style={{ justifyContent: 'center', width: "200px" }}>
 
                         <Select
                             id={`Unit${key}`}
