@@ -1,0 +1,247 @@
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import './CustomTable.scss';
+import { customTableSearch } from '../components/Common/SearchBox/MySearch';
+import CustomPagination from './CustomPagination';
+// import TableHeader from './TableHeader';
+// import TableBody from './TableBody';
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
+import { Input } from 'reactstrap';
+
+
+
+
+
+const TableHeader = ({
+    showSelectionColumn,
+    selectRow,
+    columns,
+    sortField,
+    sortOrder,
+    onSort,
+    isAllSelected,
+    handleSelectAllRows
+}) => (
+    <thead>
+        <Tr>
+            {showSelectionColumn && selectRow && (
+                <Th>
+                    <Input
+                        type="checkbox"
+                        checked={isAllSelected}
+                        onChange={handleSelectAllRows}
+                    />
+                </Th>
+            )}
+            {columns.map((column, key) => (
+                <Th
+                    key={key}
+                    onClick={() => {
+                        if (column.sort) {
+                            onSort(column.dataField);
+                        }
+                    }}
+                >
+                    {column.text}{' '}
+                    {column.sort && sortField === column.dataField && (sortOrder === 'asc' ? '↑' : '↓')}
+                </Th>
+            ))}
+        </Tr>
+    </thead>
+);
+
+
+const TableBody = ({
+    keyField,
+    slicedData,
+    selectedRows,
+    showSelectionColumn,
+    selectRow,
+    onRowSelect,
+    columns
+}) => (
+    <Tbody>
+        {slicedData.length === 0 && (
+            <Tr>
+                <Td colSpan={showSelectionColumn && selectRow ? columns.length + 1 : columns.length}>
+                    No data available
+                </Td>
+            </Tr>
+        )}
+        {slicedData.map((row) => (
+            <Tr
+                key={row[keyField]}
+                data-selected={selectedRows.includes(row[keyField])}
+                data-record-deleted={row.IsRecordDeleted}
+                onClick={() => onRowSelect(row)}
+            >
+                {showSelectionColumn && selectRow && (
+                    <Td>
+                        <Input
+                            type="checkbox"
+                            className='check-disabled'
+                            checked={selectedRows.includes(row[keyField])}
+                            disabled={
+                                (selectRow && selectRow.nonSelected.includes(row[keyField]))
+                            }
+                            onChange={() => onRowSelect(row)}
+                        />
+                    </Td>
+                )}
+                {columns.map((column, colIndex) => (
+                    <Td key={colIndex} data-label={column.text}>
+                        {column.formatter
+                            ? column.formatter(row[column.dataField], row, colIndex, column.formatExtraData)
+                            : row[column.dataField]}
+                    </Td>
+                ))}
+            </Tr>
+        ))}
+    </Tbody>
+);
+
+
+
+const CustomTable = ({
+    data,
+    columns,
+    onDataSizeChange = () => { },
+    itemsPerPage = 15,
+    defaultSorted = [],
+    showNoDataIndication = true,
+    selectRow,
+    showSelectionColumn = true,
+    keyField,
+    ...rest
+}) => {
+    const [searchText, setSearchText] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [sortField, setSortField] = useState(null);
+    const [sortOrder, setSortOrder] = useState('asc');
+
+    const handleSearch = (val) => {
+        setSearchText(val);
+        setCurrentPage(1);
+    };
+
+    customTableSearch({ onSearch: handleSearch });
+
+    const filteredData = useMemo(() => {
+        return data.filter((row) =>
+            columns.some((column) => {
+                const columnValue = row[column.dataField];
+                const isHidden = column.hidden;
+
+                if (columnValue === null || isHidden || columnValue === undefined) {
+                    return false;
+                }
+                return columnValue.toString().toLowerCase().includes(searchText.toLowerCase());
+            })
+        );
+    }, [data, searchText, columns]);
+
+    const sortedData = useMemo(() => {
+        if (sortField && sortOrder) {
+            return [...filteredData].sort((a, b) => {
+                const aValue = a[sortField];
+                const bValue = b[sortField];
+                return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+            });
+        }
+        return filteredData;
+    }, [filteredData, sortField, sortOrder]);
+
+    const pageCount = Math.ceil(sortedData.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = currentPage * itemsPerPage;
+
+    const slicedData = sortedData.slice(startIndex, endIndex);
+
+    useEffect(() => {
+        if (defaultSorted.length > 0) {
+            const defaultSort = defaultSorted[0];
+            setSortField(defaultSort.dataField);
+            setSortOrder(defaultSort.order);
+        }
+    }, [defaultSorted]);
+
+    const handlePageChange = useCallback((page) => {
+        setCurrentPage(page);
+    }, []);
+
+    const handleSelectAllRows = useCallback(() => {
+        const nonSelected = selectRow && selectRow.nonSelected ? selectRow.nonSelected : [];
+        const selectableRows = slicedData.filter((row) => !nonSelected.includes(row[keyField]));
+
+        if (selectedRows.length === selectableRows.length) {
+            setSelectedRows([]);
+        } else {
+            setSelectedRows([...selectableRows.map((row) => row[keyField])]);
+        }
+    }, [selectedRows, slicedData, keyField, selectRow]);
+
+    const handleSort = useCallback((field) => {
+        if (sortField === field) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortField(field);
+            setSortOrder('asc');
+        }
+    }, [sortField, sortOrder]);
+
+    const handleRowSelect = useCallback((row) => {
+        const rowId = row[keyField];
+
+        setSelectedRows((prevSelectedRows) => {
+            if (prevSelectedRows.includes(rowId)) {
+                return prevSelectedRows.filter((selectedRow) => selectedRow !== rowId);
+            } else {
+                return [...prevSelectedRows, rowId];
+            }
+        });
+    }, [keyField]);
+
+    const isAllSelected = useMemo(() => {
+        return slicedData.every((row) =>
+            selectedRows.includes(row[keyField]) ||
+            (selectRow && selectRow.nonSelected.includes(row[keyField]))
+        );
+    }, [slicedData, selectedRows, keyField, selectRow]);
+
+    return (
+        <div className="table-rep-plugin">
+            <div className="table-responsive mb-0" data-pattern="priority-columns">
+                <table className="table table-bordered">
+                    <TableHeader
+                        keyField={keyField}
+                        showSelectionColumn={showSelectionColumn}
+                        selectRow={selectRow}
+                        columns={columns}
+                        sortField={sortField}
+                        sortOrder={sortOrder}
+                        onSort={handleSort}
+                        isAllSelected={isAllSelected}
+                        handleSelectAllRows={handleSelectAllRows}
+                    />
+                    <TableBody
+                        keyField={keyField}
+                        slicedData={slicedData}
+                        selectedRows={selectedRows}
+                        showSelectionColumn={showSelectionColumn}
+                        selectRow={selectRow}
+                        onRowSelect={handleRowSelect}
+                        columns={columns}
+                    />
+                </table>
+                <CustomPagination
+                    pageCount={pageCount}
+                    currentPage={currentPage}
+                    handlePageChange={handlePageChange}
+                />
+            </div>
+        </div>
+    );
+};
+
+export default CustomTable;

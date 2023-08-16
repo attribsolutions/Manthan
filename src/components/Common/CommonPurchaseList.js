@@ -283,17 +283,38 @@ const CommonPurchaseList = (props) => {
       return E_WayBill_ActionsButtonFunc({ ...props, dispatch, userAccState, })
     }
   }
+  // function rowSelected() {
+  //   return tableList.map((index) => { return (index.selectCheck) })
+  // }
 
-  const [tableColumns, defaultSorted, pageOptions,] = DynamicColumnHook({
+  // const nonSelectedRow = () => {
+  //   return tableList.forEach(row => {
+  //     if ((masterPath === url.SALES_RETURN) && ((row.Status === "Send To Supplier") || (row.Status === "Open"))) {
+  //       row.forceSelectDissabled = true;
+  //     }
+  //   })
+  // };
+
+  const selectRowCheckBox = () => (
+    selectCheckParams.isShow ?
+      {
+        // rowSelected: rowSelected(),
+        nonSelectedRow: nonSelectedRow(),
+        selectHeaderLabel: selectCheckParams.selectHeaderLabel
+      }
+      : undefined
+  )
+
+  const [tableColumns, defaultSorted,] = DynamicColumnHook({
     pageField,
     reducers: props.reducers,
+    selectRowCheckBox,
     secondLastColumn,
     thirdLastColumn,
     lastColumn,
     makeBtnColumn,
     userAccState: userAccState
   })
-
 
   function rowSelected() {
     return tableList.map((index) => { return (index.selectCheck) })
@@ -315,6 +336,7 @@ const CommonPurchaseList = (props) => {
     return noSelectedIds;
   };
 
+
   if (!(userAccState === "")) {
 
     return (
@@ -334,7 +356,10 @@ const CommonPurchaseList = (props) => {
                 bootstrap4
                 bordered={false}
                 selectRow={selectCheckParams.isShow ?
-                  selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
+                  {
+                    rowSelected: rowSelected(),
+                    nonSelected: nonSelectedRow()
+                  }
                   : undefined}
                 defaultSorted={defaultSorted}
                 striped={true}

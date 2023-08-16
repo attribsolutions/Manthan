@@ -531,6 +531,7 @@ const OrderList = () => {
     }
 
     const selectSaveBtnHandler = (row = []) => {
+        debugger
 
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
