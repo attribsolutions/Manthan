@@ -34,6 +34,7 @@ export const Details = [
 ]
 
 export const Rows1 = (data) => {
+    
     const { CRDRNoteItems = [] } = data
     CRDRNoteItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -45,7 +46,7 @@ export const Rows1 = (data) => {
     let totalQuantity = 0
 
     CRDRNoteItems.forEach((element, key) => {
-        
+
         const tableitemRow = [
             element.ItemName,
             `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
@@ -112,7 +113,7 @@ export const Rows1 = (data) => {
 }
 
 export const Rows = (data) => {
-    
+
     const { CRDRInvoices = [] } = data
     CRDRInvoices.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
