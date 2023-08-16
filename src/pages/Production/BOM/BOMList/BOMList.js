@@ -71,7 +71,7 @@ const BOMList = () => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"BOM Count"} :0`))
+        // dispatch(BreadcrumbShowCountlabel(`${"BOM Count"} :0`))
         goButtonHandler(true)
 
     }, []);

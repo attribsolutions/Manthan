@@ -187,7 +187,7 @@ const OrderList = () => {
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
+        // dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler("event", IBType)

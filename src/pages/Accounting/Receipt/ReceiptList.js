@@ -76,7 +76,7 @@ const ReceiptList = () => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`));
+        // dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`));
         return () => {
             dispatch(ReceiptListAPISuccess([]));
             dispatch(Retailer_List_Success([]));

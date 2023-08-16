@@ -128,7 +128,7 @@ const BankAssign = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${" Bank Assign Count"} :${bankTableList.length}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Count"}:${bankTableList.length}`))
     }, [bankTableList])
 
     const pagesListColumns = [

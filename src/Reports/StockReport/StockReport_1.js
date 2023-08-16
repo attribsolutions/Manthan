@@ -5,14 +5,14 @@ import { useHistory } from "react-router-dom";
 import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import C_Report from "../../components/Common/C_Report";
 import { StockProcessing_API_Success, StockProcessing_Action, stockReport_1_GoButton_API_Success } from "../../store/Report/StockReport/action";
-import { getBaseUnit_ForDropDown, getpdfReportdata } from "../../store/actions";
+import { commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getpdfReportdata } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { StockReport_1_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../ReportIndex'
+import { mode, pageId, url } from "../../routes/index"
 
 const StockReport_1 = (props) => {
 
@@ -62,6 +62,8 @@ const StockReport_1 = (props) => {
     useEffect(() => {
         dispatch(stockReport_1_GoButton_API_Success([]))
         dispatch(getBaseUnit_ForDropDown());
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.STOCK_REPORT_1))
     }, [])
 
     useEffect(async () => {
@@ -186,6 +188,7 @@ const StockReport_1 = (props) => {
                                         options={BaseUnit_DropdownOptions}
                                         onChange={(e) => { setUnitDropdown(e) }}
                                     />
+
                                 </Col>
                             </FormGroup>
                         </Col >

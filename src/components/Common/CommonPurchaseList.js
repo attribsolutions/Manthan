@@ -340,7 +340,8 @@ const CommonPurchaseList = (props) => {
                 striped={true}
                 classes={"table  table-bordered table-hover"}
                 onDataSizeChange={({ dataCount }) => {
-                  dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
+                  // dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
+                  dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
                 }}
                 noDataIndication={
                   <div className="text-danger text-center ">
@@ -414,7 +415,8 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
   }
 
   if (!(iscall === searchCount)) {
-    dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${iscall}`))
+    // dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${iscall}`))
+    dispatch(BreadcrumbShowCountlabel(`Count:${iscall}`))
     searchCount = paginationProps.dataSize
   }
   searchProps = toolkitProps.searchProps
