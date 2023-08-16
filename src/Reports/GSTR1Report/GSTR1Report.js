@@ -10,7 +10,7 @@ import { mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import * as report from '../ReportIndex'
 import C_Report from "../../components/Common/C_Report";
-import { GST_R1_Report_API, GST_R3B_Report_API } from "../../store/Report/GSTR1ReportRedux/action";
+import { GST_R1_Report_API, GST_R1_Report_API_Success, GST_R3B_Report_API, GST_R3B_Report_API_Success } from "../../store/Report/GSTR1ReportRedux/action";
 
 const GSTR1Report = (props) => {
     const dispatch = useDispatch();
@@ -76,6 +76,7 @@ const GSTR1Report = (props) => {
             link.href = url;
             link.download = `GST_R3B_Report_From_(${values.FromDate})_To_(${values.ToDate}).xlsx`;
             link.click();
+            dispatch(GST_R3B_Report_API_Success([]))
         } else if ((GstR1ReportData.length !== 0)) {
             const blob = new Blob([GstR1ReportData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = URL.createObjectURL(blob);
@@ -83,6 +84,8 @@ const GSTR1Report = (props) => {
             link.href = url;
             link.download = `GST_R1_Report_From_(${values.FromDate})_To_(${values.ToDate}).xlsx`;
             link.click();
+            dispatch(GST_R1_Report_API_Success([]))
+
         }
 
 
@@ -90,6 +93,13 @@ const GSTR1Report = (props) => {
 
     }, [GstR3BReportData, GstR1ReportData])
 
+
+    useEffect(() => {
+        return () => {
+            dispatch(GST_R3B_Report_API_Success([]))
+            dispatch(GST_R1_Report_API_Success([]))
+        }
+    }, [])
 
     function goButtonHandler(Type) {
         const jsonBody = JSON.stringify({
