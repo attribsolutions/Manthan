@@ -731,7 +731,7 @@ const PartyMasterBulkUpdate = (props) => {
                                 }
                             </PaginationProvider>
 
-                            {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
+                            {Data.length > 0 ? <FormGroup className="row row-cols-2 save1" >
                                 <Row >
                                     <Col sm={2} className="mt-n4">
                                         <SaveButton pageMode={pageMode}
