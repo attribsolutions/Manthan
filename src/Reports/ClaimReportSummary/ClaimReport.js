@@ -25,6 +25,12 @@ const fileds = () => ({
     PartyName: "",
     SelectedMonth: SelectedMonth(),
 })
+const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
+const ClaimBtnCss = "badge badge-soft-info font-size-18 btn btn-info waves-effect waves-light w-xxs border border-light"
+const CWClaimBtnCss = "badge badge-soft-primary font-size-18 btn btn-primary waves-effect waves-light w-xxs border border-light"
+
+
+
 
 const ClaimSummary = (props) => {
 
@@ -145,7 +151,7 @@ const ClaimSummary = (props) => {
             text: "Action",
             dataField: "",
             style: {
-                width: "600px"
+                width: "300px"
             },
             formatExtraData: { btnLoading: reducers.ReportBtnLoading, selectedDate: values },
             formatter: (value, row, key, { btnLoading, selectedDate }) => {
@@ -158,13 +164,16 @@ const ClaimSummary = (props) => {
                                 className="mt-3  mb-3">
                                 <C_Button
                                     loading={btnLoading === `gobtn-${"createClaim"}-${row.id}-${key}`}
-                                    forceDisabled={btnLoading}
+                                    // forceDisabled={btnLoading}
                                     type="button"
+                                    style={{ width: "100px" }}
+                                    title="Create Claim"
                                     spinnerColor="white"
-                                    className="btn btn-success w-md  "
+                                    className={createClaimBtnCss}
                                     onClick={(e) => { goButtonHandler("createClaim", row, `gobtn-${"createClaim"}-${row.id}-${key}`) }}
                                 >
-                                    Create
+                                    create<i className="fas fa-pencil-alt"></i>
+
                                 </C_Button>
                             </div>
 
@@ -173,12 +182,14 @@ const ClaimSummary = (props) => {
                                 <C_Button
                                     loading={btnLoading === `gobtn-${report.ClaimSummary}-${row.id}-${key}`}
                                     type="button"
-                                    forceDisabled={btnLoading}
+                                    // forceDisabled={btnLoading}
+                                    title="Claim Summary"
                                     spinnerColor="white"
-                                    className="btn btn-primary w-md  "
+                                    className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.ClaimSummary, row, `gobtn-${report.ClaimSummary}-${row.id}-${key}`) }}
                                 >
-                                    Claim Summary
+                                    <i className=" fas fa-file-signature"></i>
+
                                 </C_Button>
                             </div>
 
@@ -188,25 +199,30 @@ const ClaimSummary = (props) => {
                                 <C_Button
                                     loading={btnLoading === `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`}
                                     type="button"
-                                    forceDisabled={btnLoading}
+                                    // forceDisabled={btnLoading}
+                                    title="Customer Wise Summary"
                                     spinnerColor="white"
-                                    className="btn btn-primary w-md  "
+                                    className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.CustomerWiseReturn, row, `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`) }}
                                 >
-                                    Customer wise return
+
+                                    <i className="fas fa-file-contract"></i>
+
+
                                 </C_Button>
                             </div>
                             <div
                                 className="mt-3  mb-3">
                                 <C_Button
                                     loading={btnLoading === `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`}
-                                    forceDisabled={btnLoading}
+                                    // forceDisabled={btnLoading}
                                     type="button"
+                                    title="Master Claim Summary"
                                     spinnerColor="white"
-                                    className="btn btn-primary w-md  "
+                                    className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.CompanyWiseBudget, row, `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`) }}
                                 >
-                                    Master Claim
+                                    <i className="far fa-file-alt"></i>
                                 </C_Button>
                             </div>
                         </div>
@@ -223,10 +239,10 @@ const ClaimSummary = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3" >
-                                <Label className="col-sm-2 p-2 ">Month</Label>
-                                <Col sm="7">
+                        <Col sm={6}>
+                            <FormGroup className="mb- row mt-2" >
+                                <Label className="col-sm-1 p-2 ">Month</Label>
+                                <Col sm="4">
                                     <Input className="form-control"
                                         type="month"
                                         defaultValue={values.SelectedMonth}

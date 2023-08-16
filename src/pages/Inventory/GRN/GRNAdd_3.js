@@ -561,7 +561,7 @@ const GRNAdd3 = (props) => {
 
                     {
                         (grnItemTableList.length > 0) ?
-                            <div className="row save1" style={{ marginTop: "-30px" }}>
+                            <div className="row row-cols-2 save1" style={{ paddingBottom: 'center' }}>
                                 <Col sm={6}>
                                     <SaveButton pageMode={pageMode}
                                         loading={saveBtnloading}
