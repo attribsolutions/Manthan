@@ -26,7 +26,8 @@ import { commonPageField, commonPageFieldSuccess } from "../../../store/actions"
 import {
   getDistrictOnState,
   getDistrictOnStateSuccess,
-  getPartyListAPI
+  getPartyListAPI,
+  getPartyListAPISuccess
 } from "../../../store/Administrator/PartyRedux/action";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -58,6 +59,8 @@ import AddMaster from "./Drodown";
 import PartyMaster from "../PartyMaster/MasterAdd/PartyIndex";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import CityMaster from "../CityPages/CityMaster";
+import { getStateESuccess } from "../../../store/Administrator/EmployeeRedux/action";
+import { getEmployeeTypelistSuccess } from "../../../store/Administrator/EmployeeTypeRedux/action";
 
 const AddEmployee = (props) => {
 
@@ -140,6 +143,11 @@ const AddEmployee = (props) => {
     dispatch(getEmployeeTypelist());
     dispatch(getPartyListAPI())
     dispatch(getState());
+    return () => {
+      dispatch(getPartyListAPISuccess([]));
+      dispatch(getStateESuccess([]));
+      dispatch(getEmployeeTypelistSuccess([]));
+    }
   }, [dispatch]);
 
 
