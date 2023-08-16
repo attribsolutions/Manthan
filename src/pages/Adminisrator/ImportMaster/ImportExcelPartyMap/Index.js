@@ -124,9 +124,8 @@ const ImportExcelPartyMap = (props) => {
 
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Import Count"} :${goButtonArr.length}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${goButtonArr.length}`))
     }, [goButtonArr])
-
 
     useEffect(async () => {
 

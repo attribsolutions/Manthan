@@ -102,7 +102,7 @@ const LoadingSheet = (props) => {
     }, []);
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`LoadingSheet Count:${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:${Data.length}`))
     }, [GoButton]);
 
     const location = { ...history.location }

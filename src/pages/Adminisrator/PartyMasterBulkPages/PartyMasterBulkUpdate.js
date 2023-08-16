@@ -202,7 +202,7 @@ const PartyMasterBulkUpdate = (props) => {
     }, [postMsg.Status])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Party Bulk Update Count"} :${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Data.length}`))
     }, [Data])
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);

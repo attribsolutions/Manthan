@@ -125,7 +125,7 @@ const RouteUpdate = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Route Update Count"}:${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Count"}:${Data.length}`))
     }, [RouteUpdateList])
 
     useEffect(() => {
@@ -162,7 +162,7 @@ const RouteUpdate = (props) => {
             style: () => ({ width: "30%" }),
             formatExtraData: { forceRefresh },
             formatter: (value, row, key, { forceRefresh }) => {
-                
+
                 return (
                     <C_Select
                         value={!(row.Route > 0) ? "" : {
@@ -197,7 +197,7 @@ const RouteUpdate = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            
+
             const data = Data.map((index) => ({
                 id: index.id,
                 Party: index.Party,
