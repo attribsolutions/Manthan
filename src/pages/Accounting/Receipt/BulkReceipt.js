@@ -54,7 +54,7 @@ const BulkRecipt = (props) => {
     }, []);
 
     useEffect(() => {
-        // dispatch(BreadcrumbShowCountlabel(`BulkReceipt Count :${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`BulkReceipt Count :${Data.length}`))
     }, [ReceiptGoButton]);
 
 

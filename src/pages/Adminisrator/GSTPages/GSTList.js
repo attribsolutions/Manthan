@@ -50,7 +50,7 @@ const GSTList = () => {
     setpageMode(hasPagePath)
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    // dispatch(BreadcrumbShowCountlabel(`${"GST Count"} :0`))
+    dispatch(BreadcrumbShowCountlabel(`${"GST Count"} :0`))
     dispatch(getGSTList())
     return () => {
       dispatch(_act.getGSTListSuccess([]));

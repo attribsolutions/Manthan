@@ -56,7 +56,7 @@ const MaterialIssueList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         // setpageMode(page_mode)
-        // dispatch(BreadcrumbShowCountlabel(`${"Material Issue Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)

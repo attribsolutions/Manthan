@@ -205,8 +205,7 @@ const CommonListPage = (props) => {
             striped={true}
             classes={"table table-bordered table-hover"}
             onDataSizeChange={({ dataCount }) => {
-              // dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
-              dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+              dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
             }}
             noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
           />

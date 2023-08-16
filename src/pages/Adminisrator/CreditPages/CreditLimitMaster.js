@@ -155,9 +155,9 @@ const CreditLimitMaster = (props) => {
         }
     }, [pageField])
 
-    // useEffect(() => {
-    //     dispatch(BreadcrumbShowCountlabel(`${" Credit Limit Count"} :${Data.length}`))
-    // }, [Data])
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${" Credit Limit Count"} :${Data.length}`))
+    }, [Data])
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 

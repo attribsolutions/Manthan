@@ -51,9 +51,7 @@ const ForgetPasswordPage = props => {
   const [sendOTPSuccessMsg, setSendOTPSuccessMsg] = useState(null)
   const [setpawShowUI, setSetpawShowUI] = useState(false)
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordMatched, setPasswordMatched] = useState(true);
+
 
 
   useEffect(() => {
@@ -127,18 +125,6 @@ const ForgetPasswordPage = props => {
       // return
     }
   }
-
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    setConfirmPassword(''); // Clear Confirm Password field
-    // setPasswordMatched(true); // Reset to true when Password changes
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
-    setPasswordMatched(e.target.value === password);
-  };
   return (
     <React.Fragment>
       <MetaTags>
@@ -194,7 +180,6 @@ const ForgetPasswordPage = props => {
                                   autoComplete="off"
                                   required
                                 />
-
                                 <label>Enter OTP</label>
                                 <AvInput
                                   name="OTP"
@@ -204,8 +189,8 @@ const ForgetPasswordPage = props => {
                                   type="text"
                                   required
                                 />
+                                <label>Password</label>
 
-                                {/* <label>Password</label>
                                 <AvInput
                                   name="password1"
                                   className={"form-control  mb-2"}
@@ -220,6 +205,8 @@ const ForgetPasswordPage = props => {
                                   ?
                                   <div className="text-danger"> Please Enter Correct Password</div>
                                   : <></>}
+
+
                                 <label>confirm password</label>
                                 <AvInput
                                   name="passwordcon"
@@ -230,41 +217,11 @@ const ForgetPasswordPage = props => {
                                   placeholder="Enter confirm password"
                                   type="password"
                                   required
-                                />*/}
-                              </div>
-
-                              <div>
-                                <label>Password</label>
-                                <AvInput
-                                  name="password1"
-                                  className="form-control mb-2"
-                                  autoComplete="new-password"
-                                  placeholder="Enter password"
-                                  type="password"
-                                  required
-                                  value={password}
-                                  onChange={handlePasswordChange}
                                 />
-
-                                <label>Confirm Password</label>
-                                <AvInput
-                                  name="passwordcon"
-                                  className="form-control mb-2"
-                                  autoComplete="new-password"
-                                  placeholder="Enter confirm password"
-                                  type="password"
-                                  required
-                                  value={confirmPassword}
-                                  onChange={handleConfirmPasswordChange}
-                                />
-
-                                {passwordMatched ? (
-                                  password !== '' && (
-                                    <div className="text-success">Passwords match!</div>
-                                  )
-                                ) : (
-                                  <div className="text-danger">Passwords do not match!</div>
-                                )}
+                                {/* {(paswErr === true)
+                                  ?
+                                  <div className="text-danger"> Please Enter Correct Password</div>
+                                  : <></>} */}
                               </div>
 
 
@@ -290,7 +247,7 @@ const ForgetPasswordPage = props => {
                               </div>
 
                               <div className="mb-3 mt-4">
-                                {Loading ? <button className="btn btn-primary w-100 waves-effect waves-light" type="submit"> <div className="dot-pulse"> <span> Reset</span>     &nbsp;
+                                {Loading ? <button  className="btn btn-primary w-100 waves-effect waves-light" type="submit"> <div className="dot-pulse"> <span> Reset</span>     &nbsp;
                                   <div className="bounce1" style={{ background: "white" }}></div>
                                   <div className="bounce2" style={{ background: "white" }}></div>
                                   <div className="bounce3" style={{ background: "white" }}></div>

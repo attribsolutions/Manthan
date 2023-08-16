@@ -137,7 +137,7 @@ const ImportExcelFieldMap = (props) => {
 
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${goButtonItem.length}`))
+        dispatch(BreadcrumbShowCountlabel(`${" Field Count"} :${goButtonItem.length}`))
     }, [goButtonItem])
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonItem]);

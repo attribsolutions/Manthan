@@ -34,7 +34,7 @@ function ExtraTableWrapper({ data, children }) {
 
     }, [radioButtonNonDelete, radioButtonDelete, data])
 
-    
+    debugger
     return <> {children(modifiyRowKeys)}</>
 }
 

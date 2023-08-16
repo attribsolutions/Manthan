@@ -133,7 +133,7 @@ const PaymentEntryList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(BreadcrumbShowCountlabel(`${"Payment Entry Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Payment Entry Count"} :0`))
         // dispatch(getSupplier())
         dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
 

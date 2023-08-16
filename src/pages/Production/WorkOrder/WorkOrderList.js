@@ -56,7 +56,7 @@ const WorkOrderList = () => {
 
     useEffect(() => {
         setpageMode(page_mode)
-        // dispatch(BreadcrumbShowCountlabel(`${"Work Order Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)

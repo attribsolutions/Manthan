@@ -22,7 +22,7 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../CustomValidateForm";
 import { commonPageField } from "../../store/actions";
 import { SapLedger_Go_Button_API, SapLedger_Go_Button_API_Success } from "../../store/Report/SapLedger Redux/action";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { Go_Button } from "../../components/Common/CommonButton";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
@@ -36,7 +36,6 @@ const SapLedger = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
     const [headerFilters, setHeaderFilters] = useState('');
-    const [btnMode, setBtnMode] = useState(0);
 
     const {
         userAccess,
@@ -49,7 +48,7 @@ const SapLedger = (props) => {
         List: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
-    debugger
+
     const { data = [], Data = [] } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
@@ -134,60 +133,9 @@ const SapLedger = (props) => {
         };
     }, [userAccess])
 
-    // useEffect(() => {
-    //     return () => {
-    //         setTableData([]);
-    //     }
-    // }, [])
-
-    // useEffect(() => {
-    //     dispatch(BreadcrumbShowCountlabel(`${"Sap Ledger count"} :${Number(data.length > 0 && data.length - 1)}`))
-
-    //     if (goBtnMode === "downloadExcel") {
-    //         if (InvoiceExportSerializerDetails.length > 0) {
-    //             const worksheet = XLSX.utils.json_to_sheet(InvoiceExportSerializerDetails);
-    //             const workbook = XLSX.utils.book_new();
-    //             XLSX.utils.book_append_sheet(workbook, worksheet, `InvoiceDataExportReport`);
-    //             XLSX.writeFile(workbook, `Invoice Data Export Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
-    //         }
-    //     }
-    // }, [List]);
-
-    // useEffect(() => {
-
-    //     try {
-    //         if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
-    //             setBtnMode(0);
-    //             const { GenericSaleDetails } = goButtonData.Data
-    //             if (btnMode === 2) {
-    //                 const worksheet = XLSX.utils.json_to_sheet(GenericSaleDetails);
-    //                 const workbook = XLSX.utils.book_new();
-    //                 XLSX.utils.book_append_sheet(workbook, worksheet, "GenericSaleReport");
-    //                 XLSX.writeFile(workbook, `Generic Sale Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
-
-    //                 dispatch(GoButton_For_GenericSale_Success([]));
-    //                 setDistributorDropdown([{ value: "", label: "All" }])
-    //             }
-    //             else {
-    //                 const UpdatedTableData = GenericSaleDetails.map((item, index) => {
-
-    //                     return {
-    //                         ...item, id: index + 1,
-    //                     };
-    //                 });
-    //                 setTableData(UpdatedTableData);
-    //                 dispatch(GoButton_For_GenericSale_Success([]));
-
-    //             }
-    //         }
-    //         else if ((goButtonData.Status === true)) {
-    //             setTableData([]);
-    //         }
-    //         setBtnMode(0);
-    //     }
-    //     catch (e) { console.log(e) }
-
-    // }, [goButtonData]);
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${"Sap Ledger count"} :${Number(data.length > 0 && data.length - 1)}`))
+    }, [List])
 
     const PartyDropdown = partyList.map((data) => ({
         value: data.id,
@@ -209,8 +157,7 @@ const SapLedger = (props) => {
         return 0;
     };
 
-    function excel_And_GoBtnHandler(e, Btnmode) {
-        setBtnMode(Btnmode);
+    function goButtonHandler() {
         try {
 
             if ((userAdminRole) && (SelectedPartyDropdown().value === 0)) {
@@ -229,6 +176,7 @@ const SapLedger = (props) => {
         catch (e) {
             _cfunc.CommonConsole(e);
         }
+
     }
 
     function fromdateOnchange(e, date) {
@@ -236,6 +184,7 @@ const SapLedger = (props) => {
         newObj.fromdate = date
         setHeaderFilters(newObj)
         dispatch(SapLedger_Go_Button_API_Success([]))
+
     }
 
     function todateOnchange(e, date) {
@@ -243,11 +192,13 @@ const SapLedger = (props) => {
         newObj.todate = date
         setHeaderFilters(newObj)
         dispatch(SapLedger_Go_Button_API_Success([]))
+
     }
 
     function partySelectOnChangeHandler() {
         dispatch(SapLedger_Go_Button_API_Success([]))
     }
+
 
     if (!(userPageAccessState === '')) {
         return (
@@ -263,7 +214,7 @@ const SapLedger = (props) => {
                     <div className="px-2  c_card_filter text-black " >
                         <div className="row">
                             <div className=" row">
-                                <Col sm="4" className="">
+                                <Col sm="5" className="">
                                     <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "83px" }}>From Date</Label>
@@ -276,7 +227,7 @@ const SapLedger = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm="4" className="">
+                                <Col sm="6" className="">
                                     <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "65px" }}>To Date</Label>
@@ -289,33 +240,9 @@ const SapLedger = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                {/* <Col sm="1" className="mt-2 ">
+                                <Col sm="1" className="mt-2 ">
                                     <Go_Button loading={goBtnLoading} onClick={goButtonHandler} />
 
-                                </Col> */}
-                                <Col sm={1} className="mt-2 ">
-
-                                    <C_Button
-                                        type="button"
-                                        spinnerColor="white"
-                                        // loading={GoBtnLoading === "showOnTable"}
-                                        className="btn btn-success"
-                                        onClick={(e) => excel_And_GoBtnHandler(e, 1)}
-                                    >
-                                        Show
-                                    </C_Button>
-
-                                </Col>
-                                <Col sm={2} className="mt-2 ">
-                                    <C_Button
-                                        type="button"
-                                        spinnerColor="white"
-                                        // loading={ExcelBtnLoading === "downloadExcel"}
-                                        className="btn btn-primary"
-                                        onClick={(e) => excel_And_GoBtnHandler(e, 2)}
-                                    >
-                                        Excel Download
-                                    </C_Button>
                                 </Col>
                             </div>
 

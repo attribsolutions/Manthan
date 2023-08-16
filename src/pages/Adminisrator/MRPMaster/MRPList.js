@@ -48,7 +48,7 @@ const MRPList = () => {
     setpageMode(hasPagePath)
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    // dispatch(BreadcrumbShowCountlabel(`${"MRP Count"} :0`))
+    dispatch(BreadcrumbShowCountlabel(`${"MRP Count"} :0`))
     dispatch(getMRPList())
 
   }, []);
