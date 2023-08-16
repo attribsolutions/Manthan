@@ -73,6 +73,7 @@ const PartyLedger = (props) => {
 
     useEffect(() => {
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
+            dispatch(getpdfReportdataSuccess({ Status: false }))
             customAlert({
                 Type: 3,
                 Message: pdfdata.Message,
