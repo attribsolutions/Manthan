@@ -12,13 +12,13 @@ export const columns = [
 export const columns1 = [
     "HSN Item Name",
     "Quantity",
-    "Rate",
-    "Basic Amt",
+    "Basic Rate",
+    "Basic Amount",
     "CGST %",
-    "CGST Amt",
+    "CGST Amount",
     "SGST %",
-    "SGST Amt",
-    "Total Amt"
+    "SGST Amount",
+    "Total Amount"
 ];
 
 export const BilledBy = [
@@ -33,7 +33,8 @@ export const Details = [
     " ",
 ]
 
-export const Rows1 = (data) => {
+export const RowsForCreditGoods = (data) => {
+
     const { CRDRNoteItems = [] } = data
     CRDRNoteItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -45,7 +46,7 @@ export const Rows1 = (data) => {
     let totalQuantity = 0
 
     CRDRNoteItems.forEach((element, key) => {
-        
+
         const tableitemRow = [
             element.ItemName,
             `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
@@ -75,13 +76,11 @@ export const Rows1 = (data) => {
                 "",
                 "",
                 "",
+                `${Number(totalCGst).toFixed(2)}`,
                 "",
-                // `CGST :${parseFloat(totalCGst).toFixed(2)}`,
+                `${Number(totalSGst).toFixed(2)}`,
                 "",
-                "",
-                // `SGST :${parseFloat(totalSGst).toFixed(2)}`,
-                "",
-                `TotalAmt :${parseFloat(totalAmount).toFixed(2)}`,
+                `${Number(totalAmount).toFixed(2)}`,
             ];
         };
 
@@ -112,7 +111,7 @@ export const Rows1 = (data) => {
 }
 
 export const Rows = (data) => {
-    
+
     const { CRDRInvoices = [] } = data
     CRDRInvoices.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -144,9 +143,12 @@ export const Rows = (data) => {
                 "Total Amount Paid",
                 "",
                 "",
-                // `Total:${parseFloat(Total).toFixed(2)}`,
-                `${parseFloat(TotalPaidAmount).toFixed(2)}`,
-                // `BalnceAmt:${parseFloat(TotalBalanceAmt).toFixed(2)}`,
+                "",
+                "",
+                "",
+                `${Number(Total).toFixed(2)}`,
+                ``,
+                ``,
 
 
 

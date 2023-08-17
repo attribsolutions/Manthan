@@ -50,7 +50,7 @@ const MarginList = () => {
     setpageMode(hasPagePath)
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(BreadcrumbShowCountlabel(`${"Margin Count"} :0`))
+    // dispatch(BreadcrumbShowCountlabel(`${"Margin Count"} :0`))
     dispatch(getMarginList())
 
   }, []);

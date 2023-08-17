@@ -87,7 +87,7 @@ const InvoiceDataExport = (props) => {
     useEffect(() => { return () => { dispatch(postInvoiceDataExport_API_Success([])); } }, [])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Invoice count"} :${Number(InvoiceExportSerializerDetails.length)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Number(InvoiceExportSerializerDetails.length)}`))
 
         if (goBtnMode === "downloadExcel") {
             if (InvoiceExportSerializerDetails.length > 0) {

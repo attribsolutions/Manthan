@@ -35,7 +35,6 @@ const PartyList = () => {
     });
 
     const reducers = useSelector(
-
         (state) => ({
             goBtnLoading: state.PartyMasterReducer.goBtnLoading,
             listBtnLoading: state.PartyMasterReducer.listBtnLoading,
@@ -78,10 +77,18 @@ const PartyList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(getPartyListAPI(subPageMode));
 
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            goButtonHandler()
+        }
+        else if (subPageMode === url.PARTY_lIST) {
+            dispatch(getPartyListAPI({
+                ..._cfunc.loginJsonBody(),
+                PartyID: _cfunc.loginPartyID(),
+                IsRetailer: 0
+            }));
+        }
         return () => {
-            // dispatch(commonPageFieldListSuccess(null));
             dispatch(updatePartyIDSuccess([])); //for clear privious order list 
             dispatch(getPartyListAPISuccess([]));
         }
@@ -99,7 +106,7 @@ const PartyList = () => {
                 ..._cfunc.loginJsonBody(),
                 PartyID: _cfunc.loginSelectedPartyID(),
                 IsRetailer: subPageMode === url.RETAILER_LIST ? 1 : 0
-            };
+            }
             dispatch(getPartyListAPI(jsonBody));
         }
         catch (error) { }
@@ -114,10 +121,13 @@ const PartyList = () => {
         <React.Fragment>
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
-                <PartyDropdown_Common
-                    goButtonHandler={goButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler}
-                />
+                {subPageMode === url.RETAILER_LIST &&
+                    <PartyDropdown_Common
+                        goBtnLoading={goBtnLoading}
+                        goButtonHandler={goButtonHandler}
+                        changeButtonHandler={partyOnChngeButtonHandler}
+                    />
+                }
                 {
                     (pageField) &&
                     <CommonPurchaseList

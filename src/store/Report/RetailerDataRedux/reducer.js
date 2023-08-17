@@ -1,4 +1,8 @@
-import { RETAILER_DATA_API_ERROR_ACTION, POST_RETAILER_DATA_API, POST_RETAILER_DATA_API_SUCCESS } from "./actionType";
+import {
+    RETAILER_DATA_API_ERROR_ACTION,
+    POST_RETAILER_DATA_API,
+    POST_RETAILER_DATA_API_SUCCESS
+} from "./actionType";
 
 const INIT_STATE = {
     RetailerGobtn: [],
@@ -26,7 +30,6 @@ const RetailerDataReducer = (state = INIT_STATE, action) => {
                 ...state,
                 listBtnLoading: false,
             };
-
 
         default:
             return state

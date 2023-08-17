@@ -187,7 +187,7 @@ const OrderList = () => {
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
+        // dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler("event", IBType)
@@ -551,13 +551,13 @@ const OrderList = () => {
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
 
-                    <Col sm={subPageMode === url.ORDER_LIST_4 ? 2 : 3} >
+                    <Col lg={subPageMode === url.ORDER_LIST_4 ? 0 : 3} >
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>
+                                style={{ width: "65px" }}>
                                 {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "FromDate"}
                             </Label>
-                            <Col sm="7">
+                            <Col sm="8">
                                 <C_DatePicker
                                     options={{
                                         altInput: true,
@@ -572,13 +572,13 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col sm={subPageMode === url.ORDER_LIST_4 ? 2 : 3} >
+                    <Col lg={subPageMode === url.ORDER_LIST_4 ? 0 : 3} >
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
                                 {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "ToDate"}
                             </Label>
-                            <Col sm="7">
+                            <Col sm="8">
                                 <C_DatePicker
                                     options={{
                                         altInput: true,
@@ -594,13 +594,13 @@ const OrderList = () => {
                     </Col>
 
                     {subPageMode === url.ORDER_LIST_4 ?
-                        <Col sm="3">
-                            <FormGroup className="mb-2 row mt-3 " >
-                                <Label className="col-md-4 p-2"
-                                    style={{ width: "115px" }}>
+                        <Col lg={3}>
+                            <FormGroup className="mb-1 row mt-3 " >
+                                <Label className="col-sm p-2"
+                                >
                                     {!(fieldLabel.CustomerType === '') ? fieldLabel.CustomerType : "Customer Type"}
                                 </Label>
-                                <Col sm="7">
+                                <Col sm="8">
                                     <C_Select
                                         name="CustomerType"
                                         classNamePrefix="select2-Customer"
@@ -622,10 +622,10 @@ const OrderList = () => {
 
 
 
-                    <Col sm="3">
-                        <FormGroup className="mb-2 row mt-3 " >
+                    <Col lg={3}>
+                        <FormGroup className="mb-1 row mt-3 " >
                             <Label className="col-md-4 p-2"
-                                style={{ width: "115px" }}>
+                                style={{ width: "90px" }}>
                                 {!(fieldLabel.Supplier === '') ? fieldLabel.Supplier : "Supplier"}
                             </Label>
                             <Col sm="7">
@@ -644,8 +644,8 @@ const OrderList = () => {
                         </FormGroup>
                     </Col >
 
-                    <Col sm="1" />
-                    <Col sm="1" className="mt-3 ">
+                    {/* <Col sm="1" /> */}
+                    <Col sm="1" className="mt-3 mb-2 ">
                         <Go_Button loading={reducers.goBtnloading} id={gobtnId} onClick={goButtonHandler} />
                     </Col>
                 </div>
@@ -708,6 +708,7 @@ const OrderList = () => {
                                 selectSaveBtnLabel: "Confirm",
                                 selectHeaderLabel: "Confirm"
                             }}
+                            totalAmountShow={true}
                         />
                         : null
                 }

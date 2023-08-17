@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, } from "../../components/Common/validationFunction";
-import { Go_Button } from "../../components/Common/CommonButton";
+import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { url, mode, } from "../../routes/index"
@@ -73,6 +73,7 @@ const PartyLedger = (props) => {
 
     useEffect(() => {
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
+            dispatch(getpdfReportdataSuccess({ Status: false }))
             customAlert({
                 Type: 3,
                 Message: pdfdata.Message,
@@ -214,7 +215,12 @@ const PartyLedger = (props) => {
 
 
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.goBtnLoading} />
+                            <C_Button
+                                type="button"
+                                className="btn btn-outline-primary border-1 font-size-12 text-center"
+                                onClick={goButtonHandler}
+                                loading={reducers.goBtnLoading} >
+                                Print</C_Button>
                         </Col>
                     </div>
                 </div>

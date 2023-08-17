@@ -71,7 +71,7 @@ const StockReport = (props) => {
     }, [])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Stock Report Count:${tableData.length}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`))
     }, [tableData])
 
     const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")

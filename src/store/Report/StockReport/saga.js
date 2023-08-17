@@ -22,7 +22,7 @@ function* StockReport_1_GenFunc({ config }) {
     
     try {
         const response = yield call(StockReport_1_GoBtn_API, config);
-        yield put(stockReport_1_GoButton_API_Success(response.Data))
+        yield put(stockReport_1_GoButton_API_Success(response))
     } catch (error) { yield put(stockReportApiErrorAction()) }
 }
 

@@ -399,7 +399,7 @@ const PurchaseReturnMode3 = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
+                <div className="page-content" >
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
@@ -488,7 +488,7 @@ const PurchaseReturnMode3 = (props) => {
                                     <React.Fragment>
                                         <Row>
                                             <Col xl="12">
-                                                <div className="table-responsive table" style={{ minHeight: "60vh" }}>
+                                                <div className="table-responsive table" style={{ minHeight: "45vh" }}>
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         id="table_Arrow"
@@ -517,7 +517,7 @@ const PurchaseReturnMode3 = (props) => {
 
                     {
                         tableData.length > 0 ?
-                            <div style={{ marginLeft: '-35px' }}>
+                            <div >
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"} >
                                         <SaveButton

@@ -156,7 +156,8 @@ function* orderList_GoBtn_GenFunc({ config }) {
     // }
 
     newList = yield response.Data.map((i) => {
-
+      
+      i["recordsAmountTotal"] = i.OrderAmount;  // Breadcrumb Count total
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
 

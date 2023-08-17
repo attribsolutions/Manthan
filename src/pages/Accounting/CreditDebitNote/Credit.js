@@ -50,7 +50,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { calculateSalesReturnFunc } from "../../Sale/SalesReturn/SalesCalculation";
+import { calculateSalesReturnFunc, return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 
 const Credit = (props) => {
@@ -392,36 +392,43 @@ const Credit = (props) => {
     }
 
     function val_onChange(val, row, type, key) {
-
+        
         if (type === "qty") {
-            row["Qty"] = val;
+            row["Quantity"] = val;
         }
         else {
             row["Rate"] = val
         }
+
+        // let v1 = Number(row.BaseUnitQuantity);
+        // let v2 = Number(val)
+        // if (!(v1 >= v2)) {
+        //     val = v1;
+        // }
         row.gstPercentage = row.GSTPercentage
-        const calculate = calculateSalesReturnFunc(row)
+        const calculate = return_discountCalculate_Func(row)
 
         row["AmountTotal"] = Number(calculate.roundedTotalAmount);
-        row["BasicAmount"] = Number(calculate.basicAmount);
+        row["DiscBasicAmount"] = Number(calculate.discountBaseAmt);
         row["GSTAmount"] = Number(calculate.roundedGstAmount);
         row["CGSTAmount"] = Number(calculate.CGST_Amount);
         row["SGSTAmount"] = Number(calculate.SGST_Amount);
 
         let sum = 0
         InvoiceItems.forEach(ind => {
+
             if (ind.AmountTotal === undefined) {
                 ind.AmountTotal = 0
             }
-            var amt = parseFloat(ind.AmountTotal)
+            var amt = Number(ind.AmountTotal)
             sum = sum + amt
         });
-        let v1 = (row.BaseUnitQuantity);
-        let v2 = Number(val)
-        if (!(v1 >= v2)) {
-            val = v1;
 
-        }
+
+
+
+
+
         setState((i) => {
             let a = { ...i }
             a.values.GrandTotal = Number(sum).toFixed(2)
@@ -438,7 +445,7 @@ const Credit = (props) => {
 
     function UnitOnchange(e, row, key) {
 
-        row.unit = e.value
+        row["selectedUnit"] = e.value
     };
 
     const pagesListColumns1 = [
@@ -473,7 +480,12 @@ const Credit = (props) => {
                         autoComplete="off"
                         className=" text-end"
                         onChange={(e) => {
-                            const val = e.target.value
+                            let val = e.target.value
+                            let v1 = Number(row.BaseUnitQuantity);
+                            let v2 = Number(val)
+                            if (!(v1 >= v2)) {
+                                val = v1;
+                            }
                             val_onChange(val, row, "qty", key)
                         }}
                     />
@@ -485,18 +497,20 @@ const Credit = (props) => {
             dataField: "",
             formatter: (cellContent, row, key) => {
 
+
                 if (pageMode !== mode.view) {
                     const Units = row.ItemUnitDetails.map((index) => ({
                         value: index.Unit,
                         label: index.UnitName,
                     }));
 
+                    row["unit"] = { label: row.UnitName, value: row.Unit };
 
-                    return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    return (<span style={{ justifyContent: 'center', width: "200px" }}>
                         <Select
                             id={`Unit${key}`}
                             name="Unit"
-                            defaultValue={row.Calculate}
+                            defaultValue={row.unit}
                             isSearchable={true}
                             className="react-dropdown"
                             classNamePrefix="dropdown"
@@ -507,7 +521,7 @@ const Credit = (props) => {
                     </span>)
                 } else {
                     row.unit = { label: row.UnitName, value: row.Unit };
-                    return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    return (<span style={{ justifyContent: 'center', width: "200px" }}>
 
                         <Select
                             id={`Unit${key}`}
@@ -630,21 +644,21 @@ const Credit = (props) => {
 
         InvoiceItems.forEach(index => {
 
-            if ((!(index.unit) && (index.Qty > 0))) {
+            if ((!(index.unit.value) && (Number(index.Quantity) > 0))) {
                 inValideUnits.push({ [`${index.ItemName}`]: "This Item Unit Is Required." })
             }
 
-            if (index.Qty) {
-
+            if (index.Quantity) {
+                
                 const CRDRNoteItems = {
                     CRDRNoteDate: values.CRDRNoteDate,
                     Item: index.Item,
-                    Quantity: Number(index.Qty),
-                    Unit: index.unit,
+                    Quantity: Number(index.Quantity),
+                    Unit: index.selectedUnit ? index.selectedUnit : index.unit.value,
                     BaseUnitQuantity: index.BaseUnitQuantity,
                     MRP: index.MRP,
                     Rate: index.Rate,
-                    BasicAmount: index.BasicAmount,
+                    BasicAmount: index.DiscBasicAmount,
                     TaxType: index.TaxType,
                     GST: index.GST,
                     GSTAmount: index.CGSTAmount,
@@ -937,20 +951,20 @@ const Credit = (props) => {
 
 
                         {
-                            // Data.length > 0 ?
-                            <FormGroup>
-                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                    <SaveButton pageMode={pageMode}
-                                        loading={saveBtnloading}
-                                        onClick={saveHandeller}
-                                        userAcc={userPageAccessState}
-                                        editCreatedBy={editCreatedBy}
-                                        module={"Receipts"}
+                            InvoiceItems.length > 0 ?
+                                <FormGroup>
+                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            onClick={saveHandeller}
+                                            userAcc={userPageAccessState}
+                                            editCreatedBy={editCreatedBy}
+                                            module={"Receipts"}
 
-                                    />
-                                </Col>
-                            </FormGroup >
-                            // : null
+                                        />
+                                    </Col>
+                                </FormGroup >
+                                : null
                         }
 
                     </form >

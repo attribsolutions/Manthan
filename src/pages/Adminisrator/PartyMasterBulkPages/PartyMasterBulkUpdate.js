@@ -202,7 +202,7 @@ const PartyMasterBulkUpdate = (props) => {
     }, [postMsg.Status])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Party Bulk Update Count"} :${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Data.length}`))
     }, [Data])
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
@@ -731,7 +731,7 @@ const PartyMasterBulkUpdate = (props) => {
                                 }
                             </PaginationProvider>
 
-                            {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
+                            {Data.length > 0 ? <FormGroup className="row row-cols-2 save1" >
                                 <Row >
                                     <Col sm={2} className="mt-n4">
                                         <SaveButton pageMode={pageMode}

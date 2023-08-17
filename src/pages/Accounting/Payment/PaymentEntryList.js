@@ -133,7 +133,7 @@ const PaymentEntryList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Payment Entry Count"} :0`))
+        // dispatch(BreadcrumbShowCountlabel(`${"Payment Entry Count"} :0`))
         // dispatch(getSupplier())
         dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
 
@@ -240,7 +240,7 @@ const PaymentEntryList = () => {
     }
 
     function partySelectButtonHandler() {
-        
+
         const jsonBody = JSON.stringify({
             Type: 4,
             PartyID: _cfunc.loginSelectedPartyID(),
@@ -373,7 +373,7 @@ const PaymentEntryList = () => {
                             deleteName={"FullReceiptNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={PaymentEntry}
-
+                            totalAmountShow={true}
                         />
                         : null
                 }

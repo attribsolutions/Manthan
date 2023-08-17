@@ -357,7 +357,7 @@ const SalesReturnList = () => {
                             goButnFunc={goButtonHandler}
                             ButtonMsgLable={otherState.buttonMsgLable}
                             deleteName={"FullReturnNumber"}
-
+                            totalAmountShow={true}
                             selectCheckParams={{
                                 isRoleAccess: (PurchaseReturnMode_3_Access),
                                 isShow: (subPageMode === url.SALES_RETURN_LIST),

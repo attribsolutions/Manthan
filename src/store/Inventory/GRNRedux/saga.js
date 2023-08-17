@@ -64,7 +64,7 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
   try {
     const response = yield call(GRN_get_API, config);
     const newList = yield response.Data.map((i) => {
-
+      i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i.GrandTotal = _cfunc.amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel

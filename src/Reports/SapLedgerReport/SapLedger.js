@@ -134,7 +134,7 @@ const SapLedger = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Sap Ledger count"} :${Number(data.length > 0 && data.length - 1)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Number(data.length > 0 && data.length - 1)}`))
     }, [List])
 
     const PartyDropdown = partyList.map((data) => ({

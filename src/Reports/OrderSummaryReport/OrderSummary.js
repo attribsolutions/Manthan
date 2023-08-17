@@ -123,7 +123,7 @@ const OrderSummary = (props) => {
         if (showTableData.length === 0) {
             setBtnMode(0)
         }
-        dispatch(BreadcrumbShowCountlabel(`OrderSummary Count:${showTableData.length}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:${showTableData.length}`))
     }, [showTableData]);
 
     const downloadExcelFunction = (excelTableData) => {

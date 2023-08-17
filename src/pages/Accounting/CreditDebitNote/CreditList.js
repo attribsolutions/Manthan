@@ -101,7 +101,7 @@ const CreditList = () => {
         setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${buttonMsgLable} Count : 0`));
+        // dispatch(BreadcrumbShowCountlabel(`Count : 0`));
 
         return () => {
             dispatch(GetCreditListSuccess([]));
@@ -354,6 +354,8 @@ const CreditList = () => {
                             ButtonMsgLable={otherState.buttonMsgLable}
                             deleteName={"FullNoteNumber"}
                             MasterModal={otherState.MasterModal}
+                            totalAmountShow={true}
+
                         />
                         : null
                 }
