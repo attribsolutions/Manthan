@@ -36,6 +36,6 @@ const CreditNote = (data) => {
     });
     const options = { filename: "Credit Debit Report" }
     doc.output('dataurlnewwindow', options);
-    return (<></>);
+ 
 }
 export default CreditNote;

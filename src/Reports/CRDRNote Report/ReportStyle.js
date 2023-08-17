@@ -160,11 +160,11 @@ export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
-   
+
 }
 
 export const reportFooterForGoodsCredit = (doc, data) => {
-    
+    debugger
     const a = data.CRDRNoteItems.map((data) => ({
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
@@ -201,10 +201,9 @@ export const reportFooterForGoodsCredit = (doc, data) => {
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
     doc.text(`Amount Paid :`, 439, 365,)
-    const PaidTotal = Math.round(Amount)
-    const Total = numberWithCommas((PaidTotal).toFixed(2))
+    const Total = numberWithCommas(Number(data.GrandTotal).toFixed(2))
     doc.text(`${Total}`, 560, 365, 'right')
-    let stringNumber = toWords(Number(Total))
+    let stringNumber = toWords(Number(data.GrandTotal))
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -230,8 +229,8 @@ export const reportFooterForGoodsCredit = (doc, data) => {
 }
 
 export const reportFooterForCredit = (doc, data) => {
-    
 
+    debugger
     const a = data.CRDRInvoices.map((data) => ({
         GrandTotal: Number(data.GrandTotal),
         PaidAmount: Number(data.PaidAmount),
@@ -245,8 +244,8 @@ export const reportFooterForCredit = (doc, data) => {
         PaidAmount += arg.PaidAmount;
 
     });
-    const BalAmt = GrandTotal - PaidAmount
-    let stringNumber = toWords(Number(PaidAmount))
+
+    let stringNumber = toWords(Number(data.GrandTotal))
     doc.setDrawColor(0, 0, 0);
     doc.setLineWidth(1)
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
@@ -277,8 +276,7 @@ export const reportFooterForCredit = (doc, data) => {
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
     doc.text(`Amount Paid :`, 439, 365,)
-    const PaidTotal = Math.round(PaidAmount)
-    const Total = numberWithCommas((PaidTotal).toFixed(2))
+    const Total = numberWithCommas(Number(data.GrandTotal).toFixed(2))
     doc.text(`${Total}`, 560, 365, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
@@ -323,10 +321,10 @@ export const tableBodyforCreditGoods = (doc, data) => {
 
                 data1.row.cells[8].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
-             
+
                 data1.row.cells[8].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
-                
+
             }
             if (data1.row.cells[0].raw === "HSN Item Name") {
                 data1.row.cells[4].colSpan = 2
