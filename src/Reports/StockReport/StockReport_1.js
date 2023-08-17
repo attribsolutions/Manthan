@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row, } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import C_Report from "../../components/Common/C_Report";
-import { StockProcessing_API_Success, StockProcessing_Action, stockReport_1_GoButton_API_Success } from "../../store/Report/StockReport/action";
+import { StockProcessing_API_Success, StockProcessing_Action, stockReport_1_GoButton_API, stockReport_1_GoButton_API_Success } from "../../store/Report/StockReport/action";
 import { getBaseUnit_ForDropDown, getpdfReportdata } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { StockReport_1_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../ReportIndex'
+import * as XLSX from 'xlsx';
 
 const StockReport_1 = (props) => {
 
@@ -23,20 +24,25 @@ const StockReport_1 = (props) => {
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
     const [unitDropdown, setUnitDropdown] = useState("");
+    const [tableData, setTableData] = useState([]);
+
+    const [btnMode, setBtnMode] = useState(0);
 
     const reducers = useSelector(
         (state) => ({
             goBtnLoading: state.PdfReportReducers.goBtnLoading,
             stockProcessingLoading: state.StockReportReducer.stockProcessingLoading,
             StockProcessingBtn: state.StockReportReducer.StockProcessingBtn,
+            StockReport_1_Gobtb: state.StockReportReducer.StockReport_1_Gobtb,
+            pdfdata: state.PdfReportReducers.pdfdata,
             BaseUnit: state.ItemMastersReducer.BaseUnit,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { tableData = [] } = reducers
+    const { StockReport_1_Gobtb, pdfdata } = reducers
 
-    const { userAccess, BaseUnit, StockProcessingBtn } = reducers;
+    const { userAccess, BaseUnit, StockProcessingBtn, } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -63,6 +69,56 @@ const StockReport_1 = (props) => {
         dispatch(stockReport_1_GoButton_API_Success([]))
         dispatch(getBaseUnit_ForDropDown());
     }, [])
+
+    useEffect(() => {
+        if (tableData.length === 0) {
+            setBtnMode(0)
+        }
+    }, [tableData]);
+
+    useEffect(() => {
+
+        try {
+
+            if ((StockReport_1_Gobtb.Status === true) && (StockReport_1_Gobtb.StatusCode === 200)) {
+                setBtnMode(0);
+                const { StockDetails } = StockReport_1_Gobtb.Data[0]
+                if ((btnMode === 2)) {
+                    if (StockDetails.length > 0) {
+                        const worksheet = XLSX.utils.json_to_sheet(StockDetails);
+                        const workbook = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(workbook, worksheet, "SNS Report");
+                        XLSX.writeFile(workbook, `SNS Report.xlsx`);
+                        dispatch(stockReport_1_GoButton_API_Success([]));
+                    }
+                    else {
+                        customAlert({
+                            Type: 3,
+                            Message: "Records Not available ",
+                        })
+                    }
+                }
+            }
+            // else if ((pdfdata.Status === true) && (pdfdata.StatusCode === 200)) {
+            //     setBtnMode(0);
+            //     const { StockDetails } = StockReport_1_Gobtb.Data[0]
+            //     if ((btnMode === 1)) {
+            //         if ((StockDetails.length === 0)) {
+            //             customAlert({
+            //                 Type: 3,
+            //                 Message: "Records Not available ",
+            //             })
+            //         }
+            //     }
+            // }
+            else {
+                setTableData([]);
+            }
+            setBtnMode(0);
+        }
+        catch (e) { console.log(e) }
+
+    }, [StockReport_1_Gobtb]);
 
     useEffect(async () => {
 
@@ -100,13 +156,15 @@ const StockReport_1 = (props) => {
         dispatch(StockProcessing_Action({ jsonBody, btnId }))
     }
 
-    function goButtonHandler() {
+    function excel_And_GoBtnHandler(e, btnMode) {
 
+        setBtnMode(btnMode);
         if (unitDropdown === "") {
             customAlert({
                 Type: 4,
                 Message: "Please Select Unit"
             })
+            setBtnMode(0);
             return
         }
         const jsonBody = JSON.stringify({
@@ -117,7 +175,12 @@ const StockReport_1 = (props) => {
         });
 
         let config = { ReportType: report.Stock, jsonBody }
-        dispatch(getpdfReportdata(StockReport_1_GoBtn_API, config))
+        if (btnMode === 2) {
+            dispatch(stockReport_1_GoButton_API(config))
+        }
+        else {
+            dispatch(getpdfReportdata(StockReport_1_GoBtn_API, config))
+        }
     }
 
     function fromdateOnchange(e, date) {
@@ -138,7 +201,7 @@ const StockReport_1 = (props) => {
             <div className="page-content">
                 <div className="px-2 c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={3}>
+                        <Col sm={2}>
                             <FormGroup className=" mb-2 row mt-3 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "66px" }}>FromDate</Label>
@@ -146,14 +209,13 @@ const StockReport_1 = (props) => {
                                     <C_DatePicker
                                         name='fromdate'
                                         value={fromdate}
-
                                         onChange={fromdateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3}>
+                        <Col sm={2}>
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "60px" }}>ToDate</Label>
@@ -161,7 +223,6 @@ const StockReport_1 = (props) => {
                                     <C_DatePicker
                                         nane='todate'
                                         value={todate}
-
                                         onChange={todateOnchange}
                                     />
                                 </Col>
@@ -190,55 +251,46 @@ const StockReport_1 = (props) => {
                             </FormGroup>
                         </Col >
 
-                        <Col sm={1} className="mt-3 ">
+                        <Col sm={1} className="mt-3 ml-5 px-2 p-1">
                             <C_Button
                                 type="button"
+                                spinnerColor="white"
                                 loading={reducers.stockProcessingLoading}
-                                className="btn btn-outline-primary border-1 font-size-10 text-center"
-                                onClick={() => StockProccessHandler()}>
+                                className="btn btn-outline-info border-1 font-size-10 text-center"
+                                onClick={() => StockProccessHandler()}
+                            >
                                 Stock Process
+                            </C_Button>
+                        </Col>
+
+                        <Col sm={1} className="mt-3" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                className="btn btn-success"
+                                onClick={(e) => excel_And_GoBtnHandler(e, 1)}
+                            >
+                                Print
                             </C_Button>
 
                         </Col>
 
-                        <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
-                            < Go_Button loading={reducers.goBtnLoading}
-                                onClick={(e) => goButtonHandler()}
-                            />
+                        <Col sm={2} className="mt-3 ">
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={btnMode === 2 && true}
+                                className="btn btn-primary"
+                                onClick={(e) => excel_And_GoBtnHandler(e, 2)}
+                            >
+                                Excel Download
+                            </C_Button>
                         </Col>
+
                     </div>
 
                 </div>
-                {/* 
-                <ToolkitProvider
-                    keyField={"Item"}
-                    data={tableData}
-                    columns={pagesListColumns}
-                    search
-                >
-                    {(toolkitProps,) => (
-                        <React.Fragment>
-                            <Row>
-                                <Col xl="12">
-                                    <div className="table-responsive table">
-                                        <BootstrapTable
-                                            keyField={"Item"}
-                                            classes={"table  table-bordered table-hover"}
-                                            noDataIndication={
-                                                <div className="text-danger text-center ">
-                                                    Record Not available
-                                                </div>
-                                            }
-                                            {...toolkitProps.baseProps}
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-                                </Col>
-                            </Row>
 
-                        </React.Fragment>
-                    )}
-                </ToolkitProvider> */}
             </div>
             <C_Report />
         </React.Fragment >
