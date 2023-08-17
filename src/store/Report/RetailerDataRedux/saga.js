@@ -1,12 +1,13 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
- POST_RETAILER_DATA_API} from "./actionType";
-import {  postRetailerData_API_Success, RetailerDataApiErrorAction } from "./action";
-import { OderSummary_GoBtn_API, RetailerData_GoBtn_API } from "../../../helpers/backend_helper";
+    POST_RETAILER_DATA_API
+} from "./actionType";
+import { postRetailerData_API_Success, RetailerDataApiErrorAction } from "./action";
+import { RetailerData_GoBtn_API } from "../../../helpers/backend_helper";
 
-function* RetailerData_Gen({ config }) {
+function* RetailerData_Gen(jsonBody) {
     try {
-        const response = yield call(RetailerData_GoBtn_API, config);
+        const response = yield call(RetailerData_GoBtn_API, jsonBody);
         yield put(postRetailerData_API_Success(response))
     } catch (error) { yield put(RetailerDataApiErrorAction()) }
 }

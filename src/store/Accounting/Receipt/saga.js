@@ -51,7 +51,7 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
     }
 
     const newList = yield response.Data.map((i) => {
-      
+
       i["recordsAmountTotal"] = i.AmountPaid;  // Breadcrumb Count total
       i.AmountPaid = amountCommaSeparateFunc(i.AmountPaid) //  AmountPaid show with commas
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel

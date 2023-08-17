@@ -16,10 +16,9 @@ const RetailerDataReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const isSCMParty = _cfunc.loginIsSCMParty();
 
     const [userPageAccessState, setUserAccState] = useState('');
-    const [partydropdown, setPartydropdown] = useState('')
+    const [partydropdown, setPartydropdown] = useState({ value: 0, label: " All" })
 
     const reducers = useSelector(
         (state) => ({
@@ -59,24 +58,36 @@ const RetailerDataReport = (props) => {
     }, [])
 
     useEffect(() => {
-
-        if (RetailerGobtn.Status === true && RetailerGobtn.StatusCode === 200) {
-            
-            const { Data } = RetailerGobtn
-            const worksheet = XLSX.utils.json_to_sheet(Data.ReportExportSerializerDetails);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "RetailerDataReport");
-            XLSX.writeFile(workbook, "Retailer Data Report.xlsx");
-            dispatch(postRetailerData_API_Success([]));
+        try {
+            if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
+                const { Data } = RetailerGobtn
+                const worksheet = XLSX.utils.json_to_sheet(Data.ReportExportSerializerDetails);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "RetailerDataReport");
+                XLSX.writeFile(workbook, "Retailer Data Report.xlsx");
+                dispatch(postRetailerData_API_Success([]));
+            }
+            else if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 204)) {
+                dispatch(postRetailerData_API_Success([]));
+                customAlert({
+                    Type: 3,
+                    Message: JSON.stringify(RetailerGobtn.Message),
+                })
+            }
         }
-    }, [RetailerGobtn]);
+        catch (e) { { _cfunc.CommonConsole(e) } }
 
+    }, [RetailerGobtn]);
 
     const Party_Option = SSDD_List.map(i => ({
         value: i.id,
         label: i.Name
     }));
 
+    Party_Option.unshift({
+        value: 0,
+        label: "All"
+    });
 
     function goButtonHandler() {
         if (partydropdown === "") {
@@ -86,11 +97,7 @@ const RetailerDataReport = (props) => {
             })
         }
         else {
-            const btnId = `gobtn-${url.RETAILER_DATA_REPORT}`
-            const jsonBody = JSON.stringify({
-                "Party": partydropdown.value
-            });
-            dispatch(postRetailerData_API({ jsonBody, btnId }));
+            dispatch(postRetailerData_API(JSON.stringify({ "Party": partydropdown.value })));
         }
     }
 
@@ -101,30 +108,27 @@ const RetailerDataReport = (props) => {
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
 
-                        {isSCMParty &&
-                            <Col sm={4} >
-                                <FormGroup className="mb- row mt-3 mb-2" >
-                                    <Label className="col-sm-4 p-2"
-                                        style={{ width: "65px" }}>Party</Label>
-                                    <Col sm="8">
-                                        <C_Select
-                                            name="party"
-                                            value={partydropdown}
-                                            isSearchable={true}
-                                            isLoading={partyLoading}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            styles={{
-                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                            }}
-                                            options={Party_Option}
-                                            onChange={(e) => { setPartydropdown(e) }}
-
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                        }
+                        <Col sm={4} >
+                            <FormGroup className="mb- row mt-3 mb-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px" }}>Party</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="party"
+                                        value={partydropdown}
+                                        isSearchable={true}
+                                        isLoading={partyLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Party_Option}
+                                        onChange={(e) => { setPartydropdown(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
                         <Col sm="1" className="mt-3 mb-3 ">
                             <Go_Button onClick={goButtonHandler} loading={listBtnLoading} />

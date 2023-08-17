@@ -240,7 +240,7 @@ const PaymentEntryList = () => {
     }
 
     function partySelectButtonHandler() {
-        
+
         const jsonBody = JSON.stringify({
             Type: 4,
             PartyID: _cfunc.loginSelectedPartyID(),
