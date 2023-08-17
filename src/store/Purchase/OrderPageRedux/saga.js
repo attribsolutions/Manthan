@@ -138,6 +138,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
   //  Order List Filter by subPageMode
   try {
+  
     const { subPageMode } = config
     let response;
     let newList;

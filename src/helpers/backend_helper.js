@@ -446,7 +446,7 @@ export const Update_Party_Bulk = ({ jsonBody, updateId }) => put(`${url.PARTY_MA
 
 // Order Page api  
 export const OrderPage_GoButton_API = ({ jsonBody }) => post(url.ORDER_Edit_API, jsonBody)//get api
-export const OrderList_get_Filter_API = ({ filtersBody }) => post(url.ORDER_LiST_BY_FILTERS, filtersBody)
+export const OrderList_get_Filter_API = ({ filtersBody }) => post(url.ORDER_LiST_BY_FILTERS, "filtersBody")
 export const OrderPage_Save_API_ForPO = ({ jsonBody }) => post(url.ORDER_PAGE_API, jsonBody)//get api
 export const OrderPage_Edit_Post_API = ({ jsonBody }) => post(url.ORDER_Edit_API, jsonBody)//Edit Order
 export const OrderPage_Edit_Get_API = ({ orderId }) => get(`${url.ORDER_PAGE_API}/${orderId}`)//Order edit single get api
@@ -650,12 +650,6 @@ export const PurchaseGSTReportSaga_GoBtn_API = ({ jsonBody }) => post(url.PURCHA
 
 export const Gst_R1_Report_API = ({ jsonBody }) => postMethodExcel(url.GST_R1_REPORT, jsonBody)//Go button api
 export const Gst_R3B_Report_API = ({ jsonBody }) => postMethodExcel(url.GST_R3B_REPORT, jsonBody)//Go button api
-
-
-
-
-
-//DeletedInvoiceData
 
 export const DeleteInvoiceDataExport_GoBtn_API = ({ jsonBody }) => post(url.DELETE_INVOICE_DATA_EXPORT, jsonBody)//Go button api
 
