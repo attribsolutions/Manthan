@@ -1,51 +1,20 @@
-import axios from "axios";
-import {
-  CheckAPIResponse,
-  CommonConsole,
-} from "../components/Common/CommonFunction";
+ import {axiosApi} from "./axios_Config"
 
-const API_URL = "http://192.168.1.114:8000"
 
-// const API_URL = "http://117.248.109.234:8000"
-// const API_URL = "http://10.4.5.64:8000"
 
-// const API_URL = "http://cbmfooderp.com:8000";
-
-const axiosApi = axios.create({
-  baseURL: API_URL,
-});
-
-const AuthonticationFunction = () => {
-  const token = "Bearer " + localStorage.getItem("token");
-  if (token) {
-    axiosApi.defaults.headers.common["Authorization"] = token;
-  } else {
-    axiosApi.defaults.headers.common["Authorization"] = "";
-  }
-};
-
-axiosApi.interceptors.response.use(
-  (response) => response,
-  (error) => Promise.reject(error)
-);
 
 export function get(url, param) {
-  CommonConsole("get api call", url);
-  AuthonticationFunction();
   return axiosApi
     .get(url, param)
     .then((response) => {
-      return CheckAPIResponse({ method: "get", url, response });
+      return response.data;
     })
     .catch((error) => {
-      return CheckAPIResponse({ method: "get", url, error });
+      return Promise.reject(error);
     });
 }
 
 export function post(url, body) {
-  CommonConsole("Post api call", url, body);
-  AuthonticationFunction();
-
   return axiosApi
     .post(url, body, {
       headers: {
@@ -54,17 +23,14 @@ export function post(url, body) {
       },
     })
     .then((response) => {
-      return CheckAPIResponse({ method: "post", url, response, body });
+      return response.data;
     })
     .catch((error) => {
-      return CheckAPIResponse({ method: "post", url, error, body });
+      return Promise.reject(error);
     });
 }
 
 export function put(url, body) {
-  CommonConsole("put api call");
-  AuthonticationFunction();
-
   return axiosApi
     .put(url, body, {
       headers: {
@@ -73,28 +39,25 @@ export function put(url, body) {
       },
     })
     .then((response) => {
-      return CheckAPIResponse({ method: "put", url, response, body });
+      return response.data;
     })
     .catch((error) => {
-      return CheckAPIResponse({ method: "put", url, error, body, });
+      return Promise.reject(error);
     });
 }
 
 export function del(url) {
-  CommonConsole(" delete api call");
-  AuthonticationFunction();
-
   return axiosApi
     .delete(url)
     .then((response) => {
-      return CheckAPIResponse({ method: "delete", url, response });
+      return response.data;
     })
     .catch((error) => {
-      return CheckAPIResponse({ method: "delete", url, error });
+      return Promise.reject(error);
     });
 }
 
-// for forget password
+
 export function postWithoutToken(url, body) {
   return axiosApi
     .post(url, body, {
@@ -105,19 +68,11 @@ export function postWithoutToken(url, body) {
       },
     })
     .then((response) => {
-      console.log(`${url} Body :`, body);
-      console.log(`${url} response :`, response);
       return response.data;
     })
-    .catch((error) => {
-      console.log(`${url} Body :`, body);
-      console.log(`${url} error :`, error);
-      return Promise.reject(error);
-    });
 }
 
 export async function postRefreshToken(url, body) {
-  AuthonticationFunction();
   return axiosApi
     .post(url, body, {
       headers: {
@@ -131,40 +86,30 @@ export async function postRefreshToken(url, body) {
 }
 
 export function getWithotMsg(url) {
-  CommonConsole(`${url} :get api call `);
-  AuthonticationFunction();
+  // CommonConsole(`${url} :get api call `);
+
   return axiosApi
     .get(url)
     .then((response) => {
       console.log(`${url} response :`, response);
       return response.data;
     })
-    .catch((error) => {
-      console.log(`${url} error :`, error);
-      return Promise.reject(error);
-    });
+
 }
 
-
-// code for excel download method get method 
-
 export function postMethodExcel(url, body) {
-  CommonConsole(`${url} :post api call `);
-  AuthonticationFunction();
+  // CommonConsole(`${url} :post api call `);
+
   return axiosApi
     .post(url, body, {
-      responseType: 'arraybuffer',
+      responseType: "arraybuffer",
     })
     .then((response) => {
       console.log(`${url} Body :`, body);
       console.log(`${url} response :`, response);
       return response.data;
     })
-    .catch((error) => {
-      console.log(`${url} Body :`, body);
-      console.log(`${url} error :`, error);
-      return Promise.reject(error);
-    });
+
 }
 
 
