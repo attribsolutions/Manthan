@@ -392,7 +392,7 @@ const Credit = (props) => {
     }
 
     function val_onChange(val, row, type, key) {
-        debugger
+        
         if (type === "qty") {
             row["Quantity"] = val;
         }
@@ -649,7 +649,7 @@ const Credit = (props) => {
             }
 
             if (index.Quantity) {
-                debugger
+                
                 const CRDRNoteItems = {
                     CRDRNoteDate: values.CRDRNoteDate,
                     Item: index.Item,

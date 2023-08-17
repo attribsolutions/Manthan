@@ -167,3 +167,27 @@ export function postMethodExcel(url, body) {
     });
 }
 
+
+
+export function delwithPostBody(url, body) {
+  debugger
+  CommonConsole(" delete api call");
+  AuthonticationFunction();
+  return axiosApi
+    .delete(url, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      data: body
+    })
+    .then((response) => {
+      console.log(`${url} Body :`, body);
+      return CheckAPIResponse({ method: "delete", url, response });
+    })
+    .catch((error) => {
+      console.log(`${url} Body :`, body);
+      return CheckAPIResponse({ method: "delete", url, error });
+    });
+}
+
