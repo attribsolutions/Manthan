@@ -296,7 +296,7 @@ const ReceiptList = () => {
                             downBtnFunc={downBtnFunc}
                             ButtonMsgLable={"Receipt"}
                             deleteName={"FullReceiptNumber"}
-
+                            totalAmountShow={true}
                         />
                         : null
                 }

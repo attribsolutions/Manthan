@@ -596,7 +596,7 @@ const OrderList = () => {
                         <Col lg={3}>
                             <FormGroup className="mb-1 row mt-3 " >
                                 <Label className="col-sm p-2"
-                                    >
+                                >
                                     {!(fieldLabel.CustomerType === '') ? fieldLabel.CustomerType : "Customer Type"}
                                 </Label>
                                 <Col sm="8">
@@ -707,6 +707,7 @@ const OrderList = () => {
                                 selectSaveBtnLabel: "Confirm",
                                 selectHeaderLabel: "Confirm"
                             }}
+                            totalAmountShow={true}
                         />
                         : null
                 }

@@ -84,7 +84,7 @@ const GRNList = () => {
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-        
+
 
         if (!(loginSelectedPartyID() === 0)) {
             goButtonHandler()
@@ -244,6 +244,7 @@ const GRNList = () => {
                             deleteName={"FullGRNNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={GRNAdd}
+                            totalAmountShow={true}
                         />
                         : null
                 }

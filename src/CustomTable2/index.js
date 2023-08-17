@@ -15,7 +15,7 @@ const CustomTable = ({
 }) => {
     const [searchText, setSearchText] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-  
+
     // Function to handle search
     const handleSearch = (val) => {
         setSearchText(val);
@@ -46,7 +46,8 @@ const CustomTable = ({
 
     const slicedData = useMemo(() => {
         // ...
-        onDataSizeChange({ dataCount: filteredData.length }); // Notify the parent about the filtered data count
+
+        onDataSizeChange({ dataCount: filteredData.length, filteredData: filteredData }); // Notify the parent about the filtered data count
         return filteredData.slice(startIndex, endIndex);
     }, [filteredData, startIndex, endIndex]);
 
@@ -55,7 +56,7 @@ const CustomTable = ({
         setCurrentPage(page);
     };
 
-  
+
     const rowStyles = (row) => {
         if (row.IsRecordDeleted) {
             return { textDecoration: 'line-through' };

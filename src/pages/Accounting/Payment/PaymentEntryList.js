@@ -373,7 +373,7 @@ const PaymentEntryList = () => {
                             deleteName={"FullReceiptNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={PaymentEntry}
-
+                            totalAmountShow={true}
                         />
                         : null
                 }

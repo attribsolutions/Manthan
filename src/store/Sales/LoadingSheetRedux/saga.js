@@ -11,8 +11,9 @@ function* goBtn_Post_API_GenFun({ filters }) {
         const response = yield call(Loading_Sheet_Go_Button_API, filters);
 
         response.Data.map((index) => {
+
             index["selectCheck"] = false
-            index["preInvoiceDate"] =date_dmy_func(index.InvoiceDate);
+            index["preInvoiceDate"] = date_dmy_func(index.InvoiceDate);
             return index
         });
 
@@ -59,8 +60,8 @@ function* get_LoadingSheet_List_GenFun({ filters }) {
         const response = yield call(Loading_Sheet_get_API, filters);
         const newList = yield response.Data.map((i) => {
 
+            i["recordsAmountTotal"] = i.TotalAmount;  // Breadcrumb Count total
             i.TotalAmount = amountCommaSeparateFunc(i.TotalAmount)
-
             //tranzaction date is only for fiterand page field but UI show transactionDateLabel
             i["transactionDate"] = i.CreatedOn;
             i["transactionDateLabel"] = concatDateAndTime(i.Date, i.CreatedOn);

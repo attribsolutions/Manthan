@@ -453,6 +453,7 @@ const InvoiceList = () => {
                             filters={hederFilters}
                             forceNewBtnView={false}
                             e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
+                            totalAmountShow={true}
                         />
                         : null
                 }
