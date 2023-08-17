@@ -354,6 +354,8 @@ const CreditList = () => {
                             ButtonMsgLable={otherState.buttonMsgLable}
                             deleteName={"FullNoteNumber"}
                             MasterModal={otherState.MasterModal}
+                            totalAmountShow={true}
+
                         />
                         : null
                 }

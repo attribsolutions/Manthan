@@ -43,6 +43,8 @@ function* Get_Credit_List_GenFunc(data) {               // getList API
 
     const response = yield call(Go_Button_Credit_Debit_Post_API, data.data);
     const newList = yield response.Data.map((i) => {
+                          
+      i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
       var date = date_dmy_func(i.CRDRNoteDate)
       var time = convertTimefunc(i.CreatedOn)
