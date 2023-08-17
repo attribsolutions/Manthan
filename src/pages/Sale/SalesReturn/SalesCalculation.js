@@ -39,7 +39,7 @@ export const calculateSalesReturnFunc = (row) => {
 };
 
 export const return_discountCalculate_Func = (row,) => {
-    debugger
+    
     // Extract values from the input parameters
     const rate = Number(row.Rate) || 0;
     const qty = Number(row.Quantity) || 0;
