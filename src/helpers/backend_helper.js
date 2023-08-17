@@ -1,5 +1,5 @@
 import axios from "axios"
-import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, postMethodExcel, } from "./api_helper"
+import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, postMethodExcel, delwithPostBody, } from "./api_helper"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -138,7 +138,7 @@ export const Role_Master_Update_API = ({ jsonBody, updateId }) => put(`${url.ROL
 
 //  Module Master API 
 export const Module_Get_API = () => get(url.H_MODULES_API_URL,)//module-list get API method
-export const Module_Post_API = ({ jsonBody }) => post(url.H_MODULES_API_URL, jsonBody )
+export const Module_Post_API = ({ jsonBody }) => post(url.H_MODULES_API_URL, jsonBody)
 export const Module_Edit_API = ({ editId }) => get(`${url.H_MODULES_API_URL}/${editId}`)// Edit_Modules- by_ID
 export const Module_Update_API = ({ jsonBody, updateId }) => put(`${url.H_MODULES_API_URL}/${updateId}`, jsonBody)// Update_Modules- by_ID
 export const Module_Delete_API = ({ deleteId }) => del(`${url.H_MODULES_API_URL}/${deleteId}`)// Delete_Modules_By-ID
@@ -329,7 +329,7 @@ export const PartySubParty_Update_API = ({ jsonBody, updateId }) => put(`${url.P
 export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// PartySubParty dropdown Api
 
 // export const GoButton_API = (data) => post(url.PARTYITEM_FOR_LIST, data)//get api
-export const Save_Party_Items = ({ jsonBody  }) => post(url.PARTYITEM_FOR_MASTER, jsonBody)// post api
+export const Save_Party_Items = ({ jsonBody }) => post(url.PARTYITEM_FOR_MASTER, jsonBody)// post api
 // export const get_Party_Item_List = (SupplierID) => get(`${url.PARTY_ITEM_FILTER}/${SupplierID}`)//get api
 export const get_Party_Item_List = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
 
@@ -619,6 +619,12 @@ export const PartyLedgerReport_API = ({ jsonBody }) => post(url.PARTY_LEDGER, js
 export const ClaimSummary_API = ({ jsonBody }) => post(url.CLAIM_SUMMARY, jsonBody)//  postapi
 export const MasterClaimSummary_API = ({ jsonBody }) => post(url.MASTER_CLAIM_SUMMARY, jsonBody)//  postapi
 export const MasterClaimCreate_API = ({ jsonBody }) => post(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
+
+export const delete_Claim_API = (jsonBody) => delwithPostBody(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
+
+
+
+
 
 
 

@@ -190,12 +190,12 @@ export const reportFooterForGoodsCredit = (doc, data) => {
     doc.line(435, 295, 435, 379);//vertical right1 Qr Left 1
     doc.setFont('Tahoma')
     doc.line(435, 340, 30, 340);//horizontal line (Bottom)
-    doc.setFontSize(9)
-    doc.text(`CGST:`, 440, 322,)
+    doc.setFontSize(8)
+    doc.text(`Total CGST:`, 440, 322,)
     doc.text(`${CGST.toFixed(2)}`, 560, 322, 'right')
-    doc.text(`SGST:`, 440, 334,)
+    doc.text(`Total SGST:`, 440, 334,)
     doc.text(` ${SGST.toFixed(2)}`, 560, 334, 'right')
-    doc.text(`Basic Amount:`, 440, 346,)
+    doc.text(`Total Basic:`, 440, 346,)
     doc.text(`${BasicAmount.toFixed(2)}`, 560, 346, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(11)
@@ -320,10 +320,14 @@ export const tableBodyforCreditGoods = (doc, data) => {
                 data1.row.cells[6].colSpan = 2
 
                 data1.row.cells[8].styles.fontSize = 8
+                data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
 
+
                 data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
+
 
             }
             if (data1.row.cells[0].raw === "HSN Item Name") {
@@ -400,7 +404,7 @@ export const tableBodyforCreditGoods = (doc, data) => {
     };
 
 
-    doc.autoTable(table.columns1, table.Rows1(data), options1,);
+    doc.autoTable(table.columns1, table.RowsForCreditGoods(data), options1,);
     const optionsTable4 = {
         margin: {
             left: 30, right: 30, bottom: 110

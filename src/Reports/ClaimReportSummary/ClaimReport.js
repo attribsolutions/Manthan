@@ -12,10 +12,11 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
-import { postClaimMasterCreate_API, postMasterClaimCreat_API_Success } from "../../store/Report/ClaimSummary/action";
+import { deleteClaimSuccess, delete_Claim_ID, postClaimMasterCreate_API, postMasterClaimCreat_API_Success } from "../../store/Report/ClaimSummary/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { deltBtnCss } from "../../components/Common/ListActionsButtons";
 
 const SelectedMonth = () => _cfunc.getCurrentMonthAndYear()
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -45,6 +46,8 @@ const ClaimSummary = (props) => {
 
     const reducers = useSelector(
         (state) => ({
+            deleteMsg: state.ClaimSummaryReducer.deleteMsg,
+            DeleteBtnLoading: state.ClaimSummaryReducer.DeleteBtnLoading,
             ClaimSummaryGobtn: state.ClaimSummaryReducer.ClaimSummaryGobtn,
             pdfdata: state.PdfReportReducers.pdfdata,
             ReportBtnLoading: (state.PdfReportReducers.ReportBtnLoading) || (state.ClaimSummaryReducer.CreateClaimLoading),
@@ -54,7 +57,7 @@ const ClaimSummary = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, supplier, pdfdata, ClaimSummaryGobtn } = reducers;
+    const { userAccess, supplier, pdfdata, ClaimSummaryGobtn, deleteMsg, DeleteBtnLoading } = reducers;
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -102,6 +105,18 @@ const ClaimSummary = (props) => {
         }
     }, [ClaimSummaryGobtn])
 
+
+    useEffect(() => {
+        if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
+            dispatch(deleteClaimSuccess({ Status: false }))
+            customAlert({
+                Type: 1,
+                Message: deleteMsg.Message,
+            })
+            return
+        }
+    }, [deleteMsg])
+
     function goButtonHandler(reportType, row, btnId) {
 
         const jsonBody = JSON.stringify({
@@ -121,6 +136,23 @@ const ClaimSummary = (props) => {
 
         if ((reportType === report.CustomerWiseReturn) || (reportType === report.ClaimSummary)) {
             dispatch(getpdfReportdata(ClaimSummary_API, config))
+        }
+    }
+
+    const deleteHandler = async (row, btnId) => {
+        const jsonBody = JSON.stringify({
+            "FromDate": row.selectedDate.FromDate,
+            "ToDate": row.selectedDate.ToDate,
+            "Party": row.id,
+        });
+
+        const isConfirmed = await customAlert({
+            Type: 7,
+            Message: "Do you want To Delete Claim ?",
+        });
+
+        if (isConfirmed) {
+            dispatch(delete_Claim_ID(jsonBody))
         }
     }
 
@@ -224,6 +256,28 @@ const ClaimSummary = (props) => {
                                 >
                                     <i className="far fa-file-alt"></i>
                                 </C_Button>
+
+
+
+
+                            </div>
+                            <div
+                                className="mt-3  mb-3">
+                                <C_Button
+                                    // loading={btnLoading === `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`}
+                                    // forceDisabled={btnLoading}
+                                    type="button"
+                                    title="Delete Claim"
+                                    spinnerColor="white"
+                                    className={deltBtnCss}
+                                    onClick={(e) => { deleteHandler(row, `deletebtn-${row.id}-${key}`) }}
+                                >
+                                    <i className="mdi mdi-delete font-size-16"></i>
+                                </C_Button>
+
+
+
+
                             </div>
                         </div>
                     </>
