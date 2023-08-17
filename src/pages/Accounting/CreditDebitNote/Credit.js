@@ -392,13 +392,19 @@ const Credit = (props) => {
     }
 
     function val_onChange(val, row, type, key) {
-
+        debugger
         if (type === "qty") {
-            row["Qty"] = val;
+            row["Quantity"] = val;
         }
         else {
             row["Rate"] = val
         }
+
+        // let v1 = Number(row.BaseUnitQuantity);
+        // let v2 = Number(val)
+        // if (!(v1 >= v2)) {
+        //     val = v1;
+        // }
         row.gstPercentage = row.GSTPercentage
         const calculate = return_discountCalculate_Func(row)
 
@@ -417,12 +423,12 @@ const Credit = (props) => {
             var amt = Number(ind.AmountTotal)
             sum = sum + amt
         });
-        let v1 = (row.BaseUnitQuantity);
-        let v2 = Number(val)
-        if (!(v1 >= v2)) {
-            val = v1;
 
-        }
+
+
+
+
+
         setState((i) => {
             let a = { ...i }
             a.values.GrandTotal = Number(sum).toFixed(2)
@@ -439,7 +445,7 @@ const Credit = (props) => {
 
     function UnitOnchange(e, row, key) {
 
-        row.unit = e.value
+        row["selectedUnit"] = e.value
     };
 
     const pagesListColumns1 = [
@@ -474,7 +480,12 @@ const Credit = (props) => {
                         autoComplete="off"
                         className=" text-end"
                         onChange={(e) => {
-                            const val = e.target.value
+                            let val = e.target.value
+                            let v1 = Number(row.BaseUnitQuantity);
+                            let v2 = Number(val)
+                            if (!(v1 >= v2)) {
+                                val = v1;
+                            }
                             val_onChange(val, row, "qty", key)
                         }}
                     />
@@ -633,21 +644,21 @@ const Credit = (props) => {
 
         InvoiceItems.forEach(index => {
 
-            if ((!(index.unit) && (index.Qty > 0))) {
+            if ((!(index.unit.value) && (Number(index.Quantity) > 0))) {
                 inValideUnits.push({ [`${index.ItemName}`]: "This Item Unit Is Required." })
             }
 
-            if (index.Qty) {
-
+            if (index.Quantity) {
+                debugger
                 const CRDRNoteItems = {
                     CRDRNoteDate: values.CRDRNoteDate,
                     Item: index.Item,
-                    Quantity: Number(index.Qty),
-                    Unit: index.unit,
+                    Quantity: Number(index.Quantity),
+                    Unit: index.selectedUnit ? index.selectedUnit : index.unit.value,
                     BaseUnitQuantity: index.BaseUnitQuantity,
                     MRP: index.MRP,
                     Rate: index.Rate,
-                    BasicAmount: index.BasicAmount,
+                    BasicAmount: index.DiscBasicAmount,
                     TaxType: index.TaxType,
                     GST: index.GST,
                     GSTAmount: index.CGSTAmount,
@@ -940,20 +951,20 @@ const Credit = (props) => {
 
 
                         {
-                            // Data.length > 0 ?
-                            <FormGroup>
-                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                    <SaveButton pageMode={pageMode}
-                                        loading={saveBtnloading}
-                                        onClick={saveHandeller}
-                                        userAcc={userPageAccessState}
-                                        editCreatedBy={editCreatedBy}
-                                        module={"Receipts"}
+                            InvoiceItems.length > 0 ?
+                                <FormGroup>
+                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            onClick={saveHandeller}
+                                            userAcc={userPageAccessState}
+                                            editCreatedBy={editCreatedBy}
+                                            module={"Receipts"}
 
-                                    />
-                                </Col>
-                            </FormGroup >
-                            // : null
+                                        />
+                                    </Col>
+                                </FormGroup >
+                                : null
                         }
 
                     </form >
