@@ -90,15 +90,7 @@ const RetailerDataReport = (props) => {
     });
 
     function goButtonHandler() {
-        if (partydropdown === "") {
-            customAlert({
-                Type: 3,
-                Message: "Please Select Party",
-            })
-        }
-        else {
-            dispatch(postRetailerData_API(JSON.stringify({ "Party": partydropdown.value })));
-        }
+        dispatch(postRetailerData_API(JSON.stringify({ "Party": partydropdown.value })));
     }
 
     return (
