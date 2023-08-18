@@ -349,7 +349,7 @@ const CommonPurchaseList = (props) => {
                     }, 0);
                     let commaSeparateAmount = amountCommaSeparateFunc(totalAmount);
 
-                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} (₹ ${commaSeparateAmount})`));
+                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
                   }
                   else {
                     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
