@@ -45,7 +45,7 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
     }, [deleteMessage]);
 
     const ondeleteHandeler = (ele) => {
-
+        debugger
         if (ele.id === undefined) {
             if (!(ele.RowId === 0)) {
                 var fil = addressTable.filter((i) => {
@@ -107,7 +107,7 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
                     {`${info.IsDefault}`}
                 </td>
 
-                 <td>
+                <td>
                     <Button
                         className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"

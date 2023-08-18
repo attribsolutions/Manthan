@@ -620,7 +620,7 @@ export const ClaimSummary_API = ({ jsonBody }) => post(url.CLAIM_SUMMARY, jsonBo
 export const MasterClaimSummary_API = ({ jsonBody }) => post(url.MASTER_CLAIM_SUMMARY, jsonBody)//  postapi
 export const MasterClaimCreate_API = ({ jsonBody }) => post(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
 
-export const delete_Claim_API = (jsonBody) => delwithPostBody(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
+export const delete_Claim_API = ({ jsonBody }) => delwithPostBody(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
 
 
 
@@ -643,7 +643,7 @@ export const StockReport_GoBtn_API = ({ jsonBody }) => post(url.STOCK_REPORT, js
 export const StockProcessing_API = ({ jsonBody }) => post(url.STOCK_PROCESSING, jsonBody)//Go button api
 export const StockReport_1_GoBtn_API = ({ jsonBody }) => post(url.STOCK_REPORT_1, jsonBody)//Go button api
 // Damage Stock Report 
-export const DamageStockReport_GoBtn_API = ({ partyId }) => get(`${url.DAMAGE_STOCK_REPORT_GO_BUTTON}/${partyId}`)//add button get api
+export const DamageStockReport_GoBtn_API = ({ jsonBody, btnId }) => post(url.DAMAGE_STOCK_REPORT_GO_BUTTON, jsonBody)//Go button api
 
 //Generic Sale Report
 export const GenericSale_GoBtn_API = ({ jsonBody }) => post(url.GENERIC_SALE_REPORT, jsonBody)//Go button api

@@ -330,11 +330,19 @@ const GRNAdd3 = (props) => {
         },
     ];
 
-    const hideHandler = (event) => {
+    const hideHandler = async (event) => {
         let isHide = event.target.checked
         const HideValue = isHide ? "1" : "0"
         let config = { InvoiceId: InvoiceID, IsHide: HideValue }
-        dispatch(hideInvoiceForGRFAction(config))
+
+        const isConfirmed = await customAlert({
+            Type: 7,
+            Message: "Do you want To Hide Invoice ?",
+        });
+
+        if (isConfirmed) {
+            dispatch(hideInvoiceForGRFAction(config))
+        }
 
     }
 
