@@ -441,7 +441,7 @@ export const tableBody = (doc, data) => {
                     }
                 })
 
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length}) (${Box} Box)`
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength}) (${Box} Box)`
 
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
@@ -580,7 +580,7 @@ export const tableBodyWithIGST = (doc, data) => {
                     }
                 })
 
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length})  (${TotalBox} Box)`
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
                 data1.row.cells[8].colSpan = 2
             }
 
