@@ -99,7 +99,7 @@ const CustomTable = ({
     }, [defaultSearchText]);
 
     useEffect(() => {
-        onDataSizeChange({ dataCount: sortedData.length,filteredData:sortedData}); // Call the on DataSize Change function with the length of sortedData
+        onDataSizeChange({ dataCount: sortedData.length, filteredData: sortedData }); // Call the on DataSize Change function with the length of sortedData
     }, [sortedData]);
 
     const handlePageChange = (page) => {
@@ -165,90 +165,92 @@ const CustomTable = ({
     return (
         <div className="table-rep-plugin">
             <div className="table-responsive mb-0" data-pattern="priority-columns">
-                <div className="table-container1">
-                    <Table className="table  table-bordered">
-                        <Thead>
+                <Table className="table  table-bordered custom-table">
+                    <Thead>
+                        <Tr>
+                            {selectRow && (
+                                <Th>
+                                    <span>
+                                        <Input
+                                            type="checkbox"
+                                            checked={isAllSelected}
+                                            onChange={handleSelectAllRows}
+                                        />{' '}
+                                        <label>{selectRow.selectHeaderLabel}</label>
+                                    </span>
+                                </Th>
+                            )}
+                            {columns.map((column, key) => (
+                                <Th
+                                    key={key}
+                                    onClick={() => {
+                                        if (column.sort) {
+                                            handleSort(column.dataField);
+                                        }
+                                    }}
+                                >
+                                    <div className="column-header">
+                                        {column.headerFormatter ? column.headerFormatter(column, key)
+                                            : <span className="column-text">{column.text}</span>}
+
+                                        {column.sort && (
+                                            <span className={`sort-icon ${sortField === column.dataField ? 'active' : ''}`}>
+                                                {sortField === column.dataField && sortOrder === 'asc' && '↑'}
+                                                {sortField === column.dataField && sortOrder === 'desc' && '↓'}
+                                            </span>
+                                        )}
+                                    </div>
+                                </Th>
+                            ))}
+
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {slicedData.length === 0 && noDataIndication && (
                             <Tr>
-                                {selectRow && (
-                                    <Th>
-                                        <span>
+                                <Td colSpan={selectRow ? columns.length + 1 : columns.length}>
+                                    {noDataIndication}
+                                </Td>
+                            </Tr>
+                        )}
+                        {slicedData.map((row) => {
+                            // Check if the row should blink
+                            const shouldBlink = updatedRowBlinkId !== undefined && row[keyField] === updatedRowBlinkId;
+                            return (
+                                <Tr
+                                    key={row[keyField]}
+                                    data-selected={selectedRows.includes(row[keyField])}
+                                    data-record-deleted={row.IsRecordDeleted}
+                                    className={shouldBlink ? 'row-blink' : ''} // Apply blinking class if shouldBlink is true
+                                >
+                                    {selectRow && (
+                                        <Td>
                                             <Input
                                                 type="checkbox"
-                                                checked={isAllSelected}
-                                                onChange={handleSelectAllRows}
-                                            />{' '}
-                                            <label>{selectRow.selectHeaderLabel}</label>
-                                        </span>
-                                    </Th>
-                                )}
-                                {columns.map((column, key) => (
-                                    <Th
-                                        key={key}
-                                        onClick={() => {
-                                            if (column.sort) {
-                                                handleSort(column.dataField);
-                                            }
-                                        }}
-                                    >
-                                        <div className="column-header">
-                                            <span className="column-text">{column.text}</span>
-                                            {column.sort && (
-                                                <span className={`sort-icon ${sortField === column.dataField ? 'active' : ''}`}>
-                                                    {sortField === column.dataField && sortOrder === 'asc' && '↑'}
-                                                    {sortField === column.dataField && sortOrder === 'desc' && '↓'}
-                                                </span>
-                                            )}
-                                        </div>
-                                    </Th>
-                                ))}
-
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {slicedData.length === 0 && noDataIndication && (
-                                <Tr>
-                                    <Td colSpan={selectRow ? columns.length + 1 : columns.length}>
-                                        {noDataIndication}
-                                    </Td>
+                                                className='check-disabled'
+                                                checked={selectedRows.includes(row[keyField])}
+                                                disabled={
+                                                    (selectRow && selectRow.nonSelected.includes(row[keyField]))
+                                                }
+                                                onChange={(e) => handleRowSelect(e, row)}
+                                            />
+                                        </Td>
+                                    )}
+                                    {columns.map((column, colIndex) => (
+                                        <Td key={colIndex}>
+                                            {!column.headerFormatter &&
+                                                <div data-testid="td-before" class="tdBefore">{column.text}</div>}
+                                            {column.formatter
+                                                ? column.formatter(row[column.dataField], row, colIndex, column.formatExtraData)
+                                                : row[column.dataField]}
+                                        </Td>
+                                    ))}
                                 </Tr>
-                            )}
-                            {slicedData.map((row) => {
-                                // Check if the row should blink
-                                const shouldBlink = updatedRowBlinkId !== undefined && row[keyField] === updatedRowBlinkId;
-                                return (
-                                    <Tr
-                                        key={row[keyField]}
-                                        data-selected={selectedRows.includes(row[keyField])}
-                                        data-record-deleted={row.IsRecordDeleted}
-                                        className={shouldBlink ? 'row-blink' : ''} // Apply blinking class if shouldBlink is true
-                                    >
-                                        {selectRow && (
-                                            <Td>
-                                                <Input
-                                                    type="checkbox"
-                                                    className='check-disabled'
-                                                    checked={selectedRows.includes(row[keyField])}
-                                                    disabled={
-                                                        (selectRow && selectRow.nonSelected.includes(row[keyField]))
-                                                    }
-                                                    onChange={(e) => handleRowSelect(e, row)}
-                                                />
-                                            </Td>
-                                        )}
-                                        {columns.map((column, colIndex) => (
-                                            <Td key={colIndex} data-label={column.text}>
-                                                {column.formatter
-                                                    ? column.formatter(row[column.dataField], row, colIndex, column.formatExtraData)
-                                                    : row[column.dataField]}
-                                            </Td>
-                                        ))}
-                                    </Tr>
-                                )
-                            })}
-                        </Tbody>
-                    </Table>
-                    <CustomPagination pageCount={pageCount} currentPage={currentPage} handlePageChange={handlePageChange} />
-                </div>
+                            )
+                        })}
+                    </Tbody>
+                </Table>
+                <CustomPagination pageCount={pageCount} currentPage={currentPage} handlePageChange={handlePageChange} />
             </div>
         </div>
     );
