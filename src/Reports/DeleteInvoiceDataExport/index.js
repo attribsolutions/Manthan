@@ -6,7 +6,7 @@ import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, url } from "../../routes/index"
+import { mode, url, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import * as XLSX from 'xlsx';
 import { postDeleteInvoiceDataExport_API, postDeleteInvoiceDataExport_API_Success } from "../../store/Report/InvoiceDataExportRedux/action";
@@ -14,8 +14,9 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import Select from "react-select";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { BreadcrumbShowCountlabel } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 
 const DeleteInvoiceDataExport = (props) => {
 
@@ -31,8 +32,6 @@ const DeleteInvoiceDataExport = (props) => {
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [columns, setColumns] = useState([{}]);
-    const [columnsCreated, setColumnsCreated] = useState(false)
     const [PartyDropdown, setPartyDropdown] = useState("");
 
     const reducers = useSelector(
@@ -42,17 +41,23 @@ const DeleteInvoiceDataExport = (props) => {
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             ExcelBtnLoading: state.InvoiceDataExportReducer.ExcelBtnLoading,
             userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
         })
     );
 
-    const { userAccess, tableData = [], ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
+    const { userAccess, tableData = [], ExcelBtnLoading, GoBtnLoading, Distributor, pageField } = reducers;
     const { DeletedInvoiceExportSerializerDetails = [] } = tableData;
 
     useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.DELETE_INVOICE_DATA_EXPORT))
         return () => {
+            dispatch(commonPageFieldSuccess(null));
             dispatch(postDeleteInvoiceDataExport_API_Success([]))
         }
-    }, [])
+    }, []);
+
+    const [tableColumns] = DynamicColumnHook({ pageField })
 
     const values = { ...state.values }
 
@@ -127,29 +132,6 @@ const DeleteInvoiceDataExport = (props) => {
             dispatch(postDeleteInvoiceDataExport_API_Success([]))
 
         } catch (error) { _cfunc.CommonConsole(error) }
-    }
-
-    const createColumns = () => {
-        if (DeletedInvoiceExportSerializerDetails.length > 0) {
-            const objectAtIndex0 = DeletedInvoiceExportSerializerDetails[0];
-            const internalColumn = []
-            for (const key in objectAtIndex0) {
-                const column = {
-                    text: key,
-                    dataField: key,
-                    sort: true,
-                    classes: "table-cursor-pointer",
-                };
-                internalColumn.push(column);
-            }
-
-            setColumns(internalColumn)
-            setColumnsCreated(true)
-        }
-    }
-
-    if (!columnsCreated) {
-        createColumns();
     }
 
     function fromdateOnchange(e, date) {
@@ -268,8 +250,10 @@ const DeleteInvoiceDataExport = (props) => {
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="PartyID"
-                        data={tableData.btnId !== "excel_btnId" ? DeletedInvoiceExportSerializerDetails : [{}]}
-                        columns={tableData.btnId !== "excel_btnId" ? columns : [{}]}
+                        // data={tableData.btnId !== "excel_btnId" ? DeletedInvoiceExportSerializerDetails : [{}]}
+                        // columns={tableData.btnId !== "excel_btnId" ? tableColumns : [{}]}
+                        data={DeletedInvoiceExportSerializerDetails}
+                        columns={tableColumns}
                         search
                     >
                         {(toolkitProps,) => (
