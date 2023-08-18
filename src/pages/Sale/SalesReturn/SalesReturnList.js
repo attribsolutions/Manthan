@@ -359,8 +359,7 @@ const SalesReturnList = () => {
                             deleteName={"FullReturnNumber"}
                             totalAmountShow={true}
                             selectCheckParams={{
-                                isRoleAccess: (PurchaseReturnMode_3_Access),
-                                isShow: (subPageMode === url.SALES_RETURN_LIST),
+                                isShow: ((subPageMode === url.SALES_RETURN_LIST) && PurchaseReturnMode_3_Access),
                                 selectSaveBtnHandler: selectSaveBtnHandler,
                                 selectSaveBtnLabel: "Send To Supplier",
                                 selectHeaderLabel: "Select",

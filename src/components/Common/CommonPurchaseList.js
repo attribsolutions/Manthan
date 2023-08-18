@@ -344,7 +344,7 @@ const CommonPurchaseList = (props) => {
                 responsive
                 bootstrap4
                 bordered={false}
-                selectRow={selectCheckParams.isShow ?
+                selectRow={(selectCheckParams.isShow) ?
                   {
                     rowSelected: rowSelected(),
                     nonSelected: nonSelectedRow(),
@@ -379,7 +379,7 @@ const CommonPurchaseList = (props) => {
           </ExtraTableWrapper>
           {
 
-            ((tableList.length > 0) && (selectCheckParams.isShow) && (selectCheckParams.isRoleAccess)) ?
+            ((tableList.length > 0) && (selectCheckParams.isShow)) ?
 
               <div className="row save1 " style={{ paddingBottom: 'center' }}>
                 <C_Button
