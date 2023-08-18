@@ -123,21 +123,6 @@ export const Rows = (data) => {
 
             ];
         };
-        const BatchRow = [
-            `Batch:  ${element.quantityString} `,
-            `Batch`,
-            " ",
-            ``,
-            "",
-            "",
-            "",
-            "",
-            ``,
-            "",
-            ``,
-            "",
-            ``,
-        ]
 
         if (Gst === 0) { Gst = element.GST };
         let aa = { TotalCGst: 0, totalSGst: 0 }
