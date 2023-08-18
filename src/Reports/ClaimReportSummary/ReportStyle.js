@@ -24,7 +24,7 @@ export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
-    doc.text(' PARTY WISE CLAIM SUMMARY', 110, 45,)
+    doc.text(' ITEM WISE CLAIM SUMMARY', 110, 45,)
 }
 
 export const reportHeder1 = (doc, data) => {

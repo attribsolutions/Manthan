@@ -12,7 +12,6 @@ function* damageStockReport_GenFunc({ config }) {
 
 function* DamageStockReportSaga() {
     yield takeLatest(DAMAGE_STOCK_REPORT_GO_BUTTON_API, damageStockReport_GenFunc)
-
 }
 
 export default DamageStockReportSaga;

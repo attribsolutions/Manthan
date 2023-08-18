@@ -210,22 +210,8 @@ const ClaimSummary = (props) => {
 
                             <div
                                 className="mt-3  mb-3">
-                                <C_Button
-                                    loading={btnLoading === `gobtn-${report.ClaimSummary}-${row.id}-${key}`}
-                                    type="button"
-                                    title="Claim Summary"
-                                    spinnerColor="white"
-                                    className={CWClaimBtnCss}
-                                    onClick={(e) => { goButtonHandler(report.ClaimSummary, row, `gobtn-${report.ClaimSummary}-${row.id}-${key}`) }}
-                                >
-                                    <i className=" fas fa-file-signature"></i>
-
-                                </C_Button>
-                            </div>
 
 
-                            <div
-                                className="mt-3 mb-3 ">
                                 <C_Button
                                     loading={btnLoading === `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`}
                                     type="button"
@@ -236,8 +222,25 @@ const ClaimSummary = (props) => {
                                 >
                                     <i className="fas fa-file-contract"></i>
 
+                                </C_Button>
+
+                            </div>
+
+
+                            <div
+                                className="mt-3 mb-3 ">
+                                <C_Button
+                                    loading={btnLoading === `gobtn-${report.ClaimSummary}-${row.id}-${key}`}
+                                    type="button"
+                                    title="Item Wise Claim Summary"
+                                    spinnerColor="white"
+                                    className={CWClaimBtnCss}
+                                    onClick={(e) => { goButtonHandler(report.ClaimSummary, row, `gobtn-${report.ClaimSummary}-${row.id}-${key}`) }}
+                                >
+                                    <i className=" fas fa-file-signature"></i>
 
                                 </C_Button>
+
                             </div>
                             <div
                                 className="mt-3  mb-3">

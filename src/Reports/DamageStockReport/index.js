@@ -32,7 +32,7 @@ const DamageStockReport = (props) => {
     const [unitDropdown, setUnitDropdown] = useState("");
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
-
+   
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.DamageStockReportReducer.listBtnLoading,
@@ -82,7 +82,6 @@ const DamageStockReport = (props) => {
     useEffect(() => {
 
         try {
-
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 setBtnMode(0);
                 const { Data } = goButtonData
@@ -107,8 +106,11 @@ const DamageStockReport = (props) => {
     }, [goButtonData]);
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`))
-    }, [tableData])
+        if (tableData.length === 0) {
+            setBtnMode(0)
+        }
+        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
+    }, [tableData]);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
 
@@ -256,7 +258,7 @@ const DamageStockReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                // loading={btnMode === 1 && true}
+                                loading={btnMode === 1 && true}
                                 className="btn btn-success"
                                 onClick={(e) => goButtonHandler(e, 1)}
                             >
@@ -269,7 +271,7 @@ const DamageStockReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                // loading={btnMode === 2 && true}
+                                loading={btnMode === 2 && true}
                                 className="btn btn-primary"
                                 onClick={(e) => goButtonHandler(e, 2)}
                             >
