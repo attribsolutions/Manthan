@@ -2,7 +2,9 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { toast, Bounce } from 'react-toastify';
 
-const API_URL = "http://cbmfooderp.com:8000";
+// const API_URL = "http://cbmfooderp.com:8000";
+const API_URL = "http://192.168.1.114:8000";
+
 const axiosApi = axios.create({ baseURL: API_URL });
 
 const requestUrls = {};
@@ -99,6 +101,8 @@ axiosApi.interceptors.response.use(
                 401: 'Unauthorized. Please log in again.',
                 403: 'Permission denied.',
                 404: 'Resource not found.',
+                226: 'The requested resource has been used in a different context',
+                406: 'Not Acceptable - The server cannot produce a response matching the list of acceptable values defined in the request',   
                 0: () => axiosRetry(error.config),
             };
             const errorMessage = messages[status] || 'Oops! Something went wrong.';

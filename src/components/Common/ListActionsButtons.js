@@ -191,118 +191,120 @@ export const listPageActionsButtonFunc = (props) => {
         };
 
         return (
-            <div id="ActionBtn">
-                {renderButtonIfNeeded({
-                    condition: canEdit,
-                    btnmode: mode.edit,
-                    iconClass: editIconClass,
-                    actionFunc: editBodyfunc,
-                    dispatchAction: editActionFun,
-                    title: "Edit",
-                    buttonClasss: editBtnCss,
-                    isDummyBtn: dummyDisable_Edit
-                })}
-                {renderButtonIfNeeded({
-                    condition: canEditSelf,
-                    btnmode: mode.edit,
-                    iconClass: editIconClass,
-                    actionFunc: editBodyfunc,
-                    dispatchAction: editActionFun,
-                    title: "EditSelf",
-                    buttonClasss: editSelfBtnCss,
-                })}
-                {renderButtonIfNeeded({
-                    condition: canView,
-                    btnmode: mode.view,
-                    iconClass: viewIconClass,
-                    dispatchAction: editActionFun,
-                    title: "View",
-                    buttonClasss: vieBtnCss,
-                })}
+            <span>
+                <div id="ActionBtn">
+                    {renderButtonIfNeeded({
+                        condition: canEdit,
+                        btnmode: mode.edit,
+                        iconClass: editIconClass,
+                        actionFunc: editBodyfunc,
+                        dispatchAction: editActionFun,
+                        title: "Edit",
+                        buttonClasss: editBtnCss,
+                        isDummyBtn: dummyDisable_Edit
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canEditSelf,
+                        btnmode: mode.edit,
+                        iconClass: editIconClass,
+                        actionFunc: editBodyfunc,
+                        dispatchAction: editActionFun,
+                        title: "EditSelf",
+                        buttonClasss: editSelfBtnCss,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canView,
+                        btnmode: mode.view,
+                        iconClass: viewIconClass,
+                        dispatchAction: editActionFun,
+                        title: "View",
+                        buttonClasss: vieBtnCss,
+                    })}
 
-                {renderButtonIfNeeded({
-                    condition: canApprovalView,
-                    btnmode: mode.viewApproval,
-                    iconClass: approvalviewIconClass,
-                    actionFunc: viewApprovalBtnFunc,
-                    title: "Approval View",
-                    buttonClasss: vieBtnCss,
-                })}
+                    {renderButtonIfNeeded({
+                        condition: canApprovalView,
+                        btnmode: mode.viewApproval,
+                        iconClass: approvalviewIconClass,
+                        actionFunc: viewApprovalBtnFunc,
+                        title: "Approval View",
+                        buttonClasss: vieBtnCss,
+                    })}
 
 
 
-                {renderButtonIfNeeded({
-                    condition: canMakeBtn,
-                    btnmode: mode.makeBtn,
-                    iconClass: makeBtnIconClass,
-                    actionFunc: makeButtonHandler,
-                    title: makeBtnName,
-                    buttonClasss: makeBtnCss,
-                    isDummyBtn: dummyDisable_MakeBtn
-                })}
+                    {renderButtonIfNeeded({
+                        condition: canMakeBtn,
+                        btnmode: mode.makeBtn,
+                        iconClass: makeBtnIconClass,
+                        actionFunc: makeButtonHandler,
+                        title: makeBtnName,
+                        buttonClasss: makeBtnCss,
+                        isDummyBtn: dummyDisable_MakeBtn
+                    })}
 
-                {renderButtonIfNeeded({
-                    condition: canPrint,
-                    btnmode: mode.download,
-                    iconClass: printIconClass,
-                    actionFunc: downBtnFunc,
-                    title: "Print",
-                    buttonClasss: printBtnCss,
-                })}
-                {renderButtonIfNeeded({
-                    condition: canMultiInvoicePrint,
-                    btnmode: mode.MultiInvoice,
-                    iconClass: multiInvoiceIconClass,
-                    actionFunc: downBtnFunc,
-                    title: "MultipleInvoices",
-                    buttonClasss: printInvoiceBtnCss,
-                })}
-                {renderButtonIfNeeded({
-                    condition: otherBtn_1Func,
-                    btnmode: mode.otherBtn_1,
-                    iconClass: updateIconClass,
-                    actionFunc: otherBtn_1Func,
-                    title: "Update",
-                    buttonClasss: updateBtnCss,
-                })}
-                {renderButtonIfNeeded({
-                    condition: canDelete,
-                    btnmode: mode.isdelete,
-                    iconClass: deleteIconClass,
-                    actionFunc: deleteBodyfunc,
-                    dispatchAction: deleteActionFun,
-                    title: "Delete",
-                    buttonClasss: deltBtnCss,
-                    isDummyBtn: dummyDisable_Delete
+                    {renderButtonIfNeeded({
+                        condition: canPrint,
+                        btnmode: mode.download,
+                        iconClass: printIconClass,
+                        actionFunc: downBtnFunc,
+                        title: "Print",
+                        buttonClasss: printBtnCss,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canMultiInvoicePrint,
+                        btnmode: mode.MultiInvoice,
+                        iconClass: multiInvoiceIconClass,
+                        actionFunc: downBtnFunc,
+                        title: "MultipleInvoices",
+                        buttonClasss: printInvoiceBtnCss,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: otherBtn_1Func,
+                        btnmode: mode.otherBtn_1,
+                        iconClass: updateIconClass,
+                        actionFunc: otherBtn_1Func,
+                        title: "Update",
+                        buttonClasss: updateBtnCss,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canDelete,
+                        btnmode: mode.isdelete,
+                        iconClass: deleteIconClass,
+                        actionFunc: deleteBodyfunc,
+                        dispatchAction: deleteActionFun,
+                        title: "Delete",
+                        buttonClasss: deltBtnCss,
+                        isDummyBtn: dummyDisable_Delete
 
-                })}
-                {renderButtonIfNeeded({
-                    condition: canDeleteSelf,
-                    btnmode: mode.isdelete,
-                    iconClass: deleteIconClass,
-                    actionFunc: deleteBodyfunc,
-                    dispatchAction: deleteActionFun,
-                    title: "Delete",
-                    buttonClasss: deltBtnCss,
-                })}
-                {renderButtonIfNeeded({
-                    condition: canCopy,
-                    btnmode: mode.copy,
-                    iconClass: copyIconClass,
-                    actionFunc: copyBodyfunc,
-                    title: "Copy",
-                    buttonClasss: copyBtnCss,
-                })}
-                {renderButtonIfNeeded({
-                    condition: canOrderApproval,
-                    btnmode: mode.orderApproval,
-                    iconClass: orderApprovalIconClass,
-                    actionFunc: oderAprovalBtnFunc,
-                    title: "Order Approval",
-                    buttonClasss: makeBtnCss,
-                    isDummyBtn: dummyDisable_OrderApproval
-                })}
-            </div>
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canDeleteSelf,
+                        btnmode: mode.isdelete,
+                        iconClass: deleteIconClass,
+                        actionFunc: deleteBodyfunc,
+                        dispatchAction: deleteActionFun,
+                        title: "Delete",
+                        buttonClasss: deltBtnCss,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canCopy,
+                        btnmode: mode.copy,
+                        iconClass: copyIconClass,
+                        actionFunc: copyBodyfunc,
+                        title: "Copy",
+                        buttonClasss: copyBtnCss,
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canOrderApproval,
+                        btnmode: mode.orderApproval,
+                        iconClass: orderApprovalIconClass,
+                        actionFunc: oderAprovalBtnFunc,
+                        title: "Order Approval",
+                        buttonClasss: makeBtnCss,
+                        isDummyBtn: dummyDisable_OrderApproval
+                    })}
+                </div>
+            </span>
         );
     };
     const isActionColunmHidden = !(

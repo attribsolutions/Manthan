@@ -91,9 +91,8 @@ export function getWithotMsg(url) {
   return axiosApi
     .get(url)
     .then((response) => {
-      console.log(`${url} response :`, response);
       return response.data;
-    })
+    });
 
 }
 
@@ -105,19 +104,13 @@ export function postMethodExcel(url, body) {
       responseType: "arraybuffer",
     })
     .then((response) => {
-      console.log(`${url} Body :`, body);
-      console.log(`${url} response :`, response);
       return response.data;
-    })
-
+    });
 }
 
 
 
 export function delwithPostBody(url, body) {
-  debugger
-  CommonConsole(" delete api call");
-  AuthonticationFunction();
   return axiosApi
     .delete(url, {
       headers: {
@@ -127,12 +120,7 @@ export function delwithPostBody(url, body) {
       data: body
     })
     .then((response) => {
-      console.log(`${url} Body :`, body);
-      return CheckAPIResponse({ method: "delete", url, response });
-    })
-    .catch((error) => {
-      console.log(`${url} Body :`, body);
-      return CheckAPIResponse({ method: "delete", url, error });
+      return response.data;
     });
 }
 

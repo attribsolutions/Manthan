@@ -283,22 +283,10 @@ const CommonPurchaseList = (props) => {
       return E_WayBill_ActionsButtonFunc({ ...props, dispatch, userAccState, })
     }
   }
-  // function rowSelected() {
-  //   return tableList.map((index) => { return (index.selectCheck) })
-  // }
-
-  // const nonSelectedRow = () => {
-  //   return tableList.forEach(row => {
-  //     if ((masterPath === url.SALES_RETURN) && ((row.Status === "Send To Supplier") || (row.Status === "Open"))) {
-  //       row.forceSelectDissabled = true;
-  //     }
-  //   })
-  // };
 
   const selectRowCheckBox = () => (
     selectCheckParams.isShow ?
       {
-        // rowSelected: rowSelected(),
         nonSelectedRow: nonSelectedRow(),
         selectHeaderLabel: selectCheckParams.selectHeaderLabel
       }
@@ -336,7 +324,7 @@ const CommonPurchaseList = (props) => {
     return noSelectedIds;
   };
 
-
+  const { updatedRowBlinkId } = history.location
   if (!(userAccState === "")) {
 
     return (
@@ -350,6 +338,7 @@ const CommonPurchaseList = (props) => {
             {(tableProps) => (
               <CustomTable
                 keyField={"id"}
+                updatedRowBlinkId={updatedRowBlinkId}
                 data={tableProps}
                 columns={tableColumns}
                 responsive
@@ -364,8 +353,7 @@ const CommonPurchaseList = (props) => {
                 defaultSorted={defaultSorted}
                 striped={true}
                 classes={"table  table-bordered table-hover"}
-                onDataSizeChange={({ dataCount, filteredData }) => {
-                  // dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
+                onDataSizeChange={({ dataCount, filteredData = [] }) => {
 
                   if (totalAmountShow === true) {
                     let totalAmount = filteredData.reduce((total, item) => {

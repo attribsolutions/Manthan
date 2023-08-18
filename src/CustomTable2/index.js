@@ -15,9 +15,11 @@ const CustomTable = ({
     defaultSorted = [],
     noDataIndication,
     selectRow = undefined,
-    onDataSizeChange
+    defaultSearchText,
+    onDataSizeChange,
+    updatedRowBlinkId
 }) => {
-    debugger
+
     const [searchText, setSearchText] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedRows, setSelectedRows] = useState([]);
@@ -54,11 +56,25 @@ const CustomTable = ({
             return [...filteredData].sort((a, b) => {
                 const aValue = a[sortField];
                 const bValue = b[sortField];
-                return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+
+                if (typeof aValue === 'number' && typeof bValue === 'number') {
+                    return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+                }
+                if (typeof aValue === 'string' && typeof bValue === 'string') {
+                    return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+                }
+                if (aValue === null || aValue === undefined) {
+                    return sortOrder === 'asc' ? -1 : 1;
+                }
+                if (bValue === null || bValue === undefined) {
+                    return sortOrder === 'asc' ? 1 : -1;
+                }
+                return sortOrder === 'asc' ? aValue.toString().localeCompare(bValue.toString()) : bValue.toString().localeCompare(aValue.toString());
             });
         }
         return filteredData;
     }, [filteredData, sortField, sortOrder]);
+
 
     const pageCount = Math.ceil(sortedData.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -76,7 +92,14 @@ const CustomTable = ({
     }, [defaultSorted]);
 
     useEffect(() => {
-        onDataSizeChange({ dataCount: sortedData.length }); // Call the onDataSizeChange function with the length of sortedData
+        if (defaultSearchText !== undefined && defaultSearchText !== null) {
+            setSearchText(defaultSearchText);
+            setCurrentPage(1);
+        }
+    }, [defaultSearchText]);
+
+    useEffect(() => {
+        onDataSizeChange({ dataCount: sortedData.length,filteredData:sortedData}); // Call the on DataSize Change function with the length of sortedData
     }, [sortedData]);
 
     const handlePageChange = (page) => {
@@ -149,12 +172,12 @@ const CustomTable = ({
                                 {selectRow && (
                                     <Th>
                                         <span>
-                                        <Input
-                                            type="checkbox"
-                                            checked={isAllSelected}
-                                            onChange={handleSelectAllRows}
-                                        />{' '}
-                                        <label>label</label>
+                                            <Input
+                                                type="checkbox"
+                                                checked={isAllSelected}
+                                                onChange={handleSelectAllRows}
+                                            />{' '}
+                                            <label>label</label>
                                         </span>
                                     </Th>
                                 )}
@@ -190,12 +213,14 @@ const CustomTable = ({
                                 </Tr>
                             )}
                             {slicedData.map((row) => {
+                                // Check if the row should blink
+                                const shouldBlink = updatedRowBlinkId !== undefined && row[keyField] === updatedRowBlinkId;
                                 return (
                                     <Tr
                                         key={row[keyField]}
                                         data-selected={selectedRows.includes(row[keyField])}
                                         data-record-deleted={row.IsRecordDeleted}
-                                    // onClick={() => handleRowSelect(row)}
+                                        className={shouldBlink ? 'row-blink' : ''} // Apply blinking class if shouldBlink is true
                                     >
                                         {selectRow && (
                                             <Td>

@@ -25,7 +25,21 @@
 
 
 
- /* CustomTableStyles.scss */
+
+
+.row-blink {
+    animation: blink-animation 2s 3;  /* 2 seconds duration, 2 iterations */
+  }
+  
+  @keyframes blink-animation {
+    0%, 100% {
+      background-color: transparent;
+    }
+    50% {
+    //   background-color: #511db329; /* Soft purple color */
+      background-color: #ffffcc; /* Pale yellow color */
+    }
+  }
 
  /* Style for selected rows */
  .table-rep-plugin table tbody tr[data-selected="true"] {
@@ -80,24 +94,24 @@
 
 
 
-//  .table-container {
-//     overflow-y: auto;
-//     max-height: calc(100vh - 200px); /* Adjust the value as needed */
-// }
+ //  .table-container {
+ //     overflow-y: auto;
+ //     max-height: calc(100vh - 200px); /* Adjust the value as needed */
+ // }
 
-// .table-container::-webkit-scrollbar {
-//     width: 0.01em; /* Set to adjust the width of the scrollbar track */
-// }
+ // .table-container::-webkit-scrollbar {
+ //     width: 0.01em; /* Set to adjust the width of the scrollbar track */
+ // }
 
-// .table-container::-webkit-scrollbar-thumb {
-//     background-color: transparent;
-// }
+ // .table-container::-webkit-scrollbar-thumb {
+ //     background-color: transparent;
+ // }
 
-/* Hide horizontal scrollbar */
-// .table-container::-webkit-scrollbar-horizontal {
-//     height: 0.5em; /* Set to adjust the height of the scrollbar track */
-// }
+ /* Hide horizontal scrollbar */
+ // .table-container::-webkit-scrollbar-horizontal {
+ //     height: 0.5em; /* Set to adjust the height of the scrollbar track */
+ // }
 
-// .table-container::-webkit-scrollbar-thumb-horizontal {
-//     background-color: transparent;
-// }
+ // .table-container::-webkit-scrollbar-thumb-horizontal {
+ //     background-color: transparent;
+ // }
