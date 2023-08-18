@@ -4,25 +4,27 @@ import {
     Col,
     FormGroup,
     Label,
+    Button,
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
+
 import { useHistory } from "react-router-dom";
 import { mode, pageId } from "../../routes/index"
+
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../CustomValidateForm";
 import { commonPageField } from "../../store/actions";
 import { SapLedger_Go_Button_API, SapLedger_Go_Button_API_Success } from "../../store/Report/SapLedger Redux/action";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { Go_Button } from "../../components/Common/CommonButton";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { damageStockReport_GoButton_API_Success } from "../../store/Report/DamageStockReportRedux/action";
-import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 
 const SapLedger = (props) => {
 
@@ -32,36 +34,65 @@ const SapLedger = (props) => {
     const userAdminRole = _cfunc.loginUserAdminRole();
 
     const [userPageAccessState, setUserAccState] = useState('');
+    const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
     const [headerFilters, setHeaderFilters] = useState('');
 
     const {
         userAccess,
         List,
         goBtnLoading,
-        partyList,
-        pageField
+        partyList
     } = useSelector((state) => ({
         goBtnLoading: state.SapLedgerReducer.goBtnLoading,
         partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
         List: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
     }));
 
     const { data = [], Data = [] } = List
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
-    useEffect(() => {
+    const tableColumns = [
+        {
+            text: "Document No",
+            dataField: "DocumentNo",
+        },
+        {
+            text: "FiscalYear",
+            dataField: "Fiscalyear",
+        },
+        {
+            text: "DocumentType",
+            dataField: "DocumentType",
+        },
+        {
+            text: "	DocumentDesc",
+            dataField: "DocumentDesc",
+        },
+        {
+            text: "PostingDate",
+            dataField: "PostingDate",
+        },
+        {
+            text: "DebitCredit",
+            dataField: "DebitCredit",
+        },
+        {
+            text: "Debit Amount",
+            dataField: "Debit_Amount",
+            align: "right"
+        },
+        {
+            text: "	Credit Amount",
+            dataField: "Credit_Amount",
+            align: "right"
+        },
+        {
+            text: "	ItemText",
+            dataField: "ItemText",
+        },
 
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.SAP_LEDGER))
-        return () => {
-            dispatch(commonPageFieldSuccess(null));
-            dispatch(damageStockReport_GoButton_API_Success([]));
-        }
-    }, [])
-
-    const [tableColumns] = DynamicColumnHook({ pageField })
+    ];
 
     const rowStyle = (row, rowIndex) => {
 
@@ -153,6 +184,7 @@ const SapLedger = (props) => {
         newObj.fromdate = date
         setHeaderFilters(newObj)
         dispatch(SapLedger_Go_Button_API_Success([]))
+
     }
 
     function todateOnchange(e, date) {
@@ -160,11 +192,13 @@ const SapLedger = (props) => {
         newObj.todate = date
         setHeaderFilters(newObj)
         dispatch(SapLedger_Go_Button_API_Success([]))
+
     }
 
     function partySelectOnChangeHandler() {
         dispatch(SapLedger_Go_Button_API_Success([]))
     }
+
 
     if (!(userPageAccessState === '')) {
         return (
@@ -180,7 +214,7 @@ const SapLedger = (props) => {
                     <div className="px-2  c_card_filter text-black " >
                         <div className="row">
                             <div className=" row">
-                                <Col sm="4" className="">
+                                <Col sm="5" className="">
                                     <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "83px" }}>From Date</Label>
@@ -193,7 +227,7 @@ const SapLedger = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm="4" className="">
+                                <Col sm="6" className="">
                                     <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "65px" }}>To Date</Label>
@@ -206,36 +240,10 @@ const SapLedger = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-
                                 <Col sm="1" className="mt-2 ">
                                     <Go_Button loading={goBtnLoading} onClick={goButtonHandler} />
-                                </Col>
-
-                                {/* <Col sm={1} className="mt-2" >
-                                    <C_Button
-                                        type="button"
-                                        spinnerColor="white"
-                                        // loading={btnMode === 1 && true}
-                                        className="btn btn-success"
-                                        onClick={(e) => goButtonHandler(e, 1)}
-                                    >
-                                        Show
-                                    </C_Button>
 
                                 </Col>
-
-                                <Col sm={2} className="mt-2 ">
-                                    <C_Button
-                                        type="button"
-                                        spinnerColor="white"
-                                        // loading={btnMode === 2 && true}
-                                        className="btn btn-primary"
-                                        onClick={(e) => goButtonHandler(e, 2)}
-                                    >
-                                        Excel Download
-                                    </C_Button>
-                                </Col> */}
-
                             </div>
 
                         </div>
