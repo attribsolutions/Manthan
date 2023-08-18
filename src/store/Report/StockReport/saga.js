@@ -2,14 +2,30 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { StockProcessing_API_Success, stockReportApiErrorAction, stockReport_1_GoButton_API_Success, stockReport_GoButton_API_Success } from "./action";
 import { STOCK_PROCESSING_ACTION, STOCK_REPORT_1_GO_BUTTON_API, STOCK_REPORT_1_GO_BUTTON_API_SUCCESS, STOCK_REPORT_GO_BUTTON_API } from "./actionType";
 import { StockProcessing_API, StockReport_1_GoBtn_API, StockReport_GoBtn_API } from "../../../helpers/backend_helper";
+import { amountCommaSeparateFunc } from "../../../components/Common/CommonFunction";
 
 function* StockReport_GenFunc({ config }) {
     try {
         const response = yield call(StockReport_GoBtn_API, config);
-        yield put(stockReport_GoButton_API_Success(response.Data))
+        yield put(stockReport_GoButton_API_Success(response))
     } catch (error) { yield put(stockReportApiErrorAction()) }
 }
+// function* StockReport_GenFunc({ config }) {
+//     try {
+//         debugger
+//         const response = yield call(StockReport_GoBtn_API, config);
 
+//         // Process the response data to format ActualQty with comma separation
+//         const formattedResponse = response.map(item => ({
+//             ...item,
+//             ActualQty: amountCommaSeparateFunc(item.ActualQty) // Format the number with commas
+//         }));
+
+//         yield put(stockReport_GoButton_API_Success(formattedResponse));
+//     } catch (error) {
+//         yield put(stockReportApiErrorAction());
+//     }
+// }
 //*************** */ Stock Report 1 ***************************
 function* StockProccessing_GenFunc({ config }) {
     try {
