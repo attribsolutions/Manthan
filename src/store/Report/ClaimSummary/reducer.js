@@ -28,7 +28,7 @@ const ClaimSummaryReducer = (state = INIT_STATE, action) => {
         case DELETE_CLAIM_ID:
             return {
                 ...state,
-                DeleteBtnLoading: true
+                DeleteBtnLoading: action.config.btnId
             };
 
 

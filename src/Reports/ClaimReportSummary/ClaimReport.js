@@ -47,17 +47,16 @@ const ClaimSummary = (props) => {
     const reducers = useSelector(
         (state) => ({
             deleteMsg: state.ClaimSummaryReducer.deleteMsg,
-            DeleteBtnLoading: state.ClaimSummaryReducer.DeleteBtnLoading,
             ClaimSummaryGobtn: state.ClaimSummaryReducer.ClaimSummaryGobtn,
             pdfdata: state.PdfReportReducers.pdfdata,
-            ReportBtnLoading: (state.PdfReportReducers.ReportBtnLoading) || (state.ClaimSummaryReducer.CreateClaimLoading),
+            ReportBtnLoading: (state.PdfReportReducers.ReportBtnLoading) || (state.ClaimSummaryReducer.CreateClaimLoading) || (state.ClaimSummaryReducer.DeleteBtnLoading),
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, supplier, pdfdata, ClaimSummaryGobtn, deleteMsg, DeleteBtnLoading } = reducers;
+    const { userAccess, supplier, pdfdata, ClaimSummaryGobtn, deleteMsg } = reducers;
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -145,6 +144,7 @@ const ClaimSummary = (props) => {
             "ToDate": row.selectedDate.ToDate,
             "Party": row.id,
         });
+        let config = { jsonBody, btnId: btnId }
 
         const isConfirmed = await customAlert({
             Type: 7,
@@ -152,7 +152,7 @@ const ClaimSummary = (props) => {
         });
 
         if (isConfirmed) {
-            dispatch(delete_Claim_ID(jsonBody))
+            dispatch(delete_Claim_ID(config))
         }
     }
 
@@ -196,7 +196,6 @@ const ClaimSummary = (props) => {
                                 className="mt-3  mb-3">
                                 <C_Button
                                     loading={btnLoading === `gobtn-${"createClaim"}-${row.id}-${key}`}
-                                    // forceDisabled={btnLoading}
                                     type="button"
                                     style={{ width: "100px" }}
                                     title="Create Claim"
@@ -214,7 +213,6 @@ const ClaimSummary = (props) => {
                                 <C_Button
                                     loading={btnLoading === `gobtn-${report.ClaimSummary}-${row.id}-${key}`}
                                     type="button"
-                                    // forceDisabled={btnLoading}
                                     title="Claim Summary"
                                     spinnerColor="white"
                                     className={CWClaimBtnCss}
@@ -231,13 +229,11 @@ const ClaimSummary = (props) => {
                                 <C_Button
                                     loading={btnLoading === `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`}
                                     type="button"
-                                    // forceDisabled={btnLoading}
                                     title="Customer Wise Summary"
                                     spinnerColor="white"
                                     className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.CustomerWiseReturn, row, `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`) }}
                                 >
-
                                     <i className="fas fa-file-contract"></i>
 
 
@@ -247,7 +243,7 @@ const ClaimSummary = (props) => {
                                 className="mt-3  mb-3">
                                 <C_Button
                                     loading={btnLoading === `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`}
-                                    // forceDisabled={btnLoading}
+
                                     type="button"
                                     title="Master Claim Summary"
                                     spinnerColor="white"
@@ -264,15 +260,14 @@ const ClaimSummary = (props) => {
                             <div
                                 className="mt-3  mb-3">
                                 <C_Button
-                                    // loading={btnLoading === `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`}
-                                    // forceDisabled={btnLoading}
+                                    loading={btnLoading === `deletebtn-${row.id}-${key}`}
                                     type="button"
                                     title="Delete Claim"
                                     spinnerColor="white"
                                     className={deltBtnCss}
                                     onClick={(e) => { deleteHandler(row, `deletebtn-${row.id}-${key}`) }}
                                 >
-                                    <i className="mdi mdi-delete font-size-16"></i>
+                                    <i className="mdi mdi-delete font-size-20"></i>
                                 </C_Button>
 
 
