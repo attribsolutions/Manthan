@@ -145,6 +145,12 @@ const LoadingSheetList = () => {
                                         style={{ width: "83px" }}>From Date</Label>
                                     <Col sm="7">
                                         <C_DatePicker
+                                            options={{
+                                                maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                            }}
                                             name='fromdate'
                                             value={fromdate}
                                             onChange={fromdateOnchange}
@@ -158,6 +164,12 @@ const LoadingSheetList = () => {
                                         style={{ width: "65px" }}>To Date</Label>
                                     <Col sm="7">
                                         <C_DatePicker
+                                            options={{
+                                                maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                            }}
                                             nane='todate'
                                             value={todate}
                                             onChange={todateOnchange}
