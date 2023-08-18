@@ -6,9 +6,8 @@ import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { url, mode } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer } from "../../store/actions";
+import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import * as XLSX from 'xlsx';
@@ -16,6 +15,8 @@ import Select from "react-select";
 import { postPurchaseGSTReport_API, postPurchaseGSTReport_API_Success } from "../../store/Report/PurchaseGSTRedux/action";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import { mode, url, pageId } from "../../routes/index"
+import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 
 const PurchaseGSTReport = (props) => {
 
@@ -43,10 +44,11 @@ const PurchaseGSTReport = (props) => {
             GoBtnLoading: state.PurchaseGSTReportReducer.GoBtnLoading,
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
         })
     );
 
-    const { userAccess, tableData, ExcelBtnLoading, GoBtnLoading, Distributor } = reducers;
+    const { userAccess, tableData, ExcelBtnLoading, GoBtnLoading, Distributor, pageField } = reducers;
     const { PurchaseGSTDetails = [], PurchaseGSTRateWiseDetails = [] } = tableData;
 
     const values = { ...state.values }
@@ -72,10 +74,27 @@ const PurchaseGSTReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.PURCHASE_GST_REPORT))
         return () => {
+            dispatch(commonPageFieldSuccess(null));
             dispatch(postPurchaseGSTReport_API_Success([]));
         }
+
     }, [])
+
+    const [tableColumns] = DynamicColumnHook({ pageField });
+
+    const updatedTableColumns = GSTRateWise
+        ? tableColumns.filter(column => (
+            column.dataField !== "Name" &&
+            column.dataField !== "InvoiceNumber" &&
+            column.dataField !== "InvoiceDate" &&
+            column.dataField !== "FullInvoiceNumber" &&
+            column.dataField !== "DiscountAmount" &&
+            column.dataField !== "GSTRate"
+        ))
+        : tableColumns;
 
     const Party_Option = Distributor.map(i => ({
         value: i.id,
@@ -138,114 +157,6 @@ const PurchaseGSTReport = (props) => {
 
         } catch (error) { _cfunc.CommonConsole(error) }
     }
-
-    const WithoutGSTRateWiseColumn = [
-        {
-            text: "Name",
-            dataField: "Name",
-        },
-        {
-            text: "Invoice Number",
-            dataField: "InvoiceNumber",
-            align: 'right'
-        },
-        {
-            text: "Full Invoice Number",
-            dataField: "FullInvoiceNumber",
-            align: 'right'
-        },
-        {
-            text: "Invoice Date",
-            dataField: "InvoiceDate",
-        },
-        {
-            text: "GST Rate",
-            dataField: "GSTRate",
-            align: 'right'
-        },
-
-        {
-            text: "GST Percentage",
-            dataField: "GSTPercentage",
-            align: 'right'
-        },
-        {
-            text: "CGST",
-            dataField: "CGST",
-            align: 'right'
-        },
-        {
-            text: "SGST",
-            dataField: "SGST",
-            align: 'right'
-        },
-        {
-            text: "IGST",
-            dataField: "IGST",
-            align: 'right'
-
-        },
-        {
-            text: "GST Amount",
-            dataField: "GSTAmount",
-            align: 'right'
-
-        },
-        {
-            text: "Discount Amount",
-            dataField: "DiscountAmount",
-            align: 'right'
-        },
-        {
-            text: "Taxable Value",
-            dataField: "TaxableValue",
-            align: 'right'
-        },
-        {
-            text: "Total Value",
-            dataField: "TotalValue",
-            align: 'right'
-        },
-    ];
-
-    const GSTRateWiseColumn = [
-
-        {
-            text: "GST Percentage",
-            dataField: "GSTPercentage",
-            align: 'right'
-        },
-        {
-            text: "CGST",
-            dataField: "CGST",
-            align: 'right'
-        },
-        {
-            text: "SGST",
-            dataField: "SGST",
-            align: 'right'
-        },
-        {
-            text: "IGST",
-            dataField: "IGST",
-            align: 'right'
-        },
-        {
-            text: "GST Amount",
-            dataField: "GSTAmount",
-            align: 'right'
-        },
-        {
-            text: "Taxable Value",
-            dataField: "TaxableValue",
-            align: 'right'
-        },
-        {
-            text: "Total Value",
-            dataField: "TotalValue",
-            align: 'right'
-        },
-    ];
 
     const partyOnchange = (e) => {
         setPartyDropdown(e)
@@ -331,9 +242,7 @@ const PurchaseGSTReport = (props) => {
                                     <Input type="checkbox"
                                         className="p-2"
                                         checked={GSTRateWise}
-                                        onChange={(e) => setGSTRateWise(e.target.checked)}
-
-
+                                        onChange={(e) => { setGSTRateWise(e.target.checked) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -392,7 +301,7 @@ const PurchaseGSTReport = (props) => {
                 <ToolkitProvider
                     keyField={"id"}
                     data={GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails}
-                    columns={GSTRateWise ? GSTRateWiseColumn : WithoutGSTRateWiseColumn}
+                    columns={updatedTableColumns}
                 >
                     {(toolkitProps,) => (
                         <React.Fragment>
