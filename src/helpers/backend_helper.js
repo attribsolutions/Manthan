@@ -620,7 +620,7 @@ export const ClaimSummary_API = ({ jsonBody }) => post(url.CLAIM_SUMMARY, jsonBo
 export const MasterClaimSummary_API = ({ jsonBody }) => post(url.MASTER_CLAIM_SUMMARY, jsonBody)//  postapi
 export const MasterClaimCreate_API = ({ jsonBody }) => post(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
 
-export const delete_Claim_API = (jsonBody) => delwithPostBody(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
+export const delete_Claim_API = ({ jsonBody }) => delwithPostBody(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
 
 
 
