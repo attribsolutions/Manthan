@@ -569,31 +569,31 @@ const GRNAdd3 = (props) => {
 
                     {
                         (grnItemTableList.length > 0) ?
-                            <div className="row row-cols-2 save1" style={{ paddingBottom: 'center' }}>
-                                <Col sm={6}>
-                                    <SaveButton pageMode={pageMode}
-                                        loading={saveBtnloading}
-                                        editCreatedBy={editCreatedBy}
-                                        userAcc={userPageAccessState}
-                                        module={"GRN"} onClick={saveHandeller}
-                                    />
-                                </Col>
-
-                                <Col sm={6}>
-
-                                    {pageMode === mode.view ? null :
-                                        <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                                            <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" onChange={(event) => { hideHandler(event) }} />
-                                            <label className="btn btn-outline-primary" htmlFor="btncheck1">Hide</label>
-
-                                        </div>}
-                                </Col>
+                            <div>
+                                <div className="row row-cols-2 save1" style={{ paddingBottom: 'center' }}>
+                                    <Col sm={6}>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            editCreatedBy={editCreatedBy}
+                                            userAcc={userPageAccessState}
+                                            module={"GRN"} onClick={saveHandeller}
+                                        />
+                                    </Col>
+                                </div>
+                                <div className="HideButton">
+                                    <Col sm={6}>
+                                        {pageMode === mode.view ? null :
+                                            <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                                <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" onChange={(event) => { hideHandler(event) }} />
+                                                <label className="btn btn-outline-primary" htmlFor="btncheck1">Hide</label>
+                                            </div>}
+                                    </Col>
+                                </div>
 
                             </div>
 
-
                             :
-                            <div className="row save1"></div>
+                            null
                     }
                 </div >
 
