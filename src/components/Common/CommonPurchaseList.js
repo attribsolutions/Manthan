@@ -347,7 +347,8 @@ const CommonPurchaseList = (props) => {
                 selectRow={selectCheckParams.isShow ?
                   {
                     rowSelected: rowSelected(),
-                    nonSelected: nonSelectedRow()
+                    nonSelected: nonSelectedRow(),
+                    ...selectCheckParams
                   }
                   : undefined}
                 defaultSorted={defaultSorted}

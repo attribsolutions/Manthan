@@ -177,7 +177,7 @@ const CustomTable = ({
                                                 checked={isAllSelected}
                                                 onChange={handleSelectAllRows}
                                             />{' '}
-                                            <label>label</label>
+                                            <label>{selectRow.selectHeaderLabel}</label>
                                         </span>
                                     </Th>
                                 )}
