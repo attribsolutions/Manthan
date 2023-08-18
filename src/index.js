@@ -9,12 +9,14 @@ import store from "./store"
 
 import ConfirmDialog from "./CustomAlert/ConfirmDialog"
 import { ConfirmContextProvider } from "./CustomAlert/ConfirmContextProvider"
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const app = (
   <Provider store={store}>
     <BrowserRouter>
       <ConfirmContextProvider>
+        <ToastContainer />
         <App />
         <ConfirmDialog />
       </ConfirmContextProvider>

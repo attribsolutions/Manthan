@@ -180,7 +180,11 @@ const DynamicColumnHook = ({
                 </span>
               );
             }
-            return <span>{typeof cell === "boolean" ? String(cell) : cell}</span>;
+            return <>
+              <div data-testid="td-before" className="tdBefore">
+                {column.text}
+              </div>
+              {typeof cell === "boolean" ? String(cell) : cell}</>;
           },
         };
 

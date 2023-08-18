@@ -37,8 +37,6 @@ const PurchaseReturnMode3 = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
-
-    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const fileds = {
@@ -90,7 +88,8 @@ const PurchaseReturnMode3 = (props) => {
             });
 
             setTableData(UpdatedTableData);
-            dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${grand_total}`))
+            let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(grand_total)}`
+            dispatch(BreadcrumbShowCountlabel(count_label))
             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
             setReturnItemIDs(sendToSSbtnTableData.ReturnItemID)
         }
@@ -298,7 +297,7 @@ const PurchaseReturnMode3 = (props) => {
         row.roundedTotalAmount = caculate.roundedTotalAmount;
 
         let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+        let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(sumOfGrandTotal)}`
         dispatch(BreadcrumbShowCountlabel(count_label))
     }
 
