@@ -333,7 +333,7 @@ const CommonPurchaseList = (props) => {
                 responsive
                 bootstrap4
                 bordered={false}
-                selectRow={selectCheckParams.isShow ?
+                selectRow={(selectCheckParams.isShow) && (selectCheckParams.isRoleAccess) ?
                   selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
                   : undefined}
                 defaultSorted={defaultSorted}
