@@ -249,6 +249,6 @@ export const DELETE_INVOICE_DATA_EXPORT = 221
 
 export const RETURN_REPORT = 223
 
-export const PURCHASE_GST_REPORT=219
+export const PURCHASE_GST_REPORT = 219
 
-export const INVOICE_DATA_EXPORT=218
+export const INVOICE_DATA_EXPORT = 218
