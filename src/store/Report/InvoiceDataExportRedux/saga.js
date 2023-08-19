@@ -12,23 +12,32 @@ import { InvoiceDataExport_GoBtn_API, DeleteInvoiceDataExport_GoBtn_API } from "
 import { date_dmy_func } from "../../../components/Common/CommonFunction";
 
 function* InvoiceDataExport_Gen({ config }) {
-
     try {
-
         const response = yield call(InvoiceDataExport_GoBtn_API, config);
         response.Data["goBtnMode"] = config.goBtnMode;
-        const newresponse = yield response.Data.InvoiceExportSerializerDetails.map((i, key) => {
-            i["InvoiceDate"] = date_dmy_func(i.InvoiceDate)
-            return i
-        })
-        response.Data["InvoiceExportSerializerDetails"] = newresponse;
-        yield put(postInvoiceDataExport_API_Success(response.Data))
-    } catch (error) { yield put(postInvoiceDataExportApiErrorAction()) }
+
+        const newResponse = response.Data.InvoiceExportSerializerDetails.map((i) => {
+            // Convert quantity values to floats and format to remove trailing zeros
+            i["QtyInNo"] = parseFloat(i.QtyInNo);
+            i["QtyInKg"] = parseFloat(i.QtyInKg);
+            i["QtyInBox"] = parseFloat(i.QtyInBox);
+
+            // Format InvoiceDate using date_dmy_func
+            i["InvoiceDate"] = date_dmy_func(i.InvoiceDate);
+
+            return i;
+        });
+
+        response.Data["InvoiceExportSerializerDetails"] = newResponse;
+
+        yield put(postInvoiceDataExport_API_Success(response.Data));
+    } catch (error) {
+        yield put(postInvoiceDataExportApiErrorAction());
+    }
 }
 
 function* DeleteInvoiceDataExport_Gen({ config }) {
     try {
-
         const response = yield call(DeleteInvoiceDataExport_GoBtn_API, config);
         response.Data["btnId"] = config.btnId;
 
@@ -36,6 +45,9 @@ function* DeleteInvoiceDataExport_Gen({ config }) {
         const transformedDetails = response.Data.DeletedInvoiceExportSerializerDetails.map(i => ({
             ...i,
             InvoiceDate: date_dmy_func(i.InvoiceDate),
+            QtyInNo: parseFloat(i.QtyInNo), // Convert and remove trailing zeros
+            QtyInKg: parseFloat(i.QtyInKg),
+            QtyInBox: parseFloat(i.QtyInBox),
         }));
 
         response.Data["DeletedInvoiceExportSerializerDetails"] = transformedDetails;

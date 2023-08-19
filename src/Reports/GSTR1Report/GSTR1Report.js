@@ -11,6 +11,8 @@ import { MetaTags } from "react-meta-tags";
 import * as report from '../ReportIndex'
 import C_Report from "../../components/Common/C_Report";
 import { GST_R1_Report_API, GST_R1_Report_API_Success, GST_R3B_Report_API, GST_R3B_Report_API_Success } from "../../store/Report/GSTR1ReportRedux/action";
+import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const GSTR1Report = (props) => {
     const dispatch = useDispatch();
@@ -28,8 +30,6 @@ const GSTR1Report = (props) => {
 
     const reducers = useSelector(
         (state) => ({
-
-
             GstR3BReportData: state.GSTR1ReportReducer.GstR3BReportData,
             GstR1ReportData: state.GSTR1ReportReducer.GstR1ReportData,
             GstR3BBtnLoading: state.GSTR1ReportReducer.GstR3BBtnLoading,
@@ -66,7 +66,6 @@ const GSTR1Report = (props) => {
         };
     }, [userAccess])
 
-
     useEffect(() => {
         if ((GstR3BReportData.length !== 0)) {
 
@@ -85,14 +84,9 @@ const GSTR1Report = (props) => {
             link.download = `GST_R1_Report_From_(${values.FromDate})_To_(${values.ToDate}).xlsx`;
             link.click();
             dispatch(GST_R1_Report_API_Success([]))
-
         }
 
-
-
-
     }, [GstR3BReportData, GstR1ReportData])
-
 
     useEffect(() => {
         return () => {
@@ -102,6 +96,12 @@ const GSTR1Report = (props) => {
     }, [])
 
     function goButtonHandler(Type) {
+
+        if (_cfunc.loginSelectedPartyID() === 0) {
+            customAlert({ Type: 3, Message: "Please Select Party" });
+            return;
+        };
+
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
@@ -134,10 +134,18 @@ const GSTR1Report = (props) => {
         })
     }
 
+    function partyOnChngeButtonHandler() {
+        dispatch(GST_R3B_Report_API_Success([]))
+        dispatch(GST_R1_Report_API_Success([]))
+    }
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
+
+                <PartyDropdown_Common
+                    changeButtonHandler={partyOnChngeButtonHandler} />
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >

@@ -111,7 +111,8 @@ const SapLedger = (props) => {
         dispatch(SapLedger_Go_Button_API_Success([]))
         const page_Id = pageId.SAP_LEDGER
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
+        dispatch(commonPageField(page_Id));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
     }, []);
 
     const location = { ...history.location }

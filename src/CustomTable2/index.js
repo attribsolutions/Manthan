@@ -236,7 +236,7 @@ const CustomTable = ({
                                         </Td>
                                     )}
                                     {columns.map((column, colIndex) => (
-                                        <Td key={colIndex}>
+                                        <Td key={colIndex}  className={`text-align-${column.align || 'left'} ${column.classes || ''}`}>
                                             {!column.headerFormatter && <div data-testid="td-before" className="tdBefore">{column.text}</div>}
                                             {column.formatter
                                                 ? column.formatter(row[column.dataField], row, colIndex, column.formatExtraData)
