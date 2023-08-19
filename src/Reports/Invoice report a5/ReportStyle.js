@@ -340,12 +340,12 @@ export const reportFooter = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 100,
+                columnWidth: (data.BankData.length > 0) ? 100 : 30,
                 halign: 'lfet',
             },
             1: {
                 valign: "top",
-                columnWidth: 100,
+                columnWidth: (data.BankData.length > 0) ? 100 : 300,
                 halign: 'lfet',
             },
             2: {
