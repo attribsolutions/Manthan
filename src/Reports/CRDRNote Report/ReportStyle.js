@@ -156,15 +156,10 @@ export const reportHeder1 = (doc, data) => {
 
 }
 
-export const reportHeder2 = (doc, data) => {
-    doc.setFont('Tahoma')
-    doc.setFontSize(9)
-    doc.setFont(undefined, 'bold')
 
-}
+
 
 export const reportFooterForGoodsCredit = (doc, data) => {
-    debugger
     const a = data.CRDRNoteItems.map((data) => ({
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
@@ -313,7 +308,7 @@ export const reportFooterForCredit = (doc, data) => {
 }
 
 export const tableBodyforCreditGoods = (doc, data) => {
-    var options1 = {
+    var optionsForCreditGoods = {
         didParseCell: (data1) => {
             if (data1.row.cells[0].raw === "") {
                 data1.row.cells[4].colSpan = 2
@@ -404,7 +399,7 @@ export const tableBodyforCreditGoods = (doc, data) => {
     };
 
 
-    doc.autoTable(table.columns1, table.RowsForCreditGoods(data), options1,);
+    doc.autoTable(table.columnsForCreditGoods, table.RowsForCreditGoods(data), optionsForCreditGoods);
     const optionsTable4 = {
         margin: {
             left: 30, right: 30, bottom: 110
@@ -416,7 +411,7 @@ export const tableBodyforCreditGoods = (doc, data) => {
 }
 
 export const tableBodyforCredit = (doc, data) => {
-    var options = {
+    var optionsForPlainCredit = {
         didParseCell: (data1) => {
 
             if (data1.row.cells[0].raw === "Total Amount Paid") {
@@ -488,7 +483,7 @@ export const tableBodyforCredit = (doc, data) => {
     };
 
 
-    doc.autoTable(table.columns, table.Rows(data), options,);
+    doc.autoTable(table.columnsForPlainCredit, table.RowsForPlainCredit(data), optionsForPlainCredit,);
     const optionsTable4 = {
         margin: {
             left: 30, right: 30, bottom: 110
