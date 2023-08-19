@@ -133,10 +133,6 @@ const SapLedger = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Number(data.length > 0 && data.length - 1)}`))
-    }, [List])
-
     const PartyDropdown = partyList.map((data) => ({
         value: data.id,
         label: data.Name,
@@ -281,7 +277,9 @@ const SapLedger = (props) => {
                                         noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                         classes={"table align-middle table-nowrap table-hover"}
                                         headerWrapperClasses={"thead-light"}
-
+                                        onDataSizeChange={({ dataSize }) => {
+                                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 ? dataSize - 1 : 0}`));
+                                        }}
                                         {...toolkitProps.baseProps}
 
                                     />

@@ -109,7 +109,7 @@ const StockReport = (props) => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
+        // dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
     }, [tableData]);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
@@ -301,6 +301,9 @@ const StockReport = (props) => {
                                                     Record Not available
                                                 </div>
                                             }
+                                            onDataSizeChange={({ dataSize }) => {
+                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                            }}
                                             {...toolkitProps.baseProps}
                                         />
                                         {mySearchProps(toolkitProps.searchProps)}

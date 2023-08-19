@@ -134,7 +134,6 @@ const PurchaseGSTReport = (props) => {
                 setPartyDropdown('')
             }
         }
-        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Number(GSTRateWise ? PurchaseGSTRateWiseDetails.length > 0 && PurchaseGSTRateWiseDetails.length - 1 : PurchaseGSTDetails.length > 0 && PurchaseGSTDetails.length - 1)}`))
     }, [tableData]);
 
     function excelhandler() {
@@ -298,6 +297,7 @@ const PurchaseGSTReport = (props) => {
 
                     </div>
                 </div>
+
                 <ToolkitProvider
                     keyField={"id"}
                     data={GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails}
@@ -317,6 +317,9 @@ const PurchaseGSTReport = (props) => {
                                                     Record Not available
                                                 </div>
                                             }
+                                            onDataSizeChange={({ dataSize }) => {
+                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 ? dataSize - 1 : 0}`));
+                                            }}
                                             {...toolkitProps.baseProps}
                                         />
                                         {mySearchProps(toolkitProps.searchProps)}

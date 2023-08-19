@@ -9,6 +9,7 @@ import { date_dmy_func, convertOnlyTimefunc, convertTimefunc, currentDate_dmy, C
 
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.5)
     doc.line(570, 16, 30, 16);//horizontal line (Top)
     doc.line(30, 379, 30, 16);//vertical line (left)
     doc.line(570, 379, 570, 16);//vertical line (Right)
@@ -17,17 +18,14 @@ export const pageBorder = (doc) => {
 let initial_y = 0
 
 export const pageHeder = (doc, data) => {
-    doc.addFont("Arial", 'Normal')
-    doc.setFont('Arial')
+    doc.setFont('Tahoma')
     doc.setFont(undefined, 'bold')
     doc.setFontSize(15)
-    doc.text('TAX INVOICE', 180, 40,)
+    doc.text('TAX INVOICE', 180, 35,)
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 56, 30, 56) //Full horizontal line Bill by Upper line
+    doc.line(570, 45, 30, 45) //Full horizontal line Bill by Upper line
     doc.setFontSize(7)
-    doc.text('Original For Buyer', 500, 11,)
-
-
+    doc.text('Original For Buyer', 33, 28,)
 
 }
 
@@ -35,19 +33,14 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text("Billed by", 80, 65)  //bill by 
-    doc.text('Billed to', 280, 65) //billed to
-    doc.text('Details of Transport', 440, 65) //Details of Transport
-    doc.setDrawColor(0, 0, 0);
-    doc.line(570, 56, 30, 56);//horizontal line  when header on next page bottom line
-    doc.line(570, 68, 30, 68);// full horizontal bill by bill to below line 
+    doc.text("Billed by", 80, 55)    //bill by 
+    doc.text('Billed to', 280, 55)   //billed to
+    doc.text('Details of Transport', 440, 55) //Details of Transport
+    doc.line(570, 45, 30, 45);//horizontal line  when header on next page bottom line
+    doc.line(570, 60, 30, 60);// full horizontal bill by bill to below line 
     doc.line(30, 350, 30, 16);//vertical left 1
     doc.line(570, 350, 570, 16);//vertical left 2
-    // doc.line(408, initial_y, 408, 16);//vertical right 1
-    // console.log("good", initial_y)
-    // doc.line(220, initial_y, 220, 56);//vertical line between billby billto
-    // doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
-    // console.log("good", initial_y)
+
 
 
     var BilledByStyle = {
@@ -63,9 +56,10 @@ export const reportHeder1 = (doc, data) => {
         },
         bodyStyles: {
             columnWidth: 'wrap',
-            textColor: [30, 30, 30],
+            textColor: "black",
             cellPadding: 1,
             fontSize: 8,
+            // font: 'Arial',
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
         },
@@ -78,7 +72,7 @@ export const reportHeder1 = (doc, data) => {
 
         },
         tableLineColor: "black",
-        startY: 68,
+        startY: 62,
 
     };
     var BilledToStyle = {
@@ -94,9 +88,10 @@ export const reportHeder1 = (doc, data) => {
         },
         bodyStyles: {
             columnWidth: 'wrap',
-            textColor: [30, 30, 30],
+            textColor: "black",
             cellPadding: 1,
             fontSize: 8,
+            // font: 'Arial',
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
         },
@@ -108,7 +103,7 @@ export const reportHeder1 = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        startY: 68,
+        startY: 62,
 
     };
     var DetailsOfTransportStyle = {
@@ -128,6 +123,8 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 1,
             fontSize: 8,
+            textColor: "black",
+            // font: 'Arial',
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
         },
@@ -137,22 +134,17 @@ export const reportHeder1 = (doc, data) => {
                 columnWidth: 162,
                 halign: 'lfet',
             },
-
         },
         tableLineColor: "black",
 
-        startY: 68,
-
+        startY: 62,
     };
 
-    // let initial_y = 0
     const priLength = () => {
         let final_y = doc.previousAutoTable.finalY
-
         if (final_y > initial_y) {
             initial_y = final_y
         }
-
     }
 
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
@@ -167,23 +159,15 @@ export const reportHeder1 = (doc, data) => {
     console.log("third", doc.previousAutoTable.finalY)
     priLength()
 
-
 }
 
-export const reportHeder2 = (doc, data) => {
-    doc.setFont('Tahoma')
-    doc.setFontSize(9)
-    doc.setFont(undefined, 'bold')
-    // doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 65)
-    // doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 65)
-}
 
 export const reportHeder3 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
-    doc.line(408, 57, 408, 16);//vertical Line header
+    doc.line(408, 45, 408, 16);//vertical Line header
     // doc.line(570, 44, 408, 44) //horizontal line 1 billby upper
 
     doc.setFont(undefined, 'bold')
@@ -197,6 +181,7 @@ export const reportHeder3 = (doc, data) => {
 
 export const reportFooter = (doc, data) => {
     let stringNumber = toWords(Number(data.GrandTotal))
+    // doc.setFont('Tahoma')
     // doc.addImage(upi_qr_code, 'JPEG', 359, 310, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
@@ -204,7 +189,6 @@ export const reportFooter = (doc, data) => {
     doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
     doc.line(435, 295, 435, 379);//vertical right1 Qr Left 1
     doc.line(360, 308, 360, 379);//vertical right1 Sub Total
-    doc.setFont('Tahoma')
     doc.line(360, 340, 30, 340);//horizontal line (Bottom)
     doc.line(360, 362, 30, 362); //horizontal line Sginature upper line
     doc.line(570, 365, 435, 365); //horizontal line Sginature upper line 
@@ -267,7 +251,6 @@ export const reportFooter = (doc, data) => {
         doc.text(`Total GST:`, 440, 342,)
         doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 342, 'right')
 
-
     }
 
 
@@ -284,9 +267,8 @@ export const reportFooter = (doc, data) => {
     const Total = numberWithCommas(Number(data.GrandTotal).toFixed(2))
     doc.text(`${Total}`, 567, 376, 'right')
     doc.setFont(undefined, 'Normal')
-    doc.setFont('Tahoma')
+    // doc.setFont('Tahoma')
     doc.setFontSize(9)
-    doc.setFont('Tahoma')
     doc.setFontSize(8)
     doc.text(`Prepared by `, 35, 785,)
     doc.text(`Received By `, 180, 785,)
@@ -295,17 +277,12 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(10)
     doc.text(`${data.CustomerName} `, 140, 811,)
     doc.setFontSize(9)
-
-
-    doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
  of the nature and quantity which it/these purports to be `, 34, 348,)
     doc.text(`Signature `, 280, 372,)
     doc.text(`Prepared by :${data.PartyName} `, 35, 372,)
-
     doc.setFont(undefined, 'bold')
     doc.text(`Rupees:`, 33, 305,)
-    doc.addFont("Arial", 'Normal')
     doc.text(`${stringNumber}`, 65, 305,)
     var DetailsOfBankStyle = {
         didParseCell: (data1) => {
@@ -331,11 +308,11 @@ export const reportFooter = (doc, data) => {
         },
         bodyStyles: {
             columnWidth: 'wrap',
-            textColor: [30, 30, 30],
+            textColor: "black",
             cellPadding: 1,
             fontSize: 8,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
+            // fontStyle: 'bold',
+            lineColor: "black"
         },
         columnStyles: {
             0: {
@@ -401,8 +378,12 @@ export const tableBody = (doc, data) => {
                         TotalBox = Number(TotalBox) + Number(element.Quantity)
                     }
                 })
+                if (TotalBox === 0) {
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})`
+                } else {
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
+                }
 
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
             }
@@ -418,7 +399,7 @@ export const tableBody = (doc, data) => {
         theme: 'grid',
         headerStyles: {
             cellPadding: 1,
-            lineWidth: 1,
+            lineWidth: 0.3,
             valign: 'top',
             fontStyle: 'bold',
             halign: 'center',    //'center' or 'right'
@@ -497,10 +478,10 @@ export const tableBody = (doc, data) => {
         startY: initial_y,
 
     };
-
+    doc.setLineWidth(0.5);
     ////  lines when report  header line when table cordinates
     doc.line(408, initial_y, 408, 16);//vertical right 1
-    doc.line(220, initial_y, 220, 56);//vertical line between billby billto
+    doc.line(220, initial_y, 220, 45);//vertical line between billby billto
     doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
 
 
@@ -543,15 +524,22 @@ export const tableBodyWithIGST = (doc, data) => {
             }
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
+
                 let TotalBox = 0;
                 data.InvoiceItems.forEach((element, key) => {
                     if (element.PrimaryUnitName === "Box") {
                         TotalBox = Number(TotalBox) + Number(element.Quantity)
                     }
                 })
+                if (TotalBox === 0) {
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})`
+                } else {
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
+                }
 
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
+
                 data1.row.cells[8].colSpan = 2
+
             }
 
             if (data1.row.cells[1].raw === "Batch") {
@@ -559,13 +547,40 @@ export const tableBodyWithIGST = (doc, data) => {
 
             }
         },
+
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 8) {
+                if (data1.row.cells[8].raw === "          IGST           %         Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2; // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 4, startY1vertical, startXVertical - 4, endYvertical); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
+        },
+
+
         margin: {
             left: 30, right: 25, top: 55
         },
         theme: 'grid',
         headerStyles: {
             cellPadding: 1,
-            lineWidth: 1,
+            lineWidth: 0.3,
             valign: 'top',
             fontStyle: 'bold',
             halign: 'center',    //'center' or 'right'
@@ -635,8 +650,9 @@ export const tableBodyWithIGST = (doc, data) => {
         tableLineColor: "black",
         startY: initial_y,
     };
+    doc.setLineWidth(0.5)
     doc.line(408, initial_y, 408, 16);//vertical right 1
-    doc.line(220, initial_y, 220, 56);//vertical line between billby billto
+    doc.line(220, initial_y, 220, 45);//vertical line between billby billto
     doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
     doc.autoTable(table.columnsWithIGST, table.RowsWithIGST(data), options,);
     const optionsTable4 = {
@@ -650,12 +666,8 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 
-export const pageFooter = (doc, data, islast = 0, array = []) => {
-
+export const pageFooter = (doc, data) => {
     const pageCount = doc.internal.getNumberOfPages()
-
-
-
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
 
@@ -666,7 +678,7 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
             pageBorder(doc)
             reportHeder3(doc, data)
 
-            doc.text('Page' + String(pageCount) + ' of ' + String(i), 500, 390,)
+            doc.text('Page' + String(pageCount) + ' of ' + String(i), 532, 390,)
             doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
         }
 
@@ -676,15 +688,4 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
         reportHeder3(doc, data)
 
     }
-
-
-
-    // for (let j = 1; j <= pageCount; j++) {
-    //     doc.setPage(j)
-    //     doc.text('Page' + String(pageCount) + ' of ' + String(j), 500, 390,)
-    //     doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
-    // }
-
 }
-
-// original

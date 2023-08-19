@@ -92,7 +92,6 @@ const InvoiceDataExport = (props) => {
     }, [])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Number(InvoiceExportSerializerDetails.length)}`))
 
         if (goBtnMode === "downloadExcel") {
             if (InvoiceExportSerializerDetails.length > 0) {
@@ -257,8 +256,10 @@ const InvoiceDataExport = (props) => {
                                                     <div className="text-danger text-center ">
                                                         Record Not available
                                                     </div>
-
                                                 }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                }}
                                                 {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
