@@ -81,7 +81,12 @@ const DeleteInvoiceDataExport = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => { return () => { dispatch(postDeleteInvoiceDataExport_API_Success([])); } }, [])
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        return () => {
+            dispatch(postDeleteInvoiceDataExport_API_Success([]));
+        }
+    }, [])
 
     useEffect(() => {
 
