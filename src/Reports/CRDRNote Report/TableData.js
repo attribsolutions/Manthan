@@ -1,6 +1,6 @@
 import { concatDateAndTime } from "../../components/Common/CommonFunction";
 
-export const columns = [
+export const columnsForPlainCredit = [
     "Invoice Date",
     "Invoice Number",
     "Grand Total",
@@ -9,17 +9,18 @@ export const columns = [
 
 ];
 
-export const columns1 = [
+export const columnsForCreditGoods = [
     "HSN Item Name",
     "Quantity",
     "Basic Rate",
     "Basic Amount",
-    "CGST %",
+    "          CGST                    %                   Amount",
     "CGST Amount",
-    "SGST %",
+    "          SGST                    %                   Amount",
     "SGST Amount",
     "Total Amount"
 ];
+
 
 export const BilledBy = [
     "Billed by",
@@ -110,7 +111,7 @@ export const RowsForCreditGoods = (data) => {
     return returnArr;
 }
 
-export const Rows = (data) => {
+export const RowsForPlainCredit = (data) => {
 
     const { CRDRInvoices = [] } = data
     CRDRInvoices.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
