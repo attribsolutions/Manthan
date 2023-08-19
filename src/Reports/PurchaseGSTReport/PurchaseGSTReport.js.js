@@ -75,12 +75,12 @@ const PurchaseGSTReport = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.PURCHASE_GST_REPORT))
+        dispatch(commonPageField(pageId.PURCHASE_GST_REPORT));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(postPurchaseGSTReport_API_Success([]));
         }
-
     }, [])
 
     const [tableColumns] = DynamicColumnHook({ pageField });

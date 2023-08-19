@@ -71,7 +71,8 @@ const StockReport = (props) => {
 
         dispatch(getBaseUnit_ForDropDown());
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.STOCK_REPORT))
+        dispatch(commonPageField(pageId.STOCK_REPORT));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(stockReport_GoButton_API_Success([]));
@@ -302,6 +303,7 @@ const StockReport = (props) => {
                                                 </div>
                                             }
                                             onDataSizeChange={({ dataSize }) => {
+                                                
                                                 dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
                                             }}
                                             {...toolkitProps.baseProps}

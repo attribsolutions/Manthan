@@ -63,7 +63,8 @@ const InvoiceDataExport = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.INVOICE_DATA_EXPORT))
+        dispatch(commonPageField(pageId.INVOICE_DATA_EXPORT));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
         }

@@ -72,6 +72,7 @@ const GenericSaleReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
         return () => {
             setTableData([]);
         }
@@ -81,7 +82,7 @@ const GenericSaleReport = (props) => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
+
     }, [tableData]);
 
     const Party_Option = Distributor.map(i => ({
@@ -282,6 +283,9 @@ const GenericSaleReport = (props) => {
                                                         Record Not available
                                                     </div>
                                                 }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                }}
                                                 {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
