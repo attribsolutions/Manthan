@@ -74,7 +74,9 @@ export const Rows = (data) => {
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
         const pattern = /\((.*?)\)/;
+
         // const patterSeprateCharAndNo = /^(\d+\.\d+)/;
+
         if (currentItem.UnitName !== "") {
             const matchFound = currentItem.UnitName.match(pattern);
             const extractedText = matchFound[1];
@@ -91,8 +93,9 @@ export const Rows = (data) => {
 
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
+
             accumulator[key].PcsinNumber += Number(PcsinNumber);
-            accumulator[key].UnitName += Number(UnitName);
+            // accumulator[key].UnitName += Number(UnitName);
             accumulator[key].DiscountAmount += Number(DiscountAmount);
             accumulator[key].Quantity += Number(Quantity);
             accumulator[key].BasicAmount += Number(BasicAmount);
@@ -112,8 +115,10 @@ export const Rows = (data) => {
         return accumulator;
     }, {});
 
+    const TotalItemlength = Object.values(groupedItems).length;
+    data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
-
+        debugger
         let HSNcodes = ""
         if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
@@ -124,7 +129,7 @@ export const Rows = (data) => {
         if (data.SettingData.HSNCodeDigit === "3") {
             HSNcodes = element.HSNCode.slice(0, 8);
         }
-        
+
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
@@ -441,6 +446,12 @@ export const BankRow = (data) => {
         var reportArray = [
             [`A/C No: ${BankData.AccountNo}`, `IFSC Code: ${BankData.IFSC}`, `Branch: ${BankData.BranchName}`],
             [`Bank Name :${BankData.BankName}`]
+        ]
+    } else {
+
+        var reportArray = [
+            [],
+            [, `Bank details not provided. Please update Bank details`]
         ]
     }
     return reportArray;

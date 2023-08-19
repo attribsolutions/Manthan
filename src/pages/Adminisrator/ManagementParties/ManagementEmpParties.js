@@ -153,7 +153,7 @@ const ManagementEmpParties = (props) => {
 
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Management Count"} :${partyList.length}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${partyList.length}`))
     }, [partyList])
 
     const employeeListOptions = employeeList.map((index) => ({

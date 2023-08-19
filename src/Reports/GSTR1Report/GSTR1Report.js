@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, } from "../../components/Common/validationFunction";
-import { Go_Button } from "../../components/Common/CommonButton";
+import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import * as report from '../ReportIndex'
 import C_Report from "../../components/Common/C_Report";
-import { GST_R1_Report_API } from "../../store/Report/GSTR1ReportRedux/action";
+import { GST_R1_Report_API, GST_R1_Report_API_Success, GST_R3B_Report_API, GST_R3B_Report_API_Success } from "../../store/Report/GSTR1ReportRedux/action";
 
 const GSTR1Report = (props) => {
     const dispatch = useDispatch();
@@ -29,7 +29,12 @@ const GSTR1Report = (props) => {
     const reducers = useSelector(
         (state) => ({
 
-            ExcelData: state.GSTR1ReportReducer.GstR1ReportData,
+
+            GstR3BReportData: state.GSTR1ReportReducer.GstR3BReportData,
+            GstR1ReportData: state.GSTR1ReportReducer.GstR1ReportData,
+            GstR3BBtnLoading: state.GSTR1ReportReducer.GstR3BBtnLoading,
+            GstR1BtnLoading: state.GSTR1ReportReducer.GstR1BtnLoading,
+
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
@@ -37,7 +42,7 @@ const GSTR1Report = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, ExcelData = [] } = reducers;
+    const { userAccess, GstR3BReportData = [], GstR1ReportData = [], GstR1BtnLoading, GstR3BBtnLoading, } = reducers;
 
     const values = { ...state.values }
 
@@ -63,29 +68,52 @@ const GSTR1Report = (props) => {
 
 
     useEffect(() => {
-        if (ExcelData.length !== 0) {
-            const blob = new Blob([ExcelData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        if ((GstR3BReportData.length !== 0)) {
+
+            const blob = new Blob([GstR3BReportData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `GST_R3B_Report_From_(${values.FromDate})_To_(${values.ToDate}).xlsx`;
+            link.click();
+            dispatch(GST_R3B_Report_API_Success([]))
+        } else if ((GstR1ReportData.length !== 0)) {
+            const blob = new Blob([GstR1ReportData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
             link.download = `GST_R1_Report_From_(${values.FromDate})_To_(${values.ToDate}).xlsx`;
             link.click();
+            dispatch(GST_R1_Report_API_Success([]))
+
         }
 
-    }, [ExcelData])
 
 
-    function goButtonHandler() {
 
+    }, [GstR3BReportData, GstR1ReportData])
+
+
+    useEffect(() => {
+        return () => {
+            dispatch(GST_R3B_Report_API_Success([]))
+            dispatch(GST_R1_Report_API_Success([]))
+        }
+    }, [])
+
+    function goButtonHandler(Type) {
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "Party": _cfunc.loginSelectedPartyID()
         });
 
-        let config = { ReportType: report.PartyLedger, jsonBody }
-        dispatch(GST_R1_Report_API(config))
-
+        let config = { jsonBody }
+        if (Type === "GSTR1") {
+            dispatch(GST_R1_Report_API(config))
+        } else {
+            dispatch(GST_R3B_Report_API(config))
+        }
     }
 
     function fromdateOnchange(e, date) {
@@ -113,7 +141,7 @@ const GSTR1Report = (props) => {
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={5} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -127,7 +155,7 @@ const GSTR1Report = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={5} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -140,8 +168,30 @@ const GSTR1Report = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} loading={reducers.goBtnLoading} />
+                        <Col sm={2} className="mt-3" >
+                            <C_Button
+                                type="button"
+                                style={{ width: "90px" }}
+                                spinnerColor="white"
+                                loading={GstR1BtnLoading}
+                                className="btn btn-primary"
+                                onClick={() => goButtonHandler("GSTR1")}
+                            >
+                                GST R1
+                            </C_Button>
+                        </Col>
+
+                        <Col sm={2} className="mt-3" >
+                            <C_Button
+                                type="button"
+                                style={{ width: "90px" }}
+                                spinnerColor="white"
+                                loading={GstR3BBtnLoading}
+                                className="btn btn-primary"
+                                onClick={() => goButtonHandler("GSTR3B")}
+                            >
+                                GST R3B
+                            </C_Button>
                         </Col>
                     </div>
                 </div>

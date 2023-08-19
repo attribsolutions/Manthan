@@ -2,20 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { Change_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
-import { BreadcrumbShowCountlabel, SSDD_List_under_Company, getBaseUnit_ForDropDown } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
-import { stockReport_GoButton_API } from "../../store/Report/StockReport/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
+import DynamicColumnHook from "../../components/Common/TableCommonFunc";
+import { mode, pageId, url } from "../../routes/index"
+import * as XLSX from 'xlsx';
+import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
 
 const StockReport = (props) => {
 
@@ -29,20 +30,21 @@ const StockReport = (props) => {
 
     const [partyDropdown, setPartyDropdown] = useState("");
     const [unitDropdown, setUnitDropdown] = useState("");
+    const [tableData, setTableData] = useState([]);
+    const [btnMode, setBtnMode] = useState(0);
 
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.StockReportReducer.listBtnLoading,
-            tableData: state.StockReportReducer.StockReportGobtn,
+            goButtonData: state.StockReportReducer.StockReportGobtn,
             BaseUnit: state.ItemMastersReducer.BaseUnit,
             SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { tableData = [] } = reducers
 
-    const { userAccess, BaseUnit, SSDD_List } = reducers;
+    const { userAccess, BaseUnit, SSDD_List, pageField, goButtonData = [], } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -66,13 +68,51 @@ const StockReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(stockReport_GoButton_API_Success([]))
+
         dispatch(getBaseUnit_ForDropDown());
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.STOCK_REPORT))
+        return () => {
+            dispatch(commonPageFieldSuccess(null));
+            dispatch(stockReport_GoButton_API_Success([]));
+            dispatch(getBaseUnit_ForDropDownSuccess([]));
+        }
     }, [])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Stock Report Count:${tableData.length}`))
-    }, [tableData])
+
+        try {
+            if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
+                setBtnMode(0);
+                const { Data } = goButtonData
+                if (btnMode === 2) {
+                    const worksheet = XLSX.utils.json_to_sheet(Data);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, "Damage Stock Report");
+                    XLSX.writeFile(workbook, `Damage Stock Report.xlsx`);
+                    dispatch(stockReport_GoButton_API_Success([]));
+                }
+                else {
+                    setTableData(Data)
+                }
+            }
+            else if ((goButtonData.Status === true)) {
+                setTableData([]);
+            }
+            setBtnMode(0);
+        }
+        catch (e) { console.log(e) }
+
+    }, [goButtonData]);
+
+    useEffect(() => {
+        if (tableData.length === 0) {
+            setBtnMode(0)
+        }
+        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
+    }, [tableData]);
+
+    const [tableColumns] = DynamicColumnHook({ pageField })
 
     const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
         .map(data => ({
@@ -85,28 +125,31 @@ const StockReport = (props) => {
         label: i.Name
     }));
 
-    function goButtonHandler() {
+    function goButtonHandler(e, btnMode) {
         try {
-            const btnId = `gobtn-${url.STOCK_REPORT}`
-            if ((isSCMParty) && (partyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
-                return;
-            }
-            else if (unitDropdown === "") {
+            setBtnMode(btnMode)
+            if (unitDropdown === "") {
                 customAlert({
-                    Type: 4,
+                    Type: 3,
                     Message: "Please Select Unit"
                 })
+                setBtnMode(0)
                 return
             }
+            else if ((isSCMParty) && (partyDropdown === "")) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                setBtnMode(0)
+                return;
+            }
+
             const jsonBody = JSON.stringify({
                 "FromDate": fromdate,
                 "ToDate": todate,
                 "Unit": unitDropdown.value,
                 "PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
             });
-            let config = { jsonBody, btnId: btnId }
-            dispatch(stockReport_GoButton_API(config))
+
+            dispatch(stockReport_GoButton_API({ jsonBody }))
 
         } catch (error) { _cfunc.CommonConsole(error) }
     }
@@ -122,21 +165,6 @@ const StockReport = (props) => {
         newObj.todate = date
         setHeaderFilters(newObj)
     }
-
-    const pagesListColumns = [
-        {
-            text: "ItemName",
-            dataField: "ItemName",
-        },
-        {
-            text: "Quantity",
-            dataField: "ActualQty",
-        },
-        {
-            text: "Unit",
-            dataField: "Unit",
-        }
-    ];
 
     return (
         <React.Fragment>
@@ -174,7 +202,7 @@ const StockReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={(isSCMParty) ? 3 : 4}>
+                        <Col sm={(isSCMParty) ? 2 : 3}>
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-2 p-2"
                                     style={{ width: "85px" }}>Unit</Label>
@@ -182,7 +210,7 @@ const StockReport = (props) => {
                                     <Select
                                         name="Unit"
                                         value={unitDropdown}
-                                        isDisabled={tableData.length > 0 && true}
+                                        // isDisabled={tableData.length > 0 && true}
                                         isSearchable={true}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
@@ -190,7 +218,10 @@ const StockReport = (props) => {
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
                                         options={BaseUnit_DropdownOptions}
-                                        onChange={(e) => { setUnitDropdown(e) }}
+                                        onChange={(e) => {
+                                            setUnitDropdown(e);
+                                            setTableData([]);
+                                        }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -199,42 +230,62 @@ const StockReport = (props) => {
                         {isSCMParty &&
                             <Col sm={3}>
                                 <FormGroup className=" row mt-3 " >
-                                    <Label className="col-md-3 p-2"
+                                    <Label className="col-md-3 p-2 "
                                         style={{ width: "90px" }}>Party</Label>
-                                    <Col sm={8}>
+                                    <Col sm={7}>
                                         <Select
                                             name="Party"
                                             value={partyDropdown}
                                             isSearchable={true}
-                                            isDisabled={tableData.length > 0 && true}
+                                            // isDisabled={tableData.length > 0 && true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
                                             options={Party_Option}
-                                            onChange={(e) => { setPartyDropdown(e) }}
+                                            onChange={(e) => {
+                                                setPartyDropdown(e);
+                                                setTableData([]);
+                                            }}
                                         />
                                     </Col>
                                 </FormGroup>
                             </Col >
                         }
 
-                        <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
-                            {!tableData.length > 0 ?
-                                < Go_Button loading={reducers.listBtnLoading} onClick={(e) => goButtonHandler()} />
-                                : <Change_Button onClick={(e) => dispatch(stockReport_GoButton_API_Success([]))}
-                                />
-                            }
+                        <Col sm={1} className="mt-3" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={btnMode === 1 && true}
+                                className="btn btn-success"
+                                onClick={(e) => goButtonHandler(e, 1)}
+                            >
+                                Show
+                            </C_Button>
+
+                        </Col>
+
+                        <Col sm={2} className="mt-3 ">
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={btnMode === 2 && true}
+                                className="btn btn-primary"
+                                onClick={(e) => goButtonHandler(e, 2)}
+                            >
+                                Excel Download
+                            </C_Button>
                         </Col>
                     </div>
 
                 </div>
 
                 <ToolkitProvider
-                    keyField={"Item"}
+                    keyField={"id"}
                     data={tableData}
-                    columns={pagesListColumns}
+                    columns={tableColumns}
                     search
                 >
                     {(toolkitProps,) => (
@@ -243,7 +294,7 @@ const StockReport = (props) => {
                                 <Col xl="12">
                                     <div className="table-responsive table">
                                         <BootstrapTable
-                                            keyField={"Item"}
+                                            keyField={"id"}
                                             classes={"table  table-bordered table-hover"}
                                             noDataIndication={
                                                 <div className="text-danger text-center ">
@@ -266,4 +317,4 @@ const StockReport = (props) => {
     )
 }
 
-export default StockReport;
+export default StockReport;;

@@ -2,38 +2,49 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { Go_Button } from "../../components/Common/CommonButton";
+import { C_Button, Change_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel } from "../../store/actions";
+import Select from "react-select";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { damageStockReport_GoButton_API, damageStockReport_GoButton_API_Success } from "../../store/Report/DamageStockReportRedux/action";
+import DynamicColumnHook from "../../components/Common/TableCommonFunc";
+import { mode, pageId, url } from "../../routes/index"
+import * as XLSX from 'xlsx';
 
 const DamageStockReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const isSCMParty = _cfunc.loginIsSCMParty();
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
 
+    const [partyDropdown, setPartyDropdown] = useState("");
+    const [unitDropdown, setUnitDropdown] = useState("");
+    const [tableData, setTableData] = useState([]);
+    const [btnMode, setBtnMode] = useState(0);
+   
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.DamageStockReportReducer.listBtnLoading,
-            tableData: state.DamageStockReportReducer.StockReportGobtn,
+            goButtonData: state.DamageStockReportReducer.StockReportGobtn,
+            BaseUnit: state.ItemMastersReducer.BaseUnit,
+            SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { tableData = [] } = reducers
 
-    const { userAccess } = reducers;
+    const { userAccess, BaseUnit, SSDD_List, pageField, goButtonData = [], } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -57,18 +68,90 @@ const DamageStockReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(damageStockReport_GoButton_API_Success([]))
+
+        dispatch(getBaseUnit_ForDropDown());
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.DAMAGE_STOCK_REPORT))
+        return () => {
+            dispatch(commonPageFieldSuccess(null));
+            dispatch(damageStockReport_GoButton_API_Success([]));
+            dispatch(getBaseUnit_ForDropDownSuccess([]));
+        }
     }, [])
 
     useEffect(() => {
-        if (tableData.length > 0) {
-            dispatch(BreadcrumbShowCountlabel(`Damage Stock Report Count:${tableData.length}`))
 
+        try {
+            if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
+                setBtnMode(0);
+                const { Data } = goButtonData
+                if (btnMode === 2) {
+                    const worksheet = XLSX.utils.json_to_sheet(Data);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, "Damage Stock Report");
+                    XLSX.writeFile(workbook, `Damage Stock Report.xlsx`);
+                    dispatch(damageStockReport_GoButton_API_Success([]));
+                }
+                else {
+                    setTableData(Data)
+                }
+            }
+            else if ((goButtonData.Status === true)) {
+                setTableData([]);
+            }
+            setBtnMode(0);
         }
-    }, [tableData])
+        catch (e) { console.log(e) }
 
-    function goButtonHandler() {
-        dispatch(damageStockReport_GoButton_API({ partyId: _cfunc.loginPartyID() }))
+    }, [goButtonData]);
+
+    useEffect(() => {
+        if (tableData.length === 0) {
+            setBtnMode(0)
+        }
+        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
+    }, [tableData]);
+
+    const [tableColumns] = DynamicColumnHook({ pageField })
+
+    const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
+        .map(data => ({
+            value: data.id,
+            label: data.Name
+        }));
+
+    const Party_Option = SSDD_List.map(i => ({
+        value: i.id,
+        label: i.Name
+    }));
+
+    function goButtonHandler(e, btnMode) {
+        try {
+            setBtnMode(btnMode)
+            if (unitDropdown === "") {
+                customAlert({
+                    Type: 3,
+                    Message: "Please Select Unit"
+                })
+                setBtnMode(0)
+                return
+            }
+            else if ((isSCMParty) && (partyDropdown === "")) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                setBtnMode(0)
+                return;
+            }
+
+            const jsonBody = JSON.stringify({
+                "FromDate": fromdate,
+                "ToDate": todate,
+                "Unit": unitDropdown.value,
+                "PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
+            });
+
+            dispatch(damageStockReport_GoButton_API({ jsonBody }))
+
+        } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     function fromdateOnchange(e, date) {
@@ -83,28 +166,13 @@ const DamageStockReport = (props) => {
         setHeaderFilters(newObj)
     }
 
-    const pagesListColumns = [
-        {
-            text: "ItemName",
-            dataField: "ItemName",
-        },
-        {
-            text: "Quantity",
-            dataField: "Qty",
-        },
-        {
-            text: "Unit",
-            dataField: "UnitName",
-        }
-    ];
-
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
                 <div className="px-2 c_card_filter text-black mb-1" >
                     <div className="row" >
-                        <Col sm={4} >
+                        <Col sm={(isSCMParty) ? 2 : 3} className="">
                             <FormGroup className=" mb-2 row mt-3 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "66px" }}>FromDate</Label>
@@ -119,7 +187,7 @@ const DamageStockReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={4} >
+                        <Col sm={(isSCMParty) ? 2 : 3} className="">
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "60px" }}>ToDate</Label>
@@ -134,19 +202,90 @@ const DamageStockReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
+                        <Col sm={(isSCMParty) ? 2 : 3}>
+                            <FormGroup className=" row mt-3 " >
+                                <Label className="col-sm-2 p-2"
+                                    style={{ width: "85px" }}>Unit</Label>
+                                <Col sm={7}>
+                                    <Select
+                                        name="Unit"
+                                        value={unitDropdown}
+                                        // isDisabled={tableData.length > 0 && true}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={BaseUnit_DropdownOptions}
+                                        onChange={(e) => {
+                                            setUnitDropdown(e);
+                                            setTableData([]);
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col >
 
-                            < Go_Button loading={reducers.listBtnLoading} onClick={(e) => goButtonHandler()} />
+                        {isSCMParty &&
+                            <Col sm={3}>
+                                <FormGroup className=" row mt-3 " >
+                                    <Label className="col-md-3 p-2 "
+                                        style={{ width: "90px" }}>Party</Label>
+                                    <Col sm={7}>
+                                        <Select
+                                            name="Party"
+                                            value={partyDropdown}
+                                            isSearchable={true}
+                                            // isDisabled={tableData.length > 0 && true}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={Party_Option}
+                                            onChange={(e) => {
+                                                setPartyDropdown(e);
+                                                setTableData([]);
+                                            }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col >
+                        }
 
+                        <Col sm={1} className="mt-3" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={btnMode === 1 && true}
+                                className="btn btn-success"
+                                onClick={(e) => goButtonHandler(e, 1)}
+                            >
+                                Show
+                            </C_Button>
+
+                        </Col>
+
+                        <Col sm={2} className="mt-3 ">
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={btnMode === 2 && true}
+                                className="btn btn-primary"
+                                onClick={(e) => goButtonHandler(e, 2)}
+                            >
+                                Excel Download
+                            </C_Button>
                         </Col>
                     </div>
 
                 </div>
 
                 <ToolkitProvider
-                    keyField={"Item"}
+                    keyField={"id"}
                     data={tableData}
-                    columns={pagesListColumns}
+                    columns={tableColumns}
                     search
                 >
                     {(toolkitProps,) => (
@@ -155,7 +294,7 @@ const DamageStockReport = (props) => {
                                 <Col xl="12">
                                     <div className="table-responsive table">
                                         <BootstrapTable
-                                            keyField={"Item"}
+                                            keyField={"id"}
                                             classes={"table  table-bordered table-hover"}
                                             noDataIndication={
                                                 <div className="text-danger text-center ">
@@ -178,4 +317,4 @@ const DamageStockReport = (props) => {
     )
 }
 
-export default DamageStockReport;
+export default DamageStockReport;;

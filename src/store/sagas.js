@@ -94,6 +94,7 @@ import InvoiceDataExportSaga from "./Report/InvoiceDataExportRedux/saga"
 import PurchaseGSTReportSaga from "./Report/PurchaseGSTRedux/saga"
 import DamageStockReportSaga from "./Report/DamageStockReportRedux/saga"
 import GstR1ReportSaga from "./Report/GSTR1ReportRedux/saga"
+import ReturnReportSaga from "./Report/ReturnReportRedux/saga"
 
 
 
@@ -185,6 +186,10 @@ export default function* rootSaga() {
     fork(PurchaseGSTReportSaga),
     fork(InvoiceDataExportSaga),
     fork(GstR1ReportSaga),
+    fork(ReturnReportSaga),
+
+
+    
 
     
 

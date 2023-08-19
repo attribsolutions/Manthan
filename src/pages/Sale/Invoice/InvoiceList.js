@@ -133,7 +133,7 @@ const InvoiceList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
+        // dispatch(BreadcrumbShowCountlabel(`${"Count"} :0`))
         dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
 
         setmodal(false);
@@ -142,6 +142,7 @@ const InvoiceList = () => {
         }
         return () => {
             dispatch(UpdateVehicleInvoice_Success([]));
+            dispatch(invoiceListGoBtnfilterSucccess([]));
         }
 
     }, [dispatch]);
@@ -453,6 +454,7 @@ const InvoiceList = () => {
                             filters={hederFilters}
                             forceNewBtnView={false}
                             e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
+                            totalAmountShow={true}
                         />
                         : null
                 }

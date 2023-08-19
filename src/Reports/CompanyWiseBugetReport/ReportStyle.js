@@ -22,14 +22,18 @@ export const pageHeder = (doc, data) => {
     doc.setFontSize(10)
     doc.text(`Company wise Budget Report period ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `, 300, 75, 'center')
     doc.text(`Expiry From Retailer(Approved/NonApproved)`, 300, 85, 'center')
-    doc.text(`GT And Xpress Claim`, 300, 95, 'center')
+    // doc.text(`GT And Xpress Claim`, 300, 95, 'center')
     doc.line(570, 52, 30, 52);//horizontal Line Below Name
 }
 export const tableBody = (doc, data) => {
     let tableStartY = 100;
     // Loop for multiple table 
+    debugger
     data.ReasonwiseMasterClaim.forEach((index1) => {
+
         Object.keys(index1).forEach((index2) => {
+            doc.text(`${index2}`, 300, (tableStartY - 5), 'center')
+
 
             const options = {
 
@@ -115,8 +119,7 @@ export const tableBody = (doc, data) => {
                 startY: tableStartY,
             }
             doc.autoTable(table.columns, table.Rows(index1[index2]), options);
-            console.log(doc.previousAutoTable.finalY + 15)
-            tableStartY = doc.previousAutoTable.finalY + 15;
+            tableStartY = doc.previousAutoTable.finalY + 20;
         })
     })
     const ProductWiseoptions = {

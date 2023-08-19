@@ -1,5 +1,5 @@
-import { call, delay, put, takeLatest } from "redux-saga/effects";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
+import { call, put, takeLatest } from "redux-saga/effects";
+import { CommonConsole, loginJsonBody, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
   GetCompanyByDivisionTypeID_For_Dropdown,
   GetDistrictOnState_For_Dropdown,
@@ -36,17 +36,14 @@ import {
   UPDATE_PARTY_ID,
   PARTY_ADDRESS_DELETE_ID,
 } from "./actionTypes";
-import * as url from "../../../routes/route_url";
 
-function* Get_Party_GenFun({ subPageMode }) {   // Only CompanyID is Required
+function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
 
-  var IsRetailer = subPageMode === url.RETAILER_LIST ? 1 : 0
-
-  var jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ IsRetailer: IsRetailer } });
+  var JsonBody = !(jsonBody) ? { ...loginJsonBody(), PartyID: loginPartyID(), IsRetailer: 0 } : jsonBody
 
   try {
 
-    const response = yield call(Party_Master_Get_API, jsonBody);
+    const response = yield call(Party_Master_Get_API, JSON.stringify(JsonBody));
     function address(arr) {
       let result = ''
       const ind = arr.PartyAddress.find((index) => {
@@ -134,7 +131,6 @@ function* GetDistrictOnState_saga({ id }) {
   }
 }
 
-
 //get addresstypes
 function* GetAddressTypes_saga() {
   try {
@@ -167,7 +163,6 @@ function* GetCompanyByDivisionTypeID_GenFun({ id }) {
     yield put(PartyApiErrorAction());
   }
 }
-
 
 function* PartyAddressDelete_GenFun({ config }) {
   const { deleteId } = config

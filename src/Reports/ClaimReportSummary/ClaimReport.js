@@ -12,10 +12,11 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
-import { postClaimMasterCreate_API, postMasterClaimCreat_API_Success } from "../../store/Report/ClaimSummary/action";
+import { deleteClaimSuccess, delete_Claim_ID, postClaimMasterCreate_API, postMasterClaimCreat_API_Success } from "../../store/Report/ClaimSummary/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { deltBtnCss } from "../../components/Common/ListActionsButtons";
 
 const SelectedMonth = () => _cfunc.getCurrentMonthAndYear()
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -25,6 +26,12 @@ const fileds = () => ({
     PartyName: "",
     SelectedMonth: SelectedMonth(),
 })
+const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
+const ClaimBtnCss = "badge badge-soft-info font-size-18 btn btn-info waves-effect waves-light w-xxs border border-light"
+const CWClaimBtnCss = "badge badge-soft-primary font-size-18 btn btn-primary waves-effect waves-light w-xxs border border-light"
+
+
+
 
 const ClaimSummary = (props) => {
 
@@ -39,16 +46,17 @@ const ClaimSummary = (props) => {
 
     const reducers = useSelector(
         (state) => ({
+            deleteMsg: state.ClaimSummaryReducer.deleteMsg,
             ClaimSummaryGobtn: state.ClaimSummaryReducer.ClaimSummaryGobtn,
             pdfdata: state.PdfReportReducers.pdfdata,
-            ReportBtnLoading: (state.PdfReportReducers.ReportBtnLoading) || (state.ClaimSummaryReducer.CreateClaimLoading),
+            ReportBtnLoading: (state.PdfReportReducers.ReportBtnLoading) || (state.ClaimSummaryReducer.CreateClaimLoading) || (state.ClaimSummaryReducer.DeleteBtnLoading),
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, supplier, pdfdata, ClaimSummaryGobtn } = reducers;
+    const { userAccess, supplier, pdfdata, ClaimSummaryGobtn, deleteMsg } = reducers;
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -96,6 +104,18 @@ const ClaimSummary = (props) => {
         }
     }, [ClaimSummaryGobtn])
 
+
+    useEffect(() => {
+        if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
+            dispatch(deleteClaimSuccess({ Status: false }))
+            customAlert({
+                Type: 1,
+                Message: deleteMsg.Message,
+            })
+            return
+        }
+    }, [deleteMsg])
+
     function goButtonHandler(reportType, row, btnId) {
 
         const jsonBody = JSON.stringify({
@@ -115,6 +135,24 @@ const ClaimSummary = (props) => {
 
         if ((reportType === report.CustomerWiseReturn) || (reportType === report.ClaimSummary)) {
             dispatch(getpdfReportdata(ClaimSummary_API, config))
+        }
+    }
+
+    const deleteHandler = async (row, btnId) => {
+        const jsonBody = JSON.stringify({
+            "FromDate": row.selectedDate.FromDate,
+            "ToDate": row.selectedDate.ToDate,
+            "Party": row.id,
+        });
+        let config = { jsonBody, btnId: btnId }
+
+        const isConfirmed = await customAlert({
+            Type: 7,
+            Message: "Do you want To Delete Claim ?",
+        });
+
+        if (isConfirmed) {
+            dispatch(delete_Claim_ID(config))
         }
     }
 
@@ -145,7 +183,7 @@ const ClaimSummary = (props) => {
             text: "Action",
             dataField: "",
             style: {
-                width: "600px"
+                width: "300px"
             },
             formatExtraData: { btnLoading: reducers.ReportBtnLoading, selectedDate: values },
             formatter: (value, row, key, { btnLoading, selectedDate }) => {
@@ -158,56 +196,86 @@ const ClaimSummary = (props) => {
                                 className="mt-3  mb-3">
                                 <C_Button
                                     loading={btnLoading === `gobtn-${"createClaim"}-${row.id}-${key}`}
-                                    forceDisabled={btnLoading}
                                     type="button"
+                                    style={{ width: "100px" }}
+                                    title="Create Claim"
                                     spinnerColor="white"
-                                    className="btn btn-success w-md  "
+                                    className={createClaimBtnCss}
                                     onClick={(e) => { goButtonHandler("createClaim", row, `gobtn-${"createClaim"}-${row.id}-${key}`) }}
                                 >
-                                    Create
+                                    create<i className="fas fa-pencil-alt"></i>
+
                                 </C_Button>
                             </div>
 
                             <div
                                 className="mt-3  mb-3">
+
+
                                 <C_Button
-                                    loading={btnLoading === `gobtn-${report.ClaimSummary}-${row.id}-${key}`}
+                                    loading={btnLoading === `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`}
                                     type="button"
-                                    forceDisabled={btnLoading}
+                                    title="Customer Wise Summary"
                                     spinnerColor="white"
-                                    className="btn btn-primary w-md  "
-                                    onClick={(e) => { goButtonHandler(report.ClaimSummary, row, `gobtn-${report.ClaimSummary}-${row.id}-${key}`) }}
+                                    className={CWClaimBtnCss}
+                                    onClick={(e) => { goButtonHandler(report.CustomerWiseReturn, row, `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`) }}
                                 >
-                                    Claim Summary
+                                    <i className="fas fa-file-contract"></i>
+
                                 </C_Button>
+
                             </div>
 
 
                             <div
                                 className="mt-3 mb-3 ">
                                 <C_Button
-                                    loading={btnLoading === `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`}
+                                    loading={btnLoading === `gobtn-${report.ClaimSummary}-${row.id}-${key}`}
                                     type="button"
-                                    forceDisabled={btnLoading}
+                                    title="Item Wise Claim Summary"
                                     spinnerColor="white"
-                                    className="btn btn-primary w-md  "
-                                    onClick={(e) => { goButtonHandler(report.CustomerWiseReturn, row, `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`) }}
+                                    className={CWClaimBtnCss}
+                                    onClick={(e) => { goButtonHandler(report.ClaimSummary, row, `gobtn-${report.ClaimSummary}-${row.id}-${key}`) }}
                                 >
-                                    Customer wise return
+                                    <i className=" fas fa-file-signature"></i>
+
                                 </C_Button>
+
                             </div>
                             <div
                                 className="mt-3  mb-3">
                                 <C_Button
                                     loading={btnLoading === `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`}
-                                    forceDisabled={btnLoading}
+
                                     type="button"
+                                    title="Master Claim Summary"
                                     spinnerColor="white"
-                                    className="btn btn-primary w-md  "
+                                    className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.CompanyWiseBudget, row, `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`) }}
                                 >
-                                    Master Claim
+                                    <i className="far fa-file-alt"></i>
                                 </C_Button>
+
+
+
+
+                            </div>
+                            <div
+                                className="mt-3  mb-3">
+                                <C_Button
+                                    loading={btnLoading === `deletebtn-${row.id}-${key}`}
+                                    type="button"
+                                    title="Delete Claim"
+                                    spinnerColor="white"
+                                    className={deltBtnCss}
+                                    onClick={(e) => { deleteHandler(row, `deletebtn-${row.id}-${key}`) }}
+                                >
+                                    <i className="mdi mdi-delete font-size-20"></i>
+                                </C_Button>
+
+
+
+
                             </div>
                         </div>
                     </>
@@ -223,10 +291,10 @@ const ClaimSummary = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3" >
-                                <Label className="col-sm-2 p-2 ">Month</Label>
-                                <Col sm="7">
+                        <Col sm={6}>
+                            <FormGroup className="mb- row mt-2" >
+                                <Label className="col-sm-1 p-2 ">Month</Label>
+                                <Col sm="4">
                                     <Input className="form-control"
                                         type="month"
                                         defaultValue={values.SelectedMonth}

@@ -340,12 +340,12 @@ export const reportFooter = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 100,
+                columnWidth: (data.BankData.length > 0) ? 100 : 30,
                 halign: 'lfet',
             },
             1: {
                 valign: "top",
-                columnWidth: 100,
+                columnWidth: (data.BankData.length > 0) ? 100 : 300,
                 halign: 'lfet',
             },
             2: {
@@ -402,7 +402,7 @@ export const tableBody = (doc, data) => {
                     }
                 })
 
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length})  (${TotalBox} Box)`
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
             }
@@ -550,7 +550,7 @@ export const tableBodyWithIGST = (doc, data) => {
                     }
                 })
 
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.InvoiceItems.length})  (${TotalBox} Box)`
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
                 data1.row.cells[8].colSpan = 2
             }
 
@@ -651,9 +651,10 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 export const pageFooter = (doc, data, islast = 0, array = []) => {
-    
+
     const pageCount = doc.internal.getNumberOfPages()
-    console.log(pageCount)
+
+
 
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
@@ -664,16 +665,25 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
             pageHeder(doc, data)
             pageBorder(doc)
             reportHeder3(doc, data)
+
+            doc.text('Page' + String(pageCount) + ' of ' + String(i), 500, 390,)
+            doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
         }
+
+    } else {
+        pageBorder(doc)
+        pageHeder(doc, data)
+        reportHeder3(doc, data)
+
     }
 
 
 
-    for (let j = 1; j <= pageCount; j++) {
-        doc.setPage(j)
-        doc.text('Page' + String(pageCount) + ' of ' + String(j), 500, 390,)
-        doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
-    }
+    // for (let j = 1; j <= pageCount; j++) {
+    //     doc.setPage(j)
+    //     doc.text('Page' + String(pageCount) + ' of ' + String(j), 500, 390,)
+    //     doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
+    // }
 
 }
 

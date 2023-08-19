@@ -123,7 +123,7 @@ const OrderSummary = (props) => {
         if (showTableData.length === 0) {
             setBtnMode(0)
         }
-        dispatch(BreadcrumbShowCountlabel(`OrderSummary Count:${showTableData.length}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:${showTableData.length}`))
     }, [showTableData]);
 
     const downloadExcelFunction = (excelTableData) => {
@@ -380,9 +380,9 @@ const OrderSummary = (props) => {
                     <CardBody className="c_card_body text-black">
                         <Row>
                             <Col sm={4} >
-                                <FormGroup className="row">
+                                <FormGroup className="row mt-n3 mb-n4">
                                     <Label className="col-4 p-2" >By Date Group</Label>
-                                    <Col sm="4">
+                                    <Col sm="4" style={{ marginTop: '9px', }}>
                                         <Input type="checkbox"
                                             checked={groupByDate}
                                             onChange={groupByDateHandler} />
@@ -391,7 +391,7 @@ const OrderSummary = (props) => {
                             </Col>
 
                             <Col sm={4} >
-                                <FormGroup className="row">
+                                <FormGroup className="row mt-n3 mb-n4">
                                     <Label className="col-4 p-2" >By Supplier Name</Label>
                                     <Col sm="4" style={{ marginTop: '9px', }}>
                                         <Input type="checkbox"
@@ -402,7 +402,7 @@ const OrderSummary = (props) => {
                                 </FormGroup>
                             </Col>
                             <Col sm={4} >
-                                <FormGroup className="row">
+                                <FormGroup className="row mt-n3 mb-n4">
                                     <Label className="col-4 p-2" >By Customer Name</Label>
                                     <Col sm="4" style={{ marginTop: '9px', }}>
                                         <Input type="checkbox"

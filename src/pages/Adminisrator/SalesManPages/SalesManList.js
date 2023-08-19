@@ -13,7 +13,7 @@ import {
     updateSalesManIDSuccess,
     getSalesManlistSuccess
 } from "../../../store/Administrator/SalesManRedux/actions";
-import {  loginSelectedPartyID } from "../../../components/Common/CommonFunction";
+import { loginJsonBody, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
@@ -69,7 +69,10 @@ const SalesManList = (props) => {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
-            dispatch(getSalesManlist());
+            dispatch(getSalesManlist({
+                ...loginJsonBody(),
+                PartyID: loginSelectedPartyID()
+            }));
         } catch (error) { }
         return
     };

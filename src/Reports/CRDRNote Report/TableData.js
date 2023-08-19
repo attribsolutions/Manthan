@@ -1,6 +1,6 @@
 import { concatDateAndTime } from "../../components/Common/CommonFunction";
 
-export const columns = [
+export const columnsForPlainCredit = [
     "Invoice Date",
     "Invoice Number",
     "Grand Total",
@@ -9,17 +9,18 @@ export const columns = [
 
 ];
 
-export const columns1 = [
+export const columnsForCreditGoods = [
     "HSN Item Name",
     "Quantity",
-    "Rate",
-    "Basic Amt",
-    "CGST %",
-    "CGST Amt",
-    "SGST %",
-    "SGST Amt",
-    "Total Amt"
+    "Basic Rate",
+    "Basic Amount",
+    "          CGST                    %                   Amount",
+    "CGST Amount",
+    "          SGST                    %                   Amount",
+    "SGST Amount",
+    "Total Amount"
 ];
+
 
 export const BilledBy = [
     "Billed by",
@@ -33,7 +34,8 @@ export const Details = [
     " ",
 ]
 
-export const Rows1 = (data) => {
+export const RowsForCreditGoods = (data) => {
+
     const { CRDRNoteItems = [] } = data
     CRDRNoteItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -45,7 +47,7 @@ export const Rows1 = (data) => {
     let totalQuantity = 0
 
     CRDRNoteItems.forEach((element, key) => {
-        
+
         const tableitemRow = [
             element.ItemName,
             `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
@@ -75,13 +77,11 @@ export const Rows1 = (data) => {
                 "",
                 "",
                 "",
+                `${Number(totalCGst).toFixed(2)}`,
                 "",
-                // `CGST :${parseFloat(totalCGst).toFixed(2)}`,
+                `${Number(totalSGst).toFixed(2)}`,
                 "",
-                "",
-                // `SGST :${parseFloat(totalSGst).toFixed(2)}`,
-                "",
-                `TotalAmt :${parseFloat(totalAmount).toFixed(2)}`,
+                `${Number(totalAmount).toFixed(2)}`,
             ];
         };
 
@@ -111,8 +111,8 @@ export const Rows1 = (data) => {
     return returnArr;
 }
 
-export const Rows = (data) => {
-    
+export const RowsForPlainCredit = (data) => {
+
     const { CRDRInvoices = [] } = data
     CRDRInvoices.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -144,9 +144,12 @@ export const Rows = (data) => {
                 "Total Amount Paid",
                 "",
                 "",
-                // `Total:${parseFloat(Total).toFixed(2)}`,
-                `${parseFloat(TotalPaidAmount).toFixed(2)}`,
-                // `BalnceAmt:${parseFloat(TotalBalanceAmt).toFixed(2)}`,
+                "",
+                "",
+                "",
+                `${Number(Total).toFixed(2)}`,
+                ``,
+                ``,
 
 
 

@@ -17,7 +17,7 @@ import {
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import {Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { useHistory } from "react-router-dom";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -34,7 +34,7 @@ const LoadingSheetList = () => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [pageMode] = useState(mode.defaultList);
- 
+
     const reducers = useSelector(
         (state) => ({
             loading: state.LoadingSheetReducer.loading,
@@ -62,7 +62,7 @@ const LoadingSheetList = () => {
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
+        // dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler()
         }
@@ -145,6 +145,12 @@ const LoadingSheetList = () => {
                                         style={{ width: "83px" }}>From Date</Label>
                                     <Col sm="7">
                                         <C_DatePicker
+                                            options={{
+                                                maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                            }}
                                             name='fromdate'
                                             value={fromdate}
                                             onChange={fromdateOnchange}
@@ -158,6 +164,12 @@ const LoadingSheetList = () => {
                                         style={{ width: "65px" }}>To Date</Label>
                                     <Col sm="7">
                                         <C_DatePicker
+                                            options={{
+                                                maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                            }}
                                             nane='todate'
                                             value={todate}
                                             onChange={todateOnchange}
@@ -189,6 +201,7 @@ const LoadingSheetList = () => {
                             ButtonMsgLable={"LoadingSheet"}
                             deleteName={"LoadingSheetNo"}
                             MasterModal={LoadingSheet}
+                            totalAmountShow={true}
                         />
 
                         : null

@@ -68,6 +68,7 @@ const InvoiceDataExport = (props) => {
             dispatch(commonPageFieldSuccess(null));
         }
     }, []);
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -84,10 +85,14 @@ const InvoiceDataExport = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => { return () => { dispatch(postInvoiceDataExport_API_Success([])); } }, [])
+    const [tableColumns] = DynamicColumnHook({ pageField })
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Invoice count"} :${Number(InvoiceExportSerializerDetails.length)}`))
+        return () => { dispatch(postInvoiceDataExport_API_Success([])); }
+    }, [])
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Number(InvoiceExportSerializerDetails.length)}`))
 
         if (goBtnMode === "downloadExcel") {
             if (InvoiceExportSerializerDetails.length > 0) {
@@ -98,8 +103,6 @@ const InvoiceDataExport = (props) => {
             }
         }
     }, [tableData]);
-
-
 
     function goButtonHandler(goBtnMode) {
 
@@ -148,7 +151,9 @@ const InvoiceDataExport = (props) => {
         value: i.id,
         label: i.Name
     }));
-    const [tableColumns] = DynamicColumnHook({ pageField, })
+
+
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -232,12 +237,12 @@ const InvoiceDataExport = (props) => {
 
                     </div>
                 </div>
-                
+
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="PartyID"
-                        data={goBtnMode === "showOnTable" ? InvoiceExportSerializerDetails : [{}]}
-                        columns={goBtnMode === "showOnTable" ? tableColumns : [{}]}
+                        data={InvoiceExportSerializerDetails}
+                        columns={tableColumns}
                         search
                     >
                         {(toolkitProps,) => (
@@ -249,12 +254,12 @@ const InvoiceDataExport = (props) => {
                                                 keyField="PartyID"
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
-                                                     goBtnMode === "showOnTable" && <div className="text-danger text-center ">
+                                                    <div className="text-danger text-center ">
                                                         Record Not available
                                                     </div>
-                                                    
+
                                                 }
-                                            {...toolkitProps.baseProps}
+                                                {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
                                         </div>

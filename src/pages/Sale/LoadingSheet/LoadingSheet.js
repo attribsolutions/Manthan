@@ -102,7 +102,7 @@ const LoadingSheet = (props) => {
     }, []);
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`LoadingSheet Count:${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:${Data.length}`))
     }, [GoButton]);
 
     const location = { ...history.location }
@@ -357,6 +357,12 @@ const LoadingSheet = (props) => {
                                                 name='Date'
                                                 value={values.Date}
                                                 onChange={DateOnchange}
+                                                options={{
+                                                    maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
                                             />
                                         </Col>
 

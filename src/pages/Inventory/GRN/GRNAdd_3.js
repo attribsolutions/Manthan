@@ -114,7 +114,7 @@ const GRNAdd3 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true)) {
-            debugger
+
             const grnDetails = { ...items.Data }
             const InvoiceID = grnDetails.GRNReferences[0].Invoice
             setInvoiceID(InvoiceID)
@@ -136,7 +136,7 @@ const GRNAdd3 = (props) => {
 
 
     useEffect(() => {
-        debugger
+
         if (hideMsg.Status === true && hideMsg.StatusCode === 200) {
             // setState(() => resetFunction(fileds, state)) // Clear form values 
             customAlert({
@@ -155,6 +155,7 @@ const GRNAdd3 = (props) => {
     }, [hideMsg]);
 
     useEffect(() => {
+
         if ((hasShowloction || hasShowModal)) {
             let hasEditVal = null
             if (hasShowloction) {
@@ -329,11 +330,19 @@ const GRNAdd3 = (props) => {
         },
     ];
 
-    const hideHandler = (event) => {
+    const hideHandler = async (event) => {
         let isHide = event.target.checked
         const HideValue = isHide ? "1" : "0"
         let config = { InvoiceId: InvoiceID, IsHide: HideValue }
-        dispatch(hideInvoiceForGRFAction(config))
+
+        const isConfirmed = await customAlert({
+            Type: 7,
+            Message: "Do you want To Hide Invoice ?",
+        });
+
+        if (isConfirmed) {
+            dispatch(hideInvoiceForGRFAction(config))
+        }
 
     }
 
@@ -560,30 +569,31 @@ const GRNAdd3 = (props) => {
 
                     {
                         (grnItemTableList.length > 0) ?
-                            <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
-                                <Col sm={6}>
-                                    <SaveButton pageMode={pageMode}
-                                        loading={saveBtnloading}
-                                        editCreatedBy={editCreatedBy}
-                                        userAcc={userPageAccessState}
-                                        module={"GRN"} onClick={saveHandeller}
-                                    />
-                                </Col>
-                                <Col sm={6}>
-
-
-                                    <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                                        <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" onChange={(event) => { hideHandler(event) }} />
-                                        <label className="btn btn-outline-primary" htmlFor="btncheck1">Hide</label>
-
-                                    </div>
-                                </Col>
+                            <div>
+                                <div className="row row-cols-2 save1" style={{ paddingBottom: 'center' }}>
+                                    <Col sm={6}>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            editCreatedBy={editCreatedBy}
+                                            userAcc={userPageAccessState}
+                                            module={"GRN"} onClick={saveHandeller}
+                                        />
+                                    </Col>
+                                </div>
+                                <div className="HideButton">
+                                    <Col sm={6}>
+                                        {pageMode === mode.view ? null :
+                                            <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                                <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" onChange={(event) => { hideHandler(event) }} />
+                                                <label className="btn btn-outline-primary" htmlFor="btncheck1">Hide</label>
+                                            </div>}
+                                    </Col>
+                                </div>
 
                             </div>
 
-
                             :
-                            <div className="row save1"></div>
+                            null
                     }
                 </div >
 

@@ -26,6 +26,7 @@ export function numberWithCommas(x) {
 
 
 export function toWords(number) {
+  
   // Define word mappings
   const units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
   const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];

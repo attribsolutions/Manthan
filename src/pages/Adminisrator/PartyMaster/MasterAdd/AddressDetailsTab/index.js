@@ -115,6 +115,10 @@ const AddressTabForm = forwardRef((props, ref) => {
         window.open("https://foscos.fssai.gov.in/");
     }
 
+
+
+
+
     const AddressTab = (
         <Row>
             <Card className="text-black" style={{ backgroundColor: "whitesmoke" }}>
@@ -181,6 +185,8 @@ const AddressTabForm = forwardRef((props, ref) => {
                                 className=" p-1 mt-3 "
                                 color="btn btn-outline-primary border-2 font-size-10 "
                                 type="button"
+                                title={`After Redirect Click on FBO Search`}
+
                                 onClick={FSSAIverifyhandler}
                             > Verify FSSAI
                             </Button>

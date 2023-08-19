@@ -37,8 +37,6 @@ const PurchaseReturnMode3 = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
-
-    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const fileds = {
@@ -90,7 +88,8 @@ const PurchaseReturnMode3 = (props) => {
             });
 
             setTableData(UpdatedTableData);
-            dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${grand_total}`))
+            let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(grand_total)}`
+            dispatch(BreadcrumbShowCountlabel(count_label))
             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
             setReturnItemIDs(sendToSSbtnTableData.ReturnItemID)
         }
@@ -298,7 +297,7 @@ const PurchaseReturnMode3 = (props) => {
         row.roundedTotalAmount = caculate.roundedTotalAmount;
 
         let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+        let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(sumOfGrandTotal)}`
         dispatch(BreadcrumbShowCountlabel(count_label))
     }
 
@@ -329,6 +328,7 @@ const PurchaseReturnMode3 = (props) => {
             .map(item => ({ SubReturn: parseInt(item.trim()) }));
 
         const ReturnItems = tableData.reduce((filterdItem, i) => {
+
             if (Number(i.Quantity) > 0) {
                 const calculate = return_discountCalculate_Func(i);
 
@@ -367,10 +367,10 @@ const PurchaseReturnMode3 = (props) => {
                     "primarySourceID": i.primarySourceID,
                     "ReturnItemImages": [],
                 });
-                return filterdItem
             }
+            return filterdItem
         }, [])
-        
+
         try {
             const jsonBody = JSON.stringify({
                 ReturnDate: values.ReturnDate,
@@ -398,7 +398,7 @@ const PurchaseReturnMode3 = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
+                <div className="page-content" >
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
@@ -487,7 +487,7 @@ const PurchaseReturnMode3 = (props) => {
                                     <React.Fragment>
                                         <Row>
                                             <Col xl="12">
-                                                <div className="table-responsive table" style={{ minHeight: "60vh" }}>
+                                                <div className="table-responsive table" style={{ minHeight: "45vh" }}>
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         id="table_Arrow"
@@ -516,7 +516,7 @@ const PurchaseReturnMode3 = (props) => {
 
                     {
                         tableData.length > 0 ?
-                            <div style={{ marginLeft: '-35px' }}>
+                            <div >
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"} >
                                         <SaveButton

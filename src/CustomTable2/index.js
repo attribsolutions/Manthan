@@ -1,31 +1,43 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import './CustomTable.scss';
 import { customTableSearch } from '../components/Common/SearchBox/MySearch';
-import BootstrapTable from 'react-bootstrap-table-next';
-import CustomPagination from './CustomPagination';
-import { useDispatch, useSelector } from 'react-redux';
-import { BreadcrumbNonDeleteButton } from '../store/actions';
+
+import TablePagination from './TablePagination';
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
+import { Input } from 'reactstrap';
 
 const CustomTable = ({
-    data, // table row data
-    columns, // table columns
-    onDataSizeChange = () => { }, // table data changes by search, pagination, sort - callback function
-    itemsPerPage = 15, // Number of items per page
-    ...rest
+    keyField,
+    data,
+    columns,
+    itemsPerPage = 15,
+    defaultSorted = [],
+    noDataIndication,
+    selectRow = undefined,
+    defaultSearchText,
+    onDataSizeChange,
+    updatedRowBlinkId
 }) => {
     const [searchText, setSearchText] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-  
-    // Function to handle search
-    const handleSearch = (val) => {
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [sortField, setSortField] = useState(null);
+    const [sortOrder, setSortOrder] = useState('asc');
+
+    const handleSearch = useCallback((val) => {
         setSearchText(val);
         setCurrentPage(1);
-    };
+    }, []);
 
-    // Call the main theme search function
-    customTableSearch({ onSearch: handleSearch });
+    useEffect(() => {
+        customTableSearch({ onSearch: handleSearch });
+    }, [handleSearch]);
 
-    // Function to filter the data based on search text
+    useEffect(() => {
+        setSelectedRows([]);
+    }, [data]);
+
     const filteredData = useMemo(() => {
         return data.filter((row) =>
             columns.some((column) => {
@@ -40,47 +52,196 @@ const CustomTable = ({
         );
     }, [data, searchText, columns]);
 
-    const pageCount = Math.ceil(filteredData.length / itemsPerPage);
+    const sortedData = useMemo(() => {
+        if (sortField && sortOrder) {
+            return [...filteredData].sort((a, b) => {
+                const aValue = a[sortField];
+                const bValue = b[sortField];
+
+                if (typeof aValue === 'number' && typeof bValue === 'number') {
+                    return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+                }
+                if (typeof aValue === 'string' && typeof bValue === 'string') {
+                    return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+                }
+                if (aValue === null || aValue === undefined) {
+                    return sortOrder === 'asc' ? -1 : 1;
+                }
+                if (bValue === null || bValue === undefined) {
+                    return sortOrder === 'asc' ? 1 : -1;
+                }
+                return sortOrder === 'asc' ? aValue.toString().localeCompare(bValue.toString()) : bValue.toString().localeCompare(aValue.toString());
+            });
+        }
+        return filteredData;
+    }, [filteredData, sortField, sortOrder]);
+
+    const pageCount = Math.ceil(sortedData.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = currentPage * itemsPerPage;
+    const slicedData = sortedData.slice(startIndex, endIndex);
 
-    const slicedData = useMemo(() => {
-        // ...
-        onDataSizeChange({ dataCount: filteredData.length }); // Notify the parent about the filtered data count
-        return filteredData.slice(startIndex, endIndex);
-    }, [filteredData, startIndex, endIndex]);
-
-    // Function to handle page change
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };
-
-  
-    const rowStyles = (row) => {
-        if (row.IsRecordDeleted) {
-            return { textDecoration: 'line-through' };
+    useEffect(() => {
+        if (defaultSorted.length > 0) {
+            const defaultSort = defaultSorted[0];
+            setSortField(defaultSort.dataField);
+            setSortOrder(defaultSort.order);
         }
-        return {};
-    };
+    }, [defaultSorted]);
+
+    useEffect(() => {
+        if (defaultSearchText !== undefined && defaultSearchText !== null) {
+            setSearchText(defaultSearchText);
+            setCurrentPage(1);
+        }
+    }, [defaultSearchText]);
+
+    useEffect(() => {
+        onDataSizeChange({ dataCount: sortedData.length, filteredData: sortedData });
+    }, [sortedData]);
+
+    const handlePageChange = useCallback((page) => {
+        setCurrentPage(page);
+    }, []);
+
+    const handleSelectAllRows = useCallback(() => {
+        const nonSelected = selectRow && selectRow.nonSelected ? selectRow.nonSelected : [];
+        const selectableRows = slicedData.reduce((selectable, row) => {
+            if (!nonSelected.includes(row[keyField])) {
+                selectable.push(row[keyField]);
+            }
+            return selectable;
+        }, []);
+
+        if (selectedRows.length === selectableRows.length) {
+            setSelectedRows([]);
+            data.forEach(row => {
+                if (selectableRows.includes(row[keyField])) {
+                    row.selectCheck = false;
+                }
+            });
+        } else {
+            data.forEach(row => {
+                if ((selectableRows.includes(row[keyField]))) {
+                    row.selectCheck = true;
+                }
+            });
+            setSelectedRows(selectableRows);
+        }
+    }, [selectedRows, keyField, slicedData, selectRow, data]);
+
+    const handleSort = useCallback((field) => {
+        if (sortField === field) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortField(field);
+            setSortOrder('asc');
+        }
+    }, [sortField, sortOrder]);
+
+    const handleRowSelect = useCallback((e, row) => {
+        const rowId = row[keyField];
+        data.forEach(row => {
+            if (row[keyField] === rowId) {
+                row.selectCheck = e.target.checked;
+            }
+        });
+        setSelectedRows(prevSelectedRows => {
+            if (prevSelectedRows.includes(rowId)) {
+                return prevSelectedRows.filter((selectedRow) => selectedRow !== rowId);
+            } else {
+                return [...prevSelectedRows, rowId];
+            }
+        });
+    }, [selectedRows, keyField, data]);
+
+    const isAllSelected = slicedData.every(row => selectedRows.includes(row[keyField]) || (selectRow && selectRow.nonSelected.includes(row[keyField])));
 
     return (
-        <div className="table-responsive table "  >
-
-            <BootstrapTable data={slicedData} columns={columns}
-                rowStyle={rowStyles}
-                {...rest} />
-
-            {/* Pagination component */}
-            <div>
-                <CustomPagination
-                    pageCount={pageCount}
-                    currentPage={currentPage}
-                    handlePageChange={handlePageChange}
-                />
+        <div className="table-rep-plugin">
+            <div className="table-responsive mb-0" data-pattern="priority-columns">
+                <Table className="table table-bordered custom-table">
+                    <Thead>
+                        <Tr>
+                            {selectRow && (
+                                <Th>
+                                    <span>
+                                        <Input
+                                            type="checkbox"
+                                            checked={isAllSelected}
+                                            onChange={handleSelectAllRows}
+                                        />{' '}
+                                        <label>{selectRow.selectHeaderLabel}</label>
+                                    </span>
+                                </Th>
+                            )}
+                            {columns.map((column, key) => (
+                                <Th
+                                    key={key}
+                                    onClick={() => {
+                                        if (column.sort) {
+                                            handleSort(column.dataField);
+                                        }
+                                    }}
+                                >
+                                    <div className="column-header">
+                                        {column.headerFormatter ? column.headerFormatter(column, key) : <span className="column-text">{column.text}</span>}
+                                        {column.sort && (
+                                            <span className={`sort-icon ${sortField === column.dataField ? 'active' : ''}`}>
+                                                {sortField === column.dataField && sortOrder === 'asc' && '↑'}
+                                                {sortField === column.dataField && sortOrder === 'desc' && '↓'}
+                                            </span>
+                                        )}
+                                    </div>
+                                </Th>
+                            ))}
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {slicedData.length === 0 && noDataIndication && (
+                            <Tr>
+                                <Td colSpan={selectRow ? columns.length + 1 : columns.length}>
+                                    {noDataIndication}
+                                </Td>
+                            </Tr>
+                        )}
+                        {slicedData.map((row) => {
+                            const shouldBlink = updatedRowBlinkId !== undefined && row[keyField] === updatedRowBlinkId;
+                            return (
+                                <Tr
+                                    key={row[keyField]}
+                                    data-selected={selectedRows.includes(row[keyField])}
+                                    data-record-deleted={row.IsRecordDeleted}
+                                    className={shouldBlink ? 'row-blink' : ''}
+                                >
+                                    {selectRow && (
+                                        <Td>
+                                            <Input
+                                                type="checkbox"
+                                                className='check-disabled'
+                                                checked={selectedRows.includes(row[keyField])}
+                                                disabled={(selectRow && selectRow.nonSelected.includes(row[keyField]))}
+                                                onChange={(e) => handleRowSelect(e, row)}
+                                            />
+                                        </Td>
+                                    )}
+                                    {columns.map((column, colIndex) => (
+                                        <Td key={colIndex}>
+                                            {!column.headerFormatter && <div data-testid="td-before" className="tdBefore">{column.text}</div>}
+                                            {column.formatter
+                                                ? column.formatter(row[column.dataField], row, colIndex, column.formatExtraData)
+                                                : row[column.dataField]}
+                                        </Td>
+                                    ))}
+                                </Tr>
+                            );
+                        })}
+                    </Tbody>
+                </Table>
+                <TablePagination pageCount={pageCount} currentPage={currentPage} handlePageChange={handlePageChange} />
             </div>
         </div>
     );
 };
 
 export default CustomTable;
-
