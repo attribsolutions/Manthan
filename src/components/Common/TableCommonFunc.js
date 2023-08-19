@@ -58,7 +58,7 @@ const DynamicColumnHook = ({
   userAccState,
 }) => {
   const { listBtnLoading } = reducers;
-  const [tableColumns, setTableColumns] = useState([{ text: "ID", dataField: "id" }]);
+  const [tableColumns, setTableColumns] = useState([{ }]);
   const [defaultSorted, setDefaultSorted] = useState([]);
   const [pageOptions, setPageOptions] = useState({
     custom: true,
@@ -180,7 +180,9 @@ const DynamicColumnHook = ({
                 </span>
               );
             }
-            return <span>{typeof cell === "boolean" ? String(cell) : cell}</span>;
+            return <>
+                {column.text}
+              {typeof cell === "boolean" ? String(cell) : cell}</>;
           },
         };
 
