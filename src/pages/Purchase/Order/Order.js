@@ -292,7 +292,7 @@ const Order = (props) => {
             setGoBtnDissable(false)
             // setOrderAmount(0);
             setTermsAndConTable([]);
-            setorderTypeSelect('');
+            // setorderTypeSelect('');
             setisOpen_assignLink(false)
             setOrderItemTable([])
             setsupplierSelect('');

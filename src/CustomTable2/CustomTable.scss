@@ -4,21 +4,114 @@
      justify-content: end;
 
  }
+
  #c__pagination li {
-         display: inline-block;
-         padding: 5px 10px;
-         margin: 0 2px;
-         border-radius: 35%;
-         cursor: pointer;
-         transition: background-color 0.3s ease;
-     }
+     display: inline-block;
+     padding: 5px 10px;
+     margin: 0 2px;
+     border-radius: 35%;
+     cursor: pointer;
+     transition: background-color 0.3s ease;
+ }
 
-     #c__pagination li:hover {
-         background-color: #ddd;
-     }
+ #c__pagination li:hover {
+     background-color: #ddd;
+ }
 
-     #c__pagination li.active {
-         background-color: rgb(72, 90, 247);
-         color: #fff;
+ #c__pagination li.active {
+     background-color: rgb(72, 90, 247);
+     color: #fff;
+ }
+
+
+
+
+
+.row-blink {
+    animation: blink-animation 2s 3;  /* 2 seconds duration, 2 iterations */
+  }
+  
+  @keyframes blink-animation {
+    0%, 100% {
+      background-color: transparent;
+    }
+    50% {
+    //   background-color: #511db329; /* Soft purple color */
+      background-color: #ffffcc; /* Pale yellow color */
+    }
+  }
+
+ /* Style for selected rows */
+ .table-rep-plugin table tbody tr[data-selected="true"] {
+     background-color: lightblue !important;
+ }
+
+ /* Style for IsRecordDeleted rows */
+ .table-rep-plugin table tbody tr[data-record-deleted="true"] {
+     text-decoration: line-through !important;
+     color: gray !important;
+ }
+
+ /* Striped background for alternate rows */
+ .table-rep-plugin table tbody tr:nth-child(odd) {
+     background-color: #f2f2f2;
+ }
+
+ .check-disabled:disabled {
+     opacity: 0.5;
+     background-color: #ababab82 !important;
+ }
+
+
+
+
+ .column-header {
+     display: flex;
+     align-items: center;
+ }
+
+ .column-text {
+     flex-grow: 1;
+     margin-right: 0.25rem;
+ }
+
+ .sort-icon {
+     font-weight: normal;
+     color: #aaa;
+     font-size: 0.75rem;
+     cursor: pointer;
+     transition: color 0.2s;
+
+     &.active {
+         font-weight: bold !important;
+         font-size: 16px;
+         color: #333;
      }
- 
+ }
+
+
+
+
+
+
+ //  .table-container {
+ //     overflow-y: auto;
+ //     max-height: calc(100vh - 200px); /* Adjust the value as needed */
+ // }
+
+ // .table-container::-webkit-scrollbar {
+ //     width: 0.01em; /* Set to adjust the width of the scrollbar track */
+ // }
+
+ // .table-container::-webkit-scrollbar-thumb {
+ //     background-color: transparent;
+ // }
+
+ /* Hide horizontal scrollbar */
+ // .table-container::-webkit-scrollbar-horizontal {
+ //     height: 0.5em; /* Set to adjust the height of the scrollbar track */
+ // }
+
+ // .table-container::-webkit-scrollbar-thumb-horizontal {
+ //     background-color: transparent;
+ // }

@@ -284,16 +284,25 @@ const CommonPurchaseList = (props) => {
     }
   }
 
-  const [tableColumns, defaultSorted, pageOptions,] = DynamicColumnHook({
+  const selectRowCheckBox = () => (
+    selectCheckParams.isShow ?
+      {
+        nonSelectedRow: nonSelectedRow(),
+        selectHeaderLabel: selectCheckParams.selectHeaderLabel
+      }
+      : undefined
+  )
+
+  const [tableColumns, defaultSorted,] = DynamicColumnHook({
     pageField,
     reducers: props.reducers,
+    selectRowCheckBox,
     secondLastColumn,
     thirdLastColumn,
     lastColumn,
     makeBtnColumn,
     userAccState: userAccState
   })
-
 
   function rowSelected() {
     return tableList.map((index) => { return (index.selectCheck) })
@@ -315,6 +324,7 @@ const CommonPurchaseList = (props) => {
     return noSelectedIds;
   };
 
+  const { updatedRowBlinkId } = history.location
   if (!(userAccState === "")) {
 
     return (
@@ -328,19 +338,24 @@ const CommonPurchaseList = (props) => {
             {(tableProps) => (
               <CustomTable
                 keyField={"id"}
+                updatedRowBlinkId={updatedRowBlinkId}
                 data={tableProps}
                 columns={tableColumns}
                 responsive
                 bootstrap4
                 bordered={false}
-                selectRow={(selectCheckParams.isShow) && (selectCheckParams.isRoleAccess) ?
-                  selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
+                selectRow={selectCheckParams.isShow ?
+                  {
+                    rowSelected: rowSelected(),
+                    nonSelected: nonSelectedRow(),
+                    ...selectCheckParams
+                  }
+
                   : undefined}
                 defaultSorted={defaultSorted}
                 striped={true}
                 classes={"table  table-bordered table-hover"}
-                onDataSizeChange={({ dataCount, filteredData }) => {
-                  // dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
+                onDataSizeChange={({ dataCount, filteredData = [] }) => {
 
                   if (totalAmountShow === true) {
                     let totalAmount = filteredData.reduce((total, item) => {
