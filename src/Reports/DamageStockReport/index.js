@@ -32,7 +32,7 @@ const DamageStockReport = (props) => {
     const [unitDropdown, setUnitDropdown] = useState("");
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
-   
+
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.DamageStockReportReducer.listBtnLoading,
@@ -109,7 +109,6 @@ const DamageStockReport = (props) => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
     }, [tableData]);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
@@ -301,6 +300,9 @@ const DamageStockReport = (props) => {
                                                     Record Not available
                                                 </div>
                                             }
+                                            onDataSizeChange={({ dataSize }) => {
+                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                            }}
                                             {...toolkitProps.baseProps}
                                         />
                                         {mySearchProps(toolkitProps.searchProps)}
