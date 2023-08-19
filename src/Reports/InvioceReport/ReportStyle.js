@@ -457,15 +457,15 @@ export const tableBody = (doc, data) => {
         theme: 'grid',
         headerStyles: {
             cellPadding: 2,
-            lineWidth: 1,
+            lineWidth: 0.3,
             valign: 'top',
             fontStyle: 'bold',
             halign: 'center',    //'center' or 'right'
             fillColor: "white",
-            textColor: [0, 0, 0], //Black     
+            textColor: "black", //Black     
             fontSize: 7,
             rowHeight: 10,
-            lineColor: [0, 0, 0]
+            lineColor: "black"
         },
         bodyStyles: {
             textColor: [30, 30, 30],
@@ -595,7 +595,7 @@ export const tableBodyWithIGST = (doc, data) => {
         theme: 'grid',
         headerStyles: {
             cellPadding: 1,
-            lineWidth: 1,
+            lineWidth: 0.3,
             valign: 'top',
             fontStyle: 'bold',
             halign: 'center',    //'center' or 'right'

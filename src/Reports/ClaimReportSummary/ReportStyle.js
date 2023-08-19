@@ -136,23 +136,19 @@ export const tableBody = (doc, data) => {
 
                 data1.row.cells[0].styles.fontSize = 7
                 data1.row.cells[1].styles.fontSize = 7
-                data1.row.cells[8].styles.fontSize = 7
                 data1.row.cells[9].styles.fontSize = 7
                 data1.row.cells[10].styles.fontSize = 7
+                data1.row.cells[11].styles.fontSize = 7
 
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[8].styles.fontStyle = "bold"
                 data1.row.cells[9].styles.fontStyle = "bold"
                 data1.row.cells[10].styles.fontStyle = "bold"
+                data1.row.cells[11].styles.fontStyle = "bold"
 
             }
 
-            if (data1.row.cells[1].raw === "HSN Item Name") {
-
-                data1.row.cells[8].colSpan = 2
-                data1.row.cells[10].colSpan = 2
-            }
+           
 
         },
         margin: {
@@ -182,10 +178,10 @@ export const tableBody = (doc, data) => {
 
             0: {
                 valign: "top",
-                columnWidth: 137,
+                columnWidth: 110,
             },
             1: {
-                columnWidth: 40,
+                columnWidth: 35,
                 halign: 'right',
             },
             2: {
@@ -197,7 +193,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             4: {
-                columnWidth: 40,
+                columnWidth: 35,
                 halign: 'right',
             },
             5: {
@@ -222,7 +218,11 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             10: {
-                columnWidth: 43,
+                columnWidth: 40,
+                halign: 'right',
+            },
+            11: {
+                columnWidth: 40,
                 halign: 'right',
             },
 

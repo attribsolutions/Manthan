@@ -3,7 +3,7 @@ import { invoice } from "../ReportIndex";
 import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
-    "SR",
+    "SN",
     "HSN Item Name",
     "Quantity (UOM)",
     "MRP",
@@ -18,7 +18,7 @@ export const columns = [
     "Amount",
 ];
 export const columnsWithIGST = [
-    "SR",
+    "SN",
     "HSN Item Name",
     "Quantity (UOM)",
     "MRP",
@@ -26,7 +26,7 @@ export const columnsWithIGST = [
     "Discount",
     "Discount Amount ",
     "Taxable Amount",
-    "          IGST           %        Amount",
+    "          IGST           %         Amount",
     "IGST Amount",
     "Amount",
 ];
@@ -75,21 +75,15 @@ export const Rows = (data) => {
         let PcsinNumberUnit = ""
         const pattern = /\((.*?)\)/;
 
-        // const patterSeprateCharAndNo = /^(\d+\.\d+)/;
-
         if (currentItem.UnitName !== "") {
             const matchFound = currentItem.UnitName.match(pattern);
             const extractedText = matchFound[1];
             console.log(extractedText); // Output: "19.0 No"
             const match = extractedText.split(" ")
-            // const match = extractedText.match(patterSeprateCharAndNo);
             PcsinNumber = match[0];
             PcsinNumberUnit = match[1];
 
         }
-
-
-
 
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
@@ -264,7 +258,8 @@ export const RowsWithIGST = (data) => {
         }
         return accumulator;
     }, {});
-
+    const TotalItemlength = Object.values(groupedItems).length;
+    data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
