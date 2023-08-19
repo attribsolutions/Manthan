@@ -447,6 +447,12 @@ export const BankRow = (data) => {
             [`A/C No: ${BankData.AccountNo}`, `IFSC Code: ${BankData.IFSC}`, `Branch: ${BankData.BranchName}`],
             [`Bank Name :${BankData.BankName}`]
         ]
+    } else {
+
+        var reportArray = [
+            [],
+            [, `Bank details not provided. Please update Bank details`]
+        ]
     }
     return reportArray;
 }
