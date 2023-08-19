@@ -58,7 +58,7 @@ const DynamicColumnHook = ({
   userAccState,
 }) => {
   const { listBtnLoading } = reducers;
-  const [tableColumns, setTableColumns] = useState([{ text: "ID", dataField: "id" }]);
+  const [tableColumns, setTableColumns] = useState([{ }]);
   const [defaultSorted, setDefaultSorted] = useState([]);
   const [pageOptions, setPageOptions] = useState({
     custom: true,
@@ -181,9 +181,7 @@ const DynamicColumnHook = ({
               );
             }
             return <>
-              <div data-testid="td-before" className="tdBefore">
                 {column.text}
-              </div>
               {typeof cell === "boolean" ? String(cell) : cell}</>;
           },
         };
