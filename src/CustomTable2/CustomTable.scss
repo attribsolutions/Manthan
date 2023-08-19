@@ -27,19 +27,24 @@
 
 
 
-.row-blink {
-    animation: blink-animation 2s 3;  /* 2 seconds duration, 2 iterations */
-  }
-  
-  @keyframes blink-animation {
-    0%, 100% {
-      background-color: transparent;
-    }
-    50% {
-    //   background-color: #511db329; /* Soft purple color */
-      background-color: #ffffcc; /* Pale yellow color */
-    }
-  }
+ .row-blink {
+     animation: blink-animation 2s 3;
+     /* 2 seconds duration, 2 iterations */
+ }
+
+ @keyframes blink-animation {
+
+     0%,
+     100% {
+         background-color: transparent;
+     }
+
+     50% {
+         //   background-color: #511db329; /* Soft purple color */
+         background-color: #ffffcc;
+         /* Pale yellow color */
+     }
+ }
 
  /* Style for selected rows */
  .table-rep-plugin table tbody tr[data-selected="true"] {
@@ -51,6 +56,14 @@
      text-decoration: line-through !important;
      color: gray !important;
  }
+
+ .text-align-right {
+     text-align: right !important;
+ }
+ .text-align-center {
+    text-align: center !important;
+}
+
 
  /* Striped background for alternate rows */
  .table-rep-plugin table tbody tr:nth-child(odd) {
@@ -94,24 +107,66 @@
 
 
 
- //  .table-container {
- //     overflow-y: auto;
- //     max-height: calc(100vh - 200px); /* Adjust the value as needed */
- // }
 
- // .table-container::-webkit-scrollbar {
- //     width: 0.01em; /* Set to adjust the width of the scrollbar track */
- // }
 
- // .table-container::-webkit-scrollbar-thumb {
- //     background-color: transparent;
- // }
 
- /* Hide horizontal scrollbar */
- // .table-container::-webkit-scrollbar-horizontal {
- //     height: 0.5em; /* Set to adjust the height of the scrollbar track */
- // }
 
- // .table-container::-webkit-scrollbar-thumb-horizontal {
- //     background-color: transparent;
- // }
+
+
+
+
+
+
+ // /* Reset some default styles */
+ // .my-table {
+ //     border-collapse: collapse;
+ //     width: 100%;
+ //   }
+
+ //   /* Table styles for desktop view */
+ //   .custom-table {
+ //     border: 1px solid #ddd;
+ //     width: 100%;
+ //   }
+
+ //   .custom-table th,
+ //   .custom-table td {
+ //     padding: 10px;
+ //     text-align: left;
+ //   }
+
+ //   .custom-table th {
+ //     background-color: #f2f2f2;
+ //   }
+
+ //   /* Responsive Styles */
+ //   @media (max-width: 767px) {
+ //     .custom-table td.pivoted {
+ //       /* Behave like a "row" */
+ //       border: none !important;
+ //       position: relative;
+ //       padding-left: 10px !important;
+ //       text-align: left !important;
+ //       white-space: pre-wrap;
+ //       overflow-wrap: break-word;
+ //     }
+
+ //     .custom-table td .tdBefore {
+ //       /* Now like a table header */
+ //       position: absolute;
+ //       display: none; /* Hide the pseudo-header for mobile view */
+
+ //       /* Top/left values mimic padding */
+ //       left: 5px;
+ //       width: 50%;
+ //       white-space: pre-wrap;
+ //       overflow-wrap: break-word;
+ //       text-align: left !important;
+ //       font-weight: 600;
+ //     }
+
+ //     /* Adjust table container width for mobile view */
+ //     .table-container {
+ //       overflow-x: auto;
+ //     }
+ //   }
