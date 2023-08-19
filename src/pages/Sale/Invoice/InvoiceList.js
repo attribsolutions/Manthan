@@ -142,6 +142,7 @@ const InvoiceList = () => {
         }
         return () => {
             dispatch(UpdateVehicleInvoice_Success([]));
+            dispatch(invoiceListGoBtnfilterSucccess([]));
         }
 
     }, [dispatch]);

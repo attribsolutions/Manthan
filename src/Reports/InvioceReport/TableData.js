@@ -67,9 +67,9 @@ export const Rows = (data) => {
     let SrNO = 1
     let TotalGst = 0
     let GSTPercentage = 0
-    
+
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
-        
+
 
         const { HSNCode, ItemName, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName } = currentItem;
         let PcsinNumber = ""
@@ -106,8 +106,11 @@ export const Rows = (data) => {
         return accumulator;
     }, {});
 
-    Object.values(groupedItems).forEach((element, key) => {
+    const TotalItemlength = Object.values(groupedItems).length;
+    data["TotalItemlength"] = TotalItemlength;
 
+    Object.values(groupedItems).forEach((element, key) => {
+        debugger
         let HSNcodes = ""
         if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);

@@ -350,6 +350,7 @@ const CommonPurchaseList = (props) => {
                     nonSelected: nonSelectedRow(),
                     ...selectCheckParams
                   }
+
                   : undefined}
                 defaultSorted={defaultSorted}
                 striped={true}
