@@ -198,10 +198,7 @@ const CommonListPage = (props) => {
             keyField={"id"}
             data={tableList}
             columns={tableColumns}
-            bordered={false}
             defaultSorted={defaultSorted}
-            striped={true}
-            classes={"table table-bordered table-hover"}
             onDataSizeChange={({ dataCount }) => {
               dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
             }}

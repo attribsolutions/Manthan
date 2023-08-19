@@ -1,9 +1,9 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import './CustomTable.scss';
 import { customTableSearch } from '../components/Common/SearchBox/MySearch';
 
 import TablePagination from './TablePagination';
-import { Table, Thead, Tbody, Tr, Th, Td, } from 'react-super-responsive-table';
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import { Input } from 'reactstrap';
 
@@ -19,22 +19,23 @@ const CustomTable = ({
     onDataSizeChange,
     updatedRowBlinkId
 }) => {
-
     const [searchText, setSearchText] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedRows, setSelectedRows] = useState([]);
     const [sortField, setSortField] = useState(null);
     const [sortOrder, setSortOrder] = useState('asc');
 
-    const handleSearch = (val) => {
+    const handleSearch = useCallback((val) => {
         setSearchText(val);
         setCurrentPage(1);
-    };
-
-    customTableSearch({ onSearch: handleSearch });
+    }, []);
 
     useEffect(() => {
-        setSelectedRows([])
+        customTableSearch({ onSearch: handleSearch });
+    }, [handleSearch]);
+
+    useEffect(() => {
+        setSelectedRows([]);
     }, [data]);
 
     const filteredData = useMemo(() => {
@@ -75,13 +76,10 @@ const CustomTable = ({
         return filteredData;
     }, [filteredData, sortField, sortOrder]);
 
-
     const pageCount = Math.ceil(sortedData.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = currentPage * itemsPerPage;
-
     const slicedData = sortedData.slice(startIndex, endIndex);
-
 
     useEffect(() => {
         if (defaultSorted.length > 0) {
@@ -99,73 +97,70 @@ const CustomTable = ({
     }, [defaultSearchText]);
 
     useEffect(() => {
-        onDataSizeChange({ dataCount: sortedData.length, filteredData: sortedData }); // Call the on DataSize Change function with the length of sortedData
+        onDataSizeChange({ dataCount: sortedData.length, filteredData: sortedData });
     }, [sortedData]);
 
-    const handlePageChange = (page) => {
+    const handlePageChange = useCallback((page) => {
         setCurrentPage(page);
-    };
+    }, []);
 
-    const handleSelectAllRows = () => {
+    const handleSelectAllRows = useCallback(() => {
         const nonSelected = selectRow && selectRow.nonSelected ? selectRow.nonSelected : [];
         const selectableRows = slicedData.reduce((selectable, row) => {
             if (!nonSelected.includes(row[keyField])) {
-                selectable.push(row[keyField])
+                selectable.push(row[keyField]);
             }
-            return selectable
+            return selectable;
         }, []);
-
-
 
         if (selectedRows.length === selectableRows.length) {
             setSelectedRows([]);
             data.forEach(row => {
                 if (selectableRows.includes(row[keyField])) {
-                    row.selectCheck = false
+                    row.selectCheck = false;
                 }
-            })
+            });
         } else {
             data.forEach(row => {
                 if ((selectableRows.includes(row[keyField]))) {
-                    row.selectCheck = true
+                    row.selectCheck = true;
                 }
-            })
+            });
             setSelectedRows(selectableRows);
         }
-    };
+    }, [selectedRows, keyField, slicedData, selectRow, data]);
 
-    const handleSort = (field) => {
+    const handleSort = useCallback((field) => {
         if (sortField === field) {
             setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
         } else {
             setSortField(field);
             setSortOrder('asc');
         }
-    };
+    }, [sortField, sortOrder]);
 
-    const handleRowSelect = (e, row) => {
+    const handleRowSelect = useCallback((e, row) => {
         const rowId = row[keyField];
         data.forEach(row => {
             if (row[keyField] === rowId) {
                 row.selectCheck = e.target.checked;
             }
-        })
-        setSelectedRows(() => {
-
-            if (selectedRows.includes(rowId)) {
-                return selectedRows.filter((selectedRow) => selectedRow !== rowId);
+        });
+        setSelectedRows(prevSelectedRows => {
+            if (prevSelectedRows.includes(rowId)) {
+                return prevSelectedRows.filter((selectedRow) => selectedRow !== rowId);
             } else {
-                return [...selectedRows, rowId];
+                return [...prevSelectedRows, rowId];
             }
         });
-    };
+    }, [selectedRows, keyField, data]);
 
     const isAllSelected = slicedData.every(row => selectedRows.includes(row[keyField]) || (selectRow && selectRow.nonSelected.includes(row[keyField])));
 
     return (
         <div className="table-rep-plugin">
             <div className="table-responsive mb-0" data-pattern="priority-columns">
-                <Table className="table  table-bordered custom-table">
+                <Table className="table table-bordered custom-table">
                     <Thead>
                         <Tr>
                             {selectRow && (
@@ -190,9 +185,7 @@ const CustomTable = ({
                                     }}
                                 >
                                     <div className="column-header">
-                                        {column.headerFormatter ? column.headerFormatter(column, key)
-                                            : <span className="column-text">{column.text}</span>}
-
+                                        {column.headerFormatter ? column.headerFormatter(column, key) : <span className="column-text">{column.text}</span>}
                                         {column.sort && (
                                             <span className={`sort-icon ${sortField === column.dataField ? 'active' : ''}`}>
                                                 {sortField === column.dataField && sortOrder === 'asc' && '↑'}
@@ -202,7 +195,6 @@ const CustomTable = ({
                                     </div>
                                 </Th>
                             ))}
-
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -214,14 +206,13 @@ const CustomTable = ({
                             </Tr>
                         )}
                         {slicedData.map((row) => {
-                            // Check if the row should blink
                             const shouldBlink = updatedRowBlinkId !== undefined && row[keyField] === updatedRowBlinkId;
                             return (
                                 <Tr
                                     key={row[keyField]}
                                     data-selected={selectedRows.includes(row[keyField])}
                                     data-record-deleted={row.IsRecordDeleted}
-                                    className={shouldBlink ? 'row-blink' : ''} // Apply blinking class if shouldBlink is true
+                                    className={shouldBlink ? 'row-blink' : ''}
                                 >
                                     {selectRow && (
                                         <Td>
@@ -229,24 +220,21 @@ const CustomTable = ({
                                                 type="checkbox"
                                                 className='check-disabled'
                                                 checked={selectedRows.includes(row[keyField])}
-                                                disabled={
-                                                    (selectRow && selectRow.nonSelected.includes(row[keyField]))
-                                                }
+                                                disabled={(selectRow && selectRow.nonSelected.includes(row[keyField]))}
                                                 onChange={(e) => handleRowSelect(e, row)}
                                             />
                                         </Td>
                                     )}
                                     {columns.map((column, colIndex) => (
                                         <Td key={colIndex}>
-                                            {!column.headerFormatter &&
-                                                <div data-testid="td-before" class="tdBefore">{column.text}</div>}
+                                            {!column.headerFormatter && <div data-testid="td-before" className="tdBefore">{column.text}</div>}
                                             {column.formatter
                                                 ? column.formatter(row[column.dataField], row, colIndex, column.formatExtraData)
                                                 : row[column.dataField]}
                                         </Td>
                                     ))}
                                 </Tr>
-                            )
+                            );
                         })}
                     </Tbody>
                 </Table>
