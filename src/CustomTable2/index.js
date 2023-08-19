@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import './CustomTable.scss';
 import { customTableSearch } from '../components/Common/SearchBox/MySearch';
 
-import CustomPagination from './CustomPagination';
+import TablePagination from './TablePagination';
 import { Table, Thead, Tbody, Tr, Th, Td, } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import { Input } from 'reactstrap';
@@ -250,7 +250,7 @@ const CustomTable = ({
                         })}
                     </Tbody>
                 </Table>
-                <CustomPagination pageCount={pageCount} currentPage={currentPage} handlePageChange={handlePageChange} />
+                <TablePagination pageCount={pageCount} currentPage={currentPage} handlePageChange={handlePageChange} />
             </div>
         </div>
     );
