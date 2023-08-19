@@ -2,8 +2,9 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { toast, Bounce } from 'react-toastify';
 
-// const API_URL = "http://cbmfooderp.com:8000";
-const API_URL = "http://192.168.1.114:8000";
+const API_URL = "http://cbmfooderp.com:8000";
+
+// const API_URL = "http://192.168.1.114:8000";
 
 const axiosApi = axios.create({ baseURL: API_URL });
 
@@ -45,12 +46,6 @@ function logRequestAndResponse(config, response) {
         }
     }
 }
-
-
-
-
-
-
 
 axiosApi.interceptors.request.use(
     (config) => {
