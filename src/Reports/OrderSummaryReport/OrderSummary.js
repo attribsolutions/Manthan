@@ -123,7 +123,6 @@ const OrderSummary = (props) => {
         if (showTableData.length === 0) {
             setBtnMode(0)
         }
-        dispatch(BreadcrumbShowCountlabel(`Count:${showTableData.length}`))
     }, [showTableData]);
 
     const downloadExcelFunction = (excelTableData) => {
@@ -436,6 +435,9 @@ const OrderSummary = (props) => {
                                                         Record Not available
                                                     </div>
                                                 }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                }}
                                                 {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
