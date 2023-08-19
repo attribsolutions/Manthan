@@ -42,7 +42,7 @@ export const reportHeder1 = (doc, data) => {
 }
 
 export const reportHeder3 = (doc, data) => {
-    
+
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
@@ -60,22 +60,19 @@ export const tableBody = (doc, data) => {
 
                 data1.row.cells[0].styles.fontSize = 7
                 data1.row.cells[1].styles.fontSize = 7
-                data1.row.cells[8].styles.fontSize = 7
+                data1.row.cells[11].styles.fontSize = 7
                 data1.row.cells[9].styles.fontSize = 7
                 data1.row.cells[10].styles.fontSize = 7
 
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[11].styles.fontStyle = "bold"
                 data1.row.cells[9].styles.fontStyle = "bold"
                 data1.row.cells[10].styles.fontStyle = "bold"
 
             }
 
-            if (data1.row.cells[1].raw === "HSN Item Name") {
-                data1.row.cells[8].colSpan = 2
-                data1.row.cells[10].colSpan = 2
-            }
+
 
         },
         margin: {
@@ -108,7 +105,7 @@ export const tableBody = (doc, data) => {
                 columnWidth: 50,
             },
             1: {
-                columnWidth: 40,
+                columnWidth: 25,
                 halign: 'right',
             },
             2: {
@@ -116,11 +113,11 @@ export const tableBody = (doc, data) => {
                 halign: 'left',
             },
             3: {
-                columnWidth: 83,
+                columnWidth: 75,
                 halign: 'left',
             },
             4: {
-                columnWidth: 40,
+                columnWidth: 35,
                 halign: 'right',
             },
             5: {
@@ -133,7 +130,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             7: {
-                columnWidth: 40,
+                columnWidth: 35,
                 halign: 'right',
             },
             8: {
@@ -141,11 +138,15 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             9: {
-                columnWidth: 40,
+                columnWidth: 35,
                 halign: 'right',
             },
             10: {
-                columnWidth: 43,
+                columnWidth: 35,
+                halign: 'right',
+            },
+            11: {
+                columnWidth: 46,
                 halign: 'right',
             },
         },
@@ -199,11 +200,11 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(8)
 
 
-    doc.text(`Total Amount:`, 440, 738,)
-    doc.text(`${numberWithCommas(Number(TotalAmount).toFixed(2))}`, 567, 738, 'right')
+    doc.text(`Total Amount:`, 440, 748,)
+    doc.text(`${numberWithCommas(Number(TotalAmount).toFixed(2))}`, 567, 748, 'right')
 
-    doc.text(`Total Disc:`, 440, 748,)
-    doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 748, 'right')
+    // doc.text(`Total Disc:`, 440, 748,)
+    // doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 748, 'right')
 
     doc.text(`Total CGST:`, 440, 758)
     doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 567, 758, 'right')

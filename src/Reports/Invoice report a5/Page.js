@@ -87,7 +87,6 @@ var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);                           // Page Border
     style.pageHeder(doc, data);                            // Report Title 
     style.reportHeder1(doc, data);
-    style.reportHeder2(doc, data);
     style.reportHeder3(doc, data);                          //Invoice ID , Date 
 };
 

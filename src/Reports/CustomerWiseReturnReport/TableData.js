@@ -7,9 +7,10 @@ export const columns = [
     "Customer Name",
     "Item Name",
     "MRP ",
-    "QTY In Pcs",
+    "Approve Quantity",
+    "Return Quantity",
     "GST %",
-    "Rate Without GSTf",
+    "Rate Without GST",
     "CGST Amount",
     "SGST Amount",
     "Amount",
@@ -62,6 +63,7 @@ export const Rows = (data) => {
             `${(element.CustomerName)}`,
             `${(element.ItemName)}`,
             `${numberWithCommas(Number(element.MRP).toFixed(2))}`,
+            `${numberWithCommas(Number(element.ApprovedQuantity).toFixed(2))}`,
             `${numberWithCommas(Number(element.Quantity).toFixed(2))}`,
             `${numberWithCommas(Number(element.GST).toFixed(2))}%`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
@@ -93,27 +95,14 @@ export const Rows = (data) => {
                 ``,
                 ``,
                 ``,
+                ``,
                 `${numberWithCommas(Number(totalCGst).toFixed(2))}`,
                 `${numberWithCommas(Number(totalSGst).toFixed(2))}`,
                 `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
 
             ];
         };
-        const BatchRow = [
-            `Batch:  ${element.quantityString} `,
-            `Batch`,
-            " ",
-            ``,
-            "",
-            "",
-            "",
-            "",
-            ``,
-            "",
-            ``,
-            "",
-            ``,
-        ]
+
 
         if (Gst === 0) { Gst = element.GST };
         let aa = { TotalCGst: 0, totalSGst: 0 }
