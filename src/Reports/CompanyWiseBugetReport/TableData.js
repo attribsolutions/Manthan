@@ -44,7 +44,7 @@ export const Rows = (table = []) => {
             `${numberWithCommas(Number(index.NetSaleValue).toFixed(2))}`,
             `${numberWithCommas(Number(index.Budget).toFixed(2))}`,
             `${numberWithCommas(Number(index.ClaimAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(index.ClaimAgainstNetSale).toFixed(2))}`,
+            `${numberWithCommas(Number(index.ClaimAgainstNetSale).toFixed(2))} %`,
         ];
 
         function totalLots() {
@@ -58,7 +58,8 @@ export const Rows = (table = []) => {
         };
 
         function totalrow() {
-            const TotalNetPurchaseValue = TotalCXprimaryAmount - TotalCXreturnValue;
+            debugger
+            const TotalNetPurchaseValue = TotalCXPurchaseAmount - TotalCXreturnValue;
             table["TotalNetPurchaseValue"] = TotalNetPurchaseValue;
             return [
                 "Total",
@@ -106,7 +107,7 @@ export const ProductWiseRows = (data) => {
             `${numberWithCommas(Number(element.NetSaleValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Budget).toFixed(2))}`,
             `${numberWithCommas(Number(element.ClaimAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(element.ClaimAgainstNetSale).toFixed(2))}`,
+            `${numberWithCommas(Number(element.ClaimAgainstNetSale).toFixed(2))}%`,
         ];
         function totalLots() {
             TotalInQuantity = Number(TotalInQuantity) + Number(element.InQuantity)

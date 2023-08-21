@@ -65,7 +65,7 @@ export const tableBody = (doc, data) => {
 
                             data1.row.cells[1].styles.valign = "top"
                         } else {
-                            data1.row.cells[1].styles.halign = "center"
+                            data1.row.cells[1].styles.halign = "right"
                             data1.row.cells[1].styles.valign = "center"
 
                             data1.row.cells[1].rowSpan = index1[index2].length
@@ -77,17 +77,17 @@ export const tableBody = (doc, data) => {
 
                             data1.row.cells[2].styles.valign = "top"
                         } else {
-                            data1.row.cells[2].styles.halign = "center"
+                            data1.row.cells[2].styles.halign = "right"
                             data1.row.cells[2].styles.valign = "center"
                             data1.row.cells[2].rowSpan = index1[index2].length
                         }
                     }
                     if (data1.row.index === 0) {
-                        debugger
+
                         if (data1.row.cells[4].raw === numberWithCommas(Number(index1[index2][0].NetSaleValue).toFixed(2))) {
 
-                            data1.row.cells[4].text[0] = `${numberWithCommas(Number(index1[index2].TotalNetPurchaseValue))}`
-                            data1.row.cells[4].styles.halign = "center"
+                            data1.row.cells[4].text[0] = `${numberWithCommas(Number(index1[index2].TotalNetPurchaseValue).toFixed(2))}`
+                            data1.row.cells[4].styles.halign = "right"
                             data1.row.cells[4].styles.valign = "center"
 
                             data1.row.cells[4].rowSpan = index1[index2].length
