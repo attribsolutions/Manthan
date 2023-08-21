@@ -17,6 +17,8 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
+import Papa from 'papaparse';
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
 
 const InvoiceDataExport = (props) => {
 
@@ -93,16 +95,17 @@ const InvoiceDataExport = (props) => {
     }, [])
 
     useEffect(() => {
-
         if (goBtnMode === "downloadExcel") {
             if (InvoiceExportSerializerDetails.length > 0) {
-                const worksheet = XLSX.utils.json_to_sheet(InvoiceExportSerializerDetails);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, `InvoiceDataExportReport`);
-                XLSX.writeFile(workbook, `Invoice Data Export Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
+                ExcelDownloadFunc({      // Download CSV
+                    pageField,
+                    excelData: InvoiceExportSerializerDetails,
+                    excelFileName: "Invoice Data Export"
+                })
+                dispatch(postInvoiceDataExport_API_Success([]));   // Reset Excel Data
             }
         }
-    }, [tableData]);
+    }, [goBtnMode, InvoiceExportSerializerDetails, pageField]);
 
     function goButtonHandler(goBtnMode) {
 

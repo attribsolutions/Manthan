@@ -5,15 +5,16 @@ import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, url } from "../../routes/index"
+import { mode, pageId, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import C_Report from "../../components/Common/C_Report";
 import { StockProcessing_API_Success, StockProcessing_Action, stockReport_1_GoButton_API, stockReport_1_GoButton_API_Success } from "../../store/Report/StockReport/action";
-import { getBaseUnit_ForDropDown, getpdfReportdata } from "../../store/actions";
+import { commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess, getpdfReportdata } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { StockReport_1_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../ReportIndex'
 import * as XLSX from 'xlsx';
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
 
 const StockReport_1 = (props) => {
 
@@ -37,11 +38,11 @@ const StockReport_1 = (props) => {
             pdfdata: state.PdfReportReducers.pdfdata,
             BaseUnit: state.ItemMastersReducer.BaseUnit,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { StockReport_1_Gobtb, pdfdata } = reducers
-
+    const { StockReport_1_Gobtb, pdfdata, pageField } = reducers
+    console.log(pdfdata)
     const { userAccess, BaseUnit, StockProcessingBtn, } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
@@ -66,8 +67,15 @@ const StockReport_1 = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(stockReport_1_GoButton_API_Success([]))
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.STOCK_REPORT_1));
         dispatch(getBaseUnit_ForDropDown());
+        return () => {
+            dispatch(commonPageFieldSuccess(null));
+            dispatch(stockReport_1_GoButton_API_Success([]))
+            dispatch(getBaseUnit_ForDropDownSuccess([]));
+        }
+
     }, [])
 
     useEffect(() => {
@@ -77,48 +85,54 @@ const StockReport_1 = (props) => {
     }, [tableData]);
 
     useEffect(() => {
-
         try {
 
             if ((StockReport_1_Gobtb.Status === true) && (StockReport_1_Gobtb.StatusCode === 200)) {
                 setBtnMode(0);
                 const { StockDetails } = StockReport_1_Gobtb.Data[0]
-                if ((btnMode === 2)) {
-                    if (StockDetails.length > 0) {
-                        const worksheet = XLSX.utils.json_to_sheet(StockDetails);
-                        const workbook = XLSX.utils.book_new();
-                        XLSX.utils.book_append_sheet(workbook, worksheet, "SNS Report");
-                        XLSX.writeFile(workbook, `SNS Report.xlsx`);
-                        dispatch(stockReport_1_GoButton_API_Success([]));
-                    }
-                    else {
-                        customAlert({
-                            Type: 3,
-                            Message: "Records Not available ",
-                        })
-                    }
+                if (btnMode === 2) {
+                    ExcelDownloadFunc({      // Download CSV
+                        pageField,
+                        excelData: StockDetails,
+                        excelFileName: "SNS Report"
+                    })
+                    dispatch(stockReport_1_GoButton_API_Success([]));
                 }
             }
-            // else if ((pdfdata.Status === true) && (pdfdata.StatusCode === 200)) {
-            //     setBtnMode(0);
-            //     const { StockDetails } = StockReport_1_Gobtb.Data[0]
-            //     if ((btnMode === 1)) {
-            //         if ((StockDetails.length === 0)) {
-            //             customAlert({
-            //                 Type: 3,
-            //                 Message: "Records Not available ",
-            //             })
-            //         }
-            //     }
-            // }
-            else {
-                setTableData([]);
+
+            else if ((StockReport_1_Gobtb.Status === true) && (StockReport_1_Gobtb.StatusCode === 204)) {
+                customAlert({
+                    Type: 3,
+                    Message: "Records Not available ",
+                })
+                setBtnMode(0);
+                dispatch(stockReport_1_GoButton_API_Success([]));
+                return
             }
             setBtnMode(0);
         }
         catch (e) { console.log(e) }
 
     }, [StockReport_1_Gobtb]);
+
+    useEffect(() => {
+        try {
+            if (btnMode === 1) {
+                if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
+                    customAlert({
+                        Type: 3,
+                        Message: "Records Not available ",
+                    })
+                    setBtnMode(0);
+                    return
+                }
+            }
+            setBtnMode(0);
+            dispatch(stockReport_1_GoButton_API_Success([]));
+        }
+        catch (e) { console.log(e) }
+
+    }, [pdfdata]);
 
     useEffect(async () => {
 

@@ -15,8 +15,8 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId, url } from "../../routes/index"
-import * as XLSX from 'xlsx';
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
 
 const StockReport = (props) => {
 
@@ -81,36 +81,35 @@ const StockReport = (props) => {
     }, [])
 
     useEffect(() => {
-
+        // This useEffect handles the response from the API call
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
-                setBtnMode(0);
-                const { Data } = goButtonData
+
                 if (btnMode === 2) {
-                    const worksheet = XLSX.utils.json_to_sheet(Data);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, "Damage Stock Report");
-                    XLSX.writeFile(workbook, `Damage Stock Report.xlsx`);
-                    dispatch(stockReport_GoButton_API_Success([]));
+                    ExcelDownloadFunc({      // Download CSV
+                        pageField,
+                        excelData: goButtonData.Data,
+                        excelFileName: "Current_Stock_Report"
+                    })
+                    dispatch(stockReport_GoButton_API_Success([])); // Reset goButtonData
                 }
                 else {
-                    setTableData(Data)
+                    setTableData(goButtonData.Data); // Update table data
                 }
+            } else if ((goButtonData.Status === true)) {
+                setTableData([]); // Clear table data if necessary
             }
-            else if ((goButtonData.Status === true)) {
-                setTableData([]);
-            }
-            setBtnMode(0);
-        }
-        catch (e) { console.log(e) }
+            setBtnMode(0); // Reset button mode
 
-    }, [goButtonData]);
+        } catch (e) {
+            console.log(e); // Log any errors
+        }
+    }, [goButtonData, pageField, btnMode]);
 
     useEffect(() => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-        // dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
     }, [tableData]);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
@@ -303,7 +302,7 @@ const StockReport = (props) => {
                                                 </div>
                                             }
                                             onDataSizeChange={({ dataSize }) => {
-                                                
+
                                                 dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
                                             }}
                                             {...toolkitProps.baseProps}
@@ -322,4 +321,4 @@ const StockReport = (props) => {
     )
 }
 
-export default StockReport;;
+export default StockReport;
