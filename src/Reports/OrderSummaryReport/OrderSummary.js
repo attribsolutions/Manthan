@@ -6,7 +6,7 @@ import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, } from "../../routes/index"
+import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
 import * as XLSX from 'xlsx';
@@ -14,7 +14,8 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { BreadcrumbShowCountlabel } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
 
 const OrderSummary = (props) => {
 
@@ -38,15 +39,14 @@ const OrderSummary = (props) => {
     const [orderSummaryApiData, setOrderSummaryApiData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
 
-    const { userAccess, goButtonData, SSDD_List, partyLoading, goBtnLoading } = useSelector(
+    const { userAccess, goButtonData, SSDD_List, partyLoading, goBtnLoading, pageField } = useSelector(
         (state) => ({
-
             goButtonData: state.OrderSummaryReducer.orderSummaryGobtn,
             goBtnLoading: state.OrderSummaryReducer.goBtnLoading,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
             partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageField
         })
     );
 
@@ -71,6 +71,15 @@ const OrderSummary = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.ORDER_SUMMARY_REPORT));
+        return () => {
+            dispatch(commonPageFieldSuccess(null));
+            dispatch(postOrderSummary_API_Success({ Status: false }));
+        }
+    }, [])
 
     useEffect(() => {
 
@@ -127,14 +136,19 @@ const OrderSummary = (props) => {
 
     const downloadExcelFunction = (excelTableData) => {
         if ((btnMode === 2)) {
-            const groupData = groupByColumnsWithSumFunc(excelTableData);
-            _cfunc.CommonConsole(JSON.stringify("groupData", excelTableData))
-            const worksheet = XLSX.utils.json_to_sheet(groupData);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
-            XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
-        }
+            // const groupData = groupByColumnsWithSumFunc(excelTableData);
+            // _cfunc.CommonConsole(JSON.stringify("groupData", excelTableData))
+            // const worksheet = XLSX.utils.json_to_sheet(groupData);
+            // const workbook = XLSX.utils.book_new();
+            // XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
+            // XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
 
+            ExcelDownloadFunc({      // Download CSV
+                pageField,
+                excelData: excelTableData,
+                excelFileName: "Order Summary Report"
+            })
+        }
     }
 
     const groupByColumnsWithSumFunc = (jsonData) => {
