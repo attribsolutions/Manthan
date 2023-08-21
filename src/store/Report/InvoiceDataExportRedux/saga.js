@@ -9,7 +9,7 @@ import {
     postInvoiceDataExportApiErrorAction
 } from "./action";
 import { InvoiceDataExport_GoBtn_API, DeleteInvoiceDataExport_GoBtn_API } from "../../../helpers/backend_helper";
-import { date_dmy_func } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, trailingZeros } from "../../../components/Common/CommonFunction";
 
 function* InvoiceDataExport_Gen({ config }) {
     try {
@@ -18,9 +18,10 @@ function* InvoiceDataExport_Gen({ config }) {
 
         const newResponse = response.Data.InvoiceExportSerializerDetails.map((i) => {
             // Convert quantity values to floats and format to remove trailing zeros
-            i["QtyInNo"] = parseFloat(i.QtyInNo);
-            i["QtyInKg"] = parseFloat(i.QtyInKg);
-            i["QtyInBox"] = parseFloat(i.QtyInBox);
+
+            i["QtyInNo"] = trailingZeros(i.QtyInNo);
+            i["QtyInKg"] = trailingZeros(i.QtyInKg);
+            i["QtyInBox"] = trailingZeros(i.QtyInBox);
 
             // Format InvoiceDate using date_dmy_func
             i["InvoiceDate"] = date_dmy_func(i.InvoiceDate);
@@ -45,9 +46,9 @@ function* DeleteInvoiceDataExport_Gen({ config }) {
         const transformedDetails = response.Data.DeletedInvoiceExportSerializerDetails.map(i => ({
             ...i,
             InvoiceDate: date_dmy_func(i.InvoiceDate),
-            QtyInNo: parseFloat(i.QtyInNo), // Convert and remove trailing zeros
-            QtyInKg: parseFloat(i.QtyInKg),
-            QtyInBox: parseFloat(i.QtyInBox),
+            QtyInNo: trailingZeros(i.QtyInNo), // Convert and remove trailing zeros
+            QtyInKg: trailingZeros(i.QtyInKg),
+            QtyInBox: trailingZeros(i.QtyInBox),
         }));
 
         response.Data["DeletedInvoiceExportSerializerDetails"] = transformedDetails;

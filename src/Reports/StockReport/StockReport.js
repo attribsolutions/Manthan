@@ -17,6 +17,7 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId, url } from "../../routes/index"
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
 import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import CustomTable from "../../CustomTable2";
 
 const StockReport = (props) => {
 
@@ -93,7 +94,7 @@ const StockReport = (props) => {
                     })
                     dispatch(stockReport_GoButton_API_Success([])); // Reset goButtonData
                 }
-                else {
+                else if (btnMode === 1) {
                     setTableData(goButtonData.Data); // Update table data
                 }
             } else if ((goButtonData.Status === true)) {
@@ -282,39 +283,16 @@ const StockReport = (props) => {
 
                 </div>
 
-                <ToolkitProvider
+                <CustomTable
                     keyField={"id"}
                     data={tableData}
                     columns={tableColumns}
-                    search
-                >
-                    {(toolkitProps,) => (
-                        <React.Fragment>
-                            <Row>
-                                <Col xl="12">
-                                    <div className="table-responsive table">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            classes={"table  table-bordered table-hover"}
-                                            noDataIndication={
-                                                <div className="text-danger text-center ">
-                                                    Record Not available
-                                                </div>
-                                            }
-                                            onDataSizeChange={({ dataSize }) => {
-
-                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                            }}
-                                            {...toolkitProps.baseProps}
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-                                </Col>
-                            </Row>
-
-                        </React.Fragment>
-                    )}
-                </ToolkitProvider>
+                    paginationEnabled={false}
+                    onDataSizeChange={({ dataCount }) => {
+                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                    }}
+                    noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
+                />
             </div>
             <C_Report />
         </React.Fragment >

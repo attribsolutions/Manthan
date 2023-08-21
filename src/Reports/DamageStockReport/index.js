@@ -83,6 +83,12 @@ const DamageStockReport = (props) => {
     }, [])
 
     useEffect(() => {
+        if (tableData.length === 0) {
+            setBtnMode(0)
+        }
+    }, [tableData]);
+
+    useEffect(() => {
 
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
@@ -107,12 +113,6 @@ const DamageStockReport = (props) => {
         catch (e) { console.log(e) }
 
     }, [goButtonData]);
-
-    useEffect(() => {
-        if (tableData.length === 0) {
-            setBtnMode(0)
-        }
-    }, [tableData]);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
 
