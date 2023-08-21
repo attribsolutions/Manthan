@@ -4,7 +4,8 @@ import { numberWithCommas } from "../Report_common_function";
 export const columns = [
     "Item Name",
     "MRP",
-    "Quantity in Pcs",
+    "Return Quantity",
+    "Approve Quantity",
     "GST %",
     "Rate without GST ",
     "Discount %",
@@ -84,6 +85,7 @@ export const Rows = (data) => {
             `${element.ItemName}`,
             `${numberWithCommas(Number(element.MRP).toFixed(2))}`,
             `${numberWithCommas(Number(element.Quantity).toFixed(2))}`,
+            `${numberWithCommas(Number(element.ApprovedQuantity).toFixed(2))}`,
             `${numberWithCommas(Number(element.GST).toFixed(2))}%`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${numberWithCommas(Number(element.Discount).toFixed(2))}`,
@@ -111,6 +113,7 @@ export const Rows = (data) => {
             return [
                 `Total`,
                 `GST ${(Number(GSTPercentage))}% Total `,
+                ``,
                 ``,
                 ``,
                 ``,

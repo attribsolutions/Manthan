@@ -81,10 +81,14 @@ const DeleteInvoiceDataExport = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => { return () => { dispatch(postDeleteInvoiceDataExport_API_Success([])); } }, [])
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        return () => {
+            dispatch(postDeleteInvoiceDataExport_API_Success([]));
+        }
+    }, [])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Number(DeletedInvoiceExportSerializerDetails.length)}`))
 
         if (tableData.btnId === "excel_btnId") {
             if (DeletedInvoiceExportSerializerDetails.length > 0) {
@@ -269,6 +273,9 @@ const DeleteInvoiceDataExport = (props) => {
                                                         Record Not available
                                                     </div>
                                                 }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 && dataSize - 1}`));
+                                                }}
                                                 {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}

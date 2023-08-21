@@ -111,7 +111,8 @@ const SapLedger = (props) => {
         dispatch(SapLedger_Go_Button_API_Success([]))
         const page_Id = pageId.SAP_LEDGER
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
+        dispatch(commonPageField(page_Id));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
     }, []);
 
     const location = { ...history.location }
@@ -132,10 +133,6 @@ const SapLedger = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
-
-    useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${Number(data.length > 0 && data.length - 1)}`))
-    }, [List])
 
     const PartyDropdown = partyList.map((data) => ({
         value: data.id,
@@ -281,7 +278,9 @@ const SapLedger = (props) => {
                                         noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                         classes={"table align-middle table-nowrap table-hover"}
                                         headerWrapperClasses={"thead-light"}
-
+                                        onDataSizeChange={({ dataSize }) => {
+                                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 ? dataSize - 1 : 0}`));
+                                        }}
                                         {...toolkitProps.baseProps}
 
                                     />

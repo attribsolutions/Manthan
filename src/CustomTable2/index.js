@@ -12,12 +12,14 @@ const CustomTable = ({
     data,
     columns,
     itemsPerPage = 15,
+    paginationEnabled=true,
     defaultSorted = [],
     noDataIndication,
     selectRow = undefined,
     defaultSearchText,
     onDataSizeChange,
-    updatedRowBlinkId
+    updatedRowBlinkId,
+   
 }) => {
     const [searchText, setSearchText] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -77,9 +79,13 @@ const CustomTable = ({
     }, [filteredData, sortField, sortOrder]);
 
     const pageCount = Math.ceil(sortedData.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = currentPage * itemsPerPage;
-    const slicedData = sortedData.slice(startIndex, endIndex);
+    
+    // Using useMemo to compute displayedData
+    const displayedData = useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = currentPage * itemsPerPage;
+        return sortedData.slice(startIndex, endIndex);
+    }, [currentPage, sortedData, itemsPerPage]);
 
     useEffect(() => {
         if (defaultSorted.length > 0) {
@@ -106,7 +112,7 @@ const CustomTable = ({
 
     const handleSelectAllRows = useCallback(() => {
         const nonSelected = selectRow && selectRow.nonSelected ? selectRow.nonSelected : [];
-        const selectableRows = slicedData.reduce((selectable, row) => {
+        const selectableRows = displayedData.reduce((selectable, row) => {
             if (!nonSelected.includes(row[keyField])) {
                 selectable.push(row[keyField]);
             }
@@ -128,7 +134,7 @@ const CustomTable = ({
             });
             setSelectedRows(selectableRows);
         }
-    }, [selectedRows, keyField, slicedData, selectRow, data]);
+    }, [selectedRows, keyField, displayedData, selectRow, data]);
 
     const handleSort = useCallback((field) => {
         if (sortField === field) {
@@ -155,7 +161,11 @@ const CustomTable = ({
         });
     }, [selectedRows, keyField, data]);
 
-    const isAllSelected = slicedData.every(row => selectedRows.includes(row[keyField]) || (selectRow && selectRow.nonSelected.includes(row[keyField])));
+    const isAllSelected = useMemo(() => {
+        return displayedData.every(row =>
+            selectedRows.includes(row[keyField]) || (selectRow && selectRow.nonSelected.includes(row[keyField]))
+        );
+    }, [displayedData, selectedRows, keyField, selectRow]);
 
     return (
         <div className="table-rep-plugin">
@@ -198,14 +208,14 @@ const CustomTable = ({
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {slicedData.length === 0 && noDataIndication && (
+                        {displayedData.length === 0 && noDataIndication && (
                             <Tr>
                                 <Td colSpan={selectRow ? columns.length + 1 : columns.length}>
                                     {noDataIndication}
                                 </Td>
                             </Tr>
                         )}
-                        {slicedData.map((row) => {
+                        {displayedData.map((row) => {
                             const shouldBlink = updatedRowBlinkId !== undefined && row[keyField] === updatedRowBlinkId;
                             return (
                                 <Tr
@@ -238,10 +248,91 @@ const CustomTable = ({
                         })}
                     </Tbody>
                 </Table>
-                <TablePagination pageCount={pageCount} currentPage={currentPage} handlePageChange={handlePageChange} />
+                {paginationEnabled && (
+                    <TablePagination pageCount={pageCount} currentPage={currentPage} handlePageChange={handlePageChange} />
+                )}
             </div>
         </div>
     );
 };
 
 export default CustomTable;
+
+
+// import React from 'react';
+// import './CustomTable.scss'; // Import your stylesheet
+// import useCustomTable from './useCustomTable';
+// import TableHeader from './TableHeader';
+// import TableRow from './TableRow';
+// import TablePagination from './TablePagination';
+// import PropTypes from 'prop-types';
+
+// const CustomTable = ({
+//   data,
+//   columns,
+//   itemsPerPage = 15,
+//   onDataSizeChange,
+// }) => {
+//   const {
+//     handleSort,
+//     handleSelectAllRows,
+//     handleRowSelect,
+//     slicedData,
+//     pageCount,
+//     isAllSelected,
+//     currentPage,
+//     handlePageChange,
+//   } = useCustomTable({
+//     data,
+//     itemsPerPage,
+//     onDataSizeChange,
+//   });
+
+//   return (
+//     <div className="table-rep-plugin">
+//       <div className="table-responsive mb-0" data-pattern="priority-columns">
+//         <table className="table table-bordered custom-table">
+//           <TableHeader
+//             columns={columns}
+//             sortField={sortField}
+//             sortOrder={sortOrder}
+//             handleSort={handleSort}
+//             isAllSelected={isAllSelected}
+//             handleSelectAllRows={handleSelectAllRows}
+//           />
+//           <tbody>
+//             {slicedData.length === 0 ? (
+//               <tr>
+//                 <td colSpan={columns.length + 1}>No data available.</td>
+//               </tr>
+//             ) : (
+//               slicedData.map((row) => (
+//                 <TableRow
+//                   key={row.keyField}
+//                   row={row}
+//                   selectedRows={selectedRows}
+//                   handleRowSelect={handleRowSelect}
+//                 />
+//               ))
+//             )}
+//           </tbody>
+//         </table>
+//         <TablePagination
+//           pageCount={pageCount}
+//           currentPage={currentPage}
+//           handlePageChange={handlePageChange}
+//         />
+//       </div>
+//     </div>
+//   );
+// };
+
+// CustomTable.propTypes = {
+//   data: PropTypes.array.isRequired,
+//   columns: PropTypes.array.isRequired,
+//   itemsPerPage: PropTypes.number,
+//   onDataSizeChange: PropTypes.func,
+// };
+
+// export default CustomTable;
+

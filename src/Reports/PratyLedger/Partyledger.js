@@ -3,12 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, } from "../../components/Common/validationFunction";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { url, mode, } from "../../routes/index"
+import { mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import Select from "react-select";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
@@ -97,6 +96,11 @@ const PartyLedger = (props) => {
     }
 
     function goButtonHandler() {
+
+        if (_cfunc.loginSelectedPartyID() === 0) {
+            customAlert({ Type: 3, Message: "Please Select Party" });
+            return;
+        };
 
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
