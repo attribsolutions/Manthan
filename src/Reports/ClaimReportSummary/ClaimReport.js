@@ -7,7 +7,7 @@ import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, getpdfReportdata } from "../../store/actions";
+import { GetVenderSupplierCustomer, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
@@ -85,6 +85,7 @@ const ClaimSummary = (props) => {
 
     useEffect(() => {
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
+            dispatch(getpdfReportdataSuccess({ Status: false }))
             customAlert({
                 Type: 3,
                 Message: pdfdata.Message,
@@ -128,6 +129,7 @@ const ClaimSummary = (props) => {
 
         if (reportType === report.CompanyWiseBudget) {
             dispatch(getpdfReportdata(MasterClaimSummary_API, config))
+
         }
         if (reportType === "createClaim") {
             dispatch(postClaimMasterCreate_API(config))
@@ -215,7 +217,7 @@ const ClaimSummary = (props) => {
                                 <C_Button
                                     loading={btnLoading === `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`}
                                     type="button"
-                                    title="Customer Wise Summary"
+                                    title="Customer Wise Claim Summary"
                                     spinnerColor="white"
                                     className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.CustomerWiseReturn, row, `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`) }}

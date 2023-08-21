@@ -353,17 +353,17 @@ export const tableBody = (doc, data) => {
 
             if (data1.row.cells[9].raw === "isaddition") {
                 data1.row.cells[1].colSpan = 5
-                // data1.row.cells[3].colSpan = 5
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
 
-                data1.row.cells[1].styles.fontSize = 7
                 data1.row.cells[1].styles.halign = "right"    // Alignment for  cgst and Total in spanrow
 
+                data1.row.cells[1].styles.fontSize = 7
                 data1.row.cells[8].styles.fontSize = 7
                 data1.row.cells[7].styles.fontSize = 7
                 data1.row.cells[10].styles.fontSize = 7
                 data1.row.cells[12].styles.fontSize = 7
+
                 data1.row.cells[1].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
                 data1.row.cells[7].styles.fontStyle = "bold"
@@ -383,15 +383,54 @@ export const tableBody = (doc, data) => {
                 } else {
                     data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
                 }
-
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
             }
-
             if (data1.row.cells[1].raw === "Batch") {
                 data1.row.cells[0].colSpan = 12
 
             }
+        },
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 8) {
+                if (data1.row.cells[8].raw === "          CGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2; // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 5, startY1vertical, startXVertical - 5, endYvertical); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+            if (rowIdx === 0 && colIdx === 10) {
+                if (data1.row.cells[10].raw === "          SGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2; // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 5, startY1vertical , startXVertical - 5, endYvertical ); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
         },
         margin: {
             left: 30, right: 25, top: 56

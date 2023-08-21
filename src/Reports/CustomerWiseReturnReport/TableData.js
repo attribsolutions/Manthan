@@ -2,8 +2,8 @@ import { date_dmy_func } from "../../components/Common/CommonFunction";
 import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
-    "CR.Date ",
-    "CR No",
+    "Date ",
+    "Doc No",
     "Customer Name",
     "Item Name",
     "MRP ",
@@ -43,7 +43,12 @@ export const Bankcolumn = [
 export const Rows = (data) => {
 
     const { ClaimSummaryItemDetails = [] } = data
-    ClaimSummaryItemDetails.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+    function extractNumber(fullReturnNumber) {
+        const match = fullReturnNumber.match(/\d+/);
+        return match ? parseInt(match[0]) : 0;
+    }
+    ClaimSummaryItemDetails.sort((a, b) => extractNumber(a.FullReturnNumber) - extractNumber(b.FullReturnNumber));
+
     const returnArr = [];
     let Gst = 0
     let totalBasicAmount = 0
@@ -116,7 +121,7 @@ export const Rows = (data) => {
 
 
         else {
-            returnArr.push(totalrow());
+            // returnArr.push(totalrow());
             returnArr.push(tableitemRow);
             totalBasicAmount = 0
             totalCGst = 0
@@ -128,7 +133,7 @@ export const Rows = (data) => {
             Gst = element.GST;
         }
         if (key === ClaimSummaryItemDetails.length - 1) {
-            returnArr.push(totalrow());
+            // returnArr.push(totalrow());
         }
     })
     return returnArr;

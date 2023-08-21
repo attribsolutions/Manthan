@@ -17,7 +17,6 @@ function pageFooter(doc, data) {
 
 const CompanyWiseBudgetReport = (data) => {
 
-
     var doc = new jsPDF('p', 'pt', 'a4');
     try {
         pageHeder(doc, data);

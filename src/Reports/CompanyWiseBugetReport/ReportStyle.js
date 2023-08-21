@@ -1,5 +1,6 @@
 
 import { CurrentTime, currentDate_dmy, date_dmy_func } from '../../components/Common/CommonFunction';
+import { numberWithCommas } from '../Report_common_function';
 import * as table from './TableData'
 let initial_y = 0
 
@@ -28,16 +29,16 @@ export const pageHeder = (doc, data) => {
 export const tableBody = (doc, data) => {
     let tableStartY = 100;
     // Loop for multiple table 
-    debugger
     data.ReasonwiseMasterClaim.forEach((index1) => {
 
         Object.keys(index1).forEach((index2) => {
             doc.text(`${index2}`, 300, (tableStartY - 5), 'center')
 
-
+            debugger
             const options = {
 
                 didParseCell: (data1) => {
+
                     if (data1.row.cells[0].raw === "Total") {
 
                         data1.row.cells[1].styles.fontSize = 8
@@ -57,6 +58,44 @@ export const tableBody = (doc, data) => {
                         data1.row.cells[7].styles.fontStyle = "bold"
                         data1.row.cells[0].rowSpan = 1
                     }
+
+                    if (data1.cell.raw === numberWithCommas(Number(index1[index2][0].SecondaryAmount).toFixed(2))) {
+
+                        if (data1.row.cells[0].raw === "Total") {
+
+                            data1.row.cells[1].styles.valign = "top"
+                        } else {
+                            data1.row.cells[1].styles.halign = "right"
+                            data1.row.cells[1].styles.valign = "center"
+
+                            data1.row.cells[1].rowSpan = index1[index2].length
+                        }
+                    }
+                    if (data1.cell.raw === numberWithCommas(Number(index1[index2][0].PrimaryAmount).toFixed(2))) {
+
+                        if (data1.row.cells[0].raw === "Total") {
+
+                            data1.row.cells[2].styles.valign = "top"
+                        } else {
+                            data1.row.cells[2].styles.halign = "right"
+                            data1.row.cells[2].styles.valign = "center"
+                            data1.row.cells[2].rowSpan = index1[index2].length
+                        }
+                    }
+                    if (data1.row.index === 0) {
+
+                        if (data1.row.cells[4].raw === numberWithCommas(Number(index1[index2][0].NetSaleValue).toFixed(2))) {
+
+                            data1.row.cells[4].text[0] = `${numberWithCommas(Number(index1[index2].TotalNetPurchaseValue).toFixed(2))}`
+                            data1.row.cells[4].styles.halign = "right"
+                            data1.row.cells[4].styles.valign = "center"
+
+                            data1.row.cells[4].rowSpan = index1[index2].length
+                        }
+                    }
+
+
+
                 },
                 margin: {
                     left: 30, right: 25,//200 bottom
@@ -125,13 +164,13 @@ export const tableBody = (doc, data) => {
     const ProductWiseoptions = {
         didParseCell: (data1) => {
             if (data1.row.cells[0].raw === "Total") {
-                data1.row.cells[1].styles.fontSize = 9
-                data1.row.cells[2].styles.fontSize = 9
-                data1.row.cells[3].styles.fontSize = 9
-                data1.row.cells[4].styles.fontSize = 9
-                data1.row.cells[5].styles.fontSize = 9
-                data1.row.cells[6].styles.fontSize = 9
-                data1.row.cells[7].styles.fontSize = 9
+                data1.row.cells[1].styles.fontSize = 8
+                data1.row.cells[2].styles.fontSize = 8
+                data1.row.cells[3].styles.fontSize = 8
+                data1.row.cells[4].styles.fontSize = 8
+                data1.row.cells[5].styles.fontSize = 8
+                data1.row.cells[6].styles.fontSize = 8
+                data1.row.cells[7].styles.fontSize = 8
 
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[1].styles.fontStyle = "bold"
