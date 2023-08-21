@@ -126,33 +126,22 @@ function getBadRequestMessage(data) {
 
 axiosRetry(axiosApi, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
-const activeToasts = new Map();
+const activeToasts = new Set();
 
 function showAlert(message, color = '') {
-    if (activeToasts.has(message)) {
-        const toastCount = activeToasts.get(message);
-        if (toastCount >= 3) {
-            return; // Maximum of 3 duplicate toasts already shown
-        }
-        activeToasts.set(message, toastCount + 1);
-    } else {
-        activeToasts.set(message, 1);
-    }
+    if (!activeToasts.has(message)) {
+        activeToasts.add(message);
 
-    toast(message, {
-        type: color,
-        transition: Bounce,
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 5000,
-        onClose: () => {
-            const toastCount = activeToasts.get(message);
-            if (toastCount === 1) {
+        toast(message, {
+            type: color,
+            transition: Bounce,
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            onClose: () => {
                 activeToasts.delete(message);
-            } else {
-                activeToasts.set(message, toastCount - 1);
-            }
-        },
-    });
+            },
+        });
+    }
 }
 
 export { axiosApi };
