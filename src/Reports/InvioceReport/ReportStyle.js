@@ -451,6 +451,48 @@ export const tableBody = (doc, data) => {
 
             }
         },
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 8) {
+                if (data1.row.cells[8].raw === "          CGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 5, startY1vertical + 1, startXVertical - 5, endYvertical + 1);  // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+            if (rowIdx === 0 && colIdx === 10) {
+                if (data1.row.cells[10].raw === "          SGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 5, startY1vertical + 1, startXVertical - 5, endYvertical + 1); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
+        },
         margin: {
             left: 30, right: 25, top: 63,
         },
@@ -589,6 +631,8 @@ export const tableBodyWithIGST = (doc, data) => {
 
             }
         },
+
+
         margin: {
             left: 30, right: 25, top: 55
         },
