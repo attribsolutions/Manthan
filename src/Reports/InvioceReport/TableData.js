@@ -372,12 +372,12 @@ export const BilledByRow = (data) => {
     }
 
     var BilledByArray = [
-        [`${data.PartyName}`],
-        [`${PartyAddress}`],
-        [`${data.PartyState}`],
-        [`GSTIN:${data.PartyGSTIN}`],
-        [`FSSAINo:${data.PartyFSSAINo}`],
-        [`MobileNo:${data.PartyMobileNo}`],
+        [`            ${data.PartyName}`],
+        [`                 ${PartyAddress}`],
+        [`            ${data.PartyState}`],
+        [`              ${data.PartyGSTIN}`],
+        [`                   ${data.PartyFSSAINo}`],
+        [`                   ${data.PartyMobileNo}`],
 
     ]
     return BilledByArray;
@@ -392,13 +392,12 @@ export const BilledToRow = (data) => {
         CustomerAddress = data.CustomerAddress
     }
     var BilledToArray = [
-        [`${data.CustomerName}`],
-        [`${CustomerAddress}`],
-        [`${data.CustomerState}`],
-        [`GSTIN:${data.CustomerGSTIN}`,],
-        [`FSSAINo:${data.CustomerFSSAINo}`],
-        [`MobileNo:${data.CustomerMobileNo}`],
-
+        [`                   ${data.CustomerName}`],
+        [`                 ${CustomerAddress}`],
+        [`           ${data.CustomerState}`],
+        [`             ${data.CustomerGSTIN}`,],
+        [`                   ${data.CustomerFSSAINo}`],
+        [`                   ${data.CustomerMobileNo}`],
     ]
 
     return BilledToArray;
@@ -423,11 +422,11 @@ export const DetailsOfTransportRow = (data) => {
 
     var DetailsOfTransportArray = [
 
-        [`PO Number:${OrderNumber}`],
-        [data.DriverName === null ? "Driver Name:" : `Driver Name :${data.DriverName}`],
-        [`Vehicle No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
-        [`E-way Bill : ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
-        [`IRN NO :${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
+        [`                       ${OrderNumber}`],
+        [data.DriverName === null ? "" : `                        ${data.DriverName}`],
+        [`                     ${data.VehicleNo === null ? "" : data.VehicleNo}`],
+        [`                               ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
+        [`                               ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]
 
     return DetailsOfTransportArray;
