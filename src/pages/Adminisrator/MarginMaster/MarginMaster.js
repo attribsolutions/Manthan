@@ -46,6 +46,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { async } from "q";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -176,23 +177,20 @@ const MarginMaster = (props) => {
             dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
             dispatch(goButtonForMarginSuccess([]))
             GoButton_Handler()
-            dispatch(
-                customAlert({
-                    Type: 1,
-                    Status: true,
-                    Message: deleteMessage.Message,
-                    AfterResponseAction: getMarginList,
-                })
-            );
+            customAlert({
+                Type: 1,
+                Message: deleteMessage.Message,
+            })
+
         } else if (deleteMessage.Status === true) {
             dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMessage.Message),
-                })
-            );
+
+            customAlert({
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(deleteMessage.Message),
+            })
+
         }
     }, [deleteMessage]);
 
@@ -212,10 +210,8 @@ const MarginMaster = (props) => {
         label: data.Name
     }));
 
-    const GoButton_Handler = (event) => {
+    const GoButton_Handler = () => {
 
-        event.preventDefault();
-        const btnId = event.target.id
         if (values.EffectiveDate === '') {
             customAlert({
                 Type: 4,
@@ -226,8 +222,6 @@ const MarginMaster = (props) => {
         try {
             if (formValid(state, setState)) {
 
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
-
                 const jsonBody = JSON.stringify({
                     PriceList: values.PriceListName.value,
                     Party: values.PartyName.value ? values.PartyName.value : 0,
@@ -235,21 +229,21 @@ const MarginMaster = (props) => {
                 });
                 dispatch(goButtonForMargin({ jsonBody }));
             }
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { console.log(e) }
     };
 
     //select id for delete row
-    const deleteHandeler = (id, name) => {
-        dispatch(
-            customAlert({
-                Type: 5,
-                Status: true,
-                Message: `Are you sure you want to delete this Item : "${name}"`,
-                RedirectPath: false,
-                PermissionAction: deleteIdForMarginMaster,
-                ID: id,
-            })
-        );
+    const deleteHandeler = async (id, name) => {
+
+        const isConfirmed = await customAlert({
+            Type: 7,
+            Message: `Are you sure you want to delete this Item : "${name}"`
+        });
+
+        if (isConfirmed) {
+            dispatch(deleteIdForMarginMaster(id))
+        }
+
     };
 
     useEffect(async () => {

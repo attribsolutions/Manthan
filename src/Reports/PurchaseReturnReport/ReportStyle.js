@@ -68,6 +68,60 @@ export const reportHeder1 = (doc, data) => {
 
 
     var BilledByStyle = {
+
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Customer: ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Address: ', x, y)
+            };
+            if (rowIdx === 2 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('State: ', x, y)
+            };
+            if (rowIdx === 3 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('GSTIN: ', x, y)
+            };
+            if (rowIdx === 4 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('FSSAI No: ', x, y)
+            };
+            if (rowIdx === 5 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Mobile No: ', x, y)
+            };
+
+        },
         margin: {
             top: 45, left: 30, right: 35,
         },
@@ -83,7 +137,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: data.PrintType ? 1 : 2,
             fontSize: 8,
-            fontStyle: 'bold',
+            fontStyle: 'normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -99,6 +153,59 @@ export const reportHeder1 = (doc, data) => {
     };
 
     var BilledToStyle = {
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Party: ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Address: ', x, y)
+            };
+            if (rowIdx === 2 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('State: ', x, y)
+            };
+            if (rowIdx === 3 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('GSTIN: ', x, y)
+            };
+            if (rowIdx === 4 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('FSSAI No: ', x, y)
+            };
+            if (rowIdx === 5 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Mobile No: ', x, y)
+            };
+
+        },
         margin: {
             top: 45, left: 292, right: 35,
         },
@@ -114,7 +221,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: data.PrintType ? 1 : 2,
             fontSize: 8,
-            fontStyle: 'bold',
+            fontStyle: 'normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -601,7 +708,7 @@ export const tableBody = (doc, data) => {
 
 
 export const pageFooter = (doc, data) => {
-    
+
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
