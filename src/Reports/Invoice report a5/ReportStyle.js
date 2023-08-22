@@ -44,6 +44,60 @@ export const reportHeder1 = (doc, data) => {
 
 
     var BilledByStyle = {
+
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Party: ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Address: ', x, y)
+            };
+            if (rowIdx === 2 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('State: ', x, y)
+            };
+            if (rowIdx === 3 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('GSTIN: ', x, y)
+            };
+            if (rowIdx === 4 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('FSSAI No: ', x, y)
+            };
+            if (rowIdx === 5 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Mobile No: ', x, y)
+            };
+
+        },
         margin: {
             top: 45, left: 30, right: 35,
         },
@@ -59,8 +113,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: "black",
             cellPadding: 1,
             fontSize: 8,
-            // font: 'Arial',
-            fontStyle: 'bold',
+            fontStyle: 'normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -76,6 +129,59 @@ export const reportHeder1 = (doc, data) => {
 
     };
     var BilledToStyle = {
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Customer: ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Address: ', x, y)
+            };
+            if (rowIdx === 2 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('State: ', x, y)
+            };
+            if (rowIdx === 3 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('GSTIN: ', x, y)
+            };
+            if (rowIdx === 4 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('FSSAI No: ', x, y)
+            };
+            if (rowIdx === 5 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Mobile No: ', x, y)
+            };
+
+        },
         margin: {
             top: 45, left: 220, right: 35,
         },
@@ -91,8 +197,8 @@ export const reportHeder1 = (doc, data) => {
             textColor: "black",
             cellPadding: 1,
             fontSize: 8,
-            // font: 'Arial',
-            fontStyle: 'bold',
+
+            fontStyle: 'normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -107,6 +213,53 @@ export const reportHeder1 = (doc, data) => {
 
     };
     var DetailsOfTransportStyle = {
+
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('PO No: ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Driver Name: ', x, y)
+            };
+            if (rowIdx === 2 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Vehicle No: ', x, y)
+            };
+            if (rowIdx === 3 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('E-way Bill: ', x, y)
+            };
+            if (rowIdx === 4 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('IRN No: ', x, y)
+            };
+
+
+        },
         margin: {
             top: 45, left: 408, right: 35,
         },
@@ -124,8 +277,7 @@ export const reportHeder1 = (doc, data) => {
             cellPadding: 1,
             fontSize: 8,
             textColor: "black",
-            // font: 'Arial',
-            fontStyle: 'bold',
+            fontStyle: 'normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -353,17 +505,17 @@ export const tableBody = (doc, data) => {
 
             if (data1.row.cells[9].raw === "isaddition") {
                 data1.row.cells[1].colSpan = 5
-                // data1.row.cells[3].colSpan = 5
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
 
-                data1.row.cells[1].styles.fontSize = 7
                 data1.row.cells[1].styles.halign = "right"    // Alignment for  cgst and Total in spanrow
 
+                data1.row.cells[1].styles.fontSize = 7
                 data1.row.cells[8].styles.fontSize = 7
                 data1.row.cells[7].styles.fontSize = 7
                 data1.row.cells[10].styles.fontSize = 7
                 data1.row.cells[12].styles.fontSize = 7
+
                 data1.row.cells[1].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
                 data1.row.cells[7].styles.fontStyle = "bold"
@@ -383,15 +535,59 @@ export const tableBody = (doc, data) => {
                 } else {
                     data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
                 }
-
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
             }
-
             if (data1.row.cells[1].raw === "Batch") {
                 data1.row.cells[0].colSpan = 12
 
             }
+        },
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 8) {
+                if (data1.row.cells[8].raw === "          CGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2; // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 5, startY1vertical, startXVertical - 5, endYvertical); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+            if (rowIdx === 0 && colIdx === 10) {
+                if (data1.row.cells[10].raw === "          SGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2; // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 5, startY1vertical, startXVertical - 5, endYvertical); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
+
+
+
+
         },
         margin: {
             left: 30, right: 25, top: 56
@@ -424,10 +620,10 @@ export const tableBody = (doc, data) => {
             },
             1: {
                 valign: "top",
-                columnWidth: 137,
+                columnWidth: 135,
             },
             2: {
-                columnWidth: 50,
+                columnWidth: 52,
                 halign: 'right',
             },
             3: {
@@ -486,15 +682,15 @@ export const tableBody = (doc, data) => {
 
 
 
-    doc.autoTable(table.columns, table.Rows(data), options,);
-    const optionsTable4 = {
+    doc.autoTable(table.columnsWithCGST_SGST, table.RowsWithCGST_SGST(data), options,);
+
+    const Buttom_Hidden_Table_To_Avoid_FooterOverlap = {
         margin: {
             left: 30, right: 30, bottom: 110
         },
     };
 
-
-    doc.autoTable(optionsTable4);
+    doc.autoTable(Buttom_Hidden_Table_To_Avoid_FooterOverlap);
 }
 ////  lines when report  header line when table cordinates
 
@@ -572,7 +768,6 @@ export const tableBodyWithIGST = (doc, data) => {
             }
 
         },
-
 
         margin: {
             left: 30, right: 25, top: 55
@@ -655,13 +850,13 @@ export const tableBodyWithIGST = (doc, data) => {
     doc.line(220, initial_y, 220, 45);//vertical line between billby billto
     doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
     doc.autoTable(table.columnsWithIGST, table.RowsWithIGST(data), options,);
-    const optionsTable4 = {
+    const Buttom_Hidden_Table_To_Avoid_FooterOverlap = {
         margin: {
             left: 30, right: 30, bottom: 110
         },
     };
 
-    doc.autoTable(optionsTable4);
+    doc.autoTable(Buttom_Hidden_Table_To_Avoid_FooterOverlap);
 }
 
 

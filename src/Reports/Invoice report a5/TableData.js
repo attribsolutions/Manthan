@@ -2,7 +2,7 @@
 import { invoice } from "../ReportIndex";
 import { numberWithCommas } from "../Report_common_function";
 
-export const columns = [
+export const columnsWithCGST_SGST = [
     "SN",
     "HSN Item Name",
     "Quantity (UOM)",
@@ -33,10 +33,6 @@ export const columnsWithIGST = [
 
 
 
-export const Footercolumn = [
-    "",
-]
-
 export const Bankcolumn = [
     "",
     "",
@@ -54,7 +50,7 @@ export const DetailsOfTransport = [
     "Billed by",
 ]
 
-export const Rows = (data) => {
+export const RowsWithCGST_SGST = (data) => {
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -70,7 +66,15 @@ export const Rows = (data) => {
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
 
-        const { HSNCode, ItemName, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName } = currentItem;
+        const { HSNCode,
+            ItemName, MRP, Rate,
+            Discount, CGST, SGST,
+            Amount, DiscountAmount,
+            BasicAmount, Quantity,
+            UnitName, MRPValue, CGSTPercentage,
+            SGSTPercentage, GSTPercentage,
+            BatchCode, BatchDate, DiscountType,
+            PrimaryUnitName } = currentItem;
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
         const pattern = /\((.*?)\)/;
@@ -103,7 +107,15 @@ export const Rows = (data) => {
         } else {
             accumulator[key] = {
                 ItemName, HSNCode,
-                MRPValue, DiscountType, Rate, Discount, PcsinNumberUnit: PcsinNumberUnit, PcsinNumber: Number(PcsinNumber), CGST: Number(CGST), SGST: Number(SGST), Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount), Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate, BatchCode: BatchCode, BatchDate: BatchDate, quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName
+                MRPValue, DiscountType, Rate,
+                Discount, PcsinNumberUnit: PcsinNumberUnit,
+                PcsinNumber: Number(PcsinNumber),
+                CGST: Number(CGST), SGST: Number(SGST),
+                Amount: Number(Amount), DiscountAmount: Number(DiscountAmount),
+                BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
+                UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
+                BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
+                quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName
             };
         }
         return accumulator;
@@ -112,7 +124,7 @@ export const Rows = (data) => {
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
-        debugger
+
         let HSNcodes = ""
         if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);
@@ -123,11 +135,11 @@ export const Rows = (data) => {
         if (data.SettingData.HSNCodeDigit === "3") {
             HSNcodes = element.HSNCode.slice(0, 8);
         }
-
+        debugger
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
-            element.UnitName === "" ? `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}      (${element.PcsinNumber} ${element.PcsinNumberUnit})`,
+            element.UnitName === "" ? `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${parseFloat(element.Quantity)} ${element.PrimaryUnitName} (${element.PcsinNumber} ${element.PcsinNumberUnit})`,
             `${Number(element.MRPValue).toFixed(2)}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
@@ -235,10 +247,30 @@ export const RowsWithIGST = (data) => {
     let GSTPercentage = 0
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
+        const { HSNCode, ItemName, IGSTPercentage,
+            MRP, Rate, Discount, CGST, SGST,
+            Amount, DiscountAmount, BasicAmount,
+            Quantity, UnitName, MRPValue, CGSTPercentage,
+            SGSTPercentage, GSTPercentage, BatchCode,
+            BatchDate, DiscountType, PrimaryUnitName, IGST } = currentItem;
 
-        const { HSNCode, ItemName, IGSTPercentage, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName, IGST } = currentItem;
+        let PcsinNumber = ""
+        let PcsinNumberUnit = ""
+        const pattern = /\((.*?)\)/;
+
+        if (currentItem.UnitName !== "") {
+            const matchFound = currentItem.UnitName.match(pattern);
+            const extractedText = matchFound[1];
+            console.log(extractedText); // Output: "19.0 No"
+            const match = extractedText.split(" ")
+            PcsinNumber = match[0];
+            PcsinNumberUnit = match[1];
+
+        }
+
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
+            accumulator[key].PcsinNumber += Number(PcsinNumber);
             accumulator[key].DiscountAmount += Number(DiscountAmount);
             accumulator[key].Quantity += Number(Quantity);
             accumulator[key].BasicAmount += Number(BasicAmount);
@@ -253,7 +285,14 @@ export const RowsWithIGST = (data) => {
         } else {
             accumulator[key] = {
                 ItemName, HSNCode,
-                MRPValue, IGSTPercentage, DiscountType, Rate, Discount, CGST: Number(CGST), SGST: Number(SGST), Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount), Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate, BatchCode: BatchCode, BatchDate: BatchDate, quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName, IGST
+                MRPValue, IGSTPercentage, DiscountType,
+                PcsinNumber: Number(PcsinNumber), Rate,
+                Discount, CGST: Number(CGST), SGST: Number(SGST),
+                Amount: Number(Amount), DiscountAmount: Number(DiscountAmount),
+                BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
+                UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
+                BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
+                quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName, IGST
             };
         }
         return accumulator;
@@ -276,7 +315,7 @@ export const RowsWithIGST = (data) => {
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
-            `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}   ${element.UnitName}`,
+            element.UnitName === "" ? `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}      (${element.PcsinNumber} ${element.PcsinNumberUnit})`,
             `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
@@ -374,12 +413,12 @@ export const BilledByRow = (data) => {
     }
 
     var BilledByArray = [
-        [`${data.PartyName}`],
-        [`${PartyAddress}`],
-        [`${data.PartyState}`],
-        [`GSTIN:${data.PartyGSTIN}`],
-        [`FSSAINo:${data.PartyFSSAINo}`],
-        [`MobileNo:${data.PartyMobileNo}`],
+        [`            ${data.PartyName}`],
+        [`                 ${PartyAddress}`],
+        [`            ${data.PartyState}`],
+        [`              ${data.PartyGSTIN}`],
+        [`                   ${data.PartyFSSAINo}`],
+        [`                   ${data.PartyMobileNo}`],
 
     ]
     return BilledByArray;
@@ -394,13 +433,12 @@ export const BilledToRow = (data) => {
         CustomerAddress = data.CustomerAddress
     }
     var BilledToArray = [
-        [`${data.CustomerName}`],
-        [`${CustomerAddress}`],
-        [`${data.CustomerState}`],
-        [`GSTIN:${data.CustomerGSTIN}`,],
-        [`FSSAINo:${data.CustomerFSSAINo}`],
-        [`MobileNo:${data.CustomerMobileNo}`],
-
+        [`                   ${data.CustomerName}`],
+        [`                 ${CustomerAddress}`],
+        [`           ${data.CustomerState}`],
+        [`             ${data.CustomerGSTIN}`,],
+        [`                   ${data.CustomerFSSAINo}`],
+        [`                   ${data.CustomerMobileNo}`],
     ]
 
     return BilledToArray;
@@ -423,11 +461,11 @@ export const DetailsOfTransportRow = (data) => {
     }
 
     var DetailsOfTransportArray = [
-        [`PO Number:${OrderNumber}`],
-        [data.DriverName === null ? "Driver Name:" : `Driver Name :${data.DriverName}`],
-        [`vehicle No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
-        [`E-way Bill : ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
-        [`IRN NO :${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
+        [`              ${OrderNumber}`],
+        [data.DriverName === null ? "" : `                        ${data.DriverName}`],
+        [`                      ${data.VehicleNo === null ? "" : data.VehicleNo}`],
+        [`                          ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
+        [`                          ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]
 
     return DetailsOfTransportArray;

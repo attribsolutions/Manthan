@@ -55,6 +55,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
 import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
+import CustomTable from "../../../CustomTable2";
 
 const Invoice = (props) => {
 
@@ -817,7 +818,22 @@ const Invoice = (props) => {
                             </div>
                         </Col>
 
-                        <div>
+                        <CustomTable
+                            keyField={"id"}
+                            data={orderItemDetails}
+                            columns={pagesListColumns}
+                            id="table_Arrow"
+                            classes={"table  table-bordered "}
+                            noDataIndication={
+                                <div className="text-danger text-center ">
+                                    Items Not available
+                                </div>
+                            }
+                            onDataSizeChange={(e) => {
+                                _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                            }}
+                        />
+                        {/* <div>
                             <ToolkitProvider
                                 keyField={"id"}
                                 data={orderItemDetails}
@@ -851,7 +867,7 @@ const Invoice = (props) => {
                                     </React.Fragment>
                                 )}
                             </ToolkitProvider>
-                        </div>
+                        </div> */}
 
                         {/* {orderItemDetails.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>

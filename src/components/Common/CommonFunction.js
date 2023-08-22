@@ -267,11 +267,6 @@ export const loginUserGSTIN = () => { //+++++++++++++++++++++ Session Company Id
   return '';
 };
 
-
-
-
-
-
 export const loginJsonBody = () => ({ //+++++++++++++++++++++ loginJsonBody for Filter API +++++++++++++++++++++++++++++
   UserID: loginUserID(),
   RoleID: loginRoleID(),
@@ -399,7 +394,6 @@ export async function CheckAPIResponse({ method, url, response = {}, body, error
 
   return Promise.reject(response);
 }
-
 
 export const tableInputArrowUpDounFunc = (tableId) => {
 
@@ -584,6 +578,10 @@ export const tableInputArrowUpDounFunc = (tableId) => {
   });
 
 
+}
+
+export function trailingZeros(value) {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
+  return parseFloat(value).toString()
 }
 
 

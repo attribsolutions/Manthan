@@ -2,7 +2,7 @@ import { numberWithCommas } from "../Report_common_function";
 
 
 export const columns = [
-    "SR",
+    "SN",
     "HSN Item Name",
     "Quantity (UOM)",
     "MRP",
@@ -17,7 +17,7 @@ export const columns = [
     "Amount",
 ];
 export const columnsWithIGST = [
-    "SR",
+    "SN",
     "HSN Item Name",
     "Quantity (UOM)",
     "MRP",
@@ -125,10 +125,10 @@ export const Rows = (data) => {
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
-            element.UnitName === "" ? `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}      (${element.PcsinNumber} ${element.PcsinNumberUnit})`,
+            element.UnitName === "" ? `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}(${element.PcsinNumber} ${element.PcsinNumberUnit})`,
             `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
-            `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
+            `${parseFloat(element.Discount)} ${element.DiscountType === "1" ? "Rs" : "%"}`,
             `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
             `${numberWithCommas(Number(element.BasicAmount).toFixed(2))}`,
             `${Number(element.CGSTPercentage).toFixed(1)}%`,
@@ -372,12 +372,12 @@ export const BilledByRow = (data) => {
     }
 
     var BilledByArray = [
-        [`${data.PartyName}`],
-        [`${PartyAddress}`],
-        [`${data.PartyState}`],
-        [`GSTIN:${data.PartyGSTIN}`],
-        [`FSSAINo:${data.PartyFSSAINo}`],
-        [`MobileNo:${data.PartyMobileNo}`],
+        [`            ${data.PartyName}`],
+        [`                 ${PartyAddress}`],
+        [`            ${data.PartyState}`],
+        [`              ${data.PartyGSTIN}`],
+        [`                   ${data.PartyFSSAINo}`],
+        [`                   ${data.PartyMobileNo}`],
 
     ]
     return BilledByArray;
@@ -392,13 +392,12 @@ export const BilledToRow = (data) => {
         CustomerAddress = data.CustomerAddress
     }
     var BilledToArray = [
-        [`${data.CustomerName}`],
-        [`${CustomerAddress}`],
-        [`${data.CustomerState}`],
-        [`GSTIN:${data.CustomerGSTIN}`,],
-        [`FSSAINo:${data.CustomerFSSAINo}`],
-        [`MobileNo:${data.CustomerMobileNo}`],
-
+        [`                   ${data.CustomerName}`],
+        [`                 ${CustomerAddress}`],
+        [`           ${data.CustomerState}`],
+        [`             ${data.CustomerGSTIN}`,],
+        [`                   ${data.CustomerFSSAINo}`],
+        [`                   ${data.CustomerMobileNo}`],
     ]
 
     return BilledToArray;
@@ -422,12 +421,11 @@ export const DetailsOfTransportRow = (data) => {
     }
 
     var DetailsOfTransportArray = [
-
-        [` PO Number:${OrderNumber}`],
-        [data.DriverName === null ? "Driver Name:" : `Driver Name :${data.DriverName}`],
-        [`vehicle No :${data.VehicleNo === null ? "" : data.VehicleNo}`],
-        [`E-way Bill : ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
-        [`IRN NO :${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
+        [`             ${OrderNumber}`],
+        [data.DriverName === null ? "" : `                        ${data.DriverName}`],
+        [`                     ${data.VehicleNo === null ? "" : data.VehicleNo}`],
+        [`                               ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
+        [`               ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]
 
     return DetailsOfTransportArray;

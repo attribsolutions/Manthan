@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row, } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
@@ -9,14 +9,12 @@ import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { mode, pageId, url } from "../../routes/index"
-import * as XLSX from 'xlsx';
+import { mode, pageId } from "../../routes/index"
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import CustomTable from "../../CustomTable2";
 
 const StockReport = (props) => {
 
@@ -81,36 +79,34 @@ const StockReport = (props) => {
     }, [])
 
     useEffect(() => {
-
+        // This useEffect handles the response from the API call
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
-                setBtnMode(0);
-                const { Data } = goButtonData
+                dispatch(stockReport_GoButton_API_Success([])); // Reset goButtonData
                 if (btnMode === 2) {
-                    const worksheet = XLSX.utils.json_to_sheet(Data);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, "Damage Stock Report");
-                    XLSX.writeFile(workbook, `Damage Stock Report.xlsx`);
-                    dispatch(stockReport_GoButton_API_Success([]));
+                    ExcelDownloadFunc({      // Download CSV
+                        pageField,
+                        excelData: goButtonData.Data,
+                        excelFileName: "Current_Stock_Report"
+                    })
                 }
-                else {
-                    setTableData(Data)
+                else if (btnMode === 1) {
+                    setTableData(goButtonData.Data); // Update table data
                 }
+            } else if ((goButtonData.Status === true)) {
+                setTableData([]); // Clear table data if necessary
             }
-            else if ((goButtonData.Status === true)) {
-                setTableData([]);
-            }
-            setBtnMode(0);
-        }
-        catch (e) { console.log(e) }
+            setBtnMode(0); // Reset button mode
 
+        } catch (e) {
+            console.log(e); // Log any errors
+        }
     }, [goButtonData]);
 
     useEffect(() => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-        // dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
     }, [tableData]);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
@@ -127,6 +123,7 @@ const StockReport = (props) => {
     }));
 
     function goButtonHandler(e, btnMode) {
+
         try {
             setBtnMode(btnMode)
             if (unitDropdown === "") {
@@ -211,7 +208,6 @@ const StockReport = (props) => {
                                     <Select
                                         name="Unit"
                                         value={unitDropdown}
-                                        // isDisabled={tableData.length > 0 && true}
                                         isSearchable={true}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
@@ -238,7 +234,6 @@ const StockReport = (props) => {
                                             name="Party"
                                             value={partyDropdown}
                                             isSearchable={true}
-                                            // isDisabled={tableData.length > 0 && true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{
@@ -283,43 +278,20 @@ const StockReport = (props) => {
 
                 </div>
 
-                <ToolkitProvider
+                <CustomTable
                     keyField={"id"}
                     data={tableData}
                     columns={tableColumns}
-                    search
-                >
-                    {(toolkitProps,) => (
-                        <React.Fragment>
-                            <Row>
-                                <Col xl="12">
-                                    <div className="table-responsive table">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            classes={"table  table-bordered table-hover"}
-                                            noDataIndication={
-                                                <div className="text-danger text-center ">
-                                                    Record Not available
-                                                </div>
-                                            }
-                                            onDataSizeChange={({ dataSize }) => {
-                                                
-                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                            }}
-                                            {...toolkitProps.baseProps}
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-                                </Col>
-                            </Row>
-
-                        </React.Fragment>
-                    )}
-                </ToolkitProvider>
+                    paginationEnabled={false}
+                    onDataSizeChange={({ dataCount }) => {
+                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                    }}
+                    noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
+                />
             </div>
             <C_Report />
         </React.Fragment >
     )
 }
 
-export default StockReport;;
+export default StockReport;

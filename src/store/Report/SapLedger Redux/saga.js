@@ -1,11 +1,10 @@
-
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
   LedgerApiErrorAction,
   SapLedger_Go_Button_API_Success, getExcel_Button_API_Success
 } from "./action";
 import {
-  GetExcelButton, Get_Product_Margin_Report, PartyLedger_API,
+  Get_Product_Margin_Report, PartyLedger_API,
 } from "../../../helpers/backend_helper";
 import {
   GET_EXCELBUTTON_API, GO_BUTTON_API_SAP_LEDGER,
@@ -20,31 +19,49 @@ function* goBtn_Get_API_GenFun({ filters }) {
     const response = yield call(PartyLedger_API, filters);
     let TotalDebitAmount = 0
     let TotalCreditAmount = 0
+    let NewResponse
 
-    const newresponse = yield response.Data.data.map((i, key) => {
+    if (response.Data.status_code === 200) {
+      const newresponse = yield response.Data.data.map((i, key) => {
 
-      i.id = key + 1
-      if (i.DebitCredit === "S") {
-        i.Debit_Amount = i.Amount
-        TotalDebitAmount = Number(TotalDebitAmount) + Number(i.Debit_Amount)
-      }
-      if (i.DebitCredit === "H") {
-        i.Credit_Amount = i.Amount
-        TotalCreditAmount = Number(TotalCreditAmount) + Number(i.Credit_Amount)
-      }
+        i.id = key + 1
+        if (i.DebitCredit === "S") {
+          i.Debit_Amount = i.Amount
+          TotalDebitAmount = Number(TotalDebitAmount) + Number(i.Debit_Amount)
+        }
+        if (i.DebitCredit === "H") {
+          i.Credit_Amount = i.Amount
+          TotalCreditAmount = Number(TotalCreditAmount) + Number(i.Credit_Amount)
+        }
+        return i
+      })
 
-      return i
+      newresponse.push({
+        id: response.length - 1,
+        PostingDate: "Total",
+        Credit_Amount: TotalCreditAmount.toFixed(2),
+        Debit_Amount: TotalDebitAmount.toFixed(2)
+      })
 
-    })
-    newresponse.push({
-      id: response.length - 1,
-      PostingDate: "Total",
-      Credit_Amount: TotalCreditAmount.toFixed(2),
-      Debit_Amount: TotalDebitAmount.toFixed(2)
-    })
-    response.data = newresponse
+      NewResponse = {
+        Status: true,
+        StatusCode: 200,
+        count: response.Data.count,
+        OpeingBal: response.Data.OpeingBal,
+        ClosingBal: response.Data.ClosingBal,
+        tableData: newresponse
+      };
+    }
+    else {
 
-    yield put(SapLedger_Go_Button_API_Success(response));
+      NewResponse = {
+        Status: true,
+        StatusCode: 204,
+        tableData: []
+      };
+    }
+
+    yield put(SapLedger_Go_Button_API_Success(NewResponse));
 
   } catch (error) { yield put(LedgerApiErrorAction()) }
 }

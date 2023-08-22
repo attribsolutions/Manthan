@@ -18,6 +18,7 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId, url } from "../../routes/index"
 import * as XLSX from 'xlsx';
 import CustomTable from "../../CustomTable2";
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
 
 const DamageStockReport = (props) => {
 
@@ -82,20 +83,26 @@ const DamageStockReport = (props) => {
     }, [])
 
     useEffect(() => {
+        if (tableData.length === 0) {
+            setBtnMode(0)
+        }
+    }, [tableData]);
+
+    useEffect(() => {
 
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 setBtnMode(0);
-                const { Data } = goButtonData
                 if (btnMode === 2) {
-                    const worksheet = XLSX.utils.json_to_sheet(Data);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, "Damage Stock Report");
-                    XLSX.writeFile(workbook, `Damage Stock Report.xlsx`);
+                    ExcelDownloadFunc({      // Download CSV
+                        pageField,
+                        excelData: goButtonData.Data,
+                        excelFileName: "Damage Stock Export"
+                    })
                     dispatch(damageStockReport_GoButton_API_Success([]));
                 }
                 else {
-                    setTableData(Data)
+                    setTableData(goButtonData.Data)
                 }
             }
             else if ((goButtonData.Status === true)) {
@@ -106,12 +113,6 @@ const DamageStockReport = (props) => {
         catch (e) { console.log(e) }
 
     }, [goButtonData]);
-
-    useEffect(() => {
-        if (tableData.length === 0) {
-            setBtnMode(0)
-        }
-    }, [tableData]);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
 
@@ -293,7 +294,7 @@ const DamageStockReport = (props) => {
                     }}
                     noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
                 />
-                
+
             </div>
             <C_Report />
         </React.Fragment >

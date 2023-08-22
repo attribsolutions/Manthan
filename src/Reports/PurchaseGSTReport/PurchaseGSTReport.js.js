@@ -7,16 +7,18 @@ import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, commonPageField, commonPageFieldSuccess } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import * as XLSX from 'xlsx';
 import Select from "react-select";
 import { postPurchaseGSTReport_API, postPurchaseGSTReport_API_Success } from "../../store/Report/PurchaseGSTRedux/action";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { mode, url, pageId } from "../../routes/index"
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
+import Papa from 'papaparse';
+import XLSX from 'react-csv';
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
 
 const PurchaseGSTReport = (props) => {
 
@@ -126,12 +128,13 @@ const PurchaseGSTReport = (props) => {
     useEffect(() => {
         if (tableData.btnId === "excel_btnId") {
             if (GSTRateWise ? PurchaseGSTRateWiseDetails.length : PurchaseGSTDetails.length > 1) {
-                const worksheet = XLSX.utils.json_to_sheet(GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, "PurchaseGSTReport");
-                XLSX.writeFile(workbook, `Purchase GST Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
+                ExcelDownloadFunc({      // Download CSV
+                    pageField,
+                    excelData: GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails,
+                    excelFileName: "Purchase GST Report"
+                })
                 dispatch(postPurchaseGSTReport_API_Success([]));
-                setPartyDropdown('')
+                setPartyDropdown('');
             }
         }
     }, [tableData]);
