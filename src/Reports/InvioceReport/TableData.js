@@ -421,12 +421,11 @@ export const DetailsOfTransportRow = (data) => {
     }
 
     var DetailsOfTransportArray = [
-
-        [`                       ${OrderNumber}`],
+        [`             ${OrderNumber}`],
         [data.DriverName === null ? "" : `                        ${data.DriverName}`],
         [`                     ${data.VehicleNo === null ? "" : data.VehicleNo}`],
         [`                               ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
-        [`                               ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
+        [`               ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]
 
     return DetailsOfTransportArray;
