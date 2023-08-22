@@ -4,7 +4,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { Go_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import {mode, pageId } from "../../routes/index"
+import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { SSDD_List_under_Company, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
