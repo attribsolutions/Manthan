@@ -34,7 +34,7 @@ export const tableBody = (doc, data) => {
         Object.keys(index1).forEach((index2) => {
             doc.text(`${index2}`, 300, (tableStartY - 5), 'center')
 
-            debugger
+            
             const options = {
 
                 didParseCell: (data1) => {
@@ -103,7 +103,7 @@ export const tableBody = (doc, data) => {
                 theme: 'grid',
                 headerStyles: {
                     cellPadding: 4,
-                    lineWidth: 1,
+                    lineWidth: 0.5,
                     valign: 'top',
                     fontStyle: 'bold',
                     halign: 'center',    //'center' or 'right'
@@ -111,7 +111,7 @@ export const tableBody = (doc, data) => {
                     textColor: [0, 0, 0], //Black     
                     fontSize: 8,
                     rowHeight: 10,
-                    lineColor: [0, 0, 0]
+                    lineColor: "black"
                 },
                 bodyStyles: {
                     textColor: [30, 30, 30],
@@ -190,7 +190,7 @@ export const tableBody = (doc, data) => {
         theme: 'grid',
         headerStyles: {
             cellPadding: 4,
-            lineWidth: 1,
+            lineWidth: 0.5,
             valign: 'top',
             fontStyle: 'bold',
             halign: 'center',
@@ -198,7 +198,7 @@ export const tableBody = (doc, data) => {
             textColor: [0, 0, 0],
             fontSize: 8,
             rowHeight: 10,
-            lineColor: [0, 0, 0]
+            lineColor: "black"
         },
         bodyStyles: {
             textColor: [30, 30, 30],
