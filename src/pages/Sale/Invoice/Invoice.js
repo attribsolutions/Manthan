@@ -268,7 +268,9 @@ const Invoice = (props) => {
         {//***************ItemName********************************************************************* */
             text: "Item Name",
             dataField: "ItemName",
-            classes: () => ('invoice-item-row'),
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "ItemName", "sticky-col": "true" }),
+            // headerClasses: 'd-none d-sm-table-cell', // Hide on mobile
+            classes: ' d-none d-sm-table-cell', // Hide on mobile
             formatter: (cellContent, index1) => {
                 return (
                     <>
@@ -287,7 +289,7 @@ const Invoice = (props) => {
             text: "Quantity/Unit",
             dataField: "",
             formatExtraData: { tableList: orderItemDetails },
-            // classes: () => ('invoice-quantity-row1'),
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <>
                     <div className="div-1 mb-2" style={{ minWidth: "200px" }}>
@@ -306,7 +308,7 @@ const Invoice = (props) => {
                             }}
                         />
                     </div>
-                    <div className="div-1 ">
+                    <div>
                         <div id="select">
                             <Select
                                 classNamePrefix="select2-selection"
@@ -328,7 +330,7 @@ const Invoice = (props) => {
                             ></Select>
                         </div>
                     </div>
-                    <div className="bottom-div">
+                    <div >
                         <span>Order-Qty :</span>
                         <samp>{index1.OrderQty}</samp>
                         <samp>{index1.UnitName}</samp>
@@ -339,72 +341,58 @@ const Invoice = (props) => {
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label1': "Stock Details", "stock-header": "true" }),
+            headerStyle: { zIndex: "2" },
+            // classes: '_StockDetails-header',
             formatExtraData: { tableList: orderItemDetails },
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
-                <div>
-                    <Table className="table table-responsive mb-1">
-                        <Thead >
-                            <tr >
-                                <th style={{ zIndex: -1 }}>BatchCode</th>
-                                <th style={{ zIndex: -1 }}>
-                                    <div>
-                                        <samp>Stock Quantity</samp>
-                                    </div>
-                                </th >
-                                <th style={{ zIndex: -1 }}>
-                                    <div>
-                                        <samp>Quantity</samp>
-                                    </div>
-                                </th>
-                                <th style={{ zIndex: -1 }}>Basic Rate</th>
-                                <th style={{ zIndex: -1 }}>MRP</th>
+                <div className="table-responsive">
+                    <table className="custom-table ">
+                        <thead >
+                            <tr>
+                                <th>BatchCode</th>
+                                <th>Stock Quantity</th>
+                                <th>Quantity</th>
+                                <th>Basic Rate</th>
+                                <th>MRP</th>
                             </tr>
-                        </Thead>
-                        <Tbody>
+                        </thead>
+                        <tbody>
                             {cellContent.map((index2) => (
                                 <tr key={index1.id}>
-                                    <td>
-                                        <div style={{ width: "120px" }}>{index2.BatchCode}</div>
+                                    <td data-label="BatchCode">{index2.BatchCode}</td>
+                                    <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
+                                        <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
                                     </td>
-                                    <td>
-                                        <div style={{ width: "120px", textAlign: "right" }}>
-                                            <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
-                                        </div>
+                                    <td data-label='Quantity'>
+                                        <Input
+                                            type="text"
+                                            disabled={pageMode === 'edit' ? true : false}
+                                            style={{ textAlign: "right" }}
+                                            key={`batchQty${index1.id}-${index2.id}`}
+                                            id={`batchQty${index1.id}-${index2.id}`}
+                                            defaultValue={index2.Qty}
+                                            onChange={(event) => {
+                                                stockQtyOnChange(event, index1, index2);
+                                                totalAmountCalcuationFunc(tableList);
+                                            }}
+                                        />
                                     </td>
-                                    <td>
-                                        <div style={{ width: "150px" }}>
-                                            <Input
-                                                type="text"
-                                                disabled={pageMode === 'edit' ? true : false}
-                                                style={{ textAlign: "right" }}
-                                                key={`batchQty${index1.id}-${index2.id}`}
-                                                id={`batchQty${index1.id}-${index2.id}`}
-                                                defaultValue={index2.Qty}
-                                                onChange={(event) => {
-                                                    stockQtyOnChange(event, index1, index2);
-                                                    totalAmountCalcuationFunc(tableList);
-                                                }}
-                                            ></Input>
-                                        </div>
+                                    <td data-label='Basic Rate' style={{ textAlign: "right" }}>
+                                        <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
                                     </td>
-                                    <td>
-                                        <div style={{ width: "50px" }}>
-                                            <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style={{ width: "50px" }}>{index2.MRP}</div>
-                                    </td>
+                                    <td data-label='MRP' style={{ textAlign: "right" }}>{index2.MRP}</td>
                                 </tr>
                             ))}
-                        </Tbody>
-                    </Table>
+                        </tbody>
+                    </table>
                 </div>
             ),
         },
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
             dataField: "",
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Discount/unit" }),
             formatExtraData: {
                 discountValueAll: discountValueAll,
                 discountTypeAll: discountTypeAll,
@@ -807,7 +795,7 @@ const Invoice = (props) => {
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState })
                                                 }}
-                                                styles={{ menu: provided => ({ ...provided, zIndex: 2 }) }}
+                                                styles={{ menu: provided => ({ ...provided, zIndex: 3 }) }}
                                             />
                                             {isError.VehicleNo.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.VehicleNo}</small></span>
@@ -817,70 +805,23 @@ const Invoice = (props) => {
                                 </Col>
                             </div>
                         </Col>
-
-                        <CustomTable
-                            keyField={"id"}
-                            data={orderItemDetails}
-                            columns={pagesListColumns}
-                            id="table_Arrow"
-                            classes={"table  table-bordered "}
-                            noDataIndication={
-                                <div className="text-danger text-center ">
-                                    Items Not available
-                                </div>
-                            }
-                            onDataSizeChange={(e) => {
-                                _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                            }}
-                        />
-                        {/* <div>
-                            <ToolkitProvider
+                        <div className="mb-1">
+                            <CustomTable
                                 keyField={"id"}
                                 data={orderItemDetails}
                                 columns={pagesListColumns}
-                                search
-                            >
-                                {(toolkitProps) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive table">
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        id="table_Arrow"
-                                                        classes={"table  table-bordered "}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        onDataSizeChange={(e) => {
-                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                        }}
-                                                    />
-                                                </div>
-                                            </Col>
-                                            {mySearchProps(toolkitProps.searchProps,)}
-                                        </Row>
-
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        </div> */}
-
-                        {/* {orderItemDetails.length > 0 ? <FormGroup>
-                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                <SaveButton
-                                    pageMode={pageMode}
-                                    onClick={SaveHandler}
-                                    id={saveBtnid}
-                                    loading={saveBtnloading}
-                                    userAcc={userPageAccessState}
-                                />
-                            </Col>
-                        </FormGroup > : null} */}
-
+                                id="table_Arrow"
+                                classes={"table  table-bordered "}
+                                noDataIndication={
+                                    <div className="text-danger text-center ">
+                                        Items Not available
+                                    </div>
+                                }
+                                onDataSizeChange={(e) => {
+                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                }}
+                            />
+                        </div>
                         {
                             (orderItemDetails.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                                 <Col>

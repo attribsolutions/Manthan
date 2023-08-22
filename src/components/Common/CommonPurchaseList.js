@@ -339,6 +339,7 @@ const CommonPurchaseList = (props) => {
                 onDataSizeChange={({ dataCount }) => {
                   dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
                 }}
+                paginationEnabled={true}
                 noDataIndication={
                   <div className="text-danger text-center ">
                     No record(s) Not Found.

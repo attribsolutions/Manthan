@@ -1,7 +1,7 @@
 import { Input } from "reactstrap"
 import { useState } from "react";
 import { useEffect } from "react";
-import { concatDateAndTime } from "./CommonFunction";
+
 
 const onSelectAll = (event, allarray,) => {
 

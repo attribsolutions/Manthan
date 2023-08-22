@@ -13,7 +13,7 @@ const CustomTable = ({
     defaultSearchText,
     onDataSizeChange,
     itemsPerPage = 15,
-    paginationEnabled = true,
+    paginationEnabled = false,
     classes,
     updatedRowBlinkId,
     ...rest
