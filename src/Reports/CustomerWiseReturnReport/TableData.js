@@ -9,10 +9,11 @@ export const columns = [
     "MRP ",
     "Return Quantity",
     "Approve Quantity",
-    "GST %",
     "Rate Without GST",
-    "CGST Amount",
-    "SGST Amount",
+    "Discount Amount",
+    "Taxable Amount",
+    "GST %",
+    "GST Amount",
     "Amount",
 ];
 
@@ -51,17 +52,20 @@ export const Rows = (data) => {
 
     const returnArr = [];
     let Gst = 0
-    let totalBasicAmount = 0
-    let totalCGst = 0
-    let totalSGst = 0
+    let totalTaxableAmount = 0
+    let totalGst = 0
     let totalAmount = 0
     let totalQuantity = 0
-    let SrNO = 1
-    let TotalGst = 0
+    let totalApprovedQuantity = 0
+
+
+
+
     let GSTPercentage = 0
 
     ClaimSummaryItemDetails.forEach((element, key) => {
-
+        debugger
+        const TotalGST = (Number(element.CGST)) + (Number(element.SGST))
         const tableitemRow = [
             `${date_dmy_func(element.ReturnDate)}`,
             `${(element.FullReturnNumber)}`,
@@ -70,22 +74,21 @@ export const Rows = (data) => {
             `${numberWithCommas(Number(element.MRP).toFixed(2))}`,
             `${numberWithCommas(Number(element.Quantity).toFixed(2))}`,
             `${numberWithCommas(Number(element.ApprovedQuantity).toFixed(2))}`,
-            `${numberWithCommas(Number(element.GST).toFixed(2))}%`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
-            `${numberWithCommas(Number(element.CGST).toFixed(2))}`,
-            `${numberWithCommas(Number(element.SGST).toFixed(2))}`,
+            `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.TaxableAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.GST).toFixed(2))}%`,
+            `${numberWithCommas(Number(TotalGST).toFixed(2))}`,
             `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
         ];
 
         function totalLots() {
             totalQuantity = Number(totalQuantity) + Number(element.Quantity)
-            totalCGst = Number(totalCGst) + Number(element.CGST)
-            totalSGst = Number(totalSGst) + Number(element.SGST)
-            totalAmount = Number(totalAmount) + Number(element.Amount)
-            TotalGst = totalCGst + totalSGst;
+            totalApprovedQuantity = Number(totalApprovedQuantity) + Number(element.ApprovedQuantity)
+            totalTaxableAmount = Number(totalTaxableAmount) + Number(element.TaxableAmount)
+            totalGst = Number(totalGst) + Number(TotalGST)
+            totalAmount = Number(totalAmount) + Number(element.Amount);
             GSTPercentage = Number(element.GST)
-            let cgst = data["tableTot"].TotalCGst
-            return ({ TotalCGst: Number(totalCGst) + Number(cgst) })
 
         };
 
@@ -93,16 +96,17 @@ export const Rows = (data) => {
 
             return [
                 `Total`,
-                `GST ${(Number(GSTPercentage))}% Total `,
+                ` `,
                 ``,
                 ``,
                 ``,
+                `${numberWithCommas(Number(totalQuantity).toFixed(2))}`,
+                `${numberWithCommas(Number(totalApprovedQuantity).toFixed(2))}`,
                 ``,
                 ``,
+                `${numberWithCommas(Number(totalTaxableAmount).toFixed(2))}`,
                 ``,
-                ``,
-                `${numberWithCommas(Number(totalCGst).toFixed(2))}`,
-                `${numberWithCommas(Number(totalSGst).toFixed(2))}`,
+                `${numberWithCommas(Number(totalGst).toFixed(2))}`,
                 `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
 
             ];
@@ -123,17 +127,12 @@ export const Rows = (data) => {
         else {
             // returnArr.push(totalrow());
             returnArr.push(tableitemRow);
-            totalBasicAmount = 0
-            totalCGst = 0
-            totalSGst = 0
-            totalAmount = 0
-            totalQuantity = 0
-
+            
             data["tableTot"] = totalLots()
             Gst = element.GST;
         }
         if (key === ClaimSummaryItemDetails.length - 1) {
-            // returnArr.push(totalrow());
+            returnArr.push(totalrow());
         }
     })
     return returnArr;
