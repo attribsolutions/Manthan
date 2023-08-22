@@ -131,16 +131,22 @@ export const reportHeder3 = (doc, data) => {
 export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
-            if (data1.row.cells[0].raw === "Total") {
-                data1.row.cells[1].colSpan = 3
+            if (data1.row.cells[1].raw === "Total") {
+                data1.row.cells[0].colSpan = 2
 
                 data1.row.cells[0].styles.fontSize = 7
+                data1.row.cells[2].styles.fontSize = 7
+                data1.row.cells[3].styles.fontSize = 7
+
                 data1.row.cells[1].styles.fontSize = 7
                 data1.row.cells[9].styles.fontSize = 7
                 data1.row.cells[10].styles.fontSize = 7
                 data1.row.cells[11].styles.fontSize = 7
 
                 data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+
                 data1.row.cells[1].styles.fontStyle = "bold"
                 data1.row.cells[9].styles.fontStyle = "bold"
                 data1.row.cells[10].styles.fontStyle = "bold"
@@ -148,7 +154,7 @@ export const tableBody = (doc, data) => {
 
             }
 
-           
+
 
         },
         margin: {

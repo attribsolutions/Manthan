@@ -417,6 +417,9 @@ export const GST_R1_REPORT = "/GSTR1Excel"
 
 export const GST_R3B_REPORT = "/GSTR3BExcel"
 
+export const RETURN_REPORT = "/ReturnReport"
+
+
 
 
 
