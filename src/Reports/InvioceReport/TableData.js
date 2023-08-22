@@ -110,7 +110,7 @@ export const Rows = (data) => {
     data["TotalItemlength"] = TotalItemlength;
 
     Object.values(groupedItems).forEach((element, key) => {
-        debugger
+        
         let HSNcodes = ""
         if (data.SettingData.HSNCodeDigit === "1") {
             HSNcodes = element.HSNCode.slice(0, 4);

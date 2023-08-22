@@ -27,7 +27,7 @@
 
 
 
- .row-blink {
+ ._row-blink {
      animation: blink-animation 2s 3;
      /* 2 seconds duration, 2 iterations */
  }
@@ -41,64 +41,128 @@
 
      50% {
          //   background-color: #511db329; /* Soft purple color */
-         background-color: #ffffcc;
+         background-color: #9dadf09e;
          /* Pale yellow color */
      }
  }
 
- /* Style for selected rows */
- .table-rep-plugin table tbody tr[data-selected="true"] {
-     background-color: lightblue !important;
- }
-
- /* Style for IsRecordDeleted rows */
- .table-rep-plugin table tbody tr[data-record-deleted="true"] {
+ ._deleted-Row {
      text-decoration: line-through !important;
-     color: gray !important;
- }
-
- .text-align-right {
-     text-align: right !important;
- }
- .text-align-center {
-    text-align: center !important;
-}
-
-
- /* Striped background for alternate rows */
- .table-rep-plugin table tbody tr:nth-child(odd) {
-     background-color: #f2f2f2;
- }
-
- .check-disabled:disabled {
-     opacity: 0.5;
-     background-color: #ababab82 !important;
  }
 
 
 
 
- .column-header {
-     display: flex;
-     align-items: center;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ /* Common styles for both desktop and mobile */
+ .custom-table {
+     width: 100%;
+     border-collapse: collapse;
+
+     tr:nth-child(odd) {
+         background-color: #f2f2f2;
+     }
+
+     thead th {
+         padding: 10px;
+         border: 1px solid #ddd;
+     }
+     
+     tbody td {
+         padding: 10px;
+         border: 1px solid #ddd;
+     }
  }
 
- .column-text {
-     flex-grow: 1;
-     margin-right: 0.25rem;
- }
+ @media (max-width: 768px) {
+     .custom-table {
+         width: 100%;
+         border-collapse: collapse;
 
- .sort-icon {
-     font-weight: normal;
-     color: #aaa;
-     font-size: 0.75rem;
-     cursor: pointer;
-     transition: color 0.2s;
 
-     &.active {
-         font-weight: bold !important;
-         font-size: 16px;
-         color: #333;
+         th td {
+             display: block;
+             text-align: left;
+             border: 1px solid #ddd;
+             padding: 8px;
+             /* Adjust as needed */
+         }
+
+         thead {
+             display: none;
+         }
+
+         tbody tr {
+             display: flex;
+             flex-direction: column;
+             margin-bottom: 10px;
+             border: 1px solid #ddd;
+             border-radius: 5px;
+             background-color: #f8f8f8;
+         }
+
+         tbody td {
+             border: none;
+             border-bottom: 1px solid #ddd;
+             position: relative;
+             padding-left: 50%;
+             text-align: left;
+             background-color: #f8f8f8;
+         }
+
+         tbody td:before {
+             content: attr(data-label);
+             font-weight: bold;
+             position: absolute;
+             left: 5px;
+             top: 50%;
+             transform: translateY(-50%);
+             white-space: nowrap;
+         }
+
+         tbody td.selection-cell:before {
+             content: "Select";
+             font-weight: bold;
+             position: absolute;
+             left: 5px;
+             top: 50%;
+             transform: translateY(-50%);
+             white-space: nowrap;
+         }
+
+         tbody td[sticky-col="true"] {
+             position: sticky;
+             left: 0;
+             z-index: 2;
+             top: 0;
+             background-color: rgb(233, 233, 239);
+         }
      }
  }
 
@@ -117,56 +181,65 @@
 
 
 
- // /* Reset some default styles */
- // .my-table {
+ //  /* custom-table.css */
+
+ //  /* Common styles for both desktop and mobile */
+ //  .custom-table {
+ //     width: 100%;
  //     border-collapse: collapse;
- //     width: 100%;
- //   }
+ // }
 
- //   /* Table styles for desktop view */
- //   .custom-table {
- //     border: 1px solid #ddd;
- //     width: 100%;
- //   }
-
- //   .custom-table th,
- //   .custom-table td {
+ // .custom-table th,
+ // .custom-table td {
  //     padding: 10px;
- //     text-align: left;
- //   }
+ //     border: 1px solid #ddd;
+ // }
 
- //   .custom-table th {
- //     background-color: #f2f2f2;
- //   }
+ // @media (max-width: 768px) {
+ //    .custom-table {
+ //        width: 100%;
+ //        border-collapse: collapse;
+ //    }
 
- //   /* Responsive Styles */
- //   @media (max-width: 767px) {
- //     .custom-table td.pivoted {
- //       /* Behave like a "row" */
- //       border: none !important;
- //       position: relative;
- //       padding-left: 10px !important;
- //       text-align: left !important;
- //       white-space: pre-wrap;
- //       overflow-wrap: break-word;
- //     }
+ //    .custom-table th,
+ //    .custom-table td {
+ //        display: block;
+ //        text-align: left;
+ //        border: 1px solid #ddd;
+ //        padding: 8px; /* Adjust as needed */
+ //    }
 
- //     .custom-table td .tdBefore {
- //       /* Now like a table header */
- //       position: absolute;
- //       display: none; /* Hide the pseudo-header for mobile view */
+ //    .custom-table tbody tr {
+ //        display: block;
+ //        margin-bottom: 10px;
+ //        border: 1px solid #ddd;
+ //        border-radius: 5px;
+ //        background-color: #f8f8f8;
+ //    }
 
- //       /* Top/left values mimic padding */
- //       left: 5px;
- //       width: 50%;
- //       white-space: pre-wrap;
- //       overflow-wrap: break-word;
- //       text-align: left !important;
- //       font-weight: 600;
- //     }
+ //    .custom-table tbody td:before {
+ //        content: attr(data-label);
+ //        font-weight: bold;
+ //    }
 
- //     /* Adjust table container width for mobile view */
- //     .table-container {
- //       overflow-x: auto;
- //     }
- //   }
+ //    .custom-table thead {
+ //        display: none;
+ //    }
+
+ //    .custom-table tbody tr td {
+ //        text-align: left;
+ //        border: none;
+ //        border-bottom: 1px solid #ddd;
+ //        position: relative;
+ //        padding-left: 50%;
+ //        background-color: #f8f8f8;
+ //    }
+
+ //    .custom-table tbody tr td:before {
+ //        position: absolute;
+ //        left: 5px;
+ //        top: 50%;
+ //        transform: translateY(-50%);
+ //        white-space: nowrap; /* Add this line to prevent header text from wrapping */
+ //    }
+ // }

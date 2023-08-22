@@ -38,6 +38,7 @@ import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrato
 import { ORDER_4 } from "../../../routes/route_url";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import "./order.scss"
+import "../../../CustomTable2/CustomTable.scss"
 
 let editVal = {}
 let initial_BredcrumbMsg = "Order Amount :0.00"
@@ -463,6 +464,7 @@ const Order = (props) => {
             text: "Group",
             classes: 'table-cursor-pointer',
             sort: true,
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "GroupName" }),
             headerStyle: () => {
                 return { minWidth: '100px', textAlign: 'center' };
             },
@@ -472,6 +474,7 @@ const Order = (props) => {
             text: "SubGroup",
             classes: 'table-cursor-pointer',
             sort: true,
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "SubGroupName" }),
             headerStyle: () => {
                 return { minWidth: '100px', textAlign: 'center' };
             },
@@ -481,6 +484,7 @@ const Order = (props) => {
             dataField: "ItemName",
             text: "Item Name",
             classes: 'table-cursor-pointer',
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "ItemName", "sticky-col": "true" }),
             sort: true,
             headerStyle: () => {
                 return { minWidth: '200px', textAlign: 'center' };
@@ -507,6 +511,7 @@ const Order = (props) => {
             text: "Stock Quantity",
             classes: 'table-cursor-pointer',
             align: () => "right",
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "StockQuantity" }),
             sort: true,
             headerStyle: () => {
                 return { minWidth: '100px', textAlign: 'center' };
@@ -516,6 +521,7 @@ const Order = (props) => {
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             classes: 'table-cursor-pointer',
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Quantity" }),
             headerStyle: () => {
                 return { width: '10%', textAlign: 'center' };
             },
@@ -546,6 +552,7 @@ const Order = (props) => {
             text: "Unit",
             classes: 'table-cursor-pointer',
             dataField: "",
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Unit" }),
             headerStyle: () => {
                 return { width: '9%', textAlign: 'center' };
             },
@@ -650,6 +657,7 @@ const Order = (props) => {
             text: "Basic Rate",
             classes: 'table-cursor-pointer',
             dataField: "",
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Basic Rate" }),
             headerStyle: () => {
                 return { width: '9%', textAlign: 'center' };
             },
@@ -691,6 +699,7 @@ const Order = (props) => {
             text: "MRP",
             classes: 'table-cursor-pointer',
             dataField: "",
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "MRP" }),
             headerStyle: () => {
                 return { width: '8%', textAlign: 'center' };
             },
@@ -714,6 +723,7 @@ const Order = (props) => {
                 forceReload: forceReload,
                 tableList: orderItemTable
             },
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Discount/unit" }),
             headerStyle: () => {
                 return { width: '11%', textAlign: 'center' };
             },
@@ -867,6 +877,7 @@ const Order = (props) => {
             text: "Comment",
             classes: 'table-cursor-pointer',
             dataField: "",
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Comment" }),
             formatter: (value, row, k) => {
                 return (
                     <span >
@@ -1662,7 +1673,8 @@ const Order = (props) => {
                                                     keyField={"Item_id"}
                                                     id="table_Arrow"
                                                     defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
-                                                    classes={"table  table-bordered table-hover "}
+                                                    classes='custom-table'
+                                                    // headerClasses="custom-table"
                                                     noDataIndication={
                                                         <div className="text-danger text-center table-cursor-pointer">
                                                             Items Not available
