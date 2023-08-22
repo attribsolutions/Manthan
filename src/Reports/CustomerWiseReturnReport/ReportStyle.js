@@ -59,16 +59,23 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[1].colSpan = 3
 
                 data1.row.cells[0].styles.fontSize = 7
-                data1.row.cells[1].styles.fontSize = 7
-                data1.row.cells[11].styles.fontSize = 7
+                data1.row.cells[5].styles.fontSize = 7
+                data1.row.cells[6].styles.fontSize = 7
                 data1.row.cells[9].styles.fontSize = 7
+                data1.row.cells[11].styles.fontSize = 7
+                data1.row.cells[6].styles.fontSize = 7
                 data1.row.cells[10].styles.fontSize = 7
+                data1.row.cells[12].styles.fontSize = 7
+
 
                 data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[11].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
                 data1.row.cells[9].styles.fontStyle = "bold"
+                data1.row.cells[11].styles.fontStyle = "bold"
                 data1.row.cells[10].styles.fontStyle = "bold"
+                data1.row.cells[12].styles.fontStyle = "bold"
+
 
             }
 
@@ -102,14 +109,14 @@ export const tableBody = (doc, data) => {
 
             0: {
                 valign: "top",
-                columnWidth: 50,
+                columnWidth: 42,
             },
             1: {
                 columnWidth: 25,
                 halign: 'right',
             },
             2: {
-                columnWidth: 84,
+                columnWidth: 79,
                 halign: 'left',
             },
             3: {
@@ -117,16 +124,16 @@ export const tableBody = (doc, data) => {
                 halign: 'left',
             },
             4: {
-                columnWidth: 35,
+                columnWidth: 30,
                 halign: 'right',
             },
             5: {
-                columnWidth: 40,
+                columnWidth: 37,
                 halign: 'right',
             },
 
             6: {
-                columnWidth: 40,
+                columnWidth: 37,
                 halign: 'right',
             },
             7: {
@@ -138,15 +145,19 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             9: {
-                columnWidth: 35,
+                columnWidth: 37,
                 halign: 'right',
             },
             10: {
-                columnWidth: 35,
+                columnWidth: 33,
                 halign: 'right',
             },
             11: {
-                columnWidth: 46,
+                columnWidth: 34,
+                halign: 'right',
+            },
+            12: {
+                columnWidth: 36,
                 halign: 'right',
             },
         },
