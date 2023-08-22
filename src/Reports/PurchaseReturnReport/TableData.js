@@ -60,7 +60,7 @@ export const Rows = (data) => {
     const groupedItems = ReturnItems.reduce((accumulator, currentItem) => {
 
         const { HSNCode, ItemName, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName } = currentItem;
-        const key = ItemName + '_' + MRPValue;
+        const key = ItemName + '_' + MRPValue + "_" + Discount;
         if (accumulator[key]) {
             accumulator[key].DiscountAmount += Number(DiscountAmount);
             accumulator[key].Quantity += Number(Quantity);
