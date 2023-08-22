@@ -658,6 +658,9 @@ export const Gst_R1_Report_API = ({ jsonBody }) => postMethodExcel(url.GST_R1_RE
 export const Gst_R3B_Report_API = ({ jsonBody }) => postMethodExcel(url.GST_R3B_REPORT, jsonBody)//Go button api
 
 export const DeleteInvoiceDataExport_GoBtn_API = ({ jsonBody }) => post(url.DELETE_INVOICE_DATA_EXPORT, jsonBody)//Go button api
+export const ReturnReport_API = ({ jsonBody }) => post(url.RETURN_REPORT, jsonBody)//Go button api
+
+
 
 export {
   getLoggedInUser,
