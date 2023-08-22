@@ -31,7 +31,7 @@ function* save_SalesMan_Master_GenFun({ config = {} }) {
 }
 
 function* Post_SalesMan_List_GenratorFunction({ jsonBody }) {
-    debugger
+    
     const filters = (!jsonBody ? JSON.stringify(loginJsonBody()) : jsonBody);// required only PartyID and CompanyID
     try {
         const response = yield call(SalesMan_Get_API, filters);

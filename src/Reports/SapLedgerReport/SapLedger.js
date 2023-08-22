@@ -22,9 +22,11 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../CustomValidateForm";
 import { commonPageField } from "../../store/actions";
 import { SapLedger_Go_Button_API, SapLedger_Go_Button_API_Success } from "../../store/Report/SapLedger Redux/action";
-import { Go_Button } from "../../components/Common/CommonButton";
+import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { async } from "q";
 
 const SapLedger = (props) => {
 
@@ -34,22 +36,23 @@ const SapLedger = (props) => {
     const userAdminRole = _cfunc.loginUserAdminRole();
 
     const [userPageAccessState, setUserAccState] = useState('');
-    const [loadingDate, setLoadingDate] = useState(currentDate_ymd);
     const [headerFilters, setHeaderFilters] = useState('');
+    const [btnMode, setBtnMode] = useState(0);
 
     const {
         userAccess,
-        List,
-        goBtnLoading,
-        partyList
+        gobuttonReduxData,
+        partyList,
+        pageField
     } = useSelector((state) => ({
-        goBtnLoading: state.SapLedgerReducer.goBtnLoading,
         partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
-        List: state.SapLedgerReducer.goBtnSapLedger,
+        gobuttonReduxData: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField
     }));
 
-    const { data = [], Data = [] } = List
+    const { tableData = [], OpeingBal, ClosingBal } = gobuttonReduxData
+
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     const tableColumns = [
@@ -111,7 +114,8 @@ const SapLedger = (props) => {
         dispatch(SapLedger_Go_Button_API_Success([]))
         const page_Id = pageId.SAP_LEDGER
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
+        dispatch(commonPageField(page_Id));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
     }, []);
 
     const location = { ...history.location }
@@ -133,6 +137,36 @@ const SapLedger = (props) => {
         };
     }, [userAccess])
 
+    useEffect(() => {
+        // This useEffect handles the response from the API call
+        try {
+
+            if (gobuttonReduxData.length === 0) {
+                return; // Exit early if there's no data
+            }
+
+            if ((gobuttonReduxData.Status === true) && (gobuttonReduxData.StatusCode === 200)) {
+                setBtnMode(0); // Reset button mode
+                if (btnMode === 2) {
+                    ExcelDownloadFunc({      // Download CSV
+                        pageField,
+                        excelData: gobuttonReduxData.tableData,
+                        excelFileName: "Sap Ledger Report"
+                    })
+                    dispatch(SapLedger_Go_Button_API_Success([])); // Reset goButtonData
+                    setBtnMode(0); // Reset button mode
+                }
+
+            } else if ((gobuttonReduxData.Status === true)) {
+                dispatch(SapLedger_Go_Button_API_Success([])); // Reset goButtonData
+                setBtnMode(0);
+            }
+
+        } catch (e) {
+            console.log(e); // Log any errors
+        }
+    }, [gobuttonReduxData, btnMode]);
+
     const PartyDropdown = partyList.map((data) => ({
         value: data.id,
         label: data.Name,
@@ -153,11 +187,14 @@ const SapLedger = (props) => {
         return 0;
     };
 
-    function goButtonHandler() {
+    function goButtonHandler(e, btnMode) {
+
         try {
+            setBtnMode(btnMode)
 
             if ((userAdminRole) && (SelectedPartyDropdown().value === 0)) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
+                setBtnMode(0);
                 return;
 
             }
@@ -210,7 +247,7 @@ const SapLedger = (props) => {
                     <div className="px-2  c_card_filter text-black " >
                         <div className="row">
                             <div className=" row">
-                                <Col sm="5" className="">
+                                <Col sm="4" className="">
                                     <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "83px" }}>From Date</Label>
@@ -223,7 +260,7 @@ const SapLedger = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm="6" className="">
+                                <Col sm="4" className="">
                                     <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "65px" }}>To Date</Label>
@@ -236,17 +273,39 @@ const SapLedger = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm="1" className="mt-2 ">
-                                    <Go_Button loading={goBtnLoading} onClick={goButtonHandler} />
 
+                                <Col sm={1} className="mt-2" >
+                                    <C_Button
+                                        type="button"
+                                        spinnerColor="white"
+                                        loading={btnMode === 1 && true}
+                                        className="btn btn-success"
+                                        onClick={(e) => goButtonHandler(e, 1)}
+                                    >
+                                        Show
+                                    </C_Button>
+
+                                </Col>
+
+                                <Col sm={2} className="mt-2">
+                                    <C_Button
+                                        type="button"
+                                        spinnerColor="white"
+                                        loading={btnMode === 2 && true}
+                                        className="btn btn-primary"
+                                        onClick={(e) => goButtonHandler(e, 2)}
+                                    >
+                                        Excel Download
+                                    </C_Button>
                                 </Col>
                             </div>
 
                         </div>
                     </div>
+
                     <ToolkitProvider
                         keyField="id"
-                        data={data}
+                        data={tableData}
                         columns={tableColumns}
                         search
                     >
@@ -255,13 +314,13 @@ const SapLedger = (props) => {
                                 <Row>
                                     <Col sm={9}>
                                         <Label className="col-sm-6 mt-1 p-1 text-black"
-                                            style={{ width: "270px", background: "#efefef", borderRadius: "5px" }}>Opening Balance:  {Data.OpeingBal}
+                                            style={{ width: "270px", background: "#efefef", borderRadius: "5px" }}>Opening Balance:  {OpeingBal}
                                         </Label>
                                     </Col>
                                     <Col sm={3}>
 
                                         <Label className="col-sm-6 mt-1 p-1 text-black"
-                                            style={{ width: "257px", background: "#efefef", borderRadius: "5px" }}>Closing Balance: {Data.ClosingBal}
+                                            style={{ width: "257px", background: "#efefef", borderRadius: "5px" }}>Closing Balance: {ClosingBal}
                                         </Label>
                                     </Col>
 

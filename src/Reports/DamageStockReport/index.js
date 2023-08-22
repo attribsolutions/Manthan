@@ -17,6 +17,8 @@ import { damageStockReport_GoButton_API, damageStockReport_GoButton_API_Success 
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId, url } from "../../routes/index"
 import * as XLSX from 'xlsx';
+import CustomTable from "../../CustomTable2";
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
 
 const DamageStockReport = (props) => {
 
@@ -72,6 +74,7 @@ const DamageStockReport = (props) => {
         dispatch(getBaseUnit_ForDropDown());
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.DAMAGE_STOCK_REPORT))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(damageStockReport_GoButton_API_Success([]));
@@ -80,20 +83,26 @@ const DamageStockReport = (props) => {
     }, [])
 
     useEffect(() => {
+        if (tableData.length === 0) {
+            setBtnMode(0)
+        }
+    }, [tableData]);
+
+    useEffect(() => {
 
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 setBtnMode(0);
-                const { Data } = goButtonData
                 if (btnMode === 2) {
-                    const worksheet = XLSX.utils.json_to_sheet(Data);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, "Damage Stock Report");
-                    XLSX.writeFile(workbook, `Damage Stock Report.xlsx`);
+                    ExcelDownloadFunc({      // Download CSV
+                        pageField,
+                        excelData: goButtonData.Data,
+                        excelFileName: "Damage Stock Export"
+                    })
                     dispatch(damageStockReport_GoButton_API_Success([]));
                 }
                 else {
-                    setTableData(Data)
+                    setTableData(goButtonData.Data)
                 }
             }
             else if ((goButtonData.Status === true)) {
@@ -104,12 +113,6 @@ const DamageStockReport = (props) => {
         catch (e) { console.log(e) }
 
     }, [goButtonData]);
-
-    useEffect(() => {
-        if (tableData.length === 0) {
-            setBtnMode(0)
-        }
-    }, [tableData]);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
 
@@ -281,38 +284,17 @@ const DamageStockReport = (props) => {
 
                 </div>
 
-                <ToolkitProvider
+                <CustomTable
                     keyField={"id"}
                     data={tableData}
                     columns={tableColumns}
-                    search
-                >
-                    {(toolkitProps,) => (
-                        <React.Fragment>
-                            <Row>
-                                <Col xl="12">
-                                    <div className="table-responsive table">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            classes={"table  table-bordered table-hover"}
-                                            noDataIndication={
-                                                <div className="text-danger text-center ">
-                                                    Record Not available
-                                                </div>
-                                            }
-                                            onDataSizeChange={({ dataSize }) => {
-                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                            }}
-                                            {...toolkitProps.baseProps}
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-                                </Col>
-                            </Row>
+                    paginationEnabled={false}
+                    onDataSizeChange={({ dataCount }) => {
+                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                    }}
+                    noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
+                />
 
-                        </React.Fragment>
-                    )}
-                </ToolkitProvider>
             </div>
             <C_Report />
         </React.Fragment >

@@ -116,13 +116,14 @@ export const getCurrentMonthAndYear = () => {
   return `${year}-${month}`;
 }
 
-export const amountCommaSeparateFunc = (amount) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-  return Number(amount).toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+export const amountCommaSeparateFunc = (amount) => {
+  return Number(amount).toLocaleString('en-IN', {
+    // style: 'currency',
+    currency: 'INR',
+    // minimumFractionDigits: 2,
+    // maximumFractionDigits: 2,
   });
 };
-
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
@@ -266,11 +267,6 @@ export const loginUserGSTIN = () => { //+++++++++++++++++++++ Session Company Id
   return '';
 };
 
-
-
-
-
-
 export const loginJsonBody = () => ({ //+++++++++++++++++++++ loginJsonBody for Filter API +++++++++++++++++++++++++++++
   UserID: loginUserID(),
   RoleID: loginRoleID(),
@@ -398,7 +394,6 @@ export async function CheckAPIResponse({ method, url, response = {}, body, error
 
   return Promise.reject(response);
 }
-
 
 export const tableInputArrowUpDounFunc = (tableId) => {
 
@@ -583,6 +578,10 @@ export const tableInputArrowUpDounFunc = (tableId) => {
   });
 
 
+}
+
+export function trailingZeros(value) {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
+  return parseFloat(value).toString()
 }
 
 

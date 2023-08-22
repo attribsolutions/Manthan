@@ -15,8 +15,9 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId, url } from "../../routes/index"
-import * as XLSX from 'xlsx';
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import CustomTable from "../../CustomTable2";
 
 const StockReport = (props) => {
 
@@ -71,7 +72,8 @@ const StockReport = (props) => {
 
         dispatch(getBaseUnit_ForDropDown());
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.STOCK_REPORT))
+        dispatch(commonPageField(pageId.STOCK_REPORT));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(stockReport_GoButton_API_Success([]));
@@ -80,36 +82,35 @@ const StockReport = (props) => {
     }, [])
 
     useEffect(() => {
-
+        // This useEffect handles the response from the API call
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
-                setBtnMode(0);
-                const { Data } = goButtonData
-                if (btnMode === 2) {
-                    const worksheet = XLSX.utils.json_to_sheet(Data);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, "Damage Stock Report");
-                    XLSX.writeFile(workbook, `Damage Stock Report.xlsx`);
-                    dispatch(stockReport_GoButton_API_Success([]));
-                }
-                else {
-                    setTableData(Data)
-                }
-            }
-            else if ((goButtonData.Status === true)) {
-                setTableData([]);
-            }
-            setBtnMode(0);
-        }
-        catch (e) { console.log(e) }
 
-    }, [goButtonData]);
+                if (btnMode === 2) {
+                    ExcelDownloadFunc({      // Download CSV
+                        pageField,
+                        excelData: goButtonData.Data,
+                        excelFileName: "Current_Stock_Report"
+                    })
+                    dispatch(stockReport_GoButton_API_Success([])); // Reset goButtonData
+                }
+                else if (btnMode === 1) {
+                    setTableData(goButtonData.Data); // Update table data
+                }
+            } else if ((goButtonData.Status === true)) {
+                setTableData([]); // Clear table data if necessary
+            }
+            setBtnMode(0); // Reset button mode
+
+        } catch (e) {
+            console.log(e); // Log any errors
+        }
+    }, [goButtonData, pageField, btnMode]);
 
     useEffect(() => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-        // dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
     }, [tableData]);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
@@ -282,42 +283,20 @@ const StockReport = (props) => {
 
                 </div>
 
-                <ToolkitProvider
+                <CustomTable
                     keyField={"id"}
                     data={tableData}
                     columns={tableColumns}
-                    search
-                >
-                    {(toolkitProps,) => (
-                        <React.Fragment>
-                            <Row>
-                                <Col xl="12">
-                                    <div className="table-responsive table">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            classes={"table  table-bordered table-hover"}
-                                            noDataIndication={
-                                                <div className="text-danger text-center ">
-                                                    Record Not available
-                                                </div>
-                                            }
-                                            onDataSizeChange={({ dataSize }) => {
-                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                            }}
-                                            {...toolkitProps.baseProps}
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-                                </Col>
-                            </Row>
-
-                        </React.Fragment>
-                    )}
-                </ToolkitProvider>
+                    paginationEnabled={false}
+                    onDataSizeChange={({ dataCount }) => {
+                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                    }}
+                    noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
+                />
             </div>
             <C_Report />
         </React.Fragment >
     )
 }
 
-export default StockReport;;
+export default StockReport;

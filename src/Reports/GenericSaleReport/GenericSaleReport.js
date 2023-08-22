@@ -14,6 +14,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
 
 const GenericSaleReport = (props) => {
 
@@ -72,6 +73,7 @@ const GenericSaleReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
         return () => {
             setTableData([]);
         }
@@ -81,7 +83,7 @@ const GenericSaleReport = (props) => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
+
     }, [tableData]);
 
     const Party_Option = Distributor.map(i => ({
@@ -98,11 +100,11 @@ const GenericSaleReport = (props) => {
                 setBtnMode(0);
                 const { GenericSaleDetails } = goButtonData.Data
                 if (btnMode === 2) {
-                    const worksheet = XLSX.utils.json_to_sheet(GenericSaleDetails);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, "GenericSaleReport");
-                    XLSX.writeFile(workbook, `Generic Sale Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
-
+                    ExcelDownloadFunc({      // Download CSV
+                        pageField,
+                        excelData: GenericSaleDetails,
+                        excelFileName: "Generic Sale Report"
+                    })
                     dispatch(GoButton_For_GenericSale_Success([]));
                     setDistributorDropdown([{ value: "", label: "All" }])
                 }
@@ -115,7 +117,6 @@ const GenericSaleReport = (props) => {
                     });
                     setTableData(UpdatedTableData);
                     dispatch(GoButton_For_GenericSale_Success([]));
-
                 }
             }
             else if ((goButtonData.Status === true)) {
@@ -282,6 +283,9 @@ const GenericSaleReport = (props) => {
                                                         Record Not available
                                                     </div>
                                                 }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                }}
                                                 {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}

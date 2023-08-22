@@ -50,7 +50,7 @@ const ReturnReport = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
-        debugger
+        
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.RETURN_REPORT))
 

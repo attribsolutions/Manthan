@@ -17,6 +17,7 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
+import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
 
 const DeleteInvoiceDataExport = (props) => {
 
@@ -81,16 +82,23 @@ const DeleteInvoiceDataExport = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => { return () => { dispatch(postDeleteInvoiceDataExport_API_Success([])); } }, [])
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        return () => {
+            dispatch(postDeleteInvoiceDataExport_API_Success([]));
+        }
+    }, [])
 
     useEffect(() => {
 
         if (tableData.btnId === "excel_btnId") {
             if (DeletedInvoiceExportSerializerDetails.length > 0) {
-                const worksheet = XLSX.utils.json_to_sheet(DeletedInvoiceExportSerializerDetails);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, `DeleteInvoiceDataExportReport`);
-                XLSX.writeFile(workbook, `Delete Invoice Data Export Report From ${_cfunc.date_dmy_func(values.FromDate)} To ${_cfunc.date_dmy_func(values.ToDate)}.xlsx`);
+                ExcelDownloadFunc({                // Download CSV
+                    pageField,
+                    excelData: DeletedInvoiceExportSerializerDetails,
+                    excelFileName: "Deleted Invoice Data Export"
+                })
+                dispatch(postDeleteInvoiceDataExport_API_Success([]));
             }
         }
     }, [tableData]);
