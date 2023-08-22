@@ -1,7 +1,7 @@
 import { Input } from "reactstrap"
 import { useState } from "react";
 import { useEffect } from "react";
-import { concatDateAndTime } from "./CommonFunction";
+
 
 const onSelectAll = (event, allarray,) => {
 
@@ -17,11 +17,14 @@ const selectRow = (row, event) => {
 export const selectAllCheck = (selected, nonSelectable, position, headLabel) => ({
 
   mode: "checkbox",
+  bgColor: "#9dadf09e",
   onSelectAll: onSelectAll,
   onSelect: selectRow,
   selected: selected,
   selectColumnPosition: position ? position : "right",
   nonSelectable: nonSelectable,
+  attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Select" }),
+  
 
   selectionHeaderRenderer: (head) => {
 
@@ -76,12 +79,12 @@ const DynamicColumnHook = ({
     let columns = [];
 
     // Sort PageFieldMaster by ListPageSeq
-    PageFieldMaster.sort((a, b) => a.ListPageSeq - b.ListPageSeq);
 
     if (PageFieldMaster.length === 0) {
       columns.push({ text: "Page Field Is Blank...", dataField: "id" });
     }
-
+    PageFieldMaster.sort((a, b) => a.ListPageSeq - b.ListPageSeq);
+    
     PageFieldMaster.forEach((i, k) => {
       if (i.ShowInListPage) {
         const column = {
@@ -90,8 +93,10 @@ const DynamicColumnHook = ({
           hidden: false,
           sort: true,
           // key: `column-${k}`,
-          classes: "table-cursor-pointer",
+          // classes: "table-cursor-pointer",
           align: i.Alignment || null,
+          attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': i.FieldLabel, "sticky-col": (colIndex === 0) ? "true" : "false" }),
+
           formatter: (cell, row) => {
             if (i.ControlID === "transactionDate") {
               return (

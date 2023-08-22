@@ -322,6 +322,7 @@ export const listPageActionsButtonFunc = (props) => {
     return {
         text: "Action",
         dataField: "",
+        attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Action", "sticky-col": (colIndex === 0) ? "true" : "false" }),
         formatExtraData: { listBtnLoading },
         formatter: renderActionButton,
     };

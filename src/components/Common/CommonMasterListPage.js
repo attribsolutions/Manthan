@@ -202,6 +202,7 @@ const CommonListPage = (props) => {
             onDataSizeChange={({ dataCount }) => {
               dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
             }}
+            paginationEnabled={true}
             noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
           />
 

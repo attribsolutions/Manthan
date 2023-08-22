@@ -45,7 +45,7 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
     }, [deleteMessage]);
 
     const ondeleteHandeler = (ele) => {
-        debugger
+        
         if (ele.id === undefined) {
             if (!(ele.RowId === 0)) {
                 var fil = addressTable.filter((i) => {

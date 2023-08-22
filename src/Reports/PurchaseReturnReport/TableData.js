@@ -79,10 +79,8 @@ export const Rows = (data) => {
         }
         return accumulator;
     }, {});
-    debugger
-    Object.values(groupedItems).forEach((element, key) => {
-        debugger
 
+    Object.values(groupedItems).forEach((element, key) => {
 
         const tableitemRow = [
             SrNO++,
@@ -182,24 +180,24 @@ export const Rows = (data) => {
 export const ReturnByRow = (data) => {
 
     var ReturnByArray = [
-        [`${data.CustomerName}`],
-        [`${data.CustomerAddress}`],
-        [`${data.CustomerState}`],
-        [`GSTIN:${data.CustomerGSTIN}`,],
-        [`FSSAINo:${data.CustomerFSSAINo}`],
-        [`MobileNo:${data.CustomerMobileNo}`],
+        [`                    ${data.CustomerName}`],
+        [`                 ${data.CustomerAddress}`],
+        [`            ${data.CustomerState}`],
+        [`              ${data.CustomerGSTIN}`,],
+        [`                   ${data.CustomerFSSAINo}`],
+        [`                   ${data.CustomerMobileNo}`],
     ]
     return ReturnByArray;
 }
 export const ReturnToRow = (data) => {
 
     var ReturnToArray = [
-        [`${data.PartyName}`],
-        [`${data.PartyAddress}`],
-        [`${data.PartyState}`],
-        [`GSTIN:${data.PartyGSTIN}`],
-        [`FSSAINo:${data.PartyFSSAINo}`],
-        [`MobileNo:${data.PartyMobileNo}`],
+        [`             ${data.PartyName}`],
+        [`                  ${data.PartyAddress}`],
+        [`            ${data.PartyState}`],
+        [`               ${data.PartyGSTIN}`],
+        [`                   ${data.PartyFSSAINo}`],
+        [`                   ${data.PartyMobileNo}`],
     ]
 
     return ReturnToArray;

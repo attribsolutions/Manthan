@@ -14,22 +14,23 @@ export const return_discountCalculate_Func = (row, index1, IsComparGstIn) => {
     const basicAmount = rate * quantity;
 
     // Calculate the discount amount based on the discount type
-    const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : quantity * discount;
+    const disCountAmt = discountType === 2 ?
+        basicAmount - (basicAmount / ((100 + discount) / 100))
+        : quantity * discount;
 
     // Calculate the discounted base amount
-    const discountBaseAmt = basicAmount - disCountAmt;
+    const discountedBaseAmt = basicAmount - disCountAmt;
 
     // Calculate the GST amount
-    let gstAmt = discountBaseAmt * (gstPercentage / 100);
-    let CGST_Amount = Number((gstAmt / 2).toFixed(2));
+    let CGST_Amount = Number((discountedBaseAmt * (gstPercentage / 2) / 100).toFixed(2));
     let SGST_Amount = CGST_Amount;
     let IGST_Amount = 0 //initial GST Amount 
 
     // Calculate the total amount after discount and GST
     const roundedGstAmount = CGST_Amount + SGST_Amount;
-    let totalAmount = roundedGstAmount + discountBaseAmt;
+    let totalAmount = discountedBaseAmt + roundedGstAmount;
 
-    let GST_Percentage = Number(index1.GSTPercentage) || 0;
+    let GST_Percentage = gstPercentage;
     let IGST_Percentage = 0;
     let SGST_Percentage = (GST_Percentage / 2);
     let CGST_Percentage = (GST_Percentage / 2);
@@ -47,7 +48,7 @@ export const return_discountCalculate_Func = (row, index1, IsComparGstIn) => {
     }
     // Return the calculated values as an object
     return {
-        discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
+        discountedBaseAmt: Number(discountedBaseAmt.toFixed(2)),
         disCountAmt: Number(disCountAmt.toFixed(2)),
         roundedGstAmount: Number(roundedGstAmount.toFixed(2)),
         roundedTotalAmount: Number(totalAmount.toFixed(2)),
@@ -63,7 +64,7 @@ export const return_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 
 // ************************************************************************
 
-export function stockDistributeFunc(index1,_key) {
+export function stockDistributeFunc(index1, _key) {
 
     let itemTotalAmount = 0
     let orderqty = Number(index1.Quantity);
@@ -124,7 +125,7 @@ export function stockDistributeFunc(index1,_key) {
 
 // ************************************************************************
 
-export function returnQtyOnChange(event, index,_key) {
+export function returnQtyOnChange(event, index, _key) {
 
     let input = Number(event.target.value)
     let ItemTotalStock = Number(index.ItemTotalStock)
@@ -144,12 +145,12 @@ export function returnQtyOnChange(event, index,_key) {
     event.target.value = input;
     index.Quantity = input
 
-    stockDistributeFunc(index,_key)
+    stockDistributeFunc(index, _key)
 };
 
 // ************************************************************************
 
-export function stockQtyOnChange(event, index1, index2,_key) {
+export function stockQtyOnChange(event, index1, index2, _key) {
 
     let input = Number(event.target.value)
     let result = /^\d*(\.\d{0,3})?$/.test(input);
@@ -169,21 +170,21 @@ export function stockQtyOnChange(event, index1, index2,_key) {
     event.target.value = input;
     index2.Qty = input
 
-    innerStockCaculation(index1,_key)
+    innerStockCaculation(index1, _key)
 
 };
 
 // ************************************************************************
-export const innerStockCaculation = (index1,_key) => {
+export const innerStockCaculation = (index1, _key) => {
 
     let QuantityTatal = 0
     let itemTotalAmount = 0;
 
     index1.StockDetails.forEach(index2 => {
-        if(Number(index2.Qty)>0){
-        const calculate = return_discountCalculate_Func(index2, index1);
-        itemTotalAmount += Number(calculate.roundedTotalAmount);
-        QuantityTatal += Number(index2.Qty);
+        if (Number(index2.Qty) > 0) {
+            const calculate = return_discountCalculate_Func(index2, index1);
+            itemTotalAmount += Number(calculate.roundedTotalAmount);
+            QuantityTatal += Number(index2.Qty);
         }
     });
 

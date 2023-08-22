@@ -28,7 +28,7 @@ export const pageHeder = (doc, data) => {
 }
 export const tableBody = (doc, data) => {
     let tableStartY = 100;
-    // Loop for multiple table 
+
     data.ReasonwiseMasterClaim.forEach((index1) => {
 
         Object.keys(index1).forEach((index2) => {

@@ -531,7 +531,7 @@ const OrderList = () => {
     }
 
     const selectSaveBtnHandler = (row = []) => {
-        debugger
+        
 
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
@@ -702,8 +702,7 @@ const OrderList = () => {
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
                             selectCheckParams={{
-                                isRoleAccess: (true),
-                                isShow: subPageMode === url.ORDER_LIST_4,
+                                isShow: (subPageMode === url.ORDER_LIST_4),
                                 selectSaveBtnHandler: selectSaveBtnHandler,
                                 selectSaveBtnLabel: "Confirm",
                                 selectHeaderLabel: "Confirm"
