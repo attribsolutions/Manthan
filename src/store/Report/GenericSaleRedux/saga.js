@@ -9,15 +9,18 @@ function* GenericSaleReport_GenFunc({ config }) {
     try {
         const response = yield call(GenericSale_GoBtn_API, config);
 
-        const newResponse = response.Data.GenericSaleDetails.map((i) => {
-            // Convert quantity values to floats and format to remove trailing zeros
-            i["QtyInNo"] = trailingZeros(i.QtyInNo);
-            i["QtyInKg"] = trailingZeros(i.QtyInKg);
-            i["QtyInBox"] = trailingZeros(i.QtyInBox);
+        if (response.Data.length > 0) {
+            const newResponse = response.Data.GenericSaleDetails.map((i) => {
+                // Convert quantity values to floats and format to remove trailing zeros
+                i["QtyInNo"] = trailingZeros(i.QtyInNo);
+                i["QtyInKg"] = trailingZeros(i.QtyInKg);
+                i["QtyInBox"] = trailingZeros(i.QtyInBox);
 
-            return i;
-        });
-        response.Data["GenericSaleDetails"] = newResponse;
+                return i;
+            });
+            response.Data["GenericSaleDetails"] = newResponse;
+        }
+
         yield put(GoButton_For_GenericSale_Success(response))
     } catch (error) { CommonConsole(error) }
 }
