@@ -63,7 +63,7 @@ export const return_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 
 // ************************************************************************
 
-export function stockDistributeFunc(index1,_key) {
+export function stockDistributeFunc(index1, _key) {
 
     let itemTotalAmount = 0
     let orderqty = Number(index1.Quantity);
@@ -124,7 +124,7 @@ export function stockDistributeFunc(index1,_key) {
 
 // ************************************************************************
 
-export function returnQtyOnChange(event, index,_key) {
+export function returnQtyOnChange(event, index, _key) {
 
     let input = Number(event.target.value)
     let ItemTotalStock = Number(index.ItemTotalStock)
@@ -144,12 +144,12 @@ export function returnQtyOnChange(event, index,_key) {
     event.target.value = input;
     index.Quantity = input
 
-    stockDistributeFunc(index,_key)
+    stockDistributeFunc(index, _key)
 };
 
 // ************************************************************************
 
-export function stockQtyOnChange(event, index1, index2,_key) {
+export function stockQtyOnChange(event, index1, index2, _key) {
 
     let input = Number(event.target.value)
     let result = /^\d*(\.\d{0,3})?$/.test(input);
@@ -169,21 +169,21 @@ export function stockQtyOnChange(event, index1, index2,_key) {
     event.target.value = input;
     index2.Qty = input
 
-    innerStockCaculation(index1,_key)
+    innerStockCaculation(index1, _key)
 
 };
 
 // ************************************************************************
-export const innerStockCaculation = (index1,_key) => {
+export const innerStockCaculation = (index1, _key) => {
 
     let QuantityTatal = 0
     let itemTotalAmount = 0;
 
     index1.StockDetails.forEach(index2 => {
-        if(Number(index2.Qty)>0){
-        const calculate = return_discountCalculate_Func(index2, index1);
-        itemTotalAmount += Number(calculate.roundedTotalAmount);
-        QuantityTatal += Number(index2.Qty);
+        if (Number(index2.Qty) > 0) {
+            const calculate = return_discountCalculate_Func(index2, index1);
+            itemTotalAmount += Number(calculate.roundedTotalAmount);
+            QuantityTatal += Number(index2.Qty);
         }
     });
 
