@@ -270,11 +270,10 @@ const Invoice = (props) => {
             dataField: "ItemName",
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "ItemName", "sticky-col": "true" }),
             // headerClasses: 'd-none d-sm-table-cell', // Hide on mobile
-            classes: ' d-none d-sm-table-cell', // Hide on mobile
             formatter: (cellContent, index1) => {
                 return (
                     <>
-                        <div className="invoice-item-row-div-1">
+                        <div>
                             <samp id={`ItemName${index1.id}`}>{index1.ItemName}</samp>
                         </div>
                         {
@@ -292,7 +291,7 @@ const Invoice = (props) => {
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <>
-                    <div className="div-1 mb-2" style={{ minWidth: "200px" }}>
+                    <div>
                         <Input
                             type="text"
                             disabled={pageMode === 'edit' ? true : false}
