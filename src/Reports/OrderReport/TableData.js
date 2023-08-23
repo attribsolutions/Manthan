@@ -219,10 +219,10 @@ export const ReportRows = (data, doc) => {
 
 export const BilledByRow = (data) => {
     var BilledByArray = [
-        [`${data.SupplierName}`],
-        [`${data.SupplierAddress}`],
-        [`FSSAI:${data.SupplierFssai}`],
-        [`GSTIN:${data.SupplierGSTIN}`],
+        [`                  ${data.SupplierName}`],
+        [`                ${data.SupplierAddress}`],
+        [`              ${data.SupplierGSTIN}`],
+        [`                  ${data.SupplierFssai}`],
 
     ]
     return BilledByArray;
@@ -231,10 +231,10 @@ export const BilledByRow = (data) => {
 export const BilledToRow = (data) => {
 
     var BilledToArray = [
-        [`${data.CustomerName}`],
-        [`${data.BillingAddress}`],
-        [`FSSAI:${data.BillingFssai}`],
-        [`GSTIN:${data.CustomerGSTIN}`],
+        [`                    ${data.CustomerName}`],
+        [`                 ${data.BillingAddress}`],
+        [`             ${data.CustomerGSTIN}`],
+        [`                  ${data.BillingFssai}`],
 
     ]
 
@@ -244,10 +244,10 @@ export const BilledToRow = (data) => {
 export const DetailsOfTransportRow = (data) => {
 
     var DetailsOfTransportArray = [
-        [`${data.POTypeName}`],
-        [`${data.CustomerName}`],
-        [`${data.BillingAddress}`],
-        [`FSSAI:${data.ShippingFssai}`],
+        [`                  ${data.POTypeName}`],
+        [`                   ${data.CustomerName}`],
+        [`                 ${data.BillingAddress}`],
+        [`                   ${data.ShippingFssai}`],
 
     ]
 
