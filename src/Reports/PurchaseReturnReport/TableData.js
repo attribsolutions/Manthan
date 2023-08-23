@@ -3,7 +3,7 @@ import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
     "SR",
-    "HSN Item Name",
+    "Item Name",
     "Quantity (UOM)",
     "MRP",
     "Rate",
@@ -202,13 +202,7 @@ export const ReturnToRow = (data) => {
 
     return ReturnToArray;
 }
-// export const DetailsOfTransportRow = (data) => {
-//     var DetailsOfTransportArray = [
-//         [`Claim No: {}`],
-//         [`Period :`],
-//     ]
-//     return DetailsOfTransportArray;
-// }
+
 
 
 export const ReturnReason = (data) => {
