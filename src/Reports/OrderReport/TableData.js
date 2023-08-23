@@ -52,6 +52,7 @@ export const Rows = (data) => {
 
     const { OrderItem = [] } = data
     let hasHedRow = []
+    debugger
     const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
     console.log(grouped)
     grouped.forEach(i => {
@@ -66,9 +67,6 @@ export const Rows = (data) => {
             let TotalGst = 0
             let GSTPercentage = 0
             let totalDiscountAmount = 0
-
-
-
 
             i.forEach(element => {
 
