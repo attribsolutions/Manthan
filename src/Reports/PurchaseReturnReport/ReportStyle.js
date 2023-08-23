@@ -34,15 +34,15 @@ export const pageBorder = (doc, data) => {
 
 export const pageHeder = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
-    doc.line(408, 63, 408, 16);//vertical right 1
-    doc.line(570, 63, 30, 63)  //horizontal line 1 billby upper for repeat header
+    doc.line(408, 50, 408, 16);//vertical right 1
+    doc.line(570, 50, 30, 50)  //horizontal line 1 billby upper for repeat header
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
     if (data.subPageMode === url.PURCHASE_RETURN_LIST) {
-        doc.text(' PURCHASE RETURN', 160, 45,)
+        doc.text(' PURCHASE RETURN', 160, 40,)
     } else {
-        doc.text(' SALES RETURN', 160, 45,)
+        doc.text(' SALES RETURN', 160, 40,)
 
     }
 }
@@ -52,20 +52,12 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Return by", 110, 75)  //bill by 
-    doc.text('Return to', 390, 75) //billed to
-    // doc.text('Details of Transport', 440, 75)
+    doc.text("Return by", 110, 63)
+    doc.text('Return to', 390, 63)
 
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 63, 30, 63) //horizontal line 1 billby upper
-    doc.line(570, 16, 30, 16);//horizontal line 2
-    doc.line(570, 80, 30, 80);//horizontal line 3
-    // doc.line(30, 789, 30, 16);//vertical left 1
-
-    doc.line(408, 63, 408, 16);//vertical line header section billby 
-    doc.line(292, 170, 292, 63);//vertical  line header section billto
-
-
+    doc.line(570, 50, 30, 50) //horizontal line 1 ReturnBy And ReturnTo upper
+    doc.line(570, 67, 30, 67);//horizontal line 1 ReturnBy And ReturnTo Below
 
     var BilledByStyle = {
 
@@ -143,13 +135,13 @@ export const reportHeder1 = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 300,
+                columnWidth: 260,
                 halign: 'lfet',
             }
         },
         tableLineColor: "black",
 
-        startY: 80
+        startY: 67
     };
 
     var BilledToStyle = {
@@ -232,43 +224,13 @@ export const reportHeder1 = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        startY: 80,
+        startY: 67,
     };
 
-    var DetailsOfTransportStyle = {
-        margin: {
-            top: 45, left: 408, right: 35,
-        },
-        showHead: 'always',
-        theme: 'plain',
-        styles: {
-            overflow: 'linebreak',
-            fontSize: 8,
-            height: 0,
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: 2,
-            fontSize: 8,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 162,
-                halign: 'lfet',
-            },
 
-        },
-        tableLineColor: "black",
-
-        startY: 80,
-
-    };
 
     const priLength = () => {
+        debugger
         let final_y = doc.previousAutoTable.finalY
         if (final_y > initial_y) {
             initial_y = final_y
@@ -289,31 +251,26 @@ export const reportHeder1 = (doc, data) => {
 
 export const reportHeder3 = (doc, data) => {
     var date = date_dmy_func(data.ReturnDate)
-
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
-    // doc.line(570, 49, 408, 49) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
     doc.text(`Return No:   ${data.FullReturnNumber}`, 415, 27) //Invoice Id
     doc.text(`Return Date: ${date}`, 415, 43) //Invoice date
-    // doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 60) //Invoice date
 
 }
-// original
+
 
 export const reportFooter = (doc, data) => {
 
     let stringNumber = toWords(Number(data.GrandTotal))
-    // doc.addImage(upi_qr_code, 'PNG', 359, 747, 75, 65)
+
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
     doc.line(435, 745, 30, 745);//horizontal line Footer 2
     doc.line(435, 775, 30, 775);//horizontal line Footer 3
     doc.line(435, 795, 30, 795);//horizontal line Footer 3
-
-    doc.line(435, 730, 435, 815);//vertical right Sub Total
-    // doc.line(360, 745, 360, 815);//vertical right Qr Code    /////////////////
+    doc.line(435, 730, 435, 815);//vertical right Sub Total   
     doc.setFont('Tahoma')
 
     const a = data.ReturnItems.map((data) => ({
@@ -570,20 +527,54 @@ export const reportFooterForA5 = (doc, data) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 export const tableBody = (doc, data) => {
     var options = {
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 8) {
+                if (data1.row.cells[8].raw === "          CGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2; // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 5, startY1vertical + 1, startXVertical - 5, endYvertical + 1); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+            if (rowIdx === 0 && colIdx === 10) {
+                if (data1.row.cells[10].raw === "          SGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2; // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 5, startY1vertical + 1, startXVertical - 5, endYvertical + 1); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
+
+
+
+
+        },
         didParseCell: (data1) => {
             if (data1.row.cells[9].raw === "isaddition") {
                 data1.row.cells[1].colSpan = 5
@@ -606,7 +597,7 @@ export const tableBody = (doc, data) => {
 
             }
 
-            if (data1.row.cells[1].raw === "HSN Item Name") {
+            if (data1.row.cells[1].raw === "Item Name") {
 
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2
@@ -619,7 +610,7 @@ export const tableBody = (doc, data) => {
         theme: 'grid',
         headerStyles: {
             cellPadding: 2,
-            lineWidth: 1,
+            lineWidth: 0.5,
             valign: 'top',
             fontStyle: 'bold',
             halign: 'center',    //'center' or 'right'
@@ -627,7 +618,7 @@ export const tableBody = (doc, data) => {
             textColor: [0, 0, 0], //Black     
             fontSize: 7,
             rowHeight: 10,
-            lineColor: [0, 0, 0]
+            lineColor: "black"
         },
         bodyStyles: {
             textColor: [30, 30, 30],
@@ -696,6 +687,11 @@ export const tableBody = (doc, data) => {
         startY: initial_y,
     };
 
+    doc.setLineWidth(0.5);
+
+    doc.line(292, initial_y, 292, 50);//vertical line between billby billto
+    doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
+
     doc.autoTable(table.columns, table.Rows(data), options,);
     const optionsTable4 = {
         margin: {
@@ -705,7 +701,6 @@ export const tableBody = (doc, data) => {
     doc.autoTable(optionsTable4);
 
 }
-
 
 export const pageFooter = (doc, data) => {
 
