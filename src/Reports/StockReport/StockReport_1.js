@@ -13,7 +13,7 @@ import { commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBa
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { StockReport_1_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../ReportIndex'
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 
 const StockReport_1 = (props) => {
 
@@ -93,7 +93,7 @@ const StockReport_1 = (props) => {
                 setBtnMode(0);
                 const { StockDetails } = StockReport_1_Gobtb.Data[0]
                 if (btnMode === 2) {
-                    ExcelDownloadFunc({      // Download CSV
+                    ReportComponent({      // Download CSV
                         pageField,
                         excelData: StockDetails,
                         excelFileName: "SNS Report"

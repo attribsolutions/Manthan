@@ -14,7 +14,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 
 const GenericSaleReport = (props) => {
 
@@ -100,7 +100,7 @@ const GenericSaleReport = (props) => {
                 setBtnMode(0);
                 const { GenericSaleDetails } = goButtonData.Data
                 if (btnMode === 2) {
-                    ExcelDownloadFunc({      // Download CSV
+                    ReportComponent({      // Download CSV
                         pageField,
                         excelData: GenericSaleDetails,
                         excelFileName: "Generic Sale Report"
