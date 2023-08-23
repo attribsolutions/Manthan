@@ -9,7 +9,10 @@ function* ReturnReport_GenFunc({ config }) {
 
     try {
         const response = yield call(ReturnReport_API, config);
-        // response["Data"] = response.Data.ReturnReportDetails
+        response.Data.map((i) => {
+            i["FullReturnNumber"] = (`${i.FullReturnNumber}(${i.id})`);
+            return i;
+        });
         yield put(Return_Report_Action_Success(response))
     } catch (error) { CommonConsole(error) }
 }

@@ -97,9 +97,9 @@ const ReturnReport = (props) => {
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 setBtnMode(0);
-                const { ReturnReportDetails } = goButtonData.Data
+
                 if (btnMode === 2) {
-                    const worksheet = XLSX.utils.json_to_sheet(ReturnReportDetails);
+                    const worksheet = XLSX.utils.json_to_sheet(goButtonData.Data);
                     const workbook = XLSX.utils.book_new();
                     XLSX.utils.book_append_sheet(workbook, worksheet, "ReturnReport");
                     XLSX.writeFile(workbook, `Return Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
@@ -108,7 +108,7 @@ const ReturnReport = (props) => {
                     setDistributorDropdown([{ value: "", label: "All" }])
                 }
                 else {
-                    const UpdatedTableData = ReturnReportDetails.map((item, index) => {
+                    const UpdatedTableData = goButtonData.Data.map((item, index) => {
 
                         return {
                             ...item, id: index + 1,
