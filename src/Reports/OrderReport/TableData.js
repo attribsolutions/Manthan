@@ -10,9 +10,9 @@ export const columns = [
     "Discount",
     "Discount Amount",
     "Basic   Amount ",
-    "       CGST       %     Amount",
+    "       CGST        %        Amount",
     "CGST   Amount ",
-    "        SGST      %      Amount",
+    "       SGST        %        Amount",
     "SGST   Amount",
     "Total Amount"];
 
@@ -24,7 +24,6 @@ export const columnsWithIGST = [
     "Discount",
     "Discount Amount",
     "Basic   Amount ",
-
     "        IGST        %       Amount",
     "IGST   Amount ",
     "Total Amount",

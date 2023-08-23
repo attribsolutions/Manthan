@@ -291,21 +291,62 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[9].colSpan = 2
             }
         },
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 7) {
+                if (data1.row.cells[7].raw === "       CGST        %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 4, startY1vertical + 2, startXVertical - 4, endYvertical + 2);  // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+            if (rowIdx === 0 && colIdx === 9) {
+                if (data1.row.cells[9].raw === "       SGST        %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 4, startY1vertical + 2, startXVertical - 4, endYvertical + 2); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
+        },
         margin: {
             left: 30, right: 25, top: 65
         },
         theme: 'grid',
         headerStyles: {
-            cellPadding: 4,
-            lineWidth: 1,
+            cellPadding: 3,
+            lineWidth: 0.8,
             valign: 'top',
             fontStyle: 'bold',
             halign: 'center',
             fillColor: "white",
             textColor: [0, 0, 0],
-            fontSize: 8,
+            fontSize: 7,
             rowHeight: 10,
-            lineColor: [0, 0, 0]
+            lineColor: "black"
         },
         bodyStyles: {
             columnWidth: 'wrap',
@@ -442,7 +483,7 @@ export const tableBodyWithIGST = (doc, data) => {
 
             }
             if (data1.row.cells[0].raw === "HSN Item Name") {
-                
+
                 let TotalBox = 0;
                 OrderItem.forEach((element, key) => {
                     if (element.PrimaryUnitName === "Box") {
