@@ -3,14 +3,8 @@ import {
   LedgerApiErrorAction,
   SapLedger_Go_Button_API_Success, getExcel_Button_API_Success
 } from "./action";
-import {
-  Get_Product_Margin_Report, PartyLedger_API,
-} from "../../../helpers/backend_helper";
-import {
-  GET_EXCELBUTTON_API, GO_BUTTON_API_SAP_LEDGER,
-} from "./actionType";
-
-import * as XLSX from 'xlsx';
+import { Get_Product_Margin_Report, PartyLedger_API, } from "../../../helpers/backend_helper";
+import { GET_EXCELBUTTON_API, GO_BUTTON_API_SAP_LEDGER, } from "./actionType";
 
 function* goBtn_Get_API_GenFun({ filters }) {
 
@@ -69,7 +63,6 @@ function* goBtn_Get_API_GenFun({ filters }) {
 function* GetExcelButton_saga({ IsSCM_ID, PartyID }) {
 
   try {
-
     const response = yield call(Get_Product_Margin_Report, IsSCM_ID, PartyID);
 
     if (response.StatusCode === 200) {
@@ -87,11 +80,21 @@ function* GetExcelButton_saga({ IsSCM_ID, PartyID }) {
         delete obj.ItemMargins
         newArray.push(obj)
       })
+      const csvContent = newArray.map(item => {
+        return Object.values(item).join(",");
+      });
 
-      const worksheet = XLSX.utils.json_to_sheet(newArray);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin1");
-      XLSX.writeFile(workbook, "Product Margin Report.xlsx");
+      const csvContentString = ["sep=,", Object.keys(newArray[0]).join(",")].concat(csvContent).join("\n");
+
+      const blob = new Blob([csvContentString], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Product Margin Report.csv`;
+      a.click();
+
+      URL.revokeObjectURL(url);
     }
     yield put(getExcel_Button_API_Success([]));
   } catch (error) {
@@ -99,7 +102,6 @@ function* GetExcelButton_saga({ IsSCM_ID, PartyID }) {
     LedgerApiErrorAction()
   }
 }
-
 
 function* SapLedgerSaga() {
   yield takeLatest(GO_BUTTON_API_SAP_LEDGER, goBtn_Get_API_GenFun)
