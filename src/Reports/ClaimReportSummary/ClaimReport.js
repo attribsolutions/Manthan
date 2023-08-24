@@ -134,18 +134,7 @@ const ClaimSummary = (props) => {
         }
     }, [ClaimListData])
 
-    function goButtonHeaderHandler() {
-        const jsonBody = JSON.stringify({
-            "FromDate": "2023-08-01",
-            "ToDate": "2023-08-31",
-            "Party": _cfunc.loginSelectedPartyID()
-        });
 
-        let config = { jsonBody }
-
-        dispatch(claimList_API(config))
-
-    }
 
 
 
@@ -191,6 +180,8 @@ const ClaimSummary = (props) => {
     }
 
     function MonthAndYearOnchange(e, InitialDate) {
+        dispatch(claimList_API_Success([]))
+
         let selectedMonth = ""
         if (InitialDate) {
             selectedMonth = e
@@ -221,23 +212,13 @@ const ClaimSummary = (props) => {
         dispatch(claimList_API(config))
     }
 
-    function fromdateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.HeaderFromDate = date;
-            a.hasValid.HeaderFromDate.valid = true
-            return a
-        })
-    }
+    const getFormattedDate = (date, format) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        return format.replace('yyyy', year).replace('MM', month);
+    };
 
-    function todateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.HeaderToDate = date;
-            a.hasValid.HeaderToDate.valid = true
-            return a
-        })
-    }
+    const currentMonth = getFormattedDate(new Date(), "yyyy-MM");
 
     const pagesListColumns = [
         {
@@ -406,6 +387,7 @@ const ClaimSummary = (props) => {
                                         defaultValue={values.SelectedMonth}
                                         id="example-month-input"
                                         onChange={MonthAndYearOnchange}
+                                        max={currentMonth}
                                     />
                                 </Col>
                             </FormGroup>
