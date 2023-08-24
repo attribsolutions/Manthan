@@ -7,7 +7,7 @@ import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
+import { getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
@@ -17,7 +17,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { deltBtnCss } from "../../components/Common/ListActionsButtons";
-import { C_DatePicker } from "../../CustomValidateForm";
+
 const CWClaimBtnCss = "badge badge-soft-primary font-size-18 btn btn-primary waves-effect waves-light w-xxs border border-light"
 const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
 
@@ -238,11 +238,11 @@ const ClaimSummary = (props) => {
         {
             text: "Purchase Amount",
             dataField: "PrimaryAmount",
-        }, 
+        },
         {
             text: "Sale Amount",
             dataField: "SecondaryAmount",
-        }, 
+        },
         {
             text: "Claim Amount",
             dataField: "ReturnAmount",
@@ -258,6 +258,7 @@ const ClaimSummary = (props) => {
             formatter: (value, row, key, { btnLoading, selectedDate }) => {
                 //selected date push to row to pass json accurate selectdate value format
                 row["selectedDate"] = selectedDate
+                debugger
                 return (
                     <>
                         <div className=" d-flex justify-content-start  gap-2" >
@@ -266,13 +267,15 @@ const ClaimSummary = (props) => {
                                 <C_Button
                                     loading={btnLoading === `gobtn-${"createClaim"}-${row.id}-${key}`}
                                     type="button"
+                                    // forceDisabled={row.id !== null}
                                     style={{ width: "100px" }}
                                     title="Create Claim"
                                     spinnerColor="white"
                                     className={createClaimBtnCss}
-                                    onClick={(e) => { goButtonHandler("createClaim", row, `gobtn-${"createClaim"}-${row.id}-${key}`) }}
+                                    onClick={(e) => { row.id === null ? goButtonHandler("createClaim", row, `gobtn-${"createClaim"}-${row.id}-${key}`) : void (0) }}
                                 >
-                                    create<i className="fas fa-pencil-alt"></i>
+                                    {row.id !== null ? "Created" : "Create"}
+                                    {row.id === null && <i className="fas fa-pencil-alt"></i>}
 
                                 </C_Button>
                             </div>
@@ -284,8 +287,10 @@ const ClaimSummary = (props) => {
                                 <C_Button
                                     loading={btnLoading === `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`}
                                     type="button"
+
                                     title="Customer Wise Claim Summary"
                                     spinnerColor="white"
+                                    forceDisabled={row.id === null}
                                     className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.CustomerWiseReturn, row, `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`) }}
                                 >
@@ -303,6 +308,7 @@ const ClaimSummary = (props) => {
                                     type="button"
                                     title="Item Wise Claim Summary"
                                     spinnerColor="white"
+                                    forceDisabled={row.id === null}
                                     className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.ClaimSummary, row, `gobtn-${report.ClaimSummary}-${row.id}-${key}`) }}
                                 >
@@ -318,6 +324,7 @@ const ClaimSummary = (props) => {
 
                                     type="button"
                                     title="Master Claim Summary"
+                                    forceDisabled={row.id === null}
                                     spinnerColor="white"
                                     className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.CompanyWiseBudget, row, `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`) }}
@@ -332,6 +339,7 @@ const ClaimSummary = (props) => {
                                 <C_Button
                                     loading={btnLoading === `deletebtn-${row.id}-${key}`}
                                     type="button"
+                                    forceDisabled={row.id === null}
                                     title="Delete Claim"
                                     spinnerColor="white"
                                     className={deltBtnCss}
