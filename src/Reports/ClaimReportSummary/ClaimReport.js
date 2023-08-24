@@ -44,7 +44,7 @@ const ClaimSummary = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds()))
     const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [isClaimList, setisClaimList] = useState(false);
+    const [jsonBody, setjsonBody] = useState({});
 
 
 
@@ -107,6 +107,7 @@ const ClaimSummary = (props) => {
 
     useEffect(() => {
         if ((ClaimSummaryGobtn.Status === true) && (ClaimSummaryGobtn.StatusCode === 200)) {
+            dispatch(claimList_API(jsonBody))
             dispatch(postMasterClaimCreat_API_Success([]))
             customAlert({
                 Type: 1,
@@ -120,6 +121,7 @@ const ClaimSummary = (props) => {
     useEffect(() => {
         if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
             dispatch(deleteClaimSuccess({ Status: false }))
+            dispatch(claimList_API(jsonBody))
             customAlert({
                 Type: 1,
                 Message: deleteMsg.Message,
@@ -128,12 +130,11 @@ const ClaimSummary = (props) => {
         }
     }, [deleteMsg])
 
-    useEffect(() => {
-        if ((ClaimListData.Status === true) && (ClaimListData.StatusCode === 200)) {
-            setisClaimList(true)
-        }
-    }, [ClaimListData])
-
+    // useEffect(() => {
+    //     if ((ClaimListData.Status === true) && (ClaimListData.StatusCode === 200)) {
+    //         setisClaimList(true)
+    //     }
+    // }, [ClaimListData])
 
 
 
@@ -144,7 +145,8 @@ const ClaimSummary = (props) => {
             "FromDate": row.selectedDate.FromDate,
             "ToDate": row.selectedDate.ToDate,
             "Party": row.PartyID,
-            "Mode": (reportType === report.ClaimSummary) ? 1 : 2
+            "Mode": (reportType === report.ClaimSummary) ? 1 : 2,
+            "LoginParty": (reportType === "createClaim") ? _cfunc.loginSelectedPartyID() : undefined,
         });
         let config = { ReportType: reportType, jsonBody, btnId: btnId, ToDate: row.selectedDate.ToDate, FromDate: row.selectedDate.FromDate, ClaimID: row.id }
 
@@ -181,7 +183,7 @@ const ClaimSummary = (props) => {
 
     function MonthAndYearOnchange(e, InitialDate) {
         dispatch(claimList_API_Success([]))
-
+        debugger
         let selectedMonth = ""
         if (InitialDate) {
             selectedMonth = e
@@ -202,13 +204,14 @@ const ClaimSummary = (props) => {
             return a
         })
         const jsonBody = JSON.stringify({
-            "FromDate": values.FromDate,
-            "ToDate": values.ToDate,
+            "FromDate": firstDate,
+            "ToDate": lastDate,
             "Party": _cfunc.loginSelectedPartyID()
         });
 
-        let config = { jsonBody }
 
+        let config = { jsonBody }
+        setjsonBody(config)
         dispatch(claimList_API(config))
     }
 
