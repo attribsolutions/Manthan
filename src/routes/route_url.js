@@ -265,6 +265,8 @@ export const GST_R1_REPORT = "/Gst_R1_Report"
 
 export const RETURN_REPORT = "/ReturnReport"
 
+export const ITEM_SALE_REPORT = "/Item_Sale_Report"
+
 
 
 
