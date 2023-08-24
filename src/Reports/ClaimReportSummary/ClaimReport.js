@@ -65,7 +65,7 @@ const ClaimSummary = (props) => {
     const { userAccess, supplier, pdfdata, ClaimSummaryGobtn, deleteMsg, ClaimListData } = reducers;
     const { Data = [] } = ClaimListData
     const values = { ...state.values }
-
+    Data.sort((a, b) => b.id - a.id);
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -148,7 +148,7 @@ const ClaimSummary = (props) => {
             "Mode": (reportType === report.ClaimSummary) ? 1 : 2,
             "LoginParty": (reportType === "createClaim") ? _cfunc.loginSelectedPartyID() : undefined,
         });
-        let config = { ReportType: reportType, jsonBody, btnId: btnId, ToDate: row.selectedDate.ToDate, FromDate: row.selectedDate.FromDate, ClaimID: row.id }
+        let config = { ReportType: reportType, jsonBody, btnId: btnId, ToDate: row.selectedDate.ToDate, FromDate: row.selectedDate.FromDate, ClaimID: row.id, PartyName: row.PartyName }
 
         if (reportType === report.CompanyWiseBudget) {
             dispatch(getpdfReportdata(MasterClaimSummary_API, config))
@@ -234,6 +234,18 @@ const ClaimSummary = (props) => {
         {
             text: "Party",
             dataField: "PartyName",
+        },
+        {
+            text: "Purchase Amount",
+            dataField: "PrimaryAmount",
+        }, 
+        {
+            text: "Sale Amount",
+            dataField: "SecondaryAmount",
+        }, 
+        {
+            text: "Claim Amount",
+            dataField: "ReturnAmount",
         },
 
         {
