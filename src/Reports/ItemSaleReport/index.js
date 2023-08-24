@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId, url } from "../../routes/index"
@@ -10,10 +10,11 @@ import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { GetVenderSupplierCustomer, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getItemList } from "../../store/actions";
+import { GetVenderSupplierCustomer, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getGroupList, getItemList, getSubGroupList, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown } from "../../store/actions";
 import { GetRoutesList } from "../../store/Administrator/RoutesRedux/actions";
-import "../ItemSaleReport/ItemSaleCSS.scss";
 import { getPartyTypelist } from "../../store/Administrator/PartyTypeRedux/action";
+import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success } from "../../store/Report/ItemSaleReport/action";
+import "../ItemSaleReport/ItemSaleCSS.scss";
 
 const ItemSaleReport = (props) => {
 
@@ -26,15 +27,19 @@ const ItemSaleReport = (props) => {
     const [saleMadeFromeSelect, setSaleMadeFromeSelect] = useState({ value: "", label: "All" });
     const [saleMadeToSelect, setSaleMadeToSelect] = useState({ value: "", label: "All" });
     const [routeSelect, setRouteSelect] = useState({ value: "", label: "All" });
-    const [supplierSelect, setSupplierSelect] = useState('');
+    const [supplierSelect, setSupplierSelect] = useState({ value: "", label: "All" });
     const [customerSelect, setCustomerSelect] = useState({ value: "", label: "All" });
     const [unitDropdown, setUnitDropdown] = useState("");
     const [ItemNameSelect, setItemNameSelect] = useState({ value: "", label: "All" });
-
+    const [productSelect, setProductSelect] = useState({ value: "", label: "All" });
+    const [subProductSelect, setSubProductSelect] = useState({ value: "", label: "All" });
+    const [SubProductOptions, setSubProductOptions] = useState([]);
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
 
-    const { userAccess,
-        partyLoading,
+    const { goBtnLoading,
+        ItemSaleReportGobtn,
+        userAccess,
+        supplierLoading,
         pageField,
         supplier,
         RoutesList,
@@ -44,9 +49,16 @@ const ItemSaleReport = (props) => {
         customerDropLoading,
         BaseUnit,
         ItemDropdownloading,
-        ItemNameList } = useSelector(
+        ItemNameList,
+        productLoading,
+        productDropdown,
+        subProductLoading,
+        subProductDropdown,
+        getSubProductbyProduct } = useSelector(
             (state) => ({
-                partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
+                goBtnLoading: state.ItemSaleReportReducer.goBtnLoading,
+                ItemSaleReportGobtn: state.ItemSaleReportReducer.ItemSaleReportGobtn,
+                supplierLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
                 supplier: state.CommonPartyDropdownReducer.commonPartyDropdown,
 
                 RoutesList: state.RoutesReducer.RoutesList,
@@ -61,12 +73,20 @@ const ItemSaleReport = (props) => {
                 ItemNameList: state.ItemMastersReducer.ItemList,
 
                 BaseUnit: state.ItemMastersReducer.BaseUnit,
+
+                productLoading: state.GroupReducer.goBtnLoading,
+                productDropdown: state.GroupReducer.groupList,
+
+                subProductLoading: state.SubGroupReducer.goBtnLoading,
+                subProductDropdown: state.SubGroupReducer.SubgroupList,
+                getSubProductbyProduct: state.ItemMastersReducer.SubGroupList,
+
                 userAccess: state.Login.RoleAccessUpdateData,
                 pageField: state.CommonPageFieldReducer.pageField
             })
         );
     const { fromdate, todate, venderSelect } = hederFilters;
-    const Data = []
+    const { Data = [] } = ItemSaleReportGobtn;
 
     // const Data = [
     //     {
@@ -227,52 +247,33 @@ const ItemSaleReport = (props) => {
         dispatch(GetRoutesList());
         dispatch(getPartyTypelist());
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, RouteID: "" }));
+        dispatch(getGroupList());
+        dispatch(getSubGroupList())
         dispatch(getBaseUnit_ForDropDown());
         dispatch(getItemList());
         return () => {
             dispatch(commonPageFieldSuccess(null));
+            dispatch(ItemSaleGoButton_API_Success([]));
         }
     }, [])
 
-    const tableColumns = [
-        {
-            text: "InvoiceDate",
-            dataField: "InvoiceDate",
-        },
-        {
-            text: "SaleMadeFrom",
-            dataField: "SaleMadeFrom",
-        },
-        {
-            text: "SaleMadeTo",
-            dataField: "SaleMadeTo",
-        },
-        {
-            text: "	FullInvoiceNumber",
-            dataField: "FullInvoiceNumber",
-        },
-        {
-            text: "SupplierName",
-            dataField: "SupplierName",
-        },
-        {
-            text: "RouteName",
-            dataField: "RouteName",
-        },
-        {
-            text: "CustomerName",
-            dataField: "CustomerName",
-        },
-        {
-            text: "	SubGroupName",
-            dataField: "SubGroupName",
-        },
-        {
-            text: "	ItemName",
-            dataField: "ItemName",
-        },
+    useEffect(() => {
 
-    ];
+        let SubProduct = []
+        if (productSelect.value === '') {
+            SubProduct = subProductDropdown.map((i) => ({
+                value: i.id,
+                label: i.Name,
+            }))
+        } else {
+            SubProduct = getSubProductbyProduct.map((i) => ({
+                value: i.id,
+                label: i.Name,
+            }))
+        }
+        setSubProductOptions(SubProduct)
+
+    }, [productSelect, subProductDropdown, getSubProductbyProduct])
 
     const supplierDropdownOptions = supplier.map((data) => ({
         value: data.id,
@@ -280,6 +281,11 @@ const ItemSaleReport = (props) => {
     }))
 
     const customerOptions = customerDropdown.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }))
+
+    const ProductOptions = productDropdown.map((i) => ({
         value: i.id,
         label: i.Name,
     }))
@@ -346,15 +352,12 @@ const ItemSaleReport = (props) => {
             label: data.Name
         }));
 
-
     function RouteOnChange(event) {
-        // setsupplierSelect('')
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, RouteID: event.value, PartyID: supplierSelect.value }))
         setRouteSelect(event)
     }
 
     function SupplierOnChange(event) {
-
         setSupplierSelect(event)
         const jsonBody = JSON.stringify({
             CompanyID: _cfunc.loginCompanyID(),
@@ -369,19 +372,124 @@ const ItemSaleReport = (props) => {
     function fromdateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.fromdate = date
-        setHederFilters(newObj)
+        setHederFilters(newObj);
+        dispatch(ItemSaleGoButton_API_Success([]));
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.todate = date
-        setHederFilters(newObj)
+        setHederFilters(newObj);
+        dispatch(ItemSaleGoButton_API_Success([]));
     }
 
+    function ProductOnchange(e) {
+        setProductSelect(e)
+        dispatch(get_Sub_Group_By_Group_ForDropDown(e.value))
+        setSubProductSelect({ value: "", label: "All" })
+    }
+
+    function goButtonHandler() {
+        try {
+            const jsonBody = JSON.stringify({
+                "FromDate": fromdate,
+                "ToDate": todate,
+            });
+            dispatch(ItemSaleGoButton_API({ jsonBody, btnId: url.ITEM_SALE_REPORT }))
+
+        } catch (error) { _cfunc.CommonConsole(error) }
+    }
+
+    const tableColumns = [
+        {
+            text: "InvoiceDate",
+            dataField: "InvoiceDate",
+        },
+        {
+            text: "SaleMadeFrom",
+            dataField: "SaleMadeFrom",
+        },
+        {
+            text: "SaleMadeTo",
+            dataField: "SaleMadeTo",
+        },
+        {
+            text: "	FullInvoiceNumber",
+            dataField: "FullInvoiceNumber",
+        },
+        {
+            text: "SupplierName",
+            dataField: "SupplierName",
+        },
+        {
+            text: "RouteName",
+            dataField: "RouteName",
+        },
+        {
+            text: "CustomerName",
+            dataField: "CustomerName",
+        },
+        {
+            text: "	SubGroupName",
+            dataField: "SubGroupName",
+        },
+        {
+            text: "	QtyInKg",
+            dataField: "QtyInKg",
+        },
+        {
+            text: "	QtyInNo",
+            dataField: "QtyInNo",
+        },
+        {
+            text: "	QtyInBox",
+            dataField: "QtyInBox",
+        },
+        {
+            text: "	Rate",
+            dataField: "Rate",
+        },
+        {
+            text: "	BasicAmount",
+            dataField: "BasicAmount",
+        },
+        {
+            text: "	DiscountAmount",
+            dataField: "DiscountAmount",
+        },
+        {
+            text: "	GSTPercentage",
+            dataField: "GSTPercentage",
+        },
+        {
+            text: "	GSTAmount",
+            dataField: "GSTAmount",
+        },
+        {
+            text: "	Amount",
+            dataField: "Amount",
+        },
+        {
+            text: "	GrandTotal",
+            dataField: "GrandTotal",
+        },
+        {
+            text: "	RoundOffAmount",
+            dataField: "RoundOffAmount",
+        },
+        {
+            text: "	TCSAmount",
+            dataField: "TCSAmount",
+        },
+        {
+            text: "	FullGRNNumber",
+            dataField: "FullGRNNumber",
+        },
+    ];
+    
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-
 
             <div className="page-content">
                 <div className="item-Sale-card_1 px-2 text-black mt-n1">
@@ -426,7 +534,8 @@ const ItemSaleReport = (props) => {
                                         <Label className="col-sm-4 p-2">Channel From</Label>
                                         <Col>
                                             <C_Select
-                                                name="PartyName"
+
+
                                                 value={saleMadeFromeSelect}
                                                 isSearchable={true}
                                                 //  isLoading={partyLoading}       
@@ -452,12 +561,9 @@ const ItemSaleReport = (props) => {
                                         <Label className="col-sm-4 p-2">Supplier</Label>
                                         <Col>
                                             <C_Select
-                                                name="PartyName"
                                                 value={supplierSelect}
-
                                                 isSearchable={true}
-                                                //  isLoading={partyLoading}       
-
+                                                isLoading={supplierLoading}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
@@ -465,7 +571,6 @@ const ItemSaleReport = (props) => {
                                                 }}
                                                 options={supplierDropdownOptions}
                                                 onChange={SupplierOnChange}
-
                                             />
                                         </Col>
                                     </FormGroup>
@@ -476,14 +581,13 @@ const ItemSaleReport = (props) => {
 
                         <Col sm="1" className="mt-1 mb-1 ">
                             <Go_Button
-                            // loading={reducers.goBtnloading} 
-                            // id={gobtnId} 
-                            // onClick={goButtonHandler} 
+                                loading={goBtnLoading}
+                                // id={gobtnId} 
+                                onClick={goButtonHandler}
                             />
                         </Col>
                     </Row>
                 </div>
-
 
                 <div className="item-Sale-card_3 px-2 text-black mt-1">
                     <Row className="mb-1">
@@ -495,7 +599,8 @@ const ItemSaleReport = (props) => {
                                 <Label className="col-sm-3 p-2">Channel to</Label>
                                 <Col sm={6}>
                                     <C_Select
-                                        name="PartyName"
+
+
                                         value={saleMadeToSelect}
 
                                         isSearchable={true}
@@ -542,7 +647,8 @@ const ItemSaleReport = (props) => {
 
                                 <Col>
                                     <C_Select
-                                        name="PartyName"
+
+
                                         value={customerSelect}
                                         isSearchable={true}
                                         isLoading={customerDropLoading}
@@ -567,7 +673,8 @@ const ItemSaleReport = (props) => {
 
                                 <Col>
                                     <C_Select
-                                        name="PartyName"
+
+
                                         // value={values.PartyName}         
                                         isSearchable={true}
                                         //  isLoading={partyLoading}       
@@ -587,6 +694,7 @@ const ItemSaleReport = (props) => {
                         </Col>
 
                     </Row>
+
                     <Row>
                         <Col sm={3}>
                             <FormGroup className=" row mt-2">
@@ -596,19 +704,16 @@ const ItemSaleReport = (props) => {
                                 <Label className="col-sm-3 p-2">Product</Label>
                                 <Col sm={6}>
                                     <C_Select
-                                        name="PartyName"
-                                        // value={values.PartyName}         
-
+                                        value={productSelect}
                                         isSearchable={true}
-                                        //  isLoading={partyLoading}       
-
+                                        isLoading={productLoading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                    // options={Party_Option}
-                                    // onChange={partySlectHandler}
+                                        options={ProductOptions}
+                                        onChange={ProductOnchange}
 
                                     />
                                 </Col>
@@ -623,20 +728,16 @@ const ItemSaleReport = (props) => {
                                 <Label className="col-sm-4 p-2">Sub Product</Label>
                                 <Col>
                                     <C_Select
-                                        name="PartyName"
-                                        // value={values.PartyName}         
-
+                                        value={subProductSelect}
                                         isSearchable={true}
-                                        //  isLoading={partyLoading}       
-
+                                        isLoading={subProductLoading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                    // options={Party_Option}
-                                    // onChange={partySlectHandler}
-
+                                        options={SubProductOptions}
+                                        onChange={(e) => { setSubProductSelect(e) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -650,10 +751,9 @@ const ItemSaleReport = (props) => {
                                 <Label className="col-sm-4 p-2">Items</Label>
                                 <Col>
                                     <C_Select
-                                        name="PartyName"
                                         value={ItemNameSelect}
                                         isSearchable={true}
-                                         isLoading={ItemDropdownloading}       
+                                        isLoading={ItemDropdownloading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
@@ -661,7 +761,6 @@ const ItemSaleReport = (props) => {
                                         }}
                                         options={ItemNameOptions}
                                         onChange={(e) => { setItemNameSelect(e) }}
-
                                     />
                                 </Col>
                             </FormGroup>
@@ -675,12 +774,9 @@ const ItemSaleReport = (props) => {
                                 <Label className="col-sm-4 p-2">Quantity</Label>
                                 <Col>
                                     <C_Select
-                                        name="PartyName"
                                         value={unitDropdown}
-
                                         isSearchable={true}
                                         //  isLoading={partyLoading}       
-
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
@@ -688,7 +784,6 @@ const ItemSaleReport = (props) => {
                                         }}
                                         options={Unit_DropdownOptions}
                                         onChange={(e) => { setUnitDropdown(e) }}
-
                                     />
                                 </Col>
                             </FormGroup>
@@ -698,7 +793,7 @@ const ItemSaleReport = (props) => {
 
                 <div className="mt-1">
                     <ToolkitProvider
-                        keyField="PartyID"
+                        keyField="id"
                         // data={tableData.btnId !== "excel_btnId" ? DeletedInvoiceExportSerializerDetails : [{}]}
                         // columns={tableData.btnId !== "excel_btnId" ? tableColumns : [{}]}
                         data={Data}
@@ -711,7 +806,7 @@ const ItemSaleReport = (props) => {
                                     <Col xl="12">
                                         <div className="table-responsive table">
                                             <BootstrapTable
-                                                keyField="PartyID"
+                                                keyField="id"
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
