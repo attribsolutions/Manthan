@@ -38,7 +38,9 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 80, 30, 80);//horizontal line 3
     doc.line(408, 63, 408, 16);//vertical line header section billby 
     doc.line(292, 170, 292, 80);//vertical  line header section billto
-    doc.line(570, 40, 408, 40);//horizontal line 3
+    doc.line(570, 32, 408, 32);//horizontal line 3
+    doc.line(570, 47, 408, 47);//horizontal line 3
+
 
 
     var BilledByStyle = {
@@ -120,11 +122,14 @@ export const reportHeder1 = (doc, data) => {
 }
 
 export const reportHeder3 = (doc, data) => {
+    debugger
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`From Date:  ${date_dmy_func(data.Period.FromDate)}`, 415, 30)
-    doc.text(`To Date:       ${date_dmy_func(data.Period.ToDate)}`, 415, 53)
+    doc.text(`From Date:  ${date_dmy_func(data.Period.FromDate)}`, 415, 25)
+    doc.text(`To Date:       ${date_dmy_func(data.Period.ToDate)}`, 415, 40)
+    doc.text(`Claim ID:       ${data.Period.ClaimID}`, 415, 56)
+
 
 }
 

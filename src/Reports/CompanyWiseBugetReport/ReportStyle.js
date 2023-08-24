@@ -17,8 +17,11 @@ export const pageHeder = (doc, data) => {
     doc.setFont('Arial')
     doc.setFontSize(18)
     doc.text(`Chitale Bandhu Mithalwale`, 300, 45, 'center')
+
     doc.setFontSize(12)
+
     doc.setFont(undefined, 'bold')
+    doc.text(`Claim ID : ${data.Period.ClaimID}`, 450, 40)
     doc.text(`Chitale Bandhu Mithalwale`, 300, 65, 'center')
     doc.setFontSize(10)
     doc.text(`Company wise Budget Report period ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `, 300, 75, 'center')
