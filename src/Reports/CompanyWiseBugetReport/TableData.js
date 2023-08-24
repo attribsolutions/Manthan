@@ -68,7 +68,7 @@ export const Rows = (table = []) => {
                 `${numberWithCommas(Number(TotalNetPurchaseValue).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalBudgetOnlyExpiryFrom).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalCXClaimAmount).toFixed(2))}`,
-                `${numberWithCommas(Number(ClaimAgainstNetSale).toFixed(2))}`,
+                `${numberWithCommas(Number(ClaimAgainstNetSale).toFixed(2))}%`,
             ];
         };
 
@@ -127,7 +127,7 @@ export const ProductWiseRows = (data) => {
                 `${numberWithCommas(Number(TotalCXNetPurchaseValue).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalBudgetOnlyExpiryFrom).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalCXClaimAmount).toFixed(2))}`,
-                `${numberWithCommas(Number(ClaimAgainstNetSale).toFixed(2))}`,
+                `${numberWithCommas(Number(ClaimAgainstNetSale).toFixed(2))}%`,
             ];
         };
 
