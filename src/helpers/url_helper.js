@@ -382,6 +382,10 @@ export const PARTY_LEDGER = '/PartyLedgerReport'
 export const CLAIM_SUMMARY = '/ClaimSummary'
 export const MASTER_CLAIM_SUMMARY = '/MasterClaimPrint'
 export const MASTER_CLAIM_CREATE = '/MasterClaimCreate'
+export const CLAIM_LIST = '/Claimlist'
+
+
+
 
 
 
