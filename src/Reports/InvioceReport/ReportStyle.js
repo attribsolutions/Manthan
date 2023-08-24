@@ -235,7 +235,7 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 9
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('PO Number: ', x, y)
+                doc.text('PO No: ', x, y)
             };
             if (rowIdx === 1 && colIdx === 0) {
 
@@ -267,7 +267,7 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 9
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('IRN NO: ', x, y)
+                doc.text('IRN No: ', x, y)
             };
 
 
@@ -586,15 +586,17 @@ export const tableBody = (doc, data) => {
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
 
-                let Box = 0;
-
+                let TotalBox = 0;
                 data.InvoiceItems.forEach((element, key) => {
                     if (element.PrimaryUnitName === "Box") {
-                        Box = Number(Box) + Number(element.Quantity)
+                        TotalBox = Number(TotalBox) + Number(element.Quantity)
                     }
                 })
-
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength}) (${Box} Box)`
+                if (TotalBox === 0) {
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})`
+                } else {
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
+                }
 
                 data1.row.cells[8].colSpan = 2
                 data1.row.cells[10].colSpan = 2

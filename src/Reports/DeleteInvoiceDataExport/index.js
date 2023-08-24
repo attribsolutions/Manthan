@@ -17,7 +17,7 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 
 const DeleteInvoiceDataExport = (props) => {
 
@@ -83,7 +83,7 @@ const DeleteInvoiceDataExport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(postDeleteInvoiceDataExport_API_Success([]));
         }
@@ -93,7 +93,7 @@ const DeleteInvoiceDataExport = (props) => {
 
         if (tableData.btnId === "excel_btnId") {
             if (DeletedInvoiceExportSerializerDetails.length > 0) {
-                ExcelDownloadFunc({                // Download CSV
+                ReportComponent({                // Download CSV
                     pageField,
                     excelData: DeletedInvoiceExportSerializerDetails,
                     excelFileName: "Deleted Invoice Data Export"
@@ -124,7 +124,7 @@ const DeleteInvoiceDataExport = (props) => {
 
     function goButtonHandler() {
         try {
-            const btnId = `gobtn-${url.INVOICE_DATA_EXPORT}`
+            const btnId = `gobtn-${url.DELETE_INVOICE_DATA_EXPORT}`
             if ((isSCMParty) && (PartyDropdown === "")) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;

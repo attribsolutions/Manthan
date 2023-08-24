@@ -3,7 +3,7 @@ import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
     "SR",
-    "HSN Item Name",
+    "Item Name",
     "Quantity (UOM)",
     "MRP",
     "Rate",
@@ -60,7 +60,7 @@ export const Rows = (data) => {
     const groupedItems = ReturnItems.reduce((accumulator, currentItem) => {
 
         const { HSNCode, ItemName, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName } = currentItem;
-        const key = ItemName + '_' + MRPValue;
+        const key = ItemName + '_' + MRPValue + "_" + Discount;
         if (accumulator[key]) {
             accumulator[key].DiscountAmount += Number(DiscountAmount);
             accumulator[key].Quantity += Number(Quantity);
@@ -79,10 +79,8 @@ export const Rows = (data) => {
         }
         return accumulator;
     }, {});
-    debugger
-    Object.values(groupedItems).forEach((element, key) => {
-        debugger
 
+    Object.values(groupedItems).forEach((element, key) => {
 
         const tableitemRow = [
             SrNO++,
@@ -182,35 +180,29 @@ export const Rows = (data) => {
 export const ReturnByRow = (data) => {
 
     var ReturnByArray = [
-        [`${data.CustomerName}`],
-        [`${data.CustomerAddress}`],
-        [`${data.CustomerState}`],
-        [`GSTIN:${data.CustomerGSTIN}`,],
-        [`FSSAINo:${data.CustomerFSSAINo}`],
-        [`MobileNo:${data.CustomerMobileNo}`],
+        [`                    ${data.CustomerName}`],
+        [`                 ${data.CustomerAddress}`],
+        [`            ${data.CustomerState}`],
+        [`              ${data.CustomerGSTIN}`,],
+        [`                   ${data.CustomerFSSAINo}`],
+        [`                   ${data.CustomerMobileNo}`],
     ]
     return ReturnByArray;
 }
 export const ReturnToRow = (data) => {
 
     var ReturnToArray = [
-        [`${data.PartyName}`],
-        [`${data.PartyAddress}`],
-        [`${data.PartyState}`],
-        [`GSTIN:${data.PartyGSTIN}`],
-        [`FSSAINo:${data.PartyFSSAINo}`],
-        [`MobileNo:${data.PartyMobileNo}`],
+        [`             ${data.PartyName}`],
+        [`                  ${data.PartyAddress}`],
+        [`            ${data.PartyState}`],
+        [`               ${data.PartyGSTIN}`],
+        [`                   ${data.PartyFSSAINo}`],
+        [`                   ${data.PartyMobileNo}`],
     ]
 
     return ReturnToArray;
 }
-// export const DetailsOfTransportRow = (data) => {
-//     var DetailsOfTransportArray = [
-//         [`Claim No: {}`],
-//         [`Period :`],
-//     ]
-//     return DetailsOfTransportArray;
-// }
+
 
 
 export const ReturnReason = (data) => {

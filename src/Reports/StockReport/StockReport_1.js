@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
@@ -13,19 +13,20 @@ import { commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBa
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { StockReport_1_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../ReportIndex'
-import * as XLSX from 'xlsx';
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 
 const StockReport_1 = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const isSCMParty = _cfunc.loginIsSCMParty();
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
     const [unitDropdown, setUnitDropdown] = useState("");
     const [tableData, setTableData] = useState([]);
+    const [PartyDropdown, setPartyDropdown] = useState("");
 
     const [btnMode, setBtnMode] = useState(0);
 
@@ -35,14 +36,15 @@ const StockReport_1 = (props) => {
             stockProcessingLoading: state.StockReportReducer.stockProcessingLoading,
             StockProcessingBtn: state.StockReportReducer.StockProcessingBtn,
             StockReport_1_Gobtb: state.StockReportReducer.StockReport_1_Gobtb,
+            party: state.CommonPartyDropdownReducer.commonPartyDropdown,
             pdfdata: state.PdfReportReducers.pdfdata,
             BaseUnit: state.ItemMastersReducer.BaseUnit,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { StockReport_1_Gobtb, pdfdata, pageField } = reducers
-    console.log(pdfdata)
+    const { StockReport_1_Gobtb, pdfdata, pageField, party } = reducers
+
     const { userAccess, BaseUnit, StockProcessingBtn, } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
@@ -91,7 +93,7 @@ const StockReport_1 = (props) => {
                 setBtnMode(0);
                 const { StockDetails } = StockReport_1_Gobtb.Data[0]
                 if (btnMode === 2) {
-                    ExcelDownloadFunc({      // Download CSV
+                    ReportComponent({      // Download CSV
                         pageField,
                         excelData: StockDetails,
                         excelFileName: "SNS Report"
@@ -153,6 +155,11 @@ const StockReport_1 = (props) => {
         }
     }, [StockProcessingBtn])
 
+    const Party_Option = party.map(i => ({
+        value: i.id,
+        label: i.Name
+    }));
+
     const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
         .map(data => ({
             value: data.id,
@@ -181,11 +188,15 @@ const StockReport_1 = (props) => {
             setBtnMode(0);
             return
         }
+        if ((isSCMParty) && (PartyDropdown === "")) {
+            customAlert({ Type: 4, Message: "Please Select Party" });
+            return;
+        }
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
             "Unit": unitDropdown.value,
-            "Party": _cfunc.loginPartyID(),
+            "Party": isSCMParty ? PartyDropdown.value : _cfunc.loginPartyID()
         });
 
         let config = { ReportType: report.Stock, jsonBody }
@@ -209,99 +220,155 @@ const StockReport_1 = (props) => {
         setHeaderFilters(newObj)
     }
 
+    const FromDateColumn = (
+        <FormGroup className=" mb-2 row mt-3 " >
+            <Label className="col-sm-4 p-2"
+                style={{ width: "66px" }}>FromDate</Label>
+            <Col sm={7}>
+                <C_DatePicker
+                    name='fromdate'
+                    value={fromdate}
+                    onChange={fromdateOnchange}
+                />
+            </Col>
+        </FormGroup>
+    );
+
+    const ToDateColumn = (
+        <FormGroup className=" row mt-3 " >
+            <Label className="col-sm-4 p-2"
+                style={{ width: "60px" }}>ToDate</Label>
+            <Col sm={7}>
+                <C_DatePicker
+                    nane='todate'
+                    value={todate}
+                    onChange={todateOnchange}
+                />
+            </Col>
+        </FormGroup>
+    );
+
+    const UnitColumn = (
+        <FormGroup className=" row" >
+            <Label className="col-sm-2 p-2"
+                style={{ width: "60px" }}>Unit</Label>
+            <Col sm={7}>
+                <C_Select
+                    name="Unit"
+                    value={unitDropdown}
+                    isDisabled={tableData.length > 0 && true}
+                    isSearchable={true}
+                    className="react-dropdown"
+                    classNamePrefix="dropdown"
+                    styles={{
+                        menu: provided => ({ ...provided, zIndex: 2 })
+                    }}
+                    options={BaseUnit_DropdownOptions}
+                    onChange={(e) => { setUnitDropdown(e) }}
+                />
+            </Col>
+        </FormGroup>
+    );
+
+    const PartyColumn = (
+        <FormGroup className=" row" >
+            <Label className="col-sm-2 p-2"
+                style={{ width: "60px" }}>Party</Label>
+            <Col sm={7}>
+                <C_Select
+                    name="Party"
+                    value={PartyDropdown}
+                    isSearchable={true}
+                    className="react-dropdown"
+                    classNamePrefix="dropdown"
+                    styles={{
+                        menu: provided => ({ ...provided, zIndex: 2 })
+                    }}
+                    options={Party_Option}
+                    onChange={(e) => { setPartyDropdown(e) }}
+                />
+            </Col>
+        </FormGroup>
+    );
+
+    const StockProcessColumn = (
+        <C_Button
+            type="button"
+            spinnerColor="white"
+            loading={reducers.stockProcessingLoading}
+            className="btn btn-outline-info border-1 font-size-10 text-center"
+            onClick={() => StockProccessHandler()}
+        >
+            Stock Process
+        </C_Button>
+    );
+
+    const PrintBtnColumn = (
+        <C_Button
+            type="button"
+            spinnerColor="white"
+            className="btn btn-success"
+            onClick={(e) => excel_And_GoBtnHandler(e, 1)}
+        >
+            Print
+        </C_Button>
+    );
+
+    const ExcelBtnColumn = (
+        <C_Button
+            type="button"
+            spinnerColor="white"
+            loading={btnMode === 2 && true}
+            className="btn btn-primary"
+            onClick={(e) => excel_And_GoBtnHandler(e, 2)}
+        >
+            Excel Download
+        </C_Button>
+    );
+  
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
                 <div className="px-2 c_card_filter text-black" >
-                    <div className="row" >
-                        <Col sm={2}>
-                            <FormGroup className=" mb-2 row mt-3 " >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "66px" }}>FromDate</Label>
-                                <Col sm={7}>
-                                    <C_DatePicker
-                                        name='fromdate'
-                                        value={fromdate}
-                                        onChange={fromdateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
 
-                        <Col sm={2}>
-                            <FormGroup className=" row mt-3 " >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "60px" }}>ToDate</Label>
-                                <Col sm={7}>
-                                    <C_DatePicker
-                                        nane='todate'
-                                        value={todate}
-                                        onChange={todateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
+                    {isSCMParty ? (
+                        <>
+                            <div className="row" >
+                                <Col sm={4}>{FromDateColumn} </Col>
 
-                        <Col sm={3}>
-                            <FormGroup className=" row mt-3 " >
-                                <Label className="col-sm-2 p-2"
-                                    style={{ width: "85px" }}>Unit</Label>
-                                <Col sm={7}>
-                                    <C_Select
-                                        name="Unit"
-                                        value={unitDropdown}
-                                        isDisabled={tableData.length > 0 && true}
-                                        isSearchable={true}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={BaseUnit_DropdownOptions}
-                                        onChange={(e) => { setUnitDropdown(e) }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col >
+                                <Col sm={4}>{ToDateColumn} </Col>
 
-                        <Col sm={1} className="mt-3 ml-5 px-2 p-1">
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={reducers.stockProcessingLoading}
-                                className="btn btn-outline-info border-1 font-size-10 text-center"
-                                onClick={() => StockProccessHandler()}
-                            >
-                                Stock Process
-                            </C_Button>
-                        </Col>
+                                <Col sm={1} className="mt-3 ml-5 px-2 p-1"> {StockProcessColumn} </Col>
+                            </div>
 
-                        <Col sm={1} className="mt-3" >
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                className="btn btn-success"
-                                onClick={(e) => excel_And_GoBtnHandler(e, 1)}
-                            >
-                                Print
-                            </C_Button>
+                            <div className="row mb-1">
+                                <Col sm={4}>{UnitColumn} </Col>
 
-                        </Col>
+                                <Col sm={4}> {PartyColumn}</Col>
 
-                        <Col sm={2} className="mt-3 ">
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={btnMode === 2 && true}
-                                className="btn btn-primary"
-                                onClick={(e) => excel_And_GoBtnHandler(e, 2)}
-                            >
-                                Excel Download
-                            </C_Button>
-                        </Col>
+                                <Col sm={1}>{PrintBtnColumn}</Col>
 
-                    </div>
+                                <Col sm={2}> {ExcelBtnColumn} </Col>
+                            </div>
+                        </>
+
+                    ) : (
+                        <div className="row">
+                            <Col sm={2}>{FromDateColumn}</Col>
+
+                            <Col sm={2}> {ToDateColumn} </Col>
+
+                            <Col sm={3} className="mt-3"> {UnitColumn}  </Col >
+
+                            <Col sm={1} className="mt-3 ml-5 px-2 p-1"> {StockProcessColumn}</Col>
+
+                            <Col sm={1} className="mt-3" >  {PrintBtnColumn}  </Col>
+
+                            <Col sm={2} className="mt-3 "> {ExcelBtnColumn}  </Col>
+
+                        </div>
+                    )}
 
                 </div>
 

@@ -48,6 +48,45 @@ export const reportHeder1 = (doc, data) => {
 
     //Header Table Style 
     var BilledByStyle = {
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Supplier : ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Address: ', x, y)
+            };
+
+            if (rowIdx === 2 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('GSTIN: ', x, y)
+            };
+            if (rowIdx === 3 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('FSSAI No: ', x, y)
+            };
+
+
+        },
         margin: {
             top: 45, left: 30, right: 35,
         },
@@ -63,7 +102,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 2,
             fontSize: 8,
-            fontStyle: 'bold',
+            fontStyle: 'normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -80,6 +119,42 @@ export const reportHeder1 = (doc, data) => {
 
     };
     var BilledToStyle = {
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Customer : ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Address: ', x, y)
+            };
+
+            if (rowIdx === 2 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('GSTIN: ', x, y)
+            };
+            if (rowIdx === 3 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('FSSAI No: ', x, y)
+            };
+
+        },
         margin: {
             top: 45, left: 220, right: 35,
         },
@@ -95,7 +170,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 2,
             fontSize: 8,
-            fontStyle: 'bold',
+            fontStyle: 'normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -110,6 +185,46 @@ export const reportHeder1 = (doc, data) => {
 
     };
     var DetailsOfTransportStyle = {
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('PO Type : ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Customer: ', x, y)
+            };
+
+            if (rowIdx === 2 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Address: ', x, y)
+            };
+            if (rowIdx === 3 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('FSSAI No: ', x, y)
+            };
+
+
+        },
+
         margin: {
             top: 45, left: 408, right: 35,
         },
@@ -125,7 +240,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 2,
             fontSize: 8,
-            fontStyle: 'bold',
+            fontStyle: 'normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -291,28 +406,68 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[9].colSpan = 2
             }
         },
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 7) {
+                if (data1.row.cells[7].raw === "       CGST        %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 4, startY1vertical + 2, startXVertical - 4, endYvertical + 2);  // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+            if (rowIdx === 0 && colIdx === 9) {
+                if (data1.row.cells[9].raw === "       SGST        %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 4, startY1vertical + 2, startXVertical - 4, endYvertical + 2); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
+        },
         margin: {
             left: 30, right: 25, top: 65
         },
         theme: 'grid',
         headerStyles: {
-            cellPadding: 4,
-            lineWidth: 1,
+            cellPadding: 3,
+            lineWidth: 0.8,
             valign: 'top',
             fontStyle: 'bold',
             halign: 'center',
             fillColor: "white",
             textColor: [0, 0, 0],
-            fontSize: 8,
+            fontSize: 7,
             rowHeight: 10,
-            lineColor: [0, 0, 0]
+            lineColor: "black"
         },
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
             cellPadding: 5,
             fontSize: 7,
-            // fontStyle: 'bold',
             lineColor: [6, 3, 1]
         },
         columnStyles: {
@@ -442,7 +597,7 @@ export const tableBodyWithIGST = (doc, data) => {
 
             }
             if (data1.row.cells[0].raw === "HSN Item Name") {
-                
+
                 let TotalBox = 0;
                 OrderItem.forEach((element, key) => {
                     if (element.PrimaryUnitName === "Box") {

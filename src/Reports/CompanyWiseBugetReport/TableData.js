@@ -22,9 +22,7 @@ export const ProductWisecolumns = [
     "Claim Against % Net Sale",
 ];
 
-
 export const Rows = (table = []) => {
-
     const returnArr = [];
     let TotalCXprimaryAmount = 0
     let TotalCXPurchaseAmount = 0
@@ -35,7 +33,6 @@ export const Rows = (table = []) => {
     let TotalNetSale = 0
 
     table.forEach((index, key) => {
-
         const tableitemRow = [
             `${index.ItemReasonName}`,
             `${numberWithCommas(Number(index.SecondaryAmount).toFixed(2))}`,
@@ -58,7 +55,7 @@ export const Rows = (table = []) => {
         };
 
         function totalrow() {
-            debugger
+
             const TotalNetPurchaseValue = TotalCXPurchaseAmount - TotalCXreturnValue;
             table["TotalNetPurchaseValue"] = TotalNetPurchaseValue;
             return [
@@ -79,11 +76,9 @@ export const Rows = (table = []) => {
         if (key === table.length - 1) {
             returnArr.push(totalrow());
         }
-
     })
     return returnArr;
 }
-
 
 export const ProductWiseRows = (data) => {
     const { ProductwiseBudgetReport = [] } = data
@@ -99,7 +94,6 @@ export const ProductWiseRows = (data) => {
     let TotalNetSale = 0
     ProductwiseBudgetReport.forEach((element, key) => {
         const tableitemRow = [
-            // element.BatchDate,
             `${element.Product}`,
             `${numberWithCommas(Number(element.SecondaryAmount).toFixed(2))}`,
             `${numberWithCommas(Number(element.PrimaryAmount).toFixed(2))}`,
@@ -124,8 +118,8 @@ export const ProductWiseRows = (data) => {
         function totalrow() {
             return [
                 "Total",
-                `${numberWithCommas(Number(TotalCXprimaryAmount).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalCXPurchaseAmount).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalCXprimaryAmount).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalCXreturnValue).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalCXNetPurchaseValue).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalBudgetOnlyExpiryFrom).toFixed(2))}`,

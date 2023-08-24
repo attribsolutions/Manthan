@@ -16,7 +16,7 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 
 const InvoiceDataExport = (props) => {
 
@@ -95,7 +95,7 @@ const InvoiceDataExport = (props) => {
     useEffect(() => {
         if (goBtnMode === "downloadExcel") {
             if (InvoiceExportSerializerDetails.length > 0) {
-                ExcelDownloadFunc({      // Download CSV
+                ReportComponent({      // Download CSV
                     pageField,
                     excelData: InvoiceExportSerializerDetails,
                     excelFileName: "Invoice Data Export"

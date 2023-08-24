@@ -225,7 +225,7 @@ export const reportFooterForGoodsCredit = (doc, data) => {
 
 export const reportFooterForCredit = (doc, data) => {
 
-    debugger
+    
     const a = data.CRDRInvoices.map((data) => ({
         GrandTotal: Number(data.GrandTotal),
         PaidAmount: Number(data.PaidAmount),

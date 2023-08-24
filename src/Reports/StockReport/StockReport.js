@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row, } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
@@ -9,14 +9,11 @@ import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { mode, pageId, url } from "../../routes/index"
+import { mode, pageId } from "../../routes/index"
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 import CustomTable from "../../CustomTable2";
 
 const StockReport = (props) => {
@@ -85,14 +82,13 @@ const StockReport = (props) => {
         // This useEffect handles the response from the API call
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
-
+                dispatch(stockReport_GoButton_API_Success([])); // Reset goButtonData
                 if (btnMode === 2) {
-                    ExcelDownloadFunc({      // Download CSV
+                    ReportComponent({      // Download CSV
                         pageField,
                         excelData: goButtonData.Data,
                         excelFileName: "Current_Stock_Report"
                     })
-                    dispatch(stockReport_GoButton_API_Success([])); // Reset goButtonData
                 }
                 else if (btnMode === 1) {
                     setTableData(goButtonData.Data); // Update table data
@@ -105,7 +101,7 @@ const StockReport = (props) => {
         } catch (e) {
             console.log(e); // Log any errors
         }
-    }, [goButtonData, pageField, btnMode]);
+    }, [goButtonData]);
 
     useEffect(() => {
         if (tableData.length === 0) {
@@ -127,6 +123,7 @@ const StockReport = (props) => {
     }));
 
     function goButtonHandler(e, btnMode) {
+
         try {
             setBtnMode(btnMode)
             if (unitDropdown === "") {
@@ -211,7 +208,6 @@ const StockReport = (props) => {
                                     <Select
                                         name="Unit"
                                         value={unitDropdown}
-                                        // isDisabled={tableData.length > 0 && true}
                                         isSearchable={true}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
@@ -238,7 +234,6 @@ const StockReport = (props) => {
                                             name="Party"
                                             value={partyDropdown}
                                             isSearchable={true}
-                                            // isDisabled={tableData.length > 0 && true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{

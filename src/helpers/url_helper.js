@@ -382,6 +382,10 @@ export const PARTY_LEDGER = '/PartyLedgerReport'
 export const CLAIM_SUMMARY = '/ClaimSummary'
 export const MASTER_CLAIM_SUMMARY = '/MasterClaimPrint'
 export const MASTER_CLAIM_CREATE = '/MasterClaimCreate'
+export const CLAIM_LIST = '/Claimlist'
+
+
+
 
 
 
@@ -416,6 +420,9 @@ export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
 export const GST_R1_REPORT = "/GSTR1Excel"
 
 export const GST_R3B_REPORT = "/GSTR3BExcel"
+
+export const RETURN_REPORT = "/ReturnReport"
+
 
 
 

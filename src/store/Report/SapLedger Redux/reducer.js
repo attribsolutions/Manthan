@@ -41,8 +41,8 @@ const SapLedgerReducer = (state = INIT_STATE, action) => {
     case GET_EXCELBUTTON_API_SUCCESS:
       return {
         ...state,
-        downloadProductMargin: false,
         ProductMargin: action.payload,
+        downloadProductMargin: false,
       }
 
     case GO_BUTTON_API_SAP_LEDGER_ERROR:

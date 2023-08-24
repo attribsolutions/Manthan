@@ -51,33 +51,12 @@ export const Rows = (data) => {
     let totalCGst = 0
     let totalSGst = 0
     let totalAmount = 0
-    let totalQuantity = 0
+    let totalReturnQuantity = 0
+    let totalApproveQuantity = 0
     let SrNO = 1
     let TotalGst = 0
     let GSTPercentage = 0
 
-    // const groupedItems = ReturnItems.reduce((accumulator, currentItem) => {
-
-    //     const { HSNCode, ItemName, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName } = currentItem;
-    //     const key = ItemName + '_' + MRP;
-    //     if (accumulator[key]) {
-    //         accumulator[key].DiscountAmount += Number(DiscountAmount);
-    //         accumulator[key].Quantity += Number(Quantity);
-    //         accumulator[key].BasicAmount += Number(BasicAmount);
-    //         accumulator[key].CGST += Number(CGST);
-    //         accumulator[key].SGST += Number(SGST);
-    //         accumulator[key].Amount += Number(Amount);
-    //         accumulator[key].BatchCode += BatchCode;
-    //         accumulator[key].BatchDate += BatchDate;
-    //         accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
-    //     } else {
-    //         accumulator[key] = {
-    //             ItemName, HSNCode,
-    //             MRPValue, DiscountType, Rate, Discount, CGST: Number(CGST), SGST: Number(SGST), Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount), Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate, BatchCode: BatchCode, BatchDate: BatchDate, quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName
-    //         };
-    //     }
-    //     return accumulator;
-    // }, {});
 
     ClaimSummaryItemDetails.forEach((element, key) => {
 
@@ -97,7 +76,8 @@ export const Rows = (data) => {
         ];
 
         function totalLots() {
-            totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+            totalReturnQuantity = Number(totalReturnQuantity) + Number(element.Quantity)
+            totalApproveQuantity = Number(totalApproveQuantity) + Number(element.ApprovedQuantity)
             totalCGst = Number(totalCGst) + Number(element.CGST)
             totalSGst = Number(totalSGst) + Number(element.SGST)
             totalAmount = Number(totalAmount) + Number(element.Amount)
@@ -111,10 +91,10 @@ export const Rows = (data) => {
         function totalrow() {
 
             return [
+                `GST ${(Number(GSTPercentage))}% Total`,
                 `Total`,
-                `GST ${(Number(GSTPercentage))}% Total `,
-                ``,
-                ``,
+                ` ${numberWithCommas(Number(totalReturnQuantity).toFixed(2))}`,
+                `${numberWithCommas(Number(totalApproveQuantity).toFixed(2))}`,
                 ``,
                 ``,
                 ``,
@@ -144,8 +124,8 @@ export const Rows = (data) => {
             totalCGst = 0
             totalSGst = 0
             totalAmount = 0
-            totalQuantity = 0
-
+            totalReturnQuantity = 0
+            totalApproveQuantity = 0
             data["tableTot"] = totalLots()
             Gst = element.GST;
         }
@@ -170,9 +150,9 @@ export const BilledToRow = (data) => {
 
 
     var BilledToArray = [
-        [`Expiry From Retailer Claim summary`],
-        [`GSTIN NO :${data.PartyDetails.GSTIN}`],
-        [`FSSAI NO :${data.PartyDetails.FSSAINo}`],
+        // [`Expiry From Retailer Claim summary`],
+        // [`GSTIN NO :${data.PartyDetails.GSTIN}`],
+        // [`FSSAI NO :${data.PartyDetails.FSSAINo}`],
     ]
 
     return BilledToArray;

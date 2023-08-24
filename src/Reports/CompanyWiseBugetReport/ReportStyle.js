@@ -28,13 +28,13 @@ export const pageHeder = (doc, data) => {
 }
 export const tableBody = (doc, data) => {
     let tableStartY = 100;
-    // Loop for multiple table 
+
     data.ReasonwiseMasterClaim.forEach((index1) => {
 
         Object.keys(index1).forEach((index2) => {
             doc.text(`${index2}`, 300, (tableStartY - 5), 'center')
 
-            
+
             const options = {
 
                 didParseCell: (data1) => {
@@ -154,6 +154,10 @@ export const tableBody = (doc, data) => {
                         columnWidth: 55,
                         halign: 'right',
                     },
+                    8: {
+                        columnWidth: 55,
+                        halign: 'right',
+                    },
                 },
                 startY: tableStartY,
             }
@@ -210,7 +214,7 @@ export const tableBody = (doc, data) => {
         columnStyles: {
 
             0: {
-                columnWidth: 130,
+                columnWidth: 125,
                 halign: 'left',
 
             },
@@ -219,31 +223,31 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             2: {
-                columnWidth: 50,
+                columnWidth: 70,
                 halign: 'right',
             },
             3: {
-                columnWidth: 50,
+                columnWidth: 55,
                 halign: 'right',
             },
             4: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             5: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             6: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             7: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             8: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
         },
@@ -267,4 +271,3 @@ export const pageFooter = (doc, data) => {
     }
 }
 
-// original

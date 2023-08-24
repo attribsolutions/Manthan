@@ -1,174 +1,52 @@
-
-
-.invoice-item-row {
-    // border: 1px solid green;
-    // border: none !important;
-    // float: left;
-    min-height: 180px;
-    margin: 2px;
-    padding: 10px;
-    // min-width: 300px;
-    position: relative;
-}
-
-.invoice-item-row-div-1 {
-    font-size: 16px;
-    // color: rgb(161, 175, 255);
-    // font-weight: bold;
-    // text-align: center
-}
-
-
-.invoice-quantity-row {
-    position: relative;
-    table-layout: fixed;
-    width: 175px;
-}
-
-.invoice-quantity-row .div-1 {
-    padding-bottom: 5px;
-    display: flex;
-}
-
-.invoice-quantity-row .div-1 .input {
-    display: block;
-    text-align: "right";
-    margin-left: 5px !important;
-    min-width: 115px !important;
-    max-width: 115px !important;
-    // background-color: azure;
-}
-
-.invoice-quantity-row .div-1 .label {
-    align-items: center;
-    padding-right: 5px;
-    padding-top: 7px;
-}
-
-.invoice-quantity-row .div-1 #select {
-    margin-left: 1px !important;
-    min-width: 115px !important;
-    max-width: 115px !important;
-    // background-color: rgb(3, 27, 27);
-}
-
-.invoice-quantity-row .bottom-div {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
-
-.invoice-quantity-row .bottom-div samp {
-    padding-left: 4px;
-}
-
-.invoice-quantity-row .bottom-div span {
-    flex-grow: 3;
-    flex-basis: 50px;
-    margin-left: 8px;
-}
-
 .invoice-discount-row {
     position: relative;
     table-layout: fixed;
     min-width: 100px;
     position: relative;
+}
 
-    .parent {
-        display: flex;
-        min-width: 100px;
+.invoice-discount-row .parent {
+    display: flex;
+    min-width: 100px;
+}
+
+.invoice-discount-row .child {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.invoice-discount-row .child:first-child {
+    flex-basis: 30%;
+}
+
+.invoice-discount-row .child:last-child {
+    flex-basis: 70%;
+}
+
+.invoice-discount-row .bottom-div {
+    samp {
+        padding-top: 6px;
+        padding-left: 4px;
+        font-size: 130%;
     }
 
-    .child {
-        flex-grow: 0;
-        flex-shrink: 0;
+    span {
+        flex-grow: 3;
+        padding-top: 6px;
+        margin-left: 8px;
+        flex-basis: 50px;
     }
+}
 
-    .child:first-child {
-        flex-basis: 30%;
-    }
-
-    .child:last-child {
-        flex-basis: 70%;
-    }
-
-    .bottom-div {
-        samp {
-            padding-top: 6px;
-            padding-left: 4px;
-            font-size: 130%;
+/* Media query for small screens (max-width: 576px) */
+@media (max-width: 768px) {
+    .custom-table tbody td[stock-header="true"] {
+        padding-left: 0px !important;
+        tbody td::before {
+            color: rgb(128, 125, 125) !important;
+            font-weight: normal;
         }
-
-        span {
-            flex-grow: 3;
-            padding-top: 6px;
-            margin-left: 8px;
-            flex-basis: 50px
-        }
     }
 
-}
-
-
-
-
-
-
-.invoice-discount-row .invoice-discount-row .bottom-div .multiinvoice {
-    border: none;
-    margin-bottom: 15px;
-}
-
-
-.multiinvoice ._heder {
-    padding: 8px 8px 8px 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: solid;
-    border-color: rgb(228, 226, 226);
-    border-width: thin;
-    border-radius: 4px;
-    background-color: snow;
-    // background-color: rgb(197, 197, 197);
-    /* border-bottom: none; */
-    margin-bottom: 5px
-}
-
-.multiinvoice ._cardbody {
-    padding: 5px 5px 5px 5px;
-}
-
-.multiinvoice ._heder label {
-    min-width: 80px;
-    font-weight: bold;
-    margin: 0%;
-    color: #01020f;
-}
-
-.multiinvoice ._heder .div-2 {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.invoice-savebtn {
-    position: fixed;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    bottom: 10px;
-    text-align: center;
-    left: 25560;
-    z-index: 99;
-    font-size: 10px;
-    border: none;
-    outline: none;
-    color: rgb(161, 160, 160);
-    cursor: pointer;
-    padding: 10px;
-}
-
-.invoicezindex {
-    z-index: auto;
+    
 }

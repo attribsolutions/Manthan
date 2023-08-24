@@ -15,7 +15,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 
 const OrderSummary = (props) => {
 
@@ -143,7 +143,7 @@ const OrderSummary = (props) => {
             // XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
             // XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
 
-            ExcelDownloadFunc({      // Download CSV
+            ReportComponent({      // Download CSV
                 pageField,
                 excelData: excelTableData,
                 excelFileName: "Order Summary Report"

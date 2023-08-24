@@ -7,13 +7,13 @@ import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { GoButton_For_GenericSale_Action, GoButton_For_GenericSale_Success } from "../../store/Report/GenericSaleRedux/action";
 import * as XLSX from 'xlsx';
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
+import { Return_Report_Action, Return_Report_Action_Success } from "../../store/Report/ReturnReportRedux/action";
 
 const ReturnReport = (props) => {
 
@@ -29,7 +29,7 @@ const ReturnReport = (props) => {
     const [btnMode, setBtnMode] = useState(0);
 
     const {
-        goButtonData = [],
+        goButtonData,
         pageField,
         userAccess,
         Distributor,
@@ -42,7 +42,7 @@ const ReturnReport = (props) => {
         pageField: state.CommonPageFieldReducer.pageField
     })
     );
-
+    debugger
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -50,7 +50,7 @@ const ReturnReport = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
-        
+
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.RETURN_REPORT))
 
@@ -97,25 +97,25 @@ const ReturnReport = (props) => {
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 setBtnMode(0);
-                const { GenericSaleDetails } = goButtonData.Data
-                if (btnMode === 2) {
-                    const worksheet = XLSX.utils.json_to_sheet(GenericSaleDetails);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, "GenericSaleReport");
-                    XLSX.writeFile(workbook, `Generic Sale Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
 
-                    dispatch(GoButton_For_GenericSale_Success([]));
+                if (btnMode === 2) {
+                    const worksheet = XLSX.utils.json_to_sheet(goButtonData.Data);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, "ReturnReport");
+                    XLSX.writeFile(workbook, `Return Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
+
+                    dispatch(Return_Report_Action_Success([]));
                     setDistributorDropdown([{ value: "", label: "All" }])
                 }
                 else {
-                    const UpdatedTableData = GenericSaleDetails.map((item, index) => {
+                    const UpdatedTableData = goButtonData.Data.map((item, index) => {
 
                         return {
                             ...item, id: index + 1,
                         };
                     });
                     setTableData(UpdatedTableData);
-                    dispatch(GoButton_For_GenericSale_Success([]));
+                    dispatch(Return_Report_Action_Success([]));
 
                 }
             }
@@ -146,7 +146,7 @@ const ReturnReport = (props) => {
             "Party": !(isSCMParty) ? _cfunc.loginPartyID().toString() : isDistributorDropdown,
         });
         let config = { jsonBody }
-        dispatch(GoButton_For_GenericSale_Action(config));
+        dispatch(Return_Report_Action(config));
     }
 
     function fromdateOnchange(e, date) {

@@ -4,13 +4,13 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { Go_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import {mode, pageId } from "../../routes/index"
+import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { SSDD_List_under_Company, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { postRetailerData_API, postRetailerData_API_Success } from "../../store/Report/RetailerDataRedux/action";
 import { C_Select } from "../../CustomValidateForm";
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 
 const RetailerDataReport = (props) => {
 
@@ -67,7 +67,7 @@ const RetailerDataReport = (props) => {
         try {
             if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
                 const { Data } = RetailerGobtn
-                ExcelDownloadFunc({      // Download CSV
+                ReportComponent({      // Download CSV
                     pageField,
                     excelData: Data.ReportExportSerializerDetails,
                     excelFileName: "Retailer Data Report"

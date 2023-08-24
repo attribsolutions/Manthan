@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row, } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { C_Button, Change_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { damageStockReport_GoButton_API, damageStockReport_GoButton_API_Success } from "../../store/Report/DamageStockReportRedux/action";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { mode, pageId, url } from "../../routes/index"
-import * as XLSX from 'xlsx';
+import { mode, pageId } from "../../routes/index"
 import CustomTable from "../../CustomTable2";
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import PartyDropdownForReport, { ReportComponent, ShowAndExcelBtn } from "../ReportComponent";
 
 const DamageStockReport = (props) => {
 
@@ -40,13 +35,12 @@ const DamageStockReport = (props) => {
             listBtnLoading: state.DamageStockReportReducer.listBtnLoading,
             goButtonData: state.DamageStockReportReducer.StockReportGobtn,
             BaseUnit: state.ItemMastersReducer.BaseUnit,
-            SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
 
-    const { userAccess, BaseUnit, SSDD_List, pageField, goButtonData = [], } = reducers;
+    const { userAccess, BaseUnit, pageField, goButtonData = [], } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
@@ -94,7 +88,7 @@ const DamageStockReport = (props) => {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 setBtnMode(0);
                 if (btnMode === 2) {
-                    ExcelDownloadFunc({      // Download CSV
+                    ReportComponent({      // Download CSV
                         pageField,
                         excelData: goButtonData.Data,
                         excelFileName: "Damage Stock Export"
@@ -121,11 +115,6 @@ const DamageStockReport = (props) => {
             value: data.id,
             label: data.Name
         }));
-
-    const Party_Option = SSDD_List.map(i => ({
-        value: i.id,
-        label: i.Name
-    }));
 
     function goButtonHandler(e, btnMode) {
         try {
@@ -166,6 +155,11 @@ const DamageStockReport = (props) => {
         let newObj = { ...headerFilters }
         newObj.todate = date
         setHeaderFilters(newObj)
+    }
+
+    function partyOnChangeHandler(e) {
+        setPartyDropdown(e);
+        setTableData([]);
     }
 
     return (
@@ -229,59 +223,19 @@ const DamageStockReport = (props) => {
                             </FormGroup>
                         </Col >
 
-                        {isSCMParty &&
-                            <Col sm={3}>
-                                <FormGroup className=" row mt-3 " >
-                                    <Label className="col-md-3 p-2 "
-                                        style={{ width: "90px" }}>Party</Label>
-                                    <Col sm={7}>
-                                        <Select
-                                            name="Party"
-                                            value={partyDropdown}
-                                            isSearchable={true}
-                                            // isDisabled={tableData.length > 0 && true}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            styles={{
-                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                            }}
-                                            options={Party_Option}
-                                            onChange={(e) => {
-                                                setPartyDropdown(e);
-                                                setTableData([]);
-                                            }}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col >
-                        }
+                        <PartyDropdownForReport  // Party Dropdown if isSCMParty true then Party dropdown show
+                            partyValue={partyDropdown}
+                            setPartyValue={partyOnChangeHandler}
+                        />
 
-                        <Col sm={1} className="mt-3" >
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={btnMode === 1 && true}
-                                className="btn btn-success"
-                                onClick={(e) => goButtonHandler(e, 1)}
-                            >
-                                Show
-                            </C_Button>
+                        <ShowAndExcelBtn  // Excel download and Show button function
+                            showLoading={btnMode === 1 && true}
+                            excelLoading={btnMode === 2 && true}
+                            showOnClick={(e) => goButtonHandler(e, 1)}
+                            excelOnClick={(e) => goButtonHandler(e, 2)}
+                        />
 
-                        </Col>
-
-                        <Col sm={2} className="mt-3 ">
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={btnMode === 2 && true}
-                                className="btn btn-primary"
-                                onClick={(e) => goButtonHandler(e, 2)}
-                            >
-                                Excel Download
-                            </C_Button>
-                        </Col>
                     </div>
-
                 </div>
 
                 <CustomTable
