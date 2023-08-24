@@ -165,7 +165,7 @@ const ClaimSummary = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": row.selectedDate.FromDate,
             "ToDate": row.selectedDate.ToDate,
-            "Party": row.id,
+            "Party": row.PartyID,
         });
         let config = { jsonBody, btnId: btnId }
 
