@@ -19,7 +19,7 @@ function pageFooter(doc, data) {
     style.reportFooter(doc, data);
 }
 
-const MaterialReport = () => {
+const ItemRegisterReport = () => {
     const data = Data
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
@@ -29,6 +29,6 @@ const MaterialReport = () => {
         title: "Report"
     });
     doc.output('dataurlnewwindow');
-    return (<></>);
+
 }
-export default MaterialReport;
+export default ItemRegisterReport;
