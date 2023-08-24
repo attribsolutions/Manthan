@@ -118,8 +118,8 @@ export const ProductWiseRows = (data) => {
         function totalrow() {
             return [
                 "Total",
-                `${numberWithCommas(Number(TotalCXprimaryAmount).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalCXPurchaseAmount).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalCXprimaryAmount).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalCXreturnValue).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalCXNetPurchaseValue).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalBudgetOnlyExpiryFrom).toFixed(2))}`,

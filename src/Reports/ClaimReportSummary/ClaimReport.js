@@ -12,11 +12,15 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
-import { deleteClaimSuccess, delete_Claim_ID, postClaimMasterCreate_API, postMasterClaimCreat_API_Success } from "../../store/Report/ClaimSummary/action";
+import { claimList_API, claimList_API_Success, deleteClaimSuccess, delete_Claim_ID, postClaimMasterCreate_API, postMasterClaimCreat_API_Success } from "../../store/Report/ClaimSummary/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { deltBtnCss } from "../../components/Common/ListActionsButtons";
+import { C_DatePicker } from "../../CustomValidateForm";
+const CWClaimBtnCss = "badge badge-soft-primary font-size-18 btn btn-primary waves-effect waves-light w-xxs border border-light"
+const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
+
 
 const SelectedMonth = () => _cfunc.getCurrentMonthAndYear()
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -24,12 +28,10 @@ const fileds = () => ({
     FromDate: FirstAndLastDate().firstDate,
     ToDate: FirstAndLastDate().lastDate,
     PartyName: "",
+    HeaderFromDate: _cfunc.date_ymd_func(),
+    HeaderToDate: _cfunc.date_ymd_func(),
     SelectedMonth: SelectedMonth(),
 })
-const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
-const ClaimBtnCss = "badge badge-soft-info font-size-18 btn btn-info waves-effect waves-light w-xxs border border-light"
-const CWClaimBtnCss = "badge badge-soft-primary font-size-18 btn btn-primary waves-effect waves-light w-xxs border border-light"
-
 
 
 
@@ -39,14 +41,18 @@ const ClaimSummary = (props) => {
     const history = useHistory();
     //function to convert selected month and year to date format initial date
 
-
     const [state, setState] = useState(() => initialFiledFunc(fileds()))
     const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
+    const [isClaimList, setisClaimList] = useState(false);
+
+
+
 
     const reducers = useSelector(
         (state) => ({
             deleteMsg: state.ClaimSummaryReducer.deleteMsg,
+            ClaimListData: state.ClaimSummaryReducer.ClaimListData,
             ClaimSummaryGobtn: state.ClaimSummaryReducer.ClaimSummaryGobtn,
             pdfdata: state.PdfReportReducers.pdfdata,
             ReportBtnLoading: (state.PdfReportReducers.ReportBtnLoading) || (state.ClaimSummaryReducer.CreateClaimLoading) || (state.ClaimSummaryReducer.DeleteBtnLoading),
@@ -56,7 +62,8 @@ const ClaimSummary = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, supplier, pdfdata, ClaimSummaryGobtn, deleteMsg } = reducers;
+    const { userAccess, supplier, pdfdata, ClaimSummaryGobtn, deleteMsg, ClaimListData } = reducers;
+    const { Data = [] } = ClaimListData
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -80,8 +87,12 @@ const ClaimSummary = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
+        MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
+        return () => {
+            dispatch(claimList_API_Success([]))
+        }
     }, [])
+
 
     useEffect(() => {
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
@@ -117,15 +128,36 @@ const ClaimSummary = (props) => {
         }
     }, [deleteMsg])
 
+    useEffect(() => {
+        if ((ClaimListData.Status === true) && (ClaimListData.StatusCode === 200)) {
+            setisClaimList(true)
+        }
+    }, [ClaimListData])
+
+    function goButtonHeaderHandler() {
+        const jsonBody = JSON.stringify({
+            "FromDate": "2023-08-01",
+            "ToDate": "2023-08-31",
+            "Party": _cfunc.loginSelectedPartyID()
+        });
+
+        let config = { jsonBody }
+
+        dispatch(claimList_API(config))
+
+    }
+
+
+
     function goButtonHandler(reportType, row, btnId) {
 
         const jsonBody = JSON.stringify({
             "FromDate": row.selectedDate.FromDate,
             "ToDate": row.selectedDate.ToDate,
-            "Party": row.id,
+            "Party": row.PartyID,
             "Mode": (reportType === report.ClaimSummary) ? 1 : 2
         });
-        let config = { ReportType: reportType, jsonBody, btnId: btnId, ToDate: row.selectedDate.ToDate, FromDate: row.selectedDate.FromDate }
+        let config = { ReportType: reportType, jsonBody, btnId: btnId, ToDate: row.selectedDate.ToDate, FromDate: row.selectedDate.FromDate, ClaimID: row.id }
 
         if (reportType === report.CompanyWiseBudget) {
             dispatch(getpdfReportdata(MasterClaimSummary_API, config))
@@ -158,10 +190,15 @@ const ClaimSummary = (props) => {
         }
     }
 
-
-    function MonthAndYearOnchange(e) {
+    function MonthAndYearOnchange(e, InitialDate) {
+        let selectedMonth = ""
+        if (InitialDate) {
+            selectedMonth = e
+        } else {
+            selectedMonth = e.target.value
+        }
         //function to convert selected month and year to date format first and last date of month
-        let selectedMonth = e.target.value
+
         const { firstDate, lastDate } = _cfunc.getFirstAndLastDateOfMonth(selectedMonth);
         setState((i) => {
             const a = { ...i }
@@ -173,12 +210,39 @@ const ClaimSummary = (props) => {
             a.hasValid.SelectedMonth.valid = true
             return a
         })
+        const jsonBody = JSON.stringify({
+            "FromDate": values.FromDate,
+            "ToDate": values.ToDate,
+            "Party": _cfunc.loginSelectedPartyID()
+        });
+
+        let config = { jsonBody }
+
+        dispatch(claimList_API(config))
+    }
+
+    function fromdateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.HeaderFromDate = date;
+            a.hasValid.HeaderFromDate.valid = true
+            return a
+        })
+    }
+
+    function todateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.HeaderToDate = date;
+            a.hasValid.HeaderToDate.valid = true
+            return a
+        })
     }
 
     const pagesListColumns = [
         {
             text: "Party",
-            dataField: "Name",
+            dataField: "PartyName",
         },
 
         {
@@ -259,8 +323,6 @@ const ClaimSummary = (props) => {
                                 </C_Button>
 
 
-
-
                             </div>
                             <div
                                 className="mt-3  mb-3">
@@ -275,9 +337,6 @@ const ClaimSummary = (props) => {
                                     <i className="mdi mdi-delete font-size-20"></i>
                                 </C_Button>
 
-
-
-
                             </div>
                         </div>
                     </>
@@ -291,11 +350,56 @@ const ClaimSummary = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
+                {/* <div className="px-2 mb-1  c_card_filter text-black" >
+                    <div className="row" >
+                        <Col sm={4} className="">
+                            <FormGroup className="mb- row mt-3 mb-2 " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name='FromDate'
+                                        value={values.HeaderFromDate}
+                                        onChange={fromdateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={4} className="">
+                            <FormGroup className="mb- row mt-3 mb-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name="ToDate"
+                                        value={values.HeaderToDate}
+                                        onChange={todateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+                        <Col sm={2} className="mt-3" >
+                            <C_Button
+                                type="button"
+                                style={{ width: "50px" }}
+                                spinnerColor="white"
+                                // loading={GstR1BtnLoading}
+                                className="btn btn-success"
+                                onClick={() => goButtonHeaderHandler()}
+                            >
+                                Go
+                            </C_Button>
+                        </Col>
+
+                    </div>
+                </div> */}
+
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm={6}>
                             <FormGroup className="mb- row mt-2" >
-                                <Label className="col-sm-1 p-2 ">Month</Label>
+                                <Label style={{ width: "83px" }} className="col-sm-1 p-2 ">Month</Label>
                                 <Col sm="4">
                                     <Input className="form-control"
                                         type="month"
@@ -312,7 +416,7 @@ const ClaimSummary = (props) => {
                 <div className="mt-2">
                     <ToolkitProvider
                         keyField={"Item_id"}
-                        data={supplier}
+                        data={Data}
                         columns={pagesListColumns}
                         search
                     >
