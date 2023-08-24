@@ -222,6 +222,13 @@ const ClaimSummary = (props) => {
 
     const pagesListColumns = [
         {
+            text: "id",
+            dataField: "id",
+            style: {
+                width: "60px"
+            },
+        },
+        {
             text: "Party",
             dataField: "PartyName",
         },
