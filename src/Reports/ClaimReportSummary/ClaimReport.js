@@ -16,10 +16,10 @@ import { claimList_API, claimList_API_Success, deleteClaimSuccess, delete_Claim_
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { deltBtnCss } from "../../components/Common/ListActionsButtons";
 
 const CWClaimBtnCss = "badge badge-soft-primary font-size-18 btn btn-primary waves-effect waves-light w-xxs border border-light"
 const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
+const deltBtnCss = "badge badge-soft-danger font-size-18 btn btn-danger waves-effect waves-light w-xxs border border-light"
 
 
 const SelectedMonth = () => _cfunc.getCurrentMonthAndYear()
@@ -267,15 +267,17 @@ const ClaimSummary = (props) => {
                                 <C_Button
                                     loading={btnLoading === `gobtn-${"createClaim"}-${row.id}-${key}`}
                                     type="button"
-                                    // forceDisabled={row.id !== null}
-                                    style={{ width: "100px" }}
+                                    // forceDisabled={row.id !== null} 
+                                    style={{ width: "100px", cursor: ((row.id === null) && (row.returncnt !== null)) ? "pointer" : "not-allowed" }}
                                     title="Create Claim"
                                     spinnerColor="white"
-                                    className={createClaimBtnCss}
-                                    onClick={(e) => { row.id === null ? goButtonHandler("createClaim", row, `gobtn-${"createClaim"}-${row.id}-${key}`) : void (0) }}
+                                    className={row.returncnt === null ? deltBtnCss : createClaimBtnCss}
+                                    onClick={(e) => { ((row.id === null) && (row.returncnt !== null)) ? goButtonHandler("createClaim", row, `gobtn-${"createClaim"}-${row.id}-${key}`) : void (0) }}
                                 >
                                     {row.id !== null ? "Created" : "Create"}
-                                    {row.id === null && <i className="fas fa-pencil-alt"></i>}
+                                    {row.returncnt !== null && row.id === null && <i className="fas fa-pencil-alt font-size-13"></i>}
+                                    {row.returncnt === null && <i className="  fas fa-ban font-size-13"></i>}
+
 
                                 </C_Button>
                             </div>
@@ -290,6 +292,7 @@ const ClaimSummary = (props) => {
 
                                     title="Customer Wise Claim Summary"
                                     spinnerColor="white"
+                                    style={{ cursor: row.id === null ? "not-allowed" : "pointer" }}
                                     forceDisabled={row.id === null}
                                     className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.CustomerWiseReturn, row, `gobtn-${report.CustomerWiseReturn}-${row.id}-${key}`) }}
@@ -308,6 +311,7 @@ const ClaimSummary = (props) => {
                                     type="button"
                                     title="Item Wise Claim Summary"
                                     spinnerColor="white"
+                                    style={{ cursor: row.id === null ? "not-allowed" : "pointer" }}
                                     forceDisabled={row.id === null}
                                     className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.ClaimSummary, row, `gobtn-${report.ClaimSummary}-${row.id}-${key}`) }}
@@ -326,6 +330,7 @@ const ClaimSummary = (props) => {
                                     title="Master Claim Summary"
                                     forceDisabled={row.id === null}
                                     spinnerColor="white"
+                                    style={{ cursor: row.id === null ? "not-allowed" : "pointer" }}
                                     className={CWClaimBtnCss}
                                     onClick={(e) => { goButtonHandler(report.CompanyWiseBudget, row, `gobtn-${report.CompanyWiseBudget}-${row.id}-${key}`) }}
                                 >
