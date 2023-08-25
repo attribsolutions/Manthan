@@ -3,6 +3,7 @@ import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { toWords } from "../Report_common_function";
+import { loginUserDetails } from "../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {
@@ -21,7 +22,9 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text(`*** ${data.CompanyName} ***`, 300, 75, 'center')  //bill by 
+    const UserDetails = loginUserDetails()
+
+    doc.text(`*** ${UserDetails.PartyName} ***`, 300, 75, 'center')  //bill by 
     doc.line(570, 60, 30, 60) //horizontal line 1 billby upper
     doc.line(570, 80, 30, 80);//horizontal line 3
 
@@ -96,22 +99,22 @@ export const reportHeder1 = (doc, data) => {
                 doc.setFont(undefined, 'bold')
                 doc.text('To Date: ', x, y)
             };
-            if (rowIdx === 1 && colIdx === 2) {
+            // if (rowIdx === 1 && colIdx === 2) {
 
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 10
-                doc.setFontSize(9)
-                doc.setFont(undefined, 'bold')
-                doc.text('Open Balance:', x, y)
-            };
-            if (rowIdx === 2 && colIdx === 2) {
+            //     let x = data1.cursor.x + 2
+            //     let y = data1.cursor.y + 10
+            //     doc.setFontSize(9)
+            //     doc.setFont(undefined, 'bold')
+            //     doc.text('Open Balance:', x, y)
+            // };
+            // if (rowIdx === 2 && colIdx === 2) {
 
-                let x = data1.cursor.x + 2
-                let y = data1.cursor.y + 10
-                doc.setFontSize(9)
-                doc.setFont(undefined, 'bold')
-                doc.text('Close Balance: ', x, y)
-            };
+            //     let x = data1.cursor.x + 2
+            //     let y = data1.cursor.y + 10
+            //     doc.setFontSize(9)
+            //     doc.setFont(undefined, 'bold')
+            //     doc.text('Close Balance: ', x, y)
+            // };
 
 
         },
@@ -166,8 +169,8 @@ export const reportHeder3 = (doc, data) => {
     doc.setFontSize(10)
     doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
-    doc.text(`Report No:${data.InvoiceNumber}`, 415, 30) //Invoice Id
-    doc.text(`Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
+    doc.text(`Report No:`, 415, 30) //Invoice Id
+    doc.text(`Date: `, 415, 50) //Invoice date
     doc.setFontSize(11)
     // doc.text(`Material: ${data.ItemName}`, 415, 75) //Invoice date
 
@@ -202,6 +205,21 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[4].styles.fontStyle = "bold"
                 data1.row.cells[5].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
+
+            }
+
+            if (data1.row.cells[2].raw === "Total") {
+                data1.row.cells[0].colSpan = 8
+
+                data1.row.cells[0].styles.fontSize = 9
+
+                data1.row.cells[0].styles.fontStyle = "bold"
+            }
+
+            if (data1.row.cells[2].raw === "Total") {
+                data1.row.cells[0].colSpan = 8
+                data1.row.cells[0].styles.fontSize = 9
+                data1.row.cells[0].styles.fontStyle = "bold"
 
             }
 
