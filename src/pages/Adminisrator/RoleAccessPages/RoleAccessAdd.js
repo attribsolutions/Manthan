@@ -320,6 +320,7 @@ const RoleAccessAdd = () => {
             function isAccessSelect(item) {
                 let accArray = [];
                 let isShowOnMenu_Id
+                debugger
                 item.defaultSelectedValues.map(({ value, id }) => {
                     // -1 stands for "List", -2 stands for "Add", and -3 stands for "STP".
                     if ((value < 0)) {
@@ -329,6 +330,7 @@ const RoleAccessAdd = () => {
                         accArray.push({ "PageAccess": value })
                     }
                 })
+                debugger
                 return { accArray, isShowOnMenu_Id }
             }
 
@@ -337,7 +339,7 @@ const RoleAccessAdd = () => {
 
                 let { accArray = [], isShowOnMenu_Id } = isAccessSelect(row);
                 // -1 stands for "List", -2 stands for "Add", and -3 stands for "STP".
-                let showList = row.defaultSelectedValues?.find(i => (i.value === -1))
+                let showList = row.defaultSelectedValues?.find(i => ((i.value === -1)||(i.value === -3)))
                 let showAdd = row.defaultSelectedValues?.find(i => (i.value === -2))
                 let isAccess = accArray.length > 0;
                 let isrelated = row.RelatedPageID > 0;
