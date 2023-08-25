@@ -418,7 +418,7 @@ const OrderList = () => {
     }
 
     function downBtnFunc(config) {
-        config["ReportType"] = report.order1;
+        config["ReportType"] = report.ItemRegister;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
     }
 

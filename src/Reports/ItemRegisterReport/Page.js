@@ -19,16 +19,21 @@ function pageFooter(doc, data) {
     style.reportFooter(doc, data);
 }
 
-const ItemRegisterReport = () => {
-    const data = Data
+const ItemRegisterReport = (data) => {
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
     doc.setProperties({
-        title: "Report"
+        title: "Item Register"
     });
-    doc.output('dataurlnewwindow');
+
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        const options = { filename: "ItemRegisterReport" }
+        window.open(pdfUrl, options);
+    }
+    generateSaveAndOpenPDFReport();
 
 }
 export default ItemRegisterReport;

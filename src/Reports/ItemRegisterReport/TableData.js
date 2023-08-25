@@ -1,12 +1,15 @@
 
 export const columns = [
     "Date",
-    "Particulars",
-    "transaction type",
-    "In Quantity ",
-    "Out Quantity",
-    "Issue Quantity",
+    "Name",
+    "Document No",
+    "GRN",
+    "Sales Return",
+    "Stock",
+    "Sale",
+    "Purchase Return",
     "Balance",
+
 ];
 
 export const PageHedercolumns = [
@@ -16,35 +19,66 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
-    const { InvoiceItems = [] } = data
-    InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+
+    // InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Gst = 0
     let TotalIssueQuanity = 0
     let TotalInQuantity = 0
     let TotalOutQuantity = 0
     let TotalBalance = 0
-    let totalQuantity = 0
 
-    InvoiceItems.forEach((element, key) => {
+
+    data.forEach((element, key) => {
+        let Unit = data.Period.Unit.label
+        let GRN = ""
+        let SalesReturn = ""
+        let Stock = ""
+        let Sale = ""
+        let PurchaseReturn = ""
+
+        if (Unit === "No") {
+            GRN = element.QtyInNo
+            SalesReturn = element.QtyInNo
+            Stock = element.QtyInNo
+            Sale = element.QtyInNo
+            PurchaseReturn = element.QtyInNo
+        }
+
+        if (Unit === "Kg") {
+            GRN = element.QtyInNo
+            SalesReturn = element.QtyInNo
+            Stock = element.QtyInNo
+            Sale = element.QtyInNo
+            PurchaseReturn = element.QtyInNo
+        }
+        if (Unit === "Box") {
+            GRN = element.QtyInNo
+            SalesReturn = element.QtyInNo
+            Stock = element.QtyInNo
+            Sale = element.QtyInNo
+            PurchaseReturn = element.QtyInNo
+        }
+
+
         const tableitemRow = [
-            element.BatchDate,
-            element.Particulars,
-            element.TransactionType,
-            element.InQuantity,
-            element.OutQuantity,
-            element.IssueQuanity,
-            element.Balance,
-           
+            element.TransactionDate,
+            element.Name,
+            element.TransactionNumber,
+            (element.Sequence === 1) ? GRN : null,
+            (element.Sequence === 2) ? SalesReturn : null,
+            (element.Sequence === 3) ? Stock : null,
+            (element.Sequence === 4) ? Sale : null,
+            (element.Sequence === 4) ? PurchaseReturn : null,
+
         ];
 
         function totalLots() {
             TotalInQuantity = Number(TotalInQuantity) + Number(element.InQuantity)
             TotalOutQuantity = Number(TotalOutQuantity) + Number(element.OutQuantity)
-            TotalIssueQuanity = Number(TotalIssueQuanity) + Number( element.IssueQuanity)
+            TotalIssueQuanity = Number(TotalIssueQuanity) + Number(element.IssueQuanity)
             TotalBalance = Number(TotalBalance) + Number(element.Balance)
-            // let cgst = data["tableTot"].TotalCGst
-            // return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
+
         };
 
         function totalrow() {
@@ -56,8 +90,8 @@ export const Rows = (data) => {
                 `Total :${parseFloat(TotalOutQuantity).toFixed(2)}`,
                 `Total :${parseFloat(TotalIssueQuanity).toFixed(2)}`,
                 `Balance:${parseFloat(TotalBalance).toFixed(2)}`,
-                
-               
+
+
             ];
         };
 
@@ -65,31 +99,25 @@ export const Rows = (data) => {
         if (Gst === 0) { Gst = element.GSTPercentage };
         let aa = { TotalCGst: 0, totalSGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
-     
+
         else {
             // returnArr.push(totalrow());
             returnArr.push(tableitemRow);
             data["tableTot"] = totalLots()
         }
-        if (key === InvoiceItems.length - 1) {
+        if (key === data.length - 1) {
             returnArr.push(totalrow());
         }
     })
     return returnArr;
 }
-export const ReportFotterColumns = [
-    "SGST",
-    "CGST", "Quantity",
-    "GST % ",
-    "TaxbleAmt.", "IGST", "Total Amt"
-];
+
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [`${data.CustomerName}`, ,`Current Time: ${data.Time}`],
-        [`maharashtra`, , `From Date:  ${data.InvoiceDate}`],
-        [`FSSAI :f23dfxxxxxwe55`, ,`To Date:      ${data.Todate}`  ],
-        // [,,`INR NO :${data.FullInvoiceNumber}`]
+        [`                   ${data.CustomerName}`, `              : ${data.ItemName}`,],
+        [`            maharashtra `, `                    ${data.InvoiceDate}`, `                          ${data.Open}`],
+        [`                  f23dfxxxxxwe55`, `                ${data.Todate}`, `                           ${data.Close}`],
     ]
     return reportArray;
 }
