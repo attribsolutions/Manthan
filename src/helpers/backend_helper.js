@@ -621,6 +621,9 @@ export const MasterClaimSummary_API = ({ jsonBody }) => post(url.MASTER_CLAIM_SU
 export const MasterClaimCreate_API = ({ jsonBody }) => post(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
 export const ClaimList_API = ({ jsonBody }) => post(url.CLAIM_LIST, jsonBody)//  postapi
 
+export const ItemRegister_API = ({ jsonBody }) => post(url.ITEM_REGISTER, jsonBody)//  postapi
+
+
 
 export const delete_Claim_API = ({ jsonBody }) => delwithPostBody(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
 

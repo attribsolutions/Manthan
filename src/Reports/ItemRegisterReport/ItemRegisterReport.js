@@ -8,10 +8,10 @@ import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, getpartyItemList, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, getBaseUnit_ForDropDown, getpartyItemList, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
-import { PartyLedgerReport_API } from "../../helpers/backend_helper";
+import { ItemRegister_API, PartyLedgerReport_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 
@@ -24,7 +24,9 @@ const ItemRegisterReport = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Item: ""
+        Item: "",
+        Unit: "",
+
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -34,7 +36,7 @@ const ItemRegisterReport = (props) => {
     const reducers = useSelector(
         (state) => ({
             pdfdata: state.PdfReportReducers.pdfdata,
-            tableList: state.PartyItemsReducer.partyItem,
+            ItemList: state.PartyItemsReducer.partyItem,
             BaseUnit: state.ItemMastersReducer.BaseUnit,
             goBtnLoading: state.PdfReportReducers.goBtnLoading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -44,7 +46,7 @@ const ItemRegisterReport = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, pdfdata, CustomerLoading, tableList, BaseUnit } = reducers;
+    const { userAccess, pdfdata, CustomerLoading, ItemList, BaseUnit } = reducers;
 
     const values = { ...state.values }
 
@@ -69,6 +71,7 @@ const ItemRegisterReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        dispatch(getBaseUnit_ForDropDown());
         const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody() });
         dispatch(getpartyItemList(jsonBody));
     }, [])
@@ -83,9 +86,8 @@ const ItemRegisterReport = (props) => {
             return
         }
     }, [pdfdata])
-    debugger
-    const ItemOptions = tableList.map((i) => ({
 
+    const ItemOptions = ItemList.map((i) => ({
         value: i.Item,
         label: i.ItemName,
     }))
@@ -98,8 +100,17 @@ const ItemRegisterReport = (props) => {
     const onselecthandel = (e) => {
         setState((i) => {
             const a = { ...i }
-            a.values.Customer = e;
-            a.hasValid.Customer.valid = true
+            a.values.Item = e;
+            a.hasValid.Item.valid = true
+            return a
+        })
+    }
+
+    const onUnitselecthandel = (e) => {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Unit = e;
+            a.hasValid.Unit.valid = true
             return a
         })
     }
@@ -114,20 +125,29 @@ const ItemRegisterReport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Customer": values.Customer.value,
+            "Item": values.Item.value,
+            "Unit": values.Unit.value,
             "Party": _cfunc.loginSelectedPartyID()
         });
 
-        let config = { ReportType: report.PartyLedger, jsonBody }
+        let config = {
+            ReportType: report.ItemRegister, jsonBody, ItemName: values.Item.label, FromDate: values.FromDate, ToDate: values.ToDate, Unit: values.Unit
+        }
 
-        if (values.Customer === "") {
+        if (values.Item === "") {
             customAlert({
                 Type: 3,
-                Message: "Please Select Customer",
+                Message: "Please Select Item",
+            })
+            return
+        } else if (values.Unit === "") {
+            customAlert({
+                Type: 3,
+                Message: "Please Select Unit",
             })
             return
         } else {
-            dispatch(getpdfReportdata(PartyLedgerReport_API, config))
+            dispatch(getpdfReportdata(ItemRegister_API, config))
         }
     }
 
@@ -158,8 +178,8 @@ const ItemRegisterReport = (props) => {
         dispatch(GetVenderSupplierCustomerSuccess([]));
         setState((i) => {
             let a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
-            a.hasValid.Customer.valid = true;
+            a.values.Item = { value: "", label: "All" }
+            a.hasValid.Item.valid = true;
             return a
         })
     }
@@ -242,7 +262,7 @@ const ItemRegisterReport = (props) => {
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
                                         options={BaseUnit_DropdownOptions}
-                                        onChange={(e) => { onselecthandel(e) }}
+                                        onChange={(e) => { onUnitselecthandel(e) }}
                                     />
                                 </Col>
                             </FormGroup>
