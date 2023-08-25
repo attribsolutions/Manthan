@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Input, Label, Row } from "reactstrap";
+import { Col, CustomInput, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { Go_Button } from "../../components/Common/CommonButton";
+import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId, url } from "../../routes/index"
@@ -10,11 +10,107 @@ import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { GetVenderSupplierCustomer, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getGroupList, getItemList, getSubGroupList, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown } from "../../store/actions";
+import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getGroupList, getItemList, getSubGroupList, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown } from "../../store/actions";
 import { GetRoutesList } from "../../store/Administrator/RoutesRedux/actions";
 import { getPartyTypelist } from "../../store/Administrator/PartyTypeRedux/action";
 import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success } from "../../store/Report/ItemSaleReport/action";
 import "../ItemSaleReport/ItemSaleCSS.scss";
+
+const defaultTableColumns = [
+    {
+        text: "InvoiceDate",
+        dataField: "InvoiceDate",
+    },
+    {
+        text: "SaleMadeFrom",
+        dataField: "SaleMadeFrom",
+    },
+    {
+        text: "SaleMadeTo",
+        dataField: "SaleMadeTo",
+    },
+    {
+        text: "	FullInvoiceNumber",
+        dataField: "FullInvoiceNumber",
+    },
+    {
+        text: "SupplierName",
+        dataField: "SupplierName",
+    },
+    {
+        text: "RouteName",
+        dataField: "RouteName",
+    },
+    {
+        text: "CustomerName",
+        dataField: "CustomerName",
+    },
+    {
+        text: "	GroupName",
+        dataField: "GroupName",
+    },
+    {
+        text: "	SubGroupName",
+        dataField: "SubGroupName",
+    },
+    {
+        text: "	ItemName",
+        dataField: "ItemName",
+    },
+
+    {
+        text: "	QtyInKg",
+        dataField: "QtyInKg",
+    },
+    {
+        text: "	QtyInNo",
+        dataField: "QtyInNo",
+    },
+    {
+        text: "	QtyInBox",
+        dataField: "QtyInBox",
+    },
+    {
+        text: "	Rate",
+        dataField: "Rate",
+    },
+    {
+        text: "	BasicAmount",
+        dataField: "BasicAmount",
+    },
+    {
+        text: "	DiscountAmount",
+        dataField: "DiscountAmount",
+    },
+    {
+        text: "	GSTPercentage",
+        dataField: "GSTPercentage",
+    },
+    {
+        text: "	GSTAmount",
+        dataField: "GSTAmount",
+    },
+    {
+        text: "	Amount",
+        dataField: "Amount",
+    },
+    {
+        text: "	GrandTotal",
+        dataField: "GrandTotal",
+    },
+    {
+        text: "	RoundOffAmount",
+        dataField: "RoundOffAmount",
+    },
+    {
+        text: "	TCSAmount",
+        dataField: "TCSAmount",
+    },
+    {
+        text: "	FullGRNNumber",
+        dataField: "FullGRNNumber",
+    },
+];
 
 const ItemSaleReport = (props) => {
 
@@ -24,8 +120,13 @@ const ItemSaleReport = (props) => {
     const isSCMParty = _cfunc.loginIsSCMParty();
 
     const [userPageAccessState, setUserAccState] = useState('');
-    const [saleMadeFromeSelect, setSaleMadeFromeSelect] = useState({ value: "", label: "All" });
-    const [saleMadeToSelect, setSaleMadeToSelect] = useState({ value: "", label: "All" });
+    const [hederFilters, setHederFilters] = useState({
+        fromdate: currentDate_ymd,
+        todate: currentDate_ymd, venderSelect: { value: '', label: "All" }
+    })
+
+    const [channelFromSelect, setchannelFromSelect] = useState({ value: "", label: "All" });
+    const [channelToSelect, setChannelToSelect] = useState({ value: "", label: "All" });
     const [routeSelect, setRouteSelect] = useState({ value: "", label: "All" });
     const [supplierSelect, setSupplierSelect] = useState({ value: "", label: "All" });
     const [customerSelect, setCustomerSelect] = useState({ value: "", label: "All" });
@@ -34,7 +135,20 @@ const ItemSaleReport = (props) => {
     const [productSelect, setProductSelect] = useState({ value: "", label: "All" });
     const [subProductSelect, setSubProductSelect] = useState({ value: "", label: "All" });
     const [SubProductOptions, setSubProductOptions] = useState([]);
-    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
+
+    const [customerCheckbox, setCustomerCheckbox] = useState(false);
+    const [routeCheckbox, setRouteCheckbox] = useState(false);
+    const [channelToCheckbox, setChannelToCheckbox] = useState(false);
+    const [productCheckbox, setProductCheckbox] = useState(false);
+    const [subProductCheckbox, setSubProductCheckbox] = useState(false);
+    const [itemNameCheckbox, setItemNameCheckbox] = useState(false);
+    const [fromDateCheckbox, setFromDateCheckbox] = useState(false);
+    const [channelFromCheckbox, setChannelFromCheckbox] = useState(false);
+    const [supplierCheckbox, setSupplierCheckbox] = useState(false);
+
+    const [tableData, setTableData] = useState([]);
+    const [initaialBaseData, setInitaialBaseData] = useState([]);
+    const [selectedColumns, setSelectedColumns] = useState(defaultTableColumns);
 
     const { goBtnLoading,
         ItemSaleReportGobtn,
@@ -86,7 +200,6 @@ const ItemSaleReport = (props) => {
             })
         );
     const { fromdate, todate, venderSelect } = hederFilters;
-    const { Data = [] } = ItemSaleReportGobtn;
 
     // const Data = [
     //     {
@@ -251,11 +364,25 @@ const ItemSaleReport = (props) => {
         dispatch(getSubGroupList())
         dispatch(getBaseUnit_ForDropDown());
         dispatch(getItemList());
+        dispatch(BreadcrumbShowCountlabel(`${"Amount"} :${0}`))
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(ItemSaleGoButton_API_Success([]));
         }
     }, [])
+
+    useEffect(() => {
+
+        if (ItemSaleReportGobtn.length > 0) {
+            setInitaialBaseData(ItemSaleReportGobtn);
+            sortData(ItemSaleReportGobtn);
+            dispatch(ItemSaleGoButton_API_Success([]));
+            const totalAmount = ItemSaleReportGobtn.reduce((sum, item) => {
+                return sum + parseFloat(item.Amount);
+            }, 0);
+            dispatch(BreadcrumbShowCountlabel(`${"Amount"} :${(totalAmount).toFixed(2)}`))
+        }
+    }, [ItemSaleReportGobtn])
 
     useEffect(() => {
 
@@ -271,6 +398,10 @@ const ItemSaleReport = (props) => {
                 label: i.Name,
             }))
         }
+        SubProduct.unshift({
+            value: "",
+            label: "All"
+        });
         setSubProductOptions(SubProduct)
 
     }, [productSelect, subProductDropdown, getSubProductbyProduct])
@@ -279,27 +410,47 @@ const ItemSaleReport = (props) => {
         value: data.id,
         label: data.Name,
     }))
+    supplierDropdownOptions.unshift({
+        value: "",
+        label: "All"
+    });
 
     const customerOptions = customerDropdown.map((i) => ({
         value: i.id,
         label: i.Name,
     }))
+    customerOptions.unshift({
+        value: "",
+        label: "All"
+    });
 
     const ProductOptions = productDropdown.map((i) => ({
         value: i.id,
         label: i.Name,
     }))
+    ProductOptions.unshift({
+        value: "",
+        label: "All"
+    });
 
     const ItemNameOptions = ItemNameList.map((i) => ({
         value: i.id,
         label: i.Name,
     }))
+    ItemNameOptions.unshift({
+        value: "",
+        label: "All"
+    });
 
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
         label: index.Name,
         division: index.IsDivision
     }));
+    PartyTypeDropdown_Options.unshift({
+        value: "",
+        label: "All"
+    });
 
     const checkboxOption = [{
         value: 1,
@@ -367,20 +518,24 @@ const ItemSaleReport = (props) => {
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, PartyID: event.value, RouteID: "" }))
         setRouteSelect({ value: "", label: "All" })
         setCustomerSelect({ value: "", label: "All" })
+        setTableData([]);
+        setInitaialBaseData([]);
     }
 
     function fromdateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.fromdate = date
         setHederFilters(newObj);
-        dispatch(ItemSaleGoButton_API_Success([]));
+        setTableData([]);
+        setInitaialBaseData([]);
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.todate = date
         setHederFilters(newObj);
-        dispatch(ItemSaleGoButton_API_Success([]));
+        setTableData([]);
+        setInitaialBaseData([]);
     }
 
     function ProductOnchange(e) {
@@ -394,99 +549,113 @@ const ItemSaleReport = (props) => {
             const jsonBody = JSON.stringify({
                 "FromDate": fromdate,
                 "ToDate": todate,
+                "PartyType": "",
+                "Party": supplierSelect.value
             });
             dispatch(ItemSaleGoButton_API({ jsonBody, btnId: url.ITEM_SALE_REPORT }))
 
         } catch (error) { _cfunc.CommonConsole(error) }
     }
 
-    const tableColumns = [
-        {
-            text: "InvoiceDate",
-            dataField: "InvoiceDate",
-        },
-        {
-            text: "SaleMadeFrom",
-            dataField: "SaleMadeFrom",
-        },
-        {
-            text: "SaleMadeTo",
-            dataField: "SaleMadeTo",
-        },
-        {
-            text: "	FullInvoiceNumber",
-            dataField: "FullInvoiceNumber",
-        },
-        {
-            text: "SupplierName",
-            dataField: "SupplierName",
-        },
-        {
-            text: "RouteName",
-            dataField: "RouteName",
-        },
-        {
-            text: "CustomerName",
-            dataField: "CustomerName",
-        },
-        {
-            text: "	SubGroupName",
-            dataField: "SubGroupName",
-        },
-        {
-            text: "	QtyInKg",
-            dataField: "QtyInKg",
-        },
-        {
-            text: "	QtyInNo",
-            dataField: "QtyInNo",
-        },
-        {
-            text: "	QtyInBox",
-            dataField: "QtyInBox",
-        },
-        {
-            text: "	Rate",
-            dataField: "Rate",
-        },
-        {
-            text: "	BasicAmount",
-            dataField: "BasicAmount",
-        },
-        {
-            text: "	DiscountAmount",
-            dataField: "DiscountAmount",
-        },
-        {
-            text: "	GSTPercentage",
-            dataField: "GSTPercentage",
-        },
-        {
-            text: "	GSTAmount",
-            dataField: "GSTAmount",
-        },
-        {
-            text: "	Amount",
-            dataField: "Amount",
-        },
-        {
-            text: "	GrandTotal",
-            dataField: "GrandTotal",
-        },
-        {
-            text: "	RoundOffAmount",
-            dataField: "RoundOffAmount",
-        },
-        {
-            text: "	TCSAmount",
-            dataField: "TCSAmount",
-        },
-        {
-            text: "	FullGRNNumber",
-            dataField: "FullGRNNumber",
-        },
-    ];
-    
+    const sortData = (baseData = []) => {
+
+        // setTableData(filtered);
+
+        const checkboxOptions = [
+            {
+                fieldName: 'CustomerName',
+                checkboxState: customerCheckbox,
+                selectValue: customerSelect,
+            },
+            {
+                fieldName: 'RouteName',
+                checkboxState: routeCheckbox,
+                selectValue: routeSelect,
+            },
+            {
+                fieldName: 'SaleMadeTo',
+                checkboxState: channelToCheckbox,
+                selectValue: channelToSelect,
+            },
+            {
+                fieldName: 'GroupName',
+                checkboxState: productCheckbox,
+                selectValue: productSelect,
+            },
+            {
+                fieldName: 'SubGroupName',
+                checkboxState: subProductCheckbox,
+                selectValue: subProductSelect,
+            },
+            {
+                fieldName: 'ItemName',
+                checkboxState: itemNameCheckbox,
+                selectValue: ItemNameSelect,
+            },
+
+
+            // Add more checkbox options here
+        ];
+
+        let manupulatedData = baseData;
+
+        const filterOption = checkboxOptions.filter(option => !(option.selectValue.value === ''));
+
+        if (filterOption.length > 0) {
+            manupulatedData = baseData.filter(item => {
+                return filterOption.every(option => {
+                    var a = item[option.fieldName] === option.selectValue.label;
+                    return a;
+                });
+            });
+        }
+
+        // Apply grouping and filtering logic for each checkbox option
+        if (checkboxOptions.some(option => option.checkboxState)) {
+
+            const newSelectedColumns = checkboxOptions
+                .filter(option => option.checkboxState)
+                .map(option => ({ text: option.fieldName, dataField: option.fieldName }));
+
+            // Always include the default "Amount" column
+            newSelectedColumns.push({ text: "Amount", dataField: "Amount" });
+            setSelectedColumns(newSelectedColumns);
+
+            const groupedData = {};
+
+            manupulatedData.forEach(item => {
+                const groupValues = checkboxOptions
+                    .filter(option => option.checkboxState && option.fieldName !== 'Amount')
+                    .map(option => item[option.fieldName]);
+
+                const groupKey = groupValues.join('-');
+                if (!groupedData[groupKey]) {
+                    groupedData[groupKey] = {
+                        ...item,
+                        Amount: 0,
+                    };
+                }
+                groupedData[groupKey].Amount += parseFloat(item.Amount);
+                // Format Amount to have only two decimal places
+                groupedData[groupKey].Amount = parseFloat(groupedData[groupKey].Amount.toFixed(2));
+            });
+            manupulatedData = Object.values(groupedData);
+        }
+        else {
+            setSelectedColumns(defaultTableColumns);
+        }
+
+        setTableData(manupulatedData);
+        const totalAmount = manupulatedData.reduce((sum, item) => {
+            return sum + parseFloat(item.Amount);
+        }, 0);
+        dispatch(BreadcrumbShowCountlabel(`${"Amount"} :${(totalAmount).toFixed(2)}`))
+    }
+
+    function CustomerOnChange(e) {
+        setCustomerSelect(e)
+    }
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -499,7 +668,10 @@ const ItemSaleReport = (props) => {
                                 <Col sm={3}>
                                     <FormGroup className="mb-n3 row mt-1">
                                         <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1" type="checkbox"
+                                            className="p-1"
+                                            type="checkbox"
+                                            checked={fromDateCheckbox}
+                                            onChange={(e) => { setFromDateCheckbox(e.target.checked) }}
                                         />
                                         <Label className="col-sm-3 p-2">FromDate</Label>
                                         <Col sm={6}>
@@ -514,7 +686,6 @@ const ItemSaleReport = (props) => {
 
                                 <Col sm={3}>
                                     <FormGroup className="mb-n3 row mt-1">
-
                                         <Label className="col-sm-4 p-2">ToDate</Label>
                                         <Col>
                                             <C_DatePicker
@@ -529,24 +700,24 @@ const ItemSaleReport = (props) => {
                                 <Col sm={3}>
                                     <FormGroup className="mb-n3 row mt-1">
                                         <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1" type="checkbox"
+                                            className="p-1"
+                                            type="checkbox"
+                                            checked={channelFromCheckbox}
+                                            onChange={(e) => { setChannelFromCheckbox(e.target.checked) }}
                                         />
                                         <Label className="col-sm-4 p-2">Channel From</Label>
                                         <Col>
                                             <C_Select
-
-
-                                                value={saleMadeFromeSelect}
+                                                value={channelFromSelect}
                                                 isSearchable={true}
                                                 //  isLoading={partyLoading}       
-
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 options={PartyTypeDropdown_Options}
-                                                onChange={(e) => { setSaleMadeFromeSelect(e) }}
+                                                onChange={(e) => { setchannelFromSelect(e) }}
 
                                             />
                                         </Col>
@@ -556,7 +727,10 @@ const ItemSaleReport = (props) => {
                                 <Col sm={3}>
                                     <FormGroup className="mb-n3 row mt-1">
                                         <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1" type="checkbox"
+                                            className="p-1"
+                                            type="checkbox"
+                                            checked={supplierCheckbox}
+                                            onChange={(e) => { setSupplierCheckbox(e.target.checked) }}
                                         />
                                         <Label className="col-sm-4 p-2">Supplier</Label>
                                         <Col>
@@ -576,13 +750,11 @@ const ItemSaleReport = (props) => {
                                     </FormGroup>
                                 </Col>
                             </Row>
-
                         </Col>
 
                         <Col sm="1" className="mt-1 mb-1 ">
                             <Go_Button
                                 loading={goBtnLoading}
-                                // id={gobtnId} 
                                 onClick={goButtonHandler}
                             />
                         </Col>
@@ -591,115 +763,131 @@ const ItemSaleReport = (props) => {
 
                 <div className="item-Sale-card_3 px-2 text-black mt-1">
                     <Row className="mb-1">
-                        <Col sm={3}>
-                            <FormGroup className=" row mt-1 mb-n3">
-                                <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                    className="p-1" type="checkbox"
-                                />
-                                <Label className="col-sm-3 p-2">Channel to</Label>
-                                <Col sm={6}>
-                                    <C_Select
-
-
-                                        value={saleMadeToSelect}
-
-                                        isSearchable={true}
-                                        //  isLoading={partyLoading}       
-
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={PartyTypeDropdown_Options}
-                                        onChange={(e) => { setSaleMadeToSelect(e) }}
-
-                                    />
+                        <Col className="col col-11">
+                            <Row>
+                                <Col sm={3}>
+                                    <FormGroup className=" row mt-1 mb-n3">
+                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                            className="p-1"
+                                            type="checkbox"
+                                            checked={channelToCheckbox}
+                                            onChange={(e) => { setChannelToCheckbox(e.target.checked) }}
+                                        />
+                                        <Label className="col-sm-3 p-2">Channel to</Label>
+                                        <Col sm={6}>
+                                            <C_Select
+                                                value={channelToSelect}
+                                                isSearchable={true}
+                                                //  isLoading={partyLoading}       
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={PartyTypeDropdown_Options}
+                                                onChange={(e) => { setChannelToSelect(e) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
                                 </Col>
-                            </FormGroup>
-                        </Col>
 
-                        <Col sm={3}>
-                            <FormGroup className=" row mt-1">
-                                <Label className="col-sm-4 p-2">Route</Label>
-                                <Col>
-                                    <C_Select
-                                        classNamePrefix="react-select"
-                                        value={routeSelect}
-                                        options={RouteOptions}
-                                        // onChange={(e) => { setRouteSelect(e) }}
-                                        onChange={(e) => { RouteOnChange(e) }}
-                                        isLoading={routesDropLoading}
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                    />
+                                <Col sm={3}>
+                                    <FormGroup className=" row mt-1">
+                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                            className="p-1"
+                                            type="checkbox"
+                                            checked={routeCheckbox}
+                                            onChange={(e) => { setRouteCheckbox(e.target.checked) }}
+                                        />
+                                        <Label className="col-sm-4 p-2">Route</Label>
+                                        <Col>
+                                            <C_Select
+                                                classNamePrefix="react-select"
+                                                value={routeSelect}
+                                                options={RouteOptions}
+                                                // onChange={(e) => { setRouteSelect(e) }}
+                                                onChange={(e) => { RouteOnChange(e) }}
+                                                isLoading={routesDropLoading}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
                                 </Col>
-                            </FormGroup>
-                        </Col>
 
-                        <Col sm={3}>
-                            <FormGroup className=" row mt-1">
-                                <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                    className="p-1" type="checkbox"
-                                />
-                                <Label className="col-sm-4 p-2">Customer</Label>
+                                <Col sm={3}>
+                                    <FormGroup className=" row mt-1">
+                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                            className="p-1"
+                                            type="checkbox"
+                                            checked={customerCheckbox}
+                                            onChange={(e) => { setCustomerCheckbox(e.target.checked) }}
+                                        />
+                                        <Label className="col-sm-4 p-2">Customer</Label>
 
-                                <Col>
-                                    <C_Select
+                                        <Col>
+                                            <C_Select
+                                                value={customerSelect}
+                                                isSearchable={true}
+                                                isLoading={customerDropLoading}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={customerOptions}
+                                                onChange={(e) => { CustomerOnChange(e) }}
 
-
-                                        value={customerSelect}
-                                        isSearchable={true}
-                                        isLoading={customerDropLoading}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={customerOptions}
-                                        onChange={(e) => {
-                                            setCustomerSelect(e)
-                                        }}
-
-                                    />
+                                            />
+                                        </Col>
+                                    </FormGroup>
                                 </Col>
-                            </FormGroup>
-                        </Col>
 
-                        <Col sm={3}>
-                            <FormGroup className=" row mt-1">
-                                <Label className="col-sm-4 p-2">Select</Label>
+                                <Col sm={3}>
+                                    <FormGroup className=" row mt-1">
+                                        <Label className="col-sm-4 p-2">Select</Label>
 
-                                <Col>
-                                    <C_Select
+                                        <Col>
+                                            <C_Select
+                                                // value={values.PartyName}         
+                                                isSearchable={true}
+                                                //  isLoading={partyLoading}       
 
+                                                isMulti={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={checkboxOption}
+                                            // onChange={partySlectHandler}
 
-                                        // value={values.PartyName}         
-                                        isSearchable={true}
-                                        //  isLoading={partyLoading}       
-
-                                        isMulti={true}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={checkboxOption}
-                                    // onChange={partySlectHandler}
-
-                                    />
+                                            />
+                                        </Col>
+                                    </FormGroup>
                                 </Col>
-                            </FormGroup>
+                            </Row>
                         </Col>
-
+                        <Col sm="1" className="mt-1 mb-1 ">
+                            <C_Button
+                                type="button"
+                                className="btn btn-outline-primary border-1 font-size-12 text-center"
+                                onClick={() => { sortData(initaialBaseData) }} // Example field, you can change it
+                            >
+                                Sort
+                            </C_Button>
+                        </Col>
                     </Row>
 
                     <Row>
                         <Col sm={3}>
                             <FormGroup className=" row mt-2">
                                 <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                    className="p-1" type="checkbox"
+                                    className="p-1"
+                                    type="checkbox"
+                                    checked={productCheckbox}
+                                    onChange={(e) => { setProductCheckbox(e.target.checked) }}
                                 />
                                 <Label className="col-sm-3 p-2">Product</Label>
                                 <Col sm={6}>
@@ -723,7 +911,10 @@ const ItemSaleReport = (props) => {
                         <Col sm={3}>
                             <FormGroup className=" row mt-2">
                                 <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                    className="p-1" type="checkbox"
+                                    className="p-1"
+                                    type="checkbox"
+                                    checked={subProductCheckbox}
+                                    onChange={(e) => { setSubProductCheckbox(e.target.checked) }}
                                 />
                                 <Label className="col-sm-4 p-2">Sub Product</Label>
                                 <Col>
@@ -746,7 +937,10 @@ const ItemSaleReport = (props) => {
                         <Col sm={3}>
                             <FormGroup className=" row mt-2">
                                 <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                    className="p-1" type="checkbox"
+                                    className="p-1"
+                                    type="checkbox"
+                                    checked={itemNameCheckbox}
+                                    onChange={(e) => { setItemNameCheckbox(e.target.checked) }}
                                 />
                                 <Label className="col-sm-4 p-2">Items</Label>
                                 <Col>
@@ -794,10 +988,8 @@ const ItemSaleReport = (props) => {
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="id"
-                        // data={tableData.btnId !== "excel_btnId" ? DeletedInvoiceExportSerializerDetails : [{}]}
-                        // columns={tableData.btnId !== "excel_btnId" ? tableColumns : [{}]}
-                        data={Data}
-                        columns={tableColumns}
+                        data={tableData}
+                        columns={selectedColumns}
                         search
                     >
                         {(toolkitProps,) => (
@@ -807,6 +999,7 @@ const ItemSaleReport = (props) => {
                                         <div className="table-responsive table">
                                             <BootstrapTable
                                                 keyField="id"
+                                                key={`table-id-${new Date().getTime()}`}
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
