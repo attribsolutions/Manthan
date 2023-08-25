@@ -620,8 +620,6 @@ const OrderList = () => {
                         <Col sm='1' />
                     }
 
-
-
                     <Col lg={3}>
                         <FormGroup className="mb-1 row mt-3 " >
                             <Label className="col-md-4 p-2"
