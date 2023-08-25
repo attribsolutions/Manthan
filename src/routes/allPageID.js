@@ -252,3 +252,5 @@ export const RETURN_REPORT = 223
 export const PURCHASE_GST_REPORT = 219
 
 export const INVOICE_DATA_EXPORT = 218
+
+export const ITEM_SALE_REPORT = 224

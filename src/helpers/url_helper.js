@@ -424,7 +424,8 @@ export const RETURN_REPORT = "/ReturnReport"
 
 
 
-
+//Item Sale Report Go button API
+export const ITEM_SALE_REPORT_GO_BUTTON = '/ItemSaleReport'
 
 
 //Deleted Invoice Data Export Report 

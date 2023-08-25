@@ -666,6 +666,9 @@ export const DeleteInvoiceDataExport_GoBtn_API = ({ jsonBody }) => post(url.DELE
 export const ReturnReport_API = ({ jsonBody }) => post(url.RETURN_REPORT, jsonBody)//Go button api
 
 
+// Item Sale Report Go button API
+export const ItemSaleReport_GoBtn_API = ({ jsonBody }) => post(url.ITEM_SALE_REPORT_GO_BUTTON, jsonBody)//Go button api
+
 
 export {
   getLoggedInUser,
