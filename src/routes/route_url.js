@@ -267,6 +267,10 @@ export const RETURN_REPORT = "/ReturnReport"
 
 export const ITEM_SALE_REPORT = "/Item_Sale_Report"
 
+export const ITEM_REGISTER_REPORT = "/ItemRegister"
+
+
+
 
 
 

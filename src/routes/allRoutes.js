@@ -177,7 +177,11 @@ import DamageStockReport from "../Reports/DamageStockReport";
 import DeleteInvoiceDataExport from "../Reports/DeleteInvoiceDataExport";
 import GSTR1Report from "../Reports/GSTR1Report/GSTR1Report";
 import ReturnReport from "../Reports/ReturnReport/ReturnReport";
+
 import ItemSaleReport from "../Reports/ItemSaleReport";
+
+import ItemRegisterReport from "../Reports/ItemRegisterReport/ItemRegisterReport";
+
 // import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
@@ -440,7 +444,12 @@ const userRoutes = [
 
   { path: path.RETURN_REPORT, component: ReturnReport },
 
+
   { path: path.ITEM_SALE_REPORT, component: ItemSaleReport },
+
+  { path: path.ITEM_REGISTER_REPORT, component: ItemRegisterReport },
+
+
   // ************************************ Utility **************************************//
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
