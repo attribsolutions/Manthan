@@ -592,6 +592,21 @@ const ItemSaleReport = (props) => {
                 checkboxState: itemNameCheckbox,
                 selectValue: ItemNameSelect,
             },
+            {
+                fieldName: 'InvoiceDate',
+                checkboxState: fromDateCheckbox,
+                selectValue: { value: "", label: "All" },
+            },
+            {
+                fieldName: 'SaleMadeFrom',
+                checkboxState: channelFromCheckbox,
+                selectValue: { value: "", label: "All" },
+            },
+            {
+                fieldName: 'SupplierName',
+                checkboxState: supplierCheckbox,
+                selectValue: { value: "", label: "All" },
+            },
 
 
             // Add more checkbox options here
