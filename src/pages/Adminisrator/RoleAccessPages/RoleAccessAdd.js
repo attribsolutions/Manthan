@@ -4,21 +4,18 @@ import {
     Container,
     Row,
     Label,
-    Input,
     CardHeader,
     FormGroup,
     Button,
-    Table,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Select from "react-select";
+import Select, { components } from "react-select";
 import {
     getPartyListAPI,
 } from "../../../store/Administrator/PartyRedux/action";
 import { MetaTags } from "react-meta-tags";
 import {
     AddPageHandlerForRoleAccessListPage,
-    deleteRoleAcessMasterAction,
     getPageAccess_DropDown_API,
     GO_Button_RoleAccess_AddPage_Action,
     PageDropdownForRoleAccessList,
@@ -29,95 +26,30 @@ import {
 } from "../../../store/actions";
 import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, CommonConsole, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as url from "../../../routes/route_url"
-import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 import { C_Select } from "../../../CustomValidateForm";
-
+import "./style.scss";
+import CustomTable from "../../../CustomTable2/index"
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import BootstrapTable from "react-bootstrap-table-next";
 
 const RoleAccessAdd = () => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const InitialCol = [
-        {
-            text: "Action",
-            dataField: "",
-            formatter: (cellContent, user) => {
-                const btnId = `roleAccDelete-${user.id}`
-                const config = { btnId, deleteId: user.id }
-                return (
-                    <div style={{ justifyContent: 'center' }} >
-                        <Button className={deltBtnCss} id={btnId}> <i className="mdi mdi-delete font-size-18 text-danger text-right"
-                            onClick={() => { DeleteRolePage_Handler({ ...config }) }}></i></Button>
-                    </div>
-                )
-            },
-            style: (cell, row) => {
-                if (row) {
-                    return {
-                        position: "sticky",
-                        left: "0",
-                        backgroundColor: "white"
-                    };
-                }
 
-            },
-            headerStyle: {
-                position: "sticky",
-                left: "0",
-                backgroundColor: "white",
-                top: "0",
-                zIndex: 2
-
-            },
-
-        },
-        {
-            text: "Module Name",
-            dataField: "ModuleName",
-            headerStyle: {
-                position: "sticky",
-                backgroundColor: "white",
-                top: "0",
-
-            },
-        },
-        {
-            text: "PageName",
-            dataField: "PageName",
-            style: (cell, row, rowIndex, colIndex) => {
-                if (colIndex) {
-                    return {
-                        position: "sticky",
-                        left: "1.7cm",
-                        backgroundColor: "white"
-
-                    };
-                }
-            },
-            headerStyle: {
-                position: "sticky",
-                left: "1.7cm",
-                backgroundColor: "white",
-                top: "0",
-                zIndex: 2
-            },
-        }
-    ]
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [editCreatedBy, setEditCreatedBy] = useState('');
-    const [tableHederList, setTableHederList] = useState(InitialCol)
     const [showTableOnUI, setShowTableOnUI] = useState(false)
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState({ label: "Select...", value: 0 });
     const [role_dropdown_Select, setRoleDropDown] = useState("");
@@ -133,7 +65,7 @@ const RoleAccessAdd = () => {
         ModuleData,
         PageDropdownRedux,
         postMsg,
-        Roles=[],
+        Roles = [],
         partyList,
         userAccess = [],
         company,
@@ -199,82 +131,14 @@ const RoleAccessAdd = () => {
         dispatch(getcompanyList());
     }, []);
 
-
     useEffect(() => {
-
-        const NewColoumList = []
-
-        function columnFunc(text, checkShow, ischeck) {
-            return {
-                text: text,
-                dataField: ischeck,
-                headerStyle: {
-                    position: "sticky",
-                    // left: "1.7cm",
-                    backgroundColor: "white",
-                    top: "0",
-                    zIndex: 1
-                },
-
-                formatter: (cellContent, user) => {
-
-                    let isSTP_page = user.PageType === 3 //PageTypeName :"SourceTransactionPage"
-                    let isShowinlistAdd = (ischeck === "RoleAccess_IsShowOnMenuForMaster")
-
-                    if (!(user[checkShow] > 0)) { return null }
-
-                    else if ((isSTP_page && isShowinlistAdd)) {
-                        user[ischeck] = 0;
-                        return null
-                    }
-                    return (
-                        <div style={{ justifyContent: 'center' }} >
-                            <Col>
-                                <FormGroup className=" col col-sm-4 ">
-                                    <Input
-                                        id={`check-id-${ischeck}-${user.PageID}`}
-                                        key={user.PageID}
-                                        type="checkbox"
-                                        defaultChecked={user[ischeck]}
-                                        className="col col-sm text-end"
-                                        onChange={(e) => {
-
-                                            user[ischeck] = e.target.checked ? 1 : 0;
-                                            document.getElementById(`check-id-${ischeck}-${user.PageID}`).checked = e.target.checked;
-                                            // dispatch(IscheckRoleAcessMasterAction(user.id, ischeck, e.target.checked))
-                                        }}
-                                    />
-                                </FormGroup>
-                            </Col>
-                        </div>
-                    )
-                }
-            }
+        if (company.length === 1) {
+            setCompany_dropdown_Select({
+                value: company[0].id,
+                label: company[0].Name
+            })
         }
-
-        PageAccess.map((i) => {
-
-            let checkShow = `PageAccess_${i.Name}`;
-            if (i.Name === "IsShowOnMenu") {
-                let textList = "ShowList";
-                let textAdd = "ShowAdd";
-                let ischeckList = "RoleAccess_IsShowOnMenuForList"
-                let ischeckAdd = "RoleAccess_IsShowOnMenuForMaster";
-
-                let colnObj2 = columnFunc(textList, checkShow, ischeckList);
-                let colnObj1 = columnFunc(textAdd, checkShow, ischeckAdd);
-
-                NewColoumList.push(colnObj1);
-                NewColoumList.push(colnObj2);
-            } else {
-                let ischeckAdd = `RoleAccess_${i.Name}`;
-                let colnObj3 = columnFunc(i.Name, checkShow, ischeckAdd)
-                NewColoumList.push(colnObj3)
-            }
-        })
-        const a = [...InitialCol, ...NewColoumList]
-        setTableHederList(a)
-    }, [PageAccess])
+    }, [company])
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -312,20 +176,45 @@ const RoleAccessAdd = () => {
         label: i.Name,
     }));
 
-    useEffect(() => {
-        if (company.length === 1) {
-            setCompany_dropdown_Select({
-                value: company[0].id,
-                label: company[0].Name
-            })
-        }
-    }, [company])
-
     // for Page dropdown
     const Page_DropdownOption = PageDropdownRedux.map((d) => ({
         value: d.id,
         label: d.Name,
     }));
+
+    const tableColumns = [
+
+        {
+            text: "Module Name",
+            dataField: "ModuleName",
+            sort: true,
+        },
+        {
+            text: "PageName",
+            dataField: "PageName",
+            sort: true,
+        },
+        {
+            text: "Access",
+            dataField: "",
+            formatter: MultiSelectDopdown
+        },
+        {
+            text: "Action",
+            dataField: "",
+            formatExtraData: { tableList: tableDataRedux },
+            formatter: (cellContent, user, __key, { tableList }) => {
+                const btnId = `roleAccDelete-${user.id}`
+                const config = { btnId, deleteId: user.id }
+                return (
+                    <div style={{ justifyContent: 'center' }} >
+                        <Button className={deltBtnCss} id={btnId}> <i className="mdi mdi-delete font-size-18 text-danger text-right"
+                            onClick={() => { DeleteRolePage_Handler(user.PageID, tableList) }}></i></Button>
+                    </div>
+                )
+            },
+        },
+    ]
 
     /// Role dopdown
     function RoleDropDown_select_handler(e) {
@@ -334,7 +223,6 @@ const RoleAccessAdd = () => {
 
     function handllerDivisionTypes(e) {
         setDivision_dropdown_Select(e)
-        // dispatch(GetPartyTypeByDivisionTypeID(e.value))
     }
 
     // for module dropdown
@@ -370,6 +258,12 @@ const RoleAccessAdd = () => {
             })
 
         }
+    }
+    function ChangeButtonHandeler() {
+        setShowTableOnUI(false);
+        setModule_DropdownSelect('')
+        setPage_DropdownSelect('')
+        dispatch(setTableData_roleAccss_AddPageSuccess([]))
     }
 
     const AddPageButton_Handeler = () => {
@@ -408,71 +302,59 @@ const RoleAccessAdd = () => {
         }
     }
 
-    function DeleteRolePage_Handler(config) {
-        const { btnId } = config;
-        btnIsDissablefunc({ btnId, state: false })
-        dispatch(deleteRoleAcessMasterAction(config))
+    function DeleteRolePage_Handler(deleteId, tableList = []) {
+
+        const newList = tableList.filter((index) => {
+            return (!(index.PageID === deleteId))
+        })
+        dispatch(setTableData_roleAccss_AddPageSuccess(newList))
+
     }
-    function ChangeButtonHandeler() {
-        setShowTableOnUI(false);
-        setModule_DropdownSelect('')
-        setPage_DropdownSelect('')
-        dispatch(setTableData_roleAccss_AddPageSuccess([]))
-    }
-
-
-    const pageOptions = {
-        sizePerPage: tableDataRedux.length + 1,
-        // totalSize: TableData.length,
-        custom: true,
-    };
-
 
     const saveHandeller = (event) => {
         event.preventDefault();
         const btnId = event.target.id
-        // btnIsDissablefunc({ btnId, state: true })
+
         try {
 
-            function ischeckboxCheck(i1) {
+            function isAccessSelect(item) {
                 let accArray = [];
                 let isShowOnMenu_Id
-
-                PageAccess.map((i2) => {
-
-                    const roleCond = `RoleAccess_${i2.Name}`
-                    const pageCond = `PageAccess_${i2.Name}`
-
-                    if (((i2.Name === "IsShowOnMenu") && (i1[pageCond] > 0))) {
-                        isShowOnMenu_Id = i2.id
+                item.defaultSelectedValues.map(({ value, id }) => {
+                    // -1 stands for "List", -2 stands for "Add", and -3 stands for "STP".
+                    if ((value < 0)) {
+                        isShowOnMenu_Id = id
                     }
-                    else if (((i1[roleCond] > 0) && (i1[pageCond] > 0))) {
-                        accArray.push({ "PageAccess": i2.id })
+                    else {
+                        accArray.push({ "PageAccess": value })
                     }
                 })
                 return { accArray, isShowOnMenu_Id }
             }
 
             const jsonArray = [];
-            tableDataRedux.map((i1) => {
+            tableDataRedux.map((row) => {
 
-                let { accArray, isShowOnMenu_Id } = ischeckboxCheck(i1);
-                let showList = i1.RoleAccess_IsShowOnMenuForList > 0
-                let showAdd = i1.RoleAccess_IsShowOnMenuForMaster > 0
+                let { accArray = [], isShowOnMenu_Id } = isAccessSelect(row);
+                // -1 stands for "List", -2 stands for "Add", and -3 stands for "STP".
+                let showList = row.defaultSelectedValues?.find(i => (i.value === -1))
+                let showAdd = row.defaultSelectedValues?.find(i => (i.value === -2))
                 let isAccess = accArray.length > 0;
-                let isrelated = i1.RelatedPageID > 0;
+                let isrelated = row.RelatedPageID > 0;
                 let divisionID = division_dropdown_Select.value
-                let isSTP_page = i1.PageType === 3 //PageTypeName :"SourceTransactionPage"
-
+                let isSTP_page = row.PageType === 3 //PageTypeName :"SourceTransactionPage"
+                debugger
                 const listRowOBJFunc = () => {
                     let showArray = [];
-                    if (showList) showArray = [{ "PageAccess": isShowOnMenu_Id }]
+                    if (showList) {
+                        showArray = [{ "PageAccess": isShowOnMenu_Id }]
+                    }
                     return {
                         Role: role_dropdown_Select.value,
                         Company: company_dropdown_Select.value,
                         Division: divisionID === 0 ? '' : divisionID,
-                        Modules: i1.ModuleID,
-                        Pages: i1.PageID,
+                        Modules: row.ModuleID,
+                        Pages: row.PageID,
                         CreatedBy: loginUserID(),
                         UpdatedBy: loginUserID(),
                         RolePageAccess: [...showArray, ...accArray],
@@ -481,13 +363,15 @@ const RoleAccessAdd = () => {
 
                 const addRowOBJFunc = () => {
                     let showArray = [];
-                    if (showAdd) showArray = [{ "PageAccess": isShowOnMenu_Id }]
+                    if (showAdd) {
+                        showArray = [{ "PageAccess": isShowOnMenu_Id }]
+                    }
                     return {
                         Role: role_dropdown_Select.value,
                         Company: company_dropdown_Select.value,
                         Division: divisionID === 0 ? '' : divisionID,
-                        Modules: i1.ModuleID,
-                        Pages: i1.RelatedPageID,
+                        Modules: row.ModuleID,
+                        Pages: row.RelatedPageID,
                         CreatedBy: loginUserID(),
                         UpdatedBy: loginUserID(),
                         RolePageAccess: [...showArray, ...accArray],
@@ -500,57 +384,15 @@ const RoleAccessAdd = () => {
                 }
             })
             const jsonBody = JSON.stringify(jsonArray)
-
+            console.log("jsonArray", jsonArray)
             dispatch(saveRoleAccessAddAction({ jsonBody, btnId }));
 
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (w) { CommonConsole(w) }
     }
 
-
-
-    const RoleAccTable = () => {
-        return (
-            <div className='sticky-div1 table-rsponsive mb-4'>
-
-                <ToolkitProvider
-                    keyField="id"
-                    data={tableDataRedux}
-                    columns={[...tableHederList]}
-                    search
-                >
-                    {(toolkitProps) => (
-                        <React.Fragment>
-                            <Row>
-                                <Col xl="12">
-                                    <div className="table-responsive" id="TableDiv" >
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            responsive
-                                            bordered={false}
-                                            striped={false}
-                                            headerClasses="theader-class"
-                                            classes={"table  table-bordered "}
-                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                            {...toolkitProps.baseProps}
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps,)}
-                                    </div>
-                                </Col>
-                            </Row>
-
-                        </React.Fragment>
-                    )}
-                </ToolkitProvider>
-
-            </div>
-        )
-
-    }
 
     let IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
-
 
     return <React.Fragment>
         <div className="page-content"  >
@@ -717,7 +559,7 @@ const RoleAccessAdd = () => {
                     marginLeft: "-7px",
                     paddingTop: '4px'
                 }}>
-                    <RoleAccTable ></RoleAccTable>
+                    <RoleAccTable data={tableDataRedux} columns={tableColumns} />
                 </div>
 
             </Container>
@@ -731,3 +573,100 @@ const RoleAccessAdd = () => {
 
 
 export default RoleAccessAdd
+
+
+
+const RoleAccTable = ({ data, columns }) => {
+
+    return (
+        <>
+            <ToolkitProvider
+                keyField="PageID"
+                data={data}
+                columns={columns}
+                search
+            >
+                {(toolkitProps) => (
+                    <React.Fragment>
+                        <Row>
+                            <Col xl="12">
+                                <div className="table-responsive" id="TableDiv" style={{ minHeight: "65vh" }}  >
+                                    <BootstrapTable
+                                        keyField={"id"}
+                                        responsive
+                                        bordered={false}
+                                        headerClasses="theader-class"
+                                        classes={"table  table-bordered "}
+                                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                        {...toolkitProps.baseProps}
+                                    />
+                                    {mySearchProps(toolkitProps.searchProps,)}
+                                </div>
+                            </Col>
+                        </Row>
+
+                    </React.Fragment>
+                )}
+            </ToolkitProvider>
+        </>
+    )
+}
+
+
+
+const MultiSelectDopdown = (cell, item) => {
+
+
+
+
+    const Option = (props) => {
+        const { innerProps, label, data } = props;
+        return (
+            <components.Option {...props}>
+                <div {...innerProps} className="custom-option">
+                    <span className="icon">{data.icon}</span>
+                    <span className="label">{label}</span>
+
+                </div>
+            </components.Option>
+        );
+    };
+
+
+    const CustomMultiValueLabel = ({ data }) => (
+        <div className="custom-select-value">
+            <span className="icon">{data.icon}</span>
+            <span className="label">{data.label}</span>
+        </div>
+    );
+
+    const MultiValueRemove = props => (
+        <components.MultiValueRemove {...props}>
+            <span className="remove-icon">×</span>
+        </components.MultiValueRemove>
+    );
+
+    const onChangehamdler = (seletedVal = []) => {
+        // e.sort((a, b) => a.value - b.value);
+        item.defaultSelectedValues = seletedVal
+    }
+    // item.dynamicOptions.sort((a, b) => a.value - b.value);
+
+
+    return (
+        <div key={item.id}>
+            <Select
+                key={`select-${item.id}`}
+                isMulti
+                onChange={onChangehamdler}
+                defaultValue={item.defaultSelectedValues}
+                components={{
+                    Option,
+                    MultiValueLabel: CustomMultiValueLabel, // Custom icon + label for selected values
+                    MultiValueRemove: MultiValueRemove, // Default cancel button
+                }}
+                options={item.dynamicOptions} />
+        </div>
+
+    );
+};
