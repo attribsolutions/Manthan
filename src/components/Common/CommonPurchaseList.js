@@ -332,17 +332,8 @@ const CommonPurchaseList = (props) => {
                 keyField={"id"}
                 data={tableProps}
                 columns={tableColumns}
-
-                responsive
-                bootstrap4
-                bordered={false}
-                selectRow={(selectCheckParams.isShow) ?
-                  {
-                    rowSelected: rowSelected(),
-                    nonSelected: nonSelectedRow(),
-                    ...selectCheckParams
-                  }
-
+                selectRow={selectCheckParams.isShow ?
+                  selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
                   : undefined}
                 defaultSorted={defaultSorted}
                 updatedRowBlinkId={updatedRowBlinkId}
