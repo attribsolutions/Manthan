@@ -32,9 +32,18 @@ const copyIconClass = "bx bxs-copy font-size-16";
 const orderApprovalIconClass = "bx bx-check-shield font-size-20";
 const uploadIconClass = "bx bx-upload font-size-14";
 const cancelIconClass = "mdi mdi-cancel font-size-14";
+const claimCustomerWisePrintIconClass = "fas fa-file-contract font-size-14";  //Icon Added For Claim Print on Claim list
+const claimItemWisePrintIconClass = "fas fa-file-signature";  //Icon Added For Claim Print on Claim list
+const claimMasterPrintIconClass = "far fa-file-alt font-size-14";  //Icon Added For Claim Print on Claim list
+
+
+
+
+
 
 
 export const listPageActionsButtonFunc = (props) => {
+
     const {
         dispatch,
         history,
@@ -47,6 +56,7 @@ export const listPageActionsButtonFunc = (props) => {
         editBodyfunc,
         deleteBodyfunc,
         copyBodyfunc,
+        downClaimBtnFunc,
         viewApprovalBtnFunc,
         otherBtn_1Func,
         makeBtnFunc = () => { },
@@ -54,6 +64,7 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnName,
         makeBtnShow = false,
         oderAprovalBtnFunc,
+        isFormExtraData,
     } = props;
 
     const { listBtnLoading } = props.reducers;
@@ -68,8 +79,8 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnFunc(arr, btnId);
     };
 
-    const renderButtonOnClick = async ({ rowData, btnmode, btnId, actionFunc, dispatchAction }) => {
-
+    const renderButtonOnClick = async ({ rowData, btnmode, btnId, actionFunc, dispatchAction, isFormExtraData }) => {
+        debugger
         try {
             const config = {
                 editId: rowData.id,
@@ -118,7 +129,7 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     const renderActionButton = (__cell, rowData, __key, formatExtra) => {
-        const { listBtnLoading } = formatExtra;
+        const { listBtnLoading, isFormExtraData } = formatExtra;
         const {
             forceEditHide,
             forceDeleteHide,
@@ -135,13 +146,21 @@ export const listPageActionsButtonFunc = (props) => {
         const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && rowData.CreatedBy === userCreated && !forceEditHide;
         const canView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && !viewApprovalBtnFunc;
         const canApprovalView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && viewApprovalBtnFunc;
-        const canPrint = hasRole("RoleAccess_IsPrint");
+        const canPrint = hasRole("RoleAccess_IsPrint") && !downClaimBtnFunc;
         const canMultiInvoicePrint = hasRole("RoleAccess_IsMultipleInvoicePrint");
         const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide;
         const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && rowData.CreatedBy === userCreated && !forceDeleteHide;
         const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy");
         const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtnHide;
         const canOrderApproval = oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
+
+        const canCustomerWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
+        const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
+        const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
+
+
+
+
 
         const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc;
@@ -266,6 +285,30 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Update",
                         buttonClasss: updateBtnCss,
                     })}
+                    {renderButtonIfNeeded({   // Button Added For Customer Wise Claim Summary Print on Claim List page
+                        condition: canCustomerWisePrint,
+                        btnmode: mode.CustomerWiseSummary,
+                        iconClass: claimCustomerWisePrintIconClass,
+                        actionFunc: downClaimBtnFunc,
+                        title: "Print Customer Wise ",
+                        buttonClasss: printBtnCss,
+                    })}
+                    {renderButtonIfNeeded({ // Button Added For Item Wise Claim Summary Print on Claim List page
+                        condition: canItemWisePrint,
+                        btnmode: mode.ItemWiseSummary,
+                        iconClass: claimItemWisePrintIconClass,
+                        actionFunc: downClaimBtnFunc,
+                        title: "Print Item Wise",
+                        buttonClasss: printBtnCss,
+                    })}
+                    {renderButtonIfNeeded({ // Button Added For Master Claim Summary Print on Claim List page
+                        condition: canMasterClaimPrint,
+                        btnmode: mode.MastarClaimSummary,
+                        iconClass: claimMasterPrintIconClass,
+                        actionFunc: downClaimBtnFunc,
+                        title: "Print Master ",
+                        buttonClasss: printBtnCss,
+                    })}
                     {renderButtonIfNeeded({
                         condition: canDelete,
                         btnmode: mode.isdelete,
@@ -303,6 +346,8 @@ export const listPageActionsButtonFunc = (props) => {
                         buttonClasss: makeBtnCss,
                         isDummyBtn: dummyDisable_OrderApproval
                     })}
+
+
                 </div>
             </span>
         );
@@ -323,7 +368,7 @@ export const listPageActionsButtonFunc = (props) => {
         text: "Action",
         dataField: "",
         attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Action", "sticky-col": (colIndex === 0) ? "true" : "false" }),
-        formatExtraData: { listBtnLoading },
+        formatExtraData: { listBtnLoading, isFormExtraData },
         formatter: renderActionButton,
     };
 };
