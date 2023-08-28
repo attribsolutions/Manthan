@@ -254,3 +254,8 @@ export const PURCHASE_GST_REPORT = 219
 export const INVOICE_DATA_EXPORT = 218
 
 export const ITEM_SALE_REPORT = 224
+
+export const CLAIM_SUMMARY_MASTER = 226
+
+export const CLAIM_SUMMARY_lIST = 227
+
