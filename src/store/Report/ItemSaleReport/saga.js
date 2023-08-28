@@ -13,7 +13,7 @@ function* ItemSaleReport_GenFunc({ config }) {
 
 // Supplier API depends on Channel From(Party Type)
 function* SupplierOnPartyType_GenFunc({ config }) {
-    
+
     const { employeeID, channelFromID } = config
     try {
         const response = yield call(SupplierDropdownApi, employeeID, channelFromID);
