@@ -14,7 +14,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 
 const GenericSaleReport = (props) => {
 
@@ -98,18 +98,18 @@ const GenericSaleReport = (props) => {
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 setBtnMode(0);
-                const { GenericSaleDetails } = goButtonData.Data
+                const { Data } = goButtonData
                 if (btnMode === 2) {
-                    ExcelDownloadFunc({      // Download CSV
+                    ReportComponent({      // Download CSV
                         pageField,
-                        excelData: GenericSaleDetails,
+                        excelData: Data,
                         excelFileName: "Generic Sale Report"
                     })
                     dispatch(GoButton_For_GenericSale_Success([]));
                     setDistributorDropdown([{ value: "", label: "All" }])
                 }
                 else {
-                    const UpdatedTableData = GenericSaleDetails.map((item, index) => {
+                    const UpdatedTableData = Data.map((item, index) => {
 
                         return {
                             ...item, id: index + 1,

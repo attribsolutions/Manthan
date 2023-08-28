@@ -26,7 +26,8 @@ const CompanyWiseBudgetReport = (data) => {
             title: `MasterClaim_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `
         });
         function generateSaveAndOpenPDFReport() {
-            const pdfUrl = URL.createObjectURL(doc.output('blob'));
+
+            const pdfUrl = URL.createObjectURL(doc.output("blob"));
             const options = { filename: `MasterClaim_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} ` }
             window.open(pdfUrl,);
         }

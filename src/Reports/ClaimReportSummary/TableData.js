@@ -57,28 +57,6 @@ export const Rows = (data) => {
     let TotalGst = 0
     let GSTPercentage = 0
 
-    // const groupedItems = ReturnItems.reduce((accumulator, currentItem) => {
-
-    //     const { HSNCode, ItemName, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName } = currentItem;
-    //     const key = ItemName + '_' + MRP;
-    //     if (accumulator[key]) {
-    //         accumulator[key].DiscountAmount += Number(DiscountAmount);
-    //         accumulator[key].Quantity += Number(Quantity);
-    //         accumulator[key].BasicAmount += Number(BasicAmount);
-    //         accumulator[key].CGST += Number(CGST);
-    //         accumulator[key].SGST += Number(SGST);
-    //         accumulator[key].Amount += Number(Amount);
-    //         accumulator[key].BatchCode += BatchCode;
-    //         accumulator[key].BatchDate += BatchDate;
-    //         accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
-    //     } else {
-    //         accumulator[key] = {
-    //             ItemName, HSNCode,
-    //             MRPValue, DiscountType, Rate, Discount, CGST: Number(CGST), SGST: Number(SGST), Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount), Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate, BatchCode: BatchCode, BatchDate: BatchDate, quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName
-    //         };
-    //     }
-    //     return accumulator;
-    // }, {});
 
     ClaimSummaryItemDetails.forEach((element, key) => {
 

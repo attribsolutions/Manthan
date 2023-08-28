@@ -382,6 +382,9 @@ export const PARTY_LEDGER = '/PartyLedgerReport'
 export const CLAIM_SUMMARY = '/ClaimSummary'
 export const MASTER_CLAIM_SUMMARY = '/MasterClaimPrint'
 export const MASTER_CLAIM_CREATE = '/MasterClaimCreate'
+export const CLAIM_LIST = '/Claimlist'
+export const ITEM_REGISTER = '/MaterialRegister'
+
 
 
 
@@ -421,7 +424,8 @@ export const RETURN_REPORT = "/ReturnReport"
 
 
 
-
+//Item Sale Report Go button API
+export const ITEM_SALE_REPORT_GO_BUTTON = '/ItemSaleReport'
 
 
 //Deleted Invoice Data Export Report 

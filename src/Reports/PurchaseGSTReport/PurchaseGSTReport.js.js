@@ -18,7 +18,7 @@ import { mode, url, pageId } from "../../routes/index"
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import Papa from 'papaparse';
 import XLSX from 'react-csv';
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 
 const PurchaseGSTReport = (props) => {
 
@@ -128,7 +128,7 @@ const PurchaseGSTReport = (props) => {
     useEffect(() => {
         if (tableData.btnId === "excel_btnId") {
             if (GSTRateWise ? PurchaseGSTRateWiseDetails.length : PurchaseGSTDetails.length > 1) {
-                ExcelDownloadFunc({      // Download CSV
+                ReportComponent({      // Download CSV
                     pageField,
                     excelData: GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails,
                     excelFileName: "Purchase GST Report"

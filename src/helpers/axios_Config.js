@@ -97,7 +97,7 @@ axiosApi.interceptors.response.use(
                 403: 'Permission denied.',
                 404: 'Resource not found.',
                 226: 'The requested resource has been used in a different context',
-                406: 'Not Acceptable - The server cannot produce a response matching the list of acceptable values defined in the request',   
+                406: 'Not Acceptable - The server cannot produce a response matching the list of acceptable values defined in the request',
                 0: () => axiosRetry(error.config),
             };
             const errorMessage = messages[status] || 'Oops! Something went wrong.';

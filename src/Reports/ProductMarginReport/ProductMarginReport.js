@@ -10,12 +10,11 @@ import {
     Row,
     Spinner,
 } from "reactstrap";
-import { breadcrumbReturnFunc, date_dmy_func, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
 import { getExcel_Button_API, getExcel_Button_API_Success } from '../../store/Report/SapLedger Redux/action';
-import * as XLSX from 'xlsx';
 import { useState } from 'react';
 
 const ProductMarginReport = (props) => {
@@ -23,14 +22,13 @@ const ProductMarginReport = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
     const [userPageAccessState, setUserAccState] = useState('');
+    
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         userAccess,
-        ProductMarginData,
         downloadProductMargin,
     } = useSelector((state) => ({
         userAccess: state.Login.RoleAccessUpdateData,
-        ProductMarginData: state.SapLedgerReducer.ProductMargin,
         pageField: state.CommonPageFieldReducer.pageField,
         downloadProductMargin: state.SapLedgerReducer.downloadProductMargin,
     }));
@@ -39,6 +37,7 @@ const ProductMarginReport = (props) => {
         const page_Id = pageId.PRODUCT_MARGIN_REPORT//changes
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(getExcel_Button_API_Success([]))
     }, []);
 
     const location = { ...history.location }
@@ -63,33 +62,6 @@ const ProductMarginReport = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
-
-
-    useEffect(() => {
-
-        if (ProductMarginData.length > 1) {
-
-            let newArray = []
-            ProductMarginData.forEach(i => {
-                let obj = i
-                i.ItemMargins.forEach(ele => {
-                    const keys = Object.keys(ele);
-                    keys.forEach(key => {
-                        obj[key] = ele[key]
-                    })
-                })
-                delete obj.ItemMargins
-                newArray.push(obj)
-            })
-
-            const worksheet = XLSX.utils.json_to_sheet(newArray);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "ProductMargin");
-            XLSX.writeFile(workbook, `Product Margin Report.xlsx`);
-
-            dispatch(getExcel_Button_API_Success([]));
-        }
-    }, [ProductMarginData]);
 
     function excelhandler() {
         const userDetails = loginUserDetails()
