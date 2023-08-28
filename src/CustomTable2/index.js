@@ -94,7 +94,6 @@ const CustomTable = ({
                 classes='custom-table'
                 rowClasses={rowClesess}
                 sort={sortCaretFunction}
-                hover
                 {...rest} />
 
             {paginationEnabled &&
