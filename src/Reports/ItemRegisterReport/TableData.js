@@ -1,12 +1,16 @@
+import { loginUserDetails } from "../../components/Common/CommonFunction";
 
 export const columns = [
     "Date",
-    "Particulars",
-    "transaction type",
-    "In Quantity ",
-    "Out Quantity",
-    "Issue Quantity",
+    "Name",
+    "Document No",
+    "GRN",
+    "Sales Return",
+    "Stock",
+    "Sale",
+    "Purchase Return",
     "Balance",
+
 ];
 
 export const PageHedercolumns = [
@@ -16,80 +20,193 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
-    const { InvoiceItems = [] } = data
-    InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+    const openingBalance = Number(data[data.length - 1].OpeningBalance);
+
+    // InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Gst = 0
-    let TotalIssueQuanity = 0
-    let TotalInQuantity = 0
-    let TotalOutQuantity = 0
-    let TotalBalance = 0
-    let totalQuantity = 0
+    let TotalGRN = 0
+    let TotalSalesReturn = 0
+    let TotalStock = 0
+    let TotalPurchaseReturn = 0
+    let TotalSale = 0
 
-    InvoiceItems.forEach((element, key) => {
+    let TotalBalance = 0
+
+
+    let Unit = data.Period.Unit.label
+    let GRN = 0
+    let SalesReturn = 0
+    let Stock = 0
+    let Sale = 0
+    let PurchaseReturn = 0
+
+
+
+
+    let BalanceAmount = Number(openingBalance)
+
+    data.forEach((element, key) => {
+        let RowGRN = 0
+        let RowSalesReturn = 0
+        let RowStock = 0
+        let RowSale = 0
+        let RowPurchaseReturn = 0
+
+
+        if (Unit === "No") {
+            GRN = Number(element.QtyInNo)
+            SalesReturn = Number(element.QtyInNo)
+            Stock = Number(element.QtyInNo)
+            Sale = Number(element.QtyInNo)
+            PurchaseReturn = Number(element.QtyInNo)
+        }
+
+        if (Unit === "Kg") {
+            GRN = Number(element.QtyInNo)
+            SalesReturn = Number(element.QtyInNo)
+            Stock = Number(element.QtyInNo)
+            Sale = Number(element.QtyInNo)
+            PurchaseReturn = Number(element.QtyInNo)
+        }
+        if (Unit === "Box") {
+            GRN = Number(element.QtyInNo)
+            SalesReturn = Number(element.QtyInNo)
+            Stock = Number(element.QtyInNo)
+            Sale = Number(element.QtyInNo)
+            PurchaseReturn = Number(element.QtyInNo)
+        }
+
+        if (element.Sequence === 1) {
+            RowGRN = GRN
+        } if (element.Sequence === 2) {
+            RowSalesReturn = SalesReturn
+        } if (element.Sequence === 3) {
+            RowStock = Stock
+        } if (element.Sequence === 4) {
+            RowSale = Sale
+        } if (element.Sequence === 5) {
+            RowPurchaseReturn = PurchaseReturn
+        }
+
+        const rowGRN = Number(RowGRN);
+        const rowSalesReturn = Number(RowSalesReturn);
+        const rowSale = Number(RowSale);
+        const rowPurchaseReturn = Number(RowPurchaseReturn);
+        if (element.TransactionNumber === "STOCK") {
+            BalanceAmount = RowStock
+        }
+        BalanceAmount = (BalanceAmount + rowGRN + rowSalesReturn) - (rowSale + rowPurchaseReturn);
+
+
         const tableitemRow = [
-            element.BatchDate,
-            element.Particulars,
-            element.TransactionType,
-            element.InQuantity,
-            element.OutQuantity,
-            element.IssueQuanity,
-            element.Balance,
-           
+            element.TransactionDate,
+            element.Name,
+            element.TransactionNumber,
+            (element.Sequence === 1) ? GRN : 0,
+            (element.Sequence === 2) ? SalesReturn : 0,
+            (element.Sequence === 3) ? Stock : 0,
+            (element.Sequence === 4) ? Sale : 0,
+            (element.Sequence === 5) ? PurchaseReturn : 0,
+            element.TransactionNumber === "STOCK" ? RowStock : BalanceAmount
         ];
 
         function totalLots() {
-            TotalInQuantity = Number(TotalInQuantity) + Number(element.InQuantity)
-            TotalOutQuantity = Number(TotalOutQuantity) + Number(element.OutQuantity)
-            TotalIssueQuanity = Number(TotalIssueQuanity) + Number( element.IssueQuanity)
-            TotalBalance = Number(TotalBalance) + Number(element.Balance)
-            // let cgst = data["tableTot"].TotalCGst
-            // return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
+
+            TotalGRN = Number(TotalGRN) + Number(RowGRN)
+            TotalSalesReturn = Number(TotalSalesReturn) + Number(RowSalesReturn)
+            TotalSale = Number(TotalSale) + Number(RowSale)
+            TotalStock = Number(TotalStock) + Number(RowStock)
+            TotalPurchaseReturn = Number(TotalPurchaseReturn) + Number(RowPurchaseReturn)
+            TotalBalance = Number(TotalBalance) + Number(BalanceAmount)
+
         };
+
+        if (key === data.length - 3) {
+            data["Close"] = BalanceAmount
+        }
 
         function totalrow() {
             return [
-                " ",
-                " ",
                 "Total",
-                `Total :${parseFloat(TotalInQuantity).toFixed(2)}`,
-                `Total :${parseFloat(TotalOutQuantity).toFixed(2)}`,
-                `Total :${parseFloat(TotalIssueQuanity).toFixed(2)}`,
-                `Balance:${parseFloat(TotalBalance).toFixed(2)}`,
-                
-               
+                "",
+                "",
+                `${Number(TotalGRN).toFixed(2)}`,
+                `${Number(TotalSalesReturn).toFixed(2)}`,
+                `${Number(TotalStock).toFixed(2)}`,
+                `${Number(TotalSale).toFixed(2)}`,
+                `${Number(TotalPurchaseReturn).toFixed(2)}`,
+                ``,
+
+            ];
+        };
+
+        function totalopen() {
+            return [
+                `Opening Balance: ${data[data.length - 1].OpeningBalance}`,
+                "",
+                "Total",
+                ``,
+                ``,
+                ``,
+                ``,
+                ``,
+                ``,
+
+            ];
+        };
+
+        function totalclose() {
+            return [
+                `Closing Balance: ${data[data.length - 1].OpeningBalance}`,
+                "",
+                "Total",
+                ``,
+                ``,
+                ``,
+                ``,
+                ``,
+                ``,
+
             ];
         };
 
 
-        if (Gst === 0) { Gst = element.GSTPercentage };
-        let aa = { TotalCGst: 0, totalSGst: 0 }
-        if (data["tableTot"] === undefined) { data["tableTot"] = aa }
-     
-        else {
-            // returnArr.push(totalrow());
+        // if (Gst === 0) { Gst = element.GSTPercentage };
+        // let aa = { TotalCGst: 0, totalSGst: 0 }
+        // if (data["tableTot"] === undefined) { data["tableTot"] = aa }
+
+        // else {
+        //     // returnArr.push(totalrow());
+        // if (key === 0) {
+        //     returnArr.push(totalopen());
+        // }
+        if (key !== data.length - 1) {
             returnArr.push(tableitemRow);
-            data["tableTot"] = totalLots()
+            totalLots()
         }
-        if (key === InvoiceItems.length - 1) {
+
+        // if (key === data.length - 1) {
+        //     returnArr.push(totalclose())
+
+        // }
+
+        // }
+        if (key === data.length - 2) {
             returnArr.push(totalrow());
         }
     })
     return returnArr;
 }
-export const ReportFotterColumns = [
-    "SGST",
-    "CGST", "Quantity",
-    "GST % ",
-    "TaxbleAmt.", "IGST", "Total Amt"
-];
+
 
 export const ReportHederRows = (data) => {
+
+    const UserDetails = loginUserDetails()
     var reportArray = [
-        [`${data.CustomerName}`, ,`Current Time: ${data.Time}`],
-        [`maharashtra`, , `From Date:  ${data.InvoiceDate}`],
-        [`FSSAI :f23dfxxxxxwe55`, ,`To Date:      ${data.Todate}`  ],
-        // [,,`INR NO :${data.FullInvoiceNumber}`]
+        [`                   ${UserDetails.PartyName}`, `              : ${data.Period.ItemName}`,],
+        [`             `, `                    ${data.Period.FromDate}`,],
+        [`                  `, `                ${data.Period.ToDate}`,],
     ]
     return reportArray;
 }
