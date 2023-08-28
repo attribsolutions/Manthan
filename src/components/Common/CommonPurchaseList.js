@@ -7,7 +7,7 @@ import {
   BreadcrumbShowCountlabel,
   CommonBreadcrumbDetails,
 } from "../../store/actions";
-import { breadcrumbReturnFunc, metaTagLabel } from "./CommonFunction";
+import { amountCommaSeparateFunc, breadcrumbReturnFunc, metaTagLabel } from "./CommonFunction";
 import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
@@ -64,7 +64,8 @@ const CommonPurchaseList = (props) => {
     HeaderContent = () => {
       return null;
     },
-    selectCheckParams = { isShow: false }
+    selectCheckParams = { isShow: false },
+    totalAmountShow = false,
   } = props;
 
   const { PageFieldMaster = [] } = { ...pageField };
@@ -331,22 +332,25 @@ const CommonPurchaseList = (props) => {
                 keyField={"id"}
                 data={tableProps}
                 columns={tableColumns}
-
-                responsive
-                bootstrap4
-                bordered={false}
-                selectRow={(selectCheckParams.isShow) ?
-                  {
-                    rowSelected: rowSelected(),
-                    nonSelected: nonSelectedRow(),
-                    ...selectCheckParams
-                  }
-
+                selectRow={selectCheckParams.isShow ?
+                  selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
                   : undefined}
                 defaultSorted={defaultSorted}
                 updatedRowBlinkId={updatedRowBlinkId}
-                onDataSizeChange={({ dataCount }) => {
-                  dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count:${dataCount}`));
+                onDataSizeChange={({ dataCount, filteredData = [] }) => {
+
+                  if (totalAmountShow === true) {
+                    let totalAmount = filteredData.reduce((total, item) => {
+                      return total + Number(item.recordsAmountTotal) || 0;
+
+                    }, 0);
+                    let commaSeparateAmount = amountCommaSeparateFunc(totalAmount);
+
+                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+                  }
+                  else {
+                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                  }
                 }}
                 paginationEnabled={true}
                 noDataIndication={
