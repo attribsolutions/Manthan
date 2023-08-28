@@ -28,7 +28,7 @@ export async function isAlertFunc(type, Msg) {
 }
 
 const CommonPurchaseList = (props) => {
-
+  
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -266,6 +266,7 @@ const CommonPurchaseList = (props) => {
   }
   const lastColumn = () => {  // ======================== for List Page Action Button ================================
     if (!(pageMode === mode.modeSTPsave)) {
+
       return listPageActionsButtonFunc({
         ...props, dispatch, history, userAccState,
         editActionFun: editId,

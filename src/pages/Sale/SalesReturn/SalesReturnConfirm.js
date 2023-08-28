@@ -76,13 +76,23 @@ const ViewDetails_Modal = () => {
         {
             text: "Item Name",
             dataField: "ItemName",
+            formatter: (value, row, k) => (
+                <>
+                    <div >{`${(row.ItemName)}`}</div>
+                    <div >{`${row.primarySource}`}</div>
+                </>
+            )
+
+
         },
         {
             text: "Quantity",
             dataField: "Quantity",
             formatter: (value, row, k) => {
 
-                return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
+                <div>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
+
+
             }
         },
         {
