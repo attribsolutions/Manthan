@@ -13,13 +13,16 @@ export const pageBorder = (doc) => {
 }
 
 export const pageHeder = (doc, data) => {
+    
     doc.setDrawColor(0, 0, 0);
     doc.setFont('Arial')
     doc.setFontSize(18)
     doc.text(`Chitale Bandhu Mithalwale`, 300, 45, 'center')
     doc.setFontSize(12)
     doc.setFont(undefined, 'bold')
-    doc.text(`Chitale Bandhu Mithalwale`, 300, 65, 'center')
+    doc.text(`Claim ID : ${data.Period.ClaimID}`, 450, 40)
+    doc.text(`${data.Period.PartyName}`, 300, 65, 'center')
+
     doc.setFontSize(10)
     doc.text(`Company wise Budget Report period ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `, 300, 75, 'center')
     doc.text(`Expiry From Retailer(Approved/NonApproved)`, 300, 85, 'center')
@@ -34,7 +37,7 @@ export const tableBody = (doc, data) => {
         Object.keys(index1).forEach((index2) => {
             doc.text(`${index2}`, 300, (tableStartY - 5), 'center')
 
-            
+
             const options = {
 
                 didParseCell: (data1) => {
@@ -154,6 +157,10 @@ export const tableBody = (doc, data) => {
                         columnWidth: 55,
                         halign: 'right',
                     },
+                    8: {
+                        columnWidth: 55,
+                        halign: 'right',
+                    },
                 },
                 startY: tableStartY,
             }
@@ -210,7 +217,7 @@ export const tableBody = (doc, data) => {
         columnStyles: {
 
             0: {
-                columnWidth: 130,
+                columnWidth: 125,
                 halign: 'left',
 
             },
@@ -219,31 +226,31 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             2: {
-                columnWidth: 50,
+                columnWidth: 70,
                 halign: 'right',
             },
             3: {
-                columnWidth: 50,
+                columnWidth: 55,
                 halign: 'right',
             },
             4: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             5: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             6: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             7: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             8: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
         },
@@ -267,4 +274,3 @@ export const pageFooter = (doc, data) => {
     }
 }
 
-// original

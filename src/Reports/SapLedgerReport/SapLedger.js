@@ -25,7 +25,7 @@ import { SapLedger_Go_Button_API, SapLedger_Go_Button_API_Success } from "../../
 import { C_Button, Go_Button } from "../../components/Common/CommonButton";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 import { async } from "q";
 
 const SapLedger = (props) => {
@@ -148,7 +148,7 @@ const SapLedger = (props) => {
             if ((gobuttonReduxData.Status === true) && (gobuttonReduxData.StatusCode === 200)) {
                 setBtnMode(0); // Reset button mode
                 if (btnMode === 2) {
-                    ExcelDownloadFunc({      // Download CSV
+                    ReportComponent({      // Download CSV
                         pageField,
                         excelData: gobuttonReduxData.tableData,
                         excelFileName: "Sap Ledger Report"

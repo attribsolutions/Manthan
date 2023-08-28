@@ -13,7 +13,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId } from "../../routes/index"
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
-import { ExcelDownloadFunc } from "../ExcelDownloadFunc";
+import { ReportComponent } from "../ReportComponent";
 import CustomTable from "../../CustomTable2";
 
 const StockReport = (props) => {
@@ -84,7 +84,7 @@ const StockReport = (props) => {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 dispatch(stockReport_GoButton_API_Success([])); // Reset goButtonData
                 if (btnMode === 2) {
-                    ExcelDownloadFunc({      // Download CSV
+                    ReportComponent({      // Download CSV
                         pageField,
                         excelData: goButtonData.Data,
                         excelFileName: "Current_Stock_Report"

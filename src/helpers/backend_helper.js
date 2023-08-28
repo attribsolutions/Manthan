@@ -619,6 +619,11 @@ export const PartyLedgerReport_API = ({ jsonBody }) => post(url.PARTY_LEDGER, js
 export const ClaimSummary_API = ({ jsonBody }) => post(url.CLAIM_SUMMARY, jsonBody)//  postapi
 export const MasterClaimSummary_API = ({ jsonBody }) => post(url.MASTER_CLAIM_SUMMARY, jsonBody)//  postapi
 export const MasterClaimCreate_API = ({ jsonBody }) => post(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
+export const ClaimList_API = ({ jsonBody }) => post(url.CLAIM_LIST, jsonBody)//  postapi
+
+export const ItemRegister_API = ({ jsonBody }) => post(url.ITEM_REGISTER, jsonBody)//  postapi
+
+
 
 export const delete_Claim_API = ({ jsonBody }) => delwithPostBody(url.MASTER_CLAIM_CREATE, jsonBody)//  postapi
 
@@ -661,6 +666,10 @@ export const DeleteInvoiceDataExport_GoBtn_API = ({ jsonBody }) => post(url.DELE
 export const ReturnReport_API = ({ jsonBody }) => post(url.RETURN_REPORT, jsonBody)//Go button api
 
 
+// Item Sale Report Go button API
+export const ItemSaleReport_GoBtn_API = ({ jsonBody }) => post(url.ITEM_SALE_REPORT_GO_BUTTON, jsonBody)//Go button api
+export const SupplierDropdownApi = (employeeID, channelFromID) => get(`${url.SUPPLIER_API}/${employeeID}/${channelFromID}`)// Party Setting api
+export const ItemsList_On_Group_And_Subgroup_API = (jsonBody) => post(url.ITEM_LIST_API, jsonBody)
 
 export {
   getLoggedInUser,

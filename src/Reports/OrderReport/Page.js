@@ -14,6 +14,7 @@ var pageHeder = function (doc, data) {
 };
 
 function reportBody(doc, data) {
+    
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
     if (isIGST) {
         style.tableBodyWithIGST(doc, data);
