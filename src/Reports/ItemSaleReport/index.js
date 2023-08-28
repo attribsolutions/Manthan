@@ -10,10 +10,10 @@ import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getGroupList, getItemList, getSubGroupList, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown } from "../../store/actions";
-import { GetRoutesList } from "../../store/Administrator/RoutesRedux/actions";
+import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getGroupList, getItemList, getSubGroupList, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from "../../store/actions";
+import { GetRoutesList, GetRoutesListSuccess } from "../../store/Administrator/RoutesRedux/actions";
 import { getPartyTypelist } from "../../store/Administrator/PartyTypeRedux/action";
-import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success } from "../../store/Report/ItemSaleReport/action";
+import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success, Items_On_Group_And_Subgroup_API, SupplierOnPartyType_API, SupplierOnPartyType_API_Success } from "../../store/Report/ItemSaleReport/action";
 import "../ItemSaleReport/ItemSaleCSS.scss";
 
 const defaultTableColumns = [
@@ -122,19 +122,21 @@ const ItemSaleReport = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [hederFilters, setHederFilters] = useState({
         fromdate: currentDate_ymd,
-        todate: currentDate_ymd, venderSelect: { value: '', label: "All" }
+        todate: currentDate_ymd,
     })
 
-    const [channelFromSelect, setchannelFromSelect] = useState({ value: "", label: "All" });
+    const [channelFromSelect, setChannelFromSelect] = useState({ value: 0, label: "All" });
     const [channelToSelect, setChannelToSelect] = useState({ value: "", label: "All" });
     const [routeSelect, setRouteSelect] = useState({ value: "", label: "All" });
     const [supplierSelect, setSupplierSelect] = useState({ value: "", label: "All" });
     const [customerSelect, setCustomerSelect] = useState({ value: "", label: "All" });
     const [unitDropdown, setUnitDropdown] = useState("");
     const [ItemNameSelect, setItemNameSelect] = useState({ value: "", label: "All" });
-    const [productSelect, setProductSelect] = useState({ value: "", label: "All" });
-    const [subProductSelect, setSubProductSelect] = useState({ value: "", label: "All" });
+    const [productSelect, setProductSelect] = useState({ value: 0, label: "All" });
+    const [subProductSelect, setSubProductSelect] = useState({ value: 0, label: "All" });
+
     const [SubProductOptions, setSubProductOptions] = useState([]);
+    const [supplierOptions, setSupplierOptions] = useState([]);
 
     const [customerCheckbox, setCustomerCheckbox] = useState(false);
     const [routeCheckbox, setRouteCheckbox] = useState(false);
@@ -168,12 +170,18 @@ const ItemSaleReport = (props) => {
         productDropdown,
         subProductLoading,
         subProductDropdown,
-        getSubProductbyProduct } = useSelector(
+        getSubProductbyProduct,
+        supplierListLoading,
+        supplierListOnPartyType } = useSelector(
             (state) => ({
                 goBtnLoading: state.ItemSaleReportReducer.goBtnLoading,
                 ItemSaleReportGobtn: state.ItemSaleReportReducer.ItemSaleReportGobtn,
+
                 supplierLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
                 supplier: state.CommonPartyDropdownReducer.commonPartyDropdown,
+
+                supplierListLoading: state.ItemSaleReportReducer.supplierListLoading,
+                supplierListOnPartyType: state.ItemSaleReportReducer.supplierList,
 
                 RoutesList: state.RoutesReducer.RoutesList,
                 routesDropLoading: state.RoutesReducer.goBtnLoading,
@@ -183,8 +191,8 @@ const ItemSaleReport = (props) => {
                 customerDropdown: state.CommonAPI_Reducer.vendorSupplierCustomer,
                 customerDropLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
 
-                ItemDropdownloading: state.ItemMastersReducer.loading,
-                ItemNameList: state.ItemMastersReducer.ItemList,
+                ItemDropdownloading: state.ItemSaleReportReducer.itemListLoading,
+                ItemNameList: state.ItemSaleReportReducer.itemList,
 
                 BaseUnit: state.ItemMastersReducer.BaseUnit,
 
@@ -199,7 +207,7 @@ const ItemSaleReport = (props) => {
                 pageField: state.CommonPageFieldReducer.pageField
             })
         );
-    const { fromdate, todate, venderSelect } = hederFilters;
+    const { fromdate, todate, } = hederFilters;
 
     // const Data = [
     //     {
@@ -363,7 +371,7 @@ const ItemSaleReport = (props) => {
         dispatch(getGroupList());
         dispatch(getSubGroupList())
         dispatch(getBaseUnit_ForDropDown());
-        dispatch(getItemList());
+        dispatch(Items_On_Group_And_Subgroup_API({ "Group": 0, "SubGroup": 0 }));
         dispatch(BreadcrumbShowCountlabel(`${"Amount"} :${0}`))
         return () => {
             dispatch(commonPageFieldSuccess(null));
@@ -387,7 +395,7 @@ const ItemSaleReport = (props) => {
     useEffect(() => {
 
         let SubProduct = []
-        if (productSelect.value === '') {
+        if (productSelect.value === 0) {
             SubProduct = subProductDropdown.map((i) => ({
                 value: i.id,
                 label: i.Name,
@@ -399,21 +407,34 @@ const ItemSaleReport = (props) => {
             }))
         }
         SubProduct.unshift({
-            value: "",
+            value: 0,
             label: "All"
         });
         setSubProductOptions(SubProduct)
 
     }, [productSelect, subProductDropdown, getSubProductbyProduct])
 
-    const supplierDropdownOptions = supplier.map((data) => ({
-        value: data.id,
-        label: data.Name,
-    }))
-    supplierDropdownOptions.unshift({
-        value: "",
-        label: "All"
-    });
+    useEffect(() => {
+
+        let supplierOption = []
+        if (channelFromSelect.value === 0) {
+            supplierOption = supplier.map((i) => ({
+                value: i.id,
+                label: i.Name,
+            }))
+        } else {
+            supplierOption = supplierListOnPartyType.map((i) => ({
+                value: i.id,
+                label: i.Name,
+            }))
+        }
+        supplierOption.unshift({
+            value: '',
+            label: "All"
+        });
+        setSupplierOptions(supplierOption)
+
+    }, [channelFromSelect, supplier, supplierListOnPartyType])
 
     const customerOptions = customerDropdown.map((i) => ({
         value: i.id,
@@ -429,7 +450,7 @@ const ItemSaleReport = (props) => {
         label: i.Name,
     }))
     ProductOptions.unshift({
-        value: "",
+        value: 0,
         label: "All"
     });
 
@@ -442,13 +463,13 @@ const ItemSaleReport = (props) => {
         label: "All"
     });
 
-    const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
+    const ChannelDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
         label: index.Name,
         division: index.IsDivision
     }));
-    PartyTypeDropdown_Options.unshift({
-        value: "",
+    ChannelDropdown_Options.unshift({
+        value: 0,
         label: "All"
     });
 
@@ -508,18 +529,30 @@ const ItemSaleReport = (props) => {
         setRouteSelect(event)
     }
 
+    function ChannelFromDropdown_Onchange(e) {
+
+        setChannelFromSelect(e)
+        setSupplierSelect({ value: "", label: "All" })
+        dispatch(SupplierOnPartyType_API({ employeeID: _cfunc.loginEmployeeID(), channelFromID: e.value }))
+    }
+
     function SupplierOnChange(event) {
+
         setSupplierSelect(event)
-        const jsonBody = JSON.stringify({
-            CompanyID: _cfunc.loginCompanyID(),
-            PartyID: event.value,
-        });
-        dispatch(GetRoutesList(jsonBody));
-        dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, PartyID: event.value, RouteID: "" }))
         setRouteSelect({ value: "", label: "All" })
         setCustomerSelect({ value: "", label: "All" })
         setTableData([]);
         setInitaialBaseData([]);
+        dispatch(GetVenderSupplierCustomerSuccess([]))
+        dispatch(GetRoutesListSuccess([]))
+        if (event.value > 0) {
+            dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, PartyID: event.value, RouteID: "" }))
+            const jsonBody = JSON.stringify({
+                CompanyID: _cfunc.loginCompanyID(),
+                PartyID: event.value,
+            });
+            dispatch(GetRoutesList(jsonBody));
+        }
     }
 
     function fromdateOnchange(e, date) {
@@ -539,9 +572,20 @@ const ItemSaleReport = (props) => {
     }
 
     function ProductOnchange(e) {
+
         setProductSelect(e)
         dispatch(get_Sub_Group_By_Group_ForDropDown(e.value))
-        setSubProductSelect({ value: "", label: "All" })
+        dispatch(Items_On_Group_And_Subgroup_API({ "Group": e.value, "SubGroup": 0 }))
+        setSubProductSelect({ value: 0, label: "All" })
+        setItemNameSelect({ value: "", label: "All" })
+        dispatch(get_Sub_Group_By_Group_ForDropDown_Success([]))
+    }
+
+    function Sub_ProductOnChange(e) {
+        setSubProductSelect(e)
+        dispatch(Items_On_Group_And_Subgroup_API({ "Group": 0, "SubGroup": e.value }))
+        setItemNameSelect({ value: "", label: "All" })
+
     }
 
     function goButtonHandler() {
@@ -549,7 +593,7 @@ const ItemSaleReport = (props) => {
             const jsonBody = JSON.stringify({
                 "FromDate": fromdate,
                 "ToDate": todate,
-                "PartyType": "",
+                "PartyType": supplierSelect.value > 0 ? "" : channelFromSelect.value,
                 "Party": supplierSelect.value
             });
             dispatch(ItemSaleGoButton_API({ jsonBody, btnId: url.ITEM_SALE_REPORT }))
@@ -731,8 +775,8 @@ const ItemSaleReport = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                options={PartyTypeDropdown_Options}
-                                                onChange={(e) => { setchannelFromSelect(e) }}
+                                                options={ChannelDropdown_Options}
+                                                onChange={(e) => { ChannelFromDropdown_Onchange(e) }}
 
                                             />
                                         </Col>
@@ -758,7 +802,7 @@ const ItemSaleReport = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                options={supplierDropdownOptions}
+                                                options={supplierOptions}
                                                 onChange={SupplierOnChange}
                                             />
                                         </Col>
@@ -799,7 +843,7 @@ const ItemSaleReport = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                options={PartyTypeDropdown_Options}
+                                                options={ChannelDropdown_Options}
                                                 onChange={(e) => { setChannelToSelect(e) }}
                                             />
                                         </Col>
@@ -943,7 +987,7 @@ const ItemSaleReport = (props) => {
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
                                         options={SubProductOptions}
-                                        onChange={(e) => { setSubProductSelect(e) }}
+                                        onChange={(e) => { Sub_ProductOnChange(e) }}
                                     />
                                 </Col>
                             </FormGroup>

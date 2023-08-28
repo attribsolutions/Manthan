@@ -52,7 +52,7 @@ export const Rows = (data) => {
 
     const { OrderItem = [] } = data
     let hasHedRow = []
-    debugger
+    
     const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
     console.log(grouped)
     grouped.forEach(i => {
