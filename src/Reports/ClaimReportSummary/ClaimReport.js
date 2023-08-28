@@ -183,7 +183,7 @@ const ClaimSummary = (props) => {
 
     function MonthAndYearOnchange(e, InitialDate) {
         dispatch(claimList_API_Success([]))
-        debugger
+        
         let selectedMonth = ""
         if (InitialDate) {
             selectedMonth = e
@@ -258,7 +258,7 @@ const ClaimSummary = (props) => {
             formatter: (value, row, key, { btnLoading, selectedDate }) => {
                 //selected date push to row to pass json accurate selectdate value format
                 row["selectedDate"] = selectedDate
-                debugger
+                
                 return (
                     <>
                         <div className=" d-flex justify-content-start  gap-2" >

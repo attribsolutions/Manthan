@@ -135,7 +135,7 @@ export const RowsWithCGST_SGST = (data) => {
         if (data.SettingData.HSNCodeDigit === "3") {
             HSNcodes = element.HSNCode.slice(0, 8);
         }
-        debugger
+        
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,

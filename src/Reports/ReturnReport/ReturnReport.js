@@ -42,7 +42,7 @@ const ReturnReport = (props) => {
         pageField: state.CommonPageFieldReducer.pageField
     })
     );
-    debugger
+    
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
     // Featch Modules List data  First Rendering
