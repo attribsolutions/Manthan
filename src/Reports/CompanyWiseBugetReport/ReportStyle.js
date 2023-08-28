@@ -13,7 +13,7 @@ export const pageBorder = (doc) => {
 }
 
 export const pageHeder = (doc, data) => {
-    debugger
+    
     doc.setDrawColor(0, 0, 0);
     doc.setFont('Arial')
     doc.setFontSize(18)

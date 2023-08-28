@@ -64,7 +64,7 @@ export const Rows = (data) => {
     let GSTPercentage = 0
 
     ClaimSummaryItemDetails.forEach((element, key) => {
-        debugger
+        
         const TotalGST = (Number(element.CGST)) + (Number(element.SGST))
         const tableitemRow = [
             `${date_dmy_func(element.ReturnDate)}`,

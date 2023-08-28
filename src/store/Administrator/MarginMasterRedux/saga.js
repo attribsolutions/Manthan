@@ -70,7 +70,7 @@ function* goButton_Margin_GenFunc({ data }) {
 
 function* delete_Margin_Master_table_GenFunc({ id }) {
   try {
-    debugger
+    
     const response = yield call(Margin_MasterPage_delete_API, id);
     response["deletedId"] = id
     yield put(deleteIdForMarginMasterSuccess(response));
