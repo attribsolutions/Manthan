@@ -1,4 +1,4 @@
-import { loginUserDetails } from "../../components/Common/CommonFunction";
+import { convertOnlyTimefunc, date_dmy_func, loginUserDetails } from "../../components/Common/CommonFunction";
 
 export const columns = [
     "Date",
@@ -100,15 +100,15 @@ export const Rows = (data) => {
 
 
         const tableitemRow = [
-            element.TransactionDate,
+            `${date_dmy_func(element.TransactionDate)} ${convertOnlyTimefunc(element.CreatedOn)}`,
             element.Name,
             element.TransactionNumber,
-            (element.Sequence === 1) ? GRN : 0,
-            (element.Sequence === 2) ? SalesReturn : 0,
-            (element.Sequence === 3) ? Stock : 0,
-            (element.Sequence === 4) ? Sale : 0,
-            (element.Sequence === 5) ? PurchaseReturn : 0,
-            element.TransactionNumber === "STOCK" ? RowStock : BalanceAmount
+            (element.Sequence === 1) ? (Number(GRN).toFixed(2)) : "0.00",
+            (element.Sequence === 2) ? (Number(SalesReturn).toFixed(2)) : "0.00",
+            (element.Sequence === 3) ? (Number(Stock).toFixed(2)) : "0.00",
+            (element.Sequence === 4) ? (Number(Sale).toFixed(2)) : "0.00",
+            (element.Sequence === 5) ? (Number(PurchaseReturn).toFixed(2)) : "0.00",
+            element.TransactionNumber === "STOCK" ? (Number(RowStock).toFixed(2)) : (Number(BalanceAmount).toFixed(2))
         ];
 
         function totalLots() {
@@ -205,8 +205,8 @@ export const ReportHederRows = (data) => {
     const UserDetails = loginUserDetails()
     var reportArray = [
         [`                   ${UserDetails.PartyName}`, `              : ${data.Period.ItemName}`,],
-        [`             `, `                    ${data.Period.FromDate}`,],
-        [`                  `, `                ${data.Period.ToDate}`,],
+        [`                       ${date_dmy_func(data.Period.FromDate)}`, `                    ${date_dmy_func(data.Period.ToDate)}`,],
+        // [`                  `, ,],
     ]
     return reportArray;
 }

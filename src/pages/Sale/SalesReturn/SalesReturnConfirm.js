@@ -18,7 +18,7 @@ const ViewDetails_Modal = () => {
     const { ReturnFinalApprovalRole = '' } = loginSystemSetting()
 
     const [modal_view, setModal_view] = useState(false);
-    const [tableArray, setTableArray] = useState([]);
+    const [tableArray, setTableArray] = useState({});
 
     const { viewData_redux = [], ApprovrMsg, saveBtnloading } = useSelector((state) => ({
         viewData_redux: state.SalesReturnReducer.confirmBtnData, // modify Redux State
@@ -52,6 +52,9 @@ const ViewDetails_Modal = () => {
 
         }
     }, [ApprovrMsg])
+    if (Object.keys(tableArray).length > 0) {
+        tableArray.ReturnItems.sort((a, b) => b.id - a.id);
+    }
 
     function modalToggleFunc() {
         setModal_view(false);
@@ -73,6 +76,7 @@ const ViewDetails_Modal = () => {
     }
 
     const pagesListColumns = [
+
         {
             text: "Item Name",
             dataField: "ItemName",
@@ -88,12 +92,11 @@ const ViewDetails_Modal = () => {
         {
             text: "Quantity",
             dataField: "Quantity",
-            formatter: (value, row, k) => {
-
-                <div>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
-
-
-            }
+            formatter: (value, row, k) => (
+                <>
+                    <div>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
+                </>
+            )
         },
         {
             text: "Basic Rate",
