@@ -5,9 +5,9 @@ import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, url } from "../../routes/index"
+import { mode, pageId, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
+import { commonPageField, commonPageFieldSuccess, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
@@ -72,8 +72,11 @@ const ClaimSummaryMaster = (props) => {
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
+
+
     // userAccess useEffect
     useEffect(() => {
+        debugger
         let userAcc = null;
         let locationPath = location.pathname;
         if (hasShowModal) {
@@ -88,7 +91,12 @@ const ClaimSummaryMaster = (props) => {
         };
     }, [userAccess])
 
+
+
     useEffect(() => {
+        // const page_Id = pageId.CLAIM_SUMMARY_MASTER//changes
+        // dispatch(commonPageFieldSuccess(null));
+        // dispatch(commonPageField(page_Id))
         MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
         return () => {
             dispatch(claimList_API_Success([]))
@@ -133,13 +141,6 @@ const ClaimSummaryMaster = (props) => {
             return
         }
     }, [deleteMsg])
-
-    // useEffect(() => {
-    //     if ((ClaimListData.Status === true) && (ClaimListData.StatusCode === 200)) {
-    //         setisClaimList(true)
-    //     }
-    // }, [ClaimListData])
-
 
 
 

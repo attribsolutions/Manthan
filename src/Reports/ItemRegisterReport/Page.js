@@ -15,7 +15,7 @@ function reportBody(doc, data) {
     style.tableBody(doc, data);
 }
 function pageFooter(doc, data) {
-    // style.pageFooter(doc, data);
+    style.pageFooter(doc, data);
     // style.reportFooter(doc, data);
 }
 

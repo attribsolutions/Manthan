@@ -116,14 +116,18 @@ export const getCurrentMonthAndYear = () => {
   return `${year}-${month}`;
 }
 
-export const amountCommaSeparateFunc = (amount) => {
-  return Number(amount).toLocaleString('en-IN', {
-    // style: 'currency',
-    currency: 'INR',
-    // minimumFractionDigits: 2,
-    // maximumFractionDigits: 2,
-  });
-};
+// export const amountCommaSeparateFunc = (amount) => {
+//   return Number(amount).toLocaleString('en-IN', {
+//     // style: 'currency',
+//     currency: 'INR',
+//     // minimumFractionDigits: 2,
+//     // maximumFractionDigits: 2,
+//   });
+// };
+
+export function amountCommaSeparateFunc(x) {
+  return x.toString().split('.')[0].length > 3 ? x.toString().substring(0, x.toString().split('.')[0].length - 3).replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + x.toString().substring(x.toString().split('.')[0].length - 3) : x.toString();
+}
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
