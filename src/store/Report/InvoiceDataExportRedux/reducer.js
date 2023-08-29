@@ -9,6 +9,7 @@ const INIT_STATE = {
 }
 
 const InvoiceDataExportReducer = (state = INIT_STATE, action) => {
+    
     switch (action.type) {
 
         case POST_INVOICE_DATA_EXPORT_API:

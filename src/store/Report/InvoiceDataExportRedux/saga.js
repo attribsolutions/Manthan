@@ -12,11 +12,13 @@ import { InvoiceDataExport_GoBtn_API, DeleteInvoiceDataExport_GoBtn_API } from "
 import { date_dmy_func, trailingZeros } from "../../../components/Common/CommonFunction";
 
 function* InvoiceDataExport_Gen({ config }) {
+
     try {
         const response = yield call(InvoiceDataExport_GoBtn_API, config);
+        debugger
         response.Data["goBtnMode"] = config.goBtnMode;
 
-        const newResponse = response.Data.InvoiceExportSerializerDetails.map((i) => {
+        const newResponse = response.Data.map((i) => {
             // Convert quantity values to floats and format to remove trailing zeros
 
             i["QtyInNo"] = trailingZeros(i.QtyInNo);
