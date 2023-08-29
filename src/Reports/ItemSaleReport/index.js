@@ -58,18 +58,18 @@ const defaultTableColumns = [
         dataField: "ItemName",
     },
 
-    {
-        text: "	QtyInKg",
-        dataField: "QtyInKg",
-    },
-    {
-        text: "	QtyInNo",
-        dataField: "QtyInNo",
-    },
-    {
-        text: "	QtyInBox",
-        dataField: "QtyInBox",
-    },
+    // {
+    //     text: "	QtyInKg",
+    //     dataField: "QtyInKg",
+    // },
+    // {
+    //     text: "	QtyInNo",
+    //     dataField: "QtyInNo",
+    // },
+    // {
+    //     text: "	QtyInBox",
+    //     dataField: "QtyInBox",
+    // },
     {
         text: "	Rate",
         dataField: "Rate",
@@ -78,10 +78,10 @@ const defaultTableColumns = [
         text: "	BasicAmount",
         dataField: "BasicAmount",
     },
-    {
-        text: "	DiscountAmount",
-        dataField: "DiscountAmount",
-    },
+    // {
+    //     text: "	DiscountAmount",
+    //     dataField: "DiscountAmount",
+    // },
     {
         text: "	GSTPercentage",
         dataField: "GSTPercentage",
@@ -94,18 +94,18 @@ const defaultTableColumns = [
         text: "	Amount",
         dataField: "Amount",
     },
-    {
-        text: "	GrandTotal",
-        dataField: "GrandTotal",
-    },
-    {
-        text: "	RoundOffAmount",
-        dataField: "RoundOffAmount",
-    },
-    {
-        text: "	TCSAmount",
-        dataField: "TCSAmount",
-    },
+    // {
+    //     text: "	GrandTotal",
+    //     dataField: "GrandTotal",
+    // },
+    // {
+    //     text: "	RoundOffAmount",
+    //     dataField: "RoundOffAmount",
+    // },
+    // {
+    //     text: "	TCSAmount",
+    //     dataField: "TCSAmount",
+    // },
     {
         text: "	FullGRNNumber",
         dataField: "FullGRNNumber",
@@ -130,7 +130,7 @@ const ItemSaleReport = (props) => {
     const [routeSelect, setRouteSelect] = useState({ value: "", label: "All" });
     const [supplierSelect, setSupplierSelect] = useState({ value: 0, label: "All" });
     const [customerSelect, setCustomerSelect] = useState({ value: "", label: "All" });
-    const [unitDropdownSelect, setUnitDropdownSelect] = useState({ value: "", label: "No" });
+    const [unitDropdownSelect, setUnitDropdownSelect] = useState({ value: '', label: "select" });
     const [ItemNameSelect, setItemNameSelect] = useState({ value: "", label: "All" });
     const [productSelect, setProductSelect] = useState({ value: 0, label: "All" });
     const [subProductSelect, setSubProductSelect] = useState({ value: 0, label: "All" });
@@ -148,6 +148,8 @@ const ItemSaleReport = (props) => {
     const [channelFromCheckbox, setChannelFromCheckbox] = useState(false);
     const [supplierCheckbox, setSupplierCheckbox] = useState(false);
     const [quantityCheckbox, setQuantityCheckbox] = useState(false);
+    const [showAlsoSelect, setShowAlsoSelect] = useState([]);
+    // const [showAlsoSelect, setShowAlsoSelect] = useState([]);
 
     const [tableData, setTableData] = useState([]);
     const [initaialBaseData, setInitaialBaseData] = useState([]);
@@ -432,7 +434,7 @@ const ItemSaleReport = (props) => {
             }))
         }
         supplierOption.unshift({
-            value: '',
+            value: 0,
             label: "All"
         });
         setSupplierOptions(supplierOption)
@@ -512,9 +514,24 @@ const ItemSaleReport = (props) => {
             .map(index => ({ value: index.id, label: index.Name }))
     ];
 
-    const Unit_DropdownOptions = BaseUnit
-        .filter(data => ["No", "Kg", "Box"].includes(data.Name))
-        .map(data => ({ value: data.id, label: data.Name }));
+    // const Unit_DropdownOptions = BaseUnit
+    //     .filter(data => ["No", "Kg", "Box"].includes(data.Name))
+    //     .map(data => ({ value: data.id, label: data.Name }));
+
+    const Unit_DropdownOptions = [
+        {
+            value: '', label: "Select..."
+        },
+        {
+            value: 1, label: "QtyInNo"
+        },
+        {
+            value: 2, label: "QtyInKg"
+        },
+        {
+            value: 3, label: "QtyInBox"
+        },
+    ]
 
     function RouteOnChange(event) {
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, RouteID: event.value, PartyID: supplierSelect.value }))
@@ -593,79 +610,175 @@ const ItemSaleReport = (props) => {
         } catch (error) { _cfunc.CommonConsole(error) }
     }
 
+    function showAlsoOnChange(e) {
+        setShowAlsoSelect(e)
+    }
+
+    function CustomerOnChange(e) {
+        setCustomerSelect(e)
+    }
+
+    function change_ButtonHandler(e) {
+        dispatch(ItemSaleGoButton_API_Success([]));
+        setTableData([]);
+        setInitaialBaseData([]);
+        dispatch(BreadcrumbShowCountlabel(`${"Amount"} :${0}`))
+    }
+
     const sortData = (baseData = []) => {
 
-        // setTableData(filtered);
-
-        const checkboxOptions = [
-            {
-                textField: 'Customer',
-                fieldName: 'CustomerName',
-                checkboxState: customerCheckbox,
-                selectValue: customerSelect,
-            },
-            {
-                textField: 'Route',
-                fieldName: 'RouteName',
-                checkboxState: routeCheckbox,
-                selectValue: routeSelect,
-            },
-            {
-                textField: 'Channel To',
-                fieldName: 'SaleMadeTo',
-                checkboxState: channelToCheckbox,
-                selectValue: channelToSelect,
-            },
-            {
-                textField: 'Group',
-                fieldName: 'GroupName',
-                checkboxState: productCheckbox,
-                selectValue: productSelect,
-            },
-            {
-                textField: 'Sub-Group',
-                fieldName: 'SubGroupName',
-                checkboxState: subProductCheckbox,
-                selectValue: subProductSelect,
-            },
-            {
-                textField: 'ItemName',
-                fieldName: 'ItemName',
-                checkboxState: itemNameCheckbox,
-                selectValue: ItemNameSelect,
-            },
+        const sortedButtonArray = [
             {
                 textField: 'FromDate',
                 fieldName: 'InvoiceDate',
                 checkboxState: fromDateCheckbox,
                 selectValue: { value: "", label: "All" },
+                addRow: false,
+                sequence: 1
             },
             {
                 textField: 'Channel From',
                 fieldName: 'SaleMadeFrom',
                 checkboxState: channelFromCheckbox,
                 selectValue: { value: "", label: "All" },
+                addRow: false,
+                sequence: 2
+            },
+            {
+                textField: 'Channel To',
+                fieldName: 'SaleMadeTo',
+                checkboxState: channelToCheckbox,
+                selectValue: channelToSelect,
+                addRow: false,
+                sequence: 3
+            },
+            {
+                textField: 'FullInvoiceNumber',
+                fieldName: 'FullInvoiceNumber',
+                checkboxState: showAlsoSelect.some(item => item.value === 1) ? true : false,
+                selectValue: showAlsoSelect,
+                addRow: false,
+                sequence: 4
             },
             {
                 textField: 'Supplier',
                 fieldName: 'SupplierName',
                 checkboxState: supplierCheckbox,
                 selectValue: { value: "", label: "All" },
+                addRow: false,
+                sequence: 5
             },
-            // {
-            //     textField: 'QtyInNo',
-            //     fieldName: 'QtyInNo',
-            //     checkboxState: quantityCheckbox,
-            //     selectValue: unitDropdownSelect,
-            // },
-
-
-            // Add more checkbox options here
+            {
+                textField: 'Route',
+                fieldName: 'RouteName',
+                checkboxState: routeCheckbox,
+                selectValue: routeSelect,
+                addRow: false,
+                sequence: 6
+            },
+            {
+                textField: 'Customer',
+                fieldName: 'CustomerName',
+                checkboxState: customerCheckbox,
+                selectValue: customerSelect,
+                addRow: false,
+                sequence: 7
+            },
+            {
+                textField: 'Product',
+                fieldName: 'GroupName',
+                checkboxState: productCheckbox,
+                selectValue: productSelect,
+                addRow: false,
+                sequence: 8
+            },
+            {
+                textField: 'Sub Product',
+                fieldName: 'SubGroupName',
+                checkboxState: subProductCheckbox,
+                selectValue: subProductSelect,
+                addRow: false,
+                sequence: 9
+            },
+            {
+                textField: 'ItemName',
+                fieldName: 'ItemName',
+                checkboxState: itemNameCheckbox,
+                selectValue: ItemNameSelect,
+                addRow: false,
+                sequence: 10
+            },
+            {
+                textField: 'GRNID',
+                fieldName: 'FullGRNNumber',
+                checkboxState: showAlsoSelect.some(item => item.value === 3) ? true : false,
+                selectValue: showAlsoSelect,
+                addRow: false,
+                sequence: 11
+            },
+            {
+                textField: 'QtyInNo',
+                fieldName: 'QtyInNo',
+                checkboxState: false,
+                selectValue: { value: "", label: "All" },
+                addRow: unitDropdownSelect.value === 1 ? true : false,
+                sequence: 11
+            },
+            {
+                textField: 'QtyInKg',
+                fieldName: 'QtyInKg',
+                checkboxState: false,
+                selectValue: { value: "", label: "All" },
+                addRow: unitDropdownSelect.value === 2 ? true : false,
+                sequence: 12
+            },
+            {
+                textField: 'QtyInBox',
+                fieldName: 'QtyInBox',
+                checkboxState: false,
+                selectValue: { value: "", label: "All" },
+                addRow: unitDropdownSelect.value === 3 ? true : false,
+                sequence: 13
+            },
+            {
+                textField: 'InvoiceGrandTotal',
+                fieldName: 'GrandTotal',
+                checkboxState: false,
+                selectValue: showAlsoSelect,
+                addRow: showAlsoSelect.some(item => item.value === 5) ? true : false,
+                sequence: 12
+            },
+            {
+                textField: 'DiscountInRS',
+                fieldName: 'DiscountAmount',
+                checkboxState: false,
+                selectValue: showAlsoSelect,
+                addRow: showAlsoSelect.some(item => item.value === 4) ? true : false,
+                sequence: 13
+            },
+            {
+                textField: 'RoundOffAmount',
+                fieldName: 'RoundOffAmount',
+                checkboxState: false,
+                selectValue: showAlsoSelect,
+                addRow: showAlsoSelect.some(item => item.value === 6) ? true : false,
+                sequence: 14
+            },
+            {
+                textField: 'TCSAmount',
+                fieldName: 'TCSAmount',
+                checkboxState: false,
+                selectValue: showAlsoSelect,
+                addRow: showAlsoSelect.some(item => item.value === 7) ? true : false,
+                sequence: 15
+            }
         ];
-        debugger
-        let manupulatedData = baseData;
 
-        const filterOptionData = checkboxOptions.filter(option => (option.selectValue.value > 0));
+        let manupulatedData = baseData;
+        let tableColumns = [];
+
+        // dropdown value selected filter in baseData
+        const filterOptionData = sortedButtonArray.filter(option => (option.selectValue.value > 0));
 
         if (filterOptionData.length > 0) {
             manupulatedData = baseData.filter(item => {
@@ -677,35 +790,56 @@ const ItemSaleReport = (props) => {
         }
 
         // Apply grouping and filtering logic for each checkbox option
-        if (checkboxOptions.some(option => option.checkboxState)) {
+        if (sortedButtonArray.some(option => option.checkboxState || option.addRow)) {
 
-            const newSelectedColumns = checkboxOptions
-                .filter(option => option.checkboxState)
-                .map(option => ({ text: option.textField, dataField: option.fieldName }));
+            if (sortedButtonArray.some(option => option.addRow)) {
+                // Always include the default "Amount" column
+                tableColumns.push(sortedButtonArray
+                    .filter(option => option.addRow)
+                    .map(option => ({ text: option.textField, dataField: option.fieldName, sequence: option.sequence })));
+            }
 
-            // Always include the default "Amount" column
-            newSelectedColumns.push({ text: "Amount", dataField: "Amount" });
-            setSelectedColumns(newSelectedColumns);
+            if (sortedButtonArray.some(option => option.checkboxState)) {
 
-            const groupedData = {};
+                tableColumns.push(sortedButtonArray
+                    .filter(option => option.checkboxState)
+                    .map(option => ({ text: option.textField, dataField: option.fieldName, sequence: option.sequence })));
 
-            manupulatedData.forEach(item => {
-                const groupValues = checkboxOptions
-                    .filter(option => option.checkboxState && option.fieldName !== 'Amount')
-                    .map(option => item[option.fieldName]);
+                // Always include the default "Amount" column
+                tableColumns.push({ text: "Amount", dataField: "Amount", sequence: 19 });
 
-                const groupKey = groupValues.join('-');
-                if (!groupedData[groupKey]) {
-                    groupedData[groupKey] = {
-                        ...item,
-                        Amount: 0,
-                    };
+                const groupedData = {};
+
+                manupulatedData.forEach(item => {
+                    const groupValues = sortedButtonArray
+                        .filter(option => option.checkboxState && option.fieldName !== 'Amount')
+                        .map(option => item[option.fieldName]);
+
+                    const groupKey = groupValues.join('-');
+                    if (!groupedData[groupKey]) {
+                        groupedData[groupKey] = {
+                            ...item,
+                            Amount: 0,
+                        };
+                    }
+                    groupedData[groupKey].Amount += parseFloat(item.Amount);
+                    // Format Amount to have only two decimal places
+                    groupedData[groupKey].Amount = parseFloat(groupedData[groupKey].Amount.toFixed(2));
+                });
+                manupulatedData = Object.values(groupedData);
+            }
+
+            // tableColumns array convert in single array
+            const single_array = [];
+            tableColumns.forEach(item => {
+                if (Array.isArray(item)) {
+                    single_array.push(...item);
+                } else {
+                    single_array.push(item);
                 }
-                groupedData[groupKey].Amount += parseFloat(item.Amount);
-                // Format Amount to have only two decimal places
-                groupedData[groupKey].Amount = parseFloat(groupedData[groupKey].Amount.toFixed(2));
             });
-            manupulatedData = Object.values(groupedData);
+            single_array.sort((a, b) => a.sequence - b.sequence);
+            setSelectedColumns(single_array);
         }
         else {
             setSelectedColumns(defaultTableColumns);
@@ -716,16 +850,6 @@ const ItemSaleReport = (props) => {
             return sum + parseFloat(item.Amount);
         }, 0);
         dispatch(BreadcrumbShowCountlabel(`${"Amount"} :${(totalAmount).toFixed(2)}`))
-    }
-
-    function CustomerOnChange(e) {
-        setCustomerSelect(e)
-    }
-
-    function change_ButtonHandler(e) {
-        dispatch(ItemSaleGoButton_API_Success([]));
-        setTableData([]);
-        setInitaialBaseData([]);
     }
 
     return (
@@ -741,9 +865,19 @@ const ItemSaleReport = (props) => {
                                     <FormGroup className="mb-n3 row mt-1">
                                         <Input style={{ marginLeft: "5px", marginTop: "10px" }}
                                             className="p-1"
+                                            id="fromdate"
                                             type="checkbox"
+                                            // disabled={tableData.length > 0}
                                             checked={fromDateCheckbox}
-                                            onChange={(e) => { setFromDateCheckbox(e.target.checked) }}
+                                            // onChange={(e) => {
+                                            //     debugger
+                                            //     setFromDateCheckbox(e.target.checked)
+                                            // }}
+                                              onClick={(e) => {
+                                                debugger
+                                                setFromDateCheckbox(e.target.checked)
+                                            }}
+
                                         />
                                         <Label className="col-sm-3 p-2">FromDate</Label>
                                         <Col sm={6}>
@@ -776,6 +910,7 @@ const ItemSaleReport = (props) => {
                                         <Input style={{ marginLeft: "5px", marginTop: "10px" }}
                                             className="p-1"
                                             type="checkbox"
+                                            id="channelFrom"
                                             checked={channelFromCheckbox}
                                             onChange={(e) => { setChannelFromCheckbox(e.target.checked) }}
                                         />
@@ -804,6 +939,7 @@ const ItemSaleReport = (props) => {
                                         <Input style={{ marginLeft: "5px", marginTop: "10px" }}
                                             className="p-1"
                                             type="checkbox"
+                                            id="supplier"
                                             checked={supplierCheckbox}
                                             onChange={(e) => { setSupplierCheckbox(e.target.checked) }}
                                         />
@@ -928,10 +1064,8 @@ const ItemSaleReport = (props) => {
 
                                         <Col>
                                             <C_Select
-                                                // value={values.PartyName}         
+                                                value={showAlsoSelect}
                                                 isSearchable={true}
-                                                //  isLoading={partyLoading}       
-
                                                 isMulti={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -939,7 +1073,7 @@ const ItemSaleReport = (props) => {
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 options={checkboxOption}
-                                            // onChange={partySlectHandler}
+                                                onChange={showAlsoOnChange}
 
                                             />
                                         </Col>
@@ -1040,12 +1174,12 @@ const ItemSaleReport = (props) => {
 
                         <Col sm={3}>
                             <FormGroup className=" row mt-2">
-                                <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                {/* <Input style={{ marginLeft: "5px", marginTop: "10px" }}
                                     className="p-1"
                                     type="checkbox"
                                     checked={quantityCheckbox}
                                     onChange={(e) => { setQuantityCheckbox(e.target.checked) }}
-                                />
+                                /> */}
                                 <Label className="col-sm-4 p-2">Quantity</Label>
                                 <Col>
                                     <C_Select
