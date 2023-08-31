@@ -28,7 +28,7 @@ export async function isAlertFunc(type, Msg) {
 }
 
 const CommonPurchaseList = (props) => {
-  
+
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -345,7 +345,7 @@ const CommonPurchaseList = (props) => {
                       return total + Number(item.recordsAmountTotal) || 0;
 
                     }, 0);
-                    let commaSeparateAmount = amountCommaSeparateFunc(totalAmount);
+                    let commaSeparateAmount = amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
 
                     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
                   }

@@ -530,6 +530,9 @@ export const Invoice_1_Get_Filter_API = ({ filtersBody }) => post(url.INVOICE_1_
 export const Invoice_1_Delete_API = ({ deleteId }) => del(`${url.INVOICE_1_SAVE}/${deleteId}`)// delete api
 export const Invoice_1_Edit_API_Singel_Get = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}`)// delete api
 export const Update_Vehicle_Invoice_API = ({ Invoiceid, vehicleid }) => get(`${url.UPDATE_VEHICLE_INVOICE}/${Invoiceid}/${vehicleid}`)// Cancel_EwayBill
+export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SCM, jsonBody)// delete api
+
+
 
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 
