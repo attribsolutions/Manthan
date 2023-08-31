@@ -28,6 +28,7 @@ const printIconClass = "bx bx-printer font-size-16";
 const multiInvoiceIconClass = "fas fa-file-download";
 const updateIconClass = "mdi mdi-file-table-box-multiple font-size-16";
 const deleteIconClass = "mdi mdi-delete font-size-16";
+const sendToScmIconClass = "fas fa-share font-size-16";  //Icon Added For Invoice send to SCM Button In Invoice Listf
 const copyIconClass = "bx bxs-copy font-size-16";
 const orderApprovalIconClass = "bx bx-check-shield font-size-20";
 const uploadIconClass = "bx bx-upload font-size-14";
@@ -64,7 +65,7 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnName,
         makeBtnShow = false,
         oderAprovalBtnFunc,
-        isFormExtraData,
+        sendToScmBtnFunc,
     } = props;
 
     const { listBtnLoading } = props.reducers;
@@ -79,8 +80,8 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnFunc(arr, btnId);
     };
 
-    const renderButtonOnClick = async ({ rowData, btnmode, btnId, actionFunc, dispatchAction, isFormExtraData }) => {
-        debugger
+    const renderButtonOnClick = async ({ rowData, btnmode, btnId, actionFunc, dispatchAction, }) => {
+
         try {
             const config = {
                 editId: rowData.id,
@@ -129,7 +130,9 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     const renderActionButton = (__cell, rowData, __key, formatExtra) => {
-        const { listBtnLoading, isFormExtraData } = formatExtra;
+
+
+        const { listBtnLoading } = formatExtra;
         const {
             forceEditHide,
             forceDeleteHide,
@@ -137,11 +140,18 @@ export const listPageActionsButtonFunc = (props) => {
             forceMakeBtnHide,
             IsRecordDeleted
         } = rowData;
-
         rowData.hasSelect = false;
 
-        const hasRole = (role) => userAccState[role];
+        //Code For Button Visible only for Login Those Party Type Id match in Comaseprate String of rowData.isSendToScm
+        let isPartyTypeIDInSendToScm = ""
+        if (rowData.isSendToScm) {
+            isPartyTypeIDInSendToScm = rowData.isSendToScm
+                .split(',')
+                .map(value => parseInt(value))
+                .includes(rowData.PartyTypeID);
+        }
 
+        const hasRole = (role) => userAccState[role];
         const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide;
         const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && rowData.CreatedBy === userCreated && !forceEditHide;
         const canView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && !viewApprovalBtnFunc;
@@ -157,7 +167,7 @@ export const listPageActionsButtonFunc = (props) => {
         const canCustomerWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
-
+        const canSendToScm = isPartyTypeIDInSendToScm && false;  //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
 
 
 
@@ -309,6 +319,14 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Print Master ",
                         buttonClasss: printBtnCss,
                     })}
+                    {renderButtonIfNeeded({    //Button Added for Invoice send to SCM  in Invoice List Page
+                        condition: canSendToScm,
+                        btnmode: mode.isSendToScm,
+                        iconClass: sendToScmIconClass,
+                        actionFunc: sendToScmBtnFunc,
+                        title: "Send",
+                        buttonClasss: makeBtnCss,
+                    })}
                     {renderButtonIfNeeded({
                         condition: canDelete,
                         btnmode: mode.isdelete,
@@ -368,7 +386,7 @@ export const listPageActionsButtonFunc = (props) => {
         text: "Action",
         dataField: "",
         attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Action", "sticky-col": (colIndex === 0) ? "true" : "false" }),
-        formatExtraData: { listBtnLoading, isFormExtraData },
+        formatExtraData: { listBtnLoading },
         formatter: renderActionButton,
     };
 };

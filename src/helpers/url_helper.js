@@ -325,6 +325,11 @@ export const CANCEL_E_INVOICE = '/Cancel_EInvoicea' // Uploaded_E-Invoice
 export const CANCEL_E_WAY_BILL = '/Cancel_EwayBill' // Uploaded_E-wayBill
 export const UPDATE_VEHICLE_INVOICE = '/UpdateVehicleInvoice' // Uploaded_E-wayBill
 
+export const INVOICE_SEND_TO_SCM = '/InvoicetoSCM' // Uploaded_E-wayBill
+
+
+
+
 //BulkInvoices
 export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 
 export const IMPORT_BULK_RETAIER = '/ImportRetailerBulkdata'// invoice_1 addpage GoButton Api 

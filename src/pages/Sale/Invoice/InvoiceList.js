@@ -20,6 +20,8 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
     Cancel_EInvoiceSuccess,
     Cancel_EwayBillSuccess,
+    InvoiceSendToScm,
+    InvoiceSendToScmSuccess,
     UpdateVehicleInvoice_Action,
     UpdateVehicleInvoice_Success,
     Uploaded_EInvoiceSuccess,
@@ -69,6 +71,9 @@ const InvoiceList = () => {
             Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
             VehicleNumber: state.VehicleReducer.VehicleList,
             Update_Vehicle_Invoice: state.InvoiceReducer.Update_Vehicle_Invoice,
+
+            sendToScmMsg: state.InvoiceReducer.sendToScmMsg,
+
             listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading)
         })
     );
@@ -82,7 +87,8 @@ const InvoiceList = () => {
         Cancel_EwayBill,
         supplierDropLoading,
         VehicleNumber,
-        Update_Vehicle_Invoice
+        Update_Vehicle_Invoice,
+        sendToScmMsg
     } = reducers;
 
     const {
@@ -170,6 +176,26 @@ const InvoiceList = () => {
             })
         }
     }, [Update_Vehicle_Invoice]);
+
+
+
+
+    useEffect(() => {    // Vehicle Update against Invoice Id
+        if (sendToScmMsg.Status === true && sendToScmMsg.StatusCode === 200) {
+            dispatch(InvoiceSendToScmSuccess({ Status: false }));
+            customAlert({
+                Type: 1,
+                Message: JSON.stringify(sendToScmMsg.Message),
+            })
+        }
+    }, [sendToScmMsg]);
+
+
+
+
+
+
+
 
     useEffect(() => {   // Uploaded EInvoice useEffect 
         if (Uploaded_EInvoice.Status === true && Uploaded_EInvoice.StatusCode === 200) {
@@ -343,6 +369,12 @@ const InvoiceList = () => {
             pathname: url.INWARD,
         })
     };
+    //Added For send To Scm Button 
+    function sendToScmBtnFunc(config) {
+        const InvoiceID = config.rowData.id
+        const jsonBody = JSON.stringify({ Invoice: InvoiceID })
+        dispatch(InvoiceSendToScm({ jsonBody }))
+    }
 
     const HeaderContent = () => {
         return (
@@ -448,6 +480,7 @@ const InvoiceList = () => {
                             downBtnFunc={downBtnFunc}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
+                            sendToScmBtnFunc={sendToScmBtnFunc}
                             ButtonMsgLable={"Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make GRN"}
