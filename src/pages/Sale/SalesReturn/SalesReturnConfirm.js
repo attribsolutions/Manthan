@@ -81,6 +81,17 @@ const ViewDetails_Modal = () => {
     }
 
     const pagesListColumns = [
+        {
+            text: "Item Name",
+            dataField: "ItemName",
+            formatter: (value, row, k) => (
+                <>
+                    <div >{`${(row.ItemName)}`}</div>
+                </>
+            )
+
+
+        },
 
         {
             text: "Dist Name (Retailer Name)",
@@ -89,18 +100,6 @@ const ViewDetails_Modal = () => {
             formatter: (value, row, k) => (
                 <>
                     <div  >{`${row.primarySource}`}</div>
-                </>
-            )
-
-
-        },
-
-        {
-            text: "Item Name",
-            dataField: "ItemName",
-            formatter: (value, row, k) => (
-                <>
-                    <div >{`${(row.ItemName)}`}</div>
                 </>
             )
 
