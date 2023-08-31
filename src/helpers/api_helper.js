@@ -16,7 +16,7 @@ export function get(url, param) {
 }
 
 export function post(url, body) {
-  debugger
+  
   return axiosApi
     .post(url, body, {
       headers: {

@@ -53,7 +53,12 @@ const ViewDetails_Modal = () => {
         }
     }, [ApprovrMsg])
     if (Object.keys(tableArray).length > 0) {
-        tableArray.ReturnItems.sort((a, b) => b.id - a.id);
+        tableArray.ReturnItems.sort((a, b) => {   //Sort With Same Item Name  
+            if (a.ItemName === b.ItemName) {
+                return 0;
+            }
+            return b.ItemName.localeCompare(a.ItemName);
+        });
     }
 
     function modalToggleFunc() {
@@ -83,7 +88,19 @@ const ViewDetails_Modal = () => {
             formatter: (value, row, k) => (
                 <>
                     <div >{`${(row.ItemName)}`}</div>
-                    <div >{`${row.primarySource}`}</div>
+                </>
+            )
+
+
+        },
+
+        {
+            text: "Dist Name (Retailer Name)",
+            dataField: "primarySource",
+            style: { width: "200px" },
+            formatter: (value, row, k) => (
+                <>
+                    <div  >{`${row.primarySource}`}</div>
                 </>
             )
 

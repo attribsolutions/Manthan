@@ -148,7 +148,7 @@ export const listPageActionsButtonFunc = (props) => {
             isPartyTypeIDInSendToScm = rowData.isSendToScm
                 .split(',')
                 .map(value => parseInt(value))
-                .includes(rowData.PartyTypeID);
+                .includes(rowData.CustomerPartyType);
         }
 
         const hasRole = (role) => userAccState[role];
@@ -176,6 +176,8 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc;
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
+        const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm
+
 
 
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
@@ -326,6 +328,9 @@ export const listPageActionsButtonFunc = (props) => {
                         actionFunc: sendToScmBtnFunc,
                         title: "Send",
                         buttonClasss: makeBtnCss,
+                        isDummyBtn: dummyDisable_SendToScm
+
+
                     })}
                     {renderButtonIfNeeded({
                         condition: canDelete,
