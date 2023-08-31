@@ -392,7 +392,7 @@ const OrderList = () => {
                         Mode: isMode
                     })
 
-                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, pageMode, path: path, grnRef, challanNo, btnId: `btn-makeBtn-${obj.id}` }))
+                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody,subPageMode, pageMode, path: path, grnRef, challanNo, btnId: `btn-makeBtn-${obj.id}` }))
 
                 } else {
                     alert("Please Select Order1")

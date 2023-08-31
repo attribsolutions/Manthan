@@ -25,8 +25,8 @@ import {
   UPDATE_GRN_ID_FROM_GRN_PAGE,
   HIDE_INVOICE_FOR_GRN_ACTION,
 } from "./actionType";
-import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import { url } from "../../../routes";
 
 function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
   try {
@@ -85,46 +85,50 @@ function* HideInvoiceForGRNGenFunc({ config }) {             // Upadte GRN  genr
 
 function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
-
-  const { pageMode = '', path = '', grnRef = [], challanNo = '' } = config
+  
+  const { subPageMode, pageMode = '', path = '', grnRef = [], challanNo = '' } = config
   try {
     const response = yield call(GRN_Make_API, config);
 
-    response.Data.OrderItem.forEach(index => {
-   
-      index["GSToption"] = index.GSTDropdown.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
-      index["MRPOps"] = index.MRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
-      const deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
-        return obj.value > maxObj.value ? obj : maxObj;
-      }, { value: -Infinity });
- 
-      index["MRPValue"] = deFaultValue?.label;
-      index["MRP"] = deFaultValue?.value;
+    if (!subPageMode === url.GRN_STP_3) {//if invoice to GRN then calcuation Not requierd
 
-      if (index.GST === null) {
-        const deFaultValue = index.GSTDropdown.filter(i => i.GSTPercentage === index.GSTPercentage);
-        index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage
-        index["GST"] = deFaultValue[0]?.GST;
+      response.Data.OrderItem.forEach(index => {
 
-      } else {
-        const deFaultValue = index.GSTDropdown.filter(i => i.GST === index.GST);
-        index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage;
-        index["GST"] = deFaultValue[0]?.GST;
-      }
+        index["GSToption"] = index.GSTDropdown.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
+        index["MRPOps"] = index.MRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
+        const deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
+          return obj.value > maxObj.value ? obj : maxObj;
+        }, { value: -Infinity });
 
-    })
+        index["MRPValue"] = deFaultValue?.label;
+        index["MRP"] = deFaultValue?.value;
 
-    response.Data.OrderItem.sort(function (a, b) {
-      if (a.Item > b.Item) { return 1; }
-      else if (a.Item < b.Item) { return -1; }
-      return 0;
-    });
+        if (index.GST === null) {
+          const deFaultValue = index.GSTDropdown.filter(i => i.GSTPercentage === index.GSTPercentage);
+          index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage
+          index["GST"] = deFaultValue[0]?.GST;
 
+        } else {
+          const deFaultValue = index.GSTDropdown.filter(i => i.GST === index.GST);
+          index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage;
+          index["GST"] = deFaultValue[0]?.GST;
+        }
+
+      })
+
+      response.Data.OrderItem.sort(function (a, b) {
+        if (a.Item > b.Item) { return 1; }
+        else if (a.Item < b.Item) { return -1; }
+        return 0;
+      });
+
+    }
     response["pageMode"] = pageMode;
     response["path"] = path; //Pagepath
     response.Data["GRNReferences"] = grnRef;
     response.Data["challanNo"] = challanNo;
     yield put(makeGRN_Mode_1ActionSuccess(response))
+
   } catch (error) { yield put(GrnApiErrorAction()) }
 }
 // 
