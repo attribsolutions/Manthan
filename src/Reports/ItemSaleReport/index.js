@@ -214,20 +214,6 @@ const ItemSaleReport = (props) => {
 
 
 
-    const UnitDropdownOptions = [
-        {
-            value: '', label: "Select..."
-        },
-        {
-            value: 1, label: "QtyInNo"
-        },
-        {
-            value: 2, label: "QtyInKg"
-        },
-        {
-            value: 3, label: "QtyInBox"
-        },
-    ]
 
     function RouteOnChange(event) {
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, RouteID: event.value, PartyID: supplierSelect.value }))
@@ -306,8 +292,18 @@ const ItemSaleReport = (props) => {
         } catch (error) { _cfunc.CommonConsole(error) }
     }
 
-    function showAlsoOnChange(e) {
-        setShowAlsoSelect(e)
+    function showAlsoOnChange(event) {
+        if (event.some(item => [5, 6, 7].includes(item.value))) {
+            if (!event.some(item => item.value === 1)) {
+                event.push(initail.showAlsoOption[0]);
+            }
+        }
+        if (event.some(item => item.value === 2)) {
+            if (!event.some(item => item.value === 4)) {
+                event.push(initail.showAlsoOption[3])
+            }
+        }
+        setShowAlsoSelect(event)
     }
 
     function CustomerOnChange(e) {
@@ -434,7 +430,7 @@ const ItemSaleReport = (props) => {
                 selectValue: { value: "", label: "All" },
                 sort: true,
                 isSum: true,
-                toFixed: 0,
+                toFixed: 3,
                 sequence: 12
             },
             {
@@ -444,7 +440,7 @@ const ItemSaleReport = (props) => {
                 selectValue: { value: "", label: "All" },
                 sort: true,
                 isSum: true,
-                toFixed: 0,
+                toFixed: 3,
                 sequence: 13
             },
             {
@@ -495,6 +491,12 @@ const ItemSaleReport = (props) => {
                 groupBy: true,
                 sequence: 19
             },
+            {
+                text: "Show Discounted Items",
+                dataField: "ShowDiscountedItems",
+                selectValue: showAlsoSelect.find(item => item.value === 2) || initail.initialSlected_blank,
+            },
+
         ];
 
         //************************************************************************************************** */
@@ -512,14 +514,15 @@ const ItemSaleReport = (props) => {
 
 
         const filterParameter = buttonStateArray.filter(option => (option.selectValue.value > 0));
-
+        debugger
         if (filterParameter.length > 0) {
             manupulatedData = baseData.filter(item => {
                 return filterParameter.every(option => {
-                    // if ((option.dataField === 'DiscountAmount') && (option.checkboxState)) {
-                    //     debugger
-                    //     return (Number(item[option.dataField]) > 0) ? true : false
-                    // }
+                    debugger
+                    if ((option.dataField === 'ShowDiscountedItems') && (option.selectValue.value > 0)) {
+                        debugger
+                        return (Number(item.DiscountAmount) > 0) ? true : false
+                    }
                     var a = item[option.dataField] === option.selectValue.label;
                     return a;
                 });
@@ -691,7 +694,7 @@ const ItemSaleReport = (props) => {
                         </Col>
 
                         <Col sm="1" className="mt-1 mb-1 ">
-                            {!(tableData.length > 0) ?
+                            {!(initaialBaseData.length > 0) ?
                                 <Go_Button
                                     loading={goBtnLoading}
                                     onClick={goButtonHandler}
@@ -797,7 +800,7 @@ const ItemSaleReport = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                options={initail.checkboxOption}
+                                                options={initail.showAlsoOption}
                                                 onChange={showAlsoOnChange}
 
                                             />
@@ -807,7 +810,7 @@ const ItemSaleReport = (props) => {
                             </Row>
                         </Col>
                         <Col sm="1" className="mt-1 mb-1 ">
-                            {(tableData.length > 0) &&
+                            {(initaialBaseData.length > 0) &&
                                 <C_Button
                                     type="button"
                                     className="btn btn-success border-1 font-size-12 text-center"
@@ -918,7 +921,7 @@ const ItemSaleReport = (props) => {
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        options={UnitDropdownOptions}
+                                        options={initail.UnitDropdownOptions}
                                         onChange={(e) => { setUnitDropdownSelect(e) }}
                                     />
                                 </Col>
