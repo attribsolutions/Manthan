@@ -25,12 +25,12 @@ const ItemRegisterReport = (data) => {
     reportBody(doc, data);
     pageFooter(doc, data);
     doc.setProperties({
-        title: "Item Register"
+        title: "Material  Register"
     });
 
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        const options = { filename: "ItemRegisterReport" }
+        const options = { filename: "MaterialRegisterReport" }
         window.open(pdfUrl, options);
     }
     generateSaveAndOpenPDFReport();

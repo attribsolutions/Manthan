@@ -7,7 +7,7 @@ import { CurrentTime, currentDate_dmy, date_dmy_func, loginUserDetails } from ".
 
 
 export const pageBorder = (doc) => {
-    doc.setDrawColor(0, 0, 0);
+    doc.setDrawColor('black');
     doc.line(570, 17, 30, 17);//horizontal line (Top)
     doc.line(30, 815, 30, 17);//vertical line (left)
     doc.line(570, 815, 570, 17);//vertical line (Right)
@@ -136,7 +136,6 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 3,
             fontSize: 9,
-            // fontStyle: 'bold',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -172,7 +171,7 @@ export const reportHeder3 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
-    doc.line(408, 60, 408, 17);//vertical header report Name Section
+    doc.line(408, 55, 408, 17);//vertical header report Name Section
 
     doc.setFont(undefined, 'bold')
     doc.text(`Report No:`, 415, 30) //Invoice Id
@@ -196,69 +195,51 @@ export const tableBody = (doc, data) => {
     var options = {
 
         didParseCell: (data1) => {
-            debugger
-            if (data1.row.cells[2].raw === "Total") {
-                // data1.row.cells[0].colSpan = 3
-                // data1.row.cells[4].colSpan = 2
-                // data1.row.cells[6].colSpan = 2
-                data1.row.cells[2].styles.fontSize = 9
-                data1.row.cells[3].styles.fontSize = 9
-                data1.row.cells[4].styles.fontSize = 9
-                data1.row.cells[5].styles.fontSize = 9
-                data1.row.cells[6].styles.fontSize = 9
 
-                data1.row.cells[2].styles.fontStyle = "bold"
+
+
+            if (data1.row.cells[0].raw === "Total") {
+                data1.row.cells[0].colSpan = 2
+
+                data1.row.cells[0].styles.fontSize = 8
+                data1.row.cells[0].styles.fontStyle = "bold"
+
+                data1.row.cells[3].styles.fontSize = 8
                 data1.row.cells[3].styles.fontStyle = "bold"
+
+                data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[4].styles.fontStyle = "bold"
+
+                data1.row.cells[5].styles.fontSize = 8
                 data1.row.cells[5].styles.fontStyle = "bold"
+
+                data1.row.cells[6].styles.fontSize = 8
                 data1.row.cells[6].styles.fontStyle = "bold"
 
+                data1.row.cells[7].styles.fontSize = 8
+                data1.row.cells[7].styles.fontStyle = "bold"
             }
 
-            if (data1.row.cells[2].raw === "Total") {
-                data1.row.cells[0].colSpan = 8
-
-                data1.row.cells[0].styles.fontSize = 9
-
-                data1.row.cells[0].styles.fontStyle = "bold"
-            }
-
-            if (data1.row.cells[2].raw === "Total") {
-                data1.row.cells[0].colSpan = 8
-                data1.row.cells[0].styles.fontSize = 9
-                data1.row.cells[0].styles.fontStyle = "bold"
-
-            }
-
-            if (data1.row.raw[6] === "Dispatch") {
-                data1.row.cells[6].contentHeight = 2
-            }
 
             if (data1.cell.raw === "STOCK") {
-                debugger
+
                 // data1.cell.styles.fontStyle = "bold"
                 // data1.row.cells[2].styles.fontSize = 9
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[1].styles.fontStyle = "bold"
                 data1.row.cells[2].styles.fontStyle = "bold"
-                data1.row.cells[5].styles.fontStyle = "bold"
-                data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
             }
 
-            if (data1.column.index === 3) {
-                if (data1.cell.raw !== "0.00") {
-                    data1.row.cells[3].styles.fontStyle = "bold"
-
-                }
-
-            }
             if (data1.column.index === 4) {
                 if (data1.cell.raw !== "0.00") {
                     data1.row.cells[4].styles.fontStyle = "bold"
 
                 }
 
-            } if (data1.column.index === 5) {
+            }
+            if (data1.column.index === 5) {
                 if (data1.cell.raw !== "0.00") {
                     data1.row.cells[5].styles.fontStyle = "bold"
 
@@ -270,10 +251,16 @@ export const tableBody = (doc, data) => {
 
                 }
 
-            }
-            if (data1.column.index === 7) {
+            } if (data1.column.index === 7) {
                 if (data1.cell.raw !== "0.00") {
                     data1.row.cells[7].styles.fontStyle = "bold"
+
+                }
+
+            }
+            if (data1.column.index === 8) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[8].styles.fontStyle = "bold"
 
                 }
 
@@ -292,7 +279,7 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'center',    //'center' or 'right'
             fillColor: "white",
             textColor: [0, 0, 0], //Black     
             fontSize: 8,
@@ -308,32 +295,33 @@ export const tableBody = (doc, data) => {
         },
         columnStyles: {
             0: {
-                valign: "top",
-                columnWidth: 80,
+                columnWidth: 19,
+                halign: 'right',
+
             },
             1: {
-                columnWidth: 90,
+                columnWidth: 80,
                 halign: 'left',
 
             },
             2: {
-                columnWidth: 60,
-                halign: 'right',
+                columnWidth: 90,
+                halign: 'left',
             },
             3: {
-                columnWidth: 40,
+                columnWidth: 60,
                 halign: 'right',
             },
             4: {
-                columnWidth: 60,
+                columnWidth: 40,
                 halign: 'right',
             },
             5: {
-                columnWidth: 47,
+                columnWidth: 60,
                 halign: 'right',
             },
             6: {
-                columnWidth: 50,
+                columnWidth: 47,
                 halign: 'right',
             },
             7: {
@@ -341,7 +329,11 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             8: {
-                columnWidth: 63,
+                columnWidth: 45,
+                halign: 'right',
+            },
+            9: {
+                columnWidth: 49,
                 halign: 'right',
             },
 

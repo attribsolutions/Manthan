@@ -1,6 +1,8 @@
 import { convertOnlyTimefunc, date_dmy_func, loginUserDetails } from "../../components/Common/CommonFunction";
+import { numberWithCommas } from "../Report_common_function";
 
 export const columns = [
+    "SN",
     "Date",
     "Name",
     "Document No",
@@ -24,7 +26,7 @@ export const Rows = (data) => {
 
     // InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
-    let Gst = 0
+    let SN = 1
     let TotalGRN = 0
     let TotalSalesReturn = 0
     let TotalStock = 0
@@ -100,15 +102,16 @@ export const Rows = (data) => {
 
 
         const tableitemRow = [
+            SN++,
             `${date_dmy_func(element.TransactionDate)} ${convertOnlyTimefunc(element.CreatedOn)}`,
             element.Name,
             element.TransactionNumber,
-            (element.Sequence === 1) ? (Number(GRN).toFixed(2)) : "0.00",
-            (element.Sequence === 2) ? (Number(SalesReturn).toFixed(2)) : "0.00",
-            (element.Sequence === 3) ? (Number(Stock).toFixed(2)) : "0.00",
-            (element.Sequence === 4) ? (Number(Sale).toFixed(2)) : "0.00",
-            (element.Sequence === 5) ? (Number(PurchaseReturn).toFixed(2)) : "0.00",
-            element.TransactionNumber === "STOCK" ? (Number(RowStock).toFixed(2)) : (Number(BalanceAmount).toFixed(2))
+            (element.Sequence === 1) ? (numberWithCommas(Number(GRN).toFixed(2))) : "0.00",
+            (element.Sequence === 2) ? (numberWithCommas(Number(SalesReturn).toFixed(2))) : "0.00",
+            (element.Sequence === 3) ? (numberWithCommas(Number(Stock).toFixed(2))) : "0.00",
+            (element.Sequence === 4) ? (numberWithCommas(Number(Sale).toFixed(2))) : "0.00",
+            (element.Sequence === 5) ? (numberWithCommas(Number(PurchaseReturn).toFixed(2))) : "0.00",
+            element.TransactionNumber === "STOCK" ? numberWithCommas(Number(RowStock).toFixed(2)) : numberWithCommas(Number(BalanceAmount).toFixed(2))
         ];
 
         function totalLots() {
@@ -131,11 +134,12 @@ export const Rows = (data) => {
                 "Total",
                 "",
                 "",
-                `${Number(TotalGRN).toFixed(2)}`,
-                `${Number(TotalSalesReturn).toFixed(2)}`,
-                `${Number(TotalStock).toFixed(2)}`,
-                `${Number(TotalSale).toFixed(2)}`,
-                `${Number(TotalPurchaseReturn).toFixed(2)}`,
+                "",
+                `${numberWithCommas(Number(TotalGRN).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalSalesReturn).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalStock).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalSale).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalPurchaseReturn).toFixed(2))}`,
                 ``,
 
             ];
