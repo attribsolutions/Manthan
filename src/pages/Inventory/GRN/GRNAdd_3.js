@@ -171,7 +171,7 @@ const GRNAdd3 = (props) => {
 
                 setEditData(hasEditVal);
 
-                const { GRNItems = [], GRNReferences = [], InvoiceNumber } = hasEditVal;
+                const { GRNItems = [], GRNReferences = [], InvoiceNumber,GrandTotal } = hasEditVal;
 
                 let ChallanNo1 = ''
 
@@ -186,6 +186,7 @@ const GRNAdd3 = (props) => {
                 dispatch(editGRNIdSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
+                dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${GrandTotal}`))
             }
         }
     }, []);
