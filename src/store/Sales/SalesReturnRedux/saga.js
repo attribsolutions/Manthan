@@ -26,15 +26,16 @@ function* save_SalesReturn_GenFunc({ config }) {
 function* SalesReturn_List_GenFun({ filters }) {
 
     try {
+        debugger
         const response = yield call(apiCall.SalesReturn_list_API, filters);
         const newList = yield response.Data.map((i) => {
-
             i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
             i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal)
             //tranzaction date is only for fiterand page field but UI show transactionDateLabel
             i.dashboardReturnDate = date_dmy_func(i.ReturnDate);
             i["transactionDate"] = i.CreatedOn;
             i["transactionDateLabel"] = concatDateAndTime(i.ReturnDate, i.CreatedOn);
+
             return i
         })
         yield put(action.salesReturnListAPISuccess(newList));

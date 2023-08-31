@@ -326,7 +326,7 @@ export const listPageActionsButtonFunc = (props) => {
                         btnmode: mode.isSendToScm,
                         iconClass: sendToScmIconClass,
                         actionFunc: sendToScmBtnFunc,
-                        title: "Send",
+                        title: "Send To Scm",
                         buttonClasss: makeBtnCss,
                         isDummyBtn: dummyDisable_SendToScm
 
