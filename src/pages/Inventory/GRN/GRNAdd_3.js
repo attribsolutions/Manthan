@@ -227,12 +227,15 @@ const GRNAdd3 = (props) => {
                 <Select
                     id={`MRP${key}`}
                     name="MRP"
-                    defaultValue={row.defaultMRP}
+                    defaultValue={{ value: row.MRP, label: row.MRPValue, }}
                     isSearchable={true}
                     className="react-dropdown"
                     classNamePrefix="dropdown"
                     options={row.MRPOps}
-                    onChange={(event) => { row.defaultMRP = event }}
+                    onChange={(event) => {
+                        row.MRPValue = event.label;
+                        row.MRP = event.value;
+                    }}
                 />
             ),
         },
@@ -246,12 +249,15 @@ const GRNAdd3 = (props) => {
                 <Select
                     id={`GST${key}`}
                     name="GST"
-                    defaultValue={row.DefaultGST}
+                    defaultValue={{ value: row.GST, label: row.GSTPercentage, }}
                     isSearchable={true}
                     className="react-dropdown"
                     classNamePrefix="dropdown"
                     options={row.GSToption}
-                    onChange={(event) => { row.DefaultGST = event }}
+                    onChange={(event) => {
+                        row.GSTPercentage = event.label;
+                        row.GST = event.value;
+                    }}
                 />
             ),
         },
@@ -355,51 +361,52 @@ const GRNAdd3 = (props) => {
 
         try {
             const itemArr = []
-            let sum = 0
+            let sumOfGrandTotal = 0
             let inValidMsg = []
+            debugger
             grnItemTableList.forEach(i => {
+
 
 
                 if (!(i.Quantity > 0)) {
                     inValidMsg.push({ [i.ItemName]: "This Item Quantity Is Require..." });
                 }
-                const calculate = orderCalculateFunc(i)// amount calculation function 
+                else {
+                    const calculated = orderCalculateFunc(i)// amount calculation function 
 
-                const arr = {
-                    Item: i.Item,
-                    Quantity: i.Quantity,// GRN Quantity
-                    ActualQuantity: i.invoiceQuantity, //invoice actual quantity 
-                    Comment: i.comment,
-                    Reason: i.defaultDiscrepancy ? i.defaultDiscrepancy.value : "",//default Discrepancy value
-                    MRP: i.defaultMRP.value,
-                    MRPValue: i.defaultMRP.label,
+                    const arr = {
+                        Item: i.Item,
+                        Quantity: i.Quantity,// GRN Quantity
+                        ActualQuantity: i.invoiceQuantity, //invoice actual quantity 
+                        Comment: i.comment,
+                        Reason: i.defaultDiscrepancy ? i.defaultDiscrepancy.value : "",//default Discrepancy value
+                        MRP: i.MRP,
+                        MRPValue: i.MRPValue,
+                        GST: i.GST,
+                        ReferenceRate: i.Rate,
+                        Rate: i.Rate,
+                        Unit: i.Unit,
+                        BaseUnitQuantity: i.BaseUnitQuantity,
+                        BatchDate: i.BatchDate,
+                        BatchCode: i.BatchCode,
+                        CGST: calculated.CGST_Amount,
+                        SGST: calculated.SGST_Amount,
+                        IGST: calculated.IGST_Amount,
+                        GSTPercentage: calculated.GST_Percentage,
+                        CGSTPercentage: calculated.CGST_Percentage,
+                        SGSTPercentage: calculated.SGST_Percentage,
+                        IGSTPercentage: calculated.IGST_Percentage,
+                        BasicAmount: calculated.basicAmount,
+                        GSTAmount: calculated.roundedGstAmount,
+                        Amount: calculated.roundedTotalAmount,
+                        TaxType: 'GST',
+                        DiscountType: i.DiscountType,
+                        Discount: Number(i.Discount) || 0,
+                        DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
+                    }
 
-                    ReferenceRate: i.Rate,
-                    Rate: i.Rate,
-                    Unit: i.Unit,
-                    BaseUnitQuantity: i.BaseUnitQuantity,
-                    GST: i.DefaultGST.value,
-                    GSTPercentage: i.DefaultGST.label,
-                    BasicAmount: calculate.basicAmount,
-                    GSTAmount: calculate.roundedGstAmount,
-                    Amount: calculate.roundedTotalAmount,
-                    CGST: calculate.CGST_Amount,
-                    SGST: calculate.SGST_Amount,
-                    IGST: 0,
-                    CGSTPercentage: (i.GSTPercentage / 2),
-                    SGSTPercentage: (i.GSTPercentage / 2),
-                    IGSTPercentage: 0,
-                    BatchDate: i.BatchDate,
-                    BatchCode: i.BatchCode,
-                    DiscountType: "0",
-                    Discount: "0.00",
-                    DiscountAmount: "0.00",
-                    TaxType: "GST",
-
-                }
-
-                if ((i.Quantity > 0)) {
-                    itemArr.push(arr)
+                    sumOfGrandTotal += Number(calculated.roundedTotalAmount);
+                    itemArr.push(arr);
                 }
             })
 
@@ -407,11 +414,6 @@ const GRNAdd3 = (props) => {
                 customAlert({ Type: 4, Message: inValidMsg, })
                 return
             }
-
-            itemArr.forEach(element => {
-                sum = sum + Number(element.Amount)
-            });
-
             if (invoiceNo.length === 0) {
                 customAlert({
                     Type: 3,
@@ -423,7 +425,7 @@ const GRNAdd3 = (props) => {
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
-                GrandTotal: sum.toFixed(2),
+                GrandTotal: sumOfGrandTotal.toFixed(2),
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),

@@ -177,7 +177,13 @@ import DamageStockReport from "../Reports/DamageStockReport";
 import DeleteInvoiceDataExport from "../Reports/DeleteInvoiceDataExport";
 import GSTR1Report from "../Reports/GSTR1Report/GSTR1Report";
 import ReturnReport from "../Reports/ReturnReport/ReturnReport";
+
+import ItemSaleReport from "../Reports/ItemSaleReport";
+
 import ItemRegisterReport from "../Reports/ItemRegisterReport/ItemRegisterReport";
+import ClaimSummaryList from "../Reports/ClaimReportSummary/ClaimSummaryList";
+import ClaimSummaryMaster from "../Reports/ClaimReportSummary/ClaimSummaryMaster";
+
 // import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
@@ -440,10 +446,15 @@ const userRoutes = [
 
   { path: path.RETURN_REPORT, component: ReturnReport },
 
+
+
+  { path: path.CLAIM_SUMMARY_MASTER, component: ClaimSummaryMaster },
+  { path: path.CLAIM_SUMMARY_lIST, component: ClaimSummaryList },
+
+
+  { path: path.ITEM_SALE_REPORT, component: ItemSaleReport },
+
   { path: path.ITEM_REGISTER_REPORT, component: ItemRegisterReport },
-
-
-  
 
 
   // ************************************ Utility **************************************//

@@ -20,7 +20,24 @@ function* ClaimList_GenFunc({ config }) {
 
     try {
         const response = yield call(ClaimList_API, config);
-        yield put(claimList_API_Success(response))
+        let NewResponse = []
+        if (config.Type === "List") {
+            debugger
+            for (const item of response.Data) {
+                if (item.id !== null) {
+                    const newItem = {
+                        ...item,
+                        MonthStartDate: config.MonthStartDate,
+                        MonthEndDate: config.MonthEndDate
+                    };
+                    NewResponse.push(newItem);
+                }
+            }
+        } else {
+            NewResponse = response.Data.filter(Party => Party.id === null);
+        }
+
+        yield put(claimList_API_Success(NewResponse))
     } catch (error) { yield put(MasterClaimCreatApiErrorAction()) }
 }
 
@@ -33,7 +50,7 @@ function* Delete_Claim_ID_GenFunc({ config }) {                    // delete API
 }
 
 function* MasterClaimCreatSaga() {
-    
+
     yield takeLatest(CLAIM_LIST_API, ClaimList_GenFunc)
     yield takeLatest(POST_CLAIM_CREATE_SUMMARY_API, MasterClaimCreat_GenFunc)
     yield takeLatest(DELETE_CLAIM_ID, Delete_Claim_ID_GenFunc)

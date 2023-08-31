@@ -22,6 +22,8 @@ import {
     CANCLE_E_WAY_BILL_ACTION_SUCCESS,
     UPDATE_VEHICLE_INVOICE_ACTION,
     UPDATE_VEHICLE_INVOICE_SUCCESS,
+    INVOICE_SEND_TO_SCM_ACTION,
+    INVOICE_SEND_TO_SCM_ACTION_SUCCESS,
 
 } from "./actionType";
 
@@ -55,6 +57,17 @@ export const deleteInvoiceId = (config = {}) => ({
 
 export const deleteInvoiceIdSuccess = (resp) => ({
     type: DELETE_INVOICE_LIST_PAGE_SUCCESS,
+    payload: resp,
+});
+
+
+export const InvoiceSendToScm = (config = {}) => ({
+    type: INVOICE_SEND_TO_SCM_ACTION,
+    config,
+});
+
+export const InvoiceSendToScmSuccess = (resp) => ({
+    type: INVOICE_SEND_TO_SCM_ACTION_SUCCESS,
     payload: resp,
 });
 

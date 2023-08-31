@@ -266,6 +266,7 @@ const CommonPurchaseList = (props) => {
   }
   const lastColumn = () => {  // ======================== for List Page Action Button ================================
     if (!(pageMode === mode.modeSTPsave)) {
+
       return listPageActionsButtonFunc({
         ...props, dispatch, history, userAccState,
         editActionFun: editId,
@@ -344,7 +345,7 @@ const CommonPurchaseList = (props) => {
                       return total + Number(item.recordsAmountTotal) || 0;
 
                     }, 0);
-                    let commaSeparateAmount = amountCommaSeparateFunc(totalAmount);
+                    let commaSeparateAmount = amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
 
                     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
                   }

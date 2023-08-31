@@ -530,6 +530,9 @@ export const Invoice_1_Get_Filter_API = ({ filtersBody }) => post(url.INVOICE_1_
 export const Invoice_1_Delete_API = ({ deleteId }) => del(`${url.INVOICE_1_SAVE}/${deleteId}`)// delete api
 export const Invoice_1_Edit_API_Singel_Get = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}`)// delete api
 export const Update_Vehicle_Invoice_API = ({ Invoiceid, vehicleid }) => get(`${url.UPDATE_VEHICLE_INVOICE}/${Invoiceid}/${vehicleid}`)// Cancel_EwayBill
+export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SCM, jsonBody)// delete api
+
+
 
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 
@@ -666,6 +669,10 @@ export const DeleteInvoiceDataExport_GoBtn_API = ({ jsonBody }) => post(url.DELE
 export const ReturnReport_API = ({ jsonBody }) => post(url.RETURN_REPORT, jsonBody)//Go button api
 
 
+// Item Sale Report Go button API
+export const ItemSaleReport_GoBtn_API = ({ jsonBody }) => post(url.ITEM_SALE_REPORT_GO_BUTTON, jsonBody)//Go button api
+export const SupplierDropdownApi = (employeeID, channelFromID) => get(`${url.SUPPLIER_API}/${employeeID}/${channelFromID}`)// Party Setting api
+export const ItemsList_On_Group_And_Subgroup_API = (jsonBody) => post(url.ITEM_LIST_API, jsonBody)
 
 export {
   getLoggedInUser,

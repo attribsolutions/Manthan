@@ -16,7 +16,9 @@ import {
     CANCLE_E_INVOICE_ACTION,
     MAKE_IB_INVOICE_ACTION,
     UPLOADED_E_WAY_BILL_ACTION,
-    UPDATE_VEHICLE_INVOICE_SUCCESS
+    UPDATE_VEHICLE_INVOICE_SUCCESS,
+    INVOICE_SEND_TO_SCM_ACTION,
+    INVOICE_SEND_TO_SCM_ACTION_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -36,6 +38,8 @@ const INIT_STATE = {
     saveAndPdfBtnLoading: false,
     saveBtnloading: false,
     goBtnloading: false,
+
+    sendToScmMsg: { Status: false }
 }
 
 const InvoiceReducer = (state = INIT_STATE, action) => {
@@ -86,6 +90,22 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 Invoicelist: action.payload,
             }
         /**************************************** */
+
+
+        case INVOICE_SEND_TO_SCM_ACTION:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            }
+        case INVOICE_SEND_TO_SCM_ACTION_SUCCESS:
+            return {
+                ...state,
+                listBtnLoading: false,
+                sendToScmMsg: action.payload,
+            }
+        /**************************************** */
+
+
         case EDIT_INVOICE_LIST_SUCCESS:
             return {
                 ...state,

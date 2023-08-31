@@ -335,7 +335,7 @@ const GRNAdd = (props) => {
         },
 
         {  //-------------Rate column ----------------------------------
-            text:"Basic Rate",
+            text: "Basic Rate",
             dataField: "",
             formatter: (value, row, k) => {
                 if (row.Rate === undefined) { row["Rate"] = 0 }
@@ -547,7 +547,7 @@ const GRNAdd = (props) => {
 
             grnItemList.forEach(i => {
 
-                const calculate = orderCalculateFunc(i)// amount calculation function 
+                const calculated = orderCalculateFunc(i)// amount calculation function 
 
                 const arr = {
                     Item: i.Item,
@@ -557,35 +557,35 @@ const GRNAdd = (props) => {
                     Rate: i.Rate,
                     Unit: i.Unit,
                     BaseUnitQuantity: i.BaseUnitQuantity,
-                    GST: i.GST,
-                    BasicAmount: calculate.basicAmount,
-                    GSTAmount: calculate.roundedGstAmount,
-                    Amount: calculate.roundedTotalAmount,
-                    CGST: calculate.CGST_Amount,
-                    SGST: calculate.SGST_Amount,
-                    IGST: 0,
-                    CGSTPercentage: (i.GSTPercentage / 2),
-                    SGSTPercentage: (i.GSTPercentage / 2),
-                    IGSTPercentage: 0,
                     BatchDate: i.BatchDate,
                     BatchCode: i.BatchCode,
-                    DiscountType: "0",
-                    Discount: "0.00",
-                    DiscountAmount: "0.00",
-                    TaxType: "GST",
+
+                    GST: i.GST,
+                    CGST: calculated.CGST_Amount,
+                    SGST: calculated.SGST_Amount,
+                    IGST: calculated.IGST_Amount,
+                    GSTPercentage: calculated.GST_Percentage,
+                    CGSTPercentage: calculated.CGST_Percentage,
+                    SGSTPercentage: calculated.SGST_Percentage,
+                    IGSTPercentage: calculated.IGST_Percentage,
+                    BasicAmount: calculated.basicAmount,
+                    GSTAmount: calculated.roundedGstAmount,
+                    Amount: calculated.roundedTotalAmount,
+                    TaxType: 'GST',
+                    DiscountType: i.DiscountType,
+                    Discount: Number(i.Discount) || 0,
+                    DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
+
                 }
-                console.log(arr)
+
 
                 let isfound = itemArr.filter(ind => {
-
                     return ind.Item === i.Item
-
                 })
 
                 if (isfound.length > 0) {
                     let dubli = isfound.filter(ele => {
                         let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
-
                         return condition
                     })
 
@@ -593,7 +593,6 @@ const GRNAdd = (props) => {
 
                         if (dubli.length === 0) {
                             itemArr.push(arr)
-
                         } else {
                             isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
                         }

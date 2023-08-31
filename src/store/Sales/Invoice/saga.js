@@ -3,6 +3,8 @@ import {
   CommonConsole,
   amountCommaSeparateFunc,
   concatDateAndTime,
+  loginSystemSetting,
+  loginUserDetails,
   loginUserID,
 } from "../../../components/Common/CommonFunction";
 import {
@@ -21,6 +23,7 @@ import {
   EwayBill_Uploade_Get_API,
   EwayBill_Cancel_Get_API,
   Update_Vehicle_Invoice_API,
+  Invoice_Send_To_Scm,
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -35,6 +38,7 @@ import {
   Cancel_EInvoiceSuccess,
   Cancel_EwayBillSuccess,
   UpdateVehicleInvoice_Success,
+  InvoiceSendToScmSuccess,
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -47,6 +51,7 @@ import {
   CANCLE_E_WAY_BILL_ACTION,
   CANCLE_E_INVOICE_ACTION,
   UPDATE_VEHICLE_INVOICE_ACTION,
+  INVOICE_SEND_TO_SCM_ACTION,
 
 } from "./actionType";
 import *as url from "../../../routes/route_url"
@@ -74,8 +79,24 @@ function* save_Invoice_Genfun({ config }) {
   }
 }
 
+
+function* Invoice_Send_To_Scm_GenFun({ config }) {         // Save API
+  debugger
+  try {
+    const response = yield call(Invoice_Send_To_Scm, config);
+    yield put(InvoiceSendToScmSuccess(response));
+  } catch (error) { yield put(InvoiceApiErrorAction()) }
+}
+
+
+
+
+
 // Invoice List
 function* InvoiceListGenFunc({ config }) {
+
+  const isSendToScm = loginSystemSetting().InvoiceSendToSCMButton
+  const PartyTypeID = loginUserDetails().PartyTypeID
   try {
     const { subPageMode } = config
     let response;
@@ -94,6 +115,8 @@ function* InvoiceListGenFunc({ config }) {
       } else {
         i["LoadingSheetCreated"] = ""
       }
+      i["isSendToScm"] = isSendToScm
+      i["PartyTypeID"] = PartyTypeID
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
@@ -335,6 +358,8 @@ function* UpdateVehicleInvoice_GenFunc({ config }) {
 // MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
 
+
+  yield takeLatest(INVOICE_SEND_TO_SCM_ACTION, Invoice_Send_To_Scm_GenFun)
   yield takeLatest(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
   yield takeLatest(INVOICE_LIST_GO_BUTTON_FILTER, InvoiceListGenFunc)
   yield takeLatest(EDIT_INVOICE_LIST, editInvoiceListGenFunc)

@@ -18,7 +18,7 @@ const ViewDetails_Modal = () => {
     const { ReturnFinalApprovalRole = '' } = loginSystemSetting()
 
     const [modal_view, setModal_view] = useState(false);
-    const [tableArray, setTableArray] = useState([]);
+    const [tableArray, setTableArray] = useState({});
 
     const { viewData_redux = [], ApprovrMsg, saveBtnloading } = useSelector((state) => ({
         viewData_redux: state.SalesReturnReducer.confirmBtnData, // modify Redux State
@@ -52,6 +52,14 @@ const ViewDetails_Modal = () => {
 
         }
     }, [ApprovrMsg])
+    if (Object.keys(tableArray).length > 0) {
+        tableArray.ReturnItems.sort((a, b) => {   //Sort With Same Item Name  
+            if (a.ItemName === b.ItemName) {
+                return 0;
+            }
+            return b.ItemName.localeCompare(a.ItemName);
+        });
+    }
 
     function modalToggleFunc() {
         setModal_view(false);
@@ -76,14 +84,37 @@ const ViewDetails_Modal = () => {
         {
             text: "Item Name",
             dataField: "ItemName",
+            formatter: (value, row, k) => (
+                <>
+                    <div >{`${(row.ItemName)}`}</div>
+                </>
+            )
+
+
         },
+
+        {
+            text: "Dist Name (Retailer Name)",
+            dataField: "primarySource",
+            style: { width: "200px" },
+            formatter: (value, row, k) => (
+                <>
+                    <div  >{`${row.primarySource}`}</div>
+                </>
+            )
+
+
+        },
+
+
         {
             text: "Quantity",
             dataField: "Quantity",
-            formatter: (value, row, k) => {
-
-                return <div style={{ width: "120px" }}>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
-            }
+            formatter: (value, row, k) => (
+                <>
+                    <div>{`${Number(row.Quantity).toFixed(0)} ${row.UnitName}`}</div>
+                </>
+            )
         },
         {
             text: "Basic Rate",

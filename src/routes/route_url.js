@@ -253,6 +253,11 @@ export const RETAILER_DATA_REPORT = "/RetailerDataReport"
 
 export const CLAIM_SUMMARY_REPORT = "/ClaimSummary"
 
+export const CLAIM_SUMMARY_MASTER = "/Claim_Summary_Master"
+
+export const CLAIM_SUMMARY_lIST = "/Claim_Summary_List"
+
+
 export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
 
 export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"
@@ -265,7 +270,10 @@ export const GST_R1_REPORT = "/Gst_R1_Report"
 
 export const RETURN_REPORT = "/ReturnReport"
 
+export const ITEM_SALE_REPORT = "/Item_Sale_Report"
+
 export const ITEM_REGISTER_REPORT = "/ItemRegister"
+
 
 
 

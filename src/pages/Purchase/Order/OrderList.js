@@ -418,7 +418,7 @@ const OrderList = () => {
     }
 
     function downBtnFunc(config) {
-        config["ReportType"] = report.ItemRegister;
+        config["ReportType"] = report.order1;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
     }
 
@@ -619,8 +619,6 @@ const OrderList = () => {
                         :
                         <Col sm='1' />
                     }
-
-
 
                     <Col lg={3}>
                         <FormGroup className="mb-1 row mt-3 " >

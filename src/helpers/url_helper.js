@@ -325,6 +325,11 @@ export const CANCEL_E_INVOICE = '/Cancel_EInvoicea' // Uploaded_E-Invoice
 export const CANCEL_E_WAY_BILL = '/Cancel_EwayBill' // Uploaded_E-wayBill
 export const UPDATE_VEHICLE_INVOICE = '/UpdateVehicleInvoice' // Uploaded_E-wayBill
 
+export const INVOICE_SEND_TO_SCM = '/InvoicetoSCM' // Uploaded_E-wayBill
+
+
+
+
 //BulkInvoices
 export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 
 export const IMPORT_BULK_RETAIER = '/ImportRetailerBulkdata'// invoice_1 addpage GoButton Api 
@@ -422,9 +427,10 @@ export const GST_R3B_REPORT = "/GSTR3BExcel"
 
 export const RETURN_REPORT = "/ReturnReport"
 
-
-
-
+//Item Sale Report Go button API
+export const ITEM_SALE_REPORT_GO_BUTTON = '/ItemSaleReport'
+export const SUPPLIER_API = '/ItemSaleSupplier'
+export const ITEM_LIST_API = '/ItemSaleItemList'
 
 
 //Deleted Invoice Data Export Report 

@@ -21,6 +21,7 @@ import {
   DELETE_ROLE_ACCESS_MASTER,
   SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE_SUCCESS,
   SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE,
+  ROLE_ACCESS_API_ERROR_ACTION,
 } from "./actionType";
 
 
@@ -123,26 +124,12 @@ export const updateRoleAcessActionSuccess = (resp) => ({
 });
 
 
-
-export const setTableData_roleAccss_AddPage = (array = []) => ({
-  type: SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE,
-  array,
-});
-
-
 export const setTableData_roleAccss_AddPageSuccess = (array = []) => ({
   type: SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE_SUCCESS,
   payload: array,
 });
 
 
-export const deleteRoleAcessMasterAction = (config = {}) => ({
-  type: DELETE_ROLE_ACCESS_MASTER,
-  config,
-});
-
-export const IscheckRoleAcessMasterAction = (id, cell, check) => ({
-  type: "IS_CHECK_ROLE_ACCESS_MASTER",
-  id, cell, check,
-});
-
+export const RoleAccessApiErrorAction = () => ({
+  type: ROLE_ACCESS_API_ERROR_ACTION,
+})

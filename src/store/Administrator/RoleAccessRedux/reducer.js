@@ -11,6 +11,7 @@ import {
   SAVE_ROLE_ACCESS_ADD_ACTION,
   UPDATE_ROLE_ACCESS_lIST,
   PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST,
+  ROLE_ACCESS_API_ERROR_ACTION,
 } from "./actionType"
 
 
@@ -25,7 +26,7 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   AddPageTableDataRedux: [],
   saveBtnloading: false,
-  pageDropDownLoading:false
+  pageDropDownLoading: false
 
 }
 
@@ -41,16 +42,16 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
     case PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST:
       return {
         ...state,
-        pageDropDownLoading:true
+        pageDropDownLoading: true
       }
 
-      case PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST_SUCCESS:
-        return {
-          ...state,
-          PageDropdownForRoleAccess: action.payload,
-          pageDropDownLoading:false
+    case PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST_SUCCESS:
+      return {
+        ...state,
+        PageDropdownForRoleAccess: action.payload,
+        pageDropDownLoading: false
 
-        }
+      }
 
     case SAVE_ROLE_ACCESS_ADD_ACTION://  save AddRoleAccess 
       return {
@@ -108,6 +109,14 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
         ...state,
         AddPageTableDataRedux: action.payload,
       }
+
+    case ROLE_ACCESS_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        pageDropDownLoading: false
+      };
+
 
     default:
       return state

@@ -28,13 +28,23 @@ const printIconClass = "bx bx-printer font-size-16";
 const multiInvoiceIconClass = "fas fa-file-download";
 const updateIconClass = "mdi mdi-file-table-box-multiple font-size-16";
 const deleteIconClass = "mdi mdi-delete font-size-16";
+const sendToScmIconClass = "fas fa-share font-size-16";  //Icon Added For Invoice send to SCM Button In Invoice Listf
 const copyIconClass = "bx bxs-copy font-size-16";
 const orderApprovalIconClass = "bx bx-check-shield font-size-20";
 const uploadIconClass = "bx bx-upload font-size-14";
 const cancelIconClass = "mdi mdi-cancel font-size-14";
+const claimCustomerWisePrintIconClass = "fas fa-file-contract font-size-14";  //Icon Added For Claim Print on Claim list
+const claimItemWisePrintIconClass = "fas fa-file-signature";  //Icon Added For Claim Print on Claim list
+const claimMasterPrintIconClass = "far fa-file-alt font-size-14";  //Icon Added For Claim Print on Claim list
+
+
+
+
+
 
 
 export const listPageActionsButtonFunc = (props) => {
+
     const {
         dispatch,
         history,
@@ -47,6 +57,7 @@ export const listPageActionsButtonFunc = (props) => {
         editBodyfunc,
         deleteBodyfunc,
         copyBodyfunc,
+        downClaimBtnFunc,
         viewApprovalBtnFunc,
         otherBtn_1Func,
         makeBtnFunc = () => { },
@@ -54,6 +65,7 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnName,
         makeBtnShow = false,
         oderAprovalBtnFunc,
+        sendToScmBtnFunc,
     } = props;
 
     const { listBtnLoading } = props.reducers;
@@ -68,7 +80,7 @@ export const listPageActionsButtonFunc = (props) => {
         makeBtnFunc(arr, btnId);
     };
 
-    const renderButtonOnClick = async ({ rowData, btnmode, btnId, actionFunc, dispatchAction }) => {
+    const renderButtonOnClick = async ({ rowData, btnmode, btnId, actionFunc, dispatchAction, }) => {
 
         try {
             const config = {
@@ -118,6 +130,8 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     const renderActionButton = (__cell, rowData, __key, formatExtra) => {
+
+
         const { listBtnLoading } = formatExtra;
         const {
             forceEditHide,
@@ -126,16 +140,23 @@ export const listPageActionsButtonFunc = (props) => {
             forceMakeBtnHide,
             IsRecordDeleted
         } = rowData;
-
         rowData.hasSelect = false;
 
-        const hasRole = (role) => userAccState[role];
+        //Code For Button Visible only for Login Those Party Type Id match in Comaseprate String of rowData.isSendToScm
+        let isPartyTypeIDInSendToScm = ""
+        if (rowData.isSendToScm) {
+            isPartyTypeIDInSendToScm = rowData.isSendToScm
+                .split(',')
+                .map(value => parseInt(value))
+                .includes(rowData.CustomerPartyType);
+        }
 
+        const hasRole = (role) => userAccState[role];
         const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide;
         const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && rowData.CreatedBy === userCreated && !forceEditHide;
         const canView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && !viewApprovalBtnFunc;
         const canApprovalView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && viewApprovalBtnFunc;
-        const canPrint = hasRole("RoleAccess_IsPrint");
+        const canPrint = hasRole("RoleAccess_IsPrint") && !downClaimBtnFunc;
         const canMultiInvoicePrint = hasRole("RoleAccess_IsMultipleInvoicePrint");
         const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide;
         const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && rowData.CreatedBy === userCreated && !forceDeleteHide;
@@ -143,10 +164,20 @@ export const listPageActionsButtonFunc = (props) => {
         const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtnHide;
         const canOrderApproval = oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
 
+        const canCustomerWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
+        const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
+        const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
+        const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
+
+
+
+
         const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc;
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
+        const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm
+
 
 
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
@@ -266,6 +297,41 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Update",
                         buttonClasss: updateBtnCss,
                     })}
+                    {renderButtonIfNeeded({   // Button Added For Customer Wise Claim Summary Print on Claim List page
+                        condition: canCustomerWisePrint,
+                        btnmode: mode.CustomerWiseSummary,
+                        iconClass: claimCustomerWisePrintIconClass,
+                        actionFunc: downClaimBtnFunc,
+                        title: "Print Customer Wise ",
+                        buttonClasss: printBtnCss,
+                    })}
+                    {renderButtonIfNeeded({ // Button Added For Item Wise Claim Summary Print on Claim List page
+                        condition: canItemWisePrint,
+                        btnmode: mode.ItemWiseSummary,
+                        iconClass: claimItemWisePrintIconClass,
+                        actionFunc: downClaimBtnFunc,
+                        title: "Print Item Wise",
+                        buttonClasss: printBtnCss,
+                    })}
+                    {renderButtonIfNeeded({ // Button Added For Master Claim Summary Print on Claim List page
+                        condition: canMasterClaimPrint,
+                        btnmode: mode.MastarClaimSummary,
+                        iconClass: claimMasterPrintIconClass,
+                        actionFunc: downClaimBtnFunc,
+                        title: "Print Master ",
+                        buttonClasss: printBtnCss,
+                    })}
+                    {renderButtonIfNeeded({    //Button Added for Invoice send to SCM  in Invoice List Page
+                        condition: canSendToScm,
+                        btnmode: mode.isSendToScm,
+                        iconClass: sendToScmIconClass,
+                        actionFunc: sendToScmBtnFunc,
+                        title: "Send",
+                        buttonClasss: makeBtnCss,
+                        isDummyBtn: dummyDisable_SendToScm
+
+
+                    })}
                     {renderButtonIfNeeded({
                         condition: canDelete,
                         btnmode: mode.isdelete,
@@ -303,6 +369,8 @@ export const listPageActionsButtonFunc = (props) => {
                         buttonClasss: makeBtnCss,
                         isDummyBtn: dummyDisable_OrderApproval
                     })}
+
+
                 </div>
             </span>
         );

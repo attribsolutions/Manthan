@@ -230,7 +230,7 @@ export const reportHeder1 = (doc, data) => {
 
 
     const priLength = () => {
-        debugger
+        
         let final_y = doc.previousAutoTable.finalY
         if (final_y > initial_y) {
             initial_y = final_y

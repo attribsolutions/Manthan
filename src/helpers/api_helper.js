@@ -1,4 +1,5 @@
- import {axiosApi} from "./axios_Config"
+import { axiosApi } from "./axios_Config"
+
 
 
 
@@ -15,6 +16,7 @@ export function get(url, param) {
 }
 
 export function post(url, body) {
+  
   return axiosApi
     .post(url, body, {
       headers: {
