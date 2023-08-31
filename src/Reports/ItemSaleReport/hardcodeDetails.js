@@ -81,7 +81,7 @@ export const defaultTableColumns = [
 export const initialSlected_zero={ value: 0, label: "All" };
 export const initialSlected_blank={ value: 0, label: "All" };
 
-export const checkboxOption = [{
+export const showAlsoOption = [{
     value: 1,
     label: "Invoice Number",
 },
@@ -109,4 +109,18 @@ export const checkboxOption = [{
     value: 7,
     label: "TCSAmount",
 }
+]
+export const UnitDropdownOptions = [
+    {
+        value: '', label: "Select..."
+    },
+    {
+        value: 1, label: "QtyInNo"
+    },
+    {
+        value: 2, label: "QtyInKg"
+    },
+    {
+        value: 3, label: "QtyInBox"
+    },
 ]
