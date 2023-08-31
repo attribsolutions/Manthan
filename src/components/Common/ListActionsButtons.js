@@ -167,7 +167,7 @@ export const listPageActionsButtonFunc = (props) => {
         const canCustomerWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
-        const canSendToScm = isPartyTypeIDInSendToScm && false;  //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
+        const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
 
 
 
