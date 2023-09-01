@@ -35,6 +35,8 @@ const PdfReportReducers = (state = INIT_STATE, action) => {
       return {
         ...state,
         ReportBtnLoading: false,
+        goBtnLoading: false,
+
       }
     default:
       return state
