@@ -194,13 +194,13 @@ const ViewDetails_Modal = () => {
             const tableItemArray = []
             let inValideUnits = []
             tableArray.ReturnItems.forEach(index => {
-
+                debugger
                 const approvedQty = index.ApprovedQuantity ? index.ApprovedQuantity : index.Quantity
                 const Comment = index.ApproveComment ? index.ApproveComment : null
 
                 if (index.ApprovedQuantity === "") {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
-                } else if (Number(approvedQty) > 0) {
+                } else if (Number(approvedQty) >= 0) {
                     const ReturnItems = {
                         "id": index.id,
                         "Item": index.Item,
