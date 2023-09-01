@@ -293,12 +293,24 @@ const ItemSaleReport = (props) => {
     }
 
     function showAlsoOnChange(event) {
-        if (event.some(item => [5, 6, 7].includes(item.value))) {
+        
+        let isLastInvoice = event.length > 0
+            ? [1,5, 6, 7].includes(event[event.length - 1].value)
+            : false;
+
+        if (isLastInvoice) {
+            if (event.some(item => [2, 4].includes(item.value))) {
+                event = event.filter(item => ![2, 4].includes(item.value))
+            }
             if (!event.some(item => item.value === 1)) {
                 event.push(initail.showAlsoOption[0]);
             }
         }
+
         if (event.some(item => item.value === 2)) {
+            if (event.some(item => [1, 5, 6, 7].includes(item.value))) {
+                event = event.filter(item => ![1,5, 6, 7].includes(item.value))
+            }
             if (!event.some(item => item.value === 4)) {
                 event.push(initail.showAlsoOption[3])
             }
