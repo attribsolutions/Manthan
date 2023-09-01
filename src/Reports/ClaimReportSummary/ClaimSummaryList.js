@@ -58,7 +58,7 @@ const ClaimSummaryList = () => {
     );
 
     const { pageField, pdfdata, deleteMsg, tableList } = reducers;
-    debugger
+    
     const values = { ...state.values }
 
     const action = {
@@ -103,7 +103,7 @@ const ClaimSummaryList = () => {
 
 
     function downClaimBtnFunc(config) {
-        debugger
+        
         const jsonBody = JSON.stringify({
             "FromDate": config.rowData.MonthStartDate,
             "ToDate": config.rowData.MonthEndDate,

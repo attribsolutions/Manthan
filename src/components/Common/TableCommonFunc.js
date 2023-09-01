@@ -187,7 +187,7 @@ const DynamicColumnHook = ({
             }
 
             if (i.ControlID === "Party" && row.Mode) {
-              debugger
+              
               let Staus = ""
               if (row.Mode === 1) {
                 Staus = `(Sale Return)`

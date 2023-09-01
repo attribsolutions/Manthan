@@ -15,7 +15,7 @@ function* InvoiceDataExport_Gen({ config }) {
 
     try {
         const response = yield call(InvoiceDataExport_GoBtn_API, config);
-        debugger
+        
         response.Data["goBtnMode"] = config.goBtnMode;
 
         const newResponse = response.Data.map((i) => {

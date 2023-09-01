@@ -363,7 +363,7 @@ const GRNAdd3 = (props) => {
             const itemArr = []
             let sumOfGrandTotal = 0
             let inValidMsg = []
-            debugger
+            
             grnItemTableList.forEach(i => {
 
 

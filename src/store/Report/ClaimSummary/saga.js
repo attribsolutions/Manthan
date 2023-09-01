@@ -22,7 +22,7 @@ function* ClaimList_GenFunc({ config }) {
         const response = yield call(ClaimList_API, config);
         let NewResponse = []
         if (config.Type === "List") {
-            debugger
+            
             for (const item of response.Data) {
                 if (item.id !== null) {
                     const newItem = {

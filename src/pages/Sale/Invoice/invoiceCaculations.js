@@ -42,7 +42,7 @@ export function bulkSearch(text, data, columns) {
 // ************************************************************************
 
 export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
-
+    
     // Extract values from the input parameters
     const rate = Number(row.Rate) || 0;
     const quantity = Number(row.Qty) || 0;
@@ -108,9 +108,13 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
     const systemSetting = loginSystemSetting();
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
     const isTCS_AmtRound = systemSetting.TCSAmountRoundConfiguration === '1';
-    
+
     // Calculate the sum of the itemTotalAmount in the tableList
-    let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
+    let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => {
+        return accumulator + Number(currentObject["itemTotalAmount"]) || 0
+    }, 0);
+
+
     let TCS_Amount = 0; // Initial TCS Amount
 
     if (tableList[0].IsTCSParty) {

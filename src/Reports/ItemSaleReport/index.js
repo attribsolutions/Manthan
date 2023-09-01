@@ -525,13 +525,13 @@ const ItemSaleReport = (props) => {
 
 
         const filterParameter = buttonStateArray.filter(option => (option.selectValue.value > 0));
-        debugger
+        
         if (filterParameter.length > 0) {
             manupulatedData = baseData.filter(item => {
                 return filterParameter.every(option => {
-                    debugger
+                    
                     if ((option.dataField === 'ShowDiscountedItems') && (option.selectValue.value > 0)) {
-                        debugger
+                        
                         return (Number(item.DiscountAmount) > 0) ? true : false
                     }
                     var a = item[option.dataField] === option.selectValue.label;
@@ -551,7 +551,7 @@ const ItemSaleReport = (props) => {
             // **********************************************************************************************
             const groupedData = {};
 
-            debugger;
+            ;
 
             manupulatedData.forEach(item => {
                 const groupValues = buttonStateArray
@@ -574,7 +574,7 @@ const ItemSaleReport = (props) => {
 
                 buttonStateArray.forEach(field => {
                     if (field.isSum === true) {
-                        debugger
+                        
                         groupedData[groupKey][field.dataField] += parseFloat(item[field.dataField]);
                         groupedData[groupKey][field.dataField] = parseFloat((groupedData[groupKey][field.dataField]).toFixed(field.toFixed));
                     }

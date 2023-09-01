@@ -12,6 +12,7 @@ import {
   apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess,
   loginError_Action,
   loginSuccess,
+  loginSuccessAction,
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
   roleAceessActionError,
@@ -27,7 +28,7 @@ import {
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { CommonConsole } from "../../../components/Common/CommonFunction"
 
-function* loginUser({ payload: { user, history } }) {
+function* loginUser({ payload: { user } }) {
   try {
 
     const response = yield call(Python_FoodERP_postJwtLogin, {
@@ -36,7 +37,7 @@ function* loginUser({ payload: { user, history } }) {
     })
 
     if (response.StatusCode === 200) {
-      yield put(loginSuccess(response))
+      yield put(loginSuccessAction(response))
     } else {
       yield put(loginError_Action(response.Message))
 
@@ -86,7 +87,6 @@ function* afterLoginUserDetails_genFun({ id }) {
 
 function* logoutUser({ payload: { history } }) {
   try {
-    localStorage.removeItem("authUser")
     history.push("/login")
   } catch (error) {
     yield put(loginError_Action(error))
@@ -99,50 +99,7 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
 
     const RoleResponse = yield call(RoleAccessApi_url, party, employee, company);
 
-    // if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
-
-    //   let arrayMain = []
-    //   let objMain = {}
-    //   let arrayChild = []
-    //   let objChild = {}
-    //   let all_DataInSinlgeArray = []
-
-    //   RoleResponse.Data.forEach((parent) => {
-    //     objMain = parent;
-
-    //     parent.ModuleData.forEach((child) => {
-
-    //       objChild = child;
-
-    //       PageAccessApi.Data.forEach((page) => {
-    //         objChild[`RoleAccess_${page.Name}`] = false;
-    //       })
-
-    //       child.RolePageAccess.forEach((role) => {
-    //         child[`RoleAccess_${role.Name}`] = true;
-    //       })
-
-    //       arrayChild.push(objChild)
-    //       delete objMain.ModuleData
-    //       objMain["ModuleData"] = arrayChild
-    //       objChild = {};
-    //     });
-    //     arrayMain.push(objMain)
-    //     arrayChild = []
-    //     objMain = {}
-    //   })
-    //   arrayMain.forEach((i) => {
-    //     i.ModuleData.forEach((index) => {
-    //       index.ModuleName = i.ModuleName;
-    //       all_DataInSinlgeArray.push(index)
-    //     })
-    //   })
-
-
-
-    //   yield put(roleAceessActionSuccess(arrayMain))
-    //   yield put(RoleAccessUpdateSuccess(all_DataInSinlgeArray))
-    // }
+    
 
     if (RoleResponse.Data.length > 0 && PageAccessApi.Data.length > 0) {
       let arrayMain = [];

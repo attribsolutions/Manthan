@@ -4,12 +4,19 @@ import React, { useEffect, useState } from "react"
 import { Row, Col, Alert, Container, Input } from "reactstrap"
 import { useSelector, useDispatch } from "react-redux"
 import { withRouter, Link, useHistory } from "react-router-dom"
-import { divisionDropdownSelectSuccess, getUserDetailsAction, loginError_Action, loginUser, resetRoleAccessAction, roleAceessAction, } from "../../store/actions"
+import {
+  divisionDropdownSelectSuccess,
+  getUserDetailsAction,
+  loginError_Action,
+  loginSuccessAction,
+  loginUser,
+  resetRoleAccessAction,
+} from "../../store/actions"
 import logo from "../../assets/images/cbm_logo.png"
 import CarouselPage from "./CarouselPage"
 import { useLayoutEffect } from "react"
-import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc"
+import { useSession } from "../../routes/middleware/SessionContext"
 
 const Login = props => {
 
@@ -27,16 +34,16 @@ const Login = props => {
     divisionDropdown_redux: state.Login.divisionDropdown,
     userAccess: state.Login.RoleAccessUpdateData,
   }))
+  const { session, updateSessionActivity } = useSession();
 
   useLayoutEffect(() => {
     dispatch(resetRoleAccessAction())
     dispatch(divisionDropdownSelectSuccess([]))
   }, []);
 
-
   useLayoutEffect(() => {
     try {
-      if ((localStorage.getItem("token")) && (localStorage.getItem("roleId"))) {
+      if ((session.active === true && (localStorage.getItem("token")) && (localStorage.getItem("roleId")))) {
         history.push({ pathname: "/Dashboard" })
         return
       }
@@ -44,17 +51,19 @@ const Login = props => {
     } catch (e) { }
   }, [])
 
-  useEffect(() => {
 
+
+  useEffect(() => {
     try {
       if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
+        updateSessionActivity({ active: true });
 
         localStorage.setItem("token", (loginSuccess.token))
         localStorage.setItem("refreshToken", (loginSuccess.refreshtoken))
         localStorage.setItem("userId", (loginSuccess.UserID))
 
+        dispatch(loginSuccessAction({ Status: false }))
         dispatch(getUserDetailsAction(loginSuccess.UserID))
-        dispatch(loginSuccess({ Status: false }))
       }
     } catch (e) { }
   }, [loginSuccess])
@@ -66,9 +75,11 @@ const Login = props => {
       if (user.Party_id === null) {
         user.Party_id = 0;
       }
-      //api call roleAceessAction Api,partysetting Api , Party Dropdown Api and set localstorage roleId ;
-      afterloginOneTimeAPI(user, dispatch);// all common function
-
+      
+      if (session.active === true && (localStorage.getItem("token"))) {
+        //api call roleAceessAction Api,partysetting Api , Party Dropdown Api and set localstorage roleId ;
+        afterloginOneTimeAPI(user, dispatch);// all common function
+      }
     }
     else if (divisionDropdown_redux.length > 1) {
       history.push("/division");
@@ -110,7 +121,6 @@ const Login = props => {
 
   return (
     <React.Fragment>
-      <LogoutChecker />
       <MetaTags>
         <title>Login | FoodERP 2.0</title>
       </MetaTags>

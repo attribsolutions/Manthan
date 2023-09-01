@@ -26,7 +26,7 @@ function* save_SalesReturn_GenFunc({ config }) {
 function* SalesReturn_List_GenFun({ filters }) {
 
     try {
-        debugger
+        
         const response = yield call(apiCall.SalesReturn_list_API, filters);
         const newList = yield response.Data.map((i) => {
             i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
