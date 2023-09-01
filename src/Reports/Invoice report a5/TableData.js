@@ -126,16 +126,17 @@ export const RowsWithCGST_SGST = (data) => {
     Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
-        if (data.SettingData.HSNCodeDigit === "1") {
-            HSNcodes = element.HSNCode.slice(0, 4);
+        if (element.HSNCode) {
+            if (data.SettingData.HSNCodeDigit === "1") {
+                HSNcodes = element.HSNCode.slice(0, 4);
+            }
+            if (data.SettingData.HSNCodeDigit === "2") {
+                HSNcodes = element.HSNCode.slice(0, 6);
+            }
+            if (data.SettingData.HSNCodeDigit === "3") {
+                HSNcodes = element.HSNCode.slice(0, 8);
+            }
         }
-        if (data.SettingData.HSNCodeDigit === "2") {
-            HSNcodes = element.HSNCode.slice(0, 6);
-        }
-        if (data.SettingData.HSNCodeDigit === "3") {
-            HSNcodes = element.HSNCode.slice(0, 8);
-        }
-
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
@@ -300,18 +301,20 @@ export const RowsWithIGST = (data) => {
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
-        debugger
-        let HSNcodes = ""
-        if (data.SettingData.HSNCodeDigit === "1") {
-            HSNcodes = element.HSNCode.slice(0, 4);
-        }
-        if (data.SettingData.HSNCodeDigit === "2") {
-            HSNcodes = element.HSNCode.slice(0, 6);
-        }
-        if (data.SettingData.HSNCodeDigit === "3") {
-            HSNcodes = element.HSNCode.slice(0, 8);
-        }
 
+        let HSNcodes = ""
+        if (element.HSNCode) {
+
+            if (data.SettingData.HSNCodeDigit === "1") {
+                HSNcodes = element.HSNCode.slice(0, 4);
+            }
+            if (data.SettingData.HSNCodeDigit === "2") {
+                HSNcodes = element.HSNCode.slice(0, 6);
+            }
+            if (data.SettingData.HSNCodeDigit === "3") {
+                HSNcodes = element.HSNCode.slice(0, 8);
+            }
+        }
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,

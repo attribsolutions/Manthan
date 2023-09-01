@@ -140,9 +140,9 @@ export const Rows = (data) => {
 export const BilledByRow = (data) => {
 
     var BilledByArray = [
-        [`${data.PartyDetails.PartyName}`],
-        [`${data.PartyDetails.Address}`],
-        [`MobileNo:${data.PartyDetails.MobileNo}`],
+        [`                   ${data.PartyDetails.PartyName}`],
+        [`                 ${data.PartyDetails.Address}`],
+        [`                   ${data.PartyDetails.MobileNo}`],
     ]
     return BilledByArray;
 }
