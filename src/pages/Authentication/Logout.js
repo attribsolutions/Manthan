@@ -6,11 +6,16 @@ import { logoutReset, logoutUser } from "../../store/actions"
 
 //redux
 import { useDispatch } from "react-redux"
+import { useSession } from "../../routes/middleware/SessionContext"
 
 const Logout = props => {
   const dispatch = useDispatch()
-
+  const { updateSessionActivity } = useSession();
   useEffect(() => {
+
+    updateSessionActivity({
+      session: false,
+    })
     localStorage.clear()
     sessionStorage.clear()
     dispatch(logoutUser(props.history))

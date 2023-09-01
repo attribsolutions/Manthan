@@ -222,7 +222,7 @@ export const tableBody = (doc, data) => {
 
 
             if (data1.row.cells[2].raw === "Total") {
-                debugger
+                
                 data1.row.cells[0].colSpan = 10
                 data1.row.cells[0].styles.fontSize = 9
                 data1.row.cells[0].styles.fontStyle = "bold"

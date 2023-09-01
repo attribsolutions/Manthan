@@ -120,7 +120,7 @@ const InvioceReporta5 = async (data) => {
         // doc.text('Page' + String("2") + ' of ' + String("1"), 500, 390,)
         // doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
 
-        debugger
+        
         for (let i = 0; i < data.length; i += BATCH_SIZE) {
             const batch = data.slice(i, i + BATCH_SIZE);
             batch.forEach((item, index) => {

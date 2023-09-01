@@ -9,6 +9,7 @@ import { userRoutes, authRoutes } from "./routes/allRoutes"
 
 // Import all middleware
 import Authmiddleware from "./routes/middleware/Authmiddleware"
+import {SessionProvider} from "./routes/middleware/SessionContext"
 
 // layouts Format
 import VerticalLayout from "./components/VerticalLayout/"
@@ -22,7 +23,7 @@ import "./assets/scss/preloader.scss"
 const App = props => {
   const history = useHistory();
   const userPageAccess = history.location.state
- 
+
   function getLayout() {
     let layoutCls = VerticalLayout
     switch (props.layout.layoutType) {
@@ -41,29 +42,32 @@ const App = props => {
     <React.Fragment>
       <Router>
         <Switch>
-          {authRoutes.map((route, idx) => (
-            <Authmiddleware
-              path={route.path}
-              layout={NonAuthLayout}
-              component={route.component}
-              key={idx}
-              isAuthProtected={false}
-              exact
-            />
-          ))}
+          <SessionProvider history={history}>
+            {authRoutes.map((route, idx) => (
+              <Authmiddleware
+                path={route.path}
+                layout={NonAuthLayout}
+                component={route.component}
+                key={idx}
+                history={history}
+                isAuthProtected={false}
+                exact
+              />
+            ))}
 
-          {userRoutes.map((route, idx) => (
-            <Authmiddleware
-              path={route.path}
-              layout={Layout}
-              component={route.component}
-              key={idx}
-              isAuthProtected={true}
-              userPageAccess={userPageAccess}
-              history={history}
-              exact
-            />
-          ))}
+            {userRoutes.map((route, idx) => (
+              <Authmiddleware
+                path={route.path}
+                layout={Layout}
+                component={route.component}
+                key={idx}
+                isAuthProtected={true}
+                userPageAccess={userPageAccess}
+                history={history}
+                exact
+              />
+            ))}
+          </SessionProvider>
         </Switch>
       </Router>
     </React.Fragment>
