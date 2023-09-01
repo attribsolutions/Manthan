@@ -162,7 +162,7 @@ export const Rows = (data) => {
 
         function totalclose() {
             return [
-                `Closing Balance: ${data[data.length - 1].OpeningBalance}`,
+                `Closing Balance: ${data[data.length - 1].ClosingBalance}`,
                 "",
                 "Total",
                 ``,
@@ -182,18 +182,18 @@ export const Rows = (data) => {
 
         // else {
         //     // returnArr.push(totalrow());
-        // if (key === 0) {
-        //     returnArr.push(totalopen());
-        // }
+        if (key === 0) {
+            returnArr.push(totalopen());
+        }
         if (key !== data.length - 1) {
             returnArr.push(tableitemRow);
             totalLots()
         }
 
-        // if (key === data.length - 1) {
-        //     returnArr.push(totalclose())
+        if (key === data.length - 2) {
+            returnArr.push(totalclose())
 
-        // }
+        }
 
         // }
         if (key === data.length - 2) {
