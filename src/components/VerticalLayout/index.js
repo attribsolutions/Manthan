@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   changeLayout,
   changeSidebarTheme,
@@ -17,21 +17,12 @@ import Footer from "./Footer";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import BreadcrumbNew from "../../components/Common/BreadcrumbNew"
-
-import { useHistory } from "react-router-dom";
 import "./loader.scss";
-import LogoutChecker from "../LogoutChecker/TabSessionAlive";
-
 
 const Layout = props => {
   const dispatch = useDispatch();
-  const history = useHistory()
-  const [Count, setCount] = useState(0);
-
-
 
   const {
-    isPreloader,
     layoutWidth,
     leftSideBarType,
     topbarTheme,
@@ -60,24 +51,6 @@ const Layout = props => {
     }
   };
 
-  /*
-  layout  settings
-  */
-
-  // useEffect(() => {
-  //   //init body click event fot toggle rightbar
-  //   // document.body.addEventListener("click", hideRightbar, true);
-
-  //   if (isPreloader === true) {
-  //     document.getElementById("preloader").style.display = "block";
-
-  //     setTimeout(function () {
-  //       document.getElementById("preloader").style.display = "none";
-  //     }, 2500);
-  //   } else {
-  //     document.getElementById("preloader").style.display = "none";
-  //   }
-  // }, [isPreloader]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -140,7 +113,6 @@ const Layout = props => {
     <React.Fragment>
      
       <div id="layout-wrapper">
-        <LogoutChecker />
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
         <BreadcrumbNew />
         <Sidebar

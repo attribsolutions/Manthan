@@ -5,8 +5,8 @@ import { sessionAliveNewToken } from '../../store/auth/sessionAlive/actions';
 const SessionContext = createContext();
 
 
-const SESSION_TIMEOUT_DURATION = 30 * 60 * 1000; // 2 minutes
-const REFRESH_TOKEN_INTERVAL = 28 * 60 * 1000; // 1.3 minutes 
+const SESSION_TIMEOUT_DURATION = 28 * 60 * 1000; // 2 minutes
+const REFRESH_TOKEN_INTERVAL = 29 * 60 * 1000; // 1.3 minutes 
 
 export const SessionProvider = ({ history, children }) => {
 

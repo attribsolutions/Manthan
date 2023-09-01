@@ -15,7 +15,6 @@ import {
 import logo from "../../assets/images/cbm_logo.png"
 import CarouselPage from "./CarouselPage"
 import { useLayoutEffect } from "react"
-import LogoutChecker from "../../components/LogoutChecker/TabSessionAlive"
 import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc"
 import { useSession } from "../../routes/middleware/SessionContext"
 
@@ -122,7 +121,6 @@ const Login = props => {
 
   return (
     <React.Fragment>
-      {/* <LogoutChecker /> */}
       <MetaTags>
         <title>Login | FoodERP 2.0</title>
       </MetaTags>
