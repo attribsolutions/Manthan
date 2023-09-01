@@ -35,9 +35,7 @@ export const reportHeder1 = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 63, 30, 63) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
-    doc.line(570, 80, 30, 80);//horizontal line 3
-    doc.line(408, 63, 408, 16);//vertical line header section billby 
-    doc.line(292, 170, 292, 80);//vertical  line header section billto
+    // doc.line(570, 80, 30, 80);//horizontal line 3
     doc.line(570, 32, 408, 32);//horizontal line 3
     doc.line(570, 47, 408, 47);//horizontal line 3
 
@@ -47,6 +45,33 @@ export const reportHeder1 = (doc, data) => {
         margin: {
             top: 45, left: 30, right: 35,
         },
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Customer: ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Address: ', x, y)
+            };
+
+            if (rowIdx === 2 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Mobile No: ', x, y)
+            };
+        },
+
         showHead: 'always',
         theme: 'plain',
         styles: {
@@ -59,7 +84,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 2,
             fontSize: 8,
-            fontStyle: 'bold',
+            fontStyle: 'normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -71,7 +96,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
 
-        startY: 80
+        startY: 63
     };
 
     var BilledToStyle = {
@@ -101,7 +126,7 @@ export const reportHeder1 = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        startY: 80,
+        startY: 63,
     };
 
 
@@ -122,13 +147,13 @@ export const reportHeder1 = (doc, data) => {
 }
 
 export const reportHeder3 = (doc, data) => {
-    
+
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`From Date:  ${date_dmy_func(data.Period.FromDate)}`, 415, 25)
-    doc.text(`To Date:       ${date_dmy_func(data.Period.ToDate)}`, 415, 40)
-    doc.text(`Claim ID:       ${data.Period.ClaimID}`, 415, 56)
+    doc.text(`From Date:  ${date_dmy_func(data.Period.FromDate)}`, 415, 26)
+    doc.text(`To Date:       ${date_dmy_func(data.Period.ToDate)}`, 415, 42)
+    doc.text(`Claim ID:       ${data.Period.ClaimID}`, 415, 58)
 
 
 }
