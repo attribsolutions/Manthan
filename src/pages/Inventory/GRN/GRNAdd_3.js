@@ -100,6 +100,7 @@ const GRNAdd3 = (props) => {
         postMsg, pageMode,
         history, dispatch,
         postSuccss: saveGRNSuccess,
+        foreceRedirectList: true,
         listPath: url.GRN_LIST_3
     }), [postMsg])
 
@@ -358,11 +359,9 @@ const GRNAdd3 = (props) => {
 
         const btnId = event.target.id
 
-
         try {
-
-
-            const itemArray = grnItemTableList.map(item => {
+            const itemArray = grnItemTableList.map(index => {
+                let { UnitDetails, GSToption, MRPOps, GSTDropdown, MRPDetails, ...item } = index
                 return {
                     ...item,
                     ActualQuantity: item.invoiceQuantity, //invoice actual quantity 
