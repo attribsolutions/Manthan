@@ -14,7 +14,7 @@ var pageHeder = function (doc, data) {
 };
 
 function reportBody(doc, data) {
-    
+
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
     if (isIGST) {
         style.tableBodyWithIGST(doc, data);
@@ -39,8 +39,7 @@ const ordeRreport = (data) => {
 
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        const options = { filename: `POReport/${data.CustomerName}/${data.OrderDate} ` }
-        window.open(pdfUrl, options);
+        window.open(pdfUrl);
     }
     generateSaveAndOpenPDFReport();
 

@@ -150,9 +150,8 @@ export const BilledToRow = (data) => {
 
 
     var BilledToArray = [
-        // [`Expiry From Retailer Claim summary`],
-        // [`GSTIN NO :${data.PartyDetails.GSTIN}`],
-        // [`FSSAI NO :${data.PartyDetails.FSSAINo}`],
+        [`                   ${data.PartyDetails.GSTIN}`],
+        [`                  ${data.PartyDetails.FSSAINo}`],
     ]
 
     return BilledToArray;

@@ -32,8 +32,7 @@ const ClaimSummaryReport = (data) => {
     });
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        const options = { filename: `ClaimSummary_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)}` }
-        window.open(pdfUrl, options);
+        window.open(pdfUrl);
     }
     generateSaveAndOpenPDFReport();
 

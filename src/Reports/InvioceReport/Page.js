@@ -75,8 +75,7 @@ const invioceReport_A4 = async (data) => {
 
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        const options = { filename: "InvoiceReport" }
-        window.open(pdfUrl, options);
+        window.open(pdfUrl);
     }
     generateSaveAndOpenPDFReport();
 }
