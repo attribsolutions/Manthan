@@ -175,10 +175,7 @@ const ItemSaleReport = (props) => {
                 label: i.Name,
             }));
         }
-        options.unshift({
-            value: 0,
-            label: "All"
-        });
+        options.unshift(initail.initialSlected_zero);
         return options;
     }, [productSelect, subProductDropdown, getSubProductbyProduct]);
 
@@ -195,10 +192,7 @@ const ItemSaleReport = (props) => {
                 label: i.Name,
             }));
         }
-        options.unshift({
-            value: 0,
-            label: "All"
-        });
+        options.unshift(initail.initialSlected_zero);
         return options;
     }, [channelFromSelect, supplier, supplierListOnPartyType]);
 
@@ -223,7 +217,7 @@ const ItemSaleReport = (props) => {
     function ChannelFromDropdown_Onchange(e) {
 
         setChannelFromSelect(e)
-        setSupplierSelect({ value: 0, label: "All" })
+        setSupplierSelect(initail.initialSlected_zero)
         dispatch(SupplierOnPartyType_API({ employeeID: _cfunc.loginEmployeeID(), channelFromID: e.value }))
     }
 
@@ -267,15 +261,15 @@ const ItemSaleReport = (props) => {
         setProductSelect(e)
         dispatch(get_Sub_Group_By_Group_ForDropDown(e.value))
         dispatch(Items_On_Group_And_Subgroup_API({ "Group": e.value, "SubGroup": 0 }))
-        setSubProductSelect({ value: 0, label: "All" })
-        setItemNameSelect({ value: "", label: "All" })
+        setSubProductSelect(initail.initialSlected_zero)
+        setItemNameSelect(initail.initialSlected_blank)
         dispatch(get_Sub_Group_By_Group_ForDropDown_Success([]))
     }
 
     function Sub_ProductOnChange(e) {
         setSubProductSelect(e)
         dispatch(Items_On_Group_And_Subgroup_API({ "Group": 0, "SubGroup": e.value }))
-        setItemNameSelect({ value: "", label: "All" })
+        setItemNameSelect(initail.initialSlected_blank)
 
     }
 
@@ -294,29 +288,29 @@ const ItemSaleReport = (props) => {
 
     function showAlsoOnChange(event) {
         let isLastInvoice =
-          event.length > 0
-            ? [1, 5, 6, 7].includes(event[event.length - 1].value)
-            : false;
-    
+            event.length > 0
+                ? [1, 5, 6, 7].includes(event[event.length - 1].value)
+                : false;
+
         if (isLastInvoice) {
-          if (event.some((item) => [2, 4].includes(item.value))) {
-            event = event.filter((item) => ![2, 4].includes(item.value));
-          }
-          if (!event.some((item) => item.value === 1)) {
-            event.push(initail.showAlsoOption[0]);
-          }
+            if (event.some((item) => [2, 4].includes(item.value))) {
+                event = event.filter((item) => ![2, 4].includes(item.value));
+            }
+            if (!event.some((item) => item.value === 1)) {
+                event.push(initail.showAlsoOption[0]);
+            }
         }
-    
+
         if (event.some((item) => [2, 4].includes(item.value))) {
-          if (event.some((item) => [1, 5, 6, 7].includes(item.value))) {
-            event = event.filter((item) => ![1, 5, 6, 7].includes(item.value));
-          }
-          if (!event.some((item) => item.value === 4)) {
-            event.push(initail.showAlsoOption[3]);
-          }
+            if (event.some((item) => [1, 5, 6, 7].includes(item.value))) {
+                event = event.filter((item) => ![1, 5, 6, 7].includes(item.value));
+            }
+            if (!event.some((item) => item.value === 4)) {
+                event.push(initail.showAlsoOption[3]);
+            }
         }
         setShowAlsoSelect(event);
-      }
+    }
     function CustomerOnChange(e) {
         setCustomerSelect(e)
     }
@@ -428,7 +422,6 @@ const ItemSaleReport = (props) => {
                 text: 'QtyInNo',
                 dataField: 'QtyInNo',
                 checkboxState: unitDropdownSelect.value === 1 ? true : false,
-                selectValue: { value: "", label: "All" },
                 sort: true,
                 isSum: true,
                 toFixed: 0,
@@ -438,7 +431,6 @@ const ItemSaleReport = (props) => {
                 text: 'QtyInKg',
                 dataField: 'QtyInKg',
                 checkboxState: unitDropdownSelect.value === 2 ? true : false,
-                selectValue: { value: "", label: "All" },
                 sort: true,
                 isSum: true,
                 toFixed: 3,
@@ -448,7 +440,6 @@ const ItemSaleReport = (props) => {
                 text: 'QtyInBox',
                 dataField: 'QtyInBox',
                 checkboxState: unitDropdownSelect.value === 3 ? true : false,
-                selectValue: { value: "", label: "All" },
                 sort: true,
                 isSum: true,
                 toFixed: 3,
@@ -457,8 +448,7 @@ const ItemSaleReport = (props) => {
             {
                 text: 'InvoiceGrandTotal',
                 dataField: 'GrandTotal',
-                checkboxState: showAlsoSelect.some(item => item.value === 5) ? true : false,
-                selectValue: showAlsoSelect,
+                checkboxState: showAlsoSelect.some(item => item.value === 5),
                 sort: true,
                 toFixed: 2,
                 sequence: 15
@@ -466,8 +456,7 @@ const ItemSaleReport = (props) => {
             {
                 text: 'DiscountInRS',
                 dataField: 'DiscountAmount',
-                checkboxState: showAlsoSelect.some(item => item.value === 4) ? true : false,
-                selectValue: showAlsoSelect,
+                checkboxState: showAlsoSelect.some(item => item.value === 4),
                 sort: true,
                 isSum: true,
                 toFixed: 2,
@@ -476,8 +465,7 @@ const ItemSaleReport = (props) => {
             {
                 text: 'RoundOffAmount',
                 dataField: 'RoundOffAmount',
-                checkboxState: showAlsoSelect.some(item => item.value === 6) ? true : false,
-                selectValue: showAlsoSelect,
+                checkboxState: showAlsoSelect.some(item => item.value === 6),
                 isSum: true,
                 sort: true,
                 toFixed: 2,
@@ -486,8 +474,7 @@ const ItemSaleReport = (props) => {
             {
                 text: 'TCSAmount',
                 dataField: 'TCSAmount',
-                checkboxState: showAlsoSelect.some(item => item.value === 7) ? true : false,
-                selectValue: showAlsoSelect,
+                checkboxState: showAlsoSelect.some(item => item.value === 7),
                 isSum: true,
                 sort: true,
                 sequence: 18,
@@ -496,17 +483,25 @@ const ItemSaleReport = (props) => {
             {
                 text: 'GRNID',
                 dataField: 'FullGRNNumber',
-                checkboxState: showAlsoSelect.some(item => item.value === 3) ? true : false,
-                selectValue: showAlsoSelect,
+                checkboxState: showAlsoSelect.some(item => item.value === 3),
                 sort: true,
                 groupBy: true,
                 sequence: 19
             },
-            {
+            { //this filed not Show intable 
                 text: "Show Discounted Items",
                 dataField: "ShowDiscountedItems",
-                selectValue: showAlsoSelect.find(item => item.value === 2) || initail.initialSlected_blank,
+                selectValue: showAlsoSelect.find(item => item.value === 2),
             },
+            {
+                text: "Amount",
+                dataField: "Amount",
+                checkboxState: true,
+                sort: true,
+                isSum: true,
+                toFixed: 2,
+                sequence: 14,
+            }
 
         ];
 
@@ -514,28 +509,19 @@ const ItemSaleReport = (props) => {
 
         let manupulatedData = [...baseData];
 
-        let tableColumns = [{
-            text: "Amount",
-            dataField: "Amount",
-            sort: true,
-            isSum: true,
-            toFixed: 2,
-            sequence: 14,
-        }];
+        let tableColumns = [];
 
 
-        const filterParameter = buttonStateArray.filter(option => (option.selectValue.value > 0));
-        
+        const filterParameter = buttonStateArray.filter(option => (option.selectValue?.value > 0));
+
         if (filterParameter.length > 0) {
             manupulatedData = baseData.filter(item => {
                 return filterParameter.every(option => {
-                    
-                    if ((option.dataField === 'ShowDiscountedItems') && (option.selectValue.value > 0)) {
-                        
+                    if ((option.dataField === 'ShowDiscountedItems') && (option.selectValue?.value > 0)) {
                         return (Number(item.DiscountAmount) > 0) ? true : false
                     }
-                    var a = item[option.dataField] === option.selectValue.label;
-                    return a;
+                    return item[option.dataField] === option.selectValue.label;
+
                 });
             });
         }
@@ -544,14 +530,12 @@ const ItemSaleReport = (props) => {
         if (buttonStateArray.some(option => option.checkboxState)) {
 
             //*********************************************************** *******************************/
-            tableColumns = [...tableColumns, ...buttonStateArray.filter(option => option.checkboxState)];
+            tableColumns = buttonStateArray.filter(option => option.checkboxState);
 
             tableColumns.sort((a, b) => a.sequence - b.sequence);
             setSelectedColumns(tableColumns);
             // **********************************************************************************************
             const groupedData = {};
-
-            ;
 
             manupulatedData.forEach(item => {
                 const groupValues = buttonStateArray
@@ -574,13 +558,11 @@ const ItemSaleReport = (props) => {
 
                 buttonStateArray.forEach(field => {
                     if (field.isSum === true) {
-                        
                         groupedData[groupKey][field.dataField] += parseFloat(item[field.dataField]);
                         groupedData[groupKey][field.dataField] = parseFloat((groupedData[groupKey][field.dataField]).toFixed(field.toFixed));
                     }
                 })
-                groupedData[groupKey].Amount += parseFloat(item.Amount);
-                groupedData[groupKey].Amount = parseFloat(groupedData[groupKey].Amount.toFixed(2));
+
             });
             manupulatedData = Object.values(groupedData);
         }
@@ -592,7 +574,7 @@ const ItemSaleReport = (props) => {
             totalAmount += parseFloat(item.Amount);
             item.id = key + 1
             return item
-        },);
+        });
         setTableData(manupulatedData);
         let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
 
@@ -915,12 +897,6 @@ const ItemSaleReport = (props) => {
 
                         <Col sm={3}>
                             <FormGroup className=" row mt-2">
-                                {/* <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                    className="p-1"
-                                    type="checkbox"
-                                    checked={quantityCheckbox}
-                                    onChange={(e) => { setQuantityCheckbox(e.target.checked) }}
-                                /> */}
                                 <Label className="col-sm-4 p-2">Quantity</Label>
                                 <Col>
                                     <C_Select
