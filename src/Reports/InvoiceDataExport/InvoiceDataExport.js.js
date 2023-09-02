@@ -53,8 +53,8 @@ const InvoiceDataExport = (props) => {
     })
     );
 
-    const { InvoiceExportSerializerDetails = [], goBtnMode } = tableData;
-
+    const { Data = [], goBtnMode } = tableData;
+    
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -94,16 +94,16 @@ const InvoiceDataExport = (props) => {
 
     useEffect(() => {
         if (goBtnMode === "downloadExcel") {
-            if (InvoiceExportSerializerDetails.length > 0) {
+            if (Data.length > 0) {
                 ReportComponent({      // Download CSV
                     pageField,
-                    excelData: InvoiceExportSerializerDetails,
+                    excelData: Data,
                     excelFileName: "Invoice Data Export"
                 })
                 dispatch(postInvoiceDataExport_API_Success([]));   // Reset Excel Data
             }
         }
-    }, [goBtnMode, InvoiceExportSerializerDetails, pageField]);
+    }, [goBtnMode, Data, pageField]);
 
     function goButtonHandler(goBtnMode) {
 
@@ -242,7 +242,7 @@ const InvoiceDataExport = (props) => {
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="PartyID"
-                        data={InvoiceExportSerializerDetails}
+                        data={Data}
                         columns={tableColumns}
                         search
                     >

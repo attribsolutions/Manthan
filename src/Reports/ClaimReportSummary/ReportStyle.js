@@ -34,8 +34,6 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 63, 30, 63) //horizontal line 1 billby upper
-    doc.line(570, 16, 30, 16);//horizontal line 2
-    // doc.line(570, 80, 30, 80);//horizontal line 3
     doc.line(570, 32, 408, 32);//horizontal line 3
     doc.line(570, 47, 408, 47);//horizontal line 3
 
@@ -70,6 +68,7 @@ export const reportHeder1 = (doc, data) => {
                 doc.setFont(undefined, 'bold')
                 doc.text('Mobile No: ', x, y)
             };
+
         },
 
         showHead: 'always',
@@ -90,7 +89,7 @@ export const reportHeder1 = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 300,
+                columnWidth: 260,
                 halign: 'lfet',
             }
         },
@@ -100,6 +99,28 @@ export const reportHeder1 = (doc, data) => {
     };
 
     var BilledToStyle = {
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('GSTIN No: ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('FSSAI No: ', x, y)
+            };
+
+
+
+        },
         margin: {
             top: 45, left: 292, right: 35,
         },
@@ -115,7 +136,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: data.PrintType ? 1 : 2,
             fontSize: 8,
-            fontStyle: 'bold',
+            fontStyle: 'normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -144,10 +165,15 @@ export const reportHeder1 = (doc, data) => {
     doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
     priLength()
 
+    doc.line(290, initial_y, 290, 63);//Vertical line 
+
+
 }
 
 export const reportHeder3 = (doc, data) => {
-    debugger
+
+    doc.line(570, 32, 408, 32);//horizontal Line repeat on next page
+    doc.line(570, 47, 408, 47);//horizontal Line repeat on next pagef
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
