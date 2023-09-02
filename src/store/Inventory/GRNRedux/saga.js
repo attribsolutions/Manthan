@@ -90,7 +90,6 @@ function* makeGRN_Mode1_GenFunc({ config }) {
   try {
     const response = yield call(GRN_Make_API, config);
 
-    if (!subPageMode === url.GRN_STP_3) {//if invoice to GRN then calcuation Not requierd
 
       response.Data.OrderItem.forEach(index => {
 
@@ -115,14 +114,14 @@ function* makeGRN_Mode1_GenFunc({ config }) {
         }
 
       })
-
+debugger
       response.Data.OrderItem.sort(function (a, b) {
         if (a.Item > b.Item) { return 1; }
         else if (a.Item < b.Item) { return -1; }
         return 0;
       });
 
-    }
+  
     response["pageMode"] = pageMode;
     response["path"] = path; //Pagepath
     response.Data["GRNReferences"] = grnRef;
