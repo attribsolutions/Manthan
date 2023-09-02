@@ -28,7 +28,7 @@ const ClaimSummaryReport = (data) => {
     pageFooter(doc, data);
 
     doc.setProperties({
-        title: `ClaimSummary_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `
+        title: `Item Wise Summary Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)}`
     });
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
