@@ -24,19 +24,20 @@ function pageFooter(doc, data) {
 }
 
 const CustomerWiseReturnReport = (data) => {
-    
+
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
 
     doc.setProperties({
-        title: `CustomerWiseReturn_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)}`
+        title: `Customer Wise Return Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)}`
     });
+
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        const options = { filename: `CustomerWiseReturn_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} ` }
-        window.open(pdfUrl, options);
+        // window.open(pdfUrl);
+        window.open(pdfUrl, '_blank', `filename=${"gdff fd"}`);
     }
     generateSaveAndOpenPDFReport();
 }

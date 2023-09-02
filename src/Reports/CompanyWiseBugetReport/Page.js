@@ -7,6 +7,8 @@ import { date_dmy_func } from "../../components/Common/CommonFunction";
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
     style.pageHeder(doc, data);
+    // style.reportHeder1(doc, data);
+
 };
 function reportBody(doc, data) {
     style.tableBody(doc, data);
@@ -23,13 +25,12 @@ const CompanyWiseBudgetReport = (data) => {
         reportBody(doc, data);
         pageFooter(doc, data);
         doc.setProperties({
-            title: `MasterClaim_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `
+            title: `Master Claim Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} `
         });
         function generateSaveAndOpenPDFReport() {
 
             const pdfUrl = URL.createObjectURL(doc.output("blob"));
-            const options = { filename: `MasterClaim_Report ${date_dmy_func(data.Period.FromDate)} To ${date_dmy_func(data.Period.ToDate)} ` }
-            window.open(pdfUrl,);
+            window.open(pdfUrl);
         }
         generateSaveAndOpenPDFReport();
     } catch (error) {

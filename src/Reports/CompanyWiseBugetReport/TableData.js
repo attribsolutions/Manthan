@@ -23,6 +23,7 @@ export const ProductWisecolumns = [
 ];
 
 export const Rows = (table = []) => {
+    debugger
     const returnArr = [];
     let TotalCXprimaryAmount = 0
     let TotalCXPurchaseAmount = 0
@@ -35,8 +36,8 @@ export const Rows = (table = []) => {
     table.forEach((index, key) => {
         const tableitemRow = [
             `${index.ItemReasonName}`,
-            `${numberWithCommas(Number(index.SecondaryAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(index.PrimaryAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(index.PurchaseAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(index.SaleAmount).toFixed(2))}`,
             `${numberWithCommas(Number(index.ReturnAmount).toFixed(2))}`,
             `${numberWithCommas(Number(index.NetSaleValue).toFixed(2))}`,
             `${numberWithCommas(Number(index.Budget).toFixed(2))}`,
@@ -45,8 +46,8 @@ export const Rows = (table = []) => {
         ];
 
         function totalLots() {
-            TotalCXprimaryAmount = Number(index.PrimaryAmount)
-            TotalCXPurchaseAmount = Number(index.SecondaryAmount)
+            TotalCXPurchaseAmount = Number(index.PurchaseAmount)
+            TotalCXprimaryAmount = Number(index.SaleAmount)
             TotalCXreturnValue = Number(TotalCXreturnValue) + Number(index.ReturnAmount)
             TotalCXNetPurchaseValue = Number(TotalCXNetPurchaseValue) + Number(index.NetSaleValue)
             TotalBudgetOnlyExpiryFrom = Number(TotalBudgetOnlyExpiryFrom) + Number(index.Budget)
@@ -59,7 +60,6 @@ export const Rows = (table = []) => {
             const TotalNetPurchaseValue = TotalCXPurchaseAmount - TotalCXreturnValue;
             table["TotalNetPurchaseValue"] = TotalNetPurchaseValue;
             const ClaimAgainstNetSale = (TotalCXClaimAmount / TotalCXPurchaseAmount) * 100
-
             return [
                 "Total",
                 `${numberWithCommas(Number(TotalCXPurchaseAmount).toFixed(2))}`,
@@ -97,8 +97,8 @@ export const ProductWiseRows = (data) => {
     ProductwiseBudgetReport.forEach((element, key) => {
         const tableitemRow = [
             `${element.Product}`,
-            `${numberWithCommas(Number(element.SecondaryAmount).toFixed(2))}`,
-            `${numberWithCommas(Number(element.PrimaryAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.PurchaseAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.SaleAmount).toFixed(2))}`,
             `${numberWithCommas(Number(element.ReturnAmount).toFixed(2))}`,
             `${numberWithCommas(Number(element.NetSaleValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Budget).toFixed(2))}`,
@@ -107,8 +107,8 @@ export const ProductWiseRows = (data) => {
         ];
         function totalLots() {
             TotalInQuantity = Number(TotalInQuantity) + Number(element.InQuantity)
-            TotalCXprimaryAmount = Number(TotalCXprimaryAmount) + Number(element.PrimaryAmount)
-            TotalCXPurchaseAmount = Number(TotalCXPurchaseAmount) + Number(element.SecondaryAmount)
+            TotalCXprimaryAmount = Number(TotalCXprimaryAmount) + Number(element.SaleAmount)
+            TotalCXPurchaseAmount = Number(TotalCXPurchaseAmount) + Number(element.PurchaseAmount)
             TotalCXreturnValue = Number(TotalCXreturnValue) + Number(element.ReturnAmount)
             TotalCXNetPurchaseValue = Number(TotalCXNetPurchaseValue) + Number(element.NetSaleValue)
             TotalBudgetOnlyExpiryFrom = Number(TotalBudgetOnlyExpiryFrom) + Number(element.Budget)
