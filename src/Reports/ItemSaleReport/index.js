@@ -13,111 +13,19 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getGroupList, getItemList, getSubGroupList, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from "../../store/actions";
 import { GetRoutesList, GetRoutesListSuccess } from "../../store/Administrator/RoutesRedux/actions";
 import { getPartyTypelist } from "../../store/Administrator/PartyTypeRedux/action";
+
 import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success, Items_On_Group_And_Subgroup_API, SupplierOnPartyType_API, SupplierOnPartyType_API_Success } from "../../store/Report/ItemSaleReport/action";
+import ShowTableComponent from "./showTable";
 import "../ItemSaleReport/ItemSaleCSS.scss";
-
-const defaultTableColumns = [
-    {
-        text: "FromDate",
-        dataField: "InvoiceDate",
-    },
-    {
-        text: "Channel From",
-        dataField: "SaleMadeFrom",
-    },
-    {
-        text: "Channel to",
-        dataField: "SaleMadeTo",
-    },
-    {
-        text: "	FullInvoiceNumber",
-        dataField: "FullInvoiceNumber",
-    },
-    {
-        text: "Supplier",
-        dataField: "SupplierName",
-    },
-    {
-        text: "Route",
-        dataField: "RouteName",
-    },
-    {
-        text: "Customer",
-        dataField: "CustomerName",
-    },
-    {
-        text: "	Product",
-        dataField: "GroupName",
-    },
-    {
-        text: "	Sub Product",
-        dataField: "SubGroupName",
-    },
-    {
-        text: "	ItemName",
-        dataField: "ItemName",
-    },
-
-    // {
-    //     text: "	QtyInKg",
-    //     dataField: "QtyInKg",
-    // },
-    // {
-    //     text: "	QtyInNo",
-    //     dataField: "QtyInNo",
-    // },
-    // {
-    //     text: "	QtyInBox",
-    //     dataField: "QtyInBox",
-    // },
-    {
-        text: "	Rate",
-        dataField: "Rate",
-    },
-    {
-        text: "	BasicAmount",
-        dataField: "BasicAmount",
-    },
-    // {
-    //     text: "	DiscountAmount",
-    //     dataField: "DiscountAmount",
-    // },
-    {
-        text: "	GSTPercentage",
-        dataField: "GSTPercentage",
-    },
-    {
-        text: "	GSTAmount",
-        dataField: "GSTAmount",
-    },
-    {
-        text: "	Amount",
-        dataField: "Amount",
-    },
-    // {
-    //     text: "	GrandTotal",
-    //     dataField: "GrandTotal",
-    // },
-    // {
-    //     text: "	RoundOffAmount",
-    //     dataField: "RoundOffAmount",
-    // },
-    // {
-    //     text: "	TCSAmount",
-    //     dataField: "TCSAmount",
-    // },
-    {
-        text: "	FullGRNNumber",
-        dataField: "FullGRNNumber",
-    },
-];
+import { useMemo } from "react";
+import * as initail from "./hardcodeDetails";
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 
 const ItemSaleReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const isSCMParty = _cfunc.loginIsSCMParty();
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [hederFilters, setHederFilters] = useState({
@@ -125,35 +33,34 @@ const ItemSaleReport = (props) => {
         todate: currentDate_ymd,
     })
 
-    const [channelFromSelect, setChannelFromSelect] = useState({ value: 0, label: "All" });
-    const [channelToSelect, setChannelToSelect] = useState({ value: "", label: "All" });
-    const [routeSelect, setRouteSelect] = useState({ value: "", label: "All" });
-    const [supplierSelect, setSupplierSelect] = useState({ value: 0, label: "All" });
-    const [customerSelect, setCustomerSelect] = useState({ value: "", label: "All" });
+    const [channelFromSelect, setChannelFromSelect] = useState(initail.initialSlected_zero);
+    const [channelToSelect, setChannelToSelect] = useState(initail.initialSlected_blank);
+    const [routeSelect, setRouteSelect] = useState(initail.initialSlected_blank);
+    const [supplierSelect, setSupplierSelect] = useState(initail.initialSlected_zero);
+    const [customerSelect, setCustomerSelect] = useState(initail.initialSlected_blank);
     const [unitDropdownSelect, setUnitDropdownSelect] = useState({ value: '', label: "select" });
-    const [ItemNameSelect, setItemNameSelect] = useState({ value: "", label: "All" });
-    const [productSelect, setProductSelect] = useState({ value: 0, label: "All" });
-    const [subProductSelect, setSubProductSelect] = useState({ value: 0, label: "All" });
+    const [ItemNameSelect, setItemNameSelect] = useState(initail.initialSlected_blank);
+    const [productSelect, setProductSelect] = useState(initail.initialSlected_zero);
+    const [subProductSelect, setSubProductSelect] = useState(initail.initialSlected_zero);
 
-    const [SubProductOptions, setSubProductOptions] = useState([]);
-    const [supplierOptions, setSupplierOptions] = useState([]);
+
+
 
     const [customerCheckbox, setCustomerCheckbox] = useState(false);
     const [routeCheckbox, setRouteCheckbox] = useState(false);
     const [channelToCheckbox, setChannelToCheckbox] = useState(false);
-    const [productCheckbox, setProductCheckbox] = useState(false);
+    const [productCheckbox, setProductCheckbox] = useState(true);
     const [subProductCheckbox, setSubProductCheckbox] = useState(false);
     const [itemNameCheckbox, setItemNameCheckbox] = useState(false);
     const [fromDateCheckbox, setFromDateCheckbox] = useState(false);
     const [channelFromCheckbox, setChannelFromCheckbox] = useState(false);
     const [supplierCheckbox, setSupplierCheckbox] = useState(false);
-    const [quantityCheckbox, setQuantityCheckbox] = useState(false);
     const [showAlsoSelect, setShowAlsoSelect] = useState([]);
-    // const [showAlsoSelect, setShowAlsoSelect] = useState([]);
+
 
     const [tableData, setTableData] = useState([]);
     const [initaialBaseData, setInitaialBaseData] = useState([]);
-    const [selectedColumns, setSelectedColumns] = useState(defaultTableColumns);
+    const [selectedColumns, setSelectedColumns] = useState(initail.initialTableColumns);
 
     const { goBtnLoading,
         ItemSaleReportGobtn,
@@ -166,7 +73,6 @@ const ItemSaleReport = (props) => {
         PartyTypes,
         customerDropdown,
         customerDropLoading,
-        BaseUnit,
         ItemDropdownloading,
         ItemNameList,
         productLoading,
@@ -196,8 +102,6 @@ const ItemSaleReport = (props) => {
                 ItemDropdownloading: state.ItemSaleReportReducer.itemListLoading,
                 ItemNameList: state.ItemSaleReportReducer.itemList,
 
-                BaseUnit: state.ItemMastersReducer.BaseUnit,
-
                 productLoading: state.GroupReducer.goBtnLoading,
                 productDropdown: state.GroupReducer.groupList,
 
@@ -212,140 +116,7 @@ const ItemSaleReport = (props) => {
 
     const { fromdate, todate, } = hederFilters;
 
-    // const Data = [
-    //     {
-    //         id: 1502,
-    //         InvoiceDate: "2023-07-31",
-    //         SaleMadeFrom: "Super Stokiest",
-    //         SaleMadeTo: "Retailer",
-    //         FullInvoiceNumber: "IN51",
-    //         SupplierName: "Rahul Enterprises",
-    //         RouteName: "aurangabad",
-    //         CustomerName: "COUNTER SALES",
-    //         GroupName: "Bakarwadi",
-    //         SubGroupName: "Tray",
-    //         ItemName: "Bakarwadi 250 g Tray",
-    //         QtyInKg: "20.00",
-    //         QtyInNo: "80.00",
-    //         QtyInBox: "2.00",
-    //         Rate: "3476.79",
-    //         BasicAmount: "6953.58",
-    //         DiscountAmount: "0.00",
-    //         GSTPercentage: "12.00",
-    //         GSTAmount: "834.42",
-    //         Amount: "7788.00",
-    //         GrandTotal: "7788.00",
-    //         RoundOffAmount: "0.00",
-    //         TCSAmount: "0.00",
-    //         FullGRNNumber: null
-    //     },
-    //     {
-    //         id: 1598,
-    //         InvoiceDate: "2023-08-01",
-    //         SaleMadeFrom: "Super Stokiest",
-    //         SaleMadeTo: "Retailer",
-    //         FullInvoiceNumber: "IN5",
-    //         SupplierName: "Shri Parasnath Agencies",
-    //         RouteName: null,
-    //         CustomerName: "Jaishankar Dairy",
-    //         GroupName: "Bakarwadi",
-    //         SubGroupName: "Tray",
-    //         ItemName: "Bakarwadi 250 g Tray",
-    //         QtyInKg: "10.00",
-    //         QtyInNo: "40.00",
-    //         QtyInBox: "1.00",
-    //         Rate: "3476.79",
-    //         BasicAmount: "3375.52",
-    //         DiscountAmount: "101.27",
-    //         GSTPercentage: "12.00",
-    //         GSTAmount: "405.06",
-    //         Amount: "3780.58",
-    //         GrandTotal: "3781.00",
-    //         RoundOffAmount: "0.58",
-    //         TCSAmount: "0.00",
-    //         FullGRNNumber: null
-    //     },
-    //     {
-    //         id: 1625,
-    //         InvoiceDate: "2023-08-01",
-    //         SaleMadeFrom: "Super Stokiest",
-    //         SaleMadeTo: "Retailer",
-    //         FullInvoiceNumber: "IN3",
-    //         SupplierName: "New Shantisagar Agencies",
-    //         RouteName: null,
-    //         CustomerName: "Avenue Supermarts Ltd",
-    //         GroupName: "Bakarwadi",
-    //         SubGroupName: "Tray",
-    //         ItemName: "Bakarwadi 250 g Tray",
-    //         QtyInKg: "50.00",
-    //         QtyInNo: "200.00",
-    //         QtyInBox: "5.00",
-    //         Rate: "84.27",
-    //         BasicAmount: "16854.00",
-    //         DiscountAmount: "0.00",
-    //         GSTPercentage: "12.00",
-    //         GSTAmount: "2022.48",
-    //         Amount: "18876.48",
-    //         GrandTotal: "33291.32",
-    //         RoundOffAmount: "0.32",
-    //         TCSAmount: "0.00",
-    //         FullGRNNumber: null
-    //     },
-    //     {
-    //         id: 1625,
-    //         InvoiceDate: "2023-08-01",
-    //         SaleMadeFrom: "Super Stokiest",
-    //         SaleMadeTo: "Retailer",
-    //         FullInvoiceNumber: "IN3",
-    //         SupplierName: "New Shantisagar Agencies",
-    //         RouteName: null,
-    //         CustomerName: "Avenue Supermarts Ltd",
-    //         GroupName: "Bakarwadi",
-    //         SubGroupName: "Tray",
-    //         ItemName: "Bakarwadi 500 g Tray",
-    //         QtyInKg: "40.00",
-    //         QtyInNo: "80.00",
-    //         QtyInBox: "4.00",
-    //         Rate: "160.88",
-    //         BasicAmount: "12870.40",
-    //         DiscountAmount: "0.00",
-    //         GSTPercentage: "12.00",
-    //         GSTAmount: "1544.44",
-    //         Amount: "14414.84",
-    //         GrandTotal: "33291.32",
-    //         RoundOffAmount: "0.32",
-    //         TCSAmount: "0.00",
-    //         FullGRNNumber: null
-    //     },
-    //     {
-    //         id: 1657,
-    //         InvoiceDate: "2023-08-02",
-    //         SaleMadeFrom: "Super Stokiest",
-    //         SaleMadeTo: "Retailer",
-    //         FullInvoiceNumber: "IN8",
-    //         SupplierName: "Shri Parasnath Agencies",
-    //         RouteName: null,
-    //         CustomerName: "COUNTER SALE",
-    //         GroupName: "Bakarwadi",
-    //         SubGroupName: "Tray",
-    //         ItemName: "Bakarwadi 500 g Tray",
-    //         QtyInKg: "10.00",
-    //         QtyInNo: "20.00",
-    //         QtyInBox: "1.00",
-    //         Rate: "3318.57",
-    //         BasicAmount: "3221.91",
-    //         DiscountAmount: "96.66",
-    //         GSTPercentage: "12.00",
-    //         GSTAmount: "386.62",
-    //         Amount: "3608.53",
-    //         GrandTotal: "3609.00",
-    //         RoundOffAmount: "0.53",
-    //         TCSAmount: "0.00",
-    //         FullGRNNumber: null
-    //     }]
 
-
-    // Featch Modules List data  First Rendering
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
@@ -373,9 +144,8 @@ const ItemSaleReport = (props) => {
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, RouteID: "" }));
         dispatch(getGroupList());
         dispatch(getSubGroupList())
-        dispatch(getBaseUnit_ForDropDown());
         dispatch(Items_On_Group_And_Subgroup_API({ "Group": 0, "SubGroup": 0 }));
-        dispatch(BreadcrumbShowCountlabel(`${"Amount"} :${0}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:0 ₹ 0`))
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(ItemSaleGoButton_API_Success([]));
@@ -383,155 +153,61 @@ const ItemSaleReport = (props) => {
     }, [])
 
     useEffect(() => {
-
         if (ItemSaleReportGobtn.length > 0) {
-
-            setTableData(ItemSaleReportGobtn);
             setInitaialBaseData(ItemSaleReportGobtn);
-            sortData(ItemSaleReportGobtn);
             dispatch(ItemSaleGoButton_API_Success([]));
-            const totalAmount = ItemSaleReportGobtn.reduce((sum, item) => {
-                return sum + parseFloat(item.Amount);
-            }, 0);
-            dispatch(BreadcrumbShowCountlabel(`${"Amount"} :${(totalAmount).toFixed(2)}`))
+            dataManpulationFunction(ItemSaleReportGobtn);
+
         }
-    }, [ItemSaleReportGobtn])
+    }, [ItemSaleReportGobtn]);
 
-    useEffect(() => {
 
-        let SubProduct = []
+    const subProductDropdownOptions = useMemo(() => {
+        let options = [];
         if (productSelect.value === 0) {
-            SubProduct = subProductDropdown.map((i) => ({
+            options = subProductDropdown.map(i => ({
                 value: i.id,
                 label: i.Name,
-            }))
+            }));
         } else {
-            SubProduct = getSubProductbyProduct.map((i) => ({
+            options = getSubProductbyProduct.map(i => ({
                 value: i.id,
                 label: i.Name,
-            }))
+            }));
         }
-        SubProduct.unshift({
-            value: 0,
-            label: "All"
-        });
-        setSubProductOptions(SubProduct)
+        options.unshift(initail.initialSlected_zero);
+        return options;
+    }, [productSelect, subProductDropdown, getSubProductbyProduct]);
 
-    }, [productSelect, subProductDropdown, getSubProductbyProduct])
-
-    useEffect(() => {
-
-        let supplierOption = []
+    const supplierDropdownOptions = useMemo(() => {
+        let options = [];
         if (channelFromSelect.value === 0) {
-            supplierOption = supplier.map((i) => ({
+            options = supplier.map(i => ({
                 value: i.id,
                 label: i.Name,
-            }))
+            }));
         } else {
-            supplierOption = supplierListOnPartyType.map((i) => ({
+            options = supplierListOnPartyType.map(i => ({
                 value: i.id,
                 label: i.Name,
-            }))
+            }));
         }
-        supplierOption.unshift({
-            value: 0,
-            label: "All"
-        });
-        setSupplierOptions(supplierOption)
+        options.unshift(initail.initialSlected_zero);
+        return options;
+    }, [channelFromSelect, supplier, supplierListOnPartyType]);
 
-    }, [channelFromSelect, supplier, supplierListOnPartyType])
 
-    // useEffect(() => {
+    const generateOptions = (sourceArray, labelField = "Name", valueField = "id") =>
+        [initail.initialSlected_blank, ...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
 
-    //     let unitOption = []
-    //     let noEntry = []
-    //     if (BaseUnit.length > 0) {
-    //         unitOption = BaseUnit.map((i) => ({
-    //             value: i.id,
-    //             label: i.Name,
-    //         }))
-    //         noEntry = BaseUnit.find(data => data.Name === "No");
-    //     }
-    //     unitOption.unshift(noEntry);
-    //     setSupplierOptions(unitOption)
+    const routeDropdownOptions = useMemo(() => generateOptions(RoutesList.filter(route => route.IsActive)), [RoutesList]);
+    const channelDropdownOptions = useMemo(() => generateOptions(PartyTypes), [PartyTypes]);
+    const itemNameDropdownOptions = useMemo(() => generateOptions(ItemNameList), [ItemNameList]);
+    const productDropdownOptions = useMemo(() => generateOptions(productDropdown), [productDropdown]);
+    const customerDropdownOptions = useMemo(() => generateOptions(customerDropdown), [customerDropdown]);
 
-    // }, [BaseUnit])
 
-    const customerOptions = [
-        { value: "", label: "All" },
-        ...customerDropdown.map(i => ({ value: i.id, label: i.Name }))
-    ];
 
-    const ProductOptions = [
-        { value: 0, label: "All" },
-        ...productDropdown.map(i => ({ value: i.id, label: i.Name }))
-    ];
-
-    const ItemNameOptions = [
-        { value: "", label: "All" },
-        ...ItemNameList.map(i => ({ value: i.id, label: i.Name }))
-    ];
-
-    const ChannelDropdown_Options = [
-        { value: 0, label: "All" },
-        ...PartyTypes.map(index => ({ value: index.id, label: index.Name, division: index.IsDivision }))
-    ];
-
-    const checkboxOption = [{
-        value: 1,
-        label: "Invoice Number",
-    },
-    {
-        value: 2,
-        label: "Show Discounted Items",
-    },
-    {
-        value: 3,
-        label: "GRNID",
-    },
-    {
-        value: 4,
-        label: "DiscountInRS",
-    },
-    {
-        value: 5,
-        label: "InvoiceGrandTotal",
-    },
-    {
-        value: 6,
-        label: "RoundOffAmount",
-    },
-    {
-        value: 7,
-        label: "TCSAmount",
-    }
-    ]
-
-    const RouteOptions = [
-        { value: "", label: "All" },
-        ...RoutesList
-            .filter(index => index.IsActive)
-            .map(index => ({ value: index.id, label: index.Name }))
-    ];
-
-    // const Unit_DropdownOptions = BaseUnit
-    //     .filter(data => ["No", "Kg", "Box"].includes(data.Name))
-    //     .map(data => ({ value: data.id, label: data.Name }));
-
-    const Unit_DropdownOptions = [
-        {
-            value: '', label: "Select..."
-        },
-        {
-            value: 1, label: "QtyInNo"
-        },
-        {
-            value: 2, label: "QtyInKg"
-        },
-        {
-            value: 3, label: "QtyInBox"
-        },
-    ]
 
     function RouteOnChange(event) {
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, RouteID: event.value, PartyID: supplierSelect.value }))
@@ -541,7 +217,7 @@ const ItemSaleReport = (props) => {
     function ChannelFromDropdown_Onchange(e) {
 
         setChannelFromSelect(e)
-        setSupplierSelect({ value: 0, label: "All" })
+        setSupplierSelect(initail.initialSlected_zero)
         dispatch(SupplierOnPartyType_API({ employeeID: _cfunc.loginEmployeeID(), channelFromID: e.value }))
     }
 
@@ -585,15 +261,15 @@ const ItemSaleReport = (props) => {
         setProductSelect(e)
         dispatch(get_Sub_Group_By_Group_ForDropDown(e.value))
         dispatch(Items_On_Group_And_Subgroup_API({ "Group": e.value, "SubGroup": 0 }))
-        setSubProductSelect({ value: 0, label: "All" })
-        setItemNameSelect({ value: "", label: "All" })
+        setSubProductSelect(initail.initialSlected_zero)
+        setItemNameSelect(initail.initialSlected_blank)
         dispatch(get_Sub_Group_By_Group_ForDropDown_Success([]))
     }
 
     function Sub_ProductOnChange(e) {
         setSubProductSelect(e)
         dispatch(Items_On_Group_And_Subgroup_API({ "Group": 0, "SubGroup": e.value }))
-        setItemNameSelect({ value: "", label: "All" })
+        setItemNameSelect(initail.initialSlected_blank)
 
     }
 
@@ -610,10 +286,31 @@ const ItemSaleReport = (props) => {
         } catch (error) { _cfunc.CommonConsole(error) }
     }
 
-    function showAlsoOnChange(e) {
-        setShowAlsoSelect(e)
-    }
+    function showAlsoOnChange(event) {
+        let isLastInvoice =
+            event.length > 0
+                ? [1, 5, 6, 7].includes(event[event.length - 1].value)
+                : false;
 
+        if (isLastInvoice) {
+            if (event.some((item) => [2, 4].includes(item.value))) {
+                event = event.filter((item) => ![2, 4].includes(item.value));
+            }
+            if (!event.some((item) => item.value === 1)) {
+                event.push(initail.showAlsoOption[0]);
+            }
+        }
+
+        if (event.some((item) => [2, 4].includes(item.value))) {
+            if (event.some((item) => [1, 5, 6, 7].includes(item.value))) {
+                event = event.filter((item) => ![1, 5, 6, 7].includes(item.value));
+            }
+            if (!event.some((item) => item.value === 4)) {
+                event.push(initail.showAlsoOption[3]);
+            }
+        }
+        setShowAlsoSelect(event);
+    }
     function CustomerOnChange(e) {
         setCustomerSelect(e)
     }
@@ -622,234 +319,266 @@ const ItemSaleReport = (props) => {
         dispatch(ItemSaleGoButton_API_Success([]));
         setTableData([]);
         setInitaialBaseData([]);
-        dispatch(BreadcrumbShowCountlabel(`${"Amount"} :${0}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:0 ₹ 0`))
     }
 
-    const sortData = (baseData = []) => {
+    const dataManpulationFunction = (baseData = []) => {
 
-        const sortedButtonArray = [
+        const buttonStateArray = [
             {
-                textField: 'FromDate',
-                fieldName: 'InvoiceDate',
+                text: 'FromDate',
+                dataField: 'InvoiceDate',
                 checkboxState: fromDateCheckbox,
                 selectValue: { value: "", label: "All" },
-                addRow: false,
-                sequence: 1
+                sequence: 1,
+                sort: true,
+                groupBy: true,
+                formatter: (cell) => <>{date_dmy_func(cell)}</>
             },
             {
-                textField: 'Channel From',
-                fieldName: 'SaleMadeFrom',
+                text: 'Channel From',
+                dataField: 'SaleMadeFrom',
                 checkboxState: channelFromCheckbox,
                 selectValue: { value: "", label: "All" },
-                addRow: false,
+                sort: true,
+                groupBy: true,
                 sequence: 2
             },
             {
-                textField: 'Channel To',
-                fieldName: 'SaleMadeTo',
+                text: 'Channel To',
+                dataField: 'SaleMadeTo',
                 checkboxState: channelToCheckbox,
                 selectValue: channelToSelect,
-                addRow: false,
+                sort: true,
+                groupBy: true,
                 sequence: 3
             },
+
             {
-                textField: 'FullInvoiceNumber',
-                fieldName: 'FullInvoiceNumber',
-                checkboxState: showAlsoSelect.some(item => item.value === 1) ? true : false,
-                selectValue: showAlsoSelect,
-                addRow: false,
+                text: 'Supplier',
+                dataField: 'SupplierName',
+                checkboxState: supplierCheckbox,
+                selectValue: { value: "", label: "All" },
+                sort: true,
+                groupBy: true,
                 sequence: 4
             },
             {
-                textField: 'Supplier',
-                fieldName: 'SupplierName',
-                checkboxState: supplierCheckbox,
-                selectValue: { value: "", label: "All" },
-                addRow: false,
+                text: 'FullInvoiceNumber',
+                dataField: 'FullInvoiceNumber',
+                checkboxState: showAlsoSelect.some(item => item.value === 1) ? true : false,
+                selectValue: showAlsoSelect,
+                sort: true,
+                groupBy: true,
                 sequence: 5
             },
             {
-                textField: 'Route',
-                fieldName: 'RouteName',
+                text: 'Route',
+                dataField: 'RouteName',
                 checkboxState: routeCheckbox,
                 selectValue: routeSelect,
-                addRow: false,
+                sort: true,
+                groupBy: true,
                 sequence: 6
             },
             {
-                textField: 'Customer',
-                fieldName: 'CustomerName',
+                text: 'Customer',
+                dataField: 'CustomerName',
                 checkboxState: customerCheckbox,
                 selectValue: customerSelect,
-                addRow: false,
+                sort: true,
+                groupBy: true,
                 sequence: 7
             },
             {
-                textField: 'Product',
-                fieldName: 'GroupName',
+                text: 'Product',
+                dataField: 'GroupName',
                 checkboxState: productCheckbox,
                 selectValue: productSelect,
-                addRow: false,
+                sort: true,
+                groupBy: true,
                 sequence: 8
             },
             {
-                textField: 'Sub Product',
-                fieldName: 'SubGroupName',
+                text: 'Sub Product',
+                dataField: 'SubGroupName',
                 checkboxState: subProductCheckbox,
                 selectValue: subProductSelect,
-                addRow: false,
+                sort: true,
+                groupBy: true,
                 sequence: 9
             },
             {
-                textField: 'ItemName',
-                fieldName: 'ItemName',
+                text: 'ItemName',
+                dataField: 'ItemName',
                 checkboxState: itemNameCheckbox,
                 selectValue: ItemNameSelect,
-                addRow: false,
+                sort: true,
+                groupBy: true,
                 sequence: 10
             },
+
             {
-                textField: 'GRNID',
-                fieldName: 'FullGRNNumber',
-                checkboxState: showAlsoSelect.some(item => item.value === 3) ? true : false,
-                selectValue: showAlsoSelect,
-                addRow: false,
+                text: 'QtyInNo',
+                dataField: 'QtyInNo',
+                checkboxState: unitDropdownSelect.value === 1 ? true : false,
+                sort: true,
+                isSum: true,
+                toFixed: 0,
                 sequence: 11
             },
             {
-                textField: 'QtyInNo',
-                fieldName: 'QtyInNo',
-                checkboxState: false,
-                selectValue: { value: "", label: "All" },
-                addRow: unitDropdownSelect.value === 1 ? true : false,
-                sequence: 11
-            },
-            {
-                textField: 'QtyInKg',
-                fieldName: 'QtyInKg',
-                checkboxState: false,
-                selectValue: { value: "", label: "All" },
-                addRow: unitDropdownSelect.value === 2 ? true : false,
+                text: 'QtyInKg',
+                dataField: 'QtyInKg',
+                checkboxState: unitDropdownSelect.value === 2 ? true : false,
+                sort: true,
+                isSum: true,
+                toFixed: 3,
                 sequence: 12
             },
             {
-                textField: 'QtyInBox',
-                fieldName: 'QtyInBox',
-                checkboxState: false,
-                selectValue: { value: "", label: "All" },
-                addRow: unitDropdownSelect.value === 3 ? true : false,
+                text: 'QtyInBox',
+                dataField: 'QtyInBox',
+                checkboxState: unitDropdownSelect.value === 3 ? true : false,
+                sort: true,
+                isSum: true,
+                toFixed: 3,
                 sequence: 13
             },
             {
-                textField: 'InvoiceGrandTotal',
-                fieldName: 'GrandTotal',
-                checkboxState: false,
-                selectValue: showAlsoSelect,
-                addRow: showAlsoSelect.some(item => item.value === 5) ? true : false,
-                sequence: 12
-            },
-            {
-                textField: 'DiscountInRS',
-                fieldName: 'DiscountAmount',
-                checkboxState: false,
-                selectValue: showAlsoSelect,
-                addRow: showAlsoSelect.some(item => item.value === 4) ? true : false,
-                sequence: 13
-            },
-            {
-                textField: 'RoundOffAmount',
-                fieldName: 'RoundOffAmount',
-                checkboxState: false,
-                selectValue: showAlsoSelect,
-                addRow: showAlsoSelect.some(item => item.value === 6) ? true : false,
-                sequence: 14
-            },
-            {
-                textField: 'TCSAmount',
-                fieldName: 'TCSAmount',
-                checkboxState: false,
-                selectValue: showAlsoSelect,
-                addRow: showAlsoSelect.some(item => item.value === 7) ? true : false,
+                text: 'InvoiceGrandTotal',
+                dataField: 'GrandTotal',
+                checkboxState: showAlsoSelect.some(item => item.value === 5),
+                sort: true,
+                toFixed: 2,
                 sequence: 15
+            },
+            {
+                text: 'DiscountInRS',
+                dataField: 'DiscountAmount',
+                checkboxState: showAlsoSelect.some(item => item.value === 4),
+                sort: true,
+                isSum: true,
+                toFixed: 2,
+                sequence: 16
+            },
+            {
+                text: 'RoundOffAmount',
+                dataField: 'RoundOffAmount',
+                checkboxState: showAlsoSelect.some(item => item.value === 6),
+                isSum: true,
+                sort: true,
+                toFixed: 2,
+                sequence: 17,
+            },
+            {
+                text: 'TCSAmount',
+                dataField: 'TCSAmount',
+                checkboxState: showAlsoSelect.some(item => item.value === 7),
+                isSum: true,
+                sort: true,
+                sequence: 18,
+                toFixed: 2
+            },
+            {
+                text: 'GRNID',
+                dataField: 'FullGRNNumber',
+                checkboxState: showAlsoSelect.some(item => item.value === 3),
+                sort: true,
+                groupBy: true,
+                sequence: 19
+            },
+            { //this filed not Show intable 
+                text: "Show Discounted Items",
+                dataField: "ShowDiscountedItems",
+                selectValue: showAlsoSelect.find(item => item.value === 2),
+            },
+            {
+                text: "Amount",
+                dataField: "Amount",
+                checkboxState: true,
+                sort: true,
+                isSum: true,
+                toFixed: 2,
+                sequence: 14,
             }
+
         ];
 
-        let manupulatedData = baseData;
+        //************************************************************************************************** */
+
+        let manupulatedData = [...baseData];
+
         let tableColumns = [];
 
-        // dropdown value selected filter in baseData
-        const filterOptionData = sortedButtonArray.filter(option => (option.selectValue.value > 0));
 
-        if (filterOptionData.length > 0) {
+        const filterParameter = buttonStateArray.filter(option => (option.selectValue?.value > 0));
+
+        if (filterParameter.length > 0) {
             manupulatedData = baseData.filter(item => {
-                return filterOptionData.every(option => {
-                    var a = item[option.fieldName] === option.selectValue.label;
-                    return a;
+                return filterParameter.every(option => {
+                    if ((option.dataField === 'ShowDiscountedItems') && (option.selectValue?.value > 0)) {
+                        return (Number(item.DiscountAmount) > 0) ? true : false
+                    }
+                    return item[option.dataField] === option.selectValue.label;
+
                 });
             });
         }
 
-        // Apply grouping and filtering logic for each checkbox option
-        if (sortedButtonArray.some(option => option.checkboxState || option.addRow)) {
 
-            if (sortedButtonArray.some(option => option.addRow)) {
-                // Always include the default "Amount" column
-                tableColumns.push(sortedButtonArray
-                    .filter(option => option.addRow)
-                    .map(option => ({ text: option.textField, dataField: option.fieldName, sequence: option.sequence })));
-            }
+        if (buttonStateArray.some(option => option.checkboxState)) {
 
-            if (sortedButtonArray.some(option => option.checkboxState)) {
+            //*********************************************************** *******************************/
+            tableColumns = buttonStateArray.filter(option => option.checkboxState);
 
-                tableColumns.push(sortedButtonArray
-                    .filter(option => option.checkboxState)
-                    .map(option => ({ text: option.textField, dataField: option.fieldName, sequence: option.sequence })));
+            tableColumns.sort((a, b) => a.sequence - b.sequence);
+            setSelectedColumns(tableColumns);
+            // **********************************************************************************************
+            const groupedData = {};
 
-                // Always include the default "Amount" column
-                tableColumns.push({ text: "Amount", dataField: "Amount", sequence: 19 });
+            manupulatedData.forEach(item => {
+                const groupValues = buttonStateArray
+                    .filter(option => option.checkboxState && (option.groupBy === true))
+                    .map(option => item[option.dataField]);
 
-                const groupedData = {};
-
-                manupulatedData.forEach(item => {
-                    const groupValues = sortedButtonArray
-                        .filter(option => option.checkboxState && option.fieldName !== 'Amount')
-                        .map(option => item[option.fieldName]);
-
-                    const groupKey = groupValues.join('-');
-                    if (!groupedData[groupKey]) {
-                        groupedData[groupKey] = {
-                            ...item,
-                            Amount: 0,
-                        };
-                    }
-                    groupedData[groupKey].Amount += parseFloat(item.Amount);
-                    // Format Amount to have only two decimal places
-                    groupedData[groupKey].Amount = parseFloat(groupedData[groupKey].Amount.toFixed(2));
-                });
-                manupulatedData = Object.values(groupedData);
-            }
-
-            // tableColumns array convert in single array
-            const single_array = [];
-            tableColumns.forEach(item => {
-                if (Array.isArray(item)) {
-                    single_array.push(...item);
-                } else {
-                    single_array.push(item);
+                const groupKey = groupValues.join('-');
+                if (!groupedData[groupKey]) {
+                    groupedData[groupKey] = {
+                        ...item,
+                        Amount: 0,
+                        QtyInNo: 0,
+                        QtyInKg: 0,
+                        QtyInBox: 0,
+                        DiscountAmount: 0,
+                        RoundOffAmount: 0,
+                        TCSAmount: 0
+                    };
                 }
+
+                buttonStateArray.forEach(field => {
+                    if (field.isSum === true) {
+                        groupedData[groupKey][field.dataField] += parseFloat(item[field.dataField]);
+                        groupedData[groupKey][field.dataField] = parseFloat((groupedData[groupKey][field.dataField]).toFixed(field.toFixed));
+                    }
+                })
+
             });
-            single_array.sort((a, b) => a.sequence - b.sequence);
-            setSelectedColumns(single_array);
+            manupulatedData = Object.values(groupedData);
         }
         else {
-            setSelectedColumns(defaultTableColumns);
+            setSelectedColumns(initail.defaultTableColumns);
         }
-
+        let totalAmount = 0
+        manupulatedData = manupulatedData.map((item, key) => {
+            totalAmount += parseFloat(item.Amount);
+            item.id = key + 1
+            return item
+        });
         setTableData(manupulatedData);
-        const totalAmount = manupulatedData.reduce((sum, item) => {
-            return sum + parseFloat(item.Amount);
-        }, 0);
-        dispatch(BreadcrumbShowCountlabel(`${"Amount"} :${(totalAmount).toFixed(2)}`))
+        let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
+
+        dispatch(BreadcrumbShowCountlabel(`Count:${manupulatedData.length} ₹ ${commaSeparateAmount}`));
     }
 
     return (
@@ -867,14 +596,8 @@ const ItemSaleReport = (props) => {
                                             className="p-1"
                                             id="fromdate"
                                             type="checkbox"
-                                            // disabled={tableData.length > 0}
                                             checked={fromDateCheckbox}
-                                            // onChange={(e) => {
-                                            //     debugger
-                                            //     setFromDateCheckbox(e.target.checked)
-                                            // }}
-                                              onClick={(e) => {
-                                                debugger
+                                            onClick={(e) => {
                                                 setFromDateCheckbox(e.target.checked)
                                             }}
 
@@ -919,15 +642,14 @@ const ItemSaleReport = (props) => {
                                             <C_Select
                                                 value={channelFromSelect}
                                                 isSearchable={true}
-                                                //  isLoading={partyLoading}       
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 isDisabled={(tableData.length > 0) && true}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                options={ChannelDropdown_Options}
-                                                onChange={(e) => { ChannelFromDropdown_Onchange(e) }}
+                                                options={channelDropdownOptions}
+                                                onChange={ChannelFromDropdown_Onchange}
 
                                             />
                                         </Col>
@@ -955,7 +677,7 @@ const ItemSaleReport = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                options={supplierOptions}
+                                                options={supplierDropdownOptions}
                                                 onChange={SupplierOnChange}
                                             />
                                         </Col>
@@ -965,7 +687,7 @@ const ItemSaleReport = (props) => {
                         </Col>
 
                         <Col sm="1" className="mt-1 mb-1 ">
-                            {!(tableData.length > 0) ?
+                            {!(initaialBaseData.length > 0) ?
                                 <Go_Button
                                     loading={goBtnLoading}
                                     onClick={goButtonHandler}
@@ -992,13 +714,12 @@ const ItemSaleReport = (props) => {
                                             <C_Select
                                                 value={channelToSelect}
                                                 isSearchable={true}
-                                                //  isLoading={partyLoading}       
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                options={ChannelDropdown_Options}
+                                                options={channelDropdownOptions}
                                                 onChange={(e) => { setChannelToSelect(e) }}
                                             />
                                         </Col>
@@ -1018,7 +739,7 @@ const ItemSaleReport = (props) => {
                                             <C_Select
                                                 classNamePrefix="react-select"
                                                 value={routeSelect}
-                                                options={RouteOptions}
+                                                options={routeDropdownOptions}
                                                 // onChange={(e) => { setRouteSelect(e) }}
                                                 onChange={(e) => { RouteOnChange(e) }}
                                                 isLoading={routesDropLoading}
@@ -1050,7 +771,7 @@ const ItemSaleReport = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                options={customerOptions}
+                                                options={customerDropdownOptions}
                                                 onChange={(e) => { CustomerOnChange(e) }}
 
                                             />
@@ -1072,7 +793,7 @@ const ItemSaleReport = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                options={checkboxOption}
+                                                options={initail.showAlsoOption}
                                                 onChange={showAlsoOnChange}
 
                                             />
@@ -1082,13 +803,15 @@ const ItemSaleReport = (props) => {
                             </Row>
                         </Col>
                         <Col sm="1" className="mt-1 mb-1 ">
-                            <C_Button
-                                type="button"
-                                className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                onClick={() => { sortData(initaialBaseData) }} // Example field, you can change it
-                            >
-                                Sort
-                            </C_Button>
+                            {(initaialBaseData.length > 0) &&
+                                <C_Button
+                                    type="button"
+                                    className="btn btn-success border-1 font-size-12 text-center"
+                                    onClick={() => { dataManpulationFunction(initaialBaseData) }} // Example field, you can change it
+                                >
+                                    <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "14px" }}> Sort</span>
+                                </C_Button>
+                            }
                         </Col>
                     </Row>
 
@@ -1112,7 +835,7 @@ const ItemSaleReport = (props) => {
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        options={ProductOptions}
+                                        options={productDropdownOptions}
                                         onChange={ProductOnchange}
 
                                     />
@@ -1139,7 +862,7 @@ const ItemSaleReport = (props) => {
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        options={SubProductOptions}
+                                        options={subProductDropdownOptions}
                                         onChange={(e) => { Sub_ProductOnChange(e) }}
                                     />
                                 </Col>
@@ -1165,7 +888,7 @@ const ItemSaleReport = (props) => {
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        options={ItemNameOptions}
+                                        options={itemNameDropdownOptions}
                                         onChange={(e) => { setItemNameSelect(e) }}
                                     />
                                 </Col>
@@ -1174,12 +897,6 @@ const ItemSaleReport = (props) => {
 
                         <Col sm={3}>
                             <FormGroup className=" row mt-2">
-                                {/* <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                    className="p-1"
-                                    type="checkbox"
-                                    checked={quantityCheckbox}
-                                    onChange={(e) => { setQuantityCheckbox(e.target.checked) }}
-                                /> */}
                                 <Label className="col-sm-4 p-2">Quantity</Label>
                                 <Col>
                                     <C_Select
@@ -1191,7 +908,7 @@ const ItemSaleReport = (props) => {
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        options={Unit_DropdownOptions}
+                                        options={initail.UnitDropdownOptions}
                                         onChange={(e) => { setUnitDropdownSelect(e) }}
                                     />
                                 </Col>
@@ -1200,41 +917,9 @@ const ItemSaleReport = (props) => {
                     </Row>
                 </div>
 
-                <div className="mt-1">
-                    <ToolkitProvider
-                        keyField="id"
-                        data={tableData}
-                        columns={selectedColumns}
-                        search
-                    >
-                        {(toolkitProps,) => (
-                            <React.Fragment>
-                                <Row>
-                                    <Col xl="12">
-                                        <div className="table-responsive table">
-                                            <BootstrapTable
-                                                keyField="id"
-                                                key={`table-id-${new Date().getTime()}`}
-                                                classes={"table  table-bordered table-hover"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Record Not available
-                                                    </div>
-                                                }
-                                                onDataSizeChange={({ dataSize }) => {
-                                                    // dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 && dataSize - 1}`));
-                                                }}
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {mySearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </Col>
-                                </Row>
-
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
-                </div>
+                <ShowTableComponent
+                    data={tableData}
+                    columns={selectedColumns} />
             </div>
 
         </React.Fragment >

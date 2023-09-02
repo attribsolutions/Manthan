@@ -378,7 +378,7 @@ const Invoice = (props) => {
                                         />
                                     </td>
                                     <td data-label='Basic Rate' style={{ textAlign: "right" }}>
-                                        <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
+                                        <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(Number(index2.Rate).toFixed(2))}</span>
                                     </td>
                                     <td data-label='MRP' style={{ textAlign: "right" }}>{index2.MRP}</td>
                                 </tr>
@@ -536,7 +536,7 @@ const Invoice = (props) => {
                         <div className="bottom-div">
                             <span>Amount:</span>
                             <samp id={`itemTotalAmount-${index1.id}`}>
-                                {_cfunc.amountCommaSeparateFunc(index1.itemTotalAmount)}
+                                {_cfunc.amountCommaSeparateFunc(Number(index1.itemTotalAmount).toFixed(2))}
                             </samp>
                         </div>
                     </>
@@ -548,7 +548,7 @@ const Invoice = (props) => {
     const totalAmountCalcuationFunc = (tableList = []) => {
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
         //toLocaleString is convert comma saprate Amount
-        let count_label = `${"Total Amount"} :${Number(calcalateGrandTotal.sumOfGrandTotal).toLocaleString()}`
+        let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal).toFixed(2))}`
         dispatch(BreadcrumbShowCountlabel(count_label))
     }
 

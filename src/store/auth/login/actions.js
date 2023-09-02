@@ -27,7 +27,7 @@ export const loginUser = (user, history) => {
   }
 }
 
-export const loginSuccess = user => {
+export const loginSuccessAction = user => {
   return {
     type: LOGIN_SUCCESS,
     payload: user,

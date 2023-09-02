@@ -100,6 +100,7 @@ const GRNAdd3 = (props) => {
         postMsg, pageMode,
         history, dispatch,
         postSuccss: saveGRNSuccess,
+        foreceRedirectList: true,
         listPath: url.GRN_LIST_3
     }), [postMsg])
 
@@ -278,7 +279,7 @@ const GRNAdd3 = (props) => {
         {//------------- Batch Code column ----------------------------------
             text: "Batch",
             dataField: "",
-            formatter: (cellContent, index1, keys_,) => (
+            formatter: (cellContent, index1) => (
                 <>
                     <div className="bottom-div mb-3" style={{ minWidth: "150px" }}>
                         <samp>{index1.BatchCode}</samp>
@@ -358,62 +359,19 @@ const GRNAdd3 = (props) => {
 
         const btnId = event.target.id
 
-
         try {
-            const itemArr = []
-            let sumOfGrandTotal = 0
-            let inValidMsg = []
-            debugger
-            grnItemTableList.forEach(i => {
-
-
-
-                if (!(i.Quantity > 0)) {
-                    inValidMsg.push({ [i.ItemName]: "This Item Quantity Is Require..." });
-                }
-                else {
-                    const calculated = orderCalculateFunc(i)// amount calculation function 
-
-                    const arr = {
-                        Item: i.Item,
-                        Quantity: i.Quantity,// GRN Quantity
-                        ActualQuantity: i.invoiceQuantity, //invoice actual quantity 
-                        Comment: i.comment,
-                        Reason: i.defaultDiscrepancy ? i.defaultDiscrepancy.value : "",//default Discrepancy value
-                        MRP: i.MRP,
-                        MRPValue: i.MRPValue,
-                        GST: i.GST,
-                        ReferenceRate: i.Rate,
-                        Rate: i.Rate,
-                        Unit: i.Unit,
-                        BaseUnitQuantity: i.BaseUnitQuantity,
-                        BatchDate: i.BatchDate,
-                        BatchCode: i.BatchCode,
-                        CGST: calculated.CGST_Amount,
-                        SGST: calculated.SGST_Amount,
-                        IGST: calculated.IGST_Amount,
-                        GSTPercentage: calculated.GST_Percentage,
-                        CGSTPercentage: calculated.CGST_Percentage,
-                        SGSTPercentage: calculated.SGST_Percentage,
-                        IGSTPercentage: calculated.IGST_Percentage,
-                        BasicAmount: calculated.basicAmount,
-                        GSTAmount: calculated.roundedGstAmount,
-                        Amount: calculated.roundedTotalAmount,
-                        TaxType: 'GST',
-                        DiscountType: i.DiscountType,
-                        Discount: Number(i.Discount) || 0,
-                        DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
-                    }
-
-                    sumOfGrandTotal += Number(calculated.roundedTotalAmount);
-                    itemArr.push(arr);
+            const itemArray = grnItemTableList.map(index => {
+                let { UnitDetails, GSToption, MRPOps, GSTDropdown, MRPDetails, ...item } = index
+                return {
+                    ...item,
+                    ActualQuantity: item.invoiceQuantity, //invoice actual quantity 
+                    Comment: item.comment,
+                    Reason: item.defaultDiscrepancy ? item.defaultDiscrepancy.value : "",//default Discrepancy value
+                    ReferenceRate: item.Rate,
+                    BaseUnitQuantity: item.BaseUnitQuantity,
                 }
             })
 
-            if (inValidMsg.length > 0) {
-                customAlert({ Type: 4, Message: inValidMsg, })
-                return
-            }
             if (invoiceNo.length === 0) {
                 customAlert({
                     Type: 3,
@@ -425,12 +383,12 @@ const GRNAdd3 = (props) => {
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
-                GrandTotal: sumOfGrandTotal.toFixed(2),
+                GrandTotal: grnDetail.OrderAmount,
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
-                GRNItems: itemArr,
+                GRNItems: itemArray,
                 GRNReferences: openPOdata,
             });
 

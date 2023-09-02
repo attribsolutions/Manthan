@@ -15,25 +15,22 @@ function* InvoiceDataExport_Gen({ config }) {
 
     try {
         const response = yield call(InvoiceDataExport_GoBtn_API, config);
-        debugger
+
         response.Data["goBtnMode"] = config.goBtnMode;
 
-        const newResponse = response.Data.map((i) => {
+        response.Data.map((i) => {
             // Convert quantity values to floats and format to remove trailing zeros
-
             i["QtyInNo"] = trailingZeros(i.QtyInNo);
             i["QtyInKg"] = trailingZeros(i.QtyInKg);
             i["QtyInBox"] = trailingZeros(i.QtyInBox);
-
-            // Format InvoiceDate using date_dmy_func
             i["InvoiceDate"] = date_dmy_func(i.InvoiceDate);
 
             return i;
         });
 
-        response.Data["InvoiceExportSerializerDetails"] = newResponse;
 
-        yield put(postInvoiceDataExport_API_Success(response.Data));
+
+        yield put(postInvoiceDataExport_API_Success(response));
     } catch (error) {
         yield put(postInvoiceDataExportApiErrorAction());
     }

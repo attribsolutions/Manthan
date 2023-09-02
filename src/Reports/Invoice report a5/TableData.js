@@ -126,16 +126,17 @@ export const RowsWithCGST_SGST = (data) => {
     Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
-        if (data.SettingData.HSNCodeDigit === "1") {
-            HSNcodes = element.HSNCode.slice(0, 4);
+        if (element.HSNCode) {
+            if (data.SettingData.HSNCodeDigit === "1") {
+                HSNcodes = element.HSNCode.slice(0, 4);
+            }
+            if (data.SettingData.HSNCodeDigit === "2") {
+                HSNcodes = element.HSNCode.slice(0, 6);
+            }
+            if (data.SettingData.HSNCodeDigit === "3") {
+                HSNcodes = element.HSNCode.slice(0, 8);
+            }
         }
-        if (data.SettingData.HSNCodeDigit === "2") {
-            HSNcodes = element.HSNCode.slice(0, 6);
-        }
-        if (data.SettingData.HSNCodeDigit === "3") {
-            HSNcodes = element.HSNCode.slice(0, 8);
-        }
-        
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
@@ -302,16 +303,18 @@ export const RowsWithIGST = (data) => {
     Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
-        if (data.SettingData.HSNCodeDigit === "1") {
-            HSNcodes = element.HSNCode.slice(0, 4);
-        }
-        if (data.SettingData.HSNCodeDigit === "2") {
-            HSNcodes = element.HSNCode.slice(0, 6);
-        }
-        if (data.SettingData.HSNCodeDigit === "3") {
-            HSNcodes = element.HSNCode.slice(0, 8);
-        }
+        if (element.HSNCode) {
 
+            if (data.SettingData.HSNCodeDigit === "1") {
+                HSNcodes = element.HSNCode.slice(0, 4);
+            }
+            if (data.SettingData.HSNCodeDigit === "2") {
+                HSNcodes = element.HSNCode.slice(0, 6);
+            }
+            if (data.SettingData.HSNCodeDigit === "3") {
+                HSNcodes = element.HSNCode.slice(0, 8);
+            }
+        }
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
@@ -444,17 +447,23 @@ export const BilledToRow = (data) => {
     return BilledToArray;
 }
 export const DetailsOfTransportRow = (data) => {
-
-    const PoNumber = data.InvoicesReferences.map(index => ({
-        SystemGenerate: index.FullOrderNumber,
-        Description: index.Description,
-    }));
     let OrderNumber = " "
-    if (PoNumber[0].Description === null) {
-        OrderNumber = PoNumber[0].SystemGenerate
-    } else {
-        OrderNumber = PoNumber[0].Description
+
+    if (data.InvoicesReferences > 0) {
+        const PoNumber = data.InvoicesReferences.map(index => ({
+            SystemGenerate: index.FullOrderNumber,
+            Description: index.Description,
+        }));
+
+        if (PoNumber[0].Description === null) {
+            OrderNumber = PoNumber[0].SystemGenerate
+        } else {
+            OrderNumber = PoNumber[0].Description
+        }
+
+
     }
+
     let EwayData = ""
     if (data.InvoiceUploads.length > 0) {
         EwayData = data.InvoiceUploads[0]

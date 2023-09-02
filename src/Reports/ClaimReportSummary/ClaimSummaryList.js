@@ -58,7 +58,7 @@ const ClaimSummaryList = () => {
     );
 
     const { pageField, pdfdata, deleteMsg, tableList } = reducers;
-    debugger
+    
     const values = { ...state.values }
 
     const action = {
@@ -103,7 +103,9 @@ const ClaimSummaryList = () => {
 
 
     function downClaimBtnFunc(config) {
-        debugger
+
+
+
         const jsonBody = JSON.stringify({
             "FromDate": config.rowData.MonthStartDate,
             "ToDate": config.rowData.MonthEndDate,
@@ -112,8 +114,8 @@ const ClaimSummaryList = () => {
         });
         let ReportData = {
             jsonBody,
-            ToDate: config.rowData.MonthStartDate,
-            FromDate: config.rowData.MonthEndDate,
+            ToDate: config.rowData.MonthEndDate,
+            FromDate: config.rowData.MonthStartDate,
             PartyName: config.rowData.PartyName,
             ClaimID: config.rowData.id,
             btnId: config.btnId

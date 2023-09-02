@@ -221,6 +221,16 @@ export const tableBody = (doc, data) => {
             }
 
 
+            if (data1.row.cells[2].raw === "Total") {
+                
+                data1.row.cells[0].colSpan = 10
+                data1.row.cells[0].styles.fontSize = 9
+                data1.row.cells[0].styles.fontStyle = "bold"
+
+
+            }
+
+
             if (data1.cell.raw === "STOCK") {
 
                 // data1.cell.styles.fontStyle = "bold"
@@ -296,7 +306,7 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 columnWidth: 19,
-                halign: 'right',
+                halign: 'left',
 
             },
             1: {

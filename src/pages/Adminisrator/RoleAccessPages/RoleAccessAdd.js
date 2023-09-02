@@ -320,7 +320,7 @@ const RoleAccessAdd = () => {
             function isAccessSelect(item) {
                 let accArray = [];
                 let isShowOnMenu_Id
-                debugger
+                
                 item.defaultSelectedValues.map(({ value, id }) => {
                     // -1 stands for "List", -2 stands for "Add", and -3 stands for "STP".
                     if ((value < 0)) {
@@ -330,7 +330,7 @@ const RoleAccessAdd = () => {
                         accArray.push({ "PageAccess": value })
                     }
                 })
-                debugger
+                
                 return { accArray, isShowOnMenu_Id }
             }
 
@@ -345,7 +345,7 @@ const RoleAccessAdd = () => {
                 let isrelated = row.RelatedPageID > 0;
                 let divisionID = division_dropdown_Select.value
                 let isSTP_page = row.PageType === 3 //PageTypeName :"SourceTransactionPage"
-                debugger
+                
                 const listRowOBJFunc = () => {
                     let showArray = [];
                     if (showList) {

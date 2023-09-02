@@ -239,7 +239,7 @@ const Order = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(hasEditVal.OrderAmount)}`))
+                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2))}`))
                 setorderdate(hasEditVal.OrderDate)
 
                 if (subPageMode === url.ORDER_4) {
@@ -643,7 +643,7 @@ const Order = (props) => {
                                 row["Rate"] = ((e.BaseUnitQuantity / e.BaseUnitQuantityNoUnit) * e.Rate).toFixed(2);
                                 itemWise_CalculationFunc(row, undefined, tableList)
 
-                                document.getElementById(`Rate-${key}`).innerText = _cfunc.amountCommaSeparateFunc(row.Rate)
+                                document.getElementById(`Rate-${key}`).innerText = _cfunc.amountCommaSeparateFunc(Number(row.Rate).toFixed(2))
                             }}
                         >
                         </Select >
@@ -686,7 +686,7 @@ const Order = (props) => {
                     return (
                         <div key={row.id} className="text-end">
 
-                            <span id={`Rate-${k}`}>{_cfunc.amountCommaSeparateFunc(row.Rate)}</span>
+                            <span id={`Rate-${k}`}>{_cfunc.amountCommaSeparateFunc(Number(row.Rate).toFixed(2))}</span>
                         </div>
                     )
                 }
@@ -978,7 +978,7 @@ const Order = (props) => {
         row["Amount"] = calculate.roundedTotalAmount
         let sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
         // setOrderAmount(sumOfAmount.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(sumOfAmount)}`))
+        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(Number(sumOfAmount).toFixed(2))}`))
     };
 
 

@@ -35,7 +35,7 @@ export const userAccessUseEffect = ({ props,
 // ****************************************************************************************
 
 export const saveMsgUseEffect = async ({
-    postMsg, postSuccss, pageMode, dispatch, history, status200, listPath }) => {
+    postMsg, postSuccss, pageMode, dispatch, history, status200, listPath, foreceRedirectList = false }) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
         dispatch(postSuccss({ Status: false }))
@@ -53,7 +53,7 @@ export const saveMsgUseEffect = async ({
                 Type: 1,
                 Message: postMsg.Message,
             })
-            if (a) {
+            if ((a || foreceRedirectList === true)) {
                 history.push({
                     pathname: listPath,
                 });

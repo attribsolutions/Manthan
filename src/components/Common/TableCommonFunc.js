@@ -24,7 +24,7 @@ export const selectAllCheck = (selected, nonSelectable, position, headLabel) => 
   selectColumnPosition: position ? position : "right",
   nonSelectable: nonSelectable,
   attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Select" }),
-  
+
 
   selectionHeaderRenderer: (head) => {
 
@@ -84,7 +84,7 @@ const DynamicColumnHook = ({
       columns.push({ text: "Page Field Is Blank...", dataField: "id" });
     }
     PageFieldMaster.sort((a, b) => a.ListPageSeq - b.ListPageSeq);
-    
+
     PageFieldMaster.forEach((i, k) => {
       if (i.ShowInListPage) {
         const column = {
@@ -185,6 +185,26 @@ const DynamicColumnHook = ({
                 </span>
               );
             }
+
+            if (i.ControlID === "Party" && row.Mode) {
+              
+              let Staus = ""
+              if (row.Mode === 1) {
+                Staus = `(Sale Return)`
+              } else if (row.Mode === 2) {
+                Staus = `(Purchase Return)`
+              } else if (row.Mode === 3) {
+                Staus = `(Send To Supplier)`
+              }
+              return (
+                <>
+                  <div >{`${row.Party}`}</div>
+                  <div >{`${Staus}`}</div>
+                </>
+              );
+            }
+
+
             return <>
               {typeof cell === "boolean" ? String(cell) : cell}</>;
           },

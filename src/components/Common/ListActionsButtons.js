@@ -176,7 +176,7 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc;
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
-        const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm
+        const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc
 
 
 
@@ -326,7 +326,7 @@ export const listPageActionsButtonFunc = (props) => {
                         btnmode: mode.isSendToScm,
                         iconClass: sendToScmIconClass,
                         actionFunc: sendToScmBtnFunc,
-                        title: "Send",
+                        title: "Send To Scm",
                         buttonClasss: makeBtnCss,
                         isDummyBtn: dummyDisable_SendToScm
 
