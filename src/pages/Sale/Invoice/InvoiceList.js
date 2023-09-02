@@ -187,6 +187,12 @@ const InvoiceList = () => {
                 Type: 1,
                 Message: JSON.stringify(sendToScmMsg.Message),
             })
+        } else if (sendToScmMsg.Status === true && sendToScmMsg.StatusCode === 204) {
+            dispatch(InvoiceSendToScmSuccess({ Status: false }));
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(sendToScmMsg.Message),
+            })
         }
     }, [sendToScmMsg]);
 
