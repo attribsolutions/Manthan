@@ -171,7 +171,7 @@ const GRNAdd3 = (props) => {
 
                 setEditData(hasEditVal);
 
-                const { GRNItems = [], GRNReferences = [], InvoiceNumber,GrandTotal } = hasEditVal;
+                const { GRNItems = [], GRNReferences = [], InvoiceNumber } = hasEditVal;
 
                 let ChallanNo1 = ''
 
@@ -186,7 +186,6 @@ const GRNAdd3 = (props) => {
                 dispatch(editGRNIdSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
-                dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${GrandTotal}`))
             }
         }
     }, []);
@@ -221,14 +220,46 @@ const GRNAdd3 = (props) => {
 
         {  //-------------MRP column ----------------------------------
             text: "MRP",
-            dataField: "MRPValue",
+            dataField: "MRPDetails",
             align: () => ('right'),
+            style: () => ({ minWidth: "100px" }),
+            formatter: (cellContent, row, key) => (
+                <Select
+                    id={`MRP${key}`}
+                    name="MRP"
+                    defaultValue={{ value: row.MRP, label: row.MRPValue, }}
+                    isSearchable={true}
+                    className="react-dropdown"
+                    classNamePrefix="dropdown"
+                    options={row.MRPOps}
+                    onChange={(event) => {
+                        row.MRPValue = event.label;
+                        row.MRP = event.value;
+                    }}
+                />
+            ),
         },
 
         {  //-------------GST column ----------------------------------
             text: "GST",
-            dataField: "GSTPercentage",
+            dataField: "GSTDropdown",
             align: () => ('right'),
+            style: () => ({ minWidth: "100px" }),
+            formatter: (cellContent, row, key) => (
+                <Select
+                    id={`GST${key}`}
+                    name="GST"
+                    defaultValue={{ value: row.GST, label: row.GSTPercentage, }}
+                    isSearchable={true}
+                    className="react-dropdown"
+                    classNamePrefix="dropdown"
+                    options={row.GSToption}
+                    onChange={(event) => {
+                        row.GSTPercentage = event.label;
+                        row.GST = event.value;
+                    }}
+                />
+            ),
         },
 
         {  //-------------Rate column ----------------------------------
@@ -247,7 +278,7 @@ const GRNAdd3 = (props) => {
         {//------------- Batch Code column ----------------------------------
             text: "Batch",
             dataField: "",
-            formatter: (cellContent, index1, keys_,) => (
+            formatter: (cellContent, index1) => (
                 <>
                     <div className="bottom-div mb-3" style={{ minWidth: "150px" }}>
                         <samp>{index1.BatchCode}</samp>
