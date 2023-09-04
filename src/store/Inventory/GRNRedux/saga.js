@@ -86,7 +86,7 @@ function* HideInvoiceForGRNGenFunc({ config }) {             // Upadte GRN  genr
 function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
   
-  const { subPageMode, pageMode = '', path = '', grnRef = [], challanNo = '' } = config
+  const { pageMode = '', path = '', grnRef = [], challanNo = '' } = config
   try {
     const response = yield call(GRN_Make_API, config);
 
@@ -114,7 +114,7 @@ function* makeGRN_Mode1_GenFunc({ config }) {
         }
 
       })
-debugger
+
       response.Data.OrderItem.sort(function (a, b) {
         if (a.Item > b.Item) { return 1; }
         else if (a.Item < b.Item) { return -1; }

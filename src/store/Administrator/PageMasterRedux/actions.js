@@ -19,6 +19,8 @@ import {
   GET_PAGETYPE,
   GET_PAGETYPE_SUCCESS,
   PAGEMASTER_API_ERROR_ACTION,
+  GET_FIELD_VALIDATIONS_FOR_ALL_TYPE,
+  GET_FIELD_VALIDATIONS_FOR_ALL_TYPE_SUCCESS,
 } from "./actionType";
 
 // Fetch Modules get Data Actions 
@@ -118,7 +120,15 @@ export const getFieldValidations = (id) => ({
   type: GET_FIELD_VALIDATIONS,
   id
 });
+// FieldValidations
+export const getFieldValidationsForALLType = () => ({
+  type: GET_FIELD_VALIDATIONS_FOR_ALL_TYPE,
+})
 
+export const getFieldValidationsForALLTypeSuccess = (resp) => ({
+  type: GET_FIELD_VALIDATIONS_FOR_ALL_TYPE_SUCCESS,
+  payload: resp,
+});
 export const getFieldValidationsSuccess = (resp) => ({
   type: GET_FIELD_VALIDATIONS_SUCCESS,
   payload: resp,
